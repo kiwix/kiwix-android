@@ -58,7 +58,7 @@
   <string name="pref_newtab_background_title">Äöpen nuuj tabblaad in achtergróndj</string>
   <string name="pref_newtab_background_summary">Wen se e nuuj tabblaad äöpens den kump det oppen achtergróndj</string>
   <string name="pref_extras">Extra</string>
-  <string name="new_tab_snack_bar">Artikel äöpent zich in nuuj tabblaad</string>
+  <string name="new_tab_snackbar">Artikel äöpent zich in nuuj tabblaad</string>
   <string name="local_zims">Toustèl</string>
   <string name="delete_specific_zim_toast">Bestandj eweggesjaf</string>
   <string name="download_pause">Pauseer</string>

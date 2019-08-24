@@ -70,7 +70,7 @@
   <string name="bookmark_removed">Marcador removido</string>
   <string name="pref_newtab_background_title">Abrir separador novo em segundo plano</string>
   <string name="pref_newtab_background_summary">Ao abrir um separador novo, ele será aberto em segundo plano</string>
-  <string name="new_tab_snack_bar">Artigo aberto num novo separador</string>
+  <string name="new_tab_snackbar">Artigo aberto num novo separador</string>
   <string name="search_widget_text">Procurar no Kiwix</string>
   <string name="speech_prompt_text">Falar para pesquisar %s</string>
   <string name="speech_not_supported">Desculpe! O seu dispositivo não suporta entrada de voz</string>

@@ -51,7 +51,7 @@
   <string name="bookmark_added">Marcador afegit</string>
   <string name="open">Obrir</string>
   <string name="bookmark_removed">Marcador eliminat</string>
-  <string name="new_tab_snack_bar">Article obert en una pestanya nova</string>
+  <string name="new_tab_snackbar">Article obert en una pestanya nova</string>
   <string name="local_zims">Dispositiu</string>
   <string name="zim_manager">Biblioteca</string>
   <string name="delete_specific_zim_toast">Fitxer esborrat</string>

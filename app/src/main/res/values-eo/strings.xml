@@ -71,7 +71,7 @@
   <string name="pref_newtab_background_title">Malfermi novan langeton en fono</string>
   <string name="pref_newtab_background_summary">Novaj langetoj malfermiĝos fone</string>
   <string name="pref_extras">Kromaĵoj</string>
-  <string name="new_tab_snack_bar">Artikolo malfermiĝis en nova langeto</string>
+  <string name="new_tab_snackbar">Artikolo malfermiĝis en nova langeto</string>
   <string name="search_widget_text">Serĉi Kiwix</string>
   <string name="speech_prompt_text">Paroli por serĉi %s</string>
   <string name="speech_not_supported">Domaĝe, via aparato ne subtenas voĉan enigon</string>

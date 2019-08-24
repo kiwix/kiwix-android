@@ -68,7 +68,7 @@
   <string name="bookmark_removed">Lesezeichen entfernt</string>
   <string name="pref_newtab_background_title">Neue Registerkarte im Hintergrund öffnen</string>
   <string name="pref_newtab_background_summary">Beim Öffnen einer neuen Registerkarte wird sie im Hintergrund geöffnet</string>
-  <string name="new_tab_snack_bar">Artikel in neuem Reiter geöffnet</string>
+  <string name="new_tab_snackbar">Artikel in neuem Reiter geöffnet</string>
   <string name="search_widget_text">Kiwix durchsuchen</string>
   <string name="speech_prompt_text">Sprechen, um %s zu suchen</string>
   <string name="speech_not_supported">Leider unterstützt Ihr Gerät keine Spracheingabe!</string>

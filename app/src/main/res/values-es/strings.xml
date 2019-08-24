@@ -70,7 +70,7 @@
   <string name="bookmark_removed">Marcador borrado</string>
   <string name="pref_newtab_background_title">Abrir una pestaña nueva en segundo plano</string>
   <string name="pref_newtab_background_summary">Al abrir una pestaña nueva se abrirá en segundo plano</string>
-  <string name="new_tab_snack_bar">Artículo abierto en una pestaña nueva</string>
+  <string name="new_tab_snackbar">Artículo abierto en una pestaña nueva</string>
   <string name="search_widget_text">Buscar en Kiwix</string>
   <string name="speech_prompt_text">Habla para buscar %s</string>
   <string name="speech_not_supported">Tu dispositivo no admite entrada de voz</string>

@@ -57,7 +57,7 @@
   <string name="open">खोल्नुहोस्</string>
   <string name="bookmark_removed">पुस्तक चिनो हटाइयो</string>
   <string name="pref_extras">थप</string>
-  <string name="new_tab_snack_bar">लेख नयाँ ट्याबमा खोल्नुहोस्</string>
+  <string name="new_tab_snackbar">लेख नयाँ ट्याबमा खोल्नुहोस्</string>
   <string name="local_zims">उपकरण</string>
   <string name="zim_downloads">डाउनलोड गर्दै</string>
   <string name="zim_manager">पुस्तकालय</string>

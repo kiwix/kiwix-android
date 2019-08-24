@@ -71,7 +71,7 @@
   <string name="pref_newtab_background_title">새 탭을 백그라운드로 열기</string>
   <string name="pref_newtab_background_summary">새 탭을 열 때 백그라운드에서 열립니다</string>
   <string name="pref_extras">기타</string>
-  <string name="new_tab_snack_bar">새 탭에서 열린 문서</string>
+  <string name="new_tab_snackbar">새 탭에서 열린 문서</string>
   <string name="search_widget_text">Kiwix 검색</string>
   <string name="speech_prompt_text">%s을(를) 찾으려면 말하세요</string>
   <string name="speech_not_supported">죄송합니다! 장치가 음성 입력을 지원하지 않습니다</string>

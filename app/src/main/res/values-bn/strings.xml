@@ -71,7 +71,7 @@
   <string name="pref_newtab_background_title">পটভূমিতে নতুন ট্যাব খুলুন</string>
   <string name="pref_newtab_background_summary">নতুন একটি ট্যাব খোলার সময় তা পটভূমিতে খুলবে</string>
   <string name="pref_extras">অতিরিক্ত</string>
-  <string name="new_tab_snack_bar">নতুন ট্যাবে নিবন্ধ খোলা হয়েছে</string>
+  <string name="new_tab_snackbar">নতুন ট্যাবে নিবন্ধ খোলা হয়েছে</string>
   <string name="search_widget_text">কিউইক্স অনুসন্ধান</string>
   <string name="speech_prompt_text">%s অনুসন্ধান করতে কথা বলুন</string>
   <string name="speech_not_supported">দুঃখিত! আপনার ডিভাইস কথ্য ইনপুট সমর্থন করে না</string>

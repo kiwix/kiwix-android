@@ -68,7 +68,7 @@
   <string name="pref_newtab_background_title">Åbn ny fane i baggrunden</string>
   <string name="pref_newtab_background_summary">Når en ny fane åbnes vil den åbnes i baggrunden</string>
   <string name="pref_extras">Ekstra</string>
-  <string name="new_tab_snack_bar">Artikel åbnet i nyt faneblad</string>
+  <string name="new_tab_snackbar">Artikel åbnet i nyt faneblad</string>
   <string name="search_widget_text">Søg i Kiwix</string>
   <string name="speech_prompt_text">Tal for at søge %s</string>
   <string name="speech_not_supported">Beklager! Din enhed understøtter ikke tale</string>

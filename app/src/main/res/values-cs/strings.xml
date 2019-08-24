@@ -59,7 +59,7 @@
   <string name="open">Otevřít</string>
   <string name="pref_newtab_background_title">Otevřít novou kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Otevře novou záložku na pozadí</string>
-  <string name="new_tab_snack_bar">Článek otevřený na nové kartě</string>
+  <string name="new_tab_snackbar">Článek otevřený na nové kartě</string>
   <string name="zim_downloads">Stahování</string>
   <string name="zim_manager">Knihovna</string>
   <string name="delete_specific_zim_toast">Soubor byl smazán</string>

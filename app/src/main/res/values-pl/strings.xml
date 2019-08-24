@@ -67,7 +67,7 @@
   <string name="pref_newtab_background_title">Otwórz nowe okno w tle</string>
   <string name="pref_newtab_background_summary">Otwarcie nowej karty nastąpi w tle</string>
   <string name="pref_extras">Dodatki</string>
-  <string name="new_tab_snack_bar">Artykuł otworzony w nowej karcie</string>
+  <string name="new_tab_snackbar">Artykuł otworzony w nowej karcie</string>
   <string name="search_widget_text">Szukaj w Kiwix</string>
   <string name="speech_prompt_text">Mów by wyszukać %s</string>
   <string name="speech_not_supported">Przepraszamy! Twoje urządzenie nie obsługuje wprowadzania głosowego</string>

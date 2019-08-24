@@ -70,7 +70,7 @@
   <string name="pref_newtab_background_title">Mở thẻ mới trong nền</string>
   <string name="pref_newtab_background_summary">Khi mở thẻ mới, nó sẽ mở trong nền</string>
   <string name="pref_extras">Thêm</string>
-  <string name="new_tab_snack_bar">Trang đã mở trong thẻ mới</string>
+  <string name="new_tab_snackbar">Trang đã mở trong thẻ mới</string>
   <string name="search_widget_text">Tìm kiếm Kiwix</string>
   <string name="speech_prompt_text">Nói để tìm %s</string>
   <string name="speech_not_supported">Xin lỗi! Thiết bị của bạn không hỗ trợ nhập bằng guọng nói</string>

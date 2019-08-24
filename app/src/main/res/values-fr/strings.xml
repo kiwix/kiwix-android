@@ -67,7 +67,7 @@
   <string name="bookmark_removed">Marque-page supprimé</string>
   <string name="pref_newtab_background_title">Ouvrir un nouvel onglet en arrière-plan</string>
   <string name="pref_newtab_background_summary">Lors de l\'ouverture d\'un nouvel onglet, il s\'ouvrira en arrière-plan</string>
-  <string name="new_tab_snack_bar">Article ouvert dans un nouvel onglet</string>
+  <string name="new_tab_snackbar">Article ouvert dans un nouvel onglet</string>
   <string name="search_widget_text">Rechercher dans Kiwix</string>
   <string name="speech_prompt_text">Parler pour rechercher %s</string>
   <string name="speech_not_supported">Désolé ! Votre appareil ne prend pas en charge la saisie vocale</string>

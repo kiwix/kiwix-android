@@ -71,7 +71,7 @@
   <string name="pref_newtab_background_title">Yeni sekmeyi arka planda aç</string>
   <string name="pref_newtab_background_summary">Yeni bir sekme açtığınızda sekme arka planda açılacak</string>
   <string name="pref_extras">Ekstralar</string>
-  <string name="new_tab_snack_bar">Makale yeni bir sekmede açıldı</string>
+  <string name="new_tab_snackbar">Makale yeni bir sekmede açıldı</string>
   <string name="search_widget_text">Kiwix\'i ara</string>
   <string name="speech_prompt_text">%s aramak için konuşun</string>
   <string name="speech_not_supported">Üzgünüz! Cihazınız konuşma girdisini desteklemiyor</string>

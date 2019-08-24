@@ -71,7 +71,7 @@
   <string name="pref_newtab_background_title">فتح علامة تبويب جديدة في الخلفية</string>
   <string name="pref_newtab_background_summary">عند فتح علامة تبويب جديدة سوف تفتح في الخلفية</string>
   <string name="pref_extras">إضافات</string>
-  <string name="new_tab_snack_bar">تم فتح المقالة في علامة تبويب جديدة</string>
+  <string name="new_tab_snackbar">تم فتح المقالة في علامة تبويب جديدة</string>
   <string name="search_widget_text">بحث كيويكس</string>
   <string name="speech_prompt_text">تحدث للبحث %s</string>
   <string name="speech_not_supported">آسف! جهازك لا يدعم إدخال الكلام</string>

@@ -66,7 +66,7 @@
   <string name="pref_newtab_background_title">Avaa uusi välilehti taustalla</string>
   <string name="pref_newtab_background_summary">Kun avaat uuden välilehden, se aukeaa taustalla</string>
   <string name="pref_extras">Ekstrat</string>
-  <string name="new_tab_snack_bar">Artikkeli avattu uudessa välilehdessä</string>
+  <string name="new_tab_snackbar">Artikkeli avattu uudessa välilehdessä</string>
   <string name="search_widget_text">Hae Kiwixistä</string>
   <string name="speech_prompt_text">Puhu hakeaksesi %s</string>
   <string name="speech_not_supported">Sori! Laitteesi ei tue puheensyöttöä</string>

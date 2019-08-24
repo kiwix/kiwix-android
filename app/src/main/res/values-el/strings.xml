@@ -63,7 +63,7 @@
   <string name="bookmark_removed">Αφαιρέθηκε σελιδοδείκτης</string>
   <string name="pref_newtab_background_title">Άνοιγμα νέας καρτέλας στο παρασκήνιο</string>
   <string name="pref_extras">Πρόσθετα</string>
-  <string name="new_tab_snack_bar">Άρθρο άνοιξε σε νέα καρτέλα</string>
+  <string name="new_tab_snackbar">Άρθρο άνοιξε σε νέα καρτέλα</string>
   <string name="search_widget_text">Αναζήτηση Kiwix</string>
   <string name="speech_prompt_text">Ομιλήστε για αναζήτηση %s</string>
   <string name="local_zims">Συσκευή</string>

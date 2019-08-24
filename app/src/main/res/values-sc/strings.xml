@@ -70,7 +70,7 @@
   <string name="bookmark_removed">Sinnalibru bogadu</string>
   <string name="pref_newtab_background_title">Aberi un\'ischeda noa in s\'isfundu</string>
   <string name="pref_newtab_background_summary">Sas ischedas noas s\'ant a abèrrere in s\'isfundu</string>
-  <string name="new_tab_snack_bar">Artìculu abertu in un\'ischeda noa</string>
+  <string name="new_tab_snackbar">Artìculu abertu in un\'ischeda noa</string>
   <string name="search_widget_text">Chirca in Kiwix</string>
   <string name="speech_prompt_text">Chistiona pro chircare %s</string>
   <string name="speech_not_supported">Làstima! Su dispositivu tuo non suportat sa sintetizatzione vocale</string>

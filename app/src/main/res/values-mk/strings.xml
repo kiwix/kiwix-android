@@ -71,7 +71,7 @@
   <string name="pref_newtab_background_title">Отвори ново јазиче во позадината</string>
   <string name="pref_newtab_background_summary">Кога отворате ново јазиче, ќе се отвори во позадината</string>
   <string name="pref_extras">Дополнително</string>
-  <string name="new_tab_snack_bar">Статијата е отворена во ново јазиче</string>
+  <string name="new_tab_snackbar">Статијата е отворена во ново јазиче</string>
   <string name="search_widget_text">Пребарај по Kiwix</string>
   <string name="speech_prompt_text">Гласовно пребарајте го %s</string>
   <string name="speech_not_supported">Жалиме! Вашиот уред не поддржува гласовно внесување</string>

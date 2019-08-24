@@ -71,7 +71,7 @@
   <string name="pref_newtab_background_title">Digeriñ un ivinell nevez en drekleur</string>
   <string name="pref_newtab_background_summary">Pa vo digoret un ivinell e tigoro en drekleur</string>
   <string name="pref_extras">Ouzhpennadennoù</string>
-  <string name="new_tab_snack_bar">Pennad digoret en un ivinell nevez</string>
+  <string name="new_tab_snackbar">Pennad digoret en un ivinell nevez</string>
   <string name="search_widget_text">Klask er wiki</string>
   <string name="speech_prompt_text">Komz evit klask %s</string>
   <string name="speech_not_supported">Ho tigarez ! Ho trobarzhell ne gemer ket ar skrivañ dre gomz e karg</string>
