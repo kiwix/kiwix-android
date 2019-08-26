@@ -466,6 +466,6 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void onLocationSet() {
-    createHotspotIntent(ACTION_TURN_ON_AFTER_O);
+    startService(createHotspotIntent(ACTION_TURN_ON_AFTER_O));
   }
 }
