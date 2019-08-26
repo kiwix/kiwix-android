@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.utils
 
+import android.net.wifi.WifiConfiguration
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
@@ -51,6 +52,20 @@ sealed class KiwixDialog(
     R.string.go_to_wifi_settings_label,
     null
   )
+
+  data class ShowHotspotDetails(override val args: Array<out Any>) : KiwixDialog(
+    R.string.hotspot_turned_on,
+    R.string.hotspot_details_message,
+    android.R.string.ok,
+    null
+  ), HasBodyFormatArgs {
+    constructor(wifiConfiguration: WifiConfiguration) : this(
+      arrayOf(
+        wifiConfiguration.SSID,
+        wifiConfiguration.preSharedKey
+      )
+    )
+  }
 
   data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog(
     null, R.string.transfer_to, R.string.yes, android.R.string.cancel

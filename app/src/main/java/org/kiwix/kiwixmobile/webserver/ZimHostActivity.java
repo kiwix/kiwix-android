@@ -314,8 +314,6 @@ public class ZimHostActivity extends BaseActivity implements
       progressDialog =
           ProgressDialog.show(this, getString(R.string.progress_dialog_starting_server), "",
               true);
-      progressDialog.show();
-
       pollForValidIpAddress();
     });
 
@@ -399,27 +397,17 @@ public class ZimHostActivity extends BaseActivity implements
 
     hotspotService.startForegroundNotificationHelper();
 
-    //Show an alert dialog for hotspot details
-    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
-
-    builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-
-      progressDialog =
-          ProgressDialog.show(this, getString(R.string.progress_dialog_starting_server), "",
-              true);
-      progressDialog.show();
-
-      pollForValidIpAddress();
-    });
-
-    builder.setTitle(this.getString(R.string.hotspot_turned_on));
-    builder.setMessage(getString(R.string.hotspot_details_message, wifiConfiguration.SSID,
-        wifiConfiguration.preSharedKey));
-    builder.setCancelable(false);
-    AlertDialog dialog = builder.create();
-    dialog.show();
-
-    //setupServer();
+    alertDialogShower.show(new KiwixDialog.ShowHotspotDetails(wifiConfiguration),
+        new Function0<Unit>() {
+          @Override public Unit invoke() {
+            progressDialog =
+                ProgressDialog.show(ZimHostActivity.this,
+                    getString(R.string.progress_dialog_starting_server), "",
+                    true);
+            pollForValidIpAddress();
+            return Unit.INSTANCE;
+          }
+        });
   }
 
   void launchTetheringSettingsScreen() {
