@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # default value is guessed from repo (AndroidManifest)
-PACKAGE=`python -c "from xml.dom.minidom import parse; d=parse('app/src/main/AndroidManifest.xml'); print([e.getAttribute('package').strip() for e in d.getElementsByTagName('manifest')][-1])"`
+PACKAGE=$(python -c "from xml.dom.minidom import parse; d=parse('app/src/main/AndroidManifest.xml'); print([e.getAttribute('package').strip() for e in d.getElementsByTagName('manifest')][-1])")
 
 if [ "x$1" != "x" ];
 	then

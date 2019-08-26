@@ -22,9 +22,9 @@ function die {
 }
 
 # default values are guessed from repo (AndroidManifest and res/values/branding)
-APP_NAME=`python -c "from xml.dom.minidom import parse; d=parse('res/values/branding.xml'); print([e.childNodes[0].data.strip() for e in d.getElementsByTagName('string') if e.getAttribute('name') == 'app_name'][-1])"`
-TARGET_VERSION=`grep "compileSdkVersion" build.gradle | awk '{print $2}'`
-BUILD_VERSION=`grep "buildToolsVersion" build.gradle | awk '{print $2}' | sed 's/"//g'`
+APP_NAME=$(python -c "from xml.dom.minidom import parse; d=parse('res/values/branding.xml'); print([e.childNodes[0].data.strip() for e in d.getElementsByTagName('string') if e.getAttribute('name') == 'app_name'][-1])")
+TARGET_VERSION=$(grep "compileSdkVersion" build.gradle | awk '{print $2}')
+BUILD_VERSION=$(grep "buildToolsVersion" build.gradle | awk '{print $2}' | sed 's/"//g')
 
 if [ "x$2" != "x" ];
 	then
