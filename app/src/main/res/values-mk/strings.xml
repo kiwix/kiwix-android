@@ -93,7 +93,6 @@
   <string name="zim_nopic">Без слики</string>
   <string name="zim_novid">Нема видеа</string>
   <string name="no_network_connection">Немате мрежна врска</string>
-  <string name="get_library_over_network">Користи мрежа за преземање на списокот содржини (прибл. 6 МБ)</string>
   <string name="help_2">Што прави Kiwix?</string>
   <string name="help_3">Kiwix е вонмрежен читач на содржини. Работи како прелистувач но чита содржини од податотека во ZIM-формат место од семрежјето.</string>
   <string name="help_4">Иако Kiwix е првично предвиден како вонмрежен читач на Википедија, но сега чита и други содржини.</string>

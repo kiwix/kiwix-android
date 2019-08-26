@@ -93,7 +93,6 @@
   <string name="zim_nopic">Neniu Bildo</string>
   <string name="zim_novid">Neniu Videaĵo</string>
   <string name="no_network_connection">Reta konekto mankas</string>
-  <string name="get_library_over_network">Uzi reton por elŝuti liston de enhavo (proksimume 6 megabajtoj)</string>
   <string name="help_2">Kion faras Kiwix?</string>
   <string name="help_3">Kiwix estas senkonekta legilo de enhavo. Ĝi estas simila al TTT-legilo, sed anstataŭ legi retpaĝojn konektite, ĝi legas enhavon en ZIM-dosiero.</string>
   <string name="help_4">Kiwix estis originale farita por senkonekta legado de Vikipedio, sed ĝi povas legi alian enhavon.</string>

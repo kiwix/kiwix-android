@@ -30,7 +30,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Url;
 
 public interface KiwixService {
-  @GET("/library/library_zim.xml") Single<LibraryNetworkEntity> getLibrary();
+
+  String LIBRARY_NETWORK_PATH = "/library/library_zim.xml";
+
+  @GET(LIBRARY_NETWORK_PATH) Single<LibraryNetworkEntity> getLibrary();
 
   @GET Observable<MetaLinkNetworkEntity> getMetaLinks(@Url String url);
 

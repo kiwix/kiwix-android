@@ -12,5 +12,6 @@ if [ "$status" = 0 ] ; then
 else
     ./gradlew app:ktlintKiwixDebugFormat --daemon
     echo 1>&2 "Static analysis found violations and attempted to autofix, please commit these autoformat changes"
+    echo "If the build failed for another reason please make sure JAVA_HOME is set to JDK8"
     exit 1
 fi

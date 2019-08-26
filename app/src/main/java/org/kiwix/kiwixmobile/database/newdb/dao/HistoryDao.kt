@@ -45,7 +45,7 @@ class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) {
   fun getHistoryList(showHistoryCurrentBook: Boolean) = box
     .query {
       if (showHistoryCurrentBook) {
-        equal(HistoryEntity_.zimFilePath, ZimContentProvider.getZimFile())
+        equal(HistoryEntity_.zimFilePath, ZimContentProvider.getZimFile() ?: "")
       }
       orderDesc(HistoryEntity_.timeStamp)
     }
