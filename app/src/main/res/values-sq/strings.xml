@@ -91,7 +91,6 @@
   <string name="zim_nopic">S\’ka Foto</string>
   <string name="zim_novid">S\’ka Video</string>
   <string name="no_network_connection">S\’ka lidhje rrjeti</string>
-  <string name="get_library_over_network">Përdor rrjetin për shkarkim liste lënde. (Afërsisht 6MB)</string>
   <string name="help_2">Ç’kryen Kiwix-i?</string>
   <string name="help_3">Kiwix është një lexues lënde pa internet. Funksionon shumë ngjashëm me një shfletues, por në vend të përdorimit\n“online” të faqeve web, lëndën e lexon që nga një kartelë në formatin ZIM.</string>
   <string name="help_4">Edhe pse fillimisht qe konceptuar për të lejuar përdorimin pa internet të Wikipedia-s, mund të përdoret edhe për lëndë tjetër.</string>

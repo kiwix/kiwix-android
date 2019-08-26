@@ -93,7 +93,6 @@
   <string name="zim_nopic">Resim yok</string>
   <string name="zim_novid">Video yok</string>
   <string name="no_network_connection">Ağ bağlantısı yok</string>
-  <string name="get_library_over_network">İçerik listesini indirmek için ağı kullan. (Yaklaşık 6MB)</string>
   <string name="help_2">Kiwix ne yapar?</string>
   <string name="help_3">Kiwix bir çevrimdışı içerik okuyucusudur. Aynı bir ağ tarayıcısı gibi çalışır ama web sayfalarına çevrimiçi erişmek yerine içeriği ZIM formatındaki bir dosyadan okur.</string>
   <string name="help_4">Kiwix orijinalde Vikipedi\'yi çevrimdışı olarak okuması için tasarlanmış olsa da diğer içerikleri de okuyabilir.</string>

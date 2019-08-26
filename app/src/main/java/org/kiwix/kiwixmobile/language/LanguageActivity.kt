@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_language.language_progressbar
-import kotlinx.android.synthetic.main.activity_language.recycler_view
+import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import kotlinx.android.synthetic.main.activity_language.toolbar
+import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.base.BaseActivity
 import org.kiwix.kiwixmobile.extensions.viewModel
@@ -42,6 +43,10 @@ class LanguageActivity : BaseActivity() {
       HeaderDelegate()
     )
 
+  override fun injection() {
+    KiwixApplication.getApplicationComponent().inject(this)
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_language)
@@ -52,7 +57,7 @@ class LanguageActivity : BaseActivity() {
       it.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
       it.setTitle(R.string.select_languages)
     }
-    recycler_view.run {
+    language_recycler_view.run {
       adapter = languageAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)

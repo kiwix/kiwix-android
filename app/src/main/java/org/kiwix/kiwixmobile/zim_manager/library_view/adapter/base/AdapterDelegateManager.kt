@@ -33,5 +33,5 @@ class AdapterDelegateManager<T> {
     throw RuntimeException("No delegate registered for $item")
   }
 
-  var delegates: SparseArrayCompat<AdapterDelegate<T>> = SparseArrayCompat()
+  private var delegates: SparseArrayCompat<AdapterDelegate<T>> = SparseArrayCompat()
 }

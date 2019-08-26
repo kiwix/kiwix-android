@@ -62,7 +62,6 @@
   <string name="no_files_here">Cap fitxer aquí</string>
   <string name="download_no_space">Espai insuficient per descarregar aquest fitxer.</string>
   <string name="no_network_connection">Cap connexió de xarxa</string>
-  <string name="get_library_over_network">Utilitzar la xarxa per descarregar la llista de contingut. (Aproximadament 6MB)</string>
   <string name="help_2">Què fa Kiwix?</string>
   <string name="help_3">Kiwix és un lector de contingut sense connexió. Actua molt semblant a un navegador però en comptes d\'accedir a pàgines web en línia, llegeix el contingut d\'un fitxer en format ZIM.</string>
   <string name="help_4">Si bé Kiwix es va dissenyar originalment per a proporcionar una Wikipedia sense connexió, també pot llegir altres continguts.</string>

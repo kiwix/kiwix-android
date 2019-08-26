@@ -31,7 +31,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +49,7 @@ public class KiwixDatabaseTest {
   }
 
   @Test
+  @SuppressWarnings("CharsetObjectCanBeUsed") // Standard charset throws exception on < API19
   public void testMigrateDatabase() throws IOException {
     KiwixDatabase kiwixDatabase = new KiwixDatabase(context, null, null);
     kiwixDatabase.recreate();
@@ -61,8 +61,8 @@ public class KiwixDatabaseTest {
       throw new IOException("Unable to create file for testing migration");
     }
     Writer writer =
-        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName),
-            StandardCharsets.UTF_8));
+      new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName),
+        "UTF-8"));
     for (String bookmark : testBookmarks) {
       writer.write(bookmark + "\n");
     }
@@ -71,10 +71,10 @@ public class KiwixDatabaseTest {
 
     ArrayList<String> bookmarkTitles = new ArrayList<>();
     try (SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
-        Query.selectDistinct(Bookmark.BOOKMARK_TITLE)
-            .where(Bookmark.ZIM_ID.eq(testId)
-                .or(Bookmark.ZIM_NAME.eq("")))
-            .orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
+      Query.selectDistinct(Bookmark.BOOKMARK_TITLE)
+        .where(Bookmark.ZIM_ID.eq(testId)
+          .or(Bookmark.ZIM_NAME.eq("")))
+        .orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
       while (bookmarkCursor.moveToNext()) {
         bookmarkTitles.add(bookmarkCursor.get(Bookmark.BOOKMARK_TITLE));
       }

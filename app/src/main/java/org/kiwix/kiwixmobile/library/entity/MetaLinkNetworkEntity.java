@@ -30,7 +30,7 @@ import org.simpleframework.xml.Text;
 public class MetaLinkNetworkEntity {
 
   @Element
-  private FileElement file;
+  public FileElement file;
 
   public List<Url> getUrls() {
     return file.urls;
@@ -47,15 +47,15 @@ public class MetaLinkNetworkEntity {
   @Root(strict = false)
   public static class FileElement {
     @Attribute
-    private String name;
+    public String name;
     @ElementList(inline = true, entry = "url")
-    private List<Url> urls;
+    public List<Url> urls;
     @Element
     private long size;
     @ElementMap(entry = "hash", key = "type", attribute = true, inline = true)
-    private Map<String, String> hashes;
+    public Map<String, String> hashes;
     @Element
-    private Pieces pieces;
+    public Pieces pieces;
 
     public String getName() {
       return name;
@@ -88,26 +88,26 @@ public class MetaLinkNetworkEntity {
     }
   }
 
-  private static class Pieces {
+  public static class Pieces {
     @Attribute
     private int length;
 
     @Attribute(name = "type")
-    private String hashType;
+    public String hashType;
 
     @ElementList(inline = true, entry = "hash")
-    private List<String> pieceHashes;
+    public List<String> pieceHashes;
   }
 
   public static class Url {
     @Attribute
-    private String location;
+    public String location;
 
     @Attribute
     private int priority;
 
     @Text
-    private String value;
+    public String value;
 
     public String getValue() {
       return value;

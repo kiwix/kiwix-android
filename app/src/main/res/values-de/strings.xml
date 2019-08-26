@@ -89,7 +89,6 @@
   <string name="zim_nopic">Keine Bilder</string>
   <string name="zim_novid">Keine Videos</string>
   <string name="no_network_connection">Keine Netzwerkverbindung</string>
-  <string name="get_library_over_network">Netzwerk verwenden, um die Inhaltsliste herunterzuladen (ungefähr 6 MB).</string>
   <string name="help_2">Was macht Kiwix?</string>
   <string name="help_3">Kiwix ist eine Lesesoftware für Offlineinhalte. Sie funktioniert wie ein Browser, aber anstatt auf Webseiten online zuzugreifen, liest sie Inhalte von einer Datei im ZIM-Format.</string>
   <string name="help_4">Obwohl Kiwix ursprünglich entwickelt wurde, um Wikipedia offline zur Verfügung zu stellen, liest es auch andere Inhalte.</string>

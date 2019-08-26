@@ -92,7 +92,6 @@
   <string name="zim_nopic">Không có hình</string>
   <string name="zim_novid">Không có video</string>
   <string name="no_network_connection">Không có kết nối mạng</string>
-  <string name="get_library_over_network">Dùng mạng để tải về danh sách nội dung (khoảng 6MB)</string>
   <string name="help_2">Kiwix dùng để làm gì?</string>
   <string name="help_3">Kiwix là một chương trình đọc nội dung ngoại tuyến. Kiwix hoạt động như trình duyệt, tuy nhiên, thay vì truy cập các trang web trực tuyến thì Kiwix lại đọc nội dung từ các tập tin định dạng ZIM.</string>
   <string name="help_4">Mặc dù Kiwix lúc ban đầu được tạo ra để giúp bạn truy cập Wikipedia ngoại tuyến, chương trình cũng có thể đọc các nội dung khác nữa.</string>

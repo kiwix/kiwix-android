@@ -92,7 +92,6 @@
   <string name="zim_nopic">Sem imagens</string>
   <string name="zim_novid">Sem vídeos</string>
   <string name="no_network_connection">Nenhuma ligação de rede</string>
-  <string name="get_library_over_network">Usar a rede para descarregar a lista de conteúdos (aproximadamente 6 MB).</string>
   <string name="help_2">O que faz o Kiwix?</string>
   <string name="help_3">O Kiwix é um leitor de conteúdo offline. Funciona tal como um navegador mas, em vez de aceder a páginas da Internet online, lê o conteúdo de um ficheiro no formato ZIM.</string>
   <string name="help_4">Embora o Kiwix tenha sido originalmente desenhado para fornecer a Wikipédia offline, também lê outros conteúdos.</string>

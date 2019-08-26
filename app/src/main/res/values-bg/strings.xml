@@ -93,7 +93,6 @@
   <string name="zim_nopic">Без картинки</string>
   <string name="zim_novid">Без видео клипове</string>
   <string name="no_network_connection">Няма връзка с мрежата</string>
-  <string name="get_library_over_network">Използвайте мрежата за даунлоуд на списъка със съдържанието.\n(Приблизително 6MB)</string>
   <string name="help_2">Какво прави Kiwix?</string>
   <string name="help_3">Kiwix е офлайн четец на съдържание. Той действа като браузър, но вместо да зарежда съдържанието от онлайн уеб страници, той зарежда съдържанието от файл в ZIM формат.</string>
   <string name="help_4">Въпреки че Kiwix е проектиран първоначално, да предоставя достъп до Уикипедия офлайн, той е способен, да предоставя достъп и до друго съдържание.</string>

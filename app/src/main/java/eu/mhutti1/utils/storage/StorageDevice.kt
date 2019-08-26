@@ -21,10 +21,12 @@ package eu.mhutti1.utils.storage
 
 import android.os.Build
 import android.os.StatFs
+import android.util.Log
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.io.IOException
 
 const val LOCATION_EXTENSION = "storageLocationMarker"
 
@@ -73,16 +75,20 @@ data class StorageDevice(
   // Create unique file to identify duplicate devices.
   private fun createLocationCode() {
     if (!getLocationCodeFromFolder(file)) {
-      File(file.path, ".$LOCATION_EXTENSION").let { locationCode ->
-        locationCode.createNewFile()
-        FileWriter(locationCode).use { it.write(file.path) }
+      File(file, ".$LOCATION_EXTENSION").let { locationCode ->
+        try {
+          locationCode.createNewFile()
+          FileWriter(locationCode).use { it.write(file.path) }
+        } catch (ioException: IOException) {
+          Log.d("StorageDevice", "could not write file $file", ioException)
+        }
       }
     }
   }
 
   // Check if there is already a device code in our path
   private fun getLocationCodeFromFolder(folder: File): Boolean {
-    val locationCode = File(folder.path, ".$LOCATION_EXTENSION")
+    val locationCode = File(folder, ".$LOCATION_EXTENSION")
     if (locationCode.exists()) {
       try {
         BufferedReader(FileReader(locationCode)).use { br ->

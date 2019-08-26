@@ -87,7 +87,6 @@
   <string name="zim_nopic">Brak obrazka</string>
   <string name="zim_novid">Brak wideo</string>
   <string name="no_network_connection">Brak połączenia z siecią</string>
-  <string name="get_library_over_network">Użyj sieci, aby pobrać listę zawartości. (Około 6 MB)</string>
   <string name="help_3">Kiwix to czytnik zawartości offline. Zachowuje się jak przeglądarka, jednak zamiast stron internetowych, czyta zawartość z pliku w formacie ZIM.</string>
   <string name="help_5">Gdzie jest zawartość?</string>
   <string name="help_11">Pliki ZIM pobrane rzez aplikacje znajdują się w zewnętrznym katalogu dysku w folderze o nazwie Kiwix.</string>

@@ -92,7 +92,6 @@
   <string name="zim_nopic">Ez dago argazkirik</string>
   <string name="zim_novid">Bideorik ez</string>
   <string name="no_network_connection">Ez dago konexiorik</string>
-  <string name="get_library_over_network">Sarea erabili eduki zerrenda deskargatzeko. (6MB inguru)</string>
   <string name="help_2">Zer egiten du Kiwix-ek?</string>
   <string name="help_3">Kiwix konexio gabeko eduki irakurlea da. Nabigatzaile baten moduan erabiltzen da, baina sarean dauden web orrialdeetan sartu beharrean, ZIM formatoko edukia irakurtzen du.</string>
   <string name="help_4">Nahiz eta, Kiwix, berez, Wikipedia konexiorik gabe erabiltzeko sortu, beste edukiak ere eskeintzen ditu.</string>

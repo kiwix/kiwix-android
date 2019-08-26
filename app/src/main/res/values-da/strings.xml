@@ -88,7 +88,6 @@
   <string name="zim_nopic">Ingen billeder</string>
   <string name="zim_novid">Ingen videoer</string>
   <string name="no_network_connection">Ingen netværksforbindelse</string>
-  <string name="get_library_over_network">Brug netværk til at hente indholdsliste. (Cirka 6 MB)</string>
   <string name="help_2">Hvad gør Kiwix?</string>
   <string name="help_3">Kiwix er en lokal indholdlæser. Den fungerer meget lig en browser, men i stedet for at tilgå internetsider, så læser den indhold fra en fil i ZIM-formatet.</string>
   <string name="help_4">Selvom Kiwix oprindelig blev designet for at tilbyde Wikipedia lokalt, så læser det også andet indhold.</string>
