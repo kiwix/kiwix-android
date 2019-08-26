@@ -104,7 +104,6 @@ public class HotspotService extends Service implements HotspotStateListener {
           }
           Toast.makeText(this, R.string.server_started__successfully_toast_message,
               Toast.LENGTH_SHORT).show();
-
         } else {
           zimHostCallbacks.onServerFailedToStart();
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -204,7 +203,6 @@ public class HotspotService extends Service implements HotspotStateListener {
   }
 
   @Override public void onHotspotStopped() {
-    Log.v("DANG", "Inside Hotspot Service onHotspotStopped()");
     webServerHelper.stopAndroidWebServer();
     zimHostCallbacks.onServerStopped();
     stopForeground(true);
