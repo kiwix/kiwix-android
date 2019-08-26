@@ -29,7 +29,7 @@ class LanguageTest {
   @Nested
   inner class Equals {
     @Test
-    @Suppress("UnusedEquals", "ReplaceCallWithBinaryOperator") //cannot == Unit
+    @Suppress("UnusedEquals", "ReplaceCallWithBinaryOperator") // cannot == Unit
     fun `throws exception when object is not language item`() {
       assertThrows(ClassCastException::class.java) { language().equals(Unit) }
     }

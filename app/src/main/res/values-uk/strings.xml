@@ -93,7 +93,6 @@
   <string name="zim_nopic">Без зображень</string>
   <string name="zim_novid">Немає відео</string>
   <string name="no_network_connection">Відсутнє з\'єднання з мережею</string>
-  <string name="get_library_over_network">Скористатись мережею, щоб завантажити список контенту (приблизно 6MБ)</string>
   <string name="help_2">Що робить Kiwix?</string>
   <string name="help_3">Kiwix — це офлайновий читач контенту. Він багато в чому поводиться як браузер, але замість доступу до онлайнових веб-сторінок, він зчитує контент із файлу у форматі ZIM.</string>
   <string name="help_4">Тоді як початково Kiwix було розроблено для забезпечення доступу до Вікіпедії в режимі офлайн, він також зчитує інші типи контенту.</string>

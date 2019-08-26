@@ -98,7 +98,6 @@
   <string name="zim_nopic">No Pictures</string>
   <string name="zim_novid">No Videos</string>
   <string name="no_network_connection">No network connection</string>
-  <string name="get_library_over_network">Use network to download content list. (Approximately 6MB)</string>
   <string name="help_2">What does Kiwix do?</string>
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
   <string name="help_4">While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.</string>
@@ -259,4 +258,30 @@
     <item quantity="one">%d book</item>
     <item quantity="other">%d books</item>
   </plurals>
+  <string name="discovery_initiated">Discovery initiated</string>
+  <string name="discovery_failed">Discovery failed</string>
+  <string name="severe_loss_error">Severe error! Try Disable/Re-enable WiFi P2P</string>
+  <string name="connection_failed">Connection failed</string>
+  <string name="permission_rationale_location">Location permission is required by Android to allow the app to detect peer devices</string>
+  <string name="permission_refused_location">Cannot locate peer devices without location permissions</string>
+  <string name="permission_refused_storage">Cannot access zim files without storage permission</string>
+  <string name="request_enable_location">Enable location to allow detection of peers</string>
+  <string name="discovery_needs_location">Cannot discover peers without location services</string>
+  <string name="request_enable_wifi">Enable WiFi P2P from system settings</string>
+  <string name="discovery_needs_wifi">Cannot discover peers without WiFi ON</string>
+  <string name="transfer_to">Transfer files to %s?</string>
+  <string name="device_not_cooperating">Selected device not co-operating for transfer</string>
+  <string name="file_transfer_complete">File transfer complete</string>
+  <string name="error_during_transfer">An error was encountered during transfer</string>
+  <string name="error_transferring">Error transferring file %s</string>
+  <string name="get_content_from_nearby_device">Get content from nearby device</string>
+  <string name="search_for_peers">Search For Peers</string>
+  <string name="your_device">Your Device:</string>
+  <string name="nearby_devices">NEARBY DEVICES</string>
+  <string name="no_devices_found">No devices detected. Tap on search button to try again.</string>
+  <string name="files_for_transfer">FILES FOR TRANSFER</string>
+  <string name="preparing_files">Preparing files for transfer....</string>
+  <string name="performing_handshake">Performing handshake....</string>
+  <string name="local_zim_sharing">Local ZIM Sharing</string>
+  <string name="status">Status</string>
 </resources>

@@ -90,7 +90,6 @@
   <string name="zim_nopic">Fără imagini</string>
   <string name="zim_novid">Fără video</string>
   <string name="no_network_connection">Nu există conexiune de rețea</string>
-  <string name="get_library_over_network">Folosește rețeaua să descarci lista de conținut. (Aproximativ 6MB)</string>
   <string name="help_2">Ce face Kiwix?</string>
   <string name="help_3">Kiwix este un server de citit conținut off-line. Este aproape ca un browser dar în loc să acceseze paginile web online citește conținut de la un fișier în formatul ZIM.</string>
   <string name="help_4">În timp ce Kiwix a fost făcut inițial să ofere Wikipedia off-line de asemenea citește și alt conținut.</string>

@@ -30,6 +30,8 @@ import javax.inject.Inject
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun books() = box.asFlowable()
+    .doOnNext(::removeBooksThatDoNotExist)
+    .map { books -> books.filter { it.file.exists() } }
     .map { it.map(::BookOnDisk) }
 
   fun getBooks() = box.all.map(::BookOnDisk)
@@ -51,5 +53,13 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun migrationInsert(books: ArrayList<Book>) {
     insert(books.map { BookOnDisk(book = it, file = it.file) })
+  }
+
+  private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
+    delete(books.filterNot { it.file.exists() })
+  }
+
+  private fun delete(books: List<BookOnDiskEntity>) {
+    box.remove(books)
   }
 }

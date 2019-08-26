@@ -43,6 +43,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
+import kotlin.Unit;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
@@ -50,7 +51,6 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_WEBVIEWS_LIST;
@@ -81,9 +81,9 @@ public class KiwixSettingsActivity extends BaseActivity {
     allHistoryCleared = false;
 
     getFragmentManager()
-        .beginTransaction().
-        replace(R.id.content_frame, new PrefsFragment())
-        .commit();
+      .beginTransaction().
+      replace(R.id.content_frame, new PrefsFragment())
+      .commit();
 
     setUpToolbar();
   }
@@ -110,8 +110,8 @@ public class KiwixSettingsActivity extends BaseActivity {
   }
 
   public static class PrefsFragment extends PreferenceFragment implements
-      SettingsContract.View,
-      SharedPreferences.OnSharedPreferenceChangeListener, StorageSelectDialog.OnSelectListener {
+    SettingsContract.View,
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Inject
     SettingsPresenter presenter;
@@ -329,29 +329,25 @@ public class KiwixSettingsActivity extends BaseActivity {
 
     public void openFolderSelect() {
       StorageSelectDialog dialogFragment = new StorageSelectDialog();
-      Bundle b = new Bundle();
-      b.putString(StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
-          getResources().getString(R.string.internal_storage));
-      b.putString(StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
-          getResources().getString(R.string.external_storage));
-      b.putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle());
-      dialogFragment.setArguments(b);
-      dialogFragment.setOnSelectListener(this);
-      dialogFragment.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(), getResources().getString(R.string.pref_storage));
+      dialogFragment.setOnSelectListener(storageDevice -> {
+        selectionCallback(storageDevice);
+        return Unit.INSTANCE;
+      });
+      dialogFragment.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(),
+        getResources().getString(R.string.pref_storage));
     }
 
-    @Override
-    public void selectionCallback(StorageDevice storageDevice) {
-      findPreference(PREF_STORAGE).setSummary(storageDevice.getSize());
+    private void selectionCallback(StorageDevice storageDevice) {
+      findPreference(PREF_STORAGE).setSummary(storageDevice.getAvailableSpace());
       sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
       if (storageDevice.isInternal()) {
         findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.internal_storage));
         sharedPreferenceUtil.putPrefStorageTitle(
-            getResources().getString(R.string.internal_storage));
+          getResources().getString(R.string.internal_storage));
       } else {
         findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.external_storage));
         sharedPreferenceUtil.putPrefStorageTitle(
-            getResources().getString(R.string.external_storage));
+          getResources().getString(R.string.external_storage));
       }
     }
   }

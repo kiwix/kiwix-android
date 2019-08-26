@@ -4,7 +4,7 @@ import java.text.DecimalFormat
 import kotlin.math.log10
 import kotlin.math.pow
 
-inline class KiloByte(val kilobyteString: String?) {
+inline class KiloByte(private val kilobyteString: String?) {
   val humanReadable
     get() = kilobyteString?.toLongOrNull()?.let {
       val units = arrayOf("KB", "MB", "GB", "TB")

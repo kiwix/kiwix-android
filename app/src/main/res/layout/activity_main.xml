@@ -124,6 +124,14 @@
         tools:visibility="visible"
         />
 
+      <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/snackbar_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/activity_main_button_pause_tts"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <include layout="@layout/bottom_toolbar"/>
 
     <include

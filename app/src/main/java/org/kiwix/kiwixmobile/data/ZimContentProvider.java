@@ -125,7 +125,7 @@ public class ZimContentProvider extends ContentProvider {
    *
    * Note that the value returned is NOT unique for each zim file. Versions of the same wiki
    * (complete, nopic, novid, etc) may return the same title.
-   * */
+   */
   public static String getZimFileTitle() {
     if (currentJNIReader == null || zimFileName == null) {
       return null;
@@ -416,12 +416,10 @@ public class ZimContentProvider extends ContentProvider {
   private ParcelFileDescriptor loadVideoViaCache(Uri uri) throws IOException {
     String filePath = getFilePath(uri);
     String fileName = uri.toString();
-    fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
+    fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
     File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
-    JNIKiwixString mime = new JNIKiwixString();
-    JNIKiwixString title = new JNIKiwixString();
-    JNIKiwixInt size = new JNIKiwixInt();
-    byte[] data = currentJNIReader.getContent(new JNIKiwixString(filePath), title, mime, size);
+    byte[] data = currentJNIReader.getContent(new JNIKiwixString(filePath), new JNIKiwixString(),
+        new JNIKiwixString(), new JNIKiwixInt());
     FileOutputStream out = new FileOutputStream(f);
     out.write(data, 0, data.length);
     out.flush();
@@ -482,10 +480,10 @@ public class ZimContentProvider extends ContentProvider {
     @Override
     public void run() {
       try {
-        JNIKiwixString mime = new JNIKiwixString();
-        JNIKiwixString title = new JNIKiwixString();
-        JNIKiwixInt size = new JNIKiwixInt();
-        byte[] data = currentJNIReader.getContent(new JNIKiwixString(articleZimUrl), title, mime, size);
+        final JNIKiwixString mime = new JNIKiwixString();
+        final JNIKiwixInt size = new JNIKiwixInt();
+        final JNIKiwixString url = new JNIKiwixString(articleZimUrl);
+        byte[] data = currentJNIReader.getContent(url, new JNIKiwixString(), mime, size);
         if (mime.value != null && mime.value.equals("text/css") && MainActivity.nightMode) {
           out.write(("img, video { \n" +
               " -webkit-filter: invert(1); \n" +
@@ -495,7 +493,7 @@ public class ZimContentProvider extends ContentProvider {
         out.write(data, 0, data.length);
         out.flush();
 
-        Log.d(TAG_KIWIX, "reading  " + articleZimUrl
+        Log.d(TAG_KIWIX, "reading  " + url.value
             + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
       } catch (IOException | NullPointerException e) {
         Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",

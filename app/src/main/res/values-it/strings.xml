@@ -70,7 +70,6 @@
   <string name="no_files_here">Nessun file qui</string>
   <string name="download_no_space">Lo spazio è insufficiente per scaricare questo file.</string>
   <string name="space_available">Spazio disponibile:</string>
-  <string name="get_library_over_network">Usa un network per scaricare la lista dei contenuti. (Circa 6 MB)</string>
   <string name="help_10">Puoi sia scaricare i tuoi file ZIM in-app selezionati o selezionare attentamente quello/i che desideri e scaricarli attraverso il Desktop di un computer prima di trasferire i file ZIM sulla tua memoria SD.</string>
   <string name="help_11">I file ZIM scaricati nell\'applicazione sono localizzati nella directory di archiviazione esterna in una cartella chiamata Kiwix.</string>
   <string name="help_12">Come utilizzare file ZIM di grandi dimensioni?</string>

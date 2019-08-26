@@ -10,11 +10,19 @@
       app:actionViewClass="androidx.appcompat.widget.SearchView"
       app:iconifiedByDefault="true"
       app:showAsAction="always|collapseActionView"/>
+
   <item
       android:id="@+id/select_language"
       android:icon="@drawable/ic_language_white_24dp"
       android:title="@string/pref_language_chooser"
       android:visible="true"
       app:showAsAction="ifRoom"/>
+
+  <item
+      android:id="@+id/get_zim_nearby_device"
+      android:icon="@drawable/ic_baseline_mobile_screen_share_24px"
+      android:title="@string/get_content_from_nearby_device"
+      app:showAsAction="always"/>
+
 </menu>
 

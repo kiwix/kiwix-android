@@ -29,6 +29,6 @@ class MainContract {
 
     void saveBookmark(BookmarkItem bookmark);
 
-    void deleteBookmark(BookmarkItem bookmark);
+    void deleteBookmark(String bookmarkUrl);
   }
 }
