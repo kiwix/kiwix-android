@@ -1,12 +1,10 @@
 package org.kiwix.kiwixmobile.webserver;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -26,14 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
 import io.reactivex.Flowable;
 import io.reactivex.SingleObserver;
@@ -66,7 +57,7 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TURN_OFF_
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TURN_ON_AFTER_O;
 
 public class ZimHostActivity extends BaseActivity implements
-    ZimHostCallbacks, ZimHostContract.View {
+    ZimHostCallbacks, ZimHostContract.View, LocationCallbacks {
 
   @BindView(R.id.startServerButton)
   Button startServerButton;
@@ -94,6 +85,7 @@ public class ZimHostActivity extends BaseActivity implements
   HotspotService hotspotService;
   private String ip;
   private ServiceConnection serviceConnection;
+  LocationServicesHelper locationServicesHelper;
   ArrayList<String> selectedBooksPath = new ArrayList<>();
 
   @Override
@@ -153,6 +145,7 @@ public class ZimHostActivity extends BaseActivity implements
         startHotspotHelper();
       }
     });
+    locationServicesHelper = new LocationServicesHelper(ZimHostActivity.this);
   }
 
   private void startHotspotHelper() {
@@ -291,23 +284,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    //Checking the result code for LocationSettings resolution
-    if (requestCode == LOCATION_SETTINGS_PERMISSION_RESULT) {
-      final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-      switch (resultCode) {
-        case Activity.RESULT_OK:
-          // All required changes were successfully made
-          Log.v(TAG, states.isLocationPresent() + "");
-          startService(createHotspotIntent(ACTION_TURN_ON_AFTER_O));
-          break;
-        case Activity.RESULT_CANCELED:
-          // The user was asked to change settings, but chose not to
-          Log.v(TAG, "Canceled");
-          break;
-        default:
-          break;
-      }
-    }
+    locationServicesHelper.onActivityResult(requestCode, resultCode, data);
   }
 
   @Override protected void onDestroy() {
@@ -323,61 +300,6 @@ public class ZimHostActivity extends BaseActivity implements
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
-  }
-
-  private void setupLocationServices() {
-    LocationRequest locationRequest = new LocationRequest();
-    locationRequest.setInterval(10);
-    locationRequest.setSmallestDisplacement(10);
-    locationRequest.setFastestInterval(10);
-    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    LocationSettingsRequest.Builder builder = new
-        LocationSettingsRequest.Builder();
-    builder.addLocationRequest(locationRequest);
-
-    task = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
-
-    locationSettingsResponseBuilder();
-  }
-
-  private void locationSettingsResponseBuilder() {
-    task.addOnCompleteListener(task -> {
-      try {
-        LocationSettingsResponse response = task.getResult(ApiException.class);
-        // All location settings are satisfied. The client can initialize location
-        // requests here.
-
-        startService(createHotspotIntent(ACTION_TURN_ON_AFTER_O));
-
-        //}
-      } catch (ApiException exception) {
-        switch (exception.getStatusCode()) {
-          case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-            // Location settings are not satisfied. But could be fixed by showing the
-            // user a dialog.
-            try {
-              // Cast to a resolvable exception.
-              ResolvableApiException resolvable = (ResolvableApiException) exception;
-              // Show the dialog by calling startResolutionForResult(),
-              // and check the result in onActivityResult().
-              resolvable.startResolutionForResult(
-                  ZimHostActivity.this,
-                  LOCATION_SETTINGS_PERMISSION_RESULT);
-            } catch (IntentSender.SendIntentException e) {
-              // Ignore the error.
-            } catch (ClassCastException e) {
-              // Ignore, should be an impossible error.
-            }
-            break;
-          case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-            // Location settings are not satisfied. However, we have no way to fix the
-            // settings so we won't show the dialog.
-            break;
-          default:
-            break;
-        }
-      }
-    });
   }
 
   //Advice user to turn on hotspot manually for API<26
@@ -528,7 +450,7 @@ public class ZimHostActivity extends BaseActivity implements
       startService(createHotspotIntent(ACTION_TURN_OFF_AFTER_O));
     } else //If hotspot is not already enabled, then turn it on.
     {
-      setupLocationServices();
+      locationServicesHelper.setupLocationServices();
     }
   }
 
@@ -541,5 +463,9 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void addBooks(@Nullable List<BooksOnDiskListItem> books) {
     booksAdapter.setItems(books);
+  }
+
+  @Override public void onLocationSet() {
+    createHotspotIntent(ACTION_TURN_ON_AFTER_O);
   }
 }
