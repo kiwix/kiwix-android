@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.util.Log;
+import androidx.annotation.NonNull;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -18,10 +19,11 @@ public class LocationServicesHelper {
   private static final String TAG = "LocationServicesHelper";
   private final LocationCallbacks locationCallbacks;
   private final Activity activity;
-  public static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
+  private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
 
   @Inject
-  public LocationServicesHelper(Activity activity, LocationCallbacks locationCallbacks) {
+  public LocationServicesHelper(@NonNull Activity activity,
+      @NonNull LocationCallbacks locationCallbacks) {
     this.activity = activity;
     this.locationCallbacks = locationCallbacks;
   }
@@ -44,7 +46,7 @@ public class LocationServicesHelper {
     locationSettingsResponseBuilder();
   }
 
-  public void locationSettingsResponseBuilder() {
+  private void locationSettingsResponseBuilder() {
     task.addOnCompleteListener(task -> {
       try {
         LocationSettingsResponse response = task.getResult(ApiException.class);
@@ -83,7 +85,7 @@ public class LocationServicesHelper {
     });
   }
 
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+  public void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
     //Checking the result code for LocationSettings resolution
     if (requestCode == LOCATION_SETTINGS_PERMISSION_RESULT) {
       final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);

@@ -29,6 +29,7 @@ import io.reactivex.disposables.Disposable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import kotlin.Unit;
@@ -72,11 +73,11 @@ public class ZimHostActivity extends BaseActivity implements
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
   private static final String IP_STATE_KEY = "ip_state_key";
-  ProgressDialog progressDialog;
+  private ProgressDialog progressDialog;
 
   private BooksOnDiskAdapter booksAdapter;
-  BookOnDiskDelegate.BookDelegate bookDelegate;
-  HotspotService hotspotService;
+  private BookOnDiskDelegate.BookDelegate bookDelegate;
+  private HotspotService hotspotService;
   private String ip;
   private ServiceConnection serviceConnection;
 
@@ -252,7 +253,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    locationServicesHelper.onActivityResult(requestCode, resultCode, data);
+    locationServicesHelper.onActivityResult(requestCode, resultCode, Objects.requireNonNull(data));
   }
 
   @Override protected void onDestroy() {
@@ -263,7 +264,7 @@ public class ZimHostActivity extends BaseActivity implements
   private void setUpToolbar() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle(getString(R.string.menu_host_books));
+    Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.menu_host_books));
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -274,22 +275,18 @@ public class ZimHostActivity extends BaseActivity implements
   private void startHotspotManuallyDialog() {
 
     alertDialogShower.show(KiwixDialog.StartHotspotManually.INSTANCE,
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            launchTetheringSettingsScreen();
-            return Unit.INSTANCE;
-          }
+        () -> {
+          launchTetheringSettingsScreen();
+          return Unit.INSTANCE;
         },
         null,
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            progressDialog =
-                ProgressDialog.show(ZimHostActivity.this,
-                    getString(R.string.progress_dialog_starting_server), "",
-                    true);
-            pollForValidIpAddress();
-            return Unit.INSTANCE;
-          }
+        () -> {
+          progressDialog =
+              ProgressDialog.show(ZimHostActivity.this,
+                  getString(R.string.progress_dialog_starting_server), "",
+                  true);
+          pollForValidIpAddress();
+          return Unit.INSTANCE;
         }
     );
   }
@@ -297,7 +294,7 @@ public class ZimHostActivity extends BaseActivity implements
   //Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
   //If no ip is found after 15 seconds, dismisses the progress dialog
   private void pollForValidIpAddress() {
-    Flowable.fromCallable(() -> ServerUtils.getIp())
+    Flowable.fromCallable(ServerUtils::getIp)
         .retryWhen(error -> error.delay(1, TimeUnit.SECONDS))
         .timeout(15, TimeUnit.SECONDS)
         .firstOrError()
@@ -322,7 +319,7 @@ public class ZimHostActivity extends BaseActivity implements
         });
   }
 
-  Intent createHotspotIntent(String action) {
+  private Intent createHotspotIntent(String action) {
     return new Intent(this, HotspotService.class).setAction(action);
   }
 
@@ -341,19 +338,17 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
     alertDialogShower.show(new KiwixDialog.ShowHotspotDetails(wifiConfiguration),
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            progressDialog =
-                ProgressDialog.show(ZimHostActivity.this,
-                    getString(R.string.progress_dialog_starting_server), "",
-                    true);
-            pollForValidIpAddress();
-            return Unit.INSTANCE;
-          }
+        (Function0<Unit>) () -> {
+          progressDialog =
+              ProgressDialog.show(ZimHostActivity.this,
+                  getString(R.string.progress_dialog_starting_server), "",
+                  true);
+          pollForValidIpAddress();
+          return Unit.INSTANCE;
         });
   }
 
-  void launchTetheringSettingsScreen() {
+  private void launchTetheringSettingsScreen() {
     final Intent intent = new Intent(Intent.ACTION_MAIN, null);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     final ComponentName cn =
@@ -366,11 +361,9 @@ public class ZimHostActivity extends BaseActivity implements
   @Override public void onHotspotFailedToStart() {
     //Show a dialog to turn off default hotspot
     alertDialogShower.show(KiwixDialog.TurnOffHotspotManually.INSTANCE,
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            launchTetheringSettingsScreen();
-            return Unit.INSTANCE;
-          }
+        (Function0<Unit>) () -> {
+          launchTetheringSettingsScreen();
+          return Unit.INSTANCE;
         });
   }
 
@@ -381,12 +374,12 @@ public class ZimHostActivity extends BaseActivity implements
   @Override protected void onSaveInstanceState(@Nullable Bundle outState) {
     super.onSaveInstanceState(outState);
     if (ServerUtils.isServerStarted) {
-      outState.putString(IP_STATE_KEY, ip);
+      Objects.requireNonNull(outState).putString(IP_STATE_KEY, ip);
     }
   }
 
   @Override public void addBooks(@Nullable List<BooksOnDiskListItem> books) {
-    booksAdapter.setItems(books);
+    booksAdapter.setItems(Objects.requireNonNull(books));
   }
 
   @Override public void onLocationSet() {

@@ -157,7 +157,7 @@ public class HotspotService extends Service implements HotspotStateListener {
   }
 
   //Dismiss notification and turn off hotspot for devices>=O
-  void stopHotspotAndDismissNotification() {
+  private void stopHotspotAndDismissNotification() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       hotspotManager.turnOffHotspot();
     } else {

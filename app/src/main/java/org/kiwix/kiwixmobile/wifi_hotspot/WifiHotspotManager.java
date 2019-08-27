@@ -77,7 +77,7 @@ public class WifiHotspotManager {
     return hotspotReservation != null;
   }
 
-  void printCurrentConfig(WifiConfiguration wifiConfiguration) {
+  private void printCurrentConfig(WifiConfiguration wifiConfiguration) {
     Log.v(TAG, "THE PASSWORD IS: "
         + wifiConfiguration.preSharedKey
         + " \n SSID is : "

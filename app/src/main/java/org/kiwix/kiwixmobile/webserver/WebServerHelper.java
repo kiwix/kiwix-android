@@ -17,11 +17,11 @@ import org.kiwix.kiwixmobile.utils.ServerUtils;
 
 public class WebServerHelper {
   private static final String TAG = "WebServerHelper";
-  private final int DEFAULT_PORT = 8080;
   private JNIKiwixLibrary kiwixLibrary;
   private JNIKiwixServer kiwixServer;
 
-  @Inject public WebServerHelper(JNIKiwixLibrary kiwixLibrary, JNIKiwixServer kiwixServer) {
+  @Inject public WebServerHelper(@NonNull JNIKiwixLibrary kiwixLibrary,
+      @NonNull JNIKiwixServer kiwixServer) {
     this.kiwixLibrary = kiwixLibrary;
     this.kiwixServer = kiwixServer;
   }
@@ -47,6 +47,7 @@ public class WebServerHelper {
 
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!ServerUtils.isServerStarted) {
+      int DEFAULT_PORT = 8080;
       ServerUtils.port = DEFAULT_PORT;
       for (String path : selectedBooksPath) {
         try {

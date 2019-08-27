@@ -22,5 +22,4 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 
 @Scope
 @Retention(RUNTIME)
-annotation class ServiceScope {
-}
+annotation class ServiceScope
