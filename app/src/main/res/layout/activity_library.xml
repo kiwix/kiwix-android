@@ -12,6 +12,8 @@
       android:id="@+id/libraryErrorText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:paddingBottom="@dimen/libraryErrorText_padding_bottom"
+      android:textSize="@dimen/libraryErrorText_text_size"
       android:visibility="gone"
       tools:visibility="visible"
       app:layout_constraintBottom_toBottomOf="parent"
