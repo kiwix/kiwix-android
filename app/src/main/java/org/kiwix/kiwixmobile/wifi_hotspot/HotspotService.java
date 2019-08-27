@@ -44,7 +44,6 @@ public class HotspotService extends Service implements HotspotStateListener {
   private static final int HOTSPOT_NOTIFICATION_ID = 666;
   private static final String ACTION_STOP = "hotspot_stop";
   private static final String TAG = "HotspotService";
-  private WifiHotspotManager hotspotManager;
   private BroadcastReceiver stopReceiver;
   private NotificationManager notificationManager;
   private NotificationCompat.Builder builder;
@@ -54,6 +53,9 @@ public class HotspotService extends Service implements HotspotStateListener {
   @Inject
   WebServerHelper webServerHelper;
 
+  @Inject
+  WifiHotspotManager hotspotManager;
+
   @Override public void onCreate() {
     KiwixApplication.getApplicationComponent()
         .serviceComponent()
@@ -62,7 +64,6 @@ public class HotspotService extends Service implements HotspotStateListener {
         .inject(this);
     super.onCreate();
 
-    hotspotManager = new WifiHotspotManager(this);
     hotspotManager.registerListener(this);
 
     stopReceiver = new BroadcastReceiver() {

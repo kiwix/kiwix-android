@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import javax.inject.Inject;
 
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
@@ -16,11 +17,12 @@ import androidx.annotation.RequiresApi;
  */
 
 public class WifiHotspotManager {
+  private static final String TAG = "WifiHotspotManager";
   private final WifiManager wifiManager;
   private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   private HotspotStateListener hotspotStateListener;
-  private static final String TAG = "WifiHotspotManager";
 
+  @Inject
   public WifiHotspotManager(@NonNull Context context) {
     wifiManager =
         (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
