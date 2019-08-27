@@ -12,16 +12,18 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
+import javax.inject.Inject;
 
 public class LocationServicesHelper {
   private Activity activity;
-  private LocationCallbacks locationCallbacks;
   private static final String TAG = "LocationServicesHelper";
+  private LocationCallbacks locationCallbacks;
   public static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
 
-  public LocationServicesHelper(Activity activity) {
+  @Inject
+  public LocationServicesHelper(Activity activity, LocationCallbacks locationCallbacks) {
     this.activity = activity;
-    locationCallbacks = (LocationCallbacks) activity;
+    this.locationCallbacks = locationCallbacks;
   }
 
   private Task<LocationSettingsResponse> task;

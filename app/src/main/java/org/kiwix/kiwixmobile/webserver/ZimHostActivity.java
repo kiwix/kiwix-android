@@ -22,8 +22,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.tasks.Task;
 import io.reactivex.Flowable;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -68,11 +66,13 @@ public class ZimHostActivity extends BaseActivity implements
   @Inject
   AlertDialogShower alertDialogShower;
 
+  @Inject
+  LocationServicesHelper locationServicesHelper;
+
   private static final String TAG = "ZimHostActivity";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
   private static final String IP_STATE_KEY = "ip_state_key";
-  private Task<LocationSettingsResponse> task;
   ProgressDialog progressDialog;
 
   private BooksOnDiskAdapter booksAdapter;
@@ -80,7 +80,6 @@ public class ZimHostActivity extends BaseActivity implements
   HotspotService hotspotService;
   private String ip;
   private ServiceConnection serviceConnection;
-  LocationServicesHelper locationServicesHelper;
   ArrayList<String> selectedBooksPath = new ArrayList<>();
 
   @Override
@@ -140,7 +139,6 @@ public class ZimHostActivity extends BaseActivity implements
         startHotspotHelper();
       }
     });
-    locationServicesHelper = new LocationServicesHelper(ZimHostActivity.this);
   }
 
   private void startHotspotHelper() {
