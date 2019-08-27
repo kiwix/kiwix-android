@@ -12,6 +12,7 @@
       android:id="@+id/download_management_no_downloads"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:paddingBottom="@dimen/download_management_no_downloads_padding_bottom"
       android:text="@string/no_downloads_here"
       android:textSize="@dimen/download_management_no_downloads_text_size"
       android:visibility="gone"

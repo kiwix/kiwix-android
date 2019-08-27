@@ -19,7 +19,10 @@
   <dimen name="title_text_margin">16dp</dimen>
   <dimen name="title_text_padding">16dp</dimen>
   <dimen name="slider_dialog_horizontal_padding">16dp</dimen>
+  <dimen name="download_management_no_downloads_padding_bottom">75dp</dimen>
   <dimen name="download_management_no_downloads_text_size">20sp</dimen>
+  <dimen name="libraryErrorText_padding_bottom">75dp</dimen>
+  <dimen name="libraryErrorText_text_size">20sp</dimen>
   <dimen name="kiwix_search_widget_padding">0dp</dimen>
   <dimen name="section_list_height">56dp</dimen>
   <dimen name="favicon_width">48dp</dimen>
