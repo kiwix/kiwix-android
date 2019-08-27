@@ -15,9 +15,9 @@ import com.google.android.gms.tasks.Task;
 import javax.inject.Inject;
 
 public class LocationServicesHelper {
-  private Activity activity;
   private static final String TAG = "LocationServicesHelper";
-  private LocationCallbacks locationCallbacks;
+  private final LocationCallbacks locationCallbacks;
+  private final Activity activity;
   public static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
 
   @Inject

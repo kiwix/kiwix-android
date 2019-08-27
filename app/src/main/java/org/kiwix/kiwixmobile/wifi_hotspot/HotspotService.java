@@ -79,7 +79,7 @@ public class HotspotService extends Service implements HotspotStateListener {
 
       case ACTION_IS_HOTSPOT_ENABLED:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          zimHostCallbacks.onHotspotStateReceived(hotspotManager.checkHotspotState());
+          zimHostCallbacks.onHotspotStateReceived(hotspotManager.isHotspotStarted());
         }
         break;
 

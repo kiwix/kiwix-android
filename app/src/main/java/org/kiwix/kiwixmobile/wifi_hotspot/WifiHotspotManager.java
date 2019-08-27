@@ -71,7 +71,7 @@ public class WifiHotspotManager {
 
   //This method checks the state of the hostpot for devices>=Oreo
   @RequiresApi(api = Build.VERSION_CODES.O)
-  public boolean checkHotspotState() {
+  public boolean isHotspotStarted() {
     return hotspotReservation != null;
   }
 
