@@ -81,7 +81,6 @@ public class HotspotService extends Service implements HotspotStateListener {
           if (hotspotManager.isHotspotStarted()) {
             stopHotspotAndDismissNotification();
           } else {
-            //Turn it on, then callbacks
             zimHostCallbacks.requestLocationAccess();
           }
         }

@@ -199,9 +199,9 @@ public class ZimHostActivity extends BaseActivity implements
     //Check if location permissions are granted
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
-
+      //Toggle hotspot if location permissions are granted
       startService(createHotspotIntent(
-          ACTION_TOGGLE_HOTSPOT)); //If hotspot is already enabled, turn it off
+          ACTION_TOGGLE_HOTSPOT));
     } else {
       //Ask location permission if not granted
       ActivityCompat.requestPermissions(this,
