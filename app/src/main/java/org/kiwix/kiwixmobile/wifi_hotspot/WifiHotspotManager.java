@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.wifi_hotspot;
 
-import android.content.Context;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
