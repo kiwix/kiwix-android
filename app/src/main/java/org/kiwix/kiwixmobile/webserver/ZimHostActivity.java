@@ -79,7 +79,6 @@ public class ZimHostActivity extends BaseActivity implements
   HotspotService hotspotService;
   private String ip;
   private ServiceConnection serviceConnection;
-  ArrayList<String> selectedBooksPath = new ArrayList<>();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,8 +126,7 @@ public class ZimHostActivity extends BaseActivity implements
     startServerButton.setOnClickListener(v -> {
       //Get the path of ZIMs user has selected
       if (!ServerUtils.isServerStarted) {
-        getSelectedBooksPath();
-        if (selectedBooksPath.size() > 0) {
+        if (getSelectedBooksPath().size() > 0) {
           startHotspotHelper();
         } else {
           Toast.makeText(ZimHostActivity.this, R.string.no_books_selected_toast_message,
@@ -152,7 +150,8 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  private void getSelectedBooksPath() {
+  private ArrayList<String> getSelectedBooksPath() {
+    ArrayList<String> selectedBooksPath = new ArrayList<>();
     for (BooksOnDiskListItem item : booksAdapter.getItems()) {
       if (item.isSelected()) {
         BooksOnDiskListItem.BookOnDisk bookOnDisk = (BooksOnDiskListItem.BookOnDisk) item;
@@ -161,6 +160,7 @@ public class ZimHostActivity extends BaseActivity implements
         Log.v(TAG, "ZIM PATH : " + file.getAbsolutePath());
       }
     }
+    return selectedBooksPath;
   }
 
   private void select(@NonNull BooksOnDiskListItem.BookOnDisk bookOnDisk) {
@@ -309,7 +309,7 @@ public class ZimHostActivity extends BaseActivity implements
           @Override public void onSuccess(String s) {
             progressDialog.dismiss();
             startService(createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
-                SELECTED_ZIM_PATHS_KEY, selectedBooksPath));
+                SELECTED_ZIM_PATHS_KEY, getSelectedBooksPath()));
             Log.d(TAG, "onSuccess:  " + s);
           }
 
@@ -333,9 +333,6 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void onServerStopped() {
     layoutServerStopped();
-    if (selectedBooksPath.size() > 0) {
-      selectedBooksPath.clear();
-    }
   }
 
   @Override public void onServerFailedToStart() {
