@@ -18,14 +18,15 @@ import javax.inject.Inject;
 
 public class WifiHotspotManager {
   private static final String TAG = "WifiHotspotManager";
-  private final WifiManager wifiManager;
   private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   private HotspotStateListener hotspotStateListener;
 
   @Inject
-  public WifiHotspotManager(@NonNull Context context) {
-    wifiManager =
-        (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+  WifiManager wifiManager;
+
+  @Inject
+  public WifiHotspotManager(@NonNull WifiManager wifiManager) {
+    this.wifiManager = wifiManager;
   }
 
   //Workaround to turn on hotspot for Oreo versions

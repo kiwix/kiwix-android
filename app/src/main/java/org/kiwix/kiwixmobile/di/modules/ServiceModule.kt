@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.di.modules
 
 import android.content.Context
+import android.net.wifi.WifiManager
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixlib.JNIKiwixLibrary
@@ -21,7 +22,8 @@ class ServiceModule {
 
   @Provides
   @ServiceScope
-  fun providesWifiHotspotManager(context: Context): WifiHotspotManager = WifiHotspotManager(context)
+  fun providesWifiHotspotManager(wifiManager: WifiManager): WifiHotspotManager =
+    WifiHotspotManager(wifiManager)
 
   @Provides
   @ServiceScope
@@ -31,5 +33,10 @@ class ServiceModule {
   @ServiceScope
   fun providesJNIKiwixServer(jniKiwixLibrary: JNIKiwixLibrary): JNIKiwixServer =
     JNIKiwixServer(jniKiwixLibrary)
+
+  @Provides
+  @ServiceScope
+  fun providesWifiManager(context: Context): WifiManager =
+    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 }
 
