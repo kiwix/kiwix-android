@@ -44,11 +44,10 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDeleg
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
-import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_IS_HOTSPOT_ENABLED;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_LOCATION_ACCESS_GRANTED;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_START_SERVER;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
-import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TURN_OFF_AFTER_O;
-import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TURN_ON_AFTER_O;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TOGGLE_HOTSPOT;
 
 public class ZimHostActivity extends BaseActivity implements
     ZimHostCallbacks, ZimHostContract.View, LocationCallbacks {
@@ -202,7 +201,7 @@ public class ZimHostActivity extends BaseActivity implements
         == PackageManager.PERMISSION_GRANTED) {
 
       startService(createHotspotIntent(
-          ACTION_IS_HOTSPOT_ENABLED)); //If hotspot is already enabled, turn it off
+          ACTION_TOGGLE_HOTSPOT)); //If hotspot is already enabled, turn it off
     } else {
       //Ask location permission if not granted
       ActivityCompat.requestPermissions(this,
@@ -381,14 +380,8 @@ public class ZimHostActivity extends BaseActivity implements
         });
   }
 
-  @Override public void onHotspotStateReceived(@NonNull Boolean isHotspotEnabled) {
-    if (isHotspotEnabled) //if hotspot is already enabled, turn it off.
-    {
-      startService(createHotspotIntent(ACTION_TURN_OFF_AFTER_O));
-    } else //If hotspot is not already enabled, then turn it on.
-    {
-      locationServicesHelper.setupLocationServices();
-    }
+  @Override public void requestLocationAccess() {
+    locationServicesHelper.setupLocationServices();
   }
 
   @Override protected void onSaveInstanceState(@Nullable Bundle outState) {
@@ -403,6 +396,6 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void onLocationSet() {
-    startService(createHotspotIntent(ACTION_TURN_ON_AFTER_O));
+    startService(createHotspotIntent(ACTION_LOCATION_ACCESS_GRANTED));
   }
 }

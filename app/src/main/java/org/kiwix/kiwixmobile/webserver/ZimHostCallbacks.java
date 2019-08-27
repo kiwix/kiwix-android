@@ -15,5 +15,5 @@ public interface ZimHostCallbacks {
 
   void onHotspotFailedToStart();
 
-  void onHotspotStateReceived(@NonNull Boolean state);
+  void requestLocationAccess();
 }

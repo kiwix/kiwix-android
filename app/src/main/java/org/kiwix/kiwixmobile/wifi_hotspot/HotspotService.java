@@ -34,9 +34,8 @@ import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS
 
 public class HotspotService extends Service implements HotspotStateListener {
 
-  public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
-  public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
-  public static final String ACTION_IS_HOTSPOT_ENABLED = "Is_hotspot_enabled";
+  public static final String ACTION_TOGGLE_HOTSPOT = "toggle_hotspot";
+  public static final String ACTION_LOCATION_ACCESS_GRANTED = "location_access_granted";
   public static final String ACTION_START_SERVER = "start_server";
   public static final String ACTION_STOP_SERVER = "stop_server";
 
@@ -77,21 +76,20 @@ public class HotspotService extends Service implements HotspotStateListener {
   @Override public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
     switch (intent.getAction()) {
 
-      case ACTION_IS_HOTSPOT_ENABLED:
+      case ACTION_TOGGLE_HOTSPOT:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          zimHostCallbacks.onHotspotStateReceived(hotspotManager.isHotspotStarted());
+          if (hotspotManager.isHotspotStarted()) {
+            stopHotspotAndDismissNotification();
+          } else {
+            //Turn it on, then callbacks
+            zimHostCallbacks.requestLocationAccess();
+          }
         }
         break;
 
-      case ACTION_TURN_ON_AFTER_O:
+      case ACTION_LOCATION_ACCESS_GRANTED:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           hotspotManager.turnOnHotspot();
-        }
-        break;
-
-      case ACTION_TURN_OFF_AFTER_O:
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          stopHotspotAndDismissNotification();
         }
         break;
 
