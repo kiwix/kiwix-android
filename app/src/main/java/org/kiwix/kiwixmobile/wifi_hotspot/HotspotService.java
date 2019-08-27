@@ -56,7 +56,7 @@ public class HotspotService extends Service implements HotspotStateListener {
     super.onCreate();
 
     hotspotManager = new WifiHotspotManager(this);
-    hotspotManager.registerListener(HotspotService.this);
+    hotspotManager.registerListener(this);
 
     stopReceiver = new BroadcastReceiver() {
       @Override
