@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.IBinder;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -31,7 +29,6 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -49,7 +46,6 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDeleg
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
-import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_IS_HOTSPOT_ENABLED;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_START_SERVER;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
@@ -74,7 +70,6 @@ public class ZimHostActivity extends BaseActivity implements
 
   private static final String TAG = "ZimHostActivity";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
-  private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
   private static final String IP_STATE_KEY = "ip_state_key";
   private Task<LocationSettingsResponse> task;
@@ -152,15 +147,11 @@ public class ZimHostActivity extends BaseActivity implements
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       toggleHotspot();
     } else {
-      //if (isMobileDataEnabled(context)) {
-      //  mobileDataDialog();
-      //} else {
       if (ServerUtils.isServerStarted) {
         startService(createHotspotIntent(ACTION_STOP_SERVER));
       } else {
         startHotspotManuallyDialog();
       }
-      //}
     }
   }
 
@@ -250,26 +241,6 @@ public class ZimHostActivity extends BaseActivity implements
     booksAdapter.notifyDataSetChanged();
   }
 
-  // This method checks if mobile data is enabled in user's device.
-  static boolean isMobileDataEnabled(Context context) {
-    ConnectivityManager cm =
-        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    try {
-      Class cmClass = Class.forName(cm.getClass().getName());
-      Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
-      method.setAccessible(true);
-      return (Boolean) method.invoke(cm);
-    } catch (Exception e) {
-      Log.e(TAG, e.toString());
-    }
-    return false;
-  }
-
-  //This method sends the user to data usage summary settings activity
-  private void openMobileDataActivity() {
-    startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-  }
-
   @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
     if (requestCode == MY_PERMISSIONS_ACCESS_FINE_LOCATION) {
@@ -346,7 +317,6 @@ public class ZimHostActivity extends BaseActivity implements
           }
 
           @Override public void onError(Throwable e) {
-            // display the ip and don't forget to dismiss the dialog
             progressDialog.dismiss();
             Toast.makeText(ZimHostActivity.this, R.string.server_failed_message, Toast.LENGTH_SHORT)
                 .show();
@@ -357,25 +327,6 @@ public class ZimHostActivity extends BaseActivity implements
 
   Intent createHotspotIntent(String action) {
     return new Intent(this, HotspotService.class).setAction(action);
-  }
-
-  void mobileDataDialog() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
-
-      builder.setPositiveButton(this.getString(R.string.yes),
-          (dialog, id) -> openMobileDataActivity());
-      builder.setNegativeButton((android.R.string.no),
-          (dialog, id) -> startHotspotManuallyDialog());
-      builder.setTitle(this.getString(R.string.mobile_data_enabled));
-      builder.setMessage(
-          this.getString(R.string.mobile_data_message) + "\n" + this.getString(
-              R.string.mobile_data_message_confirmation)
-      );
-      builder.setCancelable(false);
-      AlertDialog dialog = builder.create();
-      dialog.show();
-    }
   }
 
   @Override public void onServerStarted(@NonNull String ipAddress) {
@@ -423,7 +374,6 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void onHotspotFailedToStart() {
     //Show a dialog to turn off default hotspot
-
     alertDialogShower.show(KiwixDialog.TurnOffHotspotManually.INSTANCE,
         new Function0<Unit>() {
           @Override public Unit invoke() {
