@@ -304,25 +304,26 @@ public class ZimHostActivity extends BaseActivity implements
 
   //Advice user to turn on hotspot manually for API<26
   private void startHotspotManuallyDialog() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
-    builder.setPositiveButton(getString(R.string.go_to_settings_label),
-        (dialog, id) -> launchTetheringSettingsScreen());
-
-    builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
-
-      progressDialog =
-          ProgressDialog.show(this, getString(R.string.progress_dialog_starting_server), "",
-              true);
-      pollForValidIpAddress();
-    });
-
-    builder.setTitle(getString(R.string.hotspot_dialog_title));
-    builder.setMessage(
-        getString(R.string.hotspot_dialog_message)
+    alertDialogShower.show(KiwixDialog.StartHotspotManually.INSTANCE,
+        new Function0<Unit>() {
+          @Override public Unit invoke() {
+            launchTetheringSettingsScreen();
+            return Unit.INSTANCE;
+          }
+        },
+        null,
+        new Function0<Unit>() {
+          @Override public Unit invoke() {
+            progressDialog =
+                ProgressDialog.show(ZimHostActivity.this,
+                    getString(R.string.progress_dialog_starting_server), "",
+                    true);
+            pollForValidIpAddress();
+            return Unit.INSTANCE;
+          }
+        }
     );
-    AlertDialog dialog = builder.create();
-    dialog.show();
   }
 
   //Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec

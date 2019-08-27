@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.utils
 import android.app.Activity
 import android.app.AlertDialog
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.utils.KiwixDialog.StartHotspotManually
 import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(
@@ -31,6 +32,14 @@ class AlertDialogShower @Inject constructor(
           setNegativeButton(it) { _, _ ->
             clickListeners.getOrNull(1)
               ?.invoke()
+          }
+        }
+        if (dialog === StartHotspotManually) {
+          dialog.neutralMessage?.let {
+            setNeutralButton(it) { _, _ ->
+              clickListeners.getOrNull(2)
+                ?.invoke()
+            }
           }
         }
       }
