@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.webserver;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import java.util.ArrayList;
+import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixLibrary;
 import org.kiwix.kiwixlib.JNIKiwixServer;
@@ -15,21 +16,18 @@ import org.kiwix.kiwixmobile.utils.ServerUtils;
  */
 
 public class WebServerHelper {
-  private final int DEFAULT_PORT = 8080;
-  private final JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
-  private final JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
   private static final String TAG = "WebServerHelper";
+  private final int DEFAULT_PORT = 8080;
+  private JNIKiwixLibrary kiwixLibrary;
+  private JNIKiwixServer kiwixServer;
 
-  public WebServerHelper() {
-
+  @Inject public WebServerHelper(JNIKiwixLibrary kiwixLibrary, JNIKiwixServer kiwixServer) {
+    this.kiwixLibrary = kiwixLibrary;
+    this.kiwixServer = kiwixServer;
   }
 
   public boolean startServerHelper(@NonNull ArrayList<String> selectedBooksPath) {
 
-    // 1. Get port from settings screen
-    // 2. Ask user to change port in settings if port is in use.
-    // OR
-    // Always use 8080 and when its not available then iterate this number.
     String ip = ServerUtils.getIpAddress();
     ip = ip.replaceAll("\n", "");
     if (ip.length() == 0) {
@@ -50,7 +48,6 @@ public class WebServerHelper {
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!ServerUtils.isServerStarted) {
       ServerUtils.port = DEFAULT_PORT;
-      //Call to start server
       for (String path : selectedBooksPath) {
         try {
           boolean isBookAdded = kiwixLibrary.addBook(path);

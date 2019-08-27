@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.utils.ServerUtils;
@@ -48,10 +50,16 @@ public class HotspotService extends Service implements HotspotStateListener {
   private NotificationCompat.Builder builder;
   private ZimHostCallbacks zimHostCallbacks;
   private final IBinder serviceBinder = new HotspotBinder();
-  private WebServerHelper webServerHelper;
+
+  @Inject
+  WebServerHelper webServerHelper;
 
   @Override public void onCreate() {
-
+    KiwixApplication.getApplicationComponent()
+        .serviceComponent()
+        .service(this)
+        .build()
+        .inject(this);
     super.onCreate();
 
     hotspotManager = new WifiHotspotManager(this);
@@ -67,8 +75,6 @@ public class HotspotService extends Service implements HotspotStateListener {
     };
 
     registerReceiver(stopReceiver, new IntentFilter(ACTION_STOP));
-
-    webServerHelper = new WebServerHelper();
 
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
   }
