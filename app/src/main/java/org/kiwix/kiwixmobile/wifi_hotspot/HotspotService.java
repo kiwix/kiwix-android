@@ -186,12 +186,13 @@ public class HotspotService extends Service implements HotspotStateListener {
     zimHostCallbacks = myCallback;
   }
 
-  public void startForegroundNotificationHelper() {
+  private void startForegroundNotificationHelper() {
     startForeground(HOTSPOT_NOTIFICATION_ID,
         buildForegroundNotification(getString(R.string.hotspot_running)));
   }
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
+    startForegroundNotificationHelper();
     zimHostCallbacks.onHotspotTurnedOn(wifiConfiguration);
   }
 

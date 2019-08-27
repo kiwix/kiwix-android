@@ -343,9 +343,6 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
-
-    hotspotService.startForegroundNotificationHelper();
-
     alertDialogShower.show(new KiwixDialog.ShowHotspotDetails(wifiConfiguration),
         new Function0<Unit>() {
           @Override public Unit invoke() {
