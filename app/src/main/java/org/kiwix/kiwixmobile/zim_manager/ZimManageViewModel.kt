@@ -406,8 +406,7 @@ class ZimManageViewModel @Inject constructor(
             }
           }
           .filterNot { downloadedBooksIds.contains(it.id) }
-          .filterNot { downloadingBookIds.contains(it.id) }
-          .filterNot { it.url.contains("/stack_exchange/") }, // Temp filter see #694, filter)
+          .filterNot { downloadingBookIds.contains(it.id) },
         filter
       )
 
