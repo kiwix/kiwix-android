@@ -1,9 +1,5 @@
 package org.kiwix.kiwixmobile.wifi_hotspot;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,21 +9,18 @@ import android.net.wifi.WifiConfiguration;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.utils.ServerUtils;
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
-import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS_KEY;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID;
 
 /**
  * HotspotService is used to add a foreground service for the wifi hotspot.
@@ -41,12 +34,9 @@ public class HotspotService extends Service implements HotspotStateListener {
   public static final String ACTION_START_SERVER = "start_server";
   public static final String ACTION_STOP_SERVER = "stop_server";
 
-  private static final int HOTSPOT_NOTIFICATION_ID = 666;
-  private static final String ACTION_STOP = "hotspot_stop";
+  public static final String ACTION_STOP = "hotspot_stop";
   private static final String TAG = "HotspotService";
   private BroadcastReceiver stopReceiver;
-  private NotificationManager notificationManager;
-  private NotificationCompat.Builder builder;
   private ZimHostCallbacks zimHostCallbacks;
   private final IBinder serviceBinder = new HotspotBinder();
 
@@ -55,6 +45,9 @@ public class HotspotService extends Service implements HotspotStateListener {
 
   @Inject
   WifiHotspotManager hotspotManager;
+
+  @Inject
+  HotspotNotificationManager hotspotNotificationManager;
 
   @Override public void onCreate() {
     KiwixApplication.getApplicationComponent()
@@ -76,8 +69,6 @@ public class HotspotService extends Service implements HotspotStateListener {
     };
 
     registerReceiver(stopReceiver, new IntentFilter(ACTION_STOP));
-
-    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
   @Override public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
@@ -113,7 +104,7 @@ public class HotspotService extends Service implements HotspotStateListener {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             stopForeground(true);
             stopSelf();
-            notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
+            hotspotNotificationManager.dismissNotification();
           }
         }
 
@@ -132,30 +123,6 @@ public class HotspotService extends Service implements HotspotStateListener {
     return serviceBinder;
   }
 
-  private Notification buildForegroundNotification(String status) {
-    Log.v(TAG, "Building notification " + status);
-    builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle(getString(R.string.hotspot_notification_content_title))
-        .setContentText(status);
-    Intent targetIntent = new Intent(this, ZimHostActivity.class);
-    targetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    PendingIntent contentIntent =
-        PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-    builder.setContentIntent(contentIntent)
-        .setSmallIcon(R.mipmap.kiwix_icon)
-        .setWhen(System.currentTimeMillis());
-
-    hotspotNotificationChannel();
-
-    Intent stopIntent = new Intent(ACTION_STOP);
-    PendingIntent stopHotspot =
-        PendingIntent.getBroadcast(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-    builder.addAction(R.drawable.ic_close_white_24dp, getString(R.string.stop_hotspot_button),
-        stopHotspot);
-
-    return (builder.build());
-  }
-
   //Dismiss notification and turn off hotspot for devices>=O
   private void stopHotspotAndDismissNotification() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -165,7 +132,7 @@ public class HotspotService extends Service implements HotspotStateListener {
       zimHostCallbacks.onServerStopped();
       stopForeground(true);
       stopSelf();
-      notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
+      hotspotNotificationManager.dismissNotification();
     }
   }
 
@@ -177,25 +144,14 @@ public class HotspotService extends Service implements HotspotStateListener {
     super.onDestroy();
   }
 
-  private void hotspotNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationChannel hotspotServiceChannel = new NotificationChannel(
-          Constants.HOTSPOT_SERVICE_CHANNEL_ID, getString(R.string.hotspot_service_channel_name),
-          NotificationManager.IMPORTANCE_DEFAULT);
-      hotspotServiceChannel.setDescription(getString(R.string.hotspot_channel_description));
-      hotspotServiceChannel.setSound(null, null);
-      builder.setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID);
-      notificationManager.createNotificationChannel(hotspotServiceChannel);
-    }
-  }
-
   public void registerCallBack(@Nullable ZimHostCallbacks myCallback) {
     zimHostCallbacks = myCallback;
   }
 
   private void startForegroundNotificationHelper() {
     startForeground(HOTSPOT_NOTIFICATION_ID,
-        buildForegroundNotification(getString(R.string.hotspot_running)));
+        hotspotNotificationManager.buildForegroundNotification(
+            getString(R.string.hotspot_running)));
   }
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
@@ -212,7 +168,7 @@ public class HotspotService extends Service implements HotspotStateListener {
     zimHostCallbacks.onServerStopped();
     stopForeground(true);
     stopSelf();
-    notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
+    hotspotNotificationManager.dismissNotification();
   }
 
   public class HotspotBinder extends Binder {
