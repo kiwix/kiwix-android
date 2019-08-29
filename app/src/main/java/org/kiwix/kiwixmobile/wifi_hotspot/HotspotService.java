@@ -57,8 +57,6 @@ public class HotspotService extends Service implements HotspotStateListener {
         .inject(this);
     super.onCreate();
 
-    hotspotManager.registerListener(this);
-
     stopReceiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent intent) {

@@ -24,8 +24,10 @@ public class WifiHotspotManager {
   WifiManager wifiManager;
 
   @Inject
-  public WifiHotspotManager(@NonNull WifiManager wifiManager) {
+  public WifiHotspotManager(@NonNull WifiManager wifiManager,
+      HotspotStateListener hotspotStateListener) {
     this.wifiManager = wifiManager;
+    this.hotspotStateListener = hotspotStateListener;
   }
 
   //Workaround to turn on hotspot for Oreo versions
@@ -82,9 +84,5 @@ public class WifiHotspotManager {
         + wifiConfiguration.preSharedKey
         + " \n SSID is : "
         + wifiConfiguration.SSID);
-  }
-
-  public void registerListener(@NonNull HotspotStateListener hotspotStateListener) {
-    this.hotspotStateListener = hotspotStateListener;
   }
 }
