@@ -29,7 +29,6 @@ import io.reactivex.disposables.Disposable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import kotlin.Unit;
@@ -114,8 +113,7 @@ public class ZimHostActivity extends BaseActivity implements
 
       @Override
       public void onServiceConnected(ComponentName className, IBinder service) {
-        HotspotService.HotspotBinder binder = (HotspotService.HotspotBinder) service;
-        hotspotService = binder.getService();
+        hotspotService = ((HotspotService.HotspotBinder) service).getService();
         hotspotService.registerCallBack(ZimHostActivity.this);
       }
 
@@ -253,7 +251,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    locationServicesHelper.onActivityResult(requestCode, resultCode, Objects.requireNonNull(data));
+    locationServicesHelper.onActivityResult(requestCode, resultCode, (data));
   }
 
   @Override protected void onDestroy() {
@@ -264,7 +262,7 @@ public class ZimHostActivity extends BaseActivity implements
   private void setUpToolbar() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.menu_host_books));
+    getSupportActionBar().setTitle(getString(R.string.menu_host_books));
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -374,12 +372,12 @@ public class ZimHostActivity extends BaseActivity implements
   @Override protected void onSaveInstanceState(@Nullable Bundle outState) {
     super.onSaveInstanceState(outState);
     if (ServerUtils.isServerStarted) {
-      Objects.requireNonNull(outState).putString(IP_STATE_KEY, ip);
+      outState.putString(IP_STATE_KEY, ip);
     }
   }
 
   @Override public void addBooks(@Nullable List<BooksOnDiskListItem> books) {
-    booksAdapter.setItems(Objects.requireNonNull(books));
+    booksAdapter.setItems(books);
   }
 
   @Override public void onLocationSet() {
