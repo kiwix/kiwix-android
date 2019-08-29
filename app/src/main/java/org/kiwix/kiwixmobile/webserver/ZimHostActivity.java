@@ -272,8 +272,8 @@ public class ZimHostActivity extends BaseActivity implements
   //Advice user to turn on hotspot manually for API<26
   private void startHotspotManuallyDialog() {
 
-    alertDialogShower.show(KiwixDialog.StartHotspotManually.INSTANCE,
-        () -> {
+    alertDialogShower.show(new KiwixDialog.StartHotspotManually(),
+        (Function0<Unit>) () -> {
           launchTetheringSettingsScreen();
           return Unit.INSTANCE;
         },
