@@ -12,7 +12,7 @@
       android:id="@+id/file_management_no_files"
       android:text="@string/no_files_here"
       tools:ignore="MissingConstraints"
-      style="@style/CustomTextView"
+      style="@style/no_list_content_text"
       />
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

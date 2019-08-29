@@ -11,7 +11,7 @@
   <TextView
       android:id="@+id/libraryErrorText"
       tools:ignore="MissingConstraints"
-      style="@style/CustomTextView"
+      style="@style/no_list_content_text"
       />
 
 

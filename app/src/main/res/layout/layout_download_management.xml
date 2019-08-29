@@ -13,7 +13,7 @@
       android:id="@+id/download_management_no_downloads"
       android:text="@string/no_downloads_here"
       tools:ignore="MissingConstraints"
-      style="@style/CustomTextView"
+      style="@style/no_list_content_text"
       />
 
   <androidx.recyclerview.widget.RecyclerView

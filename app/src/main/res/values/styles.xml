@@ -149,7 +149,7 @@
     <item name="android:windowBackground">@color/cardview_dark_background</item>
   </style>
 
-  <style name="CustomTextView" parent="Widget.Design.TextInputLayout">
+  <style name="no_list_content_text" parent="TextAppearance.AppCompat">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/custom_text_view_text_size</item>
