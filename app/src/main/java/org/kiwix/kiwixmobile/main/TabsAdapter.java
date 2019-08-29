@@ -133,7 +133,9 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     }
     holder.title.setText(webViewTitle);
     holder.close.setOnClickListener(v -> listener.onCloseTab(v, holder.getAdapterPosition()));
-    holder.content.setImageBitmap(getBitmapFromView(webView));
+    holder.content.setImageBitmap(
+      getBitmapFromView(webView, getWindowWidth(activity), getWindowHeight(activity))
+    );
     holder.content.setOnClickListener(v -> {
       selectedPosition = holder.getAdapterPosition();
       listener.onSelectTab(v, selectedPosition);
@@ -159,9 +161,9 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
   }
 
   public interface TabClickListener {
-    void onSelectTab(View view, int position);
+    void onSelectTab(@NonNull View view, int position);
 
-    void onCloseTab(View view, int position);
+    void onCloseTab(@NonNull View view, int position);
   }
 
   static class ViewHolder extends RecyclerView.ViewHolder {

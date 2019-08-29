@@ -50,8 +50,8 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter
 import org.kiwix.kiwixmobile.language
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.libraryNetworkEntity
 import org.kiwix.kiwixmobile.resetSchedulers
 import org.kiwix.kiwixmobile.setScheduler
 import org.kiwix.kiwixmobile.utils.BookUtils
@@ -66,7 +66,6 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskList
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import java.io.File
-import java.util.LinkedList
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
@@ -302,12 +301,13 @@ class ZimManageViewModelTest {
       )
       expectNetworkDbAndDefault(
         listOf(
-          Book().apply { language = "eng" },
-          Book().apply { language = "eng" },
-          Book().apply { language = "fra" }
+          book(language = "eng"),
+          book(language = "eng"),
+          book(language = "fra")
         ),
         listOf(),
-        defaultLanguage)
+        defaultLanguage
+      )
       verify {
         newLanguagesDao.insert(
           listOf(
@@ -337,9 +337,9 @@ class ZimManageViewModelTest {
       )
       expectNetworkDbAndDefault(
         listOf(
-          Book().apply { language = "eng" },
-          Book().apply { language = "eng" },
-          Book().apply { language = "fra" }
+          book(language = "eng"),
+          book(language = "eng"),
+          book(language = "fra")
         ),
         listOf(dbLanguage),
         language(isActive = true, occurencesOfLanguage = 1)
@@ -368,10 +368,8 @@ class ZimManageViewModelTest {
     ) {
       every { application.getString(any()) } returns ""
       every { kiwixService.library } returns Single.just(
-        LibraryNetworkEntity().apply {
-          book = LinkedList(networkBooks)
-        })
-      val defaultLanguage = defaultLanguage
+        libraryNetworkEntity(networkBooks)
+      )
       every { defaultLanguageProvider.provide() } returns defaultLanguage
       languages.onNext(dbBooks)
       testScheduler.triggerActions()
@@ -392,41 +390,34 @@ class ZimManageViewModelTest {
     every { downloader.queryStatus(any()) } returns emptyList()
     every { application.getString(R.string.your_languages) } returns "1"
     every { application.getString(R.string.other_languages) } returns "2"
-    val bookAlreadyOnDisk = Book().apply {
-      id = "0"
-      url = ""
+    val bookAlreadyOnDisk = book(
+      id = "0",
+      url = "",
       language = Locale.ENGLISH.language
-    }
-    val bookDownloading = Book().apply {
-      id = "1"
+    )
+    val bookDownloading = book(
+      id = "1",
       url = ""
-    }
-    val bookWithStackExchange = Book().apply {
-      id = "2"
-      url = "blahblah/stack_exchange/"
-    }
-    val bookWithActiveLanguage = Book().apply {
-      id = "3"
-      language = "activeLanguage"
+    )
+    val bookWithActiveLanguage = book(
+      id = "3",
+      language = "activeLanguage",
       url = ""
-    }
-    val bookWithInactiveLanguage = Book().apply {
-      id = "3"
-      language = "inactiveLanguage"
+    )
+    val bookWithInactiveLanguage = book(
+      id = "3",
+      language = "inactiveLanguage",
       url = ""
-    }
+    )
     every { kiwixService.library } returns Single.just(
-      LibraryNetworkEntity().apply {
-        book = LinkedList(
-          listOf(
-            bookAlreadyOnDisk,
-            bookDownloading,
-            bookWithStackExchange,
-            bookWithActiveLanguage,
-            bookWithInactiveLanguage
-          )
+      libraryNetworkEntity(
+        listOf(
+          bookAlreadyOnDisk,
+          bookDownloading,
+          bookWithActiveLanguage,
+          bookWithInactiveLanguage
         )
-      }
+      )
     )
     networkStates.onNext(CONNECTED)
     downloads.onNext(listOf(downloadModel(book = bookDownloading)))
@@ -453,15 +444,15 @@ class ZimManageViewModelTest {
 
   @Test
   fun `library filters out files over 4GB if file system state says to`() {
-    val bookOver4Gb = Book().apply {
-      id = "0"
-      url = ""
+    val bookOver4Gb = book(
+      id = "0",
+      url = "",
       size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
-    }
+    )
     every { kiwixService.library } returns Single.just(
-      LibraryNetworkEntity().apply {
-        book = LinkedList(listOf(bookOver4Gb))
-      }
+      libraryNetworkEntity(
+        listOf(bookOver4Gb)
+      )
     )
     networkStates.onNext(CONNECTED)
     downloads.onNext(listOf())

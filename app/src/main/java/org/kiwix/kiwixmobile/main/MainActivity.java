@@ -66,7 +66,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -468,7 +467,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void setTabListener() {
     tabsAdapter.setTabClickListener(new TabsAdapter.TabClickListener() {
       @Override
-      public void onSelectTab(View view, int position) {
+      public void onSelectTab(@NonNull View view, int position) {
         hideTabSwitcher();
         selectTab(position);
 
@@ -477,7 +476,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       }
 
       @Override
-      public void onCloseTab(View view, int position) {
+      public void onCloseTab(@NonNull View view, int position) {
         closeTab(position);
       }
     });
@@ -1589,6 +1588,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     toggleActionItemsConfig();
+    // Forcing redraw of RecyclerView children so that the tabs are properly oriented on rotation
+    tabRecyclerView.setAdapter(tabsAdapter);
   }
 
   private void toggleActionItemsConfig() {

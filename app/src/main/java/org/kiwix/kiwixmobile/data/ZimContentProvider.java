@@ -365,6 +365,15 @@ public class ZimContentProvider extends ContentProvider {
     return mimeType;
   }
 
+  public static String getRedirect(String url) {
+    return Uri.parse(CONTENT_URI + currentJNIReader.checkUrl(getFilePath(Uri.parse(url))))
+        .toString();
+  }
+
+  public static boolean isRedirect(String url) {
+    return !url.equals(getRedirect(url));
+  }
+
   @Override
   public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
 
@@ -407,7 +416,7 @@ public class ZimContentProvider extends ContentProvider {
   private ParcelFileDescriptor loadVideoViaCache(Uri uri) throws IOException {
     String filePath = getFilePath(uri);
     String fileName = uri.toString();
-    fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
+    fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
     File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
     byte[] data = currentJNIReader.getContent(new JNIKiwixString(filePath), new JNIKiwixString(),
         new JNIKiwixString(), new JNIKiwixInt());
@@ -473,7 +482,7 @@ public class ZimContentProvider extends ContentProvider {
       try {
         final JNIKiwixString mime = new JNIKiwixString();
         final JNIKiwixInt size = new JNIKiwixInt();
-        final JNIKiwixString url = new JNIKiwixString(this.articleZimUrl);
+        final JNIKiwixString url = new JNIKiwixString(articleZimUrl);
         byte[] data = currentJNIReader.getContent(url, new JNIKiwixString(), mime, size);
         if (mime.value != null && mime.value.equals("text/css") && MainActivity.nightMode) {
           out.write(("img, video { \n" +
