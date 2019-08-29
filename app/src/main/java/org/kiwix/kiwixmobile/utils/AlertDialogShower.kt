@@ -34,12 +34,10 @@ class AlertDialogShower @Inject constructor(
               ?.invoke()
           }
         }
-        if (dialog === StartHotspotManually) {
-          dialog.neutralMessage?.let {
-            setNeutralButton(it) { _, _ ->
-              clickListeners.getOrNull(2)
-                ?.invoke()
-            }
+        if (dialog is StartHotspotManually) {
+          setNeutralButton(dialog.neutralMessage) { _, _ ->
+            clickListeners.getOrNull(2)
+              ?.invoke()
           }
         }
       }
