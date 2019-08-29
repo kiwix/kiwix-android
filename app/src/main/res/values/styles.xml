@@ -149,4 +149,17 @@
     <item name="android:windowBackground">@color/cardview_dark_background</item>
   </style>
 
+  <style name="no_list_content_text" parent="TextAppearance.AppCompat">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">20sp</item>
+    <item name="android:textColor">@color/grey</item>
+    <item name="android:visibility">gone</item>
+    <item name="layout_constraintLeft_toLeftOf">parent</item>
+    <item name="layout_constraintRight_toRightOf">parent</item>
+    <item name="layout_constraintVertical_bias">0.4</item>
+    <item name="layout_constraintTop_toTopOf">parent</item>
+    <item name="layout_constraintBottom_toBottomOf">parent</item>
+  </style>
+
 </resources>
