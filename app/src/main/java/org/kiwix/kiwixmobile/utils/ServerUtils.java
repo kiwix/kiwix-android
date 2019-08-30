@@ -53,7 +53,6 @@ public class ServerUtils {
 
   @Nullable public static String getIp() {
     String ip = getIpAddress();
-    if (ip.length() == 0) return INVALID_IP;
-    return ip;
+    return ip.length() == 0 ? INVALID_IP : ip;
   }
 }

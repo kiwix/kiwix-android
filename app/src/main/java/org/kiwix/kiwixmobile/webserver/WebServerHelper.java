@@ -26,6 +26,7 @@ public class WebServerHelper {
   private JNIKiwixLibrary kiwixLibrary;
   private JNIKiwixServer kiwixServer;
   private IpAddressCallbacks ipAddressCallbacks;
+  private boolean isServerStarted;
 
   @Inject public WebServerHelper(@NonNull JNIKiwixLibrary kiwixLibrary,
       @NonNull JNIKiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
@@ -35,26 +36,23 @@ public class WebServerHelper {
   }
 
   public boolean startServerHelper(@NonNull ArrayList<String> selectedBooksPath) {
-
-    String ip = ServerUtils.getIpAddress();
-    ip = ip.replaceAll("\n", "");
-    if (ip.length() == 0) {
+    if (ServerUtils.getIpAddress().length() == 0) {
       return false;
     } else if (startAndroidWebServer(selectedBooksPath)) {
       return true;
     }
-    return ServerUtils.isServerStarted;
+    return isServerStarted;
   }
 
   public void stopAndroidWebServer() {
-    if (ServerUtils.isServerStarted) {
+    if (isServerStarted) {
       kiwixServer.stop();
-      ServerUtils.isServerStarted = false;
+      updateServerState(false);
     }
   }
 
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
-    if (!ServerUtils.isServerStarted) {
+    if (!isServerStarted) {
       int DEFAULT_PORT = 8080;
       ServerUtils.port = DEFAULT_PORT;
       for (String path : selectedBooksPath) {
@@ -66,10 +64,15 @@ public class WebServerHelper {
         }
       }
       kiwixServer.setPort(ServerUtils.port);
-      ServerUtils.isServerStarted = kiwixServer.start();
-      Log.v(TAG, "Server status" + ServerUtils.isServerStarted);
+      updateServerState(kiwixServer.start());
+      Log.v(TAG, "Server status" + isServerStarted);
     }
-    return ServerUtils.isServerStarted;
+    return isServerStarted;
+  }
+
+  private void updateServerState(boolean isStarted) {
+    isServerStarted = isStarted;
+    ServerUtils.isServerStarted = isStarted;
   }
 
   //Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
@@ -85,11 +88,11 @@ public class WebServerHelper {
             s -> {
               ipAddressCallbacks.onIpAddressValid();
               Log.d(TAG, "onSuccess:  " + s);
-            },       //success stuff
+            },
             e -> {
               Log.d(TAG, "Unable to turn on server", e);
               ipAddressCallbacks.onIpAddressInvalid();
-            }       //failure stuff
+            }
         );
   }
 }
