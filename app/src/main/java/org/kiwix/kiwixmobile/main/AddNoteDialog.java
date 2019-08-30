@@ -106,7 +106,7 @@ public class AddNoteDialog extends DialogFragment
   }
 
   private void onFailureToCreateAddNoteDialog() {
-    showToast(R.string.error_filenotfound, Toast.LENGTH_LONG);
+    showToast(R.string.error_file_not_found, Toast.LENGTH_LONG);
     closeKeyboard();
     getFragmentManager().beginTransaction().remove(this).commit();
   }

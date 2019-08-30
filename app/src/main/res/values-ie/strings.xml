@@ -4,15 +4,15 @@
   <string name="menu_home">Principal</string>
   <string name="menu_settings">Preferenties</string>
   <string name="menu_search">Sercha</string>
-  <string name="menu_searchintext">Constatar in textu</string>
+  <string name="menu_search_in_text">Constatar in textu</string>
   <string name="menu_bookmarks">Marcatores</string>
-  <string name="menu_randomarticle">Articul sporadic</string>
-  <string name="menu_fullscreen">Scren ampli</string>
-  <string name="menu_exitfullscreen">Cluder plen-scren</string>
+  <string name="menu_random_article">Articul sporadic</string>
+  <string name="menu_full_screen">Scren ampli</string>
+  <string name="menu_exit_full_screen">Cluder plen-scren</string>
   <string name="search_label">Sercha</string>
   <string name="pref_display_title">Exposition</string>
-  <string name="pref_backtotop">Retro a supra</string>
-  <string name="pref_backtotop_summary">Monstra un taste in li fin del págine por saltar a supra.</string>
+  <string name="pref_back_to_top">Retro a supra</string>
+  <string name="pref_back_to_top_summary">Monstra un taste in li fin del págine por saltar a supra.</string>
   <string name="pref_language_title">Lingue</string>
   <string name="menu_bookmarks_list">Marcatores</string>
 

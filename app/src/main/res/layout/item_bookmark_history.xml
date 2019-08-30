@@ -14,7 +14,7 @@
       android:layout_marginEnd="@dimen/activity_horizontal_margin"
       android:layout_marginStart="@dimen/activity_horizontal_margin"
       android:layout_marginTop="8dp"
-      android:contentDescription="@string/favicon"
+      android:contentDescription="@string/fav_icon"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@id/title"
       app:layout_constraintStart_toStartOf="parent"

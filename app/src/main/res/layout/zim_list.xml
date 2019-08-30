@@ -10,17 +10,9 @@
 
   <TextView
       android:id="@+id/file_management_no_files"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingBottom="@dimen/file_management_no_files_padding_bottom"
       android:text="@string/no_files_here"
-      android:textSize="@dimen/file_management_no_files_text_size"
-      android:visibility="gone"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:visibility="visible"
+      tools:ignore="MissingConstraints"
+      style="@style/no_list_content_text"
       />
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

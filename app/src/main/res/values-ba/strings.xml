@@ -4,11 +4,11 @@
   <string name="menu_home">Төп Бит</string>
   <string name="menu_settings">Көйләүҙәр</string>
   <string name="menu_search">Эҙләү</string>
-  <string name="menu_searchintext">Текста табырға</string>
+  <string name="menu_search_in_text">Текста табырға</string>
   <string name="menu_bookmarks">Һалынмалар</string>
-  <string name="menu_randomarticle">Осраҡлы мәҡәлә</string>
-  <string name="menu_fullscreen">Тулы экран</string>
-  <string name="menu_exitfullscreen">Тулы экран режимынан сығырға</string>
+  <string name="menu_random_article">Осраҡлы мәҡәлә</string>
+  <string name="menu_full_screen">Тулы экран</string>
+  <string name="menu_exit_full_screen">Тулы экран режимынан сығырға</string>
   <string name="save_media">Медиа файлды һаҡлау форматы</string>
   <string name="search_label">Эҙләү</string>
   <string name="pref_display_title">Күрһәтергә</string>
