@@ -30,7 +30,7 @@ class OpenFile(val bookOnDisk: BookOnDisk) : SideEffect<Unit> {
     val file = bookOnDisk.file
     ZimContentProvider.canIterate = false
     if (!file.canRead()) {
-      activity.toast(R.string.error_filenotfound)
+      activity.toast(R.string.error_file_not_found)
     } else {
       (activity as ZimManageActivity).finishResult(file.path)
     }
