@@ -51,9 +51,9 @@ public class HotspotNotificationManager {
 
     hotspotNotificationChannel();
 
-    Intent stopIntent = new Intent(ACTION_STOP);
+    Intent stopIntent = new Intent(context, HotspotService.class).setAction(ACTION_STOP);
     PendingIntent stopHotspot =
-        PendingIntent.getBroadcast(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent.getService(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     return new NotificationCompat.Builder(context)
         .setContentTitle(context.getString(R.string.hotspot_notification_content_title))

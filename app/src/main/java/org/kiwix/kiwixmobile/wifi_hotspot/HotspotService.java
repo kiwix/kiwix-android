@@ -1,10 +1,7 @@
 package org.kiwix.kiwixmobile.wifi_hotspot;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.wifi.WifiConfiguration;
 import android.os.Binder;
 import android.os.Build;
@@ -36,7 +33,6 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
   public static final String ACTION_CHECK_IP_ADDRESS = "check_ip_address";
 
   public static final String ACTION_STOP = "hotspot_stop";
-  private BroadcastReceiver stopReceiver;
   private ZimHostCallbacks zimHostCallbacks;
   private final IBinder serviceBinder = new HotspotBinder();
 
@@ -56,17 +52,6 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
         .build()
         .inject(this);
     super.onCreate();
-
-    stopReceiver = new BroadcastReceiver() {
-      @Override
-      public void onReceive(Context context, Intent intent) {
-        if (intent != null && intent.getAction().equals(ACTION_STOP)) {
-          stopHotspotAndDismissNotification();
-        }
-      }
-    };
-
-    registerReceiver(stopReceiver, new IntentFilter(ACTION_STOP));
   }
 
   @Override public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
@@ -116,6 +101,10 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
         webServerHelper.pollForValidIpAddress();
         break;
 
+      case ACTION_STOP:
+        stopHotspotAndDismissNotification();
+        break;
+
       default:
         break;
     }
@@ -137,14 +126,6 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
       stopSelf();
       hotspotNotificationManager.dismissNotification();
     }
-  }
-
-  @Override
-  public void onDestroy() {
-    if (stopReceiver != null) {
-      unregisterReceiver(stopReceiver);
-    }
-    super.onDestroy();
   }
 
   public void registerCallBack(@Nullable ZimHostCallbacks myCallback) {
