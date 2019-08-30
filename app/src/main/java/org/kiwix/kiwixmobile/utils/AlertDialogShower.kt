@@ -36,7 +36,7 @@ class AlertDialogShower @Inject constructor(
   }
 
   private fun bodyArguments(dialog: KiwixDialog) =
-    if (dialog is HasBodyFormatArgs) dialog.args
+    if (dialog is HasBodyFormatArgs) dialog.args.toTypedArray()
     else emptyArray()
 
   private fun dialogStyle() =

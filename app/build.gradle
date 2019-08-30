@@ -131,6 +131,10 @@ dependencies {
   implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
   implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
 
+  implementation "androidx.tonyodev.fetch2:xfetch2:3.1.4"
+  implementation "androidx.tonyodev.fetch2okhttp:xfetch2okhttp:3.1.4"
+  implementation "androidx.tonyodev.fetch2rx:xfetch2rx:3.1.4"
+
   testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
   testImplementation "io.mockk:mockk:1.9"
   testImplementation "org.assertj:assertj-core:3.11.1"

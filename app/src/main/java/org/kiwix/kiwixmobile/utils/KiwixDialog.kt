@@ -10,45 +10,32 @@ sealed class KiwixDialog(
   val negativeMessage: Int
 ) {
 
-  data class DeleteZim(override val args: Array<out Any>) : KiwixDialog(
+  data class DeleteZim(override val args: List<Any>) : KiwixDialog(
     null, R.string.delete_zim_body, R.string.delete, R.string.no
   ), HasBodyFormatArgs {
-    constructor(bookOnDisk: BookOnDisk) : this(arrayOf(bookOnDisk.book.title))
-
-    override fun equals(other: Any?): Boolean {
-      if (this === other) return true
-      if (javaClass != other?.javaClass) return false
-
-      other as DeleteZim
-
-      if (!args.contentEquals(other.args)) return false
-
-      return true
-    }
-
-    override fun hashCode() = args.contentHashCode()
+    constructor(bookOnDisk: BookOnDisk) : this(listOf(bookOnDisk.book.title))
   }
 
   object LocationPermissionRationale : KiwixDialog(
-      null, R.string.permission_rationale_location, android.R.string.yes, android.R.string.cancel
+    null, R.string.permission_rationale_location, android.R.string.yes, android.R.string.cancel
   )
 
   object StoragePermissionRationale : KiwixDialog(
-      null, R.string.request_storage, android.R.string.yes, android.R.string.cancel
+    null, R.string.request_storage, android.R.string.yes, android.R.string.cancel
   )
 
   object EnableWifiP2pServices : KiwixDialog(
-      null, R.string.request_enable_wifi, R.string.yes, android.R.string.no
+    null, R.string.request_enable_wifi, R.string.yes, android.R.string.no
   )
 
   object EnableLocationServices : KiwixDialog(
-      null, R.string.request_enable_location, R.string.yes, android.R.string.no
+    null, R.string.request_enable_location, R.string.yes, android.R.string.no
   )
 
-  data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog(
-      null, R.string.transfer_to, R.string.yes, android.R.string.cancel
+  data class FileTransferConfirmation(override val args: List<Any>) : KiwixDialog(
+    null, R.string.transfer_to, R.string.yes, android.R.string.cancel
   ), HasBodyFormatArgs {
-    constructor(selectedPeerDeviceName: String) : this(arrayOf(selectedPeerDeviceName))
+    constructor(selectedPeerDeviceName: String) : this(listOf(selectedPeerDeviceName))
   }
 
   open class YesNoDialog(
@@ -66,5 +53,5 @@ sealed class KiwixDialog(
 }
 
 interface HasBodyFormatArgs {
-  val args: Array<out Any>
+  val args: List<Any>
 }

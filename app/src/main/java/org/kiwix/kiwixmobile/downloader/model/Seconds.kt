@@ -4,8 +4,8 @@ import org.kiwix.kiwixmobile.KiwixApplication
 import java.util.Locale
 import kotlin.math.roundToLong
 
-inline class Seconds(private val seconds: Int) {
-  @Suppress("unused") fun toHumanReadableTime(): String {
+inline class Seconds(val seconds: Long) {
+  fun toHumanReadableTime(): String {
     val minutes = 60.0
     val hours = 60 * minutes
     val days = 24 * hours

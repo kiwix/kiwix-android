@@ -34,6 +34,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.downloader.DownloadMonitor;
 
 public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
 
@@ -46,6 +47,8 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
 
   @Inject
   DispatchingAndroidInjector<Activity> activityInjector;
+  @Inject
+  DownloadMonitor downloadMonitor;
   private File logFile;
 
   public static KiwixApplication getInstance() {
@@ -65,8 +68,8 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     super.attachBaseContext(base);
     application = this;
     setApplicationComponent(DaggerApplicationComponent.builder()
-        .context(this)
-        .build());
+      .context(this)
+      .build());
   }
 
   @Override
@@ -104,6 +107,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
 
     Log.d("KIWIX", "Started KiwixApplication");
     applicationComponent.inject(this);
+    downloadMonitor.init();
     if (BuildConfig.DEBUG) {
       StrictMode.setThreadPolicy(buildThreadPolicy(new StrictMode.ThreadPolicy.Builder()));
       StrictMode.setVmPolicy(buildVmPolicy(new StrictMode.VmPolicy.Builder()));
@@ -118,12 +122,12 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
       builder.detectUnbufferedIo();
     }
     return builder.detectCustomSlowCalls()
-        .detectDiskReads()
-        .detectDiskWrites()
-        .detectNetwork()
-        .penaltyFlashScreen()
-        .penaltyLog()
-        .build();
+      .detectDiskReads()
+      .detectDiskWrites()
+      .detectNetwork()
+      .penaltyFlashScreen()
+      .penaltyLog()
+      .build();
   }
 
   private StrictMode.VmPolicy buildVmPolicy(StrictMode.VmPolicy.Builder builder) {
@@ -143,10 +147,10 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
       builder.detectNonSdkApiUsage();
     }
     return builder.detectActivityLeaks()
-        .detectLeakedClosableObjects()
-        .detectLeakedSqlLiteObjects()
-        .penaltyLog()
-        .build();
+      .detectLeakedClosableObjects()
+      .detectLeakedSqlLiteObjects()
+      .penaltyLog()
+      .build();
   }
 
   /* Checks if external storage is available for read and write */

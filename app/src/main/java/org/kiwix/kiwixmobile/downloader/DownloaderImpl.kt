@@ -19,17 +19,15 @@
 package org.kiwix.kiwixmobile.downloader
 
 import org.kiwix.kiwixmobile.data.remote.KiwixService
-import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
+import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadRequest
-import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(
   private val downloadRequester: DownloadRequester,
-  private val downloadDao: NewDownloadDao,
+  private val downloadDao: FetchDownloadDao,
   private val kiwixService: KiwixService
 ) : Downloader {
 
@@ -42,21 +40,14 @@ class DownloaderImpl @Inject constructor(
             val downloadId = downloadRequester.enqueue(
               DownloadRequest(it, book)
             )
-            downloadDao.insert(
-              DownloadModel(downloadId = downloadId, book = book)
-            )
+            downloadDao.insert(downloadId, book = book)
           }
         },
         Throwable::printStackTrace
       )
   }
 
-  override fun queryStatus(downloadModels: List<DownloadModel>) =
-    downloadRequester.query(downloadModels)
-      .sortedBy(DownloadStatus::downloadId)
-
   override fun cancelDownload(downloadItem: DownloadItem) {
     downloadRequester.cancel(downloadItem)
-    downloadDao.delete(downloadItem.downloadId)
   }
 }

@@ -68,7 +68,7 @@ class StorageObserverTest {
     every { sharedPreferenceUtil.prefStorage } returns "a"
     every { fileSearch.scan("a") } returns files
     every { newDownloadDao.downloads() } returns downloads
-    storageObserver = StorageObserver(sharedPreferenceUtil, newDownloadDao, fileSearch)
+    storageObserver = StorageObserver(newDownloadDao, fileSearch)
   }
 
   @Test

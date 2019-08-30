@@ -61,7 +61,7 @@ class FileSearchTest {
     every { Environment.getExternalStorageDirectory() } returns externalStorageDirectory
     every { externalStorageDirectory.absolutePath } returns "/externalStorageDirectory"
     every { context.contentResolver } returns contentResolver
-    every { StorageDeviceUtils.getStorageDevices(context, false) } returns arrayListOf(
+    every { StorageDeviceUtils.getReadableStorage(context, false) } returns arrayListOf(
       storageDevice
     )
     every { storageDevice.name } returns "/deviceDir"

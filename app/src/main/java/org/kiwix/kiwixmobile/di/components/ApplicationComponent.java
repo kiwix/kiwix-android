@@ -28,20 +28,18 @@ import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.language.LanguageActivity;
 import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
-import org.kiwix.kiwixmobile.zim_manager.DownloadNotificationClickedReceiver;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 @Singleton
 @Component(modules = {
-    ApplicationModule.class,
-    NetworkModule.class,
-    JNIModule.class,
-    DataModule.class
+  ApplicationModule.class,
+  NetworkModule.class,
+  JNIModule.class,
+  DataModule.class
 })
 public interface ApplicationComponent {
 
@@ -56,8 +54,6 @@ public interface ApplicationComponent {
 
   void inject(KiwixApplication application);
 
-  void inject(DownloadService service);
-
   void inject(ZimContentProvider zimContentProvider);
 
   void inject(KiwixWebView kiwixWebView);
@@ -65,8 +61,6 @@ public interface ApplicationComponent {
   void inject(KiwixSettingsActivity.PrefsFragment prefsFragment);
 
   void inject(AutoCompleteAdapter autoCompleteAdapter);
-
-  void inject(DownloadNotificationClickedReceiver downloadNotificationClickedReceiver);
 
   void inject(@NotNull ZimManageActivity zimManageActivity);
 

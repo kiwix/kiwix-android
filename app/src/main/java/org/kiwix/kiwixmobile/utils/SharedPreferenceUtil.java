@@ -2,14 +2,14 @@ package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Environment;
 import android.preference.PreferenceManager;
+import androidx.core.content.ContextCompat;
 import io.reactivex.Flowable;
-import io.reactivex.processors.BehaviorProcessor;
 import io.reactivex.processors.PublishProcessor;
 import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.kiwix.kiwixmobile.KiwixApplication;
 
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_AUTONIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_BACK_TO_TOP;
@@ -59,7 +59,6 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
   }
 
-
   public boolean getPrefBackToTop() {
     return sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
   }
@@ -85,8 +84,15 @@ public class SharedPreferenceUtil {
   }
 
   public String getPrefStorage() {
-    return sharedPreferences.getString(PREF_STORAGE,
-        Environment.getExternalStorageDirectory().getPath());
+    String storage = sharedPreferences.getString(PREF_STORAGE,
+      null);
+    if (storage == null) {
+      storage =
+        ContextCompat.getExternalFilesDirs(KiwixApplication.getInstance(), null)[0]
+          .getPath();
+      putPrefStorage(storage);
+    }
+    return storage;
   }
 
   private boolean getPrefNightMode() {
@@ -127,7 +133,7 @@ public class SharedPreferenceUtil {
     prefStorages.onNext(storage);
   }
 
-  public Flowable<String> getPrefStorages(){
+  public Flowable<String> getPrefStorages() {
     return prefStorages.startWith(getPrefStorage());
   }
 
@@ -153,8 +159,8 @@ public class SharedPreferenceUtil {
 
   public void setShowHistoryCurrentBook(boolean prefShowHistoryCurrentBook) {
     sharedPreferences.edit()
-        .putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook)
-        .apply();
+      .putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook)
+      .apply();
   }
 
   public boolean nightMode() {
@@ -174,7 +180,7 @@ public class SharedPreferenceUtil {
 
   public void setShowBookmarksCurrentBook(boolean prefShowBookmarksFromCurrentBook) {
     sharedPreferences.edit()
-        .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
-        .apply();
+      .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
+      .apply();
   }
 }

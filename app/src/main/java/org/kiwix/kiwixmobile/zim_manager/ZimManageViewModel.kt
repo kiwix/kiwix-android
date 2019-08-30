@@ -33,15 +33,11 @@ import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.data.DataSource
 import org.kiwix.kiwixmobile.data.remote.KiwixService
+import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
-import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
-import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
-import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter
 import org.kiwix.kiwixmobile.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.extensions.registerReceiver
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
@@ -51,6 +47,7 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
@@ -80,17 +77,15 @@ import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class ZimManageViewModel @Inject constructor(
-  private val downloadDao: NewDownloadDao,
+  private val downloadDao: FetchDownloadDao,
   private val bookDao: NewBookDao,
   private val languageDao: NewLanguagesDao,
-  private val downloader: Downloader,
   private val storageObserver: StorageObserver,
   private val kiwixService: KiwixService,
   private val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val bookUtils: BookUtils,
   private val fat32Checker: Fat32Checker,
-  private val uriToFileConverter: UriToFileConverter,
   private val defaultLanguageProvider: DefaultLanguageProvider,
   private val dataSource: DataSource
 ) : ViewModel() {
@@ -136,14 +131,11 @@ class ZimManageViewModel @Inject constructor(
 
   private fun disposables(): Array<Disposable> {
     val downloads = downloadDao.downloads()
-    val downloadStatuses = downloadStatuses(downloads)
     val booksFromDao = books()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages()
     return arrayOf(
-      updateDownloadItems(downloadStatuses),
-      removeCompletedDownloadsFromDb(downloadStatuses),
-      removeNonExistingDownloadsFromDb(downloadStatuses, downloads),
+      updateDownloadItems(downloads),
       updateBookItems(),
       checkFileSystemForBooksOnRequest(booksFromDao),
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
@@ -246,46 +238,6 @@ class ZimManageViewModel @Inject constructor(
         Throwable::printStackTrace
       )
 
-  private fun removeNonExistingDownloadsFromDb(
-    downloadStatuses: Flowable<List<DownloadStatus>>,
-    downloads: Flowable<List<DownloadModel>>
-  ) = downloadStatuses
-    .withLatestFrom(
-      downloads,
-      BiFunction(::combineToDownloadsWithoutStatuses)
-    )
-    .buffer(3, SECONDS)
-    .map(::downloadIdsWithNoStatusesOverBufferPeriod)
-    .filter { it.isNotEmpty() }
-    .subscribe(
-      {
-        downloadDao.delete(*it.toLongArray())
-      },
-      Throwable::printStackTrace
-    )
-
-  private fun downloadIdsWithNoStatusesOverBufferPeriod(noStatusIds: List<MutableList<Long>>) =
-    noStatusIds.flatten()
-      .fold(mutableMapOf<Long, Int>(), { acc, id -> acc.increment(id) })
-      .filter { (_, count) -> count == noStatusIds.size }
-      .map { (id, _) -> id }
-
-  private fun combineToDownloadsWithoutStatuses(
-    statuses: List<DownloadStatus>,
-    downloads: List<DownloadModel>
-  ): MutableList<Long> {
-    val downloadIdsWithStatuses = statuses.map(DownloadStatus::downloadId)
-    return downloads.fold(
-      mutableListOf(),
-      { acc, downloadModel ->
-        if (!downloadIdsWithStatuses.contains(downloadModel.downloadId)) {
-          acc.add(downloadModel.downloadId)
-        }
-        acc
-      }
-    )
-  }
-
   private fun updateNetworkStates() =
     connectivityBroadcastReceiver.networkStates.subscribe(
       networkStates::postValue, Throwable::printStackTrace
@@ -301,10 +253,13 @@ class ZimManageViewModel @Inject constructor(
     downloads,
     languages.filter { it.isNotEmpty() },
     library,
-    requestFiltering
-      .doOnNext { libraryListIsRefreshing.postValue(true) }
-      .debounce(500, MILLISECONDS)
-      .observeOn(Schedulers.io()),
+    Flowable.merge(
+      Flowable.just(""),
+      requestFiltering
+        .doOnNext { libraryListIsRefreshing.postValue(true) }
+        .debounce(500, MILLISECONDS)
+        .observeOn(Schedulers.io())
+    ),
     fat32Checker.fileSystemStates,
     Function6(::combineLibrarySources)
   )
@@ -400,6 +355,7 @@ class ZimManageViewModel @Inject constructor(
         libraryNetworkEntity.books
           .filter {
             when (fileSystemState) {
+              Unknown,
               CannotWrite4GbFile -> isLessThan4GB(it)
               NotEnoughSpaceFor4GbFile,
               CanWrite4GbFile -> true
@@ -516,38 +472,11 @@ class ZimManageViewModel @Inject constructor(
       })
   }
 
-  private fun removeCompletedDownloadsFromDb(downloadStatuses: Flowable<List<DownloadStatus>>) =
-    downloadStatuses
-      .observeOn(Schedulers.io())
-      .subscribeOn(Schedulers.io())
-      .map { it.filter { status -> status.state == Successful } }
-      .filter { it.isNotEmpty() }
-      .subscribe(
-        {
-          bookDao.insert(
-            it.map { downloadStatus -> downloadStatus.toBookOnDisk(uriToFileConverter) })
-          downloadDao.delete(
-            *it.map(DownloadStatus::downloadId).toLongArray()
-          )
-        },
-        Throwable::printStackTrace
-      )
-
-  private fun updateDownloadItems(downloadStatuses: Flowable<List<DownloadStatus>>) =
-    downloadStatuses
-      .map { statuses -> statuses.map(::DownloadItem) }
+  private fun updateDownloadItems(downloadModels: Flowable<List<DownloadModel>>) =
+    downloadModels
+      .map { it.map(::DownloadItem) }
       .subscribe(
         downloadItems::postValue,
         Throwable::printStackTrace
       )
-
-  private fun downloadStatuses(downloads: Flowable<List<DownloadModel>>) =
-    Flowable.combineLatest(
-      downloads,
-      Flowable.interval(1, SECONDS),
-      BiFunction { downloadModels: List<DownloadModel>, _: Long -> downloadModels }
-    )
-      .subscribeOn(Schedulers.io())
-      .map(downloader::queryStatus)
-      .distinctUntilChanged()
 }

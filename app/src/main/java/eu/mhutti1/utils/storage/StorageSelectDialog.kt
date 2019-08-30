@@ -54,7 +54,7 @@ class StorageSelectDialog : DialogFragment() {
     title.text = mTitle
     mAdapter = StorageSelectArrayAdapter(
       activity!!,
-      StorageDeviceUtils.getStorageDevices(activity!!, true)
+      StorageDeviceUtils.getWritableStorage(activity!!)
     )
     device_list.adapter = mAdapter
     device_list.onItemClickListener = OnItemClickListener { _, _, position, _ ->

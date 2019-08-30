@@ -20,9 +20,10 @@
 package org.kiwix.kiwixmobile.utils.files
 
 import android.content.Context
-import android.os.Environment
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.MediaColumns
+import android.util.Log
+import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
@@ -36,9 +37,9 @@ class FileSearch @Inject constructor(private val context: Context) {
 
   private val zimFileExtensions = arrayOf("zim", "zimaa")
 
-  fun scan(defaultPath: String): Flowable<List<File>> =
+  fun scan(): Flowable<List<File>> =
     Flowable.combineLatest(
-      Flowable.fromCallable { scanFileSystem(defaultPath) }.subscribeOn(Schedulers.io()),
+      Flowable.fromCallable(::scanFileSystem).subscribeOn(Schedulers.io()),
       Flowable.fromCallable(::scanMediaStore).subscribeOn(Schedulers.io()),
       BiFunction<List<File>, List<File>, List<File>> { filesSystemFiles, mediaStoreFiles ->
         filesSystemFiles + mediaStoreFiles
@@ -62,17 +63,18 @@ class FileSearch @Inject constructor(private val context: Context) {
       null
     )
 
-  private fun scanFileSystem(defaultPath: String) =
-    directoryRoots(defaultPath)
-      .minus(Environment.getExternalStorageDirectory().absolutePath)
+  private fun scanFileSystem() =
+    directoryRoots()
+      .also { Log.d("FileSearch", "searching at distinct: $it") }
       .fold(mutableListOf<File>(), { acc, root ->
         acc.apply { addAll(scanDirectory(root)) }
       })
+      .distinctBy { it.canonicalPath }
+      .also { Log.d("FileSearch", "found distinct files: $it") }
 
-  private fun directoryRoots(defaultPath: String) = listOf(
+  private fun directoryRoots() = listOf(
     "/mnt",
-    defaultPath,
-    *StorageDeviceUtils.getStorageDevices(context, false).map { it.name }.toTypedArray()
+    *StorageDeviceUtils.getReadableStorage(context).map(StorageDevice::name).toTypedArray()
   )
 
   private fun scanDirectory(directory: String): List<File> = File(directory).listFiles()
