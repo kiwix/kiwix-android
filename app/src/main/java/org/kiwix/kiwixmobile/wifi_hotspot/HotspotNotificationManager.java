@@ -7,7 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
@@ -18,7 +18,6 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP;
 
 public class HotspotNotificationManager {
 
-  private static final String TAG = "NotificationManager";
   public static final int HOTSPOT_NOTIFICATION_ID = 666;
   private Context context;
 
@@ -26,7 +25,8 @@ public class HotspotNotificationManager {
   NotificationManager notificationManager;
 
   @Inject
-  public HotspotNotificationManager(NotificationManager notificationManager, Context context) {
+  public HotspotNotificationManager(@NonNull NotificationManager notificationManager,
+      @NonNull Context context) {
     this.notificationManager = notificationManager;
     this.context = context;
   }
@@ -43,8 +43,7 @@ public class HotspotNotificationManager {
     }
   }
 
-  public Notification buildForegroundNotification(String status) {
-    Log.v(TAG, "Building notification " + status);
+  @NonNull public Notification buildForegroundNotification() {
     Intent targetIntent = new Intent(context, ZimHostActivity.class);
     targetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     PendingIntent contentIntent =
@@ -58,7 +57,7 @@ public class HotspotNotificationManager {
 
     return new NotificationCompat.Builder(context)
         .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
-        .setContentText(status)
+        .setContentText(context.getString(R.string.hotspot_running))
         .setContentIntent(contentIntent)
         .setSmallIcon(R.mipmap.kiwix_icon)
         .setWhen(System.currentTimeMillis())

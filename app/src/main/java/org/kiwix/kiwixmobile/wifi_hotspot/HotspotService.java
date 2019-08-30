@@ -36,7 +36,6 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
   public static final String ACTION_CHECK_IP_ADDRESS = "check_ip_address";
 
   public static final String ACTION_STOP = "hotspot_stop";
-  private static final String TAG = "HotspotService";
   private BroadcastReceiver stopReceiver;
   private ZimHostCallbacks zimHostCallbacks;
   private final IBinder serviceBinder = new HotspotBinder();
@@ -154,8 +153,7 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
 
   private void startForegroundNotificationHelper() {
     startForeground(HOTSPOT_NOTIFICATION_ID,
-        hotspotNotificationManager.buildForegroundNotification(
-            getString(R.string.hotspot_running)));
+        hotspotNotificationManager.buildForegroundNotification());
   }
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
@@ -176,12 +174,11 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
   }
 
   @Override public void onIpAddressValid() {
-    zimHostCallbacks.dismissProgressDialog();
-    zimHostCallbacks.provideBooksAndStartServer();
+    zimHostCallbacks.onIpAddressValid();
   }
 
   @Override public void onIpAddressInvalid() {
-    zimHostCallbacks.dismissProgressDialog();
+    zimHostCallbacks.onIpAddressInvalid();
   }
 
   public class HotspotBinder extends Binder {

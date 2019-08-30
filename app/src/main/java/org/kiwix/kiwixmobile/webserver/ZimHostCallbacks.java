@@ -17,7 +17,7 @@ public interface ZimHostCallbacks {
 
   void requestLocationAccess();
 
-  void provideBooksAndStartServer();
+  void onIpAddressValid();
 
-  void dismissProgressDialog();
+  void onIpAddressInvalid();
 }

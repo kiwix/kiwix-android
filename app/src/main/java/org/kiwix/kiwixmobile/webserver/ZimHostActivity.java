@@ -352,12 +352,13 @@ public class ZimHostActivity extends BaseActivity implements
     startService(createHotspotIntent(ACTION_LOCATION_ACCESS_GRANTED));
   }
 
-  @Override public void provideBooksAndStartServer() {
+  @Override public void onIpAddressValid() {
+    progressDialog.dismiss();
     startService(createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
         SELECTED_ZIM_PATHS_KEY, getSelectedBooksPath()));
   }
 
-  @Override public void dismissProgressDialog() {
+  @Override public void onIpAddressInvalid() {
     progressDialog.dismiss();
     Toast.makeText(this, R.string.server_failed_message,
         Toast.LENGTH_SHORT)

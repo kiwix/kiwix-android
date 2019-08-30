@@ -64,7 +64,7 @@ class ServiceModule {
   fun providesHotspotNotificationManager(
     notificationManager: NotificationManager,
     context: Context
-  ):
-      HotspotNotificationManager = HotspotNotificationManager(notificationManager, context)
+  ): HotspotNotificationManager =
+    HotspotNotificationManager(notificationManager, context)
 }
 
