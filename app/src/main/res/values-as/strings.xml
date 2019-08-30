@@ -6,9 +6,9 @@
   <string name="menu_search">সন্ধান কৰক</string>
   <string name="menu_search_in_text">লিখনীত বিচাৰক</string>
   <string name="menu_bookmarks">পত্ৰচিহ্নসমূহ</string>
-  <string name="menu_randomarticle">যাদৃচ্ছিক ৰচনা</string>
-  <string name="menu_fullscreen">পূর্ণাঙ্গ স্ক্রিন</string>
-  <string name="menu_exitfullscreen">পূৰ্ণাঙ্গ স্ক্ৰীণ বন্ধ কৰক</string>
+  <string name="menu_random_article">যাদৃচ্ছিক ৰচনা</string>
+  <string name="menu_full_screen">পূর্ণাঙ্গ স্ক্রিন</string>
+  <string name="menu_exit_full_screen">পূৰ্ণাঙ্গ স্ক্ৰীণ বন্ধ কৰক</string>
   <string name="search_label">সন্ধান কৰক</string>
   <string name="pref_display_title">প্রদর্শন</string>
   <string name="pref_info_title">বিবৰণ</string>

@@ -6,9 +6,9 @@
   <string name="menu_search">Fittex</string>
   <string name="menu_search_in_text">Sib fit-test</string>
   <string name="menu_bookmarks">Werrejja</string>
-  <string name="menu_randomarticle">Artiklu kwalunkwe</string>
-  <string name="menu_fullscreen">Skrin sħiħ</string>
-  <string name="menu_exitfullscreen">Oħroġ mill-modalità ta\' skrin sħiħ</string>
+  <string name="menu_random_article">Artiklu kwalunkwe</string>
+  <string name="menu_full_screen">Skrin sħiħ</string>
+  <string name="menu_exit_full_screen">Oħroġ mill-modalità ta\' skrin sħiħ</string>
   <string name="save_media_error">Sar żball meta kont qed tipprova tissejvja l-fajl multimedjali!</string>
   <string name="search_label">Fittex</string>
   <string name="pref_display_title">Viżwal</string>

@@ -6,9 +6,9 @@
   <string name="menu_search">Traži</string>
   <string name="menu_search_in_text">Nađi u tekstu</string>
   <string name="menu_bookmarks">Bilješke</string>
-  <string name="menu_randomarticle">Slučajni članak</string>
-  <string name="menu_fullscreen">Preko cijelog zaslona</string>
-  <string name="menu_exitfullscreen">Izađi iz prikaza preko cijelog zaslona</string>
+  <string name="menu_random_article">Slučajni članak</string>
+  <string name="menu_full_screen">Preko cijelog zaslona</string>
+  <string name="menu_exit_full_screen">Izađi iz prikaza preko cijelog zaslona</string>
   <string name="menu_read_aloud">Pročitaj naglas</string>
   <string name="search_label">Traži</string>
   <string name="pref_display_title">Prikaz</string>

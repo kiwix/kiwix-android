@@ -51,7 +51,7 @@
   <item
       android:id="@+id/menu_random_article"
       android:icon="@drawable/action_randomarticle"
-      android:title="@string/menu_randomarticle"
+      android:title="@string/menu_random_article"
       android:visible="false"
       app:showAsAction="never"/>
 
@@ -69,7 +69,7 @@
 
   <item
       android:id="@+id/menu_fullscreen"
-      android:title="@string/menu_fullscreen"
+      android:title="@string/menu_full_screen"
       android:visible="false"
       app:showAsAction="never"/>
 

@@ -6,9 +6,9 @@
   <string name="menu_search">Издөө</string>
   <string name="menu_search_in_text">Тексттен табуу</string>
   <string name="menu_bookmarks">Чөп каттар</string>
-  <string name="menu_randomarticle">Тушкелди макала</string>
-  <string name="menu_fullscreen">Толук көрүнүшү</string>
-  <string name="menu_exitfullscreen">Толук көрүнүштөн чыгуу</string>
+  <string name="menu_random_article">Тушкелди макала</string>
+  <string name="menu_full_screen">Толук көрүнүшү</string>
+  <string name="menu_exit_full_screen">Толук көрүнүштөн чыгуу</string>
   <string name="menu_read_aloud">Үн чыгарып окуу</string>
   <string name="menu_read_aloud_stop">Үн чыгарып окууну токтотуу</string>
   <string name="save_media">Медиафайлды мындай түрдө сактоо…</string>
@@ -18,7 +18,7 @@
   <string name="pref_display_title">Көрсөтүү</string>
   <string name="pref_info_title">Маалымат</string>
   <string name="pref_info_version">Версия</string>
-  <string name="pref_backtotop">Жогоруга кайтуу</string>
+  <string name="pref_back_to_top">Жогоруга кайтуу</string>
   <string name="pref_language_title">Тил</string>
   <string name="pref_language_chooser">Тилин тандаңыз</string>
   <string name="menu_bookmarks_list">Чөп каттар</string>

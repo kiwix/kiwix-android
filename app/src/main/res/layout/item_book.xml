@@ -29,7 +29,7 @@
       android:id="@+id/item_book_icon"
       android:layout_width="40dp"
       android:layout_height="40dp"
-      android:contentDescription="@string/favicon"
+      android:contentDescription="@string/fav_icon"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toEndOf="@id/itemBookCheckbox"
       app:layout_constraintTop_toTopOf="parent"

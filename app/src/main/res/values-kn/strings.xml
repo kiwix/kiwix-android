@@ -6,9 +6,9 @@
   <string name="menu_search">ಅನ್ವೇಷಿಸಿ</string>
   <string name="menu_search_in_text">ಪಠ್ಯದಲ್ಲಿ ಹುಡುಕಿ</string>
   <string name="menu_bookmarks">ಓದುಗುರುತುಗಳು</string>
-  <string name="menu_randomarticle">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
-  <string name="menu_fullscreen">ಪೂರ್ಣಪರದೆ</string>
-  <string name="menu_exitfullscreen">ಪೂರ್ಣ ತೆರೆಯನ್ನು ನಿರ್ಗಮಿಸಿ</string>
+  <string name="menu_random_article">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
+  <string name="menu_full_screen">ಪೂರ್ಣಪರದೆ</string>
+  <string name="menu_exit_full_screen">ಪೂರ್ಣ ತೆರೆಯನ್ನು ನಿರ್ಗಮಿಸಿ</string>
   <string name="search_label">ಅನ್ವೇಷಿಸಿ</string>
   <string name="pref_display_title">ಪ್ರದರ್ಶಿಸು</string>
   <string name="pref_info_title">ಮಾಹಿತಿ</string>

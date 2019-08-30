@@ -6,9 +6,9 @@
   <string name="menu_search">تلاش</string>
   <string name="menu_search_in_text">متن میں تلاش کریں</string>
   <string name="menu_bookmarks">نشانزدہ</string>
-  <string name="menu_randomarticle">تصادفی مقالہ</string>
-  <string name="menu_fullscreen">مکمل تظاہرہ</string>
-  <string name="menu_exitfullscreen">مکمل اسکرین ختم کریں</string>
+  <string name="menu_random_article">تصادفی مقالہ</string>
+  <string name="menu_full_screen">مکمل تظاہرہ</string>
+  <string name="menu_exit_full_screen">مکمل اسکرین ختم کریں</string>
   <string name="search_label">تلاش</string>
   <string name="pref_display_title">تظاہرہ</string>
   <string name="pref_info_title">معلومات</string>

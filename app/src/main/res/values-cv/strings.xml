@@ -6,9 +6,9 @@
   <string name="menu_search">Шырав</string>
   <string name="menu_search_in_text">Текстра шыра</string>
   <string name="menu_bookmarks">Картсем</string>
-  <string name="menu_randomarticle">Ăнсăртран илнĕ статья</string>
-  <string name="menu_fullscreen">Тулли экран</string>
-  <string name="menu_exitfullscreen">Тулли мар экран</string>
+  <string name="menu_random_article">Ăнсăртран илнĕ статья</string>
+  <string name="menu_full_screen">Тулли экран</string>
+  <string name="menu_exit_full_screen">Тулли мар экран</string>
   <string name="search_label">Шырав</string>
   <string name="pref_display_title">Кăтарт</string>
   <string name="pref_info_title">Тӗплӗнрех</string>

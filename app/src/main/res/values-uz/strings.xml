@@ -6,9 +6,9 @@
   <string name="menu_search">Qidiruv</string>
   <string name="menu_search_in_text">Matndan qidirish</string>
   <string name="menu_bookmarks">Xatchoʻplar</string>
-  <string name="menu_randomarticle">Tasodifiy sahifa</string>
-  <string name="menu_fullscreen">Toʻliq ekran</string>
-  <string name="menu_exitfullscreen">Toʻliq ekran tartibidan chiqish</string>
+  <string name="menu_random_article">Tasodifiy sahifa</string>
+  <string name="menu_full_screen">Toʻliq ekran</string>
+  <string name="menu_exit_full_screen">Toʻliq ekran tartibidan chiqish</string>
   <string name="search_label">Qidiruv</string>
   <string name="pref_display_title">Koʻrsatish</string>
   <string name="pref_info_title">Axborot</string>
