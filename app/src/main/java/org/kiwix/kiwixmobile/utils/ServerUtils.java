@@ -27,7 +27,7 @@ public class ServerUtils {
           InetAddress inetAddress = enumInetAddress.nextElement();
 
           if (inetAddress.isSiteLocalAddress()) {
-            ip += inetAddress.getHostAddress() + "\n";
+            ip += inetAddress.getHostAddress();
           }
         }
       }
@@ -42,20 +42,17 @@ public class ServerUtils {
       }
     } catch (SocketException e) {
       e.printStackTrace();
-      ip += "Something Wrong! " + e.toString() + "\n";
+      ip += "Something Wrong! " + e.toString();
     }
     return ip;
   }
 
   @NonNull public static String getSocketAddress() {
-    String address = "http://" + getIpAddress() + ":" + port;
-    address = address.replaceAll("\n", "");
-    return address;
+    return "http://" + getIpAddress() + ":" + port;
   }
 
   @Nullable public static String getIp() {
     String ip = getIpAddress();
-    ip = ip.replaceAll("\n", "");
     if (ip.length() == 0) return INVALID_IP;
     return ip;
   }
