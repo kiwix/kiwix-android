@@ -22,14 +22,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import io.reactivex.Flowable;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
@@ -44,6 +39,7 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDeleg
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_LOCATION_ACCESS_GRANTED;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_START_SERVER;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
@@ -70,15 +66,15 @@ public class ZimHostActivity extends BaseActivity implements
 
   private static final String TAG = "ZimHostActivity";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
-  public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
   private static final String IP_STATE_KEY = "ip_state_key";
-  private ProgressDialog progressDialog;
+  public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
 
   private BooksOnDiskAdapter booksAdapter;
   private BookOnDiskDelegate.BookDelegate bookDelegate;
   private HotspotService hotspotService;
   private String ip;
   private ServiceConnection serviceConnection;
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -280,41 +276,13 @@ public class ZimHostActivity extends BaseActivity implements
         null,
         () -> {
           progressDialog =
-              ProgressDialog.show(ZimHostActivity.this,
+              ProgressDialog.show(this,
                   getString(R.string.progress_dialog_starting_server), "",
                   true);
-          pollForValidIpAddress();
+          startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS));
           return Unit.INSTANCE;
         }
     );
-  }
-
-  //Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
-  //If no ip is found after 15 seconds, dismisses the progress dialog
-  private void pollForValidIpAddress() {
-    Flowable.fromCallable(ServerUtils::getIp)
-        .retryWhen(error -> error.delay(1, TimeUnit.SECONDS))
-        .timeout(15, TimeUnit.SECONDS)
-        .firstOrError()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new SingleObserver<String>() {
-          @Override public void onSubscribe(Disposable d) {
-          }
-
-          @Override public void onSuccess(String s) {
-            progressDialog.dismiss();
-            startService(createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
-                SELECTED_ZIM_PATHS_KEY, getSelectedBooksPath()));
-            Log.d(TAG, "onSuccess:  " + s);
-          }
-
-          @Override public void onError(Throwable e) {
-            progressDialog.dismiss();
-            Toast.makeText(ZimHostActivity.this, R.string.server_failed_message, Toast.LENGTH_SHORT)
-                .show();
-            Log.d(TAG, "Unable to turn on server", e);
-          }
-        });
   }
 
   private Intent createHotspotIntent(String action) {
@@ -338,10 +306,10 @@ public class ZimHostActivity extends BaseActivity implements
     alertDialogShower.show(new KiwixDialog.ShowHotspotDetails(wifiConfiguration),
         (Function0<Unit>) () -> {
           progressDialog =
-              ProgressDialog.show(ZimHostActivity.this,
+              ProgressDialog.show(this,
                   getString(R.string.progress_dialog_starting_server), "",
                   true);
-          pollForValidIpAddress();
+          startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS));
           return Unit.INSTANCE;
         });
   }
@@ -382,5 +350,17 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void onLocationSet() {
     startService(createHotspotIntent(ACTION_LOCATION_ACCESS_GRANTED));
+  }
+
+  @Override public void provideBooksAndStartServer() {
+    startService(createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
+        SELECTED_ZIM_PATHS_KEY, getSelectedBooksPath()));
+  }
+
+  @Override public void dismissProgressDialog() {
+    progressDialog.dismiss();
+    Toast.makeText(this, R.string.server_failed_message,
+        Toast.LENGTH_SHORT)
+        .show();
   }
 }

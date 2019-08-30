@@ -16,4 +16,8 @@ public interface ZimHostCallbacks {
   void onHotspotFailedToStart();
 
   void requestLocationAccess();
+
+  void provideBooksAndStartServer();
+
+  void dismissProgressDialog();
 }

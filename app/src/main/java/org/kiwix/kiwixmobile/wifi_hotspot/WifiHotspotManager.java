@@ -17,15 +17,13 @@ import javax.inject.Inject;
 
 public class WifiHotspotManager {
   private static final String TAG = "WifiHotspotManager";
+  private WifiManager wifiManager;
   private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   private HotspotStateListener hotspotStateListener;
 
   @Inject
-  WifiManager wifiManager;
-
-  @Inject
   public WifiHotspotManager(@NonNull WifiManager wifiManager,
-      HotspotStateListener hotspotStateListener) {
+      @NonNull HotspotStateListener hotspotStateListener) {
     this.wifiManager = wifiManager;
     this.hotspotStateListener = hotspotStateListener;
   }

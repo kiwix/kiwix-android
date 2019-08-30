@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.utils;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -9,9 +10,10 @@ import java.util.Enumeration;
 public class ServerUtils {
   public static int port;
   public static boolean isServerStarted;
+  public static final String INVALID_IP = "-1";
 
   // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network
-  public static String getIpAddress() {
+  @Nullable public static String getIpAddress() {
     String ip = "";
     try {
       Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
@@ -51,10 +53,10 @@ public class ServerUtils {
     return address;
   }
 
-  public static String getIp() {
+  @Nullable public static String getIp() {
     String ip = getIpAddress();
     ip = ip.replaceAll("\n", "");
-    if (ip.length() == 0) throw new IllegalStateException();
+    if (ip.length() == 0) return INVALID_IP;
     return ip;
   }
 }

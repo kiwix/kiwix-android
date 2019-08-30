@@ -27,12 +27,13 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotNotificationManager.HOTS
  * Created by Adeel Zafar on 07/01/2019.
  */
 
-public class HotspotService extends Service implements HotspotStateListener {
+public class HotspotService extends Service implements HotspotStateListener, IpAddressCallbacks {
 
   public static final String ACTION_TOGGLE_HOTSPOT = "toggle_hotspot";
   public static final String ACTION_LOCATION_ACCESS_GRANTED = "location_access_granted";
   public static final String ACTION_START_SERVER = "start_server";
   public static final String ACTION_STOP_SERVER = "stop_server";
+  public static final String ACTION_CHECK_IP_ADDRESS = "check_ip_address";
 
   public static final String ACTION_STOP = "hotspot_stop";
   private static final String TAG = "HotspotService";
@@ -111,6 +112,11 @@ public class HotspotService extends Service implements HotspotStateListener {
       case ACTION_STOP_SERVER:
         stopHotspotAndDismissNotification();
         break;
+
+      case ACTION_CHECK_IP_ADDRESS:
+        webServerHelper.pollForValidIpAddress();
+        break;
+
       default:
         break;
     }
@@ -167,6 +173,15 @@ public class HotspotService extends Service implements HotspotStateListener {
     stopForeground(true);
     stopSelf();
     hotspotNotificationManager.dismissNotification();
+  }
+
+  @Override public void onIpAddressValid() {
+    zimHostCallbacks.dismissProgressDialog();
+    zimHostCallbacks.provideBooksAndStartServer();
+  }
+
+  @Override public void onIpAddressInvalid() {
+    zimHostCallbacks.dismissProgressDialog();
   }
 
   public class HotspotBinder extends Binder {
