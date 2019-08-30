@@ -4,7 +4,7 @@
   <string name="menu_home">Laman utama</string>
   <string name="menu_settings">Keutamaan</string>
   <string name="menu_search">Cari</string>
-  <string name="menu_searchintext">Cari dalam teks</string>
+  <string name="menu_search_in_text">Cari dalam teks</string>
   <string name="menu_bookmarks">Kegemaran</string>
   <string name="menu_randomarticle">Rencana rawak</string>
   <string name="menu_fullscreen">Skrin penuh</string>

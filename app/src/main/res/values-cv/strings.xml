@@ -4,7 +4,7 @@
   <string name="menu_home">Тĕпел</string>
   <string name="menu_settings">Ĕнерлев</string>
   <string name="menu_search">Шырав</string>
-  <string name="menu_searchintext">Текстра шыра</string>
+  <string name="menu_search_in_text">Текстра шыра</string>
   <string name="menu_bookmarks">Картсем</string>
   <string name="menu_randomarticle">Ăнсăртран илнĕ статья</string>
   <string name="menu_fullscreen">Тулли экран</string>

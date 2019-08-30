@@ -5,7 +5,7 @@
   <string name="menu_home">Degemer</string>
   <string name="menu_settings">Arventennoù</string>
   <string name="menu_search">Klask ur pennad</string>
-  <string name="menu_searchintext">Kavout er bajenn</string>
+  <string name="menu_search_in_text">Kavout er bajenn</string>
   <string name="menu_bookmarks">Sinedoù</string>
   <string name="menu_randomarticle">Pennad dre zegouezh</string>
   <string name="menu_fullscreen">Skramm leun</string>

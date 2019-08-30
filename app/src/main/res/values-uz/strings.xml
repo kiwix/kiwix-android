@@ -4,7 +4,7 @@
   <string name="menu_home">Boshiga</string>
   <string name="menu_settings">Moslamalar</string>
   <string name="menu_search">Qidiruv</string>
-  <string name="menu_searchintext">Matndan qidirish</string>
+  <string name="menu_search_in_text">Matndan qidirish</string>
   <string name="menu_bookmarks">Xatchoʻplar</string>
   <string name="menu_randomarticle">Tasodifiy sahifa</string>
   <string name="menu_fullscreen">Toʻliq ekran</string>

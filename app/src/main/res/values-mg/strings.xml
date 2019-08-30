@@ -4,7 +4,7 @@
   <string name="menu_home">Fandraisana</string>
   <string name="menu_settings">Safidy</string>
   <string name="menu_search">Hikaroka</string>
-  <string name="menu_searchintext">Hitady anaty lahatsoratra</string>
+  <string name="menu_search_in_text">Hitady anaty lahatsoratra</string>
   <string name="menu_bookmarks">Marika pejy</string>
   <string name="menu_randomarticle">Takelaka kisendra</string>
   <string name="menu_fullscreen">Fisehoana mameno ekrà</string>

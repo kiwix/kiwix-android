@@ -5,7 +5,7 @@
   <string name="menu_home">Inici</string>
   <string name="menu_settings">Configuració</string>
   <string name="menu_search">Cercar article</string>
-  <string name="menu_searchintext">Cercar a la pàgina</string>
+  <string name="menu_search_in_text">Cercar a la pàgina</string>
   <string name="menu_bookmarks">Marcadors</string>
   <string name="menu_randomarticle">Article aleatori</string>
   <string name="menu_fullscreen">Pantalla completa</string>

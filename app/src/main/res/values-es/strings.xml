@@ -5,7 +5,7 @@
   <string name="menu_home">Inicio</string>
   <string name="menu_settings">Configuración</string>
   <string name="menu_search">Buscar artículo</string>
-  <string name="menu_searchintext">Buscar en la página</string>
+  <string name="menu_search_in_text">Buscar en la página</string>
   <string name="menu_bookmarks">Marcadores</string>
   <string name="menu_randomarticle">Artículo aleatorio</string>
   <string name="menu_fullscreen">Pantalla completa</string>

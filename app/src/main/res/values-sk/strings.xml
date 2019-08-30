@@ -4,7 +4,7 @@
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavenia</string>
   <string name="menu_search">Hľadať</string>
-  <string name="menu_searchintext">Nájsť v texte</string>
+  <string name="menu_search_in_text">Nájsť v texte</string>
   <string name="menu_bookmarks">Záložky</string>
   <string name="menu_randomarticle">Náhodný článok</string>
   <string name="menu_fullscreen">Celá obrazovka</string>

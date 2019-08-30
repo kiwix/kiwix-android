@@ -5,7 +5,7 @@
   <string name="menu_home">Начало</string>
   <string name="menu_settings">Настройки</string>
   <string name="menu_search">Търси публикация</string>
-  <string name="menu_searchintext">Търси в страницата</string>
+  <string name="menu_search_in_text">Търси в страницата</string>
   <string name="menu_bookmarks">Отметки</string>
   <string name="menu_randomarticle">Случайна статия</string>
   <string name="menu_fullscreen">Цял екран</string>

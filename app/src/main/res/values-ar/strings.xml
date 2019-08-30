@@ -5,7 +5,7 @@
   <string name="menu_home">الصفحة الرئيسية</string>
   <string name="menu_settings">إعدادات</string>
   <string name="menu_search">البحث عن مقالة</string>
-  <string name="menu_searchintext">البحث في الصفحة</string>
+  <string name="menu_search_in_text">البحث في الصفحة</string>
   <string name="menu_bookmarks">العلامات</string>
   <string name="menu_randomarticle">مقالة عشوائية</string>
   <string name="menu_fullscreen">ملء الشاشة</string>

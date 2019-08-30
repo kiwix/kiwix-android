@@ -5,7 +5,7 @@
   <string name="menu_home">Ana sayfa</string>
   <string name="menu_settings">Ayarlar</string>
   <string name="menu_search">Makale ara</string>
-  <string name="menu_searchintext">Sayfada bul</string>
+  <string name="menu_search_in_text">Sayfada bul</string>
   <string name="menu_bookmarks">Yer imleri</string>
   <string name="menu_randomarticle">Rastgele makale</string>
   <string name="menu_fullscreen">Tam ekran</string>

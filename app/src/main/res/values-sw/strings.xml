@@ -4,7 +4,7 @@
   <string name="menu_home">Mwanzo</string>
   <string name="menu_settings">Mipangilio</string>
   <string name="menu_search">Tafuta makala</string>
-  <string name="menu_searchintext">Tafuta katika ukurasa</string>
+  <string name="menu_search_in_text">Tafuta katika ukurasa</string>
   <string name="menu_bookmarks">Maalamisho</string>
   <string name="menu_randomarticle">Ukurasa wa bahati</string>
   <string name="menu_fullscreen">Skrini nzima</string>

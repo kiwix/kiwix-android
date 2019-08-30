@@ -5,7 +5,7 @@
   <string name="menu_home">홈</string>
   <string name="menu_settings">설정</string>
   <string name="menu_search">문서 검색</string>
-  <string name="menu_searchintext">문서에서 찾기</string>
+  <string name="menu_search_in_text">문서에서 찾기</string>
   <string name="menu_bookmarks">책갈피</string>
   <string name="menu_randomarticle">임의 문서</string>
   <string name="menu_fullscreen">전체 화면</string>

@@ -4,7 +4,7 @@
   <string name="menu_home">Soba</string>
   <string name="menu_settings">I diyanyeta</string>
   <string name="menu_search">Ɲinini kɛ</string>
-  <string name="menu_searchintext">Ɲinini kɛ sɛbɛnni kɔnɔ</string>
+  <string name="menu_search_in_text">Ɲinini kɛ sɛbɛnni kɔnɔ</string>
   <string name="menu_bookmarks">Ɲɛ dogo</string>
   <string name="menu_randomarticle">Laala kunnafoni</string>
   <string name="menu_fullscreen">Ekaran fa</string>

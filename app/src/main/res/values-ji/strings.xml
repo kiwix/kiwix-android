@@ -4,7 +4,7 @@
   <string name="menu_home">היים</string>
   <string name="menu_settings">פרעפֿערענצן</string>
   <string name="menu_search">זוכן</string>
-  <string name="menu_searchintext">זוכן אין טעקסט</string>
+  <string name="menu_search_in_text">זוכן אין טעקסט</string>
   <string name="menu_bookmarks">ליין־צייכנס</string>
   <string name="menu_randomarticle">צופֿעליגער ארטיקל</string>
   <string name="menu_fullscreen">פֿולער עקראן</string>

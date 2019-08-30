@@ -4,7 +4,7 @@
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
   <string name="menu_search">Išči članek</string>
-  <string name="menu_searchintext">Najdi na strani</string>
+  <string name="menu_search_in_text">Najdi na strani</string>
   <string name="menu_bookmarks">Zaznamki</string>
   <string name="menu_randomarticle">Naključni članek</string>
   <string name="menu_fullscreen">Celozaslonski način</string>

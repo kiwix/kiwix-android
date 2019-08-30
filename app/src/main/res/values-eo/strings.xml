@@ -5,7 +5,7 @@
   <string name="menu_home">Hejmo</string>
   <string name="menu_settings">Agordoj</string>
   <string name="menu_search">Serĉi artikolon</string>
-  <string name="menu_searchintext">Trovi en paĝo</string>
+  <string name="menu_search_in_text">Trovi en paĝo</string>
   <string name="menu_bookmarks">Legosignoj</string>
   <string name="menu_randomarticle">Hazarda artikolo</string>
   <string name="menu_fullscreen">Plenekrane</string>

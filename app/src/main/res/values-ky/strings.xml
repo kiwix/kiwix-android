@@ -4,7 +4,7 @@
   <string name="menu_home">Башкы</string>
   <string name="menu_settings">Параметрлер</string>
   <string name="menu_search">Издөө</string>
-  <string name="menu_searchintext">Тексттен табуу</string>
+  <string name="menu_search_in_text">Тексттен табуу</string>
   <string name="menu_bookmarks">Чөп каттар</string>
   <string name="menu_randomarticle">Тушкелди макала</string>
   <string name="menu_fullscreen">Толук көрүнүшү</string>

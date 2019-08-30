@@ -5,7 +5,7 @@
   <string name="menu_home">Koti</string>
   <string name="menu_settings">Asetukset</string>
   <string name="menu_search">Hae artikkelia</string>
-  <string name="menu_searchintext">Etsi sivulta</string>
+  <string name="menu_search_in_text">Etsi sivulta</string>
   <string name="menu_bookmarks">Kirjanmerkit</string>
   <string name="menu_randomarticle">Satunnainen artikkeli</string>
   <string name="menu_fullscreen">Koko näyttö</string>

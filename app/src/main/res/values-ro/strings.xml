@@ -5,7 +5,7 @@
   <string name="menu_home">Acasă</string>
   <string name="menu_settings">Setări</string>
   <string name="menu_search">Caută articol</string>
-  <string name="menu_searchintext">Găsește în pagină</string>
+  <string name="menu_search_in_text">Găsește în pagină</string>
   <string name="menu_bookmarks">Semn de carte</string>
   <string name="menu_randomarticle">Articol aleatoriu</string>
   <string name="menu_fullscreen">Ecran complet</string>

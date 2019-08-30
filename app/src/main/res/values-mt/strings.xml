@@ -4,7 +4,7 @@
   <string name="menu_home">Daħla</string>
   <string name="menu_settings">Preferenzi</string>
   <string name="menu_search">Fittex</string>
-  <string name="menu_searchintext">Sib fit-test</string>
+  <string name="menu_search_in_text">Sib fit-test</string>
   <string name="menu_bookmarks">Werrejja</string>
   <string name="menu_randomarticle">Artiklu kwalunkwe</string>
   <string name="menu_fullscreen">Skrin sħiħ</string>

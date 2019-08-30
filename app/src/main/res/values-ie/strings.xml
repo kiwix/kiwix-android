@@ -4,7 +4,7 @@
   <string name="menu_home">Principal</string>
   <string name="menu_settings">Preferenties</string>
   <string name="menu_search">Sercha</string>
-  <string name="menu_searchintext">Constatar in textu</string>
+  <string name="menu_search_in_text">Constatar in textu</string>
   <string name="menu_bookmarks">Marcatores</string>
   <string name="menu_randomarticle">Articul sporadic</string>
   <string name="menu_fullscreen">Scren ampli</string>

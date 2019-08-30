@@ -4,7 +4,7 @@
   <string name="menu_home">ముంగిలి</string>
   <string name="menu_settings">అభిరుచులు</string>
   <string name="menu_search">వెతుకు</string>
-  <string name="menu_searchintext">పాఠ్యంలో వెతుకు</string>
+  <string name="menu_search_in_text">పాఠ్యంలో వెతుకు</string>
   <string name="menu_bookmarks">మడతపేజీలు</string>
   <string name="menu_randomarticle">యాదృచ్ఛిక వ్యాసం</string>
   <string name="menu_fullscreen">నిండుతెర</string>

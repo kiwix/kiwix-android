@@ -5,7 +5,7 @@
   <string name="menu_home">Hem</string>
   <string name="menu_settings">Inställningar</string>
   <string name="menu_search">Sök artikel</string>
-  <string name="menu_searchintext">Hitta på sidan</string>
+  <string name="menu_search_in_text">Hitta på sidan</string>
   <string name="menu_bookmarks">Bokmärken</string>
   <string name="menu_randomarticle">Slumpartikel</string>
   <string name="menu_fullscreen">Fullskärm</string>

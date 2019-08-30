@@ -63,7 +63,7 @@
 
   <item
       android:id="@+id/menu_searchintext"
-      android:title="@string/menu_searchintext"
+      android:title="@string/menu_search_in_text"
       android:visible="false"
       app:showAsAction="never"/>
 

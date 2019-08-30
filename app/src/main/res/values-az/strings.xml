@@ -4,7 +4,7 @@
   <string name="menu_home">Ana səhifə</string>
   <string name="menu_settings">Nizamlamalar</string>
   <string name="menu_search">Axtar</string>
-  <string name="menu_searchintext">Mətndə axtar</string>
+  <string name="menu_search_in_text">Mətndə axtar</string>
   <string name="menu_bookmarks">Əlfəcinlər</string>
   <string name="menu_randomarticle">Təsadüfi məqalə</string>
   <string name="menu_fullscreen">Tam ekran</string>

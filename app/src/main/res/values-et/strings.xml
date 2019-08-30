@@ -4,7 +4,7 @@
   <string name="menu_home">Koduleht</string>
   <string name="menu_settings">Eelistused</string>
   <string name="menu_search">Otsi</string>
-  <string name="menu_searchintext">Otsi tekstist</string>
+  <string name="menu_search_in_text">Otsi tekstist</string>
   <string name="menu_bookmarks">Järjehoidjad</string>
   <string name="menu_randomarticle">Juhuslik artikkel</string>
   <string name="menu_fullscreen">Täisekraan</string>

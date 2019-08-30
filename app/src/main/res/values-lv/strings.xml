@@ -5,7 +5,7 @@
   <string name="menu_home">Sākums</string>
   <string name="menu_settings">Izvēles</string>
   <string name="menu_search">Meklēt</string>
-  <string name="menu_searchintext">Atrast tekstā</string>
+  <string name="menu_search_in_text">Atrast tekstā</string>
   <string name="menu_bookmarks">Grāmatzīmes</string>
   <string name="menu_randomarticle">Nejaušs raksts</string>
   <string name="menu_fullscreen">Pilnekrāna režīms</string>

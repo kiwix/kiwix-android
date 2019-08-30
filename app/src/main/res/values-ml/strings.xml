@@ -4,7 +4,7 @@
   <string name="menu_home">പ്രധാനം</string>
   <string name="menu_settings">ഐച്ഛികങ്ങള്‍</string>
   <string name="menu_search">തിരയുക</string>
-  <string name="menu_searchintext">എഴുത്തിൽ തിരയുക</string>
+  <string name="menu_search_in_text">എഴുത്തിൽ തിരയുക</string>
   <string name="menu_bookmarks">ബൂക്ക്മാർക്കുകൾ</string>
   <string name="menu_randomarticle">ഏതെങ്കിലും ലേഖനം</string>
   <string name="menu_fullscreen">മുഴുവന്‍ സ്ക്രീനില്‍</string>

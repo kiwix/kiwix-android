@@ -4,7 +4,7 @@
   <string name="menu_home">Дадому</string>
   <string name="menu_settings">Настройкі</string>
   <string name="menu_search">Пошук</string>
-  <string name="menu_searchintext">Знайсці ў тэксце</string>
+  <string name="menu_search_in_text">Знайсці ў тэксце</string>
   <string name="menu_bookmarks">Закладкі</string>
   <string name="menu_randomarticle">Выпадковы артыкул</string>
   <string name="menu_fullscreen">Поўны экран</string>

@@ -4,7 +4,7 @@
   <string name="menu_home">Start</string>
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_search">Wyszukaj artykuł</string>
-  <string name="menu_searchintext">Znajdź na stronie</string>
+  <string name="menu_search_in_text">Znajdź na stronie</string>
   <string name="menu_bookmarks">Zakładki</string>
   <string name="menu_randomarticle">Losowy artykuł</string>
   <string name="menu_fullscreen">Pełny ekran</string>

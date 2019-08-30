@@ -4,7 +4,7 @@
   <string name="menu_home">Pradžia</string>
   <string name="menu_settings">Nustatymai</string>
   <string name="menu_search">Paieška</string>
-  <string name="menu_searchintext">Rasti tekste</string>
+  <string name="menu_search_in_text">Rasti tekste</string>
   <string name="menu_bookmarks">Žymės</string>
   <string name="menu_randomarticle">Atsitiktinis straipsnis</string>
   <string name="menu_fullscreen">Visas ekranas</string>

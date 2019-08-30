@@ -4,7 +4,7 @@
   <string name="menu_home">ទំព័រដើម</string>
   <string name="menu_settings">ចំណង់ចំណូលចិត្ត</string>
   <string name="menu_search">ស្វែងរក</string>
-  <string name="menu_searchintext">ស្វែងរកក្នុងអត្ថបទ</string>
+  <string name="menu_search_in_text">ស្វែងរកក្នុងអត្ថបទ</string>
   <string name="menu_bookmarks">ការកត់ចំណាំ</string>
   <string name="menu_randomarticle">អត្ថបទចៃដន្យ</string>
   <string name="menu_fullscreen">ទំហំពេញអេក្រង់</string>

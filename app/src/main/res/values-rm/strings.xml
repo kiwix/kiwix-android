@@ -4,7 +4,7 @@
   <string name="menu_home">Pagina da partenza</string>
   <string name="menu_settings">Preferenzas</string>
   <string name="menu_search">Tschertgar</string>
-  <string name="menu_searchintext">Tschertgar en il text</string>
+  <string name="menu_search_in_text">Tschertgar en il text</string>
   <string name="menu_bookmarks">Segnapaginas</string>
   <string name="menu_randomarticle">Artitgel casual</string>
   <string name="menu_fullscreen">Maletg entir</string>

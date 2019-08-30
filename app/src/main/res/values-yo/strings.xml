@@ -4,7 +4,7 @@
   <string name="menu_home">Ibùdó</string>
   <string name="menu_settings">Àwọn ìfẹ́ràn</string>
   <string name="menu_search">Àwárí</string>
-  <string name="menu_searchintext">Ìwárí nínú ìkọ</string>
+  <string name="menu_search_in_text">Ìwárí nínú ìkọ</string>
   <string name="menu_bookmarks">Àwọn ojúewé àdápamọ́</string>
   <string name="menu_randomarticle">Àyọkà àrìnnàkò</string>
   <string name="menu_fullscreen">Ojúìran kíkúnrẹ́rẹ́</string>

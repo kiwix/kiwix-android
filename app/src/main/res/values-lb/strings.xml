@@ -5,7 +5,7 @@
   <string name="menu_home">Haaptsäit</string>
   <string name="menu_settings">Astellungen</string>
   <string name="menu_search">Artikel sichen</string>
-  <string name="menu_searchintext">Op der Säit sichen</string>
+  <string name="menu_search_in_text">Op der Säit sichen</string>
   <string name="menu_bookmarks">Lieszeechen</string>
   <string name="menu_randomarticle">Zoufällegen Artikel</string>
   <string name="menu_fullscreen">Ganzen Ecran</string>

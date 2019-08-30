@@ -4,7 +4,7 @@
   <string name="menu_home">ホーム</string>
   <string name="menu_settings">設定</string>
   <string name="menu_search">検索</string>
-  <string name="menu_searchintext">テキストで検索</string>
+  <string name="menu_search_in_text">テキストで検索</string>
   <string name="menu_bookmarks">ブックマーク</string>
   <string name="menu_randomarticle">ランダム記事</string>
   <string name="menu_fullscreen">全画面表示</string>

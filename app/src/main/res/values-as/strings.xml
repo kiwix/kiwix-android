@@ -4,7 +4,7 @@
   <string name="menu_home">বেটুপাত</string>
   <string name="menu_settings">পছন্দসমূহ</string>
   <string name="menu_search">সন্ধান কৰক</string>
-  <string name="menu_searchintext">লিখনীত বিচাৰক</string>
+  <string name="menu_search_in_text">লিখনীত বিচাৰক</string>
   <string name="menu_bookmarks">পত্ৰচিহ্নসমূহ</string>
   <string name="menu_randomarticle">যাদৃচ্ছিক ৰচনা</string>
   <string name="menu_fullscreen">পূর্ণাঙ্গ স্ক্রিন</string>

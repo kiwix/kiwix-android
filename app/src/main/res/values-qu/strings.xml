@@ -4,7 +4,7 @@
   <string name="menu_home">Qallarina</string>
   <string name="menu_settings">Allinkachinakuna</string>
   <string name="menu_search">Maskay</string>
-  <string name="menu_searchintext">Qillqapi maskay</string>
+  <string name="menu_search_in_text">Qillqapi maskay</string>
   <string name="menu_bookmarks">Yuyana unanchakuna</string>
   <string name="menu_randomarticle">Mayninpi p\'anqa</string>
   <string name="menu_fullscreen">Hunt\'a qhawana pampa</string>

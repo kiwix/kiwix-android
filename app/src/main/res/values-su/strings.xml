@@ -4,7 +4,7 @@
   <string name="menu_home">Tepas</string>
   <string name="menu_settings">Préferénsi</string>
   <string name="menu_search">Paluruh</string>
-  <string name="menu_searchintext">Téangan dina téks</string>
+  <string name="menu_search_in_text">Téangan dina téks</string>
   <string name="menu_bookmarks">Tatanda buku</string>
   <string name="menu_randomarticle">Artikel acak</string>
   <string name="menu_fullscreen">Layar pinuh</string>

@@ -5,7 +5,7 @@
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Поставки</string>
   <string name="menu_search">Пребарај статија</string>
-  <string name="menu_searchintext">Најди на страницата</string>
+  <string name="menu_search_in_text">Најди на страницата</string>
   <string name="menu_bookmarks">Обележани</string>
   <string name="menu_randomarticle">Случајна статија</string>
   <string name="menu_fullscreen">На цел екран</string>

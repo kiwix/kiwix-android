@@ -4,7 +4,7 @@
   <string name="menu_home">Initio</string>
   <string name="menu_settings">Preferentias</string>
   <string name="menu_search">Cercar</string>
-  <string name="menu_searchintext">Cercar in texto</string>
+  <string name="menu_search_in_text">Cercar in texto</string>
   <string name="menu_bookmarks">Marcapaginas</string>
   <string name="menu_randomarticle">Articulo aleatori</string>
   <string name="menu_fullscreen">Schermo complete</string>

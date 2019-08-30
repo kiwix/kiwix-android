@@ -5,7 +5,7 @@
   <string name="menu_home">Heim</string>
   <string name="menu_settings">Instèllinge</string>
   <string name="menu_search">Zeuk artikel</string>
-  <string name="menu_searchintext">Zeuk op pagina</string>
+  <string name="menu_search_in_text">Zeuk op pagina</string>
   <string name="menu_bookmarks">Blaadwiezers</string>
   <string name="menu_randomarticle">Willekäörig artikel</string>
   <string name="menu_fullscreen">Volstenjig sjerm</string>

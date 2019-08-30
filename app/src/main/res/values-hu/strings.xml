@@ -5,7 +5,7 @@
   <string name="menu_home">Kezdőlap</string>
   <string name="menu_settings">Beállítások</string>
   <string name="menu_search">Cikk keresése</string>
-  <string name="menu_searchintext">Keresés a lapon</string>
+  <string name="menu_search_in_text">Keresés a lapon</string>
   <string name="menu_bookmarks">Könyvjelzők</string>
   <string name="menu_randomarticle">Véletlenszerű cikk</string>
   <string name="menu_fullscreen">Teljes képernyő</string>

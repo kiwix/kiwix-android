@@ -4,7 +4,7 @@
   <string name="menu_home">Hafan</string>
   <string name="menu_settings">Dewisiadau</string>
   <string name="menu_search">Chwilio</string>
-  <string name="menu_searchintext">Chwilio\'r testun</string>
+  <string name="menu_search_in_text">Chwilio\'r testun</string>
   <string name="menu_bookmarks">Llyfrnodau</string>
   <string name="menu_randomarticle">Erthygl ar hap</string>
   <string name="menu_fullscreen">Sgrin lawn</string>

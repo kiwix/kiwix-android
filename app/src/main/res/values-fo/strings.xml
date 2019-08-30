@@ -4,7 +4,7 @@
   <string name="menu_home">Heim</string>
   <string name="menu_settings">Innstillingar</string>
   <string name="menu_search">Leita</string>
-  <string name="menu_searchintext">Finn í teksti</string>
+  <string name="menu_search_in_text">Finn í teksti</string>
   <string name="menu_bookmarks">Bókamerki</string>
   <string name="menu_randomarticle">Tilvildarlig grein</string>
   <string name="menu_fullscreen">Fullan skerm</string>

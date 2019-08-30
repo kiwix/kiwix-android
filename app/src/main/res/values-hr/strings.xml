@@ -4,7 +4,7 @@
   <string name="menu_home">Početna stranica</string>
   <string name="menu_settings">Postavke</string>
   <string name="menu_search">Traži</string>
-  <string name="menu_searchintext">Nađi u tekstu</string>
+  <string name="menu_search_in_text">Nađi u tekstu</string>
   <string name="menu_bookmarks">Bilješke</string>
   <string name="menu_randomarticle">Slučajni članak</string>
   <string name="menu_fullscreen">Preko cijelog zaslona</string>

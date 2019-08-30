@@ -4,7 +4,7 @@
   <string name="menu_home">ಮುಖ್ಯಪುಟ</string>
   <string name="menu_settings">ಪ್ರಾಶಸ್ತ್ಯಗಳು</string>
   <string name="menu_search">ಅನ್ವೇಷಿಸಿ</string>
-  <string name="menu_searchintext">ಪಠ್ಯದಲ್ಲಿ ಹುಡುಕಿ</string>
+  <string name="menu_search_in_text">ಪಠ್ಯದಲ್ಲಿ ಹುಡುಕಿ</string>
   <string name="menu_bookmarks">ಓದುಗುರುತುಗಳು</string>
   <string name="menu_randomarticle">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
   <string name="menu_fullscreen">ಪೂರ್ಣಪರದೆ</string>

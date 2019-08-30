@@ -4,7 +4,7 @@
   <string name="menu_home">Tuisblad</string>
   <string name="menu_settings">Voorkeure</string>
   <string name="menu_search">Soek</string>
-  <string name="menu_searchintext">Soek in teks</string>
+  <string name="menu_search_in_text">Soek in teks</string>
   <string name="menu_bookmarks">Boekmerke</string>
   <string name="menu_randomarticle">Lukrake artikel</string>
   <string name="menu_fullscreen">Volle skerm</string>

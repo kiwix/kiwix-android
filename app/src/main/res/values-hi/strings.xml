@@ -5,7 +5,7 @@
   <string name="menu_home">घर</string>
   <string name="menu_settings">पसंद</string>
   <string name="menu_search">लेख खोजें</string>
-  <string name="menu_searchintext">पृष्ठ में ढूंढें</string>
+  <string name="menu_search_in_text">पृष्ठ में ढूंढें</string>
   <string name="menu_bookmarks">बूकमार्क</string>
   <string name="menu_randomarticle">कोई भी लेख</string>
   <string name="menu_fullscreen">पूरा स्क्रीन</string>

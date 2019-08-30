@@ -5,7 +5,7 @@
   <string name="menu_home">गृह</string>
   <string name="menu_settings">सेटिङहरू</string>
   <string name="menu_search">लेख खोज्नुहोस्</string>
-  <string name="menu_searchintext">पृष्ठमा खोज्नुहोस्</string>
+  <string name="menu_search_in_text">पृष्ठमा खोज्नुहोस्</string>
   <string name="menu_bookmarks">पुस्तक चिनोहरू</string>
   <string name="menu_randomarticle">कुनै लेख</string>
   <string name="menu_fullscreen">पूरा पर्दा</string>

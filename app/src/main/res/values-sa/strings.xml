@@ -4,7 +4,7 @@
   <string name="menu_home">गृहम्</string>
   <string name="menu_settings">इष्टतमानि</string>
   <string name="menu_search">अन्विष्यताम्</string>
-  <string name="menu_searchintext">पाठे अन्विष्यताम्</string>
+  <string name="menu_search_in_text">पाठे अन्विष्यताम्</string>
   <string name="menu_bookmarks">पुस्तकचिह्नानि</string>
   <string name="menu_randomarticle">यादृच्छिकं (Random) पृष्ठम्</string>
   <string name="menu_fullscreen">सम्पूर्णपटलम्</string>

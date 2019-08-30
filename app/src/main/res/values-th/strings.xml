@@ -4,7 +4,7 @@
   <string name="menu_home">หน้าแรก</string>
   <string name="menu_settings">การตั้งค่า</string>
   <string name="menu_search">ค้นหา</string>
-  <string name="menu_searchintext">ค้นหาในข้อความ</string>
+  <string name="menu_search_in_text">ค้นหาในข้อความ</string>
   <string name="menu_bookmarks">ที่คั่นหน้าเว็บ</string>
   <string name="menu_randomarticle">สุ่มบทความ</string>
   <string name="menu_fullscreen">เต็มหน้าจอ</string>

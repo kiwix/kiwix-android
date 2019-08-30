@@ -5,7 +5,7 @@
   <string name="menu_home">Trang đầu</string>
   <string name="menu_settings">Thiết lập</string>
   <string name="menu_search">Tìm bài</string>
-  <string name="menu_searchintext">Tìm trong trang</string>
+  <string name="menu_search_in_text">Tìm trong trang</string>
   <string name="menu_bookmarks">Dấu trang</string>
   <string name="menu_randomarticle">Bài viết ngẫu nhiên</string>
   <string name="menu_fullscreen">Toàn màn hình</string>

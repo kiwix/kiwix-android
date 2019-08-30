@@ -4,7 +4,7 @@
   <string name="menu_home">کور</string>
   <string name="menu_settings">غوره توبونه</string>
   <string name="menu_search">پلټل</string>
-  <string name="menu_searchintext">په متن کې موندل</string>
+  <string name="menu_search_in_text">په متن کې موندل</string>
   <string name="menu_bookmarks">کتاب نخښې</string>
   <string name="menu_randomarticle">ناټاکلې ليکنه</string>
   <string name="menu_fullscreen">ډکه پرده</string>

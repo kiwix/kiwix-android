@@ -5,7 +5,7 @@
   <string name="menu_home">Accueil</string>
   <string name="menu_settings">Options</string>
   <string name="menu_search">Rechercher un article</string>
-  <string name="menu_searchintext">Trouver dans la page</string>
+  <string name="menu_search_in_text">Trouver dans la page</string>
   <string name="menu_bookmarks">Marque-pages</string>
   <string name="menu_randomarticle">Article au hasard</string>
   <string name="menu_fullscreen">Plein écran</string>

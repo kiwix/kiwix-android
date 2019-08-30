@@ -4,7 +4,7 @@
   <string name="menu_home">მთავარი</string>
   <string name="menu_settings">კონფიგურაცია</string>
   <string name="menu_search">ძიება</string>
-  <string name="menu_searchintext">ძიება ტექსტში</string>
+  <string name="menu_search_in_text">ძიება ტექსტში</string>
   <string name="menu_bookmarks">სანიშნები</string>
   <string name="menu_randomarticle">შემთხვევითი სტატია</string>
   <string name="menu_fullscreen">სრულ ეკრანზე</string>

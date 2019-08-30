@@ -4,7 +4,7 @@
   <string name="menu_home">ମୂଳ ଜାଗା</string>
   <string name="menu_settings">ପସନ୍ଦସବୁ</string>
   <string name="menu_search">ଖୋଜିବେ</string>
-  <string name="menu_searchintext">ଲେଖାରେ ଖୋଜିବେ</string>
+  <string name="menu_search_in_text">ଲେଖାରେ ଖୋଜିବେ</string>
   <string name="menu_bookmarks">ବୁକମାର୍କ</string>
   <string name="menu_randomarticle">ଯାହିତାହି ପ୍ରସଙ୍ଗ</string>
   <string name="menu_fullscreen">ପୁରା ସ୍କ୍ରିନ</string>

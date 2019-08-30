@@ -4,7 +4,7 @@
   <string name="menu_home">صفحہ اول</string>
   <string name="menu_settings">ترجیحات</string>
   <string name="menu_search">تلاش</string>
-  <string name="menu_searchintext">متن میں تلاش کریں</string>
+  <string name="menu_search_in_text">متن میں تلاش کریں</string>
   <string name="menu_bookmarks">نشانزدہ</string>
   <string name="menu_randomarticle">تصادفی مقالہ</string>
   <string name="menu_fullscreen">مکمل تظاہرہ</string>

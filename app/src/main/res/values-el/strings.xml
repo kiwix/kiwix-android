@@ -5,7 +5,7 @@
   <string name="menu_home">Αρχική</string>
   <string name="menu_settings">Ρυθμίσεις</string>
   <string name="menu_search">Αναζήτηση άρθρου</string>
-  <string name="menu_searchintext">Βρείτε στην σελίδα</string>
+  <string name="menu_search_in_text">Βρείτε στην σελίδα</string>
   <string name="menu_bookmarks">Σελιδοδείκτες</string>
   <string name="menu_randomarticle">Τυχαίο άρθρο</string>
   <string name="menu_fullscreen">Πλήρης οθόνη</string>

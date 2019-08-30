@@ -4,7 +4,7 @@
   <string name="menu_home">Startpagina</string>
   <string name="menu_settings">Voorkeuren</string>
   <string name="menu_search">Zoeken</string>
-  <string name="menu_searchintext">Zoeken in tekst</string>
+  <string name="menu_search_in_text">Zoeken in tekst</string>
   <string name="menu_bookmarks">Bladwijzers</string>
   <string name="menu_randomarticle">Willekeurige pagina</string>
   <string name="menu_fullscreen">Volledig scherm</string>

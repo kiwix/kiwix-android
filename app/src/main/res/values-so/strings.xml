@@ -4,7 +4,7 @@
   <string name="menu_home">Bogga Hore</string>
   <string name="menu_settings">Dooqyada</string>
   <string name="menu_search">Raadi</string>
-  <string name="menu_searchintext">Ka dhex baar qoraalka</string>
+  <string name="menu_search_in_text">Ka dhex baar qoraalka</string>
   <string name="menu_bookmarks">Calaamadaha aqriska</string>
   <string name="menu_randomarticle">Bogag iskuraran ah</string>
   <string name="menu_fullscreen">Dhammaan Shaashadda</string>

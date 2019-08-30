@@ -4,7 +4,7 @@
   <string name="menu_home">ပင်မ</string>
   <string name="menu_settings">အပြင်အဆင်များ</string>
   <string name="menu_search">ဆောင်းပါး ရှာဖွေရန်</string>
-  <string name="menu_searchintext">စာမျက်နှာတွင် ရှာဖွေရန်</string>
+  <string name="menu_search_in_text">စာမျက်နှာတွင် ရှာဖွေရန်</string>
   <string name="menu_bookmarks">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="menu_randomarticle">ကျပန်း ဆောင်းပါး</string>
   <string name="menu_fullscreen">မျက်နှာဖွင့်အပြည့်</string>

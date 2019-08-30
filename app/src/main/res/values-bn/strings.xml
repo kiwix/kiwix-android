@@ -5,7 +5,7 @@
   <string name="menu_home">প্রধান পাতা</string>
   <string name="menu_settings">সেটিংস</string>
   <string name="menu_search">নিবন্ধ অনুসন্ধান</string>
-  <string name="menu_searchintext">পাতায় খুঁজুন</string>
+  <string name="menu_search_in_text">পাতায় খুঁজুন</string>
   <string name="menu_bookmarks">বুকমার্ক</string>
   <string name="menu_randomarticle">অজানা নিবন্ধ</string>
   <string name="menu_fullscreen">পূর্ণ পর্দা</string>

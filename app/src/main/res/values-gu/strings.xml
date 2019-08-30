@@ -4,7 +4,7 @@
   <string name="menu_home">ઘર</string>
   <string name="menu_settings">પસંદ</string>
   <string name="menu_search">શોધો</string>
-  <string name="menu_searchintext">ભાષા ના સંદર્ભ  માં શોધો</string>
+  <string name="menu_search_in_text">ભાષા ના સંદર્ભ  માં શોધો</string>
   <string name="menu_bookmarks">બુકમાર્કો</string>
   <string name="menu_randomarticle">કોઈપણ એક લેખ</string>
   <string name="menu_fullscreen">આખી સ્ક્રિન</string>

@@ -4,7 +4,7 @@
   <string name="menu_home">Tahanan</string>
   <string name="menu_settings">Mga nais</string>
   <string name="menu_search">Humanap</string>
-  <string name="menu_searchintext">Hanapin sa teksto</string>
+  <string name="menu_search_in_text">Hanapin sa teksto</string>
   <string name="menu_bookmarks">Mga pananda</string>
   <string name="menu_randomarticle">Alin mang artikulo</string>
   <string name="menu_fullscreen">Buong panooran</string>

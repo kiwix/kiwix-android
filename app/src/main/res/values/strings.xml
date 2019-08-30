@@ -6,7 +6,7 @@
   <string name="menu_home">Home</string>
   <string name="menu_settings">Settings</string>
   <string name="menu_search">Search article</string>
-  <string name="menu_searchintext">Find in page</string>
+  <string name="menu_search_in_text">Find in page</string>
   <string name="menu_bookmarks">Bookmarks</string>
   <string name="menu_randomarticle">Random article</string>
   <string name="menu_fullscreen">Full screen</string>

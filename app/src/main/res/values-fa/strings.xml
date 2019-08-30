@@ -4,7 +4,7 @@
   <string name="menu_home">آغازه</string>
   <string name="menu_settings">تنظیمات</string>
   <string name="menu_search">جستجوی مقاله</string>
-  <string name="menu_searchintext">جستجو در صفحه</string>
+  <string name="menu_search_in_text">جستجو در صفحه</string>
   <string name="menu_bookmarks">نشانک‌ها</string>
   <string name="menu_randomarticle">مقالهٔ تصادفی</string>
   <string name="menu_fullscreen">تمام‌صفحه</string>

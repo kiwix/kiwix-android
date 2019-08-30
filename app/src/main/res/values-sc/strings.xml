@@ -5,7 +5,7 @@
   <string name="menu_home">Pàgina printzipale</string>
   <string name="menu_settings">Impostatziones</string>
   <string name="menu_search">Chirca artìculu</string>
-  <string name="menu_searchintext">Agata in sa pàgina</string>
+  <string name="menu_search_in_text">Agata in sa pàgina</string>
   <string name="menu_bookmarks">Sinnalibros</string>
   <string name="menu_randomarticle">Artìculu a sa tzurpa</string>
   <string name="menu_fullscreen">Ischermu intreu</string>

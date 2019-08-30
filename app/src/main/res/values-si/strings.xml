@@ -4,7 +4,7 @@
   <string name="menu_home">මුල් පිටුව</string>
   <string name="menu_settings">අභිරුචි</string>
   <string name="menu_search">ගවේෂණය</string>
-  <string name="menu_searchintext">පෙළෙහි සොයන්න</string>
+  <string name="menu_search_in_text">පෙළෙහි සොයන්න</string>
   <string name="menu_bookmarks">පොත්යොමු</string>
   <string name="menu_randomarticle">අහඹු ලිපිය</string>
   <string name="menu_fullscreen">පූර්ණ තිරය</string>

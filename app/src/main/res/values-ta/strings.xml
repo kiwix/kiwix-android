@@ -4,7 +4,7 @@
   <string name="menu_home">முகப்பு</string>
   <string name="menu_settings">விருப்பங்கள்</string>
   <string name="menu_search">தேடு</string>
-  <string name="menu_searchintext">உரையில் கண்டுபிடி</string>
+  <string name="menu_search_in_text">உரையில் கண்டுபிடி</string>
   <string name="menu_bookmarks">புத்தகக்குறிகள்</string>
   <string name="menu_randomarticle">தொடர்பற்ற கட்டுரை</string>
   <string name="menu_fullscreen">முழு திரை</string>

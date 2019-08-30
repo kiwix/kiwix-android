@@ -4,7 +4,7 @@
   <string name="menu_home">Нүүр</string>
   <string name="menu_settings">Тохиргоо</string>
   <string name="menu_search">Хайлт</string>
-  <string name="menu_searchintext">Бичвэрээс хайх</string>
+  <string name="menu_search_in_text">Бичвэрээс хайх</string>
   <string name="menu_bookmarks">Тэмдэглэсэн хуудсууд</string>
   <string name="menu_randomarticle">Санаандгүй сонгосон нийлэл</string>
   <string name="menu_fullscreen">Дэлгэц дүүргэн харах</string>

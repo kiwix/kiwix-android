@@ -4,7 +4,7 @@
   <string name="menu_home">Төп Бит</string>
   <string name="menu_settings">Көйләүҙәр</string>
   <string name="menu_search">Эҙләү</string>
-  <string name="menu_searchintext">Текста табырға</string>
+  <string name="menu_search_in_text">Текста табырға</string>
   <string name="menu_bookmarks">Һалынмалар</string>
   <string name="menu_randomarticle">Осраҡлы мәҡәлә</string>
   <string name="menu_fullscreen">Тулы экран</string>

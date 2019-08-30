@@ -4,7 +4,7 @@
   <string name="menu_home">Latar</string>
   <string name="menu_settings">Pilihan</string>
   <string name="menu_search">Golèk</string>
-  <string name="menu_searchintext">Temukna nèng teks</string>
+  <string name="menu_search_in_text">Temukna nèng teks</string>
   <string name="menu_bookmarks">Tenger wacan</string>
   <string name="menu_randomarticle">Waton artikel</string>
   <string name="menu_fullscreen">Layar wutuh</string>
