@@ -36,7 +36,8 @@ public class WebServerHelper {
   }
 
   public boolean startServerHelper(@NonNull ArrayList<String> selectedBooksPath) {
-    if (ServerUtils.getIpAddress().length() == 0) {
+    String ip = ServerUtils.getIpAddress();
+    if (ip.length() == 0) {
       return false;
     } else if (startAndroidWebServer(selectedBooksPath)) {
       return true;
