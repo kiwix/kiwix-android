@@ -54,6 +54,8 @@ public interface ApplicationComponent {
 
   ActivityComponent.Builder activityComponent();
 
+  ServiceComponent.Builder serviceComponent();
+
   void inject(KiwixApplication application);
 
   void inject(DownloadService service);

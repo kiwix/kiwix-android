@@ -126,6 +126,8 @@ public final class Constants {
 
   public static final String EXTRA_NOTIFICATION_ID = "notificationID";
 
+  public static final String HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService";
+
   public static final String EXTRA_WEBVIEWS_LIST = "webviewsList";
 
   public static final String EXTRA_SEARCH_TEXT = "searchText";

@@ -130,6 +130,7 @@ dependencies {
   implementation "android.arch.lifecycle:extensions:1.1.1"
   implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
   implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
+  implementation 'com.google.android.gms:play-services-location:17.0.0'
 
   testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
   testImplementation "io.mockk:mockk:1.9"
@@ -248,9 +249,9 @@ android {
       'LogConditional'
 
     warning 'UnknownNullness',
-      'SelectableText',
-      'IconDensities',
-      'SyntheticAccessor'
+        'SelectableText',
+        'IconDensities',
+        'SyntheticAccessor'
     baseline file("lint-baseline.xml")
   }
 

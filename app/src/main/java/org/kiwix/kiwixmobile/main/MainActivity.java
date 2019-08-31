@@ -86,6 +86,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,6 +112,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
@@ -939,6 +941,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         Intent intentSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
         intentSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
         openExternalUrl(intentSupportKiwix);
+        break;
+
+      case R.id.menu_host_books:
+        Intent intent = new Intent(MainActivity.this, ZimHostActivity.class);
+        startActivity(intent);
+        break;
 
       default:
         break;
@@ -1687,6 +1695,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           }
         }
         return;
+
       default:
         break;
     }
@@ -1756,6 +1765,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         menu.findItem(R.id.menu_home).setVisible(false);
         menu.findItem(R.id.menu_random_article).setVisible(false);
         menu.findItem(R.id.menu_searchintext).setVisible(false);
+        menu.findItem(R.id.menu_host_books).setVisible(true);
       } else {
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         menu.findItem(R.id.menu_home).setVisible(true);

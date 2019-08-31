@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto"
     package="org.kiwix.kiwixmobile">
 
@@ -7,10 +8,17 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+  <!-- Devices with version >= Oreo need location permission to start/stop the hotspot -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+  <!-- Device with versions >= Pie need this permission -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
 
   <application
       android:name=".KiwixApplication"
@@ -140,6 +148,7 @@
         android:name=".zim_manager.ZimManageActivity"
         android:label="@string/choose_file"
         android:launchMode="singleTop">
+
       <!-- TODO -->
       <intent-filter>
         <action android:name="android.intent.action.GET_CONTENT"/>
@@ -159,6 +168,7 @@
     <activity android:name=".settings.KiwixSettingsActivity"/>
     <activity android:name=".search.SearchActivity"/>
     <activity android:name=".bookmark.BookmarksActivity"/>
+    <activity android:name=".webserver.ZimHostActivity"/>
 
     <provider
         android:name=".data.ZimContentProvider"
@@ -178,6 +188,8 @@
           android:name="android.appwidget.provider"
           android:resource="@xml/kiwix_widget_provider_info"/>
     </receiver>
+    
+    <service android:name=".wifi_hotspot.HotspotService"/>
 
     <activity
         android:name=".error.ErrorActivity"
@@ -193,7 +205,6 @@
           android:resource="@xml/provider_paths"/>
     </provider>
 
-
     <activity android:name=".intro.IntroActivity"/>
     <activity android:name=".language.LanguageActivity"/>
     <activity android:name=".history.HistoryActivity"/>
@@ -202,12 +213,14 @@
           android:name="android.support.PARENT_ACTIVITY"
           android:value="main.MainActivity"/>
     </activity>
-    <activity android:name=".zim_manager.local_file_transfer.LocalFileTransferActivity"
+    <activity
+        android:name=".zim_manager.local_file_transfer.LocalFileTransferActivity"
         android:label="Send to nearby device"
         android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.SEND_MULTIPLE"/>
         <category android:name="android.intent.category.DEFAULT"/>
+
         <data android:mimeType="application/octet-stream"/>
         <data android:pathPattern=".*\\.zim"/>
         <data android:pathPattern=".*\\..*\\.zim"/>
@@ -223,4 +236,5 @@
       </intent-filter>
     </receiver>
   </application>
+
 </manifest>

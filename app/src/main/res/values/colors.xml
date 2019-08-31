@@ -26,6 +26,7 @@
   <color name="actionModeBackground">#4285F4</color>
   <color name="titleBar">#000000</color>
   <color name="greenTick">#4CAF50</color>
+  <color name="stopServer">#E53935</color>
 
   <!-- Dark Text Color for Light Background -->
   <color name="textDarkPrimary">#000000</color> <!-- 0% opacity-->
