@@ -351,7 +351,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     checkForRateDialog();
 
-    initPlayStoreUri();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
 
     addFileReader();
@@ -591,11 +590,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     drawerLayout.openDrawer(GravityCompat.END);
   }
 
-  private void initPlayStoreUri() {
-    KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
-    KIWIX_BROWSER_MARKET_URI =
-        Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
-  }
 
   private void checkForRateDialog() {
     isFirstRun = sharedPreferenceUtil.getPrefIsFirstRun();
@@ -648,7 +642,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void goToRateApp() {
-
+    KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
+    KIWIX_BROWSER_MARKET_URI =
+            Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
     Intent goToMarket = new Intent(Intent.ACTION_VIEW, KIWIX_LOCAL_MARKET_URI);
 
     goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
