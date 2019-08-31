@@ -18,6 +18,8 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +28,11 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
@@ -46,6 +53,14 @@ public class KiwixWebViewClient extends WebViewClient {
       new SharedPreferenceUtil(KiwixApplication.getInstance());
   private final WebViewCallback callback;
   private View home;
+  @BindView(R.id.content_side_image)
+  ImageView sideImage;
+  @BindView(R.id.content_main_card_image)
+  ImageView cardImage;
+  @BindView(R.id.constraint_main)
+  ConstraintLayout constraintLayout;
+  @BindView(R.id.content_main_card_download_button)
+  AppCompatButton downloadButton;
 
   KiwixWebViewClient(WebViewCallback callback) {
     this.callback = callback;
@@ -120,9 +135,16 @@ public class KiwixWebViewClient extends WebViewClient {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
     home = inflater.inflate(R.layout.content_main, view, false);
     callback.setHomePage(home);
+    ButterKnife.bind(this, home);
     if (sharedPreferenceUtil.nightMode()) {
-      ImageView cardImage = home.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
+      constraintLayout.setBackgroundResource(R.drawable.back_cover_night);
+      sideImage.setImageResource(R.drawable.home_side_cover_night);
+      cardImage.setImageResource(R.drawable.kiwix_logo_night);
+      downloadButton.setTextColor(Color.parseColor("#000000"));
+      downloadButton.getBackground()
+          .setColorFilter(
+              ContextCompat.getColor(downloadButton.getContext(), R.color.complement_blue800),
+              PorterDuff.Mode.MULTIPLY);
     }
     view.removeAllViews();
     view.addView(home);

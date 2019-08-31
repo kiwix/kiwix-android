@@ -1590,6 +1590,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
     // Forcing redraw of RecyclerView children so that the tabs are properly oriented on rotation
     tabRecyclerView.setAdapter(tabsAdapter);
+    if (getCurrentWebView().getUrl().equalsIgnoreCase(HOME_URL)) {
+      showHomePage();
+    }
   }
 
   private void toggleActionItemsConfig() {

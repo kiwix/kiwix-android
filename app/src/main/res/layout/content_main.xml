@@ -20,6 +20,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/constraint_main"
+        android:background="@drawable/back_cover"
         >
 
       <ImageView
@@ -27,12 +29,23 @@
           android:layout_width="0dp"
           android:layout_height="144dp"
           android:contentDescription="@string/kiwi"
-          android:scaleType="fitXY"
-          android:src="@drawable/ic_home_kiwix_banner"
+          android:padding="10dp"
           app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
+          android:src="@drawable/kiwix_logo"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintEnd_toStartOf="@id/content_main_card_download_button"
+          />
+
+      <ImageView
+          android:id="@+id/content_side_image"
+          android:layout_width="0dp"
+          android:layout_height="144dp"
+          android:contentDescription="@null"
+          android:scaleType="fitEnd"
+          android:src="@drawable/home_side_cover"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
           />
 
       <!-- constraintRight_toRightOf is used as android:layoutDirection is supported from API 17 -->
