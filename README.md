@@ -1,4 +1,4 @@
-<img src="https://github.com/kiwix/kiwix-android/blob/master/Kiwix_icon_transparent_512x512.png" align="right" height='250' />
+<img src="https://github.com/kiwix/kiwix-android/blob/develop/Kiwix_icon_transparent_512x512.png" align="right" height='250' />
 <a href="https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile" target="_blank" align="left">
   <img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" />
 </a>
@@ -16,9 +16,9 @@ with additional meta-data.
 Kiwix is written in [Kotlin](https://kotlinlang.org/) (with a few old
 pieces in Java).
 
-[![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=master)](https://travis-ci.org/kiwix/kiwix-android)
+[![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=develop)](https://travis-ci.org/kiwix/kiwix-android)
 [![IRC Web](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](http://chat.kiwix.org)
-[![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/master/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
+[![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
@@ -53,7 +53,7 @@ different versions of our app. Ensure your build variant is
 ## Contributing
 
 Before contributing be sure to check out the
-[CONTRIBUTION](https://github.com/kiwix/kiwix-android/blob/master/CONTRIBUTING.md)
+[CONTRIBUTION](https://github.com/kiwix/kiwix-android/blob/develop/CONTRIBUTING.md)
 guidelines.
 
 We currently have a series of automated Unit and Integration
