@@ -67,4 +67,3 @@ class ServiceModule {
   ): HotspotNotificationManager =
     HotspotNotificationManager(notificationManager, context)
 }
-
