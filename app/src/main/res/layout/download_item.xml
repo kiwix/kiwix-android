@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
@@ -83,7 +84,7 @@
         android:layout_weight="0.5"
         android:minHeight="@dimen/stop_min_height"
         android:minWidth="@dimen/stop_min_width"
-        android:src="@drawable/ic_stop_black_24dp"
+        app:srcCompat="@drawable/ic_stop_black_24dp"
         android:text="@string/download_stop"
         />
   </LinearLayout>
