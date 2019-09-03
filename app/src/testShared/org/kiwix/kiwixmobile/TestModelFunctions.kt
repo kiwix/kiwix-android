@@ -17,10 +17,15 @@
  */
 package org.kiwix.kiwixmobile
 
+import com.tonyodev.fetch2.Error
+import com.tonyodev.fetch2.Status
+import com.tonyodev.fetch2.Status.NONE
+import org.kiwix.kiwixmobile.downloader.model.Base64String
+import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Pending
-import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
+import org.kiwix.kiwixmobile.downloader.model.Seconds
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
@@ -39,29 +44,37 @@ fun bookOnDisk(
   file: File = File("")
 ) = BookOnDisk(databaseId, book, file)
 
-fun downloadStatus(
-  downloadId: Long = 0L,
-  title: String = "",
-  description: String = "",
-  downloadState: DownloadState = Pending,
-  bytesDownloadedSoFar: Long = 0L,
-  totalSizeBytes: Long = 0L,
-  lastModified: String = "",
-  localUri: String? = null,
-  mediaProviderUri: String? = null,
-  mediaType: String? = null,
-  uri: String? = null,
+fun downloadModel(
+  databaseId: Long = 1L,
+  downloadId: Long = 1L,
+  file: String = "",
+  etaInMilliSeconds: Long = 0L,
+  bytesDownloaded: Long = 1L,
+  totalSizeOfDownload: Long = 1L,
+  status: Status = NONE,
+  error: Error = Error.NONE,
+  progress: Int = 1,
   book: Book = book()
-) = DownloadStatus(
-  downloadId, title, description, downloadState, bytesDownloadedSoFar,
-  totalSizeBytes, lastModified, localUri, mediaProviderUri, mediaType, uri, book
+) = DownloadModel(
+  databaseId, downloadId, file, etaInMilliSeconds, bytesDownloaded, totalSizeOfDownload,
+  status, error, progress, book
 )
 
-fun downloadModel(
-  databaseId: Long? = 1L,
+fun downloadItem(
   downloadId: Long = 1L,
-  book: Book = book()
-) = DownloadModel(databaseId, downloadId, book)
+  favIcon: Base64String = Base64String("favIcon"),
+  title: String = "title",
+  description: String = "description",
+  bytesDownloaded: Long = 1L,
+  totalSizeBytes: Long = 1L,
+  progress: Int = 1,
+  eta: Seconds = Seconds(0),
+  state: DownloadState = Pending
+) =
+  DownloadItem(
+    downloadId, favIcon, title, description, bytesDownloaded,
+    totalSizeBytes, progress, eta, state
+  )
 
 fun language(
   id: Long = 0,

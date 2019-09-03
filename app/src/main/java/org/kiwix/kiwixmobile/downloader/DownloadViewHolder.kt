@@ -51,9 +51,7 @@ class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHo
     stop.setOnClickListener {
       itemClickListener.invoke(downloadItem)
     }
-    downloadState.text = toReadableState(
-      downloadItem.downloadState, containerView.context
-    )
+    downloadState.text = toReadableState(downloadItem.downloadState, containerView.context)
     eta.text = downloadItem.eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
   }
 

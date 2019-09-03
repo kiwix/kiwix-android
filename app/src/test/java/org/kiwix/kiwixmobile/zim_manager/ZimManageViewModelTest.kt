@@ -25,6 +25,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Single
+import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
 import org.junit.jupiter.api.AfterAll
@@ -38,17 +39,12 @@ import org.kiwix.kiwixmobile.book
 import org.kiwix.kiwixmobile.bookOnDisk
 import org.kiwix.kiwixmobile.data.DataSource
 import org.kiwix.kiwixmobile.data.remote.KiwixService
+import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
-import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.downloadItem
 import org.kiwix.kiwixmobile.downloadModel
-import org.kiwix.kiwixmobile.downloadStatus
-import org.kiwix.kiwixmobile.downloader.Downloader
-import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.downloader.model.DownloadState
-import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
-import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter
 import org.kiwix.kiwixmobile.language
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.libraryNetworkEntity
@@ -65,7 +61,6 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
-import java.io.File
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
@@ -73,17 +68,15 @@ import java.util.concurrent.TimeUnit.SECONDS
 @ExtendWith(InstantExecutorExtension::class)
 class ZimManageViewModelTest {
 
-  private val newDownloadDao: NewDownloadDao = mockk()
+  private val downloadDao: FetchDownloadDao = mockk()
   private val newBookDao: NewBookDao = mockk()
   private val newLanguagesDao: NewLanguagesDao = mockk()
-  private val downloader: Downloader = mockk()
   private val storageObserver: StorageObserver = mockk()
   private val kiwixService: KiwixService = mockk()
   private val application: Application = mockk()
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
   private val bookUtils: BookUtils = mockk()
   private val fat32Checker: Fat32Checker = mockk()
-  private val uriToFileConverter: UriToFileConverter = mockk()
   private val defaultLanguageProvider: DefaultLanguageProvider = mockk()
   private val dataSource: DataSource = mockk()
   lateinit var viewModel: ZimManageViewModel
@@ -92,7 +85,7 @@ class ZimManageViewModelTest {
   private val booksOnFileSystem: PublishProcessor<List<BookOnDisk>> = PublishProcessor.create()
   private val books: PublishProcessor<List<BookOnDisk>> = PublishProcessor.create()
   private val languages: PublishProcessor<List<Language>> = PublishProcessor.create()
-  private val fileSystemStates: PublishProcessor<FileSystemState> = PublishProcessor.create()
+  private val fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
   private val networkStates: PublishProcessor<NetworkState> = PublishProcessor.create()
   private val booksOnDiskListItems: PublishProcessor<List<BooksOnDiskListItem>> =
     PublishProcessor.create()
@@ -112,7 +105,7 @@ class ZimManageViewModelTest {
   fun init() {
     clearAllMocks()
     every { connectivityBroadcastReceiver.action } returns "test"
-    every { newDownloadDao.downloads() } returns downloads
+    every { downloadDao.downloads() } returns downloads
     every { newBookDao.books() } returns books
     every { storageObserver.booksOnFileSystem } returns booksOnFileSystem
     every { newLanguagesDao.languages() } returns languages
@@ -121,9 +114,17 @@ class ZimManageViewModelTest {
     every { application.registerReceiver(any(), any()) } returns mockk()
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     viewModel = ZimManageViewModel(
-      newDownloadDao, newBookDao, newLanguagesDao, downloader,
-      storageObserver, kiwixService, application, connectivityBroadcastReceiver, bookUtils,
-      fat32Checker, uriToFileConverter, defaultLanguageProvider, dataSource
+      downloadDao,
+      newBookDao,
+      newLanguagesDao,
+      storageObserver,
+      kiwixService,
+      application,
+      connectivityBroadcastReceiver,
+      bookUtils,
+      fat32Checker,
+      defaultLanguageProvider,
+      dataSource
     )
     testScheduler.triggerActions()
   }
@@ -150,63 +151,19 @@ class ZimManageViewModelTest {
   @Nested
   inner class Downloads {
     @Test
-    fun `on emission from database query and render downloads`() {
-      val expectedStatus = downloadStatus()
-      expectStatusWith(listOf(expectedStatus))
+    fun `on emission from database render downloads`() {
+      expectDownloads()
       viewModel.downloadItems
         .test()
-        .assertValue(listOf(DownloadItem(expectedStatus)))
+        .assertValue(listOf(downloadItem()))
     }
 
-    @Test
-    fun `on emission of successful status create a book and delete the download`() {
-      every { uriToFileConverter.convert(any()) } returns File("test")
-      val expectedStatus = downloadStatus(
-        downloadId = 10L,
-        downloadState = DownloadState.Successful
-      )
-      expectStatusWith(listOf(expectedStatus))
-      val element = expectedStatus.toBookOnDisk(uriToFileConverter)
-      verify {
-        newBookDao.insert(listOf(element))
-        newDownloadDao.delete(10L)
-      }
-    }
-
-    @Test
-    fun `if statuses don't have a matching Id for download in db over 3 secs then delete`() {
-      expectStatusWith(
-        listOf(downloadStatus(downloadId = 1)),
-        listOf(downloadModel(downloadId = 1), downloadModel(downloadId = 3))
-      )
-      testScheduler.advanceTimeBy(3, SECONDS)
-      testScheduler.triggerActions()
-      verify {
-        newDownloadDao.delete(3)
-      }
-    }
-
-    @Test
-    fun `if statuses do have a matching Id for download in db over 3 secs then don't delete`() {
-      expectStatusWith(
-        listOf(downloadStatus(downloadId = 1)),
-        listOf(downloadModel(downloadId = 1))
-      )
-      testScheduler.advanceTimeBy(3, SECONDS)
-      testScheduler.triggerActions()
-      verify(exactly = 0) {
-        newDownloadDao.delete(any())
-      }
-    }
-
-    private fun expectStatusWith(
-      expectedStatuses: List<DownloadStatus>,
+    private fun expectDownloads(
       expectedDownloads: List<DownloadModel> = listOf(
         downloadModel()
       )
     ) {
       every { application.getString(any()) } returns ""
-      every { downloader.queryStatus(expectedDownloads) } returns expectedStatuses
       downloads.offer(expectedDownloads)
       testScheduler.triggerActions()
       testScheduler.advanceTimeBy(1, SECONDS)
@@ -387,7 +344,6 @@ class ZimManageViewModelTest {
 
   @Test
   fun `library update removes from sources`() {
-    every { downloader.queryStatus(any()) } returns emptyList()
     every { application.getString(R.string.your_languages) } returns "1"
     every { application.getString(R.string.other_languages) } returns "2"
     val bookAlreadyOnDisk = book(

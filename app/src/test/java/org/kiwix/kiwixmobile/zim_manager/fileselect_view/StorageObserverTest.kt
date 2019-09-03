@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.book
 import org.kiwix.kiwixmobile.bookOnDisk
 import org.kiwix.kiwixmobile.data.ZimContentProvider
-import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
+import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.resetSchedulers
@@ -44,7 +44,7 @@ import java.io.File
 class StorageObserverTest {
 
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
-  private val newDownloadDao: NewDownloadDao = mockk()
+  private val downloadDao: FetchDownloadDao = mockk()
   private val fileSearch: FileSearch = mockk()
   private val downloadModel = mockk<DownloadModel>()
   private val file = mockk<File>()
@@ -66,9 +66,9 @@ class StorageObserverTest {
   @BeforeEach fun init() {
     clearAllMocks()
     every { sharedPreferenceUtil.prefStorage } returns "a"
-    every { fileSearch.scan("a") } returns files
-    every { newDownloadDao.downloads() } returns downloads
-    storageObserver = StorageObserver(newDownloadDao, fileSearch)
+    every { fileSearch.scan() } returns files
+    every { downloadDao.downloads() } returns downloads
+    storageObserver = StorageObserver(downloadDao, fileSearch)
   }
 
   @Test
