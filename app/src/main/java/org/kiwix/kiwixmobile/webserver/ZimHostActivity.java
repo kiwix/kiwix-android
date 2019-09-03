@@ -75,6 +75,7 @@ public class ZimHostActivity extends BaseActivity implements
   private String ip;
   private ServiceConnection serviceConnection;
   private ProgressDialog progressDialog;
+  private boolean isActivityVisible;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -176,6 +177,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override protected void onStop() {
     super.onStop();
+    isActivityVisible = false;
     unbindService();
   }
 
@@ -207,10 +209,13 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override protected void onResume() {
     super.onResume();
+    isActivityVisible = true;
     presenter.loadBooks();
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.getSocketAddress();
       layoutServerStarted();
+    } else {
+      layoutServerStopped();
     }
   }
 
@@ -295,7 +300,9 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void onServerStopped() {
-    layoutServerStopped();
+    if (isActivityVisible) {
+      layoutServerStopped();
+    }
   }
 
   @Override public void onServerFailedToStart() {
