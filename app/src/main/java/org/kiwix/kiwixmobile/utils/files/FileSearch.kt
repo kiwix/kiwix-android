@@ -22,7 +22,6 @@ package org.kiwix.kiwixmobile.utils.files
 import android.content.Context
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.MediaColumns
-import android.util.Log
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import io.reactivex.Flowable
@@ -65,17 +64,13 @@ class FileSearch @Inject constructor(private val context: Context) {
 
   private fun scanFileSystem() =
     directoryRoots()
-      .also { Log.d("FileSearch", "searching at distinct: $it") }
       .fold(mutableListOf<File>(), { acc, root ->
         acc.apply { addAll(scanDirectory(root)) }
       })
       .distinctBy { it.canonicalPath }
-      .also { Log.d("FileSearch", "found distinct files: $it") }
 
-  private fun directoryRoots() = listOf(
-    "/mnt",
-    *StorageDeviceUtils.getReadableStorage(context).map(StorageDevice::name).toTypedArray()
-  )
+  private fun directoryRoots() =
+    StorageDeviceUtils.getReadableStorage(context).map(StorageDevice::name)
 
   private fun scanDirectory(directory: String): List<File> = File(directory).listFiles()
     ?.fold(

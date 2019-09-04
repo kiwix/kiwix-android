@@ -106,9 +106,7 @@ class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: F
   init {
     fetch.addListener(fetchListener, true)
     updater.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-      {
-        it.invoke()
-      },
+      { it.invoke() },
       Throwable::printStackTrace
     )
   }

@@ -132,9 +132,8 @@ dependencies {
   implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
   implementation 'com.google.android.gms:play-services-location:17.0.0'
 
-  implementation "androidx.tonyodev.fetch2:xfetch2:3.1.4"
-  implementation "androidx.tonyodev.fetch2okhttp:xfetch2okhttp:3.1.4"
-  implementation "androidx.tonyodev.fetch2rx:xfetch2rx:3.1.4"
+  implementation "androidx.tonyodev.fetch2:xfetch2:$fetchVersion"
+  implementation "androidx.tonyodev.fetch2okhttp:xfetch2okhttp:$fetchVersion"
 
   testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
   testImplementation "io.mockk:mockk:1.9"
@@ -145,7 +144,7 @@ dependencies {
   androidTestImplementation "io.mockk:mockk-android:1.9"
   androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
   androidTestImplementation "org.assertj:assertj-core:3.11.1"
-  androidTestImplementation ("org.simpleframework:simple-xml:2.7.1"){
+  androidTestImplementation("org.simpleframework:simple-xml:2.7.1") {
     exclude module: 'stax'
     exclude module: 'stax-api'
     exclude module: 'xpp3'
@@ -253,9 +252,9 @@ android {
       'LogConditional'
 
     warning 'UnknownNullness',
-        'SelectableText',
-        'IconDensities',
-        'SyntheticAccessor'
+      'SelectableText',
+      'IconDensities',
+      'SyntheticAccessor'
     baseline file("lint-baseline.xml")
   }
 
@@ -280,7 +279,6 @@ android {
       java.srcDirs += "$projectDir/src/testShared"
     }
   }
-
 
   flavorDimensions "default"
 

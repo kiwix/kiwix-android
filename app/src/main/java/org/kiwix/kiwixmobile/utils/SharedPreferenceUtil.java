@@ -84,12 +84,10 @@ public class SharedPreferenceUtil {
   }
 
   public String getPrefStorage() {
-    String storage = sharedPreferences.getString(PREF_STORAGE,
-      null);
+    String storage = sharedPreferences.getString(PREF_STORAGE, null);
     if (storage == null) {
       storage =
-        ContextCompat.getExternalFilesDirs(KiwixApplication.getInstance(), null)[0]
-          .getPath();
+        ContextCompat.getExternalFilesDirs(KiwixApplication.getInstance(), null)[0].getPath();
       putPrefStorage(storage);
     }
     return storage;

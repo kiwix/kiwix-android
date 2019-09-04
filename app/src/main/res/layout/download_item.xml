@@ -68,7 +68,6 @@
         android:id="@+id/eta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
         android:textAppearance="?android:attr/textAppearanceSmall"
         tools:text="1min 10secs" />
     </LinearLayout>

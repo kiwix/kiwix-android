@@ -37,6 +37,7 @@ ext {
   set("baristaVersion", "2.7.1")
   set("kotlinVersion", "1.3.50")
   set("objectboxVersion", "2.3.4")
+  set("fetchVersion", "3.1.4")
 }
 
 allprojects {

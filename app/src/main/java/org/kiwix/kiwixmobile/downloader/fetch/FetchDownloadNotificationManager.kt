@@ -48,10 +48,6 @@ class FetchDownloadNotificationManager(context: Context) :
     }
   }
 
-  override fun notify(groupId: Int) {
-    super.notify(groupId)
-  }
-
   override fun updateNotification(
     notificationBuilder: NotificationCompat.Builder,
     downloadNotification: DownloadNotification,

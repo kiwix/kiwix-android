@@ -107,7 +107,7 @@ class FileSearchTest {
         ".zim",
         File("$tempRoot${File.separator}dir").apply { mkdirs() })
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
-      every { storageDevice.name } returns tempRoot
+      every { storageDevice.name } returns zimFile.parentFile.parent
       val fileList = fileSearch.scan()
         .test()
         .values()[0]
