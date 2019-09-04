@@ -18,7 +18,7 @@ import javax.inject.Inject;
 /**
  * LocationServicesHelper sets up location services required to turn on local
  * hotspot on devices >= Oreo.
- * Created by Adeel Zafar on 10/8/2019.
+ * Created by Adeel Zafar on Aug 10,2019.
  */
 
 public class LocationServicesHelper {

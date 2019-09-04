@@ -12,7 +12,7 @@ import javax.inject.Inject;
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
  * to implement the wifi hotspot feature.
- * Created by Adeel Zafar on 28/5/2019.
+ * Created by Adeel Zafar on May 28,2019.
  */
 
 public class WifiHotspotManager {

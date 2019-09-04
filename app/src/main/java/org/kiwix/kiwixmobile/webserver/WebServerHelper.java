@@ -18,7 +18,7 @@ import static org.kiwix.kiwixmobile.utils.ServerUtils.INVALID_IP;
 /**
  * WebServerHelper class is used to set up the suitable environment i.e. getting the
  * ip address and port no. and starting/stopping the kiwix-serve
- * Created by Adeel Zafar on 18/07/2019.
+ * Created by Adeel Zafar on July 18,2019.
  */
 
 public class WebServerHelper {

@@ -26,7 +26,7 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotNotificationManager.HOTS
 
 /**
  * HotspotService is used to add a foreground service for the wifi hotspot.
- * Created by Adeel Zafar on 07/01/2019.
+ * Created by Adeel Zafar on July 01,2019.
  */
 
 public class HotspotService extends Service implements HotspotStateListener, IpAddressCallbacks {
