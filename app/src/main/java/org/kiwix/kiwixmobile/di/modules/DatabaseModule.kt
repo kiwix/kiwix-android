@@ -32,9 +32,18 @@ import org.kiwix.kiwixmobile.database.newdb.entities.MyObjectBox
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule {
-  @Provides @Singleton fun providesBoxStore(context: Context): BoxStore =
-    MyObjectBox.builder().androidContext(context).build()
+open class DatabaseModule {
+  companion object {
+    var boxStore: BoxStore? = null
+  }
+
+  // NOT RECOMMENDED TODO use custom runner to load TestApplication
+  @Provides @Singleton fun providesBoxStore(context: Context): BoxStore {
+    if (boxStore == null) {
+      boxStore = MyObjectBox.builder().androidContext(context).build()
+    }
+    return boxStore!!
+  }
 
   @Provides @Singleton fun providesNewBookDao(boxStore: BoxStore): NewBookDao =
     NewBookDao(boxStore.boxFor())

@@ -39,7 +39,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
   ApplicationModule.class,
   NetworkModule.class,
   JNIModule.class,
-  DataModule.class
+  DataModule.class,
 })
 public interface ApplicationComponent {
 

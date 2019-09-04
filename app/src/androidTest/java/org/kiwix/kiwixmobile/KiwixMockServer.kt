@@ -27,7 +27,7 @@ import java.util.Stack
  */
 class KiwixMockServer {
 
-  val queuedResponses: Stack<MockResponse> = Stack()
+  var forcedResponse: MockResponse? = null
 
   private val mockWebServer = MockWebServer().apply {
     start(TEST_PORT)
@@ -44,8 +44,8 @@ class KiwixMockServer {
     mockWebServer.setDispatcher(object : Dispatcher() {
       override fun dispatch(request: RecordedRequest) =
         mapOfPathsToResponses[request.path]?.let(::successfulResponse)
-          ?: queuedResponses.popOrNull()?.let { return@let it }
-          ?: throw RuntimeException("No response mapped for ${request.path}")
+          ?: forcedResponse?.let { return@let it }
+          ?: throw RuntimeException("No response mapped for ${request.path}\nmapped $mapOfPathsToResponses\nqueued $forcedResponse")
     })
   }
 
@@ -54,8 +54,8 @@ class KiwixMockServer {
     setBody(bodyObject.asXmlString())
   }
 
-  fun queueResponse(mockResponse: MockResponse) {
-    queuedResponses.push(mockResponse)
+  fun forceResponse(mockResponse: MockResponse) {
+    forcedResponse = mockResponse
   }
 
   private fun <E> Stack<E>.popOrNull() =
