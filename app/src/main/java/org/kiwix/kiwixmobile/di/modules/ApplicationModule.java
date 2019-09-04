@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.IO;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.downloader.DownloadMonitor;
-import org.kiwix.kiwixmobile.downloader.FetchDownloadMonitor;
+import org.kiwix.kiwixmobile.downloader.fetch.FetchDownloadMonitor;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 

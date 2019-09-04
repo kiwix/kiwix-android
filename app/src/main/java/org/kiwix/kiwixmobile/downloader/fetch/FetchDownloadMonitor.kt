@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.downloader
+package org.kiwix.kiwixmobile.downloader.fetch
 
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
@@ -25,6 +25,7 @@ import com.tonyodev.fetch2core.DownloadBlock
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.downloader.DownloadMonitor
 import javax.inject.Inject
 
 class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: FetchDownloadDao) :
@@ -104,15 +105,15 @@ class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: F
 
   init {
     fetch.addListener(fetchListener, true)
-  }
-
-  override fun init() {
-    // empty method to so class does not get reported unused
     updater.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
       {
         it.invoke()
       },
       Throwable::printStackTrace
     )
+  }
+
+  override fun init() {
+    // empty method to so class does not get reported unused
   }
 }

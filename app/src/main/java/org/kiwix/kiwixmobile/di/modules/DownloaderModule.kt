@@ -18,10 +18,10 @@
 package org.kiwix.kiwixmobile.di.modules
 
 import android.content.Context
-import com.tonyodev.fetch2.DefaultFetchNotificationManager
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.Fetch.Impl
 import com.tonyodev.fetch2.FetchConfiguration
+import com.tonyodev.fetch2.FetchNotificationManager
 import com.tonyodev.fetch2okhttp.OkHttpDownloader
 import dagger.Module
 import dagger.Provides
@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.downloader.DownloaderImpl
+import org.kiwix.kiwixmobile.downloader.fetch.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.downloader.fetch.FetchDownloadRequester
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import javax.inject.Singleton
@@ -66,21 +67,25 @@ object DownloaderModule {
   @Singleton
   fun provideFetchConfiguration(
     context: Context,
-    okHttpDownloader: OkHttpDownloader
+    okHttpDownloader: OkHttpDownloader,
+    fetchNotificationManager: FetchNotificationManager
   ): FetchConfiguration =
     FetchConfiguration.Builder(context).apply {
       setDownloadConcurrentLimit(5)
       enableLogging(DEBUG)
       enableRetryOnNetworkGain(true)
       setHttpDownloader(okHttpDownloader)
-      setNotificationManager(object : DefaultFetchNotificationManager(context) {
-        override fun getFetchInstanceForNamespace(namespace: String) =
-          Fetch.getDefaultInstance()
-      })
+      setNotificationManager(fetchNotificationManager)
     }.build().also(Impl::setDefaultInstanceConfiguration)
 
   @JvmStatic
   @Provides
   @Singleton
   fun provideOkHttpDownloader() = OkHttpDownloader(OkHttpClient.Builder().build())
+
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun provideFetchDownloadNotificationManager(context: Context): FetchNotificationManager =
+    FetchDownloadNotificationManager(context)
 }

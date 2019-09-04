@@ -35,7 +35,7 @@ data class DownloadModel(
   val progress: Int,
   val book: Book
 ) {
-  val fileNameFromUrl: String get() = StorageUtils.getFileNameFromUrl(book.url)
+  val fileNameFromUrl: String by lazy { StorageUtils.getFileNameFromUrl(book.url) }
 
   constructor(downloadEntity: FetchDownloadEntity) : this(
     downloadEntity.id,
