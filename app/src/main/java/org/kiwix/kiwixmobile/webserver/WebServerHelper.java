@@ -38,10 +38,12 @@ public class WebServerHelper {
   public boolean startServerHelper(@NonNull ArrayList<String> selectedBooksPath) {
     String ip = ServerUtils.getIpAddress();
     if (ip.length() == 0) {
+      Log.v(TAG, "Ip length equals 0");
       return false;
     } else if (startAndroidWebServer(selectedBooksPath)) {
       return true;
     }
+    Log.v(TAG, "isServerStarted" + isServerStarted);
     return isServerStarted;
   }
 
@@ -49,6 +51,7 @@ public class WebServerHelper {
     if (isServerStarted) {
       kiwixServer.stop();
       updateServerState(false);
+      Log.v(TAG,"isServerStarted Local "+isServerStarted);
     }
   }
 
