@@ -72,6 +72,8 @@ public final class Constants {
 
   public static final String PREF_HIDE_TOOLBAR = "pref_hidetoolbar";
 
+  public static final String PREF_READ_ALOUD = "pref_read_aloud";
+
   public static final String PREF_ZOOM = "pref_zoom_slider";
 
   public static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
