@@ -34,7 +34,7 @@ sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskView
 
   class BookDelegate(
     val sharedPreferenceUtil: SharedPreferenceUtil,
-    private val clickAction: (BookOnDisk) -> Unit,
+    private val clickAction: ((BookOnDisk) -> Unit)? = null,
     private val longClickAction: ((BookOnDisk) -> Unit)? = null,
     private val multiSelectAction: ((BookOnDisk) -> Unit)? = null
   ) : BookOnDiskDelegate<BookOnDisk, BookViewHolder>() {

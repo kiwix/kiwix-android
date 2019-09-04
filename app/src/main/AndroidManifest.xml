@@ -12,6 +12,13 @@
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+  <!-- Devices with version >= Oreo need location permission to start/stop the hotspot -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+  <!-- Device with versions >= Pie need this permission -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+
   <application
     android:name=".KiwixApplication"
     android:allowBackup="true"
@@ -159,6 +166,7 @@
     <activity android:name=".settings.KiwixSettingsActivity" />
     <activity android:name=".search.SearchActivity" />
     <activity android:name=".bookmark.BookmarksActivity" />
+    <activity android:name=".webserver.ZimHostActivity" />
 
     <provider
       android:name=".data.ZimContentProvider"
@@ -178,6 +186,8 @@
         android:name="android.appwidget.provider"
         android:resource="@xml/kiwix_widget_provider_info" />
     </receiver>
+
+    <service android:name=".wifi_hotspot.HotspotService" />
 
     <activity
       android:name=".error.ErrorActivity"

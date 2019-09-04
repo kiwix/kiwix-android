@@ -32,7 +32,7 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
   class BookViewHolder(
     containerView: View,
     private val sharedPreferenceUtil: SharedPreferenceUtil,
-    private val clickAction: (BookOnDisk) -> Unit,
+    private val clickAction: ((BookOnDisk) -> Unit)?,
     private val longClickAction: ((BookOnDisk) -> Unit)?,
     private val multiSelectAction: ((BookOnDisk) -> Unit)?
   ) : BookOnDiskViewHolder<BookOnDisk>(containerView) {
@@ -80,7 +80,7 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
         }
         NORMAL -> {
           itemBookCheckbox.visibility = View.GONE
-          item_book_clickable_area.setOnClickListener { clickAction.invoke(item) }
+          item_book_clickable_area.setOnClickListener { clickAction?.invoke(item) }
           item_book_clickable_area.setOnLongClickListener {
             longClickAction?.invoke(item)
             return@setOnLongClickListener true

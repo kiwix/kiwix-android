@@ -130,6 +130,7 @@ dependencies {
   implementation "android.arch.lifecycle:extensions:1.1.1"
   implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
   implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
+  implementation 'com.google.android.gms:play-services-location:17.0.0'
 
   implementation "androidx.tonyodev.fetch2:xfetch2:3.1.4"
   implementation "androidx.tonyodev.fetch2okhttp:xfetch2okhttp:3.1.4"
@@ -252,9 +253,9 @@ android {
       'LogConditional'
 
     warning 'UnknownNullness',
-      'SelectableText',
-      'IconDensities',
-      'SyntheticAccessor'
+        'SelectableText',
+        'IconDensities',
+        'SyntheticAccessor'
     baseline file("lint-baseline.xml")
   }
 
