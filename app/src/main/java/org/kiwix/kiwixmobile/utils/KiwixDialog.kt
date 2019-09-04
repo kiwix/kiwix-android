@@ -2,7 +2,6 @@ package org.kiwix.kiwixmobile.utils
 
 import android.net.wifi.WifiConfiguration
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 sealed class KiwixDialog(
@@ -39,7 +38,10 @@ sealed class KiwixDialog(
   )
 
   object StoragePermissionRationale : KiwixDialog(
-    null, R.string.request_storage, android.R.string.yes, android.R.string.cancel
+    null,
+    R.string.request_storage,
+    android.R.string.yes,
+    android.R.string.cancel
   )
 
   object EnableWifiP2pServices : KiwixDialog(
@@ -71,13 +73,14 @@ sealed class KiwixDialog(
     )
   }
 
-  data class StartHotspotManually(val neutralMessage: Int = string.hotspot_dialog_neutral_button) :
-    KiwixDialog(
-      string.hotspot_dialog_title,
-      string.hotspot_dialog_message,
-      string.go_to_settings_label,
-      null
-    )
+  data class StartHotspotManually(
+    val neutralMessage: Int = R.string.hotspot_dialog_neutral_button
+  ) : KiwixDialog(
+    R.string.hotspot_dialog_title,
+    R.string.hotspot_dialog_message,
+    R.string.go_to_settings_label,
+    null
+  )
 
   data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog(
     null, R.string.transfer_to, R.string.yes, android.R.string.cancel

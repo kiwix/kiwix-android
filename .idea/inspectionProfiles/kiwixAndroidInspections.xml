@@ -343,7 +343,7 @@
     <inspection_tool class="RemoveForLoopIndices" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RemoveRedundantBackticks" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RemoveRedundantCallsOfConversionMethods" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="RemoveRedundantQualifierName" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="RemoveRedundantQualifierName" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="RemoveRedundantSpreadOperator" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RemoveSetterParameterType" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RemoveSingleExpressionStringTemplate" enabled="true" level="ERROR" enabled_by_default="true" />
