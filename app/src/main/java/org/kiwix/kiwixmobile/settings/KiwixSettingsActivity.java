@@ -30,7 +30,9 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
@@ -59,6 +61,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_CLEAR_ALL_HISTORY;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_CREDITS;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_READ_ALOUD;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_VERSION;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
@@ -127,6 +130,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       addPreferencesFromResource(R.xml.preferences);
 
       boolean auto_night_mode = sharedPreferenceUtil.getPrefAutoNightMode();
+
 
       if (auto_night_mode) {
         getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(false);
@@ -244,6 +248,12 @@ public class KiwixSettingsActivity extends BaseActivity {
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+      if (key.equals(PREF_READ_ALOUD)) {
+        Log.d("ReadAloud", "You've changed the ReadAloud Preference JHB");
+        sharedPreferenceUtil.getPrefReadAloud();
+
+      }
 
       if (key.equals(PREF_ZOOM_ENABLED)) {
         setSliderState();

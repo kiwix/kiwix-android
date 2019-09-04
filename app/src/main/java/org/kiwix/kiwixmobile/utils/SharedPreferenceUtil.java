@@ -16,6 +16,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_BACK_TO_TOP;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_EXTERNAL_LINK_POPUP;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULLSCREEN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_HIDE_TOOLBAR;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_READ_ALOUD;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_IS_FIRST_RUN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NEW_TAB_BACKGROUND;
@@ -49,6 +50,10 @@ public class SharedPreferenceUtil {
 
   public boolean getPrefHideToolbar() {
     return sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true);
+  }
+
+  public boolean getPrefReadAloud () {
+    return sharedPreferences.getBoolean(PREF_READ_ALOUD, true);
   }
 
   public boolean getPrefIsFirstRun() {

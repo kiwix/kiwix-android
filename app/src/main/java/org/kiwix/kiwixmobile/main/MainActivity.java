@@ -228,7 +228,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private List<DocumentSection> documentSections;
   private Menu menu;
   private boolean requestClearHistoryAfterLoad = false;
-  private boolean requestInitAllMenuItems = false;
+  private boolean requestInitAllMenuItems = true;
   private boolean isBackToTopEnabled = false;
   private boolean wasHideToolbar = true;
   private boolean isHideToolbar = true;
@@ -1736,12 +1736,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     super.onPrepareOptionsMenu(menu);
     toggleActionItemsConfig();
     this.menu = menu;
+    //respond to read-aloud visibility preference and make the menu item visible/invisible
+    menu.findItem(R.id.menu_read_aloud).setVisible(sharedPreferenceUtil.getPrefReadAloud());
 
-    if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals(HOME_URL)) {
-      menu.findItem(R.id.menu_read_aloud).setVisible(false);
+
+    if (sharedPreferenceUtil.getPrefReadAloud()) {
+      Log.d("readAloud", "getPrefReadAloud was true.");
+
     } else {
-      menu.findItem(R.id.menu_read_aloud).setVisible(true);
+      Log.d("readAloud", "getPrefReadAloud was false.");
     }
 
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
@@ -1762,7 +1765,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         menu.findItem(R.id.menu_searchintext).setVisible(false);
         menu.findItem(R.id.menu_host_books).setVisible(true);
       } else {
-        menu.findItem(R.id.menu_read_aloud).setVisible(true);
         menu.findItem(R.id.menu_home).setVisible(true);
         menu.findItem(R.id.menu_random_article).setVisible(true);
         menu.findItem(R.id.menu_searchintext).setVisible(true);

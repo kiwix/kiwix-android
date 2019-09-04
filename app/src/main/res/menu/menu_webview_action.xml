@@ -18,6 +18,7 @@
 
   <item
       android:id="@+id/menu_speak_text"
+      android:visible="true"
       android:icon="@drawable/action_voice"
       android:title="@string/menu_read_aloud"
       app:showAsAction="always"/>

@@ -308,4 +308,6 @@
   <string name="performing_handshake">Performing handshake....</string>
   <string name="local_zim_sharing">Local ZIM Sharing</string>
   <string name="status">Status</string>
+  <string name="pref_read_aloud">Keep Read Aloud Option Visible</string>
+  <string name="pref_read_aloud_summary">Keeps read-aloud option visible in sidebar and settings</string>
 </resources>
