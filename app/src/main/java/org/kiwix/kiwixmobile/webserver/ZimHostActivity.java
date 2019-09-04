@@ -45,6 +45,13 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_START_SER
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TOGGLE_HOTSPOT;
 
+/**
+ * ZimHostActivity shows the list of books to host on the server. It starts
+ * {@link HotspotService} and listens to {@link ZimHostCallbacks}
+ * and updates the layout accordingly.
+ * Created by Adeel Zafar on 05/8/2019.
+ */
+
 public class ZimHostActivity extends BaseActivity implements
     ZimHostCallbacks, ZimHostContract.View, LocationCallbacks {
 

@@ -16,6 +16,12 @@ import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP;
 
+/**
+ * HotspotNotificationManager is used to add a foreground notification for the {@link
+ * HotspotService}
+ * Created by Adeel Zafar on 07/01/2019.
+ */
+
 public class HotspotNotificationManager {
 
   public static final int HOTSPOT_NOTIFICATION_ID = 666;

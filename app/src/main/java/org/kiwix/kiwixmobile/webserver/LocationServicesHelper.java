@@ -15,10 +15,17 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
 import javax.inject.Inject;
 
+/**
+ * LocationServicesHelper sets up location services required to turn on local
+ * hotspot on devices >= Oreo.
+ * Created by Adeel Zafar on 10/8/2019.
+ */
+
 public class LocationServicesHelper {
   private static final String TAG = "LocationServicesHelper";
   private final LocationCallbacks locationCallbacks;
   private final Activity activity;
+  private Task<LocationSettingsResponse> task;
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
 
   @Inject
@@ -27,8 +34,6 @@ public class LocationServicesHelper {
     this.activity = activity;
     this.locationCallbacks = locationCallbacks;
   }
-
-  private Task<LocationSettingsResponse> task;
 
   public void setupLocationServices() {
     LocationRequest locationRequest = new LocationRequest();
