@@ -49,11 +49,6 @@ public class MainActivityTest {
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
-  public void MainActivitySimple() {
-
-  }
-
-  @Test
   public void navigateHelp() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
