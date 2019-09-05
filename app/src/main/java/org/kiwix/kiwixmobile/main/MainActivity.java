@@ -164,8 +164,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public static boolean refresh;
   public static boolean wifiOnly;
   public static boolean nightMode;
-  private static Uri KIWIX_LOCAL_MARKET_URI;
-  private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R.id.activity_main_root)
@@ -351,7 +349,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     checkForRateDialog();
 
-    initPlayStoreUri();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
 
     addFileReader();
@@ -591,12 +588,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     drawerLayout.openDrawer(GravityCompat.END);
   }
 
-  private void initPlayStoreUri() {
-    KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
-    KIWIX_BROWSER_MARKET_URI =
-        Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
-  }
-
   private void checkForRateDialog() {
     isFirstRun = sharedPreferenceUtil.getPrefIsFirstRun();
     visitCounterPref = new RateAppCounter(this);
@@ -648,8 +639,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void goToRateApp() {
+      Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getPackageName());
+      Uri kiwixBrowserMarketUri =
+              Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
 
-    Intent goToMarket = new Intent(Intent.ACTION_VIEW, KIWIX_LOCAL_MARKET_URI);
+
+      Intent goToMarket = new Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri);
 
     goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
         Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
@@ -659,7 +654,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       startActivity(goToMarket);
     } catch (ActivityNotFoundException e) {
       startActivity(new Intent(Intent.ACTION_VIEW,
-          KIWIX_BROWSER_MARKET_URI));
+          kiwixBrowserMarketUri));
     }
   }
 
