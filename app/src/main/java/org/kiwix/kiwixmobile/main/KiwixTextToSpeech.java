@@ -110,7 +110,7 @@ public class KiwixTextToSpeech {
         onSpeakingListener.onSpeakingEnded();
       }
     } else {
-      Locale locale = LanguageUtils.ISO3ToLocale(ZimContentProvider.getLanguage());
+      Locale locale = LanguageUtils.iSO3ToLocale(ZimContentProvider.getLanguage());
       int result;
       if ("mul".equals(ZimContentProvider.getLanguage())) {
         Log.d(TAG_KIWIX, "TextToSpeech: disabled " +

@@ -24,12 +24,12 @@ import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 
 class BookUtilsTest {
-  private val container: LanguageUtils.LanguageContainer = mockk()
+  private val container: LanguageContainer = mockk()
 
   // Test that the language returned for the given language code is correct
   @Test
   fun testLanguageFromCode() {
-    val t = BookUtils(container)
+    val t = BookUtils()
 
     // testing trivial cases
     assertEquals("null is passed", "", t.getLanguage(null))
