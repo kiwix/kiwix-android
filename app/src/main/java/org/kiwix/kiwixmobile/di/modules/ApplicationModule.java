@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.di.qualifiers.IO;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter;
 import org.kiwix.kiwixmobile.utils.BookUtils;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 @Module(includes = {
   ActivityBindingModule.class,
@@ -62,14 +61,8 @@ public class ApplicationModule {
 
   @Provides
   @Singleton
-  BookUtils provideBookUtils(LanguageUtils.LanguageContainer container) {
-    return new BookUtils(container);
-  }
-
-  @Provides
-  @Singleton
-  LanguageUtils.LanguageContainer provideLanguageContainer() {
-    return new LanguageUtils.LanguageContainer();
+  BookUtils provideBookUtils() {
+    return new BookUtils();
   }
 
   @IO
