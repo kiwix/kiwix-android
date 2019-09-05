@@ -45,8 +45,6 @@ class BookUtilsTest {
     assertEquals("code length equals 3 (Catalan)", "Catalan", t.getLanguage("cat"))
 
     // this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest
-    every { container.findLanguageName(any()) } returns container
-    every { container.languageName } returns "English"
     assertEquals("code length equals 2 (dummy)", "English", t.getLanguage("en"))
   }
 }
