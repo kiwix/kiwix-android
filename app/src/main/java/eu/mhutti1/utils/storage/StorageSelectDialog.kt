@@ -28,15 +28,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import kotlinx.android.synthetic.main.storage_select_dialog.device_list
 import kotlinx.android.synthetic.main.storage_select_dialog.title
+import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.settings.StorageCalculator
 import org.kiwix.kiwixmobile.utils.StyleUtils
+import javax.inject.Inject
 
 class StorageSelectDialog : DialogFragment() {
 
   private var onSelectAction: ((StorageDevice) -> Unit)? = null
-  private var mAdapter: StorageSelectArrayAdapter? = null
+  private var adapter: StorageSelectArrayAdapter? = null
+  private var aTitle: String? = null
 
-  private var mTitle: String? = null
+  @Inject lateinit var storageCalculator: StorageCalculator
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setStyle(STYLE_NORMAL, StyleUtils.dialogStyle())
@@ -51,20 +55,22 @@ class StorageSelectDialog : DialogFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    title.text = mTitle
-    mAdapter = StorageSelectArrayAdapter(
+    KiwixApplication.getApplicationComponent().inject(this)
+    title.text = aTitle
+    adapter = StorageSelectArrayAdapter(
       activity!!,
-      StorageDeviceUtils.getStorageDevices(activity!!, true)
+      StorageDeviceUtils.getStorageDevices(activity!!, true),
+      storageCalculator
     )
-    device_list.adapter = mAdapter
+    device_list.adapter = adapter
     device_list.onItemClickListener = OnItemClickListener { _, _, position, _ ->
-      onSelectAction?.invoke(mAdapter!!.getItem(position)!!)
+      onSelectAction?.invoke(adapter!!.getItem(position)!!)
       dismiss()
     }
   }
 
   override fun show(fm: FragmentManager, text: String) {
-    mTitle = text
+    aTitle = text
     super.show(fm, text)
   }
 
