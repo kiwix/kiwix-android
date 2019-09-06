@@ -2,15 +2,12 @@ package org.kiwix.kiwixmobile.wifi_hotspot;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +26,8 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotNotificationManager.HOTS
  * Created by Adeel Zafar on July 01,2019.
  */
 
-public class HotspotService extends Service implements HotspotStateListener, IpAddressCallbacks {
+public class HotspotService extends Service
+    implements HotspotStateListener, IpAddressCallbacks, HotspotStateReceiverCallbacks {
 
   public static final String ACTION_TOGGLE_HOTSPOT = "toggle_hotspot";
   public static final String ACTION_LOCATION_ACCESS_GRANTED = "location_access_granted";
@@ -41,7 +39,7 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
   public static final String TAG = "HotspotService";
   private ZimHostCallbacks zimHostCallbacks;
   private final IBinder serviceBinder = new HotspotBinder();
-  private BroadcastReceiver hotspotStateReceiver;
+  private BroadcastReceiver hotspotBroadcastStateReceiver;
 
   @Inject
   WebServerHelper webServerHelper;
@@ -52,6 +50,9 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
   @Inject
   HotspotNotificationManager hotspotNotificationManager;
 
+  @Inject
+  HotspotStateReceiver hotspotStateReceiver;
+
   @Override public void onCreate() {
     KiwixApplication.getApplicationComponent()
         .serviceComponent()
@@ -59,7 +60,7 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
         .build()
         .inject(this);
     super.onCreate();
-    setUpHotspotStateReceiver();
+    hotspotStateReceiver.setUpHotspotStateReceiver();
   }
 
   @Override public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
@@ -123,28 +124,6 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
     return serviceBinder;
   }
 
-  private void setUpHotspotStateReceiver() {
-    hotspotStateReceiver = new BroadcastReceiver() {
-      @Override
-      public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-        if ("android.net.wifi.WIFI_AP_STATE_CHANGED".equals(action)) {
-          int state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0);
-
-          if (WifiManager.WIFI_STATE_ENABLED == state % 10) {
-            Log.v(TAG, "Hotspot enabled");
-          } else {
-            initiateServiceDismissal();
-            Log.v(TAG, "Hotspot disabled");
-          }
-        }
-      }
-    };
-
-    IntentFilter intentFilter = new IntentFilter("android.net.wifi.WIFI_AP_STATE_CHANGED");
-    registerReceiver(hotspotStateReceiver, intentFilter);
-  }
-
   private void initiateServiceDismissal() {
     if (ServerUtils.isServerStarted) {
       ServerUtils.isServerStarted = false;
@@ -159,7 +138,7 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
 
   @Override public void onDestroy() {
     super.onDestroy();
-    unregisterReceiver(hotspotStateReceiver);
+    unregisterReceiver(hotspotBroadcastStateReceiver);
   }
 
   //Dismiss notification and turn off hotspot for devices>=O
@@ -208,6 +187,17 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
 
   @Override public void onIpAddressInvalid() {
     zimHostCallbacks.onIpAddressInvalid();
+  }
+
+  @Override public void onHotspotDisabled() {
+    initiateServiceDismissal();
+  }
+
+  @Override public void registerHotspotStateReceiver(
+      @NonNull BroadcastReceiver broadcastReceiver,
+      @NonNull IntentFilter intentFilter) {
+    hotspotBroadcastStateReceiver = broadcastReceiver;
+    registerReceiver(hotspotBroadcastStateReceiver, intentFilter);
   }
 
   public class HotspotBinder extends Binder {
