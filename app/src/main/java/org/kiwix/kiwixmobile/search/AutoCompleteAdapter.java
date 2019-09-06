@@ -18,13 +18,17 @@
 package org.kiwix.kiwixmobile.search;
 
 import android.content.Context;
+import android.media.audiofx.AutomaticGainControl;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -34,17 +38,16 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
-public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
-
+public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapter.ViewHolder> implements Filterable {
   @Inject JNIKiwix currentJNIReader;
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
-  private List<String> mData;
+  List<String> mData;
   private KiwixFilter mFilter;
   private Context context;
 
   public AutoCompleteAdapter(Context context) {
-    super(context, android.R.layout.simple_list_item_1);
+    //super(context, android.R.layout.simple_list_item_1);
     this.context = context;
     mData = new ArrayList<>();
     mFilter = new KiwixFilter();
@@ -55,22 +58,20 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     KiwixApplication.getApplicationComponent().inject(this);
   }
 
-  @Override
-  public int getCount() {
-    return mData.size();
+  @Override public Filter getFilter() {
+    return mFilter;
   }
 
-  @Override
-  public View getView(int position, View convertView, ViewGroup parent) {
-    View row = super.getView(position, convertView, parent);
-
-    TextView tv = row.findViewById(android.R.id.text1);
-    tv.setText(Html.fromHtml(getItem(position)));
-
-    return row;
+  @NonNull @Override public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    View view = (View) LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, null);
+    ViewHolder holder = new ViewHolder(view);
+    return holder;
   }
 
-  @Override
+  @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    holder.txt.setText(Html.fromHtml(getItem(position)).toString());
+  }
+
   public String getItem(int index) {
     String a = mData.get(index);
     if (a.endsWith(".html")) {
@@ -82,9 +83,17 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     }
   }
 
-  @Override
-  public Filter getFilter() {
-    return mFilter;
+  @Override public int getItemCount() {
+    return mData.size();
+  }
+
+  public class ViewHolder extends RecyclerView.ViewHolder {
+    TextView txt;
+
+    public ViewHolder(@NonNull View itemView) {
+      super(itemView);
+      txt = itemView.findViewById(android.R.id.text1);
+    }
   }
 
   class KiwixFilter extends Filter {
@@ -143,7 +152,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
       if (results.count > 0) {
         notifyDataSetChanged();
       } else {
-        notifyDataSetInvalidated();
+        //notifyDataSetInvalidated();
       }
     }
   }
