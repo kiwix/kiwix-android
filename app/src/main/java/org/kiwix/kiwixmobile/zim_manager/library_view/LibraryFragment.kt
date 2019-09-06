@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.extensions.toast
 import org.kiwix.kiwixmobile.extensions.viewModel
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.main.MainActivity
+import org.kiwix.kiwixmobile.settings.StorageCalculator
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.DialogShower
 import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.WifiOnly
@@ -69,6 +70,7 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
+  @Inject lateinit var storageCalculator: StorageCalculator
 
   private val zimManageViewModel by lazy {
     activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
@@ -81,7 +83,7 @@ class LibraryFragment : BaseFragment() {
   }
 
   private val spaceAvailable: Long
-    get() = File(sharedPreferenceUtil.prefStorage).freeSpace
+    get() = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
 
   private val noWifiWithWifiOnlyPreferenceSet
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(context!!)
@@ -180,7 +182,7 @@ class LibraryFragment : BaseFragment() {
         context.toast(
           getString(string.download_no_space) +
             "\n" + getString(string.space_available) + " " +
-            LibraryUtils.bytesToHuman(spaceAvailable)
+            storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage))
         )
         libraryList.snack(
           string.download_change_storage,

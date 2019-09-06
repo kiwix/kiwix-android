@@ -22,6 +22,7 @@ import android.app.DownloadManager;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.location.LocationManager;
+import android.os.storage.StorageManager;
 import dagger.Module;
 import dagger.Provides;
 import dagger.android.AndroidInjectionModule;
@@ -37,17 +38,16 @@ import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 @Module(includes = {
-    ActivityBindingModule.class,
-    AndroidInjectionModule.class,
-    DownloaderModule.class,
-    ViewModelModule.class,
-    DatabaseModule.class
+  ActivityBindingModule.class,
+  AndroidInjectionModule.class,
+  DownloaderModule.class,
+  ViewModelModule.class,
+  DatabaseModule.class
 })
 public class ApplicationModule {
 
   @Provides @Singleton Application provideApplication(Context context) {
     return (Application) context;
-
   }
 
   @Provides
@@ -98,5 +98,10 @@ public class ApplicationModule {
   @Provides @Singleton
   LocationManager provideLocationManager(Context context) {
     return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+  }
+
+  @Provides @Singleton
+  StorageManager provideStorageManager(Context context) {
+    return (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
   }
 }
