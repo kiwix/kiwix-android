@@ -152,7 +152,7 @@ class LanguageUtils(private val context: Context) {
 
   companion object {
 
-    private var mLocaleMap =
+    private var localeMap =
       Locale.getAvailableLocales().associateBy { it.isO3Language.toUpperCase(Locale.ROOT) }
 
     private var fontExceptions = mapOf(
@@ -204,7 +204,7 @@ class LanguageUtils(private val context: Context) {
      */
     @JvmStatic
     fun iSO3ToLocale(iso3: String?): Locale? =
-      iso3?.let { mLocaleMap[it.toUpperCase(Locale.ROOT)] }
+      iso3?.let { localeMap[it.toUpperCase(Locale.ROOT)] }
 
     @JvmStatic
     fun getCurrentLocale(context: Context) = context.locale
