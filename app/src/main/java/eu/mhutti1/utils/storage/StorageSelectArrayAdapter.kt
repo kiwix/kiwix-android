@@ -30,10 +30,12 @@ import kotlinx.android.synthetic.main.device_item.file_size
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.extensions.inflate
+import org.kiwix.kiwixmobile.settings.StorageCalculator
 
 internal class StorageSelectArrayAdapter(
   context: Context,
-  devices: List<StorageDevice>
+  devices: List<StorageDevice>,
+  val storageCalculator: StorageCalculator
 ) : ArrayAdapter<StorageDevice>(context, 0, devices) {
 
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -56,7 +58,8 @@ internal class StorageSelectArrayAdapter(
   internal inner class ViewHolder(override val containerView: View) : LayoutContainer {
     fun bind(device: StorageDevice) {
       file_name.setText(if (device.isInternal) string.internal_storage else string.external_storage)
-      file_size.text = device.availableSpace + " / " + device.totalSize
+      file_size.text = storageCalculator.calculateAvailableSpace(device.file) + " / " +
+        storageCalculator.calculateTotalSpace(device.file)
     }
   }
 }
