@@ -28,11 +28,9 @@ import java.util.Map;
 public class BookUtils {
 
   public final Map<String, Locale> localeMap;
-  public LanguageUtils.LanguageContainer container;
 
   // Create a map of ISO 369-2 language codes
-  public BookUtils(LanguageUtils.LanguageContainer container) {
-    this.container = container;
+  public BookUtils() {
     String[] languages = Locale.getISOLanguages();
     localeMap = new HashMap<>(languages.length);
     for (String language : languages) {
@@ -49,7 +47,7 @@ public class BookUtils {
     }
 
     if (languageCode.length() == 2) {
-      return container.findLanguageName(languageCode).getLanguageName();
+      return new LanguageContainer(languageCode).getLanguageName();
     } else if (languageCode.length() == 3) {
       try {
         return localeMap.get(languageCode).getDisplayLanguage();

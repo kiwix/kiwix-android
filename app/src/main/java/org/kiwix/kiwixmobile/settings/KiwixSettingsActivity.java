@@ -53,7 +53,6 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_WEBVIEWS_LIST;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_AUTONIGHTMODE;
@@ -120,6 +119,8 @@ public class KiwixSettingsActivity extends BaseActivity {
     SettingsPresenter presenter;
     @Inject
     SharedPreferenceUtil sharedPreferenceUtil;
+    @Inject
+    StorageCalculator storageCalculator;
 
     private SliderPreference mSlider;
 
@@ -144,7 +145,7 @@ public class KiwixSettingsActivity extends BaseActivity {
 
       if (BuildConfig.IS_CUSTOM_APP) {
         PreferenceCategory notificationsCategory =
-            (PreferenceCategory) findPreference("pref_extras");
+          (PreferenceCategory) findPreference("pref_extras");
         notificationsCategory.removePreference(findPreference("pref_wifi_only"));
       }
 
@@ -153,7 +154,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       setStorage();
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater(),
-          sharedPreferenceUtil);
+        sharedPreferenceUtil);
     }
 
     private void setStorage() {
@@ -162,19 +163,20 @@ public class KiwixSettingsActivity extends BaseActivity {
       } else {
         if (Environment.isExternalStorageEmulated()) {
           findPreference(PREF_STORAGE).setTitle(
-              sharedPreferenceUtil.getPrefStorageTitle("Internal"));
+            sharedPreferenceUtil.getPrefStorageTitle("Internal"));
         } else {
           findPreference(PREF_STORAGE).setTitle(
-              sharedPreferenceUtil.getPrefStorageTitle("External"));
+            sharedPreferenceUtil.getPrefStorageTitle("External"));
         }
-        findPreference(PREF_STORAGE).setSummary(LibraryUtils.bytesToHuman(
-            new File(sharedPreferenceUtil.getPrefStorage()).getFreeSpace()));
+        findPreference(PREF_STORAGE).setSummary(
+          storageCalculator.calculateAvailableSpace(new File(sharedPreferenceUtil.getPrefStorage()))
+        );
       }
     }
 
     private void setSliderState() {
       boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(
-          PREF_ZOOM_ENABLED, false);
+        PREF_ZOOM_ENABLED, false);
       if (enabled) {
         mSlider.setEnabled(true);
       } else {
@@ -186,14 +188,14 @@ public class KiwixSettingsActivity extends BaseActivity {
     public void onResume() {
       super.onResume();
       getPreferenceScreen().getSharedPreferences()
-          .registerOnSharedPreferenceChangeListener(this);
+        .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
       super.onPause();
       getPreferenceScreen().getSharedPreferences()
-          .unregisterOnSharedPreferenceChangeListener(this);
+        .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     public void setUpSettings() {
@@ -210,7 +212,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       for (int index = 0; index < code.length; index++) {
         Locale locale = new Locale(code[index]);
         entries[index] =
-            locale.getDisplayLanguage() + " (" + locale.getDisplayLanguage(locale) + ") ";
+          locale.getDisplayLanguage() + " (" + locale.getDisplayLanguage(locale) + ") ";
       }
       languagePref.setEntries(entries);
       languagePref.setEntryValues(code);
@@ -238,9 +240,10 @@ public class KiwixSettingsActivity extends BaseActivity {
       versionPref.setSummary(BuildConfig.VERSION_NAME + " Build: " + getVersionCode());
     }
 
-    private int getVersionCode()  {
+    private int getVersionCode() {
       try {
-        return getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionCode;
+        return getActivity().getPackageManager()
+          .getPackageInfo(getActivity().getPackageName(), 0).versionCode;
       } catch (PackageManager.NameNotFoundException e) {
         throw new RuntimeException(e);
       }
@@ -289,39 +292,39 @@ public class KiwixSettingsActivity extends BaseActivity {
         warningResId = R.drawable.ic_warning_black;
       }
       new AlertDialog.Builder(getActivity(), dialogStyle())
-          .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
-          .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
-          .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-            presenter.clearHistory();
-            allHistoryCleared = true;
-            Toast.makeText(getActivity(),
-                getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT)
-                .show();
-          })
-          .setNegativeButton(android.R.string.no, (dialog, which) -> {
-            // do nothing
-          })
-          .setIcon(warningResId)
-          .show();
+        .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
+        .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
+        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+          presenter.clearHistory();
+          allHistoryCleared = true;
+          Toast.makeText(getActivity(),
+            getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT)
+            .show();
+        })
+        .setNegativeButton(android.R.string.no, (dialog, which) -> {
+          // do nothing
+        })
+        .setIcon(warningResId)
+        .show();
     }
 
     public void openCredits() {
       WebView view =
-          (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
+        (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
       view.loadUrl("file:///android_asset/credits.html");
       if (sharedPreferenceUtil.nightMode()) {
         view.getSettings().setJavaScriptEnabled(true);
         view.setBackgroundColor(0);
       }
       new AlertDialog.Builder(getActivity(), dialogStyle())
-          .setView(view)
-          .setPositiveButton(android.R.string.ok, null)
-          .show();
+        .setView(view)
+        .setPositiveButton(android.R.string.ok, null)
+        .show();
     }
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-        Preference preference) {
+      Preference preference) {
       if (preference.getKey().equalsIgnoreCase(PREF_CLEAR_ALL_HISTORY)) {
         clearAllHistoryDialog();
       }
@@ -348,7 +351,9 @@ public class KiwixSettingsActivity extends BaseActivity {
     }
 
     private void selectionCallback(StorageDevice storageDevice) {
-      findPreference(PREF_STORAGE).setSummary(storageDevice.getAvailableSpace());
+      findPreference(PREF_STORAGE).setSummary(
+        storageCalculator.calculateAvailableSpace(storageDevice.getFile())
+      );
       sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
       if (storageDevice.isInternal()) {
         findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.internal_storage));

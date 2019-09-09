@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.di.components;
 import android.content.Context;
 import dagger.BindsInstance;
 import dagger.Component;
+import eu.mhutti1.utils.storage.StorageSelectDialog;
 import javax.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.KiwixApplication;
@@ -38,15 +39,16 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 @Singleton
 @Component(modules = {
-    ApplicationModule.class,
-    NetworkModule.class,
-    JNIModule.class,
-    DataModule.class
+  ApplicationModule.class,
+  NetworkModule.class,
+  JNIModule.class,
+  DataModule.class
 })
 public interface ApplicationComponent {
 
   @Component.Builder
   interface Builder {
+
     @BindsInstance Builder context(Context context);
 
     ApplicationComponent build();
@@ -73,4 +75,6 @@ public interface ApplicationComponent {
   void inject(@NotNull ZimManageActivity zimManageActivity);
 
   void inject(@NotNull LanguageActivity languageActivity);
+
+  void inject(@NotNull StorageSelectDialog storageSelectDialog);
 }

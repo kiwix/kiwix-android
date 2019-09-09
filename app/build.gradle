@@ -141,7 +141,7 @@ dependencies {
   androidTestImplementation "io.mockk:mockk-android:1.9"
   androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
   androidTestImplementation "org.assertj:assertj-core:3.11.1"
-  androidTestImplementation ("org.simpleframework:simple-xml:2.7.1"){
+  androidTestImplementation("org.simpleframework:simple-xml:2.7.1") {
     exclude module: 'stax'
     exclude module: 'stax-api'
     exclude module: 'xpp3'
@@ -276,7 +276,6 @@ android {
       java.srcDirs += "$projectDir/src/testShared"
     }
   }
-
 
   flavorDimensions "default"
 
@@ -452,7 +451,7 @@ android {
       universalApk true
     }
     density {
-      enable true
+      enable false
       reset()
       include "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
     }
@@ -460,7 +459,7 @@ android {
   applicationVariants.all { variant ->
     variant.outputs.each { output ->
       def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI)) ?: 0
-      def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.DENSITY)) ?: 1
+      def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.DENSITY)) ?: 0
       output.versionCodeOverride =
         (baseDensityVersionCode * 10000000) +
           (baseAbiVersionCode * 1000000) +
