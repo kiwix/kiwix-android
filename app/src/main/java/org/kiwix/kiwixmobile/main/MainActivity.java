@@ -1654,37 +1654,45 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       case REQUEST_FILE_SELECT:
       case REQUEST_HISTORY_ITEM_CHOSEN:
         if (resultCode == RESULT_OK) {
-          String title = data.getStringExtra(EXTRA_CHOSE_X_TITLE);
-          String url = data.getStringExtra(EXTRA_CHOSE_X_URL);
-          if (data.getData() != null) {
-            final Uri uri = data.getData();
-            File file = null;
-            if (uri != null) {
-              String path = uri.getPath();
-              if (path != null) {
-                file = new File(path);
-              }
+          if (data.getBooleanExtra(HistoryActivity.USER_CLEARED_HISTORY, false)) {
+            for (KiwixWebView kiwixWebView : webViewList) {
+              kiwixWebView.clearHistory();
             }
-            if (file == null) {
-              Toast.makeText(this, R.string.error_file_not_found, Toast.LENGTH_LONG).show();
+            webViewList.clear();
+            newTab(HOME_URL);
+          } else {
+            String title = data.getStringExtra(EXTRA_CHOSE_X_TITLE);
+            String url = data.getStringExtra(EXTRA_CHOSE_X_URL);
+            if (data.getData() != null) {
+              final Uri uri = data.getData();
+              File file = null;
+              if (uri != null) {
+                String path = uri.getPath();
+                if (path != null) {
+                  file = new File(path);
+                }
+              }
+              if (file == null) {
+                Toast.makeText(this, R.string.error_file_not_found, Toast.LENGTH_LONG).show();
+                return;
+              }
+              Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
+              zimFile.setData(uri);
+              if (url != null) {
+                zimFile.putExtra(EXTRA_CHOSE_X_URL, url);
+              } else if (title != null) {
+                zimFile.putExtra(EXTRA_CHOSE_X_URL, ZimContentProvider.getPageUrlFromTitle(title));
+              }
+              startActivity(zimFile);
+              finish();
               return;
             }
-            Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
-            zimFile.setData(uri);
+            newTab();
             if (url != null) {
-              zimFile.putExtra(EXTRA_CHOSE_X_URL, url);
+              getCurrentWebView().loadUrl(url);
             } else if (title != null) {
-              zimFile.putExtra(EXTRA_CHOSE_X_URL, ZimContentProvider.getPageUrlFromTitle(title));
+              getCurrentWebView().loadUrl(ZimContentProvider.getPageUrlFromTitle(title));
             }
-            startActivity(zimFile);
-            finish();
-            return;
-          }
-          newTab();
-          if (url != null) {
-            getCurrentWebView().loadUrl(url);
-          } else if (title != null) {
-            getCurrentWebView().loadUrl(ZimContentProvider.getPageUrlFromTitle(title));
           }
         }
         return;
