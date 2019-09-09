@@ -1541,7 +1541,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @NotNull
   private String contentUrl(String articleUrl) {
-    return ZimContentProvider.CONTENT_URI + articleUrl;
+    return Uri.parse(ZimContentProvider.CONTENT_URI + articleUrl).toString();
   }
 
   @NotNull
