@@ -184,7 +184,7 @@ object FileUtils {
     return context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
       ?.use {
         if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
-          it.get<String>(columnName)
+          it[columnName]
         } else null
       }
   }

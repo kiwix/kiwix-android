@@ -19,40 +19,12 @@
 
 package eu.mhutti1.utils.storage
 
-import android.os.Build
-import android.os.StatFs
 import java.io.File
 
-data class StorageDevice(
-  val file: File,
-  val isInternal: Boolean
-) {
+data class StorageDevice(val file: File, val isInternal: Boolean) {
 
   constructor(path: String, internal: Boolean) : this(File(path), internal)
 
   val name: String
     get() = file.path
-
-  val availableSpace: String
-    get() = Bytes(availableBytes).humanReadable
-
-  private val availableBytes: Long
-    get() = StatFs(file.path).let {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
-        it.blockSizeLong * it.availableBlocksLong
-      else
-        it.blockSize.toLong() * it.availableBlocks.toLong()
-    }
-
-  val totalSize: String
-    get() = Bytes(totalBytes).humanReadable
-
-  // Get total space on device
-  private val totalBytes: Long
-    get() = StatFs(file.path).let {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
-        it.blockSizeLong * it.blockCountLong
-      else
-        it.blockSize.toLong() * it.blockCount.toLong()
-    }
 }

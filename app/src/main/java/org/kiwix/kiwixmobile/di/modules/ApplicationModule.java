@@ -22,6 +22,7 @@ import android.app.DownloadManager;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.location.LocationManager;
+import android.os.storage.StorageManager;
 import dagger.Module;
 import dagger.Provides;
 import dagger.android.AndroidInjectionModule;
@@ -35,7 +36,6 @@ import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.downloader.DownloadMonitor;
 import org.kiwix.kiwixmobile.downloader.fetch.FetchDownloadMonitor;
 import org.kiwix.kiwixmobile.utils.BookUtils;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 @Module(includes = {
   ActivityBindingModule.class,
@@ -62,14 +62,8 @@ public class ApplicationModule {
 
   @Provides
   @Singleton
-  BookUtils provideBookUtils(LanguageUtils.LanguageContainer container) {
-    return new BookUtils(container);
-  }
-
-  @Provides
-  @Singleton
-  LanguageUtils.LanguageContainer provideLanguageContainer() {
-    return new LanguageUtils.LanguageContainer();
+  BookUtils provideBookUtils() {
+    return new BookUtils();
   }
 
   @IO
@@ -98,5 +92,10 @@ public class ApplicationModule {
   @Provides @Singleton
   DownloadMonitor provideDownloadMonitor(FetchDownloadMonitor fetchDownloadMonitor) {
     return fetchDownloadMonitor;
+  }
+
+  @Provides @Singleton
+  StorageManager provideStorageManager(Context context) {
+    return (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
   }
 }

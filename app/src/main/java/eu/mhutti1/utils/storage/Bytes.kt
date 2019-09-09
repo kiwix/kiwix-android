@@ -29,15 +29,15 @@ const val Eb = Pb * 1024
 inline class Bytes(val size: Long) {
   val humanReadable
     get() = when {
-      size < Kb -> "${floatForm(size)} byte"
-      size < Mb -> "${floatForm(size / Kb)} KB"
-      size < Gb -> "${floatForm(size / Mb)} MB"
-      size < Tb -> "${floatForm(size / Gb)} GB"
-      size < Pb -> "${floatForm(size / Tb)} TB"
-      size < Eb -> "${floatForm(size / Pb)} PB"
-      size >= Eb -> "${floatForm(size / Eb)} EB"
-      else -> "???"
+      size < Kb -> "$size Bytes"
+      size in Kb until Mb -> format(size.toDouble() / Kb) + " KB"
+      size in Mb until Gb -> format(size.toDouble() / Mb) + " MB"
+      size in Gb until Tb -> format(size.toDouble() / Gb) + " GB"
+      size in Tb until Pb -> format(size.toDouble() / Tb) + " TB"
+      size in Pb until Eb -> format(size.toDouble() / Pb) + " PB"
+      size >= Eb -> format(size.toDouble() / Eb) + " EB"
+      else -> throw RuntimeException("impossible value $size")
     }
 
-  private fun floatForm(d: Long) = DecimalFormat("#.#").format(d.toDouble())
+  fun format(size: Double): String = DecimalFormat("#.#").format(size)
 }
