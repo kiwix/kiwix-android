@@ -17,8 +17,6 @@
  */
 package org.kiwix.kiwixmobile.utils;
 
-import android.os.Environment;
-
 import org.kiwix.kiwixmobile.BuildConfig;
 
 public final class Constants {
@@ -49,46 +47,6 @@ public final class Constants {
 
   public static final int RESULT_HISTORY_CLEARED = 1239;
 
-  // Prefs
-  public static final String PREF_LANG = "pref_language_chooser";
-
-  public static final String PREF_VERSION = "pref_version";
-
-  public static final String PREF_CLEAR_ALL_HISTORY = "pref_clear_all_history";
-
-  public static final String PREF_CREDITS = "pref_credits";
-
-  public static final String PREF_STORAGE = "pref_select_folder";
-
-  public static final String PREF_AUTONIGHTMODE = "pref_auto_nightmode";
-
-  public static final String PREF_NIGHTMODE = "pref_nightmode";
-
-  public static final String PREF_WIFI_ONLY = "pref_wifi_only";
-
-  public static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
-
-  public static final String PREF_BACK_TO_TOP = "pref_backtotop";
-
-  public static final String PREF_HIDE_TOOLBAR = "pref_hidetoolbar";
-
-  public static final String PREF_ZOOM = "pref_zoom_slider";
-
-  public static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
-
-  public static final String PREF_FULLSCREEN = "pref_fullscreen";
-
-  public static final String PREF_NEW_TAB_BACKGROUND = "pref_newtab_background";
-
-  public static final String PREF_FULL_TEXT_SEARCH = "pref_full_text_search";
-
-  public static final String PREF_STORAGE_TITLE = "pref_selected_title";
-
-  public static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
-
-  public static final String PREF_IS_FIRST_RUN = "isFirstRun";
-
-  public static final String PREF_SHOW_INTRO = "showIntro";
 
   // Tags
   public static final String TAG_FILE_SEARCHED = "searchedarticle";
@@ -138,7 +96,4 @@ public final class Constants {
   public static final String OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base";
 
   public static final String NEW_PROVIDER_DOMAIN = BuildConfig.APPLICATION_ID + ".zim.base";
-
-  // Path Constants
-  public static final String NOTES_DIRECTORY = Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
 }

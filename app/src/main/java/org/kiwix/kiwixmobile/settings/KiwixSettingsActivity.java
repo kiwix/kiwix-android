@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.settings;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageSelectDialog;
 import java.io.File;
@@ -44,27 +46,27 @@ import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import kotlin.Unit;
+import kotlin.io.FilesKt;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.extensions.ContextExtensionsKt;
+import org.kiwix.kiwixmobile.main.AddNoteDialog;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_WEBVIEWS_LIST;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_AUTONIGHTMODE;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_CLEAR_ALL_HISTORY;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_CREDITS;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_VERSION;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_HISTORY_CLEARED;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_RESTART;
+import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_AUTONIGHTMODE;
+import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_LANG;
+import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_NIGHTMODE;
+import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_STORAGE;
+import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_WIFI_ONLY;
+import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_ZOOM;
+import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_ZOOM_ENABLED;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class KiwixSettingsActivity extends BaseActivity {
@@ -112,6 +114,10 @@ public class KiwixSettingsActivity extends BaseActivity {
     SettingsContract.View,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
+    public static final String PREF_VERSION = "pref_version";
+    public static final String PREF_CLEAR_ALL_HISTORY = "pref_clear_all_history";
+    public static final String PREF_CLEAR_ALL_NOTES = "pref_clear_all_notes";
+    public static final String PREF_CREDITS = "pref_credits";
     @Inject
     SettingsPresenter presenter;
     @Inject
@@ -298,6 +304,40 @@ public class KiwixSettingsActivity extends BaseActivity {
         .show();
     }
 
+    private void showClearAllNotesDialog() {
+      AlertDialog.Builder builder;
+      if (sharedPreferenceUtil.nightMode()) { // Night Mode support
+        builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog_Night);
+      } else {
+        builder = new AlertDialog.Builder(getActivity());
+      }
+
+      builder.setMessage(R.string.delete_notes_confirmation_msg)
+        .setNegativeButton(android.R.string.cancel, null) // Do nothing for 'Cancel' button
+        .setPositiveButton(R.string.yes, (dialog, which) -> clearAllNotes())
+        .show();
+    }
+
+    private void clearAllNotes() {
+      if (KiwixApplication.getInstance().isExternalStorageWritable()) {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+          Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          != PackageManager.PERMISSION_GRANTED) {
+          ContextExtensionsKt.toast(getActivity(), R.string.ext_storage_permission_not_granted,
+            Toast.LENGTH_LONG);
+          return;
+        }
+
+        if (FilesKt.deleteRecursively(new File(AddNoteDialog.NOTES_DIRECTORY))) {
+          ContextExtensionsKt.toast(getActivity(), R.string.notes_deletion_successful,
+            Toast.LENGTH_SHORT);
+          return;
+        }
+      }
+      ContextExtensionsKt.toast(getActivity(), R.string.notes_deletion_unsuccessful,
+        Toast.LENGTH_SHORT);
+    }
+
     public void openCredits() {
       WebView view =
         (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
@@ -318,6 +358,9 @@ public class KiwixSettingsActivity extends BaseActivity {
       if (preference.getKey().equalsIgnoreCase(PREF_CLEAR_ALL_HISTORY)) {
         clearAllHistoryDialog();
       }
+      if (preference.getKey().equalsIgnoreCase(PREF_CLEAR_ALL_NOTES)) {
+        showClearAllNotesDialog();
+      }
 
       if (preference.getKey().equalsIgnoreCase(PREF_CREDITS)) {
         openCredits();
@@ -332,15 +375,12 @@ public class KiwixSettingsActivity extends BaseActivity {
 
     public void openFolderSelect() {
       StorageSelectDialog dialogFragment = new StorageSelectDialog();
-      dialogFragment.setOnSelectListener(storageDevice -> {
-        selectionCallback(storageDevice);
-        return Unit.INSTANCE;
-      });
+      dialogFragment.setOnSelectListener(this::onStorageDeviceSelected);
       dialogFragment.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(),
         getResources().getString(R.string.pref_storage));
     }
 
-    private void selectionCallback(StorageDevice storageDevice) {
+    private Unit onStorageDeviceSelected(StorageDevice storageDevice) {
       findPreference(PREF_STORAGE).setSummary(
         storageCalculator.calculateAvailableSpace(storageDevice.getFile())
       );
@@ -354,6 +394,7 @@ public class KiwixSettingsActivity extends BaseActivity {
         sharedPreferenceUtil.putPrefStorageTitle(
           getResources().getString(R.string.external_storage));
       }
+      return Unit.INSTANCE;
     }
   }
 }

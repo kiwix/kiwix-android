@@ -35,11 +35,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
-import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 
 /**
  * Created by @author Aditya-Sood (21/05/19) as a part of GSoC 2019
@@ -53,6 +52,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 public class AddNoteDialog extends DialogFragment
   implements ConfirmationAlertDialogFragment.UserClickListener {
 
+  public static final String NOTES_DIRECTORY =
+    Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
   public static final String TAG = "AddNoteDialog";
 
   private SharedPreferenceUtil sharedPreferenceUtil;
@@ -298,7 +299,7 @@ public class AddNoteDialog extends DialogFragment
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * */
 
-    if (isExternalStorageWritable()) {
+    if (KiwixApplication.getInstance().isExternalStorageWritable()) {
 
       if (ContextCompat.checkSelfPermission(getContext(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -413,10 +414,6 @@ public class AddNoteDialog extends DialogFragment
         startActivity(shareChooser);
       }
     }
-  }
-
-  static boolean isExternalStorageWritable() {
-    return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
   }
 
   private void showToast(int stringResource, int duration) {
