@@ -86,7 +86,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -95,6 +94,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import kotlin.Unit;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
@@ -158,7 +158,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
-    MainContract.View {
+  MainContract.View {
 
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
@@ -256,21 +256,21 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
-        @NonNull RecyclerView.ViewHolder viewHolder) {
+      @NonNull RecyclerView.ViewHolder viewHolder) {
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-        @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-        boolean isCurrentlyActive) {
+      @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+      boolean isCurrentlyActive) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
       viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView,
-        @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+      @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
       return false;
     }
 
@@ -314,13 +314,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void readAloudSelection(Menu menu) {
     if (menu != null) {
       menu.findItem(R.id.menu_speak_text)
-          .setOnMenuItemClickListener(item -> {
-            tts.readSelection(getCurrentWebView());
-            if (actionMode != null) {
-              actionMode.finish();
-            }
-            return true;
-          });
+        .setOnMenuItemClickListener(item -> {
+          tts.readSelection(getCurrentWebView());
+          if (actionMode != null) {
+            actionMode.finish();
+          }
+          return true;
+        });
     }
   }
 
@@ -347,7 +347,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     });
 
     tableDrawerRight =
-        tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
+      tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
 
     checkForRateDialog();
 
@@ -364,7 +364,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     setupDocumentParser();
 
     if (BuildConfig.IS_CUSTOM_APP) {
-      Log.d(TAG_KIWIX, "This is a custom app:" +BuildConfig.APPLICATION_ID);
+      Log.d(TAG_KIWIX, "This is a custom app:" + BuildConfig.APPLICATION_ID);
       if (loadCustomAppContent()) {
         Log.d(TAG_KIWIX, "Found custom content, continuing...");
         // Continue
@@ -375,7 +375,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         // it didn't crash yet today the app crashes because it tries to load books
         // in onResume();
       }
-
     } else {
 
       manageExternalLaunchAndRestoringViewState();
@@ -388,14 +387,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     wasHideToolbar = isHideToolbar;
     booksAdapter = new BooksOnDiskAdapter(
-        new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
-            bookOnDiskItem -> {
-              open(bookOnDiskItem);
-              return Unit.INSTANCE;
-            },
-            null,
-            null),
-        BookOnDiskDelegate.LanguageDelegate.INSTANCE
+      new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
+        bookOnDiskItem -> {
+          open(bookOnDiskItem);
+          return Unit.INSTANCE;
+        },
+        null,
+        null),
+      BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
 
     searchFiles();
@@ -513,8 +512,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       @Override
       public void onSectionClick(View view, int position) {
         getCurrentWebView().loadUrl("javascript:document.getElementById('"
-            + documentSections.get(position).id
-            + "').scrollIntoView();");
+          + documentSections.get(position).id
+          + "').scrollIntoView();");
         drawerLayout.closeDrawers();
       }
     });
@@ -524,7 +523,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void showTabSwitcher() {
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeAsUpIndicator(
-        ContextCompat.getDrawable(this, R.drawable.ic_round_add_white_36dp));
+      ContextCompat.getDrawable(this, R.drawable.ic_round_add_white_36dp));
     actionBar.setDisplayShowTitleEnabled(false);
 
     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -535,7 +534,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tabSwitcherRoot.setVisibility(View.VISIBLE);
     supportInvalidateOptionsMenu();
     if (tabsAdapter.getSelected() < webViewList.size() &&
-        tabRecyclerView.getLayoutManager() != null) {
+      tabRecyclerView.getLayoutManager() != null) {
       tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
     }
   }
@@ -546,7 +545,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     closeAllTabsButton.setImageDrawable(
-        ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
+      ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
     tabSwitcherRoot.setVisibility(View.GONE);
     progressBar.setVisibility(View.VISIBLE);
     contentFrame.setVisibility(View.VISIBLE);
@@ -598,8 +597,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     visitCounterPref.setCount(tempVisitCount);
 
     if (tempVisitCount >= 10
-        && !visitCounterPref.getNoThanksState()
-        && NetworkUtils.isNetworkAvailable(this) && !BuildConfig.DEBUG) {
+      && !visitCounterPref.getNoThanksState()
+      && NetworkUtils.isNetworkAvailable(this) && !BuildConfig.DEBUG) {
       showRateDialog();
     }
   }
@@ -607,26 +606,26 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void showRateDialog() {
     String title = getString(R.string.rate_dialog_title);
     String message = getString(R.string.rate_dialog_msg_1) + " "
-        + getString(R.string.app_name)
-        + getString(R.string.rate_dialog_msg_2);
+      + getString(R.string.app_name)
+      + getString(R.string.rate_dialog_msg_2);
     String positive = getString(R.string.rate_dialog_positive);
     String negative = getString(R.string.rate_dialog_negative);
     String neutral = getString(R.string.rate_dialog_neutral);
 
     new AlertDialog.Builder(this, dialogStyle())
-        .setTitle(title)
-        .setMessage(message)
-        .setPositiveButton(positive, (dialog, id) -> {
-          visitCounterPref.setNoThanksState(true);
-          goToRateApp();
-        })
-        .setNegativeButton(negative, (dialog, id) -> visitCounterPref.setNoThanksState(true))
-        .setNeutralButton(neutral, (dialog, id) -> {
-          tempVisitCount = 0;
-          visitCounterPref.setCount(tempVisitCount);
-        })
-        .setIcon(ContextCompat.getDrawable(this, R.mipmap.kiwix_icon))
-        .show();
+      .setTitle(title)
+      .setMessage(message)
+      .setPositiveButton(positive, (dialog, id) -> {
+        visitCounterPref.setNoThanksState(true);
+        goToRateApp();
+      })
+      .setNegativeButton(negative, (dialog, id) -> visitCounterPref.setNoThanksState(true))
+      .setNeutralButton(neutral, (dialog, id) -> {
+        tempVisitCount = 0;
+        visitCounterPref.setCount(tempVisitCount);
+      })
+      .setIcon(ContextCompat.getDrawable(this, R.mipmap.kiwix_icon))
+      .show();
   }
 
   private void goToSearch(boolean isVoice) {
@@ -641,22 +640,21 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void goToRateApp() {
-      Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getPackageName());
-      Uri kiwixBrowserMarketUri =
-              Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
+    Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getPackageName());
+    Uri kiwixBrowserMarketUri =
+      Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
 
-
-      Intent goToMarket = new Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri);
+    Intent goToMarket = new Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri);
 
     goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-        Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
-        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+      Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
+      Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
     try {
       startActivity(goToMarket);
     } catch (ActivityNotFoundException e) {
       startActivity(new Intent(Intent.ACTION_VIEW,
-          kiwixBrowserMarketUri));
+        kiwixBrowserMarketUri));
     }
   }
 
@@ -683,7 +681,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         isSpeaking = true;
         runOnUiThread(() -> {
           menu.findItem(R.id.menu_read_aloud)
-              .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
+            .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
           TTSControls.setVisibility(View.VISIBLE);
         });
       }
@@ -693,7 +691,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         isSpeaking = false;
         runOnUiThread(() -> {
           menu.findItem(R.id.menu_read_aloud)
-              .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud)));
+            .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud)));
           TTSControls.setVisibility(View.GONE);
           pauseTTSButton.setText(R.string.tts_pause);
         });
@@ -768,8 +766,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     KiwixWebView webView;
     if (!isHideToolbar) {
       webView =
-          new ToolbarScrollingKiwixWebView(MainActivity.this, this, toolbarContainer, bottomToolbar,
-              attrs);
+        new ToolbarScrollingKiwixWebView(MainActivity.this, this, toolbarContainer, bottomToolbar,
+          attrs);
     } else {
       webView = new ToolbarStaticKiwixWebView(MainActivity.this, this, attrs);
     }
@@ -779,9 +777,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private KiwixWebView newTab() {
-    String mainPage =
-        Uri.parse(ZimContentProvider.CONTENT_URI + ZimContentProvider.getMainPage()).toString();
-    return newTab(mainPage);
+    return newTab(contentUrl(ZimContentProvider.getMainPage()));
   }
 
   private KiwixWebView newTab(String url) {
@@ -808,13 +804,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyItemRangeChanged(index, webViewList.size());
     Snackbar.make(snackbarRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
-        .setAction(R.string.undo, v -> {
-          webViewList.add(index, tempForUndo);
-          tabsAdapter.notifyItemInserted(index);
-          setUpWebView();
-          updateTabSwitcherIcon();
-        })
-        .show();
+      .setAction(R.string.undo, v -> {
+        webViewList.add(index, tempForUndo);
+        tabsAdapter.notifyItemInserted(index);
+        setUpWebView();
+        updateTabSwitcherIcon();
+      })
+      .show();
     openHomeScreen();
     updateTabSwitcherIcon();
   }
@@ -928,7 +924,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       case R.id.menu_history:
         startActivityForResult(new Intent(this, HistoryActivity.class),
-            REQUEST_HISTORY_ITEM_CHOSEN);
+          REQUEST_HISTORY_ITEM_CHOSEN);
         return true;
 
       case R.id.menu_support_kiwix:
@@ -961,14 +957,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     builder.setMessage(R.string.delete_notes_confirmation_msg)
-        .setNegativeButton(android.R.string.cancel, null) // Do nothing for 'Cancel' button
-        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            clearAllNotes();
-          }
-        })
-        .show();
+      .setNegativeButton(android.R.string.cancel, null) // Do nothing for 'Cancel' button
+      .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+          clearAllNotes();
+        }
+      })
+      .show();
   }
 
   /** Method to delete all user notes */
@@ -978,7 +974,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     if (AddNoteDialog.isExternalStorageWritable()) {
       if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          != PackageManager.PERMISSION_GRANTED) {
+        != PackageManager.PERMISSION_GRANTED) {
         Log.d("MainActivity", "WRITE_EXTERNAL_STORAGE permission not granted");
         showToast(R.string.ext_storage_permission_not_granted, Toast.LENGTH_LONG);
         return;
@@ -1009,7 +1005,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       }
 
       result =
-          result && notesDirectory.delete(); // "{External Storage}/Kiwix/Notes" directory deleted
+        result && notesDirectory.delete(); // "{External Storage}/Kiwix/Notes" directory deleted
     }
 
     if (result) {
@@ -1039,7 +1035,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (Build.VERSION.SDK_INT >= 23) { // For Marshmallow & higher API levels
 
       if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          == PackageManager.PERMISSION_GRANTED) {
+        == PackageManager.PERMISSION_GRANTED) {
         return true;
       } else {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -1051,7 +1047,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         }
 
         requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-            REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
+          REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
       }
     } else { // For Android versions below Marshmallow 6.0 (API 23)
       return true; // As already requested at install time
@@ -1122,8 +1118,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       // Show popup with warning that this url is external and could lead to additional costs
       // or may event not work when the user is offline.
       if (intent.hasExtra(EXTRA_EXTERNAL_LINK)
-          && intent.getBooleanExtra(EXTRA_EXTERNAL_LINK, false)
-          && isExternalLinkPopup) {
+        && intent.getBooleanExtra(EXTRA_EXTERNAL_LINK, false)
+        && isExternalLinkPopup) {
         externalLinkPopup(intent);
       } else {
         startActivity(intent);
@@ -1139,25 +1135,25 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       ? R.drawable.ic_warning_white : R.drawable.ic_warning_black;
 
     new AlertDialog.Builder(this, dialogStyle())
-        .setTitle(R.string.external_link_popup_dialog_title)
-        .setMessage(R.string.external_link_popup_dialog_message)
-        .setNegativeButton(android.R.string.no, (dialogInterface, i) -> {
-          // do nothing
-        })
-        .setNeutralButton(R.string.do_not_ask_anymore, (dialogInterface, i) -> {
-          sharedPreferenceUtil.putPrefExternalLinkPopup(false);
-          isExternalLinkPopup = false;
+      .setTitle(R.string.external_link_popup_dialog_title)
+      .setMessage(R.string.external_link_popup_dialog_message)
+      .setNegativeButton(android.R.string.no, (dialogInterface, i) -> {
+        // do nothing
+      })
+      .setNeutralButton(R.string.do_not_ask_anymore, (dialogInterface, i) -> {
+        sharedPreferenceUtil.putPrefExternalLinkPopup(false);
+        isExternalLinkPopup = false;
 
-          startActivity(intent);
-        })
-        .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
-        .setIcon(warningResId)
-        .show();
+        startActivity(intent);
+      })
+      .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
+      .setIcon(warningResId)
+      .show();
   }
 
   private void openZimFile(File file, boolean clearHistory) {
     if (file.canRead() || Build.VERSION.SDK_INT < 19 || (BuildConfig.IS_CUSTOM_APP
-        && Build.VERSION.SDK_INT != 23)) {
+      && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
         if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
@@ -1175,40 +1171,40 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           presenter.loadCurrentZimBookmarksUrl();
         } else {
           Toast.makeText(this, getResources().getString(R.string.error_file_invalid),
-              Toast.LENGTH_LONG).show();
+            Toast.LENGTH_LONG).show();
           showHomePage();
         }
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
         Toast.makeText(this, getResources().getString(R.string.error_file_not_found),
-            Toast.LENGTH_LONG)
-            .show();
+          Toast.LENGTH_LONG)
+          .show();
         showHomePage();
       }
     } else {
       this.file = file;
       ActivityCompat.requestPermissions(this,
-          new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
-          REQUEST_STORAGE_PERMISSION);
+        new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+        REQUEST_STORAGE_PERMISSION);
       if (BuildConfig.IS_CUSTOM_APP && Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
         Toast.makeText(this, getResources().getString(R.string.request_storage_custom),
-            Toast.LENGTH_LONG)
-            .show();
+          Toast.LENGTH_LONG)
+          .show();
       } else {
         Toast.makeText(this, getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
-            .show();
+          .show();
       }
     }
   }
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-      @NonNull String[] permissions, @NonNull int[] grantResults) {
+    @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           finish();
           Intent newZimFile = new Intent(MainActivity.this, MainActivity.class);
           newZimFile.setData(Uri.fromFile(file));
@@ -1224,17 +1220,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       case REQUEST_READ_STORAGE_PERMISSION: {
         if (grantResults.length > 0
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           scanStorageForZims();
         } else {
           Snackbar.make(snackbarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
-              .setAction(R.string.menu_settings, view -> {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-              }).show();
+            .setAction(R.string.menu_settings, view -> {
+              Intent intent = new Intent();
+              intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+              Uri uri = Uri.fromParts("package", getPackageName(), null);
+              intent.setData(uri);
+              startActivity(intent);
+            }).show();
         }
         break;
       }
@@ -1246,7 +1242,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           showAddNoteDialog();
         } else {
           Toast.makeText(getApplicationContext(),
-              getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG);
+            getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG);
         }
 
         break;
@@ -1256,9 +1252,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void scanStorageForZims() {
     storageObserver.getBooksOnFileSystem()
-        .take(1)
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(presenter::saveBooks, Throwable::printStackTrace);
+      .take(1)
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(presenter::saveBooks, Throwable::printStackTrace);
   }
 
   // Workaround for popup bottom menu on older devices
@@ -1309,7 +1305,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         if (isSpeaking) {
           menu.findItem(R.id.menu_read_aloud)
-              .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
+            .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
         }
       }
     } catch (Exception e) {
@@ -1368,7 +1364,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     boolean isBookmark = false;
     if (articleUrl != null && !bookmarks.contains(articleUrl)) {
       if (ZimContentProvider.getId() != null) {
-        presenter.saveBookmark( BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(), articleUrl));
+        presenter.saveBookmark(
+          BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(), articleUrl));
       } else {
         Toast.makeText(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT).show();
       }
@@ -1384,12 +1381,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void popBookmarkSnackbar(boolean isBookmark) {
     if (isBookmark) {
       Snackbar.make(snackbarRoot, R.string.bookmark_added, Snackbar.LENGTH_LONG)
-          .setAction(getString(R.string.open), v -> goToBookmarks())
-          .setActionTextColor(getResources().getColor(R.color.white))
-          .show();
+        .setAction(getString(R.string.open), v -> goToBookmarks())
+        .setActionTextColor(getResources().getColor(R.color.white))
+        .show();
     } else {
       Snackbar.make(snackbarRoot, R.string.bookmark_removed, Snackbar.LENGTH_LONG)
-          .show();
+        .show();
     }
   }
 
@@ -1421,9 +1418,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     if (!webViewList.isEmpty() && currentWebViewIndex < webViewList.size() &&
-        webViewList.get(currentWebViewIndex).getUrl() != null &&
-        webViewList.get(currentWebViewIndex).getUrl().equals(HOME_URL) &&
-        webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
+      webViewList.get(currentWebViewIndex).getUrl() != null &&
+      webViewList.get(currentWebViewIndex).getUrl().equals(HOME_URL) &&
+      webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
       webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
     }
     updateBottomToolbarVisibility();
@@ -1482,12 +1479,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void updateBottomToolbarVisibility() {
     if (checkNull(bottomToolbar)) {
       if (!HOME_URL.equals(
-          getCurrentWebView().getUrl())
-          && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
+        getCurrentWebView().getUrl())
+        && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
         bottomToolbar.setVisibility(View.VISIBLE);
         if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
           contentFrame.setPadding(0, 0, 0,
-              (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
+            (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
         } else {
           contentFrame.setPadding(0, 0, 0, 0);
         }
@@ -1528,19 +1525,30 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
     builder.setMessage(getString(R.string.hint_contents_drawer_message))
-        .setPositiveButton(getString(R.string.got_it), (dialog, id) -> {
-        })
-        .setTitle(getString(R.string.did_you_know))
-        .setIcon(R.drawable.icon_question);
+      .setPositiveButton(getString(R.string.got_it), (dialog, id) -> {
+      })
+      .setTitle(getString(R.string.did_you_know))
+      .setIcon(R.drawable.icon_question);
     AlertDialog alert = builder.create();
     alert.show();
   }
 
   private void openArticle(String articleUrl) {
     if (articleUrl != null) {
-      getCurrentWebView().loadUrl(
-          Uri.parse(ZimContentProvider.CONTENT_URI + articleUrl).toString());
+      getCurrentWebView().loadUrl(redirectOrOriginal(contentUrl(articleUrl)));
     }
+  }
+
+  @NotNull
+  private String contentUrl(String articleUrl) {
+    return ZimContentProvider.CONTENT_URI + articleUrl;
+  }
+
+  @NotNull
+  private String redirectOrOriginal(String contentUrl) {
+    return ZimContentProvider.isRedirect(contentUrl)
+      ? ZimContentProvider.getRedirect(contentUrl)
+      : contentUrl;
   }
 
   private void openRandomArticle() {
@@ -1621,7 +1629,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       case REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
           String title =
-              data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
+            data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           boolean isSearchInText = data.getBooleanExtra(EXTRA_SEARCH_IN_TEXT, false);
           if (isSearchInText) {
             //if the search is localized trigger find in page UI.
@@ -1738,7 +1746,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     this.menu = menu;
 
     if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals(HOME_URL)) {
+      getCurrentWebView().getUrl().equals(HOME_URL)) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
@@ -1755,7 +1763,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       menu.findItem(R.id.menu_search).setVisible(true);
       menu.findItem(R.id.menu_fullscreen).setVisible(true);
       if (getCurrentWebView().getUrl() == null ||
-          getCurrentWebView().getUrl().equals(HOME_URL)) {
+        getCurrentWebView().getUrl().equals(HOME_URL)) {
         menu.findItem(R.id.menu_read_aloud).setVisible(false);
         menu.findItem(R.id.menu_home).setVisible(false);
         menu.findItem(R.id.menu_random_article).setVisible(false);
@@ -1784,10 +1792,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void refreshBookmarkSymbol() {
     if (checkNull(bottomToolbarBookmark)) {
       if (getCurrentWebView().getUrl() != null &&
-          ZimContentProvider.getId() != null &&
-          !getCurrentWebView().getUrl().equals(HOME_URL)) {
+        ZimContentProvider.getId() != null &&
+        !getCurrentWebView().getUrl().equals(HOME_URL)) {
         int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp
-            : R.drawable.ic_bookmark_border_24dp;
+          : R.drawable.ic_bookmark_border_24dp;
         bottomToolbarBookmark.setImageResource(icon);
       } else {
         bottomToolbarBookmark.setImageResource(R.drawable.ic_bookmark_border_24dp);
@@ -1905,100 +1913,100 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
    * loadCustomAppContent  Return true if all's well, else false.
    */
   private boolean loadCustomAppContent() {
-      Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: "
-        + BuildConfig.ZIM_FILE_NAME);
+    Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: "
+      + BuildConfig.ZIM_FILE_NAME);
 
-      String currentLocaleCode = Locale.getDefault().toString();
-      // Custom App recommends to start off a specific language
-      if (BuildConfig.ENFORCED_LANG.length() > 0 && !BuildConfig.ENFORCED_LANG
-        .equals(currentLocaleCode)) {
+    String currentLocaleCode = Locale.getDefault().toString();
+    // Custom App recommends to start off a specific language
+    if (BuildConfig.ENFORCED_LANG.length() > 0 && !BuildConfig.ENFORCED_LANG
+      .equals(currentLocaleCode)) {
 
-        // change the locale machinery
-        LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG);
+      // change the locale machinery
+      LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG);
 
-        // save new locale into preferences for next startup
-        sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG);
+      // save new locale into preferences for next startup
+      sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG);
 
-        // restart activity for new locale to take effect
-        this.setResult(1236);
-        this.finish();
-        this.startActivity(new Intent(this, this.getClass()));
-        return false;
+      // restart activity for new locale to take effect
+      this.setResult(1236);
+      this.finish();
+      this.startActivity(new Intent(this, this.getClass()));
+      return false;
+    }
+
+    String filePath = "";
+    if (BuildConfig.HAS_EMBEDDED_ZIM) {
+      String appPath = getPackageResourcePath();
+      File libDir = new File(appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/");
+      if (libDir.exists() && libDir.listFiles().length > 0) {
+        filePath = libDir.listFiles()[0].getPath() + "/" + BuildConfig.ZIM_FILE_NAME;
       }
-
-      String filePath = "";
-      if (BuildConfig.HAS_EMBEDDED_ZIM) {
-        String appPath = getPackageResourcePath();
-        File libDir = new File(appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/");
-        if (libDir.exists() && libDir.listFiles().length > 0) {
-          filePath = libDir.listFiles()[0].getPath() + "/" + BuildConfig.ZIM_FILE_NAME;
-        }
-        if (filePath.isEmpty() || !new File(filePath).exists()) {
-          filePath = String.format("/data/data/%s/lib/%s", BuildConfig.APPLICATION_ID,
-            BuildConfig.ZIM_FILE_NAME);
-        }
-      } else {
-        String fileName = FileUtils.getExpansionAPKFileName(true);
-        filePath = FileUtils.generateSaveFileName(fileName);
+      if (filePath.isEmpty() || !new File(filePath).exists()) {
+        filePath = String.format("/data/data/%s/lib/%s", BuildConfig.APPLICATION_ID,
+          BuildConfig.ZIM_FILE_NAME);
       }
+    } else {
+      String fileName = FileUtils.getExpansionAPKFileName(true);
+      filePath = FileUtils.generateSaveFileName(fileName);
+    }
 
-      Log.d(TAG_KIWIX, "BuildConfig.ZIM_FILE_SIZE = " + BuildConfig.ZIM_FILE_SIZE);
-      if (!FileUtils.doesFileExist(filePath, BuildConfig.ZIM_FILE_SIZE, false)) {
+    Log.d(TAG_KIWIX, "BuildConfig.ZIM_FILE_SIZE = " + BuildConfig.ZIM_FILE_SIZE);
+    if (!FileUtils.doesFileExist(filePath, BuildConfig.ZIM_FILE_SIZE, false)) {
 
-        AlertDialog.Builder zimFileMissingBuilder =
-          new AlertDialog.Builder(this, dialogStyle());
-        zimFileMissingBuilder.setTitle(R.string.app_name);
-        zimFileMissingBuilder.setMessage(R.string.custom_app_missing_content);
-        zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
-        final Activity activity = this;
-        zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
-          (dialog, which) -> {
-            String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(market_uri));
-            startActivity(intent);
-            activity.finish();
-          });
-        zimFileMissingBuilder.setCancelable(false);
-        AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
-        zimFileMissingDialog.show();
-        return false;
-      } else {
-        openZimFile(new File(filePath), true);
-        return true;
-      }
+      AlertDialog.Builder zimFileMissingBuilder =
+        new AlertDialog.Builder(this, dialogStyle());
+      zimFileMissingBuilder.setTitle(R.string.app_name);
+      zimFileMissingBuilder.setMessage(R.string.custom_app_missing_content);
+      zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
+      final Activity activity = this;
+      zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
+        (dialog, which) -> {
+          String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
+          Intent intent = new Intent(Intent.ACTION_VIEW);
+          intent.setData(Uri.parse(market_uri));
+          startActivity(intent);
+          activity.finish();
+        });
+      zimFileMissingBuilder.setCancelable(false);
+      AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
+      zimFileMissingDialog.show();
+      return false;
+    } else {
+      openZimFile(new File(filePath), true);
+      return true;
+    }
   }
 
   private void manageExternalLaunchAndRestoringViewState() {
 
     if (getIntent().getData() != null) {
       String filePath =
-          FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
+        FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
 
       if (filePath == null || !new File(filePath).exists()) {
-        Toast.makeText(MainActivity.this, getString(R.string.error_file_not_found), Toast.LENGTH_LONG)
-            .show();
+        Toast.makeText(MainActivity.this, getString(R.string.error_file_not_found),
+          Toast.LENGTH_LONG)
+          .show();
         return;
       }
 
       Log.d(TAG_KIWIX, "Kiwix started from a file manager. Intent filePath: "
-          + filePath
-          + " -> open this zim file and load menu_main page");
+        + filePath
+        + " -> open this zim file and load menu_main page");
       openZimFile(new File(filePath), false);
     } else {
       SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
       String zimFile = settings.getString(TAG_CURRENT_FILE, null);
       if (zimFile != null && new File(zimFile).exists()) {
         Log.d(TAG_KIWIX,
-            "Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
+          "Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
         restoreTabStates();
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
-          Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page");
-          showHomePage();
-        }
-
+        Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page");
+        showHomePage();
+      }
     }
   }
 
@@ -2007,7 +2015,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     super.onPause();
     saveTabStates();
     Log.d(TAG_KIWIX,
-        "onPause Save current zim file to preferences: " + ZimContentProvider.getZimFile());
+      "onPause Save current zim file to preferences: " + ZimContentProvider.getZimFile());
   }
 
   @Override
@@ -2029,18 +2037,18 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (url != null && !url.equals(HOME_URL)) {
       final long timeStamp = System.currentTimeMillis();
       SimpleDateFormat sdf =
-          new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
+        new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
       HistoryListItem.HistoryItem history = new HistoryListItem.HistoryItem(
-          0L,
-          ZimContentProvider.getId(),
-          ZimContentProvider.getName(),
-          ZimContentProvider.getZimFile(),
-          ZimContentProvider.getFavicon(),
-          getCurrentWebView().getTitle(),
-          getCurrentWebView().getUrl(),
-          sdf.format(new Date(timeStamp)),
-          timeStamp,
-          0L
+        0L,
+        ZimContentProvider.getId(),
+        ZimContentProvider.getName(),
+        ZimContentProvider.getZimFile(),
+        ZimContentProvider.getFavicon(),
+        getCurrentWebView().getTitle(),
+        getCurrentWebView().getUrl(),
+        sdf.format(new Date(timeStamp)),
+        timeStamp,
+        0L
       );
       presenter.saveHistory(history);
     }
@@ -2060,7 +2068,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       if (progress == 100) {
         if (requestClearHistoryAfterLoad) {
           Log.d(TAG_KIWIX,
-              "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
+            "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
           getCurrentWebView().clearHistory();
           requestClearHistoryAfterLoad = false;
         }
@@ -2082,8 +2090,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       hideBackToTopTimer.start();
       if (getCurrentWebView().getScrollY() > 200) {
         if ((backToTopButton.getVisibility() == View.GONE
-            || backToTopButton.getVisibility() == View.INVISIBLE)
-            && TTSControls.getVisibility() == View.GONE) {
+          || backToTopButton.getVisibility() == View.INVISIBLE)
+          && TTSControls.getVisibility() == View.GONE) {
           backToTopButton.show();
         }
       } else {
@@ -2114,11 +2122,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         if (isOpenNewTabInBackground) {
           newTabInBackground(url);
           Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
-              .setAction(getString(R.string.open), v -> {
-                if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
-              })
-              .setActionTextColor(getResources().getColor(R.color.white))
-              .show();
+            .setAction(getString(R.string.open), v -> {
+              if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
+            })
+            .setActionTextColor(getResources().getColor(R.color.white))
+            .show();
         } else {
           newTab(url);
         }
@@ -2154,11 +2162,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void searchFiles() {
     if (Build.VERSION.SDK_INT >= VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
-        Manifest.permission.READ_EXTERNAL_STORAGE)
-        != PackageManager.PERMISSION_GRANTED) {
+      Manifest.permission.READ_EXTERNAL_STORAGE)
+      != PackageManager.PERMISSION_GRANTED) {
       ActivityCompat.requestPermissions(this,
-          new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
-          REQUEST_READ_STORAGE_PERMISSION);
+        new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+        REQUEST_READ_STORAGE_PERMISSION);
     } else {
       scanStorageForZims();
     }
