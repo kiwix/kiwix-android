@@ -33,8 +33,16 @@ import javax.inject.Singleton
 
 @Module
 class DatabaseModule {
-  @Provides @Singleton fun providesBoxStore(context: Context): BoxStore =
-    MyObjectBox.builder().androidContext(context.applicationContext).build()
+  companion object {
+    var boxStore: BoxStore? = null
+  }
+
+  @Provides @Singleton fun providesBoxStore(context: Context): BoxStore {
+    if (boxStore == null) {
+      boxStore = MyObjectBox.builder().androidContext(context.applicationContext).build()
+    }
+    return boxStore!!
+  }
 
   @Provides @Singleton fun providesNewDownloadDao(boxStore: BoxStore): NewDownloadDao =
     NewDownloadDao(boxStore.boxFor())
