@@ -188,9 +188,9 @@ def branchName = System.getenv('TRAVIS_PULL_REQUEST') ?: "false" == "false"
 def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 
 ext {
-  versionMajor = 2
-  versionMinor = 5
-  versionPatch = 1
+  versionMajor = 3
+  versionMinor = 0
+  versionPatch = 0
 }
 
 private String generateVersionName() {

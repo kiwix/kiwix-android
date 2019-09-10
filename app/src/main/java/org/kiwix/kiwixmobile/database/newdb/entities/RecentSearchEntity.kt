@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.database.newdb.entities
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.data.ZimContentProvider
+import org.kiwix.kiwixmobile.data.local.entity.RecentSearch
 
 @Entity
 data class RecentSearchEntity(
@@ -30,5 +31,11 @@ data class RecentSearchEntity(
   constructor(searchTerm: String) : this(
     searchTerm = searchTerm,
     zimId = ZimContentProvider.getId()
+  )
+
+  constructor(recentSearch: RecentSearch) : this(
+    0,
+    recentSearch.searchString,
+    recentSearch.zimID
   )
 }

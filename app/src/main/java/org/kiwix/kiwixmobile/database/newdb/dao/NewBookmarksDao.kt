@@ -21,6 +21,7 @@ import io.objectbox.Box
 import io.objectbox.kotlin.query
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem
 import org.kiwix.kiwixmobile.data.ZimContentProvider
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.database.newdb.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.BookmarkEntity_
 import javax.inject.Inject
@@ -57,5 +58,9 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
     box.query {
       equal(BookmarkEntity_.bookmarkUrl, bookmarkUrl)
     }.remove()
+  }
+
+  fun migrationInsert(bookmarks: MutableList<Bookmark>) {
+    box.put(bookmarks.map(::BookmarkEntity))
   }
 }

@@ -36,13 +36,16 @@ import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookmarksDao;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
@@ -51,17 +54,24 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 17;
+  private static final int FINAL = 18;//3.0.0
+  private static final int VERSION = FINAL;
   private final Context context;
   private final NewBookDao bookDao;
   private final NewLanguagesDao languagesDao;
+  private final NewBookmarksDao bookmarksDao;
+  private final NewRecentSearchDao recentSearchDao;
 
   @Inject
-  public KiwixDatabase(Context context, NewBookDao bookDao, NewLanguagesDao languagesDao) {
+  public KiwixDatabase(Context context, NewBookDao bookDao, NewLanguagesDao languagesDao,
+    NewBookmarksDao bookmarksDao,
+    NewRecentSearchDao recentSearchDao) {
     super(context);
     this.context = context;
     this.bookDao = bookDao;
     this.languagesDao = languagesDao;
+    this.bookmarksDao = bookmarksDao;
+    this.recentSearchDao = recentSearchDao;
   }
 
   @Override
@@ -72,25 +82,11 @@ public class KiwixDatabase extends SquidDatabase {
   @Override
   protected Table[] getTables() {
     return new Table[] {
-      RecentSearch.TABLE,
-      Bookmark.TABLE,
     };
   }
 
   @Override
   protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
-    if (newVersion >= 16) { //2.5 attempt reading values from old db before they get dropped
-      try {
-        bookDao.migrationInsert(new BookDao(this).getBooks());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      try {
-        languagesDao.insert(new NetworkLanguageDao(this).getFilteredLanguages());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
     switch (oldVersion) {
       case 1:
       case 2:
@@ -135,12 +131,35 @@ public class KiwixDatabase extends SquidDatabase {
         tryAddColumn(Bookmark.ZIM_FILE_PATH);
         tryAddColumn(Bookmark.FAVICON);
         migrateBookmarksVersion16();
+      case 16:
+        try {
+          bookDao.migrationInsert(new BookDao(this).getBooks());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        try {
+          languagesDao.insert(new NetworkLanguageDao(this).getFilteredLanguages());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
         tryDropTable(BookDatabaseEntity.TABLE);
         tryDropTable(NetworkLanguageDatabaseEntity.TABLE);
         tryDropTable(LibraryDatabaseEntity.TABLE);
-      case 16:
-        new BookmarksDao(this).processBookmark(UpdateUtils::reformatProviderUrl);
-        //TODO MIGRATIONS BEFORE 3.0
+      case 17:
+        try {
+          final BookmarksDao oldBookmarksDao = new BookmarksDao(this);
+          oldBookmarksDao.processBookmark(UpdateUtils::reformatProviderUrl);
+          this.bookmarksDao.migrationInsert(oldBookmarksDao.getBookmarks(false));
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        tryDropTable(Bookmark.TABLE);
+        try {
+          recentSearchDao.migrationInsert(new RecentSearchDao(this).getRecentSearches());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        tryDropTable(RecentSearch.TABLE);
     }
     return true;
   }

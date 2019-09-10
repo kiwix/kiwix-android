@@ -40,23 +40,6 @@ public class BookmarksDao {
     this.kiwixDatabase = kiwixDatabase;
   }
 
-  /**
-   * @return Url of the bookmarks from the current Zim file.
-   */
-  public List<String> getCurrentZimBookmarksUrl() {
-    ArrayList<String> bookmarksUrl = new ArrayList<>();
-    try (SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
-      Query.selectDistinct(Bookmark.BOOKMARK_URL)
-        .where(Bookmark.ZIM_ID.eq(ZimContentProvider.getId())
-          .or(Bookmark.ZIM_NAME.eq(ZimContentProvider.getName())))
-        .orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
-      while (bookmarkCursor.moveToNext()) {
-        bookmarksUrl.add(bookmarkCursor.get(Bookmark.BOOKMARK_URL));
-      }
-    }
-    return bookmarksUrl;
-  }
-
   public void saveBookmark(Bookmark bookmark) {
     kiwixDatabase.deleteWhere(Bookmark.class, Bookmark.BOOKMARK_URL.eq(bookmark.getBookmarkUrl())
       .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
@@ -92,18 +75,6 @@ public class BookmarksDao {
       }
     }
     return bookmarks;
-  }
-
-  public void deleteBookmarks(List<Bookmark> bookmarks) {
-    for (Bookmark bookmark : bookmarks) {
-      kiwixDatabase.deleteWhere(Bookmark.class, Bookmark.BOOKMARK_URL.eq(bookmark.getBookmarkUrl())
-        .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
-    }
-  }
-
-  public void deleteBookmark(Bookmark bookmark) {
-    kiwixDatabase.deleteWhere(Bookmark.class, Bookmark.BOOKMARK_URL.eq(bookmark.getBookmarkUrl())
-      .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
   }
 
   public void processBookmark(StringOperation operation) {

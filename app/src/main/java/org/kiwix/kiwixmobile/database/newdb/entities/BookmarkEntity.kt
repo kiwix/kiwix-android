@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.database.newdb.entities
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark
 
 @Entity
 data class BookmarkEntity(
@@ -39,5 +40,15 @@ data class BookmarkEntity(
     item.bookmarkUrl,
     item.bookmarkTitle,
     item.favicon
+  )
+
+  constructor(bookmark: Bookmark) : this(
+    0,
+    bookmark.zimId,
+    bookmark.zimName,
+    bookmark.zimFilePath,
+    bookmark.bookmarkUrl,
+    bookmark.bookmarkTitle,
+    bookmark.favicon
   )
 }
