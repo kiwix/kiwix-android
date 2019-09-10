@@ -1,4 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright (c) 2019 Kiwix
+  ~ All rights reserved.
+  -->
+
 <resources>
   <string name="menu_zim_manager">सामग्रीहरू प्राप्त गर्नुहोस्</string>
   <string name="menu_help">सहायता</string>

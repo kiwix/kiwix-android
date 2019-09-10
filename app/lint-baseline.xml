@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2019 Kiwix
+  ~ All rights reserved.
+  -->
+
 <issues format="5" by="lint 3.4.1" client="gradle" variant="kiwixDebug" version="3.4.1">
 
     <issue

@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019 Kiwix
+  ~ All rights reserved.
+  -->
+
 <library version="20110515">
   <book articleCount="1275" creator="Wikipedia" date="2017-03-02"
       description="Авикипедиа, аенциклопедиа хту"

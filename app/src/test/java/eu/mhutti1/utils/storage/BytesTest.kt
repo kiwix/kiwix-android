@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 Kiwix
+ * All rights reserved.
+ */
+
 package eu.mhutti1.utils.storage
 
 /*

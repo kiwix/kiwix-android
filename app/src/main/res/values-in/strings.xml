@@ -1,4 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright (c) 2019 Kiwix
+  ~ All rights reserved.
+  -->
+
 <resources>
   <string name="wifi_only_msg">If you choose “Yes” you won\'t be warned in future. However, you can always change this in Settings</string>
   <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>

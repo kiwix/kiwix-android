@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Kiwix
+  ~ All rights reserved.
+  -->
+
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
   <item android:drawable="@color/selected_light" android:state_pressed="true"/>

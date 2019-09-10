@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 Kiwix
+ * All rights reserved.
+ */
+
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem

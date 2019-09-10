@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 Kiwix
+ * All rights reserved.
+ */
+
 package org.kiwix.kiwixmobile.bookmark;
 
 import android.content.Intent;

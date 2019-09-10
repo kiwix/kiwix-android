@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 Kiwix
+ * All rights reserved.
+ */
+
 package org.kiwix.kiwixmobile.database.newdb.dao
 
 import io.objectbox.Box

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 Kiwix
+ * All rights reserved.
+ */
+
 package org.kiwix.kiwixmobile.data.local.dao;/*
  * Kiwix Android
  * Copyright (C) 2018  Kiwix <android.kiwix.org>

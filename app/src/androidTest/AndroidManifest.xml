@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Kiwix
+  ~ All rights reserved.
+  -->
+
 <manifest xmlns:tools="http://schemas.android.com/tools"
     package="org.kiwix.kiwixmobile">
 

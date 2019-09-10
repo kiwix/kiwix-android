@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 Kiwix
+ * All rights reserved.
+ */
+
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter
 
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.AdapterDelegate

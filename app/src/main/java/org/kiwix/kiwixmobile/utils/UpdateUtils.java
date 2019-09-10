@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 Kiwix
+ * All rights reserved.
+ */
+
 package org.kiwix.kiwixmobile.utils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.NEW_PROVIDER_DOMAIN;
