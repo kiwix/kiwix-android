@@ -57,7 +57,6 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 import static org.kiwix.kiwixmobile.utils.StandardActions.deleteZimIfExists;
 
-
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class DownloadTest {
@@ -65,13 +64,13 @@ public class DownloadTest {
   private static final String KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest";
   @Rule
   public ActivityTestRule<MainActivity> activityTestRule =
-      new ActivityTestRule<>(MainActivity.class);
+    new ActivityTestRule<>(MainActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @BeforeClass
   public static void beforeClass() {
@@ -100,19 +99,19 @@ public class DownloadTest {
 
     captureAndSaveScreenshot("Before-checking-for-ZimManager-Main-Activity");
     ViewInteraction viewPager2 = onView(
-            allOf(withId(R.id.manageViewPager),
-                    withParent(allOf(withId(R.id.zim_manager_main_activity),
-                            withParent(withId(android.R.id.content)))),
-                    isDisplayed()));
+      allOf(withId(R.id.manageViewPager),
+        withParent(allOf(withId(R.id.zim_manager_main_activity),
+          withParent(withId(android.R.id.content)))),
+        isDisplayed()));
     captureAndSaveScreenshot("After-the-check-completed");
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     try {
-        onData(withContent("ray_charles")).inAdapterView(withId(R.id.libraryList));
+      onData(withContent("ray_charles")).inAdapterView(withId(R.id.libraryList));
     } catch (Exception e) {
       fail("Couldn't find downloaded file 'ray_charles'\n\nOriginal Exception:\n" +
-          e.getLocalizedMessage() + "\n\n");
+        e.getLocalizedMessage() + "\n\n");
     }
 
     deleteZimIfExists("ray_charles", R.id.libraryList);

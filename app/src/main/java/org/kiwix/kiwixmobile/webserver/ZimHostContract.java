@@ -7,12 +7,12 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskList
 class ZimHostContract {
 
   interface View
-      extends BaseContract.View<org.kiwix.kiwixmobile.webserver.ZimHostContract.Presenter> {
+    extends BaseContract.View<org.kiwix.kiwixmobile.webserver.ZimHostContract.Presenter> {
     void addBooks(List<BooksOnDiskListItem> books);
   }
 
   interface Presenter
-      extends BaseContract.Presenter<org.kiwix.kiwixmobile.webserver.ZimHostContract.View> {
+    extends BaseContract.Presenter<org.kiwix.kiwixmobile.webserver.ZimHostContract.View> {
     void loadBooks();
   }
 }

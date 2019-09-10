@@ -38,7 +38,7 @@ public class ChunkUtils {
   }
 
   private static List<Chunk> generateChunks(long contentLength, String url, String[] fileNames,
-      int notificationID) {
+    int notificationID) {
     List<Chunk> chunks = new ArrayList<>();
     long currentRange = 0;
     for (String zim : fileNames) {
@@ -46,12 +46,12 @@ public class ChunkUtils {
       if (currentRange + CHUNK_SIZE >= contentLength) {
         range = String.format(Locale.US, "%d-", currentRange);
         chunks.add(
-            new Chunk(range, zim, url, contentLength, notificationID, currentRange, contentLength));
+          new Chunk(range, zim, url, contentLength, notificationID, currentRange, contentLength));
         currentRange += CHUNK_SIZE + 1;
       } else {
         range = String.format(Locale.US, "%d-%d", currentRange, currentRange + CHUNK_SIZE);
         chunks.add(new Chunk(range, zim, url, contentLength, notificationID, currentRange,
-            currentRange + CHUNK_SIZE));
+          currentRange + CHUNK_SIZE));
         currentRange += CHUNK_SIZE + 1;
       }
     }

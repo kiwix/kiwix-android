@@ -20,12 +20,12 @@ package org.kiwix.kiwixmobile.di.components
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
+import org.kiwix.kiwixmobile.NetworkTest
+import org.kiwix.kiwixmobile.ZimTest
 import org.kiwix.kiwixmobile.data.DataModule
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.di.modules.JNIModule
 import org.kiwix.kiwixmobile.di.modules.TestNetworkModule
-import org.kiwix.kiwixmobile.NetworkTest
-import org.kiwix.kiwixmobile.ZimTest
 import javax.inject.Singleton
 
 /**

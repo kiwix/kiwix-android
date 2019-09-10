@@ -46,10 +46,10 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 public class KiwixWebView extends WebView {
   public static final float[] NIGHT_MODE_COLORS = {
-      -1.0f, 0, 0, 0, 255, // red
-      0, -1.0f, 0, 0, 255, // green
-      0, 0, -1.0f, 0, 255, // blue
-      0, 0, 0, 1.0f, 0 // alpha
+    -1.0f, 0, 0, 0, 255, // red
+    0, -1.0f, 0, 0, 255, // green
+    0, 0, -1.0f, 0, 255, // blue
+    0, 0, 0, 1.0f, 0 // alpha
   };
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
@@ -109,8 +109,8 @@ public class KiwixWebView extends WebView {
     super.onCreateContextMenu(menu);
     final HitTestResult result = getHitTestResult();
     if (result.getType() == HitTestResult.IMAGE_ANCHOR_TYPE
-        || result.getType() == HitTestResult.IMAGE_TYPE
-        || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+      || result.getType() == HitTestResult.IMAGE_TYPE
+      || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
       MenuItem saveMenu = menu.add(0, 1, 0, getResources().getString(R.string.save_media));
       saveMenu.setOnMenuItemClickListener(item -> {
         Message msg = new SaveHandler().obtainMessage();
@@ -156,7 +156,7 @@ public class KiwixWebView extends WebView {
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
-            && KiwixApplication.getInstance().getExternalMediaDirs().length > 0) {
+          && KiwixApplication.getInstance().getExternalMediaDirs().length > 0) {
           root = KiwixApplication.getInstance().getExternalMediaDirs()[0];
         }
 
@@ -172,7 +172,7 @@ public class KiwixWebView extends WebView {
 
         try {
           InputStream input =
-              KiwixApplication.getInstance().getContentResolver().openInputStream(source);
+            KiwixApplication.getInstance().getContentResolver().openInputStream(source);
           OutputStream output = new FileOutputStream(storageDir);
 
           byte[] buffer = new byte[1024];
