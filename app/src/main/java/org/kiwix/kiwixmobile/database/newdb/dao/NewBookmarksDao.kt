@@ -60,7 +60,10 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
     }.remove()
   }
 
-  fun migrationInsert(bookmarks: MutableList<Bookmark>) {
-    box.put(bookmarks.map(::BookmarkEntity))
+  fun migrationInsert(
+    bookmarks: MutableList<Bookmark>,
+    bookDao: NewBookDao
+  ) {
+    box.put(bookmarks.zip(bookmarks.map { bookDao.getFavIconAndZimFile(it) }).map(::BookmarkEntity))
   }
 }

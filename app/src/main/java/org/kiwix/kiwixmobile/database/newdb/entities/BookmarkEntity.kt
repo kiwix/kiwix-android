@@ -27,10 +27,10 @@ data class BookmarkEntity(
   @Id var id: Long = 0,
   val zimId: String,
   var zimName: String,
-  var zimFilePath: String,
+  var zimFilePath: String?,
   var bookmarkUrl: String,
   var bookmarkTitle: String,
-  var favicon: String
+  var favicon: String?
 ) {
   constructor(item: BookmarkItem) : this(
     item.databaseId,
@@ -42,13 +42,19 @@ data class BookmarkEntity(
     item.favicon
   )
 
-  constructor(bookmark: Bookmark) : this(
+  private constructor(bookmark: Bookmark, zimFilePath: String?, favicon: String?) : this(
     0,
     bookmark.zimId,
     bookmark.zimName,
-    bookmark.zimFilePath,
+    zimFilePath,
     bookmark.bookmarkUrl,
     bookmark.bookmarkTitle,
-    bookmark.favicon
+    favicon
+  )
+
+  constructor(bookmarkWithFavIconAndFile: Pair<Bookmark, Pair<String?, String?>>) : this(
+    bookmarkWithFavIconAndFile.first,
+    bookmarkWithFavIconAndFile.second.first,
+    bookmarkWithFavIconAndFile.second.second
   )
 }

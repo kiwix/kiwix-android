@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
@@ -46,7 +45,6 @@ import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookmarksDao;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
@@ -54,8 +52,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
+  private static final int TWO_POINT_FIVE_POINT_THREE = 16;
   private static final int FINAL = 17;//3.0.0
-  private static final int VERSION = FINAL;
   private final Context context;
   private final NewBookDao bookDao;
   private final NewLanguagesDao languagesDao;
@@ -81,11 +79,17 @@ public class KiwixDatabase extends SquidDatabase {
 
   @Override
   protected Table[] getTables() {
-    return new Table[] {};
+    return new Table[] {
+      RecentSearch.TABLE,
+      Bookmark.TABLE,
+      BookDatabaseEntity.TABLE,
+      NetworkLanguageDatabaseEntity.TABLE
+    };
   }
 
   @Override
   protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
+    Log.e("UPGRADE", "oldversion: " + oldVersion + " newVersion: " + newVersion);
     switch (oldVersion) {
       case 1:
       case 2:
@@ -127,9 +131,6 @@ public class KiwixDatabase extends SquidDatabase {
         tryCreateTable(BookDatabaseEntity.TABLE);
       case 14:
       case 15:
-        tryAddColumn(Bookmark.ZIM_FILE_PATH);
-        tryAddColumn(Bookmark.FAVICON);
-        migrateBookmarksVersion16();
         try {
           bookDao.migrationInsert(new BookDao(this).getBooks());
         } catch (Exception e) {
@@ -143,11 +144,11 @@ public class KiwixDatabase extends SquidDatabase {
         tryDropTable(BookDatabaseEntity.TABLE);
         tryDropTable(NetworkLanguageDatabaseEntity.TABLE);
         tryDropTable(LibraryDatabaseEntity.TABLE);
-      case 16:
+      case TWO_POINT_FIVE_POINT_THREE:
         try {
           final BookmarksDao oldBookmarksDao = new BookmarksDao(this);
           oldBookmarksDao.processBookmark(UpdateUtils::reformatProviderUrl);
-          this.bookmarksDao.migrationInsert(oldBookmarksDao.getBookmarks(false));
+          this.bookmarksDao.migrationInsert(oldBookmarksDao.getBookmarks(false), bookDao);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -162,27 +163,9 @@ public class KiwixDatabase extends SquidDatabase {
     return true;
   }
 
-  private void migrateBookmarksVersion16() {
-    BookmarksDao bookmarksDao = new BookmarksDao(this);
-    BookDao bookDao = new BookDao(this);
-    List<Bookmark> bookmarks = bookmarksDao.getBookmarks(false);
-    List<LibraryNetworkEntity.Book> books = bookDao.getBooks();
-    for (Bookmark bookmark : bookmarks) {
-      if (bookmark.getZimId() != null) {
-        for (LibraryNetworkEntity.Book book : books) {
-          if (bookmark.getZimId().equals(book.getId())) {
-            bookmark.setZimFilePath(book.getUrl()).setFavicon(book.getFavicon());
-            bookmarksDao.saveBookmark(bookmark);
-            break;
-          }
-        }
-      }
-    }
-  }
-
   @Override
   protected int getVersion() {
-    return VERSION;
+    return FINAL;
   }
 
   public void migrateBookmarksVersion6() {
@@ -215,6 +198,14 @@ public class KiwixDatabase extends SquidDatabase {
         }
       }
     }
+  }
+
+  /* Now that the database is no longer used
+   * we need to make a migration happen with an explicit call
+   */
+  public void forceMigration() {
+    beginTransaction();
+    endTransaction();
   }
 }
 

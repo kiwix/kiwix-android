@@ -40,19 +40,6 @@ public class BookmarksDao {
     this.kiwixDatabase = kiwixDatabase;
   }
 
-  public void saveBookmark(Bookmark bookmark) {
-    kiwixDatabase.deleteWhere(Bookmark.class, Bookmark.BOOKMARK_URL.eq(bookmark.getBookmarkUrl())
-      .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
-
-    kiwixDatabase.persist(new Bookmark()
-      .setZimId(bookmark.getZimId())
-      .setZimName(bookmark.getZimName())
-      .setZimFilePath(bookmark.getZimFilePath())
-      .setFavicon(bookmark.getFavicon())
-      .setBookmarkUrl(bookmark.getBookmarkUrl())
-      .setBookmarkTitle(bookmark.getBookmarkTitle()));
-  }
-
   public List<Bookmark> getBookmarks(boolean fromCurrentBook) {
     ArrayList<Bookmark> bookmarks = new ArrayList<>();
     Query query = Query.select();
@@ -63,14 +50,10 @@ public class BookmarksDao {
       .query(Bookmark.class, query.orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
       while (squidCursor.moveToNext()) {
         Bookmark bookmark = new Bookmark();
-
         bookmark.setZimId(squidCursor.get(Bookmark.ZIM_ID));
         bookmark.setZimName(squidCursor.get(Bookmark.ZIM_NAME));
-        bookmark.setZimFilePath(squidCursor.get(Bookmark.ZIM_FILE_PATH));
-        bookmark.setFavicon(squidCursor.get(Bookmark.FAVICON));
         bookmark.setBookmarkTitle(squidCursor.get(Bookmark.BOOKMARK_TITLE));
         bookmark.setBookmarkUrl(squidCursor.get(Bookmark.BOOKMARK_URL));
-
         bookmarks.add(bookmark);
       }
     }
