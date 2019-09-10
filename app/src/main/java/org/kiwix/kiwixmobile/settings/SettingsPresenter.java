@@ -8,7 +8,7 @@ import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
 
 class SettingsPresenter extends BasePresenter<SettingsContract.View>
-    implements SettingsContract.Presenter {
+  implements SettingsContract.Presenter {
 
   private final DataSource dataSource;
 
@@ -19,21 +19,21 @@ class SettingsPresenter extends BasePresenter<SettingsContract.View>
   @Override
   public void clearHistory() {
     dataSource.clearHistory()
-        .subscribe(new CompletableObserver() {
-          @Override
-          public void onSubscribe(Disposable d) {
+      .subscribe(new CompletableObserver() {
+        @Override
+        public void onSubscribe(Disposable d) {
 
-          }
+        }
 
-          @Override
-          public void onComplete() {
+        @Override
+        public void onComplete() {
 
-          }
+        }
 
-          @Override
-          public void onError(Throwable e) {
-            Log.e("SettingsPresenter", e.toString());
-          }
-        });
+        @Override
+        public void onError(Throwable e) {
+          Log.e("SettingsPresenter", e.toString());
+        }
+      });
   }
 }

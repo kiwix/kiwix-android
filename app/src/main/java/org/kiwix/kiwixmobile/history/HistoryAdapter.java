@@ -23,7 +23,7 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private final List<HistoryListItem> deleteList;
 
   HistoryAdapter(List<HistoryListItem> historyList, List<HistoryListItem> deleteList,
-      OnItemClickListener itemClickListener) {
+    OnItemClickListener itemClickListener) {
     this.historyList = historyList;
     this.deleteList = deleteList;
     this.itemClickListener = itemClickListener;
@@ -34,11 +34,11 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM) {
       View view = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_bookmark_history, parent, false);
+        .inflate(R.layout.item_bookmark_history, parent, false);
       return new Item(view);
     } else {
       View view =
-          LayoutInflater.from(parent.getContext()).inflate(R.layout.header_date, parent, false);
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.header_date, parent, false);
       return new Category(view);
     }
   }
@@ -51,15 +51,15 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       item.title.setText(history.getHistoryTitle());
       if (deleteList.contains(history)) {
         item.favicon.setImageDrawable(ContextCompat.getDrawable(item.favicon.getContext(),
-            R.drawable.ic_check_circle_blue_24dp));
+          R.drawable.ic_check_circle_blue_24dp));
       } else {
         ImageViewExtensionsKt.setBitmapFromString(item.favicon, history.getFavicon());
       }
       item.itemView.setOnClickListener(v -> itemClickListener.onItemClick(item.favicon, history));
       item.itemView.setOnLongClickListener(v ->
-          itemClickListener.onItemLongClick(item.favicon, history));
+        itemClickListener.onItemLongClick(item.favicon, history));
     } else {
-      String date = ((HistoryListItem.DateItem)historyList.get(position)).getDateString();
+      String date = ((HistoryListItem.DateItem) historyList.get(position)).getDateString();
       String todaysDate, yesterdayDate;
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
       todaysDate = LocalDate.now().format(formatter);

@@ -46,10 +46,10 @@ public class BookmarksDao {
   public List<String> getCurrentZimBookmarksUrl() {
     ArrayList<String> bookmarksUrl = new ArrayList<>();
     try (SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
-        Query.selectDistinct(Bookmark.BOOKMARK_URL)
-            .where(Bookmark.ZIM_ID.eq(ZimContentProvider.getId())
-                .or(Bookmark.ZIM_NAME.eq(ZimContentProvider.getName())))
-            .orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
+      Query.selectDistinct(Bookmark.BOOKMARK_URL)
+        .where(Bookmark.ZIM_ID.eq(ZimContentProvider.getId())
+          .or(Bookmark.ZIM_NAME.eq(ZimContentProvider.getName())))
+        .orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
       while (bookmarkCursor.moveToNext()) {
         bookmarksUrl.add(bookmarkCursor.get(Bookmark.BOOKMARK_URL));
       }
@@ -59,15 +59,15 @@ public class BookmarksDao {
 
   public void saveBookmark(Bookmark bookmark) {
     kiwixDatabase.deleteWhere(Bookmark.class, Bookmark.BOOKMARK_URL.eq(bookmark.getBookmarkUrl())
-        .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
+      .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
 
     kiwixDatabase.persist(new Bookmark()
-        .setZimId(bookmark.getZimId())
-        .setZimName(bookmark.getZimName())
-        .setZimFilePath(bookmark.getZimFilePath())
-        .setFavicon(bookmark.getFavicon())
-        .setBookmarkUrl(bookmark.getBookmarkUrl())
-        .setBookmarkTitle(bookmark.getBookmarkTitle()));
+      .setZimId(bookmark.getZimId())
+      .setZimName(bookmark.getZimName())
+      .setZimFilePath(bookmark.getZimFilePath())
+      .setFavicon(bookmark.getFavicon())
+      .setBookmarkUrl(bookmark.getBookmarkUrl())
+      .setBookmarkTitle(bookmark.getBookmarkTitle()));
   }
 
   public List<Bookmark> getBookmarks(boolean fromCurrentBook) {
@@ -77,7 +77,7 @@ public class BookmarksDao {
       query = query.where(Bookmark.ZIM_ID.eq(ZimContentProvider.getId()));
     }
     try (SquidCursor<Bookmark> squidCursor = kiwixDatabase
-        .query(Bookmark.class, query.orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
+      .query(Bookmark.class, query.orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
       while (squidCursor.moveToNext()) {
         Bookmark bookmark = new Bookmark();
 
@@ -97,25 +97,25 @@ public class BookmarksDao {
   public void deleteBookmarks(List<Bookmark> bookmarks) {
     for (Bookmark bookmark : bookmarks) {
       kiwixDatabase.deleteWhere(Bookmark.class, Bookmark.BOOKMARK_URL.eq(bookmark.getBookmarkUrl())
-          .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
+        .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
     }
   }
 
   public void deleteBookmark(Bookmark bookmark) {
     kiwixDatabase.deleteWhere(Bookmark.class, Bookmark.BOOKMARK_URL.eq(bookmark.getBookmarkUrl())
-        .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
+      .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
   }
 
   public void processBookmark(StringOperation operation) {
     try (SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
-        Query.select(Bookmark.ID, Bookmark.BOOKMARK_URL))) {
+      Query.select(Bookmark.ID, Bookmark.BOOKMARK_URL))) {
       while (bookmarkCursor.moveToNext()) {
         String url = bookmarkCursor.get(Bookmark.BOOKMARK_URL);
         url = operation.apply(url);
         if (url != null) {
           kiwixDatabase.update(Update.table(Bookmark.TABLE)
-              .where(Bookmark.ID.eq(bookmarkCursor.get(Bookmark.ID)))
-              .set(Bookmark.BOOKMARK_URL, url));
+            .where(Bookmark.ID.eq(bookmarkCursor.get(Bookmark.ID)))
+            .set(Bookmark.BOOKMARK_URL, url));
         }
       }
     }

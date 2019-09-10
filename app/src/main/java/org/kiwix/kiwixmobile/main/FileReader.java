@@ -29,7 +29,7 @@ public class FileReader {
       StringBuilder buf = new StringBuilder();
       InputStream json = context.getAssets().open(filePath);
       BufferedReader in =
-          new BufferedReader(new InputStreamReader(json, "UTF-8"));
+        new BufferedReader(new InputStreamReader(json, "UTF-8"));
       String str;
 
       while ((str = in.readLine()) != null) {

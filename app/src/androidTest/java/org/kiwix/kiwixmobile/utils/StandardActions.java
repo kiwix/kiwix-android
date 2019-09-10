@@ -48,7 +48,7 @@ public class StandardActions {
       Log.i("TEST_DELETE_ZIM", "Successfully deleted ZIM file [" + zimName + "]");
     } catch (RuntimeException e) {
       Log.i("TEST_DELETE_ZIM", "Failed to delete ZIM file [" + zimName + "]... " +
-          "Probably because it doesn't exist");
+        "Probably because it doesn't exist");
     }
   }
 }

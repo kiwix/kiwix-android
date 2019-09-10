@@ -54,13 +54,14 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 public class LanguageActivityTest {
 
   @Rule
-  public BaristaRule<ZimManageActivity> activityTestRule = BaristaRule.create(ZimManageActivity.class);
+  public BaristaRule<ZimManageActivity> activityTestRule =
+    BaristaRule.create(ZimManageActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Before
   public void setUp() {
@@ -95,15 +96,13 @@ public class LanguageActivityTest {
 
     // Get a reference to the checkbox associated with the top selected language
     checkBox1 = onView(
-        allOf(withId(R.id.item_language_checkbox),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.recycler_view),
-                    1),
-                0),
-            isDisplayed()));
-
-
+      allOf(withId(R.id.item_language_checkbox),
+        childAtPosition(
+          childAtPosition(
+            withId(R.id.recycler_view),
+            1),
+          0),
+        isDisplayed()));
 
     onView(withContentDescription("Save languages")).perform(click());
 

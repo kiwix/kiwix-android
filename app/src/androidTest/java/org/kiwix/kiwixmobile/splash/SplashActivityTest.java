@@ -23,9 +23,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
 import org.junit.After;
@@ -51,10 +51,10 @@ public class SplashActivityTest {
   public BaristaRule<SplashActivity> activityTestRule = BaristaRule.create(SplashActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
   private Context context;
 
   @Before
@@ -79,7 +79,7 @@ public class SplashActivityTest {
   @Test
   public void testNormalRun() {
     SharedPreferences.Editor preferencesEditor =
-        PreferenceManager.getDefaultSharedPreferences(context).edit();
+      PreferenceManager.getDefaultSharedPreferences(context).edit();
     preferencesEditor.putBoolean(PREF_SHOW_INTRO, false).apply();
 
     activityTestRule.launchActivity();
