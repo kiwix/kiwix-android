@@ -66,13 +66,13 @@ public class NetworkTest {
   private static final String NETWORK_TEST_TAG = "KiwixNetworkTest";
   @Rule
   public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
-      MainActivity.class, false, false);
+    MainActivity.class, false, false);
   @Rule
   public GrantPermissionRule readPermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
   //@Inject
   //MockWebServer mockWebServer;
 
@@ -87,7 +87,7 @@ public class NetworkTest {
   public void setUp() {
 
     TestComponent component = DaggerTestComponent.builder().context(
-        getInstrumentation().getTargetContext().getApplicationContext()).build();
+      getInstrumentation().getTargetContext().getApplicationContext()).build();
 
     KiwixApplication.setApplicationComponent(component);
 
@@ -95,7 +95,7 @@ public class NetworkTest {
     component.inject(this);
     InputStream library = NetworkTest.class.getClassLoader().getResourceAsStream("library.xml");
     InputStream metalinks =
-        NetworkTest.class.getClassLoader().getResourceAsStream("test.zim.meta4");
+      NetworkTest.class.getClassLoader().getResourceAsStream("test.zim.meta4");
     InputStream testzim = NetworkTest.class.getClassLoader().getResourceAsStream("testzim.zim");
     //try {
     //  byte[] libraryBytes = IOUtils.toByteArray(library);
@@ -123,7 +123,8 @@ public class NetworkTest {
 
     TestUtils.allowPermissionsIfNeeded();
 
-    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.libraryList)).perform(click());
+    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.libraryList))
+      .perform(click());
 
     try {
       onView(withId(android.R.id.button1)).perform(click());
@@ -147,14 +148,14 @@ public class NetworkTest {
     // Find matching zim files on the device
     try {
       DataInteraction dataInteraction =
-          onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
+        onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
       // TODO how can we get a count of the items matching the dataInteraction?
       dataInteraction.atPosition(0).perform(click());
 
       clickMenu(R.string.menu_zim_manager);
 
       DataInteraction dataInteraction1 =
-          onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
+        onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
       dataInteraction1.atPosition(0).perform(longClick()); // to delete the zim file
       clickDialogPositiveButton();
     } catch (Exception e) {

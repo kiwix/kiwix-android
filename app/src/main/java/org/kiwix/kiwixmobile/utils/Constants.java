@@ -47,7 +47,6 @@ public final class Constants {
 
   public static final int RESULT_HISTORY_CLEARED = 1239;
 
-
   // Tags
   public static final String TAG_FILE_SEARCHED = "searchedarticle";
 

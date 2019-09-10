@@ -62,18 +62,18 @@ public class TestUtils {
 
   public static boolean hasStoragePermission() {
     return ContextCompat.checkSelfPermission(
+      InstrumentationRegistry.getInstrumentation().getTargetContext(),
+      Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+      ContextCompat.checkSelfPermission(
         InstrumentationRegistry.getInstrumentation().getTargetContext(),
-        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-        ContextCompat.checkSelfPermission(
-            InstrumentationRegistry.getInstrumentation().getTargetContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
   }
 
   public static void allowPermissionsIfNeeded() {
     if (Build.VERSION.SDK_INT >= 23 && !hasStoragePermission()) {
       UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
       UiObject allowPermissions =
-          device.findObject(new UiSelector().clickable(true).checkable(false).index(1));
+        device.findObject(new UiSelector().clickable(true).checkable(false).index(1));
       if (allowPermissions.exists()) {
         try {
           allowPermissions.click();
@@ -85,8 +85,8 @@ public class TestUtils {
 
   public static void captureAndSaveScreenshot(String name) {
     File screenshotDir = new File(
-        Environment.getExternalStorageDirectory() +
-            "/Android/data/KIWIXTEST/Screenshots");
+      Environment.getExternalStorageDirectory() +
+        "/Android/data/KIWIXTEST/Screenshots");
 
     if (!screenshotDir.exists()) {
       if (!screenshotDir.mkdirs()) {

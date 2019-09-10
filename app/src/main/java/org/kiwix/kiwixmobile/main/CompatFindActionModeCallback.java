@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
 import org.kiwix.kiwixmobile.R;
 
 public class CompatFindActionModeCallback
-    implements ActionMode.Callback, TextWatcher, View.OnClickListener {
+  implements ActionMode.Callback, TextWatcher, View.OnClickListener {
 
   public boolean mIsActive;
 
@@ -94,7 +94,7 @@ public class CompatFindActionModeCallback
   public void setWebView(WebView webView) {
     if (null == webView) {
       throw new AssertionError(
-          "WebView supplied to CompatFindActionModeCallback cannot be null");
+        "WebView supplied to CompatFindActionModeCallback cannot be null");
     }
     mWebView = webView;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -207,7 +207,7 @@ public class CompatFindActionModeCallback
   public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
     if (mWebView == null) {
       throw new AssertionError(
-          "No WebView for CompatFindActionModeCallback::onActionItemClicked");
+        "No WebView for CompatFindActionModeCallback::onActionItemClicked");
     }
 
     mInput.hideSoftInputFromWindow(mWebView.getWindowToken(), 0);

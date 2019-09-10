@@ -44,7 +44,7 @@ public class FileUtilsInstrumentationTest {
         bool[index] = r.nextBoolean();
         fileNameWithExtension = fileName + char1 + char2;
         fileNameWithExtension =
-            bool[index] ? fileNameWithExtension : fileNameWithExtension + ".part";
+          bool[index] ? fileNameWithExtension : fileNameWithExtension + ".part";
         File file = new File(fileNameWithExtension);
         file.createNewFile();
         if (char1 == 'e' && char2 == 'r') {
@@ -68,12 +68,12 @@ public class FileUtilsInstrumentationTest {
     for (index = 0; index < 122; index++) {
       if (bool[index]) {
         assertEquals(
-            "if the file fileName.zimXX exists, then no need to add the .part extension at the end",
-            false, files.get(index).getPath().endsWith(".part"));
+          "if the file fileName.zimXX exists, then no need to add the .part extension at the end",
+          false, files.get(index).getPath().endsWith(".part"));
       } else {
         assertEquals(
-            "if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part",
-            true, files.get(index).getPath().endsWith(".part"));
+          "if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part",
+          true, files.get(index).getPath().endsWith(".part"));
       }
     }
   }
@@ -87,20 +87,20 @@ public class FileUtilsInstrumentationTest {
     File file1 = new File(baseName + "1" + ".zim");
     file1.createNewFile();
     assertEquals("if the fileName ends with .zim and exists in memory, return false",
-        false, FileUtils.hasPart(file1));
+      false, FileUtils.hasPart(file1));
 
     // FileName ends with .part
     File file2 = new File(baseName + "2" + ".zim");
     file2.createNewFile();
     assertEquals("if the fileName ends with .part and exists in memory, return true",
-        false, FileUtils.hasPart(file2));
+      false, FileUtils.hasPart(file2));
 
     // FileName ends with .zim, however, only the FileName.zim.part file exists in memory
     File file3 = new File(baseName + "3" + ".zim" + ".part");
     file3.createNewFile();
     File file4 = new File(baseName + "3" + ".zim");
     assertEquals("if the fileName ends with .zim, but instead the .zim.part file exists in memory",
-        true, FileUtils.hasPart(file4));
+      true, FileUtils.hasPart(file4));
 
     // FileName ends with .zimXX
     File testCall = new File(baseName + ".zimcj");

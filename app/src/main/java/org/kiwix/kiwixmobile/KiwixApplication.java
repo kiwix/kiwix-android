@@ -65,8 +65,8 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     super.attachBaseContext(base);
     application = this;
     setApplicationComponent(DaggerApplicationComponent.builder()
-        .context(this)
-        .build());
+      .context(this)
+      .build());
   }
 
   @Override
@@ -118,12 +118,12 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
       builder.detectUnbufferedIo();
     }
     return builder.detectCustomSlowCalls()
-        .detectDiskReads()
-        .detectDiskWrites()
-        .detectNetwork()
-        .penaltyFlashScreen()
-        .penaltyLog()
-        .build();
+      .detectDiskReads()
+      .detectDiskWrites()
+      .detectNetwork()
+      .penaltyFlashScreen()
+      .penaltyLog()
+      .build();
   }
 
   private StrictMode.VmPolicy buildVmPolicy(StrictMode.VmPolicy.Builder builder) {
@@ -143,10 +143,10 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
       builder.detectNonSdkApiUsage();
     }
     return builder.detectActivityLeaks()
-        .detectLeakedClosableObjects()
-        .detectLeakedSqlLiteObjects()
-        .penaltyLog()
-        .build();
+      .detectLeakedClosableObjects()
+      .detectLeakedSqlLiteObjects()
+      .penaltyLog()
+      .build();
   }
 
   /* Checks if external storage is available for read and write */

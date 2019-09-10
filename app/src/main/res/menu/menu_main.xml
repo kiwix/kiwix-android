@@ -47,7 +47,6 @@
     tools:visible="true"
     app:showAsAction="never" />
 
-
   <item
     android:id="@+id/menu_fullscreen"
     android:title="@string/menu_full_screen"

@@ -17,12 +17,12 @@ public class ServerUtils {
     String ip = "";
     try {
       Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
-          .getNetworkInterfaces();
+        .getNetworkInterfaces();
       while (enumNetworkInterfaces.hasMoreElements()) {
         NetworkInterface networkInterface = enumNetworkInterfaces
-            .nextElement();
+          .nextElement();
         Enumeration<InetAddress> enumInetAddress = networkInterface
-            .getInetAddresses();
+          .getInetAddresses();
         while (enumInetAddress.hasMoreElements()) {
           InetAddress inetAddress = enumInetAddress.nextElement();
 

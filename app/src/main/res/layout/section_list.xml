@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/section_list_height"
-    android:background="?attr/selectedBackground"
-    android:clickable="false"
-    android:focusable="false"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    >
+  android:layout_width="match_parent"
+  android:layout_height="@dimen/section_list_height"
+  android:background="?attr/selectedBackground"
+  android:clickable="false"
+  android:focusable="false"
+  android:gravity="center_vertical"
+  android:orientation="horizontal"
+  >
 
   <TextView
-      android:id="@+id/titleText"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_centerVertical="true"
-      android:layout_marginLeft="@dimen/title_text_margin"
-      android:layout_marginRight="@dimen/title_text_margin"
-      android:ellipsize="end"
-      android:fontFamily="sans-serif-light"
-      android:gravity="center_vertical"
-      android:maxLines="1"
-      android:minHeight="?android:attr/listPreferredItemHeightSmall"
-      android:paddingLeft="@dimen/title_text_padding"
-      android:textAppearance="?android:attr/textAppearanceListItemSmall"
-      />
+    android:id="@+id/titleText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="@dimen/title_text_margin"
+    android:layout_marginRight="@dimen/title_text_margin"
+    android:ellipsize="end"
+    android:fontFamily="sans-serif-light"
+    android:gravity="center_vertical"
+    android:maxLines="1"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingLeft="@dimen/title_text_padding"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    />
 
 </RelativeLayout>
