@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixInt;
@@ -57,7 +58,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 public class ZimContentProvider extends ContentProvider {
 
   public static final Uri CONTENT_URI =
-      Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".zim.base/");
+    Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".zim.base/");
 
   public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
   private static final String VIDEO_PATTERN = "([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))$)";
@@ -305,18 +306,7 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   private static String getFilePath(Uri articleUri) {
-    String filePath = articleUri.toString();
-    int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
-    if (pos != -1) {
-      filePath = articleUri.toString().substring(
-          CONTENT_URI.toString().length());
-    }
-    // Remove fragment (#...) as not supported by zimlib
-    pos = filePath.indexOf("#");
-    if (pos != -1) {
-      filePath = filePath.substring(0, pos);
-    }
-    return filePath;
+    return getFilePath(articleUri.toString());
   }
 
   public void setupDagger() {
@@ -335,39 +325,47 @@ public class ZimContentProvider extends ContentProvider {
   @Override
   public String getType(Uri uri) {
     String mimeType;
-
     // This is the code which makes a guess based on the file extenstion
-    String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase());
+    final String uriWithoutArguments = removeArguments(uri.toString());
+    String extension = MimeTypeMap.getFileExtensionFromUrl(uriWithoutArguments.toLowerCase());
     mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 
     // This is the code which retrieve the mimeType from the libzim
     // "slow" and still bugyy
     if (mimeType == null || mimeType.isEmpty()) {
-      String t = uri.toString();
-      int pos = uri.toString().indexOf(CONTENT_URI.toString());
-      if (pos != -1) {
-        t = uri.toString().substring(
-            CONTENT_URI.toString().length());
-      }
-      // Remove fragment (#...) as not supported by zimlib
-      pos = t.indexOf("#");
-      if (pos != -1) {
-        t = t.substring(0, pos);
-      }
-
-      mimeType = currentJNIReader.getMimeType(t);
-
-      // Truncate mime-type (everything after the first space
-      mimeType = mimeType.replaceAll("^([^ ]+).*$", "$1");
+      mimeType = currentJNIReader.getMimeType(getFilePath(uriWithoutArguments))
+        // Truncate mime-type (everything after the first space
+        .replaceAll("^([^ ]+).*$", "$1");
     }
 
-    Log.d(TAG_KIWIX, "Getting mime-type for " + uri.toString() + " = " + mimeType);
+    Log.d(TAG_KIWIX, "Getting mime-type for " + uriWithoutArguments + " = " + mimeType);
     return mimeType;
+  }
+
+  @NotNull private static String getFilePath(String uriString) {
+    String filePath = uriString;
+    int pos = uriString.indexOf(CONTENT_URI.toString());
+    if (pos != -1) {
+      filePath = uriString.substring(
+        CONTENT_URI.toString().length());
+    }
+    // Remove fragment (#...) as not supported by zimlib
+    pos = filePath.indexOf("#");
+    if (pos != -1) {
+      filePath = filePath.substring(0, pos);
+    }
+    return filePath;
+  }
+
+  private static String removeArguments(String url) {
+    return url.contains("?")
+      ? url.substring(0, url.lastIndexOf("?"))
+      : url;
   }
 
   public static String getRedirect(String url) {
     return Uri.parse(CONTENT_URI + currentJNIReader.checkUrl(getFilePath(Uri.parse(url))))
-        .toString();
+      .toString();
   }
 
   public static boolean isRedirect(String url) {
@@ -396,7 +394,7 @@ public class ZimContentProvider extends ContentProvider {
     } catch (IOException e) {
       //TODO: Why do we narrow the exception? We can't be sure the file isn't found
       throw new FileNotFoundException("Could not open pipe for: "
-          + uri.toString());
+        + uri.toString());
     }
     return (pipe[0]);
   }
@@ -419,7 +417,7 @@ public class ZimContentProvider extends ContentProvider {
     fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
     File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
     byte[] data = currentJNIReader.getContent(new JNIKiwixString(filePath), new JNIKiwixString(),
-        new JNIKiwixString(), new JNIKiwixInt());
+      new JNIKiwixString(), new JNIKiwixInt());
     FileOutputStream out = new FileOutputStream(f);
     out.write(data, 0, data.length);
     out.flush();
@@ -428,7 +426,7 @@ public class ZimContentProvider extends ContentProvider {
 
   @Override
   public Cursor query(Uri url, String[] projection, String selection,
-      String[] selectionArgs, String sort) {
+    String[] selectionArgs, String sort) {
     throw new RuntimeException("Operation not supported");
   }
 
@@ -439,7 +437,7 @@ public class ZimContentProvider extends ContentProvider {
 
   @Override
   public int update(Uri uri, ContentValues values, String where,
-      String[] whereArgs) {
+    String[] whereArgs) {
     throw new RuntimeException("Operation not supported");
   }
 
@@ -467,7 +465,7 @@ public class ZimContentProvider extends ContentProvider {
     JNIKiwixReader currentJNIReader;
 
     TransferThread(JNIKiwixReader currentJNIReader, Uri articleUri, OutputStream out)
-        throws IOException {
+      throws IOException {
       this.currentJNIReader = currentJNIReader;
       Log.d(TAG_KIWIX, "Retrieving: " + articleUri.toString());
 
@@ -482,29 +480,29 @@ public class ZimContentProvider extends ContentProvider {
       try {
         final JNIKiwixString mime = new JNIKiwixString();
         final JNIKiwixInt size = new JNIKiwixInt();
-        final JNIKiwixString url = new JNIKiwixString(articleZimUrl);
+        final JNIKiwixString url = new JNIKiwixString(removeArguments(articleZimUrl));
         byte[] data = currentJNIReader.getContent(url, new JNIKiwixString(), mime, size);
         if (mime.value != null && mime.value.equals("text/css") && MainActivity.nightMode) {
           out.write(("img, video { \n" +
-              " -webkit-filter: invert(1); \n" +
-              " filter: invert(1); \n" +
-              "} \n").getBytes(Charset.forName("UTF-8")));
+            " -webkit-filter: invert(1); \n" +
+            " filter: invert(1); \n" +
+            "} \n").getBytes(Charset.forName("UTF-8")));
         }
         out.write(data, 0, data.length);
         out.flush();
 
         Log.d(TAG_KIWIX, "reading  " + url.value
-            + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
+          + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
       } catch (IOException | NullPointerException e) {
         Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
-            e);
+          e);
       } finally {
         try {
           out.close();
         } catch (IOException e) {
           Log.e(TAG_KIWIX,
-              "Custom exception by closing out stream for article " + articleZimUrl,
-              e);
+            "Custom exception by closing out stream for article " + articleZimUrl,
+            e);
         }
       }
     }
