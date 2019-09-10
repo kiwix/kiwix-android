@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <item
-      android:id="@+id/menu_bookmarks_search"
-      android:icon="@drawable/action_search"
-      android:title="@string/search_label"
-      app:actionViewClass="androidx.appcompat.widget.SearchView"
-      app:iconifiedByDefault="true"
-      app:showAsAction="always|collapseActionView"
-      tools:ignore="AlwaysShowAction"/>
+    android:id="@+id/menu_bookmarks_search"
+    android:icon="@drawable/action_search"
+    android:title="@string/search_label"
+    app:actionViewClass="androidx.appcompat.widget.SearchView"
+    app:iconifiedByDefault="true"
+    app:showAsAction="always|collapseActionView"
+    tools:ignore="AlwaysShowAction" />
 
   <item
-      android:id="@+id/menu_bookmarks_toggle"
-      android:checkable="true"
-      android:title="@string/bookmarks_from_current_book"
-      app:showAsAction="never"/>
+    android:id="@+id/menu_bookmarks_toggle"
+    android:checkable="true"
+    android:title="@string/bookmarks_from_current_book"
+    app:showAsAction="never" />
 </menu>

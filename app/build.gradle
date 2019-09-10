@@ -249,9 +249,9 @@ android {
       'LogConditional'
 
     warning 'UnknownNullness',
-        'SelectableText',
-        'IconDensities',
-        'SyntheticAccessor'
+      'SelectableText',
+      'IconDensities',
+      'SyntheticAccessor'
     baseline file("lint-baseline.xml")
   }
 

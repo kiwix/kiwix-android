@@ -39,8 +39,8 @@ public class NetworkLanguageDao {
   public ArrayList<Language> getFilteredLanguages() {
     ArrayList<Language> result = new ArrayList<>();
     try (SquidCursor<NetworkLanguageDatabaseEntity> languageCursor = mDb.query(
-        NetworkLanguageDatabaseEntity.class,
-        Query.select())) {
+      NetworkLanguageDatabaseEntity.class,
+      Query.select())) {
       while (languageCursor.moveToNext()) {
         String languageCode = languageCursor.get(NetworkLanguageDatabaseEntity.LANGUAGE_I_S_O_3);
         boolean enabled = languageCursor.get(NetworkLanguageDatabaseEntity.ENABLED);

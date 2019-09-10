@@ -14,37 +14,37 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    >
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  >
 
   <EditText
-      android:id="@+id/edit"
-      android:layout_width="0dip"
-      android:layout_height="wrap_content"
-      android:layout_marginRight="@dimen/webview_search_edit_text_margin_right"
-      android:layout_weight="1"
-      android:focusableInTouchMode="true"
-      android:hint="@string/search_label"
-      android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
-      android:inputType="text"
-      android:scrollHorizontally="true"
-      android:textColor="@android:color/white"
-      android:textColorHint="@color/material_dark_foreground_hint"
-      >
-    <requestFocus/>
+    android:id="@+id/edit"
+    android:layout_width="0dip"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/webview_search_edit_text_margin_right"
+    android:layout_weight="1"
+    android:focusableInTouchMode="true"
+    android:hint="@string/search_label"
+    android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
+    android:inputType="text"
+    android:scrollHorizontally="true"
+    android:textColor="@android:color/white"
+    android:textColorHint="@color/material_dark_foreground_hint"
+    >
+    <requestFocus />
   </EditText>
 
   <TextView
-      android:id="@+id/find_results"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_marginEnd="4dp"
-      android:layout_marginRight="4dp"
-      android:gravity="center"
-      android:textColor="@android:color/darker_gray"
-      tools:text="2/10"
-      />
+    android:id="@+id/find_results"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="4dp"
+    android:layout_marginRight="4dp"
+    android:gravity="center"
+    android:textColor="@android:color/darker_gray"
+    tools:text="2/10"
+    />
 </LinearLayout>

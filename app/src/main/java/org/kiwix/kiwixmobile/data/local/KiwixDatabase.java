@@ -72,8 +72,8 @@ public class KiwixDatabase extends SquidDatabase {
   @Override
   protected Table[] getTables() {
     return new Table[] {
-        RecentSearch.TABLE,
-        Bookmark.TABLE,
+      RecentSearch.TABLE,
+      Bookmark.TABLE,
     };
   }
 
@@ -181,9 +181,9 @@ public class KiwixDatabase extends SquidDatabase {
             while ((in = read.readLine()) != null) {
               Bookmark bookmark = new Bookmark();
               bookmark.setBookmarkUrl("null")
-                  .setBookmarkTitle(in)
-                  .setZimId(idName)
-                  .setZimName(idName);
+                .setBookmarkTitle(in)
+                .setZimId(idName)
+                .setZimName(idName);
               persist(bookmark);
             }
             context.deleteFile(id);

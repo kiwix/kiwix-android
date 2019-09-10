@@ -76,7 +76,6 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.utils.Constants.ONGOING_DOWNLOAD_CHANNEL_ID;
-import static org.kiwix.kiwixmobile.utils.files.FileUtils.getCurrentSize;
 
 @Deprecated
 public class DownloadService extends Service {
@@ -156,7 +155,7 @@ public class DownloadService extends Service {
       if (MainActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
         Log.i(KIWIX_TAG, "Not connected to WiFi, and wifiOnly is enabled");
         startActivity(new Intent(this, ZimManageActivity.class).setAction(ACTION_NO_WIFI)
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+          .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         this.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
       } else {
         toggleDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
@@ -173,11 +172,11 @@ public class DownloadService extends Service {
 
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
     LibraryNetworkEntity.Book book =
-        (LibraryNetworkEntity.Book) intent.getSerializableExtra(EXTRA_BOOK);
+      (LibraryNetworkEntity.Book) intent.getSerializableExtra(EXTRA_BOOK);
     int notificationID = book.getId().hashCode();
 
     if (downloadStatus.get(notificationID, -1) == PAUSE
-        || downloadStatus.get(notificationID, -1) == PLAY) {
+      || downloadStatus.get(notificationID, -1) == PLAY) {
       return START_NOT_STICKY;
     }
 
@@ -186,39 +185,39 @@ public class DownloadService extends Service {
     target.putExtra(EXTRA_LIBRARY, true);
 
     PendingIntent pendingIntent = PendingIntent.getActivity
-        (getBaseContext(), notificationID,
-            target, PendingIntent.FLAG_CANCEL_CURRENT);
+      (getBaseContext(), notificationID,
+        target, PendingIntent.FLAG_CANCEL_CURRENT);
 
     Intent pauseIntent = new Intent(this, this.getClass()).setAction(ACTION_PAUSE)
-        .putExtra(NOTIFICATION_ID, notificationID);
+      .putExtra(NOTIFICATION_ID, notificationID);
     Intent stopIntent = new Intent(this, this.getClass()).setAction(ACTION_STOP)
-        .putExtra(NOTIFICATION_ID, notificationID);
+      .putExtra(NOTIFICATION_ID, notificationID);
     PendingIntent pausePending =
-        PendingIntent.getService(getBaseContext(), notificationID, pauseIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT);
+      PendingIntent.getService(getBaseContext(), notificationID, pauseIntent,
+        PendingIntent.FLAG_CANCEL_CURRENT);
     PendingIntent stopPending =
-        PendingIntent.getService(getBaseContext(), notificationID, stopIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT);
+      PendingIntent.getService(getBaseContext(), notificationID, stopIntent,
+        PendingIntent.FLAG_CANCEL_CURRENT);
 
     NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp,
-        getString(R.string.download_pause), pausePending);
+      getString(R.string.download_pause), pausePending);
     NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp,
-        getString(R.string.download_stop), stopPending);
+      getString(R.string.download_stop), stopPending);
 
     if (flags == START_FLAG_REDELIVERY && book.file == null) {
       return START_NOT_STICKY;
     } else {
       notification.put(notificationID,
-          new NotificationCompat.Builder(this, ONGOING_DOWNLOAD_CHANNEL_ID)
-              .setContentTitle(
-                  getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
-              .setProgress(100, 0, false)
-              .setSmallIcon(R.drawable.kiwix_notification)
-              .setColor(Color.BLACK)
-              .setContentIntent(pendingIntent)
-              .addAction(pause)
-              .addAction(stop)
-              .setOngoing(true));
+        new NotificationCompat.Builder(this, ONGOING_DOWNLOAD_CHANNEL_ID)
+          .setContentTitle(
+            getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
+          .setProgress(100, 0, false)
+          .setSmallIcon(R.drawable.kiwix_notification)
+          .setColor(Color.BLACK)
+          .setContentIntent(pendingIntent)
+          .addAction(pause)
+          .addAction(stop)
+          .setOngoing(true));
       Bundle bundle = new Bundle();
       bundle.putString(NOTIFICATION_TITLE_KEY, notificationTitle);
       notification.get(notificationID).addExtras(bundle);
@@ -260,11 +259,11 @@ public class DownloadService extends Service {
         return path;
       }
       Toast.makeText(this, getResources().getString(R.string.path_not_writable), Toast.LENGTH_LONG)
-          .show();
+        .show();
       return Environment.getExternalStorageDirectory().getPath();
     } catch (Exception e) {
       Toast.makeText(this, getResources().getString(R.string.path_not_writable), Toast.LENGTH_LONG)
-          .show();
+        .show();
       return Environment.getExternalStorageDirectory().getPath();
     }
   }
@@ -315,126 +314,126 @@ public class DownloadService extends Service {
     //}
     TestingUtils.bindResource(DownloadService.class);
     if (book.file != null && (book.file.exists() || new File(
-        book.file.getPath() + ".part").exists())) {
+      book.file.getPath() + ".part").exists())) {
       // Calculate initial download progress
       int initial =
-          (int) (FileUtils.getCurrentSize(book) / (Long.valueOf(book.getSize()) * BOOK_SIZE_OFFSET));
+        (int) (FileUtils.getCurrentSize(book) / (Long.valueOf(book.getSize()) * BOOK_SIZE_OFFSET));
       notification.get(notificationID).setProgress(100, initial, false);
       updateDownloadFragmentProgress(initial, notificationID);
       notificationManager.notify(notificationID, notification.get(notificationID).build());
     }
     kiwixService.getMetaLinks(url)
-        .retryWhen(errors -> errors.flatMap(error -> Observable.timer(5, TimeUnit.SECONDS)))
-        .subscribeOn(AndroidSchedulers.mainThread())
-        .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
-        .flatMap(pair -> Observable.fromIterable(
-            ChunkUtils.getChunks(pair.first, pair.second, notificationID)))
-        .concatMap(this::downloadChunk)
-        .distinctUntilChanged().doOnComplete(() -> updateDownloadFragmentComplete(notificationID))
-        .subscribe(new Observer<Integer>() {
-          @Override
-          public void onSubscribe(Disposable d) {
+      .retryWhen(errors -> errors.flatMap(error -> Observable.timer(5, TimeUnit.SECONDS)))
+      .subscribeOn(AndroidSchedulers.mainThread())
+      .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
+      .flatMap(pair -> Observable.fromIterable(
+        ChunkUtils.getChunks(pair.first, pair.second, notificationID)))
+      .concatMap(this::downloadChunk)
+      .distinctUntilChanged().doOnComplete(() -> updateDownloadFragmentComplete(notificationID))
+      .subscribe(new Observer<Integer>() {
+        @Override
+        public void onSubscribe(Disposable d) {
 
-          }
+        }
 
-          @Override
-          public void onNext(Integer progress) {
-            if (progress == 100) {
-              notification.get(notificationID).setOngoing(false);
-              Bundle b = notification.get(notificationID).getExtras();
-              notification.get(notificationID)
-                  .setContentTitle(
-                      b.getString(NOTIFICATION_TITLE_KEY) + " " + getResources().getString(
-                          R.string.zim_file_downloaded));
-              notification.get(notificationID).getExtras();
-              notification.get(notificationID)
-                  .setContentText(getString(R.string.zim_file_downloaded));
-              final Intent target = new Intent(DownloadService.this, MainActivity.class);
-              target.putExtra(EXTRA_ZIM_FILE,
-                  KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
-              //Remove the extra ".part" from files
-              String filename = book.file.getPath();
-              if (filename.endsWith(ZIM_EXTENSION)) {
-                filename = filename + PART;
+        @Override
+        public void onNext(Integer progress) {
+          if (progress == 100) {
+            notification.get(notificationID).setOngoing(false);
+            Bundle b = notification.get(notificationID).getExtras();
+            notification.get(notificationID)
+              .setContentTitle(
+                b.getString(NOTIFICATION_TITLE_KEY) + " " + getResources().getString(
+                  R.string.zim_file_downloaded));
+            notification.get(notificationID).getExtras();
+            notification.get(notificationID)
+              .setContentText(getString(R.string.zim_file_downloaded));
+            final Intent target = new Intent(DownloadService.this, MainActivity.class);
+            target.putExtra(EXTRA_ZIM_FILE,
+              KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+            //Remove the extra ".part" from files
+            String filename = book.file.getPath();
+            if (filename.endsWith(ZIM_EXTENSION)) {
+              filename = filename + PART;
+              File partFile = new File(filename);
+              if (partFile.exists()) {
+                partFile.renameTo(new File(partFile.getPath().replaceAll(".part", "")));
+              }
+            } else {
+              for (int i = 0; true; i++) {
+                char first = ALPHABET.charAt(i / 26);
+                char second = ALPHABET.charAt(i % 26);
+                String chunkExtension = String.valueOf(first) + second;
+                filename = book.file.getPath();
+                filename = filename.replaceAll(".zim([a-z][a-z]){0,1}$", ".zim");
+                filename = filename + chunkExtension + ".part";
                 File partFile = new File(filename);
                 if (partFile.exists()) {
-                  partFile.renameTo(new File(partFile.getPath().replaceAll(".part", "")));
-                }
-              } else {
-                for (int i = 0; true; i++) {
-                  char first = ALPHABET.charAt(i / 26);
-                  char second = ALPHABET.charAt(i % 26);
-                  String chunkExtension = String.valueOf(first) + second;
-                  filename = book.file.getPath();
-                  filename = filename.replaceAll(".zim([a-z][a-z]){0,1}$", ".zim");
-                  filename = filename + chunkExtension + ".part";
-                  File partFile = new File(filename);
-                  if (partFile.exists()) {
-                    partFile.renameTo(new File(partFile.getPath().replaceAll(".part$", "")));
+                  partFile.renameTo(new File(partFile.getPath().replaceAll(".part$", "")));
+                } else {
+                  File lastChunkFile = new File(filename + ".part");
+                  if (lastChunkFile.exists()) {
+                    lastChunkFile.renameTo(new File(partFile.getPath().replaceAll(".part", "")));
                   } else {
-                    File lastChunkFile = new File(filename + ".part");
-                    if (lastChunkFile.exists()) {
-                      lastChunkFile.renameTo(new File(partFile.getPath().replaceAll(".part", "")));
-                    } else {
-                      break;
-                    }
+                    break;
                   }
                 }
               }
-              target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
-              target.setAction(Long.toString(System.currentTimeMillis()));
-              PendingIntent pendingIntent = PendingIntent.getActivity
-                  (getBaseContext(), 0,
-                      target, PendingIntent.FLAG_ONE_SHOT);
-              //book.downloaded = true;
-              //dataSource.deleteBook(book)
-              //    .subscribe(new CompletableObserver() {
-              //      @Override
-              //      public void onSubscribe(Disposable d) {
-              //
-              //      }
-              //
-              //      @Override
-              //      public void onComplete() {
-              //
-              //      }
-              //
-              //      @Override
-              //      public void onError(Throwable e) {
-              //        Log.e("DownloadService", "Unable to delete book", e);
-              //      }
-              //    });
-              notification.get(notificationID).setContentIntent(pendingIntent);
-              //notification.get(notificationID).mActions.clear();
-              TestingUtils.unbindResource(DownloadService.class);
             }
-            notification.get(notificationID).setProgress(100, progress, false);
-            if (progress != 100 && timeRemaining.get(notificationID) != -1) {
-              //notification.get(notificationID)
-              //    .setContentText(
-              //        DownloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
-            }
-            notificationManager.notify(notificationID, notification.get(notificationID).build());
-            if (progress == 0 || progress == 100) {
-              // Tells android to not kill the service
-              updateForeground();
-            }
-            updateDownloadFragmentProgress(progress, notificationID);
-            if (progress == 100) {
-              stopSelf();
-            }
+            target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
+            target.setAction(Long.toString(System.currentTimeMillis()));
+            PendingIntent pendingIntent = PendingIntent.getActivity
+              (getBaseContext(), 0,
+                target, PendingIntent.FLAG_ONE_SHOT);
+            //book.downloaded = true;
+            //dataSource.deleteBook(book)
+            //    .subscribe(new CompletableObserver() {
+            //      @Override
+            //      public void onSubscribe(Disposable d) {
+            //
+            //      }
+            //
+            //      @Override
+            //      public void onComplete() {
+            //
+            //      }
+            //
+            //      @Override
+            //      public void onError(Throwable e) {
+            //        Log.e("DownloadService", "Unable to delete book", e);
+            //      }
+            //    });
+            notification.get(notificationID).setContentIntent(pendingIntent);
+            //notification.get(notificationID).mActions.clear();
+            TestingUtils.unbindResource(DownloadService.class);
           }
-
-          @Override
-          public void onError(Throwable e) {
-
+          notification.get(notificationID).setProgress(100, progress, false);
+          if (progress != 100 && timeRemaining.get(notificationID) != -1) {
+            //notification.get(notificationID)
+            //    .setContentText(
+            //        DownloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
           }
-
-          @Override
-          public void onComplete() {
-
+          notificationManager.notify(notificationID, notification.get(notificationID).build());
+          if (progress == 0 || progress == 100) {
+            // Tells android to not kill the service
+            updateForeground();
           }
-        });
+          updateDownloadFragmentProgress(progress, notificationID);
+          if (progress == 100) {
+            stopSelf();
+          }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+      });
   }
 
   private void updateDownloadFragmentProgress(int progress, int notificationID) {
@@ -519,7 +518,7 @@ public class DownloadService extends Service {
         File file = new File(KIWIX_ROOT, chunk.getFileName());
         file.getParentFile().mkdirs();
         File fullFile =
-            new File(file.getPath().substring(0, file.getPath().length() - PART.length()));
+          new File(file.getPath().substring(0, file.getPath().length() - PART.length()));
 
         long downloaded = Long.parseLong(chunk.getRangeHeader().split("-")[0]);
         if (fullFile.exists() && fullFile.length() == chunk.getSize()) {
@@ -576,10 +575,10 @@ public class DownloadService extends Service {
 
             // Build request with up to date range
             Response response = httpClient.newCall(
-                new Request.Builder()
-                    .url(chunk.getUrl())
-                    .header("Range", "bytes=" + rangeHeader)
-                    .build()
+              new Request.Builder()
+                .url(chunk.getUrl())
+                .header("Range", "bytes=" + rangeHeader)
+                .build()
             ).execute();
 
             // Check that the server is sending us the right file
@@ -602,7 +601,7 @@ public class DownloadService extends Service {
               }
 
               if (MainActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext()) ||
-                  !NetworkUtils.isNetworkAvailable(getApplicationContext())) {
+                !NetworkUtils.isNetworkAvailable(getApplicationContext())) {
                 pauseDownload(chunk.getNotificationID());
               }
 
@@ -661,7 +660,7 @@ public class DownloadService extends Service {
           String path = file.getPath();
           Log.i(KIWIX_TAG, "Download Cancelled, deleting file: " + path);
           if (path.substring(path.length() - (ZIM_EXTENSION + PART).length())
-              .equals(ZIM_EXTENSION + PART)) {
+            .equals(ZIM_EXTENSION + PART)) {
             path = path.substring(0, path.length() - PART.length() + 1);
             FileUtils.deleteZimFile(path);
           } else {
@@ -670,7 +669,7 @@ public class DownloadService extends Service {
           }
         } else {
           Log.i(KIWIX_TAG,
-              "Download completed, renaming file ([" + file.getPath() + "] -> .zim.part)");
+            "Download completed, renaming file ([" + file.getPath() + "] -> .zim.part)");
           file.renameTo(new File(file.getPath().replaceAll(".part$", "")));
         }
         // Mark chunk status as downloaded
@@ -693,11 +692,11 @@ public class DownloadService extends Service {
       String description = getString(R.string.ongoing_download_channel_desc);
       int importance = NotificationManager.IMPORTANCE_DEFAULT;
       NotificationChannel ongoingDownloadsChannel = new NotificationChannel(
-          Constants.ONGOING_DOWNLOAD_CHANNEL_ID, name, importance);
+        Constants.ONGOING_DOWNLOAD_CHANNEL_ID, name, importance);
       ongoingDownloadsChannel.setDescription(description);
       ongoingDownloadsChannel.setSound(null, null);
       NotificationManager notificationManager = (NotificationManager) getSystemService(
-          NOTIFICATION_SERVICE);
+        NOTIFICATION_SERVICE);
       notificationManager.createNotificationChannel(ongoingDownloadsChannel);
     }
   }
