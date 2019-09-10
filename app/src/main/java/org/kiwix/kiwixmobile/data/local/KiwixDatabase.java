@@ -54,7 +54,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int FINAL = 18;//3.0.0
+  private static final int FINAL = 17;//3.0.0
   private static final int VERSION = FINAL;
   private final Context context;
   private final NewBookDao bookDao;
@@ -81,8 +81,7 @@ public class KiwixDatabase extends SquidDatabase {
 
   @Override
   protected Table[] getTables() {
-    return new Table[] {
-    };
+    return new Table[] {};
   }
 
   @Override
@@ -131,7 +130,6 @@ public class KiwixDatabase extends SquidDatabase {
         tryAddColumn(Bookmark.ZIM_FILE_PATH);
         tryAddColumn(Bookmark.FAVICON);
         migrateBookmarksVersion16();
-      case 16:
         try {
           bookDao.migrationInsert(new BookDao(this).getBooks());
         } catch (Exception e) {
@@ -145,7 +143,7 @@ public class KiwixDatabase extends SquidDatabase {
         tryDropTable(BookDatabaseEntity.TABLE);
         tryDropTable(NetworkLanguageDatabaseEntity.TABLE);
         tryDropTable(LibraryDatabaseEntity.TABLE);
-      case 17:
+      case 16:
         try {
           final BookmarksDao oldBookmarksDao = new BookmarksDao(this);
           oldBookmarksDao.processBookmark(UpdateUtils::reformatProviderUrl);
