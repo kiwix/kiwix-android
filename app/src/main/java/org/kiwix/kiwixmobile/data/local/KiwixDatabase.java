@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.utils.UpdateUtils;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 @Singleton
+@Deprecated //delete once migrations are no longer needed
 public class KiwixDatabase extends SquidDatabase {
 
   private static final int TWO_POINT_FIVE_POINT_THREE = 16;

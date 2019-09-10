@@ -23,9 +23,7 @@ import com.yahoo.squidb.sql.Query;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -58,10 +56,6 @@ public class RecentSearchDaoTest {
     recentSearchDao.getRecentSearches();
 
     // verify ordering is in descending order of search ID and the results are limited to 5 only
-    verify(kiwixDatabase).query(any(),
-      eq(Query.selectDistinct(RecentSearch.SEARCH_STRING).where(RecentSearch.ZIM_I_D.eq(
-        ZimContentProvider.getId()))
-        .orderBy(RecentSearch.ID.desc())
-        .limit(5)));
+    verify(kiwixDatabase).query(any(), eq(Query.select()));
   }
 }
