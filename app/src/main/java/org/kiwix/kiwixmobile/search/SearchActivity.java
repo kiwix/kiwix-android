@@ -55,8 +55,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends BaseActivity
-    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
-    SearchViewCallback {
+  implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
+  SearchViewCallback {
 
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
 
@@ -120,7 +120,7 @@ public class SearchActivity extends BaseActivity
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     int value =
-        Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+      Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent intent = new Intent(this, MainActivity.class);
       startActivity(intent);
@@ -242,10 +242,10 @@ public class SearchActivity extends BaseActivity
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
       //deprecated in API 17
       value =
-          Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+        Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     } else {
       value =
-          Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0);
+        Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0);
     }
     return value;
   }
@@ -261,17 +261,17 @@ public class SearchActivity extends BaseActivity
 
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this, dialogStyle())
-        .setMessage(getString(R.string.delete_recent_search_item))
-        .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
-          deleteSpecificSearchItem(search);
-          Toast.makeText(getBaseContext(),
-              getResources().getString(R.string.delete_specific_search_toast), Toast.LENGTH_SHORT)
-              .show();
-        })
-        .setNegativeButton(android.R.string.no, (dialog, which) -> {
-          // do nothing
-        })
-        .show();
+      .setMessage(getString(R.string.delete_recent_search_item))
+      .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
+        deleteSpecificSearchItem(search);
+        Toast.makeText(getBaseContext(),
+          getResources().getString(R.string.delete_specific_search_toast), Toast.LENGTH_SHORT)
+          .show();
+      })
+      .setNegativeButton(android.R.string.no, (dialog, which) -> {
+        // do nothing
+      })
+      .show();
   }
 
   private void deleteSpecificSearchItem(String search) {
@@ -294,7 +294,7 @@ public class SearchActivity extends BaseActivity
 
         if (convertView == null) {
           row = LayoutInflater.from(parent.getContext())
-              .inflate(android.R.layout.simple_list_item_1, null);
+            .inflate(android.R.layout.simple_list_item_1, null);
         } else {
           row = convertView;
         }
@@ -309,17 +309,17 @@ public class SearchActivity extends BaseActivity
     String appName = getResources().getString(R.string.app_name);
     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+      RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
-        Locale.getDefault()); // TODO: choose selected lang on kiwix
+      Locale.getDefault()); // TODO: choose selected lang on kiwix
     intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-        String.format(getString(R.string.speech_prompt_text), appName));
+      String.format(getString(R.string.speech_prompt_text), appName));
     try {
       startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
     } catch (ActivityNotFoundException a) {
       Toast.makeText(getApplicationContext(),
-          getString(R.string.speech_not_supported),
-          Toast.LENGTH_SHORT).show();
+        getString(R.string.speech_not_supported),
+        Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -332,7 +332,7 @@ public class SearchActivity extends BaseActivity
       case REQ_CODE_SPEECH_INPUT: {
         if (resultCode == RESULT_OK && data != null) {
           ArrayList<String> result = data
-              .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
           searchViaVoice(result.get(0));
         }
         break;

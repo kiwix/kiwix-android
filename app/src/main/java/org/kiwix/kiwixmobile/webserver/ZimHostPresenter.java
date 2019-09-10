@@ -12,7 +12,7 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskList
 
 @PerActivity
 class ZimHostPresenter extends BasePresenter<ZimHostContract.View>
-    implements ZimHostContract.Presenter {
+  implements ZimHostContract.Presenter {
 
   private static final String TAG = "ZimHostPresenter";
   private final DataSource dataSource;
@@ -24,21 +24,21 @@ class ZimHostPresenter extends BasePresenter<ZimHostContract.View>
   @Override
   public void loadBooks() {
     dataSource.getLanguageCategorizedBooks()
-        .subscribe(new SingleObserver<List<BooksOnDiskListItem>>() {
-          @Override
-          public void onSubscribe(Disposable d) {
-            compositeDisposable.add(d);
-          }
+      .subscribe(new SingleObserver<List<BooksOnDiskListItem>>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+          compositeDisposable.add(d);
+        }
 
-          @Override
-          public void onSuccess(List<BooksOnDiskListItem> books) {
-            view.addBooks(books);
-          }
+        @Override
+        public void onSuccess(List<BooksOnDiskListItem> books) {
+          view.addBooks(books);
+        }
 
-          @Override
-          public void onError(Throwable e) {
-            Log.e(TAG, "Unable to load books", e);
-          }
-        });
+        @Override
+        public void onError(Throwable e) {
+          Log.e(TAG, "Unable to load books", e);
+        }
+      });
   }
 }

@@ -30,13 +30,13 @@ import org.kiwix.kiwixmobile.R;
 public class KiwixSearchWidget extends AppWidgetProvider {
 
   public static final String TEXT_CLICKED =
-      "org.kiwix.kiwixmobile.main.KiwixSearchWidget.TEXT_CLICKED";
+    "org.kiwix.kiwixmobile.main.KiwixSearchWidget.TEXT_CLICKED";
   public static final String ICON_CLICKED =
-      "org.kiwix.kiwixmobile.main.KiwixSearchWidget.ICON_CLICKED";
+    "org.kiwix.kiwixmobile.main.KiwixSearchWidget.ICON_CLICKED";
   public static final String MIC_CLICKED =
-      "org.kiwix.kiwixmobile.main.KiwixSearchWidget.MIC_CLICKED";
+    "org.kiwix.kiwixmobile.main.KiwixSearchWidget.MIC_CLICKED";
   public static final String STAR_CLICKED =
-      "org.kiwix.kiwixmobile.main.KiwixSearchWidget.STAR_CLICKED";
+    "org.kiwix.kiwixmobile.main.KiwixSearchWidget.STAR_CLICKED";
 
   @Override
   public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -50,29 +50,29 @@ public class KiwixSearchWidget extends AppWidgetProvider {
       Intent mainIntent = new Intent(context, MainActivity.class);
       mainIntent.setAction(TEXT_CLICKED);
       PendingIntent searchPendingIntent =
-          PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
-              mainIntent, 0);
+        PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
+          mainIntent, 0);
 
       /** Kiwix icon intent to main app **/
       Intent kiwixIconIntent = new Intent(context, MainActivity.class);
       kiwixIconIntent.setAction(ICON_CLICKED);
       PendingIntent mainAppPendingIntent =
-          PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
-              kiwixIconIntent, 0);
+        PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
+          kiwixIconIntent, 0);
 
       /** Star icon intent to bookmarks **/
       Intent starIntent = new Intent(context, MainActivity.class);
       starIntent.setAction(STAR_CLICKED);
       PendingIntent starPendingIntent =
-          PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
-              starIntent, 0);
+        PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
+          starIntent, 0);
 
       /** Microphone icon intent for voice search **/
       Intent voiceIntent = new Intent(context, MainActivity.class);
       voiceIntent.setAction(MIC_CLICKED);
       PendingIntent voicePendingIntent =
-          PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
-              voiceIntent, 0);
+        PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
+          voiceIntent, 0);
 
       views.setOnClickPendingIntent(R.id.search_widget_text, searchPendingIntent);
       views.setOnClickPendingIntent(R.id.search_widget_icon, mainAppPendingIntent);

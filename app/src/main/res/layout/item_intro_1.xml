@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="24dp"
-    >
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/root"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="24dp"
+  >
 
   <ImageView
-      android:layout_width="160dp"
-      android:layout_height="160dp"
-      android:contentDescription="@string/kiwi"
-      android:src="@drawable/kiwix_icon_with_title"
-      app:layout_constraintBottom_toTopOf="@id/heading"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      />
+    android:layout_width="160dp"
+    android:layout_height="160dp"
+    android:contentDescription="@string/kiwi"
+    android:src="@drawable/kiwix_icon_with_title"
+    app:layout_constraintBottom_toTopOf="@id/heading"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    />
 
   <TextView
-      android:id="@+id/heading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="@dimen/activity_vertical_margin"
-      android:text="@string/welcome_to_the_family"
-      android:textAlignment="center"
-      android:textColor="@android:color/black"
-      android:textSize="24sp"
-      android:textStyle="bold"
-      app:layout_constraintBottom_toTopOf="@id/subheading"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      />
+    android:id="@+id/heading"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:text="@string/welcome_to_the_family"
+    android:textAlignment="center"
+    android:textColor="@android:color/black"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toTopOf="@id/subheading"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    />
 
   <androidx.constraintlayout.widget.Guideline
-      android:id="@+id/guideline"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      app:layout_constraintGuide_end="56dp"
-      />
+    android:id="@+id/guideline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:layout_constraintGuide_end="56dp"
+    />
 
   <TextView
-      android:id="@+id/subheading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/human_kind_knowledge"
-      android:textAlignment="center"
-      android:textColor="@color/textDarkSecondary"
-      android:textSize="15sp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/guideline"
-      />
+    android:id="@+id/subheading"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/human_kind_knowledge"
+    android:textAlignment="center"
+    android:textColor="@color/textDarkSecondary"
+    android:textSize="15sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/guideline"
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,7 +33,7 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   @Override
   public Item onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     return new Item(LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_help, parent, false));
+      .inflate(R.layout.item_help, parent, false));
   }
 
   @Override

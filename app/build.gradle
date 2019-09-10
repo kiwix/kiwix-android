@@ -454,7 +454,7 @@ android {
       universalApk true
     }
     density {
-      enable true
+      enable false
       reset()
       include "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
     }
@@ -462,7 +462,7 @@ android {
   applicationVariants.all { variant ->
     variant.outputs.each { output ->
       def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI)) ?: 0
-      def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.DENSITY)) ?: 1
+      def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.DENSITY)) ?: 0
       output.versionCodeOverride =
         (baseDensityVersionCode * 10000000) +
           (baseAbiVersionCode * 1000000) +

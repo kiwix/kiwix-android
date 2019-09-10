@@ -203,7 +203,6 @@
         android:resource="@xml/provider_paths" />
     </provider>
 
-
     <activity android:name=".intro.IntroActivity" />
     <activity android:name=".language.LanguageActivity" />
     <activity android:name=".history.HistoryActivity" />

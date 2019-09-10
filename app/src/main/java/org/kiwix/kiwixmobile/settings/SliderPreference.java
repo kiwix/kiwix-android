@@ -41,8 +41,7 @@ public class SliderPreference extends DialogPreference {
   private TextView mMessage;
 
   /**
-   * @param context
-   * @param attrs
+   *
    */
   public SliderPreference(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -50,9 +49,7 @@ public class SliderPreference extends DialogPreference {
   }
 
   /**
-   * @param context
-   * @param attrs
-   * @param defStyle
+   *
    */
   public SliderPreference(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);

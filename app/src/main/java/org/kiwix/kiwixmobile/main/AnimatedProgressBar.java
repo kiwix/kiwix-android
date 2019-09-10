@@ -65,24 +65,24 @@ public class AnimatedProgressBar extends LinearLayout {
    */
   private void init(final Context context, AttributeSet attrs) {
     TypedArray array = context.getTheme()
-        .obtainStyledAttributes(attrs, R.styleable.AnimatedProgressBar, 0, 0);
+      .obtainStyledAttributes(attrs, R.styleable.AnimatedProgressBar, 0, 0);
     int backgroundColor;
     try {   // Retrieve the style of the progress bar that the user hopefully set
       int DEFAULT_BACKGROUND_COLOR = 0x424242;
       int DEFAULT_PROGRESS_COLOR = 0x2196f3;
 
       backgroundColor = array.getColor(R.styleable.AnimatedProgressBar_backgroundColor,
-          DEFAULT_BACKGROUND_COLOR);
+        DEFAULT_BACKGROUND_COLOR);
       mProgressColor = array.getColor(R.styleable.AnimatedProgressBar_progressColor,
-          DEFAULT_PROGRESS_COLOR);
+        DEFAULT_PROGRESS_COLOR);
       mBidirectionalAnimate = array
-          .getBoolean(R.styleable.AnimatedProgressBar_bidirectionalAnimate, false);
+        .getBoolean(R.styleable.AnimatedProgressBar_bidirectionalAnimate, false);
     } finally {
       array.recycle();
     }
 
     LayoutInflater inflater = (LayoutInflater) context
-        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     inflater.inflate(R.layout.progress_bar, this, true);
 
     // set the background color for this view
@@ -123,12 +123,12 @@ public class AnimatedProgressBar extends LinearLayout {
     mRect.top = 0;
     mRect.bottom = this.getBottom() - this.getTop();
     if (progress < mProgress
-        && !mBidirectionalAnimate) {   // if the we only animate the view in one direction
+      && !mBidirectionalAnimate) {   // if the we only animate the view in one direction
       // then reset the view width if it is less than the
       // previous progress
       mDrawWidth = 0;
     } else if (progress
-        == mProgress) {     // we don't need to go any farther if the progress is unchanged
+      == mProgress) {     // we don't need to go any farther if the progress is unchanged
       if (progress == 100) {
         fadeOut();
       }
@@ -138,7 +138,7 @@ public class AnimatedProgressBar extends LinearLayout {
     mProgress = progress;       // save the progress
 
     final int deltaWidth = (mWidth * mProgress / 100)
-        - mDrawWidth;     // calculate amount the width has to change
+      - mDrawWidth;     // calculate amount the width has to change
 
     animateView(mDrawWidth, mWidth, deltaWidth);    // animate the width change
   }

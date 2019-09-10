@@ -42,11 +42,11 @@ public interface KiwixService {
 
     public static KiwixService newHacklistService(OkHttpClient okHttpClient, String baseUrl) {
       Retrofit retrofit = new Retrofit.Builder()
-          .baseUrl(baseUrl)
-          .client(okHttpClient)
-          .addConverterFactory(SimpleXmlConverterFactory.create())
-          .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-          .build();
+        .baseUrl(baseUrl)
+        .client(okHttpClient)
+        .addConverterFactory(SimpleXmlConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+        .build();
 
       return retrofit.create(KiwixService.class);
     }

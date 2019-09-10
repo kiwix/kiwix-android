@@ -57,7 +57,7 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     Context context = parent.getContext();
     final int margin16 =
-        context.getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+      context.getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
 
     ImageView contentImage = new ImageView(context);
     contentImage.setId(1);
@@ -71,19 +71,19 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     cardView.setId(3);
     cardView.setUseCompatPadding(true);
     cardView.addView(contentImage, new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
-        CardView.LayoutParams.MATCH_PARENT));
+      CardView.LayoutParams.MATCH_PARENT));
 
     ConstraintLayout constraintLayout = new ConstraintLayout(context);
     constraintLayout.setFocusableInTouchMode(true);
 
     constraintLayout.addView(cardView,
-        new ConstraintLayout.LayoutParams(getWindowWidth(activity) / 2,
-            -getToolbarHeight(activity) / 2 + getWindowHeight(activity) / 2));
+      new ConstraintLayout.LayoutParams(getWindowWidth(activity) / 2,
+        -getToolbarHeight(activity) / 2 + getWindowHeight(activity) / 2));
     constraintLayout.addView(close, new ConstraintLayout.LayoutParams(margin16,
-        margin16));
+      margin16));
     constraintLayout.setLayoutParams(
-        new RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT,
-            RecyclerView.LayoutParams.MATCH_PARENT));
+      new RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT,
+        RecyclerView.LayoutParams.MATCH_PARENT));
 
     TextView textView = new TextView(context);
     textView.setId(4);
@@ -91,27 +91,27 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     textView.setEllipsize(TextUtils.TruncateAt.END);
     textView.setTextColor(activity.getResources().getColor(R.color.white));
     constraintLayout.addView(textView,
-        new ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+      new ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT));
 
     ConstraintSet constraintSet = new ConstraintSet();
     constraintSet.clone(constraintLayout);
 
     constraintSet.connect(cardView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID,
-        ConstraintSet.TOP);
+      ConstraintSet.TOP);
     constraintSet.connect(cardView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID,
-        ConstraintSet.BOTTOM);
+      ConstraintSet.BOTTOM);
     constraintSet.connect(cardView.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID,
-        ConstraintSet.START, margin16);
+      ConstraintSet.START, margin16);
     constraintSet.connect(cardView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID,
-        ConstraintSet.END, margin16);
+      ConstraintSet.END, margin16);
 
     constraintSet.connect(close.getId(), ConstraintSet.END, cardView.getId(), ConstraintSet.END);
     constraintSet.connect(close.getId(), ConstraintSet.BOTTOM, cardView.getId(), ConstraintSet.TOP);
 
     constraintSet.connect(textView.getId(), ConstraintSet.BOTTOM, cardView.getId(),
-        ConstraintSet.TOP);
+      ConstraintSet.TOP);
     constraintSet.connect(textView.getId(), ConstraintSet.START, cardView.getId(),
-        ConstraintSet.START, margin16 / 8);
+      ConstraintSet.START, margin16 / 8);
     constraintSet.connect(textView.getId(), ConstraintSet.END, close.getId(), ConstraintSet.START);
 
     constraintSet.applyTo(constraintLayout);
@@ -127,7 +127,7 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     String webViewTitle = fromHtml(webView.getTitle()).toString();
     if (webViewTitle.contains("REPLACE_")) {
       webViewTitle =
-          getResourceString(holder.title.getContext().getApplicationContext(), webViewTitle);
+        getResourceString(holder.title.getContext().getApplicationContext(), webViewTitle);
     } else if (webViewTitle.contains("content://org.kiwix")) {
       webViewTitle = activity.getString(R.string.menu_home);
     }

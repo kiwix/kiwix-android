@@ -63,9 +63,9 @@ public class KiwixTextToSpeech {
    * ended
    */
   KiwixTextToSpeech(Context context,
-      final OnInitSucceedListener onInitSucceedListener,
-      final OnSpeakingListener onSpeakingListener,
-      final OnAudioFocusChangeListener onAudioFocusChangeListener) {
+    final OnInitSucceedListener onInitSucceedListener,
+    final OnSpeakingListener onSpeakingListener,
+    final OnAudioFocusChangeListener onAudioFocusChangeListener) {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech");
     this.context = context;
     this.onSpeakingListener = onSpeakingListener;
@@ -114,20 +114,20 @@ public class KiwixTextToSpeech {
       int result;
       if ("mul".equals(ZimContentProvider.getLanguage())) {
         Log.d(TAG_KIWIX, "TextToSpeech: disabled " +
-            ZimContentProvider.getLanguage());
+          ZimContentProvider.getLanguage());
         Toast.makeText(context,
-            context.getResources().getString(R.string.tts_not_enabled),
-            Toast.LENGTH_LONG).show();
+          context.getResources().getString(R.string.tts_not_enabled),
+          Toast.LENGTH_LONG).show();
         return;
       }
       if (locale == null
-          || (result = tts.isLanguageAvailable(locale)) == TextToSpeech.LANG_MISSING_DATA
-          || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+        || (result = tts.isLanguageAvailable(locale)) == TextToSpeech.LANG_MISSING_DATA
+        || result == TextToSpeech.LANG_NOT_SUPPORTED) {
         Log.d(TAG_KIWIX, "TextToSpeech: language not supported: " +
-            ZimContentProvider.getLanguage());
+          ZimContentProvider.getLanguage());
         Toast.makeText(context,
-            context.getResources().getString(R.string.tts_lang_not_supported),
-            Toast.LENGTH_LONG).show();
+          context.getResources().getString(R.string.tts_lang_not_supported),
+          Toast.LENGTH_LONG).show();
       } else {
         tts.setLanguage(locale);
 
@@ -142,15 +142,15 @@ public class KiwixTextToSpeech {
     // We use JavaScript to get the content of the page conveniently, earlier making some
     // changes in the page
     webView.loadUrl("javascript:" +
-        "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
-        // Remove some elements that are shouldn't be read (table of contents,
-        // references numbers, thumbnail captions, duplicated title, etc.)
-        "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
-        "    title, .navbox');" +
-        "Array.prototype.forEach.call(toRemove, function(elem) {" +
-        "    elem.parentElement.removeChild(elem);" +
-        "});" +
-        "tts.speakAloud(body.innerText);");
+      "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
+      // Remove some elements that are shouldn't be read (table of contents,
+      // references numbers, thumbnail captions, duplicated title, etc.)
+      "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
+      "    title, .navbox');" +
+      "Array.prototype.forEach.call(toRemove, function(elem) {" +
+      "    elem.parentElement.removeChild(elem);" +
+      "});" +
+      "tts.speakAloud(body.innerText);");
   }
 
   public void stop() {
@@ -165,8 +165,8 @@ public class KiwixTextToSpeech {
 
   private Boolean requestAudioFocus() {
     int audioFocusRequest =
-        am.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC,
-            AudioManager.AUDIOFOCUS_GAIN);
+      am.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC,
+        AudioManager.AUDIOFOCUS_GAIN);
 
     Log.d(TAG_KIWIX, "Audio Focus Requested");
 

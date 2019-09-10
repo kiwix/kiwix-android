@@ -43,7 +43,7 @@ public class KiwixWebViewClient extends WebViewClient {
     put("pdf", "application/pdf");
   }};
   private final SharedPreferenceUtil sharedPreferenceUtil =
-      new SharedPreferenceUtil(KiwixApplication.getInstance());
+    new SharedPreferenceUtil(KiwixApplication.getInstance());
   private final WebViewCallback callback;
   private View home;
 
@@ -100,7 +100,8 @@ public class KiwixWebViewClient extends WebViewClient {
 
     if (invalidUrl) {
       if (BuildConfig.IS_CUSTOM_APP) {
-        Log.e(TAG_KIWIX, "Abandoning WebView as there's a problem getting the content for this custom app.");
+        Log.e(TAG_KIWIX,
+          "Abandoning WebView as there's a problem getting the content for this custom app.");
         return;
       } else {
         inflateHomeView(view);

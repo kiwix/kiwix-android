@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.search;
 
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao;
 
 /**
@@ -30,7 +29,7 @@ public class SearchPresenter extends BasePresenter<SearchViewCallback> {
 
   private final NewRecentSearchDao recentSearchDao;
 
-  @Inject SearchPresenter( NewRecentSearchDao recentSearchDao) {
+  @Inject SearchPresenter(NewRecentSearchDao recentSearchDao) {
     this.recentSearchDao = recentSearchDao;
   }
 
