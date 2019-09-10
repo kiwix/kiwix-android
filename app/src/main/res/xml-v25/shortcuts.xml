@@ -1,27 +1,27 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
   <shortcut
-      android:enabled="true"
-      android:icon="@drawable/ic_shortcut_new_tab"
-      android:shortcutDisabledMessage="@string/shortcut_disabled_message"
-      android:shortcutId="new_tab"
-      android:shortcutLongLabel="@string/new_tab_shortcut_label"
-      android:shortcutShortLabel="@string/new_tab_shortcut_label">
+    android:enabled="true"
+    android:icon="@drawable/ic_shortcut_new_tab"
+    android:shortcutDisabledMessage="@string/shortcut_disabled_message"
+    android:shortcutId="new_tab"
+    android:shortcutLongLabel="@string/new_tab_shortcut_label"
+    android:shortcutShortLabel="@string/new_tab_shortcut_label">
     <intent
-        android:action="NEW_TAB"
-        android:targetClass="org.kiwix.kiwixmobile.main.MainActivity"
-        android:targetPackage="org.kiwix.kiwixmobile"/>
+      android:action="NEW_TAB"
+      android:targetClass="org.kiwix.kiwixmobile.main.MainActivity"
+      android:targetPackage="org.kiwix.kiwixmobile" />
   </shortcut>
 
   <shortcut
-      android:enabled="true"
-      android:icon="@drawable/ic_shortcut_get_content"
-      android:shortcutDisabledMessage="@string/shortcut_disabled_message"
-      android:shortcutId="get_content"
-      android:shortcutLongLabel="@string/get_content_shortcut_label"
-      android:shortcutShortLabel="@string/get_content_shortcut_label">
+    android:enabled="true"
+    android:icon="@drawable/ic_shortcut_get_content"
+    android:shortcutDisabledMessage="@string/shortcut_disabled_message"
+    android:shortcutId="get_content"
+    android:shortcutLongLabel="@string/get_content_shortcut_label"
+    android:shortcutShortLabel="@string/get_content_shortcut_label">
     <intent
-        android:action="GET_CONTENT"
-        android:targetClass="org.kiwix.kiwixmobile.zim_manager.ZimManageActivity"
-        android:targetPackage="org.kiwix.kiwixmobile"/>
+      android:action="GET_CONTENT"
+      android:targetClass="org.kiwix.kiwixmobile.zim_manager.ZimManageActivity"
+      android:targetPackage="org.kiwix.kiwixmobile" />
   </shortcut>
 </shortcuts>

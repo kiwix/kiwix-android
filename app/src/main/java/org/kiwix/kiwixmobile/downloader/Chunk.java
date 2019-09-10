@@ -29,7 +29,7 @@ public class Chunk {
   private long endByte;
 
   public Chunk(String rangeHeader, String fileName, String url, long contentLength,
-      int notificationID, long startByte, long endByte) {
+    int notificationID, long startByte, long endByte) {
     this.rangeHeader = rangeHeader;
     this.fileName = fileName;
     this.url = url;

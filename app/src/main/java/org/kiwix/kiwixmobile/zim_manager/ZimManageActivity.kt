@@ -40,9 +40,9 @@ import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.main.MainActivity
 import org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.utils.LanguageUtils
+import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity
 import java.io.File
 import javax.inject.Inject
-import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity
 
 class ZimManageActivity : BaseActivity() {
 

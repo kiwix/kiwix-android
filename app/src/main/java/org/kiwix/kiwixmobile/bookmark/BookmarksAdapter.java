@@ -20,7 +20,7 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
   private final List<BookmarkItem> deleteList;
 
   BookmarksAdapter(List<BookmarkItem> bookmarkList, List<BookmarkItem> deleteList,
-      OnItemClickListener itemClickListener) {
+    OnItemClickListener itemClickListener) {
     this.bookmarkList = bookmarkList;
     this.deleteList = deleteList;
     this.itemClickListener = itemClickListener;
@@ -30,7 +30,7 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
   @Override
   public Item onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_bookmark_history, parent, false);
+      .inflate(R.layout.item_bookmark_history, parent, false);
     return new Item(view);
   }
 
@@ -40,14 +40,14 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
     holder.title.setText(bookmark.getBookmarkTitle());
     if (deleteList.contains(bookmark)) {
       holder.favicon.setImageDrawable(ContextCompat.getDrawable(holder.favicon.getContext(),
-          R.drawable.ic_check_circle_blue_24dp));
+        R.drawable.ic_check_circle_blue_24dp));
     } else {
       ImageViewExtensionsKt.setBitmapFromString(holder.favicon, bookmark.getFavicon());
     }
     holder.itemView.setOnClickListener(
-        v -> itemClickListener.onItemClick(holder.favicon, bookmark));
+      v -> itemClickListener.onItemClick(holder.favicon, bookmark));
     holder.itemView.setOnLongClickListener(v ->
-        itemClickListener.onItemLongClick(holder.favicon, bookmark));
+      itemClickListener.onItemLongClick(holder.favicon, bookmark));
   }
 
   @Override

@@ -36,15 +36,17 @@ public class IOUtils {
       return output.toByteArray();
     }
   }
+
   private static int copy(final InputStream input, final OutputStream output) throws IOException {
     final long count = copyLarge(input, output);
     if (count > Integer.MAX_VALUE) {
       return -1;
     }
     return (int) count;
-
   }
-  private static long copyLarge(final InputStream input, final OutputStream output)      throws IOException {
+
+  private static long copyLarge(final InputStream input, final OutputStream output)
+    throws IOException {
     final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
     long count = 0;
     int n;

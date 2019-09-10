@@ -28,7 +28,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
 
 public class BookmarksActivity extends BaseActivity implements BookmarksContract.View,
-    BookmarksAdapter.OnItemClickListener {
+  BookmarksAdapter.OnItemClickListener {
 
   private final List<BookmarkItem> bookmarksList = new ArrayList<>();
   private final List<BookmarkItem> allBookmarks = new ArrayList<>();
@@ -185,11 +185,11 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
         intent.putExtra(EXTRA_CHOSE_X_URL, bookmark.getBookmarkUrl());
       }
       if (bookmark.getZimFilePath() != null && !bookmark.getZimFilePath()
-          .equals(ZimContentProvider.getZimFile())) {
+        .equals(ZimContentProvider.getZimFile())) {
         intent.setData(Uri.fromFile(new File(bookmark.getZimFilePath())));
       }
       if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0)
-          == 1) {
+        == 1) {
         startActivity(intent);
       } else {
         setResult(RESULT_OK, intent);
@@ -216,7 +216,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       ImageViewExtensionsKt.setBitmapFromString(favicon, bookmark.getFavicon());
     } else {
       favicon.setImageDrawable(
-          ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
+        ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
       deleteList.add(bookmark);
     }
     actionMode.setTitle(getString(R.string.selected_items, deleteList.size()));

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="AppTheme" parent="AppTheme.Base"/>
+  <style name="AppTheme" parent="AppTheme.Base" />
 
   <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorPrimary">@color/primary</item>
@@ -80,7 +80,7 @@
     <item name="spinBars">true</item>
   </style>
 
-  <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView"/>
+  <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView" />
 
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
