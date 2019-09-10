@@ -5,37 +5,37 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_centerInParent="true"
-    android:layout_marginTop="@dimen/progressbar_layout_margin_top"
-    >
+  android:layout_width="wrap_content"
+  android:layout_height="match_parent"
+  android:layout_centerInParent="true"
+  android:layout_marginTop="@dimen/progressbar_layout_margin_top"
+  >
 
   <View
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="-1dp"
-      android:background="?android:attr/listDivider"
-      />
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-1dp"
+    android:background="?android:attr/listDivider"
+    />
 
   <ProgressBar
-      android:id="@+id/progressBar"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
-      android:padding="@dimen/progressbar_padding"
-      style="?android:attr/progressBarStyleLarge"
-      />
+    android:id="@+id/progressBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:padding="@dimen/progressbar_padding"
+    style="?android:attr/progressBarStyleLarge"
+    />
 
   <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_below="@id/progressBar"
-      android:layout_centerHorizontal="true"
-      android:layout_centerVertical="true"
-      android:paddingTop="@dimen/progressbar_textview_vertical_padding"
-      android:text="@string/rescan_fs_warning"
-      android:textStyle="bold"
-      />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/progressBar"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:paddingTop="@dimen/progressbar_textview_vertical_padding"
+    android:text="@string/rescan_fs_warning"
+    android:textStyle="bold"
+    />
 
 </RelativeLayout>

@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
@@ -43,10 +43,10 @@ public class MainActivityTest {
   public BaristaRule<MainActivity> activityTestRule = BaristaRule.create(MainActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
   public void MainActivitySimple() {

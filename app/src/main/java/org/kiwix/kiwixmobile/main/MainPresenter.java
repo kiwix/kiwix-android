@@ -35,112 +35,112 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   @Override
   public void loadBooks() {
     dataSource.getLanguageCategorizedBooks()
-        .subscribe(new SingleObserver<List<BooksOnDiskListItem>>() {
-          @Override
-          public void onSubscribe(Disposable d) {
-            compositeDisposable.add(d);
-          }
+      .subscribe(new SingleObserver<List<BooksOnDiskListItem>>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+          compositeDisposable.add(d);
+        }
 
-          @Override
-          public void onSuccess(List<BooksOnDiskListItem> books) {
-            view.addBooks(books);
-          }
+        @Override
+        public void onSuccess(List<BooksOnDiskListItem> books) {
+          view.addBooks(books);
+        }
 
-          @Override
-          public void onError(Throwable e) {
-            Log.e(TAG, "Unable to load books", e);
-          }
-        });
+        @Override
+        public void onError(Throwable e) {
+          Log.e(TAG, "Unable to load books", e);
+        }
+      });
   }
 
   @Override
   public void saveBooks(List<BooksOnDiskListItem.BookOnDisk> book) {
     dataSource.saveBooks(book)
-        .subscribe(new CompletableObserver() {
-          @Override
-          public void onSubscribe(Disposable d) {
+      .subscribe(new CompletableObserver() {
+        @Override
+        public void onSubscribe(Disposable d) {
 
-          }
+        }
 
-          @Override
-          public void onComplete() {
-            loadBooks();
-          }
+        @Override
+        public void onComplete() {
+          loadBooks();
+        }
 
-          @Override
-          public void onError(Throwable e) {
-            Log.e(TAG, "Unable to save books", e);
-          }
-        });
+        @Override
+        public void onError(Throwable e) {
+          Log.e(TAG, "Unable to save books", e);
+        }
+      });
   }
 
   @Override
   public void saveHistory(HistoryListItem.HistoryItem history) {
     dataSource.saveHistory(history)
-        .subscribe(new CompletableObserver() {
-          @Override
-          public void onSubscribe(Disposable d) {
+      .subscribe(new CompletableObserver() {
+        @Override
+        public void onSubscribe(Disposable d) {
 
-          }
+        }
 
-          @Override
-          public void onComplete() {
+        @Override
+        public void onComplete() {
 
-          }
+        }
 
-          @Override
-          public void onError(Throwable e) {
-            Log.e(TAG, "Unable to save history", e);
-          }
-        });
+        @Override
+        public void onError(Throwable e) {
+          Log.e(TAG, "Unable to save history", e);
+        }
+      });
   }
 
   @Override
   public void loadCurrentZimBookmarksUrl() {
     compositeDisposable.add(dataSource.getCurrentZimBookmarksUrl()
-        .subscribe(view::refreshBookmarksUrl,
-            e -> Log.e(TAG, "Unable to load current ZIM urls", e)));
+      .subscribe(view::refreshBookmarksUrl,
+        e -> Log.e(TAG, "Unable to load current ZIM urls", e)));
   }
 
   @Override
   public void saveBookmark(BookmarkItem bookmark) {
     dataSource.saveBookmark(bookmark)
-        .subscribe(new CompletableObserver() {
-          @Override
-          public void onSubscribe(Disposable d) {
+      .subscribe(new CompletableObserver() {
+        @Override
+        public void onSubscribe(Disposable d) {
 
-          }
+        }
 
-          @Override
-          public void onComplete() {
+        @Override
+        public void onComplete() {
 
-          }
+        }
 
-          @Override
-          public void onError(Throwable e) {
-            Log.e(TAG, "Unable to save bookmark", e);
-          }
-        });
+        @Override
+        public void onError(Throwable e) {
+          Log.e(TAG, "Unable to save bookmark", e);
+        }
+      });
   }
 
   @Override
   public void deleteBookmark(String bookmarkUrl) {
     dataSource.deleteBookmark(bookmarkUrl)
-        .subscribe(new CompletableObserver() {
-          @Override
-          public void onSubscribe(Disposable d) {
+      .subscribe(new CompletableObserver() {
+        @Override
+        public void onSubscribe(Disposable d) {
 
-          }
+        }
 
-          @Override
-          public void onComplete() {
+        @Override
+        public void onComplete() {
 
-          }
+        }
 
-          @Override
-          public void onError(Throwable e) {
-            Log.e(TAG, "Unable to delete bookmark", e);
-          }
-        });
+        @Override
+        public void onError(Throwable e) {
+          Log.e(TAG, "Unable to delete bookmark", e);
+        }
+      });
   }
 }

@@ -77,7 +77,8 @@ public class AddNoteDialog extends DialogFragment
   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
   private String articleNotefileName;
   private boolean noteFileExists = false;
-  private boolean noteEdited = false;   // Keeps track of state of the note (whether edited since last save)
+  private boolean noteEdited = false;
+    // Keeps track of state of the note (whether edited since last save)
 
   private String zimNotesDirectory; // Stores path to directory for the currently open zim's notes
 

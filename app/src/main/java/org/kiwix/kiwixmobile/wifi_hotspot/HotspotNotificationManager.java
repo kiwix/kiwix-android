@@ -31,7 +31,7 @@ public class HotspotNotificationManager {
 
   @Inject
   public HotspotNotificationManager(@NonNull NotificationManager notificationManager,
-      @NonNull Context context) {
+    @NonNull Context context) {
     this.notificationManager = notificationManager;
     this.context = context;
   }
@@ -39,9 +39,9 @@ public class HotspotNotificationManager {
   private void hotspotNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationChannel hotspotServiceChannel = new NotificationChannel(
-          Constants.HOTSPOT_SERVICE_CHANNEL_ID,
-          context.getString(R.string.hotspot_service_channel_name),
-          NotificationManager.IMPORTANCE_DEFAULT);
+        Constants.HOTSPOT_SERVICE_CHANNEL_ID,
+        context.getString(R.string.hotspot_service_channel_name),
+        NotificationManager.IMPORTANCE_DEFAULT);
       hotspotServiceChannel.setDescription(context.getString(R.string.hotspot_channel_description));
       hotspotServiceChannel.setSound(null, null);
       notificationManager.createNotificationChannel(hotspotServiceChannel);
@@ -52,25 +52,25 @@ public class HotspotNotificationManager {
     Intent targetIntent = new Intent(context, ZimHostActivity.class);
     targetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     PendingIntent contentIntent =
-        PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+      PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     hotspotNotificationChannel();
 
     Intent stopIntent = new Intent(context, HotspotService.class).setAction(ACTION_STOP);
     PendingIntent stopHotspot =
-        PendingIntent.getService(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+      PendingIntent.getService(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     return new NotificationCompat.Builder(context)
-        .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
-        .setContentText(context.getString(R.string.hotspot_running))
-        .setContentIntent(contentIntent)
-        .setSmallIcon(R.mipmap.kiwix_icon)
-        .setWhen(System.currentTimeMillis())
-        .addAction(R.drawable.ic_close_white_24dp,
-            context.getString(R.string.stop_hotspot_button),
-            stopHotspot)
-        .setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID)
-        .build();
+      .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
+      .setContentText(context.getString(R.string.hotspot_running))
+      .setContentIntent(contentIntent)
+      .setSmallIcon(R.mipmap.kiwix_icon)
+      .setWhen(System.currentTimeMillis())
+      .addAction(R.drawable.ic_close_white_24dp,
+        context.getString(R.string.stop_hotspot_button),
+        stopHotspot)
+      .setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID)
+      .build();
   }
 
   public void dismissNotification() {

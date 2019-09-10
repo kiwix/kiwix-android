@@ -45,11 +45,11 @@ public class RecentSearchDao {
    */
   public List<String> getRecentSearches() {
     SquidCursor<RecentSearch> searchCursor = mDb.query(
-        RecentSearch.class,
-        Query.selectDistinct(RecentSearch.SEARCH_STRING)
-            .where(RecentSearch.ZIM_I_D.eq(ZimContentProvider.getId()))
-            .orderBy(RecentSearch.ID.desc())
-            .limit(NUM_RECENT_RESULTS));
+      RecentSearch.class,
+      Query.selectDistinct(RecentSearch.SEARCH_STRING)
+        .where(RecentSearch.ZIM_I_D.eq(ZimContentProvider.getId()))
+        .orderBy(RecentSearch.ID.desc())
+        .limit(NUM_RECENT_RESULTS));
     List<String> result = new ArrayList<>();
     try {
       while (searchCursor.moveToNext()) {
@@ -66,7 +66,7 @@ public class RecentSearchDao {
    */
   public void saveSearch(String searchString) {
     mDb.persist(
-        new RecentSearch().setSearchString(searchString).setZimID(ZimContentProvider.getId()));
+      new RecentSearch().setSearchString(searchString).setZimID(ZimContentProvider.getId()));
   }
 
   /**

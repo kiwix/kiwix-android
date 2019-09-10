@@ -14,6 +14,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Button;
@@ -21,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -51,7 +51,7 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP_SERV
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TOGGLE_HOTSPOT;
 
 public class ZimHostActivity extends BaseActivity implements
-    ZimHostCallbacks, ZimHostContract.View, LocationCallbacks {
+  ZimHostCallbacks, ZimHostContract.View, LocationCallbacks {
 
   @BindView(R.id.startServerButton)
   Button startServerButton;
@@ -93,16 +93,16 @@ public class ZimHostActivity extends BaseActivity implements
       layoutServerStarted();
     }
     bookDelegate =
-        new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
-            null,
-            null,
-            bookOnDiskItem -> {
-              select(bookOnDiskItem);
-              return Unit.INSTANCE;
-            });
+      new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
+        null,
+        null,
+        bookOnDiskItem -> {
+          select(bookOnDiskItem);
+          return Unit.INSTANCE;
+        });
     bookDelegate.setSelectionMode(SelectionMode.MULTI);
     booksAdapter = new BooksOnDiskAdapter(bookDelegate,
-        BookOnDiskDelegate.LanguageDelegate.INSTANCE
+      BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
 
     presenter.attachView(this);
@@ -130,7 +130,7 @@ public class ZimHostActivity extends BaseActivity implements
           startHotspotHelper();
         } else {
           Toast.makeText(ZimHostActivity.this, R.string.no_books_selected_toast_message,
-              Toast.LENGTH_SHORT).show();
+            Toast.LENGTH_SHORT).show();
         }
       } else {
         startHotspotHelper();
@@ -186,7 +186,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   private void bindService() {
     bindService(new Intent(this, HotspotService.class), serviceConnection,
-        Context.BIND_AUTO_CREATE);
+      Context.BIND_AUTO_CREATE);
   }
 
   private void unbindService() {
@@ -198,15 +198,15 @@ public class ZimHostActivity extends BaseActivity implements
   private void toggleHotspot() {
     //Check if location permissions are granted
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-        == PackageManager.PERMISSION_GRANTED) {
+      == PackageManager.PERMISSION_GRANTED) {
       //Toggle hotspot if location permissions are granted
       startService(createHotspotIntent(
-          ACTION_TOGGLE_HOTSPOT));
+        ACTION_TOGGLE_HOTSPOT));
     } else {
       //Ask location permission if not granted
       ActivityCompat.requestPermissions(this,
-          new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-          MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+        new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+        MY_PERMISSIONS_ACCESS_FINE_LOCATION);
     }
   }
 
@@ -239,10 +239,10 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
+    @NonNull int[] grantResults) {
     if (requestCode == MY_PERMISSIONS_ACCESS_FINE_LOCATION) {
       if (grantResults.length > 0
-          && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           toggleHotspot();
         }
@@ -274,19 +274,19 @@ public class ZimHostActivity extends BaseActivity implements
   private void startHotspotManuallyDialog() {
 
     alertDialogShower.show(new KiwixDialog.StartHotspotManually(),
-        () -> {
-          launchTetheringSettingsScreen();
-          return Unit.INSTANCE;
-        },
-        null,
-        () -> {
-          progressDialog =
-              ProgressDialog.show(this,
-                  getString(R.string.progress_dialog_starting_server), "",
-                  true);
-          startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS));
-          return Unit.INSTANCE;
-        }
+      () -> {
+        launchTetheringSettingsScreen();
+        return Unit.INSTANCE;
+      },
+      null,
+      () -> {
+        progressDialog =
+          ProgressDialog.show(this,
+            getString(R.string.progress_dialog_starting_server), "",
+            true);
+        startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS));
+        return Unit.INSTANCE;
+      }
     );
   }
 
@@ -309,21 +309,21 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
     alertDialogShower.show(new KiwixDialog.ShowHotspotDetails(wifiConfiguration),
-        (Function0<Unit>) () -> {
-          progressDialog =
-              ProgressDialog.show(this,
-                  getString(R.string.progress_dialog_starting_server), "",
-                  true);
-          startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS));
-          return Unit.INSTANCE;
-        });
+      (Function0<Unit>) () -> {
+        progressDialog =
+          ProgressDialog.show(this,
+            getString(R.string.progress_dialog_starting_server), "",
+            true);
+        startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS));
+        return Unit.INSTANCE;
+      });
   }
 
   private void launchTetheringSettingsScreen() {
     final Intent intent = new Intent(Intent.ACTION_MAIN, null);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     final ComponentName cn =
-        new ComponentName("com.android.settings", "com.android.settings.TetherSettings");
+      new ComponentName("com.android.settings", "com.android.settings.TetherSettings");
     intent.setComponent(cn);
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivity(intent);
@@ -332,10 +332,10 @@ public class ZimHostActivity extends BaseActivity implements
   @Override public void onHotspotFailedToStart() {
     //Show a dialog to turn off default hotspot
     alertDialogShower.show(KiwixDialog.TurnOffHotspotManually.INSTANCE,
-        (Function0<Unit>) () -> {
-          launchTetheringSettingsScreen();
-          return Unit.INSTANCE;
-        });
+      (Function0<Unit>) () -> {
+        launchTetheringSettingsScreen();
+        return Unit.INSTANCE;
+      });
   }
 
   @Override public void requestLocationAccess() {
@@ -360,13 +360,13 @@ public class ZimHostActivity extends BaseActivity implements
   @Override public void onIpAddressValid() {
     progressDialog.dismiss();
     startService(createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
-        SELECTED_ZIM_PATHS_KEY, getSelectedBooksPath()));
+      SELECTED_ZIM_PATHS_KEY, getSelectedBooksPath()));
   }
 
   @Override public void onIpAddressInvalid() {
     progressDialog.dismiss();
     Toast.makeText(this, R.string.server_failed_message,
-        Toast.LENGTH_SHORT)
-        .show();
+      Toast.LENGTH_SHORT)
+      .show();
   }
 }

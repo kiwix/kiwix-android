@@ -5,12 +5,11 @@
   -->
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/kiwix_search_widget"
-    android:minHeight="40dp"
-    android:minResizeHeight="40dp"
-    android:minResizeWidth="250dp"
-    android:minWidth="250dp"
-    android:previewImage="@drawable/search_widget_preview"
-    android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="86400000">
-</appwidget-provider>
+  android:initialLayout="@layout/kiwix_search_widget"
+  android:minHeight="40dp"
+  android:minResizeHeight="40dp"
+  android:minResizeWidth="250dp"
+  android:minWidth="250dp"
+  android:previewImage="@drawable/search_widget_preview"
+  android:resizeMode="horizontal|vertical"
+  android:updatePeriodMillis="86400000"></appwidget-provider>

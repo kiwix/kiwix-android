@@ -34,5 +34,4 @@ class TestNetworkModule : NetworkModule() {
       okHttpClient,
       MOCK_BASE_URL
     )
-
 }

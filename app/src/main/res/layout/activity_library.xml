@@ -5,35 +5,35 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    tools:context=".zim_manager.library_view.LibraryFragment"
-    >
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:animateLayoutChanges="true"
+  tools:context=".zim_manager.library_view.LibraryFragment"
+  >
 
   <TextView
-      android:id="@+id/libraryErrorText"
-      tools:ignore="MissingConstraints"
-      style="@style/no_list_content_text"
-      />
+    android:id="@+id/libraryErrorText"
+    tools:ignore="MissingConstraints"
+    style="@style/no_list_content_text"
+    />
 
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-      android:id="@+id/librarySwipeRefresh"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      >
+    android:id="@+id/librarySwipeRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    >
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/libraryList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
+      android:id="@+id/libraryList"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      />
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

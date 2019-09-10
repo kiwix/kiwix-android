@@ -31,7 +31,7 @@ import java.lang.annotation.Target;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 @Documented
-@Target({ ElementType.METHOD})
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @MapKey
 public @interface ViewModelKey {

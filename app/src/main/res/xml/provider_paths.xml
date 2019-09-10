@@ -6,9 +6,9 @@
 
 <paths>
   <external-path
-      name="external_files"
-      path="."/>
+    name="external_files"
+    path="." />
   <root-path
-      name="external_files"
-      path="/storage/"/>
+    name="external_files"
+    path="/storage/" />
 </paths>

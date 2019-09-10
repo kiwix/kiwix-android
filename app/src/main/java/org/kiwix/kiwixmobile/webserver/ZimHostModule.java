@@ -26,7 +26,7 @@ public class ZimHostModule {
 
   @PerActivity
   @Provides LocationServicesHelper providesLocationServicesHelper(ZimHostActivity activity,
-      LocationCallbacks locationCallbacks) {
+    LocationCallbacks locationCallbacks) {
     return new LocationServicesHelper(activity, locationCallbacks);
   }
 

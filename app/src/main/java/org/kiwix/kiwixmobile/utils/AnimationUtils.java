@@ -40,7 +40,7 @@ public class AnimationUtils {
 
     // 1dp/ms
     animation.setDuration(
-        (int) (targetHeight / view.getContext().getResources().getDisplayMetrics().density));
+      (int) (targetHeight / view.getContext().getResources().getDisplayMetrics().density));
     view.startAnimation(animation);
     view.setVisibility(View.VISIBLE);
   }
@@ -67,14 +67,14 @@ public class AnimationUtils {
 
     // 1dp/ms
     animation.setDuration(
-        (int) (initialHeight / view.getContext().getResources().getDisplayMetrics().density));
+      (int) (initialHeight / view.getContext().getResources().getDisplayMetrics().density));
     view.startAnimation(animation);
   }
 
   //rotate animation for closeAllTabs FAB
   public static void rotate(FloatingActionButton v) {
     RotateAnimation wheelRotation =
-        new RotateAnimation(0.0f, 360f, v.getWidth() / 2.0f, v.getHeight() / 2.0f);
+      new RotateAnimation(0.0f, 360f, v.getWidth() / 2.0f, v.getHeight() / 2.0f);
     wheelRotation.setDuration(200);
     wheelRotation.setRepeatCount(0);
     wheelRotation.setInterpolator(v.getContext(), android.R.interpolator.cycle);
@@ -83,7 +83,7 @@ public class AnimationUtils {
 
       public void onAnimationEnd(Animation animation) {
         v.setImageDrawable(
-            ContextCompat.getDrawable(v.getContext(), R.drawable.ic_done_white_24dp));
+          ContextCompat.getDrawable(v.getContext(), R.drawable.ic_done_white_24dp));
       }
 
       public void onAnimationRepeat(Animation animation) {
@@ -91,7 +91,7 @@ public class AnimationUtils {
 
       public void onAnimationStart(Animation animation) {
         v.setImageDrawable(
-            ContextCompat.getDrawable(v.getContext(), R.drawable.ic_close_black_24dp));
+          ContextCompat.getDrawable(v.getContext(), R.drawable.ic_close_black_24dp));
       }
     });
   }

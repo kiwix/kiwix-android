@@ -42,7 +42,7 @@ public class CustomViewPager extends ViewPager {
       interpolator.setAccessible(true);
 
       CustomScroller customScroller = new CustomScroller(getContext(),
-          (Interpolator) interpolator.get(null));
+        (Interpolator) interpolator.get(null));
       scroller.set(this, customScroller);
     } catch (Exception e) {
       Log.e("CustomViewPager", e.toString());

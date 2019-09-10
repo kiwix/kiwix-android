@@ -64,9 +64,9 @@ public class RecentSearchDaoTest {
 
     // verify ordering is in descending order of search ID and the results are limited to 5 only
     verify(kiwixDatabase).query(any(),
-        eq(Query.selectDistinct(RecentSearch.SEARCH_STRING).where(RecentSearch.ZIM_I_D.eq(
-            ZimContentProvider.getId()))
-            .orderBy(RecentSearch.ID.desc())
-            .limit(5)));
+      eq(Query.selectDistinct(RecentSearch.SEARCH_STRING).where(RecentSearch.ZIM_I_D.eq(
+        ZimContentProvider.getId()))
+        .orderBy(RecentSearch.ID.desc())
+        .limit(5)));
   }
 }

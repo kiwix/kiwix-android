@@ -20,13 +20,13 @@ public class SearchActivityTest {
 
   @Rule
   public ActivityTestRule<SearchActivity> mActivityTestRule = new ActivityTestRule<>(
-      SearchActivity.class);
+    SearchActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
   public void SearchActivitySimple() {

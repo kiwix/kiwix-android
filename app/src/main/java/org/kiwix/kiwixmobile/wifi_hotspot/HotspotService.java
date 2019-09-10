@@ -18,8 +18,8 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.ServerUtils;
-import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
+import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS_KEY;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID;
@@ -52,10 +52,10 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
 
   @Override public void onCreate() {
     KiwixApplication.getApplicationComponent()
-        .serviceComponent()
-        .service(this)
-        .build()
-        .inject(this);
+      .serviceComponent()
+      .service(this)
+      .build()
+      .inject(this);
     super.onCreate();
   }
 
@@ -80,13 +80,13 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
 
       case ACTION_START_SERVER:
         if (webServerHelper.startServerHelper(
-            intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
+          intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
           zimHostCallbacks.onServerStarted(ServerUtils.getSocketAddress());
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             startForegroundNotificationHelper();
           }
           Toast.makeText(this, R.string.server_started__successfully_toast_message,
-              Toast.LENGTH_SHORT).show();
+            Toast.LENGTH_SHORT).show();
         } else {
           zimHostCallbacks.onServerFailedToStart();
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -139,7 +139,7 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
 
   private void startForegroundNotificationHelper() {
     startForeground(HOTSPOT_NOTIFICATION_ID,
-        hotspotNotificationManager.buildForegroundNotification());
+      hotspotNotificationManager.buildForegroundNotification());
   }
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {

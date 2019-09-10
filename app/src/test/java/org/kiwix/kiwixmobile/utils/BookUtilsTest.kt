@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.utils
 
-import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test

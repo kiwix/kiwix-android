@@ -5,11 +5,11 @@
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-  <solid android:color="@color/white"/>
-  <corners android:radius="3dip"/>
+  <solid android:color="@color/white" />
+  <corners android:radius="3dip" />
   <padding
-      android:bottom="0dip"
-      android:left="0dip"
-      android:right="0dip"
-      android:top="0dip"/>
+    android:bottom="0dip"
+    android:left="0dip"
+    android:right="0dip"
+    android:top="0dip" />
 </shape>

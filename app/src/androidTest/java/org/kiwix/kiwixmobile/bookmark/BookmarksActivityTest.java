@@ -18,13 +18,13 @@ public class BookmarksActivityTest {
 
   @Rule
   public ActivityTestRule<BookmarksActivity> mActivityTestRule = new ActivityTestRule<>(
-      BookmarksActivity.class);
+    BookmarksActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule =
-      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
   public void BookmarksActivitySimple() {

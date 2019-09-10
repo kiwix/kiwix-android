@@ -28,7 +28,7 @@ public class WifiHotspotManager {
 
   @Inject
   public WifiHotspotManager(@NonNull WifiManager wifiManager,
-      @NonNull HotspotStateListener hotspotStateListener) {
+    @NonNull HotspotStateListener hotspotStateListener) {
     this.wifiManager = wifiManager;
     this.hotspotStateListener = hotspotStateListener;
   }
@@ -84,8 +84,8 @@ public class WifiHotspotManager {
 
   private void printCurrentConfig(WifiConfiguration wifiConfiguration) {
     Log.v(TAG, "THE PASSWORD IS: "
-        + wifiConfiguration.preSharedKey
-        + " \n SSID is : "
-        + wifiConfiguration.SSID);
+      + wifiConfiguration.preSharedKey
+      + " \n SSID is : "
+      + wifiConfiguration.SSID);
   }
 }

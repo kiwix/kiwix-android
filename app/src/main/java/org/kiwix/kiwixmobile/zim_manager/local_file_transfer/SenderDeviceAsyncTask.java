@@ -73,7 +73,6 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
         copyToOutputStream(fileInputStream, socketOutputStream);
         if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
         publishProgress(fileIndex, SENT);
-
       } catch (IOException e) {
         Log.e(TAG, e.getMessage());
         e.printStackTrace();

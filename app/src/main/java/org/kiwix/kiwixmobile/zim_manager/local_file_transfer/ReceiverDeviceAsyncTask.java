@@ -55,7 +55,8 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
       if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size() + " files");
 
-      for (int fileItemIndex = 0; fileItemIndex < fileItems.size() && !isCancelled(); fileItemIndex++) {
+      for (int fileItemIndex = 0; fileItemIndex < fileItems.size() && !isCancelled();
+        fileItemIndex++) {
         incomingFileName = fileItems.get(fileItemIndex).getFileName();
 
         try (Socket client = serverSocket.accept()) {
@@ -77,7 +78,6 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
           copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
           publishProgress(fileItemIndex, SENT);
-
         } catch (IOException e) {
           Log.e(TAG, e.getMessage());
           isTransferErrorFree = false;
@@ -85,7 +85,6 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         }
       }
       return (!isCancelled() && isTransferErrorFree);
-
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
       return false; // Returned when an error was encountered during transfer

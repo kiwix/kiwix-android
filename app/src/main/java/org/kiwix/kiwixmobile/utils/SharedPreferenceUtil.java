@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import io.reactivex.Flowable;
-import io.reactivex.processors.BehaviorProcessor;
 import io.reactivex.processors.PublishProcessor;
 import java.util.Calendar;
 import javax.inject.Inject;
@@ -64,7 +63,6 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
   }
 
-
   public boolean getPrefBackToTop() {
     return sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
   }
@@ -91,7 +89,7 @@ public class SharedPreferenceUtil {
 
   public String getPrefStorage() {
     return sharedPreferences.getString(PREF_STORAGE,
-        Environment.getExternalStorageDirectory().getPath());
+      Environment.getExternalStorageDirectory().getPath());
   }
 
   private boolean getPrefNightMode() {
@@ -132,7 +130,7 @@ public class SharedPreferenceUtil {
     prefStorages.onNext(storage);
   }
 
-  public Flowable<String> getPrefStorages(){
+  public Flowable<String> getPrefStorages() {
     return prefStorages.startWith(getPrefStorage());
   }
 
@@ -158,8 +156,8 @@ public class SharedPreferenceUtil {
 
   public void setShowHistoryCurrentBook(boolean prefShowHistoryCurrentBook) {
     sharedPreferences.edit()
-        .putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook)
-        .apply();
+      .putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook)
+      .apply();
   }
 
   public boolean nightMode() {
@@ -179,7 +177,7 @@ public class SharedPreferenceUtil {
 
   public void setShowBookmarksCurrentBook(boolean prefShowBookmarksFromCurrentBook) {
     sharedPreferences.edit()
-        .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
-        .apply();
+      .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
+      .apply();
   }
 }

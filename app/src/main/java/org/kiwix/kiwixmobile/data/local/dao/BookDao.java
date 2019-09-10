@@ -56,11 +56,10 @@ public class BookDao {
     book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
   }
 
-
   public ArrayList<Book> getBooks() {
     ArrayList<Book> books = new ArrayList<>();
     try (SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(BookDatabaseEntity.class,
-        Query.select())) {
+      Query.select())) {
       while (bookCursor.moveToNext()) {
         Book book = new Book();
         setBookDetails(book, bookCursor);
@@ -78,7 +77,7 @@ public class BookDao {
           filteredBookList.add(book);
         } else {
           kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
-              BookDatabaseEntity.URL.eq(book.file.getPath()));
+            BookDatabaseEntity.URL.eq(book.file.getPath()));
         }
       }
     }

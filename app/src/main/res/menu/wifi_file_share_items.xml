@@ -5,13 +5,14 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".zim_manager.local_file_transfer.LocalFileTransferActivity">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".zim_manager.local_file_transfer.LocalFileTransferActivity">
 
-    <item android:id="@+id/menu_item_search_devices"
-        android:title="@string/search_for_peers"
-        app:showAsAction="always"
-        android:icon="@drawable/action_search"/>
+  <item
+    android:id="@+id/menu_item_search_devices"
+    android:title="@string/search_for_peers"
+    app:showAsAction="always"
+    android:icon="@drawable/action_search" />
 
 </menu>
