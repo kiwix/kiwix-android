@@ -1660,32 +1660,29 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
     this.menu = menu;
 
-    if (getCurrentWebView().getUrl() == null ||
-      getCurrentWebView().getUrl().equals(HOME_URL)) {
-      menu.findItem(R.id.menu_read_aloud).setVisible(false);
-    } else {
-      menu.findItem(R.id.menu_read_aloud).setVisible(true);
-    }
-
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       menu.findItem(R.id.menu_search).setVisible(false);
       menu.findItem(R.id.menu_fullscreen).setVisible(false);
       menu.findItem(R.id.menu_random_article).setVisible(false);
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
-      menu.findItem(R.id.menu_search).setVisible(true);
       menu.findItem(R.id.menu_fullscreen).setVisible(true);
-      if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals(HOME_URL)) {
+      if (urlIsHomeOrNull()) {
+        menu.findItem(R.id.menu_search).setVisible(false);
         menu.findItem(R.id.menu_read_aloud).setVisible(false);
         menu.findItem(R.id.menu_random_article).setVisible(false);
-        menu.findItem(R.id.menu_host_books).setVisible(true);
       } else {
+        menu.findItem(R.id.menu_search).setVisible(true);
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         menu.findItem(R.id.menu_random_article).setVisible(true);
       }
     }
     return true;
+  }
+
+  private boolean urlIsHomeOrNull() {
+    return getCurrentWebView().getUrl() == null ||
+      getCurrentWebView().getUrl().equals(HOME_URL);
   }
 
   private void updateTabSwitcherIcon() {
