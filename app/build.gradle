@@ -132,6 +132,9 @@ dependencies {
   implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
   implementation 'com.google.android.gms:play-services-location:17.0.0'
 
+  implementation "androidx.tonyodev.fetch2:xfetch2:$fetchVersion"
+  implementation "androidx.tonyodev.fetch2okhttp:xfetch2okhttp:$fetchVersion"
+
   testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
   testImplementation "io.mockk:mockk:1.9"
   testImplementation "org.assertj:assertj-core:3.11.1"

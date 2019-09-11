@@ -17,10 +17,6 @@
  */
 package org.kiwix.kiwixmobile.downloader
 
-import org.kiwix.kiwixmobile.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.downloader.model.DownloadRequest
-
-interface DownloadRequester {
-  fun enqueue(downloadRequest: DownloadRequest): Long
-  fun cancel(downloadItem: DownloadItem)
+interface DownloadMonitor {
+  fun init()
 }

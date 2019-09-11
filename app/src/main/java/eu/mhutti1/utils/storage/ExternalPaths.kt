@@ -51,6 +51,7 @@ internal object ExternalPaths {
     "/mnt/extsd",
     "/extsd",
     "/mnt/sdcard",
-    "/misc/android"
+    "/misc/android",
+    "/mnt"
   )
 }

@@ -2,13 +2,14 @@ package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Environment;
 import android.preference.PreferenceManager;
+import androidx.core.content.ContextCompat;
 import io.reactivex.Flowable;
 import io.reactivex.processors.PublishProcessor;
 import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.kiwix.kiwixmobile.KiwixApplication;
 
 /**
  * Manager for the Default Shared Preferences of the application.
@@ -85,8 +86,13 @@ public class SharedPreferenceUtil {
   }
 
   public String getPrefStorage() {
-    return sharedPreferences.getString(PREF_STORAGE,
-      Environment.getExternalStorageDirectory().getPath());
+    String storage = sharedPreferences.getString(PREF_STORAGE, null);
+    if (storage == null) {
+      storage =
+        ContextCompat.getExternalFilesDirs(KiwixApplication.getInstance(), null)[0].getPath();
+      putPrefStorage(storage);
+    }
+    return storage;
   }
 
   private boolean getPrefNightMode() {

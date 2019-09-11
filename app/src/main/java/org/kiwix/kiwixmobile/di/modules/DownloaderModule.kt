@@ -17,18 +17,75 @@
  */
 package org.kiwix.kiwixmobile.di.modules
 
-import dagger.Binds
+import android.content.Context
+import com.tonyodev.fetch2.Fetch
+import com.tonyodev.fetch2.Fetch.Impl
+import com.tonyodev.fetch2.FetchConfiguration
+import com.tonyodev.fetch2.FetchNotificationManager
+import com.tonyodev.fetch2okhttp.OkHttpDownloader
 import dagger.Module
-import org.kiwix.kiwixmobile.downloader.DownloadManagerRequester
+import dagger.Provides
+import okhttp3.OkHttpClient
+import org.kiwix.kiwixmobile.BuildConfig
+import org.kiwix.kiwixmobile.data.remote.KiwixService
+import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.downloader.DownloaderImpl
+import org.kiwix.kiwixmobile.downloader.fetch.FetchDownloadNotificationManager
+import org.kiwix.kiwixmobile.downloader.fetch.FetchDownloadRequester
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
+import javax.inject.Singleton
 
 @Module
-abstract class DownloaderModule {
-  @Binds
-  abstract fun bindDownloader(downloaderImpl: DownloaderImpl): Downloader
+object DownloaderModule {
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun providesDownloader(
+    downloadRequester: DownloadRequester,
+    downloadDao: FetchDownloadDao,
+    kiwixService: KiwixService
+  ): Downloader = DownloaderImpl(downloadRequester, downloadDao, kiwixService)
 
-  @Binds
-  abstract fun bindDownloaderRequester(downloaderImpl: DownloadManagerRequester): DownloadRequester
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun providesDownloadRequester(
+    fetch: Fetch,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ): DownloadRequester = FetchDownloadRequester(fetch, sharedPreferenceUtil)
+
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun provideFetch(fetchConfiguration: FetchConfiguration): Fetch =
+    Fetch.getInstance(fetchConfiguration)
+
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun provideFetchConfiguration(
+    context: Context,
+    okHttpDownloader: OkHttpDownloader,
+    fetchNotificationManager: FetchNotificationManager
+  ): FetchConfiguration =
+    FetchConfiguration.Builder(context).apply {
+      setDownloadConcurrentLimit(5)
+      enableLogging(BuildConfig.DEBUG)
+      enableRetryOnNetworkGain(true)
+      setHttpDownloader(okHttpDownloader)
+      setNotificationManager(fetchNotificationManager)
+    }.build().also(Impl::setDefaultInstanceConfiguration)
+
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun provideOkHttpDownloader() = OkHttpDownloader(OkHttpClient.Builder().build())
+
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun provideFetchDownloadNotificationManager(context: Context): FetchNotificationManager =
+    FetchDownloadNotificationManager(context)
 }

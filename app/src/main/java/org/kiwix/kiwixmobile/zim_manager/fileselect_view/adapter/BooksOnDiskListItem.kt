@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter
 
 import org.kiwix.kiwixmobile.database.newdb.entities.BookOnDiskEntity
+import org.kiwix.kiwixmobile.database.newdb.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import java.io.File
 import java.util.Locale
@@ -34,6 +35,12 @@ sealed class BooksOnDiskListItem {
       bookOnDiskEntity.id,
       bookOnDiskEntity.toBook(),
       bookOnDiskEntity.file
+    )
+
+    constructor(fetchDownloadEntity: FetchDownloadEntity) : this(
+      0L,
+      fetchDownloadEntity.toBook(),
+      File(fetchDownloadEntity.file)
     )
   }
 }

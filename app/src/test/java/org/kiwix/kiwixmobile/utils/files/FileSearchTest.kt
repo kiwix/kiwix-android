@@ -61,7 +61,7 @@ class FileSearchTest {
     every { Environment.getExternalStorageDirectory() } returns externalStorageDirectory
     every { externalStorageDirectory.absolutePath } returns "/externalStorageDirectory"
     every { context.contentResolver } returns contentResolver
-    every { StorageDeviceUtils.getStorageDevices(context, false) } returns arrayListOf(
+    every { StorageDeviceUtils.getReadableStorage(context) } returns arrayListOf(
       storageDevice
     )
     every { storageDevice.name } returns "/deviceDir"
@@ -80,7 +80,7 @@ class FileSearchTest {
     @Test
     fun `scan of directory that doesn't exist returns nothing`() {
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
-      fileSearch.scan("doesNotExist")
+      fileSearch.scan()
         .test()
         .assertValue(listOf())
     }
@@ -91,7 +91,8 @@ class FileSearchTest {
       val zimaaFile = File.createTempFile("fileToFind2", ".zimaa")
       File.createTempFile("willNotFind", ".txt")
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
-      val fileList = fileSearch.scan(zimFile.parent)
+      every { storageDevice.name } returns zimFile.parent
+      val fileList = fileSearch.scan()
         .test()
         .values()[0]
       assertThat(fileList).containsExactlyInAnyOrder(zimFile, zimaaFile)
@@ -106,7 +107,8 @@ class FileSearchTest {
         ".zim",
         File("$tempRoot${File.separator}dir").apply { mkdirs() })
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
-      val fileList = fileSearch.scan(zimFile.parentFile.parent)
+      every { storageDevice.name } returns zimFile.parentFile.parent
+      val fileList = fileSearch.scan()
         .test()
         .values()[0]
       assertThat(fileList).containsExactlyInAnyOrder(zimFile)
@@ -120,7 +122,7 @@ class FileSearchTest {
     fun `scan media store, if files are readable they are returned`() {
       val fileToFind = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(fileToFind)
-      fileSearch.scan("")
+      fileSearch.scan()
         .test()
         .assertValue(listOf(fileToFind))
     }
@@ -130,7 +132,7 @@ class FileSearchTest {
       val unreadableFile = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(unreadableFile)
       unreadableFile.delete()
-      fileSearch.scan("")
+      fileSearch.scan()
         .test()
         .assertValue(listOf())
     }

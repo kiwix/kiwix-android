@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  android:installLocation="auto"
-  package="org.kiwix.kiwixmobile">
+  package="org.kiwix.kiwixmobile"
+  android:installLocation="auto">
 
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
   <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
   <!-- Devices with version >= Oreo need location permission to start/stop the hotspot -->
@@ -147,7 +147,6 @@
       android:name=".zim_manager.ZimManageActivity"
       android:label="@string/choose_file"
       android:launchMode="singleTop">
-
       <!-- TODO -->
       <intent-filter>
         <action android:name="android.intent.action.GET_CONTENT" />
@@ -228,12 +227,5 @@
         <data android:host="*" />
       </intent-filter>
     </activity>
-
-    <receiver android:name=".zim_manager.DownloadNotificationClickedReceiver">
-      <intent-filter>
-        <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
-      </intent-filter>
-    </receiver>
   </application>
-
 </manifest>

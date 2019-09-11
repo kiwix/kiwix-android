@@ -243,7 +243,7 @@
   <string name="pending_state">Pending</string>
   <string name="running_state">In Progress</string>
   <string name="successful_state">Complete</string>
-  <string name="paused_state">Paused: %s</string>
+  <string name="paused_state">Paused</string>
   <string name="failed_state">Failed: %s</string>
   <string name="paused_wifi">Waiting for Wifi</string>
   <string name="paused_connectivity">Waiting to connect to a network</string>

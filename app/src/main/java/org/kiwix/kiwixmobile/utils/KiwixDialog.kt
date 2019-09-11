@@ -11,23 +11,10 @@ sealed class KiwixDialog(
   val negativeMessage: Int?
 ) {
 
-  data class DeleteZim(override val args: Array<out Any>) : KiwixDialog(
+  data class DeleteZim(override val args: List<Any>) : KiwixDialog(
     null, R.string.delete_zim_body, R.string.delete, R.string.no
   ), HasBodyFormatArgs {
-    constructor(bookOnDisk: BookOnDisk) : this(arrayOf(bookOnDisk.book.title))
-
-    override fun equals(other: Any?): Boolean {
-      if (this === other) return true
-      if (javaClass != other?.javaClass) return false
-
-      other as DeleteZim
-
-      if (!args.contentEquals(other.args)) return false
-
-      return true
-    }
-
-    override fun hashCode() = args.contentHashCode()
+    constructor(bookOnDisk: BookOnDisk) : this(listOf(bookOnDisk.book.title))
   }
 
   object LocationPermissionRationale : KiwixDialog(
@@ -59,17 +46,14 @@ sealed class KiwixDialog(
     null
   )
 
-  data class ShowHotspotDetails(override val args: Array<out Any>) : KiwixDialog(
+  data class ShowHotspotDetails(override val args: List<Any>) : KiwixDialog(
     R.string.hotspot_turned_on,
     R.string.hotspot_details_message,
     android.R.string.ok,
     null
   ), HasBodyFormatArgs {
     constructor(wifiConfiguration: WifiConfiguration) : this(
-      arrayOf(
-        wifiConfiguration.SSID,
-        wifiConfiguration.preSharedKey
-      )
+      listOf(wifiConfiguration.SSID, wifiConfiguration.preSharedKey)
     )
   }
 
@@ -82,10 +66,10 @@ sealed class KiwixDialog(
     null
   )
 
-  data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog(
+  data class FileTransferConfirmation(override val args: List<Any>) : KiwixDialog(
     null, R.string.transfer_to, R.string.yes, android.R.string.cancel
   ), HasBodyFormatArgs {
-    constructor(selectedPeerDeviceName: String) : this(arrayOf(selectedPeerDeviceName))
+    constructor(selectedPeerDeviceName: String) : this(listOf(selectedPeerDeviceName))
   }
 
   open class YesNoDialog(
@@ -103,5 +87,5 @@ sealed class KiwixDialog(
 }
 
 interface HasBodyFormatArgs {
-  val args: Array<out Any>
+  val args: List<Any>
 }

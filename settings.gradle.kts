@@ -1,1 +1,1 @@
-include(":app", ":kiwixlib")
+include(":app")

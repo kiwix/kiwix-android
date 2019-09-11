@@ -33,7 +33,8 @@ import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.IO;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
-import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter;
+import org.kiwix.kiwixmobile.downloader.DownloadMonitor;
+import org.kiwix.kiwixmobile.downloader.fetch.FetchDownloadMonitor;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 
 @Module(includes = {
@@ -84,13 +85,13 @@ public class ApplicationModule {
   }
 
   @Provides @Singleton
-  UriToFileConverter provideUriToFIleCOnverter() {
-    return new UriToFileConverter.Impl();
+  LocationManager provideLocationManager(Context context) {
+    return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
   }
 
   @Provides @Singleton
-  LocationManager provideLocationManager(Context context) {
-    return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+  DownloadMonitor provideDownloadMonitor(FetchDownloadMonitor fetchDownloadMonitor) {
+    return fetchDownloadMonitor;
   }
 
   @Provides @Singleton

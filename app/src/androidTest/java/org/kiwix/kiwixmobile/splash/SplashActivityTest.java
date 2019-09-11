@@ -20,14 +20,15 @@ package org.kiwix.kiwixmobile.splash;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
-import com.schibsted.spain.barista.rule.BaristaRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -47,8 +48,8 @@ import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
 @RunWith(AndroidJUnit4.class)
 public class SplashActivityTest {
 
-  @Rule
-  public BaristaRule<SplashActivity> activityTestRule = BaristaRule.create(SplashActivity.class);
+  private ActivityTestRule<SplashActivity> activityTestRule =
+    new ActivityTestRule<>(SplashActivity.class, true, false);
   @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -65,7 +66,8 @@ public class SplashActivityTest {
 
   @Test
   public void testFirstRun() {
-    activityTestRule.launchActivity();
+    shouldShowIntro(true);
+    activityTestRule.launchActivity(new Intent());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Verify that the SplashActivity is followed by IntroActivity
@@ -78,11 +80,9 @@ public class SplashActivityTest {
 
   @Test
   public void testNormalRun() {
-    SharedPreferences.Editor preferencesEditor =
-      PreferenceManager.getDefaultSharedPreferences(context).edit();
-    preferencesEditor.putBoolean(PREF_SHOW_INTRO, false).apply();
+    shouldShowIntro(false);
 
-    activityTestRule.launchActivity();
+    activityTestRule.launchActivity(new Intent());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Verify that the SplashActivity is followed by MainActivity
@@ -92,5 +92,11 @@ public class SplashActivityTest {
   @After
   public void endTest() {
     Intents.release();
+  }
+
+  private void shouldShowIntro(boolean value) {
+    SharedPreferences.Editor preferencesEditor =
+      PreferenceManager.getDefaultSharedPreferences(context).edit();
+    preferencesEditor.putBoolean(PREF_SHOW_INTRO, value).apply();
   }
 }

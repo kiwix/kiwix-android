@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.downloader.DownloadMonitor;
 
 public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
 
@@ -47,6 +48,8 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
 
   @Inject
   DispatchingAndroidInjector<Activity> activityInjector;
+  @Inject
+  DownloadMonitor downloadMonitor;
   @Inject
   KiwixDatabase kiwixDatabase;
 
@@ -78,6 +81,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     writeLogFile();
     applicationComponent.inject(this);
     kiwixDatabase.forceMigration();
+    downloadMonitor.init();
     if (BuildConfig.DEBUG) {
       StrictMode.setThreadPolicy(buildThreadPolicy(new StrictMode.ThreadPolicy.Builder()));
       StrictMode.setVmPolicy(buildVmPolicy(new StrictMode.VmPolicy.Builder()));
