@@ -1317,6 +1317,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       recreate();
     }
     presenter.loadCurrentZimBookmarksUrl();
+    if (ZimContentProvider.zimFileName == null &&
+      !HOME_URL.equals(getCurrentWebView().getUrl())) {
+      showHomePage();
+    }
     if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
       if (menu != null) {
         menu.getItem(4).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);

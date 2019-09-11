@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
 import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.data.ZimContentProvider
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.extensions.toast
 import org.kiwix.kiwixmobile.utils.DialogShower
@@ -21,6 +22,9 @@ class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
     booksOnDiskListItem.forEach {
       dialogShower.show(DeleteZim(it), {
         if (deleteSpecificZimFile(it)) {
+          if (it.file.absolutePath.equals(ZimContentProvider.zimFileName)) {
+            ZimContentProvider.setZimFile("")
+          }
           activity.toast(string.delete_specific_zim_toast)
         } else {
           activity.toast(string.delete_zim_failed)
