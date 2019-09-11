@@ -475,6 +475,7 @@ play {
   enabled = true
   serviceAccountCredentials = file("../google.json")
   track = "alpha"
+  releaseStatus = "draft"
   resolutionStrategy = "fail"
 }
 
