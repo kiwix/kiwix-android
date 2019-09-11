@@ -84,7 +84,7 @@ deploy:
   #publish on github releases
   - provider: releases
     api_key: "$GITHUB_TOKEN"
-    file: $$OUTPUT_DIR/release/*
+    file: $OUTPUT_DIR/release/*
     file_glob: true
     skip_cleanup: true
     overwrite: true
