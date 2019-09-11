@@ -27,7 +27,7 @@ buildscript {
 plugins {
   id("com.android.application")
   id("checkstyle")
-  id("com.github.triplet.play") version("2.2.1")
+  id("com.github.triplet.play") version("2.4.1")
 }
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -475,7 +475,6 @@ play {
   enabled = true
   serviceAccountCredentials = file("../google.json")
   track = "alpha"
-  releaseStatus = "draft"
   resolutionStrategy = "fail"
 }
 

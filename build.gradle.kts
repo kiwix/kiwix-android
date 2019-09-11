@@ -4,7 +4,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath("com.android.tools.build:gradle:3.4.1")
+    classpath("com.android.tools.build:gradle:3.5.0")
     classpath("com.dicedmelon.gradle:jacoco-android:0.1.4")
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
@@ -12,7 +12,7 @@ buildscript {
 }
 
 ext {
-  set("androidGradlePluginVersion", "3.4.1")
+  set("androidGradlePluginVersion", "3.5.0")
   set("testdroidGradlePluginVersion", "2.63.0")
   set("appCompatVersion", "1.0.2")
   set("materialVersion", "1.0.0")
