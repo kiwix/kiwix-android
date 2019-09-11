@@ -1,3 +1,13 @@
-NEW: Downloads are now using the DownloadManager
-NEW: Downloads/Device/Library completely rewritten
-+ Lots More
+NEW: Androidx support
+NEW: In app error reporting
+NEW: Improved bookmarks
+NEW: Help screen
+NEW: Home page
+NEW: Zim history
+NEW: Introductory screen
+NEW: Improved language selection
+NEW: Add note to articles
+NEW: Tabs
+NEW: Share zim files to other Kiwix users
+NEW: Host zim files on your phone
++ Bugfixes & Lots More
