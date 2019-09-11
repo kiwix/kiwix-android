@@ -93,6 +93,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import kotlin.Unit;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
@@ -774,9 +775,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private KiwixWebView newTab() {
-    String mainPage =
-      Uri.parse(ZimContentProvider.CONTENT_URI + ZimContentProvider.getMainPage()).toString();
-    return newTab(mainPage);
+    return newTab(contentUrl(ZimContentProvider.getMainPage()));
   }
 
   private KiwixWebView newTab(String url) {
@@ -1446,9 +1445,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void openArticle(String articleUrl) {
     if (articleUrl != null) {
-      getCurrentWebView().loadUrl(
-        Uri.parse(ZimContentProvider.CONTENT_URI + articleUrl).toString());
+      getCurrentWebView().loadUrl(redirectOrOriginal(contentUrl(articleUrl)));
     }
+  }
+
+  @NotNull
+  private String contentUrl(String articleUrl) {
+    return Uri.parse(ZimContentProvider.CONTENT_URI + articleUrl).toString();
+  }
+
+  @NotNull
+  private String redirectOrOriginal(String contentUrl) {
+    return ZimContentProvider.isRedirect(contentUrl)
+      ? ZimContentProvider.getRedirect(contentUrl)
+      : contentUrl;
   }
 
   private void openRandomArticle() {
