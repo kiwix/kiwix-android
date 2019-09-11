@@ -15,6 +15,6 @@ fun ImageView.setBitmap(base64String: Base64String) {
 
 // methods that accept inline classes as parameters are not allowed to be called from java
 // hence this facade
-fun ImageView.setBitmapFromString(string: String) {
+fun ImageView.setBitmapFromString(string: String?) {
   setBitmap(Base64String(string))
 }
