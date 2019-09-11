@@ -7,10 +7,10 @@ data class BookmarkItem(
   val databaseId: Long = 0L,
   val zimId: String,
   val zimName: String,
-  val zimFilePath: String,
+  val zimFilePath: String?,
   val bookmarkUrl: String,
   val bookmarkTitle: String,
-  val favicon: String
+  val favicon: String?
 ) {
   constructor(entity: BookmarkEntity) : this(
     entity.id,

@@ -42,7 +42,7 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_SHOW_INTRO;
+import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

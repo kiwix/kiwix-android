@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixInt;
@@ -305,18 +306,7 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   private static String getFilePath(Uri articleUri) {
-    String filePath = articleUri.toString();
-    int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
-    if (pos != -1) {
-      filePath = articleUri.toString().substring(
-        CONTENT_URI.toString().length());
-    }
-    // Remove fragment (#...) as not supported by zimlib
-    pos = filePath.indexOf("#");
-    if (pos != -1) {
-      filePath = filePath.substring(0, pos);
-    }
-    return filePath;
+    return getFilePath(articleUri.toString());
   }
 
   public void setupDagger() {
@@ -335,34 +325,42 @@ public class ZimContentProvider extends ContentProvider {
   @Override
   public String getType(Uri uri) {
     String mimeType;
-
     // This is the code which makes a guess based on the file extenstion
-    String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase());
+    final String uriWithoutArguments = removeArguments(uri.toString());
+    String extension = MimeTypeMap.getFileExtensionFromUrl(uriWithoutArguments.toLowerCase());
     mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 
     // This is the code which retrieve the mimeType from the libzim
     // "slow" and still bugyy
     if (mimeType == null || mimeType.isEmpty()) {
-      String t = uri.toString();
-      int pos = uri.toString().indexOf(CONTENT_URI.toString());
-      if (pos != -1) {
-        t = uri.toString().substring(
-          CONTENT_URI.toString().length());
-      }
-      // Remove fragment (#...) as not supported by zimlib
-      pos = t.indexOf("#");
-      if (pos != -1) {
-        t = t.substring(0, pos);
-      }
-
-      mimeType = currentJNIReader.getMimeType(t);
-
-      // Truncate mime-type (everything after the first space
-      mimeType = mimeType.replaceAll("^([^ ]+).*$", "$1");
+      mimeType = currentJNIReader.getMimeType(getFilePath(uriWithoutArguments))
+        // Truncate mime-type (everything after the first space
+        .replaceAll("^([^ ]+).*$", "$1");
     }
 
-    Log.d(TAG_KIWIX, "Getting mime-type for " + uri.toString() + " = " + mimeType);
+    Log.d(TAG_KIWIX, "Getting mime-type for " + uriWithoutArguments + " = " + mimeType);
     return mimeType;
+  }
+
+  @NotNull private static String getFilePath(String uriString) {
+    String filePath = uriString;
+    int pos = uriString.indexOf(CONTENT_URI.toString());
+    if (pos != -1) {
+      filePath = uriString.substring(
+        CONTENT_URI.toString().length());
+    }
+    // Remove fragment (#...) as not supported by zimlib
+    pos = filePath.indexOf("#");
+    if (pos != -1) {
+      filePath = filePath.substring(0, pos);
+    }
+    return filePath;
+  }
+
+  private static String removeArguments(String url) {
+    return url.contains("?")
+      ? url.substring(0, url.lastIndexOf("?"))
+      : url;
   }
 
   public static String getRedirect(String url) {
@@ -482,7 +480,7 @@ public class ZimContentProvider extends ContentProvider {
       try {
         final JNIKiwixString mime = new JNIKiwixString();
         final JNIKiwixInt size = new JNIKiwixInt();
-        final JNIKiwixString url = new JNIKiwixString(articleZimUrl);
+        final JNIKiwixString url = new JNIKiwixString(removeArguments(articleZimUrl));
         byte[] data = currentJNIReader.getContent(url, new JNIKiwixString(), mime, size);
         if (mime.value != null && mime.value.equals("text/css") && MainActivity.nightMode) {
           out.write(("img, video { \n" +

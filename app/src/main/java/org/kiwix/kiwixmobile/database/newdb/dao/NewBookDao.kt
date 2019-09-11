@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.database.newdb.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.database.newdb.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
@@ -61,5 +62,12 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   private fun delete(books: List<BookOnDiskEntity>) {
     box.remove(books)
+  }
+
+  fun getFavIconAndZimFile(it: Bookmark): Pair<String?, String?> {
+    val bookOnDiskEntity = box.query {
+      equal(BookOnDiskEntity_.bookId, it.zimId)
+    }.find().getOrNull(0)
+    return bookOnDiskEntity?.let { Pair(it.favIcon, it.file.path) } ?: Pair(null, null)
   }
 }

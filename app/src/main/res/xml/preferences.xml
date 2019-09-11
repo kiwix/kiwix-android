@@ -103,6 +103,16 @@
 
   </PreferenceCategory>
   <PreferenceCategory
+    android:key="pref_notes"
+    android:title="Notes">
+
+    <Preference
+      android:key="pref_clear_all_notes"
+      android:summary="@string/pref_clear_all_notes_summary"
+      android:title="@string/pref_clear_all_notes_title" />
+
+  </PreferenceCategory>
+  <PreferenceCategory
     android:key="pref_language"
     android:title="@string/pref_language_title">
 

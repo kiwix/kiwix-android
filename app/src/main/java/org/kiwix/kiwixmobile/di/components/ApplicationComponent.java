@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.language.LanguageActivity;
 import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.settings.PrefsFragment;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 @Singleton
@@ -62,7 +62,7 @@ public interface ApplicationComponent {
 
   void inject(KiwixWebView kiwixWebView);
 
-  void inject(KiwixSettingsActivity.PrefsFragment prefsFragment);
+  void inject(PrefsFragment prefsFragment);
 
   void inject(AutoCompleteAdapter autoCompleteAdapter);
 
