@@ -44,7 +44,6 @@ import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -398,7 +397,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
-    drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
   }
 
   //End of onCreate
@@ -585,6 +583,23 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @OnClick(R.id.bottom_toolbar_toc)
   void openToc() {
     drawerLayout.openDrawer(GravityCompat.END);
+  }
+
+  @Override public void onBackPressed() {
+    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+      selectTab(currentWebViewIndex);
+      hideTabSwitcher();
+    } else if (isFullscreenOpened) {
+      closeFullScreen();
+    } else if (compatCallback.mIsActive) {
+      compatCallback.finish();
+    } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawers();
+    } else if (getCurrentWebView().canGoBack()) {
+      getCurrentWebView().goBack();
+    } else {
+      super.onBackPressed();
+    }
   }
 
   private void checkForRateDialog() {
@@ -1221,31 +1236,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-      switch (keyCode) {
-        case KeyEvent.KEYCODE_BACK:
-          if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
-            selectTab(currentWebViewIndex);
-            hideTabSwitcher();
-          } else if (getCurrentWebView().canGoBack()) {
-            getCurrentWebView().goBack();
-          } else if (isFullscreenOpened) {
-            closeFullScreen();
-          } else if (compatCallback.mIsActive) {
-            compatCallback.finish();
-          } else {
-            finish();
-          }
-          return true;
-        case KeyEvent.KEYCODE_MENU:
-          openOptionsMenu();
-          return true;
-      }
-    }
-    return false;
   }
 
   @OnClick(R.id.tab_switcher_close_all_tabs)
