@@ -21,6 +21,7 @@ pieces in Java).
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
 
 ## Build Instructions
 
@@ -74,15 +75,12 @@ guidelines. Pull requests not matching the style will be rejected.
 
 ## Communication
 
-Please use IRC to discuss questions regarding the project: #kiwix on
-irc.freenode.net
-
-You can use IRC web interface on
-[https://chat.kiwix.org/](https://chat.kiwix.org/).
-
-Our other sources of communications include:
-- Email: contact+android@kiwix.org
-- Mailing list: kiwix-developer@lists.sourceforge.net
+Available communication channels:
+* [Web Public Chat channel](https://chat.kiwix.org)
+* [Email](mailto:contact+android@kiwix.org)
+* [Mailing list](kiwix-developer@lists.sourceforge.net)
+* [https://kiwixoffline.slack.com]: #android channel
+* IRC: #kiwix on irc.freenode.net
 
 For more information, please refer to
 [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
