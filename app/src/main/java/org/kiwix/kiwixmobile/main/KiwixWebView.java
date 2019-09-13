@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +32,7 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 import java.io.File;
@@ -64,10 +66,14 @@ public class KiwixWebView extends WebView {
     this.callback = callback;
     KiwixApplication.getApplicationComponent().inject(this);
     // Set the user agent to the current locale so it can be read with navigator.userAgent
-    getSettings().setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
+    final WebSettings settings = getSettings();
+    settings.setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
+    settings.setDomStorageEnabled(true);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      settings.setAllowUniversalAccessFromFileURLs(true);
+    }
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
-    getSettings().setDomStorageEnabled(true);
   }
 
   public void loadPrefs() {
