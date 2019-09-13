@@ -589,14 +589,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex);
       hideTabSwitcher();
-    } else if (getCurrentWebView().canGoBack()) {
-      getCurrentWebView().goBack();
     } else if (isFullscreenOpened) {
       closeFullScreen();
     } else if (compatCallback.mIsActive) {
       compatCallback.finish();
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
+    } else if (getCurrentWebView().canGoBack()) {
+      getCurrentWebView().goBack();
     } else {
       super.onBackPressed();
     }
