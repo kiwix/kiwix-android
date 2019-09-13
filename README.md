@@ -3,7 +3,7 @@
   <img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" />
 </a>
 <a href="https://f-droid.org/fr/packages/org.kiwix.kiwixmobile/" target="_blank" align="left">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Get_it_on_F-Droid.svg/320px-Get_it_on_F-Droid.svg.png" alt="Get it on F-Droid" height="30" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Get_it_on_F-Droid.svg/320px-Get_it_on_F-Droid.svg.png" alt="Get it on F-Droid" height="29" />
 </a>
 
 # Kiwix-Android
@@ -49,6 +49,7 @@ different versions of our app. Ensure your build variant is
 - [MockK](https://github.com/mockk/mockk) - Kotlin mocking library that allows mocking of final classes by default.
 - [JUnit5](https://github.com/junit-team/junit5/) - The next generation of JUnit
 - [AssertJ](https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code
+- [Fetch](https://github.com/tonyofrancis/Fetch) - A customizable file download manager library for Android
 
 ## Contributing
 
@@ -77,15 +78,16 @@ Please use IRC to discuss questions regarding the project: #kiwix on
 irc.freenode.net
 
 You can use IRC web interface on
-[http://chat.kiwix.org/](http://chat.kiwix.org/).
+[https://chat.kiwix.org/](https://chat.kiwix.org/).
 
 Our other sources of communications include:
-- Email: contact@kiwix.org
+- Email: contact+android@kiwix.org
 - Mailing list: kiwix-developer@lists.sourceforge.net
 
 For more information, please refer to
 [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
 
-## LEGAL & DISCLAIMER
+## License
 
-Please refer to [COPYING](COPYING).
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0) or later, see
+[COPYINGL](COPYING) for more details.
