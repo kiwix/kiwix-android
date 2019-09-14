@@ -28,6 +28,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import androidx.annotation.NonNull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -94,7 +95,7 @@ public class ZimContentProvider extends ContentProvider {
     return file;
   }
 
-  public synchronized static String setZimFile(String fileName) {
+  public synchronized static String setZimFile(@NonNull String fileName) {
     if (!new File(fileName).exists()) {
       Log.e(TAG_KIWIX, "Unable to find the ZIM file " + fileName);
       zimFileName = null;
