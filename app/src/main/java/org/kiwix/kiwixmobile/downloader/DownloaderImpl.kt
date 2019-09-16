@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.downloader
 import org.kiwix.kiwixmobile.data.remote.KiwixService
 import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import javax.inject.Inject
 
@@ -36,12 +35,7 @@ class DownloaderImpl @Inject constructor(
       .take(1)
       .subscribe(
         {
-          if (downloadDao.doesNotAlreadyExist(book)) {
-            val downloadId = downloadRequester.enqueue(
-              DownloadRequest(it, book)
-            )
-            downloadDao.insert(downloadId, book = book)
-          }
+          downloadDao.addIfDoesNotExist(it, book, downloadRequester)
         },
         Throwable::printStackTrace
       )
