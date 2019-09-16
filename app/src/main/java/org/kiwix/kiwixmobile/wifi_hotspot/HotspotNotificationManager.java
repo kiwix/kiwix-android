@@ -14,7 +14,7 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
-import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
 
 public class HotspotNotificationManager {
 
@@ -51,7 +51,7 @@ public class HotspotNotificationManager {
 
     hotspotNotificationChannel();
 
-    Intent stopIntent = new Intent(context, HotspotService.class).setAction(ACTION_STOP);
+    Intent stopIntent = new Intent(context, HotspotService.class).setAction(ACTION_STOP_SERVER);
     PendingIntent stopHotspot =
       PendingIntent.getService(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

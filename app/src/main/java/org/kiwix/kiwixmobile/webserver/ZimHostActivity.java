@@ -187,6 +187,7 @@ public class ZimHostActivity extends BaseActivity implements
   private void unbindService() {
     if (hotspotService != null) {
       unbindService(serviceConnection);
+      hotspotService.registerCallBack(null);
     }
   }
 

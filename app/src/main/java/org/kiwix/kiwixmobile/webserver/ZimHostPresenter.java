@@ -7,10 +7,10 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
-import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.di.ActivityScope;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
-@PerActivity
+@ActivityScope
 class ZimHostPresenter extends BasePresenter<ZimHostContract.View>
   implements ZimHostContract.Presenter {
 

@@ -32,16 +32,13 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
   public static final String ACTION_STOP_SERVER = "stop_server";
   public static final String ACTION_CHECK_IP_ADDRESS = "check_ip_address";
 
-  public static final String ACTION_STOP = "hotspot_stop";
   private ZimHostCallbacks zimHostCallbacks;
   private final IBinder serviceBinder = new HotspotBinder();
 
   @Inject
   WebServerHelper webServerHelper;
-
   @Inject
   WifiHotspotManager hotspotManager;
-
   @Inject
   HotspotNotificationManager hotspotNotificationManager;
 
@@ -62,7 +59,9 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
           if (hotspotManager.isHotspotStarted()) {
             stopHotspotAndDismissNotification();
           } else {
-            zimHostCallbacks.requestLocationAccess();
+            if (zimHostCallbacks != null) {
+              zimHostCallbacks.requestLocationAccess();
+            }
           }
         }
         break;
@@ -76,14 +75,18 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
       case ACTION_START_SERVER:
         if (webServerHelper.startServerHelper(
           intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
-          zimHostCallbacks.onServerStarted(ServerUtils.getSocketAddress());
+          if (zimHostCallbacks != null) {
+            zimHostCallbacks.onServerStarted(ServerUtils.getSocketAddress());
+          }
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             startForegroundNotificationHelper();
           }
           Toast.makeText(this, R.string.server_started__successfully_toast_message,
             Toast.LENGTH_SHORT).show();
         } else {
-          zimHostCallbacks.onServerFailedToStart();
+          if (zimHostCallbacks != null) {
+            zimHostCallbacks.onServerFailedToStart();
+          }
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             stopForeground(true);
             stopSelf();
@@ -99,10 +102,6 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
 
       case ACTION_CHECK_IP_ADDRESS:
         webServerHelper.pollForValidIpAddress();
-        break;
-
-      case ACTION_STOP:
-        stopHotspotAndDismissNotification();
         break;
 
       default:
@@ -121,7 +120,9 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
       hotspotManager.turnOffHotspot();
     } else {
       webServerHelper.stopAndroidWebServer();
-      zimHostCallbacks.onServerStopped();
+      if (zimHostCallbacks != null) {
+        zimHostCallbacks.onServerStopped();
+      }
       stopForeground(true);
       stopSelf();
       hotspotNotificationManager.dismissNotification();
@@ -139,27 +140,37 @@ public class HotspotService extends Service implements HotspotStateListener, IpA
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
     startForegroundNotificationHelper();
-    zimHostCallbacks.onHotspotTurnedOn(wifiConfiguration);
+    if (zimHostCallbacks != null) {
+      zimHostCallbacks.onHotspotTurnedOn(wifiConfiguration);
+    }
   }
 
   @Override public void onHotspotFailedToStart() {
-    zimHostCallbacks.onHotspotFailedToStart();
+    if (zimHostCallbacks != null) {
+      zimHostCallbacks.onHotspotFailedToStart();
+    }
   }
 
   @Override public void onHotspotStopped() {
     webServerHelper.stopAndroidWebServer();
-    zimHostCallbacks.onServerStopped();
+    if (zimHostCallbacks != null) {
+      zimHostCallbacks.onServerStopped();
+    }
     stopForeground(true);
     stopSelf();
     hotspotNotificationManager.dismissNotification();
   }
 
   @Override public void onIpAddressValid() {
-    zimHostCallbacks.onIpAddressValid();
+    if (zimHostCallbacks != null) {
+      zimHostCallbacks.onIpAddressValid();
+    }
   }
 
   @Override public void onIpAddressInvalid() {
-    zimHostCallbacks.onIpAddressInvalid();
+    if (zimHostCallbacks != null) {
+      zimHostCallbacks.onIpAddressInvalid();
+    }
   }
 
   public class HotspotBinder extends Binder {

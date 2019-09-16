@@ -19,11 +19,13 @@ package org.kiwix.kiwixmobile.di.modules
 
 import dagger.Binds
 import dagger.Module
+import org.kiwix.kiwixmobile.di.ActivityScope
 import org.kiwix.kiwixmobile.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.utils.DialogShower
 
 @Module
 abstract class ActivityModule {
   @Binds
+  @ActivityScope
   abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
 }
