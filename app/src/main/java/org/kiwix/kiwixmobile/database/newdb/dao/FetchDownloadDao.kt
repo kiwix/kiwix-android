@@ -25,8 +25,11 @@ import io.objectbox.kotlin.query
 import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.database.newdb.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.FetchDownloadEntity_
+import org.kiwix.kiwixmobile.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
@@ -43,8 +46,10 @@ class FetchDownloadDao @Inject constructor(
 
   private fun moveCompletedToBooksOnDiskDao(downloadEntities: List<FetchDownloadEntity>) {
     downloadEntities.filter { it.status == COMPLETED }.takeIf { it.isNotEmpty() }?.let {
-      box.remove(it)
-      newBookDao.insert(it.map(::BookOnDisk))
+      box.store.callInTx {
+        box.remove(it)
+        newBookDao.insert(it.map(::BookOnDisk))
+      }
     }
   }
 
@@ -63,11 +68,6 @@ class FetchDownloadDao @Inject constructor(
       equal(FetchDownloadEntity_.downloadId, download.id)
     }.find().getOrNull(0)
 
-  fun doesNotAlreadyExist(book: Book) =
-    box.query {
-      equal(FetchDownloadEntity_.bookId, book.id)
-    }.count() == 0L
-
   fun insert(downloadId: Long, book: Book) {
     box.put(FetchDownloadEntity(downloadId, book))
   }
@@ -77,4 +77,24 @@ class FetchDownloadDao @Inject constructor(
       equal(FetchDownloadEntity_.downloadId, download.id)
     }.remove()
   }
+
+  fun addIfDoesNotExist(
+    metaLinkNetworkEntity: MetaLinkNetworkEntity,
+    book: Book,
+    downloadRequester: DownloadRequester
+  ) {
+    box.store.callInTx {
+      if (doesNotAlreadyExist(book)) {
+        insert(
+          downloadRequester.enqueue(DownloadRequest(metaLinkNetworkEntity, book)),
+          book = book
+        )
+      }
+    }
+  }
+
+  private fun doesNotAlreadyExist(book: Book) =
+    box.query {
+      equal(FetchDownloadEntity_.bookId, book.id)
+    }.count() == 0L
 }
