@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.data.DataSource;
-import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.di.ActivityScope;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
@@ -17,7 +17,7 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskList
  * Presenter for {@link MainActivity}.
  */
 
-@PerActivity
+@ActivityScope
 class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
 
   private static final String TAG = "MainPresenter";
