@@ -39,24 +39,39 @@ internal class StorageCalculatorTest {
   }
 
   @Test
-  fun calculateAvailableSpace() {
+  fun `calculate available space with existing file`() {
     every { KiwixBuildConfig.SDK_INT } returns 25
     every { file.freeSpace } returns 1
+    every { file.exists() } returns true
     assertThat(storageCalculator.calculateAvailableSpace(file)).isEqualTo("1 Bytes")
   }
 
   @Test
-  fun calculateTotalSpace() {
+  fun `calculate total space of existing file`() {
     every { file.totalSpace } returns 1
+    every { file.exists() } returns true
     assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("1 Bytes")
   }
 
   @Test
-  fun availableBytes() {
+  fun `calculate total space of non existing file`() {
+    every { file.exists() } returns false
+    assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("0 Bytes")
+  }
+
+  @Test
+  fun `available bytes of existing file API 26`() {
     val uuid: UUID = mockk()
     every { KiwixBuildConfig.SDK_INT } returns 26
     every { storageManager.getUuidForPath(file) } returns uuid
     every { storageManager.getAllocatableBytes(uuid) } returns 1
+    every { file.exists() } returns true
     assertThat(storageCalculator.availableBytes(file)).isEqualTo(1L)
+  }
+
+  @Test
+  fun `available bytes of non existing file`() {
+    every { file.exists() } returns false
+    assertThat(storageCalculator.availableBytes(file)).isEqualTo(0L)
   }
 }

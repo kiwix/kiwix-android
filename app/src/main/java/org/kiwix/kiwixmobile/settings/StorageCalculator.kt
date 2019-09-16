@@ -35,10 +35,14 @@ class StorageCalculator @Inject constructor(private val storageManager: StorageM
 
   @SuppressLint("NewApi")
   fun availableBytes(file: File) =
-    if (KiwixBuildConfig.SDK_INT >= VERSION_CODES.O)
-      storageManager.getAllocatableBytes(storageManager.getUuidForPath(file))
-    else
-      file.freeSpace
+    if (file.exists()) {
+      if (KiwixBuildConfig.SDK_INT >= VERSION_CODES.O)
+        storageManager.getAllocatableBytes(storageManager.getUuidForPath(file))
+      else
+        file.freeSpace
+    } else {
+      0L
+    }
 
-  private fun totalBytes(file: File) = file.totalSpace
+  private fun totalBytes(file: File) = if (file.exists()) file.totalSpace else 0L
 }
