@@ -6,14 +6,14 @@
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Get_it_on_F-Droid.svg/320px-Get_it_on_F-Droid.svg.png" alt="Get it on F-Droid" height="29" />
 </a>
 
-# Kiwix-Android
+# Kiwix Android
 
 Kiwix is an offline reader for Web content. One of its main purposes
 is to make Wikipedia available offline. This is done by reading the
 content of a file in the ZIM format, a highly compressed open format
-with additional meta-data.
+with additional meta-data. This is the version for Android.
 
-Kiwix is written in [Kotlin](https://kotlinlang.org/) (with a few old
+Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
 pieces in Java).
 
 [![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=develop)](https://travis-ci.org/kiwix/kiwix-android)
@@ -79,7 +79,7 @@ Available communication channels:
 * [Web Public Chat channel](https://chat.kiwix.org)
 * [Email](mailto:contact+android@kiwix.org)
 * [Mailing list](kiwix-developer@lists.sourceforge.net)
-* [https://kiwixoffline.slack.com]: #android channel
+* [Slack](https://kiwixoffline.slack.com): #android channel
 * IRC: #kiwix on irc.freenode.net
 
 For more information, please refer to
