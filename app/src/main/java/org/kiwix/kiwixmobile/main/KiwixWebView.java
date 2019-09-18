@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 public class KiwixWebView extends WebView {
   public static final float[] NIGHT_MODE_COLORS = {
@@ -55,6 +56,8 @@ public class KiwixWebView extends WebView {
   };
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
   private WebViewCallback callback;
 
   public KiwixWebView(Context context) {
@@ -72,7 +75,7 @@ public class KiwixWebView extends WebView {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       settings.setAllowUniversalAccessFromFileURLs(true);
     }
-    setWebViewClient(new KiwixWebViewClient(callback));
+    setWebViewClient(new KiwixWebViewClient(callback, zimReaderContainer));
     setWebChromeClient(new KiwixWebChromeClient(callback));
   }
 

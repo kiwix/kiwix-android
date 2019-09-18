@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.language.LanguageActivity;
+import org.kiwix.kiwixmobile.main.AddNoteDialog;
 import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.PrefsFragment;
@@ -50,8 +51,8 @@ public interface ApplicationComponent {
     @BindsInstance Builder context(Context context);
 
     ApplicationComponent build();
-  }
 
+  }
   ActivityComponent.Builder activityComponent();
 
   ServiceComponent.Builder serviceComponent();
@@ -71,4 +72,6 @@ public interface ApplicationComponent {
   void inject(@NotNull LanguageActivity languageActivity);
 
   void inject(@NotNull StorageSelectDialog storageSelectDialog);
+
+  void inject(AddNoteDialog addNoteDialog);
 }

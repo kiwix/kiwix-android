@@ -30,8 +30,9 @@ import java.util.HashMap;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
@@ -45,20 +46,23 @@ public class KiwixWebViewClient extends WebViewClient {
   private final SharedPreferenceUtil sharedPreferenceUtil =
     new SharedPreferenceUtil(KiwixApplication.getInstance());
   private final WebViewCallback callback;
+  private final ZimReaderContainer zimReaderContainer;
   private View home;
 
-  KiwixWebViewClient(WebViewCallback callback) {
+  KiwixWebViewClient(WebViewCallback callback,
+    ZimReaderContainer zimReaderContainer) {
     this.callback = callback;
+    this.zimReaderContainer = zimReaderContainer;
   }
 
   @Override
   public boolean shouldOverrideUrlLoading(WebView view, String url) {
     callback.webViewUrlLoading();
 
-    if (ZimContentProvider.isRedirect(url)) {
-      view.loadUrl(ZimContentProvider.getRedirect(url));
+    if (zimReaderContainer.isRedirect(url)) {
+      view.loadUrl(zimReaderContainer.getRedirect(url));
       return true;
-    } else if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
+    } else if (url.startsWith(ZimFileReader.CONTENT_URI.toString())) {
       String extension = MimeTypeMap.getFileExtensionFromUrl(url);
       if (DOCUMENT_TYPES.containsKey(extension)) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -75,7 +79,7 @@ public class KiwixWebViewClient extends WebViewClient {
     } else if (url.startsWith("javascript:")) {
       // Allow javascript for HTML functions and code execution (EX: night mode)
       return true;
-    } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+    } else if (url.startsWith(ZimFileReader.UI_URI.toString())) {
       Log.e("KiwixWebViewClient", "UI Url " + url + " not supported.");
       //TODO: Document this code - what's a UI_URL?
       return true;

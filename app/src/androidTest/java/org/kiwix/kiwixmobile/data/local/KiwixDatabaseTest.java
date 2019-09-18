@@ -51,7 +51,8 @@ public class KiwixDatabaseTest {
   @Test
   @SuppressWarnings("CharsetObjectCanBeUsed") // Standard charset throws exception on < API19
   public void testMigrateDatabase() throws IOException {
-    KiwixDatabase kiwixDatabase = new KiwixDatabase(context, null, null, null, null);
+    KiwixDatabase kiwixDatabase = new KiwixDatabase(context, null, null, null, null
+    );
     kiwixDatabase.recreate();
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String[] testBookmarks = new String[] { "Test1", "Test2", "Test3" };
