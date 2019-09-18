@@ -23,6 +23,7 @@
 ########################
 # Kiwix specific rules #
 ########################
+-dontobfuscate
 
 #keep everything in kiwixlib
 -keep class org.kiwix.kiwixlib.** { *; }
