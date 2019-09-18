@@ -101,8 +101,8 @@ public class ApplicationModule {
     return (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
   }
 
-  @Provides @Singleton ZimFileReader.Factory providesZimFileReaderFactory(
-    SharedPreferenceUtil sharedPreferenceUtil) {
+  @Provides @Singleton
+  ZimFileReader.Factory providesZimFileReaderFactory(SharedPreferenceUtil sharedPreferenceUtil) {
     return new ZimFileReader.Factory.Impl(sharedPreferenceUtil);
   }
 }

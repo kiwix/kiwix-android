@@ -51,8 +51,8 @@ public interface ApplicationComponent {
     @BindsInstance Builder context(Context context);
 
     ApplicationComponent build();
-
   }
+
   ActivityComponent.Builder activityComponent();
 
   ServiceComponent.Builder serviceComponent();
