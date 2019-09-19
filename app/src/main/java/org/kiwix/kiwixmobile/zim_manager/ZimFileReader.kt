@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.utils.files.FileUtils
 import org.kiwix.kiwixmobile.zim_manager.ZimFileReader.Companion.CONTENT_URI
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 import java.io.FileDescriptor
 import java.io.FileOutputStream
@@ -186,20 +185,17 @@ class ZimFileReader(
   private fun valueOfJniStringAfter(jniStringFunction: (JNIKiwixString) -> Boolean) =
     JNIKiwixString().takeIf { jniStringFunction(it) }?.value
 
-  fun asBookOnDisk() = BookOnDisk(
-    book = Book().apply {
-      title = this@ZimFileReader.title
-      id = this@ZimFileReader.id
-      size = "$fileSize"
-      favicon = this@ZimFileReader.favicon
-      creator = this@ZimFileReader.creator
-      publisher = this@ZimFileReader.publisher
-      date = this@ZimFileReader.date
-      description = this@ZimFileReader.description
-      language = this@ZimFileReader.language
-    },
-    file = zimFile
-  )
+  fun toBook() = Book().apply {
+    title = this@ZimFileReader.title
+    id = this@ZimFileReader.id
+    size = "$fileSize"
+    favicon = this@ZimFileReader.favicon
+    creator = this@ZimFileReader.creator
+    publisher = this@ZimFileReader.publisher
+    date = this@ZimFileReader.date
+    description = this@ZimFileReader.description
+    language = this@ZimFileReader.language
+  }
 
   companion object {
     /*

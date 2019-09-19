@@ -38,7 +38,7 @@ class NewRecentSearchDao @Inject constructor(
     .map(RecentSearchEntity::searchTerm)
 
   fun saveSearch(title: String, id: String) {
-    box.put(RecentSearchEntity(0L, title, id))
+    box.put(RecentSearchEntity(searchTerm = title, zimId = id))
   }
 
   fun deleteSearchString(searchTerm: String) {

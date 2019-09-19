@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.utils.files.FileSearch
 import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
 import org.kiwix.kiwixmobile.zim_manager.ZimFileReader.Factory
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 
 class StorageObserverTest {
@@ -85,11 +84,9 @@ class StorageObserverTest {
       "description", "language"
     )
     withNoFiltering()
-    every { zimFileReader.asBookOnDisk() } returns BookOnDisk(book = expectedBook, file = file)
+    every { zimFileReader.toBook() } returns expectedBook
     booksOnFileSystem().assertValues(
-      listOf(
-        bookOnDisk(book = expectedBook, file = file, databaseId = null)
-      )
+      listOf(bookOnDisk(book = expectedBook, file = file))
     )
   }
 

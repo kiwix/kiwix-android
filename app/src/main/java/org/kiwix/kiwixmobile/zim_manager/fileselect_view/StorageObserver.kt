@@ -6,6 +6,7 @@ import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.utils.files.FileSearch
 import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 import javax.inject.Inject
 
@@ -17,27 +18,16 @@ class StorageObserver @Inject constructor(
 
   val booksOnFileSystem
     get() = scanFiles()
-      .withLatestFrom(
-        downloadDao.downloads(),
-        BiFunction(::toFilesThatAreNotDownloading)
-      )
+      .withLatestFrom(downloadDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
       .map { it.map(::convertToBookOnDisk) }
 
-  private fun toFilesThatAreNotDownloading(
-    files: List<File>,
-    downloads: List<DownloadModel>
-  ) = files.filter { fileHasNoMatchingDownload(downloads, it) }
+  private fun scanFiles() = fileSearch.scan().subscribeOn(Schedulers.io())
 
-  private fun fileHasNoMatchingDownload(
-    downloads: List<DownloadModel>,
-    file: File
-  ) = downloads.firstOrNull {
-    file.absolutePath.endsWith(it.fileNameFromUrl)
-  } == null
+  private fun toFilesThatAreNotDownloading(files: List<File>, downloads: List<DownloadModel>) =
+    files.filter { fileHasNoMatchingDownload(downloads, it) }
 
-  private fun scanFiles() = fileSearch.scan()
-    .subscribeOn(Schedulers.io())
+  private fun fileHasNoMatchingDownload(downloads: List<DownloadModel>, file: File) =
+    downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
-  private fun convertToBookOnDisk(file: File) =
-    zimReaderFactory.create(file).asBookOnDisk()
+  private fun convertToBookOnDisk(file: File) = BookOnDisk(file, zimReaderFactory.create(file))
 }
