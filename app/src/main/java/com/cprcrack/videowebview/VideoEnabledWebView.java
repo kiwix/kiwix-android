@@ -1,4 +1,4 @@
-package name.cpr;
+package com.cprcrack.videowebview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

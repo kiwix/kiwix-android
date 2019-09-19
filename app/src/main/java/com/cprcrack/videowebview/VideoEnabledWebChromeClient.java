@@ -1,4 +1,4 @@
-package name.cpr;
+package com.cprcrack.videowebview;
 
 import android.media.MediaPlayer;
 import android.view.SurfaceView;

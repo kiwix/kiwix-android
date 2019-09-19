@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
@@ -32,9 +33,10 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.Toast;
+import com.cprcrack.videowebview.VideoEnabledWebView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,10 +45,11 @@ import java.io.OutputStream;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.extensions.ViewGroupExtensionsKt;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
-public class KiwixWebView extends WebView {
+public class KiwixWebView extends VideoEnabledWebView {
   public static final float[] NIGHT_MODE_COLORS = {
     -1.0f, 0, 0, 0, 255, // red
     0, -1.0f, 0, 0, 255, // green
@@ -61,7 +64,8 @@ public class KiwixWebView extends WebView {
     super(context);
   }
 
-  public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
+  public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
+    ViewGroup nonVideoView, ViewGroup videoView) {
     super(context, attrs);
     this.callback = callback;
     KiwixApplication.getApplicationComponent().inject(this);
@@ -73,7 +77,15 @@ public class KiwixWebView extends WebView {
       settings.setAllowUniversalAccessFromFileURLs(true);
     }
     setWebViewClient(new KiwixWebViewClient(callback));
-    setWebChromeClient(new KiwixWebChromeClient(callback));
+    final KiwixWebChromeClient client =
+      new KiwixWebChromeClient(callback, nonVideoView, videoView, this);
+    client.setOnToggledFullscreen(fullscreen ->
+      setWindowVisibility(fullscreen ? SYSTEM_UI_FLAG_LOW_PROFILE : SYSTEM_UI_FLAG_VISIBLE));
+    setWebChromeClient(client);
+  }
+
+  private void setWindowVisibility(int systemUiVisibility) {
+    ((Activity) getContext()).getWindow().getDecorView().setSystemUiVisibility(systemUiVisibility);
   }
 
   public void loadPrefs() {
@@ -89,14 +101,14 @@ public class KiwixWebView extends WebView {
   }
 
   public void deactivateNightMode() {
-    setLayerType(View.LAYER_TYPE_NONE, null);
+    setLayerType(LAYER_TYPE_NONE, null);
   }
 
   public void toggleNightMode() {
     Paint paint = new Paint();
     ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
     paint.setColorFilter(filterInvert);
-    setLayerType(View.LAYER_TYPE_HARDWARE, paint);
+    setLayerType(LAYER_TYPE_HARDWARE, paint);
   }
 
   @Override

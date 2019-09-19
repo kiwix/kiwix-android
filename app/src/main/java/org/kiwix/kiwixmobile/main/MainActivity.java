@@ -205,6 +205,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   FloatingActionButton closeAllTabsButton;
   @BindView(R.id.snackbar_root)
   CoordinatorLayout snackbarRoot;
+  @BindView(R.id.fullscreen_video_container)
+  ViewGroup videoView;
 
   @Inject
   MainContract.Presenter presenter;
@@ -780,9 +782,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (!isHideToolbar) {
       webView =
         new ToolbarScrollingKiwixWebView(MainActivity.this, this, toolbarContainer, bottomToolbar,
-          attrs);
+          root, videoView, attrs);
     } else {
-      webView = new ToolbarStaticKiwixWebView(MainActivity.this, this, attrs);
+      webView =
+        new ToolbarStaticKiwixWebView(MainActivity.this, this, root, videoView, attrs);
     }
     webView.loadUrl(url);
     webView.loadPrefs();
