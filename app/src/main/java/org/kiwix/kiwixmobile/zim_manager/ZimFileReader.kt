@@ -138,10 +138,7 @@ class ZimFileReader(
       FileUtils.getFileCacheDir(KiwixApplication.getInstance()),
       "$uri".substringAfterLast("/")
     )
-    val data = getContent(uri)
-    FileOutputStream(outputFile).use {
-      it.write(data)
-    }
+    FileOutputStream(outputFile).use { it.write(getContent(uri)) }
     return ParcelFileDescriptor.open(outputFile, ParcelFileDescriptor.MODE_READ_ONLY)
   }
 
@@ -158,11 +155,16 @@ class ZimFileReader(
             outputStream.use {
               val mime = JNIKiwixString()
               val size = JNIKiwixInt()
-              val content = getContent(uri, mime = mime, size = size)
+              val url = JNIKiwixString(uri.filePath.removeArguments())
+              val content = getContent(url = url, mime = mime, size = size)
               if ("text/css" == mime.value && sharedPreferenceUtil.nightMode()) {
                 it.write(INVERT_IMAGES_VIDEO.toByteArray(Charsets.UTF_8))
               }
               it.write(content)
+              Log.d(
+                TAG,
+                "reading  ${url.value}(mime: ${mime.value}, size: ${size.value}) finished."
+              )
             }
           } catch (ioException: IOException) {
             Log.e(TAG, "error writing pipe for $uri", ioException)
@@ -172,9 +174,10 @@ class ZimFileReader(
       )
   }
 
+  private fun getContent(uri: Uri) = getContent(JNIKiwixString(uri.filePath.removeArguments()))
+
   private fun getContent(
-    uri: Uri,
-    url: JNIKiwixString = JNIKiwixString(uri.filePath.removeArguments()),
+    url: JNIKiwixString = JNIKiwixString(),
     jniKiwixString: JNIKiwixString = JNIKiwixString(),
     mime: JNIKiwixString = JNIKiwixString(),
     size: JNIKiwixInt = JNIKiwixInt()
