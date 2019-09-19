@@ -18,17 +18,26 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.net.Uri
+import org.kiwix.kiwixlib.JNIKiwixSearcher
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ZimReaderContainer @Inject constructor(
-  private val zimFileReaderFactory: ZimFileReader.Factory
+  private val zimFileReaderFactory: ZimFileReader.Factory,
+  private val jniKiwixSearcher: JNIKiwixSearcher
 ) {
-  fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
-  fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
+  private val listOfAddedReaderIds = mutableListOf<String>()
   var zimFileReader: ZimFileReader? = null
+    set(value) {
+      field = value
+      if (value != null && !listOfAddedReaderIds.contains(value.id)) {
+        listOfAddedReaderIds.add(value.id)
+        jniKiwixSearcher.addKiwixReader(value.jniKiwixReader)
+      }
+    }
+
   fun setZimFile(file: File?) {
     if (file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath) {
       return
@@ -41,18 +50,22 @@ class ZimReaderContainer @Inject constructor(
   fun readMimeType(uri: Uri) = zimFileReader?.readMimeType(uri)
 
   fun load(uri: Uri) = zimFileReader?.load(uri)
+
   fun searchSuggestions(prefix: String, count: Int) =
     zimFileReader?.searchSuggestions(prefix, count) ?: false
 
   fun getNextSuggestion() = zimFileReader?.getNextSuggestion()
 
   fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
+
   fun getRandomArticleUrl() = zimFileReader?.getRandomArticleUrl()
   fun search(query: String, count: Int) {
-    zimFileReader?.jniKiwixSearcher?.search(query, count)
+    jniKiwixSearcher.search(query, count)
   }
 
-  fun getNextResult() = zimFileReader?.jniKiwixSearcher?.nextResult
+  fun getNextResult() = jniKiwixSearcher.nextResult
+  fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
+  fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
 
   val zimFile get() = zimFileReader?.zimFile
   val zimCanonicalPath get() = zimFileReader?.zimFile?.canonicalPath

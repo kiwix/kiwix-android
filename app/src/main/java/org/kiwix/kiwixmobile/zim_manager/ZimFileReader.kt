@@ -24,11 +24,10 @@ import android.os.ParcelFileDescriptor.dup
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
-import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixlib.JNIKiwixInt
 import org.kiwix.kiwixlib.JNIKiwixReader
-import org.kiwix.kiwixlib.JNIKiwixSearcher
 import org.kiwix.kiwixlib.JNIKiwixString
 import org.kiwix.kiwixlib.Pair
 import org.kiwix.kiwixmobile.BuildConfig
@@ -45,11 +44,12 @@ import java.io.IOException
 import java.io.RandomAccessFile
 import javax.inject.Inject
 
+private const val TAG = "ZimFileReader"
+
 class ZimFileReader(
   val zimFile: File,
-  private val jniKiwixReader: JNIKiwixReader = JNIKiwixReader(zimFile.canonicalPath),
-  val jniKiwixSearcher: JNIKiwixSearcher = JNIKiwixSearcher(),
-  val sharedPreferenceUtil: SharedPreferenceUtil
+  val jniKiwixReader: JNIKiwixReader = JNIKiwixReader(zimFile.canonicalPath),
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader
@@ -79,53 +79,46 @@ class ZimFileReader(
   fun searchSuggestions(prefix: String, count: Int) =
     jniKiwixReader.searchSuggestions(prefix, count)
 
-  fun getNextSuggestion(): String =
-    valueOfJniStringAfter { jniKiwixReader.getNextSuggestion(it) }
+  fun getNextSuggestion(): String? =
+    valueOfJniStringAfter(jniKiwixReader::getNextSuggestion)
 
-  fun getPageUrlFrom(title: String): String =
+  fun getPageUrlFrom(title: String): String? =
     valueOfJniStringAfter { jniKiwixReader.getPageUrlFromTitle(title, it) }
 
-  fun getRandomArticleUrl(): String =
-    valueOfJniStringAfter { jniKiwixReader.getRandomPage(it) }
+  fun getRandomArticleUrl(): String? =
+    valueOfJniStringAfter(jniKiwixReader::getRandomPage)
 
   fun load(uri: Uri): ParcelFileDescriptor {
     if ("$uri".matches(VIDEO_REGEX)) {
       try {
         return loadVideo(uri)
       } catch (ioException: IOException) {
-        ioException.printStackTrace()
+        Log.e(TAG, "failed to write video for $uri", ioException)
       }
     }
     return loadContent(uri)
   }
 
-  fun readMimeType(uri: Uri): String {
-    return "$uri".removeArguments().let {
-      mimeTypeFromMap(it)?.takeIf(String::isNotEmpty)
-        ?: jniKiwixReader.getMimeType(it.filePath)
-          // Truncate mime-type (everything after the first space
-          .replace("^([^ ]+).*$", "$1")
-    }.also { Log.d("ZimFileReader", "getting mimetype for $uri = $it") }
-  }
+  fun readMimeType(uri: Uri) = "$uri".removeArguments().let {
+    it.mimeType?.takeIf(String::isNotEmpty) ?: mimeTypeFromReader(it)
+  }.also { Log.d(TAG, "getting mimetype for $uri = $it") }
 
-  fun getRedirect(url: String) = toRedirect(url).toUri().toString()
+  private fun mimeTypeFromReader(it: String) = jniKiwixReader.getMimeType(it.filePath)
+    // Truncate mime-type (everything after the first space
+    .replace("^([^ ]+).*$", "$1")
+
+  fun getRedirect(url: String) = "${toRedirect(url)}"
 
   fun isRedirect(url: String) =
     url.startsWith("$CONTENT_URI") && url != getRedirect(url)
 
   private fun toRedirect(url: String) =
-    "$CONTENT_URI${jniKiwixReader.checkUrl(url.toUri().filePath)}"
-
-  private fun mimeTypeFromMap(urlWithoutArguments: String): String? {
-    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-      MimeTypeMap.getFileExtensionFromUrl(urlWithoutArguments)
-    )
-  }
+    "$CONTENT_URI${jniKiwixReader.checkUrl(url.toUri().filePath)}".toUri()
 
   private fun loadContent(uri: Uri) =
     try {
       ParcelFileDescriptor.createPipe().also {
-        streamZimContentToPipe(uri, it[1])
+        streamZimContentToPipe(uri, AutoCloseOutputStream(it[1]))
       }[0]
     } catch (ioException: IOException) {
       throw IOException("Could not open pipe for $uri", ioException)
@@ -145,22 +138,24 @@ class ZimFileReader(
       FileUtils.getFileCacheDir(KiwixApplication.getInstance()),
       "$uri".substringAfterLast("/")
     )
-    val data = jniKiwixReader.getContent(
-      JNIKiwixString(uri.filePath), JNIKiwixString(),
-      JNIKiwixString(), JNIKiwixInt()
-    )
-    FileOutputStream(outputFile).use { it.write(data) }
+    val data = getContent(uri)
+    FileOutputStream(outputFile).use {
+      it.write(data)
+    }
     return ParcelFileDescriptor.open(outputFile, ParcelFileDescriptor.MODE_READ_ONLY)
   }
 
-  private fun streamZimContentToPipe(uri: Uri, parcelFileDescriptor: ParcelFileDescriptor) {
-    Flowable.just(Unit)
+  private fun streamZimContentToPipe(
+    uri: Uri,
+    outputStream: AutoCloseOutputStream
+  ) {
+    Single.just(Unit)
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .subscribe(
         {
           try {
-            AutoCloseOutputStream(parcelFileDescriptor).use {
+            outputStream.use {
               val mime = JNIKiwixString()
               val size = JNIKiwixInt()
               val content = getContent(uri, mime = mime, size = size)
@@ -168,10 +163,9 @@ class ZimFileReader(
                 it.write(INVERT_IMAGES_VIDEO.toByteArray(Charsets.UTF_8))
               }
               it.write(content)
-              it.flush()
             }
           } catch (ioException: IOException) {
-            Log.e("ZimFileReader", "error writing pipe", ioException)
+            Log.e(TAG, "error writing pipe for $uri", ioException)
           }
         },
         Throwable::printStackTrace
@@ -181,13 +175,13 @@ class ZimFileReader(
   private fun getContent(
     uri: Uri,
     url: JNIKiwixString = JNIKiwixString(uri.filePath.removeArguments()),
+    jniKiwixString: JNIKiwixString = JNIKiwixString(),
     mime: JNIKiwixString = JNIKiwixString(),
-    size: JNIKiwixInt = JNIKiwixInt(),
-    jniKiwixString: JNIKiwixString = JNIKiwixString()
+    size: JNIKiwixInt = JNIKiwixInt()
   ) = jniKiwixReader.getContent(url, jniKiwixString, mime, size)
 
-  private fun valueOfJniStringAfter(jniStringFunction: (JNIKiwixString) -> Unit) =
-    JNIKiwixString().also(jniStringFunction).value
+  private fun valueOfJniStringAfter(jniStringFunction: (JNIKiwixString) -> Boolean) =
+    JNIKiwixString().takeIf { jniStringFunction(it) }?.value
 
   fun asBookOnDisk() = BookOnDisk(
     book = Book().apply {
@@ -205,14 +199,17 @@ class ZimFileReader(
   )
 
   companion object {
+    /*
+    * these uris aren't actually nullable but unit tests fail to compile as
+    * Uri.parse returns null without android dependencies loaded
+    */
     @JvmField
-    val UI_URI = Uri.parse("content://org.kiwix.ui/")
+    val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
     @JvmField
-    val CONTENT_URI = Uri.parse("content://${BuildConfig.APPLICATION_ID}.zim.base/")
+    val CONTENT_URI: Uri? = Uri.parse("content://${BuildConfig.APPLICATION_ID}.zim.base/")
     private const val INVERT_IMAGES_VIDEO =
       "img, video { \n -webkit-filter: invert(1); \n filter: invert(1); \n} \n"
-    private val VIDEO_REGEX =
-      Regex.fromLiteral("([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))\$)")
+    private val VIDEO_REGEX = Regex("([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))\$)")
   }
 }
 
@@ -223,3 +220,7 @@ private val Uri.filePath: String
   get() = toString().filePath
 private val String.filePath: String
   get() = substringAfter("$CONTENT_URI").substringBefore("#")
+private val String.mimeType: String?
+  get() = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+    MimeTypeMap.getFileExtensionFromUrl(this)
+  )

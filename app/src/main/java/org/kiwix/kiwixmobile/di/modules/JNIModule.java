@@ -23,6 +23,7 @@ import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixSearcher;
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -33,5 +34,11 @@ import org.kiwix.kiwixlib.JNIKiwix;
   @Singleton
   public JNIKiwix providesJNIKiwix(@NonNull Context context) {
     return new JNIKiwix(context);
+  }
+
+  @Provides
+  @Singleton
+  public JNIKiwixSearcher providesJNIKiwixSearcher() {
+    return new JNIKiwixSearcher();
   }
 }
