@@ -88,4 +88,4 @@ For more information, please refer to
 ## License
 
 [GPLv3](https://www.gnu.org/licenses/gpl-3.0) or later, see
-[COPYINGL](COPYING) for more details.
+[COPYING](COPYING) for more details.
