@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.database.newdb.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.query
 import org.kiwix.kiwixmobile.data.ZimContentProvider
+import org.kiwix.kiwixmobile.data.local.entity.RecentSearch
 import org.kiwix.kiwixmobile.database.newdb.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.RecentSearchEntity_
 import javax.inject.Inject
@@ -49,6 +50,10 @@ class NewRecentSearchDao @Inject constructor(val box: Box<RecentSearchEntity>) {
 
   fun deleteSearchHistory() {
     box.removeAll()
+  }
+
+  fun migrationInsert(recentSearches: MutableList<RecentSearch>) {
+    box.put(recentSearches.map(::RecentSearchEntity))
   }
 
   companion object {

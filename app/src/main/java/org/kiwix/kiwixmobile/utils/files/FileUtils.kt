@@ -35,7 +35,7 @@ import java.util.ArrayList
 
 object FileUtils {
 
-  val saveFilePath =
+  private val saveFilePath =
     "${Environment.getExternalStorageDirectory()}${File.separator}Android" +
       "${File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
 
@@ -184,7 +184,7 @@ object FileUtils {
     return context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
       ?.use {
         if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
-          it.get<String>(columnName)
+          it[columnName]
         } else null
       }
   }

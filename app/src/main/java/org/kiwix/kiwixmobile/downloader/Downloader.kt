@@ -18,12 +18,9 @@
 package org.kiwix.kiwixmobile.downloader
 
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 
 interface Downloader {
   fun download(book: LibraryNetworkEntity.Book)
-  fun queryStatus(downloadModels: List<DownloadModel>): List<DownloadStatus>
   fun cancelDownload(downloadItem: DownloadItem)
 }

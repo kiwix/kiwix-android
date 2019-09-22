@@ -1,102 +1,84 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <item
-      android:id="@+id/menu_search"
-      android:icon="@drawable/action_search"
-      android:title="@string/menu_search"
-      android:visible="false"
-      app:showAsAction="always"/>
+    android:id="@+id/menu_search"
+    android:icon="@drawable/action_search"
+    android:title="@string/menu_search"
+    android:visible="false"
+    tools:visible="true"
+    app:showAsAction="always" />
 
   <item
-      android:id="@+id/menu_tab_switcher"
-      android:title="@string/switch_tabs"
-      app:actionLayout="@layout/ic_tab_switcher"
-      app:showAsAction="always"/>
+    android:id="@+id/menu_tab_switcher"
+    android:title="@string/switch_tabs"
+    app:actionLayout="@layout/ic_tab_switcher"
+    app:showAsAction="always" />
+
+  <item
+    android:id="@+id/menu_bookmarks_list"
+    android:title="@string/menu_bookmarks_list"
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/menu_history"
+    android:title="@string/history"
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/menu_openfile"
+    android:icon="@drawable/action_open_file"
+    android:title="@string/menu_zim_manager"
+    app:showAsAction="never" />
 
   <item
     android:id="@+id/menu_add_note"
-    android:title="@string/add_note"
     android:icon="@drawable/ic_add_note"
-    app:showAsAction="ifRoom"/>
+    android:title="@string/note"
+    app:showAsAction="ifRoom" />
+
 
   <item
-    android:id="@+id/menu_clear_notes"
-    android:title="@string/clear_all_notes"
-    android:icon="@drawable/ic_baseline_delete_sweep_24px"
-    app:showAsAction="ifRoom"/>
+    android:id="@+id/menu_random_article"
+    android:icon="@drawable/action_randomarticle"
+    android:title="@string/menu_random_article"
+    android:visible="false"
+    tools:visible="true"
+    app:showAsAction="never" />
 
   <item
-      android:id="@+id/menu_new_tab"
-      android:title="@string/new_tab"
-      app:showAsAction="never"/>
+    android:id="@+id/menu_fullscreen"
+    android:title="@string/menu_full_screen"
+    android:visible="false"
+    tools:visible="true"
+    app:showAsAction="never" />
 
   <item
-      android:id="@+id/menu_bookmarks_list"
-      android:title="@string/menu_bookmarks_list"
-      app:showAsAction="never"/>
+    android:id="@+id/menu_read_aloud"
+    android:title="@string/menu_read_aloud"
+    android:visible="false"
+    tools:visible="true"
+    app:showAsAction="never" />
 
   <item
-      android:id="@+id/menu_history"
-      android:title="@string/history"
-      app:showAsAction="never"/>
+    android:id="@+id/menu_host_books"
+    android:title="@string/menu_host_books"
+    app:showAsAction="never" />
 
   <item
-      android:id="@+id/menu_home"
-      android:icon="@drawable/action_home"
-      android:title="@string/menu_home"
-      android:visible="false"
-      app:showAsAction="never"/>
+    android:id="@+id/menu_help"
+    android:title="@string/menu_help"
+    app:showAsAction="never" />
 
   <item
-      android:id="@+id/menu_random_article"
-      android:icon="@drawable/action_randomarticle"
-      android:title="@string/menu_random_article"
-      android:visible="false"
-      app:showAsAction="never"/>
+    android:id="@+id/menu_settings"
+    android:title="@string/menu_settings"
+    app:showAsAction="never" />
 
   <item
-      android:id="@+id/menu_openfile"
-      android:icon="@drawable/action_open_file"
-      android:title="@string/menu_zim_manager"
-      app:showAsAction="never"/>
-
-  <item
-      android:id="@+id/menu_searchintext"
-      android:title="@string/menu_search_in_text"
-      android:visible="false"
-      app:showAsAction="never"/>
-
-  <item
-      android:id="@+id/menu_fullscreen"
-      android:title="@string/menu_full_screen"
-      android:visible="false"
-      app:showAsAction="never"/>
-
-  <item
-      android:id="@+id/menu_read_aloud"
-      android:title="@string/menu_read_aloud"
-      android:visible="false"
-      app:showAsAction="never"/>
-
-  <item
-      android:id="@+id/menu_host_books"
-      android:title="@string/menu_host_books"
-      app:showAsAction="never"/>
-
-  <item
-      android:id="@+id/menu_help"
-      android:title="@string/menu_help"
-      app:showAsAction="never"/>
-
-  <item
-      android:id="@+id/menu_settings"
-      android:title="@string/menu_settings"
-      app:showAsAction="never"/>
-
-  <item
-      android:id="@+id/menu_support_kiwix"
-      android:title="@string/menu_support_kiwix"
-      app:showAsAction="never"/>
+    android:id="@+id/menu_support_kiwix"
+    android:title="@string/menu_support_kiwix"
+    app:showAsAction="never" />
 
 </menu>

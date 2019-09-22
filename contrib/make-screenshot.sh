@@ -2,7 +2,7 @@
 
 if hash adb 2>/dev/null
 then
-    ADB=`which adb`
+    ADB=$(which adb)
     TMP=/data/local/tmp/
     FILE=${1:-screenshot.png}
     PATH=$TMP$FILE

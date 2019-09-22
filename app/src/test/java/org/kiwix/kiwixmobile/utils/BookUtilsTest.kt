@@ -18,18 +18,17 @@
 
 package org.kiwix.kiwixmobile.utils
 
-import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 
 class BookUtilsTest {
-  private val container: LanguageUtils.LanguageContainer = mockk()
+  private val container: LanguageContainer = mockk()
 
   // Test that the language returned for the given language code is correct
   @Test
   fun testLanguageFromCode() {
-    val t = BookUtils(container)
+    val t = BookUtils()
 
     // testing trivial cases
     assertEquals("null is passed", "", t.getLanguage(null))
@@ -45,8 +44,6 @@ class BookUtilsTest {
     assertEquals("code length equals 3 (Catalan)", "Catalan", t.getLanguage("cat"))
 
     // this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest
-    every { container.findLanguageName(any()) } returns container
-    every { container.languageName } returns "English"
     assertEquals("code length equals 2 (dummy)", "English", t.getLanguage("en"))
   }
 }

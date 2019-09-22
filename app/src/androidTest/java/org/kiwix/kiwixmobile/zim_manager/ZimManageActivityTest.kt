@@ -41,7 +41,7 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         searchFor(book)
         pressBack()
         pressBack()
-        queueMockResponseWith("0123456789")
+        forceResponse("0123456789")
         clickOn(book)
       }
       clickOnDownloading {
@@ -51,7 +51,7 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         clickPositiveDialogButton()
       }
       clickOnOnline {
-        queueMockResponseWith("01234")
+        forceResponse("01234")
         clickOn(book)
       }
       clickOnDownloading {
@@ -72,8 +72,8 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
     } clickOnLanguageIcon { }
   }
 
-  private fun queueMockResponseWith(body: String) {
-    mockServer.queueResponse(
+  private fun forceResponse(body: String) {
+    mockServer.forceResponse(
       MockResponse()
         .setBody(body)
         .throttleBody(

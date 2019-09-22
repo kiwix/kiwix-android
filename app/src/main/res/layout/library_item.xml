@@ -1,124 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:orientation="horizontal"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    >
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="?android:attr/selectableItemBackground"
+  android:minHeight="?android:attr/listPreferredItemHeight"
+  android:orientation="horizontal"
+  android:paddingBottom="@dimen/activity_vertical_margin"
+  android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingRight="@dimen/activity_horizontal_margin"
+  android:paddingTop="@dimen/activity_vertical_margin"
+  >
 
   <ImageView
-      android:id="@+id/favicon"
-      android:layout_width="@dimen/favicon_width"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:layout_marginRight="@dimen/favicon_margin_right"
-      android:adjustViewBounds="true"
-      android:scaleType="fitCenter"
-      android:src="@mipmap/kiwix_icon"
-      />
+    android:id="@+id/favicon"
+    android:layout_width="@dimen/favicon_width"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginRight="@dimen/favicon_margin_right"
+    android:adjustViewBounds="true"
+    android:scaleType="fitCenter"
+    android:src="@mipmap/kiwix_icon"
+    />
 
   <LinearLayout
-      android:layout_width="0dp"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dimen_small_padding"
+    tools:ignore="HardcodedText"
+    >
+
+    <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:orientation="vertical"
-      android:paddingLeft="@dimen/dimen_small_padding"
-      tools:ignore="HardcodedText"
-      >
+      android:text="Title"
+      android:textAppearance="?android:attr/textAppearanceListItem"
+      />
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceListItem"
-        />
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        />
+      android:id="@+id/description"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Description"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/dimen_medium_padding"
-        >
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/dimen_medium_padding"
+      >
 
       <LinearLayout
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:layout_weight="1"
-          android:orientation="vertical"
-          >
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
 
         <TextView
-            android:id="@+id/size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="File Size"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
+          android:id="@+id/size"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="File Size"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          />
 
         <TextView
-            android:id="@+id/creator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Author"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
+          android:id="@+id/creator"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Author"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          />
 
         <TextView
-            android:id="@+id/publisher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Publisher"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
+          android:id="@+id/publisher"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Publisher"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          />
 
       </LinearLayout>
 
       <LinearLayout
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:layout_weight="1"
-          android:gravity="right"
-          android:orientation="vertical"
-          >
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:orientation="vertical"
+        >
 
         <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
+          android:id="@+id/date"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Date"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          />
 
         <TextView
-            android:id="@+id/language"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Language"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
+          android:id="@+id/language"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Language"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          />
 
         <TextView
-            android:id="@+id/fileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="File Name"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
+          android:id="@+id/fileName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="File Name"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          />
 
       </LinearLayout>
 

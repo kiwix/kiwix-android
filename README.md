@@ -3,17 +3,17 @@
   <img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" />
 </a>
 <a href="https://f-droid.org/fr/packages/org.kiwix.kiwixmobile/" target="_blank" align="left">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Get_it_on_F-Droid.svg/320px-Get_it_on_F-Droid.svg.png" alt="Get it on F-Droid" height="30" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Get_it_on_F-Droid.svg/320px-Get_it_on_F-Droid.svg.png" alt="Get it on F-Droid" height="29" />
 </a>
 
-# Kiwix-Android
+# Kiwix Android
 
 Kiwix is an offline reader for Web content. One of its main purposes
 is to make Wikipedia available offline. This is done by reading the
 content of a file in the ZIM format, a highly compressed open format
-with additional meta-data.
+with additional meta-data. This is the version for Android.
 
-Kiwix is written in [Kotlin](https://kotlinlang.org/) (with a few old
+Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
 pieces in Java).
 
 [![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=develop)](https://travis-ci.org/kiwix/kiwix-android)
@@ -21,6 +21,7 @@ pieces in Java).
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
 
 ## Build Instructions
 
@@ -49,6 +50,7 @@ different versions of our app. Ensure your build variant is
 - [MockK](https://github.com/mockk/mockk) - Kotlin mocking library that allows mocking of final classes by default.
 - [JUnit5](https://github.com/junit-team/junit5/) - The next generation of JUnit
 - [AssertJ](https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code
+- [Fetch](https://github.com/tonyofrancis/Fetch) - A customizable file download manager library for Android
 
 ## Contributing
 
@@ -73,19 +75,17 @@ guidelines. Pull requests not matching the style will be rejected.
 
 ## Communication
 
-Please use IRC to discuss questions regarding the project: #kiwix on
-irc.freenode.net
-
-You can use IRC web interface on
-[http://chat.kiwix.org/](http://chat.kiwix.org/).
-
-Our other sources of communications include:
-- Email: contact@kiwix.org
-- Mailing list: kiwix-developer@lists.sourceforge.net
+Available communication channels:
+* [Web Public Chat channel](https://chat.kiwix.org)
+* [Email](mailto:contact+android@kiwix.org)
+* [Mailing list](kiwix-developer@lists.sourceforge.net)
+* [Slack](https://kiwixoffline.slack.com): #android channel
+* IRC: #kiwix on irc.freenode.net
 
 For more information, please refer to
 [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
 
-## LEGAL & DISCLAIMER
+## License
 
-Please refer to [COPYING](COPYING).
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0) or later, see
+[COPYING](COPYING) for more details.

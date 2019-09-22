@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Get Content</string>
+  <string name="menu_zim_manager">Library</string>
   <string name="menu_help">Help</string>
   <string name="menu_home">Home</string>
   <string name="menu_settings">Settings</string>
@@ -237,14 +237,13 @@
   </string-array>
   <string name="bookmarks_from_current_book">Bookmarks from current book</string>
   <string name="search_bookmarks">Search bookmarks</string>
-  <string name="new_tab">New tab</string>
   <string name="switch_tabs">Switch tabs</string>
   <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Close all tabs</string>
   <string name="pending_state">Pending</string>
   <string name="running_state">In Progress</string>
   <string name="successful_state">Complete</string>
-  <string name="paused_state">Paused: %s</string>
+  <string name="paused_state">Paused</string>
   <string name="failed_state">Failed: %s</string>
   <string name="paused_wifi">Waiting for Wifi</string>
   <string name="paused_connectivity">Waiting to connect to a network</string>
@@ -260,7 +259,6 @@
   <string name="failed_unhandled_http_code">Unknown HTTP code received</string>
   <string name="failed_unknown">Unknown</string>
   <string name="failed_http_code">HTTP code %s</string>
-  <string name="add_note">Add Note</string>
   <string name="save">Save</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Wiki Article Title</string>
@@ -272,10 +270,8 @@
   <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
   <string name="note_share_app_chooser_title">Share note file with:</string>
   <string name="confirmation_alert_dialog_message">Discard unsaved changes?</string>
-  <string name="clear_all_notes">Clear All Notes</string>
   <string name="delete_notes_confirmation_msg">Delete all notes?</string>
   <string name="ext_storage_permission_not_granted">Error: Storage permissions not granted</string>
-  <string name="notes_deletion_none_found">No notes found for deletion</string>
   <string name="notes_deletion_successful">Entire notes folder deleted</string>
   <string name="notes_deletion_unsuccessful">Some files not deleted</string>
   <plurals name="books_count">
@@ -308,4 +304,6 @@
   <string name="performing_handshake">Performing handshake....</string>
   <string name="local_zim_sharing">Local ZIM Sharing</string>
   <string name="status">Status</string>
+  <string name="pref_clear_all_notes_summary">Clears all notes on all articles</string>
+  <string name="pref_clear_all_notes_title">Clear all notes</string>
 </resources>

@@ -22,22 +22,28 @@ import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.HistoryDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookmarksDao
-import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.database.newdb.entities.MyObjectBox
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule {
-  @Provides @Singleton fun providesBoxStore(context: Context): BoxStore =
-    MyObjectBox.builder().androidContext(context.applicationContext).build()
+open class DatabaseModule {
+  companion object {
+    var boxStore: BoxStore? = null
+  }
 
-  @Provides @Singleton fun providesNewDownloadDao(boxStore: BoxStore): NewDownloadDao =
-    NewDownloadDao(boxStore.boxFor())
+  // NOT RECOMMENDED TODO use custom runner to load TestApplication
+  @Provides @Singleton fun providesBoxStore(context: Context): BoxStore {
+    if (boxStore == null) {
+      boxStore = MyObjectBox.builder().androidContext(context).build()
+    }
+    return boxStore!!
+  }
 
   @Provides @Singleton fun providesNewBookDao(boxStore: BoxStore): NewBookDao =
     NewBookDao(boxStore.boxFor())
@@ -53,4 +59,10 @@ class DatabaseModule {
 
   @Provides @Singleton fun providesNewRecentSearchDao(boxStore: BoxStore): NewRecentSearchDao =
     NewRecentSearchDao(boxStore.boxFor())
+
+  @Provides @Singleton fun providesFetchDownloadDao(
+    boxStore: BoxStore,
+    newBookDao: NewBookDao
+  ): FetchDownloadDao =
+    FetchDownloadDao(boxStore.boxFor(), newBookDao)
 }

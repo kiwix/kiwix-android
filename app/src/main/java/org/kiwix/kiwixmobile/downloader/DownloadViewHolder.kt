@@ -25,6 +25,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.download_item.description
 import kotlinx.android.synthetic.main.download_item.downloadProgress
 import kotlinx.android.synthetic.main.download_item.downloadState
+import kotlinx.android.synthetic.main.download_item.eta
 import kotlinx.android.synthetic.main.download_item.favicon
 import kotlinx.android.synthetic.main.download_item.stop
 import kotlinx.android.synthetic.main.download_item.title
@@ -35,7 +36,6 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadState.Paused
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Pending
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Running
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
-import org.kiwix.kiwixmobile.downloader.model.FailureReason.Rfc2616HttpCode
 import org.kiwix.kiwixmobile.extensions.setBitmap
 
 class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
@@ -51,36 +51,21 @@ class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHo
     stop.setOnClickListener {
       itemClickListener.invoke(downloadItem)
     }
-    downloadState.text = toReadableState(
-      downloadItem.downloadState, containerView.context
-    )
+    downloadState.text = toReadableState(downloadItem.downloadState, containerView.context)
+    eta.text = downloadItem.eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
   }
 
   private fun toReadableState(
     downloadState: DownloadState,
     context: Context
   ) = when (downloadState) {
-    is Paused -> context.getString(
-      downloadState.stringId,
-      context.getString(downloadState.reason.stringId)
-    )
     is Failed -> context.getString(
       downloadState.stringId,
-      getTemplateString(downloadState, context)
+      downloadState.reason.name
     )
     Pending,
     Running,
+    Paused,
     Successful -> context.getString(downloadState.stringId)
-  }
-
-  private fun getTemplateString(
-    downloadState: Failed,
-    context: Context
-  ) = when (downloadState.reason) {
-    is Rfc2616HttpCode -> context.getString(
-      downloadState.reason.stringId,
-      downloadState.reason.code
-    )
-    else -> context.getString(downloadState.reason.stringId)
   }
 }

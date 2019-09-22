@@ -30,7 +30,7 @@ public class LocationServicesHelper {
 
   @Inject
   public LocationServicesHelper(@NonNull Activity activity,
-      @NonNull LocationCallbacks locationCallbacks) {
+    @NonNull LocationCallbacks locationCallbacks) {
     this.activity = activity;
     this.locationCallbacks = locationCallbacks;
   }
@@ -42,11 +42,11 @@ public class LocationServicesHelper {
     locationRequest.setFastestInterval(10);
     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     LocationSettingsRequest.Builder builder = new
-        LocationSettingsRequest.Builder();
+      LocationSettingsRequest.Builder();
     builder.addLocationRequest(locationRequest);
 
     task = com.google.android.gms.location.LocationServices.getSettingsClient(activity)
-        .checkLocationSettings(builder.build());
+      .checkLocationSettings(builder.build());
 
     locationSettingsResponseBuilder();
   }
@@ -71,8 +71,8 @@ public class LocationServicesHelper {
               // Show the dialog by calling startResolutionForResult(),
               // and check the result in onActivityResult().
               resolvable.startResolutionForResult(
-                  activity,
-                  LOCATION_SETTINGS_PERMISSION_RESULT);
+                activity,
+                LOCATION_SETTINGS_PERMISSION_RESULT);
             } catch (IntentSender.SendIntentException e) {
               // Ignore the error.
             } catch (ClassCastException e) {

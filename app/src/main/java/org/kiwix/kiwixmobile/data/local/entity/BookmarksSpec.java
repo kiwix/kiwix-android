@@ -28,8 +28,6 @@ public class BookmarksSpec {
   @ColumnSpec(constraints = "NOT NULL")
   public String ZimId;
   public String ZimName;
-  public String zimFilePath;
   public String bookmarkUrl;
   public String bookmarkTitle;
-  public String favicon;
 }

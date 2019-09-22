@@ -29,7 +29,7 @@ public class WebServerHelper {
   private boolean isServerStarted;
 
   @Inject public WebServerHelper(@NonNull JNIKiwixLibrary kiwixLibrary,
-      @NonNull JNIKiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
+    @NonNull JNIKiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
     this.kiwixLibrary = kiwixLibrary;
     this.kiwixServer = kiwixServer;
     this.ipAddressCallbacks = ipAddressCallbacks;
@@ -83,20 +83,20 @@ public class WebServerHelper {
   //If no ip is found after 15 seconds, dismisses the progress dialog
   public void pollForValidIpAddress() {
     Flowable.interval(1, TimeUnit.SECONDS)
-        .map(__ -> ServerUtils.getIp())
-        .filter(s -> s != INVALID_IP)
-        .timeout(15, TimeUnit.SECONDS)
-        .take(1)
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(
-            s -> {
-              ipAddressCallbacks.onIpAddressValid();
-              Log.d(TAG, "onSuccess:  " + s);
-            },
-            e -> {
-              Log.d(TAG, "Unable to turn on server", e);
-              ipAddressCallbacks.onIpAddressInvalid();
-            }
-        );
+      .map(__ -> ServerUtils.getIp())
+      .filter(s -> s != INVALID_IP)
+      .timeout(15, TimeUnit.SECONDS)
+      .take(1)
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        s -> {
+          ipAddressCallbacks.onIpAddressValid();
+          Log.d(TAG, "onSuccess:  " + s);
+        },
+        e -> {
+          Log.d(TAG, "Unable to turn on server", e);
+          ipAddressCallbacks.onIpAddressInvalid();
+        }
+      );
   }
 }

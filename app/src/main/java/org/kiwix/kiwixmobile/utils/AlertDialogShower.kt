@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.utils
 
 import android.app.Activity
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.utils.KiwixDialog.StartHotspotManually
 import javax.inject.Inject
@@ -45,7 +45,7 @@ class AlertDialogShower @Inject constructor(
   }
 
   private fun bodyArguments(dialog: KiwixDialog) =
-    if (dialog is HasBodyFormatArgs) dialog.args
+    if (dialog is HasBodyFormatArgs) dialog.args.toTypedArray()
     else emptyArray()
 
   private fun dialogStyle() =
