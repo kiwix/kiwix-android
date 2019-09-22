@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
-  <settings>
+  <settings default="Kiwix Copyright Profile">
     <module2copyright>
-      <element module="Project Files" copyright="Kiwix Copyright Profile" />
+      <element module="Git Kiwix Copyright Scope" copyright="Kiwix Copyright Profile" />
     </module2copyright>
   </settings>
 </component>
