@@ -160,12 +160,17 @@ object FileUtils {
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
-      } else if ("com.android.providers.downloads.documents" == uri.authority)
+      } else if ("com.android.providers.downloads.documents" == uri.authority
+      )
         return contentQuery(
           ctx,
           ContentUris.withAppendedId(
             Uri.parse("content://downloads/public_downloads"),
-            DocumentsContract.getDocumentId(uri).toLong()
+            try {
+              DocumentsContract.getDocumentId(uri).toLong()
+            } catch (ignore: NumberFormatException) {
+              0L
+            }
           )
         )
     } else if ("content".equals(uri.scheme!!, ignoreCase = true)) {
