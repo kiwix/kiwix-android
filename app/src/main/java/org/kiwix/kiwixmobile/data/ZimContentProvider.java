@@ -370,7 +370,7 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   public static boolean isRedirect(String url) {
-    return !url.equals(getRedirect(url));
+    return url.startsWith(CONTENT_URI.toString()) && !url.equals(getRedirect(url));
   }
 
   @Override
