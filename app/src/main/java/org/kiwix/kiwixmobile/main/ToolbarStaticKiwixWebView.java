@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 /**
@@ -33,8 +34,9 @@ public class ToolbarStaticKiwixWebView extends KiwixWebView {
     super(context);
   }
 
-  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
-    super(context, callback, attrs);
+  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback,
+    ViewGroup nonVideoView, ViewGroup videoView, AttributeSet attrs) {
+    super(context, callback, attrs,nonVideoView,videoView);
     heightDifference = DimenUtils.getToolbarHeight(context);
     setTranslationY(heightDifference);
   }

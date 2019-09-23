@@ -60,26 +60,24 @@ public class KiwixWebViewClient extends WebViewClient {
     callback.webViewUrlLoading();
 
     if (zimReaderContainer.isRedirect(url)) {
-      view.loadUrl(zimReaderContainer.getRedirect(url));
-      return true;
-    } else if (url.startsWith(ZimFileReader.CONTENT_URI.toString())) {
-      String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-      if (DOCUMENT_TYPES.containsKey(extension)) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse(url);
-        intent.setDataAndType(uri, DOCUMENT_TYPES.get(extension));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        callback.openExternalUrl(intent);
+      if (handleEpubAndPdf(url)) {
         return true;
       }
-      return false;
-    } else if (url.startsWith("file://")) {
+      view.loadUrl(zimReaderContainer.getRedirect(url));
+      return true;
+    }
+    if (url.startsWith(ZimFileReader.CONTENT_URI.toString())) {
+      return handleEpubAndPdf(url);
+    }
+    if (url.startsWith("file://")) {
       // To handle home page (loaded from resources)
       return true;
-    } else if (url.startsWith("javascript:")) {
+    }
+    if (url.startsWith("javascript:")) {
       // Allow javascript for HTML functions and code execution (EX: night mode)
       return true;
-    } else if (url.startsWith(ZimFileReader.UI_URI.toString())) {
+    }
+    if (url.startsWith(ZimFileReader.UI_URI.toString())) {
       Log.e("KiwixWebViewClient", "UI Url " + url + " not supported.");
       //TODO: Document this code - what's a UI_URL?
       return true;
@@ -90,6 +88,19 @@ public class KiwixWebViewClient extends WebViewClient {
     intent.putExtra(EXTRA_EXTERNAL_LINK, true);
     callback.openExternalUrl(intent);
     return true;
+  }
+
+  private boolean handleEpubAndPdf(String url) {
+    String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+    if (DOCUMENT_TYPES.containsKey(extension)) {
+      Intent intent = new Intent(Intent.ACTION_VIEW);
+      Uri uri = Uri.parse(url);
+      intent.setDataAndType(uri, DOCUMENT_TYPES.get(extension));
+      intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+      callback.openExternalUrl(intent);
+      return true;
+    }
+    return false;
   }
 
   @Override
