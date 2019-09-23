@@ -18,16 +18,5 @@ public class ZimHostModule {
   @Provides Activity providesActivity(ZimHostActivity zimHostActivity) {
     return zimHostActivity;
   }
-
-  @ActivityScope
-  @Provides LocationServicesHelper providesLocationServicesHelper(ZimHostActivity activity,
-    LocationCallbacks locationCallbacks) {
-    return new LocationServicesHelper(activity, locationCallbacks);
-  }
-
-  @ActivityScope
-  @Provides LocationCallbacks providesLocationCallbacks(ZimHostActivity activity) {
-    return activity;
-  }
 }
 

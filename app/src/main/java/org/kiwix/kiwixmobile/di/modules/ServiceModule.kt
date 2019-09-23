@@ -1,10 +1,8 @@
 package org.kiwix.kiwixmobile.di.modules
 
-import android.app.Application
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
-import android.net.wifi.WifiManager
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixlib.JNIKiwixLibrary
@@ -12,9 +10,9 @@ import org.kiwix.kiwixlib.JNIKiwixServer
 import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotNotificationManager
-import org.kiwix.kiwixmobile.wifi_hotspot.HotspotStateListener
+import org.kiwix.kiwixmobile.wifi_hotspot.HotspotStateReceiver
+import org.kiwix.kiwixmobile.wifi_hotspot.HotspotStateReceiver.Callback
 import org.kiwix.kiwixmobile.wifi_hotspot.IpAddressCallbacks
-import org.kiwix.kiwixmobile.wifi_hotspot.WifiHotspotManager
 
 @Module
 class ServiceModule {
@@ -26,19 +24,6 @@ class ServiceModule {
     kiwixServer: JNIKiwixServer,
     ipAddressCallbacks: IpAddressCallbacks
   ): WebServerHelper = WebServerHelper(jniKiwixLibrary, kiwixServer, ipAddressCallbacks)
-
-  @Provides
-  @ServiceScope
-  fun providesWifiHotspotManager(
-    wifiManager: WifiManager,
-    hotspotStateListener: HotspotStateListener
-  ): WifiHotspotManager =
-    WifiHotspotManager(wifiManager, hotspotStateListener)
-
-  @Provides
-  @ServiceScope
-  fun providesHotspotStateListener(service: Service): HotspotStateListener =
-    service as HotspotStateListener
 
   @Provides
   @ServiceScope
@@ -56,14 +41,21 @@ class ServiceModule {
 
   @Provides
   @ServiceScope
-  fun providesWifiManager(context: Application): WifiManager =
-    context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-  @Provides
-  @ServiceScope
   fun providesHotspotNotificationManager(
     notificationManager: NotificationManager,
     context: Context
   ): HotspotNotificationManager =
     HotspotNotificationManager(notificationManager, context)
+
+  @Provides
+  @ServiceScope
+  fun providesHotspotStateReceiver(
+    callback: Callback
+  ): HotspotStateReceiver = HotspotStateReceiver(callback)
+
+  @Provides
+  @ServiceScope
+  fun providesHotspotStateReceiverCallback(
+    service: Service
+  ): HotspotStateReceiver.Callback = service as Callback
 }
