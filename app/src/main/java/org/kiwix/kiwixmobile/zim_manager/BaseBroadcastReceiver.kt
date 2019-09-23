@@ -6,7 +6,7 @@ import android.content.Intent
 
 abstract class BaseBroadcastReceiver : BroadcastReceiver() {
 
-abstract val action:String
+  abstract val action: String
 
   override fun onReceive(
     context: Context,
@@ -21,5 +21,4 @@ abstract val action:String
     context: Context,
     intent: Intent
   )
-
 }

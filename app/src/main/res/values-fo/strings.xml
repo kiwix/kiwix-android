@@ -4,11 +4,11 @@
   <string name="menu_home">Heim</string>
   <string name="menu_settings">Innstillingar</string>
   <string name="menu_search">Leita</string>
-  <string name="menu_searchintext">Finn í teksti</string>
+  <string name="menu_search_in_text">Finn í teksti</string>
   <string name="menu_bookmarks">Bókamerki</string>
-  <string name="menu_randomarticle">Tilvildarlig grein</string>
-  <string name="menu_fullscreen">Fullan skerm</string>
-  <string name="menu_exitfullscreen">Far burtur frá fullum skermi</string>
+  <string name="menu_random_article">Tilvildarlig grein</string>
+  <string name="menu_full_screen">Fullan skerm</string>
+  <string name="menu_exit_full_screen">Far burtur frá fullum skermi</string>
   <string name="search_label">Leita</string>
   <string name="pref_display_title">Vís</string>
   <string name="pref_info_title">Kunning</string>
@@ -17,4 +17,26 @@
   <string name="pref_language_chooser">Vel eitt mál</string>
   <string name="menu_bookmarks_list">Bókamerki</string>
   <string name="zim_manager">Bókasavn</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

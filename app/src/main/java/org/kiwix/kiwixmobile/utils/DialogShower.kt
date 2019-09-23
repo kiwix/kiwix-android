@@ -16,9 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.kiwix.kiwixmobile.utils
+
 interface DialogShower {
   fun show(
     dialog: KiwixDialog,
-    vararg clickListener: () -> Unit
+    vararg clickListeners: () -> Unit
   )
 }

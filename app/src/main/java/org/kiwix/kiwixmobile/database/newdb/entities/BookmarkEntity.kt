@@ -20,24 +20,41 @@ package org.kiwix.kiwixmobile.database.newdb.entities
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark
 
 @Entity
 data class BookmarkEntity(
   @Id var id: Long = 0,
   val zimId: String,
   var zimName: String,
-  var zimFilePath: String,
+  var zimFilePath: String?,
   var bookmarkUrl: String,
   var bookmarkTitle: String,
-  var favicon: String
+  var favicon: String?
 ) {
   constructor(item: BookmarkItem) : this(
-      item.databaseId,
-      item.zimId,
-      item.zimName,
-      item.zimFilePath,
-      item.bookmarkUrl,
-      item.bookmarkTitle,
-      item.favicon
+    item.databaseId,
+    item.zimId,
+    item.zimName,
+    item.zimFilePath,
+    item.bookmarkUrl,
+    item.bookmarkTitle,
+    item.favicon
+  )
+
+  private constructor(bookmark: Bookmark, zimFilePath: String?, favicon: String?) : this(
+    0,
+    bookmark.zimId,
+    bookmark.zimName,
+    zimFilePath,
+    bookmark.bookmarkUrl,
+    bookmark.bookmarkTitle,
+    favicon
+  )
+
+  constructor(bookmarkWithFavIconAndFile: Pair<Bookmark, Pair<String?, String?>>) : this(
+    bookmarkWithFavIconAndFile.first,
+    bookmarkWithFavIconAndFile.second.first,
+    bookmarkWithFavIconAndFile.second.second
   )
 }

@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="menu_help">הילף</string>
+  <string name="menu_home">היים</string>
+  <string name="menu_settings">פרעפֿערענצן</string>
+  <string name="menu_search">זוכן</string>
+  <string name="menu_search_in_text">זוכן אין טעקסט</string>
+  <string name="menu_bookmarks">ליין־צייכנס</string>
+  <string name="menu_random_article">צופֿעליגער ארטיקל</string>
+  <string name="menu_full_screen">פֿולער עקראן</string>
+  <string name="menu_exit_full_screen">אוועקגיין פון פולן עקראן</string>
+  <string name="menu_read_aloud">לייענען הויך</string>
+  <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
+  <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
+  <string name="save_media_error">א טעות האט פאסירט ביים אויפהיטן די מעדיע!</string>
+  <string name="save_media_saved">מעדיע אויפֿגעהיטן ווי %s צו Android/media/org.kiwix…/</string>
+  <string name="search_label">זוכן</string>
+  <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
+  <string name="error_article_url_not_found">טעות: לאדן ארטיקל (Url: %1$s) דורכגעפאלן.</string>
+  <string name="pref_display_title">אויסשטעלונג</string>
+  <string name="pref_zoom_dialog">פארגרעסערונג־טיף</string>
+  <string name="pref_info_title">אינפֿארמאציע</string>
+  <string name="pref_info_version">ווערסיע</string>
+  <string name="pref_zoom_enable">זום־קאנטראלן</string>
+  <string name="pref_night_mode">נאכטמאדע</string>
+  <string name="pref_back_to_top">צוריק אויבן</string>
+  <string name="pref_language_title">שפראַך</string>
+  <string name="pref_language_chooser">קלויבט א שפראך</string>
+  <string name="pref_credits_title">קרעדיטן</string>
+  <string name="menu_bookmarks_list">ליין־צייכנס</string>
+  <string name="delete">אויסמעקן</string>
+  <string name="did_you_know">צי האט איר געוואוסט?</string>
+  <string name="undo">אַנולירן</string>
+  <string name="zim_manager">ביבליאטעק</string>
+  <string name="delete_specific_zim_toast">טעקע אויסגעמעקט</string>
+  <string name="zim_file_downloaded">אַראָפגעלאָדן</string>
+  <string name="download_stop">אויפֿהערן</string>
+  <string name="no_files_here">קיין טעקעס דא</string>
+  <string name="yes">יא</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
+</resources>

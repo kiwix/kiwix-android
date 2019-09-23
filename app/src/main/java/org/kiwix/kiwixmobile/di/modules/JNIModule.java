@@ -17,10 +17,13 @@
  */
 package org.kiwix.kiwixmobile.di.modules;
 
+import android.content.Context;
+import androidx.annotation.NonNull;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixSearcher;
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -29,7 +32,13 @@ import org.kiwix.kiwixlib.JNIKiwix;
 @Module public class JNIModule {
   @Provides
   @Singleton
-  public JNIKiwix providesJNIKiwix() {
-    return new JNIKiwix();
+  public JNIKiwix providesJNIKiwix(@NonNull Context context) {
+    return new JNIKiwix(context);
+  }
+
+  @Provides
+  @Singleton
+  public JNIKiwixSearcher providesJNIKiwixSearcher() {
+    return new JNIKiwixSearcher();
   }
 }

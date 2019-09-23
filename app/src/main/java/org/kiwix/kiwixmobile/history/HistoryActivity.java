@@ -23,24 +23,27 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View,
-    HistoryAdapter.OnItemClickListener {
+  HistoryAdapter.OnItemClickListener {
 
   private final List<HistoryListItem> historyList = new ArrayList<>();
   private final List<HistoryListItem> fullHistory = new ArrayList<>();
   private final List<HistoryListItem> deleteList = new ArrayList<>();
   private static final String LIST_STATE_KEY = "recycler_list_state";
+  public static final String USER_CLEARED_HISTORY = "user_cleared_history";
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @Inject
   HistoryContract.Presenter presenter;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   private boolean refreshAdapter = true;
@@ -73,8 +76,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
               if the item being removed is between two category headers.
                */
             if (position - 1 >= 0 && historyList.get(position - 1) == null &&
-                (position + 1 >= historyList.size() ||
-                    (position + 1 < historyList.size() && historyList.get(position + 1) == null))) {
+              (position + 1 >= historyList.size() ||
+                (position + 1 < historyList.size() && historyList.get(position + 1) == null))) {
               historyList.remove(position - 1);
               historyAdapter.notifyItemRemoved(position - 1);
             }
@@ -106,7 +109,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
-    setContentView(R.layout.activity_bookmarks_history_language);
+    setContentView(R.layout.activity_history);
     setSupportActionBar(toolbar);
 
     ActionBar actionBar = getSupportActionBar();
@@ -192,6 +195,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
         fullHistory.clear();
         historyList.clear();
         historyAdapter.notifyDataSetChanged();
+        setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
         Toast.makeText(this, R.string.all_history_cleared_toast, Toast.LENGTH_SHORT).show();
         return true;
     }
@@ -223,11 +227,11 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     if (actionMode == null) {
       Intent intent = new Intent(this, MainActivity.class);
       intent.putExtra(EXTRA_CHOSE_X_URL, history.getHistoryUrl());
-      if (!history.getZimFilePath().equals(ZimContentProvider.getZimFile())) {
+      if (!history.getZimFilePath().equals(zimReaderContainer.getZimCanonicalPath())) {
         intent.setData(Uri.fromFile(new File(history.getZimFilePath())));
       }
       if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0)
-          == 1) {
+        == 1) {
         startActivity(intent);
         finish();
       } else {
@@ -255,7 +259,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       ImageViewExtensionsKt.setBitmapFromString(favicon, history.getFavicon());
     } else {
       favicon.setImageDrawable(
-          ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
+        ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
       deleteList.add(history);
     }
     actionMode.setTitle(getString(R.string.selected_items, deleteList.size()));

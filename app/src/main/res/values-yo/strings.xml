@@ -4,11 +4,11 @@
   <string name="menu_home">Ibùdó</string>
   <string name="menu_settings">Àwọn ìfẹ́ràn</string>
   <string name="menu_search">Àwárí</string>
-  <string name="menu_searchintext">Ìwárí nínú ìkọ</string>
+  <string name="menu_search_in_text">Ìwárí nínú ìkọ</string>
   <string name="menu_bookmarks">Àwọn ojúewé àdápamọ́</string>
-  <string name="menu_randomarticle">Àyọkà àrìnnàkò</string>
-  <string name="menu_fullscreen">Ojúìran kíkúnrẹ́rẹ́</string>
-  <string name="menu_exitfullscreen">Ìjáde kúrò ní ojúìran kíkúnrẹ́rẹ́</string>
+  <string name="menu_random_article">Àyọkà àrìnnàkò</string>
+  <string name="menu_full_screen">Ojúìran kíkúnrẹ́rẹ́</string>
+  <string name="menu_exit_full_screen">Ìjáde kúrò ní ojúìran kíkúnrẹ́rẹ́</string>
   <string name="search_label">Àwárí</string>
   <string name="pref_display_title">Ìmúhàn</string>
   <string name="pref_info_title">Ìfitọ́nilétí</string>
@@ -16,4 +16,26 @@
   <string name="pref_language_title">Èdè</string>
   <string name="menu_bookmarks_list">Àwọn ojúewé àdápamọ́</string>
   <string name="zim_manager">Ibiàmúlò</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

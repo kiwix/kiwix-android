@@ -19,7 +19,7 @@ class MainContract {
   }
 
   interface Presenter extends BaseContract.Presenter<View> {
-    void showHome();
+    void loadBooks();
 
     void saveBooks(List<BooksOnDiskListItem.BookOnDisk> books);
 
@@ -29,6 +29,6 @@ class MainContract {
 
     void saveBookmark(BookmarkItem bookmark);
 
-    void deleteBookmark(BookmarkItem bookmark);
+    void deleteBookmark(String bookmarkUrl);
   }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="AppTheme" parent="AppTheme.Base"/>
+  <style name="AppTheme" parent="AppTheme.Base" />
 
   <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorPrimary">@color/primary</item>
@@ -72,11 +72,6 @@
     <item name="colorControlNormal">@color/accent</item>
   </style>
 
-  <style name="WindowAnimationTransition">
-    <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
-    <item name="android:windowExitAnimation">@android:anim/fade_out</item>
-  </style>
-
   <style name="AppTheme.Launcher">
     <item name="android:windowBackground">@drawable/launch_screen</item>
   </style>
@@ -85,7 +80,7 @@
     <item name="spinBars">true</item>
   </style>
 
-  <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView"/>
+  <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView" />
 
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -152,6 +147,19 @@
     <item name="android:windowFullscreen">false</item>
     <item name="android:windowIsFloating">false</item>
     <item name="android:windowBackground">@color/cardview_dark_background</item>
+  </style>
+
+  <style name="no_list_content_text" parent="TextAppearance.AppCompat">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">20sp</item>
+    <item name="android:textColor">@color/grey</item>
+    <item name="android:visibility">gone</item>
+    <item name="layout_constraintLeft_toLeftOf">parent</item>
+    <item name="layout_constraintRight_toRightOf">parent</item>
+    <item name="layout_constraintVertical_bias">0.4</item>
+    <item name="layout_constraintTop_toTopOf">parent</item>
+    <item name="layout_constraintBottom_toBottomOf">parent</item>
   </style>
 
 </resources>

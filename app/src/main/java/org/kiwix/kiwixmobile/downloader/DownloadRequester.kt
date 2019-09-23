@@ -18,12 +18,9 @@
 package org.kiwix.kiwixmobile.downloader
 
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadRequest
-import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 
 interface DownloadRequester {
   fun enqueue(downloadRequest: DownloadRequest): Long
-  fun query(downloadModels: List<DownloadModel>): List<DownloadStatus>
   fun cancel(downloadItem: DownloadItem)
 }

@@ -19,20 +19,23 @@ package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
 import com.jakewharton.threetenabp.AndroidThreeTen;
-import com.squareup.leakcanary.LeakCanary;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.downloader.DownloadMonitor;
 
 public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
 
@@ -45,7 +48,10 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
 
   @Inject
   DispatchingAndroidInjector<Activity> activityInjector;
-  private File logFile;
+  @Inject
+  DownloadMonitor downloadMonitor;
+  @Inject
+  KiwixDatabase kiwixDatabase;
 
   public static KiwixApplication getInstance() {
     return application;
@@ -64,51 +70,84 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     super.attachBaseContext(base);
     application = this;
     setApplicationComponent(DaggerApplicationComponent.builder()
-        .context(this)
-        .build());
+      .context(this)
+      .build());
   }
 
   @Override
   public void onCreate() {
     super.onCreate();
-    if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
-      return;
-    }
     AndroidThreeTen.init(this);
+    writeLogFile();
+    applicationComponent.inject(this);
+    kiwixDatabase.forceMigration();
+    downloadMonitor.init();
+    if (BuildConfig.DEBUG) {
+      StrictMode.setThreadPolicy(buildThreadPolicy(new StrictMode.ThreadPolicy.Builder()));
+      StrictMode.setVmPolicy(buildVmPolicy(new StrictMode.VmPolicy.Builder()));
+    }
+  }
+
+  private void writeLogFile() {
     if (isExternalStorageWritable()) {
       File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
-      logFile = new File(appDirectory, "logcat.txt");
+      File logFile = new File(appDirectory, "logcat.txt");
       Log.d("KIWIX", "Writing all logs into [" + logFile.getPath() + "]");
-
       // create app folder
       if (!appDirectory.exists()) {
         appDirectory.mkdir();
       }
-
-      // create log folder
-      if (!appDirectory.exists()) {
-        appDirectory.mkdir();
-      }
-
       if (logFile.exists() && logFile.isFile()) {
         logFile.delete();
       }
-
       // clear the previous logcat and then write the new one to the file
       try {
         logFile.createNewFile();
-        Process process = Runtime.getRuntime().exec("logcat -c");
-        process = Runtime.getRuntime().exec("logcat -f " + logFile.getPath() + " -s kiwix");
+        Runtime.getRuntime().exec("logcat -c");
+        Runtime.getRuntime().exec("logcat -f " + logFile.getPath() + " -s kiwix");
       } catch (IOException e) {
         Log.e("KIWIX", "Error while writing logcat.txt", e);
       }
     }
+  }
 
-    Log.d("KIWIX", "Started KiwixApplication");
-    applicationComponent.inject(this);
-    LeakCanary.install(this);
+  private StrictMode.ThreadPolicy buildThreadPolicy(StrictMode.ThreadPolicy.Builder builder) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      builder.detectResourceMismatches();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      builder.detectUnbufferedIo();
+    }
+    return builder.detectCustomSlowCalls()
+      .detectDiskReads()
+      .detectDiskWrites()
+      .detectNetwork()
+      .penaltyFlashScreen()
+      .penaltyLog()
+      .build();
+  }
+
+  private StrictMode.VmPolicy buildVmPolicy(StrictMode.VmPolicy.Builder builder) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      builder.detectCleartextNetwork();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      builder.detectContentUriWithoutPermission();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+      builder.detectFileUriExposure();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      builder.detectLeakedRegistrationObjects();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      builder.detectNonSdkApiUsage();
+    }
+    return builder.detectActivityLeaks()
+      .detectLeakedClosableObjects()
+      .detectLeakedSqlLiteObjects()
+      .penaltyLog()
+      .build();
   }
 
   /* Checks if external storage is available for read and write */

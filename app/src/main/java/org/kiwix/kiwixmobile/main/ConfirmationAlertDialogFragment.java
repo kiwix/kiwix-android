@@ -3,25 +3,24 @@ package org.kiwix.kiwixmobile.main;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
 
 /**
  * Created by @Aditya-Sood as a part of GSoC 2019
  *
- * This is a generic helper class for displaying a 2-button (positive & negative) confirmation dialog fragment on top of an existing dialog fragment
- *  - Only for confirmation dialogs with a Positive & Negative button
- *  - If you also need a Neutral button, add it selectively (if-else) for the required use case (Take care of the callback interface as well)
+ * This is a generic helper class for displaying a 2-button (positive & negative) confirmation
+ * dialog fragment on top of an existing dialog fragment
+ * - Only for confirmation dialogs with a Positive & Negative button
+ * - If you also need a Neutral button, add it selectively (if-else) for the required use case (Take
+ * care of the callback interface as well)
  *
  * Currently used as:
- *  - Helper class to show the alert dialog in case the user tries to exit the {@link AddNoteDialog} with unsaved file changes
- *
+ * - Helper class to show the alert dialog in case the user tries to exit the {@link AddNoteDialog}
+ * with unsaved file changes
  **/
 
 public class ConfirmationAlertDialogFragment extends DialogFragment {
@@ -32,7 +31,8 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
   private int stringResourceId;
   private String parentDialogFragmentTAG;
 
-  public ConfirmationAlertDialogFragment(SharedPreferenceUtil sharedPreferenceUtil, String parentDialogFragmentTAG, int stringResourceId) {
+  public ConfirmationAlertDialogFragment(SharedPreferenceUtil sharedPreferenceUtil,
+    String parentDialogFragmentTAG, int stringResourceId) {
     this.sharedPreferenceUtil = sharedPreferenceUtil;
     this.parentDialogFragmentTAG = parentDialogFragmentTAG;
     this.stringResourceId = stringResourceId;
@@ -51,33 +51,35 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
     }
 
     builder.setMessage(stringResourceId)
-        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
+      .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
 
-            if(parentDialogFragment != null) {
-              ((UserClickListener) parentDialogFragment).onPositiveClick();
-            }
+          if (parentDialogFragment != null) {
+            ((UserClickListener) parentDialogFragment).onPositiveClick();
           }
-        })
-        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
+        }
+      })
+      .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
 
-            if(parentDialogFragment != null) {
-              ((UserClickListener) parentDialogFragment).onNegativeClick();
-            }
+          if (parentDialogFragment != null) {
+            ((UserClickListener) parentDialogFragment).onNegativeClick();
           }
-        });
+        }
+      });
 
     return builder.create();
   }
 
-  /** Callback interface for responding to user clicks to a {@link ConfirmationAlertDialogFragment} dialog */
+  /**
+   * Callback interface for responding to user clicks to a {@link ConfirmationAlertDialogFragment}
+   * dialog
+   */
   public interface UserClickListener {
     void onPositiveClick();
 
     void onNegativeClick();
   }
-
 }

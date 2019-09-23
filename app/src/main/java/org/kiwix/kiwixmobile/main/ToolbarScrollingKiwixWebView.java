@@ -23,6 +23,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 public class ToolbarScrollingKiwixWebView extends KiwixWebView {
@@ -37,8 +38,9 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
   }
 
   public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView,
-      View bottomBarView, AttributeSet attrs) {
-    super(context, callback, attrs);
+    View bottomBarView, ViewGroup nonVideoView, ViewGroup videoView,
+    AttributeSet attrs) {
+    super(context, callback, attrs, nonVideoView, videoView);
     this.toolbarView = toolbarView;
     this.bottomBarView = bottomBarView;
   }
@@ -56,7 +58,7 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
     toolbarView.setTranslationY(newTranslation);
     bottomBarView.setTranslationY(
-        newTranslation * -1 * (bottomBarView.getHeight() / (float) (toolbarHeight)));
+      newTranslation * -1 * (bottomBarView.getHeight() / (float) (toolbarHeight)));
     this.setTranslationY(newTranslation + toolbarHeight);
     return toolbarHeight + newTranslation != 0 && newTranslation != 0;
   }

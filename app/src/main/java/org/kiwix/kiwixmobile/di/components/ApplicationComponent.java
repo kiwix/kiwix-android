@@ -20,25 +20,28 @@ package org.kiwix.kiwixmobile.di.components;
 import android.content.Context;
 import dagger.BindsInstance;
 import dagger.Component;
+import eu.mhutti1.utils.storage.StorageSelectDialog;
 import javax.inject.Singleton;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.data.DataModule;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.language.LanguageActivity;
+import org.kiwix.kiwixmobile.main.AddNoteDialog;
 import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
-import org.kiwix.kiwixmobile.zim_manager.DownloadNotificationClickedReceiver;
+import org.kiwix.kiwixmobile.settings.PrefsFragment;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 @Singleton
 @Component(modules = {
-    ApplicationModule.class,
-    NetworkModule.class,
-    JNIModule.class,
-    DataModule.class
+  ApplicationModule.class,
+  NetworkModule.class,
+  JNIModule.class,
+  DataModule.class
 })
 public interface ApplicationComponent {
 
@@ -52,17 +55,23 @@ public interface ApplicationComponent {
 
   ActivityComponent.Builder activityComponent();
 
-  void inject(KiwixApplication application);
+  ServiceComponent.Builder serviceComponent();
 
-  void inject(DownloadService service);
+  void inject(KiwixApplication application);
 
   void inject(ZimContentProvider zimContentProvider);
 
   void inject(KiwixWebView kiwixWebView);
 
-  void inject(KiwixSettingsActivity.PrefsFragment prefsFragment);
+  void inject(PrefsFragment prefsFragment);
 
   void inject(AutoCompleteAdapter autoCompleteAdapter);
 
-  void inject(DownloadNotificationClickedReceiver downloadNotificationClickedReceiver);
+  void inject(@NotNull ZimManageActivity zimManageActivity);
+
+  void inject(@NotNull LanguageActivity languageActivity);
+
+  void inject(@NotNull StorageSelectDialog storageSelectDialog);
+
+  void inject(AddNoteDialog addNoteDialog);
 }

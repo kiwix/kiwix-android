@@ -3,7 +3,9 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter
 import android.graphics.ColorMatrixColorFilter
 import android.view.View
 import kotlinx.android.synthetic.main.header_language.header_language
+import kotlinx.android.synthetic.main.item_book.itemBookCheckbox
 import kotlinx.android.synthetic.main.item_book.item_book_article_count
+import kotlinx.android.synthetic.main.item_book.item_book_clickable_area
 import kotlinx.android.synthetic.main.item_book.item_book_date
 import kotlinx.android.synthetic.main.item_book.item_book_description
 import kotlinx.android.synthetic.main.item_book.item_book_icon
@@ -17,21 +19,31 @@ import org.kiwix.kiwixmobile.main.KiwixWebView
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ArticleCount
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.MULTI
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder
 
-sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) :
-    BaseViewHolder<T>(containerView) {
+sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: View) :
+  BaseViewHolder<T>(containerView) {
 
   class BookViewHolder(
     containerView: View,
     private val sharedPreferenceUtil: SharedPreferenceUtil,
-    private val clickAction: (BookOnDisk) -> Unit,
-    private val longClickAction: ((BookOnDisk) -> Unit)?
+    private val clickAction: ((BookOnDisk) -> Unit)?,
+    private val longClickAction: ((BookOnDisk) -> Unit)?,
+    private val multiSelectAction: ((BookOnDisk) -> Unit)?
   ) : BookOnDiskViewHolder<BookOnDisk>(containerView) {
 
     override fun bind(item: BookOnDisk) {
+    }
+
+    fun bind(
+      item: BookOnDisk,
+      selectionMode: SelectionMode
+    ) {
       val book = item.book
       item_book_title.text = book.getTitle()
       item_book_date.text = book.getDate()
@@ -46,8 +58,8 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
 
       if (sharedPreferenceUtil.nightMode()) {
         item_book_icon.drawable
-            .mutate()
-            .colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
+          .mutate()
+          .colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
       }
 
       val path = item.file.path
@@ -59,24 +71,30 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
         item_book_label_video.visibility = View.GONE
       }
 
-      containerView.setOnClickListener {
-        clickAction.invoke(item)
-      }
-      containerView.setOnLongClickListener {
-        longClickAction?.invoke(item)
-        return@setOnLongClickListener true
+      itemBookCheckbox.isChecked = item.isSelected
+      when (selectionMode) {
+        MULTI -> {
+          itemBookCheckbox.visibility = View.VISIBLE
+          item_book_clickable_area.setOnClickListener { multiSelectAction?.invoke(item) }
+          item_book_clickable_area.setOnLongClickListener(null)
+        }
+        NORMAL -> {
+          itemBookCheckbox.visibility = View.GONE
+          item_book_clickable_area.setOnClickListener { clickAction?.invoke(item) }
+          item_book_clickable_area.setOnLongClickListener {
+            longClickAction?.invoke(item)
+            return@setOnLongClickListener true
+          }
+        }
       }
     }
   }
-
-  class LanguageItemViewHolder(containerView: View) :
-      BookOnDiskViewHolder<LanguageItem>(containerView) {
-
-    override fun bind(item: LanguageItem) {
-      header_language.text = item.text
-    }
-  }
-
 }
 
+class LanguageItemViewHolder(containerView: View) :
+  BookOnDiskViewHolder<LanguageItem>(containerView) {
 
+  override fun bind(item: LanguageItem) {
+    header_language.text = item.text
+  }
+}

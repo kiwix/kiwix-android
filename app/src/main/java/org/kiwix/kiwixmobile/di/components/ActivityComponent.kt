@@ -20,11 +20,15 @@ package org.kiwix.kiwixmobile.di.components
 import android.app.Activity
 import dagger.BindsInstance
 import dagger.Subcomponent
+import org.kiwix.kiwixmobile.di.ActivityScope
 import org.kiwix.kiwixmobile.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.downloader.DownloadFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
+import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity
 
+@ActivityScope
 @Subcomponent(modules = [ActivityModule::class])
 interface ActivityComponent {
   fun inject(downloadFragment: DownloadFragment)
@@ -32,6 +36,10 @@ interface ActivityComponent {
   fun inject(libraryFragment: LibraryFragment)
 
   fun inject(zimFileSelectFragment: ZimFileSelectFragment)
+
+  fun inject(deleteFiles: DeleteFiles)
+
+  fun inject(localFileTransferActivity: LocalFileTransferActivity)
 
   @Subcomponent.Builder
   interface Builder {

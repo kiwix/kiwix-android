@@ -18,11 +18,12 @@
 package org.kiwix.kiwixmobile.history
 
 import org.kiwix.kiwixmobile.database.newdb.entities.HistoryEntity
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
 
 sealed class HistoryListItem {
   abstract val id: Long
 
-  data class HistoryItem(
+  data class HistoryItem constructor(
     val databaseId: Long = 0L,
     val zimId: String,
     val zimName: String,
@@ -34,16 +35,34 @@ sealed class HistoryListItem {
     val timeStamp: Long,
     override val id: Long = databaseId
   ) : HistoryListItem() {
+
+    constructor(
+      url: String,
+      title: String,
+      dateString: String,
+      timeStamp: Long,
+      zimFileReader: ZimFileReader
+    ) : this(
+      zimId = zimFileReader.id,
+      zimName = zimFileReader.name,
+      zimFilePath = zimFileReader.zimFile.canonicalPath,
+      favicon = zimFileReader.favicon,
+      historyUrl = url,
+      historyTitle = title,
+      dateString = dateString,
+      timeStamp = timeStamp
+    )
+
     constructor(historyEntity: HistoryEntity) : this(
-        historyEntity.id,
-        historyEntity.zimId,
-        historyEntity.zimName,
-        historyEntity.zimFilePath,
-        historyEntity.favicon,
-        historyEntity.historyUrl,
-        historyEntity.historyTitle,
-        historyEntity.dateString,
-        historyEntity.timeStamp
+      historyEntity.id,
+      historyEntity.zimId,
+      historyEntity.zimName,
+      historyEntity.zimFilePath,
+      historyEntity.favicon,
+      historyEntity.historyUrl,
+      historyEntity.historyTitle,
+      historyEntity.dateString,
+      historyEntity.timeStamp
     )
   }
 

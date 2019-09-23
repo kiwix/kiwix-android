@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="menu_zim_manager">Edukia Lortu</string>
+  <string name="menu_help">Laguntza</string>
+  <string name="menu_home">Hasiera</string>
+  <string name="menu_settings">Ezarpenak</string>
+  <string name="menu_search">Artikulua bilatu</string>
+  <string name="menu_search_in_text">Aurkitu orrialdean</string>
+  <string name="menu_bookmarks">Lastermarkak</string>
+  <string name="menu_random_article">Ausazko artikulua</string>
+  <string name="menu_full_screen">Pantaila osoa</string>
+  <string name="menu_exit_full_screen">Irten pantaila osotik</string>
+  <string name="menu_read_aloud">Irakurri ozenki</string>
+  <string name="menu_read_aloud_stop">Ozen irakurtzeari utzi</string>
+  <string name="save_media">Media gorde</string>
+  <string name="save_media_error">Akats bat gertatu da media gordetzen zen bitartean!</string>
+  <string name="save_media_saved">Media %s to Android/media/org.kiwix…/ bezala gordeta</string>
+  <string name="rescan_fs_warning">Deskargatu daiteken edukia eskaneatzen, itxaron mesedez…</string>
+  <string name="search_label">Bilatu</string>
+  <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>
+  <string name="open_in_new_tab">Ireki lotura fitxa berri batean?</string>
+  <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
+  <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
+  <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
+  <string name="pref_display_title">Erakutsi</string>
+  <string name="pref_zoom_sub_title">Zooma</string>
+  <string name="pref_zoom_dialog">Zoom maila</string>
+  <string name="pref_info_title">Informazioa</string>
+  <string name="pref_info_version">Bertsioa</string>
+  <string name="pref_zoom_enable">Zoom kontrola</string>
+  <string name="pref_night_mode">Gau modua</string>
+  <string name="pref_night_mode_summary">Artikuluak alderantzizko koloreekin erakutsi</string>
+  <string name="pref_back_to_top">Gora itzuli</string>
+  <string name="pref_back_to_top_summary">Bistaratu botoi bat orrialdearen amaieran goiko aldera mugitzeko</string>
+  <string name="pref_hide_toolbar">Tresna-barra ezkutatu desplazatzean</string>
+  <string name="pref_language_title">Hizkuntza</string>
+  <string name="pref_language_chooser">Hizkuntza aukeratu</string>
+  <string name="pref_credits">Ekarpen eta lizentziak</string>
+  <string name="pref_credits_title">Kredituak</string>
+  <string name="tts_lang_not_supported">Orrialde honetako hizkuntza ez dago babestuta, edo hizkuntza-egokitasun data ez dago instalatuta. Artikulua beharbada ez da ondo irakurriko.</string>
+  <string name="no_reader_application_installed">Ezin izan da aurkitu mota honetako artxiborako instalatutako aplikazioa</string>
+  <string name="custom_app_missing_content">Zure aplikazioa hondatuta dago.\nArtxiboak SD Txartelan ezabatzen dituzunean gerta daiteke.\nAplikazioa ezabatu eta berriro instalatu behar duzu Play Storeren bidez.</string>
+  <string name="go_to_play_store">Play Store-ra joan</string>
+  <string name="menu_bookmarks_list">Lastermarkak</string>
+  <string name="no_section_info">Ez da edukiaren goibururik aurkitu</string>
+  <string name="request_storage">Konexiorik gabeko edukian sartzeko zure biltegira sartu behar gara.</string>
+  <string name="request_storage_custom">Pantailaren bat oharpenekin ikusten baduzu, berriro piztu zure gailua konpontzeko.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Ziur zaude historiala ezabatu eta aktibatutako erailtz guztiak berrabiarazi nahi dituzula?</string>
+  <string name="delete_recent_search_item">Elementu hau ezabatu?</string>
+  <string name="pref_clear_all_history_title">Historia garbitu</string>
+  <string name="pref_clear_all_history_summary">Azkeneko bilaketak garbitu eta historialeko erlaitzak</string>
+  <string name="all_history_cleared_toast">Historial osoa garbitu da.</string>
+  <string name="clear_all_history_dialog_title">Historial osoa garbitu?</string>
+  <string name="delete">Ezabatu</string>
+  <string name="delete_specific_search_toast">Azkeneko bilaketa ezabatuta</string>
+  <string name="hint_contents_drawer_message">Ezkerrerantz eginez artikulu honen edukia ikusi dezakezu.</string>
+  <string name="got_it">Ulertu dut</string>
+  <string name="did_you_know">Ba al zenekien?</string>
+  <string name="undo">Desegin</string>
+  <string name="tab_closed">Erlaitza itxita</string>
+  <string name="bookmark_added">Liburu-marka gehitu da</string>
+  <string name="rate_dialog_title">Mesedez, puntua gaitzazu</string>
+  <string name="rate_dialog_msg_1">Erabiltzen gozatzen baduzu</string>
+  <string name="rate_dialog_msg_2">Mesedez, har ezazu momentu bat puntuatzeko. Eskerrik asko zure laguntzagatik!</string>
+  <string name="rate_dialog_positive">Puntuatu!</string>
+  <string name="rate_dialog_negative">Ez, eskerrik asko</string>
+  <string name="rate_dialog_neutral">Geroago</string>
+  <string name="open">Ireki</string>
+  <string name="bookmark_removed">Orri-markatzailea ezabatuta</string>
+  <string name="pref_newtab_background_title">Ireki leiho berri bat testuinguruan</string>
+  <string name="pref_newtab_background_summary">Leiho berria irekitzean testuinguruan irekiko da</string>
+  <string name="pref_extras">Gehigarriak</string>
+  <string name="new_tab_snack_bar">Artikulua erlaitza berrian irekita</string>
+  <string name="search_widget_text">Kiwix bilatu</string>
+  <string name="speech_prompt_text">Hitz egin %s bilatzeko</string>
+  <string name="speech_not_supported">Sentitzen dut! Zure gailuak ez du ahots bidezko sarrera onartzen.</string>
+  <string name="local_zims">Gailua</string>
+  <string name="remote_zims">Konektatuta</string>
+  <string name="zim_downloads">Jaisten</string>
+  <string name="zim_manager">Liburutegia</string>
+  <string name="delete_specific_zim_toast">Fitxategi ezabatua</string>
+  <string name="zim_file_downloading">Jaisten</string>
+  <string name="zim_file_downloaded">Jaitsita</string>
+  <string name="download_pause">Gelditu</string>
+  <string name="download_stop">Gelditu</string>
+  <string name="download_paused">pausatua</string>
+  <string name="no_downloads_here">Hemen ez dago jaitsitako artxiborik</string>
+  <string name="no_files_here">Artxiborik ez hemen</string>
+  <string name="download_no_space">Ez dago espaziorik artxibo hau jaisteko.</string>
+  <string name="space_available">Libre dagoen espazioa:</string>
+  <string name="zim_simple">Arrunta</string>
+  <string name="zim_no_pic">Ez dago argazkirik</string>
+  <string name="zim_no_vid">Bideorik ez</string>
+  <string name="no_network_connection">Ez dago konexiorik</string>
+  <string name="help_2">Zer egiten du Kiwix-ek?</string>
+  <string name="help_3">Kiwix konexio gabeko eduki irakurlea da. Nabigatzaile baten moduan erabiltzen da, baina sarean dauden web orrialdeetan sartu beharrean, ZIM formatoko edukia irakurtzen du.</string>
+  <string name="help_4">Nahiz eta, Kiwix, berez, Wikipedia konexiorik gabe erabiltzeko sortu, beste edukiak ere eskeintzen ditu.</string>
+  <string name="help_5">Non dago edukia?</string>
+  <string name="help_6">Kiwik webgunean dago gure edukia.</string>
+  <string name="help_7">ZIM artxibo gisa prest daude. Asko daude:</string>
+  <string name="help_8">\u2022 Wikipedia hizkuntza bakoitzean erabili daiteke.</string>
+  <string name="help_9">\u2022 Beste edukiak Wikileaks edo Wikisource gisa baliogarriak dira ere.</string>
+  <string name="help_10">ZIM artxiboak in-app-aren bidez jaitsi ditzakezu edo aukeratu deskargatu nahi dituzunak eta ordengailuan egin, ZIM artxiboak SD-ra aldatu baino lehen.</string>
+  <string name="help_11">In-app-eko jaitsitako ZIM artxiboak kanpoko memorian daude, Kiwix deritzon karpeta batean.</string>
+  <string name="help_12">Nola erabili ZIM artxibo handiak?</string>
+  <string name="help_13">Zure ZIM artxiboa 4GB baino handiagoa bada, agian ezin izango duzu zure memorian gorde sistemaren mugaketengatik.</string>
+  <string name="help_14">Automatikoki artxibo handiagoak deskargatzen ditu aplikazioan, hauek zuretzat banatzen ditu.</string>
+  <string name="help_15">Beste gailuren batean jaisten bazabiltza, ZIM artxiboa banatu beharko duzu hurrengo softwarea erabiltzen:</string>
+  <string name="help_17">\u2022 Apple Macen OSX: Banatu eta Kontaktua</string>
+  <string name="help_19">Oharra: zure artxiboen izena my_big_file.zimaa, my_big_file.zimab… izan behar dute.</string>
+  <string name="pref_storage">Biltegia</string>
+  <string name="pref_current_folder">Oraingo Artxiboa</string>
+  <string name="path_not_writable">Ezin da nahi den direktoriora sartu, erabilitako bolereekin. Hau konpontzeko hautatu nahi den direktorioa app-eko doikuntza atalean.</string>
+  <string name="reboot_message">Android 6.0ko bug batengatik gailua berabiarazi behar da, guk baimenik ez izateko zure biltegian sartzen jarraitzeko. Sentitzen dugu arazo honek sortu ditzakenengatik.</string>
+  <string name="delete_zim_failed">Barkatu, ezin izan dugu artxibo hau ezabatu. Artxibo kudeatzailea erabiltzen saiatu dezakezu.</string>
+  <string name="tts_pause">pausatua</string>
+  <string name="tts_resume">jarraitu</string>
+  <string name="tts_stop">Gelditu</string>
+  <string name="internal_storage">Barneko</string>
+  <string name="external_storage">Kanpokoa</string>
+  <string name="yes">Bai</string>
+  <string name="no">Ez</string>
+  <string name="confirm_stop_download_title">Deskarga geldiarazi?</string>
+  <string name="confirm_stop_download_msg">Ziur zaude deskarga eten nahi duzula?</string>
+  <string name="download_change_storage">Memoria hautatzaile gailua</string>
+  <string name="tts_not_enabled">Testuak ez du balio ZIM artxibo honetarako</string>
+  <string name="next">Hurrengoa</string>
+  <string name="previous">Aurrekoa</string>
+  <string name="wifi_only_title">Deskarga baimendu mobil konexioaren bidez?</string>
+  <string name="wifi_only_msg">“Bai” aukeratzen baduzu, etorkizunean ez dizugu abisatuko. Baina, hau aldatu dezakezu “Doikuntza” atalean.</string>
+  <string name="pref_wifi_only">Edukia WiFi-arekin baino ez deskargatu.</string>
+  <string name="time_day">eguna</string>
+  <string name="time_second">k</string>
+  <string name="time_left">joanda</string>
+  <string name="pref_auto_night_mode_summary">Automatikoki piztu egun eta gauaren arteko modoa.</string>
+  <string name="pref_auto_night_mode">Gaueko modo automatikoa</string>
+  <string name="pref_external_link_popup_title">Kanpo esteketara sartzerakoan ohartarazi</string>
+  <string name="pref_external_link_popup_summary">Gaitu popup-a gastu gehigarriez edo konexiorik gabe funtzionatzen ez duten estekez abisatzeko</string>
+  <string name="external_link_popup_dialog_title">Kanpo estekara sartzen</string>
+  <string name="external_link_popup_dialog_message">Kanpo-esteka batera sartzen ari zara. Honek datu transferentziarako gastu gehigarrietara eraman dezake edo besterik gabe, ez du funtzionatuko konexiorik ez dagoenean. Jarraitu nahi duzu?</string>
+  <string name="do_not_ask_anymore">Ez galdetu berriz</string>
+  <string name="your_languages">Hautatutako hizkuntzak:</string>
+  <string name="other_languages">Beste hizkuntzak:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
+</resources>

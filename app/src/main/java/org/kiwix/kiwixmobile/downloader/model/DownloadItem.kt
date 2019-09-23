@@ -17,6 +17,20 @@
  */
 package org.kiwix.kiwixmobile.downloader.model
 
+import com.tonyodev.fetch2.Error
+import com.tonyodev.fetch2.Status
+import com.tonyodev.fetch2.Status.ADDED
+import com.tonyodev.fetch2.Status.CANCELLED
+import com.tonyodev.fetch2.Status.COMPLETED
+import com.tonyodev.fetch2.Status.DELETED
+import com.tonyodev.fetch2.Status.DOWNLOADING
+import com.tonyodev.fetch2.Status.FAILED
+import com.tonyodev.fetch2.Status.NONE
+import com.tonyodev.fetch2.Status.PAUSED
+import com.tonyodev.fetch2.Status.QUEUED
+import com.tonyodev.fetch2.Status.REMOVED
+import org.kiwix.kiwixmobile.R
+
 data class DownloadItem(
   val downloadId: Long,
   val favIcon: Base64String,
@@ -24,17 +38,47 @@ data class DownloadItem(
   val description: String,
   val bytesDownloaded: Long,
   val totalSizeBytes: Long,
+  val progress: Int,
+  val eta: Seconds,
   val downloadState: DownloadState
 ) {
-  val progress get() = ((bytesDownloaded.toFloat() / totalSizeBytes) * 100).toInt()
 
-  constructor(downloadStatus: DownloadStatus) : this(
-      downloadStatus.downloadId,
-      Base64String(downloadStatus.book.favicon),
-      downloadStatus.title,
-      downloadStatus.description,
-      downloadStatus.bytesDownloadedSoFar,
-      downloadStatus.totalSizeBytes,
-      downloadStatus.state
+  constructor(downloadModel: DownloadModel) : this(
+    downloadModel.downloadId,
+    Base64String(downloadModel.book.favicon),
+    downloadModel.book.title,
+    downloadModel.book.description,
+    downloadModel.bytesDownloaded,
+    downloadModel.totalSizeOfDownload,
+    downloadModel.progress,
+    Seconds(downloadModel.etaInMilliSeconds / 1000L),
+    DownloadState.from(downloadModel.state, downloadModel.error)
   )
+}
+
+sealed class DownloadState(val stringId: Int) {
+
+  companion object {
+    fun from(state: Status, error: Error): DownloadState =
+      when (state) {
+        NONE,
+        ADDED,
+        QUEUED -> Pending
+        DOWNLOADING -> Running
+        PAUSED -> Paused
+        COMPLETED -> Successful
+        CANCELLED,
+        FAILED,
+        REMOVED,
+        DELETED -> Failed(error)
+      }
+  }
+
+  object Pending : DownloadState(R.string.pending_state)
+  object Running : DownloadState(R.string.running_state)
+  object Successful : DownloadState(R.string.successful_state)
+  object Paused : DownloadState(R.string.paused_state)
+  data class Failed(val reason: Error) : DownloadState(R.string.failed_state)
+
+  override fun toString(): String = javaClass.simpleName
 }

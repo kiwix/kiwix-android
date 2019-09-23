@@ -3,41 +3,105 @@
   <string name="menu_help">Pomoč</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
-  <string name="menu_search">Iskanje</string>
-  <string name="menu_searchintext">Najdi v besedilu</string>
+  <string name="menu_search">Išči članek</string>
+  <string name="menu_search_in_text">Najdi na strani</string>
   <string name="menu_bookmarks">Zaznamki</string>
-  <string name="menu_randomarticle">Naključni članek</string>
-  <string name="menu_fullscreen">Celoten zaslon</string>
-  <string name="menu_exitfullscreen">Izhod iz celozaslonskega načina</string>
-  <string name="save_media">Shrani predstavnost kot ...</string>
-  <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte ...</string>
-  <string name="button_backtotop">Nazaj na vrh</string>
+  <string name="menu_random_article">Naključni članek</string>
+  <string name="menu_full_screen">Celozaslonski način</string>
+  <string name="menu_exit_full_screen">Izhod iz celozaslonskega načina</string>
+  <string name="menu_read_aloud">Beri naglas</string>
+  <string name="menu_read_aloud_stop">Nehaj z branjem na glas</string>
+  <string name="save_media">Shrani predstavnost kot …</string>
+  <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte …</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
-  <string name="error_nozimfilesfound">Na vaši napravi ni bila najdena nobena datoteka ZIM.\nZa napotke v zvezi z nalaganjem vsebine v Kiwix si poglejte Stran za pomoč.\nČe ste datoteko ZIM posneli na svojo napravo/zunanji disk, lahko ponovno poskusite po kratkem čakanju ali pa svojo napravo ponovno zaženete.</string>
-  <string name="error_filenotfound">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
-  <string name="error_fileinvalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
-  <string name="error_articleurlnotfound">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
+  <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
+  <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
+  <string name="error_article_url_not_found">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_zoom_sub_title">Povečava</string>
   <string name="pref_zoom_dialog">Raven povečave</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Različica</string>
   <string name="pref_zoom_enable">Kontrolniki zumiranja</string>
-  <string name="pref_nightmode">Nočni način</string>
-  <string name="pref_nightmode_summary">Prikaz člankov z obrnjenimi barvami</string>
-  <string name="pref_backtotop">Nazaj na vrh</string>
-  <string name="pref_backtotop_summary">Na dnu strani prikaži gumb za pomik na vrh strani</string>
+  <string name="pref_night_mode">Nočni način</string>
+  <string name="pref_night_mode_summary">Prikaz člankov z obrnjenimi barvami</string>
+  <string name="pref_back_to_top">Nazaj na vrh</string>
+  <string name="pref_back_to_top_summary">Na dnu strani prikaži gumb za pomik na vrh strani</string>
   <string name="pref_language_title">Jezik</string>
   <string name="pref_language_chooser">Izberite jezik</string>
+  <string name="pref_credits">Sodelujoči in licence</string>
+  <string name="pref_credits_title">Zasluge</string>
+  <string name="tts_lang_not_supported">Jezik na tej strani ni podprt ali pa ustrezni jezikovni podatki niso bili nameščeni. Članek morda ne bo pravilno prebran.</string>
   <string name="menu_bookmarks_list">Zaznamki</string>
+  <string name="delete_recent_search_item">Izbriši ta element?</string>
+  <string name="pref_clear_all_history_title">Izbriši zgodovino</string>
+  <string name="delete">Odstrani</string>
+  <string name="delete_specific_search_toast">Nedavno iskanje je bilo odstranjeno</string>
+  <string name="got_it">Razumem</string>
   <string name="did_you_know">Ali ste vedeli?</string>
+  <string name="undo">Razveljavi</string>
+  <string name="tab_closed">Zavihek je zaprt</string>
+  <string name="bookmark_added">Zaznamek je dodan</string>
+  <string name="rate_dialog_title">Prosimo, ocenite nas</string>
+  <string name="rate_dialog_msg_1">Če ste uživali ob uporabi</string>
+  <string name="rate_dialog_msg_2">, prosimo vzemite si trenutek in ocenite. Hvala za vašo podporo!</string>
+  <string name="rate_dialog_positive">Oceniti!</string>
   <string name="rate_dialog_negative">Ne, hvala</string>
   <string name="rate_dialog_neutral">Kasneje</string>
+  <string name="open">Odpri</string>
+  <string name="bookmark_removed">Zaznamek je odstranjen</string>
+  <string name="search_widget_text">Iskanje Kiwix</string>
+  <string name="local_zims">Naprava</string>
+  <string name="remote_zims">Na spletu</string>
+  <string name="zim_downloads">Prenos</string>
   <string name="zim_manager">Knjižnica</string>
-  <string name="download_complete_snackbar">Prenos končan</string>
+  <string name="delete_specific_zim_toast">Datoteka je izbrisana</string>
+  <string name="zim_file_downloading">Prenos</string>
+  <string name="zim_file_downloaded">Preneseno</string>
+  <string name="download_pause">Premor</string>
+  <string name="download_stop">Ustavi</string>
+  <string name="space_available">Prostor na voljo:</string>
+  <string name="zim_simple">Enostavno</string>
+  <string name="zim_no_pic">Ni slik</string>
+  <string name="zim_no_vid">Ni videoposnetkov</string>
+  <string name="pref_storage">Shranjevanje</string>
+  <string name="pref_current_folder">Trenutna mapa</string>
+  <string name="tts_pause">premor</string>
+  <string name="tts_resume">nadaljuj</string>
+  <string name="tts_stop">ustavi</string>
+  <string name="internal_storage">Interni</string>
   <string name="yes">Da</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Ustavi prenos?</string>
+  <string name="next">Naprej</string>
+  <string name="previous">Predhodni</string>
+  <string name="wifi_only_title">Omogoči prenos vsebin prek mobilnega omrežja?</string>
+  <string name="pref_wifi_only">Prenašanje vsebine samo prek WiFi</string>
+  <string name="time_day">dan</string>
+  <string name="time_left">levo</string>
+  <string name="your_languages">Izbrani jeziki:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

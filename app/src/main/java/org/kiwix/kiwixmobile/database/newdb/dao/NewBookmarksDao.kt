@@ -20,34 +20,34 @@ package org.kiwix.kiwixmobile.database.newdb.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.query
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem
-import org.kiwix.kiwixmobile.data.ZimContentProvider
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.database.newdb.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.BookmarkEntity_
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
 import javax.inject.Inject
 
 class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
-  fun getBookmarks(fromCurrentBook: Boolean): List<BookmarkItem> {
-    return box
-        .query {
-          if (fromCurrentBook) {
-            equal(BookmarkEntity_.zimId, ZimContentProvider.getId() ?: "")
-          }
-          order(BookmarkEntity_.bookmarkTitle)
-        }
-        .find()
-        .map { BookmarkItem(it) }
-  }
+  fun getBookmarks(
+    fromCurrentBook: Boolean,
+    zimFileReader: ZimFileReader?
+  ) = box.query {
+    if (fromCurrentBook) {
+      equal(BookmarkEntity_.zimName, zimFileReader?.name ?: "")
+    }
+    order(BookmarkEntity_.bookmarkTitle)
+  }.find()
+    .map(::BookmarkItem)
 
-  fun getCurrentZimBookmarksUrl() = box.query {
-    equal(BookmarkEntity_.zimId, ZimContentProvider.getId() ?: "")
-        .or()
-        .equal(BookmarkEntity_.zimName, ZimContentProvider.getName() ?: "")
+  fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {
+    equal(BookmarkEntity_.zimId, zimFileReader?.id ?: "")
+      .or()
+      .equal(BookmarkEntity_.zimName, zimFileReader?.name ?: "")
     order(BookmarkEntity_.bookmarkTitle)
   }
-      .property(BookmarkEntity_.bookmarkUrl)
-      .findStrings()
-      .toList()
-      .distinct()
+    .property(BookmarkEntity_.bookmarkUrl)
+    .findStrings()
+    .toList()
+    .distinct()
 
   fun saveBookmark(bookmarkItem: BookmarkItem) {
     box.put(BookmarkEntity(bookmarkItem))
@@ -57,7 +57,16 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
     box.remove(bookmarks.map(::BookmarkEntity))
   }
 
-  fun deleteBookmark(bookmark: BookmarkItem) {
-    box.remove(BookmarkEntity(bookmark))
+  fun deleteBookmark(bookmarkUrl: String) {
+    box.query {
+      equal(BookmarkEntity_.bookmarkUrl, bookmarkUrl)
+    }.remove()
+  }
+
+  fun migrationInsert(
+    bookmarks: MutableList<Bookmark>,
+    bookDao: NewBookDao
+  ) {
+    box.put(bookmarks.zip(bookmarks.map(bookDao::getFavIconAndZimFile)).map(::BookmarkEntity))
   }
 }

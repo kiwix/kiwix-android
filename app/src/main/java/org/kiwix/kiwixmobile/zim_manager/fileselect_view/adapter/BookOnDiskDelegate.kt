@@ -18,32 +18,45 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskViewHolder.BookViewHolder
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskViewHolder.LanguageItemViewHolder
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.AbsDelegateAdapter
 
-sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, VH : BookOnDiskViewHolder<I>> :
-    AbsDelegateAdapter<I, BooksOnDiskListItem, VH> {
+sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskViewHolder<I>> :
+  AbsDelegateAdapter<I, BooksOnDiskListItem, VH> {
 
   class BookDelegate(
     val sharedPreferenceUtil: SharedPreferenceUtil,
-    val clickAction: (BookOnDisk) -> Unit,
-    val longClickAction: ((BookOnDisk) -> Unit)? = null
+    private val clickAction: ((BookOnDisk) -> Unit)? = null,
+    private val longClickAction: ((BookOnDisk) -> Unit)? = null,
+    private val multiSelectAction: ((BookOnDisk) -> Unit)? = null
   ) : BookOnDiskDelegate<BookOnDisk, BookViewHolder>() {
 
     override val itemClass = BookOnDisk::class.java
 
+    var selectionMode: SelectionMode = NORMAL
+
+    override fun bind(
+      viewHolder: ViewHolder,
+      itemToBind: BooksOnDiskListItem
+    ) {
+      (viewHolder as BookViewHolder).bind((itemToBind as BookOnDisk), selectionMode)
+    }
+
     override fun createViewHolder(parent: ViewGroup) =
       BookViewHolder(
-          parent.inflate(R.layout.item_book, false),
-          sharedPreferenceUtil,
-          clickAction,
-          longClickAction
+        parent.inflate(R.layout.item_book, false),
+        sharedPreferenceUtil,
+        clickAction,
+        longClickAction,
+        multiSelectAction
       )
   }
 

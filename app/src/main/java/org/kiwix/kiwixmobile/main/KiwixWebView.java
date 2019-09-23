@@ -19,10 +19,12 @@
 
 package org.kiwix.kiwixmobile.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -30,9 +32,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
+import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.widget.Toast;
+import com.cprcrack.videowebview.VideoEnabledWebView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,31 +46,47 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
-public class KiwixWebView extends WebView {
+public class KiwixWebView extends VideoEnabledWebView {
   public static final float[] NIGHT_MODE_COLORS = {
-      -1.0f, 0, 0, 0, 255, // red
-      0, -1.0f, 0, 0, 255, // green
-      0, 0, -1.0f, 0, 255, // blue
-      0, 0, 0, 1.0f, 0 // alpha
+    -1.0f, 0, 0, 0, 255, // red
+    0, -1.0f, 0, 0, 255, // green
+    0, 0, -1.0f, 0, 255, // blue
+    0, 0, 0, 1.0f, 0 // alpha
   };
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
   private WebViewCallback callback;
 
   public KiwixWebView(Context context) {
     super(context);
   }
 
-  public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
+  public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
+    ViewGroup nonVideoView, ViewGroup videoView) {
     super(context, attrs);
     this.callback = callback;
     KiwixApplication.getApplicationComponent().inject(this);
     // Set the user agent to the current locale so it can be read with navigator.userAgent
-    getSettings().setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
-    setWebViewClient(new KiwixWebViewClient(callback));
-    setWebChromeClient(new KiwixWebChromeClient(callback));
-    getSettings().setDomStorageEnabled(true);
+    final WebSettings settings = getSettings();
+    settings.setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
+    settings.setDomStorageEnabled(true);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      settings.setAllowUniversalAccessFromFileURLs(true);
+    }
+    setWebViewClient(new KiwixWebViewClient(callback, zimReaderContainer));
+    final KiwixWebChromeClient client =
+      new KiwixWebChromeClient(callback, nonVideoView, videoView, this);
+    client.setOnToggledFullscreen(fullscreen ->
+      setWindowVisibility(fullscreen ? SYSTEM_UI_FLAG_LOW_PROFILE : SYSTEM_UI_FLAG_VISIBLE));
+    setWebChromeClient(client);
+  }
+
+  private void setWindowVisibility(int systemUiVisibility) {
+    ((Activity) getContext()).getWindow().getDecorView().setSystemUiVisibility(systemUiVisibility);
   }
 
   public void loadPrefs() {
@@ -83,14 +102,14 @@ public class KiwixWebView extends WebView {
   }
 
   public void deactivateNightMode() {
-    setLayerType(View.LAYER_TYPE_NONE, null);
+    setLayerType(LAYER_TYPE_NONE, null);
   }
 
   public void toggleNightMode() {
     Paint paint = new Paint();
     ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
     paint.setColorFilter(filterInvert);
-    setLayerType(View.LAYER_TYPE_HARDWARE, paint);
+    setLayerType(LAYER_TYPE_HARDWARE, paint);
   }
 
   @Override
@@ -109,8 +128,8 @@ public class KiwixWebView extends WebView {
     super.onCreateContextMenu(menu);
     final HitTestResult result = getHitTestResult();
     if (result.getType() == HitTestResult.IMAGE_ANCHOR_TYPE
-        || result.getType() == HitTestResult.IMAGE_TYPE
-        || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+      || result.getType() == HitTestResult.IMAGE_TYPE
+      || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
       MenuItem saveMenu = menu.add(0, 1, 0, getResources().getString(R.string.save_media));
       saveMenu.setOnMenuItemClickListener(item -> {
         Message msg = new SaveHandler().obtainMessage();
@@ -156,7 +175,7 @@ public class KiwixWebView extends WebView {
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
-            && KiwixApplication.getInstance().getExternalMediaDirs().length > 0) {
+          && KiwixApplication.getInstance().getExternalMediaDirs().length > 0) {
           root = KiwixApplication.getInstance().getExternalMediaDirs()[0];
         }
 
@@ -172,7 +191,7 @@ public class KiwixWebView extends WebView {
 
         try {
           InputStream input =
-              KiwixApplication.getInstance().getContentResolver().openInputStream(source);
+            KiwixApplication.getInstance().getContentResolver().openInputStream(source);
           OutputStream output = new FileOutputStream(storageDir);
 
           byte[] buffer = new byte[1024];

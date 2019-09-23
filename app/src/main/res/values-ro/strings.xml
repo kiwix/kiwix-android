@@ -1,47 +1,63 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="menu_zim_manager">Preia conținut</string>
   <string name="menu_help">Ajutor</string>
   <string name="menu_home">Acasă</string>
-  <string name="menu_settings">Preferințe</string>
-  <string name="menu_search">Căutare</string>
-  <string name="menu_searchintext">Caută în text</string>
-  <string name="menu_bookmarks">Semne de carte</string>
-  <string name="menu_randomarticle">Articol aleatoriu</string>
-  <string name="menu_fullscreen">Ecran complet</string>
-  <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
+  <string name="menu_settings">Setări</string>
+  <string name="menu_search">Caută articol</string>
+  <string name="menu_search_in_text">Găsește în pagină</string>
+  <string name="menu_bookmarks">Semn de carte</string>
+  <string name="menu_random_article">Articol aleatoriu</string>
+  <string name="menu_full_screen">Ecran complet</string>
+  <string name="menu_exit_full_screen">Ieși din modul ecran complet</string>
   <string name="menu_read_aloud">Citește cu voce tare</string>
   <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
-  <string name="save_media">Salvează multimedia ca...</string>
+  <string name="save_media">Salvează Media</string>
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
-  <string name="save_media_saved">Fișierul media salvat ca %1$s în folderul Imagini</string>
-  <string name="rescan_fs_warning">Se caută fișiere ZIM; vă rugăm să așteptați...</string>
-  <string name="button_backtotop">Începutul paginii</string>
-  <string name="search_label">Căutare</string>
+  <string name="save_media_saved">Media salvată %s în Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Scanează pentru conținut descărcabil, vă rugăm așteptați…</string>
+  <string name="search_label">Caută</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
-  <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>
-  <string name="error_filenotfound">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
-  <string name="error_fileinvalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
-  <string name="error_articleurlnotfound">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
-  <string name="pref_display_title">Afișare</string>
+  <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
+  <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
+  <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
+  <string name="pref_display_title">Ecran</string>
   <string name="pref_zoom_dialog">Nivel de zoom</string>
   <string name="pref_info_title">Informații</string>
   <string name="pref_info_version">Versiune</string>
-  <string name="pref_zoom_enable">Controale de zoom</string>
-  <string name="pref_nightmode">Mod de noapte</string>
-  <string name="pref_nightmode_summary">Afișează articolele în culori inversate</string>
-  <string name="pref_backtotop">Începutul paginii</string>
-  <string name="pref_backtotop_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
-  <string name="pref_language_title">Limbă</string>
+  <string name="pref_zoom_enable">Controlul zoomului</string>
+  <string name="pref_night_mode">Mod de noapte</string>
+  <string name="pref_night_mode_summary">Afișează articolele în culori inversate</string>
+  <string name="pref_back_to_top">Începutul paginii</string>
+  <string name="pref_back_to_top_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
+  <string name="pref_hide_toolbar">Ascunde bara de unelte când miști scrolezi</string>
+  <string name="pref_hide_toolbar_summary">Ascunde bara de căutare când pagina este în partea de jos</string>
+  <string name="pref_language_title">Limba</string>
   <string name="pref_language_chooser">Alegeți o limbă</string>
+  <string name="pref_credits">Contribuitori și Licențe</string>
+  <string name="pref_credits_title">Credite</string>
   <string name="tts_lang_not_supported">Fie limba acestei pagini nu este acceptată, fie nu s-au instalat datele corespunzătoare limbii. Este posibil ca articolul să nu fie corect afișat.</string>
   <string name="no_reader_application_installed">Nu s-a găsit nicio aplicație instalată pentru acest tip de fișier</string>
-  <string name="customapp_missing_content">Aplicația este coruptă.\nAcest lucru se poate întâmpla atunci când ștergeți fișiere de pe cardul SD.\nTrebuie să dezinstalați și să reinstalați aplicația din Magazinul Play.</string>
+  <string name="custom_app_missing_content">Aplicația este coruptă. \nAcest lucru se poate întâmpla atunci când ștergeți fișiere de pe cardul SD.\nTrebuie să dezinstalați și să reinstalați aplicația din Magazinul Play.</string>
   <string name="go_to_play_store">Mergi la Magazinul Play</string>
-  <string name="no_bookmarks">Niciun semn de carte!</string>
   <string name="menu_bookmarks_list">Semne de carte</string>
   <string name="no_section_info">Nu s-a găsit niciun antet de conținut</string>
-  <string name="request_storage">Pentru a accesa fișiere ZIM, avem nevoie acces la spațiul de stocare</string>
+  <string name="request_storage">Pentru a accesa conținut off-line trebuie să vă accesăm spațiul de stocare</string>
+  <string name="request_storage_custom">Dacă primești un avertisment cu privire la suprapunerea ecranului ar trebui să îți restartezi dispozitivul.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Ești sigur că vrei să ștergi tot istoricul de căutare și să resetezi toate filele active?</string>
+  <string name="delete_recent_search_item">Șterge acest item?</string>
+  <string name="pref_clear_all_history_title">Curăță istoricul</string>
+  <string name="pref_clear_all_history_summary">Curăță căutările recente și istoricul filelor</string>
+  <string name="all_history_cleared_toast">Tot istoricul curățat</string>
+  <string name="clear_all_history_dialog_title">Curăță tot istoricul</string>
+  <string name="delete">Șterge</string>
+  <string name="delete_specific_search_toast">Căutare recentă scoasă</string>
+  <string name="hint_contents_drawer_message">Poți glisa spre stânga pentru a vedea acest articol</string>
+  <string name="got_it">Am înțeles</string>
+  <string name="did_you_know">Știați că?</string>
+  <string name="undo">Anulează</string>
+  <string name="tab_closed">Filă închisă</string>
   <string name="bookmark_added">Marcaj adăugat</string>
   <string name="rate_dialog_title">Vă rugăm să ne evaluați</string>
   <string name="rate_dialog_msg_1">Dacă v-a plăcut</string>
@@ -49,7 +65,98 @@
   <string name="rate_dialog_positive">Evaluează!</string>
   <string name="rate_dialog_negative">Nu, mulțumesc</string>
   <string name="rate_dialog_neutral">Mai târziu</string>
+  <string name="open">Deschis</string>
+  <string name="bookmark_removed">Semn de carte îndepărtat</string>
   <string name="pref_newtab_background_title">Deschide fila nouă în fundal</string>
   <string name="pref_newtab_background_summary">Când deschideți o filă nouă, aceasta se va deschide în fundal</string>
+  <string name="pref_extras">Suplimentare</string>
+  <string name="new_tab_snack_bar">Articol deschis într-o filă nouă</string>
+  <string name="search_widget_text">Caută Kiwix</string>
+  <string name="speech_prompt_text">Vorbește pentru a căuta %s</string>
+  <string name="speech_not_supported">Ne pare rău! Dispozitivul tău nu susține opțiunea de vorbire</string>
+  <string name="local_zims">Dispozitiv</string>
+  <string name="zim_downloads">Descărcare</string>
   <string name="zim_manager">Bibliotecă</string>
+  <string name="delete_specific_zim_toast">Filă ștearsă</string>
+  <string name="zim_file_downloading">Descărcare</string>
+  <string name="zim_file_downloaded">Descărcat</string>
+  <string name="download_pause">Pauză</string>
+  <string name="download_paused">oprită</string>
+  <string name="no_downloads_here">Nici o descărcare</string>
+  <string name="no_files_here">Nu sunt fișiere aici</string>
+  <string name="download_no_space">Spațiu insuficient pentru a descarca această filă.</string>
+  <string name="space_available">Spațiu disponibil:</string>
+  <string name="zim_simple">Simplu</string>
+  <string name="zim_no_pic">Fără imagini</string>
+  <string name="zim_no_vid">Fără video</string>
+  <string name="no_network_connection">Nu există conexiune de rețea</string>
+  <string name="help_2">Ce face Kiwix?</string>
+  <string name="help_3">Kiwix este un server de citit conținut off-line. Este aproape ca un browser dar în loc să acceseze paginile web online citește conținut de la un fișier în formatul ZIM.</string>
+  <string name="help_4">În timp ce Kiwix a fost făcut inițial să ofere Wikipedia off-line de asemenea citește și alt conținut.</string>
+  <string name="help_5">Unde este conținutul?</string>
+  <string name="help_6">Conținutul este găzduit de Kiwix pe site-ul web.</string>
+  <string name="help_7">Există mai multe fișiere ZIM. Sunt multe:</string>
+  <string name="help_8">\u2022 Wikipedia este disponibilă în mod separat pentru fiecare limbă</string>
+  <string name="help_9">\u2022 Alt conținut ca Wikileaks sa Wikisursă este de asemenea disponibil</string>
+  <string name="help_10">Fișiere ZIM pe cardul SD.</string>
+  <string name="help_11">Fișierele ZIM descărcate în aplicație sunt localizate în directorul extern de stocare într-un folder denumit Kiwix.</string>
+  <string name="help_12">Cum să folosești fișiere ZIM?</string>
+  <string name="help_13">Dacă fișierul ZIM este mai mare de 4GB este posibil să nu poți să îl descarci în cardul SD din cauza limitărilor de sistem.</string>
+  <string name="help_14">Descărcând în aplicație în mod automat se pot utiliza fișiere mai mari împărțindu-le pentru tine.</string>
+  <string name="help_15">Dacă oricum descărcați pe alt dispozitiv, este posibil să trebuie să împărțiți fișierul ZIM folosind următorul software:</string>
+  <string name="help_16">\u2022 Pe Microsoft Windows: HJ-Split</string>
+  <string name="help_19">Notă: fișierele rezultate trebuie să fie numite my_big_file.zimaa, my_big_file.zimab, etc.</string>
+  <string name="pref_storage">Stocare</string>
+  <string name="pref_current_folder">Folder curent</string>
+  <string name="path_not_writable">Nu putem accesa directorul dorit folosind implicit. Pentru a rezolva asta reselectează directorul dorit în setările aplicației.</string>
+  <string name="reboot_message">Datorită că are un bug în Android 6.0 noi vă cerem să vă reporniți dispozitivul pentru a continua fără a ne acorda permisiunea sa stocăm. Ne pare rău pentru neplăcerile cauzate.</string>
+  <string name="delete_zim_failed">Ne pare rău că nu am reușit să ștergem această filă. Ar trebui să folosiți un manager de fișier în loc.</string>
+  <string name="tts_pause">pauză</string>
+  <string name="tts_resume">rezumat</string>
+  <string name="internal_storage">Intern</string>
+  <string name="external_storage">Externă</string>
+  <string name="yes">Da</string>
+  <string name="no">Nu</string>
+  <string name="confirm_stop_download_title">Oprești descărcarea?</string>
+  <string name="confirm_stop_download_msg">Ești sigur că vrei să oprești această descărcare?</string>
+  <string name="download_change_storage">Selectează mediul de descărcare</string>
+  <string name="tts_not_enabled">Text la vorbire nu este disponibil pentru acest fișier ZIM</string>
+  <string name="next">Următoarea</string>
+  <string name="previous">Precedenta</string>
+  <string name="wifi_only_title">Permite descărcarea conținutului prin intermediul unei rețele mobile?</string>
+  <string name="wifi_only_msg">Dacă alegi „Da” nu vei fi avertizat în viitor. Oricum, poți oricând să schimbi asta în Setări</string>
+  <string name="pref_wifi_only">Descarcă conținut numai prin WiFi</string>
+  <string name="time_day">zi</string>
+  <string name="time_left">stânga</string>
+  <string name="pref_auto_night_mode_summary">Schimbă automat între modul de zi și de noapte.</string>
+  <string name="pref_auto_night_mode">Mod automat de noapte</string>
+  <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
+  <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
+  <string name="external_link_popup_dialog_title">Introdu legătură externă</string>
+  <string name="external_link_popup_dialog_message">Introduci o legătură externă. Acesta ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când ești off-line. Vrei să continui?</string>
+  <string name="do_not_ask_anymore">Nu mă mai întreba</string>
+  <string name="your_languages">Limbi selectate:</string>
+  <string name="other_languages">Alte limbi:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

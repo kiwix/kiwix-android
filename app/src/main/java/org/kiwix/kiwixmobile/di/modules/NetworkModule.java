@@ -36,18 +36,18 @@ import org.kiwix.kiwixmobile.data.remote.UserAgentInterceptor;
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
     HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-    logging.setLevel(BuildConfig.DEBUG ? Level.BODY : Level.BASIC);
+    logging.setLevel(BuildConfig.DEBUG ? Level.BASIC : Level.NONE);
 
     return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(60, TimeUnit.SECONDS)
-        .addNetworkInterceptor(logging)
-        .addNetworkInterceptor(new UserAgentInterceptor(userAgent)).build();
+      .connectTimeout(10, TimeUnit.SECONDS)
+      .readTimeout(60, TimeUnit.SECONDS)
+      .addNetworkInterceptor(logging)
+      .addNetworkInterceptor(new UserAgentInterceptor(userAgent)).build();
   }
 
   @Provides @Singleton KiwixService provideKiwixService(OkHttpClient okHttpClient) {
     return KiwixService.ServiceCreator.newHacklistService(okHttpClient,
-        BuildConfig.KIWIX_DOWNLOAD_URL);
+      BuildConfig.KIWIX_DOWNLOAD_URL);
   }
 
   @Provides @Singleton

@@ -30,10 +30,12 @@ import java.util.HashMap;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class KiwixWebViewClient extends WebViewClient {
 
@@ -42,36 +44,40 @@ public class KiwixWebViewClient extends WebViewClient {
     put("pdf", "application/pdf");
   }};
   private final SharedPreferenceUtil sharedPreferenceUtil =
-      new SharedPreferenceUtil(KiwixApplication.getInstance());
+    new SharedPreferenceUtil(KiwixApplication.getInstance());
   private final WebViewCallback callback;
+  private final ZimReaderContainer zimReaderContainer;
   private View home;
 
-  KiwixWebViewClient(WebViewCallback callback) {
+  KiwixWebViewClient(WebViewCallback callback,
+    ZimReaderContainer zimReaderContainer) {
     this.callback = callback;
+    this.zimReaderContainer = zimReaderContainer;
   }
 
   @Override
   public boolean shouldOverrideUrlLoading(WebView view, String url) {
     callback.webViewUrlLoading();
 
-    if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
-      String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-      if (DOCUMENT_TYPES.containsKey(extension)) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse(url);
-        intent.setDataAndType(uri, DOCUMENT_TYPES.get(extension));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        callback.openExternalUrl(intent);
+    if (zimReaderContainer.isRedirect(url)) {
+      if (handleEpubAndPdf(url)) {
         return true;
       }
-      return false;
-    } else if (url.startsWith("file://")) {
+      view.loadUrl(zimReaderContainer.getRedirect(url));
+      return true;
+    }
+    if (url.startsWith(ZimFileReader.CONTENT_URI.toString())) {
+      return handleEpubAndPdf(url);
+    }
+    if (url.startsWith("file://")) {
       // To handle home page (loaded from resources)
       return true;
-    } else if (url.startsWith("javascript:")) {
+    }
+    if (url.startsWith("javascript:")) {
       // Allow javascript for HTML functions and code execution (EX: night mode)
       return true;
-    } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+    }
+    if (url.startsWith(ZimFileReader.UI_URI.toString())) {
       Log.e("KiwixWebViewClient", "UI Url " + url + " not supported.");
       //TODO: Document this code - what's a UI_URL?
       return true;
@@ -84,6 +90,19 @@ public class KiwixWebViewClient extends WebViewClient {
     return true;
   }
 
+  private boolean handleEpubAndPdf(String url) {
+    String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+    if (DOCUMENT_TYPES.containsKey(extension)) {
+      Intent intent = new Intent(Intent.ACTION_VIEW);
+      Uri uri = Uri.parse(url);
+      intent.setDataAndType(uri, DOCUMENT_TYPES.get(extension));
+      intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+      callback.openExternalUrl(intent);
+      return true;
+    }
+    return false;
+  }
+
   @Override
   public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
     callback.webViewFailedLoading(failingUrl);
@@ -91,11 +110,20 @@ public class KiwixWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
-    if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null"))
-        && !BuildConfig.IS_CUSTOM_APP) {
-      inflateHomeView(view);
-      return;
+    boolean invalidUrl = url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null");
+    Log.d(TAG_KIWIX, "invalidUrl = " + invalidUrl);
+
+    if (invalidUrl) {
+      if (BuildConfig.IS_CUSTOM_APP) {
+        Log.e(TAG_KIWIX,
+          "Abandoning WebView as there's a problem getting the content for this custom app.");
+        return;
+      } else {
+        inflateHomeView(view);
+        return;
+      }
     }
+
     if (!url.equals("file:///android_asset/home.html")) {
       view.removeView(home);
     } else if (!BuildConfig.IS_CUSTOM_APP) {

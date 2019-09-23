@@ -19,36 +19,42 @@ package org.kiwix.kiwixmobile.database.newdb.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
-import org.kiwix.kiwixmobile.data.ZimContentProvider
+import org.kiwix.kiwixmobile.data.local.entity.RecentSearch
 import org.kiwix.kiwixmobile.database.newdb.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.RecentSearchEntity_
 import javax.inject.Inject
 
-class NewRecentSearchDao @Inject constructor(val box: Box<RecentSearchEntity>) {
-  fun getRecentSearches() = box
-      .query {
-        equal(RecentSearchEntity_.zimId, ZimContentProvider.getId() ?: "")
-        orderDesc(RecentSearchEntity_.id)
-      }
-      .find()
-      .distinctBy { it.searchTerm }
-      .take(NUM_RECENT_RESULTS)
-      .map { it.searchTerm }
+class NewRecentSearchDao @Inject constructor(
+  val box: Box<RecentSearchEntity>
+) {
+  fun getRecentSearches(zimId: String?) = box
+    .query {
+      equal(RecentSearchEntity_.zimId, zimId ?: "")
+      orderDesc(RecentSearchEntity_.id)
+    }
+    .find()
+    .distinctBy(RecentSearchEntity::searchTerm)
+    .take(NUM_RECENT_RESULTS)
+    .map(RecentSearchEntity::searchTerm)
 
-  fun saveSearch(title: String) {
-    box.put(RecentSearchEntity(title))
+  fun saveSearch(title: String, id: String) {
+    box.put(RecentSearchEntity(searchTerm = title, zimId = id))
   }
 
   fun deleteSearchString(searchTerm: String) {
     box
-        .query {
-          equal(RecentSearchEntity_.searchTerm, searchTerm)
-        }
-        .remove()
+      .query {
+        equal(RecentSearchEntity_.searchTerm, searchTerm)
+      }
+      .remove()
   }
 
   fun deleteSearchHistory() {
     box.removeAll()
+  }
+
+  fun migrationInsert(recentSearches: MutableList<RecentSearch>) {
+    box.put(recentSearches.map(::RecentSearchEntity))
   }
 
   companion object {

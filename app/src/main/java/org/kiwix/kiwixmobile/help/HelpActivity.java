@@ -59,7 +59,7 @@ public class HelpActivity extends BaseActivity {
 
     recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     HelpAdapter helpAdapter =
-        new HelpAdapter(titleDescriptionMap, sharedPreferenceUtil.nightMode());
+      new HelpAdapter(titleDescriptionMap, sharedPreferenceUtil.nightMode());
     recyclerView.setAdapter(helpAdapter);
   }
 
@@ -68,8 +68,8 @@ public class HelpActivity extends BaseActivity {
     Intent intent = new Intent(Intent.ACTION_SENDTO);
     intent.setType("plain/text");
     String uriText = "mailto:" + Uri.encode(CONTACT_EMAIL_ADDRESS) +
-        "?subject=" + Uri.encode(
-        "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
+      "?subject=" + Uri.encode(
+      "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
     Uri uri = Uri.parse(uriText);
     intent.setData(uri);
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"));

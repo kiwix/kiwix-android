@@ -27,131 +27,133 @@ import org.kiwix.kiwixmobile.utils.StorageUtils
 
 class ChunkUtilsTest {
 
-  private val URL =
+  private val url =
     "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
 
   init {
     mockkStatic("org.kiwix.kiwixmobile.utils.StorageUtils")
-    every { StorageUtils.getFileNameFromUrl(URL) }.returns("TestFileName")
+    every { StorageUtils.getFileNameFromUrl(url) }.returns("TestFileName")
     every { StorageUtils.getFileNameFromUrl("TestURL") }.returns("TestFileName.xml")
   }
 
   @Test
-  fun TestGetChunks() {
+  fun testGetChunks() {
     var listReturned: List<Chunk>
-    var size: Long
+    var size = ChunkUtils.CHUNK_SIZE
 
     // When the file size is exactly equal to CHUNK_SIZE
-    size = ChunkUtils.CHUNK_SIZE
-    listReturned = ChunkUtils.getChunks(URL, size, 27)
+    listReturned = ChunkUtils.getChunks(url, size, 27)
 
     assertEquals(
-        "verify that the list contains correct number of chunks", 1, listReturned.size.toLong()
+      "verify that the list contains correct number of chunks", 1, listReturned.size.toLong()
     )
     assertEquals(
-        "verify that the range format is correct", "0-",
-        listReturned[0].rangeHeader
+      "verify that the range format is correct", "0-",
+      listReturned[0].rangeHeader
     )
     assertEquals(
-        "verify that the same notificationID is passed to the chunk", 27,
-        listReturned[0].notificationID.toLong()
+      "verify that the same notificationID is passed to the chunk", 27,
+      listReturned[0].notificationID.toLong()
     )
     assertEquals(
-        "verify that the file name is correctly assigned in case of a single file",
-        "TestFileName.part.part", listReturned[0].fileName
+      "verify that the file name is correctly assigned in case of a single file",
+      "TestFileName.part.part", listReturned[0].fileName
     )
     assertEquals(
-        "verify that the same URL is passed on to the chunk", URL,
-        listReturned[0].url
+      "verify that the same URL is passed on to the chunk", url,
+      listReturned[0].url
     )
 
     // When the file size is more than CHUNK_SIZE
     size = ChunkUtils.CHUNK_SIZE * 5.toLong() + (1024 * 1024).toLong()
-    listReturned = ChunkUtils.getChunks(URL, size, 56)
+    listReturned = ChunkUtils.getChunks(url, size, 56)
 
     assertEquals(
-        "verify that the list contains correct number of chunks", 6, listReturned.size.toLong()
+      "verify that the list contains correct number of chunks", 6, listReturned.size.toLong()
     )
     assertEquals(
-        "verify that the rangehandler for the last chunk is correct", "10737418245-",
-        listReturned[listReturned.size - 1].rangeHeader
+      "verify that the rangehandler for the last chunk is correct", "10737418245-",
+      listReturned[listReturned.size - 1].rangeHeader
     )
     assertEquals(
-        "verify that the rangehandler for the first chunk is corect", "0-2147483648",
-        listReturned[0].rangeHeader
-    )
-
-    assertEquals(
-        "verify that the same notificationID is passed on to each chunk",
-        true, listReturned[0].url == URL
-        && listReturned[1].url == URL
-        && listReturned[2].url == URL
-        && listReturned[3].url == URL
-        && listReturned[4].url == URL
-        && listReturned[5].url == URL
+      "verify that the rangehandler for the first chunk is corect", "0-2147483648",
+      listReturned[0].rangeHeader
     )
 
     assertEquals(
-        "verify that the same URL is passed on to each chunk",
-        true, listReturned[0].notificationID == 56
-        && listReturned[1].notificationID == 56
-        && listReturned[2].notificationID == 56
-        && listReturned[3].notificationID == 56
-        && listReturned[4].notificationID == 56
-        && listReturned[5].notificationID == 56
+      "verify that the same notificationID is passed on to each chunk",
+      true, listReturned[0].url == url &&
+        listReturned[1].url == url &&
+        listReturned[2].url == url &&
+        listReturned[3].url == url &&
+        listReturned[4].url == url &&
+        listReturned[5].url == url
+    )
+
+    assertEquals(
+      "verify that the same URL is passed on to each chunk",
+      true, listReturned[0].notificationID == 56 &&
+        listReturned[1].notificationID == 56 &&
+        listReturned[2].notificationID == 56 &&
+        listReturned[3].notificationID == 56 &&
+        listReturned[4].notificationID == 56 &&
+        listReturned[5].notificationID == 56
     )
 
     // test assignment of file names
-    val ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+    val alphabet = "abcdefghijklmnopqrstuvwxyz"
     for (i in listReturned.indices) {
       val extension = listReturned[i]
-          .fileName
-          .substringAfter('.')
-      val expectedExtension = "zim" + ALPHABET[i / 26] + ALPHABET[i % 26] + ".part.part"
+        .fileName
+        .substringAfter('.')
+      val expectedExtension = "zim" + alphabet[i / 26] + alphabet[i % 26] + ".part.part"
       assertThat(extension).isEqualTo(expectedExtension)
     }
 
     // When the file size is less than CHUNK_SIZE
     size = ChunkUtils.CHUNK_SIZE - (1024 * 1024).toLong()
-    listReturned = ChunkUtils.getChunks(URL, size, 37)
+    listReturned = ChunkUtils.getChunks(url, size, 37)
 
     assertEquals(
-        "verify that the list contains correct number of chunks", 1, listReturned.size.toLong()
+      "verify that the list contains correct number of chunks", 1, listReturned.size.toLong()
     )
     assertEquals(
-        "verify that the range format is correct", "0-",
-        listReturned[0].rangeHeader
+      "verify that the range format is correct", "0-",
+      listReturned[0].rangeHeader
     )
     assertEquals(
-        "verify that the same notificationID is passed to the chunk", 37,
-        listReturned[0].notificationID.toLong()
+      "verify that the same notificationID is passed to the chunk", 37,
+      listReturned[0].notificationID.toLong()
     )
     assertEquals(
-        "verify that the file name is correctly assigned in case of a single file",
-        "TestFileName.part.part", listReturned[0].fileName
+      "verify that the file name is correctly assigned in case of a single file",
+      "TestFileName.part.part", listReturned[0].fileName
     )
     assertEquals(
-        "verify that the same URL is passed on to the chunk", URL,
-        listReturned[0].url
+      "verify that the same URL is passed on to the chunk", url,
+      listReturned[0].url
     )
 
     // verify that filename is correctly generated
     size = ChunkUtils.CHUNK_SIZE
     listReturned = ChunkUtils.getChunks("TestURL", size, 0)
     assertEquals(
-        "verify that previous extension in the filename (if any) is removed in case of files having 1 chunk",
-        "TestFileName.xml.part.part", listReturned[0].fileName
+      "verify that previous extension in the filename (if any) is removed" +
+        " in case of files having 1 chunk",
+      "TestFileName.xml.part.part", listReturned[0].fileName
     )
 
     size = ChunkUtils.CHUNK_SIZE * 2.toLong()
     listReturned = ChunkUtils.getChunks("TestURL", size, 0)
     assertEquals(
-        "verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk",
-        "TestFileName.zimaa.part.part", listReturned[0].fileName
+      "verify that previous extension in the filename (if any) is removed" +
+        " in case of files having more than 1 chunk",
+      "TestFileName.zimaa.part.part", listReturned[0].fileName
     )
     assertEquals(
-        "verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk",
-        "TestFileName.zimab.part.part", listReturned[1].fileName
+      "verify that previous extension in the filename (if any) is removed" +
+        " in case of files having more than 1 chunk",
+      "TestFileName.zimab.part.part", listReturned[1].fileName
     )
   }
 }

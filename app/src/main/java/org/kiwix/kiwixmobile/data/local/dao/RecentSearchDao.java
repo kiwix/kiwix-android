@@ -22,7 +22,6 @@ import com.yahoo.squidb.sql.Query;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 
@@ -43,43 +42,14 @@ public class RecentSearchDao {
   /**
    * Returns a distinct enumeration of the {@code NUM_RECENT_RESULTS} most recent searches.
    */
-  public List<String> getRecentSearches() {
-    SquidCursor<RecentSearch> searchCursor = mDb.query(
-        RecentSearch.class,
-        Query.selectDistinct(RecentSearch.SEARCH_STRING)
-            .where(RecentSearch.ZIM_I_D.eq(ZimContentProvider.getId()))
-            .orderBy(RecentSearch.ID.desc())
-            .limit(NUM_RECENT_RESULTS));
-    List<String> result = new ArrayList<>();
-    try {
+  public List<RecentSearch> getRecentSearches() {
+    List<RecentSearch> result = new ArrayList<>();
+    try (SquidCursor<RecentSearch> searchCursor = mDb.query(
+      RecentSearch.class, Query.select())) {
       while (searchCursor.moveToNext()) {
-        result.add(searchCursor.get(RecentSearch.SEARCH_STRING));
+        result.add(new RecentSearch(searchCursor));
       }
-    } finally {
-      searchCursor.close();
     }
     return result;
-  }
-
-  /**
-   * Save {@code searchString} as the most recent search.
-   */
-  public void saveSearch(String searchString) {
-    mDb.persist(
-        new RecentSearch().setSearchString(searchString).setZimID(ZimContentProvider.getId()));
-  }
-
-  /**
-   * Delete all entries that exactly matches {@code searchString}
-   */
-  public void deleteSearchString(String searchString) {
-    mDb.deleteWhere(RecentSearch.class, RecentSearch.SEARCH_STRING.eq(searchString));
-  }
-
-  /**
-   * Deletes all entries.
-   */
-  public void deleteSearchHistory() {
-    mDb.deleteWhere(RecentSearch.class, RecentSearch.ID.isNotNull());
   }
 }

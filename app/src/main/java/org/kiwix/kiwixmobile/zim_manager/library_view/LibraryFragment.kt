@@ -26,11 +26,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.support.StorageSelectDialog
+import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.activity_library.libraryErrorText
 import kotlinx.android.synthetic.main.activity_library.libraryList
 import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
@@ -41,14 +40,15 @@ import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.extensions.snack
 import org.kiwix.kiwixmobile.extensions.toast
+import org.kiwix.kiwixmobile.extensions.viewModel
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.main.MainActivity
+import org.kiwix.kiwixmobile.settings.StorageCalculator
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.DialogShower
 import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.utils.NetworkUtils
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.utils.StyleUtils
 import org.kiwix.kiwixmobile.utils.TestingUtils
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
@@ -70,19 +70,20 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
+  @Inject lateinit var storageCalculator: StorageCalculator
 
-  private val zimManageViewModel: ZimManageViewModel by lazy {
-    ViewModelProviders.of(activity!!, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
+  private val zimManageViewModel by lazy {
+    activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
   }
+
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-        BookDelegate(bookUtils, this::onBookItemClick), DividerDelegate
+      BookDelegate(bookUtils, ::onBookItemClick), DividerDelegate
     )
   }
 
   private val spaceAvailable: Long
-    get() = File(sharedPreferenceUtil.prefStorage).freeSpace
+    get() = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
 
   private val noWifiWithWifiOnlyPreferenceSet
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(context!!)
@@ -107,17 +108,17 @@ class LibraryFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    librarySwipeRefresh.setOnRefreshListener { refreshFragment() }
+    librarySwipeRefresh.setOnRefreshListener(::refreshFragment)
     libraryList.run {
       adapter = libraryAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    zimManageViewModel.libraryItems.observe(this, Observer(this::onLibraryItemsChange))
+    zimManageViewModel.libraryItems.observe(this, Observer(::onLibraryItemsChange))
     zimManageViewModel.libraryListIsRefreshing.observe(
-        this, Observer(this::onRefreshStateChange)
+      this, Observer(::onRefreshStateChange)
     )
-    zimManageViewModel.networkStates.observe(this, Observer(this::onNetworkStateChange))
+    zimManageViewModel.networkStates.observe(this, Observer(::onNetworkStateChange))
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
@@ -130,9 +131,9 @@ class LibraryFragment : BaseFragment() {
       }
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
-          context.toast(R.string.no_network_connection)
+          context.toast(string.no_network_connection)
         } else {
-          libraryErrorText.setText(R.string.no_network_connection)
+          libraryErrorText.setText(string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
         }
       }
@@ -140,11 +141,11 @@ class LibraryFragment : BaseFragment() {
   }
 
   private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
-    libraryAdapter.itemList = it!!
+    libraryAdapter.items = it!!
     if (it.isEmpty()) {
       libraryErrorText.setText(
-          if (isNotConnected) R.string.no_network_connection
-          else R.string.no_items_msg
+        if (isNotConnected) string.no_network_connection
+        else string.no_items_msg
       )
       libraryErrorText.visibility = VISIBLE
       TestingUtils.unbindResource(LibraryFragment::class.java)
@@ -155,7 +156,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun refreshFragment() {
     if (isNotConnected) {
-      context.toast(R.string.no_network_connection)
+      context.toast(string.no_network_connection)
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
@@ -168,10 +169,10 @@ class LibraryFragment : BaseFragment() {
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
     sharedPreferenceUtil.putPrefStorage(storageDevice.name)
     sharedPreferenceUtil.putPrefStorageTitle(
-        getString(
-            if (storageDevice.isInternal) R.string.internal_storage
-            else R.string.external_storage
-        )
+      getString(
+        if (storageDevice.isInternal) string.internal_storage
+        else string.external_storage
+      )
     )
   }
 
@@ -179,19 +180,19 @@ class LibraryFragment : BaseFragment() {
     when {
       notEnoughSpaceAvailable(item) -> {
         context.toast(
-            getString(R.string.download_no_space)
-                + "\n" + getString(R.string.space_available) + " "
-                + LibraryUtils.bytesToHuman(spaceAvailable)
+          getString(string.download_no_space) +
+            "\n" + getString(string.space_available) + " " +
+            storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage))
         )
         libraryList.snack(
-            R.string.download_change_storage,
-            R.string.open,
-            this::showStorageSelectDialog
+          string.download_change_storage,
+          string.open,
+          ::showStorageSelectDialog
         )
         return
       }
       isNotConnected -> {
-        context.toast(R.string.no_network_connection)
+        context.toast(string.no_network_connection)
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {
@@ -209,21 +210,9 @@ class LibraryFragment : BaseFragment() {
   private fun notEnoughSpaceAvailable(item: BookItem) =
     spaceAvailable < item.book.size.toLong() * 1024f
 
-  private fun showStorageSelectDialog() {
-    StorageSelectDialog().apply {
-      arguments = Bundle().apply {
-        putString(
-            StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
-            this@LibraryFragment.getString(string.internal_storage)
-        )
-        putString(
-            StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
-            this@LibraryFragment.getString(string.external_storage)
-        )
-        putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle())
-      }
-      setOnSelectListener(this@LibraryFragment::storeDeviceInPreferences)
+  private fun showStorageSelectDialog() = StorageSelectDialog()
+    .apply {
+      setOnSelectListener(::storeDeviceInPreferences)
     }
-        .show(fragmentManager, getString(string.pref_storage))
-  }
+    .show(fragmentManager!!, getString(string.pref_storage))
 }

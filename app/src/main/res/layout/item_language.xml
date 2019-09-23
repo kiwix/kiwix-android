@@ -1,60 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="64dp"
-    >
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="64dp"
+  >
 
   <CheckBox
-      android:id="@+id/item_language_checkbox"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/activity_horizontal_margin"
-      android:layout_marginStart="@dimen/activity_horizontal_margin"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      />
+    android:id="@+id/item_language_checkbox"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    />
 
   <TextView
-      android:id="@+id/item_language_name"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/activity_horizontal_margin"
-      android:layout_marginStart="@dimen/activity_horizontal_margin"
-      android:alpha="0.87"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-      app:layout_constraintBottom_toTopOf="@id/item_language_localized_name"
-      app:layout_constraintStart_toEndOf="@id/item_language_checkbox"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_chainStyle="packed"
-      tools:text="English"
-      />
+    android:id="@+id/item_language_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:alpha="0.87"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    app:layout_constraintBottom_toTopOf="@id/item_language_localized_name"
+    app:layout_constraintStart_toEndOf="@id/item_language_checkbox"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_chainStyle="packed"
+    tools:text="English"
+    />
 
   <TextView
-      android:id="@+id/item_language_localized_name"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:alpha="0.54"
-      android:textAppearance="?android:attr/textAppearanceSmall"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="@id/item_language_name"
-      app:layout_constraintTop_toBottomOf="@id/item_language_name"
-      tools:text="English"
-      />
+    android:id="@+id/item_language_localized_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:alpha="0.54"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="@id/item_language_name"
+    app:layout_constraintTop_toBottomOf="@id/item_language_name"
+    tools:text="English"
+    />
 
   <TextView
-      android:id="@+id/item_language_books_count"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/activity_horizontal_margin"
-      android:layout_marginStart="@dimen/activity_horizontal_margin"
-      android:alpha="0.54"
-      android:textAppearance="?android:attr/textAppearanceSmall"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="9 books"
-      />
+    android:id="@+id/item_language_books_count"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:alpha="0.54"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="9 books"
+    />
+  <View
+    android:background="?android:attr/selectableItemBackground"
+    android:id="@+id/item_language_clickable_area"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>

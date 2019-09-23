@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="wifi_only_msg">If you choose “Yes” you won\'t be warned in future. However, you can always change this in Settings</string>
+  <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
+  <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
+  <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
+</resources>

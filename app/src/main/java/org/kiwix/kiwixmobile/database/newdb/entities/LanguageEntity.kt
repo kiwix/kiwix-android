@@ -17,21 +17,20 @@ data class LanguageEntity(
 ) {
 
   constructor(language: Language) : this(
-      0,
-      Locale(language.languageCode),
-      language.active,
-      language.occurencesOfLanguage
+    0,
+    Locale(language.languageCode),
+    language.active,
+    language.occurencesOfLanguage
   )
 
   fun toLanguageModel() =
-    Language(locale, active, occurencesOfLanguage)
+    Language(locale, active, occurencesOfLanguage, id)
 }
 
 class StringToLocaleConverter : PropertyConverter<Locale, String> {
-  override fun convertToDatabaseValue(entityProperty: Locale?) =
+  override fun convertToDatabaseValue(entityProperty: Locale?): String =
     entityProperty?.isO3Language ?: Locale.ENGLISH.isO3Language
 
-  override fun convertToEntityProperty(databaseValue: String?) =
+  override fun convertToEntityProperty(databaseValue: String?): Locale =
     databaseValue?.let(::Locale) ?: Locale.ENGLISH
-
 }

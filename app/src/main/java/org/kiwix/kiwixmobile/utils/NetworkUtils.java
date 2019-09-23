@@ -35,7 +35,7 @@ public class NetworkUtils {
    */
   public static boolean isNetworkAvailable(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-        .getSystemService(Context.CONNECTIVITY_SERVICE);
+      .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
       return false;
     } else {
@@ -63,7 +63,7 @@ public class NetworkUtils {
   //TODO method isWiFi should be renamed to isWifiConnected to express the state which is checked (postponed to refactoring deprecated android.net.* usage)
   public static boolean isWiFi(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-        .getSystemService(Context.CONNECTIVITY_SERVICE);
+      .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
       return false;
     }
@@ -111,8 +111,8 @@ public class NetworkUtils {
       details = details.substring(beginIndex, endIndex);
       details = details.replaceAll("_", " ");
       details = details.replaceAll("all", "");
-      details = details.replaceAll("nopic", context.getString(R.string.zim_nopic));
-      details = details.replaceAll("novid", context.getString(R.string.zim_novid));
+      details = details.replaceAll("nopic", context.getString(R.string.zim_no_pic));
+      details = details.replaceAll("novid", context.getString(R.string.zim_no_vid));
       details = details.replaceAll("simple", context.getString(R.string.zim_simple));
       details = details.trim().replaceAll(" +", " ");
       return details;

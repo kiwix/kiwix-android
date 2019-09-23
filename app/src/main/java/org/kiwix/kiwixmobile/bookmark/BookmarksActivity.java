@@ -20,15 +20,15 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
 
 public class BookmarksActivity extends BaseActivity implements BookmarksContract.View,
-    BookmarksAdapter.OnItemClickListener {
+  BookmarksAdapter.OnItemClickListener {
 
   private final List<BookmarkItem> bookmarksList = new ArrayList<>();
   private final List<BookmarkItem> allBookmarks = new ArrayList<>();
@@ -40,6 +40,8 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   RecyclerView recyclerView;
   @Inject
   BookmarksContract.Presenter presenter;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
 
   private boolean refreshAdapter = true;
   private BookmarksAdapter bookmarksAdapter;
@@ -92,7 +94,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
-    setContentView(R.layout.activity_bookmarks_history_language);
+    setContentView(R.layout.activity_bookmarks);
     setSupportActionBar(toolbar);
 
     ActionBar actionBar = getSupportActionBar();
@@ -185,11 +187,11 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
         intent.putExtra(EXTRA_CHOSE_X_URL, bookmark.getBookmarkUrl());
       }
       if (bookmark.getZimFilePath() != null && !bookmark.getZimFilePath()
-          .equals(ZimContentProvider.getZimFile())) {
+        .equals(zimReaderContainer.getZimCanonicalPath())) {
         intent.setData(Uri.fromFile(new File(bookmark.getZimFilePath())));
       }
       if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0)
-          == 1) {
+        == 1) {
         startActivity(intent);
       } else {
         setResult(RESULT_OK, intent);
@@ -216,7 +218,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       ImageViewExtensionsKt.setBitmapFromString(favicon, bookmark.getFavicon());
     } else {
       favicon.setImageDrawable(
-          ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
+        ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
       deleteList.add(bookmark);
     }
     actionMode.setTitle(getString(R.string.selected_items, deleteList.size()));

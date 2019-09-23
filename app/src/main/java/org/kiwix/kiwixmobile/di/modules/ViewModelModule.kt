@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.KiwixViewModelFactory
 import org.kiwix.kiwixmobile.di.ViewModelKey
+import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 
 /*
@@ -31,8 +32,14 @@ abstract class ViewModelModule {
   @Binds
   @IntoMap
   @ViewModelKey(ZimManageViewModel::class)
-  internal abstract fun bindUserViewModel(userViewModel: ZimManageViewModel): ViewModel
+  internal abstract fun bindZimManageViewModel(zimManageViewModel: ZimManageViewModel): ViewModel
 
   @Binds
-  internal abstract fun bindViewModelFactory(factory: KiwixViewModelFactory): ViewModelProvider.Factory
+  @IntoMap
+  @ViewModelKey(LanguageViewModel::class)
+  internal abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
+
+  @Binds
+  internal abstract fun bindViewModelFactory(factory: KiwixViewModelFactory):
+    ViewModelProvider.Factory
 }

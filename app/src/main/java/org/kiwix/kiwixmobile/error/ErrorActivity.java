@@ -17,10 +17,10 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
@@ -29,6 +29,8 @@ public class ErrorActivity extends BaseActivity {
 
   @Inject
   NewBookDao bookDao;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
 
   @BindView(R.id.reportButton)
   Button reportButton;
@@ -74,16 +76,16 @@ public class ErrorActivity extends BaseActivity {
       emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Someone has reported a crash");
 
       String body = "Hi Kiwix Developers!\n" +
-          "The Android app crashed, here are some details to help fix it:\n\n";
+        "The Android app crashed, here are some details to help fix it:\n\n";
 
       if (allowLogsCheckbox.isChecked()) {
         File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
         File logFile = new File(appDirectory, "logcat.txt");
-        if(logFile.exists()) {
+        if (logFile.exists()) {
           Uri path =
-              FileProvider.getUriForFile(this,
-                  getApplicationContext().getPackageName() + ".fileprovider",
-                  logFile);
+            FileProvider.getUriForFile(this,
+              getApplicationContext().getPackageName() + ".fileprovider",
+              logFile);
           emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
           emailIntent.putExtra(Intent.EXTRA_STREAM, path);
         }
@@ -91,48 +93,48 @@ public class ErrorActivity extends BaseActivity {
 
       if (allowCrashCheckbox.isChecked()) {
         body += "Exception Details:\n\n" +
-            toStackTraceString(exception) +
-            "\n\n";
+          toStackTraceString(exception) +
+          "\n\n";
       }
 
-      if(allowZimsCheckbox.isChecked()) {
+      if (allowZimsCheckbox.isChecked()) {
         List<BookOnDisk> books = bookDao.getBooks();
 
         StringBuilder sb = new StringBuilder();
         for (BookOnDisk bookOnDisk : books) {
           final LibraryNetworkEntity.Book book = bookOnDisk.getBook();
           String bookString = book.getTitle() +
-              ":\nArticles: [" + book.getArticleCount() +
-              "]\nCreator: [" + book.getCreator() +
-              "]\n";
+            ":\nArticles: [" + book.getArticleCount() +
+            "]\nCreator: [" + book.getCreator() +
+            "]\n";
 
           sb.append(bookString);
         }
         String allZimFiles = sb.toString();
 
-        String currentZimFile = ZimContentProvider.getZimFile();
+        String currentZimFile = zimReaderContainer.getZimCanonicalPath();
         body += "Curent Zim File:\n" +
-            currentZimFile +
-            "\n\nAll Zim Files in DB:\n" +
-            allZimFiles +
-            "\n\n";
+          currentZimFile +
+          "\n\nAll Zim Files in DB:\n" +
+          allZimFiles +
+          "\n\n";
       }
 
       if (allowLanguageCheckbox.isChecked()) {
         body += "Current Locale:\n" +
-            getCurrentLocale(getApplicationContext()) +
-            "\n\n";
+          getCurrentLocale(getApplicationContext()) +
+          "\n\n";
       }
 
       if (allowDeviceDetailsCheckbox.isChecked()) {
         body += "Device Details:\n" +
-            "Device:[" + Build.DEVICE
-            + "]\nModel:[" + Build.MODEL
-            + "]\nManufacturer:[" + Build.MANUFACTURER
-            + "]\nTime:[" + Build.TIME
-            + "]\nAndroid Version:[" + Build.VERSION.RELEASE
-            + "]" +
-            "\n\n";
+          "Device:[" + Build.DEVICE
+          + "]\nModel:[" + Build.MODEL
+          + "]\nManufacturer:[" + Build.MANUFACTURER
+          + "]\nTime:[" + Build.TIME
+          + "]\nAndroid Version:[" + Build.VERSION.RELEASE
+          + "]" +
+          "\n\n";
       }
 
       emailIntent.putExtra(Intent.EXTRA_TEXT, body);
@@ -153,8 +155,8 @@ public class ErrorActivity extends BaseActivity {
     Context context = this;
     Intent intent = new Intent(context, SplashActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-        | Intent.FLAG_ACTIVITY_CLEAR_TASK
-        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+      | Intent.FLAG_ACTIVITY_CLEAR_TASK
+      | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
     intent.setAction(Intent.ACTION_MAIN);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     context.startActivity(intent);

@@ -17,57 +17,45 @@
  */
 package org.kiwix.kiwixmobile.zim_manager
 
-import android.Manifest.permission
-import android.content.pm.PackageManager
 import android.os.FileObserver
 import android.util.Log
-import androidx.core.content.ContextCompat
 import io.reactivex.Flowable
-import io.reactivex.functions.Function3
+import io.reactivex.functions.BiFunction
 import io.reactivex.processors.BehaviorProcessor
-import org.kiwix.kiwixmobile.KiwixApplication
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
 import java.io.File
 import java.io.RandomAccessFile
-import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUtil) {
-  private val _fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
-  val fileSystemStates = _fileSystemStates.distinctUntilChanged()
-  var fileObserver: FileObserver? = null
+  val fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
+  private var fileObserver: FileObserver? = null
   private val requestCheckSystemFileType = BehaviorProcessor.createDefault(Unit)
 
   init {
     Flowable.combineLatest(
-        sharedPreferenceUtil.prefStorages.distinctUntilChanged(),
-        requestCheckSystemFileType,
-        pollForExternalStoragePermissionGranted(),
-        Function3 { storage: String, _: Unit, _: Boolean -> storage }
+      sharedPreferenceUtil.prefStorages
+        .distinctUntilChanged()
+        .doOnNext { fileSystemStates.offer(Unknown) },
+      requestCheckSystemFileType,
+      BiFunction { storage: String, _: Unit -> storage }
     )
-        .subscribe(
-            {
-              val systemState = toFileSystemState(it)
-              _fileSystemStates.onNext(systemState)
-              fileObserver = if (systemState == NotEnoughSpaceFor4GbFile) fileObserver(it) else null
-
-            },
-            Throwable::printStackTrace
-        )
+      .observeOn(Schedulers.io())
+      .subscribeOn(Schedulers.io())
+      .subscribe(
+        {
+          val systemState = toFileSystemState(it)
+          fileSystemStates.offer(systemState)
+          fileObserver = if (systemState == NotEnoughSpaceFor4GbFile) fileObserver(it) else null
+        },
+        Throwable::printStackTrace
+      )
   }
-
-  private fun pollForExternalStoragePermissionGranted() =
-    Flowable.interval(1, SECONDS)
-        .map {
-          ContextCompat.checkSelfPermission(
-              KiwixApplication.getInstance(), permission.WRITE_EXTERNAL_STORAGE
-          ) == PackageManager.PERMISSION_GRANTED
-        }
-        .filter { it }
-        .take(1)
 
   private fun fileObserver(it: String?): FileObserver {
     return object : FileObserver(it, MOVED_FROM or DELETE) {
@@ -90,18 +78,18 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
 
   private fun canCreate4GbFile(storage: String): Boolean {
     val path = "$storage/large_file_test.txt"
-    File(path).delete()
+    File(path).deleteIfExists()
     try {
       RandomAccessFile(path, "rw").use {
         it.setLength(FOUR_GIGABYTES_IN_BYTES)
-        return true
+        return@canCreate4GbFile true
       }
     } catch (e: Exception) {
       e.printStackTrace()
       Log.d("Fat32Checker", e.message)
       return false
     } finally {
-      File(path).delete()
+      File(path).deleteIfExists()
     }
   }
 
@@ -110,9 +98,14 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
     const val FOUR_GIGABYTES_IN_KILOBYTES = 4L * 1024L * 1024L
   }
 
-  sealed class FileSystemState() {
+  sealed class FileSystemState {
     object NotEnoughSpaceFor4GbFile : FileSystemState()
     object CanWrite4GbFile : FileSystemState()
     object CannotWrite4GbFile : FileSystemState()
+    object Unknown : FileSystemState()
   }
+}
+
+private fun File.deleteIfExists() {
+  if (exists()) delete()
 }

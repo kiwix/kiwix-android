@@ -30,7 +30,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Url;
 
 public interface KiwixService {
-  @GET("/library/library_zim.xml") Single<LibraryNetworkEntity> getLibrary();
+
+  String LIBRARY_NETWORK_PATH = "/library/library_zim.xml";
+
+  @GET(LIBRARY_NETWORK_PATH) Single<LibraryNetworkEntity> getLibrary();
 
   @GET Observable<MetaLinkNetworkEntity> getMetaLinks(@Url String url);
 
@@ -39,11 +42,11 @@ public interface KiwixService {
 
     public static KiwixService newHacklistService(OkHttpClient okHttpClient, String baseUrl) {
       Retrofit retrofit = new Retrofit.Builder()
-          .baseUrl(baseUrl)
-          .client(okHttpClient)
-          .addConverterFactory(SimpleXmlConverterFactory.create())
-          .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-          .build();
+        .baseUrl(baseUrl)
+        .client(okHttpClient)
+        .addConverterFactory(SimpleXmlConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+        .build();
 
       return retrofit.create(KiwixService.class);
     }

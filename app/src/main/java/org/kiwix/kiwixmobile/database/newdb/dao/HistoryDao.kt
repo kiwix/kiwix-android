@@ -19,44 +19,46 @@ package org.kiwix.kiwixmobile.database.newdb.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
-import org.kiwix.kiwixmobile.KiwixApplication
-import org.kiwix.kiwixmobile.data.ZimContentProvider
 import org.kiwix.kiwixmobile.database.newdb.entities.HistoryEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.HistoryEntity_
 import org.kiwix.kiwixmobile.history.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale
-import java.text.SimpleDateFormat
-import java.util.Date
 import javax.inject.Inject
 
 class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) {
 
   fun history() = box.asFlowable()
-      .map { it.map(::HistoryItem) }
+    .map { it.map(::HistoryItem) }
 
   fun saveHistory(historyItem: HistoryItem) {
     box.store.callInTx {
       box
-          .query {
-            equal(HistoryEntity_.historyUrl, historyItem.historyUrl).and()
-                .equal(HistoryEntity_.dateString, historyItem.dateString)
-          }
-          .remove()
+        .query {
+          equal(HistoryEntity_.historyUrl, historyItem.historyUrl).and()
+            .equal(HistoryEntity_.dateString, historyItem.dateString)
+        }
+        .remove()
       box.put(HistoryEntity(historyItem))
     }
   }
 
-  fun getHistoryList(showHistoryCurrentBook: Boolean) = box
-      .query {
-        if (showHistoryCurrentBook) {
-          equal(HistoryEntity_.zimFilePath, ZimContentProvider.getZimFile())
-        }
-        orderDesc(HistoryEntity_.timeStamp)
+  fun getHistoryList(
+    showOnlyCurrentBookHistory: Boolean,
+    canonicalPath: String?
+  ) = box
+    .query {
+      if (showOnlyCurrentBookHistory) {
+        canonicalPath?.let { equal(HistoryEntity_.zimFilePath, it) }
       }
-      .find()
-      .map(::HistoryItem)
+      orderDesc(HistoryEntity_.timeStamp)
+    }
+    .find()
+    .map(::HistoryItem)
 
   fun deleteHistory(historyList: List<HistoryItem>) {
     box.remove(historyList.map(::HistoryEntity))
+  }
+
+  fun deleteAllHistory() {
+    box.removeAll()
   }
 }

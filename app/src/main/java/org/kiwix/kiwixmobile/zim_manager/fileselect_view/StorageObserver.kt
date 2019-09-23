@@ -1,45 +1,33 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
-import android.content.Context
-import android.util.Log
-import io.reactivex.processors.PublishProcessor
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
+import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.utils.files.FileSearch
-import org.kiwix.kiwixmobile.utils.files.FileSearch.ResultListener
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import java.io.File
 import javax.inject.Inject
 
 class StorageObserver @Inject constructor(
-  private val context: Context,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val downloadDao: NewDownloadDao
+  private val downloadDao: FetchDownloadDao,
+  private val fileSearch: FileSearch,
+  private val zimReaderFactory: ZimFileReader.Factory
 ) {
 
-  private val _booksOnFileSystem = PublishProcessor.create<List<BookOnDisk>>()
-  val booksOnFileSystem = _booksOnFileSystem.distinctUntilChanged()
-      .doOnSubscribe {
-        downloadDao.downloads()
-            .subscribeOn(Schedulers.io())
-            .take(1)
-            .subscribe(this::scanFiles, Throwable::printStackTrace)
-      }
+  val booksOnFileSystem
+    get() = scanFiles()
+      .withLatestFrom(downloadDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
+      .map { it.map(::convertToBookOnDisk) }
 
-  private fun scanFiles(downloads: List<DownloadModel>) {
-    FileSearch(context, downloads, object : ResultListener {
-      val foundBooks = mutableSetOf<BookOnDisk>()
+  private fun scanFiles() = fileSearch.scan().subscribeOn(Schedulers.io())
 
-      override fun onBookFound(book: BookOnDisk) {
-        foundBooks.add(book)
-        Log.i("Scanner", "File Search: Found Book " + book.book.title)
-      }
+  private fun toFilesThatAreNotDownloading(files: List<File>, downloads: List<DownloadModel>) =
+    files.filter { fileHasNoMatchingDownload(downloads, it) }
 
-      override fun onScanCompleted() {
-        _booksOnFileSystem.onNext(foundBooks.toList())
+  private fun fileHasNoMatchingDownload(downloads: List<DownloadModel>, file: File) =
+    downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
-      }
-    }).scan(sharedPreferenceUtil.prefStorage)
-  }
+  private fun convertToBookOnDisk(file: File) = BookOnDisk(file, zimReaderFactory.create(file))
 }
