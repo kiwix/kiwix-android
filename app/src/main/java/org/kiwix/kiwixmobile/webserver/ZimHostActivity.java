@@ -83,10 +83,6 @@ public class ZimHostActivity extends BaseActivity implements
 
     setUpToolbar();
 
-    if (savedInstanceState != null) {
-      ip = savedInstanceState.getString(IP_STATE_KEY);
-      layoutServerStarted();
-    }
     bookDelegate =
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         null,
@@ -99,11 +95,14 @@ public class ZimHostActivity extends BaseActivity implements
     booksAdapter = new BooksOnDiskAdapter(bookDelegate,
       BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
-
+    if (savedInstanceState != null) {
+      ip = savedInstanceState.getString(IP_STATE_KEY);
+      layoutServerStarted();
+    }
+    recyclerViewZimHost.setAdapter(booksAdapter);
     presenter.attachView(this);
 
     presenter.loadBooks();
-    recyclerViewZimHost.setAdapter(booksAdapter);
 
     serviceConnection = new ServiceConnection() {
 
