@@ -10,11 +10,11 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
-import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.di.ActivityScope;
 import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 
-@PerActivity
+@ActivityScope
 class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
   implements BookmarksContract.Presenter {
 

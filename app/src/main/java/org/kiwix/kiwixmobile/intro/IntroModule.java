@@ -2,11 +2,11 @@ package org.kiwix.kiwixmobile.intro;
 
 import dagger.Module;
 import dagger.Provides;
-import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.di.ActivityScope;
 
 @Module
 public class IntroModule {
-  @PerActivity
+  @ActivityScope
   @Provides
   IntroContract.Presenter provideIntroPresenter(IntroPresenter presenter) {
     return presenter;

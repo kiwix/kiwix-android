@@ -28,13 +28,11 @@ public class HotspotService extends Service implements IpAddressCallbacks {
   public static final String ACTION_STOP_SERVER = "stop_server";
   public static final String ACTION_CHECK_IP_ADDRESS = "check_ip_address";
 
-  public static final String ACTION_STOP = "hotspot_stop";
   private ZimHostCallbacks zimHostCallbacks;
   private final IBinder serviceBinder = new HotspotBinder();
 
   @Inject
   WebServerHelper webServerHelper;
-
   @Inject
   HotspotNotificationManager hotspotNotificationManager;
 
@@ -54,7 +52,7 @@ public class HotspotService extends Service implements IpAddressCallbacks {
         if (webServerHelper.startServerHelper(
           intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
           zimHostCallbacks.onServerStarted(ServerUtils.getSocketAddress());
-            startForegroundNotificationHelper();
+          startForegroundNotificationHelper();
           Toast.makeText(this, R.string.server_started__successfully_toast_message,
             Toast.LENGTH_SHORT).show();
         } else {
@@ -71,10 +69,6 @@ public class HotspotService extends Service implements IpAddressCallbacks {
         webServerHelper.pollForValidIpAddress();
         break;
 
-      case ACTION_STOP:
-        stopHotspotAndDismissNotification();
-        break;
-
       default:
         break;
     }
@@ -87,11 +81,13 @@ public class HotspotService extends Service implements IpAddressCallbacks {
 
   //Dismiss notification and turn off hotspot for devices>=O
   private void stopHotspotAndDismissNotification() {
-      webServerHelper.stopAndroidWebServer();
+    webServerHelper.stopAndroidWebServer();
+    if (zimHostCallbacks != null) {
       zimHostCallbacks.onServerStopped();
-      stopForeground(true);
-      stopSelf();
-      hotspotNotificationManager.dismissNotification();
+    }
+    stopForeground(true);
+    stopSelf();
+    hotspotNotificationManager.dismissNotification();
   }
 
   public void registerCallBack(@Nullable ZimHostCallbacks myCallback) {
@@ -104,11 +100,15 @@ public class HotspotService extends Service implements IpAddressCallbacks {
   }
 
   @Override public void onIpAddressValid() {
-    zimHostCallbacks.onIpAddressValid();
+    if (zimHostCallbacks != null) {
+      zimHostCallbacks.onIpAddressValid();
+    }
   }
 
   @Override public void onIpAddressInvalid() {
-    zimHostCallbacks.onIpAddressInvalid();
+    if (zimHostCallbacks != null) {
+      zimHostCallbacks.onIpAddressInvalid();
+    }
   }
 
   public class HotspotBinder extends Binder {

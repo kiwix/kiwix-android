@@ -4,7 +4,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksModule;
-import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.di.ActivityScope;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
@@ -24,56 +24,56 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 /**
  * Dagger.Android annotation processor will create the sub-components. We also specify the modules
  * to be used by each sub-components and make Dagger.Android aware of a scope annotation
- * {@link PerActivity}.
+ * {@link ActivityScope}.
  */
 
 @Module
 public abstract class ActivityBindingModule {
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector(modules = MainModule.class)
   public abstract MainActivity provideMainActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector
   public abstract KiwixSettingsActivity provideKiwixSettingsActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector
   public abstract ZimManageActivity provideZimManageActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector
   public abstract SearchActivity provideSearchActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector(modules = BookmarksModule.class)
   public abstract BookmarksActivity provideBookmarksActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector
   public abstract ErrorActivity provideErrorActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector(modules = IntroModule.class)
   public abstract IntroActivity provideIntroActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector
   public abstract SplashActivity provideSplashActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector
   public abstract LanguageActivity provideLanguageActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector(modules = HistoryModule.class)
   public abstract HistoryActivity provideHistoryActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector
   public abstract HelpActivity provideHelpActivity();
 
-  @PerActivity
+  @ActivityScope
   @ContributesAndroidInjector(modules = ZimHostModule.class)
   public abstract ZimHostActivity provideZimHostActivity();
 }

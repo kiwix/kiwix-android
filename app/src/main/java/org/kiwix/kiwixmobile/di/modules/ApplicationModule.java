@@ -36,6 +36,8 @@ import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.downloader.DownloadMonitor;
 import org.kiwix.kiwixmobile.downloader.fetch.FetchDownloadMonitor;
 import org.kiwix.kiwixmobile.utils.BookUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader;
 
 @Module(includes = {
   ActivityBindingModule.class,
@@ -97,5 +99,10 @@ public class ApplicationModule {
   @Provides @Singleton
   StorageManager provideStorageManager(Context context) {
     return (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+  }
+
+  @Provides @Singleton
+  ZimFileReader.Factory providesZimFileReaderFactory(SharedPreferenceUtil sharedPreferenceUtil) {
+    return new ZimFileReader.Factory.Impl(sharedPreferenceUtil);
   }
 }

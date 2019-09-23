@@ -16,6 +16,7 @@ import org.kiwix.kiwixmobile.history.HistoryListItem
 import org.kiwix.kiwixmobile.history.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.history.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.zim_manager.Language
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
@@ -34,7 +35,8 @@ class Repository @Inject internal constructor(
   private val bookmarksDao: NewBookmarksDao,
   private val historyDao: HistoryDao,
   private val languageDao: NewLanguagesDao,
-  private val recentSearchDao: NewRecentSearchDao
+  private val recentSearchDao: NewRecentSearchDao,
+  private val zimReaderContainer: ZimReaderContainer
 ) : DataSource {
 
   override fun getLanguageCategorizedBooks() =
@@ -66,7 +68,12 @@ class Repository @Inject internal constructor(
       .subscribeOn(io)
 
   override fun getDateCategorizedHistory(showHistoryCurrentBook: Boolean) =
-    Single.just(historyDao.getHistoryList(showHistoryCurrentBook))
+    Single.just(
+      historyDao.getHistoryList(
+        showHistoryCurrentBook,
+        zimReaderContainer.zimCanonicalPath
+      )
+    )
       .map {
         foldOverAddingHeaders(
           it,
@@ -87,17 +94,17 @@ class Repository @Inject internal constructor(
       .subscribeOn(io)
 
   override fun clearHistory() = Completable.fromAction {
-    historyDao.deleteHistory(historyDao.getHistoryList(false))
+    historyDao.deleteAllHistory()
     recentSearchDao.deleteSearchHistory()
   }
 
   override fun getBookmarks(fromCurrentBook: Boolean): Single<List<BookmarkItem>> =
-    Single.just(bookmarksDao.getBookmarks(fromCurrentBook))
+    Single.just(bookmarksDao.getBookmarks(fromCurrentBook, zimReaderContainer.zimFileReader))
       .subscribeOn(io)
       .observeOn(mainThread)
 
   override fun getCurrentZimBookmarksUrl() =
-    Single.just(bookmarksDao.getCurrentZimBookmarksUrl())
+    Single.just(bookmarksDao.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))
       .subscribeOn(io)
       .observeOn(mainThread)
 

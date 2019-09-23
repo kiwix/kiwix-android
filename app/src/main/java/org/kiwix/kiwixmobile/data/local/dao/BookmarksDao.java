@@ -23,7 +23,6 @@ import com.yahoo.squidb.sql.Update;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
@@ -40,12 +39,9 @@ public class BookmarksDao {
     this.kiwixDatabase = kiwixDatabase;
   }
 
-  public List<Bookmark> getBookmarks(boolean fromCurrentBook) {
+  public List<Bookmark> getBookmarks() {
     ArrayList<Bookmark> bookmarks = new ArrayList<>();
     Query query = Query.select();
-    if (fromCurrentBook) {
-      query = query.where(Bookmark.ZIM_ID.eq(ZimContentProvider.getId()));
-    }
     try (SquidCursor<Bookmark> squidCursor = kiwixDatabase
       .query(Bookmark.class, query.orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
       while (squidCursor.moveToNext()) {

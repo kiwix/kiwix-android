@@ -91,7 +91,8 @@ public class NetworkTest {
 
     KiwixApplication.setApplicationComponent(component);
 
-    new ZimContentProvider().setupDagger();
+    ZimContentProvider zimContentProvider = new ZimContentProvider();
+    KiwixApplication.getApplicationComponent().inject(zimContentProvider);
     component.inject(this);
     InputStream library = NetworkTest.class.getClassLoader().getResourceAsStream("library.xml");
     InputStream metalinks =
