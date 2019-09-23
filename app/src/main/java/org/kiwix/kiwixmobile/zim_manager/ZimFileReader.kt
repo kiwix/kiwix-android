@@ -74,6 +74,18 @@ class ZimFileReader(
   val description: String get() = jniKiwixReader.description
   val favicon: String get() = jniKiwixReader.favicon
   val language: String get() = jniKiwixReader.language
+  private val mediaCount: Int?
+    get() = try {
+      jniKiwixReader.mediaCount
+    } catch (ignore: UnsatisfiedLinkError) {
+      null
+    }
+  private val articleCount: Int?
+    get() = try {
+      jniKiwixReader.articleCount
+    } catch (ignore: UnsatisfiedLinkError) {
+      null
+    }
 
   fun searchSuggestions(prefix: String, count: Int) =
     jniKiwixReader.searchSuggestions(prefix, count)
@@ -195,6 +207,9 @@ class ZimFileReader(
     date = this@ZimFileReader.date
     description = this@ZimFileReader.description
     language = this@ZimFileReader.language
+    articleCount = this@ZimFileReader.articleCount.toString()
+    mediaCount = this@ZimFileReader.mediaCount.toString()
+    bookName = name
   }
 
   companion object {

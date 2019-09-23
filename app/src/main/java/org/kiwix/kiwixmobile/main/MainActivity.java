@@ -255,6 +255,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private TextView tabSwitcherIcon;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
+  private boolean hasLocalBooks;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -895,7 +896,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         return true;
 
       case R.id.menu_openfile:
-        manageZimFiles(1);
+        manageZimFiles(hasLocalBooks ? 0 : 1);
         break;
 
       case R.id.menu_settings:
@@ -1182,7 +1183,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     storageObserver.getBooksOnFileSystem()
       .take(1)
       .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(presenter::saveBooks, Throwable::printStackTrace);
+      .subscribe(books -> {
+        presenter.saveBooks(books);
+        hasLocalBooks = !books.isEmpty();
+      }, Throwable::printStackTrace);
   }
 
   // Workaround for popup bottom menu on older devices
