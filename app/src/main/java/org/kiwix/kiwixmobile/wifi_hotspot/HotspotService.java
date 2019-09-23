@@ -126,7 +126,6 @@ public class HotspotService extends Service
 
   private void initiateServiceDismissal() {
     if (ServerUtils.isServerStarted) {
-      ServerUtils.isServerStarted = false;
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         hotspotManager.turnOffHotspot();
       } else {

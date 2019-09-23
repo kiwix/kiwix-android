@@ -18,7 +18,6 @@ public class HotspotStateReceiver {
   private static final String TAG = "HotspotStateReceiver";
   private BroadcastReceiver hotspotStateReceiver;
   private HotspotStateReceiverCallbacks hotspotStateReceiverCallbacks;
-  private Context context;
 
   public HotspotStateReceiver(HotspotStateReceiverCallbacks hotspotStateReceiverCallbacks) {
     this.hotspotStateReceiverCallbacks = hotspotStateReceiverCallbacks;
