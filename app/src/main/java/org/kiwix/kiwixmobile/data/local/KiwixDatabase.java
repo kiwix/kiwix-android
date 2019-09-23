@@ -31,7 +31,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
@@ -149,7 +148,7 @@ public class KiwixDatabase extends SquidDatabase {
         try {
           final BookmarksDao oldBookmarksDao = new BookmarksDao(this);
           oldBookmarksDao.processBookmark(UpdateUtils::reformatProviderUrl);
-          this.bookmarksDao.migrationInsert(oldBookmarksDao.getBookmarks(false), bookDao);
+          this.bookmarksDao.migrationInsert(oldBookmarksDao.getBookmarks(), bookDao);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -188,7 +187,6 @@ public class KiwixDatabase extends SquidDatabase {
               persist(bookmark);
             }
             context.deleteFile(id);
-            Log.d(TAG_KIWIX, "Switched to bookmark file " + ZimContentProvider.getId());
           }
         } catch (FileNotFoundException e) {
           Log.e(TAG_KIWIX, "Bookmark File ( " + id + " ) not found", e);

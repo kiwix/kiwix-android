@@ -32,7 +32,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.widget.Toast;
@@ -45,9 +44,9 @@ import java.io.OutputStream;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.extensions.ViewGroupExtensionsKt;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 public class KiwixWebView extends VideoEnabledWebView {
   public static final float[] NIGHT_MODE_COLORS = {
@@ -58,6 +57,8 @@ public class KiwixWebView extends VideoEnabledWebView {
   };
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
   private WebViewCallback callback;
 
   public KiwixWebView(Context context) {
@@ -76,7 +77,7 @@ public class KiwixWebView extends VideoEnabledWebView {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       settings.setAllowUniversalAccessFromFileURLs(true);
     }
-    setWebViewClient(new KiwixWebViewClient(callback));
+    setWebViewClient(new KiwixWebViewClient(callback, zimReaderContainer));
     final KiwixWebChromeClient client =
       new KiwixWebChromeClient(callback, nonVideoView, videoView, this);
     client.setOnToggledFullscreen(fullscreen ->

@@ -39,8 +39,8 @@ import java.io.File
 import java.util.LinkedList
 
 fun bookOnDisk(
+  databaseId: Long = 0L,
   book: Book = book(),
-  databaseId: Long? = 0L,
   file: File = File("")
 ) = BookOnDisk(databaseId, book, file)
 
