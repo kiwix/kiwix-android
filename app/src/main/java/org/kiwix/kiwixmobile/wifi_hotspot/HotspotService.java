@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.utils.ServerUtils;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
@@ -22,7 +23,8 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotNotificationManager.HOTS
  * Created by Adeel Zafar on 07/01/2019.
  */
 
-public class HotspotService extends Service implements IpAddressCallbacks {
+public class HotspotService extends Service
+  implements IpAddressCallbacks, HotspotStateReceiver.Callback {
 
   public static final String ACTION_START_SERVER = "start_server";
   public static final String ACTION_STOP_SERVER = "stop_server";
@@ -35,6 +37,8 @@ public class HotspotService extends Service implements IpAddressCallbacks {
   WebServerHelper webServerHelper;
   @Inject
   HotspotNotificationManager hotspotNotificationManager;
+  @Inject
+  HotspotStateReceiver hotspotStateReceiver;
 
   @Override public void onCreate() {
     KiwixApplication.getApplicationComponent()
@@ -43,6 +47,12 @@ public class HotspotService extends Service implements IpAddressCallbacks {
       .build()
       .inject(this);
     super.onCreate();
+    ContextExtensionsKt.registerReceiver(this, hotspotStateReceiver);
+  }
+
+  @Override public void onDestroy() {
+    unregisterReceiver(hotspotStateReceiver);
+    super.onDestroy();
   }
 
   @Override public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
@@ -109,6 +119,10 @@ public class HotspotService extends Service implements IpAddressCallbacks {
     if (zimHostCallbacks != null) {
       zimHostCallbacks.onIpAddressInvalid();
     }
+  }
+
+  @Override public void onHotspotDisabled() {
+    stopHotspotAndDismissNotification();
   }
 
   public class HotspotBinder extends Binder {

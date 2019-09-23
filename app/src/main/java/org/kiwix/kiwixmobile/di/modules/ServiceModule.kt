@@ -10,6 +10,8 @@ import org.kiwix.kiwixlib.JNIKiwixServer
 import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotNotificationManager
+import org.kiwix.kiwixmobile.wifi_hotspot.HotspotStateReceiver
+import org.kiwix.kiwixmobile.wifi_hotspot.HotspotStateReceiver.Callback
 import org.kiwix.kiwixmobile.wifi_hotspot.IpAddressCallbacks
 
 @Module
@@ -44,4 +46,16 @@ class ServiceModule {
     context: Context
   ): HotspotNotificationManager =
     HotspotNotificationManager(notificationManager, context)
+
+  @Provides
+  @ServiceScope
+  fun providesHotspotStateReceiver(
+    callback: Callback
+  ): HotspotStateReceiver = HotspotStateReceiver(callback)
+
+  @Provides
+  @ServiceScope
+  fun providesHotspotStateReceiverCallback(
+    service: Service
+  ): HotspotStateReceiver.Callback = service as Callback
 }
