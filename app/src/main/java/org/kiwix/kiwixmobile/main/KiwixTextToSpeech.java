@@ -37,8 +37,8 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -49,6 +49,7 @@ public class KiwixTextToSpeech {
   private final OnSpeakingListener onSpeakingListener;
   private final AudioManager am;
   private final OnAudioFocusChangeListener onAudioFocusChangeListener;
+  private final ZimReaderContainer zimReaderContainer;
   public TTSTask currentTTSTask = null;
   private TextToSpeech tts;
   private boolean initialized = false;
@@ -60,12 +61,13 @@ public class KiwixTextToSpeech {
    * @param onInitSucceedListener listener that receives event when initialization of TTS is done
    * (and does not receive if it failed)
    * @param onSpeakingListener listener that receives an event when speaking just started or
-   * ended
    */
   KiwixTextToSpeech(Context context,
     final OnInitSucceedListener onInitSucceedListener,
     final OnSpeakingListener onSpeakingListener,
-    final OnAudioFocusChangeListener onAudioFocusChangeListener) {
+    final OnAudioFocusChangeListener onAudioFocusChangeListener,
+    ZimReaderContainer zimReaderContainer) {
+    this.zimReaderContainer = zimReaderContainer;
     Log.d(TAG_KIWIX, "Initializing TextToSpeech");
     this.context = context;
     this.onSpeakingListener = onSpeakingListener;
@@ -110,11 +112,11 @@ public class KiwixTextToSpeech {
         onSpeakingListener.onSpeakingEnded();
       }
     } else {
-      Locale locale = LanguageUtils.iSO3ToLocale(ZimContentProvider.getLanguage());
+      Locale locale = LanguageUtils.iSO3ToLocale(zimReaderContainer.getLanguage());
       int result;
-      if ("mul".equals(ZimContentProvider.getLanguage())) {
+      if ("mul".equals(zimReaderContainer.getLanguage())) {
         Log.d(TAG_KIWIX, "TextToSpeech: disabled " +
-          ZimContentProvider.getLanguage());
+          zimReaderContainer.getLanguage());
         Toast.makeText(context,
           context.getResources().getString(R.string.tts_not_enabled),
           Toast.LENGTH_LONG).show();
@@ -124,7 +126,7 @@ public class KiwixTextToSpeech {
         || (result = tts.isLanguageAvailable(locale)) == TextToSpeech.LANG_MISSING_DATA
         || result == TextToSpeech.LANG_NOT_SUPPORTED) {
         Log.d(TAG_KIWIX, "TextToSpeech: language not supported: " +
-          ZimContentProvider.getLanguage());
+          zimReaderContainer.getLanguage());
         Toast.makeText(context,
           context.getResources().getString(R.string.tts_lang_not_supported),
           Toast.LENGTH_LONG).show();

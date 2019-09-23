@@ -27,7 +27,7 @@ buildscript {
 plugins {
   id("com.android.application")
   id("checkstyle")
-  id("com.github.triplet.play") version("2.2.1")
+  id("com.github.triplet.play") version("2.4.1")
 }
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -193,7 +193,7 @@ def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 ext {
   versionMajor = 3
   versionMinor = 0
-  versionPatch = 0
+  versionPatch = 3
 }
 
 private String generateVersionName() {

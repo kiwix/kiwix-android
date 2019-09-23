@@ -21,24 +21,21 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.book
 import org.kiwix.kiwixmobile.bookOnDisk
-import org.kiwix.kiwixmobile.data.ZimContentProvider
 import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.resetSchedulers
 import org.kiwix.kiwixmobile.setScheduler
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.utils.files.FileSearch
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader.Factory
 import java.io.File
 
 class StorageObserverTest {
@@ -46,8 +43,10 @@ class StorageObserverTest {
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
   private val downloadDao: FetchDownloadDao = mockk()
   private val fileSearch: FileSearch = mockk()
-  private val downloadModel = mockk<DownloadModel>()
-  private val file = mockk<File>()
+  private val downloadModel: DownloadModel = mockk()
+  private val file: File = mockk()
+  private val readerFactory: Factory = mockk()
+  private val zimFileReader: ZimFileReader = mockk()
 
   private val files: PublishProcessor<List<File>> = PublishProcessor.create()
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
@@ -68,7 +67,8 @@ class StorageObserverTest {
     every { sharedPreferenceUtil.prefStorage } returns "a"
     every { fileSearch.scan() } returns files
     every { downloadDao.downloads() } returns downloads
-    storageObserver = StorageObserver(downloadDao, fileSearch)
+    every { readerFactory.create(file) } returns zimFileReader
+    storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory)
   }
 
   @Test
@@ -78,44 +78,16 @@ class StorageObserverTest {
   }
 
   @Test
-  fun `null books from ZimContentProvider are filtered out`() {
-    withNoFiltering()
-    booksOnFileSystem().assertValues(listOf())
-  }
-
-  @Test
-  fun `iterable ZimContentProvider with zim file produces a book`() {
+  fun `zim files are read by the file reader`() {
     val expectedBook = book(
       "id", "title", "1", "favicon", "creator", "publisher", "date",
       "description", "language"
     )
-    mockkStatic(ZimContentProvider::class)
     withNoFiltering()
-    every { ZimContentProvider.setZimFile("This won't match") } returns ""
-    expect(expectedBook)
+    every { zimFileReader.toBook() } returns expectedBook
     booksOnFileSystem().assertValues(
-      listOf(
-        bookOnDisk(book = expectedBook, file = file, databaseId = null)
-      )
+      listOf(bookOnDisk(book = expectedBook, file = file))
     )
-    assertThat(ZimContentProvider.originalFileName).isEqualTo("")
-  }
-
-  @Test
-  fun `zim provider sets zim file to original file name if it exists`() {
-    withNoFiltering()
-    mockkStatic(ZimContentProvider::class)
-    every { ZimContentProvider.setZimFile(any()) } returns null
-    ZimContentProvider.zimFileName = "myZimFileName"
-    booksOnFileSystem().assertValues(listOf())
-    verify { ZimContentProvider.setZimFile("myZimFileName") }
-  }
-
-  @Test
-  fun `zim provider does not read book if it can not iterate`() {
-    withNoFiltering()
-    ZimContentProvider.canIterate = false
-    booksOnFileSystem().assertValues(listOf())
   }
 
   private fun booksOnFileSystem() = storageObserver.booksOnFileSystem
@@ -124,18 +96,6 @@ class StorageObserverTest {
       downloads.offer(listOf(downloadModel))
       files.offer(listOf(file))
     }
-
-  private fun expect(expectedBook: Book) {
-    every { ZimContentProvider.getZimFileTitle() } returns expectedBook.title
-    every { ZimContentProvider.getId() } returns expectedBook.id
-    every { ZimContentProvider.getFileSize() } returns expectedBook.size.toInt()
-    every { ZimContentProvider.getFavicon() } returns expectedBook.favicon
-    every { ZimContentProvider.getCreator() } returns expectedBook.creator
-    every { ZimContentProvider.getPublisher() } returns expectedBook.publisher
-    every { ZimContentProvider.getDate() } returns expectedBook.date
-    every { ZimContentProvider.getDescription() } returns expectedBook.description
-    every { ZimContentProvider.getLanguage() } returns expectedBook.language
-  }
 
   private fun withFiltering() {
     every { downloadModel.fileNameFromUrl } returns "test"
