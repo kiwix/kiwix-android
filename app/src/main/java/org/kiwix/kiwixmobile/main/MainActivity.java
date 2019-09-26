@@ -1090,18 +1090,24 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
         zimReaderContainer.setZimFile(file);
-        if (clearHistory) {
-          requestClearHistoryAfterLoad = true;
-        }
-        if (menu != null) {
-          initAllMenuItems();
+        if (zimReaderContainer.getZimFileReader() != null) {
+          if (clearHistory) {
+            requestClearHistoryAfterLoad = true;
+          }
+          if (menu != null) {
+            initAllMenuItems();
+          } else {
+            // Menu may not be initialized yet. In this case
+            // signal to menu create to show
+            requestInitAllMenuItems = true;
+          }
+          openMainPage();
+          presenter.loadCurrentZimBookmarksUrl();
         } else {
-          // Menu may not be initialized yet. In this case
-          // signal to menu create to show
-          requestInitAllMenuItems = true;
+          Toast.makeText(this, getResources().getString(R.string.error_file_invalid),
+            Toast.LENGTH_LONG).show();
+          showHomePage();
         }
-        openMainPage();
-        presenter.loadCurrentZimBookmarksUrl();
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
