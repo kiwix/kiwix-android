@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.di.modules;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -38,7 +39,12 @@ import org.kiwix.kiwixlib.JNIKiwixSearcher;
 
   @Provides
   @Singleton
+  @Nullable
   public JNIKiwixSearcher providesJNIKiwixSearcher() {
-    return new JNIKiwixSearcher();
+    try {
+      return new JNIKiwixSearcher();
+    } catch (UnsatisfiedLinkError ignore) {
+      return null;
+    }
   }
 }
