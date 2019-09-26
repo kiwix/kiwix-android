@@ -27,6 +27,8 @@
 
 -keepclassmembers class com.cprcrack.videowebview.VideoEnabledWebView$JavascriptInterface { public *; }
 
+-keep class com.getkeepsafe.relinker.** { *; }
+
 #keep everything in kiwixlib
 -keep class org.kiwix.kiwixlib.** { *; }
 

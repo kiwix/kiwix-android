@@ -63,7 +63,6 @@ dependencies {
   implementation "androidx.appcompat:appcompat:$appCompatVersion"
   implementation "com.google.android.material:material:$materialVersion"
   implementation "androidx.cardview:cardview:$cardViewVersion"
-  implementation "androidx.multidex:multidex:$multidexVersion"
   implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
   implementation "androidx.core:core-ktx:1.0.2"
   implementation "androidx.fragment:fragment-ktx:1.0.0"
@@ -227,7 +226,6 @@ android {
     minSdkVersion 15
     targetSdkVersion 28
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
     archivesBaseName = "$buildNumber"
   }
@@ -292,10 +290,10 @@ android {
   }
 
   buildTypes {
-
     // Main build type for debugging
     debug {
-      multiDexKeepProguard file("multidex-instrumentation-config.pro")
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
       testCoverageEnabled true

@@ -18,6 +18,8 @@
 package org.kiwix.kiwixmobile.di.modules
 
 import android.content.Context
+import android.util.Log
+import com.getkeepsafe.relinker.ReLinker
 import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
@@ -40,7 +42,10 @@ open class DatabaseModule {
   // NOT RECOMMENDED TODO use custom runner to load TestApplication
   @Provides @Singleton fun providesBoxStore(context: Context): BoxStore {
     if (boxStore == null) {
-      boxStore = MyObjectBox.builder().androidContext(context).build()
+      boxStore = MyObjectBox.builder()
+        .androidContext(context)
+        .androidReLinker(ReLinker.log { Log.d("ReLinker", it) })
+        .build()
     }
     return boxStore!!
   }

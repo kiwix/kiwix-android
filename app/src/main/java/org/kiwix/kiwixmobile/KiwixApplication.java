@@ -18,13 +18,15 @@
 package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.multidex.MultiDexApplication;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -36,11 +38,25 @@ import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 import org.kiwix.kiwixmobile.downloader.DownloadMonitor;
+import org.kiwix.kiwixmobile.error.ErrorActivity;
 
-public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
+public class KiwixApplication extends Application implements HasActivityInjector {
 
   private static KiwixApplication application;
   private static ApplicationComponent applicationComponent;
+
+  {
+    Thread.setDefaultUncaughtExceptionHandler((paramThread, paramThrowable) -> {
+        final Intent intent = new Intent(this, ErrorActivity.class);
+        Bundle extras = new Bundle();
+        extras.putSerializable("exception", paramThrowable);
+        intent.putExtras(extras);
+        startActivity(intent);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(10);
+      }
+    );
+  }
 
   static {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);

@@ -17,12 +17,9 @@
  */
 package org.kiwix.kiwixmobile.splash;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
@@ -31,33 +28,8 @@ public class SplashActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    if (!BuildConfig.DEBUG) {
-      Context appContext = getApplicationContext();
-      Thread.setDefaultUncaughtExceptionHandler((paramThread, paramThrowable) -> {
-
-        final Intent intent = new Intent(appContext, ErrorActivity.class);
-
-        Bundle extras = new Bundle();
-        extras.putSerializable("exception", paramThrowable);
-
-        intent.putExtras(extras);
-
-        appContext.startActivity(intent);
-
-        finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(10);
-      });
-    }
-
-    Intent intent;
-    if (!sharedPreferenceUtil.showIntro()) {
-      intent = new Intent(this, MainActivity.class);
-    } else {
-      intent = new Intent(this, IntroActivity.class);
-    }
-    startActivity(intent);
+    startActivity(new Intent(this,
+      sharedPreferenceUtil.showIntro() ? IntroActivity.class : MainActivity.class));
     finish();
   }
 }
