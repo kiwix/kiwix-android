@@ -17,10 +17,12 @@
  */
 package org.kiwix.kiwixmobile.utils.files
 
+import android.annotation.TargetApi
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION_CODES
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
@@ -160,19 +162,12 @@ object FileUtils {
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
-      } else if ("com.android.providers.downloads.documents" == uri.authority
-      )
-        return contentQuery(
-          ctx,
-          ContentUris.withAppendedId(
-            Uri.parse("content://downloads/public_downloads"),
-            try {
-              DocumentsContract.getDocumentId(uri).toLong()
-            } catch (ignore: NumberFormatException) {
-              0L
-            }
-          )
-        )
+      } else if ("com.android.providers.downloads.documents" == uri.authority)
+        return try {
+          documentProviderContentQuery(ctx, uri)
+        } catch (ignore: IllegalArgumentException) {
+          null
+        }
     } else if ("content".equals(uri.scheme!!, ignoreCase = true)) {
       return contentQuery(ctx, uri)
     } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
@@ -180,6 +175,20 @@ object FileUtils {
     }
     return null
   }
+
+  @TargetApi(VERSION_CODES.KITKAT)
+  private fun documentProviderContentQuery(ctx: Context, uri: Uri) =
+    contentQuery(
+      ctx,
+      ContentUris.withAppendedId(
+        Uri.parse("content://downloads/public_downloads"),
+        try {
+          DocumentsContract.getDocumentId(uri).toLong()
+        } catch (ignore: NumberFormatException) {
+          0L
+        }
+      )
+    )
 
   private fun contentQuery(
     context: Context,
