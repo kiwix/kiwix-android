@@ -90,8 +90,18 @@ class ZimFileReader(
   fun searchSuggestions(prefix: String, count: Int) =
     jniKiwixReader.searchSuggestions(prefix, count)
 
-  fun getNextSuggestion(): String? =
-    valueOfJniStringAfter(jniKiwixReader::getNextSuggestion)
+  fun getNextSuggestion(): HashMap<String, String>? {
+    val title = JNIKiwixString()
+    val url = JNIKiwixString()
+    if (jniKiwixReader.getNextSuggestion(title, url)) {
+      val results = HashMap<String, String>()
+      results.put("title", title.value)
+      results.put("url", url.value)
+      return results
+    } else {
+      return null
+    }
+  }
 
   fun getPageUrlFrom(title: String): String? =
     valueOfJniStringAfter { jniKiwixReader.getPageUrlFromTitle(title, it) }
