@@ -4,26 +4,34 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:paddingEnd="0dp"
-  android:paddingLeft="0dp"
-  android:paddingRight="0dp"
-  android:paddingStart="@dimen/activity_horizontal_margin"
-  android:paddingTop="@dimen/activity_vertical_margin"
-  tools:ignore="Overdraw"
-  >
+  android:animateLayoutChanges="true"
+  tools:ignore="Overdraw">
+
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/horizontal_padding"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_begin="@dimen/activity_horizontal_margin" />
+
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/vertical_padding"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:layout_constraintGuide_begin="@dimen/activity_vertical_margin" />
 
   <CheckBox
     android:id="@+id/itemBookCheckbox"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:visibility="gone"
-    android:paddingRight="10dp"
     android:paddingEnd="10dp"
+    android:paddingRight="10dp"
+    android:visibility="gone"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/horizontal_padding"
     app:layout_constraintTop_toTopOf="parent"
-    tools:ignore="RtlSymmetry"
-    />
+    tools:ignore="RtlSymmetry" />
 
   <ImageView
     android:id="@+id/item_book_icon"
@@ -33,21 +41,20 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toEndOf="@id/itemBookCheckbox"
     app:layout_constraintTop_toTopOf="parent"
-    tools:src="@mipmap/kiwix_icon_round"
-    />
+    tools:src="@mipmap/kiwix_icon_round" />
 
   <TextView
     android:id="@+id/item_book_title"
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:textColor="@color/textDarkPrimary"
     android:textSize="16sp"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/item_book_icon"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:text="Wikipedia"
-    />
+    app:layout_constraintTop_toBottomOf="@+id/vertical_padding"
+    tools:text="Wikipedia" />
 
   <TextView
     android:id="@+id/item_book_date"
@@ -56,75 +63,69 @@
     android:textColor="@color/textDarkSecondary"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
     app:layout_constraintTop_toBottomOf="@id/item_book_title"
-    tools:text="1 Jan 2018"
-    />
+    tools:text="1 Jan 2018" />
 
   <TextView
     android:id="@+id/item_book_size"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:textColor="@color/textDarkSecondary"
     app:layout_constraintStart_toEndOf="@id/item_book_date"
     app:layout_constraintTop_toTopOf="@id/item_book_date"
-    tools:text="20 GB"
-    />
+    tools:text="20 GB" />
 
   <TextView
     android:id="@+id/item_book_article_count"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:textColor="@color/textDarkSecondary"
     app:layout_constraintStart_toEndOf="@id/item_book_size"
     app:layout_constraintTop_toTopOf="@id/item_book_size"
-    tools:text="10.1 K articles"
-    />
+    tools:text="10.1 K articles" />
 
   <TextView
     android:id="@+id/item_book_description"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:textColor="@color/textDarkSecondary"
     android:layout_marginEnd="8dp"
     android:layout_marginRight="8dp"
+    android:textColor="@color/textDarkSecondary"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
     app:layout_constraintTop_toBottomOf="@id/item_book_date"
-    tools:text="All wikipedia articles"
-    />
+    tools:text="All wikipedia articles" />
 
   <TextView
     android:id="@+id/item_book_label_picture"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/border_label_picture"
-    android:paddingEnd="6dp"
     android:paddingStart="6dp"
+    android:paddingEnd="6dp"
     android:text="@string/pic"
     android:textAlignment="center"
     android:textColor="@color/picture_label"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_description"
-    />
+    app:layout_constraintTop_toBottomOf="@id/item_book_description" />
 
   <TextView
     android:id="@+id/item_book_label_video"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
     android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:background="@drawable/border_label_video"
-    android:paddingEnd="6dp"
     android:paddingStart="6dp"
+    android:paddingEnd="6dp"
     android:text="@string/vid"
     android:textAlignment="center"
     android:textColor="@color/video_label"
     app:layout_constraintStart_toEndOf="@id/item_book_label_picture"
-    app:layout_constraintTop_toTopOf="@id/item_book_label_picture"
-    />
+    app:layout_constraintTop_toTopOf="@id/item_book_label_picture" />
 
   <View
     android:layout_width="0dp"
@@ -132,16 +133,16 @@
     android:layout_marginTop="@dimen/activity_vertical_margin"
     android:background="?android:attr/dividerVertical"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_label_picture"
-    />
+    app:layout_constraintTop_toBottomOf="@id/item_book_label_picture" />
+
   <View
-    android:background="?android:attr/selectableItemBackground"
     android:id="@+id/item_book_clickable_area"
     android:layout_width="0dp"
     android:layout_height="0dp"
-    app:layout_constraintTop_toTopOf="parent"
+    android:background="?android:attr/selectableItemBackground"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    />
+    app:layout_constraintTop_toTopOf="parent"
+    tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>
