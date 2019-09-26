@@ -2,14 +2,12 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  >
+  android:layout_height="match_parent">
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/get_content_card"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
       android:id="@+id/content_main_card"
@@ -19,13 +17,11 @@
       app:cardCornerRadius="4dp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      >
+      app:layout_constraintTop_toTopOf="parent">
 
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <ImageView
           android:id="@+id/content_main_card_image"
@@ -37,8 +33,7 @@
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          />
+          app:layout_constraintTop_toTopOf="parent" />
 
         <!-- constraintRight_toRightOf is used as android:layoutDirection is supported from API 17 -->
         <androidx.appcompat.widget.AppCompatButton
@@ -50,21 +45,19 @@
           android:textColor="@android:color/white"
           app:backgroundTint="#1565c0"
           app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          />
+          app:layout_constraintRight_toRightOf="parent" />
       </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recycler_view"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toEndOf="@id/content_main_card"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/content_main_card"
-      />
+      app:layout_constraintTop_toBottomOf="@id/content_main_card" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
