@@ -94,11 +94,12 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
-import org.kiwix.kiwixmobile.core.BuildConfig;
-import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.BuildConfig;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
@@ -368,7 +369,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     setupDocumentParser();
 
     if (BuildConfig.IS_CUSTOM_APP) {
-      Log.d(TAG_KIWIX, "This is a custom app:" + BuildConfig.APPLICATION_ID);
+      Log.d(TAG_KIWIX, "This is a custom app:" + getPackageName());
       if (loadCustomAppContent()) {
         Log.d(TAG_KIWIX, "Found custom content, continuing...");
         // Continue
@@ -1827,7 +1828,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         filePath = libDir.listFiles()[0].getPath() + "/" + BuildConfig.ZIM_FILE_NAME;
       }
       if (filePath.isEmpty() || !new File(filePath).exists()) {
-        filePath = String.format("/data/data/%s/lib/%s", BuildConfig.APPLICATION_ID,
+        filePath = String.format("/data/data/%s/lib/%s", getPackageName(),
           BuildConfig.ZIM_FILE_NAME);
       }
     } else {
@@ -1846,7 +1847,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       final Activity activity = this;
       zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
         (dialog, which) -> {
-          String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
+          String market_uri = "market://details?id=" + getPackageName();
           Intent intent = new Intent(Intent.ACTION_VIEW);
           intent.setData(Uri.parse(market_uri));
           startActivity(intent);

@@ -36,7 +36,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -390,7 +389,7 @@ public class AddNoteDialog extends DialogFragment
         // From Nougat 7 (API 24) access to files is shared temporarily with other apps
         // Need to use FileProvider for the same
         noteFileUri =
-          FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider",
+          FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider",
             noteFile);
       } else {
         noteFileUri = Uri.fromFile(noteFile);

@@ -24,6 +24,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
+import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.extensions.get
@@ -37,7 +38,7 @@ object FileUtils {
 
   private val saveFilePath =
     "${Environment.getExternalStorageDirectory()}${File.separator}Android" +
-      "${File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
+      "${File.separator}obb${File.separator}${KiwixApplication.getInstance().packageName}"
 
   @JvmStatic fun getFileCacheDir(context: Context): File =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
@@ -101,7 +102,7 @@ object FileUtils {
    */
   @JvmStatic fun getExpansionAPKFileName(mainFile: Boolean) =
     "${if (mainFile) "main." else "patch."}${BuildConfig.CONTENT_VERSION_CODE}" +
-      ".${BuildConfig.APPLICATION_ID}.obb"
+      ".${KiwixApplication.getInstance().packageName}.obb"
 
   /**
    * Returns the filename (where the file should be saved) from info about a download

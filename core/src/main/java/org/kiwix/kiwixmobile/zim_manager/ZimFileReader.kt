@@ -220,7 +220,7 @@ class ZimFileReader(
     @JvmField
     val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
     @JvmField
-    val CONTENT_URI: Uri? = Uri.parse("content://${BuildConfig.APPLICATION_ID}.zim.base/")
+    val CONTENT_URI: Uri? = Uri.parse("content://${KiwixApplication.getInstance().packageName}.zim.base/")
     private const val INVERT_IMAGES_VIDEO =
       "img, video { \n -webkit-filter: invert(1); \n filter: invert(1); \n} \n"
     private val VIDEO_REGEX = Regex("([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))\$)")

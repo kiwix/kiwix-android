@@ -110,7 +110,7 @@ public class KiwixWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
-    boolean invalidUrl = url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null");
+    boolean invalidUrl = url.equals("content://" + KiwixApplication.getInstance().getPackageName() + ".zim.base/null");
     Log.d(TAG_KIWIX, "invalidUrl = " + invalidUrl);
 
     if (invalidUrl) {
