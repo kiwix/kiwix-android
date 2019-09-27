@@ -1661,7 +1661,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
     this.menu = menu;
 
-    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+    if (tabSwitcherRoot != null && tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       menu.findItem(R.id.menu_search).setVisible(false);
       menu.findItem(R.id.menu_fullscreen).setVisible(false);
       menu.findItem(R.id.menu_random_article).setVisible(false);
