@@ -186,12 +186,16 @@ object FileUtils {
     uri: Uri
   ): String? {
     val columnName = "_data"
-    return context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
-      ?.use {
-        if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
-          it[columnName]
-        } else null
-      }
+    return try {
+      context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
+        ?.use {
+          if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
+            it[columnName]
+          } else null
+        }
+    } catch (ignore: SecurityException) {
+      null
+    }
   }
 
   @JvmStatic fun readLocalesFromAssets(context: Context) =
