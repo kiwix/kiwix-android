@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.InstantExecutorExtension
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.book
 import org.kiwix.kiwixmobile.bookOnDisk
 import org.kiwix.kiwixmobile.data.DataSource
@@ -48,7 +48,7 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.language
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.libraryNetworkEntity
-import org.kiwix.kiwixmobile.resetSchedulers
+import org.kiwix.kiwixmobile.core.ResetSchedulers
 import org.kiwix.kiwixmobile.setScheduler
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState

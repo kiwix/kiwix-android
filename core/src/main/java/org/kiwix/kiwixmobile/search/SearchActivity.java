@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
@@ -191,22 +191,21 @@ public class SearchActivity extends BaseActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_searchintext:
-        String queryText = "";
-        if (searchView != null) {
-          queryText = searchView.getQuery().toString();
-        }
-        Intent resultIntent = new Intent(this, MainActivity.class);
-        resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
-        resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
-        if (shouldStartNewActivity() != 1) {
-          setResult(RESULT_OK, resultIntent);
-          finish();
-        } else {
-          startActivity(resultIntent);
-        }
-        return true;
+    if (item.getItemId() == R.id.menu_searchintext) {
+      String queryText = "";
+      if (searchView != null) {
+        queryText = searchView.getQuery().toString();
+      }
+      Intent resultIntent = new Intent(this, MainActivity.class);
+      resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
+      resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
+      if (shouldStartNewActivity() != 1) {
+        setResult(RESULT_OK, resultIntent);
+        finish();
+      } else {
+        startActivity(resultIntent);
+      }
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }

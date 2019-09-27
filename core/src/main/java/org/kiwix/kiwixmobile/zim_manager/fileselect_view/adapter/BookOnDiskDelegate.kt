@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode

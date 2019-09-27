@@ -5,8 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
-import org.kiwix.kiwixmobile.BuildConfig
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 class ShareFiles(private val selectedBooks: List<BookOnDisk>) : SideEffect<Unit> {

@@ -28,9 +28,9 @@ import java.util.Locale;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.io.FilesKt;
-import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.main.AddNoteDialog;
 import org.kiwix.kiwixmobile.main.MainActivity;
@@ -76,7 +76,7 @@ public class PrefsFragment extends PreferenceFragment implements
       getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(false);
     }
 
-    if (BuildConfig.ENFORCED_LANG.equals("")) {
+   if (BuildConfig.ENFORCED_LANG.equals("")) {
       setUpLanguageChooser(PREF_LANG);
     } else {
       getPreferenceScreen().removePreference(findPreference("pref_language"));

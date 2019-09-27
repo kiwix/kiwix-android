@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
-import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.extensions.toast
 import org.kiwix.kiwixmobile.utils.DialogShower

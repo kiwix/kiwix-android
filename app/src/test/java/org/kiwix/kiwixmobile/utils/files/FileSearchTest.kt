@@ -35,7 +35,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.resetSchedulers
+import org.kiwix.kiwixmobile.core.ResetSchedulers
 import org.kiwix.kiwixmobile.setScheduler
 import java.io.File
 

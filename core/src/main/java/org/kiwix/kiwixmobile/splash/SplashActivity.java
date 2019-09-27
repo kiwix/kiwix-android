@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.splash;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.intro.IntroActivity;

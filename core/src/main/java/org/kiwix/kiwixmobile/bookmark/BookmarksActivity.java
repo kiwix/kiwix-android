@@ -18,8 +18,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
@@ -34,9 +35,9 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   private final List<BookmarkItem> allBookmarks = new ArrayList<>();
   private final List<BookmarkItem> deleteList = new ArrayList<>();
 
-  @BindView(R.id.toolbar)
+  @BindView(R2.id.toolbar)
   Toolbar toolbar;
-  @BindView(R.id.recycler_view)
+  @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
   @Inject
   BookmarksContract.Presenter presenter;
@@ -62,18 +63,17 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
       refreshAdapter = false;
-      switch (item.getItemId()) {
-        case R.id.menu_context_delete:
-          allBookmarks.removeAll(deleteList);
-          for (BookmarkItem bookmark : deleteList) {
-            int position = bookmarksList.indexOf(bookmark);
-            bookmarksList.remove(bookmark);
-            bookmarksAdapter.notifyItemRemoved(position);
-            bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.getItemCount());
-          }
-          presenter.deleteBookmarks(new ArrayList<>(deleteList));
-          mode.finish();
-          return true;
+      if (item.getItemId() == R.id.menu_context_delete) {
+        allBookmarks.removeAll(deleteList);
+        for (BookmarkItem bookmark : deleteList) {
+          int position = bookmarksList.indexOf(bookmark);
+          bookmarksList.remove(bookmark);
+          bookmarksAdapter.notifyItemRemoved(position);
+          bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.getItemCount());
+        }
+        presenter.deleteBookmarks(new ArrayList<>(deleteList));
+        mode.finish();
+        return true;
       }
       return false;
     }
@@ -144,15 +144,15 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case android.R.id.home:
-        onBackPressed();
-        return true;
-      case R.id.menu_bookmarks_toggle:
-        item.setChecked(!item.isChecked());
-        sharedPreferenceUtil.setShowBookmarksCurrentBook(item.isChecked());
-        presenter.loadBookmarks(sharedPreferenceUtil.getShowBookmarksCurrentBook());
-        return true;
+    int itemId = item.getItemId();
+    if (itemId == android.R.id.home) {
+      onBackPressed();
+      return true;
+    } else if (itemId == R.id.menu_bookmarks_toggle) {
+      item.setChecked(!item.isChecked());
+      sharedPreferenceUtil.setShowBookmarksCurrentBook(item.isChecked());
+      presenter.loadBookmarks(sharedPreferenceUtil.getShowBookmarksCurrentBook());
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }

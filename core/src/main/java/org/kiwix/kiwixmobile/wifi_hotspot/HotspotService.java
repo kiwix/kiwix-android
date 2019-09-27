@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.utils.ServerUtils;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;

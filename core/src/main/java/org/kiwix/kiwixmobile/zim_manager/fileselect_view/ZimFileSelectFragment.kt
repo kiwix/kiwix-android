@@ -35,7 +35,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.zim_list.file_management_no_files
 import kotlinx.android.synthetic.main.zim_list.zim_swiperefresh
 import kotlinx.android.synthetic.main.zim_list.zimfilelist
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.base.BaseFragment
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.extensions.toast

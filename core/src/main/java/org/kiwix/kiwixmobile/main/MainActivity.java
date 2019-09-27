@@ -94,11 +94,12 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
-import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.BuildConfig;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
@@ -166,47 +167,47 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public static boolean nightMode;
   private final ArrayList<String> bookmarks = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
-  @BindView(R.id.activity_main_root)
+  @BindView(R2.id.activity_main_root)
   ConstraintLayout root;
-  @BindView(R.id.activity_main_toolbar)
+  @BindView(R2.id.activity_main_toolbar)
   Toolbar toolbar;
-  @BindView(R.id.activity_main_back_to_top_fab)
+  @BindView(R2.id.activity_main_back_to_top_fab)
   FloatingActionButton backToTopButton;
-  @BindView(R.id.activity_main_button_stop_tts)
+  @BindView(R2.id.activity_main_button_stop_tts)
   Button stopTTSButton;
-  @BindView(R.id.activity_main_button_pause_tts)
+  @BindView(R2.id.activity_main_button_pause_tts)
   Button pauseTTSButton;
-  @BindView(R.id.activity_main_tts_controls)
+  @BindView(R2.id.activity_main_tts_controls)
   Group TTSControls;
-  @BindView(R.id.activity_main_app_bar)
+  @BindView(R2.id.activity_main_app_bar)
   AppBarLayout toolbarContainer;
-  @BindView(R.id.activity_main_progress_view)
+  @BindView(R2.id.activity_main_progress_view)
   AnimatedProgressBar progressBar;
-  @BindView(R.id.activity_main_fullscreen_button)
+  @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
-  @BindView(R.id.activity_main_drawer_layout)
+  @BindView(R2.id.activity_main_drawer_layout)
   DrawerLayout drawerLayout;
-  @BindView(R.id.activity_main_nav_view)
+  @BindView(R2.id.activity_main_nav_view)
   NavigationView tableDrawerRightContainer;
-  @BindView(R.id.activity_main_content_frame)
+  @BindView(R2.id.activity_main_content_frame)
   FrameLayout contentFrame;
-  @BindView(R.id.bottom_toolbar)
+  @BindView(R2.id.bottom_toolbar)
   LinearLayout bottomToolbar;
-  @BindView(R.id.bottom_toolbar_bookmark)
+  @BindView(R2.id.bottom_toolbar_bookmark)
   ImageView bottomToolbarBookmark;
-  @BindView(R.id.bottom_toolbar_arrow_back)
+  @BindView(R2.id.bottom_toolbar_arrow_back)
   ImageView bottomToolbarArrowBack;
-  @BindView(R.id.bottom_toolbar_arrow_forward)
+  @BindView(R2.id.bottom_toolbar_arrow_forward)
   ImageView bottomToolbarArrowForward;
-  @BindView(R.id.tab_switcher_recycler_view)
+  @BindView(R2.id.tab_switcher_recycler_view)
   RecyclerView tabRecyclerView;
-  @BindView(R.id.activity_main_tab_switcher)
+  @BindView(R2.id.activity_main_tab_switcher)
   View tabSwitcherRoot;
-  @BindView(R.id.tab_switcher_close_all_tabs)
+  @BindView(R2.id.tab_switcher_close_all_tabs)
   FloatingActionButton closeAllTabsButton;
-  @BindView(R.id.snackbar_root)
+  @BindView(R2.id.snackbar_root)
   CoordinatorLayout snackbarRoot;
-  @BindView(R.id.fullscreen_video_container)
+  @BindView(R2.id.fullscreen_video_container)
   ViewGroup videoView;
 
   @Inject
@@ -554,14 +555,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     supportInvalidateOptionsMenu();
   }
 
-  @OnClick(R.id.bottom_toolbar_arrow_back)
+  @OnClick(R2.id.bottom_toolbar_arrow_back)
   void goBack() {
     if (getCurrentWebView().canGoBack()) {
       getCurrentWebView().goBack();
     }
   }
 
-  @OnClick(R.id.bottom_toolbar_arrow_forward)
+  @OnClick(R2.id.bottom_toolbar_arrow_forward)
   void goForward() {
     if (getCurrentWebView().canGoForward()) {
       getCurrentWebView().goForward();
@@ -586,7 +587,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  @OnClick(R.id.bottom_toolbar_toc)
+  @OnClick(R2.id.bottom_toolbar_toc)
   void openToc() {
     drawerLayout.openDrawer(GravityCompat.END);
   }
@@ -733,7 +734,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }, zimReaderContainer);
   }
 
-  @OnClick(R.id.activity_main_button_pause_tts)
+  @OnClick(R2.id.activity_main_button_pause_tts)
   void pauseTts() {
     if (tts.currentTTSTask == null) {
       tts.stop();
@@ -749,7 +750,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  @OnClick(R.id.activity_main_button_stop_tts)
+  @OnClick(R2.id.activity_main_button_stop_tts)
   void stopTts() {
     tts.stop();
   }
@@ -868,82 +869,59 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case android.R.id.home:
-        if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
-          hideTabSwitcher();
+    int itemId = item.getItemId();
+    if (itemId == android.R.id.home) {
+      if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+        hideTabSwitcher();
+      }
+      newTab(HOME_URL);
+      return true;
+    } else if (itemId == R.id.menu_add_note) {
+      if (requestExternalStorageWritePermissionForNotes()) {
+        // Check permission since notes are stored in the public-external storage
+        showAddNoteDialog();
+      }
+    } else if (itemId == R.id.menu_bookmarks_list) {
+      goToBookmarks();
+    } else if (itemId == R.id.menu_random_article) {
+      openRandomArticle();
+    } else if (itemId == R.id.menu_help) {
+      startActivity(new Intent(this, HelpActivity.class));
+      return true;
+    } else if (itemId == R.id.menu_openfile) {
+      manageZimFiles(hasLocalBooks ? 0 : 1);
+    } else if (itemId == R.id.menu_settings) {
+      selectSettings();
+    } else if (itemId == R.id.menu_read_aloud) {
+      if (TTSControls.getVisibility() == View.GONE) {
+        if (isBackToTopEnabled) {
+          backToTopButton.hide();
         }
-        newTab(HOME_URL);
-        return true;
-
-      case R.id.menu_add_note:
-        if (requestExternalStorageWritePermissionForNotes()) {
-          // Check permission since notes are stored in the public-external storage
-          showAddNoteDialog();
+        tts.readAloud(getCurrentWebView());
+      } else if (TTSControls.getVisibility() == View.VISIBLE) {
+        if (isBackToTopEnabled) {
+          backToTopButton.show();
         }
-        break;
-
-      case R.id.menu_bookmarks_list:
-        goToBookmarks();
-        break;
-
-      case R.id.menu_random_article:
-        openRandomArticle();
-        break;
-
-      case R.id.menu_help:
-        startActivity(new Intent(this, HelpActivity.class));
-        return true;
-
-      case R.id.menu_openfile:
-        manageZimFiles(hasLocalBooks ? 0 : 1);
-        break;
-
-      case R.id.menu_settings:
-        selectSettings();
-        break;
-
-      case R.id.menu_read_aloud:
-        if (TTSControls.getVisibility() == View.GONE) {
-          if (isBackToTopEnabled) {
-            backToTopButton.hide();
-          }
-          tts.readAloud(getCurrentWebView());
-        } else if (TTSControls.getVisibility() == View.VISIBLE) {
-          if (isBackToTopEnabled) {
-            backToTopButton.show();
-          }
-          tts.stop();
-        }
-        break;
-
-      case R.id.menu_fullscreen:
-        if (isFullscreenOpened) {
-          closeFullScreen();
-        } else {
-          openFullScreen();
-        }
-        break;
-
-      case R.id.menu_history:
-        startActivityForResult(new Intent(this, HistoryActivity.class),
-          REQUEST_HISTORY_ITEM_CHOSEN);
-        return true;
-
-      case R.id.menu_support_kiwix:
-        Uri uriSupportKiwix = Uri.parse("https://www.kiwix.org/support");
-        Intent intentSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
-        intentSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
-        openExternalUrl(intentSupportKiwix);
-        break;
-
-      case R.id.menu_host_books:
-        Intent intent = new Intent(MainActivity.this, ZimHostActivity.class);
-        startActivity(intent);
-        break;
-
-      default:
-        break;
+        tts.stop();
+      }
+    } else if (itemId == R.id.menu_fullscreen) {
+      if (isFullscreenOpened) {
+        closeFullScreen();
+      } else {
+        openFullScreen();
+      }
+    } else if (itemId == R.id.menu_history) {
+      startActivityForResult(new Intent(this, HistoryActivity.class),
+        REQUEST_HISTORY_ITEM_CHOSEN);
+      return true;
+    } else if (itemId == R.id.menu_support_kiwix) {
+      Uri uriSupportKiwix = Uri.parse("https://www.kiwix.org/support");
+      Intent intentSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
+      intentSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
+      openExternalUrl(intentSupportKiwix);
+    } else if (itemId == R.id.menu_host_books) {
+      Intent intent = new Intent(MainActivity.this, ZimHostActivity.class);
+      startActivity(intent);
     }
 
     return super.onOptionsItemSelected(item);
@@ -995,7 +973,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   @SuppressWarnings("SameReturnValue")
-  @OnLongClick(R.id.bottom_toolbar_bookmark)
+  @OnLongClick(R2.id.bottom_toolbar_bookmark)
   boolean goToBookmarks() {
     saveTabStates();
     Intent intentBookmarks = new Intent(this, BookmarksActivity.class);
@@ -1022,7 +1000,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  @OnClick(R.id.activity_main_fullscreen_button)
+  @OnClick(R2.id.activity_main_fullscreen_button)
   void closeFullScreen() {
     toolbarContainer.setVisibility(View.VISIBLE);
     updateBottomToolbarVisibility();
@@ -1243,7 +1221,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  @OnClick(R.id.tab_switcher_close_all_tabs)
+  @OnClick(R2.id.tab_switcher_close_all_tabs)
   void closeAllTabs() {
     rotate(closeAllTabsButton);
     webViewList.clear();
@@ -1262,7 +1240,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }, 300);
   }
 
-  @OnClick(R.id.bottom_toolbar_bookmark)
+  @OnClick(R2.id.bottom_toolbar_bookmark)
   public void toggleBookmark() {
     //Check maybe need refresh
     String articleUrl = getCurrentWebView().getUrl();
@@ -1468,7 +1446,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     openArticle(articleUrl);
   }
 
-  @OnClick(R.id.bottom_toolbar_home)
+  @OnClick(R2.id.bottom_toolbar_home)
   public void openMainPage() {
     String articleUrl = zimReaderContainer.getMainPage();
     openArticle(articleUrl);
@@ -1493,7 +1471,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tts.initWebView(getCurrentWebView());
   }
 
-  @OnClick(R.id.activity_main_back_to_top_fab)
+  @OnClick(R2.id.activity_main_back_to_top_fab)
   void backToTop() {
     getCurrentWebView().pageUp(true);
   }

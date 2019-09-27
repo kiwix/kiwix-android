@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.core.BuildConfig;
 
 /**
  * Helper class for the local file sharing module.

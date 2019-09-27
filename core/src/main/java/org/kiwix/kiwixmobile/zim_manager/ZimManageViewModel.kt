@@ -30,7 +30,7 @@ import io.reactivex.functions.Function6
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.data.DataSource
 import org.kiwix.kiwixmobile.data.remote.KiwixService
 import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao

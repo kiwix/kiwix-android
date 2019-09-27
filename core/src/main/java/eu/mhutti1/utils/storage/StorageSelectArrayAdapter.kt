@@ -27,8 +27,10 @@ import android.widget.ArrayAdapter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.device_item.file_name
 import kotlinx.android.synthetic.main.device_item.file_size
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R2.id.file_name
+import org.kiwix.kiwixmobile.core.R2.id.file_size
 import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.settings.StorageCalculator
 

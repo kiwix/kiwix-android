@@ -37,7 +37,8 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -72,12 +73,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @Inject WifiDirectManager wifiDirectManager;
   @Inject LocationManager locationManager;
 
-  @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
-  @BindView(R.id.text_view_device_name) TextView deviceName;
-  @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
-  @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;
-  @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
-  @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
+  @BindView(R2.id.toolbar_local_file_transfer) Toolbar actionBar;
+  @BindView(R2.id.text_view_device_name) TextView deviceName;
+  @BindView(R2.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
+  @BindView(R2.id.list_peer_devices) ListView listViewPeerDevices;
+  @BindView(R2.id.text_view_empty_peer_list) TextView textViewPeerDevices;
+  @BindView(R2.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
   private boolean isFileSender = false;    // Whether the device is the file sender or not
 
@@ -128,7 +129,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     wifiDirectManager.startWifiDirectManager(filesForTransfer);
   }
 
-  @OnItemClick(R.id.list_peer_devices)
+  @OnItemClick(R2.id.list_peer_devices)
   void onItemClick(int position) {
     WifiP2pDevice senderSelectedPeerDevice =
       (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);

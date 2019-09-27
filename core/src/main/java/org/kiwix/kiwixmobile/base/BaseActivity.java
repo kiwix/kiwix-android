@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.AndroidInjection;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 

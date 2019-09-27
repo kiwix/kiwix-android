@@ -18,7 +18,8 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import android.view.ViewGroup
-import org.kiwix.kiwixmobile.R.layout
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.layout
 import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
@@ -38,7 +39,7 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
 
     override fun createViewHolder(parent: ViewGroup) =
       LibraryBookViewHolder(
-        parent.inflate(layout.library_item, false),
+        parent.inflate(R.layout.library_item, false),
         bookUtils,
         clickAction
       )

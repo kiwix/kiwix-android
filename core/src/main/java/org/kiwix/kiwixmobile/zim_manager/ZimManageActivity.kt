@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
 import kotlinx.android.synthetic.main.zim_manager.toolbar
 import org.kiwix.kiwixmobile.KiwixApplication
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.base.BaseActivity
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.extensions.start

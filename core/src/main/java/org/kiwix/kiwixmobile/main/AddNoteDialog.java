@@ -35,9 +35,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.BuildConfig;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
@@ -57,11 +58,11 @@ public class AddNoteDialog extends DialogFragment
     Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
   public static final String TAG = "AddNoteDialog";
 
-  @BindView(R.id.add_note_toolbar)
+  @BindView(R2.id.add_note_toolbar)
   Toolbar toolbar;          // Displays options for the note dialog
-  @BindView(R.id.add_note_text_view)
+  @BindView(R2.id.add_note_text_view)
   TextView addNoteTextView; // Displays article title
-  @BindView(R.id.add_note_edit_text)
+  @BindView(R2.id.add_note_edit_text)
   EditText addNoteEditText; // Displays the note text
 
   private Unbinder unbinder;
@@ -73,7 +74,7 @@ public class AddNoteDialog extends DialogFragment
   private String articleNotefileName;
   private boolean noteFileExists = false;
   private boolean noteEdited = false;
-    // Keeps track of state of the note (whether edited since last save)
+  // Keeps track of state of the note (whether edited since last save)
 
   private String zimNotesDirectory; // Stores path to directory for the currently open zim's notes
 
@@ -126,14 +127,11 @@ public class AddNoteDialog extends DialogFragment
     });
 
     toolbar.setOnMenuItemClickListener(item -> {
-      switch (item.getItemId()) {
-        case R.id.share_note: // Opens app-chooser for sharing the note text file
-          shareNote();
-          break;
-
-        case R.id.save_note:  // Saves the note as a text file
-          saveNote(addNoteEditText.getText().toString());
-          break;
+      int itemId = item.getItemId();
+      if (itemId == R.id.share_note) { // Opens app-chooser for sharing the note text file
+        shareNote();
+      } else if (itemId == R.id.save_note) {  // Saves the note as a text file
+        saveNote(addNoteEditText.getText().toString());
       }
       return true;
     });

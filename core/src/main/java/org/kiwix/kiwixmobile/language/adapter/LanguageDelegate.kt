@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.language.adapter
 
 import android.view.ViewGroup
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem

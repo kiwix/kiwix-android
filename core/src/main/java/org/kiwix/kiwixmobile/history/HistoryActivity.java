@@ -21,8 +21,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
@@ -38,13 +39,13 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   private static final String LIST_STATE_KEY = "recycler_list_state";
   public static final String USER_CLEARED_HISTORY = "user_cleared_history";
 
-  @BindView(R.id.toolbar)
+  @BindView(R2.id.toolbar)
   Toolbar toolbar;
   @Inject
   HistoryContract.Presenter presenter;
   @Inject
   ZimReaderContainer zimReaderContainer;
-  @BindView(R.id.recycler_view)
+  @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
   private boolean refreshAdapter = true;
   private HistoryAdapter historyAdapter;
@@ -66,29 +67,28 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
       refreshAdapter = false;
-      switch (item.getItemId()) {
-        case R.id.menu_context_delete:
-          fullHistory.removeAll(deleteList);
-          for (HistoryListItem history : deleteList) {
-            int position = historyList.indexOf(history);
+      if (item.getItemId() == R.id.menu_context_delete) {
+        fullHistory.removeAll(deleteList);
+        for (HistoryListItem history : deleteList) {
+          int position = historyList.indexOf(history);
               /*
               Delete the current category header if there are no items after the current one or
               if the item being removed is between two category headers.
                */
-            if (position - 1 >= 0 && historyList.get(position - 1) == null &&
-              (position + 1 >= historyList.size() ||
-                (position + 1 < historyList.size() && historyList.get(position + 1) == null))) {
-              historyList.remove(position - 1);
-              historyAdapter.notifyItemRemoved(position - 1);
-            }
-            position = historyList.indexOf(history);
-            historyList.remove(history);
-            historyAdapter.notifyItemRemoved(position);
-            historyAdapter.notifyItemRangeChanged(position, historyAdapter.getItemCount());
+          if (position - 1 >= 0 && historyList.get(position - 1) == null &&
+            (position + 1 >= historyList.size() ||
+              (position + 1 < historyList.size() && historyList.get(position + 1) == null))) {
+            historyList.remove(position - 1);
+            historyAdapter.notifyItemRemoved(position - 1);
           }
-          presenter.deleteHistory(new ArrayList<>(deleteList));
-          mode.finish();
-          return true;
+          position = historyList.indexOf(history);
+          historyList.remove(history);
+          historyAdapter.notifyItemRemoved(position);
+          historyAdapter.notifyItemRangeChanged(position, historyAdapter.getItemCount());
+        }
+        presenter.deleteHistory(new ArrayList<>(deleteList));
+        mode.finish();
+        return true;
       }
       return false;
     }
@@ -179,25 +179,23 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case android.R.id.home:
-        onBackPressed();
-        return true;
-
-      case R.id.menu_history_toggle:
-        item.setChecked(!item.isChecked());
-        sharedPreferenceUtil.setShowHistoryCurrentBook(item.isChecked());
-        presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
-        return true;
-
-      case R.id.menu_history_clear:
-        presenter.deleteHistory(new ArrayList<>(fullHistory));
-        fullHistory.clear();
-        historyList.clear();
-        historyAdapter.notifyDataSetChanged();
-        setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
-        Toast.makeText(this, R.string.all_history_cleared_toast, Toast.LENGTH_SHORT).show();
-        return true;
+    int itemId = item.getItemId();
+    if (itemId == android.R.id.home) {
+      onBackPressed();
+      return true;
+    } else if (itemId == R.id.menu_history_toggle) {
+      item.setChecked(!item.isChecked());
+      sharedPreferenceUtil.setShowHistoryCurrentBook(item.isChecked());
+      presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
+      return true;
+    } else if (itemId == R.id.menu_history_clear) {
+      presenter.deleteHistory(new ArrayList<>(fullHistory));
+      fullHistory.clear();
+      historyList.clear();
+      historyAdapter.notifyDataSetChanged();
+      setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
+      Toast.makeText(this, R.string.all_history_cleared_toast, Toast.LENGTH_SHORT).show();
+      return true;
     }
     return super.onOptionsItemSelected(item);
   }

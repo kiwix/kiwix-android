@@ -15,8 +15,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
@@ -32,25 +33,25 @@ public class ErrorActivity extends BaseActivity {
   @Inject
   ZimReaderContainer zimReaderContainer;
 
-  @BindView(R.id.reportButton)
+  @BindView(R2.id.reportButton)
   Button reportButton;
 
-  @BindView(R.id.restartButton)
+  @BindView(R2.id.restartButton)
   Button restartButton;
 
-  @BindView(R.id.allowLanguage)
+  @BindView(R2.id.allowLanguage)
   CheckBox allowLanguageCheckbox;
 
-  @BindView(R.id.allowZims)
+  @BindView(R2.id.allowZims)
   CheckBox allowZimsCheckbox;
 
-  @BindView(R.id.allowCrash)
+  @BindView(R2.id.allowCrash)
   CheckBox allowCrashCheckbox;
 
-  @BindView(R.id.allowLogs)
+  @BindView(R2.id.allowLogs)
   CheckBox allowLogsCheckbox;
 
-  @BindView(R.id.allowDeviceDetails)
+  @BindView(R2.id.allowDeviceDetails)
   CheckBox allowDeviceDetailsCheckbox;
 
   private static void killCurrentProcess() {

@@ -33,8 +33,8 @@ import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.activity_library.libraryErrorText
 import kotlinx.android.synthetic.main.activity_library.libraryList
 import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.base.BaseFragment
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.Downloader

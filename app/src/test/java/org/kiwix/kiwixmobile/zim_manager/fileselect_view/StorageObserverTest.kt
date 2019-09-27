@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.book
 import org.kiwix.kiwixmobile.bookOnDisk
 import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.resetSchedulers
+import org.kiwix.kiwixmobile.core.ResetSchedulers
 import org.kiwix.kiwixmobile.setScheduler
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.utils.files.FileSearch

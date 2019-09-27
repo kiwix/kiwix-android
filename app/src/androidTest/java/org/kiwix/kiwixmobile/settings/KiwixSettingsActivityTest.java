@@ -22,7 +22,7 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static androidx.test.espresso.Espresso.onData;

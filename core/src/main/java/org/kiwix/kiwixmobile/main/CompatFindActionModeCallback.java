@@ -35,7 +35,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.view.ActionMode;
 import java.lang.reflect.Method;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 
 public class CompatFindActionModeCallback
   implements ActionMode.Callback, TextWatcher, View.OnClickListener {
@@ -212,15 +212,13 @@ public class CompatFindActionModeCallback
 
     mInput.hideSoftInputFromWindow(mWebView.getWindowToken(), 0);
 
-    switch (item.getItemId()) {
-      case R.id.find_prev:
-        findNext(false);
-        break;
-      case R.id.find_next:
-        findNext(true);
-        break;
-      default:
-        return false;
+    int itemId = item.getItemId();
+    if (itemId == R.id.find_prev) {
+      findNext(false);
+    } else if (itemId == R.id.find_next) {
+      findNext(true);
+    } else {
+      return false;
     }
     return true;
   }

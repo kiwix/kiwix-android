@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.utils
 
 import android.net.wifi.WifiConfiguration
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 sealed class KiwixDialog(

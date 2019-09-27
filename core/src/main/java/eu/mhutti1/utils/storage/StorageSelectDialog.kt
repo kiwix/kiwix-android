@@ -32,7 +32,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.storage_select_dialog.device_list
 import kotlinx.android.synthetic.main.storage_select_dialog.title
 import org.kiwix.kiwixmobile.KiwixApplication
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.settings.StorageCalculator
 import org.kiwix.kiwixmobile.utils.StyleUtils
 import javax.inject.Inject

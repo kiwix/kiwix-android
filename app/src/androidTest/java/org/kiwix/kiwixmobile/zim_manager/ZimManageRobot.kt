@@ -22,7 +22,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.language.LanguageRobot
 import org.kiwix.kiwixmobile.language.language
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book

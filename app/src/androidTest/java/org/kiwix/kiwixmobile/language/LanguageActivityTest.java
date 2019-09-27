@@ -31,7 +31,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 import static androidx.test.espresso.Espresso.onView;

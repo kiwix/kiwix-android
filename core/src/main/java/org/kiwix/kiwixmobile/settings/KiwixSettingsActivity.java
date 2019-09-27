@@ -22,7 +22,7 @@ package org.kiwix.kiwixmobile.settings;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_WEBVIEWS_LIST;

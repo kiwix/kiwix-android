@@ -29,8 +29,8 @@ import com.tonyodev.fetch2.DefaultFetchNotificationManager
 import com.tonyodev.fetch2.DownloadNotification
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.string
 
 class FetchDownloadNotificationManager(context: Context) :
   DefaultFetchNotificationManager(context) {

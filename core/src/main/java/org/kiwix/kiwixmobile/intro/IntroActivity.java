@@ -13,17 +13,18 @@ import com.pixelcan.inkpageindicator.InkPageIndicator;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
 public class IntroActivity extends BaseActivity implements IntroContract.View {
 
   private final Handler handler = new Handler();
   private final Timer timer = new Timer();
-  @BindView(R.id.view_pager)
+  @BindView(R2.id.view_pager)
   ViewPager viewPager;
-  @BindView(R.id.tab_indicator)
+  @BindView(R2.id.tab_indicator)
   InkPageIndicator tabIndicator;
   @Inject
   IntroContract.Presenter presenter;
@@ -103,7 +104,7 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
     }
   }
 
-  @OnClick(R.id.get_started)
+  @OnClick(R2.id.get_started)
   void startMainActivity() {
     dismissAutoRotate();
     startActivity(new Intent(this, MainActivity.class));

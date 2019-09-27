@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.item_language.item_language_checkbox
 import kotlinx.android.synthetic.main.item_language.item_language_clickable_area
 import kotlinx.android.synthetic.main.item_language.item_language_localized_name
 import kotlinx.android.synthetic.main.item_language.item_language_name
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder

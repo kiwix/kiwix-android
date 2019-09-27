@@ -21,8 +21,8 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R.id
-import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.R.id
+import org.kiwix.kiwixmobile.core.R.string
 
 fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 

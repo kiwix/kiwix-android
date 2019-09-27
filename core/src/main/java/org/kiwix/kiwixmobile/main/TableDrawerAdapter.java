@@ -31,7 +31,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 
 public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -145,7 +146,7 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
-    public @BindView(R.id.titleText)
+    public @BindView(R2.id.titleText)
     TextView title;
 
     public ViewHolder(View v) {

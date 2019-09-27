@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.layout_download_management.download_management_no_downloads
 import kotlinx.android.synthetic.main.layout_download_management.zim_downloader_list
 import org.kiwix.kiwixmobile.base.BaseFragment
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.extensions.viewModel
@@ -61,7 +62,7 @@ class DownloadFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View =
-    inflater.inflate(org.kiwix.kiwixmobile.R.layout.layout_download_management, container, false)
+    inflater.inflate(R.layout.layout_download_management, container, false)
 
   override fun onViewCreated(
     view: View,

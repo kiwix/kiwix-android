@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_language.language_progressbar
 import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import kotlinx.android.synthetic.main.activity_language.toolbar
 import org.kiwix.kiwixmobile.KiwixApplication
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.base.BaseActivity
 import org.kiwix.kiwixmobile.extensions.viewModel
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter

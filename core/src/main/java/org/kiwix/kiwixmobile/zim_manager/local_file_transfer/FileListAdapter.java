@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.ERROR;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;
@@ -76,9 +77,9 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
   }
 
   class FileViewHolder extends RecyclerView.ViewHolder {
-    @BindView(R.id.text_view_file_item_name) TextView fileName;
-    @BindView(R.id.image_view_file_transferred) ImageView statusImage;
-    @BindView(R.id.progress_bar_transferring_file) ProgressBar progressBar;
+    @BindView(R2.id.text_view_file_item_name) TextView fileName;
+    @BindView(R2.id.image_view_file_transferred) ImageView statusImage;
+    @BindView(R2.id.progress_bar_transferring_file) ProgressBar progressBar;
     final FileListAdapter fileListAdapter;
 
     public FileViewHolder(View itemView, FileListAdapter fileListAdapter) {

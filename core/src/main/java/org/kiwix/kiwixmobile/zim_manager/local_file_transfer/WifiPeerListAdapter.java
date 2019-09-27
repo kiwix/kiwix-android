@@ -14,7 +14,8 @@ import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getDeviceStatus;
 
@@ -63,7 +64,7 @@ public class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
   }
 
   static class ViewHolder {
-    @BindView(R.id.row_device_name) TextView deviceName;
+    @BindView(R2.id.row_device_name) TextView deviceName;
 
     public ViewHolder(View view) {
       ButterKnife.bind(this, view);

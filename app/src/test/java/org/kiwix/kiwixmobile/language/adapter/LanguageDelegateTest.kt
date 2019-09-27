@@ -7,7 +7,7 @@ import io.mockk.mockkStatic
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate

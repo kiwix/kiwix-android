@@ -23,7 +23,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 import java.util.UUID;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 

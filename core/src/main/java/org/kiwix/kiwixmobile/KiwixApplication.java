@@ -32,6 +32,7 @@ import dagger.android.HasActivityInjector;
 import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;

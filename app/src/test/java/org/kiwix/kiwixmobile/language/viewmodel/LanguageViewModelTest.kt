@@ -39,7 +39,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import org.kiwix.kiwixmobile.languageItem
-import org.kiwix.kiwixmobile.resetSchedulers
+import org.kiwix.kiwixmobile.core.ResetSchedulers
 import org.kiwix.kiwixmobile.setScheduler
 import org.kiwix.kiwixmobile.zim_manager.Language
 

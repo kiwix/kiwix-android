@@ -19,7 +19,6 @@ buildscript {
     classpath "org.apache.httpcomponents:httpclient-android:4.3.3"
     classpath "com.testdroid:testdroid-api:2.71"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
     classpath "org.jlleitschuh.gradle:ktlint-gradle:8.2.0"
   }
 }
@@ -32,7 +31,6 @@ plugins {
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.objectbox'
 apply plugin: 'jacoco-android'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 

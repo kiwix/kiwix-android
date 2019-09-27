@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.utils;
 
-import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.core.BuildConfig;
 
 public final class Constants {
 

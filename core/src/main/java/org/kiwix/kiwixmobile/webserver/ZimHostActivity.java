@@ -22,8 +22,9 @@ import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.utils.ServerUtils;
@@ -40,11 +41,11 @@ import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP_SERV
 public class ZimHostActivity extends BaseActivity implements
     ZimHostCallbacks, ZimHostContract.View {
 
-  @BindView(R.id.startServerButton)
+  @BindView(R2.id.startServerButton)
   Button startServerButton;
-  @BindView(R.id.server_textView)
+  @BindView(R2.id.server_textView)
   TextView serverTextView;
-  @BindView(R.id.recycler_view_zim_host)
+  @BindView(R2.id.recycler_view_zim_host)
   RecyclerView recyclerViewZimHost;
 
   @Inject

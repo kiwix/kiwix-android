@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -91,9 +92,9 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   }
 
   class Item extends RecyclerView.ViewHolder {
-    @BindView(R.id.favicon)
+    @BindView(R2.id.favicon)
     ImageView favicon;
-    @BindView(R.id.title)
+    @BindView(R2.id.title)
     TextView title;
 
     Item(View itemView) {
@@ -103,7 +104,7 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   }
 
   class Category extends RecyclerView.ViewHolder {
-    @BindView(R.id.header_date)
+    @BindView(R2.id.header_date)
     TextView date;
 
     Category(View itemView) {

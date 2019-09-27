@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.BuildConfig;
+import org.kiwix.kiwixmobile.core.R;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.ERROR;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;

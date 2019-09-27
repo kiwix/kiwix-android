@@ -27,8 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import java.util.HashMap;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
@@ -37,9 +38,9 @@ public class HelpActivity extends BaseActivity {
 
   private final HashMap<String, String> titleDescriptionMap = new HashMap<>();
 
-  @BindView(R.id.activity_help_toolbar)
+  @BindView(R2.id.activity_help_toolbar)
   Toolbar toolbar;
-  @BindView(R.id.activity_help_recycler_view)
+  @BindView(R2.id.activity_help_recycler_view)
   RecyclerView recyclerView;
 
   @Override
@@ -63,7 +64,7 @@ public class HelpActivity extends BaseActivity {
     recyclerView.setAdapter(helpAdapter);
   }
 
-  @OnClick({ R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view })
+  @OnClick({ R2.id.activity_help_feedback_text_view, R2.id.activity_help_feedback_image_view })
   void sendFeedback() {
     Intent intent = new Intent(Intent.ACTION_SENDTO);
     intent.setType("plain/text");

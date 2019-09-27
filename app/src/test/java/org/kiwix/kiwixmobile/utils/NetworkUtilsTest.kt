@@ -30,7 +30,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import java.util.regex.Pattern

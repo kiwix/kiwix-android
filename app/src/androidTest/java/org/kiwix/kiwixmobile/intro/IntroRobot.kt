@@ -3,7 +3,7 @@ package org.kiwix.kiwixmobile.intro
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.main.MainRobot
 import org.kiwix.kiwixmobile.main.main
 

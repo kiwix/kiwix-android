@@ -13,7 +13,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import java.util.HashMap;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 
 import static org.kiwix.kiwixmobile.utils.AnimationUtils.collapse;
 import static org.kiwix.kiwixmobile.utils.AnimationUtils.expand;
@@ -51,11 +52,11 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   }
 
   class Item extends RecyclerView.ViewHolder {
-    @BindView(R.id.item_help_title)
+    @BindView(R2.id.item_help_title)
     TextView title;
-    @BindView(R.id.item_help_description)
+    @BindView(R2.id.item_help_description)
     TextView description;
-    @BindView(R.id.item_help_toggle_expand)
+    @BindView(R2.id.item_help_toggle_expand)
     ImageView toggleDescriptionVisibility;
 
     Item(View itemView) {
@@ -63,7 +64,7 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
       ButterKnife.bind(this, itemView);
     }
 
-    @OnClick({ R.id.item_help_title, R.id.item_help_toggle_expand })
+    @OnClick({ R2.id.item_help_title, R2.id.item_help_toggle_expand })
     void toggleDescriptionVisibility() {
       if (description.getVisibility() == View.GONE) {
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 0, 180).start();

@@ -2,7 +2,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
 import android.content.Context
 import android.util.Log
-import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.core.R.string
 import java.text.DecimalFormat
 import kotlin.math.log10
 import kotlin.math.pow

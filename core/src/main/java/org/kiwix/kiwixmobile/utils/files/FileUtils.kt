@@ -24,7 +24,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
-import org.kiwix.kiwixmobile.BuildConfig
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.extensions.get
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book

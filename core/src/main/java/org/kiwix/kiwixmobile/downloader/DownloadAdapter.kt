@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.downloader
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.extensions.inflate
 

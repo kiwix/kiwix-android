@@ -26,7 +26,7 @@ import com.tonyodev.fetch2okhttp.OkHttpDownloader
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
-import org.kiwix.kiwixmobile.BuildConfig
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.data.remote.KiwixService
 import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.downloader.DownloadRequester

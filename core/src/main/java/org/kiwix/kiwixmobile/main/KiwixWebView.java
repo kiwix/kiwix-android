@@ -43,7 +43,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;

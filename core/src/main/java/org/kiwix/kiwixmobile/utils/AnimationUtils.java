@@ -7,7 +7,7 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 
 public class AnimationUtils {
   public static void expand(final View view) {

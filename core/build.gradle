@@ -12,6 +12,7 @@ buildscript {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
     classpath "org.jlleitschuh.gradle:ktlint-gradle:8.2.0"
+    classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.0'
   }
 }
 
@@ -26,6 +27,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
 apply plugin: 'jacoco-android'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
   compileSdkVersion 28
@@ -38,6 +40,16 @@ android {
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles 'consumer-rules.pro'
+
+    buildConfigField "boolean", "IS_CUSTOM_APP", "false"
+    buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
+    buildConfigField "String", "ZIM_FILE_NAME", "\"\""
+    buildConfigField "long", "ZIM_FILE_SIZE", "0"
+    buildConfigField "int", "CONTENT_VERSION_CODE", "0"
+    buildConfigField "String", "ENFORCED_LANG", "\"\""
+    resValue "string", "app_name", "Kiwix"
+    resValue "string", "app_search_string", "Search Kiwix"
+    buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
   }
 
   buildTypes {
@@ -45,6 +57,14 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
+  }
+  compileOptions {
+    encoding = "UTF-8"
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  androidExtensions {
+    experimental = true
   }
 }
 
@@ -141,6 +161,4 @@ dependencies {
   testImplementation "org.assertj:assertj-core:3.11.1"
   testImplementation 'com.jraska.livedata:testing-ktx:1.1.0'
   testImplementation 'androidx.arch.core:core-testing:2.0.1'
-
-
 }

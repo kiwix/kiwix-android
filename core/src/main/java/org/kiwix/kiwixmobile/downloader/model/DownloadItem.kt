@@ -29,7 +29,7 @@ import com.tonyodev.fetch2.Status.NONE
 import com.tonyodev.fetch2.Status.PAUSED
 import com.tonyodev.fetch2.Status.QUEUED
 import com.tonyodev.fetch2.Status.REMOVED
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 
 data class DownloadItem(
   val downloadId: Long,

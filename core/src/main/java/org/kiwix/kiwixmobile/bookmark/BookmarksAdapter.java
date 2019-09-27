@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 
 class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
@@ -62,9 +63,9 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
   }
 
   class Item extends RecyclerView.ViewHolder {
-    @BindView(R.id.favicon)
+    @BindView(R2.id.favicon)
     ImageView favicon;
-    @BindView(R.id.title)
+    @BindView(R2.id.title)
     TextView title;
 
     Item(View itemView) {

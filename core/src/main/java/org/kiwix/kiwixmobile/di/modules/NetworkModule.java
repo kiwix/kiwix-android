@@ -26,7 +26,7 @@ import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.data.remote.KiwixService;
 import org.kiwix.kiwixmobile.data.remote.UserAgentInterceptor;
 

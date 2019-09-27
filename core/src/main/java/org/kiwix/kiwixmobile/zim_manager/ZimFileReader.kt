@@ -30,7 +30,7 @@ import org.kiwix.kiwixlib.JNIKiwixInt
 import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixlib.JNIKiwixString
 import org.kiwix.kiwixlib.Pair
-import org.kiwix.kiwixmobile.BuildConfig
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
