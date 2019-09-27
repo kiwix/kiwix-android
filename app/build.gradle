@@ -34,39 +34,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco-android'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
-repositories {
-  google()
-  mavenCentral()
-  maven {
-    url "https://maven.google.com"
-  }
-  jcenter()
-}
-
-String[] archs = ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
-
-// Set custom app import directory
-def map = [:]
-def custom = new File("app/src")
-if (project.hasProperty("customDir")) {
-  custom = file(project.property("customDir"))
-}
-
-// Set up flavours for each custom app in the directory
-if (custom.listFiles()) {
-  custom.eachFile() { file ->
-
-    def fileName = file.getName()
-    if (fileName.startsWith(".") ||
-      fileName.contains("test") ||
-      fileName == "main" ||
-      fileName.contains("Test")) {
-      return
-    }
-    map.put(fileName, file.getAbsolutePath())
-  }
-}
-
 jacoco {
   toolVersion = "0.8.3"
 }
@@ -75,9 +42,6 @@ tasks.withType(Test) {
   jacoco.includeNoLocationClasses = true
 }
 
-def branchName = System.getenv('TRAVIS_PULL_REQUEST') ?: "false" == "false"
-  ? System.getenv('TRAVIS_BRANCH') ?: "local"
-  : System.getenv('TRAVIS_PULL_REQUEST_BRANCH')
 def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 
 ext {
@@ -228,96 +192,7 @@ android {
       }
     }
 
-    // Custom apps built from a json file, zim file and icon set
-    map.each { name, directory ->
-      "$name" {
-        println "Configuring $name"
-        if (name == "kiwix") {
-          return
-        }
-        if (file(directory + "/build.gradle").exists()) {
-          apply from: directory + "/build.gradle"
-        }
-        def jsonFile
-        if (project.hasProperty("jsonFile")) {
-          // Read json file from properties e.g command line
-          jsonFile = file(project.property("jsonFile"))
-        } else {
-          // If no file provided use the test file
-          jsonFile = file(directory + "/info.json")
-        }
-        def parsedJson = new JsonSlurper().parseText(jsonFile.text)
-        def sourceFile = file(parsedJson.zim_file)
-        if (!sourceFile.exists()) {
-          sourceFile = file(directory + "/" + parsedJson.zim_file)
-        }
-        if (parsedJson.embed_zim) {
-          // Place content in each lib directory for embeded zims
-          for (String archName : archs) {
-            copy {
-              from sourceFile
-              into file(directory + "/jniLibs/" + archName)
-              rename { String filename -> "libcontent.so" }
-            }
-          }
-          parsedJson.zim_file = "libcontent.so"
-        }
-        // Set custom config from json
-        applicationId "$parsedJson.package"
-        buildConfigField "boolean", "IS_CUSTOM_APP", "true"
-        buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
-        def filename
-        if (parsedJson.zim_file.lastIndexOf("/") >= 0) {
-          filename = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf("/") + 1)
-        } else {
-          filename = parsedJson.zim_file
-        }
-        buildConfigField "String", "ZIM_FILE_NAME", "\"$filename\""
-        if (project.hasProperty("zim_file_size")) {
-          def length = Long.parseLong(project.property("zim_file_size"))
-          buildConfigField "long", "ZIM_FILE_SIZE", "${length}L"
-        } else {
-          long length = sourceFile.length()
-          buildConfigField "long", "ZIM_FILE_SIZE", "${length}L"
-        }
-        if (project.hasProperty("version_code")) {
-          def version_code = project.property("version_code")
-          versionCode version_code.toInteger()
-        } else {
-          versionCode parsedJson.version_code.toInteger()
-        }
-        if (project.hasProperty("version_name")) {
-          versionName project.property("version_name")
-        } else {
-          versionName parsedJson.version_name
-        }
-        if (project.hasProperty("content_version_code")) {
-          def content_version_code = project.property("content_version_code")
-          buildConfigField "int", "CONTENT_VERSION_CODE", "$content_version_code"
-        } else if (parsedJson.content_version_code != null) {
-          buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
-        } else if (project.hasProperty('version_code')) {
-          def version_code = project.property('version_code')
-          buildConfigField "int", "CONTENT_VERSION_CODE", "$version_code"
-        } else if (parsedJson.version_code != null) {
-          buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
-        }
-        buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
-        resValue "string", "app_name", "$parsedJson.app_name"
-        resValue "string", "app_search_string", "Search " + "$parsedJson.app_name"
-      }
-    }
-  }
 
-  // Set each custom apps respective source directory
-  sourceSets {
-    map.each { name, directory ->
-      "$name" {
-        setRoot directory
-        jni.srcDirs = []
-        jniLibs.srcDir directory + "/jniLibs"
-      }
-    }
   }
 
   compileOptions {
