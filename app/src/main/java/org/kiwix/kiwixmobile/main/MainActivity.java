@@ -99,6 +99,7 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
@@ -1104,16 +1105,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           openMainPage();
           presenter.loadCurrentZimBookmarksUrl();
         } else {
-          Toast.makeText(this, getResources().getString(R.string.error_file_invalid),
-            Toast.LENGTH_LONG).show();
+          ContextExtensionsKt.toast(this, R.string.error_file_invalid, Toast.LENGTH_LONG);
           showHomePage();
         }
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
-
-        Toast.makeText(this, getResources().getString(R.string.error_file_not_found),
-          Toast.LENGTH_LONG)
-          .show();
+        ContextExtensionsKt.toast(this, R.string.error_file_not_found, Toast.LENGTH_LONG);
         showHomePage();
       }
     } else {
