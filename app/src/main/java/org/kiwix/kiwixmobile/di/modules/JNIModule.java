@@ -19,10 +19,12 @@ package org.kiwix.kiwixmobile.di.modules;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixSearcher;
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -33,5 +35,16 @@ import org.kiwix.kiwixlib.JNIKiwix;
   @Singleton
   public JNIKiwix providesJNIKiwix(@NonNull Context context) {
     return new JNIKiwix(context);
+  }
+
+  @Provides
+  @Singleton
+  @Nullable
+  public JNIKiwixSearcher providesJNIKiwixSearcher() {
+    try {
+      return new JNIKiwixSearcher();
+    } catch (UnsatisfiedLinkError ignore) {
+      return null;
+    }
   }
 }

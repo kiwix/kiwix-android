@@ -18,8 +18,8 @@
 
 package org.kiwix.kiwixmobile.bookmark
 
-import org.kiwix.kiwixmobile.data.ZimContentProvider
 import org.kiwix.kiwixmobile.database.newdb.entities.BookmarkEntity
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
 
 data class BookmarkItem(
   val databaseId: Long = 0L,
@@ -40,17 +40,16 @@ data class BookmarkItem(
     entity.favicon
   )
 
-  companion object {
-    @JvmStatic fun fromZimContentProvider(
-      title: String,
-      url: String
-    ) = BookmarkItem(
-      zimId = ZimContentProvider.getId(),
-      zimName = ZimContentProvider.getName(),
-      zimFilePath = ZimContentProvider.getZimFile(),
-      bookmarkUrl = url,
-      bookmarkTitle = title,
-      favicon = ZimContentProvider.getFavicon()
-    )
-  }
+  constructor(
+    title: String,
+    url: String,
+    zimFileReader: ZimFileReader
+  ) : this(
+    zimId = zimFileReader.id,
+    zimName = zimFileReader.name,
+    zimFilePath = zimFileReader.zimFile.canonicalPath,
+    bookmarkUrl = url,
+    bookmarkTitle = title,
+    favicon = zimFileReader.favicon
+  )
 }

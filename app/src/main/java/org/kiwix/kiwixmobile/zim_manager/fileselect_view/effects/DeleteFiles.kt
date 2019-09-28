@@ -25,6 +25,7 @@ import org.kiwix.kiwixmobile.extensions.toast
 import org.kiwix.kiwixmobile.utils.DialogShower
 import org.kiwix.kiwixmobile.utils.KiwixDialog.DeleteZim
 import org.kiwix.kiwixmobile.utils.files.FileUtils
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
@@ -33,12 +34,16 @@ class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
 
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var newBookDao: NewBookDao
+  @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
   override fun invokeWith(activity: Activity) {
     activityComponent(activity).inject(this)
     booksOnDiskListItem.forEach {
       dialogShower.show(DeleteZim(it), {
         if (deleteSpecificZimFile(it)) {
+          if (it.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
+            zimReaderContainer.setZimFile(null)
+          }
           activity.toast(string.delete_specific_zim_toast)
         } else {
           activity.toast(string.delete_zim_failed)

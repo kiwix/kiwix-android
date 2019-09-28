@@ -35,10 +35,10 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
@@ -47,6 +47,8 @@ public class ErrorActivity extends BaseActivity {
 
   @Inject
   NewBookDao bookDao;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
 
   @BindView(R.id.reportButton)
   Button reportButton;
@@ -128,7 +130,7 @@ public class ErrorActivity extends BaseActivity {
         }
         String allZimFiles = sb.toString();
 
-        String currentZimFile = ZimContentProvider.getZimFile();
+        String currentZimFile = zimReaderContainer.getZimCanonicalPath();
         body += "Curent Zim File:\n" +
           currentZimFile +
           "\n\nAll Zim Files in DB:\n" +

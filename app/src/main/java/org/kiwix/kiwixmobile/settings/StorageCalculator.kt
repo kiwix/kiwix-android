@@ -18,11 +18,7 @@
 
 package org.kiwix.kiwixmobile.settings
 
-import android.annotation.SuppressLint
-import android.os.Build.VERSION_CODES
-import android.os.storage.StorageManager
 import eu.mhutti1.utils.storage.Bytes
-import org.kiwix.kiwixmobile.KiwixBuildConfig
 import java.io.File
 import javax.inject.Inject
 
@@ -43,7 +39,7 @@ import javax.inject.Inject
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-class StorageCalculator @Inject constructor(private val storageManager: StorageManager) {
+class StorageCalculator @Inject constructor() {
 
   fun calculateAvailableSpace(file: File): String =
     Bytes(availableBytes(file)).humanReadable
@@ -51,12 +47,9 @@ class StorageCalculator @Inject constructor(private val storageManager: StorageM
   fun calculateTotalSpace(file: File): String =
     Bytes(totalBytes(file)).humanReadable
 
-  @SuppressLint("NewApi")
   fun availableBytes(file: File) =
-    if (KiwixBuildConfig.SDK_INT >= VERSION_CODES.O)
-      storageManager.getAllocatableBytes(storageManager.getUuidForPath(file))
-    else
-      file.freeSpace
+    if (file.exists()) file.freeSpace
+    else 0L
 
-  private fun totalBytes(file: File) = file.totalSpace
+  private fun totalBytes(file: File) = if (file.exists()) file.totalSpace else 0L
 }

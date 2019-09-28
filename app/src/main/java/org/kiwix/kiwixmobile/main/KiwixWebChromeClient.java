@@ -17,14 +17,17 @@
  */
 package org.kiwix.kiwixmobile.main;
 
-import android.webkit.WebChromeClient;
+import android.view.ViewGroup;
 import android.webkit.WebView;
+import com.cprcrack.videowebview.VideoEnabledWebChromeClient;
 
-public class KiwixWebChromeClient extends WebChromeClient {
+public class KiwixWebChromeClient extends VideoEnabledWebChromeClient {
 
   private WebViewCallback callback;
 
-  public KiwixWebChromeClient(WebViewCallback callback) {
+  public KiwixWebChromeClient(WebViewCallback callback, ViewGroup nonVideoView,
+    ViewGroup videoView, KiwixWebView webView) {
+    super(nonVideoView, videoView, null, webView);
     this.callback = callback;
   }
 

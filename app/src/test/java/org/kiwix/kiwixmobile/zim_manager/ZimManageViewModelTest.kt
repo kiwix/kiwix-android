@@ -185,8 +185,8 @@ class ZimManageViewModelTest {
     @Test
     fun `books found on filesystem are filtered by books already in db`() {
       every { application.getString(any()) } returns ""
-      val expectedBook = bookOnDisk(book("1"), 1L)
-      val bookToRemove = bookOnDisk(book("2"), 1L)
+      val expectedBook = bookOnDisk(1L, book("1"))
+      val bookToRemove = bookOnDisk(1L, book("2"))
       testScheduler.triggerActions()
       viewModel.requestFileSystemCheck.onNext(Unit)
       testScheduler.triggerActions()

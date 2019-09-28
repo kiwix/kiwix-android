@@ -23,15 +23,22 @@
 ########################
 # Kiwix specific rules #
 ########################
+-dontobfuscate
+
+-keepclassmembers class com.cprcrack.videowebview.VideoEnabledWebView$JavascriptInterface { public *; }
 
 #keep everything in kiwixlib
 -keep class org.kiwix.kiwixlib.** { *; }
 
 ## SimpleXml
--dontwarn com.bea.xml.stream.**
--dontwarn org.simpleframework.xml.stream.**
--keep class org.simpleframework.xml.**{ *; }
--keepclassmembers,allowobfuscation class * {
-    @org.simpleframework.xml.* <fields>;
-    @org.simpleframework.xml.* <init>(...);
+
+-keep public class org.simpleframework.** { *; }
+-keep class org.simpleframework.xml.** { *; }
+-keep class org.simpleframework.xml.core.** { *; }
+-keep class org.simpleframework.xml.util.** { *; }
+
+-keepattributes ElementList, Root
+
+-keepclassmembers class * {
+    @org.simpleframework.xml.* *;
 }

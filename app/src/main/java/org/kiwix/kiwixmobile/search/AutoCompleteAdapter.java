@@ -31,14 +31,14 @@ import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
   @Inject JNIKiwix currentJNIReader;
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject ZimReaderContainer zimReaderContainer;
   private List<String> mData;
   private KiwixFilter mFilter;
   private Context context;
@@ -102,24 +102,24 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
           /* Fulltext search */
           if (sharedPreferenceUtil.getPrefFullTextSearch()) {
-            ZimContentProvider.jniSearcher.search(query, 200);
-            JNIKiwixSearcher.Result result = ZimContentProvider.jniSearcher.getNextResult();
+            zimReaderContainer.search(query, 200);
+            JNIKiwixSearcher.Result result = zimReaderContainer.getNextResult();
             while (result != null) {
               if (!result.getTitle().trim().isEmpty()) {
                 data.add(result.getTitle());
               }
-              result = ZimContentProvider.jniSearcher.getNextResult();
+              result = zimReaderContainer.getNextResult();
             }
           }
 
           /* Suggestion search if no fulltext results */
           if (data.size() == 0) {
-            ZimContentProvider.searchSuggestions(query, 200);
+            zimReaderContainer.searchSuggestions(query, 200);
             String suggestion;
             String suggestionUrl;
             List<String> alreadyAdded = new ArrayList<>();
-            while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
-              suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
+            while ((suggestion = zimReaderContainer.getNextSuggestion()) != null) {
+              suggestionUrl = zimReaderContainer.getPageUrlFromTitle(suggestion);
               if (!alreadyAdded.contains(suggestionUrl)) {
                 alreadyAdded.add(suggestionUrl);
                 data.add(suggestion);

@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.search;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 /**
  * Created by srv_twry on 14/2/18.
@@ -28,9 +29,12 @@ import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao;
 public class SearchPresenter extends BasePresenter<SearchViewCallback> {
 
   private final NewRecentSearchDao recentSearchDao;
+  private final ZimReaderContainer zimReaderContainer;
 
-  @Inject SearchPresenter(NewRecentSearchDao recentSearchDao) {
+  @Inject SearchPresenter(NewRecentSearchDao recentSearchDao,
+    ZimReaderContainer zimReaderContainer) {
     this.recentSearchDao = recentSearchDao;
+    this.zimReaderContainer = zimReaderContainer;
   }
 
   @Override
@@ -39,11 +43,11 @@ public class SearchPresenter extends BasePresenter<SearchViewCallback> {
   }
 
   void getRecentSearches() {
-    view.addRecentSearches(recentSearchDao.getRecentSearches());
+    view.addRecentSearches(recentSearchDao.getRecentSearches(zimReaderContainer.getId()));
   }
 
   void saveSearch(String title) {
-    recentSearchDao.saveSearch(title);
+    recentSearchDao.saveSearch(title, zimReaderContainer.getId());
   }
 
   void deleteSearchString(String search) {

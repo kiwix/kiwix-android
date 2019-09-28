@@ -41,9 +41,9 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
 
@@ -60,6 +60,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   Toolbar toolbar;
   @Inject
   HistoryContract.Presenter presenter;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   private boolean refreshAdapter = true;
@@ -243,7 +245,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     if (actionMode == null) {
       Intent intent = new Intent(this, MainActivity.class);
       intent.putExtra(EXTRA_CHOSE_X_URL, history.getHistoryUrl());
-      if (!history.getZimFilePath().equals(ZimContentProvider.getZimFile())) {
+      if (!history.getZimFilePath().equals(zimReaderContainer.getZimCanonicalPath())) {
         intent.setData(Uri.fromFile(new File(history.getZimFilePath())));
       }
       if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0)

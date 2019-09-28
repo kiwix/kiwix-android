@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter
 import org.kiwix.kiwixmobile.database.newdb.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
 import java.io.File
 import java.util.Locale
 
@@ -39,10 +40,10 @@ sealed class BooksOnDiskListItem {
   }
 
   data class BookOnDisk(
-    val databaseId: Long? = null,
+    val databaseId: Long = 0L,
     val book: Book,
     val file: File,
-    override val id: Long = databaseId ?: 0L
+    override val id: Long = databaseId
   ) : BooksOnDiskListItem() {
 
     val locale: Locale by lazy {
@@ -56,9 +57,13 @@ sealed class BooksOnDiskListItem {
     )
 
     constructor(fetchDownloadEntity: FetchDownloadEntity) : this(
-      0L,
-      fetchDownloadEntity.toBook(),
-      File(fetchDownloadEntity.file)
+      book = fetchDownloadEntity.toBook(),
+      file = File(fetchDownloadEntity.file)
+    )
+
+    constructor(file: File, zimFileReader: ZimFileReader) : this(
+      book = zimFileReader.toBook(),
+      file = file
     )
   }
 }

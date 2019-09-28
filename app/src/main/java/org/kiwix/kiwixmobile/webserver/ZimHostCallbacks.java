@@ -29,12 +29,6 @@ public interface ZimHostCallbacks {
 
   void onServerFailedToStart();
 
-  void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration);
-
-  void onHotspotFailedToStart();
-
-  void requestLocationAccess();
-
   void onIpAddressValid();
 
   void onIpAddressInvalid();

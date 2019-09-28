@@ -52,11 +52,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 /**
  * Created by @author Aditya-Sood (21/05/19) as a part of GSoC 2019
@@ -73,8 +74,6 @@ public class AddNoteDialog extends DialogFragment
   public static final String NOTES_DIRECTORY =
     Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
   public static final String TAG = "AddNoteDialog";
-
-  private SharedPreferenceUtil sharedPreferenceUtil;
 
   @BindView(R.id.add_note_toolbar)
   Toolbar toolbar;          // Displays options for the note dialog
@@ -96,23 +95,22 @@ public class AddNoteDialog extends DialogFragment
 
   private String zimNotesDirectory; // Stores path to directory for the currently open zim's notes
 
-  public AddNoteDialog(@NonNull SharedPreferenceUtil sharedPreferenceUtil) {
-    this.sharedPreferenceUtil = sharedPreferenceUtil;
-  }
+  @Inject SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject ZimReaderContainer zimReaderContainer;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    KiwixApplication.getApplicationComponent().inject(this);
     setStyle(DialogFragment.STYLE_NORMAL,
       sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night
         : R.style.AddNoteDialogStyle);
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
-    zimFileName = ZimContentProvider.getZimFile();
+    zimFileName = zimReaderContainer.getZimCanonicalPath();
 
     if (zimFileName != null) { // No zim file currently opened
-      zimFileTitle = ZimContentProvider.getZimFileTitle();
+      zimFileTitle = zimReaderContainer.getZimFileTitle();
       articleTitle = ((MainActivity) getActivity()).getCurrentWebView().getTitle();
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"

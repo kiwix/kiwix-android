@@ -20,25 +20,28 @@ package org.kiwix.kiwixmobile.database.newdb.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.query
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem
-import org.kiwix.kiwixmobile.data.ZimContentProvider
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.database.newdb.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.BookmarkEntity_
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader
 import javax.inject.Inject
 
 class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
-  fun getBookmarks(fromCurrentBook: Boolean) = box.query {
+  fun getBookmarks(
+    fromCurrentBook: Boolean,
+    zimFileReader: ZimFileReader?
+  ) = box.query {
     if (fromCurrentBook) {
-      equal(BookmarkEntity_.zimName, ZimContentProvider.getName() ?: "")
+      equal(BookmarkEntity_.zimName, zimFileReader?.name ?: "")
     }
     order(BookmarkEntity_.bookmarkTitle)
   }.find()
     .map(::BookmarkItem)
 
-  fun getCurrentZimBookmarksUrl() = box.query {
-    equal(BookmarkEntity_.zimId, ZimContentProvider.getId() ?: "")
+  fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {
+    equal(BookmarkEntity_.zimId, zimFileReader?.id ?: "")
       .or()
-      .equal(BookmarkEntity_.zimName, ZimContentProvider.getName() ?: "")
+      .equal(BookmarkEntity_.zimName, zimFileReader?.name ?: "")
     order(BookmarkEntity_.bookmarkTitle)
   }
     .property(BookmarkEntity_.bookmarkUrl)
@@ -64,6 +67,6 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
     bookmarks: MutableList<Bookmark>,
     bookDao: NewBookDao
   ) {
-    box.put(bookmarks.zip(bookmarks.map { bookDao.getFavIconAndZimFile(it) }).map(::BookmarkEntity))
+    box.put(bookmarks.zip(bookmarks.map(bookDao::getFavIconAndZimFile)).map(::BookmarkEntity))
   }
 }

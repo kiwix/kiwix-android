@@ -18,12 +18,10 @@
 
 package org.kiwix.kiwixmobile.utils
 
-import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 
 class BookUtilsTest {
-  private val container: LanguageContainer = mockk()
 
   // Test that the language returned for the given language code is correct
   @Test

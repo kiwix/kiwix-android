@@ -25,6 +25,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.storage_select_dialog.device_list
 import kotlinx.android.synthetic.main.storage_select_dialog.title
 import org.kiwix.kiwixmobile.KiwixApplication
@@ -56,12 +59,17 @@ class StorageSelectDialog : DialogFragment() {
     super.onViewCreated(view, savedInstanceState)
     KiwixApplication.getApplicationComponent().inject(this)
     title.text = aTitle
-    adapter = StorageSelectArrayAdapter(
-      activity!!,
-      StorageDeviceUtils.getWritableStorage(activity!!),
-      storageCalculator
-    )
-    device_list.adapter = adapter
+    Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(activity!!) }
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        {
+          adapter = StorageSelectArrayAdapter(activity!!, it, storageCalculator)
+          device_list.adapter = adapter
+        },
+        Throwable::printStackTrace
+      )
+
     device_list.onItemClickListener = OnItemClickListener { _, _, position, _ ->
       onSelectAction?.invoke(adapter!!.getItem(position)!!)
       dismiss()

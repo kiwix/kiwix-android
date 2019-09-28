@@ -43,7 +43,6 @@ import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -99,7 +98,6 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
@@ -111,7 +109,9 @@ import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
+import org.kiwix.kiwixmobile.zim_manager.ZimFileReader;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
@@ -205,11 +205,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   FloatingActionButton closeAllTabsButton;
   @BindView(R.id.snackbar_root)
   CoordinatorLayout snackbarRoot;
+  @BindView(R.id.fullscreen_video_container)
+  ViewGroup videoView;
 
   @Inject
   MainContract.Presenter presenter;
   @Inject
   StorageObserver storageObserver;
+  @Inject
+  ZimReaderContainer zimReaderContainer;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -250,6 +254,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private TextView tabSwitcherIcon;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
+  private boolean hasLocalBooks;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -397,7 +402,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
-    drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
   }
 
   //End of onCreate
@@ -586,6 +590,23 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     drawerLayout.openDrawer(GravityCompat.END);
   }
 
+  @Override public void onBackPressed() {
+    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+      selectTab(currentWebViewIndex);
+      hideTabSwitcher();
+    } else if (isFullscreenOpened) {
+      closeFullScreen();
+    } else if (compatCallback.mIsActive) {
+      compatCallback.finish();
+    } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawers();
+    } else if (getCurrentWebView().canGoBack()) {
+      getCurrentWebView().goBack();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
   private void checkForRateDialog() {
     isFirstRun = sharedPreferenceUtil.getPrefIsFirstRun();
     visitCounterPref = new RateAppCounter(this);
@@ -626,7 +647,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void goToSearch(boolean isVoice) {
-    final String zimFile = ZimContentProvider.getZimFile();
+    final String zimFile = zimReaderContainer.getZimCanonicalPath();
     saveTabStates();
     Intent i = new Intent(MainActivity.this, SearchActivity.class);
     i.putExtra(EXTRA_ZIM_FILE, zimFile);
@@ -656,7 +677,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void updateTitle() {
-    String zimFileTitle = ZimContentProvider.getZimFileTitle();
+    String zimFileTitle = zimReaderContainer.getZimFileTitle();
     if (zimFileTitle == null) {
       zimFileTitle = getString(R.string.app_name);
     }
@@ -708,7 +729,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           pauseTTSButton.setText(R.string.tts_pause);
           break;
       }
-    });
+    }, zimReaderContainer);
   }
 
   @OnClick(R.id.activity_main_button_pause_tts)
@@ -764,9 +785,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (!isHideToolbar) {
       webView =
         new ToolbarScrollingKiwixWebView(MainActivity.this, this, toolbarContainer, bottomToolbar,
-          attrs);
+          root, videoView, attrs);
     } else {
-      webView = new ToolbarStaticKiwixWebView(MainActivity.this, this, attrs);
+      webView =
+        new ToolbarStaticKiwixWebView(MainActivity.this, this, root, videoView, attrs);
     }
     webView.loadUrl(url);
     webView.loadPrefs();
@@ -774,7 +796,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private KiwixWebView newTab() {
-    return newTab(contentUrl(ZimContentProvider.getMainPage()));
+    return newTab(contentUrl(zimReaderContainer.getMainPage()));
   }
 
   private KiwixWebView newTab(String url) {
@@ -873,7 +895,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         return true;
 
       case R.id.menu_openfile:
-        manageZimFiles(1);
+        manageZimFiles(hasLocalBooks ? 0 : 1);
         break;
 
       case R.id.menu_settings:
@@ -885,12 +907,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           if (isBackToTopEnabled) {
             backToTopButton.hide();
           }
+          tts.readAloud(getCurrentWebView());
         } else if (TTSControls.getVisibility() == View.VISIBLE) {
           if (isBackToTopEnabled) {
             backToTopButton.show();
           }
+          tts.stop();
         }
-        tts.readAloud(getCurrentWebView());
         break;
 
       case R.id.menu_fullscreen:
@@ -935,7 +958,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
        *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
        **/
-      AddNoteDialog dialogFragment = new AddNoteDialog(sharedPreferenceUtil);
+      AddNoteDialog dialogFragment = new AddNoteDialog();
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG);
       // For DialogFragments, show() handles the fragment commit and display
     }
@@ -1065,25 +1088,19 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (file.canRead() || Build.VERSION.SDK_INT < 19 || (BuildConfig.IS_CUSTOM_APP
       && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
-        if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
-
-          if (clearHistory) {
-            requestClearHistoryAfterLoad = true;
-          }
-          if (menu != null) {
-            initAllMenuItems();
-          } else {
-            // Menu may not be initialized yet. In this case
-            // signal to menu create to show
-            requestInitAllMenuItems = true;
-          }
-          openMainPage();
-          presenter.loadCurrentZimBookmarksUrl();
-        } else {
-          Toast.makeText(this, getResources().getString(R.string.error_file_invalid),
-            Toast.LENGTH_LONG).show();
-          showHomePage();
+        zimReaderContainer.setZimFile(file);
+        if (clearHistory) {
+          requestClearHistoryAfterLoad = true;
         }
+        if (menu != null) {
+          initAllMenuItems();
+        } else {
+          // Menu may not be initialized yet. In this case
+          // signal to menu create to show
+          requestInitAllMenuItems = true;
+        }
+        openMainPage();
+        presenter.loadCurrentZimBookmarksUrl();
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
@@ -1165,7 +1182,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     storageObserver.getBooksOnFileSystem()
       .take(1)
       .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(presenter::saveBooks, Throwable::printStackTrace);
+      .subscribe(books -> {
+        presenter.saveBooks(books);
+        hasLocalBooks = !books.isEmpty();
+      }, Throwable::printStackTrace);
   }
 
   // Workaround for popup bottom menu on older devices
@@ -1201,7 +1221,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       MenuItem searchItem = menu.findItem(R.id.menu_search);
       searchItem.setVisible(true);
-      final String zimFile = ZimContentProvider.getZimFile();
+      final String zimFile = zimReaderContainer.getZimCanonicalPath();
       searchItem.setOnMenuItemClickListener(item -> {
         Intent i = new Intent(MainActivity.this, SearchActivity.class);
         i.putExtra(EXTRA_ZIM_FILE, zimFile);
@@ -1220,31 +1240,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-      switch (keyCode) {
-        case KeyEvent.KEYCODE_BACK:
-          if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
-            selectTab(currentWebViewIndex);
-            hideTabSwitcher();
-          } else if (getCurrentWebView().canGoBack()) {
-            getCurrentWebView().goBack();
-          } else if (isFullscreenOpened) {
-            closeFullScreen();
-          } else if (compatCallback.mIsActive) {
-            compatCallback.finish();
-          } else {
-            finish();
-          }
-          return true;
-        case KeyEvent.KEYCODE_MENU:
-          openOptionsMenu();
-          return true;
-      }
-    }
-    return false;
   }
 
   @OnClick(R.id.tab_switcher_close_all_tabs)
@@ -1272,9 +1267,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     String articleUrl = getCurrentWebView().getUrl();
     boolean isBookmark = false;
     if (articleUrl != null && !bookmarks.contains(articleUrl)) {
-      if (ZimContentProvider.getId() != null) {
+      final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
+      if (zimFileReader != null) {
         presenter.saveBookmark(
-          BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(), articleUrl));
+          new BookmarkItem(getCurrentWebView().getTitle(), articleUrl,
+            zimReaderContainer.getZimFileReader()));
       } else {
         Toast.makeText(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT).show();
       }
@@ -1316,6 +1313,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       recreate();
     }
     presenter.loadCurrentZimBookmarksUrl();
+    if (zimReaderContainer.getZimFile() == null &&
+      !HOME_URL.equals(getCurrentWebView().getUrl())) {
+      showHomePage();
+    }
     if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
       if (menu != null) {
         menu.getItem(4).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -1341,7 +1342,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       switch (intent.getAction()) {
         case Intent.ACTION_PROCESS_TEXT: {
-          final String zimFile = ZimContentProvider.getZimFile();
+          final String zimFile = zimReaderContainer.getZimCanonicalPath();
           saveTabStates();
           Intent i = new Intent(MainActivity.this, SearchActivity.class);
           i.putExtra(EXTRA_ZIM_FILE, zimFile);
@@ -1366,7 +1367,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           break;
         case Intent.ACTION_VIEW:
           if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
-            final String zimFile = ZimContentProvider.getZimFile();
+            final String zimFile = zimReaderContainer.getZimCanonicalPath();
             saveTabStates();
             Intent i = new Intent(MainActivity.this, SearchActivity.class);
             i.putExtra(EXTRA_ZIM_FILE, zimFile);
@@ -1411,11 +1412,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     boolean isWidgetVoiceSearch = intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false);
     boolean isWidgetStar = intent.getBooleanExtra(EXTRA_IS_WIDGET_STAR, false);
 
-    if (isWidgetStar && ZimContentProvider.getId() != null) {
+    if (isWidgetStar && zimReaderContainer.getId() != null) {
       goToBookmarks();
-    } else if (isWidgetSearch && ZimContentProvider.getId() != null) {
+    } else if (isWidgetSearch && zimReaderContainer.getId() != null) {
       goToSearch(false);
-    } else if (isWidgetVoiceSearch && ZimContentProvider.getId() != null) {
+    } else if (isWidgetVoiceSearch && zimReaderContainer.getId() != null) {
       goToSearch(true);
     } else if (isWidgetStar || isWidgetSearch || isWidgetVoiceSearch) {
       manageZimFiles(0);
@@ -1450,25 +1451,25 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @NotNull
   private String contentUrl(String articleUrl) {
-    return Uri.parse(ZimContentProvider.CONTENT_URI + articleUrl).toString();
+    return Uri.parse(ZimFileReader.CONTENT_URI + articleUrl).toString();
   }
 
   @NotNull
   private String redirectOrOriginal(String contentUrl) {
-    return ZimContentProvider.isRedirect(contentUrl)
-      ? ZimContentProvider.getRedirect(contentUrl)
+    return zimReaderContainer.isRedirect(contentUrl)
+      ? zimReaderContainer.getRedirect(contentUrl)
       : contentUrl;
   }
 
   private void openRandomArticle() {
-    String articleUrl = ZimContentProvider.getRandomArticleUrl();
+    String articleUrl = zimReaderContainer.getRandomArticleUrl();
     Log.d(TAG_KIWIX, "openRandomArticle: " + articleUrl);
     openArticle(articleUrl);
   }
 
   @OnClick(R.id.bottom_toolbar_home)
   public void openMainPage() {
-    String articleUrl = ZimContentProvider.getMainPage();
+    String articleUrl = zimReaderContainer.getMainPage();
     openArticle(articleUrl);
   }
 
@@ -1521,7 +1522,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (title.startsWith("A/")) {
       articleUrl = title;
     } else {
-      articleUrl = ZimContentProvider.getPageUrlFromTitle(title);
+      articleUrl = zimReaderContainer.getPageUrlFromTitle(title);
     }
     openArticle(articleUrl);
   }
@@ -1597,7 +1598,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
               if (url != null) {
                 zimFile.putExtra(EXTRA_CHOSE_X_URL, url);
               } else if (title != null) {
-                zimFile.putExtra(EXTRA_CHOSE_X_URL, ZimContentProvider.getPageUrlFromTitle(title));
+                zimFile.putExtra(EXTRA_CHOSE_X_URL, zimReaderContainer.getPageUrlFromTitle(title));
               }
               startActivity(zimFile);
               finish();
@@ -1607,7 +1608,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             if (url != null) {
               getCurrentWebView().loadUrl(url);
             } else if (title != null) {
-              getCurrentWebView().loadUrl(ZimContentProvider.getPageUrlFromTitle(title));
+              getCurrentWebView().loadUrl(zimReaderContainer.getPageUrlFromTitle(title));
             }
           }
         }
@@ -1659,32 +1660,29 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
     this.menu = menu;
 
-    if (getCurrentWebView().getUrl() == null ||
-      getCurrentWebView().getUrl().equals(HOME_URL)) {
-      menu.findItem(R.id.menu_read_aloud).setVisible(false);
-    } else {
-      menu.findItem(R.id.menu_read_aloud).setVisible(true);
-    }
-
-    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+    if (tabSwitcherRoot != null && tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       menu.findItem(R.id.menu_search).setVisible(false);
       menu.findItem(R.id.menu_fullscreen).setVisible(false);
       menu.findItem(R.id.menu_random_article).setVisible(false);
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
-      menu.findItem(R.id.menu_search).setVisible(true);
       menu.findItem(R.id.menu_fullscreen).setVisible(true);
-      if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals(HOME_URL)) {
+      if (urlIsHomeOrNull()) {
+        menu.findItem(R.id.menu_search).setVisible(false);
         menu.findItem(R.id.menu_read_aloud).setVisible(false);
         menu.findItem(R.id.menu_random_article).setVisible(false);
-        menu.findItem(R.id.menu_host_books).setVisible(true);
       } else {
+        menu.findItem(R.id.menu_search).setVisible(true);
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         menu.findItem(R.id.menu_random_article).setVisible(true);
       }
     }
     return true;
+  }
+
+  private boolean urlIsHomeOrNull() {
+    return getCurrentWebView().getUrl() == null ||
+      getCurrentWebView().getUrl().equals(HOME_URL);
   }
 
   private void updateTabSwitcherIcon() {
@@ -1700,7 +1698,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void refreshBookmarkSymbol() {
     if (checkNull(bottomToolbarBookmark)) {
       if (getCurrentWebView().getUrl() != null &&
-        ZimContentProvider.getId() != null &&
+        zimReaderContainer.getId() != null &&
         !getCurrentWebView().getUrl().equals(HOME_URL)) {
         int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp
           : R.drawable.ic_bookmark_border_24dp;
@@ -1759,7 +1757,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void selectSettings() {
-    final String zimFile = ZimContentProvider.getZimFile();
+    final String zimFile = zimReaderContainer.getZimCanonicalPath();
     Intent i = new Intent(this, KiwixSettingsActivity.class);
     // FIXME: I think line below is redundant - it's not used anywhere
     i.putExtra(EXTRA_ZIM_FILE_2, zimFile);
@@ -1778,7 +1776,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       positions.put(view.getScrollY());
     }
 
-    editor.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
+    editor.putString(TAG_CURRENT_FILE, zimReaderContainer.getZimCanonicalPath());
     editor.putString(TAG_CURRENT_ARTICLES, urls.toString());
     editor.putString(TAG_CURRENT_POSITIONS, positions.toString());
     editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex);
@@ -1923,7 +1921,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     super.onPause();
     saveTabStates();
     Log.d(TAG_KIWIX,
-      "onPause Save current zim file to preferences: " + ZimContentProvider.getZimFile());
+      "onPause Save current zim file to preferences: " + zimReaderContainer.getZimCanonicalPath());
   }
 
   @Override
@@ -1942,21 +1940,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     refreshBookmarkSymbol();
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
-    if (url != null && !url.equals(HOME_URL)) {
+    final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
+    if (url != null && !url.equals(HOME_URL) && zimFileReader != null) {
       final long timeStamp = System.currentTimeMillis();
       SimpleDateFormat sdf =
         new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
       HistoryListItem.HistoryItem history = new HistoryListItem.HistoryItem(
-        0L,
-        ZimContentProvider.getId(),
-        ZimContentProvider.getName(),
-        ZimContentProvider.getZimFile(),
-        ZimContentProvider.getFavicon(),
-        getCurrentWebView().getTitle(),
         getCurrentWebView().getUrl(),
+        getCurrentWebView().getTitle(),
         sdf.format(new Date(timeStamp)),
         timeStamp,
-        0L
+        zimFileReader
       );
       presenter.saveHistory(history);
     }
@@ -2013,13 +2007,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   public void webViewLongClick(final String url) {
     boolean handleEvent = false;
-    if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
+    if (url.startsWith(ZimFileReader.CONTENT_URI.toString())) {
       // This is my web site, so do not override; let my WebView load the page
       handleEvent = true;
     } else if (url.startsWith("file://")) {
       // To handle help page (loaded from resources)
       handleEvent = true;
-    } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+    } else if (url.startsWith(ZimFileReader.UI_URI.toString())) {
       handleEvent = true;
     }
 

@@ -36,45 +36,40 @@ package org.kiwix.kiwixmobile.settings
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import android.os.storage.StorageManager
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.KiwixBuildConfig
 import java.io.File
-import java.util.UUID
 
 internal class StorageCalculatorTest {
 
-  private val storageManager: StorageManager = mockk()
-  private val storageCalculator = StorageCalculator(storageManager)
+  private val storageCalculator = StorageCalculator()
   private val file: File = mockk()
 
-  init {
-    mockkObject(KiwixBuildConfig)
-  }
-
   @Test
-  fun calculateAvailableSpace() {
-    every { KiwixBuildConfig.SDK_INT } returns 25
+  fun `calculate available space with existing file`() {
     every { file.freeSpace } returns 1
+    every { file.exists() } returns true
     assertThat(storageCalculator.calculateAvailableSpace(file)).isEqualTo("1 Bytes")
   }
 
   @Test
-  fun calculateTotalSpace() {
+  fun `calculate total space of existing file`() {
     every { file.totalSpace } returns 1
+    every { file.exists() } returns true
     assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("1 Bytes")
   }
 
   @Test
-  fun availableBytes() {
-    val uuid: UUID = mockk()
-    every { KiwixBuildConfig.SDK_INT } returns 26
-    every { storageManager.getUuidForPath(file) } returns uuid
-    every { storageManager.getAllocatableBytes(uuid) } returns 1
-    assertThat(storageCalculator.availableBytes(file)).isEqualTo(1L)
+  fun `calculate total space of non existing file`() {
+    every { file.exists() } returns false
+    assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("0 Bytes")
+  }
+
+  @Test
+  fun `available bytes of non existing file`() {
+    every { file.exists() } returns false
+    assertThat(storageCalculator.availableBytes(file)).isEqualTo(0L)
   }
 }
