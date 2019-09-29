@@ -3,6 +3,14 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
+    android:icon="@drawable/ic_send"
+    android:title="@string/send_zim_file"
+    android:visible="true"
+    app:iconifiedByDefault="true"
+    app:showAsAction="always"/>
+
+
+  <item
     android:id="@+id/zim_file_delete_item"
     android:icon="@drawable/ic_delete_white_24dp"
     android:title="@string/delete"

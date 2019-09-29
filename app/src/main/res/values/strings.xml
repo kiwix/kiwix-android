@@ -294,7 +294,8 @@
   <string name="file_transfer_complete">File transfer complete</string>
   <string name="error_during_transfer">An error was encountered during transfer</string>
   <string name="error_transferring">Error transferring file %s</string>
-  <string name="get_content_from_nearby_device">Get content from nearby device</string>
+  <string name="get_zim_file">Get ZIM file from nearby device</string>
+  <string name="send_zim_file">Send ZIM file to nearby device</string>
   <string name="search_for_peers">Search For Peers</string>
   <string name="your_device">Your Device:</string>
   <string name="nearby_devices">NEARBY DEVICES</string>
