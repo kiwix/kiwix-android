@@ -210,19 +210,7 @@
     </activity>
     <activity
       android:name=".zim_manager.local_file_transfer.LocalFileTransferActivity"
-      android:label="Send to nearby device"
       android:screenOrientation="portrait">
-      <intent-filter>
-        <action android:name="android.intent.action.SEND_MULTIPLE" />
-        <category android:name="android.intent.category.DEFAULT" />
-
-        <data android:mimeType="application/octet-stream" />
-        <data android:pathPattern=".*\\.zim" />
-        <data android:pathPattern=".*\\..*\\.zim" />
-        <data android:pathPattern=".*\\..*\\..*\\.zim" />
-        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim" />
-        <data android:host="*" />
-      </intent-filter>
     </activity>
   </application>
 </manifest>
