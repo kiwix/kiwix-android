@@ -1,11 +1,4 @@
-import com.android.annotations.NonNull
 import com.android.build.OutputFile
-import com.android.builder.testing.api.TestServer
-import com.testdroid.api.APIClient
-import com.testdroid.api.APIKeyClient
-import com.testdroid.api.model.APIProject
-import com.testdroid.api.model.APIUser
-import groovy.json.JsonSlurper
 
 buildscript {
   repositories {
@@ -15,11 +8,11 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
-    classpath "org.apache.httpcomponents:httpclient-android:4.3.3"
-    classpath "com.testdroid:testdroid-api:2.71"
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    classpath "org.jlleitschuh.gradle:ktlint-gradle:8.2.0"
+    dependencies {
+      classpath Libs.com_android_tools_build_gradle
+      classpath Libs.kotlin_gradle_plugin
+      classpath Libs.ktlint_gradle
+    }
   }
 }
 
@@ -75,7 +68,6 @@ private Integer generateVersionCode() {
 
 android {
   compileSdkVersion 28
-  testServer new TestDroidUpload()
 
   defaultConfig {
     minSdkVersion 15
@@ -122,15 +114,6 @@ android {
         outputs.upToDateWhen { false }
         showStandardStreams = true
       }
-    }
-  }
-  sourceSets {
-    test {
-      java.srcDirs += "$projectDir/src/testShared"
-    }
-
-    androidTest {
-      java.srcDirs += "$projectDir/src/testShared"
     }
   }
 
@@ -191,8 +174,6 @@ android {
         versionName generateVersionName()
       }
     }
-
-
   }
 
   compileOptions {
@@ -248,77 +229,35 @@ ktlint {
   android = true
 }
 
-class TestDroidUpload extends TestServer {
-  def buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-  def API_KEY = System.getenv("PUBLIC_TESTDROID_API_KEY")
-  def TESTDROID_SERVER = "https://cloud.testdroid.com"
-  def RUNNER_GATEWAY = System.getenv("TESTDROID_RUNNER_GATEWAY")
-  def accessGroup = System.getenv("ACCESS_GROUP_ID")
-
-  @Override
-  String getName() {
-    return "kiwixtest"
-  }
-
-  @Override
-  void uploadApks(@NonNull String variantName, @NonNull File testApk, File testedApk) {
-    APIUser.metaClass.shareFile { id, accessGroup ->
-      System.out.println(id)
-      try {
-        delegate.postResource(createUri(selfURI, "/files/" + id + "/share"),
-          [accessGroupId: accessGroup], APIProject.class)
-      } catch (Exception e) {
-        System.out.println(e.getLocalizedMessage())
-      }
-    }
-
-    APIClient client = new APIKeyClient(TESTDROID_SERVER, API_KEY)
-    APIUser user = client.me()
-    String testId = user.uploadFile(testApk).getId()
-    user.shareFile(testId, accessGroup)
-    String testedId = user.uploadFile(testedApk).getId()
-    user.shareFile(testedId, accessGroup)
-
-    new URL(RUNNER_GATEWAY + "?apk=" + testedId + "&test=" + testId + "&buildno=" + buildNumber).
-      getText()
-  }
-
-  @Override
-  boolean isConfigured() {
-    return true
-  }
-}
-
 apply from: "${rootDir}/team-props/git-hooks.gradle"
-afterEvaluate {
-  tasks['preBuild'].dependsOn installGitHooks
-}
 
-dependencies {
-  implementation project(":core")
-  androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-  androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
-  androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
-  androidTestImplementation("com.schibsted.spain:barista:$baristaVersion") {
-    exclude group: "com.android.support.test.uiautomator"
+  dependencies {
+    implementation project(":core")
+    implementation(Libs.appcompat)
+    androidTestImplementation(Libs.espresso_core)
+    androidTestImplementation(Libs.espresso_web)
+    androidTestImplementation(Libs.espresso_intents)
+    androidTestImplementation(Libs.barista) {
+      exclude group: "com.android.support.test.uiautomator"
+    }
+    androidTestImplementation(Libs.espresso_contrib)
+    androidTestImplementation(Libs.androidx_annotation)
+    androidTestImplementation(Libs.junit)
+    androidTestImplementation(Libs.androidx_test_runner)
+    androidTestImplementation(Libs.androidx_test_rules)
+    androidTestImplementation(Libs.androidx_test_core)
+    androidTestImplementation(Libs.mockwebserver)
+    androidTestUtil(Libs.orchestrator)
+    androidTestImplementation(Libs.mockito_android)
+    androidTestCompileOnly(Libs.javax_annotation_api)
+    implementation(Libs.dagger)
+    kaptAndroidTest(Libs.dagger_compiler)
+    androidTestImplementation(Libs.mockk_android)
+    androidTestImplementation(Libs.uiautomator)
+    androidTestImplementation(Libs.assertj_core)
+    androidTestImplementation(Libs.simple_xml) {
+      exclude module: 'stax'
+      exclude module: 'stax-api'
+      exclude module: 'xpp3'
+    }
   }
-  androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
-  androidTestImplementation "androidx.annotation:annotation:$annotationVersion"
-  androidTestImplementation "androidx.test.ext:junit:1.1.1"
-  androidTestImplementation "androidx.test:runner:1.2.0"
-  androidTestImplementation "androidx.test:rules:1.2.0"
-  androidTestImplementation "androidx.test:core:1.2.0"
-  androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.6.0"
-  androidTestUtil 'androidx.test:orchestrator:1.1.0'
-  androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
-  androidTestCompileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
-  kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
-  androidTestImplementation "io.mockk:mockk-android:1.9"
-  androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-  androidTestImplementation "org.assertj:assertj-core:3.11.1"
-  androidTestImplementation("org.simpleframework:simple-xml:2.7.1") {
-    exclude module: 'stax'
-    exclude module: 'stax-api'
-    exclude module: 'xpp3'
-  }
-}

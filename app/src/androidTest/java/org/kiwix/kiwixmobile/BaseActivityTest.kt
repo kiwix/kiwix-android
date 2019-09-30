@@ -26,7 +26,9 @@ abstract class BaseActivityTest<T : Activity> {
     getInstrumentation().targetContext.applicationContext
   }
 
-  inline fun <reified T : Activity> activityTestRule(noinline beforeActivityAction: (() -> Unit)? = null) =
+  inline fun <reified T : Activity> activityTestRule(
+    noinline beforeActivityAction: (() -> Unit)? = null
+  ) =
     object : ActivityTestRule<T>(T::class.java) {
       override fun beforeActivityLaunched() {
         super.beforeActivityLaunched()

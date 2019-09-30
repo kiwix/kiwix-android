@@ -11,6 +11,9 @@ buildscript {
     // in the individual module build.gradle files
   }
 }
+plugins {
+  buildSrcVersions
+}
 
 ext {
   set("androidGradlePluginVersion", "3.5.0")

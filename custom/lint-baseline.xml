@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="5" by="lint 3.5.0" client="gradle" variant="all" version="3.5.0">
+
+    <issue
+        id="ObsoleteLintCustomCheck"
+        message="Lint found one or more custom checks that could not be loaded. The most likely reason for this is that it is using an older, incompatible or unsupported API in lint. Make sure these lint checks are updated to the new APIs. The issue registry class is com.lint.CustomIssueRegistry. The class loading issue is com/android/tools/lint/detector/api/Detector$JavaPsiScanner: ClassLoader.defineClass1(ClassLoader.java:-2)←ClassLoader.defineClass(ClassLoader.java:763)←ClassLoader.defineClass(ClassLoader.java:642)←UrlClassLoader._defineClass(UrlClassLoader.java:306)←UrlClassLoader.defineClass(UrlClassLoader.java:302)←UrlClassLoader._findClass(UrlClassLoader.java:271)←UrlClassLoader.findClass(UrlClassLoader.java:254)←ClassLoader.loadClass(ClassLoader.java:424)">
+        <location
+            file="..\..\..\.android\lint\customlint.jar"/>
+    </issue>
+
+    <issue
+        id="OldTargetApi"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details."
+        errorLine1="    targetSdkVersion 28"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle"
+            line="36"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `networkSecurityConfig` is only used in API level 24 and higher (current min is 15)"
+        errorLine1="    android:networkSecurityConfig=&quot;@xml/network_security_config&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\AndroidManifest.xml"
+            line="25"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ExportedContentProvider"
+        message="Exported content providers can provide access to potentially sensitive data"
+        errorLine1="    &lt;provider"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src\main\AndroidManifest.xml"
+            line="168"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="AllowBackup"
+        message="On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html"
+        errorLine1="  &lt;application"
+        errorLine2="   ~~~~~~~~~~~">
+        <location
+            file="src\main\AndroidManifest.xml"
+            line="19"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="UnpackedNativeCode"
+        message="Missing attribute android:extractNativeLibs=&quot;false&quot; on the `&lt;application>` tag."
+        errorLine1="  &lt;application"
+        errorLine2="  ^">
+        <location
+            file="src\main\AndroidManifest.xml"
+            line="19"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.drawable.ic_kiwix_widget` appears to be unused">
+        <location
+            file="src\customexample\res\drawable-hdpi\ic_kiwix_widget.png"/>
+        <location
+            file="src\customexample\res\drawable-mdpi\ic_kiwix_widget.png"/>
+        <location
+            file="src\customexample\res\drawable-xhdpi\ic_kiwix_widget.png"/>
+        <location
+            file="src\customexample\res\drawable-xxhdpi\ic_kiwix_widget.png"/>
+        <location
+            file="src\customexample\res\drawable-xxxhdpi\ic_kiwix_widget.png"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.drawable.kiwix_icon_with_title` appears to be unused">
+        <location
+            file="src\customexample\res\drawable\kiwix_icon_with_title.png"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.customapp_missing_content` appears to be unused"
+        errorLine1="  &lt;string name=&quot;customapp_missing_content&quot;>Ray Charles&lt;/string>"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\customexample\res\values\strings.xml"
+            line="3"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="IconDipSize"
+        message="The image `ic_kiwix_widget.png` varies significantly in its density-independent (dip) size across the various density versions: drawable-hdpi\\ic_kiwix_widget.png: 48x48 dp (72x72 px), drawable-mdpi\\ic_kiwix_widget.png: 72x72 dp (72x72 px), drawable-xhdpi\\ic_kiwix_widget.png: 48x48 dp (96x96 px), drawable-xxhdpi\\ic_kiwix_widget.png: 48x48 dp (144x144 px), drawable-xxxhdpi\\ic_kiwix_widget.png: 48x48 dp (192x192 px)">
+        <location
+            file="src\customexample\res\drawable-hdpi\ic_kiwix_widget.png"/>
+        <location
+            file="src\customexample\res\drawable-xhdpi\ic_kiwix_widget.png"/>
+        <location
+            file="src\customexample\res\drawable-xxxhdpi\ic_kiwix_widget.png"/>
+        <location
+            file="src\customexample\res\drawable-xxhdpi\ic_kiwix_widget.png"/>
+        <location
+            file="src\customexample\res\drawable-mdpi\ic_kiwix_widget.png"/>
+    </issue>
+
+    <issue
+        id="IconDipSize"
+        message="The image `kiwix_icon.png` varies significantly in its density-independent (dip) size across the various density versions: mipmap-hdpi\\kiwix_icon.png: 48x48 dp (72x72 px), mipmap-mdpi\\kiwix_icon.png: 72x72 dp (72x72 px), mipmap-xhdpi\\kiwix_icon.png: 48x48 dp (96x96 px), mipmap-xxhdpi\\kiwix_icon.png: 48x48 dp (144x144 px), mipmap-xxxhdpi\\kiwix_icon.png: 48x48 dp (192x192 px)">
+        <location
+            file="src\customexample\res\mipmap-xxhdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\mipmap-xhdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\mipmap-xxxhdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\mipmap-hdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\mipmap-mdpi\kiwix_icon.png"/>
+    </issue>
+
+    <issue
+        id="IconExpectedSize"
+        message="Incorrect icon size for `mipmap-mdpi\\kiwix_icon.png`: expected 48x48, but was 72x72">
+        <location
+            file="src\customexample\res\mipmap-mdpi\kiwix_icon.png"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/kiwix_icon_with_title.png` in densityless folder">
+        <location
+            file="src\customexample\res\drawable\kiwix_icon_with_title.png"/>
+    </issue>
+
+    <issue
+        id="IconDuplicates"
+        message="The following unrelated icon files have identical contents: ic_kiwix_widget.png, kiwix_icon.png">
+        <location
+            file="src\customexample\res\mipmap-hdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\drawable-hdpi\ic_kiwix_widget.png"/>
+    </issue>
+
+    <issue
+        id="IconDuplicates"
+        message="The following unrelated icon files have identical contents: ic_kiwix_widget.png, kiwix_icon.png">
+        <location
+            file="src\customexample\res\mipmap-mdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\drawable-mdpi\ic_kiwix_widget.png"/>
+    </issue>
+
+    <issue
+        id="IconDuplicates"
+        message="The following unrelated icon files have identical contents: ic_kiwix_widget.png, kiwix_icon.png">
+        <location
+            file="src\customexample\res\mipmap-xhdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\drawable-xhdpi\ic_kiwix_widget.png"/>
+    </issue>
+
+    <issue
+        id="IconDuplicates"
+        message="The following unrelated icon files have identical contents: ic_kiwix_widget.png, kiwix_icon.png">
+        <location
+            file="src\customexample\res\mipmap-xxhdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\drawable-xxhdpi\ic_kiwix_widget.png"/>
+    </issue>
+
+    <issue
+        id="IconDuplicates"
+        message="The following unrelated icon files have identical contents: ic_kiwix_widget.png, kiwix_icon.png">
+        <location
+            file="src\customexample\res\mipmap-xxxhdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\drawable-xxxhdpi\ic_kiwix_widget.png"/>
+    </issue>
+
+</issues>

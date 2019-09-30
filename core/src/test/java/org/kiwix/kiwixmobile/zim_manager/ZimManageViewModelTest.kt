@@ -48,7 +48,7 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.language
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.libraryNetworkEntity
-import org.kiwix.kiwixmobile.core.ResetSchedulers
+import org.kiwix.kiwixmobile.resetSchedulers
 import org.kiwix.kiwixmobile.setScheduler
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState

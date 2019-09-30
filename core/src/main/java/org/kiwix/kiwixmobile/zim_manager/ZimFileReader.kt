@@ -30,7 +30,6 @@ import org.kiwix.kiwixlib.JNIKiwixInt
 import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixlib.JNIKiwixString
 import org.kiwix.kiwixlib.Pair
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
@@ -220,7 +219,8 @@ class ZimFileReader(
     @JvmField
     val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
     @JvmField
-    val CONTENT_URI: Uri? = Uri.parse("content://${KiwixApplication.getInstance().packageName}.zim.base/")
+    val CONTENT_URI: Uri? =
+      Uri.parse("content://${KiwixApplication.getInstance().packageName}.zim.base/")
     private const val INVERT_IMAGES_VIDEO =
       "img, video { \n -webkit-filter: invert(1); \n filter: invert(1); \n} \n"
     private val VIDEO_REGEX = Regex("([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))\$)")

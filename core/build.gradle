@@ -6,13 +6,11 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
-    classpath "org.apache.httpcomponents:httpclient-android:4.3.3"
-    classpath "com.testdroid:testdroid-api:2.71"
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
-    classpath "org.jlleitschuh.gradle:ktlint-gradle:8.2.0"
-    classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.0'
+    classpath Libs.com_android_tools_build_gradle
+    classpath Libs.kotlin_gradle_plugin
+    classpath Libs.objectbox_gradle_plugin
+    classpath Libs.ktlint_gradle
+    classpath Libs.butterknife_gradle_plugin
   }
 }
 
@@ -66,6 +64,34 @@ android {
   androidExtensions {
     experimental = true
   }
+  lintOptions {
+    abortOnError true
+    checkAllWarnings true
+    warningsAsErrors true
+
+    ignore 'SyntheticAccessor',
+      //TODO stop ignoring below this
+      'MissingTranslation',
+      'CheckResult',
+      'LabelFor',
+      'DuplicateStrings',
+      'LogConditional'
+
+    warning 'UnknownNullness',
+      'SelectableText',
+      'IconDensities',
+      'SyntheticAccessor'
+    baseline file("lint-baseline.xml")
+  }
+  sourceSets {
+    test {
+      java.srcDirs += "$projectDir/src/testShared"
+    }
+
+    androidTest {
+      java.srcDirs += "$projectDir/src/testShared"
+    }
+  }
 }
 
 jacoco {
@@ -87,49 +113,49 @@ private boolean shouldUseLocalVersion() {
 dependencies {
 
   // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
-  implementation("com.jakewharton.threetenabp:threetenabp:1.1.1")
+  implementation(Libs.threetenabp)
 
   // Get kiwixlib online if it is not populated locally
   if (!shouldUseLocalVersion()) {
-    implementation 'org.kiwix.kiwixlib:kiwixlib:8.1.0'
+    implementation(Libs.kiwixlib)
   } else {
     implementation 'com.getkeepsafe.relinker:relinker:1.3.1'
     implementation fileTree(include: ['*.aar'], dir: 'libs')
   }
 
   // Android Support
-  implementation "androidx.appcompat:appcompat:$appCompatVersion"
-  implementation "com.google.android.material:material:$materialVersion"
-  implementation "androidx.cardview:cardview:$cardViewVersion"
-  implementation "androidx.multidex:multidex:$multidexVersion"
-  implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-  implementation "androidx.core:core-ktx:1.0.2"
-  implementation "androidx.fragment:fragment-ktx:1.0.0"
-  implementation "androidx.collection:collection-ktx:1.1.0"
+  implementation(Libs.appcompat)
+  implementation(Libs.material)
+  implementation(Libs.cardview)
+  implementation(Libs.androidx_multidex_multidex)
+  implementation(Libs.constraintlayout)
+  implementation(Libs.core_ktx)
+  implementation(Libs.fragment_ktx)
+  implementation(Libs.collection_ktx)
 
   // Tab indicator
-  implementation "com.pacioianu.david:ink-page-indicator:$inkPageIndicatorVersion"
+  implementation(Libs.ink_page_indicator)
 
   // Dagger
-  compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
+  compileOnly(Libs.javax_annotation_api)
 
-  implementation "com.google.dagger:dagger:$daggerVersion"
-  implementation "com.google.dagger:dagger-android:$daggerVersion"
-  kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-  kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+  implementation(Libs.dagger)
+  implementation(Libs.dagger_android)
+  kapt(Libs.dagger_compiler)
+  kapt(Libs.dagger_android_processor)
 
 
   // SquiDB
-  implementation 'com.yahoo.squidb:squidb:2.0.0'
-  implementation 'com.yahoo.squidb:squidb-annotations:2.0.0'
-  kapt 'com.yahoo.squidb:squidb-processor:2.0.0'
+  implementation(Libs.squidb)
+  implementation(Libs.squidb_annotations)
+  kapt(Libs.squidb_processor)
 
   // Square
-  implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-  implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
-  implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-  implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-  implementation("com.squareup.retrofit2:converter-simplexml:$retrofitVersion") {
+  implementation(Libs.okhttp)
+  implementation(Libs.logging_interceptor)
+  implementation(Libs.retrofit)
+  implementation(Libs.adapter_rxjava2)
+  implementation(Libs.converter_simplexml) {
     exclude group: "xpp3", module: "xpp3"
     exclude group: "stax", module: "stax-api"
     exclude group: "stax", module: "stax"
@@ -137,28 +163,27 @@ dependencies {
 
 
   // ButterKnife
-  implementation "com.jakewharton:butterknife:$butterKnifeVersion"
-  kapt "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
+  implementation(Libs.butterknife)
+  kapt(Libs.butterknife_compiler)
 
   // RxJava
-  implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-  implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+  implementation(Libs.rxandroid)
+  implementation(Libs.rxjava)
 
   // Leak canary
-  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+  debugImplementation(Libs.leakcanary_android)
 
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-  implementation "android.arch.lifecycle:extensions:1.1.1"
-  implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
-  implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
-  implementation 'com.google.android.gms:play-services-location:17.0.0'
+  implementation(Libs.kotlin_stdlib_jdk7)
+  implementation(Libs.android_arch_lifecycle_extensions)
+  implementation(Libs.objectbox_kotlin)
+  implementation(Libs.objectbox_rxjava)
 
-  implementation "androidx.tonyodev.fetch2:xfetch2:$fetchVersion"
-  implementation "androidx.tonyodev.fetch2okhttp:xfetch2okhttp:$fetchVersion"
+  implementation(Libs.xfetch2)
+  implementation(Libs.xfetch2okhttp)
 
-  testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
-  testImplementation "io.mockk:mockk:1.9"
-  testImplementation "org.assertj:assertj-core:3.11.1"
-  testImplementation 'com.jraska.livedata:testing-ktx:1.1.0'
-  testImplementation 'androidx.arch.core:core-testing:2.0.1'
+  testImplementation(Libs.junit_jupiter)
+  testImplementation(Libs.mockk)
+  testImplementation(Libs.assertj_core)
+  testImplementation(Libs.testing_ktx)
+  testImplementation(Libs.core_testing)
 }

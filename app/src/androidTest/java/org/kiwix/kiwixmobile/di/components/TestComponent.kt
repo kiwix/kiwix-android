@@ -33,7 +33,14 @@ import javax.inject.Singleton
  */
 
 @Singleton
-@Component(modules = [ApplicationModule::class, TestNetworkModule::class, JNIModule::class, DataModule::class])
+@Component(
+  modules = [
+    ApplicationModule::class,
+    TestNetworkModule::class,
+    JNIModule::class,
+    DataModule::class
+  ]
+)
 interface TestComponent : ApplicationComponent {
 
   @Component.Builder

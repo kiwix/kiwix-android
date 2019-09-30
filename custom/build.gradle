@@ -143,8 +143,29 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+
+  lintOptions {
+    abortOnError true
+    checkAllWarnings true
+    warningsAsErrors true
+
+    ignore 'SyntheticAccessor',
+      //TODO stop ignoring below this
+      'MissingTranslation',
+      'CheckResult',
+      'LabelFor',
+      'DuplicateStrings',
+      'LogConditional'
+
+    warning 'UnknownNullness',
+      'SelectableText',
+      'IconDensities',
+      'SyntheticAccessor'
+    baseline file("lint-baseline.xml")
+  }
 }
 
 dependencies {
   implementation project(':core')
+  implementation(Libs.appcompat)
 }

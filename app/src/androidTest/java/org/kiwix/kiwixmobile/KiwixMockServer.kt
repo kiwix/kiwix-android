@@ -45,7 +45,10 @@ class KiwixMockServer {
       override fun dispatch(request: RecordedRequest) =
         mapOfPathsToResponses[request.path]?.let(::successfulResponse)
           ?: forcedResponse?.let { return@let it }
-          ?: throw RuntimeException("No response mapped for ${request.path}\nmapped $mapOfPathsToResponses\nqueued $forcedResponse")
+          ?: throw RuntimeException(
+            "No response mapped for ${request.path}" +
+              "\nmapped $mapOfPathsToResponses\nqueued $forcedResponse"
+          )
     })
   }
 
@@ -67,5 +70,3 @@ class KiwixMockServer {
     "$it"
   }
 }
-
-
