@@ -41,15 +41,15 @@ object FileUtils {
     "${Environment.getExternalStorageDirectory()}${File.separator}Android" +
       "${File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
 
-  @JvmStatic fun getFileCacheDir(context: Context): File =
+  @JvmStatic fun getFileCacheDir(context: Context): File? =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
-      context.externalCacheDir!!
+      context.externalCacheDir
     } else {
       context.cacheDir
     }
 
   @JvmStatic @Synchronized fun deleteCachedFiles(context: Context) {
-    getFileCacheDir(context).deleteRecursively()
+    getFileCacheDir(context)?.deleteRecursively()
   }
 
   @JvmStatic @Synchronized fun deleteZimFile(path: String) {
