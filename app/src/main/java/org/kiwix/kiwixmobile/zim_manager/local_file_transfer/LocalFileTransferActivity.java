@@ -77,6 +77,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
   @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;
   @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
+  @BindView(R.id.text_view_files_for_transfer) TextView textBannerFilesForTransfer;
   @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
   private boolean isFileSender = false;    // Whether the device is the file sender or not
@@ -216,6 +217,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   private void displayFileTransferProgress(@NonNull ArrayList<FileItem> filesToSend) {
+    textBannerFilesForTransfer.setVisibility(View.VISIBLE);
     fileListAdapter = new FileListAdapter(filesToSend);
     filesRecyclerView.setAdapter(fileListAdapter);
     filesRecyclerView.setLayoutManager(new LinearLayoutManager(this));

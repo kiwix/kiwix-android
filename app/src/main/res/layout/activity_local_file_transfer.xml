@@ -143,6 +143,7 @@
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintBottom_toTopOf="@id/recycler_view_transfer_files"
+    android:visibility="invisible"
     />
 
   <androidx.recyclerview.widget.RecyclerView
