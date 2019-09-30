@@ -23,8 +23,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:titleTextColor="#FFFFFF"
-      app:title="@string/local_zim_sharing"
-      ></androidx.appcompat.widget.Toolbar>
+      app:title="@string/local_zim_sharing"/>
 
   </com.google.android.material.appbar.AppBarLayout>
 
@@ -68,18 +67,6 @@
     android:paddingBottom="5dp"
     />
 
-  <View
-    android:id="@+id/view_device_list_boundary"
-    android:layout_width="match_parent"
-    android:layout_height="2dp"
-    android:background="@color/accent"
-    app:layout_constraintTop_toBottomOf="@id/text_view_device_name"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    />
-
   <TextView
     android:id="@+id/text_view_available_device"
     android:layout_width="match_parent"
@@ -89,10 +76,11 @@
     android:textSize="16sp"
     app:fontFamily="monospace"
     android:background="@android:color/transparent"
-    app:layout_constraintTop_toBottomOf="@id/view_device_list_boundary"
+    android:layout_marginTop="5dp"
+    android:paddingTop="5dp"
+    app:layout_constraintTop_toBottomOf="@id/text_view_device_name"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    android:paddingTop="5dp"
     />
 
   <ListView
@@ -133,19 +121,12 @@
     android:visibility="gone"
     />
 
-  <View
-    android:id="@+id/view_file_list_boundary"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/accent"
-    android:layout_marginTop="200dp"
-    app:layout_constraintTop_toBottomOf="@id/text_view_available_device"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintBottom_toTopOf="@+id/text_view_files_for_transfer"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    />
+  <androidx.constraintlayout.widget.Barrier
+    android:id="@+id/barrier_nearby_devices"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:barrierDirection="bottom"
+    app:constraint_referenced_ids="text_view_available_device,list_peer_devices,text_view_empty_peer_list,progress_bar_searching_peers"/>
 
   <TextView
     android:id="@+id/text_view_files_for_transfer"
@@ -157,7 +138,8 @@
     android:background="@android:color/transparent"
     android:gravity="center"
     android:paddingTop="10dp"
-    app:layout_constraintTop_toBottomOf="@id/view_file_list_boundary"
+    android:layout_marginTop="50dp"
+    app:layout_constraintTop_toBottomOf="@id/barrier_nearby_devices"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintBottom_toTopOf="@id/recycler_view_transfer_files"
