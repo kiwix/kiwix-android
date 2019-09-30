@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
+import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
@@ -16,10 +17,10 @@ class StorageObserver @Inject constructor(
   private val zimReaderFactory: ZimFileReader.Factory
 ) {
 
-  val booksOnFileSystem
+  val booksOnFileSystem: Flowable<List<BookOnDisk>>
     get() = scanFiles()
       .withLatestFrom(downloadDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
-      .map { it.map(::convertToBookOnDisk) }
+      .map { it.mapNotNull(::convertToBookOnDisk) }
 
   private fun scanFiles() = fileSearch.scan().subscribeOn(Schedulers.io())
 
@@ -29,5 +30,6 @@ class StorageObserver @Inject constructor(
   private fun fileHasNoMatchingDownload(downloads: List<DownloadModel>, file: File) =
     downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
-  private fun convertToBookOnDisk(file: File) = BookOnDisk(file, zimReaderFactory.create(file))
+  private fun convertToBookOnDisk(file: File) =
+    zimReaderFactory.create(file)?.let { BookOnDisk(file, it) }
 }

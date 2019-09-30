@@ -41,15 +41,15 @@ object FileUtils {
     "${Environment.getExternalStorageDirectory()}${File.separator}Android" +
       "${File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
 
-  @JvmStatic fun getFileCacheDir(context: Context): File =
+  @JvmStatic fun getFileCacheDir(context: Context): File? =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
-      context.externalCacheDir!!
+      context.externalCacheDir
     } else {
       context.cacheDir
     }
 
   @JvmStatic @Synchronized fun deleteCachedFiles(context: Context) {
-    getFileCacheDir(context).deleteRecursively()
+    getFileCacheDir(context)?.deleteRecursively()
   }
 
   @JvmStatic @Synchronized fun deleteZimFile(path: String) {
@@ -195,12 +195,16 @@ object FileUtils {
     uri: Uri
   ): String? {
     val columnName = "_data"
-    return context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
-      ?.use {
-        if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
-          it[columnName]
-        } else null
-      }
+    return try {
+      context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
+        ?.use {
+          if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
+            it[columnName]
+          } else null
+        }
+    } catch (ignore: SecurityException) {
+      null
+    }
   }
 
   @JvmStatic fun readLocalesFromAssets(context: Context) =
