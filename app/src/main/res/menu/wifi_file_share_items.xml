@@ -6,8 +6,8 @@
 
   <item
     android:id="@+id/menu_item_search_devices"
-    android:title="@string/search_for_peers"
+    android:title="@string/refresh_search_for_peers"
     app:showAsAction="always"
-    android:icon="@drawable/action_search" />
+    android:icon="@drawable/fetch_notification_retry" />
 
 </menu>

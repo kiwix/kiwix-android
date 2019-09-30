@@ -296,7 +296,7 @@
   <string name="error_transferring">Error transferring file %s</string>
   <string name="get_zim_file">Get ZIM file from nearby device</string>
   <string name="send_zim_file">Send ZIM file to nearby device</string>
-  <string name="search_for_peers">Search For Peers</string>
+  <string name="refresh_search_for_peers">Refresh search for peers</string>
   <string name="your_device">Your Device:</string>
   <string name="nearby_devices">NEARBY DEVICES</string>
   <string name="no_devices_found">No devices detected. Tap on search button to try again.</string>
