@@ -1,13 +1,4 @@
-NEW: Androidx support
-NEW: In app error reporting
-NEW: Improved bookmarks
-NEW: Help screen
-NEW: Home page
-NEW: Zim history
-NEW: Introductory screen
-NEW: Improved language selection
-NEW: Add note to articles
-NEW: Tabs
-NEW: Share zim files to other Kiwix users
-NEW: Host zim files on your phone
-+ Bugfixes & Lots More
+BUGFIX: Some users language was causing a crash due to unstable ISO codes
+BUGFIX: Some unstable zim files were crashing when opened
+BUGFIX: Long titles were rendering off screen on home page
+BUGFIX: Issues when opening a file externally
