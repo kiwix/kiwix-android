@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.utils.files.FileUtils
 import java.text.Collator
 import java.util.Locale
+import java.util.MissingResourceException
 
 class LanguageUtils(private val context: Context) {
   private val localeLanguageCodes: List<String> = languageCodesFromAssets()
@@ -152,8 +153,14 @@ class LanguageUtils(private val context: Context) {
 
   companion object {
 
-    private var localeMap =
-      Locale.getAvailableLocales().associateBy { it.isO3Language.toUpperCase(Locale.ROOT) }
+    private var isO3LanguageToLocaleMap: Map<String, Locale> =
+      Locale.getAvailableLocales().associateBy {
+        try {
+          it.isO3Language.toUpperCase(Locale.ROOT)
+        } catch (ignore: MissingResourceException) {
+          it.language.toUpperCase(Locale.ROOT)
+        }
+      }
 
     private var fontExceptions = mapOf(
       "km" to "fonts/KhmerOS.ttf",
@@ -204,7 +211,7 @@ class LanguageUtils(private val context: Context) {
      */
     @JvmStatic
     fun iSO3ToLocale(iso3: String?): Locale? =
-      iso3?.let { localeMap[it.toUpperCase(Locale.ROOT)] }
+      iso3?.let { isO3LanguageToLocaleMap[it.toUpperCase(Locale.ROOT)] }
 
     @JvmStatic
     fun getCurrentLocale(context: Context) = context.locale

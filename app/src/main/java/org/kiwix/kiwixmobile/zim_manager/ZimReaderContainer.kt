@@ -26,7 +26,7 @@ import javax.inject.Singleton
 @Singleton
 class ZimReaderContainer @Inject constructor(
   private val zimFileReaderFactory: ZimFileReader.Factory,
-  private val jniKiwixSearcher: JNIKiwixSearcher
+  private val jniKiwixSearcher: JNIKiwixSearcher?
 ) {
   private val listOfAddedReaderIds = mutableListOf<String>()
   var zimFileReader: ZimFileReader? = null
@@ -34,7 +34,7 @@ class ZimReaderContainer @Inject constructor(
       field = value
       if (value != null && !listOfAddedReaderIds.contains(value.id)) {
         listOfAddedReaderIds.add(value.id)
-        jniKiwixSearcher.addKiwixReader(value.jniKiwixReader)
+        jniKiwixSearcher?.addKiwixReader(value.jniKiwixReader)
       }
     }
 
@@ -60,10 +60,10 @@ class ZimReaderContainer @Inject constructor(
 
   fun getRandomArticleUrl() = zimFileReader?.getRandomArticleUrl()
   fun search(query: String, count: Int) {
-    jniKiwixSearcher.search(query, count)
+    jniKiwixSearcher?.search(query, count)
   }
 
-  fun getNextResult() = jniKiwixSearcher.nextResult
+  fun getNextResult() = jniKiwixSearcher?.nextResult
   fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
   fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
 

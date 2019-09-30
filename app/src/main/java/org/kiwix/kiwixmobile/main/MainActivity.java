@@ -99,6 +99,7 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
@@ -1090,24 +1091,26 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
         zimReaderContainer.setZimFile(file);
-        if (clearHistory) {
-          requestClearHistoryAfterLoad = true;
-        }
-        if (menu != null) {
-          initAllMenuItems();
+        if (zimReaderContainer.getZimFileReader() != null) {
+          if (clearHistory) {
+            requestClearHistoryAfterLoad = true;
+          }
+          if (menu != null) {
+            initAllMenuItems();
+          } else {
+            // Menu may not be initialized yet. In this case
+            // signal to menu create to show
+            requestInitAllMenuItems = true;
+          }
+          openMainPage();
+          presenter.loadCurrentZimBookmarksUrl();
         } else {
-          // Menu may not be initialized yet. In this case
-          // signal to menu create to show
-          requestInitAllMenuItems = true;
+          ContextExtensionsKt.toast(this, R.string.error_file_invalid, Toast.LENGTH_LONG);
+          showHomePage();
         }
-        openMainPage();
-        presenter.loadCurrentZimBookmarksUrl();
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
-
-        Toast.makeText(this, getResources().getString(R.string.error_file_not_found),
-          Toast.LENGTH_LONG)
-          .show();
+        ContextExtensionsKt.toast(this, R.string.error_file_not_found, Toast.LENGTH_LONG);
         showHomePage();
       }
     } else {
@@ -1661,7 +1664,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
     this.menu = menu;
 
-    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+    if (tabSwitcherRoot != null && tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       menu.findItem(R.id.menu_search).setVisible(false);
       menu.findItem(R.id.menu_fullscreen).setVisible(false);
       menu.findItem(R.id.menu_random_article).setVisible(false);

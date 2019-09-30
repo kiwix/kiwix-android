@@ -17,10 +17,12 @@
  */
 package org.kiwix.kiwixmobile.utils.files
 
+import android.annotation.TargetApi
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION_CODES
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
@@ -39,15 +41,15 @@ object FileUtils {
     "${Environment.getExternalStorageDirectory()}${File.separator}Android" +
       "${File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
 
-  @JvmStatic fun getFileCacheDir(context: Context): File =
+  @JvmStatic fun getFileCacheDir(context: Context): File? =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
-      context.externalCacheDir!!
+      context.externalCacheDir
     } else {
       context.cacheDir
     }
 
   @JvmStatic @Synchronized fun deleteCachedFiles(context: Context) {
-    getFileCacheDir(context).deleteRecursively()
+    getFileCacheDir(context)?.deleteRecursively()
   }
 
   @JvmStatic @Synchronized fun deleteZimFile(path: String) {
@@ -146,12 +148,12 @@ object FileUtils {
   }
 
   @JvmStatic fun getLocalFilePathByUri(
-    ctx: Context,
+    context: Context,
     uri: Uri
   ): String? {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-      DocumentsContract.isDocumentUri(ctx, uri)
+      DocumentsContract.isDocumentUri(context, uri)
     ) {
       if ("com.android.externalstorage.documents" == uri.authority) {
         val documentId = DocumentsContract.getDocumentId(uri)
@@ -160,38 +162,49 @@ object FileUtils {
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
-      } else if ("com.android.providers.downloads.documents" == uri.authority
-      )
-        return contentQuery(
-          ctx,
-          ContentUris.withAppendedId(
-            Uri.parse("content://downloads/public_downloads"),
-            try {
-              DocumentsContract.getDocumentId(uri).toLong()
-            } catch (ignore: NumberFormatException) {
-              0L
-            }
-          )
-        )
+      } else if ("com.android.providers.downloads.documents" == uri.authority)
+        return try {
+          documentProviderContentQuery(context, uri)
+        } catch (ignore: IllegalArgumentException) {
+          null
+        }
     } else if ("content".equals(uri.scheme!!, ignoreCase = true)) {
-      return contentQuery(ctx, uri)
+      return contentQuery(context, uri)
     } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
       return uri.path
     }
     return null
   }
 
+  @TargetApi(VERSION_CODES.KITKAT)
+  private fun documentProviderContentQuery(context: Context, uri: Uri) =
+    contentQuery(
+      context,
+      ContentUris.withAppendedId(
+        Uri.parse("content://downloads/public_downloads"),
+        try {
+          DocumentsContract.getDocumentId(uri).toLong()
+        } catch (ignore: NumberFormatException) {
+          0L
+        }
+      )
+    )
+
   private fun contentQuery(
     context: Context,
     uri: Uri
   ): String? {
     val columnName = "_data"
-    return context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
-      ?.use {
-        if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
-          it[columnName]
-        } else null
-      }
+    return try {
+      context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
+        ?.use {
+          if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
+            it[columnName]
+          } else null
+        }
+    } catch (ignore: SecurityException) {
+      null
+    }
   }
 
   @JvmStatic fun readLocalesFromAssets(context: Context) =

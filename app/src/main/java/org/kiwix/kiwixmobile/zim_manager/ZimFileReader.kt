@@ -26,6 +26,7 @@ import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixlib.JNIKiwixException
 import org.kiwix.kiwixlib.JNIKiwixInt
 import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixlib.JNIKiwixString
@@ -51,11 +52,15 @@ class ZimFileReader(
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) {
   interface Factory {
-    fun create(file: File): ZimFileReader
+    fun create(file: File): ZimFileReader?
 
     class Impl @Inject constructor(val sharedPreferenceUtil: SharedPreferenceUtil) : Factory {
       override fun create(file: File) =
-        ZimFileReader(file, sharedPreferenceUtil = sharedPreferenceUtil)
+        try {
+          ZimFileReader(file, sharedPreferenceUtil = sharedPreferenceUtil)
+        } catch (ignore: JNIKiwixException) {
+          null
+        }
     }
   }
 
