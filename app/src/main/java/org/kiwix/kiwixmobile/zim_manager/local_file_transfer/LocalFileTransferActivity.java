@@ -128,6 +128,24 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     wifiDirectManager.startWifiDirectManager(filesForTransfer);
   }
 
+  void checkForPermissions() {
+    /* Permissions essential for this module */
+    if (!checkCoarseLocationAccessPermission()) {
+      return;
+    }
+
+    if (!checkExternalStorageWritePermission()) {
+      return;
+    }
+
+    searchForPeerDevices();
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    checkForPermissions();
+  }
+
   @OnItemClick(R.id.list_peer_devices)
   void onItemClick(int position) {
     WifiP2pDevice senderSelectedPeerDevice =
@@ -145,33 +163,28 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     if (item.getItemId() == R.id.menu_item_search_devices) {
 
-      /* Permissions essential for this module */
-      if (!checkCoarseLocationAccessPermission()) {
-        return true;
-      }
-
-      if (!checkExternalStorageWritePermission()) {
-        return true;
-      }
-
-      /* Initiate discovery */
-      if (!wifiDirectManager.isWifiP2pEnabled()) {
-        requestEnableWifiP2pServices();
-        return true;
-      }
-
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled()) {
-        requestEnableLocationServices();
-        return true;
-      }
-
-      showPeerDiscoveryProgressBar();
-      wifiDirectManager.discoverPeerDevices();
+      searchForPeerDevices();
 
       return true;
     } else {
       return super.onOptionsItemSelected(item);
     }
+  }
+
+  private void searchForPeerDevices() {
+    /* Initiate discovery */
+    if (!wifiDirectManager.isWifiP2pEnabled()) {
+      requestEnableWifiP2pServices();
+      return;
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled()) {
+      requestEnableLocationServices();
+      return;
+    }
+
+    showPeerDiscoveryProgressBar();
+    wifiDirectManager.discoverPeerDevices();
   }
 
   private void showPeerDiscoveryProgressBar() { // Setup UI for searching peers
@@ -247,6 +260,13 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
                 PERMISSION_REQUEST_CODE_COARSE_LOCATION);
               return Unit.INSTANCE;
             }
+          },
+          new Function0<Unit>() {
+            @Override public Unit invoke() {
+              showToast(LocalFileTransferActivity.this, R.string.permission_refused_location, Toast.LENGTH_LONG);
+              finish();
+              return Unit.INSTANCE;
+            }
           });
       } else {
         ActivityCompat.requestPermissions(this,
@@ -255,7 +275,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
       }
       return false;
     } else {
-      return true; // Control reaches here: Either permission granted at install time, or at the time of request
+      return true;
     }
   }
 
@@ -281,7 +301,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
       }
       return false;
     } else {
-      return true; // Control reaches here: Either permission granted at install time, or at the time of request
+      return true;
     }
   }
 
@@ -312,6 +332,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
           super.onRequestPermissionsResult(requestCode, permissions, grantResults);
           break;
         }
+      }
+    } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      if(requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION) {
+        searchForPeerDevices();
       }
     }
   }
