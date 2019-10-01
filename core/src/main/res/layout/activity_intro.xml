@@ -7,7 +7,7 @@
   tools:context=".intro.IntroActivity"
   >
 
-  <org.kiwix.kiwixmobile.intro.CustomViewPager
+  <org.kiwix.kiwixmobile.core.intro.CustomViewPager
     android:id="@+id/view_pager"
     android:layout_width="match_parent"
     android:layout_height="0dp"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.kiwix.kiwixmobile.main.KiwixWebView xmlns:android="http://schemas.android.com/apk/res/android"
+<org.kiwix.kiwixmobile.core.main.KiwixWebView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:scrollbarSize="15px"

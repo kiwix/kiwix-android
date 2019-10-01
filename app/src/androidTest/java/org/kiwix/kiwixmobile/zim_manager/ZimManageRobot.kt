@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.language.LanguageRobot
 import org.kiwix.kiwixmobile.language.language
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 
 fun zimManage(func: ZimManageRobot.() -> Unit) =
   ZimManageRobot().applyWithViewHierarchyPrinting(func)

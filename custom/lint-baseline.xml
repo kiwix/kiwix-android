@@ -9,6 +9,39 @@
     </issue>
 
     <issue
+        id="MissingRegistered"
+        message="Class referenced in the manifest, `org.kiwix.kiwixmobile.zim_manager.ZimManageActivity`, was not found in the project or the libraries"
+        errorLine1="    &lt;activity"
+        errorLine2="    ^">
+        <location
+            file="src\main\AndroidManifest.xml"
+            line="143"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MissingRegistered"
+        message="Class referenced in the manifest, `androidx.core.content.FileProvider`, was not found in the project or the libraries"
+        errorLine1="    &lt;provider"
+        errorLine2="    ^">
+        <location
+            file="src\main\AndroidManifest.xml"
+            line="193"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MissingRegistered"
+        message="Class referenced in the manifest, `org.kiwix.kiwixmobile.core.language.LanguageActivity`, was not found in the project or the libraries"
+        errorLine1="    &lt;activity android:name=&quot;.core.language.LanguageActivity&quot; />"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\AndroidManifest.xml"
+            line="204"
+            column="5"/>
+    </issue>
+
+    <issue
         id="OldTargetApi"
         message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details."
         errorLine1="    targetSdkVersion 28"

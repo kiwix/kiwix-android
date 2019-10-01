@@ -36,10 +36,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.core.KiwixApplication;
+import org.kiwix.kiwixmobile.core.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;
-import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.core.main.MainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 

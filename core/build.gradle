@@ -64,6 +64,19 @@ android {
   androidExtensions {
     experimental = true
   }
+
+  testOptions {
+    execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    unitTests.returnDefaultValues = true
+    unitTests.all {
+      useJUnitPlatform()
+      testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        outputs.upToDateWhen { false }
+        showStandardStreams = true
+      }
+    }
+  }
   lintOptions {
     abortOnError true
     checkAllWarnings true

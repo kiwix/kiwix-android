@@ -8,7 +8,7 @@
     android:shortcutShortLabel="@string/new_tab_shortcut_label">
     <intent
       android:action="NEW_TAB"
-      android:targetClass="org.kiwix.kiwixmobile.main.MainActivity"
+      android:targetClass="org.kiwix.kiwixmobile.core.main.MainActivity"
       android:targetPackage="org.kiwix.kiwixmobile" />
   </shortcut>
 

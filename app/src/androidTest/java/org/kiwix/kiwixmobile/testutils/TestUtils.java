@@ -40,7 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
 
 /**
  * Created by mhutti1 on 07/04/17.

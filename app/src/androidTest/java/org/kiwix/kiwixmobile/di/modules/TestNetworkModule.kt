@@ -19,8 +19,9 @@ package org.kiwix.kiwixmobile.di.modules
 
 import dagger.Module
 import okhttp3.OkHttpClient
-import org.kiwix.kiwixmobile.MOCK_BASE_URL
-import org.kiwix.kiwixmobile.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.MOCK_BASE_URL
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 
 /**
  * Created by mhutti1 on 14/04/17.

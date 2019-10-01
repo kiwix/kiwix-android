@@ -23,11 +23,6 @@ install:
   - pip install --user 'requests[security]'
   - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
 
-addons:
-  apt:
-    packages:
-      - lynx
-
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -57,23 +52,15 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew createKiwixDebugCoverageReport lintKiwixDebug jacocoTestKiwixDebugUnitTestReport assemble
+  - ./gradlew createDebugCoverageReport ktlintCheck lint jacocoTestReport assembleRelease
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - ./gradlew kiwixtestUploadKiwix
-
-after_failure:
-  - export REPORT_DIR=${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/
-  - export LOG_DIR=${REPORT_DIR}androidTests/connected/flavors/KIWIX/
-  - lynx -dump ${LOG_DIR}index.html
-  - lynx -dump ${REPORT_DIR}lint-results-kiwixDebug.html
-
 
 before_deploy:
   #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
   - export DATE=$(date +%Y-%m-%d)
-  - export OUTPUT_DIR=app/build/outputs/apk/kiwix
+  - export OUTPUT_DIR=app/build/outputs/apk
   - export UNIVERSAL_RELEASE_APK=$OUTPUT_DIR/release/*universal*.apk
   - export UNIVERSAL_DEBUG_APK=$OUTPUT_DIR/debug/*universal*.apk
   - export SSH_KEY=travisci_builder_id_key
@@ -96,7 +83,7 @@ deploy:
   #publish on play store
   - provider: script
     skip_cleanup: true
-    script: ./gradlew publishKiwixRelease
+    script: ./gradlew publishRelease
     on:
       tags: true
 

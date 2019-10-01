@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-
 import java.util.Map;
 
 /**

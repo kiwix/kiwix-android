@@ -3,6 +3,8 @@ import groovy.json.JsonSlurper
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'jacoco-android'
+apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 String[] archs = ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
 
@@ -164,7 +166,16 @@ android {
     baseline file("lint-baseline.xml")
   }
 }
+ktlint {
+  android = true
+}
+jacoco {
+  toolVersion = "0.8.3"
+}
 
+tasks.withType(Test) {
+  jacoco.includeNoLocationClasses = true
+}
 dependencies {
   implementation project(':core')
   implementation(Libs.appcompat)

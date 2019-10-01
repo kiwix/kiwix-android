@@ -37,7 +37,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.core.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
 import static androidx.test.espresso.Espresso.onData;

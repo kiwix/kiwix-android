@@ -17,7 +17,7 @@
 
 
   <application
-    android:name=".KiwixApplication"
+    android:name=".core.KiwixApplication"
     android:allowBackup="true"
     android:hardwareAccelerated="true"
     android:icon="@mipmap/kiwix_icon"
@@ -28,7 +28,7 @@
     android:theme="@style/AppTheme">
 
     <activity
-      android:name=".splash.SplashActivity"
+      android:name=".core.splash.SplashActivity"
       android:label="@string/app_name"
       android:theme="@style/AppTheme.Launcher">
       <intent-filter>
@@ -43,7 +43,7 @@
         android:resource="@xml/shortcuts" />
     </activity>
     <activity
-      android:name=".main.MainActivity"
+      android:name=".core.main.MainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
       android:label="@string/app_name"
       android:windowSoftInputMode="adjustPan">
@@ -160,17 +160,17 @@
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
     </activity>
-    <activity android:name=".settings.KiwixSettingsActivity" />
-    <activity android:name=".search.SearchActivity" />
-    <activity android:name=".bookmark.BookmarksActivity" />
-    <activity android:name=".webserver.ZimHostActivity" />
+    <activity android:name=".core.settings.KiwixSettingsActivity" />
+    <activity android:name=".core.search.SearchActivity" />
+    <activity android:name=".core.bookmark.BookmarksActivity" />
+    <activity android:name=".core.webserver.ZimHostActivity" />
 
     <provider
-      android:name=".data.ZimContentProvider"
+      android:name=".core.data.ZimContentProvider"
       android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 
-    <receiver android:name=".main.KiwixSearchWidget">
+    <receiver android:name=".core.main.KiwixSearchWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
@@ -184,10 +184,10 @@
         android:resource="@xml/kiwix_widget_provider_info" />
     </receiver>
 
-    <service android:name=".wifi_hotspot.HotspotService" />
+    <service android:name=".core.wifi_hotspot.HotspotService" />
 
     <activity
-      android:name=".error.ErrorActivity"
+      android:name=".core.error.ErrorActivity"
       android:process=":error_activity" />
 
     <provider
@@ -200,16 +200,16 @@
         android:resource="@xml/provider_paths" />
     </provider>
 
-    <activity android:name=".intro.IntroActivity" />
-    <activity android:name=".language.LanguageActivity" />
-    <activity android:name=".history.HistoryActivity" />
-    <activity android:name=".help.HelpActivity">
+    <activity android:name=".core.intro.IntroActivity" />
+    <activity android:name=".core.language.LanguageActivity" />
+    <activity android:name=".core.history.HistoryActivity" />
+    <activity android:name=".core.help.HelpActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
-        android:value="main.MainActivity" />
+        android:value=".core.main.MainActivity" />
     </activity>
     <activity
-      android:name=".zim_manager.local_file_transfer.LocalFileTransferActivity"
+      android:name=".core.zim_manager.local_file_transfer.LocalFileTransferActivity"
       android:label="Send to nearby device"
       android:screenOrientation="portrait">
       <intent-filter>

@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-      <org.kiwix.kiwixmobile.main.AnimatedProgressBar
+      <org.kiwix.kiwixmobile.core.main.AnimatedProgressBar
         android:id="@+id/activity_main_progress_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/progress_view_height"

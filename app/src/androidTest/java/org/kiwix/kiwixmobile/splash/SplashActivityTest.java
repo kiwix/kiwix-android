@@ -34,15 +34,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.intro.IntroActivity;
-import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.core.intro.IntroActivity;
+import org.kiwix.kiwixmobile.core.main.MainActivity;
+import org.kiwix.kiwixmobile.core.splash.SplashActivity;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
-import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
+import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

@@ -34,6 +34,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
 import static org.junit.Assert.assertArrayEquals;

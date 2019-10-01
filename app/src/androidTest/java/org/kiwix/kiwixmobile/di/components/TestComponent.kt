@@ -22,9 +22,10 @@ import dagger.BindsInstance
 import dagger.Component
 import org.kiwix.kiwixmobile.NetworkTest
 import org.kiwix.kiwixmobile.ZimTest
-import org.kiwix.kiwixmobile.data.DataModule
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule
-import org.kiwix.kiwixmobile.di.modules.JNIModule
+import org.kiwix.kiwixmobile.core.data.DataModule
+import org.kiwix.kiwixmobile.core.di.components.ApplicationComponent
+import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
+import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.di.modules.TestNetworkModule
 import javax.inject.Singleton
 

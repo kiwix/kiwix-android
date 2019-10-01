@@ -23,7 +23,8 @@ import com.yahoo.squidb.sql.Query;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
+import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase;
+import org.kiwix.kiwixmobile.core.data.local.dao.RecentSearchDao;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 

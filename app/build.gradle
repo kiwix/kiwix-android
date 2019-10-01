@@ -9,9 +9,7 @@ buildscript {
 
   dependencies {
     dependencies {
-      classpath Libs.com_android_tools_build_gradle
-      classpath Libs.kotlin_gradle_plugin
-      classpath Libs.ktlint_gradle
+
     }
   }
 }
@@ -27,13 +25,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco-android'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
-jacoco {
-  toolVersion = "0.8.3"
-}
 
-tasks.withType(Test) {
-  jacoco.includeNoLocationClasses = true
-}
 
 def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 
@@ -76,13 +68,22 @@ android {
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
     archivesBaseName = "$buildNumber"
+    // Set vanilla config
+    buildConfigField "boolean", "IS_CUSTOM_APP", "false"
+    buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
+    buildConfigField "String", "ZIM_FILE_NAME", "\"\""
+    buildConfigField "long", "ZIM_FILE_SIZE", "0"
+    buildConfigField "int", "CONTENT_VERSION_CODE", "0"
+    buildConfigField "String", "ENFORCED_LANG", "\"\""
+    resValue "string", "app_name", "Kiwix"
+    resValue "string", "app_search_string", "Search Kiwix"
+    versionCode generateVersionCode()
+    versionName generateVersionName()
   }
 
   aaptOptions {
     cruncherEnabled true
   }
-
-  testBuildType "debug"
 
   lintOptions {
     abortOnError true
@@ -117,8 +118,6 @@ android {
     }
   }
 
-  flavorDimensions "default"
-
   signingConfigs {
     release {
       storeFile file("../kiwix-android.keystore")
@@ -146,33 +145,6 @@ android {
       signingConfig signingConfigs.release
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "true"
-    }
-  }
-
-  productFlavors {
-    // Vanilla Kiwix app
-    kiwix {
-      println "Configuring Kiwix"
-      // Set vanilla config
-      buildConfigField "boolean", "IS_CUSTOM_APP", "false"
-      buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
-      buildConfigField "String", "ZIM_FILE_NAME", "\"\""
-      buildConfigField "long", "ZIM_FILE_SIZE", "0"
-      buildConfigField "int", "CONTENT_VERSION_CODE", "0"
-      buildConfigField "String", "ENFORCED_LANG", "\"\""
-      resValue "string", "app_name", "Kiwix"
-      resValue "string", "app_search_string", "Search Kiwix"
-      if (project.hasProperty("version_code")) {
-        def version_code = project.property("version_code")
-        versionCode version_code.toInteger()
-      } else {
-        versionCode generateVersionCode()
-      }
-      if (project.hasProperty("version_name")) {
-        versionName project.property("version_name")
-      } else {
-        versionName generateVersionName()
-      }
     }
   }
 
@@ -229,35 +201,43 @@ ktlint {
   android = true
 }
 
+jacoco {
+  toolVersion = "0.8.3"
+}
+
+tasks.withType(Test) {
+  jacoco.includeNoLocationClasses = true
+}
+
 apply from: "${rootDir}/team-props/git-hooks.gradle"
 
-  dependencies {
-    implementation project(":core")
-    implementation(Libs.appcompat)
-    androidTestImplementation(Libs.espresso_core)
-    androidTestImplementation(Libs.espresso_web)
-    androidTestImplementation(Libs.espresso_intents)
-    androidTestImplementation(Libs.barista) {
-      exclude group: "com.android.support.test.uiautomator"
-    }
-    androidTestImplementation(Libs.espresso_contrib)
-    androidTestImplementation(Libs.androidx_annotation)
-    androidTestImplementation(Libs.junit)
-    androidTestImplementation(Libs.androidx_test_runner)
-    androidTestImplementation(Libs.androidx_test_rules)
-    androidTestImplementation(Libs.androidx_test_core)
-    androidTestImplementation(Libs.mockwebserver)
-    androidTestUtil(Libs.orchestrator)
-    androidTestImplementation(Libs.mockito_android)
-    androidTestCompileOnly(Libs.javax_annotation_api)
-    implementation(Libs.dagger)
-    kaptAndroidTest(Libs.dagger_compiler)
-    androidTestImplementation(Libs.mockk_android)
-    androidTestImplementation(Libs.uiautomator)
-    androidTestImplementation(Libs.assertj_core)
-    androidTestImplementation(Libs.simple_xml) {
-      exclude module: 'stax'
-      exclude module: 'stax-api'
-      exclude module: 'xpp3'
-    }
+dependencies {
+  implementation project(":core")
+  implementation(Libs.appcompat)
+  androidTestImplementation(Libs.espresso_core)
+  androidTestImplementation(Libs.espresso_web)
+  androidTestImplementation(Libs.espresso_intents)
+  androidTestImplementation(Libs.barista) {
+    exclude group: "com.android.support.test.uiautomator"
   }
+  androidTestImplementation(Libs.espresso_contrib)
+  androidTestImplementation(Libs.androidx_annotation)
+  androidTestImplementation(Libs.junit)
+  androidTestImplementation(Libs.androidx_test_runner)
+  androidTestImplementation(Libs.androidx_test_rules)
+  androidTestImplementation(Libs.androidx_test_core)
+  androidTestImplementation(Libs.mockwebserver)
+  androidTestUtil(Libs.orchestrator)
+  androidTestImplementation(Libs.mockito_android)
+  androidTestCompileOnly(Libs.javax_annotation_api)
+  implementation(Libs.dagger)
+  kaptAndroidTest(Libs.dagger_compiler)
+  androidTestImplementation(Libs.mockk_android)
+  androidTestImplementation(Libs.uiautomator)
+  androidTestImplementation(Libs.assertj_core)
+  androidTestImplementation(Libs.simple_xml) {
+    exclude module: 'stax'
+    exclude module: 'stax-api'
+    exclude module: 'xpp3'
+  }
+}

@@ -26,13 +26,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
+import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase;
+import org.kiwix.kiwixmobile.core.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertEquals;
-import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import static org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
