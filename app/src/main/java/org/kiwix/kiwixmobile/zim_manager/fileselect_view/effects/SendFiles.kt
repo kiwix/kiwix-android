@@ -14,7 +14,18 @@ class SendFiles(private val selectedBooks: List<BookOnDisk>) : SideEffect<Unit> 
     val selectedFileShareIntent =
       Intent(activity, LocalFileTransferActivity::class.java)
 
-    val selectedFileContentURIs = selectedBooks.mapNotNull {
+    val selectedFileContentURIs = selectedBooks.getSelectedFileUris(activity)
+
+    selectedFileShareIntent.putParcelableArrayListExtra(
+      LocalFileTransferActivity.FILE_URIS,
+      ArrayList(selectedFileContentURIs)
+    )
+
+    activity.startActivity(selectedFileShareIntent)
+  }
+
+  private fun List<BookOnDisk>.getSelectedFileUris(activity: Activity): List<Uri> {
+    return mapNotNull {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         FileProvider.getUriForFile(
           activity,
@@ -25,11 +36,5 @@ class SendFiles(private val selectedBooks: List<BookOnDisk>) : SideEffect<Unit> 
         Uri.fromFile(it.file)
       }
     }
-    selectedFileShareIntent.putParcelableArrayListExtra(
-      LocalFileTransferActivity.FILE_URIS,
-      ArrayList(selectedFileContentURIs)
-    )
-
-    activity.startActivity(selectedFileShareIntent)
   }
 }
