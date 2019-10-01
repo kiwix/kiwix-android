@@ -29,7 +29,7 @@ def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 ext {
   versionMajor = 3
   versionMinor = 0
-  versionPatch = 3
+  versionPatch = 4
 }
 
 private String generateVersionName() {
@@ -260,5 +260,4 @@ dependencies {
   // RxJava
   implementation(Libs.rxandroid)
   implementation(Libs.rxjava)
-
 }
