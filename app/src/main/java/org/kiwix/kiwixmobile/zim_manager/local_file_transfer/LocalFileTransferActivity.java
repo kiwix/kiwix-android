@@ -63,6 +63,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   // Not a typo, 'Log' tags have a length upper limit of 25 characters
   public static final String TAG = "LocalFileTransferActvty";
+  public static final String FILE_URIS = "FileUris";
   public static final int REQUEST_ENABLE_LOCATION_SERVICES = 1;
   private static final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
   private static final int PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 2;
@@ -108,7 +109,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
      * */
     Intent filesIntent = getIntent();
     ArrayList<Uri> fileUriArrayList;
-    fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+    fileUriArrayList = filesIntent.getParcelableArrayListExtra(FILE_URIS);
     isFileSender = (fileUriArrayList != null && fileUriArrayList.size() > 0);
 
     setSupportActionBar(actionBar);
@@ -129,7 +130,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     wifiDirectManager.startWifiDirectManager(filesForTransfer);
   }
 
-  void checkForPermissions() {
+  public void checkForPermissions() {
     /* Permissions essential for this module */
     if (!checkCoarseLocationAccessPermission()) {
       return;

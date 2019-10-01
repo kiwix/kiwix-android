@@ -12,10 +12,10 @@ import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferAc
 class SendFiles(private val selectedBooks: List<BookOnDisk>) : SideEffect<Unit> {
   override fun invokeWith(activity: Activity) {
     val selectedFileShareIntent =
-      Intent(activity.applicationContext, LocalFileTransferActivity::class.java)
+      Intent(activity, LocalFileTransferActivity::class.java)
 
     val selectedFileContentURIs = selectedBooks.mapNotNull {
-      if (Build.VERSION.SDK_INT >= 24) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         FileProvider.getUriForFile(
           activity,
           BuildConfig.APPLICATION_ID + ".fileprovider",
@@ -26,10 +26,9 @@ class SendFiles(private val selectedBooks: List<BookOnDisk>) : SideEffect<Unit> 
       }
     }
     selectedFileShareIntent.putParcelableArrayListExtra(
-      Intent.EXTRA_STREAM,
+      LocalFileTransferActivity.FILE_URIS,
       ArrayList(selectedFileContentURIs)
     )
-    selectedFileShareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
 
     activity.startActivity(selectedFileShareIntent)
   }
