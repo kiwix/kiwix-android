@@ -32,7 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.core.zim_manager.ZimManageActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;

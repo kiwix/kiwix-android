@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.core.data.local.dao.BookDao;
-import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.core.data.local.entity.BookDatabaseEntity;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 

@@ -9,7 +9,8 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.di.components.DaggerTestComponent
+import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
+import org.kiwix.kiwixmobile.core.di.components.TestComponent
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest<T : Activity> {
@@ -36,7 +37,7 @@ abstract class BaseActivityTest<T : Activity> {
       }
     }
 
-  protected fun testComponent() = DaggerTestComponent.builder()
+  protected fun testComponent(): TestComponent = DaggerTestComponent.builder()
     .context(context)
     .build()
 }

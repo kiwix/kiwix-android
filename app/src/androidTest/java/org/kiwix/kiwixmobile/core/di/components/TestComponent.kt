@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.di.components
+package org.kiwix.kiwixmobile.core.di.components
 
 import android.content.Context
 import dagger.BindsInstance
@@ -23,10 +23,9 @@ import dagger.Component
 import org.kiwix.kiwixmobile.NetworkTest
 import org.kiwix.kiwixmobile.ZimTest
 import org.kiwix.kiwixmobile.core.data.DataModule
-import org.kiwix.kiwixmobile.core.di.components.ApplicationComponent
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
-import org.kiwix.kiwixmobile.di.modules.TestNetworkModule
+import org.kiwix.kiwixmobile.core.di.modules.TestNetworkModule
 import javax.inject.Singleton
 
 /**

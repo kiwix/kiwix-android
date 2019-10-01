@@ -193,7 +193,8 @@ class NetworkUtilsTest {
     every { (context.getString(R.string.zim_no_vid)) } returns "No Videos"
     every { (context.getString(R.string.zim_simple)) } returns "Simple"
 
-    assertEquals("URL Parsing on empty string", "",
+    assertEquals(
+      "URL Parsing on empty string", "",
       NetworkUtils.parseURL(context, "")
     )
 

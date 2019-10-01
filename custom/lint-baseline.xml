@@ -10,7 +10,7 @@
 
     <issue
         id="MissingRegistered"
-        message="Class referenced in the manifest, `org.kiwix.kiwixmobile.zim_manager.ZimManageActivity`, was not found in the project or the libraries"
+        message="Class referenced in the manifest, `org.kiwix.kiwixmobile.core.zim_manager.ZimManageActivity`, was not found in the project or the libraries"
         errorLine1="    &lt;activity"
         errorLine2="    ^">
         <location
@@ -48,7 +48,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~">
         <location
             file="build.gradle"
-            line="36"
+            line="38"
             column="5"/>
     </issue>
 

@@ -9,7 +9,6 @@ buildscript {
 
   dependencies {
     dependencies {
-
     }
   }
 }
@@ -24,8 +23,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco-android'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
-
-
 
 def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 
@@ -148,6 +145,15 @@ android {
     }
   }
 
+  sourceSets {
+    test {
+      java.srcDirs += "$rootDir/core/src/testShared"
+    }
+
+    androidTest {
+      java.srcDirs += "$rootDir/core/src/testShared"
+    }
+  }
   compileOptions {
     encoding = "UTF-8"
     sourceCompatibility JavaVersion.VERSION_1_8
@@ -232,6 +238,9 @@ dependencies {
   androidTestCompileOnly(Libs.javax_annotation_api)
   implementation(Libs.dagger)
   kaptAndroidTest(Libs.dagger_compiler)
+  implementation(Libs.dagger_android)
+  kapt(Libs.dagger_compiler)
+  kapt(Libs.dagger_android_processor)
   androidTestImplementation(Libs.mockk_android)
   androidTestImplementation(Libs.uiautomator)
   androidTestImplementation(Libs.assertj_core)
@@ -240,4 +249,16 @@ dependencies {
     exclude module: 'stax-api'
     exclude module: 'xpp3'
   }
+
+  implementation(Libs.squidb)
+  implementation(Libs.squidb_annotations)
+  kapt(Libs.squidb_processor)
+
+  implementation(Libs.xfetch2)
+  implementation(Libs.xfetch2okhttp)
+
+  // RxJava
+  implementation(Libs.rxandroid)
+  implementation(Libs.rxjava)
+
 }

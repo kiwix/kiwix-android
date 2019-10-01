@@ -141,7 +141,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".zim_manager.ZimManageActivity"
+      android:name=".core.zim_manager.ZimManageActivity"
       android:label="@string/choose_file"
       android:launchMode="singleTop">
       <!-- TODO -->

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.di.modules;
+package org.kiwix.kiwixmobile.core.di.modules;
 
 import dagger.Module;
 import dagger.Provides;

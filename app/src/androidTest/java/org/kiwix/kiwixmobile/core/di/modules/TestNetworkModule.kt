@@ -15,13 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.di.modules
+package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Module
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.MOCK_BASE_URL
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 
 /**
  * Created by mhutti1 on 14/04/17.
