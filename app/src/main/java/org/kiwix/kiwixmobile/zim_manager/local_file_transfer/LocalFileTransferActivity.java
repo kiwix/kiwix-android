@@ -130,7 +130,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     wifiDirectManager.startWifiDirectManager(filesForTransfer);
   }
 
-  public void checkForPermissions() {
+  private void checkForPermissions() {
     /* Permissions essential for this module */
     if (!checkCoarseLocationAccessPermission()) {
       return;
