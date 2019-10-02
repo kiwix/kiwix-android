@@ -19,20 +19,12 @@ plugins {
   id("com.github.triplet.play") version("2.4.1")
 }
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+apply plugin: KiwixConfigurationPlugin
 apply plugin: 'io.objectbox'
-apply plugin: 'jacoco-android'
-apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-  compileSdkVersion 28
-
   defaultConfig {
-    minSdkVersion 15
-    targetSdkVersion 28
     versionCode 1
     versionName "1.0"
 
@@ -56,45 +48,9 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
-  compileOptions {
-    encoding = "UTF-8"
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-  androidExtensions {
-    experimental = true
-  }
 
   testOptions {
     execution 'ANDROIDX_TEST_ORCHESTRATOR'
-    unitTests.returnDefaultValues = true
-    unitTests.all {
-      useJUnitPlatform()
-      testLogging {
-        events "passed", "skipped", "failed", "standardOut", "standardError"
-        outputs.upToDateWhen { false }
-        showStandardStreams = true
-      }
-    }
-  }
-  lintOptions {
-    abortOnError true
-    checkAllWarnings true
-    warningsAsErrors true
-
-    ignore 'SyntheticAccessor',
-      //TODO stop ignoring below this
-      'MissingTranslation',
-      'CheckResult',
-      'LabelFor',
-      'DuplicateStrings',
-      'LogConditional'
-
-    warning 'UnknownNullness',
-      'SelectableText',
-      'IconDensities',
-      'SyntheticAccessor'
-    baseline file("lint-baseline.xml")
   }
   sourceSets {
     test {
@@ -105,18 +61,6 @@ android {
       java.srcDirs += "$projectDir/src/testShared"
     }
   }
-}
-
-jacoco {
-  toolVersion = "0.8.3"
-}
-
-tasks.withType(Test) {
-  jacoco.includeNoLocationClasses = true
-}
-
-ktlint {
-  android = true
 }
 
 private boolean shouldUseLocalVersion() {

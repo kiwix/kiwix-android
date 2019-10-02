@@ -1,10 +1,7 @@
 import groovy.json.JsonSlurper
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'jacoco-android'
-apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: KiwixConfigurationPlugin
 
 String[] archs = ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
 
@@ -30,12 +27,9 @@ if (custom.listFiles()) {
   }
 }
 android {
-  compileSdkVersion 28
 
   defaultConfig {
     applicationId "org.kiwix.kiwixmobile.custom"
-    minSdkVersion 15
-    targetSdkVersion 28
     versionCode 1
     versionName "1.0"
     multiDexEnabled true
@@ -139,43 +133,8 @@ android {
       }
     }
   }
-
-  compileOptions {
-    encoding = "UTF-8"
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-
-  lintOptions {
-    abortOnError true
-    checkAllWarnings true
-    warningsAsErrors true
-
-    ignore 'SyntheticAccessor',
-      //TODO stop ignoring below this
-      'MissingTranslation',
-      'CheckResult',
-      'LabelFor',
-      'DuplicateStrings',
-      'LogConditional'
-
-    warning 'UnknownNullness',
-      'SelectableText',
-      'IconDensities',
-      'SyntheticAccessor'
-    baseline file("lint-baseline.xml")
-  }
-}
-ktlint {
-  android = true
-}
-jacoco {
-  toolVersion = "0.8.3"
 }
 
-tasks.withType(Test) {
-  jacoco.includeNoLocationClasses = true
-}
 dependencies {
   implementation project(':core')
   implementation(Libs.appcompat)

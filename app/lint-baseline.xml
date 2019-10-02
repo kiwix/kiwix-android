@@ -9,26 +9,6 @@
     </issue>
 
     <issue
-        id="ObsoleteLintCustomCheck"
-        message="Lint found an issue registry (`butterknife.lint.LintRegistry`) which is older than the current API level; these checks may not work correctly.&#xA;&#xA;Recompile the checks against the latest version. Custom check API version is 2 (3.2), current lint API level is 5 (3.5+)"
-        includedVariants="debug"
-        excludedVariants="release">
-        <location
-            file="..\..\..\.gradle\caches\transforms-2\files-2.1\155b1c6c67a15ea2c33b631c0e6e3dd4\butterknife-runtime-10.1.0\jars\lint.jar"/>
-    </issue>
-
-    <issue
-        id="OldTargetApi"
-        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details."
-        errorLine1="    targetSdkVersion 28"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="63"
-            column="5"/>
-    </issue>
-
-    <issue
         id="UnusedAttribute"
         message="Attribute `networkSecurityConfig` is only used in API level 24 and higher (current min is 15)"
         errorLine1="    android:networkSecurityConfig=&quot;@xml/network_security_config&quot;"

@@ -1,28 +1,10 @@
 import com.android.build.OutputFile
 
-buildscript {
-  repositories {
-    google()
-    mavenCentral()
-    jcenter()
-  }
-
-  dependencies {
-    dependencies {
-    }
-  }
-}
-
 plugins {
   id("com.android.application")
-  id("checkstyle")
   id("com.github.triplet.play") version("2.4.1")
 }
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'jacoco-android'
-apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: KiwixConfigurationPlugin
 
 def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 
@@ -56,16 +38,15 @@ private Integer generateVersionCode() {
 }
 
 android {
-  compileSdkVersion 28
 
   defaultConfig {
-    minSdkVersion 15
-    targetSdkVersion 28
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
     archivesBaseName = "$buildNumber"
     // Set vanilla config
+    buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
+    buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
     buildConfigField "boolean", "IS_CUSTOM_APP", "false"
     buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
     buildConfigField "String", "ZIM_FILE_NAME", "\"\""
@@ -82,37 +63,8 @@ android {
     cruncherEnabled true
   }
 
-  lintOptions {
-    abortOnError true
-    checkAllWarnings true
-    warningsAsErrors true
-
-    ignore 'SyntheticAccessor',
-      //TODO stop ignoring below this
-      'MissingTranslation',
-      'CheckResult',
-      'LabelFor',
-      'DuplicateStrings',
-      'LogConditional'
-
-    warning 'UnknownNullness',
-      'SelectableText',
-      'IconDensities',
-      'SyntheticAccessor'
-    baseline file("lint-baseline.xml")
-  }
-
   testOptions {
     execution 'ANDROIDX_TEST_ORCHESTRATOR'
-    unitTests.returnDefaultValues = true
-    unitTests.all {
-      useJUnitPlatform()
-      testLogging {
-        events "passed", "skipped", "failed", "standardOut", "standardError"
-        outputs.upToDateWhen { false }
-        showStandardStreams = true
-      }
-    }
   }
 
   signingConfigs {
@@ -129,8 +81,6 @@ android {
     // Main build type for debugging
     debug {
       multiDexKeepProguard file("multidex-instrumentation-config.pro")
-      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
-      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
       testCoverageEnabled true
     }
 
@@ -154,18 +104,8 @@ android {
       java.srcDirs += "$rootDir/core/src/testShared"
     }
   }
-  compileOptions {
-    encoding = "UTF-8"
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-
   dexOptions {
     javaMaxHeapSize "4g"
-  }
-
-  androidExtensions {
-    experimental = true
   }
 
   def abiCodes = ['arm64-v8a': 6, 'x86': 3, 'x86_64': 4, 'armeabi-v7a': 5]
@@ -202,20 +142,6 @@ play {
   releaseStatus = "draft"
   resolutionStrategy = "fail"
 }
-
-ktlint {
-  android = true
-}
-
-jacoco {
-  toolVersion = "0.8.3"
-}
-
-tasks.withType(Test) {
-  jacoco.includeNoLocationClasses = true
-}
-
-apply from: "${rootDir}/team-props/git-hooks.gradle"
 
 dependencies {
   implementation project(":core")

@@ -9,6 +9,15 @@
     </issue>
 
     <issue
+        id="ObsoleteLintCustomCheck"
+        message="Lint found an issue registry (`butterknife.lint.LintRegistry`) which is older than the current API level; these checks may not work correctly.&#xA;&#xA;Recompile the checks against the latest version. Custom check API version is 2 (3.2), current lint API level is 5 (3.5+)"
+        includedVariants="debug"
+        excludedVariants="release">
+        <location
+            file="..\..\..\.gradle\caches\transforms-2\files-2.1\5fe77b6973f8fa017590206274e7a5f7\butterknife-runtime-10.1.0\jars\lint.jar"/>
+    </issue>
+
+    <issue
         id="MissingPermission"
         message="Missing permissions required by ConnectivityManager.getActiveNetworkInfo: android.permission.ACCESS_NETWORK_STATE"
         errorLine1="  get() = if (activeNetworkInfo?.isConnected == true)"
@@ -178,17 +187,6 @@
         message="Invalid package reference in library; not included in Android: `javax.xml.stream`. Referenced from `org.simpleframework.xml.stream.StreamProvider`.">
         <location
             file="..\..\..\.gradle\caches\modules-2\files-2.1\org.simpleframework\simple-xml\2.7.1\dd91fb744c2ff921407475cb29a1e3fee397d411\simple-xml-2.7.1.jar"/>
-    </issue>
-
-    <issue
-        id="OldTargetApi"
-        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details."
-        errorLine1="    targetSdkVersion 28"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="35"
-            column="5"/>
     </issue>
 
     <issue
