@@ -25,13 +25,23 @@
 
   </com.google.android.material.appbar.AppBarLayout>
 
+  <View
+    android:id="@+id/constraint_device_details"
+    android:layout_width="wrap_content"
+    android:layout_height="0dp"
+    app:layout_constraintTop_toBottomOf="@id/app_bar_local_file_transfer"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/constraint_nearby_devices"
+    app:layout_constraintVertical_chainStyle="spread_inside"
+    app:layout_constraintVertical_weight="20"/>
+
   <TextView
     android:id="@+id/text_view_your_device"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="15dp"
     android:layout_marginLeft="15dp"
-    android:layout_marginTop="20dp"
     android:background="@android:color/transparent"
     android:paddingLeft="5dp"
     android:paddingTop="5dp"
@@ -40,10 +50,12 @@
     android:text="@string/your_device"
     android:textSize="15sp"
     android:textStyle="italic"
+    app:layout_constraintTop_toTopOf="@id/constraint_device_details"
+    app:layout_constraintLeft_toLeftOf="@id/constraint_device_details"
+    app:layout_constraintStart_toStartOf="@id/constraint_device_details"
+    app:layout_constraintBottom_toBottomOf="@id/constraint_device_details"
     app:layout_constraintEnd_toStartOf="@+id/text_view_device_name"
-    app:layout_constraintHorizontal_chainStyle="packed"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/app_bar_local_file_transfer" />
+    app:layout_constraintHorizontal_chainStyle="packed" />
 
   <TextView
     android:id="@+id/text_view_device_name"
@@ -59,17 +71,26 @@
     android:textIsSelectable="true"
     android:textSize="17sp"
     android:textStyle="bold"
-    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintEnd_toEndOf="@id/constraint_device_details"
     app:layout_constraintStart_toEndOf="@+id/text_view_your_device"
     app:layout_constraintTop_toTopOf="@id/text_view_your_device"
     app:layout_constraintBottom_toBottomOf="@id/text_view_your_device"
     tools:hint="Device Name" />
 
+  <View
+    android:id="@+id/constraint_nearby_devices"
+    android:layout_width="wrap_content"
+    android:layout_height="0dp"
+    app:layout_constraintTop_toBottomOf="@id/constraint_device_details"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/constraint_transfer_progress"
+    app:layout_constraintVertical_weight="40"/>
+
   <TextView
     android:id="@+id/text_view_available_device"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
     android:background="@android:color/transparent"
     android:gravity="center"
     android:paddingTop="5dp"
@@ -77,9 +98,9 @@
     android:textColor="#2196F3"
     android:textSize="16sp"
     app:fontFamily="monospace"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/text_view_device_name" />
+    app:layout_constraintLeft_toLeftOf="@id/constraint_nearby_devices"
+    app:layout_constraintRight_toRightOf="@id/constraint_nearby_devices"
+    app:layout_constraintTop_toTopOf="@id/constraint_nearby_devices" />
 
   <ListView
     android:id="@+id/list_peer_devices"
@@ -87,47 +108,48 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:visibility="invisible"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/text_view_available_device"
-    app:layout_constraintVertical_bias="0.0" />
+    app:layout_constraintLeft_toLeftOf="@id/constraint_nearby_devices"
+    app:layout_constraintRight_toRightOf="@id/constraint_nearby_devices"
+    app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
 
   <TextView
     android:id="@+id/text_view_empty_peer_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="50dp"
     android:background="@android:color/transparent"
     android:gravity="center"
     android:text="@string/no_devices_found"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
+    app:layout_constraintLeft_toLeftOf="@id/constraint_nearby_devices"
+    app:layout_constraintRight_toRightOf="@id/constraint_nearby_devices"
+    app:layout_constraintTop_toTopOf="@id/text_view_available_device"
+    app:layout_constraintBottom_toBottomOf="@id/constraint_nearby_devices"/>
 
   <ProgressBar
     android:id="@+id/progress_bar_searching_peers"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="50dp"
     android:background="@android:color/transparent"
     android:indeterminate="true"
     android:visibility="gone"
+    app:layout_constraintLeft_toLeftOf="@id/constraint_nearby_devices"
+    app:layout_constraintRight_toRightOf="@id/constraint_nearby_devices"
+    app:layout_constraintTop_toTopOf="@id/text_view_available_device"
+    app:layout_constraintBottom_toBottomOf="@id/constraint_nearby_devices" />
+
+  <View
+    android:id="@+id/constraint_transfer_progress"
+    android:layout_width="wrap_content"
+    android:layout_height="0dp"
+    app:layout_constraintTop_toBottomOf="@id/constraint_nearby_devices"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
-
-  <androidx.constraintlayout.widget.Barrier
-    android:id="@+id/barrier_nearby_devices"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:barrierDirection="bottom"
-    app:constraint_referenced_ids="text_view_available_device,list_peer_devices,text_view_empty_peer_list,progress_bar_searching_peers" />
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintVertical_weight="40"/>
 
   <TextView
     android:id="@+id/text_view_files_for_transfer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="50dp"
     android:background="@android:color/transparent"
     android:gravity="center"
     android:paddingTop="10dp"
@@ -136,19 +158,19 @@
     android:textSize="16sp"
     android:visibility="invisible"
     app:fontFamily="monospace"
+    app:layout_constraintTop_toTopOf="@id/constraint_transfer_progress"
     app:layout_constraintBottom_toTopOf="@id/recycler_view_transfer_files"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/barrier_nearby_devices" />
+    app:layout_constraintLeft_toLeftOf="@id/constraint_transfer_progress"
+    app:layout_constraintRight_toRightOf="@id/constraint_transfer_progress" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_view_transfer_files"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:background="@android:color/transparent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer" />
+    app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer"
+    app:layout_constraintLeft_toLeftOf="@id/constraint_transfer_progress"
+    app:layout_constraintRight_toRightOf="@id/constraint_transfer_progress"
+    app:layout_constraintBottom_toBottomOf="@id/constraint_transfer_progress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
