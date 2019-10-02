@@ -83,7 +83,6 @@ private fun BaseExtension.baseConfigure(path: String) {
   testOptions {
     unitTests.apply {
       isReturnDefaultValues = true
-      isIncludeAndroidResources = true
       all(KotlinClosure1<Any, Test>({
         (this as Test).also { testTask ->
           testTask.useJUnitPlatform()

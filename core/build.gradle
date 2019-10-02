@@ -6,18 +6,11 @@ buildscript {
   }
 
   dependencies {
-    classpath Libs.com_android_tools_build_gradle
-    classpath Libs.kotlin_gradle_plugin
     classpath Libs.objectbox_gradle_plugin
-    classpath Libs.ktlint_gradle
     classpath Libs.butterknife_gradle_plugin
   }
 }
 
-plugins {
-  id("checkstyle")
-  id("com.github.triplet.play") version("2.4.1")
-}
 apply plugin: 'com.android.library'
 apply plugin: KiwixConfigurationPlugin
 apply plugin: 'io.objectbox'
