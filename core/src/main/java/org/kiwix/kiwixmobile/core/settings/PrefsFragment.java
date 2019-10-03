@@ -94,7 +94,7 @@ public class PrefsFragment extends PreferenceFragment implements
       getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(false);
     }
 
-   if (BuildConfig.ENFORCED_LANG.equals("")) {
+    if (BuildConfig.ENFORCED_LANG.equals("")) {
       setUpLanguageChooser(PREF_LANG);
     } else {
       getPreferenceScreen().removePreference(findPreference("pref_language"));
@@ -194,13 +194,22 @@ public class PrefsFragment extends PreferenceFragment implements
 
   private void setAppVersionNumber() {
     EditTextPreference versionPref = (EditTextPreference) findPreference(PREF_VERSION);
-    versionPref.setSummary(BuildConfig.VERSION_NAME + " Build: " + getVersionCode());
+    versionPref.setSummary(getVersionName() + " Build: " + getVersionCode());
   }
 
   private int getVersionCode() {
     try {
       return getActivity().getPackageManager()
         .getPackageInfo(getActivity().getPackageName(), 0).versionCode;
+    } catch (PackageManager.NameNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private String getVersionName() {
+    try {
+      return getActivity().getPackageManager()
+        .getPackageInfo(getActivity().getPackageName(), 0).versionName;
     } catch (PackageManager.NameNotFoundException e) {
       throw new RuntimeException(e);
     }
