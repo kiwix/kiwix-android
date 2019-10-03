@@ -233,6 +233,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   private void displayFileTransferProgress(@NonNull ArrayList<FileItem> filesToSend) {
+    if (!isFileSender) {
+      searchingPeersProgressBar.setVisibility(View.GONE);
+    }
+
     textBannerFilesForTransfer.setVisibility(View.VISIBLE);
     fileListAdapter = new FileListAdapter(filesToSend);
     filesRecyclerView.setAdapter(fileListAdapter);
@@ -253,7 +257,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @Override
   public void updateListOfAvailablePeers(@NonNull WifiP2pDeviceList peers) {
     if (!isFileSender) {
-      searchingPeersProgressBar.setVisibility(View.GONE);
       return;
     }
 
