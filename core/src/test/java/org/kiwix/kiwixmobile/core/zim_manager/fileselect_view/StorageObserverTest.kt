@@ -18,36 +18,20 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 
-/*
- * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.KiwixApplication
 import org.kiwix.kiwixmobile.core.book
 import org.kiwix.kiwixmobile.core.bookOnDisk
-import org.kiwix.kiwixmobile.core.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.newdb.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.resetSchedulers
 import org.kiwix.kiwixmobile.core.setScheduler
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -64,7 +48,7 @@ class StorageObserverTest {
   private val downloadModel: DownloadModel = mockk()
   private val file: File = mockk()
   private val readerFactory: Factory = mockk()
-  private val zimFileReader: ZimFileReader = mockk()
+  private lateinit var zimFileReader: ZimFileReader
 
   private val files: PublishProcessor<List<File>> = PublishProcessor.create()
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
@@ -73,6 +57,9 @@ class StorageObserverTest {
 
   init {
     setScheduler(Schedulers.trampoline())
+    mockkStatic(KiwixApplication::class)
+    every { KiwixApplication.getInstance().packageName } returns "pkg"
+    zimFileReader = mockk()
   }
 
   @AfterAll
