@@ -76,11 +76,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
   @BindView(R.id.text_view_device_name) TextView textViewDeviceName;
+  @BindView(R.id.text_view_files_for_transfer) TextView textBannerFilesForTransfer;
+  @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
+  @BindView(R.id.text_view_available_device) TextView textBannerNearbyDevices;
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
   @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;
   @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
-  @BindView(R.id.text_view_files_for_transfer) TextView textBannerFilesForTransfer;
-  @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
   private boolean isFileSender = false;    // Whether the device is the file sender or not
 
@@ -126,6 +127,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
       }
 
       displayFileTransferProgress(filesForTransfer);
+    } else {
+      hidePeerDiscoverySectionForReceiver();
     }
 
     wifiDirectManager.startWifiDirectManager(filesForTransfer);
@@ -192,8 +195,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   private void showPeerDiscoveryProgressBar() { // Setup UI for searching peers
     searchingPeersProgressBar.setVisibility(View.VISIBLE);
-    listViewPeerDevices.setVisibility(View.INVISIBLE);
-    textViewPeerDevices.setVisibility(View.INVISIBLE);
+
+    if (isFileSender) {
+      listViewPeerDevices.setVisibility(View.INVISIBLE);
+      textViewPeerDevices.setVisibility(View.INVISIBLE);
+    }
   }
 
   /* From WifiDirectManager.Callbacks interface */
@@ -205,7 +211,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
       String deviceStatus = getDeviceStatus(userDevice.status);
       Log.d(TAG, deviceStatus);
 
-      if(!isFileSender && (deviceStatus.equals("Failed") || deviceStatus.equals("Unavailable"))) {
+      if (!isFileSender && (deviceStatus.equals("Failed") || deviceStatus.equals("Unavailable"))) {
         Snackbar.make(findViewById(R.id.layout_local_file_transfer), "Device may not be visible to sender. Please refresh search.", Snackbar.LENGTH_INDEFINITE)
           .setAction("CLOSE", v -> {})
           .setActionTextColor(getResources().getColor(R.color.accent))
@@ -233,6 +239,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     filesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
   }
 
+  private void hidePeerDiscoverySectionForReceiver() {
+    textBannerNearbyDevices.setVisibility(View.GONE);
+    listViewPeerDevices.setVisibility(View.GONE);
+    textViewPeerDevices.setVisibility(View.GONE);
+  }
+
   @Override
   public void onFileStatusChanged(int itemIndex) {
     fileListAdapter.notifyItemChanged(itemIndex);
@@ -240,6 +252,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @Override
   public void updateListOfAvailablePeers(@NonNull WifiP2pDeviceList peers) {
+    if (!isFileSender) {
+      searchingPeersProgressBar.setVisibility(View.GONE);
+      return;
+    }
+
     availablePeerDevices.clear();
     availablePeerDevices.addAll(peers.getDeviceList());
 

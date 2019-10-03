@@ -99,6 +99,33 @@
     tools:hint="Device Name" />
 
   <TextView
+    android:id="@+id/text_view_files_for_transfer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:paddingTop="10dp"
+    android:text="@string/files_for_transfer"
+    android:textColor="#2196F3"
+    android:textSize="16sp"
+    android:visibility="invisible"
+    app:fontFamily="monospace"
+    app:layout_constraintTop_toTopOf="@id/constraint_transfer_progress"
+    app:layout_constraintBottom_toTopOf="@id/recycler_view_transfer_files"
+    app:layout_constraintLeft_toLeftOf="@id/constraint_transfer_progress"
+    app:layout_constraintRight_toRightOf="@id/constraint_transfer_progress" />
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_view_transfer_files"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:background="@android:color/transparent"
+    app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer"
+    app:layout_constraintLeft_toLeftOf="@id/constraint_transfer_progress"
+    app:layout_constraintRight_toRightOf="@id/constraint_transfer_progress"
+    app:layout_constraintBottom_toBottomOf="@id/constraint_transfer_progress" />
+
+  <TextView
     android:id="@+id/text_view_available_device"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -146,32 +173,5 @@
     app:layout_constraintRight_toRightOf="@id/constraint_nearby_devices"
     app:layout_constraintTop_toTopOf="@id/text_view_available_device"
     app:layout_constraintBottom_toBottomOf="@id/constraint_nearby_devices" />
-
-  <TextView
-    android:id="@+id/text_view_files_for_transfer"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:gravity="center"
-    android:paddingTop="10dp"
-    android:text="@string/files_for_transfer"
-    android:textColor="#2196F3"
-    android:textSize="16sp"
-    android:visibility="invisible"
-    app:fontFamily="monospace"
-    app:layout_constraintTop_toTopOf="@id/constraint_transfer_progress"
-    app:layout_constraintBottom_toTopOf="@id/recycler_view_transfer_files"
-    app:layout_constraintLeft_toLeftOf="@id/constraint_transfer_progress"
-    app:layout_constraintRight_toRightOf="@id/constraint_transfer_progress" />
-
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recycler_view_transfer_files"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:background="@android:color/transparent"
-    app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer"
-    app:layout_constraintLeft_toLeftOf="@id/constraint_transfer_progress"
-    app:layout_constraintRight_toRightOf="@id/constraint_transfer_progress"
-    app:layout_constraintBottom_toBottomOf="@id/constraint_transfer_progress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
