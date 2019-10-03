@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -74,7 +75,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @Inject LocationManager locationManager;
 
   @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
-  @BindView(R.id.text_view_device_name) TextView deviceName;
+  @BindView(R.id.text_view_device_name) TextView textViewDeviceName;
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
   @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;
   @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
@@ -200,8 +201,16 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   public void onUserDeviceDetailsAvailable(@Nullable WifiP2pDevice userDevice) {
     // Update UI with user device's details
     if (userDevice != null) {
-      deviceName.setText(userDevice.deviceName);
-      Log.d(TAG, getDeviceStatus(userDevice.status));
+      textViewDeviceName.setText(userDevice.deviceName);
+      String deviceStatus = getDeviceStatus(userDevice.status);
+      Log.d(TAG, deviceStatus);
+
+      if(!isFileSender && (deviceStatus.equals("Failed") || deviceStatus.equals("Unavailable"))) {
+        Snackbar.make(findViewById(R.id.layout_local_file_transfer), "Device may not be visible to sender. Please refresh search.", Snackbar.LENGTH_INDEFINITE)
+          .setAction("CLOSE", v -> {})
+          .setActionTextColor(getResources().getColor(R.color.accent))
+          .show();
+      }
     }
   }
 
