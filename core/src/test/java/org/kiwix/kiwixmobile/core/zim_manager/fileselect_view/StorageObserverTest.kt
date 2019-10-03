@@ -48,7 +48,7 @@ class StorageObserverTest {
   private val downloadModel: DownloadModel = mockk()
   private val file: File = mockk()
   private val readerFactory: Factory = mockk()
-  private lateinit var zimFileReader: ZimFileReader
+  private val zimFileReader: ZimFileReader
 
   private val files: PublishProcessor<List<File>> = PublishProcessor.create()
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
