@@ -130,10 +130,4 @@ dependencies {
 
   implementation(Libs.xfetch2)
   implementation(Libs.xfetch2okhttp)
-
-  testImplementation(Libs.junit_jupiter)
-  testImplementation(Libs.mockk)
-  testImplementation(Libs.assertj_core)
-  testImplementation(Libs.testing_ktx)
-  testImplementation(Libs.core_testing)
 }

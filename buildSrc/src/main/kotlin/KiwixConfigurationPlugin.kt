@@ -24,8 +24,10 @@ import com.android.build.gradle.LibraryPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.KotlinClosure1
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
@@ -52,8 +54,18 @@ class KiwixConfigurationPlugin : Plugin<Project> {
     target.configureExtension<JacocoPluginExtension> { toolVersion = "0.8.3" }
     target.configureExtension<KtlintExtension> { android.set(true) }
     target.apply(from = "${target.rootDir}/team-props/git-hooks.gradle")
+    target.dependencies {
+      testImplementation(Libs.junit_jupiter)
+      testImplementation(Libs.mockk)
+      testImplementation(Libs.assertj_core)
+      testImplementation(Libs.testing_ktx)
+      testImplementation(Libs.core_testing)
+    }
   }
 }
+
+private fun DependencyHandlerScope.testImplementation(dependency: String) =
+  add("testImplementation", dependency)
 
 private inline fun <reified T> Project.configureExtension(function: T.() -> Unit) =
   extensions.getByType(T::class.java).function()
