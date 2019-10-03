@@ -55,7 +55,7 @@ script:
   - ./gradlew createDebugCoverageReport ktlintCheck lint jacocoTestReport app:assembleRelease
 
 after_success:
-  - mkdir ./core/build/reports/coverage/debug && cp ./app/build/reports/coverage/debug/report.xml ./core/build/reports/coverage/debug
+  - mkdir $HOME/core/build/reports/coverage/debug && cp $HOME/app/build/reports/coverage/debug/report.xml $HOME/core/build/reports/coverage/debug
   - bash <(curl -s https://codecov.io/bash)
 
 before_deploy:
