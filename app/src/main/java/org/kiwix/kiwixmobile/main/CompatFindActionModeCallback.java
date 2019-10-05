@@ -44,13 +44,13 @@ public class CompatFindActionModeCallback
 
   private View mCustomView;
 
-  private EditText mEditText;
+  EditText mEditText;
 
   private TextView mFindResultsTextView;
 
   private WebView mWebView;
 
-  private InputMethodManager mInput;
+  InputMethodManager mInput;
 
   private ActionMode mActionMode;
 
@@ -164,14 +164,14 @@ public class CompatFindActionModeCallback
 
   // Show on screen keyboard
   public void showSoftInput() {
-    mEditText.requestFocus();
-    mEditText.setFocusable(true);
-    mEditText.setFocusableInTouchMode(true);
-    mEditText.requestFocusFromTouch();
+    //duck-dive any hidden show/hide processes
+    mEditText.postDelayed(() -> {
 
-    if (mEditText.requestFocus()) {
-      mInput.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-    }
+      mEditText.requestFocus();
+      mInput.showSoftInput(mEditText, 0);
+
+    }, 100);
+
   }
 
   @Override
