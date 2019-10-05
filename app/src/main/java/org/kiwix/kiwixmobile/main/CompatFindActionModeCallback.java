@@ -164,10 +164,11 @@ public class CompatFindActionModeCallback
 
   // Show on screen keyboard
   public void showSoftInput() {
-    //duck-dive any hidden show/hide processes
+    //wait for any hidden show/hide processes to finish
     mEditText.postDelayed(() -> {
 
       mEditText.requestFocus();
+      //show the keyboard
       mInput.showSoftInput(mEditText, 0);
 
     }, 100);
