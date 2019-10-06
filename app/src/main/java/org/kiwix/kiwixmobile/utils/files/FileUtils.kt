@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 package org.kiwix.kiwixmobile.utils.files
 
@@ -41,15 +41,15 @@ object FileUtils {
     "${Environment.getExternalStorageDirectory()}${File.separator}Android" +
       "${File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
 
-  @JvmStatic fun getFileCacheDir(context: Context): File =
+  @JvmStatic fun getFileCacheDir(context: Context): File? =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
-      context.externalCacheDir!!
+      context.externalCacheDir
     } else {
       context.cacheDir
     }
 
   @JvmStatic @Synchronized fun deleteCachedFiles(context: Context) {
-    getFileCacheDir(context).deleteRecursively()
+    getFileCacheDir(context)?.deleteRecursively()
   }
 
   @JvmStatic @Synchronized fun deleteZimFile(path: String) {
@@ -195,12 +195,16 @@ object FileUtils {
     uri: Uri
   ): String? {
     val columnName = "_data"
-    return context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
-      ?.use {
-        if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
-          it[columnName]
-        } else null
-      }
+    return try {
+      context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
+        ?.use {
+          if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
+            it[columnName]
+          } else null
+        }
+    } catch (ignore: SecurityException) {
+      null
+    }
   }
 
   @JvmStatic fun readLocalesFromAssets(context: Context) =

@@ -1,20 +1,19 @@
 /*
- * Copyright 2013 Rashiq Ahmad <rashiq.z@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU  General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * any later version.
+ * Kiwix Android
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package org.kiwix.kiwixmobile.main;
@@ -99,6 +98,7 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
@@ -1090,24 +1090,26 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
         zimReaderContainer.setZimFile(file);
-        if (clearHistory) {
-          requestClearHistoryAfterLoad = true;
-        }
-        if (menu != null) {
-          initAllMenuItems();
+        if (zimReaderContainer.getZimFileReader() != null) {
+          if (clearHistory) {
+            requestClearHistoryAfterLoad = true;
+          }
+          if (menu != null) {
+            initAllMenuItems();
+          } else {
+            // Menu may not be initialized yet. In this case
+            // signal to menu create to show
+            requestInitAllMenuItems = true;
+          }
+          openMainPage();
+          presenter.loadCurrentZimBookmarksUrl();
         } else {
-          // Menu may not be initialized yet. In this case
-          // signal to menu create to show
-          requestInitAllMenuItems = true;
+          ContextExtensionsKt.toast(this, R.string.error_file_invalid, Toast.LENGTH_LONG);
+          showHomePage();
         }
-        openMainPage();
-        presenter.loadCurrentZimBookmarksUrl();
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
-
-        Toast.makeText(this, getResources().getString(R.string.error_file_not_found),
-          Toast.LENGTH_LONG)
-          .show();
+        ContextExtensionsKt.toast(this, R.string.error_file_not_found, Toast.LENGTH_LONG);
         showHomePage();
       }
     } else {
