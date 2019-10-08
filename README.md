@@ -34,8 +34,7 @@ for you. If you prefer to build without Android Studio you must first
 set up the Android SDK and then run the command: `./gradlew build `
 from the root directory of the project.
 
-We utilize different build variants (flavours) to build various
-different versions of our app. Ensure your build variant is
+We utilize different build variants (flavors) to build various versions of our app. Ensure your build variant is
 `kiwixDebug` to build the standard app.
 
 ## Libraries Used
