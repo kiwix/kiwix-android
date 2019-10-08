@@ -29,7 +29,6 @@ class AppConfigurer {
     target.configureExtension<AppExtension> {
       defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled = true
         vectorDrawables.useSupportLibrary = true
       }
       dexOptions {
