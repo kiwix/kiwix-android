@@ -28,7 +28,6 @@ class AppConfigurer {
   fun configure(target: Project) {
     target.configureExtension<AppExtension> {
       defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
       }
       dexOptions {

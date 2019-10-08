@@ -48,6 +48,7 @@ class AllProjectConfigurer {
       defaultConfig {
         setMinSdkVersion(Config.minSdk)
         setTargetSdkVersion(Config.targetSdk)
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
       }
 
