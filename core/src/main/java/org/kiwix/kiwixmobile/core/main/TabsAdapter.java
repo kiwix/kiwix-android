@@ -42,11 +42,11 @@ import static org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml;
 
 public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
   private final List<KiwixWebView> webViews;
-  private final MainActivity activity;
+  private final CoreMainActivity activity;
   private TabClickListener listener;
   private int selectedPosition = 0;
 
-  TabsAdapter(MainActivity activity, List<KiwixWebView> webViews) {
+  TabsAdapter(CoreMainActivity activity, List<KiwixWebView> webViews) {
     this.webViews = webViews;
     this.activity = activity;
   }

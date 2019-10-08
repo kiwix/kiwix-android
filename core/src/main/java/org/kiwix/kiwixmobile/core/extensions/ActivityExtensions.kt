@@ -28,6 +28,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import org.kiwix.kiwixmobile.core.Intents
 
 fun Activity.startActionMode(
   menuId: Int,
@@ -66,6 +67,10 @@ fun Activity.startActionMode(
 
 inline fun <reified T : Activity> Activity.start() {
   startActivity(Intent(this, T::class.java))
+}
+
+inline fun <reified T : Activity> Activity.startWithActionFrom() {
+  startActivity(Intents.internal(T::class.java))
 }
 
 inline fun <reified T : ViewModel> FragmentActivity.viewModel(

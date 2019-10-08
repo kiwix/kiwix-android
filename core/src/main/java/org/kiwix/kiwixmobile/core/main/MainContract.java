@@ -25,10 +25,10 @@ import org.kiwix.kiwixmobile.core.history.HistoryListItem;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 /**
- * The contract between {@link MainActivity} and {@link MainPresenter}.
+ * The contract between {@link CoreMainActivity} and {@link MainPresenter}.
  */
 
-class MainContract {
+public class MainContract {
 
   interface View extends BaseContract.View<Presenter> {
     void addBooks(List<BooksOnDiskListItem> books);
@@ -36,7 +36,7 @@ class MainContract {
     void refreshBookmarksUrl(List<String> urls);
   }
 
-  interface Presenter extends BaseContract.Presenter<View> {
+  public interface Presenter extends BaseContract.Presenter<View> {
     void loadBooks();
 
     void saveBooks(List<BooksOnDiskListItem.BookOnDisk> books);

@@ -1,49 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.kiwix.kiwixmobile"
-  android:installLocation="auto">
+  package="org.kiwix.kiwixmobile">
 
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-  <!-- Device with versions >= Pie need this permission -->
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-
-  <application
-    android:name=".core.KiwixApplication"
-    android:allowBackup="true"
-    android:hardwareAccelerated="true"
-    android:icon="@mipmap/kiwix_icon"
-    android:label="@string/app_name"
-    android:networkSecurityConfig="@xml/network_security_config"
-    android:roundIcon="@mipmap/kiwix_icon_round"
-    android:supportsRtl="true"
-    android:theme="@style/AppTheme">
-
+  <application>
     <activity
-      android:name=".core.splash.SplashActivity"
-      android:label="@string/app_name"
-      android:theme="@style/AppTheme.Launcher">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-
-        <category android:name="android.intent.category.LAUNCHER" />
-        <category android:name="android.intent.category.MONKEY" />
-      </intent-filter>
-
-      <meta-data
-        android:name="android.app.shortcuts"
-        android:resource="@xml/shortcuts" />
-    </activity>
-    <activity
-      android:name=".core.main.MainActivity"
+      android:name=".main.KiwixMainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
       android:label="@string/app_name"
       android:windowSoftInputMode="adjustPan">
@@ -139,89 +100,15 @@
 
         <data android:mimeType="text/plain" />
       </intent-filter>
-    </activity>
-    <activity
-      android:name=".core.zim_manager.ZimManageActivity"
-      android:label="@string/choose_file"
-      android:launchMode="singleTop">
-      <!-- TODO -->
       <intent-filter>
-        <action android:name="android.intent.action.GET_CONTENT" />
-
+        <action android:name="org.kiwix.kiwixmobile.core.main.CoreMainActivity" />
         <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.OPENABLE" />
-
-        <data android:mimeType="*/*" />
-      </intent-filter>
-      <intent-filter>
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
     </activity>
-    <activity android:name=".core.settings.KiwixSettingsActivity" />
-    <activity android:name=".core.search.SearchActivity" />
-    <activity android:name=".core.bookmark.BookmarksActivity" />
-    <activity android:name=".core.webserver.ZimHostActivity" />
-
-    <provider
-      android:name=".core.data.ZimContentProvider"
-      android:authorities="${applicationId}.zim.base"
-      android:exported="true" />
-
-    <receiver android:name=".core.main.KiwixSearchWidget">
+    <activity android:name=".settings.KiwixSettingsActivity">
       <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
-      </intent-filter>
-
-      <meta-data
-        android:name="android.appwidget.provider"
-        android:resource="@xml/kiwix_widget_provider_info" />
-    </receiver>
-
-    <service android:name=".core.wifi_hotspot.HotspotService" />
-
-    <activity
-      android:name=".core.error.ErrorActivity"
-      android:process=":error_activity" />
-
-    <provider
-      android:name="androidx.core.content.FileProvider"
-      android:authorities="${applicationId}.fileprovider"
-      android:exported="false"
-      android:grantUriPermissions="true">
-      <meta-data
-        android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/provider_paths" />
-    </provider>
-
-    <activity android:name=".core.intro.IntroActivity" />
-    <activity android:name=".core.language.LanguageActivity" />
-    <activity android:name=".core.history.HistoryActivity" />
-    <activity android:name=".core.help.HelpActivity">
-      <meta-data
-        android:name="android.support.PARENT_ACTIVITY"
-        android:value=".core.main.MainActivity" />
-    </activity>
-    <activity
-      android:name=".core.zim_manager.local_file_transfer.LocalFileTransferActivity"
-      android:label="Send to nearby device"
-      android:screenOrientation="portrait">
-      <intent-filter>
-        <action android:name="android.intent.action.SEND_MULTIPLE" />
+        <action android:name="org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity" />
         <category android:name="android.intent.category.DEFAULT" />
-
-        <data android:mimeType="application/octet-stream" />
-        <data android:pathPattern=".*\\.zim" />
-        <data android:pathPattern=".*\\..*\\.zim" />
-        <data android:pathPattern=".*\\..*\\..*\\.zim" />
-        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim" />
-        <data android:host="*" />
       </intent-filter>
     </activity>
   </application>

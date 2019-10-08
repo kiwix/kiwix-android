@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor;
 @Module public class NetworkModule {
 
   private final static String userAgent = "kiwix-android-version:" + BuildConfig.VERSION_CODE;
+  private final static String KIWIX_DOWNLOAD_URL = "http://mirror.download.kiwix.org/";
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
     HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -46,8 +47,7 @@ import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor;
   }
 
   @Provides @Singleton KiwixService provideKiwixService(OkHttpClient okHttpClient) {
-    return KiwixService.ServiceCreator.newHacklistService(okHttpClient,
-      BuildConfig.KIWIX_DOWNLOAD_URL);
+    return KiwixService.ServiceCreator.newHacklistService(okHttpClient, KIWIX_DOWNLOAD_URL);
   }
 
   @Provides @Singleton

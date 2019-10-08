@@ -389,6 +389,7 @@
     <inspection_tool class="TestFunctionName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="TypeParameterFindViewById" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UnlabeledReturnInsideLambda" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="UnnecessaryQualifierForThis" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryVariable" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UnsafeCastFromDynamic" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UnusedEquals" enabled="true" level="ERROR" enabled_by_default="true" />

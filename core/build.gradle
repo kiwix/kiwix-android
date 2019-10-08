@@ -1,3 +1,5 @@
+import plugin.KiwixConfigurationPlugin
+
 buildscript {
   repositories {
     google()
@@ -17,24 +19,6 @@ apply plugin: 'io.objectbox'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-  defaultConfig {
-    versionCode 1
-    versionName "1.0"
-
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    consumerProguardFiles 'consumer-rules.pro'
-
-    buildConfigField "boolean", "IS_CUSTOM_APP", "false"
-    buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
-    buildConfigField "String", "ZIM_FILE_NAME", "\"\""
-    buildConfigField "long", "ZIM_FILE_SIZE", "0"
-    buildConfigField "int", "CONTENT_VERSION_CODE", "0"
-    buildConfigField "String", "ENFORCED_LANG", "\"\""
-    resValue "string", "app_name", "Kiwix"
-    resValue "string", "app_search_string", "Search Kiwix"
-    buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
-  }
-
   buildTypes {
     release {
       minifyEnabled false
@@ -42,9 +26,6 @@ android {
     }
   }
 
-  testOptions {
-    execution 'ANDROIDX_TEST_ORCHESTRATOR'
-  }
   sourceSets {
     test {
       java.srcDirs += "$projectDir/src/testShared"
@@ -74,26 +55,14 @@ dependencies {
   }
 
   // Android Support
-  implementation(Libs.appcompat)
   implementation(Libs.material)
   implementation(Libs.cardview)
   implementation(Libs.androidx_multidex_multidex)
   implementation(Libs.constraintlayout)
-  implementation(Libs.core_ktx)
-  implementation(Libs.fragment_ktx)
-  implementation(Libs.collection_ktx)
+
 
   // Tab indicator
   implementation(Libs.ink_page_indicator)
-
-  // Dagger
-  compileOnly(Libs.javax_annotation_api)
-
-  implementation(Libs.dagger)
-  implementation(Libs.dagger_android)
-  kapt(Libs.dagger_compiler)
-  kapt(Libs.dagger_android_processor)
-
 
   // SquiDB
   implementation(Libs.squidb)

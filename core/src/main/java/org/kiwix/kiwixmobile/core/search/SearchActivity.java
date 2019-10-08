@@ -44,9 +44,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.main.MainActivity;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
@@ -122,7 +123,7 @@ public class SearchActivity extends BaseActivity
     int value =
       Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
-      Intent intent = new Intent(this, MainActivity.class);
+      Intent intent = Intents.internal(CoreMainActivity.class);
       startActivity(intent);
     } else {
       super.finish();
@@ -196,7 +197,7 @@ public class SearchActivity extends BaseActivity
       if (searchView != null) {
         queryText = searchView.getQuery().toString();
       }
-      Intent resultIntent = new Intent(this, MainActivity.class);
+      Intent resultIntent = Intents.internal(CoreMainActivity.class);
       resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
       resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
       if (shouldStartNewActivity() != 1) {
@@ -220,7 +221,7 @@ public class SearchActivity extends BaseActivity
   private void sendMessage(String uri) {
     int value = shouldStartNewActivity();
     if (value == 1) {
-      Intent i = new Intent(this, MainActivity.class);
+      Intent i = Intents.internal(CoreMainActivity.class);
       i.putExtra(TAG_FILE_SEARCHED, uri);
       startActivity(i);
     } else {

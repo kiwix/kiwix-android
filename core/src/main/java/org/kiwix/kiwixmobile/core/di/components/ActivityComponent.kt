@@ -23,6 +23,11 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.downloader.DownloadFragment
+import org.kiwix.kiwixmobile.core.main.MainContract
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader
+import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.StorageObserver
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.core.zim_manager.library_view.LibraryFragment
@@ -48,4 +53,10 @@ interface ActivityComponent {
 
     fun build(): ActivityComponent
   }
+
+  fun zimReaderContainer(): ZimReaderContainer
+  fun sharedPrefUtil(): SharedPreferenceUtil
+  fun mainPresenter(): MainContract.Presenter
+  fun zimFileReaderFactory(): ZimFileReader.Factory
+  fun storageObserver(): StorageObserver
 }

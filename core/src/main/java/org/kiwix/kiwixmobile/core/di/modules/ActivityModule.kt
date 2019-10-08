@@ -19,7 +19,11 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.main.MainContract
+import org.kiwix.kiwixmobile.core.main.MainPresenter
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 
@@ -28,4 +32,13 @@ abstract class ActivityModule {
   @Binds
   @ActivityScope
   abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
+
+  @Module
+  companion object {
+    @JvmStatic
+    @Provides
+    @ActivityScope
+    fun providesMainPresenter(dataSource: DataSource): MainContract.Presenter =
+      MainPresenter(dataSource)
+  }
 }

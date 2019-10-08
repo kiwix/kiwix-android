@@ -57,8 +57,6 @@ public final class Constants {
   public static final String TAG_CURRENT_TAB = "currenttab";
 
   // Extras
-  public static final String EXTRA_ZIM_FILE_2 = "zim_file";
-
   public static final String EXTRA_ZIM_FILE = "zimFile";
 
   public static final String EXTRA_CHOSE_X_URL = "choseXURL";
@@ -67,11 +65,7 @@ public final class Constants {
 
   public static final String EXTRA_EXTERNAL_LINK = "external_link";
 
-  public static final String EXTRA_LIBRARY = "library";
-
   public static final String EXTRA_SEARCH = "search";
-
-  public static final String EXTRA_BOOK = "Book";
 
   public static final String EXTRA_IS_WIDGET_VOICE = "isWidgetVoice";
 
@@ -79,16 +73,11 @@ public final class Constants {
 
   public static final String EXTRA_IS_WIDGET_STAR = "isWidgetStar";
 
-  public static final String EXTRA_NOTIFICATION_ID = "notificationID";
-
   public static final String HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService";
 
   public static final String EXTRA_WEBVIEWS_LIST = "webviewsList";
 
   public static final String EXTRA_SEARCH_TEXT = "searchText";
-
-  // Notification Channel Constants
-  public static final String ONGOING_DOWNLOAD_CHANNEL_ID = "ongoing_downloads_channel_id";
 
   public static final String OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base";
 }

@@ -36,11 +36,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
-import org.kiwix.kiwixmobile.core.main.MainActivity;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
@@ -198,7 +199,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   @Override
   public void onItemClick(ImageView favicon, BookmarkItem bookmark) {
     if (actionMode == null) {
-      Intent intent = new Intent(this, MainActivity.class);
+      Intent intent = Intents.internal(CoreMainActivity.class);
       if ("null".equals(bookmark.getBookmarkUrl())) {
         intent.putExtra(EXTRA_CHOSE_X_TITLE, bookmark.getBookmarkTitle());
       } else {

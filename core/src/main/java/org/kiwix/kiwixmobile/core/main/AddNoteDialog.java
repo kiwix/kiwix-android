@@ -111,7 +111,7 @@ public class AddNoteDialog extends DialogFragment
 
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer.getZimFileTitle();
-      articleTitle = ((MainActivity) getActivity()).getCurrentWebView().getTitle();
+      articleTitle = ((CoreMainActivity) getActivity()).getCurrentWebView().getTitle();
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
       String zimNoteDirectoryName = getZimNoteDirectoryName();
@@ -190,7 +190,7 @@ public class AddNoteDialog extends DialogFragment
 
   private @NonNull String getArticleNotefileName() {
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
-    String articleUrl = ((MainActivity) getActivity()).getCurrentWebView().getUrl();
+    String articleUrl = ((CoreMainActivity) getActivity()).getCurrentWebView().getUrl();
 
     String notefileName = "";
     if (articleUrl == null) {

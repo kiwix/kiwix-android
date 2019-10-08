@@ -26,7 +26,6 @@ import android.os.Build.VERSION_CODES
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.KiwixApplication
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -95,16 +94,6 @@ object FileUtils {
     }
     return false
   }
-
-  /**
-   * Returns the file name (without full path) for an Expansion APK file from the given context.
-   *
-   * @param mainFile true for menu_main file, false for patch file
-   * @return String the file name of the expansion file
-   */
-  @JvmStatic fun getExpansionAPKFileName(mainFile: Boolean) =
-    "${if (mainFile) "main." else "patch."}${BuildConfig.CONTENT_VERSION_CODE}" +
-      ".${KiwixApplication.getInstance().packageName}.obb"
 
   /**
    * Returns the filename (where the file should be saved) from info about a download

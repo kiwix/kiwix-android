@@ -34,9 +34,10 @@ import org.kiwix.kiwixmobile.core.KiwixApplication
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.start
+import org.kiwix.kiwixmobile.core.extensions.startWithActionFrom
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.language.LanguageActivity
-import org.kiwix.kiwixmobile.core.main.MainActivity
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -113,7 +114,7 @@ class ZimManageActivity : BaseActivity() {
   override fun onBackPressed() {
     val value = System.getInt(contentResolver, System.ALWAYS_FINISH_ACTIVITIES, 0)
     if (value == 1) {
-      startActivity(Intent(this, MainActivity::class.java))
+      startWithActionFrom<CoreMainActivity>()
     } else {
       super.onBackPressed() // optional depending on your needs
     }

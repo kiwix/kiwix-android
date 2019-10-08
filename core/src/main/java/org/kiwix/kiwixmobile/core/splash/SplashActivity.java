@@ -21,10 +21,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import org.kiwix.kiwixmobile.core.BuildConfig;
+import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.error.ErrorActivity;
 import org.kiwix.kiwixmobile.core.intro.IntroActivity;
-import org.kiwix.kiwixmobile.core.main.MainActivity;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 
 public class SplashActivity extends BaseActivity {
 
@@ -53,7 +54,7 @@ public class SplashActivity extends BaseActivity {
 
     Intent intent;
     if (!sharedPreferenceUtil.showIntro()) {
-      intent = new Intent(this, MainActivity.class);
+      intent = Intents.internal(CoreMainActivity.class);
     } else {
       intent = new Intent(this, IntroActivity.class);
     }

@@ -38,8 +38,9 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
   public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView,
     View bottomBarView, ViewGroup nonVideoView, ViewGroup videoView,
-    AttributeSet attrs) {
-    super(context, callback, attrs, nonVideoView, videoView);
+    AttributeSet attrs, CoreWebViewClient webViewClient) {
+    super(context, callback, attrs, nonVideoView, videoView,
+      webViewClient);
     this.toolbarView = toolbarView;
     this.bottomBarView = bottomBarView;
   }
@@ -72,7 +73,7 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
         break;
       case MotionEvent.ACTION_MOVE:
         // If we are in fullscreen don't scroll bar
-        if (MainActivity.isFullscreenOpened) {
+        if (CoreMainActivity.isFullscreenOpened) {
           return super.onTouchEvent(event);
         }
         // Filter out zooms since we don't want to affect the toolbar when zooming

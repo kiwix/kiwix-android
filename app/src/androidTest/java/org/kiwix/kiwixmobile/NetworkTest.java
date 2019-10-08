@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.core.KiwixApplication;
 import org.kiwix.kiwixmobile.core.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.core.di.components.TestComponent;
-import org.kiwix.kiwixmobile.core.main.MainActivity;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
@@ -66,8 +66,8 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 public class NetworkTest {
   private static final String NETWORK_TEST_TAG = "KiwixNetworkTest";
   @Rule
-  public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
-    MainActivity.class, false, false);
+  public ActivityTestRule<KiwixMainActivity> mActivityTestRule = new ActivityTestRule<>(
+    KiwixMainActivity.class, false, false);
   @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);

@@ -36,12 +36,13 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
  */
 
 @ActivityScope
-class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
+public class MainPresenter extends BasePresenter<MainContract.View>
+  implements MainContract.Presenter {
 
   private static final String TAG = "MainPresenter";
   private final DataSource dataSource;
 
-  @Inject MainPresenter(DataSource dataSource) {
+  @Inject public MainPresenter(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 

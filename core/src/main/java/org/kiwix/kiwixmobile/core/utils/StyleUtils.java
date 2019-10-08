@@ -26,12 +26,12 @@ import android.util.AttributeSet;
 import android.util.Xml;
 import androidx.annotation.XmlRes;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.main.MainActivity;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.xmlpull.v1.XmlPullParser;
 
 public class StyleUtils {
   public static int dialogStyle() {
-    if (MainActivity.nightMode) {
+    if (CoreMainActivity.nightMode) {
       return R.style.AppTheme_Dialog_Night;
     } else {
       return R.style.AppTheme_Dialog;

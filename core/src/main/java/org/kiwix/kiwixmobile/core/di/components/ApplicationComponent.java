@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.language.LanguageActivity;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
 import org.kiwix.kiwixmobile.core.main.KiwixWebView;
 import org.kiwix.kiwixmobile.core.search.AutoCompleteAdapter;
-import org.kiwix.kiwixmobile.core.settings.PrefsFragment;
+import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment;
 import org.kiwix.kiwixmobile.core.zim_manager.ZimManageActivity;
 
 @Singleton
@@ -63,7 +63,7 @@ public interface ApplicationComponent {
 
   void inject(KiwixWebView kiwixWebView);
 
-  void inject(PrefsFragment prefsFragment);
+  void inject(CorePrefsFragment prefsFragment);
 
   void inject(AutoCompleteAdapter autoCompleteAdapter);
 

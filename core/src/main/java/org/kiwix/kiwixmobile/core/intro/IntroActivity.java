@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.intro;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -31,10 +30,11 @@ import com.pixelcan.inkpageindicator.InkPageIndicator;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.main.MainActivity;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 
 public class IntroActivity extends BaseActivity implements IntroContract.View {
 
@@ -125,7 +125,7 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
   @OnClick(R2.id.get_started)
   void startMainActivity() {
     dismissAutoRotate();
-    startActivity(new Intent(this, MainActivity.class));
+    startActivity(Intents.internal(CoreMainActivity.class));
     presenter.setIntroShown();
     finish();
   }

@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+import plugin.KiwixConfigurationPlugin
 
 apply plugin: 'com.android.application'
 apply plugin: KiwixConfigurationPlugin
@@ -27,15 +28,6 @@ if (custom.listFiles()) {
   }
 }
 android {
-
-  defaultConfig {
-    applicationId "org.kiwix.kiwixmobile.custom"
-    versionCode 1
-    versionName "1.0"
-    multiDexEnabled true
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-  }
-
   buildTypes {
     release {
       minifyEnabled false
@@ -79,7 +71,6 @@ android {
         }
         // Set custom config from json
         applicationId "$parsedJson.package"
-        buildConfigField "boolean", "IS_CUSTOM_APP", "true"
         buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
         def filename
         if (parsedJson.zim_file.lastIndexOf("/") >= 0) {
@@ -133,9 +124,4 @@ android {
       }
     }
   }
-}
-
-dependencies {
-  implementation project(':core')
-  implementation(Libs.appcompat)
 }

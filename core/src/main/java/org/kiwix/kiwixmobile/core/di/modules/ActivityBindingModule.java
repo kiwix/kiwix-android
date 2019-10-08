@@ -30,10 +30,7 @@ import org.kiwix.kiwixmobile.core.history.HistoryModule;
 import org.kiwix.kiwixmobile.core.intro.IntroActivity;
 import org.kiwix.kiwixmobile.core.intro.IntroModule;
 import org.kiwix.kiwixmobile.core.language.LanguageActivity;
-import org.kiwix.kiwixmobile.core.main.MainActivity;
-import org.kiwix.kiwixmobile.core.main.MainModule;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
-import org.kiwix.kiwixmobile.core.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.core.splash.SplashActivity;
 import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity;
 import org.kiwix.kiwixmobile.core.webserver.ZimHostModule;
@@ -47,13 +44,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.ZimManageActivity;
 
 @Module
 public abstract class ActivityBindingModule {
-  @ActivityScope
-  @ContributesAndroidInjector(modules = MainModule.class)
-  public abstract MainActivity provideMainActivity();
-
-  @ActivityScope
-  @ContributesAndroidInjector
-  public abstract KiwixSettingsActivity provideKiwixSettingsActivity();
 
   @ActivityScope
   @ContributesAndroidInjector

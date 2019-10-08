@@ -65,7 +65,7 @@ public class KiwixWebView extends VideoEnabledWebView {
   }
 
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
-    ViewGroup nonVideoView, ViewGroup videoView) {
+    ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient) {
     super(context, attrs);
     this.callback = callback;
     KiwixApplication.getApplicationComponent().inject(this);
@@ -76,7 +76,7 @@ public class KiwixWebView extends VideoEnabledWebView {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       settings.setAllowUniversalAccessFromFileURLs(true);
     }
-    setWebViewClient(new KiwixWebViewClient(callback, zimReaderContainer));
+    setWebViewClient(webViewClient);
     final KiwixWebChromeClient client =
       new KiwixWebChromeClient(callback, nonVideoView, videoView, this);
     client.setOnToggledFullscreen(fullscreen ->

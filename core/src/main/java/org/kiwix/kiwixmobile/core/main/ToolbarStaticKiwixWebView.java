@@ -35,15 +35,16 @@ public class ToolbarStaticKiwixWebView extends KiwixWebView {
   }
 
   public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback,
-    ViewGroup nonVideoView, ViewGroup videoView, AttributeSet attrs) {
-    super(context, callback, attrs,nonVideoView,videoView);
+    ViewGroup nonVideoView, ViewGroup videoView, AttributeSet attrs,
+    CoreWebViewClient webViewClient) {
+    super(context, callback, attrs, nonVideoView, videoView, webViewClient);
     heightDifference = DimenUtils.getToolbarHeight(context);
     setTranslationY(heightDifference);
   }
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    if ((MainActivity.isFullscreenOpened)) {
+    if ((CoreMainActivity.isFullscreenOpened)) {
       setTranslationY(0);
       super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     } else {

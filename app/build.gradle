@@ -1,12 +1,11 @@
 import com.android.build.OutputFile
+import plugin.KiwixConfigurationPlugin
 
 plugins {
   id("com.android.application")
   id("com.github.triplet.play") version("2.4.1")
 }
 apply plugin: KiwixConfigurationPlugin
-
-def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 
 ext {
   versionMajor = 3
@@ -37,34 +36,16 @@ private Integer generateVersionCode() {
     (ext.versionPatch)
 }
 
+def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
+
 android {
 
   defaultConfig {
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    multiDexEnabled true
-    vectorDrawables.useSupportLibrary = true
     archivesBaseName = "$buildNumber"
-    // Set vanilla config
-    buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
-    buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
-    buildConfigField "boolean", "IS_CUSTOM_APP", "false"
-    buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
-    buildConfigField "String", "ZIM_FILE_NAME", "\"\""
-    buildConfigField "long", "ZIM_FILE_SIZE", "0"
-    buildConfigField "int", "CONTENT_VERSION_CODE", "0"
-    buildConfigField "String", "ENFORCED_LANG", "\"\""
     resValue "string", "app_name", "Kiwix"
     resValue "string", "app_search_string", "Search Kiwix"
     versionCode generateVersionCode()
     versionName generateVersionName()
-  }
-
-  aaptOptions {
-    cruncherEnabled true
-  }
-
-  testOptions {
-    execution 'ANDROIDX_TEST_ORCHESTRATOR'
   }
 
   signingConfigs {
@@ -78,19 +59,17 @@ android {
 
   buildTypes {
 
-    // Main build type for debugging
     debug {
       multiDexKeepProguard file("multidex-instrumentation-config.pro")
       testCoverageEnabled true
+      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
     }
 
-    // Release Type
     release {
       minifyEnabled true
       shrinkResources true
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
       signingConfig signingConfigs.release
-      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "true"
     }
   }
@@ -104,19 +83,10 @@ android {
       java.srcDirs += "$rootDir/core/src/testShared"
     }
   }
-  dexOptions {
-    javaMaxHeapSize "4g"
-  }
 
   def abiCodes = ['arm64-v8a': 6, 'x86': 3, 'x86_64': 4, 'armeabi-v7a': 5]
   def densityCodes = ['mdpi': 2, 'hdpi': 3, 'xhdpi': 4, 'xxhdpi': 5, 'xxxhdpi': 6]
   splits {
-    abi {
-      enable true
-      reset()
-      include "x86", "x86_64", 'armeabi-v7a', "arm64-v8a"
-      universalApk true
-    }
     density {
       enable false
       reset()
@@ -144,38 +114,15 @@ play {
 }
 
 dependencies {
-  implementation project(":core")
-  implementation(Libs.appcompat)
-  androidTestImplementation(Libs.espresso_core)
-  androidTestImplementation(Libs.espresso_web)
-  androidTestImplementation(Libs.espresso_intents)
+
   androidTestImplementation(Libs.barista) {
     exclude group: "com.android.support.test.uiautomator"
   }
-  androidTestImplementation(Libs.espresso_contrib)
-  androidTestImplementation(Libs.androidx_annotation)
-  androidTestImplementation(Libs.junit)
-  androidTestImplementation(Libs.androidx_test_runner)
-  androidTestImplementation(Libs.androidx_test_rules)
-  androidTestImplementation(Libs.androidx_test_core)
-  androidTestImplementation(Libs.mockwebserver)
-  androidTestUtil(Libs.orchestrator)
-  androidTestImplementation(Libs.mockito_android)
-  androidTestCompileOnly(Libs.javax_annotation_api)
-  implementation(Libs.dagger)
-  kaptAndroidTest(Libs.dagger_compiler)
-  implementation(Libs.dagger_android)
-  kapt(Libs.dagger_compiler)
-  kapt(Libs.dagger_android_processor)
-  androidTestImplementation(Libs.mockk_android)
-  androidTestImplementation(Libs.uiautomator)
-  androidTestImplementation(Libs.assertj_core)
   androidTestImplementation(Libs.simple_xml) {
     exclude module: 'stax'
     exclude module: 'stax-api'
     exclude module: 'xpp3'
   }
-
   implementation(Libs.squidb)
   implementation(Libs.squidb_annotations)
   kapt(Libs.squidb_processor)
