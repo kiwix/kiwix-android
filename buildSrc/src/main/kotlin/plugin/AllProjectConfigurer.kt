@@ -50,6 +50,12 @@ class AllProjectConfigurer {
         setTargetSdkVersion(Config.targetSdk)
       }
 
+      buildTypes {
+        getByName("debug").apply {
+          isTestCoverageEnabled = true
+        }
+      }
+
       compileOptions.apply {
         encoding = "UTF-8"
         sourceCompatibility = Config.javaVersion
