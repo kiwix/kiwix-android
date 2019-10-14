@@ -159,18 +159,6 @@ public class ZimHostActivity extends BaseActivity implements
       }
     });
   }
-  /*@OnClick(R.id.checkBox)
-  public void submit(View view){
-    for (int i=0;i<booksAdapter.getItemCount();i++){
-      if (booksAdapter.getItems().get(i).isSelected()){
-        flagSelectAll = true;
-        selectAllItem(false);
-      }
-      else {
-        selectAllItem(true);
-      }
-    }
-  }*/
 
 
   private void startHotspotHelper() {
