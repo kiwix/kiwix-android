@@ -26,7 +26,9 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -38,6 +40,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+
+import butterknife.OnClick;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.R;
@@ -64,6 +68,8 @@ public class ZimHostActivity extends BaseActivity implements
   TextView serverTextView;
   @BindView(R.id.recycler_view_zim_host)
   RecyclerView recyclerViewZimHost;
+  @BindView(R.id.checkBox)
+  CheckBox tick;
 
   @Inject
   ZimHostContract.Presenter presenter;
@@ -81,6 +87,7 @@ public class ZimHostActivity extends BaseActivity implements
   private String ip;
   private ServiceConnection serviceConnection;
   private ProgressDialog progressDialog;
+  Boolean flagSelectAll = false;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,7 +95,23 @@ public class ZimHostActivity extends BaseActivity implements
     setContentView(R.layout.activity_zim_host);
 
     setUpToolbar();
+    tick.setOnClickListener(new View.OnClickListener() {
 
+      @Override
+      public void onClick(View v) {
+        // TODO Auto-generated method stub
+        for (int i=0;i<booksAdapter.getItemCount();i++){
+          if (booksAdapter.getItems().get(i).isSelected()){
+            flagSelectAll = true;
+            selectAllItem(false);
+          }
+          else {
+            selectAllItem(true);
+          }
+        }
+
+      }
+    });
     bookDelegate =
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         null,
@@ -137,6 +160,19 @@ public class ZimHostActivity extends BaseActivity implements
       }
     });
   }
+  /*@OnClick(R.id.checkBox)
+  public void submit(View view){
+    for (int i=0;i<booksAdapter.getItemCount();i++){
+      if (booksAdapter.getItems().get(i).isSelected()){
+        flagSelectAll = true;
+        selectAllItem(false);
+      }
+      else {
+        selectAllItem(true);
+      }
+    }
+  }*/
+
 
   private void startHotspotHelper() {
       if (ServerUtils.isServerStarted) {
@@ -166,6 +202,20 @@ public class ZimHostActivity extends BaseActivity implements
         item.setSelected(!item.isSelected());
       }
       booksList.add(item);
+    }
+    booksAdapter.setItems(booksList);
+  }
+  private void selectAllItem(Boolean isSelectedAll) {
+    ArrayList<BooksOnDiskListItem> booksList = new ArrayList<>();
+    try {
+      if (booksAdapter.getItems() != null) {
+        for (int index = 0; index < booksAdapter.getItemCount(); index++) {
+            booksAdapter.getItems().get(index).setSelected(isSelectedAll);
+          booksList.add(booksAdapter.getItems().get(index));
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     booksAdapter.setItems(booksList);
   }
