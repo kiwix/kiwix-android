@@ -31,6 +31,14 @@
     app:layout_constraintTop_toBottomOf="@id/zimHostAppBarLayout"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
+    <CheckBox
+      android:id="@+id/checkBox"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:checked="false"
+      android:layout_margin="10dp"
+      tools:layout_editor_absoluteX="344dp"
+      tools:layout_editor_absoluteY="66dp" />
 
     <TextView
       android:id="@+id/server_textView"
@@ -43,14 +51,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/zimHostAppBarLayout" />
 
-    <CheckBox
-      android:id="@+id/checkBox"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:checked="false"
-      android:layout_margin="10dp"
-      tools:layout_editor_absoluteX="344dp"
-      tools:layout_editor_absoluteY="66dp" />
+
   </LinearLayout>
 
   <androidx.recyclerview.widget.RecyclerView
