@@ -99,7 +99,6 @@ public class ZimHostActivity extends BaseActivity implements
 
       @Override
       public void onClick(View v) {
-        // TODO Auto-generated method stub
         for (int i=0;i<booksAdapter.getItemCount();i++){
           if (booksAdapter.getItems().get(i).isSelected()){
             flagSelectAll = true;
