@@ -16,18 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di
+package org.kiwix.kiwixmobile.core.base.adapter
 
-import android.content.Context
-import android.location.LocationManager
-import dagger.Module
-import dagger.Provides
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import kotlinx.android.extensions.LayoutContainer
 
-@Module
-object KiwixModule {
-  @Provides
-  @KiwixScope
-  @JvmStatic
-  internal fun provideLocationManager(context: Context): LocationManager =
-    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+abstract class BaseViewHolder<in ITEM>(override val containerView: View) : ViewHolder(
+  containerView
+), LayoutContainer {
+  abstract fun bind(item: ITEM)
 }

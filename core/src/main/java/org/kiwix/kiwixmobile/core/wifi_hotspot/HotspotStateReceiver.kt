@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.wifi_hotspot
 import android.content.Context
 import android.content.Intent
 import org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotStateReceiver.HotspotState.DISABLED
-import org.kiwix.kiwixmobile.core.zim_manager.BaseBroadcastReceiver
+import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import javax.inject.Inject
 
 const val EXTRA_WIFI_AP_STATE = "wifi_state"

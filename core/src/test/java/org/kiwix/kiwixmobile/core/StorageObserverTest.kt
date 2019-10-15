@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
+package org.kiwix.kiwixmobile.core
 
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -27,7 +27,6 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.book
 import org.kiwix.kiwixmobile.core.bookOnDisk
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao

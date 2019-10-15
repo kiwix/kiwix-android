@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.zim_manager.library_view.adapter.base
+package org.kiwix.kiwixmobile.core.base.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter

@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
+package org.kiwix.kiwixmobile.core
 
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction

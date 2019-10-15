@@ -19,8 +19,8 @@
 package org.kiwix.kiwixmobile
 
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.di.DaggerKiwixComponent
-import org.kiwix.kiwixmobile.di.KiwixComponent
+import org.kiwix.kiwixmobile.di.components.DaggerKiwixComponent
+import org.kiwix.kiwixmobile.di.components.KiwixComponent
 
 class KiwixApp : CoreApp() {
   @Suppress("ConvertLambdaToReference") // we want the entire call to be lazy

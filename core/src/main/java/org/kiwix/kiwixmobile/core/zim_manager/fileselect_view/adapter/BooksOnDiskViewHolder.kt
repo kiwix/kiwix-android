@@ -42,7 +42,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULT
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
-import org.kiwix.kiwixmobile.core.zim_manager.library_view.adapter.base.BaseViewHolder
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 
 sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {

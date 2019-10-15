@@ -18,8 +18,17 @@
 
 package org.kiwix.kiwixmobile.di.components
 
-import dagger.Module
-import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
+import dagger.Component
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.di.modules.KiwixModule
+import org.kiwix.kiwixmobile.di.KiwixScope
+import org.kiwix.kiwixmobile.di.modules.ViewModelModule
 
-@Module(includes = [ActivityModule::class])
-class KiwixActivityModule
+@KiwixScope
+@Component(
+  dependencies = [CoreComponent::class],
+  modules = [ViewModelModule::class, KiwixModule::class]
+)
+interface KiwixComponent {
+  fun activityComponentBuilder(): KiwixActivityComponent.Builder
+}

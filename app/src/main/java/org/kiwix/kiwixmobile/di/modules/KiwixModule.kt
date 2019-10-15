@@ -16,18 +16,19 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di
+package org.kiwix.kiwixmobile.di.modules
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.di.components.KiwixActivityComponent
-import org.kiwix.kiwixmobile.di.modules.ViewModelModule
+import android.content.Context
+import android.location.LocationManager
+import dagger.Module
+import dagger.Provides
+import org.kiwix.kiwixmobile.di.KiwixScope
 
-@KiwixScope
-@Component(
-  dependencies = [CoreComponent::class],
-  modules = [ViewModelModule::class, KiwixModule::class]
-)
-interface KiwixComponent {
-  fun activityComponentBuilder(): KiwixActivityComponent.Builder
+@Module
+object KiwixModule {
+  @Provides
+  @KiwixScope
+  @JvmStatic
+  internal fun provideLocationManager(context: Context): LocationManager =
+    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 }

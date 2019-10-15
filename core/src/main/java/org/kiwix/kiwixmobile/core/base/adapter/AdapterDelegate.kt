@@ -16,14 +16,18 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.zim_manager.library_view.adapter.base
+package org.kiwix.kiwixmobile.core.base.adapter
 
-import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import kotlinx.android.extensions.LayoutContainer
 
-abstract class BaseViewHolder<in ITEM>(override val containerView: View) : ViewHolder(
-  containerView
-), LayoutContainer {
-  abstract fun bind(item: ITEM)
+interface AdapterDelegate<in T> {
+  fun createViewHolder(parent: ViewGroup): ViewHolder
+
+  fun bind(
+    viewHolder: ViewHolder,
+    itemToBind: T
+  )
+
+  fun isFor(item: T): Boolean
 }

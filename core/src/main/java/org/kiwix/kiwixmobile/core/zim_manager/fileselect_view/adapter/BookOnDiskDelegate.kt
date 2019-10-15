@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORM
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskViewHolder.BookViewHolder
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
-import org.kiwix.kiwixmobile.core.zim_manager.library_view.adapter.base.AbsDelegateAdapter
+import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 
 sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskViewHolder<I>> :
   AbsDelegateAdapter<I, BooksOnDiskListItem, VH> {

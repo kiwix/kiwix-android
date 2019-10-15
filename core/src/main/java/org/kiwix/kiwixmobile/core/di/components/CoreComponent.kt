@@ -43,7 +43,7 @@ import org.kiwix.kiwixmobile.core.search.AutoCompleteAdapter
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.StorageObserver
+import org.kiwix.kiwixmobile.core.StorageObserver
 import javax.inject.Singleton
 
 @Singleton

@@ -18,8 +18,8 @@
 
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
-import org.kiwix.kiwixmobile.core.zim_manager.library_view.adapter.base.AdapterDelegate
-import org.kiwix.kiwixmobile.core.zim_manager.library_view.adapter.base.BaseDelegateAdapter
+import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
+import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
 class LibraryAdapter(
   vararg delegates: AdapterDelegate<LibraryListItem>

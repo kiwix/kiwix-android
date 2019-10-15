@@ -24,7 +24,7 @@ import android.content.IntentFilter
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.widget.Toast
-import org.kiwix.kiwixmobile.core.zim_manager.BaseBroadcastReceiver
+import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import java.util.Locale
 
 fun Context?.toast(

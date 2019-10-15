@@ -16,18 +16,10 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.zim_manager.library_view.adapter.base
+package org.kiwix.kiwixmobile.di.modules
 
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import dagger.Module
+import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 
-interface AdapterDelegate<in T> {
-  fun createViewHolder(parent: ViewGroup): ViewHolder
-
-  fun bind(
-    viewHolder: ViewHolder,
-    itemToBind: T
-  )
-
-  fun isFor(item: T): Boolean
-}
+@Module(includes = [ActivityModule::class])
+class KiwixActivityModule

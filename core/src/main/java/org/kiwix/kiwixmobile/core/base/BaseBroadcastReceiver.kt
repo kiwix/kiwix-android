@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.zim_manager
+package org.kiwix.kiwixmobile.core.base
 
 import android.content.BroadcastReceiver
 import android.content.Context

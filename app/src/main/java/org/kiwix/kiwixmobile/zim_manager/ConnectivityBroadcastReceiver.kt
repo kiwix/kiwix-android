@@ -23,7 +23,7 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
-import org.kiwix.kiwixmobile.core.zim_manager.BaseBroadcastReceiver
+import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import org.kiwix.kiwixmobile.networkState
 import javax.inject.Inject
 

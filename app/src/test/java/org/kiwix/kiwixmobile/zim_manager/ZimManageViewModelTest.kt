@@ -52,7 +52,7 @@ import org.kiwix.kiwixmobile.core.resetSchedulers
 import org.kiwix.kiwixmobile.core.setScheduler
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.StorageObserver
+import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
