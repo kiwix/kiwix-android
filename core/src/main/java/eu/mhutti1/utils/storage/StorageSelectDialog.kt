@@ -30,7 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.storage_select_dialog.device_list
 import kotlinx.android.synthetic.main.storage_select_dialog.title
-import org.kiwix.kiwixmobile.core.KiwixApplication
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.StyleUtils
@@ -57,7 +57,7 @@ class StorageSelectDialog : DialogFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    KiwixApplication.getApplicationComponent().inject(this)
+    CoreApp.getCoreComponent().inject(this)
     title.text = aTitle
     Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(activity!!) }
       .subscribeOn(Schedulers.io())

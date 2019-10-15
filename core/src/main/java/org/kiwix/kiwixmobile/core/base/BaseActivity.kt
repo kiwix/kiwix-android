@@ -24,21 +24,12 @@ import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import dagger.android.AndroidInjection
-import org.kiwix.kiwixmobile.core.KiwixApplication
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
-
-  val activityComponent: ActivityComponent by lazy(
-    KiwixApplication.getApplicationComponent()
-      .activityComponent()
-      .activity(this)
-    ::build
-  )
 
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil

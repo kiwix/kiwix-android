@@ -26,7 +26,7 @@ import android.os.Build.VERSION_CODES
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
-import org.kiwix.kiwixmobile.core.KiwixApplication
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
@@ -39,7 +39,7 @@ object FileUtils {
 
   private val saveFilePath =
     "${Environment.getExternalStorageDirectory()}${File.separator}Android" +
-      "${File.separator}obb${File.separator}${KiwixApplication.getInstance().packageName}"
+      "${File.separator}obb${File.separator}${CoreApp.getInstance().packageName}"
 
   @JvmStatic fun getFileCacheDir(context: Context): File? =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {

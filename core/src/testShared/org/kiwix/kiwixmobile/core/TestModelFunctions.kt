@@ -26,7 +26,6 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Pending
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
-import org.kiwix.kiwixmobile.core.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
@@ -92,9 +91,6 @@ fun language(
   id, isActive, occurencesOfLanguage, language, languageLocalized, languageCode,
   languageCodeISO2
 )
-
-fun languageItem(language: Language = language()) =
-  LanguageItem(language)
 
 fun metaLinkNetworkEntity() = MetaLinkNetworkEntity().apply {
   file = fileElement()

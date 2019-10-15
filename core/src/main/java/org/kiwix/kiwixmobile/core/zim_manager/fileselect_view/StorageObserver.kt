@@ -21,10 +21,10 @@ package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.newdb.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
-import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 import javax.inject.Inject

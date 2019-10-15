@@ -22,7 +22,7 @@ import android.webkit.WebView
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 
 class CustomWebViewClient internal constructor(
   callback: WebViewCallback,

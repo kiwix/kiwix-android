@@ -73,16 +73,6 @@ android {
     }
   }
 
-  sourceSets {
-    test {
-      java.srcDirs += "$rootDir/core/src/testShared"
-    }
-
-    androidTest {
-      java.srcDirs += "$rootDir/core/src/testShared"
-    }
-  }
-
   def abiCodes = ['arm64-v8a': 6, 'x86': 3, 'x86_64': 4, 'armeabi-v7a': 5]
   def densityCodes = ['mdpi': 2, 'hdpi': 3, 'xhdpi': 4, 'xxhdpi': 5, 'xxxhdpi': 6]
   splits {

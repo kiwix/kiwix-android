@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
-import org.kiwix.kiwixmobile.core.KiwixApplication
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
@@ -42,7 +42,7 @@ fun Book.buildSearchableText(bookUtils: BookUtils): String =
     append("|")
     append(description)
     append("|")
-    append(NetworkUtils.parseURL(KiwixApplication.getInstance(), url))
+    append(NetworkUtils.parseURL(CoreApp.getInstance(), url))
     append("|")
     if (bookUtils.localeMap.containsKey(language)) {
       append(bookUtils.localeMap[language]!!.displayLanguage)

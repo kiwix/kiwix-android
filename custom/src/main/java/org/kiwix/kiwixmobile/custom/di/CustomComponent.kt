@@ -19,13 +19,10 @@
 package org.kiwix.kiwixmobile.custom.di
 
 import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.ActivityComponent
-import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
-import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 
-@Component(dependencies = [ActivityComponent::class])
+@Component(dependencies = [CoreComponent::class])
 @CustomScope
 interface CustomComponent {
-  fun inject(customMainActivity: CustomMainActivity)
-  fun inject(customSettingsActivity: CustomSettingsActivity)
+  fun activityComponentBuilder(): CustomActivityComponent.Builder
 }

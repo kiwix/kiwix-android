@@ -24,24 +24,23 @@ import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
-import org.kiwix.kiwixmobile.core.KiwixApplication
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer
 import org.kiwix.kiwixmobile.custom.BuildConfig
-import org.kiwix.kiwixmobile.custom.customComponent
+import org.kiwix.kiwixmobile.custom.customActivityComponent
 import java.io.File
 import java.util.Locale
 
 class CustomMainActivity : CoreMainActivity() {
-
   override fun injection() {
-    customComponent.inject(this)
+    customActivityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -142,6 +141,10 @@ class CustomMainActivity : CoreMainActivity() {
     }
   }
 
+  override fun manageZimFiles(tab: Int) {
+    TODO("not implemented")
+  }
+
   companion object {
     /**
      * Returns the file name (without full path) for an Expansion APK file from the given context.
@@ -149,6 +152,6 @@ class CustomMainActivity : CoreMainActivity() {
      * @return String the file name of the expansion file
      */
     @JvmStatic fun getExpansionAPKFileName() =
-      "patch.${BuildConfig.CONTENT_VERSION_CODE}.${KiwixApplication.getInstance().packageName}.obb"
+      "patch.${BuildConfig.CONTENT_VERSION_CODE}.${CoreApp.getInstance().packageName}.obb"
   }
 }

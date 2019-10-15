@@ -30,9 +30,9 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
-import org.kiwix.kiwixmobile.core.KiwixApplication;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
@@ -52,7 +52,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
   }
 
   private void setupDagger() {
-    KiwixApplication.getApplicationComponent().inject(this);
+    CoreApp.getCoreComponent().inject(this);
   }
 
   @Override

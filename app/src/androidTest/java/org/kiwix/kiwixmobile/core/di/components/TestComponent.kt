@@ -41,7 +41,7 @@ import javax.inject.Singleton
     DataModule::class
   ]
 )
-interface TestComponent : ApplicationComponent {
+interface TestComponent : CoreComponent {
 
   @Component.Builder
   interface Builder {

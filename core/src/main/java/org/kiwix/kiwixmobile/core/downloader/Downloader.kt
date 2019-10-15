@@ -17,8 +17,8 @@
  */
 package org.kiwix.kiwixmobile.core.downloader
 
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 
 interface Downloader {
   fun download(book: LibraryNetworkEntity.Book)

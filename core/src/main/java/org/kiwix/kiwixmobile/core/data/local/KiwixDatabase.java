@@ -39,10 +39,10 @@ import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.core.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.core.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch;
-import org.kiwix.kiwixmobile.core.newdb.dao.NewBookDao;
-import org.kiwix.kiwixmobile.core.newdb.dao.NewBookmarksDao;
-import org.kiwix.kiwixmobile.core.newdb.dao.NewLanguagesDao;
-import org.kiwix.kiwixmobile.core.newdb.dao.NewRecentSearchDao;
+import org.kiwix.kiwixmobile.core.dao.NewBookDao;
+import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;
+import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao;
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao;
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;

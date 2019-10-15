@@ -53,11 +53,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.core.KiwixApplication;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
 /**
  * Created by @author Aditya-Sood (21/05/19) as a part of GSoC 2019
@@ -101,7 +101,7 @@ public class AddNoteDialog extends DialogFragment
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    KiwixApplication.getApplicationComponent().inject(this);
+    CoreApp.getCoreComponent().inject(this);
     setStyle(DialogFragment.STYLE_NORMAL,
       sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night
         : R.style.AddNoteDialogStyle);
@@ -313,7 +313,7 @@ public class AddNoteDialog extends DialogFragment
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * */
 
-    if (KiwixApplication.getInstance().isExternalStorageWritable()) {
+    if (CoreApp.getInstance().isExternalStorageWritable()) {
 
       if (ContextCompat.checkSelfPermission(getContext(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

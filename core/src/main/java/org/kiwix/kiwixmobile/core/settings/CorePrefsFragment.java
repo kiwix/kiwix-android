@@ -44,8 +44,8 @@ import java.util.Locale;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.io.FilesKt;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
-import org.kiwix.kiwixmobile.core.KiwixApplication;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
@@ -81,7 +81,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    KiwixApplication.getApplicationComponent().inject(this);
+    CoreApp.getCoreComponent().inject(this);
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.preferences);
 
@@ -253,7 +253,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   }
 
   private void clearAllNotes() {
-    if (KiwixApplication.getInstance().isExternalStorageWritable()) {
+    if (CoreApp.getInstance().isExternalStorageWritable()) {
       if (ContextCompat.checkSelfPermission(getActivity(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED) {

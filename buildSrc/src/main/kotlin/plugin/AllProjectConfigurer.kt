@@ -106,6 +106,22 @@ class AllProjectConfigurer {
         )
         baseline("${path}/lint-baseline.xml")
       }
+      packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/LICENSE.md")
+        exclude("META-INF/LICENSE-notice.md")
+        exclude("META-INF/license.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/notice.txt")
+        exclude("META-INF/ASL2.0")
+      }
+      sourceSets {
+        this.getByName("test").java.srcDir("${target.rootDir}/core/src/testShared")
+        this.getByName("androidTest").java.srcDir("${target.rootDir}/core/src/testShared")
+      }
     }
   }
 
@@ -122,7 +138,14 @@ class AllProjectConfigurer {
   fun configureDependencies(target: Project) {
     target.dependencies {
       implementation(Libs.appcompat)
+      implementation(Libs.material)
+      implementation(Libs.androidx_multidex_multidex)
+      implementation(Libs.okhttp)
+      implementation(Libs.logging_interceptor)
+      implementation(Libs.retrofit)
+      implementation(Libs.adapter_rxjava2)
       testImplementation(Libs.junit_jupiter)
+      androidTestImplementation(Libs.junit_jupiter)
       testImplementation(Libs.mockk)
       testImplementation(Libs.assertj_core)
       testImplementation(Libs.testing_ktx)
@@ -135,6 +158,10 @@ class AllProjectConfigurer {
       implementation(Libs.core_ktx)
       implementation(Libs.fragment_ktx)
       implementation(Libs.collection_ktx)
+      implementation(Libs.butterknife)
+      kapt(Libs.butterknife_compiler)
+      implementation(Libs.xfetch2)
+      implementation(Libs.xfetch2okhttp)
     }
   }
 }

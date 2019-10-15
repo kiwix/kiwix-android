@@ -19,12 +19,12 @@
 package org.kiwix.kiwixmobile.settings
 
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
-import org.kiwix.kiwixmobile.kiwixComponent
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 
 class KiwixSettingsActivity : CoreSettingsActivity() {
 
   override fun injection() {
-    kiwixComponent.inject(this)
+    kiwixActivityComponent.inject(this)
   }
 
   override fun createPreferenceFragment() = KiwixPrefsFragment()

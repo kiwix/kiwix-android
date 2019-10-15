@@ -19,13 +19,15 @@
 package org.kiwix.kiwixmobile.di
 
 import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.ActivityComponent
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.di.components.KiwixActivityComponent
+import org.kiwix.kiwixmobile.di.modules.ViewModelModule
 
-@Component(dependencies = [ActivityComponent::class])
 @KiwixScope
+@Component(
+  dependencies = [CoreComponent::class],
+  modules = [ViewModelModule::class, KiwixModule::class]
+)
 interface KiwixComponent {
-  fun inject(kiwixMainActivity: KiwixMainActivity)
-  fun inject(kiwixMainActivity: KiwixSettingsActivity)
+  fun activityComponentBuilder(): KiwixActivityComponent.Builder
 }

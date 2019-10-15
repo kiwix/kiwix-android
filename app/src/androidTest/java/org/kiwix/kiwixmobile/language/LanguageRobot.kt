@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.language
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.R
 
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
 

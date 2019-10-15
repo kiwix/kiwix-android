@@ -27,17 +27,17 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.KiwixApplication
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.book
 import org.kiwix.kiwixmobile.core.bookOnDisk
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.newdb.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import org.kiwix.kiwixmobile.core.resetSchedulers
 import org.kiwix.kiwixmobile.core.setScheduler
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
-import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader
-import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader.Factory
 import java.io.File
 
 class StorageObserverTest {
@@ -57,8 +57,8 @@ class StorageObserverTest {
 
   init {
     setScheduler(Schedulers.trampoline())
-    mockkStatic(KiwixApplication::class)
-    every { KiwixApplication.getInstance().packageName } returns "pkg"
+    mockkStatic(CoreApp::class)
+    every { CoreApp.getInstance().packageName } returns "pkg"
     zimFileReader = mockk()
   }
 

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.kiwix.kiwixmobile">
 
-  <application>
+  <application android:name=".KiwixApp">
     <activity
       android:name=".main.KiwixMainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
@@ -109,6 +109,43 @@
       <intent-filter>
         <action android:name="org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity" />
         <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
+    <activity
+      android:name=".zim_manager.ZimManageActivity"
+      android:label="@string/choose_file"
+      android:launchMode="singleTop">
+      <!-- TODO -->
+      <intent-filter>
+        <action android:name="android.intent.action.GET_CONTENT" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.OPENABLE" />
+
+        <data android:mimeType="*/*" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
+      </intent-filter>
+    </activity>
+    <activity android:name=".language.LanguageActivity" />
+    <activity
+      android:name=".local_file_transfer.LocalFileTransferActivity"
+      android:label="Send to nearby device"
+      android:screenOrientation="portrait">
+      <intent-filter>
+        <action android:name="android.intent.action.SEND_MULTIPLE" />
+        <category android:name="android.intent.category.DEFAULT" />
+
+        <data android:mimeType="application/octet-stream" />
+        <data android:pathPattern=".*\\.zim" />
+        <data android:pathPattern=".*\\..*\\.zim" />
+        <data android:pathPattern=".*\\..*\\..*\\.zim" />
+        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim" />
+        <data android:host="*" />
       </intent-filter>
     </activity>
   </application>

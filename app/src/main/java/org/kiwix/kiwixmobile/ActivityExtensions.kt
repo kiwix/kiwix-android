@@ -19,7 +19,13 @@
 package org.kiwix.kiwixmobile
 
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.di.DaggerKiwixComponent
+import org.kiwix.kiwixmobile.di.KiwixComponent
 
-internal inline val BaseActivity.kiwixComponent
-  get() = DaggerKiwixComponent.builder().activityComponent(activityComponent).build()
+private val BaseActivity.kiwixComponent: KiwixComponent
+  get() = (applicationContext as KiwixApp).kiwixComponent
+
+internal inline val BaseActivity.kiwixActivityComponent
+  get() = kiwixComponent
+    .activityComponentBuilder()
+    .activity(this)
+    .build()

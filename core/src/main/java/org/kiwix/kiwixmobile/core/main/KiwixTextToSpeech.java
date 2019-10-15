@@ -35,10 +35,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.kiwix.kiwixmobile.core.KiwixApplication;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 
@@ -78,7 +78,7 @@ public class KiwixTextToSpeech {
   }
 
   private void initTTS(final OnInitSucceedListener onInitSucceedListener) {
-    tts = new TextToSpeech(KiwixApplication.getInstance(), status -> {
+    tts = new TextToSpeech(CoreApp.getInstance(), status -> {
       if (status == TextToSpeech.SUCCESS) {
         Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.");
         initialized = true;

@@ -27,7 +27,7 @@ import io.reactivex.processors.PublishProcessor;
 import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.kiwix.kiwixmobile.core.KiwixApplication;
+import org.kiwix.kiwixmobile.core.CoreApp;
 
 /**
  * Manager for the Default Shared Preferences of the application.
@@ -107,7 +107,7 @@ public class SharedPreferenceUtil {
     String storage = sharedPreferences.getString(PREF_STORAGE, null);
     if (storage == null) {
       storage =
-        ContextCompat.getExternalFilesDirs(KiwixApplication.getInstance(), null)[0].getPath();
+        ContextCompat.getExternalFilesDirs(CoreApp.getInstance(), null)[0].getPath();
       putPrefStorage(storage);
     }
     return storage;

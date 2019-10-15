@@ -19,7 +19,10 @@
 package org.kiwix.kiwixmobile.custom
 
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.custom.di.DaggerCustomComponent
+import org.kiwix.kiwixmobile.custom.di.CustomComponent
 
-internal inline val BaseActivity.customComponent
-  get() = DaggerCustomComponent.builder().activityComponent(activityComponent).build()
+private val BaseActivity.customComponent: CustomComponent
+  get() = (applicationContext as CustomApp).customComponent
+
+internal inline val BaseActivity.customActivityComponent
+  get() = customComponent.activityComponentBuilder().activity(this).build()

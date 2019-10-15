@@ -25,12 +25,6 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
-
-  sourceSets {
-    test {
-      java.srcDirs += "$projectDir/src/testShared"
-    }
-  }
 }
 
 private boolean shouldUseLocalVersion() {
@@ -51,7 +45,6 @@ dependencies {
   }
 
   // Android Support
-  implementation(Libs.material)
   implementation(Libs.cardview)
   implementation(Libs.androidx_multidex_multidex)
   implementation(Libs.constraintlayout)
@@ -66,20 +59,11 @@ dependencies {
   kapt(Libs.squidb_processor)
 
   // Square
-  implementation(Libs.okhttp)
-  implementation(Libs.logging_interceptor)
-  implementation(Libs.retrofit)
-  implementation(Libs.adapter_rxjava2)
   implementation(Libs.converter_simplexml) {
     exclude group: "xpp3", module: "xpp3"
     exclude group: "stax", module: "stax-api"
     exclude group: "stax", module: "stax"
   }
-
-
-  // ButterKnife
-  implementation(Libs.butterknife)
-  kapt(Libs.butterknife_compiler)
 
   // RxJava
   implementation(Libs.rxandroid)

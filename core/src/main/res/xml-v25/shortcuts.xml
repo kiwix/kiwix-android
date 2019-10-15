@@ -21,7 +21,7 @@
     android:shortcutShortLabel="@string/get_content_shortcut_label">
     <intent
       android:action="GET_CONTENT"
-      android:targetClass="org.kiwix.kiwixmobile.zim_manager.ZimManageActivity"
+      android:targetClass="org.kiwix.kiwixmobile.core.zim_manager.ZimManageActivity"
       android:targetPackage="org.kiwix.kiwixmobile" />
   </shortcut>
 </shortcuts>

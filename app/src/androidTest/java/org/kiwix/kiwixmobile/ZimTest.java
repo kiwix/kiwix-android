@@ -33,9 +33,9 @@ public class ZimTest {
   @Before public void setUp() {
     TestComponent component = DaggerTestComponent.builder().applicationModule
         (new ApplicationModule(
-            (KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext())).build();
+            (CoreApp) getInstrumentation().getTargetContext().getApplicationContext())).build();
 
-    ((KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext()).setApplicationComponent(component);
+    ((CoreApp) getInstrumentation().getTargetContext().getApplicationContext()).setCoreComponent(component);
 
     component.inject(this);
     new ZimContentProvider().setupDagger();

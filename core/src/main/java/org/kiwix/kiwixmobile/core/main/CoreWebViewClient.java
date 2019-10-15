@@ -28,11 +28,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import java.util.HashMap;
-import org.kiwix.kiwixmobile.core.KiwixApplication;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
@@ -45,7 +45,7 @@ public abstract class CoreWebViewClient extends WebViewClient {
   protected final WebViewCallback callback;
   protected final ZimReaderContainer zimReaderContainer;
   private final SharedPreferenceUtil sharedPreferenceUtil =
-    new SharedPreferenceUtil(KiwixApplication.getInstance());
+    new SharedPreferenceUtil(CoreApp.getInstance());
   private View home;
 
   public CoreWebViewClient(
@@ -110,7 +110,7 @@ public abstract class CoreWebViewClient extends WebViewClient {
   @Override
   public void onPageFinished(WebView view, String url) {
     boolean invalidUrl =
-      url.equals("content://" + KiwixApplication.getInstance().getPackageName() + ".zim.base/null");
+      url.equals("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/null");
     Log.d(TAG_KIWIX, "invalidUrl = " + invalidUrl);
 
     if (invalidUrl) {

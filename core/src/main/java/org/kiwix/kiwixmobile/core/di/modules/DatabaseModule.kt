@@ -22,13 +22,13 @@ import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import org.kiwix.kiwixmobile.core.newdb.dao.FetchDownloadDao
-import org.kiwix.kiwixmobile.core.newdb.dao.HistoryDao
-import org.kiwix.kiwixmobile.core.newdb.dao.NewBookDao
-import org.kiwix.kiwixmobile.core.newdb.dao.NewBookmarksDao
-import org.kiwix.kiwixmobile.core.newdb.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.newdb.dao.NewRecentSearchDao
-import org.kiwix.kiwixmobile.core.newdb.entities.MyObjectBox
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.entities.MyObjectBox
 import javax.inject.Singleton
 
 @Module

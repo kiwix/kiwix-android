@@ -109,9 +109,8 @@ import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.StorageObserver;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
@@ -207,7 +206,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   ViewGroup videoView;
 
   @Inject
-  MainContract.Presenter presenter;
+  protected MainContract.Presenter presenter;
   @Inject
   StorageObserver storageObserver;
   @Inject
@@ -1685,21 +1684,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     } else {
       getCurrentWebView().deactivateNightMode();
     }
-  }
-
-  public void manageZimFiles(int tab) {
-    presenter.loadCurrentZimBookmarksUrl();
-    final Intent target = new Intent(this, ZimManageActivity.class);
-    target.setAction(Intent.ACTION_GET_CONTENT);
-    // The MIME data type filter
-    target.setType("//");
-    target.putExtra(ZimManageActivity.TAB_EXTRA, tab);
-    // Only return URIs that can be opened with ContentResolver
-    target.addCategory(Intent.CATEGORY_OPENABLE);
-    // Force use of our file selection component.
-    // (Note may make sense to just define a custom intent instead)
-
-    startActivityForResult(target, REQUEST_FILE_SELECT);
   }
 
   private void selectSettings() {

@@ -18,8 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.bookmark
 
-import org.kiwix.kiwixmobile.core.newdb.entities.BookmarkEntity
-import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader
+import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 data class BookmarkItem(
   val databaseId: Long = 0L,

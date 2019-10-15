@@ -19,8 +19,8 @@ package org.kiwix.kiwixmobile.core.search;
 
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.base.BasePresenter;
-import org.kiwix.kiwixmobile.core.newdb.dao.NewRecentSearchDao;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
 /**
  * Created by srv_twry on 14/2/18.

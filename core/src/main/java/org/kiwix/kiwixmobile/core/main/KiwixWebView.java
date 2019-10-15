@@ -41,11 +41,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.core.KiwixApplication;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
 public class KiwixWebView extends VideoEnabledWebView {
   public static final float[] NIGHT_MODE_COLORS = {
@@ -68,7 +68,7 @@ public class KiwixWebView extends VideoEnabledWebView {
     ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient) {
     super(context, attrs);
     this.callback = callback;
-    KiwixApplication.getApplicationComponent().inject(this);
+    CoreApp.getCoreComponent().inject(this);
     // Set the user agent to the current locale so it can be read with navigator.userAgent
     final WebSettings settings = getSettings();
     settings.setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
@@ -174,8 +174,8 @@ public class KiwixWebView extends VideoEnabledWebView {
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
-          && KiwixApplication.getInstance().getExternalMediaDirs().length > 0) {
-          root = KiwixApplication.getInstance().getExternalMediaDirs()[0];
+          && CoreApp.getInstance().getExternalMediaDirs().length > 0) {
+          root = CoreApp.getInstance().getExternalMediaDirs()[0];
         }
 
         File storageDir = new File(root, url);
@@ -190,7 +190,7 @@ public class KiwixWebView extends VideoEnabledWebView {
 
         try {
           InputStream input =
-            KiwixApplication.getInstance().getContentResolver().openInputStream(source);
+            CoreApp.getInstance().getContentResolver().openInputStream(source);
           OutputStream output = new FileOutputStream(storageDir);
 
           byte[] buffer = new byte[1024];
@@ -203,14 +203,14 @@ public class KiwixWebView extends VideoEnabledWebView {
           }
           output.close();
 
-          String imageSaved = KiwixApplication.getInstance().getString(R.string.save_media_saved);
+          String imageSaved = CoreApp.getInstance().getString(R.string.save_media_saved);
           toastText = String.format(imageSaved, newUrl);
         } catch (IOException e) {
           Log.w("kiwix", "Couldn't save image", e);
-          toastText = KiwixApplication.getInstance().getString(R.string.save_media_error);
+          toastText = CoreApp.getInstance().getString(R.string.save_media_error);
         }
 
-        Toast.makeText(KiwixApplication.getInstance(), toastText, Toast.LENGTH_LONG).show();
+        Toast.makeText(CoreApp.getInstance(), toastText, Toast.LENGTH_LONG).show();
       }
     }
   }

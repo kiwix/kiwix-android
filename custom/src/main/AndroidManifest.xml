@@ -3,7 +3,7 @@
   package="org.kiwix.kiwixmobile.custom">
 
 
-  <application>
+  <application android:name=".CustomApp">
 
     <activity
       android:name=".main.CustomMainActivity"

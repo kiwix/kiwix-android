@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadRequester
-import org.kiwix.kiwixmobile.core.newdb.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Singleton
 

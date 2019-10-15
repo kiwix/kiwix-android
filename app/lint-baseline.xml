@@ -9,47 +9,450 @@
     </issue>
 
     <issue
-        id="UnusedAttribute"
-        message="Attribute `networkSecurityConfig` is only used in API level 24 and higher (current min is 15)"
-        errorLine1="    android:networkSecurityConfig=&quot;@xml/network_security_config&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        id="RequiredSize"
+        message="The required `layout_width` and `layout_height` attributes are missing"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
-            file="src\main\AndroidManifest.xml"
-            line="25"
-            column="5"/>
+            file="src\main\res\layout\activity_library.xml"
+            line="11"
+            column="4"/>
     </issue>
 
     <issue
-        id="ExportedContentProvider"
-        message="Exported content providers can provide access to potentially sensitive data"
-        errorLine1="    &lt;provider"
-        errorLine2="     ~~~~~~~~">
+        id="RequiredSize"
+        message="The required `layout_width` and `layout_height` attributes are missing"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
-            file="src\main\AndroidManifest.xml"
-            line="168"
-            column="6"/>
+            file="src\main\res\layout\layout_download_management.xml"
+            line="12"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="RequiredSize"
+        message="The required `layout_width` and `layout_height` attributes are missing"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\zim_list.xml"
+            line="11"
+            column="4"/>
     </issue>
 
     <issue
         id="AllowBackup"
         message="On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html"
-        errorLine1="  &lt;application"
+        errorLine1="  &lt;application android:name=&quot;.KiwixApp&quot;>"
         errorLine2="   ~~~~~~~~~~~">
         <location
             file="src\main\AndroidManifest.xml"
-            line="19"
+            line="5"
             column="4"/>
     </issue>
 
     <issue
         id="UnpackedNativeCode"
         message="Missing attribute android:extractNativeLibs=&quot;false&quot; on the `&lt;application>` tag."
-        errorLine1="  &lt;application"
+        errorLine1="  &lt;application android:name=&quot;.KiwixApp&quot;>"
         errorLine2="  ^">
         <location
             file="src\main\AndroidManifest.xml"
-            line="19"
+            line="5"
             column="3"/>
+    </issue>
+
+    <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src\main\res\layout\library_item.xml"
+            line="51"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?attr/listBackground` with a theme that also paints a background (inferred theme is `@android:style/Theme.Holo`)"
+        errorLine1="  android:background=&quot;?attr/listBackground&quot;"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\res\layout\zim_list.xml"
+            line="7"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` field `requestCheckSystemFileType` of class `Fat32Checker` requires synthetic accessor"
+        errorLine1="        requestCheckSystemFileType.onNext(Unit)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\Fat32Checker.kt"
+            line="66"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` method `deleteIfExists` of class `Fat32CheckerKt` requires synthetic accessor"
+        errorLine1="    File(path).deleteIfExists()"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\Fat32Checker.kt"
+            line="81"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` method `deleteIfExists` of class `Fat32CheckerKt` requires synthetic accessor"
+        errorLine1="      File(path).deleteIfExists()"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\Fat32Checker.kt"
+            line="92"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` field `activity` of class `WifiDirectManager` requires synthetic accessor"
+        errorLine1="        Log.d(TAG, activity.getString(R.string.discovery_failed) + &quot;: &quot; + errorMessage);"
+        errorLine2="                   ~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
+            line="146"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` field `hasSenderStartedConnection` of class `WifiDirectManager` requires synthetic accessor"
+        errorLine1="          hasSenderStartedConnection = true;"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
+            line="247"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` field `activity` of class `WifiDirectManager` requires synthetic accessor"
+        errorLine1="        Log.d(TAG, activity.getString(R.string.connection_failed) + &quot;: &quot; + errorMessage);"
+        errorLine2="                   ~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
+            line="273"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` method `closeChannel` of class `WifiDirectManager` requires synthetic accessor"
+        errorLine1="        closeChannel();"
+        errorLine2="        ~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
+            line="395"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` method `closeChannel` of class `WifiDirectManager` requires synthetic accessor"
+        errorLine1="        closeChannel();"
+        errorLine2="        ~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
+            line="401"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\activity_library.xml"
+            line="11"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="    &lt;TextView"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src\main\res\layout\download_item.xml"
+            line="31"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="    &lt;TextView"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src\main\res\layout\download_item.xml"
+            line="39"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="      &lt;TextView"
+        errorLine2="       ~~~~~~~~">
+        <location
+            file="src\main\res\layout\download_item.xml"
+            line="60"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="      &lt;TextView"
+        errorLine2="       ~~~~~~~~">
+        <location
+            file="src\main\res\layout\download_item.xml"
+            line="68"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\header_date.xml"
+            line="9"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_language.xml"
+            line="20"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_language.xml"
+            line="35"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_language.xml"
+            line="47"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\library_divider.xml"
+            line="13"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="GoogleAppIndexingApiWarning"
+        message="Missing support for Firebase App Indexing API"
+        errorLine1="class KiwixMainActivity : CoreMainActivity() {"
+        errorLine2="      ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\main\KiwixMainActivity.kt"
+            line="44"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="GoogleAppIndexingApiWarning"
+        message="Missing support for Firebase App Indexing API"
+        errorLine1="class ZimManageActivity : BaseActivity() {"
+        errorLine2="      ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\ZimManageActivity.kt"
+            line="48"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="  &lt;ImageView"
+        errorLine2="   ~~~~~~~~~">
+        <location
+            file="src\main\res\layout\download_item.xml"
+            line="13"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src\main\res\layout\download_item.xml"
+            line="82"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="  &lt;ImageView"
+        errorLine2="   ~~~~~~~~~">
+        <location
+            file="src\main\res\layout\library_item.xml"
+            line="15"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="RtlSymmetry"
+        message="When you define `paddingLeft` you should probably also define `paddingRight` for right-to-left symmetry"
+        errorLine1="    android:paddingLeft=&quot;@dimen/dimen_small_padding&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\res\layout\library_item.xml"
+            line="31"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider adding `android:layout_marginEnd=&quot;@dimen/favicon_margin_right&quot;` to better support right-to-left layouts"
+        errorLine1="    android:layout_marginRight=&quot;@dimen/favicon_margin_right&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\res\layout\download_item.xml"
+            line="18"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider adding `android:layout_marginEnd=&quot;@dimen/favicon_margin_right&quot;` to better support right-to-left layouts"
+        errorLine1="    android:layout_marginRight=&quot;@dimen/favicon_margin_right&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\res\layout\library_item.xml"
+            line="20"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider adding `android:paddingStart=&quot;@dimen/dimen_small_padding&quot;` to better support right-to-left layouts"
+        errorLine1="    android:paddingLeft=&quot;@dimen/dimen_small_padding&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\res\layout\library_item.xml"
+            line="31"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Use &quot;`end`&quot; instead of &quot;`right`&quot; to ensure correct behavior in right-to-left locales"
+        errorLine1="        android:gravity=&quot;right&quot;"
+        errorLine2="                         ~~~~~">
+        <location
+            file="src\main\res\layout\library_item.xml"
+            line="95"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="RtlEnabled"
+        message="The project references RTL attributes, but does not explicitly enable or disable RTL support with `android:supportsRtl` in the manifest">
+        <location
+            file="src\main\AndroidManifest.xml"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  public KiwixViewModelFactory(Map&lt;Class&lt;? extends ViewModel>, Provider&lt;ViewModel>> creators) {"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\KiwixViewModelFactory.java"
+            line="33"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  public &lt;T extends ViewModel> T create(Class&lt;T> modelClass) {"
+        errorLine2="                               ~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\KiwixViewModelFactory.java"
+            line="39"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  public &lt;T extends ViewModel> T create(Class&lt;T> modelClass) {"
+        errorLine2="                                        ~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\KiwixViewModelFactory.java"
+            line="39"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  void showBooks(LinkedList&lt;Book> books);"
+        errorLine2="                 ~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\library_view\LibraryViewCallback.java"
+            line="31"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  void downloadFile(LibraryNetworkEntity.Book book);"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\library_view\LibraryViewCallback.java"
+            line="43"
+            column="21"/>
     </issue>
 
 </issues>

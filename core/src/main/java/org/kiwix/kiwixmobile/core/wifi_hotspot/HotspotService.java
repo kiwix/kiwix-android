@@ -26,7 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.core.KiwixApplication;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
@@ -59,7 +59,7 @@ public class HotspotService extends Service
   HotspotStateReceiver hotspotStateReceiver;
 
   @Override public void onCreate() {
-    KiwixApplication.getApplicationComponent()
+    CoreApp.getCoreComponent()
       .serviceComponent()
       .service(this)
       .build()

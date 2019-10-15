@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -26,6 +27,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
+import org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_FILE_SELECT
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_POSITIONS
@@ -34,14 +36,15 @@ import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.core.zim_manager.ZimReaderContainer
-import org.kiwix.kiwixmobile.kiwixComponent
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
 class KiwixMainActivity : CoreMainActivity() {
 
   override fun injection() {
-    kiwixComponent.inject(this)
+    kiwixActivityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,5 +122,20 @@ class KiwixMainActivity : CoreMainActivity() {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
       // TODO: Show to user
     }
+  }
+
+  override fun manageZimFiles(tab: Int) {
+    presenter.loadCurrentZimBookmarksUrl()
+    val target = Intent(this, ZimManageActivity::class.java)
+    target.action = Intent.ACTION_GET_CONTENT
+    // The MIME data type filter
+    target.type = "//"
+    target.putExtra(ZimManageActivity.TAB_EXTRA, tab)
+    // Only return URIs that can be opened with ContentResolver
+    target.addCategory(Intent.CATEGORY_OPENABLE)
+    // Force use of our file selection component.
+    // (Note may make sense to just define a custom intent instead)
+
+    startActivityForResult(target, REQUEST_FILE_SELECT)
   }
 }

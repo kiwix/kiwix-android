@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.downloader.model
 
-import org.kiwix.kiwixmobile.core.KiwixApplication
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import java.util.Locale
 import kotlin.math.roundToLong
@@ -29,7 +29,7 @@ inline class Seconds(val seconds: Long) {
     val hours = 60 * minutes
     val days = 24 * hours
 
-    val context = KiwixApplication.getInstance()
+    val context = CoreApp.getInstance()
     return when {
       (seconds / days).roundToLong() > 0 -> String.format(
         Locale.getDefault(), "%d %s %s", (seconds / days).roundToLong(),

@@ -17,8 +17,8 @@
  */
 package org.kiwix.kiwixmobile.core.history
 
-import org.kiwix.kiwixmobile.core.newdb.entities.HistoryEntity
-import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader
+import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 sealed class HistoryListItem {
   abstract val id: Long

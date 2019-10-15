@@ -18,10 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
+import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
+import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.core.newdb.entities.BookOnDiskEntity
-import org.kiwix.kiwixmobile.core.newdb.entities.FetchDownloadEntity
-import org.kiwix.kiwixmobile.core.zim_manager.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import java.io.File
 import java.util.Locale
 
