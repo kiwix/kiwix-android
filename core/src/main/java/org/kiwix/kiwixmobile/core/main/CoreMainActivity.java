@@ -572,7 +572,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       hideTabSwitcher();
     } else if (isFullscreenOpened) {
       closeFullScreen();
-    } else if (compatCallback.mIsActive) {
+    } else if (compatCallback.isActive) {
       compatCallback.finish();
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
