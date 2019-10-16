@@ -32,9 +32,12 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.InstantExecutorExtension
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.book
 import org.kiwix.kiwixmobile.core.bookOnDisk
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
@@ -52,7 +55,6 @@ import org.kiwix.kiwixmobile.core.resetSchedulers
 import org.kiwix.kiwixmobile.core.setScheduler
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
@@ -67,6 +69,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
 
 @ExtendWith(InstantExecutorExtension::class)
+@TestInstance(PER_CLASS)
 class ZimManageViewModelTest {
 
   private val downloadDao: FetchDownloadDao = mockk()

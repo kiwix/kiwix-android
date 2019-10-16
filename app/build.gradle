@@ -92,6 +92,11 @@ android {
           variant.versionCode
     }
   }
+  sourceSets {
+    androidTest {
+      java.srcDirs += "$rootDir/core/src/testShared"
+    }
+  }
 }
 
 play {
@@ -115,11 +120,4 @@ dependencies {
   implementation(Libs.squidb)
   implementation(Libs.squidb_annotations)
   kapt(Libs.squidb_processor)
-
-  implementation(Libs.xfetch2)
-  implementation(Libs.xfetch2okhttp)
-
-  // RxJava
-  implementation(Libs.rxandroid)
-  implementation(Libs.rxjava)
 }

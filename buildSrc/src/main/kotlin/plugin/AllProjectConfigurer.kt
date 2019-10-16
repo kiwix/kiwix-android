@@ -119,8 +119,7 @@ class AllProjectConfigurer {
         exclude("META-INF/ASL2.0")
       }
       sourceSets {
-        this.getByName("test").java.srcDir("${target.rootDir}/core/src/testShared")
-        this.getByName("androidTest").java.srcDir("${target.rootDir}/core/src/testShared")
+        getByName("test").java.srcDir("${target.rootDir}/core/src/testShared")
       }
     }
   }
@@ -137,6 +136,7 @@ class AllProjectConfigurer {
 
   fun configureDependencies(target: Project) {
     target.dependencies {
+      implementation(Libs.kotlin_stdlib_jdk7)
       implementation(Libs.appcompat)
       implementation(Libs.material)
       implementation(Libs.androidx_multidex_multidex)
@@ -145,7 +145,6 @@ class AllProjectConfigurer {
       implementation(Libs.retrofit)
       implementation(Libs.adapter_rxjava2)
       testImplementation(Libs.junit_jupiter)
-      androidTestImplementation(Libs.junit_jupiter)
       testImplementation(Libs.mockk)
       testImplementation(Libs.assertj_core)
       testImplementation(Libs.testing_ktx)
@@ -162,6 +161,8 @@ class AllProjectConfigurer {
       kapt(Libs.butterknife_compiler)
       implementation(Libs.xfetch2)
       implementation(Libs.xfetch2okhttp)
+      implementation(Libs.rxandroid)
+      implementation(Libs.rxjava)
     }
   }
 }

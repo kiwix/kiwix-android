@@ -19,6 +19,7 @@ apply plugin: 'io.objectbox'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
+  publishNonDefault true
   buildTypes {
     release {
       minifyEnabled false
@@ -46,7 +47,6 @@ dependencies {
 
   // Android Support
   implementation(Libs.cardview)
-  implementation(Libs.androidx_multidex_multidex)
   implementation(Libs.constraintlayout)
 
 
@@ -65,18 +65,10 @@ dependencies {
     exclude group: "stax", module: "stax"
   }
 
-  // RxJava
-  implementation(Libs.rxandroid)
-  implementation(Libs.rxjava)
-
   // Leak canary
   debugImplementation(Libs.leakcanary_android)
 
-  implementation(Libs.kotlin_stdlib_jdk7)
   implementation(Libs.android_arch_lifecycle_extensions)
   implementation(Libs.objectbox_kotlin)
   implementation(Libs.objectbox_rxjava)
-
-  implementation(Libs.xfetch2)
-  implementation(Libs.xfetch2okhttp)
 }
