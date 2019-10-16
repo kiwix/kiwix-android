@@ -597,7 +597,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       hideTabSwitcher();
     } else if (isFullscreenOpened) {
       closeFullScreen();
-    } else if (compatCallback.mIsActive) {
+    } else if (compatCallback.isActive) {
       compatCallback.finish();
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();

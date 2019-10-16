@@ -39,44 +39,44 @@ import org.kiwix.kiwixmobile.R;
 public class CompatFindActionModeCallback
   implements ActionMode.Callback, TextWatcher, View.OnClickListener {
 
-  public boolean mIsActive;
+  public boolean isActive;
 
-  private View mCustomView;
+  private View customView;
 
-  private EditText mEditText;
+  private EditText editText;
 
-  private TextView mFindResultsTextView;
+  private TextView findResultsTextView;
 
-  private WebView mWebView;
+  private WebView webView;
 
-  private InputMethodManager mInput;
+  private InputMethodManager input;
 
-  private ActionMode mActionMode;
+  private ActionMode actionMode;
 
   CompatFindActionModeCallback(Context context) {
-    mCustomView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
-    mEditText = mCustomView.findViewById(R.id.edit);
-    mEditText.setOnClickListener(this);
-    mFindResultsTextView = mCustomView.findViewById(R.id.find_results);
-    mInput = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-    mIsActive = false;
+    customView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
+    editText = customView.findViewById(R.id.edit);
+    editText.setOnClickListener(this);
+    findResultsTextView = customView.findViewById(R.id.find_results);
+    input = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+    isActive = false;
     setText("");
   }
 
   public void setActive() {
-    mIsActive = true;
+    isActive = true;
   }
 
   public void finish() {
-    mActionMode.finish();
-    mWebView.clearMatches();
+    actionMode.finish();
+    webView.clearMatches();
   }
 
   // Place text in the text field so it can be searched for.  Need to press
   // the find next or find previous button to find all of the matches.
   public void setText(String text) {
-    mEditText.setText(text);
-    Spannable span = mEditText.getText();
+    editText.setText(text);
+    Spannable span = editText.getText();
     int length = span.length();
 
     // Ideally, we would like to set the selection to the whole field,
@@ -95,22 +95,22 @@ public class CompatFindActionModeCallback
       throw new AssertionError(
         "WebView supplied to CompatFindActionModeCallback cannot be null");
     }
-    mWebView = webView;
+    this.webView = webView;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      mFindResultsTextView.setVisibility(View.VISIBLE);
-      mWebView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
+      findResultsTextView.setVisibility(View.VISIBLE);
+      this.webView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
         String result;
-        if (mEditText.getText().toString().isEmpty()) {
+        if (editText.getText().toString().isEmpty()) {
           result = "";
         } else if (numberOfMatches == 0) {
           result = "0/0";
         } else {
           result = (activeMatchOrdinal + 1) + "/" + numberOfMatches;
         }
-        mFindResultsTextView.setText(result);
+        findResultsTextView.setText(result);
       });
     } else {
-      mFindResultsTextView.setVisibility(View.GONE);
+      findResultsTextView.setVisibility(View.GONE);
     }
   }
 
@@ -119,31 +119,31 @@ public class CompatFindActionModeCallback
   // If false, find the previous match, up in the document.
   private void findNext(boolean next) {
 
-    if (mWebView == null) {
+    if (webView == null) {
       throw new AssertionError("No WebView for CompatFindActionModeCallback::findNext");
     }
 
-    mWebView.findNext(next);
+    webView.findNext(next);
   }
 
   // Highlight all the instances of the string from mEditText in mWebView.
   public void findAll() {
-    if (mWebView == null) {
+    if (webView == null) {
       throw new AssertionError("No WebView for CompatFindActionModeCallback::findAll");
     }
-    CharSequence find = mEditText.getText();
+    CharSequence find = editText.getText();
     if (find.length() == 0) {
-      mWebView.clearMatches();
+      webView.clearMatches();
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        mWebView.findAllAsync(null);
+        webView.findAllAsync(null);
       } else {
-        mWebView.findAll(null);
+        webView.findAll(null);
       }
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        mWebView.findAllAsync(find.toString());
+        webView.findAllAsync(find.toString());
       } else {
-        mWebView.findAll(find.toString());
+        webView.findAll(find.toString());
       }
 
       // Enable word highlighting with reflection
@@ -151,7 +151,7 @@ public class CompatFindActionModeCallback
         for (Method ms : WebView.class.getDeclaredMethods()) {
           if (ms.getName().equals("setFindIsUp")) {
             ms.setAccessible(true);
-            ms.invoke(mWebView, true);
+            ms.invoke(webView, true);
             break;
           }
         }
@@ -163,14 +163,15 @@ public class CompatFindActionModeCallback
 
   // Show on screen keyboard
   public void showSoftInput() {
-    mEditText.requestFocus();
-    mEditText.setFocusable(true);
-    mEditText.setFocusableInTouchMode(true);
-    mEditText.requestFocusFromTouch();
+    //wait for any hidden show/hide processes to finish
+    editText.postDelayed(() -> {
 
-    if (mEditText.requestFocus()) {
-      mInput.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-    }
+      editText.requestFocus();
+      //show the keyboard
+      input.showSoftInput(editText, 0);
+
+    }, 100);
+
   }
 
   @Override
@@ -180,21 +181,21 @@ public class CompatFindActionModeCallback
 
   @Override
   public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-    mode.setCustomView(mCustomView);
+    mode.setCustomView(customView);
     mode.getMenuInflater().inflate(R.menu.menu_webview, menu);
-    mActionMode = mode;
-    Editable edit = mEditText.getText();
+    actionMode = mode;
+    Editable edit = editText.getText();
     Selection.setSelection(edit, edit.length());
-    mEditText.requestFocus();
+    editText.requestFocus();
     return true;
   }
 
   @Override
   public void onDestroyActionMode(ActionMode mode) {
-    mActionMode = null;
-    mIsActive = false;
-    mWebView.clearMatches();
-    mInput.hideSoftInputFromWindow(mWebView.getWindowToken(), 0);
+    actionMode = null;
+    isActive = false;
+    webView.clearMatches();
+    input.hideSoftInputFromWindow(webView.getWindowToken(), 0);
   }
 
   @Override
@@ -204,12 +205,12 @@ public class CompatFindActionModeCallback
 
   @Override
   public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-    if (mWebView == null) {
+    if (webView == null) {
       throw new AssertionError(
         "No WebView for CompatFindActionModeCallback::onActionItemClicked");
     }
 
-    mInput.hideSoftInputFromWindow(mWebView.getWindowToken(), 0);
+    input.hideSoftInputFromWindow(webView.getWindowToken(), 0);
 
     switch (item.getItemId()) {
       case R.id.find_prev:
