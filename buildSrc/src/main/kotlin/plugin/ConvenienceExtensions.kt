@@ -19,6 +19,7 @@
 package plugin
 
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 internal inline fun <reified T> Project.configureExtension(function: T.() -> Unit) =
@@ -33,8 +34,13 @@ internal fun DependencyHandlerScope.kaptAndroidTest(dependency: String) =
 internal fun DependencyHandlerScope.androidTestCompileOnly(dependency: String) =
   addDependency("androidTestCompileOnly", dependency)
 
-internal fun DependencyHandlerScope.androidTestImplementation(dependency: String) =
-  addDependency("androidTestImplementation", dependency)
+internal fun DependencyHandlerScope.androidTestImplementation(
+  dependency: String,
+  dependencyFunc: (ModuleDependency.() -> Unit)? = null
+) =
+  addDependency("androidTestImplementation", dependency).also {
+    (it as ModuleDependency?)?.let { moduleDependency -> dependencyFunc?.invoke(moduleDependency) }
+  }
 
 internal fun DependencyHandlerScope.compileOnly(dependency: String) =
   addDependency("compileOnly", dependency)

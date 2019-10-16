@@ -31,12 +31,12 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import javax.inject.Inject
 
@@ -56,7 +56,7 @@ class DownloadFragment : BaseFragment() {
   }
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.kiwixActivityComponent.inject(this)
+    (baseActivity as ZimManageActivity).cachedComponent.inject(this)
   }
 
   override fun onCreateView(

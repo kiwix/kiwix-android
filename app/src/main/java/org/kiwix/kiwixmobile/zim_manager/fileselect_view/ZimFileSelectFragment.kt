@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
-import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
@@ -76,7 +76,7 @@ class ZimFileSelectFragment : BaseFragment() {
   }
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.kiwixActivityComponent.inject(this)
+    (baseActivity as ZimManageActivity).cachedComponent.inject(this)
   }
 
   override fun onCreateView(

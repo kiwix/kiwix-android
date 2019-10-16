@@ -22,6 +22,7 @@ import Libs
 import com.android.build.gradle.AppExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.project
 
 class AppConfigurer {
@@ -41,9 +42,6 @@ class AppConfigurer {
           isUniversalApk = true
         }
       }
-      testOptions {
-        execution = "ANDROIDX_TEST_ORCHESTRATOR"
-      }
       aaptOptions {
         cruncherEnabled = true
       }
@@ -54,7 +52,7 @@ class AppConfigurer {
 
   private fun configureDependencies(target: Project) {
     target.dependencies {
-      this.add("implementation", project(":core"))
+      add("implementation", project(":core"))
       androidTestImplementation(Libs.espresso_core)
       androidTestImplementation(Libs.espresso_web)
       androidTestImplementation(Libs.espresso_intents)
@@ -66,6 +64,14 @@ class AppConfigurer {
       androidTestImplementation(Libs.androidx_test_rules)
       androidTestImplementation(Libs.androidx_test_core)
       androidTestImplementation(Libs.mockwebserver)
+      androidTestImplementation(Libs.barista) {
+        exclude(group = "com.android.support.test.uiautomator")
+      }
+      androidTestImplementation(Libs.simple_xml) {
+        exclude(module = "stax")
+        exclude(module = "stax-api")
+        exclude(module = "xpp3")
+      }
       androidTestUtil(Libs.orchestrator)
       androidTestImplementation(Libs.mockito_android)
       androidTestCompileOnly(Libs.javax_annotation_api)

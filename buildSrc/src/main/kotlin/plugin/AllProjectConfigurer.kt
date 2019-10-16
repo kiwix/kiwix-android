@@ -53,18 +53,19 @@ class AllProjectConfigurer {
       }
 
       buildTypes {
-        getByName("debug").apply {
+        getByName("debug") {
           isTestCoverageEnabled = true
         }
       }
 
-      compileOptions.apply {
+      compileOptions {
         encoding = "UTF-8"
         sourceCompatibility = Config.javaVersion
         targetCompatibility = Config.javaVersion
       }
 
       testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.apply {
           isReturnDefaultValues = true
           all(KotlinClosure1<Any, Test>({
@@ -101,8 +102,7 @@ class AllProjectConfigurer {
         warning(
           "UnknownNullness",
           "SelectableText",
-          "IconDensities",
-          "SyntheticAccessor"
+          "IconDensities"
         )
         baseline("${path}/lint-baseline.xml")
       }
@@ -119,15 +119,19 @@ class AllProjectConfigurer {
         exclude("META-INF/ASL2.0")
       }
       sourceSets {
-        getByName("test").java.srcDir("${target.rootDir}/core/src/sharedTestFunctions/java")
+        getByName("test") {
+          java.srcDir("${target.rootDir}/core/src/sharedTestFunctions/java")
+        }
       }
     }
   }
 
   fun configurePlugins(target: Project) {
-    target.configureExtension<AndroidExtensionsExtension> { isExperimental = true }
-    target.configureExtension<JacocoPluginExtension> { toolVersion = "0.8.3" }
-    target.configureExtension<KtlintExtension> { android.set(true) }
+    target.run {
+      configureExtension<AndroidExtensionsExtension> { isExperimental = true }
+      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.3" }
+      configureExtension<KtlintExtension> { android.set(true) }
+    }
   }
 
   fun applyScripts(target: Project) {

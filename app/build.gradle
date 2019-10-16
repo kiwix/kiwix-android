@@ -109,15 +109,6 @@ play {
 }
 
 dependencies {
-
-  androidTestImplementation(Libs.barista) {
-    exclude group: "com.android.support.test.uiautomator"
-  }
-  androidTestImplementation(Libs.simple_xml) {
-    exclude module: 'stax'
-    exclude module: 'stax-api'
-    exclude module: 'xpp3'
-  }
   implementation(Libs.squidb)
   implementation(Libs.squidb_annotations)
   kapt(Libs.squidb_processor)
