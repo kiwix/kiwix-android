@@ -27,8 +27,6 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -49,7 +47,6 @@ fun languageItem(language: Language = language()) =
   LanguageListItem.LanguageItem(language)
 
 @ExtendWith(InstantExecutorExtension::class)
-@TestInstance(PER_CLASS)
 class LanguageViewModelTest {
   init {
     setScheduler(Schedulers.trampoline())
