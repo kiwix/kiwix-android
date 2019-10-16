@@ -35,8 +35,8 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.resetSchedulers
-import org.kiwix.kiwixmobile.core.setScheduler
+import org.kiwix.sharedFunctions.resetSchedulers
+import org.kiwix.sharedFunctions.setScheduler
 import java.io.File
 
 class FileSearchTest {

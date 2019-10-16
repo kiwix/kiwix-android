@@ -92,9 +92,10 @@ android {
           variant.versionCode
     }
   }
+
   sourceSets {
     androidTest {
-      java.srcDirs += "$rootDir/core/src/testShared"
+      java.srcDirs += "$rootDir/core/src/sharedTestFunctions/java"
     }
   }
 }

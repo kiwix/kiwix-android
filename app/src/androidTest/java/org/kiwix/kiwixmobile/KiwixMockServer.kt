@@ -22,7 +22,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import org.kiwix.kiwixmobile.core.TEST_PORT
+import org.kiwix.sharedFunctions.TEST_PORT
 import org.simpleframework.xml.core.Persister
 import java.io.StringWriter
 import java.util.Stack

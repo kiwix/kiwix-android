@@ -30,11 +30,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.core.InstantExecutorExtension
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.language
-import org.kiwix.kiwixmobile.core.resetSchedulers
-import org.kiwix.kiwixmobile.core.setScheduler
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
@@ -44,6 +40,10 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
+import org.kiwix.sharedFunctions.InstantExecutorExtension
+import org.kiwix.sharedFunctions.resetSchedulers
+import org.kiwix.sharedFunctions.setScheduler
+import org.kiwix.sharedFunctions.language
 
 fun languageItem(language: Language = language()) =
   LanguageListItem.LanguageItem(language)

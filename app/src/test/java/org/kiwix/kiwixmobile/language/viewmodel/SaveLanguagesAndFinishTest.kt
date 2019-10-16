@@ -24,9 +24,9 @@ import io.mockk.verify
 import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.resetSchedulers
-import org.kiwix.kiwixmobile.core.setScheduler
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.sharedFunctions.resetSchedulers
+import org.kiwix.sharedFunctions.setScheduler
 
 class SaveLanguagesAndFinishTest {
 

@@ -119,7 +119,7 @@ class AllProjectConfigurer {
         exclude("META-INF/ASL2.0")
       }
       sourceSets {
-        getByName("test").java.srcDir("${target.rootDir}/core/src/testShared")
+        getByName("test").java.srcDir("${target.rootDir}/core/src/sharedTestFunctions/java")
       }
     }
   }

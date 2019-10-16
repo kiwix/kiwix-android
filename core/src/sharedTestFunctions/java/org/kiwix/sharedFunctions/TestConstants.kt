@@ -15,20 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core
+package org.kiwix.sharedFunctions
 
-import io.reactivex.Scheduler
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-
-fun setScheduler(replacementScheduler: Scheduler) {
-  RxJavaPlugins.setIoSchedulerHandler { scheduler -> replacementScheduler }
-  RxJavaPlugins.setComputationSchedulerHandler { scheduler -> replacementScheduler }
-  RxJavaPlugins.setNewThreadSchedulerHandler { scheduler -> replacementScheduler }
-  RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler -> replacementScheduler }
-}
-
-fun resetSchedulers() {
-  RxJavaPlugins.reset()
-  RxAndroidPlugins.reset()
-}
+const val TEST_PORT = 8080
+const val MOCK_BASE_URL = "http://localhost:$TEST_PORT/"

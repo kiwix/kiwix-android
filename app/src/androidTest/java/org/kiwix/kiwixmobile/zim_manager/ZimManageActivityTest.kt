@@ -23,14 +23,14 @@ import androidx.test.filters.SdkSuppress
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.book
-import org.kiwix.kiwixmobile.core.libraryNetworkEntity
-import org.kiwix.kiwixmobile.core.metaLinkNetworkEntity
 import org.kiwix.kiwixmobile.KiwixMockServer
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.LIBRARY_NETWORK_PATH
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.sharedFunctions.book
+import org.kiwix.sharedFunctions.libraryNetworkEntity
+import org.kiwix.sharedFunctions.metaLinkNetworkEntity
 import java.util.concurrent.TimeUnit.SECONDS
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)

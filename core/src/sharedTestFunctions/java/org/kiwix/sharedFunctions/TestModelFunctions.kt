@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core
+package org.kiwix.sharedFunctions
 
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status

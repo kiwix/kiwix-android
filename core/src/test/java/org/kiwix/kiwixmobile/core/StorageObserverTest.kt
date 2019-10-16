@@ -27,16 +27,16 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.book
-import org.kiwix.kiwixmobile.core.bookOnDisk
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
-import org.kiwix.kiwixmobile.core.resetSchedulers
-import org.kiwix.kiwixmobile.core.setScheduler
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
+import org.kiwix.sharedFunctions.book
+import org.kiwix.sharedFunctions.bookOnDisk
+import org.kiwix.sharedFunctions.resetSchedulers
+import org.kiwix.sharedFunctions.setScheduler
 import java.io.File
 
 class StorageObserverTest {

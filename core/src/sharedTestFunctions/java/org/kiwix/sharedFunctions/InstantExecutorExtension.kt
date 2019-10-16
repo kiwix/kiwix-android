@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core
+package org.kiwix.sharedFunctions
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor
