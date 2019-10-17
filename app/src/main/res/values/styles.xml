@@ -45,6 +45,7 @@
     <item name="listBackground">@drawable/list_bg</item>
     <item name="android:windowContentOverlay">@null</item>
     <item name="windowActionModeOverlay">true</item>
+    <item name="colorError">@color/white</item>
     <item name="selectedBackground">@drawable/list_bg_light</item>
     <item name="android:itemBackground">@color/primary_light</item>
     <item name="drawerBackground">@color/drawer_background_day</item>
@@ -65,6 +66,7 @@
     <item name="android:itemBackground">@color/grey</item>
     <item name="android:itemTextAppearance">@color/grey</item>
     <item name="android:textColor">@color/primary_light</item>
+    <item name="colorError">@color/primary</item>
     <item name="android:textColorPrimary">@color/textLightPrimary</item>
     <item name="android:textColorSecondary">@color/textLightSecondary</item>
     <item name="android:textColorTertiary">@color/textLightTertiary</item>
