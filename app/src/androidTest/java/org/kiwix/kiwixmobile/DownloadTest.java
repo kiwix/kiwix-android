@@ -50,12 +50,12 @@ import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.c
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.captureAndSaveScreenshot;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 import static org.kiwix.kiwixmobile.utils.StandardActions.deleteZimIfExists;
+import static org.kiwix.sharedFunctions.TestConstantsKt.TEST_PAUSE_MS;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

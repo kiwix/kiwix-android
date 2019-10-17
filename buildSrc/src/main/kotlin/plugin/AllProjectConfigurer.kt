@@ -23,13 +23,16 @@ import Libs
 import com.android.build.gradle.BaseExtension
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.KotlinClosure1
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.exclude
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
+import java.io.File
 
 class AllProjectConfigurer {
 
@@ -148,11 +151,6 @@ class AllProjectConfigurer {
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
       implementation(Libs.adapter_rxjava2)
-      testImplementation(Libs.junit_jupiter)
-      testImplementation(Libs.mockk)
-      testImplementation(Libs.assertj_core)
-      testImplementation(Libs.testing_ktx)
-      testImplementation(Libs.core_testing)
       compileOnly(Libs.javax_annotation_api)
       implementation(Libs.dagger)
       implementation(Libs.dagger_android)
@@ -167,6 +165,45 @@ class AllProjectConfigurer {
       implementation(Libs.xfetch2okhttp)
       implementation(Libs.rxandroid)
       implementation(Libs.rxjava)
+      unitTestDependencies()
+      instrumentationDependencies()
     }
+  }
+
+  private fun DependencyHandlerScope.unitTestDependencies() {
+    testImplementation(Libs.junit_jupiter)
+    testImplementation(Libs.mockk)
+    testImplementation(Libs.assertj_core)
+    testImplementation(Libs.testing_ktx)
+    testImplementation(Libs.core_testing)
+  }
+
+  private fun DependencyHandlerScope.instrumentationDependencies() {
+    androidTestImplementation(Libs.espresso_core)
+    androidTestImplementation(Libs.espresso_web)
+    androidTestImplementation(Libs.espresso_intents)
+    androidTestImplementation(Libs.espresso_contrib)
+    androidTestImplementation(Libs.androidx_annotation)
+    androidTestImplementation(Libs.junit)
+    androidTestImplementation(Libs.junit_jupiter)
+    androidTestImplementation(Libs.androidx_test_runner)
+    androidTestImplementation(Libs.androidx_test_rules)
+    androidTestImplementation(Libs.androidx_test_core)
+    androidTestImplementation(Libs.mockwebserver)
+    androidTestImplementation(Libs.barista) {
+      exclude(group = "com.android.support.test.uiautomator")
+    }
+    androidTestImplementation(Libs.simple_xml) {
+      exclude(module = "stax")
+      exclude(module = "stax-api")
+      exclude(module = "xpp3")
+    }
+    androidTestUtil(Libs.orchestrator)
+    androidTestImplementation(Libs.mockito_android)
+    androidTestCompileOnly(Libs.javax_annotation_api)
+    kaptAndroidTest(Libs.dagger_compiler)
+    androidTestImplementation(Libs.mockk_android)
+    androidTestImplementation(Libs.uiautomator)
+    androidTestImplementation(Libs.assertj_core)
   }
 }

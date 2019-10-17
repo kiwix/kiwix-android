@@ -48,7 +48,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.kiwix.kiwixmobile.testutils.Matcher.childAtPosition;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static org.kiwix.sharedFunctions.TestConstantsKt.TEST_PAUSE_MS;
+
+
 
 @RunWith(AndroidJUnit4.class)
 public class LanguageActivityTest {

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metalink xmlns="urn:ietf:params:xml:ns:metalink">
+  <generator>MirrorBrain/2.18.1</generator>
+  <origin dynamic="true">http://download.kiwix.org/zim/wikipedia/wikipedia_ab_all_2017-03.zim.meta4</origin>
+  <published>2016-06-08T08:59:18Z</published>
+  <publisher>
+    <name>Kiwix project</name>
+    <url>http://www.kiwix.org</url>
+  </publisher>
+
+  <file name="wikipedia_ab_all_2017-03.zim">
+    <size>357269</size>
+
+    <!-- <mtime>1462622396</mtime> -->
+
+    <!-- internal id: 756021 -->
+    <hash type="md5">6f06866b61c4a921b57f28cfd4307220</hash>
+    <hash type="sha-1">8aac4c7f89e3cdd45b245695e19ecde5aac59593</hash>
+    <hash type="sha-256">83126775538cf588a85edb10db04d6e012321a2025278a08a084b258849b3a5c</hash>
+    <pieces length="1048576" type="sha-1">
+      <hash>f36815d904d4fd563aaef4ee6ef2600fb1fd70b2</hash>
+      <hash>cd34a8a85ed1dd275417ce224ff0cd8d9893d101</hash>
+      <hash>7702114faf59441937c9075ad695fad61cdb13f3</hash>
+      <hash>532553bfb04c870375a53368b17838e50b169ab8</hash>
+      <hash>fcda3eba296502965015ef3f07b05adeb4d95dfc</hash>
+      <hash>97af1a7b1327a6f13dfc63524c63077c4aaa1278</hash>
+      <hash>4c02b16d3d0cb1acc5b0eb02a46e3047245ca65c</hash>
+      <hash>163927a9e7405b20c0544d06243baecfdf3c13d3</hash>
+      <hash>1d4ccf5570fecefc93793aa1ebb73d95eb46cf03</hash>
+      <hash>a0e5200bde74ba58c7318e15a34d5f891fb36841</hash>
+      <hash>e862a19ce5a4066efdcc15bf3c74462292251171</hash>
+      <hash>1c964b3029b6eda5ddff6815bf5298ca9a4c4196</hash>
+      <hash>29f52efd444b496fc55c99541de62823605bdce7</hash>
+      <hash>d5ae5e610f0b2f102bc16d7eeea55cacf259dda8</hash>
+      <hash>b7e0102f182a84d76c3a8ca02d0e9319a320eed6</hash>
+      <hash>bd63b665f1ac5620226481bacbe4dee1d31d48ba</hash>
+      <hash>54393351f78e24c4ebb4dbfd22fcdfff279f39fb</hash>
+      <hash>8845733b1da2876ad81aa1f7596dfd0e49bcc293</hash>
+      <hash>94c2bb5e297a1c61bd1e4a3b47a2ffa8457dc9aa</hash>
+      <hash>b2c1229eb3ffa88c71f0584c9714b7cf2d7df091</hash>
+      <hash>d0978cf7aaba0320442673fc47f400e43df84a99</hash>
+      <hash>5b8e68db7197089a78e92eb77f1c63859d098b1b</hash>
+      <hash>d4ff1f37c101735c81a06ebd98e1c3be465e0314</hash>
+      <hash>e9399f2c1f883816d3007765443cd38a1b4c6f9f</hash>
+      <hash>b6fa56a9dc6893bd67deebd14e9f2ccd42d63355</hash>
+      <hash>73efed5e8fd6480fece063826d62241783126b63</hash>
+      <hash>b24ec4bd6f1f6ad2de9724275ac141c92692edd2</hash>
+      <hash>3d35dee6ee7e1add3e8f30fe601f4f74ed11e704</hash>
+      <hash>9af07844246402bc6e28f37f8eb8c0329033a874</hash>
+      <hash>1be6178907a740670d8e61f72ebc8d47860015ce</hash>
+      <hash>6e954cc098392cf7f515e07f4d666d8b0a5fe329</hash>
+      <hash>e9f09f347f07585338073fea96f8d009a5aa3e0d</hash>
+      <hash>a48801add4c60733a023bdcce5e62aacb33becf0</hash>
+      <hash>90ca6abeeb08fbc136f1d0234741ca6b506869bc</hash>
+      <hash>7c426983069ea0556168f9e7343426f79d233bc1</hash>
+      <hash>18e893707d86bb778f9be3957e2645502ae1469d</hash>
+      <hash>c7a984439cb7e7fbbc805ea9eb77bebcfbaa25a5</hash>
+      <hash>9614ca49b5611494e4aaa0a3ffd3e23f5bfae86a</hash>
+      <hash>d344c4cd8db6c0859eb00ba90cdeb1e12b9922c4</hash>
+      <hash>ef777338b04c4b638721e1a043c3ae433a885c82</hash>
+      <hash>04504c63113f7719f5ac13c8e30f1feec4648268</hash>
+      <hash>1411ad174573f8c2a9a2d33c33f77f776db40f35</hash>
+      <hash>bc771262c4abf687b49321c83fd4613dbdcc1aa3</hash>
+      <hash>6762c76f99280283fa73037a0358efe5fd903eee</hash>
+      <hash>8ba56ea08fe4c2f9e76ee8273ce9dad4c4bd977a</hash>
+      <hash>97d8246b1db42afb9048109f920811fb5e723e71</hash>
+      <hash>6c59c23baeb706f6902f5a8dc822bcf932721cdc</hash>
+      <hash>1dff0732d971bc25af5afa9768493f435e5ab5d0</hash>
+      <hash>133ff15a2992b0d5337eeddc62da839f86cee1e0</hash>
+      <hash>0590bc490e4f12782849b8b36b87e1b68becdb83</hash>
+      <hash>705e5c62c96c6b41a9cfea97796ebdcc981145a6</hash>
+      <hash>e03ba6cf2deba1dfc8d781e4b8d0c602e033eea4</hash>
+      <hash>a5c46e2093d7c138df4553bfc92604de91b8fe89</hash>
+      <hash>035f0bd63b253c88a5ef7efaea96b3ee664e6f91</hash>
+      <hash>3b4732487b464d6164d9e460d990dcf8de8b499c</hash>
+      <hash>3453494c2188f5bee8a86a7b3626129e61a8bb21</hash>
+      <hash>47a062cdd2f7024f6f6ebffe6ade5ca9474932ea</hash>
+      <hash>5c30eee23b5b75680958760472c5c39aaaab108c</hash>
+      <hash>c93ae5c2faf3f3a898e01f5c9aef1d57f2969990</hash>
+      <hash>debf6ed9bbfbc9db4505d89dc74f871049d5c918</hash>
+      <hash>3d0c0800396e5305ff1ddabba2371f817ec4839c</hash>
+      <hash>8055e515aa6e78f2810bbb0e0cd07330838b8920</hash>
+    </pieces>
+
+
+    <!-- Found 7 mirrors: 0 in the same network prefix, 0 in the same autonomous system,
+         0 handling this country, 0 in the same region, 5 elsewhere -->
+
+    <!-- Mirrors in the same network (unknown): -->
+
+    <!-- Mirrors in the same AS (unknown): -->
+
+    <!-- Mirrors which handle this country (unknown): -->
+
+    <!-- Mirrors in the same continent (unknown): -->
+
+    <!-- Mirrors in the rest of the world: -->
+    <url location="us" priority="1">http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+    <url location="gb" priority="2">http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+    <url location="us" priority="3">http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+    <url location="de" priority="4">http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+    <url location="fr" priority="5">http://mirror3.kiwix.org/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+  </file>
+</metalink>

@@ -19,3 +19,4 @@ package org.kiwix.sharedFunctions
 
 const val TEST_PORT = 8080
 const val MOCK_BASE_URL = "http://localhost:$TEST_PORT/"
+const val TEST_PAUSE_MS = 250
