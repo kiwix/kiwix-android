@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.data.local.dao;
+package org.kiwix.kiwixmobile.data.local.dao;/*
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.yahoo.squidb.data.AbstractModel;

@@ -26,11 +26,6 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
-  sourceSets {
-    androidTest {
-      java.srcDirs += "$rootDir/core/src/sharedTestFunctions/java"
-    }
-  }
 }
 
 private boolean shouldUseLocalVersion() {

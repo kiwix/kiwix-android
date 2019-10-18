@@ -18,9 +18,11 @@
 
 package plugin
 
+import Libs
 import com.android.build.gradle.AppExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.project
 
 class AppConfigurer {
@@ -51,6 +53,32 @@ class AppConfigurer {
   private fun configureDependencies(target: Project) {
     target.dependencies {
       add("implementation", project(":core"))
+      androidTestImplementation(Libs.espresso_core)
+      androidTestImplementation(Libs.espresso_web)
+      androidTestImplementation(Libs.espresso_intents)
+      androidTestImplementation(Libs.espresso_contrib)
+      androidTestImplementation(Libs.androidx_annotation)
+      androidTestImplementation(Libs.junit)
+      androidTestImplementation(Libs.junit_jupiter)
+      androidTestImplementation(Libs.androidx_test_runner)
+      androidTestImplementation(Libs.androidx_test_rules)
+      androidTestImplementation(Libs.androidx_test_core)
+      androidTestImplementation(Libs.mockwebserver)
+      androidTestImplementation(Libs.barista) {
+        exclude(group = "com.android.support.test.uiautomator")
+      }
+      androidTestImplementation(Libs.simple_xml) {
+        exclude(module = "stax")
+        exclude(module = "stax-api")
+        exclude(module = "xpp3")
+      }
+      androidTestUtil(Libs.orchestrator)
+      androidTestImplementation(Libs.mockito_android)
+      androidTestCompileOnly(Libs.javax_annotation_api)
+      kaptAndroidTest(Libs.dagger_compiler)
+      androidTestImplementation(Libs.mockk_android)
+      androidTestImplementation(Libs.uiautomator)
+      androidTestImplementation(Libs.assertj_core)
     }
   }
 }

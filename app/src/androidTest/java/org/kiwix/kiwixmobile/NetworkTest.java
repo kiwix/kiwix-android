@@ -37,14 +37,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.CoreApp;
+import org.kiwix.kiwixmobile.core.reader.ZimContentProvider;
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.core.di.components.TestComponent;
-import org.kiwix.kiwixmobile.core.reader.ZimContentProvider;
 import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
-import static org.kiwix.sharedFunctions.TestConstantsKt.TEST_PAUSE_MS;
-
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onData;
@@ -57,6 +55,7 @@ import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.
 import static com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu;
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 

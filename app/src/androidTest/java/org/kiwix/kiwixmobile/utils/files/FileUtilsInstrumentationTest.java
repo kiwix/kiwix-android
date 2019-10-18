@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.utils.files;
+package org.kiwix.kiwixmobile.utils.files;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

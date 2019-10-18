@@ -16,11 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.splash;
+package org.kiwix.kiwixmobile.splash;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,15 +36,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.intro.IntroActivity;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
+import org.kiwix.kiwixmobile.core.splash.SplashActivity;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
-import static org.kiwix.sharedFunctions.TestConstantsKt.TEST_PAUSE_MS;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -85,9 +83,12 @@ public class SplashActivityTest {
   @Test
   public void testNormalRun() {
     shouldShowIntro(false);
-    intending(hasAction(CoreMainActivity.class.getCanonicalName())).respondWith(
-      new Instrumentation.ActivityResult(Activity.RESULT_OK, new Intent()));
+
     activityTestRule.launchActivity(new Intent());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    // Verify that the SplashActivity is followed by CoreMainActivity
+    intended(hasAction(CoreMainActivity.class.getCanonicalName()));
   }
 
   @After
