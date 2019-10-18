@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
-import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -46,9 +46,9 @@ class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
           if (it.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
             zimReaderContainer.setZimFile(null)
           }
-          activity.toast(string.delete_specific_zim_toast)
+          activity.toast(R.string.delete_specific_zim_toast)
         } else {
-          activity.toast(string.delete_zim_failed)
+          activity.toast(R.string.delete_zim_failed)
         }
       })
     }

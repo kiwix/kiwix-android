@@ -32,8 +32,7 @@ import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
-import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.R2;
+import org.kiwix.kiwixmobile.R;
 
 /**
  * Helper class, part of the local file sharing module.
@@ -80,7 +79,7 @@ public class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
   }
 
   static class ViewHolder {
-    @BindView(R2.id.row_device_name) TextView deviceName;
+    @BindView(R.id.row_device_name) TextView deviceName;
 
     public ViewHolder(View view) {
       ButterKnife.bind(this, view);
