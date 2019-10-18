@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.item_book.item_book_label_picture
 import kotlinx.android.synthetic.main.item_book.item_book_label_video
 import kotlinx.android.synthetic.main.item_book.item_book_size
 import kotlinx.android.synthetic.main.item_book.item_book_title
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -42,7 +43,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULT
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
-import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 
 sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
@@ -76,8 +76,8 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
 
       if (sharedPreferenceUtil.nightMode()) {
         item_book_icon.drawable
-          .mutate()
-          .colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
+          ?.mutate()
+          ?.colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
       }
 
       val path = item.file.path

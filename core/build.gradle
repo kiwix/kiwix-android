@@ -19,7 +19,6 @@ apply plugin: 'io.objectbox'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-  publishNonDefault true
   buildTypes {
     release {
       minifyEnabled false

@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.data.local.dao;/*
+package org.kiwix.kiwixmobile.data.local.dao;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;
