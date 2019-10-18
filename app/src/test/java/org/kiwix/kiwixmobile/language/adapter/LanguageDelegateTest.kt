@@ -47,7 +47,7 @@ class LanguageDelegateTest {
     fun `creates HeaderViewHolder`() {
       val parent = mockk<ViewGroup>()
       mockkObject(ViewGroupExtensions)
-      every { parent.inflate(R.layout.header_date, false) } returns mockk(relaxed = true)
+      every { parent.inflate(R.layout.header_date, false) } returns mockk()
       assertThat(HeaderDelegate().createViewHolder(parent))
         .isInstanceOf(HeaderViewHolder::class.java)
     }
@@ -64,7 +64,7 @@ class LanguageDelegateTest {
     fun `creates LanguageViewHolder`() {
       val parent = mockk<ViewGroup>()
       mockkObject(ViewGroupExtensions)
-      every { parent.inflate(R.layout.item_language, false) } returns mockk(relaxed = true)
+      every { parent.inflate(R.layout.item_language, false) } returns mockk()
       val clickAction = mockk<(LanguageItem) -> Unit>()
       assertThat(LanguageItemDelegate(clickAction).createViewHolder(parent))
         .isInstanceOf(LanguageViewHolder::class.java)

@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -28,7 +27,7 @@ import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteZim
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import javax.inject.Inject
 
 class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
@@ -39,7 +38,7 @@ class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
   override fun invokeWith(activity: Activity) {
-    (activity as BaseActivity).kiwixActivityComponent.inject(this)
+    (activity as ZimManageActivity).cachedComponent.inject(this)
     booksOnDiskListItem.forEach {
       dialogShower.show(DeleteZim(it), {
         if (deleteSpecificZimFile(it)) {

@@ -33,8 +33,8 @@ class SaveLanguagesAndFinishTest {
   @Test
   fun `invoke saves and finishes`() {
     setScheduler(Schedulers.trampoline())
-    val languageDao = mockk<NewLanguagesDao>(relaxUnitFun = true)
-    val activity = mockk<Activity>(relaxUnitFun = true)
+    val languageDao = mockk<NewLanguagesDao>()
+    val activity = mockk<Activity>()
     val languages = listOf<Language>()
     SaveLanguagesAndFinish(languages, languageDao).invokeWith(activity)
     verify {
