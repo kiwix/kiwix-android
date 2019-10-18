@@ -17,9 +17,10 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.NORMAL
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 data class FileSelectListState(
   val bookOnDiskListItems: List<BooksOnDiskListItem>,
@@ -31,9 +32,4 @@ data class FileSelectListState(
     )
       .filterIsInstance(BookOnDisk::class.java)
   }
-}
-
-enum class SelectionMode {
-  NORMAL,
-  MULTI
 }

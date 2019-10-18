@@ -34,25 +34,26 @@ import kotlinx.android.synthetic.main.activity_library.libraryErrorText
 import kotlinx.android.synthetic.main.activity_library.libraryList
 import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.R.string
-import org.kiwix.kiwixmobile.base.BaseFragment
-import org.kiwix.kiwixmobile.di.components.ActivityComponent
-import org.kiwix.kiwixmobile.downloader.Downloader
-import org.kiwix.kiwixmobile.extensions.snack
-import org.kiwix.kiwixmobile.extensions.toast
-import org.kiwix.kiwixmobile.extensions.viewModel
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.main.MainActivity
-import org.kiwix.kiwixmobile.settings.StorageCalculator
-import org.kiwix.kiwixmobile.utils.BookUtils
-import org.kiwix.kiwixmobile.utils.DialogShower
-import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.WifiOnly
-import org.kiwix.kiwixmobile.utils.NetworkUtils
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.utils.TestingUtils
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.WifiOnly
+import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.BookDelegate
@@ -90,8 +91,8 @@ class LibraryFragment : BaseFragment() {
 
   private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
 
-  override fun inject(activityComponent: ActivityComponent) {
-    activityComponent.inject(this)
+  override fun inject(baseActivity: BaseActivity) {
+    (baseActivity as ZimManageActivity).cachedComponent.inject(this)
   }
 
   override fun onCreateView(
@@ -198,7 +199,7 @@ class LibraryFragment : BaseFragment() {
       noWifiWithWifiOnlyPreferenceSet -> {
         dialogShower.show(WifiOnly, {
           sharedPreferenceUtil.putPrefWifiOnly(false)
-          MainActivity.wifiOnly = false
+          CoreMainActivity.wifiOnly = false
           downloadFile(item.book)
         })
         return

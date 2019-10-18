@@ -23,9 +23,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
-import org.kiwix.kiwixmobile.BuildConfig
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 class ShareFiles(private val selectedBooks: List<BookOnDisk>) : SideEffect<Unit> {
   override fun invokeWith(activity: Activity) {
@@ -36,7 +35,7 @@ class ShareFiles(private val selectedBooks: List<BookOnDisk>) : SideEffect<Unit>
       if (Build.VERSION.SDK_INT >= 24) {
         FileProvider.getUriForFile(
           activity,
-          BuildConfig.APPLICATION_ID + ".fileprovider",
+          activity.packageName + ".fileprovider",
           it.file
         )
       } else {

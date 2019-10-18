@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 
 sealed class LibraryListItem {
   abstract val id: Long

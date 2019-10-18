@@ -18,10 +18,10 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
-import org.kiwix.kiwixmobile.zim_manager.Language
 
 sealed class State {
   object Loading : State()
@@ -33,12 +33,14 @@ sealed class State {
       items, filter
     )
   ) : State() {
-    fun select(languageItem: LanguageItem) = Content(
-      items.map { if (it.id == languageItem.id) it.copy(active = !it.active) else it },
-      filter
-    )
+    fun select(languageItem: LanguageItem) =
+      Content(
+        items.map { if (it.id == languageItem.id) it.copy(active = !it.active) else it },
+        filter
+      )
 
-    fun updateFilter(filter: String) = Content(items, filter)
+    fun updateFilter(filter: String) =
+      Content(items, filter)
 
     companion object {
       internal fun createViewList(
@@ -46,7 +48,10 @@ sealed class State {
         filter: String
       ) = activeItems(
         items, filter
-      ) + otherItems(items, filter)
+      ) + otherItems(
+        items,
+        filter
+      )
 
       private fun activeItems(
         items: List<Language>,

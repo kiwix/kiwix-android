@@ -35,21 +35,22 @@ import kotlinx.android.synthetic.main.zim_list.file_management_no_files
 import kotlinx.android.synthetic.main.zim_list.zim_swiperefresh
 import kotlinx.android.synthetic.main.zim_list.zimfilelist
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.base.BaseFragment
-import org.kiwix.kiwixmobile.di.components.ActivityComponent
-import org.kiwix.kiwixmobile.extensions.toast
-import org.kiwix.kiwixmobile.extensions.viewModel
-import org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION
-import org.kiwix.kiwixmobile.utils.LanguageUtils
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_STORAGE_PERMISSION
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import javax.inject.Inject
 
 class ZimFileSelectFragment : BaseFragment() {
@@ -74,8 +75,8 @@ class ZimFileSelectFragment : BaseFragment() {
     BooksOnDiskAdapter(bookDelegate, LanguageDelegate)
   }
 
-  override fun inject(activityComponent: ActivityComponent) {
-    activityComponent.inject(this)
+  override fun inject(baseActivity: BaseActivity) {
+    (baseActivity as ZimManageActivity).cachedComponent.inject(this)
   }
 
   override fun onCreateView(
@@ -83,7 +84,8 @@ class ZimFileSelectFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    LanguageUtils(activity!!).changeFont(activity!!.layoutInflater, sharedPreferenceUtil)
+    LanguageUtils(activity!!)
+      .changeFont(activity!!.layoutInflater, sharedPreferenceUtil)
     return inflater.inflate(R.layout.zim_list, container, false)
   }
 

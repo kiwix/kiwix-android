@@ -26,6 +26,7 @@ import androidx.test.rule.GrantPermissionRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.core.search.SearchActivity;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

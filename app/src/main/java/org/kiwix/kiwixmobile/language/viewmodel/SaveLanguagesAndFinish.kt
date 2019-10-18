@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.language.viewmodel
 import android.app.Activity
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.zim_manager.Language
+import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.SideEffect
 
 data class SaveLanguagesAndFinish(

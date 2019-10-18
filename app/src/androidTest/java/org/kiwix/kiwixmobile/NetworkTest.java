@@ -36,10 +36,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
-import org.kiwix.kiwixmobile.di.components.TestComponent;
-import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.core.CoreApp;
+import org.kiwix.kiwixmobile.core.reader.ZimContentProvider;
+import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent;
+import org.kiwix.kiwixmobile.core.di.components.TestComponent;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
@@ -65,8 +66,8 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 public class NetworkTest {
   private static final String NETWORK_TEST_TAG = "KiwixNetworkTest";
   @Rule
-  public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
-    MainActivity.class, false, false);
+  public ActivityTestRule<KiwixMainActivity> mActivityTestRule = new ActivityTestRule<>(
+    KiwixMainActivity.class, false, false);
   @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -89,10 +90,10 @@ public class NetworkTest {
     TestComponent component = DaggerTestComponent.builder().context(
       getInstrumentation().getTargetContext().getApplicationContext()).build();
 
-    KiwixApplication.setApplicationComponent(component);
+    CoreApp.setCoreComponent(component);
 
     ZimContentProvider zimContentProvider = new ZimContentProvider();
-    KiwixApplication.getApplicationComponent().inject(zimContentProvider);
+    CoreApp.getCoreComponent().inject(zimContentProvider);
     component.inject(this);
     InputStream library = NetworkTest.class.getClassLoader().getResourceAsStream("library.xml");
     InputStream metalinks =

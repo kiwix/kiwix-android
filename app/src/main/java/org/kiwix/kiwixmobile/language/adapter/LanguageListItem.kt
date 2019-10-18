@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.language.adapter
 
-import org.kiwix.kiwixmobile.zim_manager.Language
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 
 sealed class LanguageListItem {
   abstract val id: Long

@@ -18,9 +18,9 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
 import java.util.LinkedList;
-import org.kiwix.kiwixmobile.base.BaseContract;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.core.base.BaseContract;
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
 
 /**
  * Created by EladKeyshawn on 06/04/2017.

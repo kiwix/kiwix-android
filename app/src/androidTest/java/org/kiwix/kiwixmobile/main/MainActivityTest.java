@@ -29,7 +29,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
@@ -40,8 +40,8 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
   @Rule
-  public ActivityTestRule<MainActivity> activityTestRule =
-    new ActivityTestRule<>(MainActivity.class);
+  public ActivityTestRule<KiwixMainActivity> activityTestRule =
+    new ActivityTestRule<>(KiwixMainActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);

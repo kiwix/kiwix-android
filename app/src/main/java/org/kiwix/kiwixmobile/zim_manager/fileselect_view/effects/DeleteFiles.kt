@@ -19,14 +19,15 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
-import org.kiwix.kiwixmobile.R.string
-import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
-import org.kiwix.kiwixmobile.extensions.toast
-import org.kiwix.kiwixmobile.utils.DialogShower
-import org.kiwix.kiwixmobile.utils.KiwixDialog.DeleteZim
-import org.kiwix.kiwixmobile.utils.files.FileUtils
-import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteZim
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import javax.inject.Inject
 
 class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
@@ -37,16 +38,16 @@ class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
   override fun invokeWith(activity: Activity) {
-    activityComponent(activity).inject(this)
+    (activity as ZimManageActivity).cachedComponent.inject(this)
     booksOnDiskListItem.forEach {
       dialogShower.show(DeleteZim(it), {
         if (deleteSpecificZimFile(it)) {
           if (it.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
             zimReaderContainer.setZimFile(null)
           }
-          activity.toast(string.delete_specific_zim_toast)
+          activity.toast(R.string.delete_specific_zim_toast)
         } else {
-          activity.toast(string.delete_zim_failed)
+          activity.toast(R.string.delete_zim_failed)
         }
       })
     }

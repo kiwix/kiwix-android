@@ -29,16 +29,16 @@ import kotlinx.android.synthetic.main.library_item.language
 import kotlinx.android.synthetic.main.library_item.publisher
 import kotlinx.android.synthetic.main.library_item.size
 import kotlinx.android.synthetic.main.library_item.title
-import org.kiwix.kiwixmobile.KiwixApplication
-import org.kiwix.kiwixmobile.downloader.model.Base64String
-import org.kiwix.kiwixmobile.extensions.setBitmap
-import org.kiwix.kiwixmobile.extensions.setTextAndVisibility
-import org.kiwix.kiwixmobile.utils.BookUtils
-import org.kiwix.kiwixmobile.utils.NetworkUtils
-import org.kiwix.kiwixmobile.zim_manager.KiloByte
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.downloader.model.Base64String
+import org.kiwix.kiwixmobile.core.extensions.setBitmap
+import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
+import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder
 
 sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
@@ -57,7 +57,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       size.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
       language.text = bookUtils.getLanguage(item.book.getLanguage())
       fileName.text = NetworkUtils.parseURL(
-        KiwixApplication.getInstance(), item.book.url
+        CoreApp.getInstance(), item.book.url
       )
       favicon.setBitmap(Base64String(item.book.favicon))
 

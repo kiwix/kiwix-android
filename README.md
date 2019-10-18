@@ -25,8 +25,7 @@ pieces in Java).
 
 ## Build Instructions
 
-Production releases of the app should be built with our companion
-build repository [kiwix-build](https://github.com/kiwix/kiwix-build).
+Production releases of the app are built on travis and released automatically
 
 To build this repository alone for development purposes you can simply
 import the project into Android Studio and the hard work will be done
@@ -34,8 +33,7 @@ for you. If you prefer to build without Android Studio you must first
 set up the Android SDK and then run the command: `./gradlew build `
 from the root directory of the project.
 
-We utilize different build variants (flavors) to build various versions of our app. Ensure your build variant is
-`kiwixDebug` to build the standard app.
+Kiwix-Android is a multi-module project, in 99% of scenarios you will want to build the `app` module in the `debug` configuration.
 
 ## Libraries Used
 

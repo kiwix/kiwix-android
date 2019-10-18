@@ -20,12 +20,12 @@ package org.kiwix.kiwixmobile.language.adapter
 
 import android.view.ViewGroup
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.extensions.inflate
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.HeaderViewHolder
 import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.LanguageViewHolder
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.AbsDelegateAdapter
 
 sealed class LanguageDelegate<I : LanguageListItem, out VH : LanguageListViewHolder<I>> :
   AbsDelegateAdapter<I, LanguageListItem, VH> {

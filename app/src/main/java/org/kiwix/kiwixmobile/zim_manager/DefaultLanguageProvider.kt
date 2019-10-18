@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.content.Context
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 import javax.inject.Inject
 
 class DefaultLanguageProvider @Inject constructor(private val context: Context) {

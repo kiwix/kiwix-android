@@ -30,14 +30,15 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_language.language_progressbar
 import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import kotlinx.android.synthetic.main.activity_language.toolbar
-import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.base.BaseActivity
-import org.kiwix.kiwixmobile.extensions.viewModel
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
 import org.kiwix.kiwixmobile.language.viewmodel.Action
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.State
@@ -62,7 +63,7 @@ class LanguageActivity : BaseActivity() {
     )
 
   override fun injection() {
-    KiwixApplication.getApplicationComponent().inject(this)
+    kiwixActivityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,7 +110,7 @@ class LanguageActivity : BaseActivity() {
     menuInflater.inflate(R.menu.menu_language, menu)
     val search = menu.findItem(R.id.menu_language_search)
     (search.actionView as SearchView).setOnQueryTextListener(SimpleTextListener {
-      languageViewModel.actions.offer(Action.Filter(it))
+      languageViewModel.actions.offer(Filter(it))
     })
     return true
   }

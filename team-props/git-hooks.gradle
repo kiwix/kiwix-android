@@ -24,3 +24,7 @@ task installGitHooks(type: Exec) {
     logger.info('Git hook installed successfully.')
   }
 }
+
+afterEvaluate {
+  tasks['preBuild'].dependsOn installGitHooks
+}

@@ -18,12 +18,12 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.extensions.toast
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
-class OpenFile(val bookOnDisk: BookOnDisk) : SideEffect<Unit> {
+class OpenFile(private val bookOnDisk: BookOnDisk) : SideEffect<Unit> {
 
   override fun invokeWith(activity: Activity) {
     val file = bookOnDisk.file

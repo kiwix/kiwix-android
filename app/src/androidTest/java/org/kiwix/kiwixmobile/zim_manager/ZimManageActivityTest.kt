@@ -23,21 +23,21 @@ import androidx.test.filters.SdkSuppress
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.KiwixMockServer
-import org.kiwix.kiwixmobile.book
-import org.kiwix.kiwixmobile.data.remote.KiwixService.LIBRARY_NETWORK_PATH
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.libraryNetworkEntity
-import org.kiwix.kiwixmobile.metaLinkNetworkEntity
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.LIBRARY_NETWORK_PATH
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.sharedFunctions.book
+import org.kiwix.sharedFunctions.libraryNetworkEntity
+import org.kiwix.sharedFunctions.metaLinkNetworkEntity
 import java.util.concurrent.TimeUnit.SECONDS
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
 
   override var activityRule = activityTestRule<ZimManageActivity> {
-    KiwixApplication.setApplicationComponent(testComponent())
+    CoreApp.setCoreComponent(testComponent())
   }
   private val book = book()
 

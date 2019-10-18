@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.downloader.DownloadFragment
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.zim_manager.download_view.DownloadFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 

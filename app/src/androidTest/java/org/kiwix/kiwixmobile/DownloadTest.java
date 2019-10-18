@@ -37,7 +37,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
 import static androidx.test.espresso.Espresso.onData;
@@ -63,8 +63,8 @@ public class DownloadTest {
 
   private static final String KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest";
   @Rule
-  public ActivityTestRule<MainActivity> activityTestRule =
-    new ActivityTestRule<>(MainActivity.class);
+  public ActivityTestRule<KiwixMainActivity> activityTestRule =
+    new ActivityTestRule<>(KiwixMainActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
