@@ -56,43 +56,48 @@ If you wish to rebase you should be following the [Golden Rule](https://www.atla
 
 ### Building
 
-The default build is `debug`, with this variant you can use a debugger while developing. To install the application click the `run` button in Android Studio with the `app` configuration selected while you have a device connected. All other build types but `release` can be ignored, the `release` build is what gets uploaded to the Google Play store and can be built locally with the dummy credentials/keystore provided.
+The Kiwix app is split into 3 modules
+1. `core` - the "core" functionality of the app shared between different clients
+1. `app` - the main app Kiwix, Wikipedia Offline
+1. `custom` - this is for building custom applications that supply only 1 zim file and a custom skin
+
+The default build is `debug`, with this variant you can use a debugger while developing. To install the application click the `run` button in Android Studio with the `app` configuration selected while you have a device connected. The `release` build is what gets uploaded to the Google Play store and can be built locally with the dummy credentials/keystore provided.
 
 By default we fetch kiwix-lib, the key component for interacting with ZIM files from maven, but if you wish to use your own locally compiled version for testing purposes, then you can create the directory `app/libs` and place your .aar file inside it to have it used instead.
 
 ### Testing
 
-Unit tests are located in `app/src/test` and to run them locally you
+Unit tests are located in `[module]/src/test` and to run them locally you
 can use the gradle command:
 
-        $ gradlew testKiwixDebugUnitTest
+        $ gradlew testDebugUnitTest
 
 or the abbreviated:
 
-        $ gradlew tKDUT
+        $ gradlew tDUT
 
-Automated tests that require a connected device (UI related tests) are located in `app/src/androidTest` & `app/src/androidTestKiwix`, to run them locally you can use the gradle command:
+Automated tests that require a connected device (UI related tests) are located in `[module]/src/androidTest` & `app/src/androidTestKiwix`, to run them locally you can use the gradle command:
 
-        $ gradlew connectedKiwixDebugAndroidTest
+        $ gradlew connectedDebugAndroidTest
 
 or the abbreviated:
 
 
-        $ gradlew cKDAT
+        $ gradlew cDAT
 
-All local test results can be seen under `app/build/reports/`
+All local test results can be seen under `[module]/build/reports/`
 
 ### Code coverage
 
 To generate coverage reports for your unit tests run:
 
-        $ gradlew jacocoTestKiwixDebugUnitTest
+        $ gradlew jacocoTestReport
 
 To generate coverage reports for your automated tests run:
 
-        $ gradlew createKiwixDebugCoverageReport
+        $ gradlew jacocoInstrumentationTestReport
 
-Code coverage results can be seen under `app/build/reports/`
+Code coverage results can be seen under `[module]/build/reports/`
 
 ### Continous Integration
 
