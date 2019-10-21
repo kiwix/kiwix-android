@@ -136,7 +136,7 @@ class CustomMainActivity : CoreMainActivity() {
       zimFileMissingDialog.show()
       return false
     } else {
-      openZimFile(File(filePath), true)
+      openZimFile(File(filePath))
       return true
     }
   }

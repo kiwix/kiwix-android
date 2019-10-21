@@ -18,10 +18,12 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
+import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.start
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 class OpenFile(private val bookOnDisk: BookOnDisk) : SideEffect<Unit> {
 
@@ -30,7 +32,10 @@ class OpenFile(private val bookOnDisk: BookOnDisk) : SideEffect<Unit> {
     if (!file.canRead()) {
       activity.toast(R.string.error_file_not_found)
     } else {
-      (activity as ZimManageActivity).finishResult(file.path)
+      activity.finish()
+      activity.start<KiwixMainActivity> {
+        data = file.toUri()
+      }
     }
   }
 }

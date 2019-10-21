@@ -22,12 +22,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.start
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
-import org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_FILE_SELECT
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_POSITIONS
@@ -36,7 +40,6 @@ import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
@@ -59,7 +62,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun manageExternalLaunchAndRestoringViewState() {
 
-    val data = intent.data
+    val data = uriFromIntent()
     if (data != null) {
       val filePath = FileUtils.getLocalFilePathByUri(applicationContext, data)
 
@@ -73,7 +76,7 @@ class KiwixMainActivity : CoreMainActivity() {
           filePath +
           " -> open this zim file and load menu_main page"
       )
-      openZimFile(File(filePath), false)
+      openZimFile(File(filePath))
     } else {
       val settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0)
       val zimFile = settings.getString(TAG_CURRENT_FILE, null)
@@ -92,6 +95,11 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
+  private fun uriFromIntent() =
+    intent.data ?: intent.getStringExtra(EXTRA_ZIM_FILE)?.let {
+      File(FileUtils.getFileName(it)).toUri()
+    }
+
   private fun restoreTabStates() {
     val settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
@@ -101,7 +109,7 @@ class KiwixMainActivity : CoreMainActivity() {
     val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
 
     if (zimFile != null) {
-      openZimFile(File(zimFile), false)
+      openZimFile(File(zimFile))
     } else {
       Toast.makeText(this, "Unable to open zim file", Toast.LENGTH_SHORT).show()
     }
@@ -125,17 +133,15 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun manageZimFiles(tab: Int) {
-    presenter.loadCurrentZimBookmarksUrl()
-    val target = Intent(this, ZimManageActivity::class.java)
-    target.action = Intent.ACTION_GET_CONTENT
-    // The MIME data type filter
-    target.type = "//"
-    target.putExtra(ZimManageActivity.TAB_EXTRA, tab)
-    // Only return URIs that can be opened with ContentResolver
-    target.addCategory(Intent.CATEGORY_OPENABLE)
-    // Force use of our file selection component.
-    // (Note may make sense to just define a custom intent instead)
+    start<ZimManageActivity> {
+      putExtra(ZimManageActivity.TAB_EXTRA, tab)
+    }
+  }
 
-    startActivityForResult(target, REQUEST_FILE_SELECT)
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    if (intent?.data != null) {
+      openZimFile(intent.data.toFile())
+    }
   }
 }
