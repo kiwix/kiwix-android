@@ -65,8 +65,12 @@ fun Activity.startActionMode(
   })
 }
 
-inline fun <reified T : Activity> Activity.start() {
-  startActivity(Intent(this, T::class.java))
+inline fun <reified T : Activity> Activity.start(noinline intentFunc: (Intent.() -> Unit)? = null) {
+  startActivity(
+    Intent(this, T::class.java).apply {
+      intentFunc?.invoke(this)
+    }
+  )
 }
 
 inline fun <reified T : Activity> Activity.startWithActionFrom() {

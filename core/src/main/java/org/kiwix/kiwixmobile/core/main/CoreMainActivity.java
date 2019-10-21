@@ -82,6 +82,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,6 +95,7 @@ import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
+import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
@@ -101,6 +103,8 @@ import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.help.HelpActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryListItem;
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity;
 import org.kiwix.kiwixmobile.core.utils.DimenUtils;
@@ -109,9 +113,6 @@ import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity;
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
-import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
@@ -161,7 +162,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   public static boolean wifiOnly;
   public static boolean nightMode;
   private final ArrayList<String> bookmarks = new ArrayList<>();
-  private final List<KiwixWebView> webViewList = new ArrayList<>();
+  protected final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R2.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R2.id.activity_main_toolbar)
@@ -225,7 +226,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   };
   private List<DocumentSection> documentSections;
   private Menu menu;
-  private boolean requestClearHistoryAfterLoad = false;
   private boolean requestInitAllMenuItems = false;
   private boolean isBackToTopEnabled = false;
   private boolean wasHideToolbar = true;
@@ -398,15 +398,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
       newTab();
       getCurrentWebView().loadUrl(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
-    }
-    if (intent.hasExtra(EXTRA_ZIM_FILE)) {
-      File file = new File(FileUtils.getFileName(intent.getStringExtra(EXTRA_ZIM_FILE)));
-      Uri uri = Uri.fromFile(file);
-
-      finish();
-      Intent zimFile = Intents.internal(CoreMainActivity.class);
-      zimFile.setData(uri);
-      startActivity(zimFile);
     }
   }
 
@@ -1040,10 +1031,10 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       .show();
   }
 
-  protected void openZimFile(File file, boolean clearHistory) {
+  protected void openZimFile(File file) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (file.exists()) {
-        openAndSetInContainer(file, clearHistory);
+        openAndSetInContainer(file);
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
         ContextExtensionsKt.toast(this, R.string.error_file_not_found, Toast.LENGTH_LONG);
@@ -1072,12 +1063,16 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     }
   }
 
-  private void openAndSetInContainer(File file, boolean clearHistory) {
+  private void openAndSetInContainer(File file) {
+    try {
+      if (isNotPreviouslyOpenZim(file.getCanonicalPath())) {
+        webViewList.clear();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     zimReaderContainer.setZimFile(file);
     if (zimReaderContainer.getZimFileReader() != null) {
-      if (clearHistory) {
-        requestClearHistoryAfterLoad = true;
-      }
       if (menu != null) {
         initAllMenuItems();
       } else {
@@ -1091,6 +1086,10 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       ContextExtensionsKt.toast(this, R.string.error_file_invalid, Toast.LENGTH_LONG);
       showHomePage();
     }
+  }
+
+  private boolean isNotPreviouslyOpenZim(String canonicalPath) {
+    return canonicalPath != null && !canonicalPath.equals(zimReaderContainer.getZimCanonicalPath());
   }
 
   @Override
@@ -1765,13 +1764,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     if (checkNull(progressBar)) {
       progressBar.setProgress(progress);
       if (progress == 100) {
-        if (requestClearHistoryAfterLoad) {
-          Log.d(TAG_KIWIX,
-            "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
-          getCurrentWebView().clearHistory();
-          requestClearHistoryAfterLoad = false;
-        }
-
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
       }
     }
@@ -1847,11 +1839,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   }
 
   private void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
-    File file = bookOnDisk.getFile();
-    Intent zimFile = Intents.internal(CoreMainActivity.class);
-    zimFile.setData(Uri.fromFile(file));
-    startActivity(zimFile);
-    finish();
+    openZimFile(bookOnDisk.getFile());
   }
 
   @Override
