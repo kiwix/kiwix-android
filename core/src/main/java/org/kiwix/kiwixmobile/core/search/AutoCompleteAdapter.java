@@ -19,12 +19,15 @@ package org.kiwix.kiwixmobile.core.search;
 
 import android.content.Context;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -34,20 +37,20 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
-public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
+public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapter.ViewHolder>
+  implements Filterable {
 
   @Inject JNIKiwix currentJNIReader;
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject ZimReaderContainer zimReaderContainer;
-  private List<String> mData;
-  private KiwixFilter mFilter;
+  private List<String> data;
+  private KiwixFilter kiwifilter;
   private Context context;
 
   public AutoCompleteAdapter(Context context) {
-    super(context, android.R.layout.simple_list_item_1);
     this.context = context;
-    mData = new ArrayList<>();
-    mFilter = new KiwixFilter();
+    data = new ArrayList<>();
+    kiwifilter = new KiwixFilter();
     setupDagger();
   }
 
@@ -55,24 +58,24 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     CoreApp.getCoreComponent().inject(this);
   }
 
-  @Override
-  public int getCount() {
-    return mData.size();
+  @Override public Filter getFilter() {
+    return kiwifilter;
   }
 
-  @Override
-  public View getView(int position, View convertView, ViewGroup parent) {
-    View row = super.getView(position, convertView, parent);
+  @NonNull @Override public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    View view = (View) LayoutInflater.from(parent.getContext())
+      .inflate(android.R.layout.simple_list_item_1, null);
+    ViewHolder holder = new ViewHolder(view);
+    return holder;
+  }
 
-    TextView tv = row.findViewById(android.R.id.text1);
-    tv.setText(Html.fromHtml(getItem(position)));
-
-    return row;
+  @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    holder.title.setText(Html.fromHtml(getItem(position)).toString());
   }
 
   @Override
   public String getItem(int index) {
-    String a = mData.get(index);
+    String a = data.get(index);
     if (a.endsWith(".html")) {
       String trim = a.substring(2);
       trim = trim.substring(0, trim.length() - 5);
@@ -82,9 +85,17 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     }
   }
 
-  @Override
-  public Filter getFilter() {
-    return mFilter;
+  @Override public int getItemCount() {
+    return data.size();
+  }
+
+  public class ViewHolder extends RecyclerView.ViewHolder {
+    TextView title;
+
+    public ViewHolder(@NonNull View itemView) {
+      super(itemView);
+      title = itemView.findViewById(android.R.id.text1);
+    }
   }
 
   class KiwixFilter extends Filter {
@@ -139,11 +150,11 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
     @Override
     protected void publishResults(CharSequence contraint, FilterResults results) {
-      mData = (ArrayList<String>) results.values;
+      data = (ArrayList<String>) results.values;
       if (results.count > 0) {
         notifyDataSetChanged();
       } else {
-        notifyDataSetInvalidated();
+        //notifyDataSetInvalidated();
       }
     }
   }

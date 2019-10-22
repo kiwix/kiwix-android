@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.search;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -56,18 +58,16 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends BaseActivity
-  implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
-  SearchViewCallback {
+  implements SearchViewCallback {
 
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
 
   private final int REQ_CODE_SPEECH_INPUT = 100;
   @Inject
   SearchPresenter searchPresenter;
-  private ListView listView;
-  private ArrayAdapter<String> currentAdapter;
-  private AutoCompleteAdapter autoAdapter;
-  private ArrayAdapter<String> defaultAdapter;
+  private RecyclerView recyclerView;
+  AutoCompleteAdapter autoAdapter;
+  DefaultAdapter defaultAdapter;
   private SearchView searchView;
   private String searchText;
 
@@ -79,20 +79,19 @@ public class SearchActivity extends BaseActivity
     if (savedInstanceState != null) {
       searchText = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
     }
+
     Toolbar toolbar = findViewById(R.id.toolbar);
     ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_LOCALE);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
-    listView = findViewById(R.id.search_list);
+    recyclerView = findViewById(R.id.search_list);
     defaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches();
     activateDefaultAdapter();
 
     autoAdapter = new AutoCompleteAdapter(this);
-    listView.setOnItemClickListener(this);
-    listView.setOnItemLongClickListener(this);
 
     boolean IS_VOICE_SEARCH_INTENT = getIntent().getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false);
     if (IS_VOICE_SEARCH_INTENT) {
@@ -101,18 +100,16 @@ public class SearchActivity extends BaseActivity
   }
 
   public void activateDefaultAdapter() {
-    currentAdapter = defaultAdapter;
-    listView.setAdapter(currentAdapter);
+    recyclerView.setAdapter(defaultAdapter);
   }
 
   public void activateAutoAdapter() {
-    currentAdapter = autoAdapter;
-    listView.setAdapter(currentAdapter);
+    recyclerView.setAdapter(autoAdapter);
   }
 
   @Override
   public void addRecentSearches(List<String> recentSearches) {
-    defaultAdapter.addAll(recentSearches);
+    defaultAdapter.searchList.addAll(recentSearches);
     defaultAdapter.notifyDataSetChanged();
   }
 
@@ -211,13 +208,6 @@ public class SearchActivity extends BaseActivity
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
-  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    String title = currentAdapter.getItem(position);
-    searchPresenter.saveSearch(title);
-    sendMessage(title);
-  }
-
   private void sendMessage(String uri) {
     int value = shouldStartNewActivity();
     if (value == 1) {
@@ -250,15 +240,6 @@ public class SearchActivity extends BaseActivity
     return value;
   }
 
-  @Override
-  public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-    if (parent.getAdapter() == defaultAdapter) {
-      String searched = listView.getItemAtPosition(position).toString();
-      deleteSpecificSearchDialog(searched);
-    }
-    return true;
-  }
-
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this, dialogStyle())
       .setMessage(getString(R.string.delete_recent_search_item))
@@ -285,24 +266,58 @@ public class SearchActivity extends BaseActivity
     searchPresenter.getRecentSearches();
   }
 
-  private ArrayAdapter<String> getDefaultAdapter() {
-    return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1) {
-      @NonNull
-      @Override
-      public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View row;
+  private DefaultAdapter getDefaultAdapter() {
+    return new DefaultAdapter();
+  }
 
-        if (convertView == null) {
-          row = LayoutInflater.from(parent.getContext())
-            .inflate(android.R.layout.simple_list_item_1, null);
-        } else {
-          row = convertView;
-        }
+  public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHolder> {
 
-        ((TextView) row).setText(Html.fromHtml(getItem(position)));
-        return row;
+    private Context context;
+    private AdapterView.OnItemClickListener onItemClickListener;
+    List<String> searchList;
+
+    @NonNull @Override
+    public DefaultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+      View view = (View) LayoutInflater.from(parent.getContext())
+        .inflate(android.R.layout.simple_list_item_1, null);
+      ViewHolder holder = new ViewHolder(view);
+      return holder;
+    }
+
+    @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+      holder.txt.setText(
+        Html.fromHtml(getItem(position)).toString());///need to get rid of this error
+    }
+
+    @Override public int getItemCount() {
+      return searchList.size();
+    }
+
+    @NonNull public String getItem(int position) {
+      return searchList.get(position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+      TextView txt;
+
+      public ViewHolder(@NonNull View itemView) {
+        super(itemView);
+        txt = itemView.findViewById(android.R.id.text1);
+        itemView.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View v) {
+            String title = txt.getText().toString();
+            searchPresenter.saveSearch(title);
+          }
+        });
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+          @Override public boolean onLongClick(View v) {
+            String searched = txt.getText().toString();
+            deleteSpecificSearchDialog(searched);
+            return true;
+          }
+        });
       }
-    };
+    }
   }
 
   private void promptSpeechInput() {
