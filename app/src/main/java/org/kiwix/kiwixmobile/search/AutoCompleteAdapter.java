@@ -26,13 +26,13 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.zim_manager.NextSuggestion;
 import org.kiwix.kiwixmobile.zim_manager.ZimReaderContainer;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
@@ -118,11 +118,11 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
             zimReaderContainer.searchSuggestions(query, 200);
             String suggestion;
             String suggestionUrl;
-            HashMap<String, String> results;
+            NextSuggestion results;
             List<String> alreadyAdded = new ArrayList<>();
             while ((results = zimReaderContainer.getNextSuggestion()) != null) {
-              suggestion = results.get("title");
-              suggestionUrl = results.get("url");
+              suggestion = results.getTitle();
+              suggestionUrl = results.getUrl();
 
               if (!alreadyAdded.contains(suggestionUrl)) {
                 alreadyAdded.add(suggestionUrl);

@@ -90,14 +90,11 @@ class ZimFileReader(
   fun searchSuggestions(prefix: String, count: Int) =
     jniKiwixReader.searchSuggestions(prefix, count)
 
-  fun getNextSuggestion(): HashMap<String, String>? {
+  fun getNextSuggestion(): NextSuggestion? {
     val title = JNIKiwixString()
     val url = JNIKiwixString()
     if (jniKiwixReader.getNextSuggestion(title, url)) {
-      val results = HashMap<String, String>()
-      results.put("title", title.value)
-      results.put("url", url.value)
-      return results
+      return NextSuggestion(title.value, url.value)
     } else {
       return null
     }
@@ -248,3 +245,5 @@ private val String.mimeType: String?
   get() = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
     MimeTypeMap.getFileExtensionFromUrl(this)
   )
+
+data class NextSuggestion(val title: String, val url: String)
