@@ -34,8 +34,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
@@ -56,31 +58,28 @@ import static org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService.ACTION_STAR
 import static org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
 
 public class ZimHostActivity extends BaseActivity implements
-    ZimHostCallbacks, ZimHostContract.View {
+  ZimHostCallbacks, ZimHostContract.View {
 
+  public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
+  private static final String TAG = "ZimHostActivity";
+  private static final String IP_STATE_KEY = "ip_state_key";
   @BindView(R2.id.startServerButton)
   Button startServerButton;
   @BindView(R2.id.server_textView)
   TextView serverTextView;
   @BindView(R2.id.recycler_view_zim_host)
   RecyclerView recyclerViewZimHost;
-
   @Inject
   ZimHostContract.Presenter presenter;
-
   @Inject
   AlertDialogShower alertDialogShower;
-
-  private static final String TAG = "ZimHostActivity";
-  private static final String IP_STATE_KEY = "ip_state_key";
-  public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
-
   private BooksOnDiskAdapter booksAdapter;
   private BookOnDiskDelegate.BookDelegate bookDelegate;
   private HotspotService hotspotService;
   private String ip;
   private ServiceConnection serviceConnection;
   private ProgressDialog progressDialog;
+  private HashSet<String> selectedBooksId = new HashSet<>();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,8 +107,6 @@ public class ZimHostActivity extends BaseActivity implements
     recyclerViewZimHost.setAdapter(booksAdapter);
     presenter.attachView(this);
 
-    presenter.loadBooks();
-
     serviceConnection = new ServiceConnection() {
 
       @Override
@@ -122,28 +119,20 @@ public class ZimHostActivity extends BaseActivity implements
       public void onServiceDisconnected(ComponentName arg0) {
       }
     };
-
-    startServerButton.setOnClickListener(v -> {
-      //Get the path of ZIMs user has selected
-      if (!ServerUtils.isServerStarted) {
-        if (getSelectedBooksPath().size() > 0) {
-          startHotspotHelper();
-        } else {
-          Toast.makeText(ZimHostActivity.this, R.string.no_books_selected_toast_message,
-            Toast.LENGTH_SHORT).show();
-        }
-      } else {
-        startHotspotHelper();
-      }
-    });
   }
 
-  private void startHotspotHelper() {
-      if (ServerUtils.isServerStarted) {
-        startService(createHotspotIntent(ACTION_STOP_SERVER));
-      } else {
-        startHotspotManuallyDialog();
-      }
+  @OnClick(R2.id.startServerButton) void startStopServer() {
+    if (ServerUtils.isServerStarted) {
+      stopServer();
+    } else if (getSelectedBooksPath().size() > 0) {
+      startHotspotManuallyDialog();
+    } else {
+      Toast.makeText(this, R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT).show();
+    }
+  }
+
+  private void stopServer() {
+    startService(createHotspotIntent(ACTION_STOP_SERVER));
   }
 
   private ArrayList<String> getSelectedBooksPath() {
@@ -160,14 +149,14 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   private void select(@NonNull BooksOnDiskListItem.BookOnDisk bookOnDisk) {
-    ArrayList<BooksOnDiskListItem> booksList = new ArrayList<>();
-    for (BooksOnDiskListItem item : booksAdapter.getItems()) {
-      if (item.equals(bookOnDisk)) {
-        item.setSelected(!item.isSelected());
-      }
-      booksList.add(item);
+    bookOnDisk.setSelected(!bookOnDisk.isSelected());
+    if (bookOnDisk.isSelected()) {
+      selectedBooksId.add(bookOnDisk.getBook().getId());
+    } else {
+      selectedBooksId.remove(bookOnDisk.getBook().getId());
     }
-    booksAdapter.setItems(booksList);
+    booksAdapter.notifyDataSetChanged();
+    saveHostedBooks();
   }
 
   @Override protected void onStart() {
@@ -201,14 +190,15 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
+  private void saveHostedBooks() {
+    sharedPreferenceUtil.setHostedBooks(selectedBooksId);
+  }
+
   private void layoutServerStarted() {
     serverTextView.setText(getString(R.string.server_started_message, ip));
     startServerButton.setText(getString(R.string.stop_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     bookDelegate.setSelectionMode(SelectionMode.NORMAL);
-    for (BooksOnDiskListItem item : booksAdapter.getItems()) {
-      item.setSelected(false);
-    }
     booksAdapter.notifyDataSetChanged();
   }
 
@@ -290,6 +280,7 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void addBooks(@Nullable List<BooksOnDiskListItem> books) {
+    selectPreviouslyHostedBooks(books);
     booksAdapter.setItems(books);
   }
 
@@ -304,5 +295,28 @@ public class ZimHostActivity extends BaseActivity implements
     Toast.makeText(this, R.string.server_failed_message,
       Toast.LENGTH_SHORT)
       .show();
+  }
+
+  private void selectPreviouslyHostedBooks(@Nullable List<BooksOnDiskListItem> books) {
+    selectedBooksId.addAll(sharedPreferenceUtil.getHostedBooks());
+    if (books != null && !books.isEmpty()) {
+      if (selectedBooksId.isEmpty()) {
+        // Select all books if no book ids are stored
+        for (BooksOnDiskListItem book : books) {
+          if (book instanceof BooksOnDiskListItem.BookOnDisk) {
+            selectedBooksId.add(((BooksOnDiskListItem.BookOnDisk) book).getBook().getId());
+            book.setSelected(true);
+          }
+        }
+      } else {
+        for (BooksOnDiskListItem book : books) {
+          if (book instanceof BooksOnDiskListItem.BookOnDisk) {
+            book.setSelected(
+              selectedBooksId.contains(((BooksOnDiskListItem.BookOnDisk) book).getBook().getId())
+            );
+          }
+        }
+      }
+    }
   }
 }
