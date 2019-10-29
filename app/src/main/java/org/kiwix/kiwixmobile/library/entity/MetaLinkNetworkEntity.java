@@ -52,9 +52,9 @@ public class MetaLinkNetworkEntity {
     public List<Url> urls;
     @Element
     private long size;
-    @ElementMap(entry = "hash", key = "type", attribute = true, inline = true)
+    @ElementMap(entry = "hash", key = "type", attribute = true, inline = true, required = false)
     public Map<String, String> hashes;
-    @Element
+    @Element(required = false)
     public Pieces pieces;
 
     public String getName() {

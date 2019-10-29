@@ -1,4 +1,2 @@
-BUGFIX: Some users language was causing a crash due to unstable ISO codes
-BUGFIX: Some unstable zim files were crashing when opened
-BUGFIX: Long titles were rendering off screen on home page
-BUGFIX: Issues when opening a file externally
+BUGFIX: Some zim files could not be downloaded due to missing metadata
+BUGFIX: Some mirrors were not allowed to download via http
