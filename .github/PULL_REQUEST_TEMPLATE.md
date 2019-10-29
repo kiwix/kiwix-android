@@ -1,5 +1,14 @@
-Fixes #[Add issue number here. If you do not solve the issue entirely, please change the message e.g. "First steps for issues #IssueNumber]
+<!--
+- Add the issue number here.
 
-Changes: [Add here what changes were made in this issue and if possible provide links.]
+- If you haven't solved the issue completely use "Linked issue #{issue_number}.
+- After solving the issue completely change it to "Fixes #{issue_number}.
+-->
+Fixes #
 
-Screenshots/GIF for the change: [If possible, please add relevant screenshots/GIF]
+<!-- Add here what changes were made in this issue and if possible provide links. -->
+
+
+<!-- If possible, please add relevant screenshots / GIFs -->
+
+**Screenshots** 
