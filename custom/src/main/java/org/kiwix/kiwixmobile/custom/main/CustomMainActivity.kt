@@ -39,6 +39,15 @@ import java.io.File
 import java.util.Locale
 
 class CustomMainActivity : CoreMainActivity() {
+
+  override fun showHomePage() {
+    Log.e("CustomMain", "tried to show home page")
+  }
+
+  override fun createNewTab() {
+    newMainPageTab()
+  }
+
   override fun injection() {
     customActivityComponent.inject(this)
   }
@@ -111,8 +120,7 @@ class CustomMainActivity : CoreMainActivity() {
         )
       }
     } else {
-      val fileName = getExpansionAPKFileName()
-      filePath = FileUtils.generateSaveFileName(fileName)
+      filePath = generateExpansionFilePath()
     }
 
     Log.d(TAG_KIWIX, "BuildConfig.ZIM_FILE_SIZE = " + BuildConfig.ZIM_FILE_SIZE)
@@ -146,12 +154,10 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   companion object {
-    /**
-     * Returns the file name (without full path) for an Expansion APK file from the given context.
-     *
-     * @return String the file name of the expansion file
-     */
-    @JvmStatic fun getExpansionAPKFileName() =
-      "patch.${BuildConfig.CONTENT_VERSION_CODE}.${CoreApp.getInstance().packageName}.obb"
+    private fun getExpansionAPKFileName() =
+      "main.${BuildConfig.CONTENT_VERSION_CODE}.${CoreApp.getInstance().packageName}.obb"
+
+    fun generateExpansionFilePath(fileName: String = getExpansionAPKFileName()) =
+      "${CoreApp.getInstance().obbDir}${File.separator}$fileName"
   }
 }

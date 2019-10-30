@@ -26,7 +26,6 @@ import android.os.Build.VERSION_CODES
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
@@ -36,10 +35,6 @@ import java.io.IOException
 import java.util.ArrayList
 
 object FileUtils {
-
-  private val saveFilePath =
-    "${Environment.getExternalStorageDirectory()}${File.separator}Android" +
-      "${File.separator}obb${File.separator}${CoreApp.getInstance().packageName}"
 
   @JvmStatic fun getFileCacheDir(context: Context): File? =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
@@ -94,11 +89,6 @@ object FileUtils {
     }
     return false
   }
-
-  /**
-   * Returns the filename (where the file should be saved) from info about a download
-   */
-  @JvmStatic fun generateSaveFileName(fileName: String) = "$saveFilePath${File.separator}$fileName"
 
   /**
    * Helper function to ascertain the existence of a file and return true/false appropriately
