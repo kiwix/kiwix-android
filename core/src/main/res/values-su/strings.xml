@@ -1,18 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Pitulung</string>
   <string name="menu_home">Tepas</string>
   <string name="menu_settings">Préferénsi</string>
   <string name="menu_search">Paluruh</string>
-  <string name="menu_search_in_text">Téangan dina téks</string>
   <string name="menu_bookmarks">Tatanda buku</string>
-  <string name="menu_random_article">Artikel acak</string>
-  <string name="menu_full_screen">Layar pinuh</string>
-  <string name="menu_exit_full_screen">Kaluar ti modeu layar pinuh</string>
   <string name="search_label">Paluruh</string>
   <string name="choose_file">Pilih Berkas Kontén (*.zim)</string>
-  <string name="error_file_invalid">Kasalahan: Berkas nu dipilih lain berkas ZIM nu sah.</string>
-  <string name="error_article_url_not_found">Kasalahan: Pamuatan artikel (Url: %1$s) gagal.</string>
   <string name="pref_display_title">Panémbong</string>
   <string name="pref_info_title">Émbaran</string>
   <string name="pref_info_version">Vérsi</string>
@@ -38,7 +32,6 @@
   <string name="no">Teu</string>
   <string name="confirm_stop_download_title">Eureunkeun undeuran?</string>
   <string name="download_change_storage">Pamilih parangkat panyimpenan</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -60,4 +53,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

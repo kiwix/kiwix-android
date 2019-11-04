@@ -1,35 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">साहाय्यम्</string>
   <string name="menu_home">गृहम्</string>
   <string name="menu_settings">इष्टतमानि</string>
   <string name="menu_search">अन्विष्यताम्</string>
-  <string name="menu_search_in_text">पाठे अन्विष्यताम्</string>
   <string name="menu_bookmarks">पुस्तकचिह्नानि</string>
-  <string name="menu_random_article">यादृच्छिकं (Random) पृष्ठम्</string>
-  <string name="menu_full_screen">सम्पूर्णपटलम्</string>
-  <string name="menu_exit_full_screen">सम्पूर्णपटलात् निर्गम्यताम्</string>
   <string name="menu_read_aloud">उच्चैः पठ्यताम्</string>
   <string name="menu_read_aloud_stop">उच्चैः पठनं स्थगयतु</string>
   <string name="save_media">सञ्चिकाम् अमुकनाम्ना रक्ष</string>
   <string name="save_media_error">सञ्चिकायाः रक्षणकाले दोषः समुद्भूतः !</string>
-  <string name="save_media_saved">सञ्चिका %1$s -रूपेण स्वचित्राणां समुच्चये रक्ष्यताम्</string>
-  <string name="rescan_fs_warning">ZIM सञ्चिकायाः परीक्षणं (scan) चलदस्ति । कृपया प्रतिक्ष्यताम्…</string>
+  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">ZIM सञ्चिकायाः परीक्षणं (scan) चलदस्ति । कृपया प्रतिक्ष्यताम्...</string>
   <string name="search_label">अन्विष्यताम्</string>
   <string name="choose_file">एतस्याः ZIM पूर्वलिखितसञ्चिकायाः चयनं करोतु (*.zim)</string>
   <string name="open_in_new_tab">एतत् परिसन्धिं नवीन-टेब्-मध्ये उद्घाटयतु</string>
-  <string name="error_file_not_found">दोषः : चितसञ्चिका ZIM न प्राप्ता ।</string>
-  <string name="error_file_invalid">दोषः : चितसञ्चिका योग्या ZIM-सञ्चिका नस्ति ।</string>
-  <string name="error_article_url_not_found">दोषः : (Url: %1$s) लेखस्य अवारोपणं विफलम् अभवत् ।</string>
   <string name="pref_display_title">प्रदर्श्यताम्</string>
   <string name="pref_zoom_dialog">वीक्षणस्य (zoom) स्तरम्</string>
   <string name="pref_info_title">सूचना</string>
   <string name="pref_info_version">संस्करणम्</string>
   <string name="pref_zoom_enable">वीक्षण(zoom)नियन्त्रकानि</string>
-  <string name="pref_night_mode">रात्र्यवस्था</string>
-  <string name="pref_night_mode_summary">विपरितरङ्गैः लेखः दृश्यताम्</string>
-  <string name="pref_back_to_top">साक्षात् उपरि गच्छतु</string>
-  <string name="pref_back_to_top_summary">साक्षात् उपरि गन्तु पृष्ठस्य अन्ते सारणकुड्मलं (scroll button) दर्श्यताम्</string>
   <string name="pref_language_title">भाषा</string>
   <string name="pref_language_chooser">भाषां चिनोतु</string>
   <string name="go_to_play_store">प्ले-आपणं गच्छतु</string>
@@ -44,7 +33,6 @@
   <string name="pref_newtab_background_title">पृष्ठे नवीनं प्लवनम् उद्घाट्यताम्</string>
   <string name="pref_newtab_background_summary">यदा नवीनप्लवनम् आरप्स्यते, तदा पृष्ठभागे एव भविष्यति</string>
   <string name="zim_manager">ग्रन्थालयः</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -66,4 +54,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

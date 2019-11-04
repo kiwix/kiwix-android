@@ -1,14 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Пулăшу</string>
   <string name="menu_home">Тĕпел</string>
   <string name="menu_settings">Ĕнерлев</string>
   <string name="menu_search">Шырав</string>
-  <string name="menu_search_in_text">Текстра шыра</string>
   <string name="menu_bookmarks">Картсем</string>
-  <string name="menu_random_article">Ăнсăртран илнĕ статья</string>
-  <string name="menu_full_screen">Тулли экран</string>
-  <string name="menu_exit_full_screen">Тулли мар экран</string>
   <string name="search_label">Шырав</string>
   <string name="pref_display_title">Кăтарт</string>
   <string name="pref_info_title">Тӗплӗнрех</string>
@@ -16,7 +12,6 @@
   <string name="pref_language_title">Чĕлхе</string>
   <string name="menu_bookmarks_list">Картсем</string>
   <string name="zim_manager">Вулавăш</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -38,4 +33,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

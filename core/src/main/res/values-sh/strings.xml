@@ -1,20 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Pomoć</string>
   <string name="menu_home">Početna</string>
   <string name="menu_settings">Postavke</string>
   <string name="menu_search">Traži</string>
-  <string name="menu_search_in_text">Pronađi u tekstu</string>
   <string name="menu_bookmarks">Oznake</string>
-  <string name="menu_random_article">Slučajni članak</string>
-  <string name="menu_full_screen">Cijeli ekran</string>
   <string name="search_label">Traži</string>
   <string name="pref_display_title">Prikaži</string>
   <string name="pref_info_title">Informacija</string>
   <string name="pref_info_version">Verzija</string>
   <string name="pref_language_title">Jezik</string>
   <string name="menu_bookmarks_list">Oznake</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -36,4 +32,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

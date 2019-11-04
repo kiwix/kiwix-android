@@ -1,41 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Aiuto</string>
   <string name="menu_home">Pagina principale</string>
   <string name="menu_settings">Impostazioni</string>
   <string name="menu_search">Ricerca</string>
-  <string name="menu_search_in_text">Trova nella pagina</string>
   <string name="menu_bookmarks">Segnalibri</string>
-  <string name="menu_random_article">Voce a caso</string>
-  <string name="menu_full_screen">A tutto schermo</string>
-  <string name="menu_exit_full_screen">Esci dalla modalità a tutto schermo</string>
   <string name="menu_read_aloud">Leggi a voce alta</string>
   <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
-  <string name="save_media">Salva file multimediale come…</string>
+  <string name="save_media">Salva file multimediale come...</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
   <string name="save_media_saved">Salvato file multimediale come %s in Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Scansione dei contenuti scaricabili, attendi…</string>
+  <string name="rescan_fs_warning">Scansione dei contenuti scaricabili, attendi...</string>
   <string name="search_label">Ricerca</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
   <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
-  <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato.</string>
-  <string name="error_file_invalid">Errore: il file selezionato non è un file ZIM valido.</string>
-  <string name="error_article_url_not_found">Errore: caricamento della voce (url: %1$s) non riuscito.</string>
   <string name="pref_display_title">Visualizza</string>
   <string name="pref_zoom_dialog">Livello di zoom</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
   <string name="pref_zoom_enable">Controlli zoom</string>
-  <string name="pref_night_mode">Modalità notte</string>
-  <string name="pref_night_mode_summary">Visualizza le voci con colori invertiti</string>
-  <string name="pref_back_to_top">Torna all\'inizio</string>
-  <string name="pref_back_to_top_summary">Mostra un pulsante alla fine della pagina per scorrere fino all\'inizio</string>
   <string name="pref_language_title">Lingua</string>
   <string name="pref_language_chooser">Scegli la lingua</string>
   <string name="pref_credits_title">Crediti</string>
   <string name="tts_lang_not_supported">La lingua di questa pagina non è supportata, o i dati per il linguaggio appropriato non sono stati installati. La voce non può essere letta correttamente.</string>
   <string name="no_reader_application_installed">Non è stata trovata alcuna applicazione installata per questo tipo di file</string>
-  <string name="custom_app_missing_content">L\'applicazione è danneggiata.\nCiò potrebbe accadere quando si rimuovono i file sulla scheda SD.\nÈ necessario disinstallare e reinstallare l\'applicazione dal Play Store.</string>
   <string name="go_to_play_store">Vai al Play Store</string>
   <string name="menu_bookmarks_list">Segnalibri</string>
   <string name="no_section_info">Nessun intestazione di contenuto trovata</string>
@@ -70,7 +58,7 @@
   <string name="no_files_here">Nessun file qui</string>
   <string name="download_no_space">Lo spazio è insufficiente per scaricare questo file.</string>
   <string name="space_available">Spazio disponibile:</string>
-  <string name="help_10">Puoi sia scaricare i tuoi file ZIM in-app selezionati o selezionare attentamente quello/i che desideri e scaricarli attraverso il Desktop di un computer prima di trasferire i file ZIM sulla tua memoria SD.</string>
+  <string name="help_10">Puoi sia scaricare i tuoi file ZIM in-app scelti o selezionare attentamente quello/i che desideri e scaricarli attraverso un computer Desktop prima di trasferire i file ZIM sulla tua memoria SD.</string>
   <string name="help_11">I file ZIM scaricati nell\'applicazione sono localizzati nella directory di archiviazione esterna in una cartella chiamata Kiwix.</string>
   <string name="help_12">Come utilizzare file ZIM di grandi dimensioni?</string>
   <string name="help_13">Se il tuo file ZIM è superiore a 4GB potresti non essere in grado di archiviarlo nella tua scheda SD a causa di limitazioni nel sistema.</string>
@@ -86,11 +74,13 @@
   <string name="previous">Precedente</string>
   <string name="pref_wifi_only">Scarica contenuto solo tramite WiFi</string>
   <string name="time_day">giorno</string>
-  <string name="pref_auto_night_mode_summary">Commuta automaticamente tra la modalità giorno e notte.</string>
-  <string name="pref_auto_night_mode">Modalità notte automatica</string>
+  <string name="time_yesterday">Ieri</string>
   <string name="your_languages">Lingue selezionate:</string>
   <string name="other_languages">Altre lingue:</string>
-
+  <string name="crash_checkbox_device">Dettagli dispositivo</string>
+  <string name="new_tab_shortcut_label">Nuova scheda</string>
+  <string name="articleCount">%s voci</string>
+  <string name="table_of_contents">Indice</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -112,4 +102,6 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <string name="failed_unknown">Sconosciuto</string>
+  <plurals name="books_count">
 </resources>

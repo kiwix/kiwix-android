@@ -1,46 +1,33 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Bantuan</string>
   <string name="menu_home">Laman utama</string>
   <string name="menu_settings">Keutamaan</string>
   <string name="menu_search">Cari</string>
-  <string name="menu_search_in_text">Cari dalam teks</string>
   <string name="menu_bookmarks">Kegemaran</string>
-  <string name="menu_random_article">Rencana rawak</string>
-  <string name="menu_full_screen">Skrin penuh</string>
-  <string name="menu_exit_full_screen">Keluar dari skrin penuh</string>
   <string name="menu_read_aloud">Bacakan</string>
   <string name="menu_read_aloud_stop">Berhenti bacakan</string>
-  <string name="save_media">Simpan media sebagai…</string>
+  <string name="save_media">Simpan media sebagai...</string>
   <string name="save_media_error">Ralat berlaku ketika cubaan menyimpan media!</string>
-  <string name="save_media_saved">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
-  <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu…</string>
+  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu...</string>
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
   <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
-  <string name="error_file_not_found">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
-  <string name="error_file_invalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>
-  <string name="error_article_url_not_found">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
   <string name="pref_display_title">Paparan</string>
   <string name="pref_zoom_dialog">Takat zum</string>
   <string name="pref_info_title">Maklumat</string>
   <string name="pref_info_version">Versi</string>
   <string name="pref_zoom_enable">Kawalan zum</string>
-  <string name="pref_night_mode">Mod malam</string>
-  <string name="pref_night_mode_summary">Paparkan rencana yang diterbalikkan warnanya</string>
-  <string name="pref_back_to_top">Kembali ke Atas</string>
-  <string name="pref_back_to_top_summary">Paparkan butang di kaki halaman untuk menskrol kembali ke atas</string>
   <string name="pref_language_title">Bahasa</string>
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="tts_lang_not_supported">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
   <string name="no_reader_application_installed">Tidak terjumpa aplikasi yang dipasang untuk jenis fail ini</string>
-  <string name="custom_app_missing_content">Aplikasi anda tercemar.\nIni mungkin berlaku apabila anda mengalihkan keluar fail pada kad SD.\nAnda perlu menyahpasang lalu memasang semula aplikasi berkenaan dari App Store.</string>
   <string name="go_to_play_store">Pergi ke Play Store</string>
   <string name="menu_bookmarks_list">Kegemaran</string>
   <string name="no_section_info">Tiada judul kandungan ditemui</string>
   <string name="request_storage">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>
   <string name="zim_manager">Perpustakaan</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -62,4 +49,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

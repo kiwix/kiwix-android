@@ -1,14 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Abi</string>
   <string name="menu_home">Koduleht</string>
   <string name="menu_settings">Eelistused</string>
   <string name="menu_search">Otsi</string>
-  <string name="menu_search_in_text">Otsi tekstist</string>
   <string name="menu_bookmarks">Järjehoidjad</string>
-  <string name="menu_random_article">Juhuslik artikkel</string>
-  <string name="menu_full_screen">Täisekraan</string>
-  <string name="menu_exit_full_screen">Välju täisekraani režiimist</string>
   <string name="search_label">Otsi</string>
   <string name="pref_display_title">Vaade</string>
   <string name="pref_info_title">Teave</string>
@@ -17,7 +13,6 @@
   <string name="pref_language_chooser">Vali keel</string>
   <string name="menu_bookmarks_list">Järjehoidjad</string>
   <string name="zim_manager">Raamatukogu</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -39,4 +34,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

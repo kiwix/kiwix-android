@@ -1,52 +1,43 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Získat obsah</string>
   <string name="menu_help">Nápověda</string>
   <string name="menu_home">Domů</string>
   <string name="menu_settings">Nastavení</string>
   <string name="menu_search">Hledat článek</string>
-  <string name="menu_search_in_text">Najít na stránce</string>
   <string name="menu_bookmarks">Záložky</string>
-  <string name="menu_random_article">Náhodný článek</string>
-  <string name="menu_full_screen">Celá obrazovka</string>
-  <string name="menu_exit_full_screen">Ukončit režim na celou obrazovku</string>
   <string name="menu_read_aloud">Číst nahlas</string>
   <string name="menu_read_aloud_stop">Zastavit čtení nahlas</string>
-  <string name="save_media">Uložit médium jako…</string>
+  <string name="save_media">Uložit médium jako...</string>
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
-  <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Probíhá hledání obsahu ke stažení, prosím čekejte…</string>
   <string name="search_label">Vyhledávání</string>
   <string name="choose_file">Vyberte obsahový soubor (*.zim)</string>
   <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>
-  <string name="error_file_not_found">Chyba: Nelze najít vybraný soubor ZIM.</string>
-  <string name="error_file_invalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>
-  <string name="error_article_url_not_found">Chyba: Načtení článku (Url: %1$s ) se nezdařilo.</string>
   <string name="pref_display_title">Zobrazení</string>
   <string name="pref_zoom_dialog">Úroveň zvětšení</string>
   <string name="pref_info_title">Informace</string>
   <string name="pref_info_version">Verze</string>
   <string name="pref_zoom_enable">Ovládání přiblížení</string>
-  <string name="pref_night_mode">Noční režim</string>
-  <string name="pref_night_mode_summary">Zobrazuje stránky v obrácených barvách.</string>
-  <string name="pref_back_to_top">Zpět na začátek</string>
-  <string name="pref_back_to_top_summary">Zobrazit tlačítko “Zpět na začátek” na konci stránky</string>
   <string name="pref_language_title">Jazyk</string>
   <string name="pref_language_chooser">Vyberte jazyk</string>
   <string name="pref_credits">Přispěvatelé a licence</string>
   <string name="pref_credits_title">O souboru</string>
   <string name="tts_lang_not_supported">Jazyk této stránky není podporován nebo odpovídající jazyková data nejsou nainstalována. Článek nemusí být správně přečten.</string>
   <string name="no_reader_application_installed">Pro tento typ souboru nebylo možné najít nainstalovanou aplikaci</string>
-  <string name="custom_app_missing_content">Vaše aplikace je poškozena. To se může stát, jestliže jste {{GENDER:|odstranil|odstranila|odstranil(a)}} soubory z SD karty. Musíte aplikaci odinstalovat a pak ji znovu nainstalovat z Play Store.</string>
   <string name="go_to_play_store">Přejděte do Play Store</string>
   <string name="menu_bookmarks_list">Záložky</string>
   <string name="no_section_info">Nebyly nalezeny žádné hlavičky obsahu.</string>
   <string name="request_storage">Pro přístup k obsahu offline potřebujeme přístup k vašemu úložišti.</string>
   <string name="clear_recent_and_tabs_history_dialog">Jste si jistí, že chcete smazat svou historii vyhledávání a resetovat všechny aktivní záložky?</string>
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
+  <string name="all_history_cleared_toast">Všechna historie odstraněna</string>
+  <string name="clear_all_history_dialog_title">Vyčistit celou historii</string>
   <string name="delete">Smazat</string>
+  <string name="delete_specific_search_toast">Nedávné hledání smazáno</string>
   <string name="got_it">Rozumím!</string>
-  <string name="did_you_know">Věděli jste, že…?</string>
+  <string name="did_you_know">Věděli jste, že...?</string>
   <string name="undo">Zpět</string>
   <string name="tab_closed">Karta zavřena</string>
   <string name="bookmark_added">Záložka přidána</string>
@@ -57,9 +48,9 @@
   <string name="rate_dialog_negative">Ne, děkuji</string>
   <string name="rate_dialog_neutral">Později</string>
   <string name="open">Otevřít</string>
+  <string name="bookmark_removed">Záložka odstraněna</string>
   <string name="pref_newtab_background_title">Otevřít novou kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Otevře novou záložku na pozadí</string>
-  <string name="new_tab_snack_bar">Článek otevřený na nové kartě</string>
   <string name="zim_downloads">Stahování</string>
   <string name="zim_manager">Knihovna</string>
   <string name="delete_specific_zim_toast">Soubor byl smazán</string>
@@ -73,11 +64,15 @@
   <string name="help_12">Jak použít velké ZIM soubory?</string>
   <string name="help_16">\u2022 v Microsoft Windows: HJ-Split</string>
   <string name="pref_storage">Úložiště</string>
+  <string name="delete_zim_failed">Omlouváme se, ale nebyli jsme schopni smazat tento soubor. Měli by jste na místo toho zkustit správce souborů.</string>
   <string name="tts_pause">Pozastavit</string>
   <string name="tts_resume">Obnovit</string>
+  <string name="external_storage">Externí</string>
   <string name="yes">Ano</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Zastavit stahování?</string>
+  <string name="confirm_stop_download_msg">Jste si jisti, že chcete zastavit toto nahrávání?</string>
+  <string name="download_change_storage">Nástroj výběru úloženého zařízení</string>
   <string name="tts_not_enabled">Výstup textu na řeč není u tohoto ZIM souboru umožněn</string>
   <string name="next">Další</string>
   <string name="previous">Předchozí</string>
@@ -85,10 +80,25 @@
   <string name="pref_wifi_only">Stahovat obsah pouze přes WiFi</string>
   <string name="time_day">den</string>
   <string name="time_left">Vlevo</string>
+  <string name="external_link_popup_dialog_title">Vkládám externí odkaz</string>
+  <string name="external_link_popup_dialog_message">Když vkládáte externí odkaz. Může to vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
   <string name="your_languages">Vybrané jazyky:</string>
   <string name="other_languages">Jiné jazyky:</string>
-
+  <string name="crash_title">Inu...to je trapné</string>
+  <string name="crash_description">Nevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
+  <string name="crash_checkbox_language">Vaše nastavení jazyka</string>
+  <string name="crash_checkbox_zimfiles">Seznam Vašich Zim souborů</string>
+  <string name="crash_checkbox_exception">Informace o výpadku</string>
+  <string name="crash_checkbox_logs">Záznamy aplikace</string>
+  <string name="crash_checkbox_device">Informace o zařízení</string>
+  <string name="crash_button_confirm">POSLAT DETAILY</string>
+  <string name="crash_button_decline">NE DÍKY</string>
+  <string name="get_content_shortcut_label">Získej obsah</string>
+  <string name="articleCount">%s článků</string>
+  <string name="download_books">Stáhnout knihy</string>
+  <string name="download_books_message">Stáhnout knihy a číst ať jste kdekoliv.</string>
+  <string name="expand">Rozšířit</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -110,4 +120,23 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <string name="bookmarks_from_current_book">Záložky z aktuální knihy</string>
+  <string name="close_all_tabs">Zavřít všechny záložky</string>
+  <string name="failed_state">Selhalo: %s</string>
+  <string name="failed_cannot_resume">Nemohu obnovit v důsledku neznáme chyby</string>
+  <string name="failed_storage_not_found">Nemohu najít uložiště</string>
+  <string name="failed_file_already_exists">Soubor již existuje</string>
+  <string name="failed_unknown_file_error">Neznámá chyba systému souborů</string>
+  <string name="failed_http_error">Chyba dat HTTP</string>
+  <string name="failed_insufficient_space">Nemáte dostatek místa na uložišti</string>
+  <string name="failed_too_many_redirects">Příliš mnoho redirektů</string>
+  <string name="failed_unhandled_http_code">Přijat neznámý HTTP kód</string>
+  <string name="failed_unknown">Neznámý</string>
+  <string name="failed_http_code">HTTP kód %s</string>
+  <string name="ext_storage_permission_rationale_add_note">Poznámky vyžadují přístup do uložiště</string>
+  <string name="ext_storage_write_permission_denied_add_note">Poznámky mohou/nemohou být používány bez přístupu do uložiště</string>
+  <string name="confirmation_alert_dialog_message">Zahodit neuložené změny?</string>
+  <string name="delete_notes_confirmation_msg">Smazat všechny poznámky?</string>
+  <string name="ext_storage_permission_not_granted">Chyba: Oprávnění k úložišti nebyla přidělena</string>
+  <plurals name="books_count">
 </resources>

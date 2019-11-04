@@ -1,19 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">帮助</string>
   <string name="menu_home">主页</string>
   <string name="menu_settings">首选项</string>
   <string name="menu_search">搜索</string>
-  <string name="menu_search_in_text">在文本中查找</string>
   <string name="menu_bookmarks">书签</string>
-  <string name="menu_random_article">随机页面</string>
-  <string name="menu_full_screen">全屏</string>
   <string name="search_label">搜索</string>
   <string name="pref_display_title">显示</string>
   <string name="pref_info_title">信息</string>
   <string name="pref_language_title">语言</string>
   <string name="menu_bookmarks_list">书签</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -35,4 +31,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

@@ -1,14 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">እርዳታ</string>
   <string name="menu_home">መኖርያ ገጽ</string>
   <string name="menu_settings">ምርጫዎች</string>
   <string name="menu_search">ፍለጋ</string>
-  <string name="menu_random_article">መጣጥፍ በነሲብ</string>
-  <string name="menu_full_screen">ሙሉ መጋረጃ</string>
   <string name="search_label">ፍለጋ</string>
   <string name="pref_language_title">ቋንቋ</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -30,4 +27,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

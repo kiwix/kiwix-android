@@ -1,46 +1,32 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Отримати контент</string>
   <string name="menu_help">Довідка</string>
   <string name="menu_home">Головна</string>
   <string name="menu_settings">Налаштування</string>
   <string name="menu_search">Знайти статтю</string>
-  <string name="menu_search_in_text">Знайти на сторінці</string>
   <string name="menu_bookmarks">Закладки</string>
-  <string name="menu_random_article">Випадкова стаття</string>
-  <string name="menu_full_screen">На весь екран</string>
-  <string name="menu_exit_full_screen">Вийти з повноекранного режиму</string>
   <string name="menu_read_aloud">Читати вголос</string>
   <string name="menu_read_aloud_stop">Зупинити читання вголос</string>
   <string name="save_media">Зберегти медіафайл</string>
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
-  <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте…</string>
+  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте...</string>
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>
-  <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
-  <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
-  <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
   <string name="pref_display_title">Дисплей</string>
   <string name="pref_zoom_sub_title">Масштаб</string>
   <string name="pref_zoom_dialog">Рівень масштабування</string>
   <string name="pref_info_title">Інформація</string>
   <string name="pref_info_version">Версія</string>
   <string name="pref_zoom_enable">Управління масштабом</string>
-  <string name="pref_night_mode">Нічний режим</string>
-  <string name="pref_night_mode_summary">Показати статті з інвертованими кольорами</string>
-  <string name="pref_back_to_top">Повернутись угору</string>
-  <string name="pref_back_to_top_summary">Відображати кнопки в кінці сторінки для прокрутки вгору</string>
-  <string name="pref_hide_toolbar">Приховувати панель інструментів при прокручуванні</string>
-  <string name="pref_hide_toolbar_summary">Приховувати панель інструментів, коли виконується прокручування сторінки</string>
   <string name="pref_language_title">Мова</string>
   <string name="pref_language_chooser">Оберіть мову</string>
   <string name="pref_credits">Дописувачі й ліцензії</string>
   <string name="pref_credits_title">Автори</string>
   <string name="tts_lang_not_supported">Мова цієї сторінки не підтримується, або не було встановлено відповідні дані мови. Стаття може не читатись правильним чином.</string>
   <string name="no_reader_application_installed">Не вдалось знайти встановлений застосунок для файлу цього типу</string>
-  <string name="custom_app_missing_content">Ваш застосунок пошкоджено.\nЦе могло статись коли Ви вилучали файли з SD-картки.\nВам потрібно деінсталювати та перевстановити застосунок з Play Store.</string>
   <string name="go_to_play_store">Перейти до Play Store</string>
   <string name="menu_bookmarks_list">Закладки</string>
   <string name="no_section_info">Не знайдено заголовків вмісту</string>
@@ -71,7 +57,6 @@
   <string name="pref_newtab_background_title">Відкрити нову вкладку на фоні</string>
   <string name="pref_newtab_background_summary">При відкритті вкладки це відкриватиме її на фоні</string>
   <string name="pref_extras">Додаткові послуги</string>
-  <string name="new_tab_snack_bar">Статтю відкрито в новій вкладці</string>
   <string name="search_widget_text">Пошук у Kiwix</string>
   <string name="speech_prompt_text">Промовте, щоб здійснити пошук %s</string>
   <string name="speech_not_supported">Вибачте! Ваш пристрій не підтримує голосове управління</string>
@@ -90,8 +75,6 @@
   <string name="download_no_space">Недостатньо простору для завантаження цього файлу.</string>
   <string name="space_available">Доступний простір:</string>
   <string name="zim_simple">Простий</string>
-  <string name="zim_no_pic">Без зображень</string>
-  <string name="zim_no_vid">Немає відео</string>
   <string name="no_network_connection">Відсутнє з\'єднання з мережею</string>
   <string name="help_2">Що робить Kiwix?</string>
   <string name="help_3">Kiwix — це офлайновий читач контенту. Він багато в чому поводиться як браузер, але замість доступу до онлайнових веб-сторінок, він зчитує контент із файлу у форматі ZIM.</string>
@@ -136,8 +119,6 @@
   <string name="time_minute">хв</string>
   <string name="time_second">с</string>
   <string name="time_left">залишилось</string>
-  <string name="pref_auto_night_mode_summary">Автоматично перемикатися між денним та нічним режимами.</string>
-  <string name="pref_auto_night_mode">Автоматичний нічний режим</string>
   <string name="pref_external_link_popup_title">Попереджувати, коли введено зовнішнє посилання</string>
   <string name="pref_external_link_popup_summary">Відображати попередження щодо проблем із зовнішніми посиланнями, як от зняття додаткових грошей або неспрацювання посилань в офлайні.</string>
   <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання</string>
@@ -145,7 +126,7 @@
   <string name="do_not_ask_anymore">Більш не питати</string>
   <string name="your_languages">Вибір мови:</string>
   <string name="other_languages">Інші мови:</string>
-
+  <string name="send_feedback">Надіслати відгук</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -167,4 +148,8 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <string name="close_all_tabs">Закрити усі вкладки</string>
+  <string name="failed_storage_not_found">Неможливо знайти зберігання</string>
+  <string name="delete_notes_confirmation_msg">Видалити всі нотатки?</string>
+  <plurals name="books_count">
 </resources>

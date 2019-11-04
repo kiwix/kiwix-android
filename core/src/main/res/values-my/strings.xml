@@ -1,36 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">အ​ကူ​အ​ညီ​</string>
   <string name="menu_home">ပင်မ</string>
   <string name="menu_settings">အပြင်အဆင်များ</string>
   <string name="menu_search">ဆောင်းပါး ရှာဖွေရန်</string>
-  <string name="menu_search_in_text">စာမျက်နှာတွင် ရှာဖွေရန်</string>
   <string name="menu_bookmarks">ဖတ်ရန်မှတ်ထားမှု</string>
-  <string name="menu_random_article">ကျပန်း ဆောင်းပါး</string>
-  <string name="menu_full_screen">မျက်နှာဖွင့်အပြည့်</string>
-  <string name="menu_exit_full_screen">မျက်နှာဖွင့်အပြည့်မှ ထွက်ရန်</string>
   <string name="menu_read_aloud">ကျယ်ကျယ်ဖတ်ပါ</string>
   <string name="menu_read_aloud_stop">ကျယ်ကျယ်ဖတ်နေခြင်းကို ရပ်တန့်ပါ</string>
   <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
   <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
-  <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix…/ တွင် သိမ်းပြီးဖြစ်သည်။</string>
-  <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ …</string>
+  <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix.../ တွင် သိမ်းပြီးဖြစ်သည်။</string>
+  <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ ...</string>
   <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
-  <string name="error_file_not_found">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
-  <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
-  <string name="error_article_url_not_found">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
   <string name="pref_display_title">မြင်ကွင်း</string>
   <string name="pref_zoom_sub_title">ချုံ့/ချဲ့ကြည့်ရန်</string>
   <string name="pref_zoom_dialog">ချဲ့ကြည့်သည့်အဆင့်</string>
   <string name="pref_info_title">သတင်းအချက်အလက်</string>
   <string name="pref_info_version">မူ</string>
   <string name="pref_zoom_enable">ချဲ့ကြည့်ရာတွင် ထိန်းချုပ်မှုများ</string>
-  <string name="pref_night_mode">ညကြည့်ပုံစံ</string>
-  <string name="pref_night_mode_summary">ဆောင်းပါးများကို အရောင်ပြောင်းပြန်သုံး၍ ပြရန်</string>
-  <string name="pref_back_to_top">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
-  <string name="pref_back_to_top_summary">ထိပ်ဆုံးသို့ပြန်သွားရန်အတွက် စာမျက်နှာ၏အောက်ဆုံးတွင် ခလုတ်တစ်ခု ပြပါ။</string>
   <string name="pref_language_title">ဘာသာစကား</string>
   <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
   <string name="pref_credits">ပံပိုးပေးသူများနှင့် လိုင်စင်များ</string>
@@ -41,6 +30,7 @@
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
   <string name="all_history_cleared_toast">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>
   <string name="clear_all_history_dialog_title">မှတ်တမ်းများအားလုံး ရှင်းလင်းရန်</string>
+  <string name="share">မျှဝေ</string>
   <string name="delete">ဖျက်</string>
   <string name="delete_specific_search_toast">မကြာမီက ရှာဖွေမှုကို ဖယ်ရှားပြီးပြီ</string>
   <string name="got_it">ရပြီဟေ့</string>
@@ -65,8 +55,6 @@
   <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
   <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>
   <string name="zim_simple">ရိုးရိုး</string>
-  <string name="zim_no_pic">ပုံများ မရှိပါ</string>
-  <string name="zim_no_vid">ဗီဒီယိုများ မရှိပါ</string>
   <string name="no_network_connection">နက်ဝက်ကွန်နက်ရှင် မရှိပါ</string>
   <string name="help_5">အကြောင်းအရာ ဘယ်မှာနည်း?</string>
   <string name="pref_storage">သိုလှောင်ခန်း</string>
@@ -85,10 +73,18 @@
   <string name="time_minute">မိနစ်</string>
   <string name="time_second">စက္ကန့်</string>
   <string name="time_left">ကျန်ရှိ</string>
+  <string name="time_today">ယနေ့</string>
+  <string name="time_yesterday">မနေ့</string>
   <string name="do_not_ask_anymore">နောက်ထပ် မမေးတော့</string>
   <string name="your_languages">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
   <string name="other_languages">အခြားဘာသာစကားများ</string>
-
+  <string name="crash_checkbox_language">သင်၏ ဘာသာစကား အပြင်အဆင်များ</string>
+  <string name="articleCount">%s ဆောင်းပါးများ</string>
+  <string name="go_to_previous_page">ယခင်စာမျက်နှာသို့သွားရန်</string>
+  <string name="go_to_next_page">နောက်စာမျက်နှာသို့သွားရန်</string>
+  <string name="table_of_contents">မာတိကာ</string>
+  <string name="expand">ချဲ့ရန်</string>
+  <string name="history">ရာဇဝင်</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -110,4 +106,6 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <string name="failed_file_already_exists">ဖိုင် ရှိနှင့်ပြီးသားဖြစ်သည်</string>
+  <plurals name="books_count">
 </resources>

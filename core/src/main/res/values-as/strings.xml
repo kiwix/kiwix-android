@@ -1,21 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">সহায়</string>
   <string name="menu_home">বেটুপাত</string>
   <string name="menu_settings">পছন্দসমূহ</string>
   <string name="menu_search">সন্ধান কৰক</string>
-  <string name="menu_search_in_text">লিখনীত বিচাৰক</string>
   <string name="menu_bookmarks">পত্ৰচিহ্নসমূহ</string>
-  <string name="menu_random_article">যাদৃচ্ছিক ৰচনা</string>
-  <string name="menu_full_screen">পূর্ণাঙ্গ স্ক্রিন</string>
-  <string name="menu_exit_full_screen">পূৰ্ণাঙ্গ স্ক্ৰীণ বন্ধ কৰক</string>
   <string name="search_label">সন্ধান কৰক</string>
   <string name="pref_display_title">প্রদর্শন</string>
   <string name="pref_info_title">বিবৰণ</string>
   <string name="pref_language_title">ভাষা</string>
   <string name="menu_bookmarks_list">পত্ৰচিহ্নসমূহ</string>
   <string name="zim_manager">পুথিভৰাল</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -37,4 +32,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

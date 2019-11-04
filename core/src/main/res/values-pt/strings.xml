@@ -1,46 +1,32 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Obter conteúdo</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Início</string>
   <string name="menu_settings">Configurações</string>
   <string name="menu_search">Pesquisar artigo</string>
-  <string name="menu_search_in_text">Localizar na página</string>
   <string name="menu_bookmarks">Marcadores</string>
-  <string name="menu_random_article">Artigo aleatório</string>
-  <string name="menu_full_screen">Ecrã inteiro</string>
-  <string name="menu_exit_full_screen">Sair do modo de ecrã inteiro</string>
   <string name="menu_read_aloud">Ler em voz alta</string>
   <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
   <string name="save_media">Guardar conteúdo</string>
   <string name="save_media_error">Ocorreu um erro ao tentar guardar o conteúdo!</string>
-  <string name="save_media_saved">Conteúdo guardado como %s em Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">A procurar conteúdo disponível; aguarde, por favor…</string>
+  <string name="save_media_saved">Conteúdo guardado como %s em Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning">A procurar conteúdo disponível; aguarde, por favor...</string>
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecionar um ficheiro de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir ligação num novo separador?</string>
-  <string name="error_file_not_found">Erro: não foi possível encontrar o ficheiro ZIM selecionado.</string>
-  <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido.</string>
-  <string name="error_article_url_not_found">Erro: o carregamento do artigo falhou (URL: %1$s).</string>
   <string name="pref_display_title">Mostrar</string>
   <string name="pref_zoom_sub_title">Aproximação</string>
   <string name="pref_zoom_dialog">Nível de aproximação</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
   <string name="pref_zoom_enable">Controlos de Zoom</string>
-  <string name="pref_night_mode">Modo nocturno</string>
-  <string name="pref_night_mode_summary">Mostrar artigos com as cores invertidas</string>
-  <string name="pref_back_to_top">Voltar ao Topo</string>
-  <string name="pref_back_to_top_summary">Apresentar um botão no fim da página para voltar ao topo da página</string>
-  <string name="pref_hide_toolbar">Ocultar a barra de ferramentas ao deslizar</string>
-  <string name="pref_hide_toolbar_summary">Ocultar a barra de ferramentas quando a página é deslizada para baixo</string>
   <string name="pref_language_title">Língua</string>
   <string name="pref_language_chooser">Escolha um idioma</string>
   <string name="pref_credits">Contribuidores e Licenças</string>
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">O idioma desta página não é suportada, ou não foram instalados os dados de língua apropriados. O artigo pode não ser lido corretamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para este tipo de ficheiro</string>
-  <string name="custom_app_missing_content">A sua aplicação está corrompida.\nIsto pode acontecer quando remove ficheiros do seu cartão SD.\nÉ preciso desinstalar a aplicação e depois reinstalá-la a partir da Play Store.</string>
   <string name="go_to_play_store">Ir para a Play Store</string>
   <string name="menu_bookmarks_list">Marcadores</string>
   <string name="no_section_info">Não foram encontrados cabeçalhos de conteúdo</string>
@@ -56,7 +42,7 @@
   <string name="delete_specific_search_toast">Pesquisa recente removida</string>
   <string name="hint_contents_drawer_message">Pode passar o dedo para a esquerda para ver o conteúdo deste artigo</string>
   <string name="got_it">Entendi</string>
-  <string name="did_you_know">Sabia que …?</string>
+  <string name="did_you_know">Sabia que ...?</string>
   <string name="undo">Desfazer</string>
   <string name="tab_closed">Separador fechado</string>
   <string name="bookmark_added">Marcador adicionado</string>
@@ -70,7 +56,6 @@
   <string name="bookmark_removed">Marcador removido</string>
   <string name="pref_newtab_background_title">Abrir separador novo em segundo plano</string>
   <string name="pref_newtab_background_summary">Ao abrir um separador novo, ele será aberto em segundo plano</string>
-  <string name="new_tab_snack_bar">Artigo aberto num novo separador</string>
   <string name="search_widget_text">Procurar no Kiwix</string>
   <string name="speech_prompt_text">Falar para pesquisar %s</string>
   <string name="speech_not_supported">Desculpe! O seu dispositivo não suporta entrada de voz</string>
@@ -89,8 +74,6 @@
   <string name="download_no_space">Espaço insuficiente para o download deste ficheiro.</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="zim_simple">Simples</string>
-  <string name="zim_no_pic">Sem imagens</string>
-  <string name="zim_no_vid">Sem vídeos</string>
   <string name="no_network_connection">Nenhuma ligação de rede</string>
   <string name="help_2">O que faz o Kiwix?</string>
   <string name="help_3">O Kiwix é um leitor de conteúdo offline. Funciona tal como um navegador mas, em vez de aceder a páginas da Internet online, lê o conteúdo de um ficheiro no formato ZIM.</string>
@@ -128,12 +111,10 @@
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir a transferência de conteúdo pela rede móvel?</string>
-  <string name="wifi_only_msg">Se escolheu “Sim”, não será avisado no futuro. No entanto, pode sempre alterar isto nas Configurações</string>
+  <string name="wifi_only_msg">Se escolheu "Sim", não será avisado no futuro. No entanto, pode sempre alterar isto nas Configurações</string>
   <string name="pref_wifi_only">Descarregar conteúdo apenas por WiFi</string>
   <string name="time_day">dia</string>
   <string name="time_left">esquerda</string>
-  <string name="pref_auto_night_mode_summary">Alternar automaticamente entre o modo diurno e noturno.</string>
-  <string name="pref_auto_night_mode">Modo noturno automático</string>
   <string name="pref_external_link_popup_title">Avisar quando introduzir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
   <string name="external_link_popup_dialog_title">Hiperligação externa de entrada</string>
@@ -141,7 +122,6 @@
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>
   <string name="other_languages">Outras línguas:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -163,4 +143,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

@@ -1,29 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Dɛmɛ</string>
   <string name="menu_home">Soba</string>
   <string name="menu_settings">I diyanyeta</string>
   <string name="menu_search">Ɲinini kɛ</string>
-  <string name="menu_search_in_text">Ɲinini kɛ sɛbɛnni kɔnɔ</string>
   <string name="menu_bookmarks">Ɲɛ dogo</string>
-  <string name="menu_random_article">Laala kunnafoni</string>
-  <string name="menu_full_screen">Ekaran fa</string>
-  <string name="menu_exit_full_screen">Bɔ ekaran falen na</string>
   <string name="search_label">Ɲinini kɛ</string>
   <string name="choose_file">I mago bɛ fisiye min na ZIMU kɔnɔ, o suganti yan.</string>
-  <string name="error_file_not_found">Fili: Fisiye sugantilen ma se ka ye fan si.</string>
-  <string name="error_file_invalid">Fili: fisiye sugantilen tɛ fisiye yamaruyalen ye.</string>
-  <string name="error_article_url_not_found">Fili: Kunnafoni (Url: %1$s)  sariziyeli tigɛra sira la.</string>
   <string name="pref_display_title">Jirayɔrɔ</string>
   <string name="pref_zoom_dialog">Bonya/dɔgɔya hakɛ</string>
   <string name="pref_info_title">Kunnafoni</string>
   <string name="pref_zoom_enable">Bonyali/dɔgɔyali kɔlɔsili</string>
-  <string name="pref_night_mode">A kɛ sufɛla ɲɛ ye.</string>
-  <string name="pref_night_mode_summary">Kunnafoni minnu ɲɛ cogoya yɛlɛmanen don, olu jira.</string>
   <string name="pref_language_title">Kan</string>
   <string name="menu_bookmarks_list">Ɲɛ dogo</string>
   <string name="zim_manager">Gafeso</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -45,4 +35,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

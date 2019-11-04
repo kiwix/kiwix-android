@@ -1,35 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Тусламж</string>
   <string name="menu_home">Нүүр</string>
   <string name="menu_settings">Тохиргоо</string>
   <string name="menu_search">Хайлт</string>
-  <string name="menu_search_in_text">Бичвэрээс хайх</string>
   <string name="menu_bookmarks">Тэмдэглэсэн хуудсууд</string>
-  <string name="menu_random_article">Санаандгүй сонгосон нийлэл</string>
-  <string name="menu_full_screen">Дэлгэц дүүргэн харах</string>
-  <string name="menu_exit_full_screen">Бүтэн дэлгэцээр үзүүлэхийг болиулах</string>
   <string name="save_media">медиаг өөр төрлөөр хадгалах</string>
-  <string name="rescan_fs_warning">ZIM файлыг шүүж байна, түр хүлээнэ үү…</string>
+  <string name="rescan_fs_warning">ZIM файлыг шүүж байна, түр хүлээнэ үү...</string>
   <string name="search_label">Хайлт</string>
   <string name="choose_file">ZIM  агуулгын файлыг сонгох (*.zim)</string>
   <string name="open_in_new_tab">Холбоосыг өөр табд нээ</string>
-  <string name="error_file_not_found">Алдаа: Сонгосон ZIM файл олдсонгүй.</string>
-  <string name="error_file_invalid">Алдаа: Сонгосон ZIM файл алдаатай байна.</string>
-  <string name="error_article_url_not_found">Алдаа: (Url: %1$s) нийтлэлийг уншихад алдаа.</string>
   <string name="pref_display_title">Үзүүлэх</string>
   <string name="pref_zoom_dialog">Татах ойр хол</string>
   <string name="pref_info_title">Мэдээлэл</string>
   <string name="pref_info_version">Хувилбар</string>
   <string name="pref_zoom_enable">Ойртуулах, холдуулах тохиргоо</string>
-  <string name="pref_night_mode_summary">Нийтлэлийн үсгийн өнгийг эсрэгээр харуулах</string>
-  <string name="pref_back_to_top">Хамгийн дээр оч</string>
-  <string name="pref_back_to_top_summary">Товчийг хуудасны сүүлд байршуулж дээш оч</string>
   <string name="pref_language_title">Хэл</string>
   <string name="pref_language_chooser">Хэлээ сонгоно уу</string>
   <string name="menu_bookmarks_list">Тэмдэглэсэн хуудсууд</string>
   <string name="zim_manager">Сан</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -51,4 +40,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

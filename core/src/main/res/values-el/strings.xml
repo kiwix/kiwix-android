@@ -1,37 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Λάβετε περιεχόμενο</string>
   <string name="menu_help">Βοήθεια</string>
   <string name="menu_home">Αρχική</string>
   <string name="menu_settings">Ρυθμίσεις</string>
   <string name="menu_search">Αναζήτηση άρθρου</string>
-  <string name="menu_search_in_text">Βρείτε στην σελίδα</string>
   <string name="menu_bookmarks">Σελιδοδείκτες</string>
-  <string name="menu_random_article">Τυχαίο άρθρο</string>
-  <string name="menu_full_screen">Πλήρης οθόνη</string>
-  <string name="menu_exit_full_screen">Έξοδος από πλήρη οθόνη</string>
   <string name="menu_read_aloud">Διάβασε δυνατά</string>
   <string name="menu_read_aloud_stop">Σταμάτα να διαβάζεις δυνατά</string>
   <string name="save_media">Αποθήκευση μέσων</string>
   <string name="save_media_error">Προέκυψε σφάλμα κατά την προσπάθεια αποθήκευσης του αρχείου πολυμέσων!</string>
-  <string name="save_media_saved">Αποθήκευση αρχείων πολυμέσων ως το %1$s  στο Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Σάρωση για εγκαταστάσιμο περιεχόμενο, παρακαλώ περιμένετε…</string>
+  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Σάρωση για εγκαταστάσιμο περιεχόμενο, παρακαλώ περιμένετε...</string>
   <string name="search_label">Αναζήτηση</string>
   <string name="choose_file">Επιλογή ZIM Content File (*.zim)</string>
   <string name="open_in_new_tab">Άνοιγμα συνδέσμου σε νέα καρτέλα;</string>
-  <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί.</string>
-  <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
-  <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
   <string name="pref_display_title">Εμφάνιση</string>
   <string name="pref_zoom_sub_title">Εστίαση</string>
   <string name="pref_zoom_dialog">Επίπεδο ζουμ</string>
   <string name="pref_info_title">Πληροφορίες</string>
   <string name="pref_info_version">Έκδοση</string>
   <string name="pref_zoom_enable">Στοιχεία ελέγχου ζουμ</string>
-  <string name="pref_night_mode">Νυχτερινή λειτουργία</string>
-  <string name="pref_night_mode_summary">Προβολή λημμάτων με ανεστραμμένα χρώματα</string>
-  <string name="pref_back_to_top">Επιστροφή στην κορυφή</string>
-  <string name="pref_back_to_top_summary">Εμφάνιση κουμπιού στο τέλος της σελίδας για να μετακινηθείτε στην κορυφή</string>
   <string name="pref_language_title">Γλώσσα</string>
   <string name="pref_language_chooser">Επιλογή γλώσσας</string>
   <string name="pref_credits">Συντάκτες και Άδειες</string>
@@ -63,15 +52,14 @@
   <string name="bookmark_removed">Αφαιρέθηκε σελιδοδείκτης</string>
   <string name="pref_newtab_background_title">Άνοιγμα νέας καρτέλας στο παρασκήνιο</string>
   <string name="pref_extras">Πρόσθετα</string>
-  <string name="new_tab_snack_bar">Άρθρο άνοιξε σε νέα καρτέλα</string>
   <string name="search_widget_text">Αναζήτηση Kiwix</string>
   <string name="speech_prompt_text">Ομιλήστε για αναζήτηση %s</string>
   <string name="local_zims">Συσκευή</string>
   <string name="remote_zims">Συνδεδεμένος</string>
-  <string name="zim_downloads">Λήψη…</string>
+  <string name="zim_downloads">Λήψη...</string>
   <string name="zim_manager">Βιβλιοθήκη</string>
   <string name="delete_specific_zim_toast">Το αρχείο διαγράφηκε</string>
-  <string name="zim_file_downloading">Λήψη…</string>
+  <string name="zim_file_downloading">Λήψη...</string>
   <string name="zim_file_downloaded">Εγκατεστημένο</string>
   <string name="download_pause">Παύση</string>
   <string name="download_stop">Διακοπή</string>
@@ -81,8 +69,6 @@
   <string name="download_no_space">Μη επαρκής αποθηκευτικός χώρος για την λήψη του αρχείου.</string>
   <string name="space_available">Διαθέσιμος αποθηκευτικός χώρος:</string>
   <string name="zim_simple">Απλό</string>
-  <string name="zim_no_pic">Χωρίς εικόνες</string>
-  <string name="zim_no_vid">Χωρίς βίντεο</string>
   <string name="no_network_connection">Δεν υπάρχει σύνδεση στο δίκτυο</string>
   <string name="help_2">Τι κάνει το Kiwix;</string>
   <string name="help_3">Το Kiwix είναι ένας αναγνώστης περιεχομένου εκτός σύνδεσης. Φέρεται πολύ σαν περιηγητής αλλά αντί να έχει πρόσβαση σε διαδικτυακές σελίδες, διαβάζει περιεχόμενο από ένα αρχείο σε μορφοποίηση ZIM.</string>
@@ -111,22 +97,19 @@
   <string name="next">Επόμενο</string>
   <string name="previous">Προηγούμενο</string>
   <string name="wifi_only_title">Να επιτρέπεται η λήψη περιεχομένου μέσω δικτύου κινητής τηλεφωνίας;</string>
-  <string name="wifi_only_msg">Εάν επιλέξετε “Ναι” δεν θα προειδοποιηθείτε στο μέλλον. Ωστόσο, μπορείτε πάντα να το αλλάξετε στις ρυθμίσεις.</string>
+  <string name="wifi_only_msg">Εάν επιλέξετε "Ναι" δεν θα προειδοποιηθείτε στο μέλλον. Ωστόσο, μπορείτε πάντα να το αλλάξετε στις ρυθμίσεις.</string>
   <string name="pref_wifi_only">Λήψη περιεχομένου μόνο μέσω WiFi</string>
   <string name="time_day">ημέρα</string>
   <string name="time_hour">ω</string>
   <string name="time_minute">λεπτά</string>
   <string name="time_second">δ</string>
   <string name="time_left">έμεινε</string>
-  <string name="pref_auto_night_mode_summary">Εναλλαγή ανάμεσα σε λειτουργία ημέρας και νύχτας αυτόματα.</string>
-  <string name="pref_auto_night_mode">Αυτοματοποιημένη λειτουργία νύχτας</string>
   <string name="pref_external_link_popup_title">Προειδοποίησέ με όταν μπαίνω σε εξωτερικούς συνδέσμους</string>
   <string name="external_link_popup_dialog_title">Είσοδος σε εξωτερικό σύνδεσμο</string>
   <string name="external_link_popup_dialog_message">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>
   <string name="do_not_ask_anymore">Μη με ρωτήσεις άλλο</string>
   <string name="your_languages">Επιλεγμένες γλώσσες:</string>
   <string name="other_languages">Άλλες γλώσσες:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -148,4 +131,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

@@ -1,40 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Obtenir contingut</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Inici</string>
   <string name="menu_settings">Configuració</string>
   <string name="menu_search">Cercar article</string>
-  <string name="menu_search_in_text">Cercar a la pàgina</string>
   <string name="menu_bookmarks">Marcadors</string>
-  <string name="menu_random_article">Article aleatori</string>
-  <string name="menu_full_screen">Pantalla completa</string>
-  <string name="menu_exit_full_screen">Sortir de pantalla completa</string>
   <string name="menu_read_aloud">Llegir en veu alta</string>
   <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
   <string name="save_media">Anomena i desa el fitxer…</string>
   <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
-  <string name="save_media_saved">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
-  <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu…</string>
+  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu...</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
-  <string name="error_file_not_found">Error: no s\'ha trobat el fitxer ZIM.</string>
-  <string name="error_file_invalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>
-  <string name="error_article_url_not_found">Error: no s\'ha pogut carregar l\'article (Url: %1$s).</string>
   <string name="pref_display_title">Visualitzar</string>
   <string name="pref_zoom_dialog">Nivell de zoom</string>
   <string name="pref_info_title">Informació</string>
   <string name="pref_info_version">Versió</string>
   <string name="pref_zoom_enable">Controls de zoom</string>
-  <string name="pref_night_mode">Mode nocturn</string>
-  <string name="pref_night_mode_summary">Mostrar els articles amb colors invertits</string>
-  <string name="pref_back_to_top">Tornar a dalt</string>
-  <string name="pref_back_to_top_summary">Mostrar un botó al final de la pàgina per a desplaçar-se cap a la part superior</string>
   <string name="pref_language_title">Idioma</string>
   <string name="pref_language_chooser">Trieu un idioma</string>
   <string name="no_reader_application_installed">No s\'ha pogut trobar una aplicació instal·lada per a aquest tipus de fitxer</string>
-  <string name="custom_app_missing_content">L\'aplicació està espatllada.\nAixò pot passar quan s\'esborren fitxers de la targeta SD.\nHas de desinstal·lar i tornar a instal·lar l\'aplicació des del Play Store.</string>
   <string name="go_to_play_store">Anar a la Play Store</string>
   <string name="menu_bookmarks_list">Marcadors</string>
   <string name="no_section_info">No es van trobar capçaleres de contingut</string>
@@ -46,12 +34,11 @@
   <string name="delete_specific_search_toast">Les darreres cerques han estat suprimides</string>
   <string name="hint_contents_drawer_message">Podeu lliscar el dit cap a l\'esquerra per veure el contingut d\'aquest article</string>
   <string name="got_it">Entesos</string>
-  <string name="did_you_know">Sabies que…?</string>
+  <string name="did_you_know">Sabies que...?</string>
   <string name="undo">Desfer</string>
   <string name="bookmark_added">Marcador afegit</string>
   <string name="open">Obrir</string>
   <string name="bookmark_removed">Marcador eliminat</string>
-  <string name="new_tab_snack_bar">Article obert en una pestanya nova</string>
   <string name="local_zims">Dispositiu</string>
   <string name="zim_manager">Biblioteca</string>
   <string name="delete_specific_zim_toast">Fitxer esborrat</string>
@@ -74,7 +61,7 @@
   <string name="help_11">Els fitxers ZIM descarregats en l\'aplicació es troben al directori d\'emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
   <string name="help_12">Com utilitzar fitxers ZIM grans?</string>
   <string name="help_13">Si el teu fitxer ZIM és més gran de 4GB, pot ser que no puguis emmagatzemar-lo en la teva targeta SD per limitacions en el sistema de fitxers.</string>
-  <string name="help_14">La descàrrega en l\'aplicació gestiona els fitxers grans automàticament, i els parteix per a tu.</string>
+  <string name="help_14">La baixada en l\'aplicació gestiona els fitxers grans automàticament, i els parteix per vós.</string>
   <string name="help_15">No obstant això, si estàs descarregant-lo en un altre dispositiu, pot ser que necessitis dividir el fitxer ZIM amb el següent programari:</string>
   <string name="help_16">\u2022 En Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 En Apple Mac OSX: Split i Concat</string>
@@ -88,13 +75,16 @@
   <string name="confirm_stop_download_msg">Segur que vols aturar aquesta descàrrega?</string>
   <string name="download_change_storage">Selector de dispositiu d\'emmagatzematge</string>
   <string name="next">Següent</string>
-  <string name="pref_auto_night_mode">Mode nocturn automatitzat</string>
   <string name="external_link_popup_dialog_title">Accés a enllaç extern</string>
   <string name="external_link_popup_dialog_message">Estàs entrant a un enllaç extern. Això podria ocasionar-te costos addicionals per transferència de dades o, senzillament, no funcionarà si no tens connexió. Vols continuar?</string>
   <string name="do_not_ask_anymore">No tornar a preguntar</string>
   <string name="your_languages">Idiomes seleccionats:</string>
   <string name="other_languages">Altres idiomes:</string>
-
+  <string name="crash_checkbox_device">Detalls de l’aparell</string>
+  <string name="crash_button_confirm">ENVIA LES DADES</string>
+  <string name="crash_button_decline">NO, MERCÈS</string>
+  <string name="new_tab_shortcut_label">Pestanya nova</string>
+  <string name="table_of_contents">Taula</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -116,4 +106,11 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <string name="running_state">En curs</string>
+  <string name="paused_unknown">Desconegut</string>
+  <string name="failed_unknown">Desconegut</string>
+  <string name="save">Desa</string>
+  <string name="note">Nota</string>
+  <string name="note_share_error_file_missing">El fitxer de la nota no existeix</string>
+  <plurals name="books_count">
 </resources>

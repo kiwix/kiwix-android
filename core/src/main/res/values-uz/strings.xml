@@ -1,14 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Yordam</string>
   <string name="menu_home">Boshiga</string>
   <string name="menu_settings">Moslamalar</string>
   <string name="menu_search">Qidiruv</string>
-  <string name="menu_search_in_text">Matndan qidirish</string>
   <string name="menu_bookmarks">Xatchoʻplar</string>
-  <string name="menu_random_article">Tasodifiy sahifa</string>
-  <string name="menu_full_screen">Toʻliq ekran</string>
-  <string name="menu_exit_full_screen">Toʻliq ekran tartibidan chiqish</string>
   <string name="search_label">Qidiruv</string>
   <string name="pref_display_title">Koʻrsatish</string>
   <string name="pref_info_title">Axborot</string>
@@ -16,7 +12,6 @@
   <string name="pref_language_title">Til</string>
   <string name="menu_bookmarks_list">Xatchoʻplar</string>
   <string name="zim_manager">Kutubxona</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -38,4 +33,5 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <plurals name="books_count">
 </resources>

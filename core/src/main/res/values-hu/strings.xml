@@ -1,53 +1,39 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Tartalom lekérése</string>
   <string name="menu_help">Súgó</string>
   <string name="menu_home">Kezdőlap</string>
   <string name="menu_settings">Beállítások</string>
   <string name="menu_search">Cikk keresése</string>
-  <string name="menu_search_in_text">Keresés a lapon</string>
   <string name="menu_bookmarks">Könyvjelzők</string>
-  <string name="menu_random_article">Véletlenszerű cikk</string>
-  <string name="menu_full_screen">Teljes képernyő</string>
-  <string name="menu_exit_full_screen">Kilépés a teljes képernyős nézetből</string>
   <string name="menu_read_aloud">Hangosan felolvas</string>
   <string name="menu_read_aloud_stop">Felolvasás megállítása</string>
   <string name="save_media">Média mentése</string>
   <string name="save_media_error">Hiba történt a média mentése közben!</string>
-  <string name="save_media_saved">Média elmentve %s néven ide: Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Letölthető tartalom pásztázása, kis türelmet…</string>
+  <string name="save_media_saved">Média elmentve %s néven ide: Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning">Letölthető tartalom pásztázása, kis türelmet...</string>
   <string name="search_label">Keresés</string>
   <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
-  <string name="error_file_not_found">Hiba: A kijelölt ZIM-fájl nem található.</string>
-  <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
-  <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
   <string name="pref_display_title">Megjelenítés</string>
   <string name="pref_zoom_sub_title">Kicsinyítés/nagyítás</string>
   <string name="pref_zoom_dialog">Nagyítási szint</string>
   <string name="pref_info_title">Információ</string>
   <string name="pref_info_version">Verzió</string>
   <string name="pref_zoom_enable">Nagyítási vezérlők</string>
-  <string name="pref_night_mode">Éjszakai mód</string>
-  <string name="pref_night_mode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
-  <string name="pref_back_to_top">Vissza a lap tetejére</string>
-  <string name="pref_back_to_top_summary">Gomb megjelenítése a lap alján, melynek segítségével visszatérhetsz a lap tetejére</string>
-  <string name="pref_hide_toolbar">Eszköztár elrejtése görgetés esetén</string>
-  <string name="pref_hide_toolbar_summary">Eszköztár elrejtése az oldal legörgetésénél</string>
   <string name="pref_language_title">Nyelv</string>
   <string name="pref_language_chooser">Válassz nyelvet</string>
   <string name="pref_credits">Közreműködők és licenszek</string>
   <string name="pref_credits_title">Készítők</string>
   <string name="tts_lang_not_supported">Az oldal nyelve nem támogatott, vagy a megfelelő nyelvi adatok nincsenek telepítve. A szócikk nem biztos, hogy tökéletesen olvasható.</string>
   <string name="no_reader_application_installed">Nem található telepített alkalmazás ehhez a fájltípushoz</string>
-  <string name="custom_app_missing_content">Az alkalmazás sérült.\nEz megtörténhet olyankor, ha eltávolítsz fájlokat az SD-kártyán.\nEl kell távolítanod, majd újra kell telepítened az alkalmazást a Play Áruházból.</string>
   <string name="go_to_play_store">Play Áruház megnyitása</string>
   <string name="menu_bookmarks_list">Könyvjelzők</string>
   <string name="no_section_info">Nem található tartalomfejléc</string>
   <string name="request_storage">Az offline tartalom eléréséhez hozzáférésre van szükségünk a tárhelyedhez</string>
   <string name="request_storage_custom">Ha látsz egy képernyőt lefedő figyelmeztetést, a helyrehozáshoz egyszerűen indítsd újra az eszközöd.</string>
   <string name="clear_recent_and_tabs_history_dialog">Biztosan törölni szeretnéd a keresési előzményeidet és visszaállítani az összes aktív lapot?</string>
-  <string name="delete_recent_search_item">Törli ezt az elemet?</string>
+  <string name="delete_recent_search_item">Törlöd ezt az elemet?</string>
   <string name="pref_clear_all_history_title">Előzmények törlése</string>
   <string name="pref_clear_all_history_summary">Töröld a mostani kereséseket és lapelőzményeket</string>
   <string name="all_history_cleared_toast">Az összes előzmény törölve</string>
@@ -71,8 +57,8 @@
   <string name="pref_newtab_background_title">Új lap megnyitása a háttérben</string>
   <string name="pref_newtab_background_summary">Új lap megnyitásakor a háttérben fog megnyílni</string>
   <string name="pref_extras">Extrák</string>
-  <string name="new_tab_snack_bar">A cikk megnyitva egy új fülön</string>
   <string name="search_widget_text">Kiwix keresése</string>
+  <string name="speech_prompt_text">Speak to search %s</string>
   <string name="speech_not_supported">Sajnálom, az eszközöd nem támogatja a beszédbevitelt</string>
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
@@ -85,14 +71,12 @@
   <string name="download_paused">szüneteltetve</string>
   <string name="no_downloads_here">Nincsenek letöltések</string>
   <string name="no_files_here">Nincsenek fájlok</string>
-  <string name="download_no_space">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
+  <string name="download_no_space">Nincs elég hely a fájl letöltéséhez.</string>
   <string name="space_available">Szabad tárhely:</string>
   <string name="zim_simple">Egyszerű</string>
-  <string name="zim_no_pic">Nincsenek képek</string>
-  <string name="zim_no_vid">Nincsenek videók</string>
   <string name="no_network_connection">Nincs hálózati kapcsolat</string>
   <string name="help_2">Mit csinál a Kiwix?</string>
-  <string name="help_3">A Kiwix egy offline tartalom olvasó. Úgy viselkedik, mint egy böngésző, de az online weboldalak betöltése helyett a tartalmát egy ZIM formátumú fájlból olvassa.</string>
+  <string name="help_3">A Kiwix egy offline tartalom olvasó. Úgy viselkedik, mint egy böngésző, de az online weboldalak betöltése helyett a tartalmakat egy ZIM formátumú fájlból olvassa.</string>
   <string name="help_4">Bár a Kiwix eredetileg az offline Wikipédia megvalósítására lett tervezve, más tartalmakat is olvas.</string>
   <string name="help_5">Hol van a tartalom?</string>
   <string name="help_6">A tartalmunk a Kiwix weboldalán van hosztolva.</string>
@@ -101,7 +85,7 @@
   <string name="help_9">\u2022 Más tartalmak, mint a Wikileaks vagy a Wikisource úgyszint elérhetőek</string>
   <string name="help_10">Letöltheted a kiválasztott ZIM fájljaidat alkalmazáson belül vagy kiválaszthatod és letöltheted ezeket egy asztali számítógépről mielőtt átküldenéd a ZIM fájlokat az SD-kártyádra.</string>
   <string name="help_11">Az alkalmazáson belül letöltött ZIM fájlok a külső tároló könyvtár Kiwix nevű mappájában vannak elhelyezve.</string>
-  <string name="help_12">Hogyan használnak nagy ZIM fájlokat?</string>
+  <string name="help_12">Hogyan használj nagy ZIM fájlokat?</string>
   <string name="help_13">Ha a ZIM fájlod nagyobb, mint 4GB, lehet, hogy nem leszel képes tárolni az SD-kártyádon a fájlrendszer korlátozásai miatt.</string>
   <string name="help_14">Az alkalmazáson belüli letöltések automatikusan kezelik a nagyobb fájlokat, felosztva ezt neked.</string>
   <string name="help_15">Azonban ha másik eszközön töltöd le, fel kell oszd a ZIM fájlt, használva a következő szoftvert:</string>
@@ -127,15 +111,13 @@
   <string name="next">Következő</string>
   <string name="previous">Előző</string>
   <string name="wifi_only_title">Engedélyezed a tartalom letöltését mobilhálózaton keresztül?</string>
-  <string name="wifi_only_msg">Ha az “Igen”-t választod nem leszel többet figyelmeztetve. Ezt azonban bármikor meg tudod változtatni a Beállításokban</string>
+  <string name="wifi_only_msg">Ha az "Igen"-t választod nem leszel többet figyelmeztetve. Ezt azonban bármikor meg tudod változtatni a Beállításokban</string>
   <string name="pref_wifi_only">Tartalom letöltése csak WiFi-n keresztül</string>
   <string name="time_day">nap</string>
   <string name="time_hour">óra</string>
   <string name="time_minute">perc</string>
   <string name="time_second">másodperc</string>
   <string name="time_left">maradt</string>
-  <string name="pref_auto_night_mode_summary">Automatikusan vált nappali és éjszakai mód között.</string>
-  <string name="pref_auto_night_mode">Automatikus éjszakai mód</string>
   <string name="pref_external_link_popup_title">Figyelmeztess külső hivatkozások indítása esetén</string>
   <string name="pref_external_link_popup_summary">Felugró ablakkal való figyelmeztetés többletköltségek esetén vagy ne működjön offline hivatkozásokkal.</string>
   <string name="external_link_popup_dialog_title">Külső hivatkozás megadása</string>
@@ -143,7 +125,10 @@
   <string name="do_not_ask_anymore">Ne kérdezz többször</string>
   <string name="your_languages">Nyelvek kiválasztása:</string>
   <string name="other_languages">További nyelvek:</string>
-
+  <string name="crash_checkbox_device">Az eszköz részletei</string>
+  <string name="crash_button_confirm">RÉSZLETEK KÜLDÉSE</string>
+  <string name="crash_button_decline">KÖSZÖNÖM NEM</string>
+  <string name="download_books">Könyvek letöltése</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -165,4 +150,7 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <string name="close_all_tabs">Az összes lap bezárása</string>
+  <string name="delete_notes_confirmation_msg">Törölsz minden jegyzetet?</string>
+  <plurals name="books_count">
 </resources>
