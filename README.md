@@ -74,7 +74,7 @@ guidelines. Pull requests not matching the style will be rejected.
 Available communication channels:
 * [Web Public Chat channel](https://chat.kiwix.org)
 * [Email](mailto:contact+android@kiwix.org)
-* [Mailing list](kiwix-developer@lists.sourceforge.net)
+* [Mailing list](mailto:kiwix-developer@lists.sourceforge.net)
 * [Slack](https://kiwixoffline.slack.com): #android channel
 * IRC: #kiwix on irc.freenode.net
 
