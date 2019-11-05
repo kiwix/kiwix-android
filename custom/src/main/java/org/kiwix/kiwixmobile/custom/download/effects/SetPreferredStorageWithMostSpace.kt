@@ -15,29 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
+
+package org.kiwix.kiwixmobile.custom.download.effects
 
 import android.app.Activity
-import androidx.core.net.toUri
-import org.kiwix.kiwixmobile.core.R
+import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.start
-import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import javax.inject.Inject
 
-class OpenFile(private val bookOnDisk: BookOnDisk) :
-  SideEffect<Unit> {
-
+class SetPreferredStorageWithMostSpace @Inject constructor(
+  private val storageCalculator: StorageCalculator,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
+) : SideEffect<Unit> {
   override fun invokeWith(activity: Activity) {
-    val file = bookOnDisk.file
-    if (!file.canRead()) {
-      activity.toast(R.string.error_file_not_found)
-    } else {
-      activity.finish()
-      activity.start<KiwixMainActivity> {
-        data = file.toUri()
-      }
-    }
+    ContextCompat.getExternalFilesDirs(activity, null)
+      .filterNotNull()
+      .maxBy(storageCalculator::availableBytes)
+      ?.let { sharedPreferenceUtil.putPrefStorage(it.path) }
   }
 }

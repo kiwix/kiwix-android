@@ -16,13 +16,20 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.di
+package org.kiwix.kiwixmobile.custom;
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import androidx.lifecycle.ViewModel;
+import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import org.kiwix.kiwixmobile.core.ViewModelFactory;
+import org.kiwix.kiwixmobile.custom.di.CustomScope;
 
-@Component(dependencies = [CoreComponent::class], modules = [CustomViewModelModule::class])
 @CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
+public class CustomViewModelFactory extends ViewModelFactory {
+
+  @Inject
+  public CustomViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
+    super(creators);
+  }
 }

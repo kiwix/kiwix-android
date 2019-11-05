@@ -16,13 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.di
+package org.kiwix.kiwixmobile.custom.download.effects
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import android.app.Activity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.extensions.start
+import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 
-@Component(dependencies = [CoreComponent::class], modules = [CustomViewModelModule::class])
-@CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
+class FinishAndStartMain() : SideEffect<Unit> {
+  override fun invokeWith(activity: Activity) {
+    activity.finish()
+    activity.start<CustomMainActivity>()
+  }
 }

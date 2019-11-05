@@ -16,13 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.di
+package org.kiwix.kiwixmobile.custom.download
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 
-@Component(dependencies = [CoreComponent::class], modules = [CustomViewModelModule::class])
-@CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
+sealed class State {
+  object DownloadRequired : State()
+  data class DownloadInProgress(val downloads: List<DownloadItem>) : State()
+  data class DownloadFailed(val downloadState: DownloadState) : State()
+  object DownloadComplete : State()
 }

@@ -16,13 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.di
+package org.kiwix.kiwixmobile.core.extensions
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import android.widget.ViewAnimator
 
-@Component(dependencies = [CoreComponent::class], modules = [CustomViewModelModule::class])
-@CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
+fun ViewAnimator.setDistinctDisplayedChild(index: Int) {
+  if (displayedChild != index) {
+    displayedChild = index
+  }
 }

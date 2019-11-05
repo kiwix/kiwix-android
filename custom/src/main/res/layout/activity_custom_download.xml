@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:animateLayoutChanges="true">
+
+  <ImageView
+    android:id="@+id/cd_icon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:src="@drawable/kiwix_icon_with_title"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <ViewAnimator
+    android:id="@+id/cd_view_animator"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:inAnimation="@anim/fade_in"
+    android:outAnimation="@anim/fade_out"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cd_icon">
+
+    <include layout="@layout/layout_custom_download_required" />
+
+    <include layout="@layout/layout_custom_download_in_progress" />
+
+    <include layout="@layout/layout_custom_download_error" />
+
+    <include layout="@layout/layout_custom_download_complete" />
+  </ViewAnimator>
+</androidx.constraintlayout.widget.ConstraintLayout>

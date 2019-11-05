@@ -16,13 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.di
+package org.kiwix.kiwixmobile.custom.download
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 
-@Component(dependencies = [CoreComponent::class], modules = [CustomViewModelModule::class])
-@CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
+sealed class Action {
+  data class DatabaseEmission(val downloads: List<DownloadItem>) : Action()
+  object ClickedDownload : Action()
+  object ClickedRetry : Action()
 }

@@ -18,11 +18,23 @@
 
 package org.kiwix.kiwixmobile.custom.di
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
+import org.kiwix.kiwixmobile.custom.CustomViewModelFactory
+import org.kiwix.kiwixmobile.custom.download.CustomDownloadViewModel
+import org.kiwix.kiwixmobile.di.ViewModelKey
 
-@Component(dependencies = [CoreComponent::class], modules = [CustomViewModelModule::class])
-@CustomScope
-interface CustomComponent {
-  fun activityComponentBuilder(): CustomActivityComponent.Builder
+@Module
+abstract class CustomViewModelModule {
+  @Binds
+  @IntoMap
+  @ViewModelKey(CustomDownloadViewModel::class)
+  abstract fun bindCustomDownloadViewModel(zimManageViewModel: CustomDownloadViewModel): ViewModel
+
+  @Binds
+  abstract fun bindViewModelFactory(factory: CustomViewModelFactory):
+    ViewModelProvider.Factory
 }

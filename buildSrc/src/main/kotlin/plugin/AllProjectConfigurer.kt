@@ -143,6 +143,7 @@ class AllProjectConfigurer {
       implementation(Libs.kotlin_stdlib_jdk7)
       implementation(Libs.appcompat)
       implementation(Libs.material)
+      implementation(Libs.constraintlayout)
       implementation(Libs.androidx_multidex_multidex)
       implementation(Libs.okhttp)
       implementation(Libs.logging_interceptor)
