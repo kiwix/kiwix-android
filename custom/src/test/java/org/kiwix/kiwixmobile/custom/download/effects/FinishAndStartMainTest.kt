@@ -19,14 +19,22 @@
 package org.kiwix.kiwixmobile.custom.download.effects
 
 import android.app.Activity
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
-import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
-import javax.inject.Inject
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
 
-class FinishAndStartMain @Inject constructor() : SideEffect<Unit> {
-  override fun invokeWith(activity: Activity) {
-    activity.finish()
-    activity.start<CustomMainActivity>()
+internal class FinishAndStartMainTest {
+
+  @Test
+  fun `invokeWith finishes activity and starts main`() {
+    val activity = mockk<Activity>()
+    // Inline functions cannot be mocked
+    // mockkObject(ActivityExtensions)
+    // every { start<CustomMainActivity>(null) } just Runs issues with inline extension functions
+    FinishAndStartMain().invokeWith(activity)
+    verify {
+      activity.finish()
+      activity.startActivity(any())
+    }
   }
 }

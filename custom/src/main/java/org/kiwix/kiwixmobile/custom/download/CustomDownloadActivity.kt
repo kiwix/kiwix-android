@@ -31,8 +31,8 @@ import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_prog
 import kotlinx.android.synthetic.main.layout_custom_download_required.cd_download_button
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
-import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload

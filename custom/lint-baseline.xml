@@ -9,14 +9,12 @@
     </issue>
 
     <issue
-        id="SdCardPath"
-        message="Do not hardcode &quot;`/data/`&quot;; use `Context.getFilesDir().getPath()` instead"
-        errorLine1="          &quot;/data/data/%s/lib/%s&quot;, packageName,"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        id="ObsoleteLintCustomCheck"
+        message="Lint found an issue registry (`butterknife.lint.LintRegistry`) which is older than the current API level; these checks may not work correctly.&#xA;&#xA;Recompile the checks against the latest version. Custom check API version is 2 (3.2), current lint API level is 5 (3.5+)"
+        includedVariants="customexampleDebug"
+        excludedVariants="customexampleRelease">
         <location
-            file="src\main\java\org\kiwix\kiwixmobile\custom\main\CustomMainActivity.kt"
-            line="109"
-            column="12"/>
+            file="..\..\..\.gradle\caches\transforms-2\files-2.1\6dca90c1110a5ba8556122fc8f89395f\butterknife-runtime-10.1.0\jars\lint.jar"/>
     </issue>
 
     <issue
@@ -58,9 +56,17 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.drawable.kiwix_icon_with_title` appears to be unused">
+        message="The resource `R.mipmap.kiwix_icon` appears to be unused">
         <location
-            file="src\customexample\res\drawable\kiwix_icon_with_title.png"/>
+            file="src\customexample\res\mipmap-hdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\mipmap-mdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\mipmap-xhdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\mipmap-xxhdpi\kiwix_icon.png"/>
+        <location
+            file="src\customexample\res\mipmap-xxxhdpi\kiwix_icon.png"/>
     </issue>
 
     <issue
@@ -72,6 +78,13 @@
             file="src\customexample\res\values\strings.xml"
             line="3"
             column="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.raw.wikipedia_fr_test_2017_07` appears to be unused">
+        <location
+            file="src\customexample\res\raw\wikipedia_fr_test_2017_07.zim"/>
     </issue>
 
     <issue
@@ -157,6 +170,39 @@
     </issue>
 
     <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\layout_custom_download_error.xml"
+            line="10"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\layout_custom_download_in_progress.xml"
+            line="8"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\layout_custom_download_in_progress.xml"
+            line="28"
+            column="4"/>
+    </issue>
+
+    <issue
         id="GoogleAppIndexingApiWarning"
         message="Missing support for Firebase App Indexing API"
         errorLine1="class CustomMainActivity : CoreMainActivity() {"
@@ -165,6 +211,28 @@
             file="src\main\java\org\kiwix\kiwixmobile\custom\main\CustomMainActivity.kt"
             line="41"
             column="7"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="  &lt;ImageView"
+        errorLine2="   ~~~~~~~~~">
+        <location
+            file="src\main\res\layout\activity_custom_download.xml"
+            line="9"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  public CustomViewModelFactory(Map&lt;Class&lt;? extends ViewModel>, Provider&lt;ViewModel>> creators) {"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\custom\CustomViewModelFactory.java"
+            line="32"
+            column="33"/>
     </issue>
 
 </issues>

@@ -41,7 +41,8 @@ import javax.inject.Inject
 class CustomDownloadViewModel @Inject constructor(
   downloadDao: FetchDownloadDao,
   setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace,
-  private val downloadCustom: DownloadCustom
+  private val downloadCustom: DownloadCustom,
+  private val finishAndStartMain: FinishAndStartMain
 ) : ViewModel() {
 
   val state = MutableLiveData<State>().apply { value = DownloadRequired }
@@ -90,7 +91,7 @@ class CustomDownloadViewModel @Inject constructor(
         else
           DownloadInProgress(action.downloads)
       else
-        DownloadComplete.also { _effects.offer(FinishAndStartMain()) }
+        DownloadComplete.also { _effects.offer(finishAndStartMain) }
     DownloadComplete -> state
   }
 }
