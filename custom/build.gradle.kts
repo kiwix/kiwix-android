@@ -23,7 +23,7 @@ android {
   // }
 }
 
-apply(from = File("build_custom.gradle"))
+apply(from = File("dynamic_flavors.gradle"))
 
 fun ProductFlavor.configureStrings(appName: String) {
   resValue("string", "app_name", appName)
