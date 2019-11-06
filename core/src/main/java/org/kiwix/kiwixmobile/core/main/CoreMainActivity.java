@@ -155,8 +155,6 @@ import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 public abstract class CoreMainActivity extends BaseActivity implements WebViewCallback,
   MainContract.View {
 
-  private static final String NEW_TAB = "NEW_TAB";
-  private static final String HOME_URL = "file:///android_asset/home.html";
   public static boolean isFullscreenOpened;
   public static boolean refresh;
   public static boolean wifiOnly;
@@ -186,9 +184,9 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   @BindView(R2.id.activity_main_nav_view)
   NavigationView tableDrawerRightContainer;
   @BindView(R2.id.activity_main_content_frame)
-  FrameLayout contentFrame;
+  protected FrameLayout contentFrame;
   @BindView(R2.id.bottom_toolbar)
-  LinearLayout bottomToolbar;
+  protected LinearLayout bottomToolbar;
   @BindView(R2.id.bottom_toolbar_bookmark)
   ImageView bottomToolbarBookmark;
   @BindView(R2.id.bottom_toolbar_arrow_back)
@@ -198,7 +196,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   @BindView(R2.id.tab_switcher_recycler_view)
   RecyclerView tabRecyclerView;
   @BindView(R2.id.activity_main_tab_switcher)
-  View tabSwitcherRoot;
+  protected View tabSwitcherRoot;
   @BindView(R2.id.tab_switcher_close_all_tabs)
   FloatingActionButton closeAllTabsButton;
   @BindView(R2.id.snackbar_root)
@@ -211,7 +209,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   @Inject
   StorageObserver storageObserver;
   @Inject
-  ZimReaderContainer zimReaderContainer;
+  protected ZimReaderContainer zimReaderContainer;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -238,7 +236,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   private KiwixTextToSpeech tts;
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
-  private int currentWebViewIndex = 0;
+  protected int currentWebViewIndex = 0;
   private File file;
   private ActionMode actionMode = null;
   private KiwixWebView tempForUndo;
@@ -392,11 +390,11 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
-      newTab();
+      newMainPageTab();
       getCurrentWebView().loadUrl(intent.getStringExtra(EXTRA_CHOSE_X_URL));
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
-      newTab();
+      newMainPageTab();
       getCurrentWebView().loadUrl(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
     }
   }
@@ -507,7 +505,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     }
   }
 
-  private void hideTabSwitcher() {
+  protected void hideTabSwitcher() {
     actionBar.setDisplayHomeAsUpEnabled(false);
     actionBar.setDisplayShowTitleEnabled(true);
 
@@ -644,15 +642,15 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   }
 
   private void updateTitle() {
-    String zimFileTitle = zimReaderContainer.getZimFileTitle();
-    if (zimFileTitle == null) {
-      zimFileTitle = getString(R.string.app_name);
-    }
-    if (zimFileTitle.trim().isEmpty() || HOME_URL.equals(getCurrentWebView().getUrl())) {
-      actionBar.setTitle(createMenuText(getString(R.string.app_name)));
-    } else {
-      actionBar.setTitle(createMenuText(zimFileTitle));
-    }
+    actionBar.setTitle(createMenuText(getValidTitle(zimReaderContainer.getZimFileTitle())));
+  }
+
+  private String getValidTitle(String zimFileTitle) {
+    return isInvalidTitle(zimFileTitle) ? getString(R.string.app_name) : zimFileTitle;
+  }
+
+  protected boolean isInvalidTitle(String zimFileTitle) {
+    return zimFileTitle == null || zimFileTitle.trim().isEmpty();
   }
 
   private void setUpTTS() {
@@ -768,7 +766,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     WebViewCallback webViewCallback,
     ZimReaderContainer zimReaderContainer);
 
-  private KiwixWebView newTab() {
+  protected KiwixWebView newMainPageTab() {
     return newTab(contentUrl(zimReaderContainer.getMainPage()));
   }
 
@@ -830,7 +828,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   }
 
   protected KiwixWebView getCurrentWebView() {
-    if (webViewList.size() == 0) return newTab();
+    if (webViewList.size() == 0) return newMainPageTab();
     if (currentWebViewIndex < webViewList.size()) {
       return webViewList.get(currentWebViewIndex);
     } else {
@@ -845,7 +843,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
         hideTabSwitcher();
       }
-      newTab(HOME_URL);
+      createNewTab();
       return true;
     } else if (itemId == R.id.menu_add_note) {
       if (requestExternalStorageWritePermissionForNotes()) {
@@ -897,6 +895,8 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
     return super.onOptionsItemSelected(item);
   }
+
+  protected abstract void createNewTab();
 
   /** Creates the full screen AddNoteDialog, which is a DialogFragment */
   private void showAddNoteDialog() {
@@ -984,12 +984,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     if (!isHideToolbar) {
       this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarHeight(this));
     }
-  }
-
-  @Override
-  public void showHomePage() {
-    getCurrentWebView().removeAllViews();
-    getCurrentWebView().loadUrl(HOME_URL);
   }
 
   @Override
@@ -1219,11 +1213,12 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   private void openHomeScreen() {
     new Handler().postDelayed(() -> {
       if (webViewList.size() == 0) {
-        newTab(HOME_URL);
+        createNewTab();
         hideTabSwitcher();
       }
     }, 300);
   }
+
 
   @OnClick(R2.id.bottom_toolbar_bookmark)
   public void toggleBookmark() {
@@ -1277,17 +1272,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       recreate();
     }
     presenter.loadCurrentZimBookmarksUrl();
-    if (zimReaderContainer.getZimFile() == null &&
-      !HOME_URL.equals(getCurrentWebView().getUrl())) {
-      showHomePage();
-    }
 
-    if (!webViewList.isEmpty() && currentWebViewIndex < webViewList.size() &&
-      webViewList.get(currentWebViewIndex).getUrl() != null &&
-      webViewList.get(currentWebViewIndex).getUrl().equals(HOME_URL) &&
-      webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
-      webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
-    }
     updateBottomToolbarVisibility();
     presenter.loadBooks();
 
@@ -1324,9 +1309,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
             startActivityForResult(i, REQUEST_FILE_SEARCH);
           }
           break;
-        case NEW_TAB:
-          newTab(HOME_URL);
-          break;
       }
     }
     updateWidgets(this);
@@ -1334,8 +1316,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
   private void updateBottomToolbarVisibility() {
     if (checkNull(bottomToolbar)) {
-      if (!HOME_URL.equals(
-        getCurrentWebView().getUrl())
+      if (!urlIsInvalid()
         && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
         bottomToolbar.setVisibility(View.VISIBLE);
         if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
@@ -1507,7 +1488,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
         }
         if (resultCode == RESULT_HISTORY_CLEARED) {
           webViewList.clear();
-          newTab();
+          newMainPageTab();
           tabsAdapter.notifyDataSetChanged();
         }
         loadPrefs();
@@ -1522,7 +1503,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
               kiwixWebView.clearHistory();
             }
             webViewList.clear();
-            newTab(HOME_URL);
+            createNewTab();
           } else {
             String title = data.getStringExtra(EXTRA_CHOSE_X_TITLE);
             String url = data.getStringExtra(EXTRA_CHOSE_X_URL);
@@ -1550,7 +1531,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
               finish();
               return;
             }
-            newTab();
+            newMainPageTab();
             if (url != null) {
               getCurrentWebView().loadUrl(url);
             } else if (title != null) {
@@ -1608,7 +1589,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_fullscreen).setVisible(true);
-      if (urlIsHomeOrNull()) {
+      if (urlIsInvalid()) {
         menu.findItem(R.id.menu_search).setVisible(false);
         menu.findItem(R.id.menu_read_aloud).setVisible(false);
         menu.findItem(R.id.menu_random_article).setVisible(false);
@@ -1621,9 +1602,8 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     return true;
   }
 
-  private boolean urlIsHomeOrNull() {
-    return getCurrentWebView().getUrl() == null ||
-      getCurrentWebView().getUrl().equals(HOME_URL);
+  protected boolean urlIsInvalid(){
+    return getCurrentWebView().getUrl() == null;
   }
 
   private void updateTabSwitcherIcon() {
@@ -1638,15 +1618,10 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
   private void refreshBookmarkSymbol() {
     if (checkNull(bottomToolbarBookmark)) {
-      if (getCurrentWebView().getUrl() != null &&
-        zimReaderContainer.getId() != null &&
-        !getCurrentWebView().getUrl().equals(HOME_URL)) {
-        int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp
-          : R.drawable.ic_bookmark_border_24dp;
-        bottomToolbarBookmark.setImageResource(icon);
-      } else {
-        bottomToolbarBookmark.setImageResource(R.drawable.ic_bookmark_border_24dp);
-      }
+      bottomToolbarBookmark.setImageResource(
+        bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp
+          : R.drawable.ic_bookmark_border_24dp
+      );
     }
   }
 
@@ -1734,7 +1709,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
     final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-    if (url != null && !url.equals(HOME_URL) && zimFileReader != null) {
+    if (hasValidFileAndUrl(url, zimFileReader)) {
       final long timeStamp = System.currentTimeMillis();
       SimpleDateFormat sdf =
         new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
@@ -1748,6 +1723,10 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
+  }
+
+  protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {
+    return url != null && zimFileReader != null;
   }
 
   @Override
