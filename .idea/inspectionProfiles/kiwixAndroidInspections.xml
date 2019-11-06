@@ -25,12 +25,11 @@
     <inspection_tool class="AndroidLintButtonOrder" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintButtonStyle" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintCanvasSize" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintCheckResult" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintCheckResult" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintClickableViewAccessibility" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintCommitPrefEdits" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintCommitTransaction" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintConstantLocale" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintContentDescription" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintConvertToWebp" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintCustomViewStyleable" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintCutPasteId" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -43,7 +42,7 @@
     <inspection_tool class="AndroidLintDrawAllocation" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintDuplicateDivider" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintDuplicateIncludedIds" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintDuplicateStrings" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintDuplicateStrings" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintDuplicateUsesFeature" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintEasterEgg" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintEnqueueWork" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -70,7 +69,6 @@
     <inspection_tool class="AndroidLintHardcodedText" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintHardwareIds" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIconColors" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintIconDipSize" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIconDuplicates" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIconDuplicatesConfig" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIconExpectedSize" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -99,11 +97,11 @@
     <inspection_tool class="AndroidLintJobSchedulerService" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintKeyboardInaccessibleWidget" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintKotlinPropertyAccess" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintLabelFor" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintLabelFor" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintLambdaLast" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintLintBaseline" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintLocaleFolder" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintLogConditional" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintLogConditional" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintMangledCRLF" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintManifestOrder" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintMergeRootFrame" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -113,7 +111,7 @@
     <inspection_tool class="AndroidLintMissingBackupPin" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintMissingFirebaseInstanceTokenRefresh" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintMissingId" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintMissingTranslation" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintMissingTranslation" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintMissingVersion" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintNegativeMargin" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintNestedScrolling" enabled="true" level="ERROR" enabled_by_default="true" />

@@ -103,7 +103,8 @@ class AllProjectConfigurer {
           "UnknownNullness",
           "SelectableText",
           "IconDensities",
-          "ContentDescription"
+          "ContentDescription",
+          "IconDipSize"
         )
         baseline("${path}/lint-baseline.xml")
       }
