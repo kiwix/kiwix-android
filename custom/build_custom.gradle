@@ -1,9 +1,6 @@
 import groovy.json.JsonSlurper
-import plugin.KiwixConfigurationPlugin
 
 apply plugin: 'com.android.application'
-apply plugin: KiwixConfigurationPlugin
-
 String[] archs = ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
 
 // Set custom app import directory
@@ -12,7 +9,6 @@ def custom = new File("custom/src")
 if (project.hasProperty("customDir")) {
   custom = file(project.property("customDir"))
 }
-
 // Set up flavours for each custom app in the directory
 if (custom.listFiles()) {
   custom.eachFile() { file ->
@@ -28,15 +24,6 @@ if (custom.listFiles()) {
   }
 }
 android {
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-    }
-  }
-
-  flavorDimensions "default"
-
   productFlavors {
     // Custom apps built from a json file, zim file and icon set
     map.each { name, directory ->
