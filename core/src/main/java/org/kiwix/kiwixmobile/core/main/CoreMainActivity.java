@@ -1046,13 +1046,10 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
   private void requestExternalStoragePermission() {
     if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
-      ActivityCompat.requestPermissions(this,
+      ActivityCompat.requestPermissions(
+        this,
         new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
         REQUEST_STORAGE_PERMISSION
-      );
-      ContextExtensionsKt.toast(this,
-        getResources().getString(R.string.request_storage),
-        Toast.LENGTH_LONG
       );
     }
   }
