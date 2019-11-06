@@ -9,15 +9,6 @@
     </issue>
 
     <issue
-        id="ObsoleteLintCustomCheck"
-        message="Lint found an issue registry (`butterknife.lint.LintRegistry`) which is older than the current API level; these checks may not work correctly.&#xA;&#xA;Recompile the checks against the latest version. Custom check API version is 2 (3.2), current lint API level is 5 (3.5+)"
-        includedVariants="customexampleDebug"
-        excludedVariants="customexampleRelease">
-        <location
-            file="..\..\..\.gradle\caches\transforms-2\files-2.1\6dca90c1110a5ba8556122fc8f89395f\butterknife-runtime-10.1.0\jars\lint.jar"/>
-    </issue>
-
-    <issue
         id="AllowBackup"
         message="On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html"
         errorLine1="  &lt;application android:name=&quot;.CustomApp&quot;>"

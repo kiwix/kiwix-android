@@ -86,94 +86,6 @@
     </issue>
 
     <issue
-        id="SyntheticAccessor"
-        message="Access to `private` field `requestCheckSystemFileType` of class `Fat32Checker` requires synthetic accessor"
-        errorLine1="        requestCheckSystemFileType.onNext(Unit)"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\Fat32Checker.kt"
-            line="66"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `deleteIfExists` of class `Fat32CheckerKt` requires synthetic accessor"
-        errorLine1="    File(path).deleteIfExists()"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\Fat32Checker.kt"
-            line="81"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `deleteIfExists` of class `Fat32CheckerKt` requires synthetic accessor"
-        errorLine1="      File(path).deleteIfExists()"
-        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\Fat32Checker.kt"
-            line="92"
-            column="7"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` field `activity` of class `WifiDirectManager` requires synthetic accessor"
-        errorLine1="        Log.d(TAG, activity.getString(R.string.discovery_failed) + &quot;: &quot; + errorMessage);"
-        errorLine2="                   ~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
-            line="146"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` field `hasSenderStartedConnection` of class `WifiDirectManager` requires synthetic accessor"
-        errorLine1="          hasSenderStartedConnection = true;"
-        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
-            line="247"
-            column="11"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` field `activity` of class `WifiDirectManager` requires synthetic accessor"
-        errorLine1="        Log.d(TAG, activity.getString(R.string.connection_failed) + &quot;: &quot; + errorMessage);"
-        errorLine2="                   ~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
-            line="273"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `closeChannel` of class `WifiDirectManager` requires synthetic accessor"
-        errorLine1="        closeChannel();"
-        errorLine2="        ~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
-            line="395"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `closeChannel` of class `WifiDirectManager` requires synthetic accessor"
-        errorLine1="        closeChannel();"
-        errorLine2="        ~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\WifiDirectManager.java"
-            line="401"
-            column="9"/>
-    </issue>
-
-    <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
         errorLine1="  &lt;TextView"
@@ -290,18 +202,7 @@
         errorLine2="      ~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\main\KiwixMainActivity.kt"
-            line="44"
-            column="7"/>
-    </issue>
-
-    <issue
-        id="GoogleAppIndexingApiWarning"
-        message="Missing support for Firebase App Indexing API"
-        errorLine1="class ZimManageActivity : BaseActivity() {"
-        errorLine2="      ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\zim_manager\ZimManageActivity.kt"
-            line="48"
+            line="49"
             column="7"/>
     </issue>
 
@@ -407,30 +308,8 @@
         errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\KiwixViewModelFactory.java"
-            line="33"
+            line="32"
             column="32"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  public &lt;T extends ViewModel> T create(Class&lt;T> modelClass) {"
-        errorLine2="                               ~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\KiwixViewModelFactory.java"
-            line="39"
-            column="32"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  public &lt;T extends ViewModel> T create(Class&lt;T> modelClass) {"
-        errorLine2="                                        ~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\KiwixViewModelFactory.java"
-            line="39"
-            column="41"/>
     </issue>
 
     <issue
