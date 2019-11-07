@@ -1,3 +1,21 @@
+/*
+ * Kiwix Android
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package org.kiwix.kiwixmobile.language
 
 import android.os.Bundle
@@ -12,14 +30,15 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_language.language_progressbar
 import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import kotlinx.android.synthetic.main.activity_language.toolbar
-import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.base.BaseActivity
-import org.kiwix.kiwixmobile.extensions.viewModel
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
 import org.kiwix.kiwixmobile.language.viewmodel.Action
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.State
@@ -44,7 +63,7 @@ class LanguageActivity : BaseActivity() {
     )
 
   override fun injection() {
-    KiwixApplication.getApplicationComponent().inject(this)
+    kiwixActivityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +110,7 @@ class LanguageActivity : BaseActivity() {
     menuInflater.inflate(R.menu.menu_language, menu)
     val search = menu.findItem(R.id.menu_language_search)
     (search.actionView as SearchView).setOnQueryTextListener(SimpleTextListener {
-      languageViewModel.actions.offer(Action.Filter(it))
+      languageViewModel.actions.offer(Filter(it))
     })
     return true
   }

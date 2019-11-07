@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,11 +13,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 package org.kiwix.kiwixmobile.utils;
 
 import androidx.test.espresso.IdlingResource;
-import org.kiwix.kiwixmobile.utils.TestingUtils.IdleListener;
+import org.kiwix.kiwixmobile.core.utils.TestingUtils;
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.IdleListener;
 
 /**
  * Created by mhutti1 on 19/04/17.

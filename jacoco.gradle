@@ -1,0 +1,61 @@
+/*
+ * Kiwix Android
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+apply plugin: 'jacoco'
+
+jacoco {
+  toolVersion = "0.8.3"
+}
+
+tasks.withType(Test) {
+  jacoco.includeNoLocationClasses = true
+}
+
+task jacocoInstrumentationTestReport(type: JacocoReport, dependsOn: ['createDebugCoverageReport']) {
+  group "Reporting"
+  description "Generate Jacoco coverage reports."
+  reports {
+    xml.enabled = true
+    html.enabled = true
+    html.destination file("${rootProject.buildDir}/coverage-report")
+  }
+  def javaClasses = []
+  def kotlinClasses = []
+  def javaSrc = []
+  def kotlinSrc = []
+  def execution = []
+
+  def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+
+  rootProject.subprojects.each { proj ->
+    javaClasses << fileTree(dir: "$proj.buildDir/intermediates/javac/debug", excludes: fileFilter)
+    kotlinClasses << fileTree(dir: "$proj.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+    javaSrc << "$proj.projectDir/src/main/java"
+    kotlinSrc << "$proj.projectDir/src/main/kotlin"
+    execution << fileTree(dir: proj.buildDir,
+      includes: ['jacoco/testDebugUnitTest.exec',
+        'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'])
+  }
+  sourceDirectories = files([javaSrc, kotlinSrc])
+  classDirectories = files([javaClasses, kotlinClasses])
+  print execution
+  executionData = files(execution)
+  doLast() {
+    print "file://${reports.html.destination}/index.html"
+  }
+}

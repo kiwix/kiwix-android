@@ -1,26 +1,27 @@
 /*
- * Copyright 2013  Rashiq Ahmad <rashiq.z@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU  General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * any later version.
+ * Kiwix Android
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.ActionMode
 import android.view.LayoutInflater
@@ -36,21 +37,22 @@ import kotlinx.android.synthetic.main.zim_list.file_management_no_files
 import kotlinx.android.synthetic.main.zim_list.zim_swiperefresh
 import kotlinx.android.synthetic.main.zim_list.zimfilelist
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.base.BaseFragment
-import org.kiwix.kiwixmobile.di.components.ActivityComponent
-import org.kiwix.kiwixmobile.extensions.toast
-import org.kiwix.kiwixmobile.extensions.viewModel
-import org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION
-import org.kiwix.kiwixmobile.utils.LanguageUtils
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_STORAGE_PERMISSION
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import javax.inject.Inject
 
 class ZimFileSelectFragment : BaseFragment() {
@@ -75,8 +77,8 @@ class ZimFileSelectFragment : BaseFragment() {
     BooksOnDiskAdapter(bookDelegate, LanguageDelegate)
   }
 
-  override fun inject(activityComponent: ActivityComponent) {
-    activityComponent.inject(this)
+  override fun inject(baseActivity: BaseActivity) {
+    (baseActivity as ZimManageActivity).cachedComponent.inject(this)
   }
 
   override fun onCreateView(
@@ -84,7 +86,8 @@ class ZimFileSelectFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    LanguageUtils(activity!!).changeFont(activity!!.layoutInflater, sharedPreferenceUtil)
+    LanguageUtils(activity!!)
+      .changeFont(activity!!.layoutInflater, sharedPreferenceUtil)
     return inflater.inflate(R.layout.zim_list, container, false)
   }
 
@@ -142,12 +145,13 @@ class ZimFileSelectFragment : BaseFragment() {
   private fun checkPermissions() {
     if (ContextCompat.checkSelfPermission(
         activity!!,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED
+        Manifest.permission.READ_EXTERNAL_STORAGE
+      ) != PackageManager.PERMISSION_GRANTED &&
+      VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN
     ) {
       context.toast(R.string.request_storage)
       requestPermissions(
-        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
         REQUEST_STORAGE_PERMISSION
       )
     } else {

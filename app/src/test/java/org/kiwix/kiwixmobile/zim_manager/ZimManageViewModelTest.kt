@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package org.kiwix.kiwixmobile.zim_manager
@@ -33,34 +33,35 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.InstantExecutorExtension
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.book
-import org.kiwix.kiwixmobile.bookOnDisk
-import org.kiwix.kiwixmobile.data.DataSource
-import org.kiwix.kiwixmobile.data.remote.KiwixService
-import org.kiwix.kiwixmobile.database.newdb.dao.FetchDownloadDao
-import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
-import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.downloadItem
-import org.kiwix.kiwixmobile.downloadModel
-import org.kiwix.kiwixmobile.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.language
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.libraryNetworkEntity
-import org.kiwix.kiwixmobile.resetSchedulers
-import org.kiwix.kiwixmobile.setScheduler
-import org.kiwix.kiwixmobile.utils.BookUtils
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
+import org.kiwix.sharedFunctions.InstantExecutorExtension
+import org.kiwix.sharedFunctions.book
+import org.kiwix.sharedFunctions.bookOnDisk
+import org.kiwix.sharedFunctions.downloadItem
+import org.kiwix.sharedFunctions.downloadModel
+import org.kiwix.sharedFunctions.language
+import org.kiwix.sharedFunctions.libraryNetworkEntity
+import org.kiwix.sharedFunctions.resetSchedulers
+import org.kiwix.sharedFunctions.setScheduler
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS

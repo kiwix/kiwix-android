@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,14 +13,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Activity
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.zim_manager.Language
+import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.SideEffect
 
 data class SaveLanguagesAndFinish(

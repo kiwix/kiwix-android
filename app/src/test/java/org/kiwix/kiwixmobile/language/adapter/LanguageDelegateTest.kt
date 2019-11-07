@@ -1,25 +1,6 @@
-package org.kiwix.kiwixmobile.language.adapter
-
-import android.view.ViewGroup
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.extensions.inflate
-import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
-import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
-import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
-import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
-import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.HeaderViewHolder
-import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.LanguageViewHolder
-
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -32,7 +13,27 @@ import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.LanguageVie
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
+
+package org.kiwix.kiwixmobile.language.adapter
+
+import android.view.ViewGroup
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkObject
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
+import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
+import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
+import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.HeaderViewHolder
+import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.LanguageViewHolder
 
 class LanguageDelegateTest {
   @Nested
@@ -45,8 +46,8 @@ class LanguageDelegateTest {
     @Test
     fun `creates HeaderViewHolder`() {
       val parent = mockk<ViewGroup>()
-      mockkStatic("org.kiwix.kiwixmobile.extensions.ViewGroupExtensionsKt")
-      every { parent.inflate(R.layout.header_date, false) } returns mockk(relaxed = true)
+      mockkObject(ViewGroupExtensions)
+      every { parent.inflate(R.layout.header_date, false) } returns mockk()
       assertThat(HeaderDelegate().createViewHolder(parent))
         .isInstanceOf(HeaderViewHolder::class.java)
     }
@@ -60,10 +61,10 @@ class LanguageDelegateTest {
     }
 
     @Test
-    fun `creates HeaderViewHolder`() {
+    fun `creates LanguageViewHolder`() {
       val parent = mockk<ViewGroup>()
-      mockkStatic("org.kiwix.kiwixmobile.extensions.ViewGroupExtensionsKt")
-      every { parent.inflate(R.layout.item_language, false) } returns mockk(relaxed = true)
+      mockkObject(ViewGroupExtensions)
+      every { parent.inflate(R.layout.item_language, false) } returns mockk()
       val clickAction = mockk<(LanguageItem) -> Unit>()
       assertThat(LanguageItemDelegate(clickAction).createViewHolder(parent))
         .isInstanceOf(LanguageViewHolder::class.java)

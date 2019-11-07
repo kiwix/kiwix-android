@@ -11,6 +11,7 @@
     <inspection_tool class="AndroidLintAnimatorKeep" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintAppCompatMethod" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintAppIndexingService" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintAppLinkUrlError" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintAppLinksAutoVerifyError" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintAppLinksAutoVerifyWarning" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintApplySharedPref" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -57,8 +58,8 @@
     <inspection_tool class="AndroidLintFontValidationWarning" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintGetInstance" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintGifUsage" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintGoogleAppIndexingApiWarning" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintGoogleAppIndexingWarning" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintGoogleAppIndexingApiWarning" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AndroidLintGoogleAppIndexingWarning" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintGradleDependency" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintGradleDeprecated" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintGradleDynamicVersion" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -389,6 +390,7 @@
     <inspection_tool class="TestFunctionName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="TypeParameterFindViewById" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UnlabeledReturnInsideLambda" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="UnnecessaryQualifierForThis" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryVariable" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UnsafeCastFromDynamic" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UnusedEquals" enabled="true" level="ERROR" enabled_by_default="true" />

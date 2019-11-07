@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package org.kiwix.kiwixmobile.language.viewmodel
@@ -28,9 +28,9 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.InstantExecutorExtension
-import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.language
+import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.language.adapter.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.SaveAll
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
@@ -38,10 +38,13 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
-import org.kiwix.kiwixmobile.languageItem
-import org.kiwix.kiwixmobile.resetSchedulers
-import org.kiwix.kiwixmobile.setScheduler
-import org.kiwix.kiwixmobile.zim_manager.Language
+import org.kiwix.sharedFunctions.InstantExecutorExtension
+import org.kiwix.sharedFunctions.resetSchedulers
+import org.kiwix.sharedFunctions.setScheduler
+import org.kiwix.sharedFunctions.language
+
+fun languageItem(language: Language = language()) =
+  LanguageListItem.LanguageItem(language)
 
 @ExtendWith(InstantExecutorExtension::class)
 class LanguageViewModelTest {
@@ -63,7 +66,8 @@ class LanguageViewModelTest {
   fun init() {
     clearAllMocks()
     every { newLanguagesDao.languages() } returns languages
-    languageViewModel = LanguageViewModel(newLanguagesDao)
+    languageViewModel =
+      LanguageViewModel(newLanguagesDao)
   }
 
   @Test
@@ -143,7 +147,12 @@ class LanguageViewModelTest {
       .also {
         languageViewModel.actions.offer(SaveAll)
       }
-      .assertValues(SaveLanguagesAndFinish(listOf(), newLanguagesDao))
+      .assertValues(
+        SaveLanguagesAndFinish(
+          listOf(),
+          newLanguagesDao
+        )
+      )
     languageViewModel.state.test()
       .assertValueHistory(Saving)
   }

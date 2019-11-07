@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,13 +13,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 package org.kiwix.kiwixmobile.utils;
 
 import android.util.Log;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
-import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.R;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.longClick;

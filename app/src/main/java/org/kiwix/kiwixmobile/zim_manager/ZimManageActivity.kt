@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 package org.kiwix.kiwixmobile.zim_manager
 
@@ -30,21 +30,24 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
 import kotlinx.android.synthetic.main.zim_manager.toolbar
-import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.base.BaseActivity
-import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.extensions.start
-import org.kiwix.kiwixmobile.extensions.viewModel
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.extensions.start
+import org.kiwix.kiwixmobile.core.extensions.startWithActionFrom
+import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.language.LanguageActivity
-import org.kiwix.kiwixmobile.main.MainActivity
-import org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX
-import org.kiwix.kiwixmobile.utils.LanguageUtils
-import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import java.io.File
 import javax.inject.Inject
 
 class ZimManageActivity : BaseActivity() {
+
+  val cachedComponent by lazy { kiwixActivityComponent }
 
   private val zimManageViewModel by lazy { viewModel<ZimManageViewModel>(viewModelFactory) }
   private val mSectionsPagerAdapter: SectionsPagerAdapter by lazy {
@@ -59,7 +62,7 @@ class ZimManageActivity : BaseActivity() {
   @Inject lateinit var languagesDao: NewLanguagesDao
 
   override fun injection() {
-    KiwixApplication.getApplicationComponent().inject(this)
+    cachedComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,7 +116,7 @@ class ZimManageActivity : BaseActivity() {
   override fun onBackPressed() {
     val value = System.getInt(contentResolver, System.ALWAYS_FINISH_ACTIVITIES, 0)
     if (value == 1) {
-      startActivity(Intent(this, MainActivity::class.java))
+      startWithActionFrom<CoreMainActivity>()
     } else {
       super.onBackPressed() // optional depending on your needs
     }

@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package org.kiwix.kiwixmobile.splash;
@@ -34,15 +34,17 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.intro.IntroActivity;
-import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.core.intro.IntroActivity;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
+import org.kiwix.kiwixmobile.core.splash.SplashActivity;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;
+import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
-import static org.kiwix.kiwixmobile.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -85,8 +87,8 @@ public class SplashActivityTest {
     activityTestRule.launchActivity(new Intent());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    // Verify that the SplashActivity is followed by MainActivity
-    intended(hasComponent(MainActivity.class.getName()));
+    // Verify that the SplashActivity is followed by CoreMainActivity
+    intended(hasAction(CoreMainActivity.class.getCanonicalName()));
   }
 
   @After
