@@ -26,6 +26,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
@@ -117,10 +118,13 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
             zimReaderContainer.searchSuggestions(query, 200);
             String suggestion;
             String suggestionUrl;
+            NextSearchSuggestion results;
             List<String> alreadyAdded = new ArrayList<>();
-            while ((suggestion = zimReaderContainer.getNextSuggestion()) != null) {
-              suggestionUrl = zimReaderContainer.getPageUrlFromTitle(suggestion);
-              if (!alreadyAdded.contains(suggestionUrl)) {
+            while ((results = zimReaderContainer.getNextSuggestion()) != null) {
+                suggestion = results.getTitle();
+                suggestionUrl = results.getUrl();
+
+                if (!alreadyAdded.contains(suggestionUrl)) {
                 alreadyAdded.add(suggestionUrl);
                 data.add(suggestion);
               }
