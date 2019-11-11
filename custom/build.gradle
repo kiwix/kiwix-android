@@ -109,6 +109,7 @@ android {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
         }
         buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
+        buildConfigField "String", "ZIM_URL", "\"$parsedJson.zim_url\""
         resValue "string", "app_name", "$parsedJson.app_name"
         resValue "string", "app_search_string", "Search " + "$parsedJson.app_name"
       }

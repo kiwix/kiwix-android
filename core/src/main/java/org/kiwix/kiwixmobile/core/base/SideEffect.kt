@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
+package org.kiwix.kiwixmobile.core.base
 
 import android.app.Activity
 

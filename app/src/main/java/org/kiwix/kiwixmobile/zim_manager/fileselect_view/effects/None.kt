@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
+import org.kiwix.kiwixmobile.core.base.SideEffect
 
 object None : SideEffect<Unit> {
   override fun invokeWith(activity: Activity) {

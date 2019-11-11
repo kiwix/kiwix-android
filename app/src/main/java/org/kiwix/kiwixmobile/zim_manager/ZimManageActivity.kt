@@ -17,12 +17,9 @@
  */
 package org.kiwix.kiwixmobile.zim_manager
 
-import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.System
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
@@ -32,17 +29,15 @@ import kotlinx.android.synthetic.main.zim_manager.tabs
 import kotlinx.android.synthetic.main.zim_manager.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.extensions.start
-import org.kiwix.kiwixmobile.core.extensions.startWithActionFrom
-import org.kiwix.kiwixmobile.core.extensions.viewModel
-import org.kiwix.kiwixmobile.language.LanguageActivity
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.startWithActionFrom
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import java.io.File
+import org.kiwix.kiwixmobile.language.LanguageActivity
+import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import javax.inject.Inject
 
 class ZimManageActivity : BaseActivity() {
@@ -142,20 +137,6 @@ class ZimManageActivity : BaseActivity() {
       R.id.get_zim_nearby_device -> start<LocalFileTransferActivity>()
     }
     return super.onOptionsItemSelected(item)
-  }
-
-  // Set zim file and return
-  fun finishResult(path: String?) {
-    if (path != null) {
-      val file = File(path)
-      val uri = Uri.fromFile(file)
-      Log.i(TAG_KIWIX, "Opening Zim File: $uri")
-      setResult(Activity.RESULT_OK, Intent().setData(uri))
-      finish()
-    } else {
-      setResult(Activity.RESULT_CANCELED)
-      finish()
-    }
   }
 
   companion object {

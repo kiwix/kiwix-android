@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.download_view
 
-import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
@@ -29,12 +28,6 @@ import kotlinx.android.synthetic.main.download_item.favicon
 import kotlinx.android.synthetic.main.download_item.stop
 import kotlinx.android.synthetic.main.download_item.title
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Paused
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Pending
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Running
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Successful
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 
 class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
@@ -50,21 +43,7 @@ class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHo
     stop.setOnClickListener {
       itemClickListener.invoke(downloadItem)
     }
-    downloadState.text = toReadableState(downloadItem.downloadState, containerView.context)
-    eta.text = downloadItem.eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
-  }
-
-  private fun toReadableState(
-    downloadState: DownloadState,
-    context: Context
-  ) = when (downloadState) {
-    is Failed -> context.getString(
-      downloadState.stringId,
-      downloadState.reason.name
-    )
-    Pending,
-    Running,
-    Paused,
-    Successful -> context.getString(downloadState.stringId)
+    downloadState.text = downloadItem.downloadState.toReadableState(containerView.context)
+    eta.text = downloadItem.readableEta
   }
 }

@@ -46,8 +46,6 @@ dependencies {
 
   // Android Support
   implementation(Libs.cardview)
-  implementation(Libs.constraintlayout)
-
 
   // Tab indicator
   implementation(Libs.ink_page_indicator)
