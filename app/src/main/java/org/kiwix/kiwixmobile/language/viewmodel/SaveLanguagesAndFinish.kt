@@ -22,7 +22,7 @@ import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.SideEffect
+import org.kiwix.kiwixmobile.core.base.SideEffect
 
 data class SaveLanguagesAndFinish(
   val languages: List<Language>,

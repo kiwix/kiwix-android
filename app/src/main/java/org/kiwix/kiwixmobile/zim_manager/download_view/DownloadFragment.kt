@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil

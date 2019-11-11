@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import android.app.Activity
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
