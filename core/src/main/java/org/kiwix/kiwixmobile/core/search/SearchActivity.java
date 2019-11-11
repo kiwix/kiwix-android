@@ -61,7 +61,6 @@ public class SearchActivity extends BaseActivity
   implements SearchViewCallback {
 
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
-
   private final int REQ_CODE_SPEECH_INPUT = 100;
   @Inject
   SearchPresenter searchPresenter;

@@ -23,27 +23,16 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import org.kiwix.kiwixmobile.core.R;
-
-import static javax.swing.UIManager.getString;
-import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
 public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHolder> {
 
   private Context context;
-  private AdapterView.OnItemClickListener onItemClickListener;
   List<String> searchList;
-  @Inject
-  SearchPresenter searchPresenter;
 
   public DefaultAdapter(Context context) {
     this.context = context;
