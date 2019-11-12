@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_URI
-import org.kiwix.kiwixmobile.core.search.NextSearchSuggestion
+import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import java.io.File
 import java.io.FileDescriptor
 import java.io.FileOutputStream
@@ -99,11 +99,11 @@ class ZimFileReader(
   fun searchSuggestions(prefix: String, count: Int) =
     jniKiwixReader.searchSuggestions(prefix, count)
 
-  fun getNextSuggestion(): NextSearchSuggestion? {
+  fun getNextSuggestion(): SearchSuggestion? {
     val title = JNIKiwixString()
     val url = JNIKiwixString()
     if (jniKiwixReader.getNextSuggestion(title, url)) {
-      return NextSearchSuggestion(title.value, url.value)
+      return SearchSuggestion(title.value, url.value)
     }
     return null
   }
@@ -254,5 +254,3 @@ private val String.mimeType: String?
   get() = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
     MimeTypeMap.getFileExtensionFromUrl(this)
   )
-
-data class NextSuggestion(val title: String, val url: String)

@@ -118,7 +118,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
             zimReaderContainer.searchSuggestions(query, 200);
             String suggestion;
             String suggestionUrl;
-            NextSearchSuggestion results;
+            SearchSuggestion results;
             List<String> alreadyAdded = new ArrayList<>();
             while ((results = zimReaderContainer.getNextSuggestion()) != null) {
                 suggestion = results.getTitle();
