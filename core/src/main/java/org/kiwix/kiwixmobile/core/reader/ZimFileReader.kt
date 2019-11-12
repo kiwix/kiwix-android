@@ -102,10 +102,10 @@ class ZimFileReader(
   fun getNextSuggestion(): SearchSuggestion? {
     val title = JNIKiwixString()
     val url = JNIKiwixString()
-    if (jniKiwixReader.getNextSuggestion(title, url)) {
-      return SearchSuggestion(title.value, url.value)
-    }
-    return null
+
+    return if (jniKiwixReader.getNextSuggestion(title, url))
+      SearchSuggestion(title.value, url.value)
+    else null
   }
 
   fun getPageUrlFrom(title: String): String? =
