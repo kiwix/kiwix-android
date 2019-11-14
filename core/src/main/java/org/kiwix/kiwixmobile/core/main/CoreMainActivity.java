@@ -1089,10 +1089,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          finish();
-          Intent newZimFile = Intents.internal(CoreMainActivity.class);
-          newZimFile.setData(Uri.fromFile(file));
-          startActivity(newZimFile);
+          openZimFile(file);
         } else {
           AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
           builder.setMessage(getResources().getString(R.string.reboot_message));

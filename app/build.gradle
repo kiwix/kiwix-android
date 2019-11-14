@@ -2,6 +2,7 @@ import plugin.KiwixConfigurationPlugin
 
 plugins {
   id("com.android.application")
+  id("com.github.triplet.play") version("2.5.0")
 }
 apply plugin: KiwixConfigurationPlugin
 
@@ -67,6 +68,10 @@ android {
 }
 
 play {
+  enabled = true
+  serviceAccountCredentials = file("../google.json")
+  track = "alpha"
+  releaseStatus = "draft"
   resolutionStrategy = "fail"
 }
 

@@ -22,7 +22,6 @@ import Libs
 import com.android.build.VariantOutput
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.api.ApkVariantOutput
-import com.github.triplet.gradle.play.PlayPublisherExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
@@ -37,7 +36,7 @@ class AppConfigurer {
       }
       signingConfigs {
         create("releaseSigningConfig") {
-          this.storeFile = File(target.rootDir, "kiwix-android.keystore")
+          storeFile = File(target.rootDir, "kiwix-android.keystore")
           storePassword = System.getenv("KEY_STORE_PASSWORD") ?: "000000"
           keyAlias = System.getenv("KEY_ALIAS") ?: "keystore"
           keyPassword = System.getenv("KEY_PASSWORD") ?: "000000"
@@ -75,13 +74,6 @@ class AppConfigurer {
       aaptOptions {
         cruncherEnabled = true
       }
-    }
-    target.plugins.apply("com.github.triplet.play")
-    target.configureExtension<PlayPublisherExtension> {
-      isEnabled = true
-      serviceAccountCredentials = File(target.rootDir, "google.json")
-      track = "alpha"
-      releaseStatus = "draft"
     }
     configureDependencies(target)
   }
