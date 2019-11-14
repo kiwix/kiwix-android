@@ -128,17 +128,17 @@
   <string name="help_5">Where is the content?</string>
   <string name="help_6">Our content is hosted on the Kiwix website.</string>
   <string name="help_7">They are available as ZIM files. There are a lot of them:</string>
-  <string name="help_8">\u2022 Wikipedia is available separately for each language</string>
-  <string name="help_9">\u2022 Other contents like Wikileaks or Wikisource are also available</string>
+  <string name="help_8">• Wikipedia is available separately for each language</string>
+  <string name="help_9">• Other contents like Wikileaks or Wikisource are also available</string>
   <string name="help_10">You can either download your chosen ZIM files in-app or carefuly select the one(s) you want and download from a Desktop computer before transferring the ZIM files to your SD card.</string>
   <string name="help_11">ZIM files download in-app are located in the external storage directory in a folder entitled Kiwix.</string>
   <string name="help_12">How to use large ZIM files?</string>
   <string name="help_13">If your ZIM file is larger than 4GB, you might not be able to store it on your SD card due to filesystem limitations.</string>
   <string name="help_14">Downloading in-app automatically handles larger files, splitting them up for you.</string>
   <string name="help_15">If however you are downloading on another device, you may need to split the ZIM file up using the following software:</string>
-  <string name="help_16">\u2022 On Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 On Apple Mac OSX: Split and Concat</string>
-  <string name="help_18" tools:ignore="TypographyDashes">\u2022 On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
+  <string name="help_16">• On Microsoft Windows: HJ-Split</string>
+  <string name="help_17">• On Apple Mac OSX: Split and Concat</string>
+  <string name="help_18" tools:ignore="TypographyDashes">• On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
   <string name="help_19">Note: your resulting files must be named my_big_file.zimaa, my_big_file.zimab, etc.</string>
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
