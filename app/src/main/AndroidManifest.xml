@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.kiwix.kiwixmobile">
 
-  <application android:name=".KiwixApp"
-    android:allowBackup="true"
-    android:fullBackupContent="@xml/backup_rules">
+  <application android:name=".KiwixApp">
     <activity
       android:name=".main.KiwixMainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
