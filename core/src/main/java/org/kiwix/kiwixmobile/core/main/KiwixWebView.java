@@ -168,6 +168,7 @@ public class KiwixWebView extends VideoEnabledWebView {
       if (url != null || src != null) {
         url = url == null ? src : url;
         url = url.substring(url.lastIndexOf('/') + 1);
+        url = src == null || url.contains(".") ? url : src.substring(src.lastIndexOf('/') + 1);
         url = url.substring(url.indexOf("%3A") + 1);
         int dotIndex = url.lastIndexOf('.');
 
