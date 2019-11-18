@@ -46,7 +46,7 @@ object CustomApps {
   )
   private val venezuela = CustomApp(
     name = "venezuela",
-    url = "https://download.kiwix.org/zim/wikipedia/wikipedia_es_venezuela_2018-07.zim",
+    url = "http://download.kiwix.org/zim/wikipedia/wikipedia_es_venezuela_2018-07.zim",
     enforcedLanguage = "es",
     displayName = "Enciclopedia de Venezuela"
   )
