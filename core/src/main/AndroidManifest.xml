@@ -52,7 +52,7 @@
     <provider
       android:name=".reader.ZimContentProvider"
       android:authorities="${applicationId}.zim.base"
-      android:exported="false" />
+      android:exported="true" />
 
     <receiver android:name=".main.KiwixSearchWidget">
       <intent-filter>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- excludes any external files in the ./Kiwix folder, therefore .zim files. -->
+<!-- excludes any external files -->
 <full-backup-content>
   <exclude domain="external" />
 </full-backup-content>
