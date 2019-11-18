@@ -134,7 +134,7 @@ fun book(
   creator: String = "creator",
   publisher: String = "publisher",
   date: String = "date",
-  url: String = "${MOCK_BASE_URL}url",
+  url: String = "${MOCK_BASE_URL}url.meta4",
   articleCount: String = "mediaCount",
   mediaCount: String = "mediaCount",
   size: String = "1024",
