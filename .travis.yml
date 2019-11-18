@@ -15,10 +15,6 @@ env:
 
 if: type != push OR tag IS present
 
-before_install:
-  - openssl aes-256-cbc -K $encrypted_82adfa9c3806_key -iv $encrypted_82adfa9c3806_iv -in secrets.tar.enc -out secrets.tar -d
-  - tar xvf secrets.tar
-
 install:
   - pip install --user 'requests[security]'
   - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
@@ -52,10 +48,13 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew jacocoInstrumentationTestReport ktlintCheck lint jacocoTestReport app:assembleRelease
+  - ./gradlew jacocoInstrumentationTestReport ktlintCheck lint jacocoTestReport app:assembleDebug
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - openssl aes-256-cbc -K $encrypted_82adfa9c3806_key -iv $encrypted_82adfa9c3806_iv -in secrets.tar.enc -out secrets.tar -d
+  - tar xvf secrets.tar
+  - ./gradlew app:assembleRelease
 
 before_deploy:
   #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
