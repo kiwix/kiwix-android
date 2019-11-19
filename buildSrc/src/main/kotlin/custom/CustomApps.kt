@@ -191,14 +191,14 @@ object CustomApps {
 }
 
 fun NamedDomainObjectContainer<ProductFlavor>.create(customApps: List<CustomApp>) {
-  customApps.forEach { customFlavor ->
-    create(customFlavor.name) {
-      versionName = customFlavor.versionName
-      versionCode = customFlavor.versionCode
-      applicationIdSuffix = ".kiwixcustom${customFlavor.name}"
-      buildConfigField("String", "ZIM_URL", "\"${customFlavor.url}\"")
-      buildConfigField("String", "ENFORCED_LANG", "\"${customFlavor.enforcedLanguage}\"")
-      configureStrings(customFlavor.displayName)
+  customApps.forEach { customApp ->
+    create(customApp.name) {
+      versionName = customApp.versionName
+      versionCode = customApp.versionCode
+      applicationIdSuffix = ".kiwixcustom${customApp.name}"
+      buildConfigField("String", "ZIM_URL", "\"${customApp.url}\"")
+      buildConfigField("String", "ENFORCED_LANG", "\"${customApp.enforcedLanguage}\"")
+      configureStrings(customApp.displayName)
     }
   }
 }
