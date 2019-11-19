@@ -172,7 +172,25 @@ object CustomApps {
     val displayName: String,
     val versionCode: Int = formatDate("YYDDD0").toInt(),
     val versionName: String = parseVersionNameFromUrlOrUsePattern(url, "YYYY-MM")
-  )
+  ) {
+    constructor(
+      name: String,
+      url: String,
+      enforcedLanguage: String,
+      displayName: String
+    ) : this(
+      name,
+      url,
+      enforcedLanguage,
+      displayName,
+      formatDate("YYDDD0").toInt(),
+      parseVersionNameFromUrlOrUsePattern(url, "YYYY-MM")
+    )
+
+    fun create(namedDomainObjectContainer: NamedDomainObjectContainer<ProductFlavor>) {
+      namedDomainObjectContainer.create(this)
+    }
+  }
 
   private fun parseVersionNameFromUrlOrUsePattern(url: String, pattern: String) =
     url.substringAfterLast("_")
@@ -191,15 +209,19 @@ object CustomApps {
 }
 
 fun NamedDomainObjectContainer<ProductFlavor>.create(customApps: List<CustomApp>) {
-  customApps.forEach { customApp ->
-    create(customApp.name) {
-      versionName = customApp.versionName
-      versionCode = customApp.versionCode
-      applicationIdSuffix = ".kiwixcustom${customApp.name}"
-      buildConfigField("String", "ZIM_URL", "\"${customApp.url}\"")
-      buildConfigField("String", "ENFORCED_LANG", "\"${customApp.enforcedLanguage}\"")
-      configureStrings(customApp.displayName)
-    }
+  customApps.forEach(this::create)
+}
+
+private fun NamedDomainObjectContainer<ProductFlavor>.create(
+  customApp: CustomApp
+) {
+  create(customApp.name) {
+    versionName = customApp.versionName
+    versionCode = customApp.versionCode
+    applicationIdSuffix = ".kiwixcustom${customApp.name}"
+    buildConfigField("String", "ZIM_URL", "\"${customApp.url}\"")
+    buildConfigField("String", "ENFORCED_LANG", "\"${customApp.enforcedLanguage}\"")
+    configureStrings(customApp.displayName)
   }
 }
 

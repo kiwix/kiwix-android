@@ -1,0 +1,7 @@
+{
+  "name": "customexample",
+  "url": "http://download.kiwix.org/zim/wikipedia_fr_test.zim",
+  "enforced_lang": "en",
+  "display_name": "Test Custom App"
+}
+

@@ -1,8 +1,6 @@
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.dsl.ProductFlavor
-import custom.CustomApps
-import custom.create
 import custom.createPublisher
 import custom.transactionWithCommit
 import plugin.KiwixConfigurationPlugin
@@ -22,8 +20,9 @@ android {
   flavorDimensions("default")
   productFlavors {
 
-    create(CustomApps.all)
-
+    // Uncomment for static productFlavors
+    // create(CustomApps.all)
+    apply(from = "dynamic_flavors.gradle")
     all {
       File("$projectDir/src", "$name/$name.zim").let {
         createDownloadTask(it)
