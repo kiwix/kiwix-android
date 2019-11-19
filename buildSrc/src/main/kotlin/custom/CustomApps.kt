@@ -175,7 +175,7 @@ object CustomApps {
   )
 
   private fun parseVersionNameFromUrlOrUsePattern(url: String, pattern: String) =
-    (url.substringAfterLast("_")
+    url.substringAfterLast("_")
       .substringBeforeLast(".")
       .takeIf {
         try {
@@ -184,7 +184,7 @@ object CustomApps {
           false
         }
       }
-      ?: formatDate(pattern))
+      ?: formatDate(pattern)
 
   private fun formatDate(pattern: String) =
     Date().let(SimpleDateFormat(pattern, Locale.ROOT)::format)
