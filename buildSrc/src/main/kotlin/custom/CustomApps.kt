@@ -21,6 +21,7 @@ package custom
 import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps.CustomApp
 import org.gradle.api.NamedDomainObjectContainer
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -42,6 +43,7 @@ object CustomApps {
     name = "tunisie",
     url = "http://download.kiwix.org/zim/wikipedia_fr_tunisie_novid.zim",
     enforcedLanguage = "fr",
+    versionName = "2018-07",
     displayName = "Encyclopédie de la Tunisie"
   )
   private val venezuela = CustomApp(
@@ -54,6 +56,7 @@ object CustomApps {
     name = "wikimed",
     url = "http://download.kiwix.org/zim/wikipedia_en_medicine_novid.zim",
     enforcedLanguage = "en",
+    versionName = "2018-08",
     displayName = "Medical Wikipedia"
   )
   private val wikimedar = CustomApp(
@@ -164,12 +167,24 @@ object CustomApps {
 
   data class CustomApp(
     val name: String,
-    val versionName: String = formatDate("YYYY-MM"),
-    val versionCode: Int = formatDate("YYDDD0").toInt(),
     val url: String,
     val enforcedLanguage: String,
-    val displayName: String
+    val displayName: String,
+    val versionCode: Int = formatDate("YYDDD0").toInt(),
+    val versionName: String = parseVersionNameFromUrlOrUsePattern(url, "YYYY-MM")
   )
+
+  private fun parseVersionNameFromUrlOrUsePattern(url: String, pattern: String) =
+    (url.substringAfterLast("_")
+      .substringBeforeLast(".")
+      .takeIf {
+        try {
+          SimpleDateFormat(pattern, Locale.ROOT).parse(it) != null
+        } catch (parseException: ParseException) {
+          false
+        }
+      }
+      ?: formatDate(pattern))
 
   private fun formatDate(pattern: String) =
     Date().let(SimpleDateFormat(pattern, Locale.ROOT)::format)
