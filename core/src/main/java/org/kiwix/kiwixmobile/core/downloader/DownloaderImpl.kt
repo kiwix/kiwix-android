@@ -18,10 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.downloader
 
+import io.reactivex.Observable
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(
@@ -31,7 +33,7 @@ class DownloaderImpl @Inject constructor(
 ) : Downloader {
 
   override fun download(book: LibraryNetworkEntity.Book) {
-    kiwixService.getMetaLinks(book.url)
+    urlProvider(book)
       .take(1)
       .subscribe(
         {
@@ -40,6 +42,10 @@ class DownloaderImpl @Inject constructor(
         Throwable::printStackTrace
       )
   }
+
+  private fun urlProvider(book: Book): Observable<String> =
+    if (book.url.endsWith("meta4")) kiwixService.getMetaLinks(book.url).map { it.relevantUrl.value }
+    else Observable.just(book.url)
 
   override fun cancelDownload(downloadItem: DownloadItem) {
     downloadRequester.cancel(downloadItem)

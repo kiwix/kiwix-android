@@ -18,8 +18,7 @@
 package org.kiwix.kiwixmobile.core.downloader.model
 
 import android.net.Uri
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 
@@ -31,14 +30,7 @@ data class DownloadRequest(
 
   val uri: Uri get() = Uri.parse(urlString)
 
-  constructor(
-    metaLinkNetworkEntity: MetaLinkNetworkEntity,
-    book: LibraryNetworkEntity.Book
-  ) : this(
-    metaLinkNetworkEntity.relevantUrl.value,
-    book.title,
-    book.description
-  )
+  constructor(url: String, book: Book) : this(url, book.title, book.description)
 
   fun getDestination(sharedPreferenceUtil: SharedPreferenceUtil): String =
     "${sharedPreferenceUtil.prefStorage}/Kiwix/${

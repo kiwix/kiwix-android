@@ -18,11 +18,9 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -34,7 +32,6 @@ import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
-import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 
@@ -57,7 +54,7 @@ class CustomMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     requireEnforcedLanguage()
     customFileValidator.validate(
-      {
+      onFilesFound = {
         when (it) {
           is HasFile -> openZimFile(it.file)
           is HasBothFiles -> {
@@ -66,7 +63,7 @@ class CustomMainActivity : CoreMainActivity() {
           }
         }
       },
-      {
+      onNoFilesFound = {
         finish()
         start<CustomDownloadActivity>()
       }
@@ -90,7 +87,7 @@ class CustomMainActivity : CoreMainActivity() {
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
       LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG)
       sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG)
-      startActivity(Intent(this, this.javaClass))
+      recreate()
       return true
     }
     return false
@@ -98,13 +95,5 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun manageZimFiles(tab: Int) {
     TODO("not implemented")
-  }
-
-  companion object {
-    private fun getExpansionAPKFileName() =
-      "main.${BuildConfig.CONTENT_VERSION_CODE}.${CoreApp.getInstance().packageName}.obb"
-
-    fun generateExpansionFilePath(fileName: String = getExpansionAPKFileName()) =
-      "${CoreApp.getInstance().obbDir}${File.separator}$fileName"
   }
 }
