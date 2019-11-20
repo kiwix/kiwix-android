@@ -1,5 +1,5 @@
 {
-  "name": "Test Custom App",
+  "app_name": "Test Custom App",
   "zim_url": "http://download.kiwix.org/zim/wikipedia_fr_test.zim",
   "enforced_lang": "en"
 }

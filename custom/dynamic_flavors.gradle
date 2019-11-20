@@ -2,7 +2,6 @@ import custom.CustomApps
 import groovy.json.JsonSlurper
 
 apply plugin: 'com.android.application'
-String[] archs = ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
 
 // Set custom app import directory
 def map = [:]
@@ -35,7 +34,7 @@ android {
           name,
           parsedJson.zim_url,
           parsedJson.enforced_lang,
-          parsedJson.name,
+          parsedJson.app_name,
           parsedJson.version_name
         ).createFlavor(it)
       }
