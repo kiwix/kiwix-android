@@ -165,29 +165,25 @@ object CustomApps {
     wikivoyagede
   )
 
+  fun createCustomAppFromJson(
+    name: String,
+    url: String,
+    enforcedLanguage: String,
+    displayName: String,
+    versionName: String?
+  ) = if (versionName == null) CustomApp(name, url, enforcedLanguage, displayName)
+  else CustomApp(name, url, enforcedLanguage, displayName, versionName)
+
   data class CustomApp(
     val name: String,
     val url: String,
     val enforcedLanguage: String,
     val displayName: String,
-    val versionCode: Int = formatDate("YYDDD0").toInt(),
     val versionName: String = parseVersionNameFromUrlOrUsePattern(url, "YYYY-MM")
   ) {
-    constructor(
-      name: String,
-      url: String,
-      enforcedLanguage: String,
-      displayName: String
-    ) : this(
-      name,
-      url,
-      enforcedLanguage,
-      displayName,
-      formatDate("YYDDD0").toInt(),
-      parseVersionNameFromUrlOrUsePattern(url, "YYYY-MM")
-    )
+    val versionCode: Int = formatDate("YYDDD0").toInt()
 
-    fun create(namedDomainObjectContainer: NamedDomainObjectContainer<ProductFlavor>) {
+    fun createFlavor(namedDomainObjectContainer: NamedDomainObjectContainer<ProductFlavor>) {
       namedDomainObjectContainer.create(this)
     }
   }

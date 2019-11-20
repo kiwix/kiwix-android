@@ -28,75 +28,17 @@ android {
   productFlavors {
     // Custom apps built from a json file
     map.each { name, directory ->
-      def jsonFile
-      if (project.hasProperty("jsonFile")) {
-        // Read json file from properties e.g command line
-        jsonFile = file(project.property("jsonFile"))
-      } else {
-        // If no file provided use the test file
-        jsonFile = file(directory + "/info.json")
-      }
-
+      def jsonFile = file(directory + "/info.json")
       if (jsonFile.exists()) {
         def parsedJson = new JsonSlurper().parseText(jsonFile.text)
-        new CustomApps.CustomApp(
-          parsedJson.name,
-          parsedJson.url,
+        CustomApps.INSTANCE.createCustomAppFromJson(
+          name,
+          parsedJson.zim_url,
           parsedJson.enforced_lang,
-          parsedJson.display_name
-        ).create(it)
+          parsedJson.name,
+          parsedJson.version_name
+        ).createFlavor(it)
       }
-      /*"$name" {
-        println "Configuring $name"
-        if (file(directory + "/build.gradle").exists()) {
-          apply from: directory + "/build.gradle"
-        }
-
-
-        // Set custom config from json
-        applicationId "$parsedJson.package"
-        buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
-        def filename
-        if (parsedJson.zim_file.lastIndexOf("/") >= 0) {
-          filename = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf("/") + 1)
-        } else {
-          filename = parsedJson.zim_file
-        }
-        buildConfigField "String", "ZIM_FILE_NAME", "\"$filename\""
-        if (project.hasProperty("zim_file_size")) {
-          def length = Long.parseLong(project.property("zim_file_size"))
-          buildConfigField "long", "ZIM_FILE_SIZE", "${length}L"
-        } else {
-          long length = sourceFile.length()
-          buildConfigField "long", "ZIM_FILE_SIZE", "${length}L"
-        }
-        if (project.hasProperty("version_code")) {
-          def version_code = project.property("version_code")
-          versionCode version_code.toInteger()
-        } else {
-          versionCode parsedJson.version_code.toInteger()
-        }
-        if (project.hasProperty("version_name")) {
-          versionName project.property("version_name")
-        } else {
-          versionName parsedJson.version_name
-        }
-        if (project.hasProperty("content_version_code")) {
-          def content_version_code = project.property("content_version_code")
-          buildConfigField "int", "CONTENT_VERSION_CODE", "$content_version_code"
-        } else if (parsedJson.content_version_code != null) {
-          buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
-        } else if (project.hasProperty('version_code')) {
-          def version_code = project.property('version_code')
-          buildConfigField "int", "CONTENT_VERSION_CODE", "$version_code"
-        } else if (parsedJson.version_code != null) {
-          buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
-        }
-        buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
-        buildConfigField "String", "ZIM_URL", "\"$parsedJson.zim_url\""
-        resValue "string", "app_name", "$parsedJson.app_name"
-        resValue "string", "app_search_string", "Search " + "$parsedJson.app_name"
-      }*/
     }
   }
 }
