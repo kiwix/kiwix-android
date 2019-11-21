@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.webserver;
+package org.kiwix.kiwixmobile.webserver;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -29,7 +29,7 @@ import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixLibrary;
 import org.kiwix.kiwixlib.JNIKiwixServer;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
-import org.kiwix.kiwixmobile.core.wifi_hotspot.IpAddressCallbacks;
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks;
 
 import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
 

@@ -15,20 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.webserver
 
-package org.kiwix.kiwixmobile.di.modules
-
-import android.content.Context
-import android.location.LocationManager
-import dagger.Module
-import dagger.Provides
-import org.kiwix.kiwixmobile.di.KiwixScope
-
-@Module
-object KiwixModule {
-  @Provides
-  @KiwixScope
-  @JvmStatic
-  internal fun provideLocationManager(context: Context): LocationManager =
-    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+interface ZimHostCallbacks {
+  fun onServerStarted(ip: String)
+  fun onServerStopped()
+  fun onServerFailedToStart()
+  fun onIpAddressValid()
+  fun onIpAddressInvalid()
 }

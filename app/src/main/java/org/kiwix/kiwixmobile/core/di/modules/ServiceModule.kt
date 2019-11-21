@@ -26,11 +26,11 @@ import dagger.Provides
 import org.kiwix.kiwixlib.JNIKiwixLibrary
 import org.kiwix.kiwixlib.JNIKiwixServer
 import org.kiwix.kiwixmobile.core.di.ServiceScope
-import org.kiwix.kiwixmobile.core.webserver.WebServerHelper
-import org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotNotificationManager
-import org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotStateReceiver
-import org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotStateReceiver.Callback
-import org.kiwix.kiwixmobile.core.wifi_hotspot.IpAddressCallbacks
+import org.kiwix.kiwixmobile.webserver.WebServerHelper
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver.Callback
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
 
 @Module
 class ServiceModule {
@@ -41,12 +41,7 @@ class ServiceModule {
     jniKiwixLibrary: JNIKiwixLibrary,
     kiwixServer: JNIKiwixServer,
     ipAddressCallbacks: IpAddressCallbacks
-  ): WebServerHelper =
-    WebServerHelper(
-      jniKiwixLibrary,
-      kiwixServer,
-      ipAddressCallbacks
-    )
+  ): WebServerHelper = WebServerHelper(jniKiwixLibrary, kiwixServer, ipAddressCallbacks)
 
   @Provides
   @ServiceScope
@@ -67,19 +62,15 @@ class ServiceModule {
   fun providesHotspotNotificationManager(
     notificationManager: NotificationManager,
     context: Context
-  ): HotspotNotificationManager =
-    HotspotNotificationManager(notificationManager, context)
+  ): HotspotNotificationManager = HotspotNotificationManager(notificationManager, context)
 
   @Provides
   @ServiceScope
-  fun providesHotspotStateReceiver(
-    callback: Callback
-  ): HotspotStateReceiver =
+  fun providesHotspotStateReceiver(callback: Callback): HotspotStateReceiver =
     HotspotStateReceiver(callback)
 
   @Provides
   @ServiceScope
-  fun providesHotspotStateReceiverCallback(
-    service: Service
-  ): HotspotStateReceiver.Callback = service as Callback
+  fun providesHotspotStateReceiverCallback(service: Service): HotspotStateReceiver.Callback =
+    service as Callback
 }

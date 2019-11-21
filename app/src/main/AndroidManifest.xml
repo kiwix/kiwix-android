@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.kiwix.kiwixmobile">
 
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
   <application android:name=".KiwixApp">
     <activity
       android:name=".main.KiwixMainActivity"
@@ -140,5 +142,8 @@
         <data android:host="*" />
       </intent-filter>
     </activity>
+    <activity android:name=".webserver.ZimHostActivity" />
+
+    <service android:name=".webserver.wifi_hotspot.HotspotService" />
   </application>
 </manifest>

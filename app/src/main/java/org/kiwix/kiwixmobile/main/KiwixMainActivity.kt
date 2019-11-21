@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
@@ -115,6 +116,10 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
     super.hasValidFileAndUrl(url, zimFileReader) && url != homeUrl
+
+  override fun onHostBooksClicked() {
+    start<ZimHostActivity>()
+  }
 
   override fun urlIsInvalid() =
     super.urlIsInvalid() || currentWebView.url == homeUrl

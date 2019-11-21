@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.webserver;
+package org.kiwix.kiwixmobile.webserver;
 
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -39,24 +39,26 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.ActivityExtensionsKt;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
-import org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService;
 
-import static org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS;
-import static org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService.ACTION_START_SERVER;
-import static org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
+import static org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS;
+import static org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER;
+import static org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
 
 public class ZimHostActivity extends BaseActivity implements
-    ZimHostCallbacks, ZimHostContract.View {
+  ZimHostCallbacks, ZimHostContract.View {
 
   @BindView(R2.id.startServerButton)
   Button startServerButton;
@@ -81,6 +83,10 @@ public class ZimHostActivity extends BaseActivity implements
   private String ip;
   private ServiceConnection serviceConnection;
   private ProgressDialog progressDialog;
+
+  @Override protected void injection() {
+    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
+  }
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,11 +145,11 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   private void startHotspotHelper() {
-      if (ServerUtils.isServerStarted) {
-        startService(createHotspotIntent(ACTION_STOP_SERVER));
-      } else {
-        startHotspotManuallyDialog();
-      }
+    if (ServerUtils.isServerStarted) {
+      startService(createHotspotIntent(ACTION_STOP_SERVER));
+    } else {
+      startHotspotManuallyDialog();
+    }
   }
 
   private ArrayList<String> getSelectedBooksPath() {
@@ -289,7 +295,7 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  @Override public void addBooks(@Nullable List<BooksOnDiskListItem> books) {
+  @Override public void addBooks(@NotNull List<? extends BooksOnDiskListItem> books) {
     booksAdapter.setItems(books);
   }
 

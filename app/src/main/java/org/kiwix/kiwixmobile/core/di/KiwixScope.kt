@@ -16,11 +16,10 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.wifi_hotspot;
+package org.kiwix.kiwixmobile.core.di
 
-public interface IpAddressCallbacks {
+import javax.inject.Scope
 
-  void onIpAddressValid();
-
-  void onIpAddressInvalid();
-}
+@Scope
+@Retention
+annotation class KiwixScope

@@ -16,19 +16,25 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di.components
+package org.kiwix.kiwixmobile.core.di.components
 
-import dagger.Component
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.di.modules.KiwixModule
-import org.kiwix.kiwixmobile.di.KiwixScope
-import org.kiwix.kiwixmobile.di.modules.ViewModelModule
+import android.app.Service
+import dagger.BindsInstance
+import dagger.Subcomponent
+import org.kiwix.kiwixmobile.core.di.ServiceScope
+import org.kiwix.kiwixmobile.core.di.modules.ServiceModule
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 
-@KiwixScope
-@Component(
-  dependencies = [CoreComponent::class],
-  modules = [ViewModelModule::class, KiwixModule::class]
-)
-interface KiwixComponent {
-  fun activityComponentBuilder(): KiwixActivityComponent.Builder
+@Subcomponent(modules = [ServiceModule::class])
+@ServiceScope
+interface ServiceComponent {
+  fun inject(hotspotService: HotspotService)
+
+  @Subcomponent.Builder
+  interface Builder {
+
+    @BindsInstance fun service(service: Service): Builder
+
+    fun build(): ServiceComponent
+  }
 }

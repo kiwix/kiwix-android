@@ -16,18 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di
+package org.kiwix.kiwixmobile.core.di.modules
 
-import androidx.lifecycle.ViewModel
-import dagger.MapKey
-import kotlin.reflect.KClass
+import dagger.Module
 
-@MustBeDocumented
-@Target(
-  AnnotationTarget.FUNCTION,
-  AnnotationTarget.PROPERTY_GETTER,
-  AnnotationTarget.PROPERTY_SETTER
-)
-@Retention
-@MapKey
-annotation class ViewModelKey(val value: KClass<out ViewModel>)
+@Module(includes = [ActivityModule::class])
+class KiwixActivityModule

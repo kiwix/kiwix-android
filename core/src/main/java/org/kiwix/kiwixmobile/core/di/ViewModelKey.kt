@@ -16,19 +16,18 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.webserver;
+package org.kiwix.kiwixmobile.core.di
 
-import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel
+import dagger.MapKey
+import kotlin.reflect.KClass
 
-public interface ZimHostCallbacks {
-
-  void onServerStarted(@NonNull String ip);
-
-  void onServerStopped();
-
-  void onServerFailedToStart();
-
-  void onIpAddressValid();
-
-  void onIpAddressInvalid();
-}
+@MustBeDocumented
+@Target(
+  AnnotationTarget.FUNCTION,
+  AnnotationTarget.PROPERTY_GETTER,
+  AnnotationTarget.PROPERTY_SETTER
+)
+@Retention
+@MapKey
+annotation class ViewModelKey(val value: KClass<out ViewModel>)

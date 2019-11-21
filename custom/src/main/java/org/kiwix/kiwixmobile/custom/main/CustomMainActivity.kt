@@ -74,7 +74,12 @@ class CustomMainActivity : CoreMainActivity() {
     val onCreateOptionsMenu = super.onCreateOptionsMenu(menu)
     menu?.findItem(R.id.menu_help)?.isVisible = false
     menu?.findItem(R.id.menu_openfile)?.isVisible = false
+    menu?.findItem(R.id.menu_host_books)?.isVisible = false
     return onCreateOptionsMenu
+  }
+
+  override fun onHostBooksClicked() {
+    TODO("not implemented")
   }
 
   override fun createWebClient(

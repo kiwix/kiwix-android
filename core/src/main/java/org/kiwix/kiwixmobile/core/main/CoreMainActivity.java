@@ -112,7 +112,6 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
@@ -889,12 +888,13 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       intentSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
       openExternalUrl(intentSupportKiwix);
     } else if (itemId == R.id.menu_host_books) {
-      Intent intent = new Intent(this, ZimHostActivity.class);
-      startActivity(intent);
+      onHostBooksClicked();
     }
 
     return super.onOptionsItemSelected(item);
   }
+
+  protected abstract void onHostBooksClicked();
 
   protected abstract void createNewTab();
 

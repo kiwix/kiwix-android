@@ -16,10 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di.modules
+package org.kiwix.kiwixmobile.webserver.wifi_hotspot;
 
-import dagger.Module
-import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
+public interface IpAddressCallbacks {
 
-@Module(includes = [ActivityModule::class])
-class KiwixActivityModule
+  void onIpAddressValid();
+
+  void onIpAddressInvalid();
+}

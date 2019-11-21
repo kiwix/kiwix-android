@@ -16,10 +16,19 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di
+package org.kiwix.kiwixmobile.core.di.modules
 
-import javax.inject.Scope
+import android.content.Context
+import android.location.LocationManager
+import dagger.Module
+import dagger.Provides
+import org.kiwix.kiwixmobile.core.di.KiwixScope
 
-@Scope
-@Retention
-annotation class KiwixScope
+@Module
+object KiwixModule {
+  @Provides
+  @KiwixScope
+  @JvmStatic
+  internal fun provideLocationManager(context: Context): LocationManager =
+    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+}

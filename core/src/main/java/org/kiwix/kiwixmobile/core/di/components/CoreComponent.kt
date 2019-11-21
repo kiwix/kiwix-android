@@ -18,12 +18,14 @@
 package org.kiwix.kiwixmobile.core.di.components
 
 import android.app.Application
+import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import dagger.BindsInstance
 import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -43,7 +45,6 @@ import org.kiwix.kiwixmobile.core.search.AutoCompleteAdapter
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.StorageObserver
 import javax.inject.Singleton
 
 @Singleton
@@ -64,7 +65,6 @@ interface CoreComponent {
     fun build(): CoreComponent
   }
 
-  fun serviceComponent(): ServiceComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
   fun zimFileReaderFactory(): ZimFileReader.Factory
@@ -79,6 +79,7 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun context(): Context
   fun downloader(): Downloader
+  fun notificationManager(): NotificationManager
 
   fun inject(application: CoreApp)
   fun inject(zimContentProvider: ZimContentProvider)
