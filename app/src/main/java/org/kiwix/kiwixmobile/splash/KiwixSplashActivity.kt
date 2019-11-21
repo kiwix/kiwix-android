@@ -15,23 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.intro
 
-import android.os.Build
-import androidx.test.filters.SdkSuppress
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+package org.kiwix.kiwixmobile.splash
 
-@SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
+import android.content.Intent
+import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity
+import org.kiwix.kiwixmobile.intro.IntroActivity
+import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
-  override var activityRule = activityTestRule<IntroActivity>()
+class KiwixSplashActivity : CoreSplashActivity() {
 
-  @Test
-  fun viewIsSwipeableAndNavigatesToMain() {
-    intro {
-      swipeLeft()
-      swipeRight()
-    } clickGetStarted { }
+  override fun injection() {
+    kiwixActivityComponent.inject(this)
   }
+
+  override val intentForNextScreen: Intent
+    get() = if (sharedPreferenceUtil.showIntro())
+      Intent(this, IntroActivity::class.java)
+    else
+      Intent(this, KiwixMainActivity::class.java)
 }

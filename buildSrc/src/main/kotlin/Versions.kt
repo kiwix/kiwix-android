@@ -16,7 +16,6 @@
  *
  */
 
-import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -52,7 +51,7 @@ object Versions {
 
   const val androidx_test_runner: String = "1.2.0"
 
-  const val butterknife_compiler: String = "10.1.0" // available: "10.2.0"
+  const val butterknife_compiler: String = "10.2.0"
 
   const val javax_annotation_api: String = "1.3.2"
 
@@ -63,8 +62,6 @@ object Versions {
   const val logging_interceptor: String = "3.12.1" // available: "4.2.0"
 
   const val androidx_test_core: String = "1.2.0"
-
-  const val httpclient_android: String = "4.3.3" // available: "4.3.5.1"
 
   const val ink_page_indicator: String = "1.3.0"
 
@@ -102,7 +99,7 @@ object Versions {
 
   const val orchestrator: String = "1.1.0" // available: "1.2.0"
 
-  const val butterknife: String = "10.1.0" // available: "10.2.0"
+  const val butterknife: String = "10.2.0"
 
   const val lint_gradle: String = "26.5.0"
 
@@ -160,4 +157,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
   inline get() =
-      id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+    id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)

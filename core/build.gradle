@@ -47,8 +47,6 @@ dependencies {
   // Android Support
   implementation(Libs.cardview)
 
-  // Tab indicator
-  implementation(Libs.ink_page_indicator)
 
   // SquiDB
   implementation(Libs.squidb)
