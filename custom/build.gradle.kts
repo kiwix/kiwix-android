@@ -35,9 +35,6 @@ android {
       isUniversalApk = false
     }
   }
-  lintOptions {
-    ignore("IconLocation")
-  }
 }
 
 fun ProductFlavor.createDownloadTask(file: File): Task {
