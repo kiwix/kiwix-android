@@ -1,7 +1,0 @@
-The whole of Wikipedia on your device!
-
-The app is a lightweight piece of software reading bigger files stored on your device or SD card: once it is installed, you can select which additional content you would like to download (Wikipedia, Wiktionary, TED talks, etc.) and be ready for when your internet connexion is bad (or need to be in airplane mode)!
-
-Please read the instructions inside the App or on the website (www.kiwix.org) to learn about the various contents that are available for download.
-
-Note: Kiwix is also available on regular computers (Windows, Mac, Linux).

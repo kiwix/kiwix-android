@@ -17,21 +17,12 @@
  */
 package org.kiwix.kiwixmobile.intro
 
-import android.os.Build
-import androidx.test.filters.SdkSuppress
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+import dagger.Binds
+import dagger.Module
+import org.kiwix.kiwixmobile.core.di.ActivityScope
 
-@SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
-
-  override var activityRule = activityTestRule<IntroActivity>()
-
-  @Test
-  fun viewIsSwipeableAndNavigatesToMain() {
-    intro {
-      swipeLeft()
-      swipeRight()
-    } clickGetStarted { }
-  }
+@Module
+abstract class IntroModule {
+  @ActivityScope @Binds
+  abstract fun bindsPresenter(presenter: IntroPresenter): IntroContract.Presenter
 }

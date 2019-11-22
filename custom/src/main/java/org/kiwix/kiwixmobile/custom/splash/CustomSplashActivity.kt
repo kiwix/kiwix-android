@@ -15,23 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.intro
 
-import android.os.Build
-import androidx.test.filters.SdkSuppress
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+package org.kiwix.kiwixmobile.custom.splash
 
-@SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
+import android.content.Intent
+import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity
+import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 
-  override var activityRule = activityTestRule<IntroActivity>()
-
-  @Test
-  fun viewIsSwipeableAndNavigatesToMain() {
-    intro {
-      swipeLeft()
-      swipeRight()
-    } clickGetStarted { }
+class CustomSplashActivity : CoreSplashActivity() {
+  override fun injection() {
+    customActivityComponent.inject(this)
   }
+  override val intentForNextScreen: Intent
+    get() = Intent(this, CustomMainActivity::class.java)
 }

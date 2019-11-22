@@ -15,23 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.intro
 
-import android.os.Build
-import androidx.test.filters.SdkSuppress
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+package org.kiwix.kiwixmobile.intro;
 
-@SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
+import org.kiwix.kiwixmobile.core.base.BaseContract;
 
-  override var activityRule = activityTestRule<IntroActivity>()
+public interface IntroContract {
 
-  @Test
-  fun viewIsSwipeableAndNavigatesToMain() {
-    intro {
-      swipeLeft()
-      swipeRight()
-    } clickGetStarted { }
+  interface View extends BaseContract.View<Presenter> {
+
+  }
+
+  interface Presenter extends BaseContract.Presenter<View> {
+    void setIntroShown();
   }
 }

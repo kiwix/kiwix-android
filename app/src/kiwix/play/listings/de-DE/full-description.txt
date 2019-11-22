@@ -1,9 +1,0 @@
-Die ganze Wikipedia auf deinem Mobilgerät!
-
-Kiwix ist eine Programm, daß das Lesen der Wikipedia und anderer Inhalte (Ubuntu Dokumentation, WikiLeaks, WikiVoyage, WikiSource, etc) ohne Internetverbindung  erlaubt.
-
-Sobald du die Inhaltsdateien heruntergeladen hast, die sehr groß sein können, benötigst du keine Internetverbindung um sie zu verwenden.
-
-Siehe die Hilfe in der App und unsere Webseite für Informationen über verfügbare Inhalte.
-
-Anmerkung: Kiwix existiert auch für PCs (Windows, Mac, Linux) verfügbar..
