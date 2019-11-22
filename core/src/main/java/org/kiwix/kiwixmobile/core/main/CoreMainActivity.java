@@ -1025,7 +1025,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       .show();
   }
 
-  protected void openZimFile(File file) {
+  protected void openZimFile(@NonNull File file) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (file.exists()) {
         openAndSetInContainer(file);
@@ -1089,7 +1089,9 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          openZimFile(file);
+          if (file != null) {
+            openZimFile(file);
+          }
         } else {
           AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
           builder.setMessage(getResources().getString(R.string.reboot_message));
