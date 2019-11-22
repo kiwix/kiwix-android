@@ -1,5 +1,0 @@
-Vikipedi'nin tamamı cihazınızda!
-
-Uygulama, cihazınızda veya SD kartta depolanan büyük dosyalar okuyan hafif bir yazılım parçasıdır: yükledikten sonra, hangi ek içerikler indirmek istediğinizi seçebilirsiniz (Vikipedi, Vikisözlük, TED Konferansları, v.b.) ve ne zaman internet bağlantınız kötü olsa, hazır olabilirsiniz (veya uçak modunda olmanız gerekiyorsa) !
-
-Indirmek için hazır olan çeşitli içerikler hakkında bilgi edinmek için, lütfen uygulama içindeki veya web sitemizindeki talimatları okuyun (www.kiwix.org)

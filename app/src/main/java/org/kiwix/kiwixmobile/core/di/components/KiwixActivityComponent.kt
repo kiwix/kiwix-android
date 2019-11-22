@@ -22,10 +22,13 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.KiwixActivityModule
+import org.kiwix.kiwixmobile.intro.IntroActivity
+import org.kiwix.kiwixmobile.intro.IntroModule
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
+import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
@@ -38,7 +41,8 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 @Subcomponent(
   modules = [
     KiwixActivityModule::class,
-    ZimHostModule::class
+    ZimHostModule::class,
+    IntroModule::class
   ]
 )
 interface KiwixActivityComponent {
@@ -52,6 +56,8 @@ interface KiwixActivityComponent {
   fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(kiwixSettingsActivity: KiwixSettingsActivity)
   fun inject(zimHostActivity: ZimHostActivity)
+  fun inject(introActivity: IntroActivity)
+  fun inject(kiwixSplashActivity: KiwixSplashActivity)
 
   @Subcomponent.Builder
   interface Builder {

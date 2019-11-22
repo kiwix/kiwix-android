@@ -15,23 +15,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.intro
 
-import android.os.Build
-import androidx.test.filters.SdkSuppress
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+package org.kiwix.kiwixmobile.intro;
 
-@SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.core.base.BasePresenter;
+import org.kiwix.kiwixmobile.core.di.ActivityScope;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
-  override var activityRule = activityTestRule<IntroActivity>()
+@ActivityScope
+public class IntroPresenter extends BasePresenter<IntroContract.View>
+  implements IntroContract.Presenter {
+  private final SharedPreferenceUtil preferences;
 
-  @Test
-  fun viewIsSwipeableAndNavigatesToMain() {
-    intro {
-      swipeLeft()
-      swipeRight()
-    } clickGetStarted { }
+  @Inject IntroPresenter(SharedPreferenceUtil preferences) {
+    this.preferences = preferences;
+  }
+
+  @Override
+  public void setIntroShown() {
+    preferences.setIntroShown();
   }
 }

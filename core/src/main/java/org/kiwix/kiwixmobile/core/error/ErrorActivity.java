@@ -38,7 +38,7 @@ import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
-import org.kiwix.kiwixmobile.core.splash.SplashActivity;
+import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 
@@ -171,15 +171,7 @@ public class ErrorActivity extends BaseActivity {
   }
 
   void restartApp() {
-    Context context = this;
-    Intent intent = new Intent(context, SplashActivity.class);
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-      | Intent.FLAG_ACTIVITY_CLEAR_TASK
-      | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-    intent.setAction(Intent.ACTION_MAIN);
-    intent.addCategory(Intent.CATEGORY_LAUNCHER);
-    context.startActivity(intent);
-
+    startActivity(getPackageManager().getLaunchIntentForPackage(getPackageName()));
     finish();
     killCurrentProcess();
   }

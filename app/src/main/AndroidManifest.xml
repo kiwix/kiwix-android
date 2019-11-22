@@ -6,6 +6,23 @@
 
   <application android:name=".KiwixApp">
     <activity
+      android:name=".splash.KiwixSplashActivity"
+      android:label="@string/app_name"
+      android:theme="@style/AppTheme.Launcher">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.MONKEY" />
+      </intent-filter>
+
+      <meta-data
+        android:name="android.app.shortcuts"
+        android:resource="@xml/shortcuts" />
+    </activity>
+    <activity android:name=".intro.IntroActivity" />
+    <activity
       android:name=".main.KiwixMainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
       android:label="@string/app_name"
