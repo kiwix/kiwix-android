@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.di.modules
+package org.kiwix.kiwixmobile.di.modules
 
 import android.app.NotificationManager
 import android.app.Service
@@ -25,7 +25,7 @@ import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixlib.JNIKiwixLibrary
 import org.kiwix.kiwixlib.JNIKiwixServer
-import org.kiwix.kiwixmobile.core.di.ServiceScope
+import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver

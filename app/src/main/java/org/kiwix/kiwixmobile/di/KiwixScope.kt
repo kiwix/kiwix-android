@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.di
+package org.kiwix.kiwixmobile.di
 
 import javax.inject.Scope
 

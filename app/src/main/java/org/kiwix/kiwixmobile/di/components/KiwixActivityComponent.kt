@@ -15,13 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.di.components
+package org.kiwix.kiwixmobile.di.components
 
 import android.app.Activity
 import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.di.modules.KiwixActivityModule
+import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.intro.IntroActivity
 import org.kiwix.kiwixmobile.intro.IntroModule
 import org.kiwix.kiwixmobile.language.LanguageActivity

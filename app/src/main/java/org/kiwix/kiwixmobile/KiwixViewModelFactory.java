@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.core.di.KiwixScope;
+import org.kiwix.kiwixmobile.di.KiwixScope;
 
 @KiwixScope
 public class KiwixViewModelFactory extends ViewModelFactory {

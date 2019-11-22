@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.di.modules
+package org.kiwix.kiwixmobile.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -15,11 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.di
 
-import javax.inject.Scope
-import kotlin.annotation.AnnotationRetention.RUNTIME
+package org.kiwix.kiwixmobile.di.modules
 
-@Scope
-@Retention(RUNTIME)
-annotation class ServiceScope
+import dagger.Module
+import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
+
+@Module(includes = [ActivityModule::class])
+class KiwixActivityModule

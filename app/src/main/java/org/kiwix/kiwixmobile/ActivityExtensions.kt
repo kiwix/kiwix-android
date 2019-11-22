@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile
 
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.KiwixComponent
+import org.kiwix.kiwixmobile.di.components.KiwixComponent
 
 private val BaseActivity.kiwixComponent: KiwixComponent
   get() = (applicationContext as KiwixApp).kiwixComponent
