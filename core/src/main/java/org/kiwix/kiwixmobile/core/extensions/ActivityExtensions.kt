@@ -70,12 +70,13 @@ object ActivityExtensions {
   inline fun <reified T : Activity> Activity.start(
     noinline intentFunc: (Intent.() -> Unit)? = null
   ) {
-    startActivity(
-      Intent(this, T::class.java).apply {
-        intentFunc?.invoke(this)
-      }
-    )
+    startActivity(intent<T> { intentFunc?.invoke(this) })
   }
+
+  inline fun <reified T : Activity> Activity.intent(
+    noinline intentFunc: (Intent.() -> Unit)? = null
+  ) =
+    Intent(this, T::class.java).apply { intentFunc?.invoke(this) }
 
   inline fun <reified T : Activity> Activity.startWithActionFrom() {
     startActivity(Intents.internal(T::class.java))
