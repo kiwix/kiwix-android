@@ -22,6 +22,7 @@ import android.util.Log;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.base.BasePresenter;
 import org.kiwix.kiwixmobile.core.data.DataSource;
@@ -40,8 +41,19 @@ class ZimHostPresenter extends BasePresenter<ZimHostContract.View>
   }
 
   @Override
-  public void loadBooks() {
+  public void loadBooks(Set<String> previouslyHostedBooks) {
     dataSource.getLanguageCategorizedBooks()
+      .map(books -> {
+          for (BooksOnDiskListItem book : books) {
+            if (book instanceof BooksOnDiskListItem.BookOnDisk) {
+              book.setSelected(previouslyHostedBooks
+                  .contains(((BooksOnDiskListItem.BookOnDisk) book).getBook().title) ||
+                  previouslyHostedBooks.isEmpty());
+            }
+          }
+          return books;
+        }
+      )
       .subscribe(new SingleObserver<List<BooksOnDiskListItem>>() {
         @Override
         public void onSubscribe(Disposable d) {

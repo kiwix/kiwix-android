@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.webserver;
 
 import java.util.List;
+import java.util.Set;
 import org.kiwix.kiwixmobile.core.base.BaseContract;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
@@ -31,6 +32,6 @@ class ZimHostContract {
 
   interface Presenter
     extends BaseContract.Presenter<ZimHostContract.View> {
-    void loadBooks();
+    void loadBooks(Set<String> previouslyHostedBooks);
   }
 }

@@ -44,8 +44,8 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.util.ArrayList
-import java.util.HashSet
 import javax.inject.Inject
 
 class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
@@ -59,7 +59,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private var ip: String? = null
   private var serviceConnection: ServiceConnection? = null
   private var progressDialog: ProgressDialog? = null
-  private val selectedBooksId = HashSet<String>()
   private val tag = "ZimHostActivity"
   private val ipStateKey = "ip_state_key"
 
@@ -129,14 +128,15 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
-    bookOnDisk.isSelected = !bookOnDisk.isSelected
-    if (bookOnDisk.isSelected) {
-      selectedBooksId.add(bookOnDisk.book.getId())
-    } else {
-      selectedBooksId.remove(bookOnDisk.book.getId())
+    val booksList: ArrayList<BooksOnDiskListItem> = ArrayList()
+    for (item in booksAdapter.items) {
+      if (item == bookOnDisk) {
+        item.isSelected = !item.isSelected
+      }
+      booksList.add(item)
     }
-    booksAdapter.notifyDataSetChanged()
-    saveHostedBooks()
+    booksAdapter.items = booksList
+    saveHostedBooks(booksList)
   }
 
   override fun onStart() {
@@ -165,15 +165,17 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onResume() {
     super.onResume()
-    presenter.loadBooks()
+    presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.getSocketAddress()
       layoutServerStarted()
     }
   }
 
-  private fun saveHostedBooks() {
-    sharedPreferenceUtil.hostedBooks = selectedBooksId
+  private fun saveHostedBooks(booksList: ArrayList<BooksOnDiskListItem>) {
+    sharedPreferenceUtil.hostedBooks =
+      booksList.filter { book -> book.isSelected && book is BookOnDisk && book.book.title != null }
+        .map { book -> (book as BookOnDisk).book.title }.toSet()
   }
 
   private fun layoutServerStarted() {
@@ -261,7 +263,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun addBooks(books: List<BooksOnDiskListItem>) {
-    selectPreviouslyHostedBooks(books)
     booksAdapter.items = books
   }
 
@@ -281,26 +282,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
       Toast.LENGTH_SHORT
     )
       .show()
-  }
-
-  private fun selectPreviouslyHostedBooks(books: List<BooksOnDiskListItem>?) {
-    selectedBooksId.addAll(sharedPreferenceUtil.hostedBooks)
-    if (books != null && books.isNotEmpty()) {
-      if (selectedBooksId.isEmpty()) {
-        // Select all books if no book ids are stored
-        for (book in books) {
-          if (book is BooksOnDiskListItem.BookOnDisk) {
-            selectedBooksId.add(book.book.getId())
-            book.isSelected = true
-          }
-        }
-      } else {
-        books
-          .asSequence()
-          .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
-          .forEach { it.isSelected = selectedBooksId.contains(it.book.getId()) }
-      }
-    }
   }
 
   companion object {
