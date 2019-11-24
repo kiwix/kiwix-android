@@ -30,7 +30,7 @@ class AlertDialogShower @Inject constructor(
 ) : DialogShower {
   override fun show(
     dialog: KiwixDialog,
-    vararg clickListeners: () -> Unit
+    vararg clickListeners: (() -> Unit)?
   ) {
 
     AlertDialog.Builder(activity, dialogStyle())

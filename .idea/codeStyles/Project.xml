@@ -10,9 +10,6 @@
       </value>
     </option>
     <option name="LINE_SEPARATOR" value="&#10;" />
-    <AndroidXmlCodeStyleSettings>
-      <option name="ARRANGEMENT_SETTINGS_MIGRATED_TO_191" value="true" />
-    </AndroidXmlCodeStyleSettings>
     <GroovyCodeStyleSettings>
       <option name="ALIGN_MULTILINE_LIST_OR_MAP" value="false" />
       <option name="ALIGN_NAMED_ARGS_IN_MAP" value="false" />

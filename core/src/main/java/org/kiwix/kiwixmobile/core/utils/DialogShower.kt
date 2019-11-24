@@ -20,6 +20,6 @@ package org.kiwix.kiwixmobile.core.utils
 interface DialogShower {
   fun show(
     dialog: KiwixDialog,
-    vararg clickListeners: () -> Unit
+    vararg clickListeners: (() -> Unit)?
   )
 }
