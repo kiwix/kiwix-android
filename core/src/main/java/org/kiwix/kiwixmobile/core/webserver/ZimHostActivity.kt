@@ -31,6 +31,7 @@ import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_zim_host.recyclerViewZimHost
 import kotlinx.android.synthetic.main.activity_zim_host.serverTextView
 import kotlinx.android.synthetic.main.activity_zim_host.startServerButton
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
@@ -64,15 +65,16 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   private val selectedBooksPath: ArrayList<String>
     get() {
-      val selectedBooksPath = ArrayList<String>()
-      for (item in booksAdapter.items) {
-        if (item.isSelected) {
-          val (_, _, file) = item as BooksOnDiskListItem.BookOnDisk
-          selectedBooksPath.add(file.absolutePath)
-          Log.v(tag, "ZIM PATH : " + file.absolutePath)
+      return booksAdapter.items
+        .filter(BooksOnDiskListItem::isSelected)
+        .filterIsInstance<BookOnDisk>()
+        .map {
+          if (BuildConfig.DEBUG) {
+            Log.v(tag, "ZIM PATH : " + it.file.absolutePath)
+          }
+          it.file.absolutePath
         }
-      }
-      return selectedBooksPath
+        as ArrayList<String>
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
