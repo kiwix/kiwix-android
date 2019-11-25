@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -36,8 +35,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Settings;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
@@ -205,7 +202,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @Inject
   protected ZimReaderContainer zimReaderContainer;
   @Inject
-  protected MainMenu.Factory factory;
+  protected MainMenu.Factory menuFactory;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -221,7 +218,6 @@ public abstract class CoreMainActivity extends BaseActivity
   private boolean isBackToTopEnabled = false;
   private boolean wasHideToolbar = true;
   private boolean isHideToolbar = true;
-  private boolean isSpeaking = false;
   private boolean isOpenNewTabInBackground;
   private boolean isExternalLinkPopup;
   private String documentParserJs;
@@ -638,7 +634,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void updateTitle() {
-    actionBar.setTitle(createMenuText(getValidTitle(zimReaderContainer.getZimFileTitle())));
+    actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()));
   }
 
   private String getValidTitle(String zimFileTitle) {
@@ -654,7 +650,6 @@ public abstract class CoreMainActivity extends BaseActivity
     }, new KiwixTextToSpeech.OnSpeakingListener() {
       @Override
       public void onSpeakingStarted() {
-        isSpeaking = true;
         runOnUiThread(() -> {
           mainMenu.onTextToSpeechStartedTalking();
           TTSControls.setVisibility(View.VISIBLE);
@@ -663,7 +658,6 @@ public abstract class CoreMainActivity extends BaseActivity
 
       @Override
       public void onSpeakingEnded() {
-        isSpeaking = false;
         runOnUiThread(() -> {
           mainMenu.onTextToSpeechStoppedTalking();
           TTSControls.setVisibility(View.GONE);
@@ -1136,13 +1130,6 @@ public abstract class CoreMainActivity extends BaseActivity
       }, Throwable::printStackTrace);
   }
 
-  // Create a correctly colored title for menu items
-  private SpannableString createMenuText(String title) {
-    SpannableString s = new SpannableString(title);
-    s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-    return s;
-  }
-
   @OnClick(R2.id.tab_switcher_close_all_tabs)
   void closeAllTabs() {
     rotate(closeAllTabsButton);
@@ -1478,7 +1465,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    mainMenu = factory.create(menu, webViewList, !urlIsInvalid(), this);
+    mainMenu = menuFactory.create(menu, webViewList, !urlIsInvalid(), this);
     return true;
   }
 
