@@ -131,11 +131,11 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
     val booksList: ArrayList<BooksOnDiskListItem> = ArrayList()
-    for (item in booksAdapter.items) {
-      if (item == bookOnDisk) {
-        item.isSelected = !item.isSelected
+    booksAdapter.items.map {
+      if (it == bookOnDisk) {
+        it.isSelected = !it.isSelected
       }
-      booksList.add(item)
+      booksList.add(it)
     }
     booksAdapter.items = booksList
     saveHostedBooks(booksList)
