@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="kiwi">Kiwi</string>
   <string name="menu_zim_manager">Library</string>
@@ -132,14 +132,6 @@
   <string name="help_9">• Other contents like Wikileaks or Wikisource are also available</string>
   <string name="help_10">You can either download your chosen ZIM files in-app or carefuly select the one(s) you want and download from a Desktop computer before transferring the ZIM files to your SD card.</string>
   <string name="help_11">ZIM files download in-app are located in the external storage directory in a folder entitled Kiwix.</string>
-  <string name="help_12">How to use large ZIM files?</string>
-  <string name="help_13">If your ZIM file is larger than 4GB, you might not be able to store it on your SD card due to filesystem limitations.</string>
-  <string name="help_14">Downloading in-app automatically handles larger files, splitting them up for you.</string>
-  <string name="help_15">If however you are downloading on another device, you may need to split the ZIM file up using the following software:</string>
-  <string name="help_16">• On Microsoft Windows: HJ-Split</string>
-  <string name="help_17">• On Apple Mac OSX: Split and Concat</string>
-  <string name="help_18" tools:ignore="TypographyDashes">• On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
-  <string name="help_19">Note: your resulting files must be named my_big_file.zimaa, my_big_file.zimab, etc.</string>
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
   <string name="path_not_writable">Can not access desired directory, using default. To fix this reselect the desired directory in app settings.</string>
@@ -225,15 +217,6 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
   <string name="bookmarks_from_current_book">Bookmarks from current book</string>
   <string name="search_bookmarks">Search bookmarks</string>

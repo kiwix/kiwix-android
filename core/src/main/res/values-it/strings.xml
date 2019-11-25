@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_help">Aiuto</string>
   <string name="menu_home">Pagina principale</string>
@@ -72,8 +72,6 @@
   <string name="space_available">Spazio disponibile:</string>
   <string name="help_10">Puoi sia scaricare i tuoi file ZIM in-app selezionati o selezionare attentamente quello/i che desideri e scaricarli attraverso il Desktop di un computer prima di trasferire i file ZIM sulla tua memoria SD.</string>
   <string name="help_11">I file ZIM scaricati nell\'applicazione sono localizzati nella directory di archiviazione esterna in una cartella chiamata Kiwix.</string>
-  <string name="help_12">Come utilizzare file ZIM di grandi dimensioni?</string>
-  <string name="help_13">Se il tuo file ZIM è superiore a 4GB potresti non essere in grado di archiviarlo nella tua scheda SD a causa di limitazioni nel sistema.</string>
   <string name="pref_current_folder">Cartella attuale</string>
   <string name="delete_zim_failed">Non siamo stati in grado di eliminare questo file. Dovresti provare ad usare un file amministratore.</string>
   <string name="tts_pause">pausa</string>
@@ -90,7 +88,6 @@
   <string name="pref_auto_night_mode">Modalità notte automatica</string>
   <string name="your_languages">Lingue selezionate:</string>
   <string name="other_languages">Altre lingue:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -102,14 +99,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

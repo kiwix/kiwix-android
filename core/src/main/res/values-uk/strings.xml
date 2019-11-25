@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Отримати контент</string>
   <string name="menu_help">Довідка</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\u2022 Доступний також інший контент, такий як Вікілікс чи Вікіджерела</string>
   <string name="help_10">Ви можете або завантажити свої обрані ZIM-файли в межах застосунка, або обережно вибрати ті, які Ви хочете, й завантажити їх зі стаціонарного комп\'ютера, перед тим як переносити ZIM-файли на свою SD-карту.</string>
   <string name="help_11">ZIM-файли, завантажені із застосунка, розташовані в каталозі зовнішнього зберігання даних у папці під назвою Kiwix.</string>
-  <string name="help_12">Як використовувати великі ZIM-файли?</string>
-  <string name="help_13">Якщо Ваші ZIM-файли більші ніж 4 ГБ, можливо, Ви не зможете зберегти їх на свою SD-карту через обмеження файлової системи.</string>
-  <string name="help_14">Завантаження в межах застосунка автоматично опрацьовує більші файли, розбиваючи їх на частини замість Вас.</string>
-  <string name="help_15">Якщо, однак, Ви завантажуєте на іншому пристрої, можливо, Вам треба буде розділити ZIM-файл за допомогою такого програмного забезпечення:</string>
-  <string name="help_16">\u2022 На Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 На Apple Mac OSX: Split and Concat</string>
-  <string name="help_19">Примітка: файли, отримані Вами в результаті, повинні мати назви my_big_file.zimaa, my_big_file.zimab тощо.</string>
   <string name="pref_storage">Зберігання даних</string>
   <string name="pref_current_folder">Поточна папка</string>
   <string name="path_not_writable">Не вдалося отримати доступ до бажаного каталогу, використовується стандартне налаштування. Щоб виправити це, виберіть бажану категорію в налаштуваннях програми повторно.</string>
@@ -145,7 +138,6 @@
   <string name="do_not_ask_anymore">Більш не питати</string>
   <string name="your_languages">Вибір мови:</string>
   <string name="other_languages">Інші мови:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -157,14 +149,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>
