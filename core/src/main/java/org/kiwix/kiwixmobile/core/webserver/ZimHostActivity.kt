@@ -159,9 +159,9 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun unbindService() {
-    if (hotspotService != null) {
+    hotspotService?.let {
       unbindService(serviceConnection)
-      hotspotService!!.registerCallBack(null)
+      it.registerCallBack(null)
     }
   }
 
