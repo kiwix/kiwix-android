@@ -216,10 +216,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private fun startHotspotManuallyDialog() {
 
     alertDialogShower.show(KiwixDialog.StartHotspotManually(),
-      {
-        launchTetheringSettingsScreen()
-        Unit
-      },
+      ::launchTetheringSettingsScreen,
       null,
       {
         progressDialog = ProgressDialog.show(
