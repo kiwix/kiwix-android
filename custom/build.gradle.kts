@@ -10,6 +10,7 @@ import java.net.URL
 plugins {
   android
 }
+
 plugins.apply(KiwixConfigurationPlugin::class)
 
 android {
