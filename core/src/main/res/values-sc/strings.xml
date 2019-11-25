@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Iscàrriga cuntenutos</string>
   <string name="menu_help">Agiudu</string>
@@ -102,13 +102,6 @@
   <string name="help_9">\u2022 Fintzas àteros cuntenutos comente a Wikileaks o Wikisource sunt disponìbiles</string>
   <string name="help_10">Podes iscarrigare sos documentos ZIM isseberados dae intro a s\'aplicatzione o isseberare cun atentzione sos chi cheres e los iscarrigare dae un\'elaboradore de iscrivania in antis de los tramudare in s\'ischeda SD tua.</string>
   <string name="help_11">Sos documentos ZIM iscarrigados dae intro de s\'aplicatzione sunt sarvados in sa memòria esterna in una cartella mutida “Kiwix”.</string>
-  <string name="help_12">Comente impreare documentos ZIM mannos?</string>
-  <string name="help_13">Si su documentu ZIM tuo est prus mannu de 4GB, dias pòdere non èssere in gradu de lu sarvare in s\'ischeda SD tua pro more de lìmites in su sistema de sos documentos.</string>
-  <string name="help_14">Iscarrighende in s\'aplicatzione sos documentos prus mannos ant a èssere manigiados automaticamente, segados in prus cantos pro tie.</string>
-  <string name="help_15">Ma, si ses iscarrighende in un\'àteru dispositivu, dias pòdere tènnere bisòngiu de truncare su documentu ZIM impreende custu programma:</string>
-  <string name="help_16">\u2022 In Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 In Apple Mac OSX: Split e Concat</string>
-  <string name="help_19">Nota: su documentu risultante tuo depet tènnere su nùmene documentu_mannu_meu.zimaa, documentu_mannu_meu.zimab, etz.</string>
   <string name="pref_storage">Memòria</string>
   <string name="pref_current_folder">Cartella atuale</string>
   <string name="path_not_writable">Impossìbile abèrrere sa cartella isseberada, impreende sas impostatziones predefinidas. Pro isòrvere su problema torra a ischertare sa cartella in sos inditos de s\'aplicatzione.</string>
@@ -142,7 +135,6 @@
   <string name="do_not_ask_anymore">Non mi lu preguntes prus</string>
   <string name="your_languages">Limbas ischertadas:</string>
   <string name="other_languages">Àteras limbas:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -154,14 +146,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

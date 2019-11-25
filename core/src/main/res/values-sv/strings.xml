@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Hämta innehåll</string>
   <string name="menu_help">Hjälp</string>
@@ -101,13 +101,6 @@
   <string name="help_9">\u2022 Annat innehåll som Wikileaks eller Wikisource finns också tillgängligt</string>
   <string name="help_10">Du kan antingen ladda ned dina valda ZIM-filer i appen eller försiktigt välja ut de som du vill ladda ned från en dator innan du överför ZIM-filerna till ditt SD-kort.</string>
   <string name="help_11">ZIM-filer som laddas ned i appen placeras i den externa lagringskatalogen i en mapp som heter Kiwix.</string>
-  <string name="help_12">Hur använder man stora ZIM-filer?</string>
-  <string name="help_13">Om din ZIM-fil är större än 4GB kan du inte lagra den på ditt SD-kort p.g.a. begränsningar i filsystemet.</string>
-  <string name="help_14">Nedladdningarna i appen hanterar automatiskt större filer och delar upp dem åt dig.</string>
-  <string name="help_15">Om du laddar ned på en annan enhet måste du dela upp ZIM-filen med följande programvara:</string>
-  <string name="help_16">\u2022 På Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 På Apple Mac OSX: Split och Concat</string>
-  <string name="help_19">OBS: Resultatfilerna måste heta min_stora_fil.zimaa, min_stora_fil.zimab, etc.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuvarande mapp</string>
   <string name="path_not_writable">Kan inte komma åt önskad katalog, använder standardplatsen. För att åtgärda detta, välj önskad katalog i appens inställningar igen.</string>
@@ -140,7 +133,6 @@
   <string name="do_not_ask_anymore">Fråga inte igen</string>
   <string name="your_languages">Valda språk:</string>
   <string name="other_languages">Andra språk:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -152,14 +144,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

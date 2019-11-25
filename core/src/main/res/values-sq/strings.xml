@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Merrni Lëndë</string>
   <string name="menu_help">Ndihmë</string>
@@ -101,13 +101,6 @@
   <string name="help_9">\u2022 Ka të gatshme lëndë tjetër, të tillë si Wikileaks ose Wikisource</string>
   <string name="help_10">Mundeni ose t\’i shkarkoni brenda aplikacionit kartelat ZIM që keni zgjedhur, ose të përzgjidhni me kujdes atë(ato) që doni dhe ta(t\’i) shkarkoni nga një kompjuter desktop përpara se të shpërngulni kartelat ZIM te kujtesa juaj SD card.</string>
   <string name="help_11">Kartelat ZIM të shkarkuara brenda aplikacionit gjenden te drejtoria e depozitimit të jashtëm, në një dosje të quajtu Kiwix.</string>
-  <string name="help_12">Si të përdoren kartela ZIM të mëdha?</string>
-  <string name="help_13">Nëse kartela juaj ZIM është më e madhe se 4GB, mund të mos jeni në gjendje ta depozitoni te kujtesa juaj SD për shkak kufizimesh nga sistemi i kartelave.</string>
-  <string name="help_14">Shkarkimi brenda aplikacionit i trajton automatikisht kartelat e mëdha, duke i ndarë në copa për ju.</string>
-  <string name="help_15">Por nëse po shkarkoni në një tjetër pajisje, mund të donit ta ndanit kartelën ZIM në copa duke përdorur programin vijues:</string>
-  <string name="help_16">\u2022 Në Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 Në Apple Mac OSX: Split and Concat</string>
-  <string name="help_19">Shënim: kartelat e prodhuara për ju duhet të emërtohen si emri_i_kartelës_time_të_madhe.zimaa, emri_i_kartelës_time_të_madhe.zimab, etj.</string>
   <string name="pref_storage">Depozitim</string>
   <string name="pref_current_folder">Dosja e Tanishme</string>
   <string name="path_not_writable">S\’hyhet dot te drejtori e dëshiruar, po përdoret parazgjedhja. Që të ndreqet kjo, ripërzgjidhni drejtorinë e dëshiruar te rregullimet e aplikacionit.</string>
@@ -141,7 +134,6 @@
   <string name="do_not_ask_anymore">Mos pyet më</string>
   <string name="your_languages">Gjuhë të përzgjedhura:</string>
   <string name="other_languages">Gjuhë të tjera:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -153,14 +145,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

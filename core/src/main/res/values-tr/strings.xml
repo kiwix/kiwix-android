@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">İçerik al</string>
   <string name="menu_help">Yardım</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\u2022 Wikileaks veya Vikikaynak gibi diğer kaynaklarımız da kullanılabilir durumdadır</string>
   <string name="help_10">Seçtiğiniz ZIM dosyalarını uygulama içerisinden indirebilir veya istediklerinizi seçerek SD kartınıza aktarmadan önce bir Masaüstü bilgisayarından indirebilirsiniz.</string>
   <string name="help_11">Uygulama içinden indirilen ZIM dosyaları harici depolama aygıtındaki Kiwix başlıklı bir klasördedir.</string>
-  <string name="help_12">Büyük ZIM dosyaları nasıl kullanılır?</string>
-  <string name="help_13">Eğer ZIM dosyanız 4GB\'tan büyükse, dosya sistemi kısıtlamalarından dolayı SD kartınıza depolayamayabilirsiniz.</string>
-  <string name="help_14">Uygulama içinde indirme yapmak büyük dosyaları sizin için otomatik olarak bölmeyi sağlar.</string>
-  <string name="help_15">Yine de başka bir cihaza indirme yapıyorsanız, ZIM dosyasını bölmek için aşağıdaki yazılımı kullanmanız gerekebilir:</string>
-  <string name="help_16">\u2022 Microsoft Windows için : HJ-Split</string>
-  <string name="help_17">\u2022 Apple Mac OSX için: Split and Concat</string>
-  <string name="help_19">Not: çıkış dosyalarınız my_big_file.zimaa, my_big_file.zimab, vs. gibi isimlendirilmiş olmalı.</string>
   <string name="pref_storage">Depolama</string>
   <string name="pref_current_folder">Mevcut Klasör</string>
   <string name="path_not_writable">Varsayılan kullanılarak istenen dizine erişilemiyor. Bu durumu çözmek için uygulama ayarlarından istenen dizini yeniden seçin.</string>
@@ -145,7 +138,6 @@
   <string name="do_not_ask_anymore">Artık sorma</string>
   <string name="your_languages">Seçilen diller:</string>
   <string name="other_languages">Diğer diller:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -157,14 +149,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>
