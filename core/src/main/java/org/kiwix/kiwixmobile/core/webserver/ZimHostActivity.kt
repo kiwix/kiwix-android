@@ -175,9 +175,11 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun saveHostedBooks(booksList: ArrayList<BooksOnDiskListItem>) {
-    sharedPreferenceUtil.hostedBooks =
-      booksList.filter { book -> book.isSelected && book is BookOnDisk && book.book.title != null }
-        .map { book -> (book as BookOnDisk).book.title }.toSet()
+    sharedPreferenceUtil.hostedBooks = booksList.asSequence()
+      .filter(BooksOnDiskListItem::isSelected)
+      .filterIsInstance<BookOnDisk>()
+      .mapNotNull { it.book.title }
+      .toSet()
   }
 
   private fun layoutServerStarted() {
