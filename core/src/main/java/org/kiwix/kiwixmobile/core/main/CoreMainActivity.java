@@ -108,7 +108,6 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
@@ -146,8 +145,10 @@ import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
-public abstract class CoreMainActivity extends BaseActivity implements WebViewCallback,
-  MainContract.View {
+public abstract class CoreMainActivity extends BaseActivity
+  implements WebViewCallback,
+  MainContract.View,
+  MainMenu.MenuClickListener {
 
   public static boolean refresh;
   public static boolean wifiOnly;
@@ -203,6 +204,8 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   StorageObserver storageObserver;
   @Inject
   protected ZimReaderContainer zimReaderContainer;
+  @Inject
+  protected MainMenu.Factory factory;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -239,6 +242,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
   private boolean hasLocalBooks;
+  private MainMenu mainMenu;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -265,7 +269,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       closeTab(viewHolder.getAdapterPosition());
     }
   };
-  private MainMenu mainMenu;
 
   private static void updateWidgets(Context context) {
     Intent intent = new Intent(context.getApplicationContext(), KiwixSearchWidget.class);
@@ -447,7 +450,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       @Override
       public void onChanged() {
         if (mainMenu != null) {
-          mainMenu.updateTabIcon(webViewList);
+          mainMenu.updateTabIcon(tabsAdapter.getItemCount());
         }
       }
     });
@@ -549,7 +552,8 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
   @Override public void onBackPressed() {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
-      selectTab(currentWebViewIndex);
+      selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
+        : webViewList.size() - 1);
       hideTabSwitcher();
     } else if (isInFullScreenMode()) {
       closeFullScreen();
@@ -778,7 +782,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     tempForUndo = webViewList.get(index);
     webViewList.remove(index);
     tabsAdapter.notifyItemRemoved(index);
-    tabsAdapter.notifyItemRangeChanged(index, webViewList.size());
+    tabsAdapter.notifyDataSetChanged();
     Snackbar.make(snackbarRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo, v -> {
         webViewList.add(index, tempForUndo);
@@ -791,7 +795,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
   protected void selectTab(int position) {
     currentWebViewIndex = position;
-    tabsAdapter.setSelected(position);
     contentFrame.removeAllViews();
 
     KiwixWebView webView = webViewList.get(position);
@@ -822,50 +825,72 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    int itemId = item.getItemId();
-    if (itemId == android.R.id.home) {
-      if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
-        hideTabSwitcher();
-      }
-      createNewTab();
-      return true;
-    } else if (itemId == R.id.menu_add_note) {
-      if (requestExternalStorageWritePermissionForNotes()) {
-        // Check permission since notes are stored in the public-external storage
-        showAddNoteDialog();
-      }
-    } else if (itemId == R.id.menu_bookmarks_list) {
-      goToBookmarks();
-    } else if (itemId == R.id.menu_random_article) {
-      openRandomArticle();
-    } else if (itemId == R.id.menu_openfile) {
-      manageZimFiles(hasLocalBooks ? 0 : 1);
-    } else if (itemId == R.id.menu_read_aloud) {
-      if (TTSControls.getVisibility() == View.GONE) {
-        if (isBackToTopEnabled) {
-          backToTopButton.hide();
-        }
-        tts.readAloud(getCurrentWebView());
-      } else if (TTSControls.getVisibility() == View.VISIBLE) {
-        if (isBackToTopEnabled) {
-          backToTopButton.show();
-        }
-        tts.stop();
-      }
-    } else if (itemId == R.id.menu_fullscreen) {
-      if (isInFullScreenMode()) {
-        closeFullScreen();
-      } else {
-        openFullScreen();
-      }
-    } else if (itemId == R.id.menu_support_kiwix) {
-      Uri uriSupportKiwix = Uri.parse("https://www.kiwix.org/support");
-      Intent intentSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
-      intentSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
-      openExternalUrl(intentSupportKiwix);
-    }
+    return mainMenu.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+  }
 
-    return super.onOptionsItemSelected(item);
+  @Override public void onSupportKiwixMenuClicked() {
+    openExternalUrl(
+      new Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://www.kiwix.org/support")
+      ).putExtra(EXTRA_EXTERNAL_LINK, true)
+    );
+  }
+
+  @Override public void onFullscreenMenuClicked() {
+    if (isInFullScreenMode()) {
+      closeFullScreen();
+    } else {
+      openFullScreen();
+    }
+  }
+
+  @Override public void onReadAloudMenuClicked() {
+    if (TTSControls.getVisibility() == View.GONE) {
+      if (isBackToTopEnabled) {
+        backToTopButton.hide();
+      }
+      tts.readAloud(getCurrentWebView());
+    } else if (TTSControls.getVisibility() == View.VISIBLE) {
+      if (isBackToTopEnabled) {
+        backToTopButton.show();
+      }
+      tts.stop();
+    }
+  }
+
+  @Override public void onLibraryMenuClicked() {
+    manageZimFiles(hasLocalBooks ? 0 : 1);
+  }
+
+  @Override public void onRandomArticleMenuClicked() {
+    openRandomArticle();
+  }
+
+  @Override public void onBookmarksMenuClicked() {
+    goToBookmarks();
+  }
+
+  @Override public void onAddNoteMenuClicked() {
+    if (requestExternalStorageWritePermissionForNotes()) {
+      showAddNoteDialog();
+    }
+  }
+
+  @Override public void onHomeMenuClicked() {
+    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+      hideTabSwitcher();
+    }
+    createNewTab();
+  }
+
+  @Override public void onTabMenuClicked() {
+    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+      hideTabSwitcher();
+      selectTab(currentWebViewIndex);
+    } else {
+      showTabSwitcher();
+    }
   }
 
   protected abstract void createNewTab();
@@ -1117,7 +1142,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
     return s;
   }
-
 
   @OnClick(R2.id.tab_switcher_close_all_tabs)
   void closeAllTabs() {
@@ -1454,18 +1478,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    mainMenu = new MainMenu(this, menu, new MainMenu.MenuClickListener() {
-
-      @Override public void onTabMenuClicked() {
-        if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
-          hideTabSwitcher();
-          selectTab(currentWebViewIndex);
-        } else {
-          showTabSwitcher();
-        }
-      }
-    });
-    mainMenu.onCreate(zimReaderContainer.getZimFileReader(), webViewList, !urlIsInvalid());
+    mainMenu = factory.create(menu, webViewList, !urlIsInvalid(), this);
     return true;
   }
 

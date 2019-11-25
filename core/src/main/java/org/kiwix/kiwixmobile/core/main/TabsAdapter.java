@@ -49,6 +49,7 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
   TabsAdapter(CoreMainActivity activity, List<KiwixWebView> webViews) {
     this.webViews = webViews;
     this.activity = activity;
+    setHasStableIds(true);
   }
 
   @SuppressLint("ResourceType")
@@ -146,6 +147,10 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
   @Override
   public int getItemCount() {
     return webViews.size();
+  }
+
+  @Override public long getItemId(int position) {
+    return webViews.get(position).hashCode();
   }
 
   int getSelected() {

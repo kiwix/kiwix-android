@@ -21,7 +21,6 @@ import android.app.Activity
 import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
-import android.webkit.WebView
 import android.widget.TextView
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
@@ -38,10 +37,34 @@ import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity
 
 const val REQUEST_FILE_SEARCH = 1236
 
-class MainMenu(private val activity: Activity, menu: Menu, menuClickListener: MenuClickListener) {
+class MainMenu(
+  private val activity: Activity,
+  zimFileReader: ZimFileReader?,
+  menu: Menu,
+  webViews: MutableList<KiwixWebView>,
+  urlIsValid: Boolean,
+  private val menuClickListener: MenuClickListener
+) {
+
+  interface Factory {
+    fun create(
+      menu: Menu,
+      webViews: MutableList<KiwixWebView>,
+      urlIsValid: Boolean,
+      menuClickListener: MenuClickListener
+    ): MainMenu
+  }
 
   interface MenuClickListener {
     fun onTabMenuClicked()
+    fun onHomeMenuClicked()
+    fun onAddNoteMenuClicked()
+    fun onBookmarksMenuClicked()
+    fun onRandomArticleMenuClicked()
+    fun onLibraryMenuClicked()
+    fun onReadAloudMenuClicked()
+    fun onFullscreenMenuClicked()
+    fun onSupportKiwixMenuClicked()
   }
 
   init {
@@ -72,47 +95,50 @@ class MainMenu(private val activity: Activity, menu: Menu, menuClickListener: Me
         MenuItem.SHOW_AS_ACTION_NEVER
     )
     tabSwitcher.actionView.setOnClickListener { menuClickListener.onTabMenuClicked() }
-    help.setOnMenuItemClickListener {
-      activity.start<HelpActivity>()
-      true
-    }
-    settings.setOnMenuItemClickListener {
+    help.menuItemClickListener { activity.start<HelpActivity>() }
+    settings.menuItemClickListener {
       activity.startActivityForResult(
         internal(CoreSettingsActivity::class.java),
         Constants.REQUEST_PREFERENCES
       )
-      true
     }
-    history.setOnMenuItemClickListener {
+    history.menuItemClickListener {
       activity.startActivityForResult(
         activity.intent<HistoryActivity>(),
         Constants.REQUEST_HISTORY_ITEM_CHOSEN
       )
-      true
     }
-    hostBooks.setOnMenuItemClickListener {
-      activity.start<ZimHostActivity>()
-      true
-    }
-  }
+    hostBooks.menuItemClickListener { activity.start<ZimHostActivity>() }
+    addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
+    bookmarks.menuItemClickListener { menuClickListener.onBookmarksMenuClicked() }
+    randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }
+    library.menuItemClickListener { menuClickListener.onLibraryMenuClicked() }
+    readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
+    fullscreen.menuItemClickListener { menuClickListener.onFullscreenMenuClicked() }
+    supportKiwix.menuItemClickListener { menuClickListener.onSupportKiwixMenuClicked() }
+    addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
 
-  fun onCreate(
-    zimFileReader: ZimFileReader?,
-    webViews: MutableList<KiwixWebView>,
-    urlIsValid: Boolean
-  ) {
     showWebViewOptions(urlIsValid)
     zimFileReader?.let(::onFileOpened)
-    updateTabIcon(webViews)
+    updateTabIcon(webViews.size)
   }
+
+  fun onOptionsItemSelected(item: MenuItem) =
+    when (item.itemId) {
+      android.R.id.home -> {
+        menuClickListener.onHomeMenuClicked()
+        true
+      }
+      else -> false
+    }
 
   fun onFileOpened(zimFileReader: ZimFileReader) {
     setVisibility(true, randomArticle, fullscreen, search, readAloud, addNote)
     search.setOnMenuItemClickListener { navigateToSearch(zimFileReader) }
   }
 
-  fun updateTabIcon(webViews: List<WebView>) {
-    tabSwitcherTextView.text = if (webViews.size > 99) ":D" else "${webViews.size}"
+  fun updateTabIcon(tabs: Int) {
+    tabSwitcherTextView.text = if (tabs > 99) ":D" else "$tabs"
   }
 
   private fun navigateToSearch(zimFileReader: ZimFileReader): Boolean {
@@ -145,5 +171,12 @@ class MainMenu(private val activity: Activity, menu: Menu, menuClickListener: Me
 
   private fun setVisibility(visibility: Boolean, vararg menuItems: MenuItem) {
     menuItems.forEach { it.isVisible = visibility }
+  }
+}
+
+private fun MenuItem.menuItemClickListener(function: (MenuItem) -> Unit) {
+  setOnMenuItemClickListener {
+    function.invoke(it)
+    true
   }
 }
