@@ -19,7 +19,7 @@
     android:adjustViewBounds="true"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:scaleType="fitCenter"
-    android:src="@mipmap/kiwix_icon" />
+    android:src="@mipmap/ic_launcher" />
 
   <LinearLayout
     android:layout_width="0dp"

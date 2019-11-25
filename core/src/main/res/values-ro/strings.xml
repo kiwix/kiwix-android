@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Preia conținut</string>
   <string name="menu_help">Ajutor</string>
@@ -100,12 +100,6 @@
   <string name="help_9">\u2022 Alt conținut ca Wikileaks sa Wikisursă este de asemenea disponibil</string>
   <string name="help_10">Fișiere ZIM pe cardul SD.</string>
   <string name="help_11">Fișierele ZIM descărcate în aplicație sunt localizate în directorul extern de stocare într-un folder denumit Kiwix.</string>
-  <string name="help_12">Cum să folosești fișiere ZIM?</string>
-  <string name="help_13">Dacă fișierul ZIM este mai mare de 4GB este posibil să nu poți să îl descarci în cardul SD din cauza limitărilor de sistem.</string>
-  <string name="help_14">Descărcând în aplicație în mod automat se pot utiliza fișiere mai mari împărțindu-le pentru tine.</string>
-  <string name="help_15">Dacă oricum descărcați pe alt dispozitiv, este posibil să trebuie să împărțiți fișierul ZIM folosind următorul software:</string>
-  <string name="help_16">\u2022 Pe Microsoft Windows: HJ-Split</string>
-  <string name="help_19">Notă: fișierele rezultate trebuie să fie numite my_big_file.zimaa, my_big_file.zimab, etc.</string>
   <string name="pref_storage">Stocare</string>
   <string name="pref_current_folder">Folder curent</string>
   <string name="path_not_writable">Nu putem accesa directorul dorit folosind implicit. Pentru a rezolva asta reselectează directorul dorit în setările aplicației.</string>
@@ -137,7 +131,6 @@
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
   <string name="your_languages">Limbi selectate:</string>
   <string name="other_languages">Alte limbi:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -149,14 +142,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

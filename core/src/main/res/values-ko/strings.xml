@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">내용 가져오기</string>
   <string name="menu_help">도움말</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\u2022 위키리스크나 위키문헌과 같은 다른 콘텐츠도 사용이 가능합니다</string>
   <string name="help_10">앱 안에서 선택한 ZIM 파일을 다운로드하거나 원하는 항목을 주의하여 선택한 다음 ZIM 파일을 SD 카드로 전송하기 전에 데스크톱 컴퓨터로부터 다운로드할 수 있습니다.</string>
   <string name="help_11">앱 안에서 다운로드되는 ZIM 파일들은 Kiwix라는 이름의 폴더의 외부 저장 디렉터리에 위치합니다.</string>
-  <string name="help_12">크기가 큰 ZIM 파일을 사용하는 방법?</string>
-  <string name="help_13">ZIM 파일이 4GB를 초과하면 파일 시스템 제한으로 인해 SD 카드에 저장하지 못할 수 있습니다.</string>
-  <string name="help_14">앱 안에서 다운로드하면 자동으로 큰 파일들을 관리하여 분할해 줍니다.</string>
-  <string name="help_15">그러나 다른 장치에서 다운로드하는 경우 다음의 소프트웨어를 사용하여 ZIM 파일을 여러 개로 나누어야 할 수 있습니다:</string>
-  <string name="help_16">\u2022 마이크로소프트 윈도우: HJ-Split</string>
-  <string name="help_17">\u2022 애플 맥 OSX: Split, Concat</string>
-  <string name="help_19">참고: 결과 파일의 이름은 my_big_file.zimaa, my_big_file.zimab 등으로 되어야 합니다.</string>
   <string name="pref_storage">기억 장치</string>
   <string name="pref_current_folder">현재 폴더</string>
   <string name="path_not_writable">기본값을 사용하여 원하는 디렉터리에 접근할 수 없습니다. 이 문제를 해결하려면 앱 설정에서 원하는 디렉터리를 다시 선택하십시오.</string>
@@ -145,7 +138,6 @@
   <string name="do_not_ask_anymore">더 이상 묻지 않습니다</string>
   <string name="your_languages">선택한 언어:</string>
   <string name="other_languages">다른 언어:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -157,14 +149,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

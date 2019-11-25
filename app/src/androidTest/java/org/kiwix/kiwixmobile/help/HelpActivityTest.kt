@@ -38,9 +38,6 @@ class HelpActivityTest : BaseActivityTest<HelpActivity>() {
       clickOnWhereIsContent()
       assertWhereIsContentIsExpanded()
       clickOnWhereIsContent()
-      clickOnLargeZimFiles()
-      assertLargeZimsIsExpanded()
-      clickOnLargeZimFiles()
       clickOnSendFeedback()
     }
   }

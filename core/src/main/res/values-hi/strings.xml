@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">सामग्री पायें</string>
   <string name="menu_help">सहायता</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\U2022 विकिलीक्स या विकीसोर्स जैसी अन्य सामग्री भी उपलब्ध हैं</string>
   <string name="help_10">आप या तो अपने चुने हुए ZIM फ़ाइलों को इन-ऐप में डाउनलोड कर सकते हैं या सावधानीपूर्वक जिन्हें आप चाहते हैं उन्हे चुन सकते हैं और अपने SD कार्ड पर ZIM फ़ाइलों को ट्रांसफर करने से पहले डेस्कटॉप कंप्यूटर से डाउनलोड कर सकते हैं।</string>
   <string name="help_11">ZIM फाइलें जो इन-ऐप में डाउनलोड हैं, एक बाहरी फ़ोल्डर में स्थित हैं, जिसमें किवीक्स नामक एक फ़ोल्डर है।</string>
-  <string name="help_12">बड़ी ZIM फ़ाइलों का उपयोग कैसे करें?</string>
-  <string name="help_13">अगर आपकी ZIM फ़ाइल 4 जीबी से अधिक है, तो आप इसे अपने सिस्टम पर फाइल सिस्टम सीमाओं के कारण SD कार्ड पर स्टोर करने में सक्षम नहीं हो सकते हैं।</string>
-  <string name="help_14">डाउनलोडिंग इन-ऐप बड़ी फ़ाइलों को स्वचालित रूप से संभालता है, उन्हें आपके लिए अलग कर रहा।</string>
-  <string name="help_15">यदि आप किसी अन्य यंत्र पर डाउनलोड कर रहे हैं, तो आपको निम्न सॉफ्टवेयर का उपयोग करके ZIM फ़ाइल को विभाजित करने की आवश्यकता हो सकती है:</string>
-  <string name="help_16">\U2022 माइक्रोसॉफ्ट विंडोज पर: HJ-Split</string>
-  <string name="help_17">\U2022 एप्पल मैक ओएसएक्स पर: स्प्लिट और कंसैट</string>
-  <string name="help_19">नोट: आपकी परिणामी फ़ाइलों का नाम my_big_file.zimaa, my_big_file.zimab, आदि होना चाहिए।</string>
   <string name="pref_storage">संचयन</string>
   <string name="pref_current_folder">वर्तमान फोल्डर</string>
   <string name="path_not_writable">डिफ़ॉल्ट का उपयोग करते हुए, इच्छित निर्देशिका तक नहीं पहुंच सकते। इसे ठीक करने के लिए ऐप सेटिंग्स में वांछित निर्देशिका को फिर से खोजें।</string>
@@ -145,7 +138,6 @@
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
   <string name="your_languages">चयनित भाषाएं</string>
   <string name="other_languages">अन्य भाषाएँ</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -157,14 +149,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

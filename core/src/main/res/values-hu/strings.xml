@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Tartalom lekérése</string>
   <string name="menu_help">Súgó</string>
@@ -101,13 +101,6 @@
   <string name="help_9">\u2022 Más tartalmak, mint a Wikileaks vagy a Wikisource úgyszint elérhetőek</string>
   <string name="help_10">Letöltheted a kiválasztott ZIM fájljaidat alkalmazáson belül vagy kiválaszthatod és letöltheted ezeket egy asztali számítógépről mielőtt átküldenéd a ZIM fájlokat az SD-kártyádra.</string>
   <string name="help_11">Az alkalmazáson belül letöltött ZIM fájlok a külső tároló könyvtár Kiwix nevű mappájában vannak elhelyezve.</string>
-  <string name="help_12">Hogyan használnak nagy ZIM fájlokat?</string>
-  <string name="help_13">Ha a ZIM fájlod nagyobb, mint 4GB, lehet, hogy nem leszel képes tárolni az SD-kártyádon a fájlrendszer korlátozásai miatt.</string>
-  <string name="help_14">Az alkalmazáson belüli letöltések automatikusan kezelik a nagyobb fájlokat, felosztva ezt neked.</string>
-  <string name="help_15">Azonban ha másik eszközön töltöd le, fel kell oszd a ZIM fájlt, használva a következő szoftvert:</string>
-  <string name="help_16">\u2022 Microsoft Windows-on: HJ-Split</string>
-  <string name="help_17">\u2022 Apple Mac OSX-en: Split and Concat</string>
-  <string name="help_19">Megjegyzés: a kapott fájljaidat a következőképpen kell nevezni: my_big_file.zimaa, my_big_file.zimab, stb.</string>
   <string name="pref_storage">Tárhely</string>
   <string name="pref_current_folder">Aktuális folder</string>
   <string name="path_not_writable">Nem érhető el a kívánt könyvtár, ehelyett az alapértelmezett lesz használva. Ahhoz, hogy ezt helyrehozd, válaszd ki újra a kívánt könyvtárat az alkalmazás beállításainál.</string>
@@ -143,7 +136,6 @@
   <string name="do_not_ask_anymore">Ne kérdezz többször</string>
   <string name="your_languages">Nyelvek kiválasztása:</string>
   <string name="other_languages">További nyelvek:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -155,14 +147,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

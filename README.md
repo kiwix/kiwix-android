@@ -33,6 +33,8 @@ set up the Android SDK and then run the command: `./gradlew build `
 from the root directory of the project.
 
 Kiwix-Android is a multi-module project, in 99% of scenarios you will want to build the `app` module in the `debug` configuration.
+If you are interested in our custom apps they have their own repo [kiwix-android-custom](https://github.com/kiwix/kiwix-android-custom
+) that goes into further detail
 
 ## Libraries Used
 

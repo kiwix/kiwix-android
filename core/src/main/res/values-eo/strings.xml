@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Akiri Enhavon</string>
   <string name="menu_help">Helpo</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\u2022 Alia enhavo, kiel Wikileaks aŭ Vikifontaro, estas havebla</string>
   <string name="help_10">Vi povas aŭ elŝuti vian elektitajn ZIM-dosierojn per ĉi tiu aplikaĵo, aŭ zorge elekti tiu(j)n kiu(j) vi deziras kaj elŝuti ilin per surtabla komputilo, antaŭ transigi la ZIM-dosierojn per SD-karto.</string>
   <string name="help_11">ZIM-dosieroj elŝutitaj per ĉi tiu aplikaĵo estas en la dosierujo nomita Kiwix en ekstera konservejo.</string>
-  <string name="help_12">Kiel uzi grandan ZIM-dosieron?</string>
-  <string name="help_13">Se via ZIM-dosiero estas pli granda ol 4 GB, vi eble ne povas konservi ĝin en via SD-karto pro dosiersistemaj limoj.</string>
-  <string name="help_14">Elŝutado per la aplikaĵo aŭtomate traktas grandajn dosierojn por vi per disfendado.</string>
-  <string name="help_15">Se, tamen, vi elŝutas per alia aparato, vi eble devas disfendi la ZIM-dosieron per unu el la jenaj programaroj:</string>
-  <string name="help_16">\2022 Je Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 Je Apple macOS: Split kaj Concat</string>
-  <string name="help_19">Noto: viaj rezultaj dosieroj nomiĝu mia_dosierego.zimaa, mia_dosierego.zimab, ktp.</string>
   <string name="pref_storage">Konservejo</string>
   <string name="pref_current_folder">Aktuala Dosierujo</string>
   <string name="path_not_writable">Ne povas atingi deziratan dosierujon; uzante la implicitan. Por korekti tion, reelektu la deziratan dosierujon en la aplikaĵaj agordoj.</string>
@@ -142,7 +135,6 @@
   <string name="do_not_ask_anymore">Ne demandu plu</string>
   <string name="your_languages">Elektitaj lingvoj:</string>
   <string name="other_languages">Aliaj Lingvoj:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -154,14 +146,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Inhalt abrufen</string>
   <string name="menu_help">Hilfe</string>
@@ -99,13 +99,6 @@
   <string name="help_9">\u2022 Andere Inhalte wie Wikileaks oder Wikisource sind ebenfalls verfügbar</string>
   <string name="help_10">Sie können entweder Ihre ausgewählten ZIM-Dateien in der App herunterladen oder die gewünschten Datei(en) sorgsam auf einem Desktopcomputer auswählen und herunterladen, bevor Sie die ZIM-Dateien auf Ihre SD-Karte übertragen.</string>
   <string name="help_11">Heruntergeladene ZIM-Dateien in der App befinden sich im Verzeichnis des externen Speichers in einem Ordner namens Kiwix.</string>
-  <string name="help_12">Wie verwendet man große ZIM-Dateien?</string>
-  <string name="help_13">Falls Ihre ZIM-Datei größer als 4 GB ist, werden Sie aufgrund von Dateisystembeschränkungen nicht in der Lage sein, sie auf Ihrer SD-Karte zu speichern.</string>
-  <string name="help_14">Das Herunterladen in der App verwaltet automatisch größere Dateien und teilt sie für Sie auf.</string>
-  <string name="help_15">Falls Sie jedoch den Download auf einem anderen Gerät durchführen, müssen Sie die ZIM-Datei mithilfe der folgenden Software aufteilen:</string>
-  <string name="help_16">\u2022 Auf Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 Auf Apple Mac OSX: Split &amp; Concat</string>
-  <string name="help_19">Hinweis: Ihre Dateien müssen meine_große_datei.zimaa, meine_große_datei.zimab etc. heißen.</string>
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
   <string name="path_not_writable">Auf das gewünschte Verzeichnis kann nicht zugegriffen werden. Es wird das Standardverzeichnis verwendet. Um dieses Problem zu beheben, wählen Sie das gewünschte Verzeichnis in den App-Einstellungen erneut aus.</string>
@@ -141,7 +134,6 @@
   <string name="do_not_ask_anymore">Nicht mehr fragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="other_languages">Weitere Sprachen:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -153,14 +145,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

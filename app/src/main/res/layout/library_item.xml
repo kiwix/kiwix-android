@@ -20,7 +20,7 @@
     android:layout_marginRight="@dimen/favicon_margin_right"
     android:adjustViewBounds="true"
     android:scaleType="fitCenter"
-    android:src="@mipmap/kiwix_icon"
+    android:src="@mipmap/ic_launcher"
     />
 
   <LinearLayout

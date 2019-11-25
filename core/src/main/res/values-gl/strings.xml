@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Obter contido</string>
   <string name="menu_help">Axuda</string>
@@ -100,13 +100,6 @@
   <string name="help_9">\u2022 Outros contidos, como Wikileaks ou Wikisource tamén están dispoñibles</string>
   <string name="help_10">Pode descargar os ficheiros ZIM elixidos na aplicación, ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
   <string name="help_11">Os ficheiros ZIM descargados na aplicación atópanse no directorio de almacenamento externo, nunha carpeta chamada Kiwix.</string>
-  <string name="help_12">Como utilizar ficheiros ZIM grandes?</string>
-  <string name="help_13">Se o seu ficheiro ZIM é maior de 4GB, pode que non poida almacenalo na súa tarxeta SD debido a limitacións no sistema de ficheiros.</string>
-  <string name="help_14">A descarga na aplicación xestiona ficheiros grandes automaticamente, partíndoos para vostede.</string>
-  <string name="help_15">Porén, se está descargando noutro dispositivo, pode que necesite dividir o ficheiro ZIM utilizando o seguinte software:</string>
-  <string name="help_16">\u2022 En Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 En Apple Mac OSX: Split e Concat</string>
-  <string name="help_19">Nota: os ficheiros resultantes deben nomearse meu_gran_ficheiro.zimaa, meu_gran_ficheiro.zimab, etc.</string>
   <string name="pref_storage">Almacenamento</string>
   <string name="pref_current_folder">Carpeta actual</string>
   <string name="path_not_writable">Non se puido acceder ó directorio desexado; úsase o predeterminado. Para solucionar isto, volva a seleccionar o directorio desexado nas preferencias da aplicación.</string>
@@ -139,7 +132,6 @@
   <string name="do_not_ask_anymore">Non preguntar máis</string>
   <string name="your_languages">Linguas escollidas:</string>
   <string name="other_languages">Outras linguas:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -151,14 +143,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

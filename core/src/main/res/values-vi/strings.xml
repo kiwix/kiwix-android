@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Lấy Nội dung</string>
   <string name="menu_help">Trợ giúp</string>
@@ -102,13 +102,6 @@
   <string name="help_9">\u2022 Các nội dung khác như Wikileaks hay Wikisource cũng có sẵn</string>
   <string name="help_10">Bạn có thể chọn tập tin ZIM muốn tải về từ ứng dụng hoặc cẩn thận chọn tập tin ZIM bạn muốn và tải về từ máy tính trước khi chuyển tập tin đó sang thẻ SD.</string>
   <string name="help_11">Các tập tin ZIM được tải về bằng ứng dụng sẽ được lưu trữ ở bộ nhớ ngoài, trong thư mục có tên Kiwix.</string>
-  <string name="help_12">Làm thế nào để dùng các tập tin ZIM kích cỡ lớn?</string>
-  <string name="help_13">Nếu tập tin ZIM của bạn lớn hơn 4GB thì bạn có thể không lưu trữ được tập tin đó trên thẻ SD vì giới hạn của filesystem.</string>
-  <string name="help_14">Nếu bạn tải về bằng ứng dụng thì ứng dụng sẽ tự động cắt tập tin ra cho bạn.</string>
-  <string name="help_15">Tuy nhiên, nếu bạn tải về bằng thiết bị khác thì bạn có thể cần dùng các phần mềm sau để cắt tập tin ZIM ra:</string>
-  <string name="help_16">\u2022 Đối với Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 Đối với Apple Mac OSX: Split and Concat</string>
-  <string name="help_19">Lưu ý: các tập tin kết quả phải được đặt theo dạng my_big_file.zimaa, my_big_file.zimab,…</string>
   <string name="pref_storage">Lưu trữ</string>
   <string name="pref_current_folder">Thư mục Hiện tại</string>
   <string name="delete_zim_failed">Rất tiếc, chúng tôi không thể xoá tập tin này. Bạn hãy dùng một trình duyệt tập tin để làm việc đó.</string>
@@ -142,7 +135,6 @@
   <string name="do_not_ask_anymore">Đừng hỏi lại</string>
   <string name="your_languages">Ngôn ngữ được chọn:</string>
   <string name="other_languages">Ngôn ngữ khác:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -154,14 +146,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>
