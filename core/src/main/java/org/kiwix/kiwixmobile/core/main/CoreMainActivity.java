@@ -607,7 +607,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
         tempVisitCount = 0;
         visitCounterPref.setCount(tempVisitCount);
       })
-      .setIcon(ContextCompat.getDrawable(this, R.mipmap.kiwix_icon))
+      .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
       .show();
   }
 
