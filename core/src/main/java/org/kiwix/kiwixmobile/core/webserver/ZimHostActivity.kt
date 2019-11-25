@@ -27,10 +27,10 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_zim_host.recyclerViewZimHost
 import kotlinx.android.synthetic.main.activity_zim_host.serverTextView
 import kotlinx.android.synthetic.main.activity_zim_host.startServerButton
+import kotlinx.android.synthetic.main.activity_zim_host.toolbar
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -204,7 +204,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun setUpToolbar() {
-    val toolbar = findViewById<Toolbar>(R.id.toolbar)
     setSupportActionBar(toolbar)
     supportActionBar!!.title = getString(R.string.menu_host_books)
     supportActionBar!!.setHomeButtonEnabled(true)
