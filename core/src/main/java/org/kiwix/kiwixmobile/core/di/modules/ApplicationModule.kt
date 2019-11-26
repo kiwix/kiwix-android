@@ -28,6 +28,7 @@ import dagger.android.AndroidInjectionModule
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
@@ -35,7 +36,6 @@ import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadMonitor
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Singleton
 
 @Module(
@@ -91,6 +91,6 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-  internal fun providesZimFileReaderFactory(sharedPreferenceUtil: SharedPreferenceUtil):
-    ZimFileReader.Factory = ZimFileReader.Factory.Impl(sharedPreferenceUtil)
+  internal fun providesZimFileReaderFactory(nightModeConfig: NightModeConfig):
+    ZimFileReader.Factory = ZimFileReader.Factory.Impl(nightModeConfig)
 }

@@ -45,7 +45,7 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.io.FilesKt;
 import org.kiwix.kiwixmobile.core.CoreApp;
-import org.kiwix.kiwixmobile.core.Intents;
+import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
@@ -54,13 +54,11 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_RESTART;
-import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_AUTONIGHTMODE;
-import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHTMODE;
+import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM_ENABLED;
-import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
 public abstract class CorePrefsFragment extends PreferenceFragment implements
   SettingsContract.View,
@@ -76,6 +74,8 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   protected SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   protected StorageCalculator storageCalculator;
+  @Inject
+  protected NightModeConfig nightModeConfig;
 
   private SliderPreference mSlider;
 
@@ -84,12 +84,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
     CoreApp.getCoreComponent().inject(this);
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.preferences);
-
-    boolean auto_night_mode = sharedPreferenceUtil.getPrefAutoNightMode();
-
-    if (auto_night_mode) {
-      getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(false);
-    }
 
     mSlider = (SliderPreference) findPreference(PREF_ZOOM);
     setSliderState();
@@ -195,33 +189,16 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
       mSlider.setSummary(mSlider.getSummary());
       ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
     }
-    if (key.equals(PREF_NIGHTMODE)) {
-      CoreMainActivity.refresh = true;
-      CoreMainActivity.nightMode = sharedPreferenceUtil.nightMode();
-      getActivity().finish();
-      startActivity(Intents.internal(CoreSettingsActivity.class));
-      getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    if (key.equals(PREF_NIGHT_MODE)) {
+      sharedPreferenceUtil.updateNightMode();
     }
     if (key.equals(PREF_WIFI_ONLY)) {
       CoreMainActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
     }
-    if (key.equals(PREF_AUTONIGHTMODE)) {
-      CoreMainActivity.refresh = true;
-      CoreMainActivity.nightMode = sharedPreferenceUtil.nightMode();
-      getActivity().finish();
-      startActivity(Intents.internal(CoreSettingsActivity.class));
-      getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-    }
   }
 
   private void clearAllHistoryDialog() {
-    int warningResId;
-    if (sharedPreferenceUtil.nightMode()) {
-      warningResId = R.drawable.ic_warning_white;
-    } else {
-      warningResId = R.drawable.ic_warning_black;
-    }
-    new AlertDialog.Builder(getActivity(), dialogStyle())
+    new AlertDialog.Builder(getActivity())
       .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
       .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
       .setPositiveButton(android.R.string.yes, (dialog, which) -> {
@@ -234,19 +211,12 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
       .setNegativeButton(android.R.string.no, (dialog, which) -> {
         // do nothing
       })
-      .setIcon(warningResId)
+      .setIcon(R.drawable.ic_warning)
       .show();
   }
 
   private void showClearAllNotesDialog() {
-    AlertDialog.Builder builder;
-    if (sharedPreferenceUtil.nightMode()) { // Night Mode support
-      builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog_Night);
-    } else {
-      builder = new AlertDialog.Builder(getActivity());
-    }
-
-    builder.setMessage(R.string.delete_notes_confirmation_msg)
+    new AlertDialog.Builder(getActivity()).setMessage(R.string.delete_notes_confirmation_msg)
       .setNegativeButton(android.R.string.cancel, null) // Do nothing for 'Cancel' button
       .setPositiveButton(R.string.yes, (dialog, which) -> clearAllNotes())
       .show();
@@ -277,11 +247,11 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
     WebView view =
       (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
     view.loadUrl("file:///android_asset/credits.html");
-    if (sharedPreferenceUtil.nightMode()) {
+    if (nightModeConfig.isNightModeActive()) {
       view.getSettings().setJavaScriptEnabled(true);
       view.setBackgroundColor(0);
     }
-    new AlertDialog.Builder(getActivity(), dialogStyle())
+    new AlertDialog.Builder(getActivity())
       .setView(view)
       .setPositiveButton(android.R.string.ok, null)
       .show();

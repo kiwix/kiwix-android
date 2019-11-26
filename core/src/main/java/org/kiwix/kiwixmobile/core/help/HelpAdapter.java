@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.help;
 
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,12 +39,10 @@ import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.expand;
 class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   private final String[] titles;
   private final String[] descriptions;
-  private final boolean nightMode;
 
-  HelpAdapter(HashMap<String, String> titleDescriptionMap, boolean nightMode) {
+  HelpAdapter(HashMap<String, String> titleDescriptionMap) {
     this.titles = titleDescriptionMap.keySet().toArray(new String[0]);
     this.descriptions = titleDescriptionMap.values().toArray(new String[0]);
-    this.nightMode = nightMode;
   }
 
   @NonNull
@@ -59,9 +56,6 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   public void onBindViewHolder(@NonNull Item holder, int position) {
     holder.title.setText(titles[position]);
     holder.description.setText(descriptions[position]);
-    if (nightMode) {
-      holder.toggleDescriptionVisibility.setColorFilter(Color.argb(255, 255, 255, 255));
-    }
   }
 
   @Override

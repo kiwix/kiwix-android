@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.storage_select_dialog.title
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.utils.StyleUtils
 import javax.inject.Inject
 
 class StorageSelectDialog : DialogFragment() {
@@ -45,7 +44,7 @@ class StorageSelectDialog : DialogFragment() {
   @Inject lateinit var storageCalculator: StorageCalculator
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    setStyle(STYLE_NORMAL, StyleUtils.dialogStyle())
+    // setStyle(STYLE_NORMAL, StyleUtils.dialogStyle())
     super.onCreate(savedInstanceState)
   }
 
@@ -76,7 +75,7 @@ class StorageSelectDialog : DialogFragment() {
     }
   }
 
-  override fun show(fm: FragmentManager, text: String) {
+  override fun show(fm: FragmentManager, text: String?) {
     aTitle = text
     super.show(fm, text)
   }

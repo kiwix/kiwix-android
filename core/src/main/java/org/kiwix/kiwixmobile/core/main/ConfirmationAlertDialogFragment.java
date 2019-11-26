@@ -60,15 +60,7 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     Fragment parentDialogFragment = getFragmentManager().findFragmentByTag(parentDialogFragmentTAG);
 
-    AlertDialog.Builder builder;
-
-    if (sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) { // Night Mode support
-      builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog_Night);
-    } else {
-      builder = new AlertDialog.Builder(getActivity());
-    }
-
-    builder.setMessage(stringResourceId)
+    return new AlertDialog.Builder(getActivity()).setMessage(stringResourceId)
       .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -86,9 +78,8 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
             ((UserClickListener) parentDialogFragment).onNegativeClick();
           }
         }
-      });
-
-    return builder.create();
+      })
+      .create();
   }
 
   /**

@@ -21,13 +21,15 @@ package org.kiwix.kiwixmobile.core.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import io.reactivex.Flowable;
 import io.reactivex.processors.PublishProcessor;
-import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.core.CoreApp;
+import org.kiwix.kiwixmobile.core.NightModeConfig;
 
 /**
  * Manager for the Default Shared Preferences of the application.
@@ -38,8 +40,6 @@ public class SharedPreferenceUtil {
   // Prefs
   public static final String PREF_LANG = "pref_language_chooser";
   public static final String PREF_STORAGE = "pref_select_folder";
-  public static final String PREF_AUTONIGHTMODE = "pref_auto_nightmode";
-  public static final String PREF_NIGHTMODE = "pref_nightmode";
   public static final String PREF_WIFI_ONLY = "pref_wifi_only";
   public static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
   public static final String PREF_BACK_TO_TOP = "pref_backtotop";
@@ -48,15 +48,16 @@ public class SharedPreferenceUtil {
   public static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
   public static final String PREF_FULLSCREEN = "pref_fullscreen";
   public static final String PREF_NEW_TAB_BACKGROUND = "pref_newtab_background";
-  public static final String PREF_FULL_TEXT_SEARCH = "pref_full_text_search";
   public static final String PREF_STORAGE_TITLE = "pref_selected_title";
   public static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
   public static final String PREF_IS_FIRST_RUN = "isFirstRun";
   public static final String PREF_SHOW_INTRO = "showIntro";
   private static final String PREF_SHOW_BOOKMARKS_CURRENT_BOOK = "show_bookmarks_current_book";
   private static final String PREF_SHOW_HISTORY_CURRENT_BOOK = "show_history_current_book";
+  public static final String PREF_NIGHT_MODE = "pref_night_mode";
   private SharedPreferences sharedPreferences;
   private final PublishProcessor<String> prefStorages = PublishProcessor.create();
+  private final PublishProcessor<NightModeConfig.Mode> nightModes = PublishProcessor.create();
 
   @Inject
   public SharedPreferenceUtil(Context context) {
@@ -111,14 +112,6 @@ public class SharedPreferenceUtil {
       putPrefStorage(storage);
     }
     return storage;
-  }
-
-  private boolean getPrefNightMode() {
-    return sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-  }
-
-  public boolean getPrefAutoNightMode() {
-    return sharedPreferences.getBoolean(PREF_AUTONIGHTMODE, false);
   }
 
   public String getPrefStorageTitle(String defaultTitle) {
@@ -181,17 +174,6 @@ public class SharedPreferenceUtil {
       .apply();
   }
 
-  public boolean nightMode() {
-    boolean autoNightMode = getPrefAutoNightMode();
-    if (autoNightMode) {
-      Calendar cal = Calendar.getInstance();
-      int hour = cal.get(Calendar.HOUR_OF_DAY);
-      return hour < 6 || hour > 18;
-    } else {
-      return getPrefNightMode();
-    }
-  }
-
   public boolean getShowBookmarksCurrentBook() {
     return sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, true);
   }
@@ -200,5 +182,25 @@ public class SharedPreferenceUtil {
     sharedPreferences.edit()
       .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
       .apply();
+  }
+
+  @NonNull
+  public NightModeConfig.Mode getNightMode() {
+    return NightModeConfig.Mode.from(
+      Integer.parseInt(
+        sharedPreferences.getString(
+          PREF_NIGHT_MODE,
+          "" + AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        )
+      )
+    );
+  }
+
+  public Flowable<NightModeConfig.Mode> nightModes() {
+    return nightModes.startWith(getNightMode());
+  }
+
+  public void updateNightMode() {
+    nightModes.offer(getNightMode());
   }
 }

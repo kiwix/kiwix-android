@@ -93,6 +93,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.Intents;
+import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
@@ -150,15 +151,12 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
-import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
 public abstract class CoreMainActivity extends BaseActivity implements WebViewCallback,
   MainContract.View {
 
   public static boolean isFullscreenOpened;
-  public static boolean refresh;
   public static boolean wifiOnly;
-  public static boolean nightMode;
   private final ArrayList<String> bookmarks = new ArrayList<>();
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R2.id.activity_main_root)
@@ -210,6 +208,8 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   StorageObserver storageObserver;
   @Inject
   protected ZimReaderContainer zimReaderContainer;
+  @Inject
+  protected NightModeConfig nightModeConfig;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -328,7 +328,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     presenter.attachView(this);
     new WebView(this).destroy(); // Workaround for buggy webViews see #710
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
-    nightMode = sharedPreferenceUtil.nightMode();
     handleLocaleCheck();
     setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);
@@ -595,7 +594,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     String negative = getString(R.string.rate_dialog_negative);
     String neutral = getString(R.string.rate_dialog_neutral);
 
-    new AlertDialog.Builder(this, dialogStyle())
+    new AlertDialog.Builder(this)
       .setTitle(title)
       .setMessage(message)
       .setPositiveButton(positive, (dialog, id) -> {
@@ -664,7 +663,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
         isSpeaking = true;
         runOnUiThread(() -> {
           menu.findItem(R.id.menu_read_aloud)
-            .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
+            .setTitle(R.string.menu_read_aloud_stop);
           TTSControls.setVisibility(View.VISIBLE);
         });
       }
@@ -674,7 +673,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
         isSpeaking = false;
         runOnUiThread(() -> {
           menu.findItem(R.id.menu_read_aloud)
-            .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud)));
+            .setTitle(R.string.menu_read_aloud);
           TTSControls.setVisibility(View.GONE);
           pauseTTSButton.setText(R.string.tts_pause);
         });
@@ -1005,10 +1004,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   }
 
   private void externalLinkPopup(Intent intent) {
-    int warningResId = (sharedPreferenceUtil.nightMode())
-      ? R.drawable.ic_warning_white : R.drawable.ic_warning_black;
-
-    new AlertDialog.Builder(this, dialogStyle())
+    new AlertDialog.Builder(this)
       .setTitle(R.string.external_link_popup_dialog_title)
       .setMessage(R.string.external_link_popup_dialog_message)
       .setNegativeButton(android.R.string.no, (dialogInterface, i) -> {
@@ -1021,7 +1017,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
         startActivity(intent);
       })
       .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
-      .setIcon(warningResId)
+      .setIcon(R.drawable.ic_warning)
       .show();
   }
 
@@ -1093,7 +1089,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
             openZimFile(file);
           }
         } else {
-          AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+          AlertDialog.Builder builder = new AlertDialog.Builder(this);
           builder.setMessage(getResources().getString(R.string.reboot_message));
           AlertDialog dialog = builder.create();
           dialog.show();
@@ -1144,25 +1140,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       }, Throwable::printStackTrace);
   }
 
-  // Workaround for popup bottom menu on older devices
-  private void StyleMenuButtons(Menu m) {
-    // Find each menu item and set its text colour
-    for (int i = 0; i < m.size(); i++) {
-      m.getItem(i).setTitle(createMenuItem(m.getItem(i).getTitle().toString()));
-    }
-  }
-
-  // Create a correctly colored title for menu items
-  private SpannableString createMenuItem(String title) {
-    SpannableString s = new SpannableString(title);
-    if (nightMode) {
-      s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-    } else {
-      s.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s.length(), 0);
-    }
-    return s;
-  }
-
   // Create a correctly colored title for menu items
   private SpannableString createMenuText(String title) {
     SpannableString s = new SpannableString(title);
@@ -1190,7 +1167,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         if (isSpeaking) {
           menu.findItem(R.id.menu_read_aloud)
-            .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
+            .setTitle(R.string.menu_read_aloud_stop);
         }
       }
     } catch (Exception e) {
@@ -1263,10 +1240,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       }
       selectTab(currentWebViewIndex);
       setUpWebView();
-    }
-    if (refresh) {
-      refresh = false;
-      recreate();
     }
     presenter.loadCurrentZimBookmarksUrl();
 
@@ -1357,11 +1330,11 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   private void contentsDrawerHint() {
     drawerLayout.postDelayed(() -> drawerLayout.openDrawer(GravityCompat.END), 500);
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(getString(R.string.hint_contents_drawer_message))
       .setPositiveButton(getString(R.string.got_it), (dialog, id) -> {
       })
-      .setTitle(getString(R.string.did_you_know))
+      .setTitle(R.string.did_you_know)
       .setIcon(R.drawable.icon_question);
     AlertDialog alert = builder.create();
     alert.show();
@@ -1550,7 +1523,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.menu_main, menu);
     this.menu = menu;
-    StyleMenuButtons(menu);
     if (requestInitAllMenuItems) {
       initAllMenuItems();
     }
@@ -1623,7 +1595,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   }
 
   private void loadPrefs() {
-    nightMode = sharedPreferenceUtil.nightMode();
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isFullscreenOpened = sharedPreferenceUtil.getPrefFullScreen();
@@ -1647,8 +1618,8 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     }
 
     // Night mode status
-    if (nightMode) {
-      getCurrentWebView().toggleNightMode();
+    if (nightModeConfig.isNightModeActive()) {
+      getCurrentWebView().activateNightMode();
     } else {
       getCurrentWebView().deactivateNightMode();
     }
@@ -1780,7 +1751,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     }
 
     if (handleEvent) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
       builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
         if (isOpenNewTabInBackground) {

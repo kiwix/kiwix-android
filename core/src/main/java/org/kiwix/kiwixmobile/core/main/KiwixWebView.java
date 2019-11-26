@@ -104,7 +104,7 @@ public class KiwixWebView extends VideoEnabledWebView {
     setLayerType(LAYER_TYPE_NONE, null);
   }
 
-  public void toggleNightMode() {
+  public void activateNightMode() {
     Paint paint = new Paint();
     ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
     paint.setColorFilter(filterInvert);

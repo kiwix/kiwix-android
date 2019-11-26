@@ -20,28 +20,15 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.StartHotspotManually
 import javax.inject.Inject
 
-class AlertDialogShower @Inject constructor(
-  private val activity: Activity,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
-) : DialogShower {
-  override fun show(
-    dialog: KiwixDialog,
-    vararg clickListeners: () -> Unit
-  ) {
-
-    AlertDialog.Builder(activity, dialogStyle())
+class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
+  override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit) {
+    AlertDialog.Builder(activity)
       .apply {
         dialog.title?.let(this::setTitle)
-        setMessage(
-          activity.getString(
-            dialog.message,
-            *bodyArguments(dialog)
-          )
-        )
+        setMessage(activity.getString(dialog.message, *bodyArguments(dialog)))
         setPositiveButton(dialog.positiveMessage) { _, _ ->
           clickListeners.getOrNull(0)
             ?.invoke()
@@ -65,11 +52,4 @@ class AlertDialogShower @Inject constructor(
   private fun bodyArguments(dialog: KiwixDialog) =
     if (dialog is HasBodyFormatArgs) dialog.args.toTypedArray()
     else emptyArray()
-
-  private fun dialogStyle() =
-    if (sharedPreferenceUtil.nightMode()) {
-      R.style.AppTheme_Dialog_Night
-    } else {
-      R.style.AppTheme_Dialog
-    }
 }

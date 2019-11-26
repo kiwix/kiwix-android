@@ -63,10 +63,6 @@ class ZimManageActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
-
-    if (sharedPreferenceUtil.nightMode()) {
-      setTheme(R.style.AppTheme_Night)
-    }
     setContentView(R.layout.zim_manager)
 
     setUpToolbar()
