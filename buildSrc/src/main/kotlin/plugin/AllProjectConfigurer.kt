@@ -147,7 +147,7 @@ class AllProjectConfigurer {
       implementation(Libs.appcompat)
       implementation(Libs.material)
       implementation(Libs.constraintlayout)
-      implementation(Libs.androidx_multidex_multidex)
+      implementation(Libs.multidex)
       implementation(Libs.okhttp)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
