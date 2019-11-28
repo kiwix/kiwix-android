@@ -18,8 +18,8 @@
 
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
-import android.app.Activity
-import android.view.ActionMode
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -33,7 +33,7 @@ data class StartMultiSelection(
   val bookOnDisk: BooksOnDiskListItem.BookOnDisk,
   val fileSelectActions: PublishProcessor<FileSelectActions>
 ) : SideEffect<ActionMode?> {
-  override fun invokeWith(activity: Activity) =
+  override fun invokeWith(activity: AppCompatActivity) =
     activity.startActionMode(
       R.menu.menu_zim_files_contextual,
       mapOf(

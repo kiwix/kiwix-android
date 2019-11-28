@@ -9,7 +9,7 @@
     <activity
       android:name=".splash.KiwixSplashActivity"
       android:label="@string/app_name"
-      android:theme="@style/AppTheme.Launcher">
+      android:theme="@style/ThemeOverlay.KiwixTheme.Launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 

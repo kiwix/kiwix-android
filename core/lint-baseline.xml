@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="5" by="lint 3.5.0" client="gradle" variant="all" version="3.5.0">
+<issues format="5" by="lint 3.5.2" client="gradle" variant="debug" version="3.5.2">
 
     <issue
         id="ObsoleteLintCustomCheck"
@@ -15,7 +15,7 @@
         errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\dialog_add_note.xml"
-            line="38"
+            line="33"
             column="7"/>
     </issue>
 
@@ -70,7 +70,7 @@
         errorLine2="                                                ~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="144"
+            line="143"
             column="49"/>
     </issue>
 
@@ -81,7 +81,7 @@
         errorLine2="                                           ~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="162"
+            line="161"
             column="44"/>
     </issue>
 
@@ -92,23 +92,8 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="183"
+            line="182"
             column="54"/>
-    </issue>
-
-    <issue
-        id="IntentReset"
-        message="Calling `setData` after calling `setType` will clear the type: Call `setDataAndType` instead?"
-        errorLine1="    intent.setData(uri);"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\help\HelpActivity.java"
-            line="75"
-            column="5"/>
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\help\HelpActivity.java"
-            line="70"
-            column="5"/>
     </issue>
 
     <issue
@@ -143,117 +128,117 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\section_list.xml"
-            line="20"
+            line="18"
             column="5"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="    app:srcCompat=&quot;@drawable/ic_feedback_blue_24dp&quot;"
+        errorLine1="    app:srcCompat=&quot;@drawable/ic_feedback_blue_24dp&quot; />"
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\activity_help.xml"
-            line="37"
+            line="32"
             column="5"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="      app:srcCompat=&quot;@drawable/ic_bookmark_border_24dp&quot;"
+        errorLine1="      app:srcCompat=&quot;@drawable/ic_bookmark_border_24dp&quot; />"
         errorLine2="      ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\bottom_toolbar.xml"
-            line="31"
+            line="29"
             column="7"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="      app:srcCompat=&quot;@drawable/ic_keyboard_arrow_left_24dp&quot;"
+        errorLine1="      app:srcCompat=&quot;@drawable/ic_keyboard_arrow_left_24dp&quot; />"
         errorLine2="      ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\bottom_toolbar.xml"
-            line="45"
+            line="42"
             column="7"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="      app:srcCompat=&quot;@drawable/action_home&quot;"
+        errorLine1="      app:srcCompat=&quot;@drawable/action_home&quot; />"
         errorLine2="      ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\bottom_toolbar.xml"
-            line="59"
+            line="55"
             column="7"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="      app:srcCompat=&quot;@drawable/ic_keyboard_arrow_right_24dp&quot;"
+        errorLine1="      app:srcCompat=&quot;@drawable/ic_keyboard_arrow_right_24dp&quot; />"
         errorLine2="      ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\bottom_toolbar.xml"
-            line="73"
+            line="68"
             column="7"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="      app:srcCompat=&quot;@drawable/ic_toc_24dp&quot;"
+        errorLine1="      app:srcCompat=&quot;@drawable/ic_toc_24dp&quot; />"
         errorLine2="      ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\bottom_toolbar.xml"
-            line="87"
+            line="81"
             column="7"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="    app:srcCompat=&quot;@drawable/action_find_next&quot;"
+        errorLine1="    app:srcCompat=&quot;@drawable/action_find_next&quot; />"
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\item_help.xml"
-            line="30"
+            line="28"
             column="5"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="    app:srcCompat=&quot;@drawable/ic_airplane&quot;"
+        errorLine1="    app:srcCompat=&quot;@drawable/ic_airplane&quot; />"
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\item_intro_2.xml"
-            line="20"
+            line="19"
             column="5"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="    app:srcCompat=&quot;@drawable/ic_stars_black_24dp&quot;"
+        errorLine1="    app:srcCompat=&quot;@drawable/ic_stars_black_24dp&quot; />"
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\kiwix_search_widget.xml"
-            line="36"
+            line="33"
             column="5"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="    app:srcCompat=&quot;@drawable/ic_mic_black_24dp&quot;"
+        errorLine1="    app:srcCompat=&quot;@drawable/ic_mic_black_24dp&quot; />"
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\kiwix_search_widget.xml"
-            line="44"
+            line="40"
             column="5"/>
     </issue>
 
@@ -264,7 +249,7 @@
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\main_activity_content.xml"
-            line="57"
+            line="55"
             column="5"/>
     </issue>
 
@@ -275,18 +260,18 @@
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\main_activity_content.xml"
-            line="70"
+            line="68"
             column="5"/>
     </issue>
 
     <issue
         id="VectorDrawableCompat"
         message="To use VectorDrawableCompat, you need to set `android.defaultConfig.vectorDrawables.useSupportLibrary = true`."
-        errorLine1="    app:srcCompat=&quot;@drawable/ic_close_black_24dp&quot;"
+        errorLine1="    app:srcCompat=&quot;@drawable/ic_close_black_24dp&quot; />"
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\tab_switcher.xml"
-            line="28"
+            line="25"
             column="5"/>
     </issue>
 
@@ -310,17 +295,6 @@
             file="src\main\res\drawable\ic_baseline_wait_24px.xml"
             line="7"
             column="5"/>
-    </issue>
-
-    <issue
-        id="PrivateResource"
-        message="Overriding `@color/foreground_material_dark` which is marked as private in com.google.android.material:material. If deliberate, use tools:override=&quot;true&quot;, otherwise pick a different name."
-        errorLine1="  &lt;color name=&quot;foreground_material_dark&quot;>@android:color/white&lt;/color>"
-        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\values\colors.xml"
-            line="20"
-            column="16"/>
     </issue>
 
     <issue
@@ -368,28 +342,6 @@
     </issue>
 
     <issue
-        id="PrivateResource"
-        message="The resource `@color/cardview_dark_background` is marked as private in com.google.android.material:material"
-        errorLine1="    &lt;item name=&quot;android:windowBackground&quot;>@color/cardview_dark_background&lt;/item>"
-        errorLine2="                                          ^">
-        <location
-            file="src\main\res\values\styles.xml"
-            line="113"
-            column="43"/>
-    </issue>
-
-    <issue
-        id="PrivateResource"
-        message="The resource `@color/cardview_dark_background` is marked as private in com.google.android.material:material"
-        errorLine1="    &lt;item name=&quot;android:windowBackground&quot;>@color/cardview_dark_background&lt;/item>"
-        errorLine2="                                          ^">
-        <location
-            file="src\main\res\values\styles.xml"
-            line="150"
-            column="43"/>
-    </issue>
-
-    <issue
         id="Typos"
         message="&quot;media&quot; is a common misspelling; did you mean &quot;medier&quot; ?"
         errorLine1="  &lt;string name=&quot;save_media&quot;>Lagre media som…&lt;/string>"
@@ -429,7 +381,7 @@
         errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\res\values\strings.xml"
-            line="216"
+            line="208"
             column="3"/>
     </issue>
 
@@ -477,7 +429,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1405"
+            line="1374"
             column="5"/>
     </issue>
 
@@ -488,24 +440,13 @@
         errorLine2="     ~~~~~~~~">
         <location
             file="src\main\AndroidManifest.xml"
-            line="52"
+            line="32"
             column="6"/>
     </issue>
 
     <issue
         id="Overdraw"
-        message="Possible overdraw: Root element paints background `?attr/listBackground` with a theme that also paints a background (inferred theme is `@style/AppTheme`)"
-        errorLine1="  android:background=&quot;?attr/listBackground&quot;"
-        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\activity_help.xml"
-            line="7"
-            column="3"/>
-    </issue>
-
-    <issue
-        id="Overdraw"
-        message="Possible overdraw: Root element paints background `@android:color/holo_blue_dark` with a theme that also paints a background (inferred theme is `@style/AppTheme`)"
+        message="Possible overdraw: Root element paints background `@android:color/holo_blue_dark` with a theme that also paints a background (inferred theme is `@style/KiwixTheme`)"
         errorLine1="  android:background=&quot;@android:color/holo_blue_dark&quot;"
         errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
@@ -516,79 +457,13 @@
 
     <issue
         id="Overdraw"
-        message="Possible overdraw: Root element paints background `?attr/selectedBackground` with a theme that also paints a background (inferred theme is `@style/AppTheme`)"
-        errorLine1="  android:background=&quot;?attr/selectedBackground&quot;"
-        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="Possible overdraw: Root element paints background `@color/black` with a theme that also paints a background (inferred theme is `@style/KiwixTheme`)"
+        errorLine1="  android:background=&quot;@color/black&quot;"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src\main\res\layout\section_list.xml"
-            line="5"
+            file="src\main\res\layout\bottom_toolbar.xml"
+            line="8"
             column="3"/>
-    </issue>
-
-    <issue
-        id="Overdraw"
-        message="Possible overdraw: Root element paints background `?attr/listBackground` with a theme that also paints a background (inferred theme is `@style/AppTheme`)"
-        errorLine1="  android:background=&quot;?attr/listBackground&quot;"
-        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\settings.xml"
-            line="7"
-            column="3"/>
-    </issue>
-
-    <issue
-        id="Overdraw"
-        message="Possible overdraw: Root element paints background `@android:color/black` with a theme that also paints a background (inferred theme is `@style/AppTheme`)"
-        errorLine1="  android:background=&quot;@android:color/black&quot;"
-        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\tab_switcher.xml"
-            line="6"
-            column="3"/>
-    </issue>
-
-    <issue
-        id="RedundantNamespace"
-        message="This namespace declaration is redundant"
-        errorLine1="    &lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\search.xml"
-            line="16"
-            column="21"/>
-    </issue>
-
-    <issue
-        id="RedundantNamespace"
-        message="This namespace declaration is redundant"
-        errorLine1="      xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;"
-        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\search.xml"
-            line="17"
-            column="7"/>
-    </issue>
-
-    <issue
-        id="UnusedNamespace"
-        message="Unused namespace declaration xmlns:android; already declared on the root element"
-        errorLine1="    &lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\search.xml"
-            line="16"
-            column="21"/>
-    </issue>
-
-    <issue
-        id="UnusedNamespace"
-        message="Unused namespace declaration xmlns:app; already declared on the root element"
-        errorLine1="      xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;"
-        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\search.xml"
-            line="17"
-            column="7"/>
     </issue>
 
     <issue
@@ -598,7 +473,7 @@
         errorLine2="                               ^">
         <location
             file="src\main\res\values\strings.xml"
-            line="162"
+            line="154"
             column="32"/>
     </issue>
 
@@ -623,7 +498,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\device_item.xml"
-            line="8"
+            line="7"
             column="4"/>
     </issue>
 
@@ -634,7 +509,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\device_item.xml"
-            line="16"
+            line="14"
             column="4"/>
     </issue>
 
@@ -645,7 +520,7 @@
         errorLine2="       ~~~~~~~~">
         <location
             file="src\main\res\layout\dialog_add_note.xml"
-            line="41"
+            line="36"
             column="8"/>
     </issue>
 
@@ -656,7 +531,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\header_date.xml"
-            line="9"
+            line="8"
             column="4"/>
     </issue>
 
@@ -667,7 +542,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\header_language.xml"
-            line="9"
+            line="8"
             column="4"/>
     </issue>
 
@@ -678,7 +553,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\ic_tab_switcher.xml"
-            line="12"
+            line="10"
             column="4"/>
     </issue>
 
@@ -700,7 +575,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_book.xml"
-            line="59"
+            line="58"
             column="4"/>
     </issue>
 
@@ -711,7 +586,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_book.xml"
-            line="68"
+            line="67"
             column="4"/>
     </issue>
 
@@ -722,7 +597,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_book.xml"
-            line="79"
+            line="78"
             column="4"/>
     </issue>
 
@@ -733,7 +608,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_book.xml"
-            line="90"
+            line="89"
             column="4"/>
     </issue>
 
@@ -744,7 +619,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_bookmark_history.xml"
-            line="25"
+            line="23"
             column="4"/>
     </issue>
 
@@ -755,39 +630,6 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_help.xml"
-            line="10"
-            column="4"/>
-    </issue>
-
-    <issue
-        id="SelectableText"
-        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="  &lt;TextView"
-        errorLine2="   ~~~~~~~~">
-        <location
-            file="src\main\res\layout\section_list.xml"
-            line="12"
-            column="4"/>
-    </issue>
-
-    <issue
-        id="SelectableText"
-        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="  &lt;TextView"
-        errorLine2="   ~~~~~~~~">
-        <location
-            file="src\main\res\layout\slider_dialog.xml"
-            line="12"
-            column="4"/>
-    </issue>
-
-    <issue
-        id="SelectableText"
-        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="  &lt;TextView"
-        errorLine2="   ~~~~~~~~">
-        <location
-            file="src\main\res\layout\storage_select_dialog.xml"
             line="9"
             column="4"/>
     </issue>
@@ -798,8 +640,41 @@
         errorLine1="  &lt;TextView"
         errorLine2="   ~~~~~~~~">
         <location
+            file="src\main\res\layout\section_list.xml"
+            line="10"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\slider_dialog.xml"
+            line="11"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
+            file="src\main\res\layout\storage_select_dialog.xml"
+            line="8"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
+        <location
             file="src\main\res\layout\webview_search.xml"
-            line="40"
+            line="39"
             column="4"/>
     </issue>
 
@@ -810,7 +685,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\progress_bar.xml"
-            line="12"
+            line="11"
             column="5"/>
     </issue>
 
@@ -821,7 +696,7 @@
         errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1440"
+            line="1409"
             column="41"/>
     </issue>
 
@@ -847,7 +722,7 @@
         errorLine2="       ~~~~~~~~">
         <location
             file="src\main\res\layout\dialog_add_note.xml"
-            line="64"
+            line="57"
             column="8"/>
     </issue>
 
@@ -858,7 +733,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\webview_search.xml"
-            line="23"
+            line="22"
             column="4"/>
     </issue>
 
@@ -880,7 +755,7 @@
         errorLine2="   ~~~~~~~~~">
         <location
             file="src\main\res\layout\activity_kiwix_error.xml"
-            line="76"
+            line="71"
             column="4"/>
     </issue>
 
@@ -891,7 +766,7 @@
         errorLine2="   ~~~~~~~~~">
         <location
             file="src\main\res\layout\kiwix_search_widget.xml"
-            line="14"
+            line="13"
             column="4"/>
     </issue>
 
@@ -902,7 +777,7 @@
         errorLine2="   ~~~~~~~~~">
         <location
             file="src\main\res\layout\kiwix_search_widget.xml"
-            line="31"
+            line="28"
             column="4"/>
     </issue>
 
@@ -913,7 +788,7 @@
         errorLine2="   ~~~~~~~~~">
         <location
             file="src\main\res\layout\kiwix_search_widget.xml"
-            line="39"
+            line="35"
             column="4"/>
     </issue>
 
@@ -924,7 +799,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\section_list.xml"
-            line="24"
+            line="22"
             column="5"/>
     </issue>
 
@@ -935,7 +810,7 @@
         errorLine2="                         ~~~~~~~~">
         <location
             file="src\main\res\layout\dialog_add_note.xml"
-            line="74"
+            line="62"
             column="26"/>
     </issue>
 
@@ -946,7 +821,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\section_list.xml"
-            line="24"
+            line="22"
             column="5"/>
     </issue>
 
@@ -957,7 +832,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\res\layout\webview_search.xml"
-            line="27"
+            line="26"
             column="5"/>
     </issue>
 
@@ -968,7 +843,7 @@
         errorLine2="                  ~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\di\modules\ActivityBindingModule.java"
-            line="48"
+            line="46"
             column="19"/>
     </issue>
 
@@ -979,7 +854,7 @@
         errorLine2="                  ~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\di\modules\ActivityBindingModule.java"
-            line="52"
+            line="50"
             column="19"/>
     </issue>
 
@@ -990,29 +865,7 @@
         errorLine2="                  ~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\di\modules\ActivityBindingModule.java"
-            line="56"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  public abstract IntroActivity provideIntroActivity();"
-        errorLine2="                  ~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\di\modules\ActivityBindingModule.java"
-            line="60"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  public abstract SplashActivity provideSplashActivity();"
-        errorLine2="                  ~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\di\modules\ActivityBindingModule.java"
-            line="64"
+            line="54"
             column="19"/>
     </issue>
 
@@ -1023,7 +876,7 @@
         errorLine2="                  ~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\di\modules\ActivityBindingModule.java"
-            line="68"
+            line="58"
             column="19"/>
     </issue>
 
@@ -1034,7 +887,7 @@
         errorLine2="                  ~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\di\modules\ActivityBindingModule.java"
-            line="72"
+            line="62"
             column="19"/>
     </issue>
 
@@ -1045,7 +898,7 @@
         errorLine2="                  ~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\di\modules\ActivityBindingModule.java"
-            line="76"
+            line="66"
             column="19"/>
     </issue>
 
@@ -2024,7 +1877,7 @@
         errorLine2="                ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\CoreApp.java"
-            line="56"
+            line="58"
             column="17"/>
     </issue>
 
@@ -2035,7 +1888,7 @@
         errorLine2="                ~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\CoreApp.java"
-            line="60"
+            line="62"
             column="17"/>
     </issue>
 
@@ -2046,7 +1899,7 @@
         errorLine2="                                      ~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\CoreApp.java"
-            line="64"
+            line="66"
             column="39"/>
     </issue>
 
@@ -2057,7 +1910,7 @@
         errorLine2="                                   ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\CoreApp.java"
-            line="69"
+            line="71"
             column="36"/>
     </issue>
 
@@ -2068,7 +1921,7 @@
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\CoreApp.java"
-            line="160"
+            line="163"
             column="10"/>
     </issue>
 
@@ -2079,7 +1932,7 @@
         errorLine2="            ~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="187"
+            line="185"
             column="13"/>
     </issue>
 
@@ -2090,7 +1943,7 @@
         errorLine2="            ~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="189"
+            line="187"
             column="13"/>
     </issue>
 
@@ -2101,7 +1954,7 @@
         errorLine2="            ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="199"
+            line="197"
             column="13"/>
     </issue>
 
@@ -2112,7 +1965,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="208"
+            line="206"
             column="13"/>
     </issue>
 
@@ -2121,6 +1974,17 @@
         message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
         errorLine1="  protected ZimReaderContainer zimReaderContainer;"
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
+            line="210"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  protected NightModeConfig nightModeConfig;"
+        errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
             line="212"
@@ -2167,7 +2031,7 @@
         errorLine2="                                   ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="652"
+            line="651"
             column="36"/>
     </issue>
 
@@ -2178,7 +2042,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="765"
+            line="764"
             column="22"/>
     </issue>
 
@@ -2189,7 +2053,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="766"
+            line="765"
             column="5"/>
     </issue>
 
@@ -2200,7 +2064,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="767"
+            line="766"
             column="5"/>
     </issue>
 
@@ -2211,7 +2075,7 @@
         errorLine2="            ~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="769"
+            line="768"
             column="13"/>
     </issue>
 
@@ -2222,7 +2086,7 @@
         errorLine2="            ~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="773"
+            line="772"
             column="13"/>
     </issue>
 
@@ -2233,7 +2097,7 @@
         errorLine2="                                ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="773"
+            line="772"
             column="33"/>
     </issue>
 
@@ -2244,7 +2108,7 @@
         errorLine2="            ~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="830"
+            line="829"
             column="13"/>
     </issue>
 
@@ -2255,7 +2119,7 @@
         errorLine2="                                       ~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="840"
+            line="839"
             column="40"/>
     </issue>
 
@@ -2266,19 +2130,8 @@
         errorLine2="                              ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="990"
+            line="989"
             column="31"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  protected void openZimFile(File file) {"
-        errorLine2="                             ~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1028"
-            column="30"/>
     </issue>
 
     <issue
@@ -2288,7 +2141,7 @@
         errorLine2="                             ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1337"
+            line="1306"
             column="30"/>
     </issue>
 
@@ -2299,7 +2152,7 @@
         errorLine2="                                  ~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1355"
+            line="1324"
             column="35"/>
     </issue>
 
@@ -2310,7 +2163,7 @@
         errorLine2="                                     ~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1429"
+            line="1398"
             column="38"/>
     </issue>
 
@@ -2321,7 +2174,7 @@
         errorLine2="                                                                ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1459"
+            line="1428"
             column="65"/>
     </issue>
 
@@ -2332,7 +2185,7 @@
         errorLine2="                                     ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1553"
+            line="1522"
             column="38"/>
     </issue>
 
@@ -2343,7 +2196,7 @@
         errorLine2="                                      ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1581"
+            line="1549"
             column="39"/>
     </issue>
 
@@ -2354,7 +2207,7 @@
         errorLine2="                                       ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1729"
+            line="1696"
             column="40"/>
     </issue>
 
@@ -2365,7 +2218,7 @@
         errorLine2="                                                   ~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1729"
+            line="1696"
             column="52"/>
     </issue>
 
@@ -2376,7 +2229,7 @@
         errorLine2="                                   ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1734"
+            line="1701"
             column="36"/>
     </issue>
 
@@ -2387,7 +2240,7 @@
         errorLine2="                                  ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1750"
+            line="1717"
             column="35"/>
     </issue>
 
@@ -2398,7 +2251,7 @@
         errorLine2="                                     ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1774"
+            line="1741"
             column="38"/>
     </issue>
 
@@ -2409,7 +2262,7 @@
         errorLine2="                          ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1810"
+            line="1777"
             column="27"/>
     </issue>
 
@@ -2420,7 +2273,7 @@
         errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreMainActivity.java"
-            line="1823"
+            line="1790"
             column="24"/>
     </issue>
 
@@ -2431,7 +2284,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\settings\CorePrefsFragment.java"
-            line="76"
+            line="74"
             column="13"/>
     </issue>
 
@@ -2440,6 +2293,17 @@
         message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
         errorLine1="  protected StorageCalculator storageCalculator;"
         errorLine2="            ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\core\settings\CorePrefsFragment.java"
+            line="76"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  protected NightModeConfig nightModeConfig;"
+        errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\settings\CorePrefsFragment.java"
             line="78"
@@ -2464,7 +2328,7 @@
         errorLine2="                                      ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\settings\CorePrefsFragment.java"
-            line="132"
+            line="126"
             column="39"/>
     </issue>
 
@@ -2475,7 +2339,7 @@
         errorLine2="                                        ~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\settings\CorePrefsFragment.java"
-            line="189"
+            line="183"
             column="41"/>
     </issue>
 
@@ -2486,7 +2350,7 @@
         errorLine2="                                                                             ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\settings\CorePrefsFragment.java"
-            line="189"
+            line="183"
             column="78"/>
     </issue>
 
@@ -2497,7 +2361,7 @@
         errorLine2="                                       ~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\settings\CorePrefsFragment.java"
-            line="291"
+            line="261"
             column="40"/>
     </issue>
 
@@ -2508,7 +2372,7 @@
         errorLine2="    ~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\settings\CorePrefsFragment.java"
-            line="292"
+            line="262"
             column="5"/>
     </issue>
 
@@ -2541,7 +2405,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="52"
+            line="51"
             column="5"/>
     </issue>
 
@@ -2552,7 +2416,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="52"
+            line="51"
             column="31"/>
     </issue>
 
@@ -2563,7 +2427,7 @@
         errorLine2="                                          ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="58"
+            line="57"
             column="43"/>
     </issue>
 
@@ -2574,7 +2438,7 @@
         errorLine2="                                                        ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="58"
+            line="57"
             column="57"/>
     </issue>
 
@@ -2585,7 +2449,7 @@
         errorLine2="                              ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="106"
+            line="105"
             column="31"/>
     </issue>
 
@@ -2596,7 +2460,7 @@
         errorLine2="                                                           ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="106"
+            line="105"
             column="60"/>
     </issue>
 
@@ -2607,7 +2471,7 @@
         errorLine2="                                                                               ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="106"
+            line="105"
             column="80"/>
     </issue>
 
@@ -2618,7 +2482,7 @@
         errorLine2="                             ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="111"
+            line="110"
             column="30"/>
     </issue>
 
@@ -2629,7 +2493,7 @@
         errorLine2="                                           ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="111"
+            line="110"
             column="44"/>
     </issue>
 
@@ -2640,7 +2504,7 @@
         errorLine2="                                           ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="129"
+            line="128"
             column="44"/>
     </issue>
 
@@ -2651,7 +2515,7 @@
         errorLine2="                                       ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="131"
+            line="130"
             column="40"/>
     </issue>
 
@@ -2662,7 +2526,7 @@
         errorLine2="                                 ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\CoreWebViewClient.java"
-            line="133"
+            line="132"
             column="34"/>
     </issue>
 
@@ -2730,39 +2594,6 @@
             file="src\main\java\org\kiwix\kiwixmobile\core\settings\CustomSwitchPreference.java"
             line="61"
             column="29"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  public CustomViewPager(Context context) {"
-        errorLine2="                         ~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\intro\CustomViewPager.java"
-            line="36"
-            column="26"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  public CustomViewPager(Context context, AttributeSet attrs) {"
-        errorLine2="                         ~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\intro\CustomViewPager.java"
-            line="41"
-            column="26"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  public CustomViewPager(Context context, AttributeSet attrs) {"
-        errorLine2="                                          ~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\intro\CustomViewPager.java"
-            line="41"
-            column="43"/>
     </issue>
 
     <issue
@@ -3113,7 +2944,7 @@
         errorLine2="                                                                ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\error\ErrorActivity.java"
-            line="188"
+            line="180"
             column="65"/>
     </issue>
 
@@ -3335,17 +3166,6 @@
             file="src\main\java\org\kiwix\kiwixmobile\core\history\HistoryContract.java"
             line="36"
             column="24"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  protected void onCreate(Bundle savedInstanceState) {"
-        errorLine2="                          ~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\intro\IntroActivity.java"
-            line="83"
-            column="27"/>
     </issue>
 
     <issue
@@ -4642,7 +4462,7 @@
         errorLine2="                          ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="75"
+            line="74"
             column="27"/>
     </issue>
 
@@ -4653,7 +4473,7 @@
         errorLine2="                                ~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="114"
+            line="113"
             column="33"/>
     </issue>
 
@@ -4664,7 +4484,7 @@
         errorLine2="                                     ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="135"
+            line="134"
             column="38"/>
     </issue>
 
@@ -4675,7 +4495,7 @@
         errorLine2="                                       ~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="194"
+            line="193"
             column="40"/>
     </issue>
 
@@ -4686,7 +4506,7 @@
         errorLine2="                          ~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="215"
+            line="214"
             column="27"/>
     </issue>
 
@@ -4697,7 +4517,7 @@
         errorLine2="                                                 ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="215"
+            line="214"
             column="50"/>
     </issue>
 
@@ -4708,7 +4528,7 @@
         errorLine2="                                 ~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="254"
+            line="253"
             column="34"/>
     </issue>
 
@@ -4719,7 +4539,7 @@
         errorLine2="                                                        ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="254"
+            line="253"
             column="57"/>
     </issue>
 
@@ -4730,7 +4550,7 @@
         errorLine2="                                                                   ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="327"
+            line="326"
             column="68"/>
     </issue>
 
@@ -4741,7 +4561,7 @@
         errorLine2="                                     ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\search\SearchActivity.java"
-            line="348"
+            line="347"
             column="38"/>
     </issue>
 
@@ -4774,7 +4594,7 @@
         errorLine2="                              ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="62"
+            line="63"
             column="31"/>
     </issue>
 
@@ -4785,7 +4605,7 @@
         errorLine2="         ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="102"
+            line="103"
             column="10"/>
     </issue>
 
@@ -4796,7 +4616,7 @@
         errorLine2="                                ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="102"
+            line="103"
             column="33"/>
     </issue>
 
@@ -4807,7 +4627,7 @@
         errorLine2="         ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="106"
+            line="107"
             column="10"/>
     </issue>
 
@@ -4818,7 +4638,7 @@
         errorLine2="         ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="124"
+            line="117"
             column="10"/>
     </issue>
 
@@ -4829,7 +4649,7 @@
         errorLine2="                                    ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="124"
+            line="117"
             column="37"/>
     </issue>
 
@@ -4840,7 +4660,7 @@
         errorLine2="                              ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="133"
+            line="126"
             column="31"/>
     </issue>
 
@@ -4851,7 +4671,7 @@
         errorLine2="                                  ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="145"
+            line="138"
             column="35"/>
     </issue>
 
@@ -4862,7 +4682,7 @@
         errorLine2="                             ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="149"
+            line="142"
             column="30"/>
     </issue>
 
@@ -4873,7 +4693,18 @@
         errorLine2="         ~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
-            line="154"
+            line="147"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  public Flowable&lt;NightModeConfig.Mode> nightModes() {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\core\utils\SharedPreferenceUtil.java"
+            line="199"
             column="10"/>
     </issue>
 
@@ -5034,17 +4865,6 @@
     <issue
         id="UnknownNullness"
         message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  protected void onCreate(Bundle savedInstanceState) {"
-        errorLine2="                          ~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\core\splash\SplashActivity.java"
-            line="33"
-            column="27"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
         errorLine1="  public static String getFileNameFromUrl(String url) {"
         errorLine2="                ~~~~~~">
         <location
@@ -5071,7 +4891,7 @@
         errorLine2="                ~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\StyleUtils.java"
-            line="41"
+            line="34"
             column="17"/>
     </issue>
 
@@ -5082,7 +4902,7 @@
         errorLine2="                                           ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\StyleUtils.java"
-            line="41"
+            line="34"
             column="44"/>
     </issue>
 
@@ -5093,7 +4913,7 @@
         errorLine2="                ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\StyleUtils.java"
-            line="53"
+            line="46"
             column="17"/>
     </issue>
 
@@ -5104,7 +4924,7 @@
         errorLine2="                                     ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\StyleUtils.java"
-            line="53"
+            line="46"
             column="38"/>
     </issue>
 
@@ -5115,7 +4935,7 @@
         errorLine2="                                                  ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\StyleUtils.java"
-            line="53"
+            line="46"
             column="51"/>
     </issue>
 
@@ -5126,7 +4946,7 @@
         errorLine2="                ~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\StyleUtils.java"
-            line="58"
+            line="51"
             column="17"/>
     </issue>
 
@@ -5137,7 +4957,7 @@
         errorLine2="                                 ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\utils\StyleUtils.java"
-            line="58"
+            line="51"
             column="34"/>
     </issue>
 
@@ -5148,7 +4968,7 @@
         errorLine2="                       ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\TableDrawerAdapter.java"
-            line="133"
+            line="118"
             column="24"/>
     </issue>
 
@@ -5159,7 +4979,7 @@
         errorLine2="                       ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\TableDrawerAdapter.java"
-            line="143"
+            line="128"
             column="24"/>
     </issue>
 
@@ -5170,7 +4990,7 @@
         errorLine2="                        ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\TableDrawerAdapter.java"
-            line="145"
+            line="130"
             column="25"/>
     </issue>
 
@@ -5181,7 +5001,7 @@
         errorLine2="    ~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\TableDrawerAdapter.java"
-            line="150"
+            line="135"
             column="5"/>
     </issue>
 
@@ -5192,7 +5012,7 @@
         errorLine2="                      ~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\TableDrawerAdapter.java"
-            line="152"
+            line="137"
             column="23"/>
     </issue>
 
@@ -5203,7 +5023,7 @@
         errorLine2="           ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\TableDrawerAdapter.java"
-            line="173"
+            line="158"
             column="12"/>
     </issue>
 
@@ -5214,7 +5034,7 @@
         errorLine2="           ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\core\main\TableDrawerAdapter.java"
-            line="174"
+            line="159"
             column="12"/>
     </issue>
 

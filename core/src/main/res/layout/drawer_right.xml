@@ -5,5 +5,4 @@
   android:layout_height="match_parent"
   android:clickable="true"
   android:fitsSystemWindows="true"
-  android:focusable="true"
-  />
+  android:focusable="true" />

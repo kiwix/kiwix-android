@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.custom.download.effects
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
@@ -29,7 +29,7 @@ class SetPreferredStorageWithMostSpace @Inject constructor(
   private val storageCalculator: StorageCalculator,
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : SideEffect<Unit> {
-  override fun invokeWith(activity: Activity) {
+  override fun invokeWith(activity: AppCompatActivity) {
     ContextCompat.getExternalFilesDirs(activity, null)
       .filterNotNull()
       .maxBy(storageCalculator::availableBytes)

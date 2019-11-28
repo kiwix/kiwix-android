@@ -3,37 +3,30 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:fitsSystemWindows="true"
-  android:background="?attr/listBackground"
-  >
+  android:fitsSystemWindows="true">
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:theme="@style/AppTheme.AppBarOverlay"
-      app:layout_constraintTop_toTopOf="parent"
-      >
+      app:layout_constraintTop_toTopOf="parent">
 
       <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        />
+        android:layout_height="wrap_content"
+        app:popupTheme="@style/KiwixTheme"
+        app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
       android:id="@+id/content_frame"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="?attr/listBackground"
-      />
+      android:layout_height="match_parent" />
   </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

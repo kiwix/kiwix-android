@@ -27,6 +27,7 @@ import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -111,7 +112,7 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
     {
-      val effectResult = it.invokeWith(activity!!)
+      val effectResult = it.invokeWith(activity!! as AppCompatActivity)
       if (effectResult is ActionMode) {
         actionMode = effectResult
       }

@@ -38,7 +38,7 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
 
     override fun createViewHolder(parent: ViewGroup) =
       LibraryBookViewHolder(
-        parent.inflate(R.layout.library_item, false),
+        parent.inflate(R.layout.item_library, false),
         bookUtils,
         clickAction
       )

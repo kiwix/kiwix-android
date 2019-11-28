@@ -1,0 +1,35 @@
+<resources>
+
+    <!--Shape-->
+
+    <!--Material allows theming of a component’s shape through the customization of corner -->
+    <!--style and radius size. To systematically apply shape throughout your app, it helps to -->
+    <!--understand that components are categorized by size, grouped into categories of small, -->
+    <!--medium and large. Each component size group can be themed by overriding the Material -->
+    <!--Components attributes ?shapeAppearanceSmallComponent, ?shapeAppearanceMediumComponent -->
+    <!--and ?shapeAppearanceLargeComponent in your app's theme. Those attributes are already -->
+    <!--defined as default stylesoverridden for you in themes.xml and point to the styles in -->
+    <!--this file.-->
+
+    <!--Experiment with ShapeAppearance properties such as cornerFamily (either ‘cut’ or -->
+    <!--‘rounded’) and corner size. Alternatively, customize each ShapeAppearance on a -->
+    <!--per-corner basis with cornerFamilyTopLeft, cornerFamilyTopRight, cornerFamilyBottomLeft, -->
+    <!--cornerFamilyBottomRight and cornerSizeTopRight, cornerSizeTopLeft, cornerSizeBottomLeft -->
+    <!--and cornerSizeBottomRight.-->
+
+    <!--Shape Appearance for small components like chips, buttons, text fields and FABs-->
+    <style name="ShapeAppearance.KiwixTheme.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <!--Your custom shape here-->
+    </style>
+
+    <!--Shape Appearance for medium components like cards, alert dialogs-->
+    <style name="ShapeAppearance.KiwixTheme.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <!--Your custom shape here-->
+    </style>
+
+    <!--Shape Appearance for large components like side and bottom navigation drawers-->
+    <style name="ShapeAppearance.KiwixTheme.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <!--Your custom shape here-->
+    </style>
+
+</resources>

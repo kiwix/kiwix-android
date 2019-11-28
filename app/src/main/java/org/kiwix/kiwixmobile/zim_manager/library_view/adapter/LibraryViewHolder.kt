@@ -20,15 +20,15 @@ package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import android.view.View
 import kotlinx.android.synthetic.main.library_divider.divider_text
-import kotlinx.android.synthetic.main.library_item.creator
-import kotlinx.android.synthetic.main.library_item.date
-import kotlinx.android.synthetic.main.library_item.description
-import kotlinx.android.synthetic.main.library_item.favicon
-import kotlinx.android.synthetic.main.library_item.fileName
-import kotlinx.android.synthetic.main.library_item.language
-import kotlinx.android.synthetic.main.library_item.publisher
-import kotlinx.android.synthetic.main.library_item.size
-import kotlinx.android.synthetic.main.library_item.title
+import kotlinx.android.synthetic.main.item_library.creator
+import kotlinx.android.synthetic.main.item_library.date
+import kotlinx.android.synthetic.main.item_library.description
+import kotlinx.android.synthetic.main.item_library.favicon
+import kotlinx.android.synthetic.main.item_library.fileName
+import kotlinx.android.synthetic.main.item_library.language
+import kotlinx.android.synthetic.main.item_library.publisher
+import kotlinx.android.synthetic.main.item_library.size
+import kotlinx.android.synthetic.main.item_library.title
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap

@@ -18,10 +18,10 @@
 
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -29,7 +29,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 
 class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
   SideEffect<Unit> {
-  override fun invokeWith(activity: Activity) {
+  override fun invokeWith(activity: AppCompatActivity) {
     val selectedFileShareIntent = Intent()
     selectedFileShareIntent.action = Intent.ACTION_SEND_MULTIPLE
     selectedFileShareIntent.type = "application/octet-stream"

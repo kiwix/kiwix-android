@@ -20,9 +20,7 @@ package org.kiwix.kiwixmobile.core
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import org.kiwix.kiwixmobile.core.NightModeConfig.UiMode.OFF
-import org.kiwix.kiwixmobile.core.NightModeConfig.UiMode.ON
-import org.kiwix.kiwixmobile.core.NightModeConfig.UiMode.NOT_SET
+import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.SYSTEM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
@@ -36,9 +34,10 @@ class NightModeConfig @Inject constructor(
   }
 
   fun isNightModeActive() =
-    when (uiMode()) {
-      ON -> true
-      OFF, NOT_SET -> false
+    when (sharedPreferenceUtil.nightMode) {
+      Mode.ON -> true
+      Mode.OFF -> false
+      SYSTEM -> uiMode() == UiMode.ON
     }
 
   private fun setMode(nightMode: Mode) {

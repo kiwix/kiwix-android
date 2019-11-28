@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:animateLayoutChanges="true"
-  tools:context="org.kiwix.kiwixmobile.core.zim_manager.library_view.LibraryFragment"
+  tools:context="org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment"
   >
 
   <TextView

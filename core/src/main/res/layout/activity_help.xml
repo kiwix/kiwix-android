@@ -4,26 +4,21 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?attr/listBackground"
   android:fitsSystemWindows="true"
-  tools:context=".help.HelpActivity"
-  >
+  tools:context=".help.HelpActivity">
 
   <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/activity_help_appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay"
-    app:layout_constraintTop_toTopOf="parent"
-    >
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.appcompat.widget.Toolbar
       android:id="@+id/activity_help_toolbar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:theme="@style/AppTheme.AppBarOverlay"
-      app:popupTheme="@style/AppTheme.PopupOverlay"
-      />
+      android:layout_height="wrap_content"
+      app:popupTheme="@style/KiwixTheme"
+      app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
   </com.google.android.material.appbar.AppBarLayout>
 
   <ImageView
@@ -32,10 +27,9 @@
     android:layout_height="wrap_content"
     android:contentDescription="@string/send_feedback"
     android:padding="@dimen/activity_horizontal_margin"
-    app:layout_constraintTop_toBottomOf="@id/activity_help_appbar"
     app:layout_constraintStart_toStartOf="parent"
-    app:srcCompat="@drawable/ic_feedback_blue_24dp"
-    />
+    app:layout_constraintTop_toBottomOf="@id/activity_help_appbar"
+    app:srcCompat="@drawable/ic_feedback_blue_24dp" />
 
   <TextView
     android:id="@+id/activity_help_feedback_text_view"
@@ -47,16 +41,14 @@
     app:layout_constraintBottom_toBottomOf="@id/activity_help_feedback_image_view"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/activity_help_feedback_image_view"
-    app:layout_constraintTop_toTopOf="@id/activity_help_feedback_image_view"
-    />
+    app:layout_constraintTop_toTopOf="@id/activity_help_feedback_image_view" />
 
   <View
     android:id="@+id/activity_help_feedback_divider"
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="?android:attr/listDivider"
-    app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_image_view"
-    />
+    app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_image_view" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/activity_help_recycler_view"
@@ -66,6 +58,5 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_divider"
-    />
+    app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_divider" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,8 +17,8 @@
  */
 package org.kiwix.kiwixmobile.core.base
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 
 interface SideEffect<out T : Any?> {
-  fun invokeWith(activity: Activity): T
+  fun invokeWith(activity: AppCompatActivity): T
 }

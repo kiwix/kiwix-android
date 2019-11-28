@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.language.viewmodel
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -29,7 +29,7 @@ data class SaveLanguagesAndFinish(
   val languageDao: NewLanguagesDao
 ) : SideEffect<Unit> {
 
-  override fun invokeWith(activity: Activity) {
+  override fun invokeWith(activity: AppCompatActivity) {
     Flowable.fromCallable { languageDao.insert(languages) }
       .subscribeOn(Schedulers.io())
       .subscribe({

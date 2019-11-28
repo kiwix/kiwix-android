@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -29,7 +29,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 class OpenFile(private val bookOnDisk: BookOnDisk) :
   SideEffect<Unit> {
 
-  override fun invokeWith(activity: Activity) {
+  override fun invokeWith(activity: AppCompatActivity) {
     val file = bookOnDisk.file
     if (!file.canRead()) {
       activity.toast(R.string.error_file_not_found)

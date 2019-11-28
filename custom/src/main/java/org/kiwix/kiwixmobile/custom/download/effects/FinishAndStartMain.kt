@@ -18,14 +18,14 @@
 
 package org.kiwix.kiwixmobile.custom.download.effects
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import javax.inject.Inject
 
 class FinishAndStartMain @Inject constructor() : SideEffect<Unit> {
-  override fun invokeWith(activity: Activity) {
+  override fun invokeWith(activity: AppCompatActivity) {
     activity.finish()
     activity.start<CustomMainActivity>()
   }

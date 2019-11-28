@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <!--Top level theme to be used in AndroidManifest.xml-->
+  <style name="KiwixTheme" parent="Base.KiwixTheme" />
+
+  <!--Base custom theme which will be shared between both light and dark theme variants-->
+  <style name="Base.KiwixTheme" parent="Base.MaterialThemeBuilder">
+    <!--Material color attributes -->
+
+    <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
+    <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
+    <!--selection controls.-->
+    <item name="colorPrimary">@color/color_primary</item>
+    <item name="colorPrimaryVariant">?colorPrimary</item>
+    <item name="colorSecondary">?colorPrimary</item>
+    <item name="colorSecondaryVariant">?colorPrimary</item>
+
+    <!--colorBackground appears behind scrollable content and is used for the default window-->
+    <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
+    <!--and menus. colorError is used to indicate an error state for components such as-->
+    <!--text fields.-->
+    <item name="colorSurface">@color/color_surface</item>
+    <item name="android:colorBackground">?colorSurface</item>
+    <item name="colorError">@color/color_error</item>
+
+    <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
+    <!--on which they appear.-->
+    <item name="colorOnPrimary">@color/color_on_primary</item>
+    <item name="colorOnSecondary">?colorOnPrimary</item>
+    <item name="colorOnSurface">@color/color_on_surface</item>
+    <item name="colorOnBackground">?colorOnSurface</item>
+    <item name="colorOnError">@color/color_on_error</item>
+
+    <!--Material type attributes-->
+    <item name="textAppearanceHeadline1">@style/TextAppearance.KiwixTheme.Headline1</item>
+    <item name="textAppearanceHeadline2">@style/TextAppearance.KiwixTheme.Headline2</item>
+    <item name="textAppearanceHeadline3">@style/TextAppearance.KiwixTheme.Headline3</item>
+    <item name="textAppearanceHeadline4">@style/TextAppearance.KiwixTheme.Headline4</item>
+    <item name="textAppearanceHeadline5">@style/TextAppearance.KiwixTheme.Headline5</item>
+    <item name="textAppearanceHeadline6">@style/TextAppearance.KiwixTheme.Headline6</item>
+    <item name="textAppearanceSubtitle1">@style/TextAppearance.KiwixTheme.Subtitle1</item>
+    <item name="textAppearanceSubtitle2">@style/TextAppearance.KiwixTheme.Subtitle2</item>
+    <item name="textAppearanceBody1">@style/TextAppearance.KiwixTheme.Body1</item>
+    <item name="textAppearanceBody2">@style/TextAppearance.KiwixTheme.Body2</item>
+    <item name="textAppearanceButton">@style/TextAppearance.KiwixTheme.Button</item>
+    <item name="textAppearanceCaption">@style/TextAppearance.KiwixTheme.Caption</item>
+    <item name="textAppearanceOverline">@style/TextAppearance.KiwixTheme.Overline</item>
+
+    <!--Material shape attributes-->
+    <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.KiwixTheme.SmallComponent
+    </item>
+    <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.KiwixTheme.MediumComponent
+    </item>
+    <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.KiwixTheme.LargeComponent
+    </item>
+
+    <!--Component styles-->
+    <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
+    <item name="bottomSheetDialogTheme">@style/ThemeOverlay.KiwixTheme.BottomSheetDialog</item>
+    <item name="navigationViewStyle">@style/Widget.KiwixTheme.NavigationView</item>
+    <item name="toolbarStyle">@style/Widget.KiwixTheme.Toolbar</item>
+    <item name="tabStyle">@style/Widget.KiwixTheme.TabLayout</item>
+  </style>
+
+  <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+    <item name="android:statusBarColor" tools:ignore="NewApi">@color/black</item>
+    <item name="actionModeBackground">@color/actionModeBackground</item>
+    <item name="windowActionModeOverlay">true</item>
+
+    <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
+    <item name="colorPrimaryDark">?colorPrimaryVariant</item>
+    <item name="colorAccent">?colorSecondary</item>
+
+  </style>
+
+</resources>

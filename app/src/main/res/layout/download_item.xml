@@ -41,7 +41,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="start"
-      android:textAppearance="?android:attr/textAppearanceSmall"
+      style="@style/list_item_body"
       tools:text="Description" />
 
     <ProgressBar
@@ -62,14 +62,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        style="@style/list_item_body"
         tools:text="In Progress" />
 
       <TextView
         android:id="@+id/eta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        style="@style/list_item_body"
         tools:text="1min 10secs" />
     </LinearLayout>
   </LinearLayout>

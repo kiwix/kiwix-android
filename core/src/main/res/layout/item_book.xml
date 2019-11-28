@@ -45,12 +45,11 @@
 
   <TextView
     android:id="@+id/item_book_title"
+    style="@style/list_item_title"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:textColor="@color/textDarkPrimary"
-    android:textSize="16sp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/item_book_icon"
     app:layout_constraintTop_toBottomOf="@+id/vertical_padding"
@@ -58,42 +57,42 @@
 
   <TextView
     android:id="@+id/item_book_date"
+    style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textColor="@color/textDarkSecondary"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
     app:layout_constraintTop_toBottomOf="@id/item_book_title"
     tools:text="1 Jan 2018" />
 
   <TextView
     android:id="@+id/item_book_size"
+    style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:textColor="@color/textDarkSecondary"
     app:layout_constraintStart_toEndOf="@id/item_book_date"
     app:layout_constraintTop_toTopOf="@id/item_book_date"
     tools:text="20 GB" />
 
   <TextView
     android:id="@+id/item_book_article_count"
+    style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:textColor="@color/textDarkSecondary"
     app:layout_constraintStart_toEndOf="@id/item_book_size"
     app:layout_constraintTop_toTopOf="@id/item_book_size"
     tools:text="10.1 K articles" />
 
   <TextView
     android:id="@+id/item_book_description"
+    style="@style/list_item_body"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
     android:layout_marginRight="8dp"
-    android:textColor="@color/textDarkSecondary"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
     app:layout_constraintTop_toBottomOf="@id/item_book_date"
@@ -101,6 +100,7 @@
 
   <TextView
     android:id="@+id/item_book_label_picture"
+    style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/border_label_picture"
@@ -114,6 +114,7 @@
 
   <TextView
     android:id="@+id/item_book_label_video"
+    style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
