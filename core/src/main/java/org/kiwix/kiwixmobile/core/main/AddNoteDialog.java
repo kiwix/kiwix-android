@@ -75,7 +75,7 @@ public class AddNoteDialog extends DialogFragment
     Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
   public static final String TAG = "AddNoteDialog";
 
-  @BindView(R2.id.add_note_toolbar)
+  @BindView(R2.id.toolbar)
   Toolbar toolbar;          // Displays options for the note dialog
   @BindView(R2.id.add_note_text_view)
   TextView addNoteTextView; // Displays article title

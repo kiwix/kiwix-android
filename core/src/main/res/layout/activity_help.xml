@@ -7,19 +7,7 @@
   android:fitsSystemWindows="true"
   tools:context=".help.HelpActivity">
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/activity_help_appbar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent">
-
-    <androidx.appcompat.widget.Toolbar
-      android:id="@+id/activity_help_toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:popupTheme="@style/KiwixTheme"
-      app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
-  </com.google.android.material.appbar.AppBarLayout>
+  <include layout="@layout/layout_standard_app_bar" />
 
   <ImageView
     android:id="@+id/activity_help_feedback_image_view"
@@ -28,7 +16,7 @@
     android:contentDescription="@string/send_feedback"
     android:padding="@dimen/activity_horizontal_margin"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/activity_help_appbar"
+    app:layout_constraintTop_toBottomOf="@+id/app_bar"
     app:srcCompat="@drawable/ic_feedback_blue_24dp" />
 
   <TextView

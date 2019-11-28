@@ -161,7 +161,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R2.id.activity_main_root)
   ConstraintLayout root;
-  @BindView(R2.id.activity_main_toolbar)
+  @BindView(R2.id.toolbar)
   Toolbar toolbar;
   @BindView(R2.id.activity_main_back_to_top_fab)
   FloatingActionButton backToTopButton;

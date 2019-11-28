@@ -7,19 +7,7 @@
   android:fitsSystemWindows="true"
   tools:context=".webserver.ZimHostActivity">
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/zimHostAppBarLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent">
-
-    <androidx.appcompat.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:popupTheme="@style/KiwixTheme"
-      app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
-  </com.google.android.material.appbar.AppBarLayout>
+  <include layout="@layout/layout_standard_app_bar" />
 
   <TextView
     android:id="@+id/server_textView"
@@ -30,7 +18,7 @@
     android:layout_marginTop="16dp"
     android:text="@string/server_textview_default_message"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/zimHostAppBarLayout" />
+    app:layout_constraintTop_toBottomOf="@+id/app_bar" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_view_zim_host"

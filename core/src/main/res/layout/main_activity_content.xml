@@ -17,14 +17,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-      <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_main_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/KiwixTheme"
-        app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+      <include layout="@layout/layout_toolbar" />
 
       <org.kiwix.kiwixmobile.core.main.AnimatedProgressBar
         android:id="@+id/activity_main_progress_view"
@@ -32,7 +25,7 @@
         android:layout_height="@dimen/progress_view_height"
         app:backgroundColor="?colorOnSurface"
         app:bidirectionalAnimate="false"
-        app:layout_constraintBottom_toBottomOf="@id/activity_main_toolbar"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:progressColor="@color/accent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </com.google.android.material.appbar.AppBarLayout>

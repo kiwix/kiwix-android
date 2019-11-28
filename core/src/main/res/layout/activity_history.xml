@@ -5,19 +5,7 @@
   android:layout_height="match_parent"
   android:fitsSystemWindows="true">
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/appbar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent">
-
-    <androidx.appcompat.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:popupTheme="@style/KiwixTheme"
-      app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
-  </com.google.android.material.appbar.AppBarLayout>
+  <include layout="@layout/layout_standard_app_bar" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_view"
@@ -27,6 +15,6 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/appbar" />
+    app:layout_constraintTop_toBottomOf="@id/app_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

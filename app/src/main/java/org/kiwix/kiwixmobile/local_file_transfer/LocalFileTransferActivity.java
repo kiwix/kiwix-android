@@ -85,7 +85,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
   @Inject WifiDirectManager wifiDirectManager;
   @Inject LocationManager locationManager;
 
-  @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
+  @BindView(R.id.toolbar) Toolbar actionBar;
   @BindView(R.id.text_view_device_name) TextView deviceName;
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
   @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;

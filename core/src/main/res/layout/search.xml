@@ -15,12 +15,7 @@
       android:layout_width="match_parent"
       android:layout_height="?android:attr/actionBarSize">
 
-      <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:popupTheme="@style/KiwixTheme"
-        app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+      <include layout="@layout/layout_toolbar" />
     </RelativeLayout>
 
     <ListView

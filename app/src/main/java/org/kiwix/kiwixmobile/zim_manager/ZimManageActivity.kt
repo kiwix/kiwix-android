@@ -23,10 +23,10 @@ import android.provider.Settings.System
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
-import kotlinx.android.synthetic.main.zim_manager.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -93,6 +93,7 @@ class ZimManageActivity : BaseActivity() {
   }
 
   private fun setUpToolbar() {
+    val toolbar = findViewById<Toolbar>(R.id.toolbar)
     setSupportActionBar(toolbar)
     supportActionBar!!.setHomeButtonEnabled(true)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)

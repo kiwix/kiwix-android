@@ -5,20 +5,7 @@
   android:layout_height="match_parent"
   android:background="@android:color/transparent">
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/app_bar_add_note_dialog"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
-
-    <androidx.appcompat.widget.Toolbar
-      android:id="@+id/add_note_toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"></androidx.appcompat.widget.Toolbar>
-
-  </com.google.android.material.appbar.AppBarLayout>
+  <include layout="@layout/layout_standard_app_bar" />
 
   <ScrollView
     android:layout_width="0dp"
@@ -26,7 +13,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/app_bar_add_note_dialog">
+    app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
     <LinearLayout
       android:layout_width="match_parent"
