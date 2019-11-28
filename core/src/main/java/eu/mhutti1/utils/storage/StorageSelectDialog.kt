@@ -43,11 +43,6 @@ class StorageSelectDialog : DialogFragment() {
 
   @Inject lateinit var storageCalculator: StorageCalculator
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    // setStyle(STYLE_NORMAL, StyleUtils.dialogStyle())
-    super.onCreate(savedInstanceState)
-  }
-
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,

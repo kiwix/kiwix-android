@@ -22,6 +22,7 @@
 
   <TextView
     android:id="@+id/title"
+    style="@style/list_item_title"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -29,7 +30,6 @@
     android:alpha="0.87"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:textAppearance="?android:attr/textAppearanceMedium"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/favicon"

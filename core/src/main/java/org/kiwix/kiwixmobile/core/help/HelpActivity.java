@@ -58,8 +58,7 @@ public class HelpActivity extends BaseActivity {
     populateMap(R.string.help_5, R.array.description_help_5);
 
     recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-    HelpAdapter helpAdapter = new HelpAdapter(titleDescriptionMap);
-    recyclerView.setAdapter(helpAdapter);
+    recyclerView.setAdapter(new HelpAdapter(titleDescriptionMap));
   }
 
   @OnClick({ R2.id.activity_help_feedback_text_view, R2.id.activity_help_feedback_image_view })

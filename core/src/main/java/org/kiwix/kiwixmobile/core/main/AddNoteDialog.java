@@ -102,9 +102,6 @@ public class AddNoteDialog extends DialogFragment
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     CoreApp.getCoreComponent().inject(this);
-    //setStyle(DialogFragment.STYLE_NORMAL,
-    //  sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night
-    //    : R.style.AddNoteDialogStyle);
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
     zimFileName = zimReaderContainer.getZimCanonicalPath();
