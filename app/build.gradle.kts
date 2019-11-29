@@ -39,7 +39,7 @@ val buildNumber get() = System.getenv("TRAVIS_BUILD_NUMBER") ?: "dev"
 android {
 
   defaultConfig {
-    // archivesBaseName = "$buildNumber"
+    base.archivesBaseName = buildNumber
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = generateVersionCode()
