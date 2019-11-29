@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.custom.download.effects
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import io.mockk.every
 import io.mockk.mockk
@@ -35,7 +35,7 @@ internal class SetPreferredStorageWithMostSpaceTest {
   fun `invokeWith sets the storage with the most space as preferred`() {
     val storageCalculator = mockk<StorageCalculator>()
     val sharedPreferenceUtil = mockk<SharedPreferenceUtil>()
-    val activity = mockk<Activity>()
+    val activity = mockk<AppCompatActivity>()
     mockkStatic(ContextCompat::class)
     val directoryWithMoreStorage = mockk<File>()
     val directoryWithLessStorage = mockk<File>()
