@@ -16,7 +16,7 @@ with additional meta-data. This is the version for Android.
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
 pieces in Java).
 
-[![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=develop)](https://travis-ci.org/kiwix/kiwix-android)
+[![Build Status](https://travis-ci.com/kiwix/kiwix-android.svg?branch=develop)](https://travis-ci.com/kiwix/kiwix-android)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)

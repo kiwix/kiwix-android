@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_URI
+import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
 import java.io.FileDescriptor
@@ -95,8 +96,14 @@ class ZimFileReader constructor(
   fun searchSuggestions(prefix: String, count: Int) =
     jniKiwixReader.searchSuggestions(prefix, count)
 
-  fun getNextSuggestion(): String? =
-    valueOfJniStringAfter(jniKiwixReader::getNextSuggestion)
+  fun getNextSuggestion(): SearchSuggestion? {
+    val title = JNIKiwixString()
+    val url = JNIKiwixString()
+
+    return if (jniKiwixReader.getNextSuggestion(title, url))
+      SearchSuggestion(title.value, url.value)
+    else null
+  }
 
   fun getPageUrlFrom(title: String): String? =
     valueOfJniStringAfter { jniKiwixReader.getPageUrlFromTitle(title, it) }
