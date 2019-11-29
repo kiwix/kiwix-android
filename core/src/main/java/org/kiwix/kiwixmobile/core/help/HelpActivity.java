@@ -68,7 +68,7 @@ public class HelpActivity extends BaseActivity {
       "?subject=" + Uri.encode(
       "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
     Uri uri = Uri.parse(uriText);
-    intent.setDataAndType(uri, "plain/text");
+    intent.setData(uri);
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"));
   }
 
