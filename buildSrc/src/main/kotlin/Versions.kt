@@ -128,7 +128,7 @@ object Versions {
 
   const val io_mockk: String = "1.9" // available: "1.9.3"
 
-  const val kiwixlib: String = "8.1.0"
+  const val kiwixlib: String = "8.2.1"
 
   const val material: String = "1.0.0"
 
