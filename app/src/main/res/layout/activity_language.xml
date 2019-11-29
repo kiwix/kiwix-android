@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:fitsSystemWindows="true">
 
-  <include layout="@layout/layout_standard_app_bar"/>
+  <include layout="@layout/layout_standard_app_bar" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/language_recycler_view"
