@@ -8,28 +8,26 @@ buildscript {
   }
 
   dependencies {
-    classpath Libs.objectbox_gradle_plugin
-    classpath Libs.butterknife_gradle_plugin
+    classpath(Libs.objectbox_gradle_plugin)
+    classpath(Libs.butterknife_gradle_plugin)
   }
 }
-
-apply plugin: 'com.android.library'
-apply plugin: KiwixConfigurationPlugin
-apply plugin: 'io.objectbox'
-apply plugin: 'com.jakewharton.butterknife'
+plugins {
+  `android-library`
+}
+plugins.apply(KiwixConfigurationPlugin::class)
+apply(plugin = "io.objectbox")
+apply(plugin = "com.jakewharton.butterknife")
 
 android {
   buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    getByName("release") {
+      isMinifyEnabled = false
     }
   }
 }
 
-private boolean shouldUseLocalVersion() {
-  file("./libs").exists()
-}
+fun shouldUseLocalVersion() = File(projectDir, "libs").exists()
 
 dependencies {
 
@@ -40,24 +38,23 @@ dependencies {
   if (!shouldUseLocalVersion()) {
     api(Libs.kiwixlib)
   } else {
-    implementation 'com.getkeepsafe.relinker:relinker:1.3.1'
-    implementation fileTree(include: ['*.aar'], dir: 'libs')
+    implementation("com.getkeepsafe.relinker:relinker:1.3.1")
+    implementation(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
   }
 
   // Android Support
   implementation(Libs.cardview)
 
-
   // SquiDB
   implementation(Libs.squidb)
   implementation(Libs.squidb_annotations)
-  kapt(Libs.squidb_processor)
+  add("kapt", Libs.squidb_processor)
 
   // Square
   implementation(Libs.converter_simplexml) {
-    exclude group: "xpp3", module: "xpp3"
-    exclude group: "stax", module: "stax-api"
-    exclude group: "stax", module: "stax"
+    exclude(group = "xpp3", module = "xpp3")
+    exclude(group = "stax", module = "stax-api")
+    exclude(group = "stax", module = "stax")
   }
 
   // Leak canary

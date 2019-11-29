@@ -31,7 +31,7 @@ import org.gradle.plugin.use.PluginDependencySpec
 object Versions {
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.6.1"
 
-  const val com_github_triplet_play_gradle_plugin: String = "2.4.1" // available: "2.4.2"
+  const val com_github_triplet_play_gradle_plugin: String = "2.5.0" // available: "2.4.2"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
