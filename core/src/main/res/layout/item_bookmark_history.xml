@@ -19,7 +19,7 @@
     app:layout_constraintEnd_toStartOf="@id/title"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:src="@mipmap/kiwix_icon_round"
+    tools:src="@mipmap/ic_launcher_round"
     />
 
   <TextView

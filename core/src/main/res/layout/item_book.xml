@@ -41,7 +41,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toEndOf="@id/itemBookCheckbox"
     app:layout_constraintTop_toTopOf="parent"
-    tools:src="@mipmap/kiwix_icon_round" />
+    tools:src="@mipmap/ic_launcher_round" />
 
   <TextView
     android:id="@+id/item_book_title"

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_help">วิธีใช้</string>
   <string name="menu_home">หน้าแรก</string>
@@ -42,7 +42,6 @@
   <string name="download_no_space">พื้นที่ไม่เพียงพอในการดาวน์โหลดไฟล์นี้</string>
   <string name="help_10">คุณสามารถดาวน์โหลดไฟล์ ZIM ที่คุณเลือกในแอพหรือเลือกไฟล์ที่คุณต้องการและดาวน์โหลดจากคอมพิวเตอร์เดสก์ท็อปอย่างระมัดระวังก่อนที่จะถ่ายโอนไฟล์ ZIM ไปยังเอสดีการ์ดของคุณ</string>
   <string name="help_11">การดาวน์โหลดไฟล์ ZIM ในแอพจะอยู่ในไดเรกทอรีจัดเก็บข้อมูลภายนอกในโฟลเดอร์ชื่อ Kiwix</string>
-  <string name="help_12">จะใช้ไฟล์ ZIM ขนาดใหญ่ได้อย่างไร ?</string>
   <string name="delete_zim_failed">ขออภัยเราไม่สามารถลบไฟล์นี้ คุณควรลองใช้โปรแกรมจัดการไฟล์แทน</string>
   <string name="external_storage">ภายนอก</string>
   <string name="confirm_stop_download_title">หยุดดาวน์โหลดหรือไม่?</string>
@@ -51,7 +50,6 @@
   <string name="external_link_popup_dialog_title">กำลังเข้าสู่ลิงค์ภายนอก</string>
   <string name="external_link_popup_dialog_message">คุณกำลังป้อนลิงก์ภายนอก ซึ่งอาจทำให้มีค่าใช้จ่ายเพิ่มเติมสำหรับการถ่ายโอนข้อมูลหรือจะไม่ทำงานเมื่อคุณออฟไลน์ คุณต้องการดำเนินการต่อหรือไม่?</string>
   <string name="do_not_ask_anymore">อย่าถามอีก</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -63,14 +61,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

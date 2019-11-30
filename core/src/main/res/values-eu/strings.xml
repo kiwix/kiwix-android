@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Edukia Lortu</string>
   <string name="menu_help">Laguntza</string>
@@ -102,12 +102,6 @@
   <string name="help_9">\u2022 Beste edukiak Wikileaks edo Wikisource gisa baliogarriak dira ere.</string>
   <string name="help_10">ZIM artxiboak in-app-aren bidez jaitsi ditzakezu edo aukeratu deskargatu nahi dituzunak eta ordengailuan egin, ZIM artxiboak SD-ra aldatu baino lehen.</string>
   <string name="help_11">In-app-eko jaitsitako ZIM artxiboak kanpoko memorian daude, Kiwix deritzon karpeta batean.</string>
-  <string name="help_12">Nola erabili ZIM artxibo handiak?</string>
-  <string name="help_13">Zure ZIM artxiboa 4GB baino handiagoa bada, agian ezin izango duzu zure memorian gorde sistemaren mugaketengatik.</string>
-  <string name="help_14">Automatikoki artxibo handiagoak deskargatzen ditu aplikazioan, hauek zuretzat banatzen ditu.</string>
-  <string name="help_15">Beste gailuren batean jaisten bazabiltza, ZIM artxiboa banatu beharko duzu hurrengo softwarea erabiltzen:</string>
-  <string name="help_17">\u2022 Apple Macen OSX: Banatu eta Kontaktua</string>
-  <string name="help_19">Oharra: zure artxiboen izena my_big_file.zimaa, my_big_file.zimab… izan behar dute.</string>
   <string name="pref_storage">Biltegia</string>
   <string name="pref_current_folder">Oraingo Artxiboa</string>
   <string name="path_not_writable">Ezin da nahi den direktoriora sartu, erabilitako bolereekin. Hau konpontzeko hautatu nahi den direktorioa app-eko doikuntza atalean.</string>
@@ -141,7 +135,6 @@
   <string name="do_not_ask_anymore">Ez galdetu berriz</string>
   <string name="your_languages">Hautatutako hizkuntzak:</string>
   <string name="other_languages">Beste hizkuntzak:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -153,14 +146,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

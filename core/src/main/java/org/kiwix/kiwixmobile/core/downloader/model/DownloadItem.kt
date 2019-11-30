@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.downloader.model
 
+import android.content.Context
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.ADDED
@@ -42,6 +43,8 @@ data class DownloadItem(
   val eta: Seconds,
   val downloadState: DownloadState
 ) {
+
+  val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
 
   constructor(downloadModel: DownloadModel) : this(
     downloadModel.downloadId,
@@ -84,4 +87,12 @@ sealed class DownloadState(val stringId: Int) {
   data class Failed(val reason: Error) : DownloadState(R.string.failed_state)
 
   override fun toString(): String = javaClass.simpleName
+
+  fun toReadableState(context: Context): CharSequence = when (this) {
+    is Failed -> context.getString(stringId, reason.name)
+    Pending,
+    Running,
+    Paused,
+    Successful -> context.getString(stringId)
+  }
 }

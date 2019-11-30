@@ -30,6 +30,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.annotations.NonNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
@@ -129,10 +130,13 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
             zimReaderContainer.searchSuggestions(query, 200);
             String suggestion;
             String suggestionUrl;
+            SearchSuggestion results;
             List<String> alreadyAdded = new ArrayList<>();
-            while ((suggestion = zimReaderContainer.getNextSuggestion()) != null) {
-              suggestionUrl = zimReaderContainer.getPageUrlFromTitle(suggestion);
-              if (!alreadyAdded.contains(suggestionUrl)) {
+            while ((results = zimReaderContainer.getNextSuggestion()) != null) {
+                suggestion = results.getTitle();
+                suggestionUrl = results.getUrl();
+
+                if (!alreadyAdded.contains(suggestionUrl)) {
                 alreadyAdded.add(suggestionUrl);
                 data.add(suggestion);
               }

@@ -607,7 +607,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
         tempVisitCount = 0;
         visitCounterPref.setCount(tempVisitCount);
       })
-      .setIcon(ContextCompat.getDrawable(this, R.mipmap.kiwix_icon))
+      .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
       .show();
   }
 
@@ -1025,7 +1025,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       .show();
   }
 
-  protected void openZimFile(File file) {
+  protected void openZimFile(@NonNull File file) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (file.exists()) {
         openAndSetInContainer(file);
@@ -1088,12 +1088,10 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
-        if (grantResults.length > 0
-          && grantResults[0] == PERMISSION_GRANTED) {
-          finish();
-          Intent newZimFile = Intents.internal(CoreMainActivity.class);
-          newZimFile.setData(Uri.fromFile(file));
-          startActivity(newZimFile);
+        if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+          if (file != null) {
+            openZimFile(file);
+          }
         } else {
           AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
           builder.setMessage(getResources().getString(R.string.reboot_message));
@@ -1218,7 +1216,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
       }
     }, 300);
   }
-
 
   @OnClick(R2.id.bottom_toolbar_bookmark)
   public void toggleBookmark() {
@@ -1602,7 +1599,7 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
     return true;
   }
 
-  protected boolean urlIsInvalid(){
+  protected boolean urlIsInvalid() {
     return getCurrentWebView().getUrl() == null;
   }
 
@@ -1824,14 +1821,10 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   }
 
   private void searchFiles() {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
-      Manifest.permission.READ_EXTERNAL_STORAGE)
-      != PERMISSION_GRANTED) {
-      ActivityCompat.requestPermissions(this,
-        new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
-        REQUEST_READ_STORAGE_PERMISSION);
-    } else {
+    if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       scanStorageForZims();
+    } else {
+      requestExternalStoragePermission();
     }
   }
 

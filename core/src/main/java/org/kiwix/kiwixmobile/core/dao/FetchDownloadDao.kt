@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity_
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -79,7 +78,7 @@ class FetchDownloadDao @Inject constructor(
   }
 
   fun addIfDoesNotExist(
-    metaLinkNetworkEntity: MetaLinkNetworkEntity,
+    url: String,
     book: Book,
     downloadRequester: DownloadRequester
   ) {
@@ -88,7 +87,7 @@ class FetchDownloadDao @Inject constructor(
         insert(
           downloadRequester.enqueue(
             DownloadRequest(
-              metaLinkNetworkEntity,
+              url,
               book
             )
           ),

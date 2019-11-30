@@ -19,11 +19,14 @@
 package plugin
 
 import Libs
+import com.android.build.VariantOutput
 import com.android.build.gradle.AppExtension
+import com.android.build.gradle.api.ApkVariantOutput
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.project
+import java.io.File
 
 class AppConfigurer {
   fun configure(target: Project) {
@@ -31,22 +34,47 @@ class AppConfigurer {
       defaultConfig {
         vectorDrawables.useSupportLibrary = true
       }
+      signingConfigs {
+        create("releaseSigningConfig") {
+          storeFile = File(target.rootDir, "kiwix-android.keystore")
+          storePassword = System.getenv("KEY_STORE_PASSWORD") ?: "000000"
+          keyAlias = System.getenv("KEY_ALIAS") ?: "keystore"
+          keyPassword = System.getenv("KEY_PASSWORD") ?: "000000"
+        }
+      }
+      buildTypes {
+        getByName("release") {
+          isMinifyEnabled = true
+          isShrinkResources = true
+          signingConfig = signingConfigs.getByName("releaseSigningConfig")
+          proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            File("${target.rootDir}/app", "proguard-rules.pro")
+          )
+        }
+      }
       dexOptions {
         javaMaxHeapSize = "4g"
       }
+      val abiCodes = mapOf("arm64-v8a" to 6, "x86" to 3, "x86_64" to 4, "armeabi-v7a" to 5)
       splits {
         abi {
           isEnable = true
           reset()
-          include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
+          include(*abiCodes.keys.toTypedArray())
           isUniversalApk = true
+        }
+      }
+      applicationVariants.all {
+        outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
+          val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 0
+          output.versionCodeOverride = (abiVersionCode * 1_000_000) + output.versionCode
         }
       }
       aaptOptions {
         cruncherEnabled = true
       }
     }
-
     configureDependencies(target)
   }
 
