@@ -159,6 +159,17 @@ public class KiwixWebView extends VideoEnabledWebView {
   }
 
   static class SaveHandler extends Handler {
+    private String getDecodedFileName(String url, String src) {
+      String fileName = "";
+      if (url != null) {
+        fileName = url.substring(url.lastIndexOf('/') + 1);
+      }
+      // If url is not a valid file name use src if it isn't null
+      if (!fileName.contains(".") && src != null) {
+        fileName = src.substring(src.lastIndexOf('/') + 1);
+      }
+      return fileName.substring(fileName.indexOf("%3A") + 1);
+    }
 
     @Override
     public void handleMessage(Message msg) {
@@ -166,10 +177,8 @@ public class KiwixWebView extends VideoEnabledWebView {
       String src = (String) msg.getData().get("src");
 
       if (url != null || src != null) {
-        url = url == null ? src : url;
-        url = url.substring(url.lastIndexOf('/') + 1);
-        url = url.substring(url.indexOf("%3A") + 1);
-        int dotIndex = url.lastIndexOf('.');
+        String fileName = getDecodedFileName(url, src);
+        int dotIndex = fileName.lastIndexOf('.');
 
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
@@ -178,10 +187,10 @@ public class KiwixWebView extends VideoEnabledWebView {
           root = CoreApp.getInstance().getExternalMediaDirs()[0];
         }
 
-        File storageDir = new File(root, url);
-        String newUrl = url;
+        File storageDir = new File(root, fileName);
+        String newUrl = fileName;
         for (int i = 2; storageDir.exists(); i++) {
-          newUrl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex);
+          newUrl = fileName.substring(0, dotIndex) + "_" + i + fileName.substring(dotIndex);
           storageDir = new File(root, newUrl);
         }
 
