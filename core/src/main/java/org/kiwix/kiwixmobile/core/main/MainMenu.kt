@@ -33,7 +33,6 @@ import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.Constants
 import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE
-import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity
 
 const val REQUEST_FILE_SEARCH = 1236
 
@@ -65,6 +64,7 @@ class MainMenu(
     fun onReadAloudMenuClicked()
     fun onFullscreenMenuClicked()
     fun onSupportKiwixMenuClicked()
+    fun onHostBooksMenuClicked()
   }
 
   init {
@@ -108,7 +108,7 @@ class MainMenu(
         Constants.REQUEST_HISTORY_ITEM_CHOSEN
       )
     }
-    hostBooks.menuItemClickListener { activity.start<ZimHostActivity>() }
+    hostBooks.menuItemClickListener { menuClickListener.onHostBooksMenuClicked() }
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
     bookmarks.menuItemClickListener { menuClickListener.onBookmarksMenuClicked() }
     randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }

@@ -74,6 +74,7 @@ class CustomMainActivity : CoreMainActivity() {
     val onCreateOptionsMenu = super.onCreateOptionsMenu(menu)
     menu?.findItem(R.id.menu_help)?.isVisible = false
     menu?.findItem(R.id.menu_openfile)?.isVisible = false
+    menu?.findItem(R.id.menu_host_books)?.isVisible = false
     return onCreateOptionsMenu
   }
 
@@ -94,6 +95,6 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun manageZimFiles(tab: Int) {
-    TODO("not implemented")
+    // Do nothing
   }
 }

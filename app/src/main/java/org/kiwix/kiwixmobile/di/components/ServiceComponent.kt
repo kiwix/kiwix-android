@@ -16,11 +16,25 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.wifi_hotspot;
+package org.kiwix.kiwixmobile.di.components
 
-public interface IpAddressCallbacks {
+import android.app.Service
+import dagger.BindsInstance
+import dagger.Subcomponent
+import org.kiwix.kiwixmobile.di.ServiceScope
+import org.kiwix.kiwixmobile.di.modules.ServiceModule
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 
-  void onIpAddressValid();
+@Subcomponent(modules = [ServiceModule::class])
+@ServiceScope
+interface ServiceComponent {
+  fun inject(hotspotService: HotspotService)
 
-  void onIpAddressInvalid();
+  @Subcomponent.Builder
+  interface Builder {
+
+    @BindsInstance fun service(service: Service): Builder
+
+    fun build(): ServiceComponent
+  }
 }

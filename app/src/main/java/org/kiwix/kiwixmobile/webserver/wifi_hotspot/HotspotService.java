@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.wifi_hotspot;
+package org.kiwix.kiwixmobile.webserver.wifi_hotspot;
 
 import android.app.Service;
 import android.content.Intent;
@@ -26,15 +26,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.core.CoreApp;
+import org.kiwix.kiwixmobile.KiwixApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
-import org.kiwix.kiwixmobile.core.webserver.WebServerHelper;
-import org.kiwix.kiwixmobile.core.webserver.ZimHostCallbacks;
+import org.kiwix.kiwixmobile.webserver.WebServerHelper;
+import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 
-import static org.kiwix.kiwixmobile.core.webserver.ZimHostActivity.SELECTED_ZIM_PATHS_KEY;
-import static org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID;
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS_KEY;
+import static org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID;
 
 /**
  * HotspotService is used to add a foreground service for the wifi hotspot.
@@ -59,7 +59,7 @@ public class HotspotService extends Service
   HotspotStateReceiver hotspotStateReceiver;
 
   @Override public void onCreate() {
-    CoreApp.getCoreComponent()
+    ((KiwixApp) this.getApplicationContext()).getKiwixComponent()
       .serviceComponent()
       .service(this)
       .build()

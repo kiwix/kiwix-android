@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.wifi_hotspot;
+package org.kiwix.kiwixmobile.webserver.wifi_hotspot;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -30,7 +30,7 @@ import androidx.core.app.NotificationCompat;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.utils.Constants;
-import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity;
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
 public class HotspotNotificationManager {
 
