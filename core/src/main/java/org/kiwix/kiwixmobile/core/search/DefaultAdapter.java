@@ -31,19 +31,12 @@ import javax.annotation.Nonnull;
 
 public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHolder> {
 
-  interface ClickListener {
-    void onItemClick(String text);
 
-    void onItemLongClick(String text);
-  }
-
-  private final ClickListener clickListener;
   private Context context;
   List<String> searchList;
 
   public DefaultAdapter(Context context, ClickListener clickListener) {
     this.context = context;
-    this.clickListener = clickListener;
   }
 
   @NonNull @Override
