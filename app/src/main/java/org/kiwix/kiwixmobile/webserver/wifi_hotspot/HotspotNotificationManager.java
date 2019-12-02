@@ -76,7 +76,7 @@ public class HotspotNotificationManager {
       .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
       .setContentText(context.getString(R.string.hotspot_running))
       .setContentIntent(contentIntent)
-      .setSmallIcon(R.mipmap.kiwix_icon)
+      .setSmallIcon(R.mipmap.ic_launcher)
       .setWhen(System.currentTimeMillis())
       .addAction(R.drawable.ic_close_white_24dp,
         context.getString(R.string.stop_hotspot_button),

@@ -29,7 +29,6 @@ import android.util.Log
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
 import java.io.File
 import java.io.IOException
 import java.util.ArrayList
@@ -86,43 +85,6 @@ object FileUtils {
     if (singlePart.exists()) {
       singlePart.delete()
       return true
-    }
-    return false
-  }
-
-  /**
-   * Helper function to ascertain the existence of a file and return true/false appropriately
-   *
-   * @param fileName the name (sans path) of the file to query
-   * @param fileSize the size that the file must match
-   * @param deleteFileOnMismatch if the file sizes do not match, delete the file
-   * @return true if it does exist, false otherwise
-   */
-  @JvmStatic fun doesFileExist(
-    fileName: String,
-    fileSize: Long,
-    deleteFileOnMismatch: Boolean
-  ): Boolean {
-
-    Log.d(TAG_KIWIX, "Looking for '$fileName' with size=$fileSize")
-
-    // the file may have been delivered by Market --- let's make sure
-    // it's the size we expect
-    val fileForNewFile = File(fileName)
-    if (fileForNewFile.exists()) {
-      if (fileForNewFile.length() == fileSize) {
-        Log.d(TAG_KIWIX, "Correct file '$fileName' found.")
-        return true
-      }
-      Log.d(
-        TAG_KIWIX,
-        "File '" + fileName + "' found but with wrong size=" + fileForNewFile.length()
-      )
-      if (deleteFileOnMismatch) {
-        fileForNewFile.delete()
-      }
-    } else {
-      Log.d(TAG_KIWIX, "No file '$fileName' found.")
     }
     return false
   }
@@ -257,7 +219,4 @@ object FileUtils {
       File("$fileName.part").exists() -> "$fileName.part"
       else -> "${fileName}aa"
     }
-
-  @JvmStatic fun getCurrentSize(book: Book) =
-    getAllZimParts(book).fold(0L, { acc, file -> acc + file.length() })
 }

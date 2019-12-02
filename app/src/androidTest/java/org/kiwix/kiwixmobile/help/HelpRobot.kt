@@ -66,26 +66,6 @@ class HelpRobot : BaseRobot() {
     )
   }
 
-  fun clickOnLargeZimFiles() {
-    clickOn(TextId(string.help_12))
-  }
-
-  fun assertLargeZimsIsExpanded() {
-    isVisible(
-      Text(
-        helpTextFormat(
-          string.help_13,
-          string.help_14,
-          string.help_15,
-          string.help_16,
-          string.help_17,
-          string.help_18,
-          string.help_19
-        )
-      )
-    )
-  }
-
   fun clickOnSendFeedback() {
     clickOn(ViewId(id.activity_help_feedback_text_view))
   }

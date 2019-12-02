@@ -117,10 +117,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
     super.hasValidFileAndUrl(url, zimFileReader) && url != homeUrl
 
-  override fun onHostBooksClicked() {
-    start<ZimHostActivity>()
-  }
-
   override fun urlIsInvalid() =
     super.urlIsInvalid() || currentWebView.url == homeUrl
 
@@ -182,5 +178,9 @@ class KiwixMainActivity : CoreMainActivity() {
     if (intent?.data != null) {
       openZimFile(intent.data.toFile())
     }
+  }
+
+  override fun onHostBooksMenuClicked() {
+    start<ZimHostActivity>()
   }
 }

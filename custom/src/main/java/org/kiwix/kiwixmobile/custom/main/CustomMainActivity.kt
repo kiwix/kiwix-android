@@ -78,10 +78,6 @@ class CustomMainActivity : CoreMainActivity() {
     return onCreateOptionsMenu
   }
 
-  override fun onHostBooksClicked() {
-    TODO("not implemented")
-  }
-
   override fun createWebClient(
     webViewCallback: WebViewCallback,
     zimReaderContainer: ZimReaderContainer
@@ -99,6 +95,6 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun manageZimFiles(tab: Int) {
-    TODO("not implemented")
+    // Do nothing
   }
 }

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">বিষয়বস্তু পান</string>
   <string name="menu_help">সাহায্য</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\u2022 এছাড়া উইকিপিডিয়া বা উইকিসংকলনের মত অন্যান্য সামগ্রীও উপলব্ধ</string>
   <string name="help_10">আপনি আপনার পছন্দসই ZIM ফাইলগুলি অ্যাপের মধ্যে ডাউনলোড করতে পারেন বা ZIM ফাইলগুলিকে সাবধানে নির্বাচন করুন এবং আপনার এসডি কার্ডে স্থানান্তর করার আগে আপনি যে ডেস্কটপ কম্পিউটার থেকে ডাউনলোড করতে চান তা নির্ধারণ করুন।</string>
   <string name="help_11">অ্যাপ্লিকেশনের মাধ্যমে ডাউনলোড করা ZIM ফাইলগুলি বাহ্যিক সঞ্চয়স্থানে Kiwix নামক ফোল্ডারে অবস্থিত।</string>
-  <string name="help_12">কিভাবে বড় ZIM ফাইল ব্যবহার করবেন?</string>
-  <string name="help_13">যদি আপনার ZIM ফাইলটি ৪ গিগাবাইটের চেয়ে বেশি হয়, তাহলে আপনি ফাইল-সিস্টেম সীমাবদ্ধতার কারণে আপনার এসডি কার্ডে এটিকে সংরক্ষণ করতে পারবেন না।</string>
-  <string name="help_14">স্বয়ংক্রিয়ভাবে ইন-অ্যাপ ডাউনলোড বড় ফাইলগুলিকে পরিচালনা করে, আপনার জন্য এগুলোকে বিভাজন করে।</string>
-  <string name="help_15">আপনি যদি অন্য ডিভাইসে ডাউনলোড করে থাকেন, তাহলে নিম্নলিখিত সফটওয়্যার ব্যবহার করে আপনাকে ZIM ফাইলটি বিভক্ত করতে হবে:</string>
-  <string name="help_16">\u2022 মাইক্রোসফট উইন্ডোজে: HJ-Split</string>
-  <string name="help_17">\ u2022 অ্যাপল ম্যাক ওএসএক্স: বিভক্ত এবং কনক্যাট</string>
-  <string name="help_19">দ্রষ্টব্য: আপনার পছন্দের ফাইলগুলি my_big_file.jimaa, my_big_file.jimab ইত্যাদি নামে হতে হবে।</string>
   <string name="pref_storage">সংগ্রহস্থল</string>
   <string name="pref_current_folder">বর্তমান ফোল্ডার</string>
   <string name="path_not_writable">পূর্বনির্ধারিত ব্যবহার করে, প্রয়োজনীয় ডিরেক্টরিতে প্রবেশ করতে পারবেন না। এটি ঠিক করার জন্য অ্যাপ্লিকেশন সেটিংসের মধ্যে পছন্দসই ডিরেক্টরি পুনঃনির্বাচন করুন।</string>
@@ -141,7 +134,6 @@
   <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
   <string name="your_languages">নির্বাচিত ভাষা</string>
   <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -153,14 +145,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

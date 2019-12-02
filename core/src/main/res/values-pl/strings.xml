@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_help">Pomoc</string>
   <string name="menu_home">Start</string>
@@ -90,8 +90,6 @@
   <string name="help_3">Kiwix to czytnik zawartości offline. Zachowuje się jak przeglądarka, jednak zamiast stron internetowych, czyta zawartość z pliku w formacie ZIM.</string>
   <string name="help_5">Gdzie jest zawartość?</string>
   <string name="help_11">Pliki ZIM pobrane rzez aplikacje znajdują się w zewnętrznym katalogu dysku w folderze o nazwie Kiwix.</string>
-  <string name="help_12">Jak korzystać z dużych plików ZIM?</string>
-  <string name="help_13">Jeśli twój plik ZIM ma rozmiar przekraczający 4GB, możliwe, że nie będziesz miał możliwości przechowywania go na twojej karcie SD z uwagi na limity pliku systemowego.</string>
   <string name="pref_storage">Magazyn</string>
   <string name="pref_current_folder">Bieżący folder</string>
   <string name="delete_zim_failed">Niestety nie udało się usunąć tego pliku. Zamiast tego powinieneś spróbować użyć menedżera plików.</string>
@@ -113,7 +111,6 @@
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>
   <string name="your_languages">Wybierz język</string>
   <string name="other_languages">Inne języki:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -125,14 +122,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>
