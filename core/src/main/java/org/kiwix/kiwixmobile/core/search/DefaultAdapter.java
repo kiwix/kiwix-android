@@ -31,11 +31,19 @@ import javax.annotation.Nonnull;
 
 public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHolder> {
 
+  interface ClickListener {
+    void onItemClick(String text);
+
+    void onItemLongClick(String text);
+  }
+
+  private final ClickListener clickListener;
   private Context context;
   List<String> searchList;
 
-  public DefaultAdapter(Context context) {
+  public DefaultAdapter(Context context, ClickListener clickListener) {
     this.context = context;
+    this.clickListener = clickListener;
   }
 
   @NonNull @Override
@@ -60,30 +68,25 @@ public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHold
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
-    @Nonnull
     TextView recentSearch;
 
-    @Nonnull
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
       recentSearch = itemView.findViewById(android.R.id.text1);
-      itemView.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          if (context instanceof SearchActivity) {
-            String title = recentSearch.getText().toString();
-            ((SearchActivity) context).searchPresenter.saveSearch(title);
-          }
+
+      itemView.setOnClickListener(v -> {
+        if (context instanceof SearchActivity) {
+          String title = recentSearch.getText().toString();
+          ((SearchActivity) context).searchPresenter.saveSearch(title);
         }
       });
-      itemView.setOnLongClickListener(new View.OnLongClickListener() {
-        @Override public boolean onLongClick(View v) {
-          if (context instanceof SearchActivity) {
-            String searched = recentSearch.getText().toString();
-            ((SearchActivity) context).deleteSpecificSearchDialog(searched);
-            return true;
-          }
-          return false;
+      itemView.setOnLongClickListener(v -> {
+        if (context instanceof SearchActivity) {
+          String searched = recentSearch.getText().toString();
+          ((SearchActivity) context).deleteSpecificSearchDialog(searched);
+          return true;
         }
+        return false;
       });
     }
   }
