@@ -30,6 +30,7 @@ sealed class LibraryListItem {
 
   data class BookItem(
     val book: Book,
+    val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = book.id.hashCode().toLong()
   ) : LibraryListItem()
 }
