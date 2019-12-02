@@ -35,7 +35,7 @@ public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHold
   private Context context;
   List<String> searchList;
 
-  public DefaultAdapter(Context context, ClickListener clickListener) {
+  public DefaultAdapter(Context context) {
     this.context = context;
   }
 
