@@ -24,7 +24,6 @@ public final class Constants {
   public static final String CONTACT_EMAIL_ADDRESS = "android@kiwix.org";
 
   // Request stuff
-  public static final int REQUEST_FILE_SEARCH = 1236;
 
   public static final int REQUEST_STORAGE_PERMISSION = 1;
 

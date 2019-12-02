@@ -15,26 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.webserver
 
-package org.kiwix.kiwixmobile.core.di.components
+import dagger.Binds
+import dagger.Module
+import org.kiwix.kiwixmobile.core.di.ActivityScope
 
-import android.app.Service
-import dagger.BindsInstance
-import dagger.Subcomponent
-import org.kiwix.kiwixmobile.core.di.ServiceScope
-import org.kiwix.kiwixmobile.core.di.modules.ServiceModule
-import org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService
-
-@Subcomponent(modules = [ServiceModule::class])
-@ServiceScope
-interface ServiceComponent {
-  fun inject(hotspotService: HotspotService)
-
-  @Subcomponent.Builder
-  interface Builder {
-
-    @BindsInstance fun service(service: Service): Builder
-
-    fun build(): ServiceComponent
-  }
+@Module
+abstract class ZimHostModule {
+  @ActivityScope @Binds
+  abstract fun bindsZimHostPresenter(zimHostPresenter: ZimHostPresenter): ZimHostContract.Presenter
 }
