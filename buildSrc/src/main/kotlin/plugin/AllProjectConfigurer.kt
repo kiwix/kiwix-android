@@ -87,7 +87,7 @@ class AllProjectConfigurer {
       lintOptions {
         isAbortOnError = true
         isCheckAllWarnings = true
-        isCheckAllWarnings = true
+        isWarningsAsErrors = true
 
         ignore(
           "SyntheticAccessor",
@@ -102,7 +102,9 @@ class AllProjectConfigurer {
         warning(
           "UnknownNullness",
           "SelectableText",
-          "IconDensities"
+          "IconDensities",
+          "ContentDescription",
+          "IconDipSize"
         )
         baseline("${path}/lint-baseline.xml")
       }
@@ -121,6 +123,7 @@ class AllProjectConfigurer {
       sourceSets {
         getByName("test") {
           java.srcDir("${target.rootDir}/core/src/sharedTestFunctions/java")
+          resources.srcDir("${target.rootDir}/core/src/test/resources")
         }
       }
     }
@@ -143,6 +146,7 @@ class AllProjectConfigurer {
       implementation(Libs.kotlin_stdlib_jdk7)
       implementation(Libs.appcompat)
       implementation(Libs.material)
+      implementation(Libs.constraintlayout)
       implementation(Libs.androidx_multidex_multidex)
       implementation(Libs.okhttp)
       implementation(Libs.logging_interceptor)

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Obtenir contingut</string>
   <string name="menu_help">Ajuda</string>
@@ -72,13 +72,6 @@
   <string name="help_9">\u2022 Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
   <string name="help_10">Pots descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulguis, descarregar-los des d\'un ordinador i transferir-los a la targeta SD.</string>
   <string name="help_11">Els fitxers ZIM descarregats en l\'aplicació es troben al directori d\'emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
-  <string name="help_12">Com utilitzar fitxers ZIM grans?</string>
-  <string name="help_13">Si el teu fitxer ZIM és més gran de 4GB, pot ser que no puguis emmagatzemar-lo en la teva targeta SD per limitacions en el sistema de fitxers.</string>
-  <string name="help_14">La descàrrega en l\'aplicació gestiona els fitxers grans automàticament, i els parteix per a tu.</string>
-  <string name="help_15">No obstant això, si estàs descarregant-lo en un altre dispositiu, pot ser que necessitis dividir el fitxer ZIM amb el següent programari:</string>
-  <string name="help_16">\u2022 En Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 En Apple Mac OSX: Split i Concat</string>
-  <string name="help_19">Nota: cal que els fitxers resultants siguin anomenats fitxer_gran.zimaa, fitxer_gran.zimab, etc.</string>
   <string name="path_not_writable">No s\'ha pogut accedir al directori desitjat, s\'usa el predeterminat. Per solucionar això, torna a seleccionar el directori desitjat en les preferències de l\'aplicació.</string>
   <string name="delete_zim_failed">No podem eliminar aquest fitxer. Hauries de provar amb un administrador de fitxers.</string>
   <string name="internal_storage">Intern</string>
@@ -94,7 +87,6 @@
   <string name="do_not_ask_anymore">No tornar a preguntar</string>
   <string name="your_languages">Idiomes seleccionats:</string>
   <string name="other_languages">Altres idiomes:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -106,14 +98,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

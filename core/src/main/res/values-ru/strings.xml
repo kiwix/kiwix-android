@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Получить Контент</string>
   <string name="menu_help">Помощь</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\u2022 Такое содержимое, как Wikleaks или Wikisource, также доступно</string>
   <string name="help_10">Вы можете или загрузить выбранные ZIM файлы через приложение, или тщательно выбрать те, которые вам нужны, и загрузить их с настольного компьютера, прежде чем передавать ZIM файлы на вашу SD-карту.</string>
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
-  <string name="help_12">Как использовать большие ZIM файлы?</string>
-  <string name="help_13">Если ваш ZIM файл больше 4GB, вы не сможете хранить его на SD-карте из-за ограничений файловой системы.</string>
-  <string name="help_14">Загрузка в приложении автоматически обрабатывает файлы больших размеров, разделяя их для вас.</string>
-  <string name="help_15">Однако, если вы загружаете на другое устройство, вам может потребоваться разделить ZIM файл, используя следующее ПО:</string>
-  <string name="help_16">• На Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 На Apple Mac OSX: Split and Concat</string>
-  <string name="help_19">Примечание: ваши готовые файлы должны быть названы my_big_file.zimaa, my_big_file.zimab и т.д.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
   <string name="path_not_writable">Нет доступа к желаемой директории, используя значение по умолчанию. Чтобы исправить это, выберите желаемую директорию заново в настройках приложения.</string>
@@ -145,7 +138,6 @@
   <string name="do_not_ask_anymore">Больше не спрашивай</string>
   <string name="your_languages">Выбранные языки:</string>
   <string name="other_languages">Другие языки:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -157,14 +149,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

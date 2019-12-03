@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Získat obsah</string>
   <string name="menu_help">Nápověda</string>
@@ -70,8 +70,6 @@
   <string name="no_files_here">Zde nejsou žádné soubory</string>
   <string name="download_no_space">Nedostatečný prostor ke stažení tohoto souboru.</string>
   <string name="zim_simple">Jednoduché</string>
-  <string name="help_12">Jak použít velké ZIM soubory?</string>
-  <string name="help_16">\u2022 v Microsoft Windows: HJ-Split</string>
   <string name="pref_storage">Úložiště</string>
   <string name="tts_pause">Pozastavit</string>
   <string name="tts_resume">Obnovit</string>
@@ -88,7 +86,6 @@
   <string name="do_not_ask_anymore">Neptat se příště</string>
   <string name="your_languages">Vybrané jazyky:</string>
   <string name="other_languages">Jiné jazyky:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -100,14 +97,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

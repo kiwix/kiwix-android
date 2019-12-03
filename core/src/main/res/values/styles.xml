@@ -53,6 +53,7 @@
     <item name="android:textColorSecondary">@color/textDarkSecondary</item>
     <item name="android:textColorTertiary">@color/textDarkTertiary</item>
     <item name="colorControlNormal">@color/accent</item>
+    <item name="buttonStyle">@style/KiwixButtonStyle</item>
   </style>
 
   <style name="AppTheme.Night" parent="AppTheme.Base">
@@ -160,6 +161,10 @@
     <item name="layout_constraintVertical_bias">0.4</item>
     <item name="layout_constraintTop_toTopOf">parent</item>
     <item name="layout_constraintBottom_toBottomOf">parent</item>
+  </style>
+
+  <style name="KiwixButtonStyle" parent="Widget.MaterialComponents.Button">
+    <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
   </style>
 
 </resources>

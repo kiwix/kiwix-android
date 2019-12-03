@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">Дај содржини</string>
   <string name="menu_help">Помош</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\u2022 Достапни се и други содржини Викиликс и Викиизвор</string>
   <string name="help_10">Можете да ги преземете избраните ZIM-податотеки во прилогот, или пак внимателно да ги изберете посакуваните и да ги преземете од столен сметач, а потоа да ги префрлите ZIM-податотеките на SD-картичка.</string>
   <string name="help_11">Преземањето на ZIM-податотеките во прилогот се сместени во надворешниот склад во папка наречена Kiwix.</string>
-  <string name="help_12">Како се користат големи ZIM-податотеки?</string>
-  <string name="help_13">Доколку вашата ZIM-податотека е поголема 4 ГБ, можеби нема да можете да ја ставите на SD-картичка поради ограничувањата во податотечниот систем.</string>
-  <string name="help_14">Преземањето во прилогот се справува сам со поголеми податотеки, делејќи ги по потреба.</string>
-  <string name="help_15">Но, доколку преземате на друг уред, може да треба да ја поделите ZIM-податотеката користејќи ја следнава програмска опрема:</string>
-  <string name="help_16">\u2022 На Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 На Apple Mac OSX: Split и Concat</string>
-  <string name="help_19">Напомена: исходните податотеки мораат да бидат наречени my_big_file.zimaa, my_big_file.zimab и тн.</string>
   <string name="pref_storage">Склад</string>
   <string name="pref_current_folder">Тековна папка</string>
   <string name="path_not_writable">Не можам да дојдам до саканата папка. Ќе ја користам основната. За да го поправите ова, преизберете папка во поставките на прилогот.</string>
@@ -145,7 +138,6 @@
   <string name="do_not_ask_anymore">Повеќе не прашувај</string>
   <string name="your_languages">Избрани јазици:</string>
   <string name="other_languages">Други јазици:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -157,14 +149,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

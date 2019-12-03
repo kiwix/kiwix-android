@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_zim_manager">الحصول على المحتوى</string>
   <string name="menu_help">مساعدة</string>
@@ -103,13 +103,6 @@
   <string name="help_9">\u2022 تتوفر أيضًا محتويات أخرى مثل ويكيليكس أو ويكي مصدر</string>
   <string name="help_10">يمكنك إما تنزيل ملفات ZIM المختارة داخل التطبيق أو اختيار التطبيق(ات) الذي تريده وتنزيله من حاسوب مكتبي قبل نقل ملفات ZIM إلى بطاقة SD الخاصة بك.</string>
   <string name="help_11">توجد ملفات ZIM القابلة للتنزيل داخل التطبيق في دليل التخزين الخارجي في مجلد بعنوان Kiwix.</string>
-  <string name="help_12">كيفية استخدام ملفات ZIM الكبيرة؟</string>
-  <string name="help_13">إذا كان حجم ملف ZIM أكبر من 4 غيغابايت، فقد لا تتمكن من تخزينه على بطاقة SD الخاصة بك بسبب قيود نظام الملفات.</string>
-  <string name="help_14">يؤدي تنزيل التطبيق آليا إلى التعامل مع الملفات الأكبر حجما، مما يؤدي إلى تقسيمها لك.</string>
-  <string name="help_15">إذا كنت تقوم بالتنزيل على جهاز آخر، فقد تحتاج إلى تقسيم ملف ZIM باستخدام البرنامج التالي:</string>
-  <string name="help_16">\u2022 في مايكروسوفت ويندوز: HJ-Split</string>
-  <string name="help_17">\u2022 في أبل ماك أو إس إكس: Split and Concat</string>
-  <string name="help_19">ملاحظة: يجب تسمية ملفاتك الناتجة باسم my_big_file.zimaa وmy_big_file.zimab وما إلى ذلك.</string>
   <string name="pref_storage">التخزين</string>
   <string name="pref_current_folder">المجلد الحالي</string>
   <string name="path_not_writable">لا يمكن الوصول إلى الدليل المطلوب، باستخدام الافتراضي، لإصلاح هذا; قم بإعادة تحديد الدليل المرغوب في إعدادات التطبيق.</string>
@@ -145,7 +138,6 @@
   <string name="do_not_ask_anymore">لا تسأل بعد الآن</string>
   <string name="your_languages">اللغات المختارة:</string>
   <string name="other_languages">لغات أخرى:</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -157,14 +149,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

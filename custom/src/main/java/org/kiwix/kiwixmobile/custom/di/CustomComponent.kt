@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.custom.di
 import dagger.Component
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 
-@Component(dependencies = [CoreComponent::class])
+@Component(dependencies = [CoreComponent::class], modules = [CustomViewModelModule::class])
 @CustomScope
 interface CustomComponent {
   fun activityComponentBuilder(): CustomActivityComponent.Builder

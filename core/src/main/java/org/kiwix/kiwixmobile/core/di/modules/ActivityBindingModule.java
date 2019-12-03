@@ -27,12 +27,7 @@ import org.kiwix.kiwixmobile.core.error.ErrorActivity;
 import org.kiwix.kiwixmobile.core.help.HelpActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryModule;
-import org.kiwix.kiwixmobile.core.intro.IntroActivity;
-import org.kiwix.kiwixmobile.core.intro.IntroModule;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
-import org.kiwix.kiwixmobile.core.splash.SplashActivity;
-import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity;
-import org.kiwix.kiwixmobile.core.webserver.ZimHostModule;
 
 /**
  * Dagger.Android annotation processor will create the sub-components. We also specify the modules
@@ -56,22 +51,10 @@ public abstract class ActivityBindingModule {
   public abstract ErrorActivity provideErrorActivity();
 
   @ActivityScope
-  @ContributesAndroidInjector(modules = IntroModule.class)
-  public abstract IntroActivity provideIntroActivity();
-
-  @ActivityScope
-  @ContributesAndroidInjector
-  public abstract SplashActivity provideSplashActivity();
-
-  @ActivityScope
   @ContributesAndroidInjector(modules = HistoryModule.class)
   public abstract HistoryActivity provideHistoryActivity();
 
   @ActivityScope
   @ContributesAndroidInjector
   public abstract HelpActivity provideHelpActivity();
-
-  @ActivityScope
-  @ContributesAndroidInjector(modules = ZimHostModule.class)
-  public abstract ZimHostActivity provideZimHostActivity();
 }

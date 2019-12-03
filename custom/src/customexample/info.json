@@ -1,10 +1,6 @@
 {
   "app_name": "Test Custom App",
-  "package": "org.kiwix.kiwixcustomexample",
-  "version_name": "2017-07",
-  "version_code": "1",
-  "zim_file": "wikipedia_fr_test_2017-07.zim",
-  "embed_zim": true,
-  "ic_launcher": "icon.png",
+  "zim_url": "http://download.kiwix.org/zim/wikipedia_fr_test.zim",
   "enforced_lang": "en"
 }
+

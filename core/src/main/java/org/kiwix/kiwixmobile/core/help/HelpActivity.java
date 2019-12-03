@@ -56,7 +56,6 @@ public class HelpActivity extends BaseActivity {
 
     populateMap(R.string.help_2, R.array.description_help_2);
     populateMap(R.string.help_5, R.array.description_help_5);
-    populateMap(R.string.help_12, R.array.description_help_12);
 
     recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     HelpAdapter helpAdapter =
