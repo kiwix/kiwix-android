@@ -22,24 +22,19 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.annotations.NonNull;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixmobile.core.CoreApp;
-import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate;
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapter.ViewHolder>
   implements Filterable {
@@ -133,10 +128,10 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
             SearchSuggestion results;
             List<String> alreadyAdded = new ArrayList<>();
             while ((results = zimReaderContainer.getNextSuggestion()) != null) {
-                suggestion = results.getTitle();
-                suggestionUrl = results.getUrl();
+              suggestion = results.getTitle();
+              suggestionUrl = results.getUrl();
 
-                if (!alreadyAdded.contains(suggestionUrl)) {
+              if (!alreadyAdded.contains(suggestionUrl)) {
                 alreadyAdded.add(suggestionUrl);
                 data.add(suggestion);
               }

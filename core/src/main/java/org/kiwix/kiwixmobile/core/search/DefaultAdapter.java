@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.search;
 
 import android.content.Context;
 import android.text.Html;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,21 +27,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
-import javax.annotation.Nonnull;
 
 public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHolder> {
 
-  private Context context;
-  List<String> searchList;
-
-  interface CLickListener {
+  interface ClickListener {
     void onItemClick(String text);
-    boolean onItemLongClick(String text);
+
+    void onItemLongClick(String text);
   }
 
-  private final CLickListener clickListener;
+  private final ClickListener clickListener;
+  private final Context context;
+  private List<String> searchList;
 
-  public DefaultAdapter(Context context, CLickListener clickListener) {
+  public void addAll(List<String> recentSearches) {
+    searchList.addAll(recentSearches);
+  }
+
+  public DefaultAdapter(Context context, ClickListener clickListener) {
     this.context = context;
     this.clickListener = clickListener;
   }
@@ -51,8 +53,7 @@ public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHold
   public DefaultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = (View) LayoutInflater.from(parent.getContext())
       .inflate(android.R.layout.simple_list_item_1, parent, false);
-    ViewHolder holder = new ViewHolder(view);
-    return holder;
+    return new ViewHolder(view);
   }
 
   @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -74,11 +75,13 @@ public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHold
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
       recentSearch = itemView.findViewById(android.R.id.text1);
-
       itemView.setOnClickListener(
         v -> clickListener.onItemClick(recentSearch.getText().toString()));
       itemView.setOnLongClickListener(
-        view -> clickListener.onItemLongClick(recentSearch.getText().toString()));
+        view -> {
+          clickListener.onItemLongClick(recentSearch.getText().toString());
+          return true;
+        });
     }
   }
 }

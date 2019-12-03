@@ -18,26 +18,15 @@
 package org.kiwix.kiwixmobile.core.search;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
-import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -59,7 +48,7 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends BaseActivity
-  implements SearchViewCallback {
+  implements SearchViewCallback, DefaultAdapter.ClickListener {
 
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
   private final int REQ_CODE_SPEECH_INPUT = 100;
@@ -67,7 +56,7 @@ public class SearchActivity extends BaseActivity
   SearchPresenter searchPresenter;
   private RecyclerView recyclerView;
   private AutoCompleteAdapter autoAdapter;
-  DefaultAdapter defaultAdapter;
+  private DefaultAdapter defaultAdapter;
   private SearchView searchView;
   private String searchText;
 
@@ -80,12 +69,13 @@ public class SearchActivity extends BaseActivity
       searchText = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
     }
 
-    Toolbar toolbar = findViewById(R.id.toolbar);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_LOCALE);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
+
     recyclerView = findViewById(R.id.search_list);
     defaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches();
@@ -109,7 +99,7 @@ public class SearchActivity extends BaseActivity
 
   @Override
   public void addRecentSearches(List<String> recentSearches) {
-    defaultAdapter.searchList.addAll(recentSearches);
+    defaultAdapter.addAll(recentSearches);
     defaultAdapter.notifyDataSetChanged();
   }
 
@@ -128,7 +118,7 @@ public class SearchActivity extends BaseActivity
     }
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.M) @Override
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_search, menu);
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
@@ -267,16 +257,7 @@ public class SearchActivity extends BaseActivity
   }
 
   private DefaultAdapter getDefaultAdapter() {
-    return new DefaultAdapter(this, new DefaultAdapter.CLickListener() {
-      @Override public void onItemClick(String text) {
-        searchPresenter.saveSearch(text);
-      }
-
-      @Override public boolean onItemLongClick(String text) {
-        deleteSpecificSearchDialog(text);
-        return true;
-      }
-    });
+    return new DefaultAdapter(this, this);
   }
 
   private void promptSpeechInput() {
@@ -322,5 +303,13 @@ public class SearchActivity extends BaseActivity
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
+  }
+
+  @Override public void onItemClick(String text) {
+    searchPresenter.saveSearch(text);
+  }
+
+  @Override public void onItemLongClick(String text) {
+    deleteSpecificSearchDialog(text);
   }
 }
