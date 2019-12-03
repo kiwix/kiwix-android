@@ -96,7 +96,8 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     serverTextView = findViewById(R.id.serverTextView)
     setUpToolbar()
 
-    bookDelegate = BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, null, null, ::select)
+    bookDelegate =
+      BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, multiSelectAction = ::select)
     bookDelegate.selectionMode = SelectionMode.MULTI
     booksAdapter = BooksOnDiskAdapter(
       bookDelegate,
@@ -233,7 +234,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
           true
         )
         startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
-        Unit
       }
     )
   }
