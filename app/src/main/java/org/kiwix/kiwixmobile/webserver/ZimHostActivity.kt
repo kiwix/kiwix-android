@@ -255,12 +255,13 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun launchTetheringSettingsScreen() {
-    val intent = Intent(Intent.ACTION_MAIN, null)
-    intent.addCategory(Intent.CATEGORY_LAUNCHER)
-    val cn = ComponentName("com.android.settings", "com.android.settings.TetherSettings")
-    intent.component = cn
-    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    startActivity(intent)
+    startActivity(
+      Intent(Intent.ACTION_MAIN, null).apply {
+        addCategory(Intent.CATEGORY_LAUNCHER)
+        component = ComponentName("com.android.settings", "com.android.settings.TetherSettings")
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+      }
+    )
   }
 
   override fun onSaveInstanceState(outState: Bundle?) {
