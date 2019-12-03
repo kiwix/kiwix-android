@@ -96,11 +96,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     serverTextView = findViewById(R.id.serverTextView)
     setUpToolbar()
 
-    bookDelegate = BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, null, null,
-      { bookOnDiskItem ->
-        select(bookOnDiskItem)
-        Unit
-      })
+    bookDelegate = BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, null, null, ::select)
     bookDelegate.selectionMode = SelectionMode.MULTI
     booksAdapter = BooksOnDiskAdapter(
       bookDelegate,
