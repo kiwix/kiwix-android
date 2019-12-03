@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
+import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 
@@ -117,10 +118,10 @@ public abstract class CoreWebViewClient extends WebViewClient {
       return;
     }
 
-    if (!url.equals("file:///android_asset/home.html")) {
-      view.removeView(home);
-    } else {
+    if (url.equals(HOME_URL)) {
       onUrlEqualToHome(view);
+    } else {
+      view.removeView(home);
     }
     callback.webViewUrlFinishedLoading();
   }

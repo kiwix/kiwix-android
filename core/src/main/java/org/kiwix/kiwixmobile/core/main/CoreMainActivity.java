@@ -147,6 +147,7 @@ public abstract class CoreMainActivity extends BaseActivity
   MainContract.View,
   MainMenu.MenuClickListener {
 
+  public static final String HOME_URL = "file:///android_asset/home.html";
   private final ArrayList<String> bookmarks = new ArrayList<>();
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R2.id.activity_main_root)
@@ -1648,6 +1649,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void setHomePage(View view) {
+    getCurrentWebView().deactivateNightMode();
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);
