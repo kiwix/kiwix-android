@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
@@ -133,11 +134,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     when {
       ServerUtils.isServerStarted -> stopServer()
       selectedBooksPath.size > 0 -> startHotspotManuallyDialog()
-      else -> Toast.makeText(
-        this,
-        R.string.no_books_selected_toast_message,
-        Toast.LENGTH_SHORT
-      ).show()
+      else -> toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
     }
   }
 
@@ -258,7 +255,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onServerFailedToStart() {
-    Toast.makeText(this, R.string.server_failed_toast_message, Toast.LENGTH_LONG).show()
+    toast(R.string.server_failed_toast_message)
   }
 
   private fun launchTetheringSettingsScreen() {
@@ -292,11 +289,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onIpAddressInvalid() {
     progressDialog!!.dismiss()
-    Toast.makeText(
-      this, R.string.server_failed_message,
-      Toast.LENGTH_SHORT
-    )
-      .show()
+    toast(R.string.server_failed_message, Toast.LENGTH_SHORT)
   }
 
   companion object {
