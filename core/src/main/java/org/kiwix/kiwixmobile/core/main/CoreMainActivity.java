@@ -147,7 +147,6 @@ public abstract class CoreMainActivity extends BaseActivity
   MainContract.View,
   MainMenu.MenuClickListener {
 
-  public static boolean wifiOnly;
   private final ArrayList<String> bookmarks = new ArrayList<>();
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R2.id.activity_main_root)
@@ -316,7 +315,6 @@ public abstract class CoreMainActivity extends BaseActivity
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
     new WebView(this).destroy(); // Workaround for buggy webViews see #710
-    wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     handleLocaleCheck();
     setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);

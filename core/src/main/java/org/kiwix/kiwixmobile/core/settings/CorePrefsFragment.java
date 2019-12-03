@@ -49,14 +49,12 @@ import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
-import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM_ENABLED;
 
@@ -191,9 +189,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
     }
     if (key.equals(PREF_NIGHT_MODE)) {
       sharedPreferenceUtil.updateNightMode();
-    }
-    if (key.equals(PREF_WIFI_ONLY)) {
-      CoreMainActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
     }
   }
 

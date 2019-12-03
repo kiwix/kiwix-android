@@ -18,7 +18,6 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="24dp"
     android:contentDescription="@string/close_all_tabs"
-    app:backgroundTint="@android:color/white"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
