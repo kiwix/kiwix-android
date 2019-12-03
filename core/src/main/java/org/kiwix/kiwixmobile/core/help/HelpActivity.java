@@ -27,14 +27,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.HelpActivityComponent;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.CONTACT_EMAIL_ADDRESS;
 
 public class HelpActivity extends BaseActivity {
+
+  HelpActivityComponent helpActivityComponent;
 
   private final HashMap<String, String> titleDescriptionMap = new HashMap<>();
 
@@ -45,6 +50,9 @@ public class HelpActivity extends BaseActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    helpActivityComponent = CoreApp.getCoreComponent().helpActivityComponent().build();
+    helpActivityComponent.inject(this);
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_help);
     setSupportActionBar(toolbar);

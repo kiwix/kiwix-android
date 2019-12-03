@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="@dimen/kiwix_search_widget_layout_id_height"
   android:layout_marginLeft="@dimen/kiwix_search_widget_margin"
@@ -26,7 +27,7 @@
     android:layout_weight="0.7"
     android:text="@string/search_widget_text"
     android:textColor="@color/grey"
-    />
+    tools:text="@string/search_widget_text" />
 
   <ImageView
     android:id="@+id/search_widget_star"

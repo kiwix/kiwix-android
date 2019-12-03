@@ -79,6 +79,11 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun context(): Context
   fun downloader(): Downloader
+  fun bookmarksActivityComponent(): BookmarksActivityComponent.Builder
+  fun errorActivityComponent(): ErrorActivityComponent.Builder
+  fun historyActivityComponent(): HistoryActivityComponent.Builder
+  fun helpActivityComponent(): HelpActivityComponent.Builder
+  fun zimHostActivityComponent(): ZimHostActivityComponent.Builder
 
   fun inject(application: CoreApp)
   fun inject(zimContentProvider: ZimContentProvider)

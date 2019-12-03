@@ -39,10 +39,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.HistoryActivityComponent;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -123,9 +126,13 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       }
     }
   };
-
+  HistoryActivityComponent historyActivityComponent;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+
+    historyActivityComponent = CoreApp.getCoreComponent().historyActivityComponent().build();
+    historyActivityComponent.inject(this);
+
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
     setContentView(R.layout.activity_history);

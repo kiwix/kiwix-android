@@ -20,15 +20,16 @@ package org.kiwix.kiwixmobile.core.di.modules;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule;
 import org.kiwix.kiwixmobile.core.di.ActivityScope;
+import org.kiwix.kiwixmobile.core.di.components.SearchActivityComponent;
 import org.kiwix.kiwixmobile.core.error.ErrorActivity;
 import org.kiwix.kiwixmobile.core.help.HelpActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryModule;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
-import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity;
 import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity;
 import org.kiwix.kiwixmobile.core.webserver.ZimHostModule;
 
@@ -42,7 +43,7 @@ import org.kiwix.kiwixmobile.core.webserver.ZimHostModule;
 public abstract class ActivityBindingModule {
 
   @ActivityScope
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = ActivityModule.class)
   public abstract SearchActivity provideSearchActivity();
 
   @ActivityScope

@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.webserver;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -39,9 +40,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.ZimHostActivityComponent;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
@@ -58,6 +62,8 @@ import static org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService.ACTION_STOP
 public class ZimHostActivity extends BaseActivity implements
     ZimHostCallbacks, ZimHostContract.View {
 
+  ZimHostActivityComponent zimHostActivityComponent;
+
   @BindView(R2.id.startServerButton)
   Button startServerButton;
   @BindView(R2.id.server_textView)
@@ -68,7 +74,7 @@ public class ZimHostActivity extends BaseActivity implements
   @Inject
   ZimHostContract.Presenter presenter;
 
-  @Inject
+  //@Inject
   AlertDialogShower alertDialogShower;
 
   private static final String TAG = "ZimHostActivity";
@@ -84,6 +90,8 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
+    zimHostActivityComponent = CoreApp.getCoreComponent().zimHostActivityComponent().build();
+    zimHostActivityComponent.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_zim_host);
 
@@ -129,7 +137,7 @@ public class ZimHostActivity extends BaseActivity implements
         if (getSelectedBooksPath().size() > 0) {
           startHotspotHelper();
         } else {
-          Toast.makeText(ZimHostActivity.this, R.string.no_books_selected_toast_message,
+          Toast.makeText(this, R.string.no_books_selected_toast_message,
             Toast.LENGTH_SHORT).show();
         }
       } else {
