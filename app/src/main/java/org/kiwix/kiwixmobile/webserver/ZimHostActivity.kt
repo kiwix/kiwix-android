@@ -74,10 +74,14 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
         .filter(BooksOnDiskListItem::isSelected)
         .filterIsInstance<BookOnDisk>()
         .map {
-          if (BuildConfig.DEBUG) {
-            Log.v(tag, "ZIM PATH : " + it.file.absolutePath)
-          }
           it.file.absolutePath
+        }
+        .also {
+          if (BuildConfig.DEBUG) {
+            it.forEach { path ->
+              Log.v(tag, "ZIM PATH : $path")
+            }
+          }
         }
         as ArrayList<String>
     }
