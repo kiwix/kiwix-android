@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.search;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +32,19 @@ import javax.annotation.Nonnull;
 
 public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHolder> {
 
-
   private Context context;
   List<String> searchList;
 
-  public DefaultAdapter(Context context) {
+  interface CLickListener {
+    void onItemClick(String text);
+    boolean onItemLongClick(String text);
+  }
+
+  private final CLickListener clickListener;
+
+  public DefaultAdapter(Context context, CLickListener clickListener) {
     this.context = context;
+    this.clickListener = clickListener;
   }
 
   @NonNull @Override
@@ -67,20 +75,10 @@ public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHold
       super(itemView);
       recentSearch = itemView.findViewById(android.R.id.text1);
 
-      itemView.setOnClickListener(v -> {
-        if (context instanceof SearchActivity) {
-          String title = recentSearch.getText().toString();
-          ((SearchActivity) context).searchPresenter.saveSearch(title);
-        }
-      });
-      itemView.setOnLongClickListener(v -> {
-        if (context instanceof SearchActivity) {
-          String searched = recentSearch.getText().toString();
-          ((SearchActivity) context).deleteSpecificSearchDialog(searched);
-          return true;
-        }
-        return false;
-      });
+      itemView.setOnClickListener(
+        v -> clickListener.onItemClick(recentSearch.getText().toString()));
+      itemView.setOnLongClickListener(
+        view -> clickListener.onItemLongClick(recentSearch.getText().toString()));
     }
   }
 }

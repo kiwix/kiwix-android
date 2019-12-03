@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -127,7 +128,7 @@ public class SearchActivity extends BaseActivity
     }
   }
 
-  @Override
+  @RequiresApi(api = Build.VERSION_CODES.M) @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_search, menu);
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
@@ -266,9 +267,17 @@ public class SearchActivity extends BaseActivity
   }
 
   private DefaultAdapter getDefaultAdapter() {
-    return new DefaultAdapter(this);
-  }
+    return new DefaultAdapter(this, new DefaultAdapter.CLickListener() {
+      @Override public void onItemClick(String text) {
+        searchPresenter.saveSearch(text);
+      }
 
+      @Override public boolean onItemLongClick(String text) {
+        deleteSpecificSearchDialog(text);
+        return true;
+      }
+    });
+  }
 
   private void promptSpeechInput() {
     String appName = getResources().getString(R.string.app_name);
