@@ -7,23 +7,24 @@
   android:padding="24dp">
 
   <ImageView
-    android:layout_width="160dp"
-    android:layout_height="160dp"
-    android:contentDescription="@string/kiwi"
-    android:src="@drawable/kiwix_icon_with_title"
+    android:id="@+id/airplane"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:alpha="1.0"
+    android:contentDescription="@string/save_books_offline"
+    android:visibility="invisible"
     app:layout_constraintBottom_toTopOf="@id/heading"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintEnd_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/ic_airplane" />
 
   <TextView
     android:id="@+id/heading"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:text="@string/welcome_to_the_family"
+    android:text="@string/save_books_offline"
     android:textAlignment="center"
-    android:textColor="@android:color/black"
     android:textSize="24sp"
     android:textStyle="bold"
     app:layout_constraintBottom_toTopOf="@id/subheading"
@@ -41,7 +42,7 @@
     android:id="@+id/subheading"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/human_kind_knowledge"
+    android:text="@string/download_books_message"
     android:textAlignment="center"
     android:textSize="15sp"
     app:layout_constraintEnd_toEndOf="parent"
