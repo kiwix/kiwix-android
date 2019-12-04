@@ -234,8 +234,17 @@ class ZimFileReader constructor(
     @JvmField
     val CONTENT_URI: Uri? =
       Uri.parse("content://${CoreApp.getInstance().packageName}.zim.base/")
-    private const val INVERT_IMAGES_VIDEO =
-      "img, video, div[poster] { \n -webkit-filter: invert(1); \n filter: invert(1); \n} \n"
+    private val INVERT_IMAGES_VIDEO =
+      """
+        img, video, div[poster], div#header { 
+           -webkit-filter: invert(1); 
+           filter: invert(1); 
+        }
+        img#header-profile{
+          -webkit-filter: invert(0); 
+          filter: invert(0); 
+        }
+      """.trimIndent()
     private val VIDEO_REGEX = Regex("([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))\$)")
   }
 }
