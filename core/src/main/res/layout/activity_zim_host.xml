@@ -25,7 +25,7 @@
   </com.google.android.material.appbar.AppBarLayout>
 
   <TextView
-    android:id="@+id/server_textView"
+    android:id="@+id/serverTextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
@@ -37,7 +37,7 @@
     />
 
   <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recycler_view_zim_host"
+    android:id="@+id/recyclerViewZimHost"
     android:layout_width="0dp"
     android:layout_height="0dp"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -46,7 +46,7 @@
     app:layout_constraintBottom_toTopOf="@+id/startServerButton"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/server_textView"
+    app:layout_constraintTop_toBottomOf="@+id/serverTextView"
     />
 
   <Button

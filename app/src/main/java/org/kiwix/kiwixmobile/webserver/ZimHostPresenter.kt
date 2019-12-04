@@ -33,8 +33,18 @@ class ZimHostPresenter @Inject internal constructor(private val dataSource: Data
   BasePresenter<View>(),
   Presenter {
 
-  override fun loadBooks() {
+  override fun loadBooks(previouslyHostedBooks: Set<String>) {
     dataSource.languageCategorizedBooks
+      .map { books ->
+        books
+          .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
+          .forEach {
+            it.isSelected = (
+              previouslyHostedBooks.contains(it.book.title) || previouslyHostedBooks.isEmpty()
+              )
+          }
+        books
+      }
       .subscribe(object : SingleObserver<List<BooksOnDiskListItem>> {
         override fun onSubscribe(d: Disposable) {
           compositeDisposable.add(d)

@@ -26,6 +26,6 @@ class ZimHostContract {
   }
 
   interface Presenter : BaseContract.Presenter<View> {
-    fun loadBooks()
+    fun loadBooks(previouslyHostedBooks: Set<String>)
   }
 }
