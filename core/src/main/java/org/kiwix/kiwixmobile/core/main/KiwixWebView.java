@@ -43,9 +43,11 @@ import java.io.OutputStream;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+
+import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
 
 public class KiwixWebView extends VideoEnabledWebView {
   public static final float[] NIGHT_MODE_COLORS = {
@@ -104,7 +106,10 @@ public class KiwixWebView extends VideoEnabledWebView {
     setLayerType(LAYER_TYPE_NONE, null);
   }
 
-  public void toggleNightMode() {
+  public void activateNightMode() {
+    if (getUrl().equals(HOME_URL)) {
+      return;
+    }
     Paint paint = new Paint();
     ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
     paint.setColorFilter(filterInvert);

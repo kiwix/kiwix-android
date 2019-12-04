@@ -286,4 +286,14 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Clears all notes on all articles</string>
   <string name="pref_clear_all_notes_title">Clear all notes</string>
+  <string-array name="pref_night_modes_entries">
+    <item>On</item>
+    <item>Off</item>
+    <item>Auto</item>
+  </string-array>
+  <string-array name="pref_night_modes_values">
+    <item>2</item>
+    <item>1</item>
+    <item>-1</item>
+  </string-array>
 </resources>

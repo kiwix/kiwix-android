@@ -3,14 +3,14 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="?android:attr/selectableItemBackground"
-  android:minHeight="?android:attr/listPreferredItemHeight"
+  android:background="?selectableItemBackground"
+  android:minHeight="?listPreferredItemHeight"
   android:orientation="horizontal"
-  android:paddingBottom="@dimen/activity_vertical_margin"
   android:paddingLeft="@dimen/activity_horizontal_margin"
-  android:paddingRight="@dimen/activity_horizontal_margin"
   android:paddingTop="@dimen/activity_vertical_margin"
-  >
+  android:paddingRight="@dimen/activity_horizontal_margin"
+  android:paddingBottom="@dimen/activity_vertical_margin"
+  tools:ignore="Overdraw">
 
   <ImageView
     android:id="@+id/favicon"
@@ -21,7 +21,7 @@
     android:adjustViewBounds="true"
     android:scaleType="fitCenter"
     android:src="@mipmap/ic_launcher"
-    />
+    tools:ignore="RtlHardcoded" />
 
   <LinearLayout
     android:layout_width="0dp"
@@ -29,62 +29,55 @@
     android:layout_weight="1"
     android:orientation="vertical"
     android:paddingLeft="@dimen/dimen_small_padding"
-    tools:ignore="HardcodedText"
-    >
+    tools:ignore="RtlHardcoded,RtlSymmetry">
 
     <TextView
       android:id="@+id/title"
+      style="@style/list_item_title"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Title"
-      android:textAppearance="?android:attr/textAppearanceListItem"
-      />
+      tools:text="Title" />
 
     <TextView
       android:id="@+id/description"
+      style="@style/list_item_body"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Description"
-      android:textAppearance="?android:attr/textAppearanceSmall"
-      />
+      tools:text="Description" />
 
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:baselineAligned="false"
       android:orientation="horizontal"
-      android:paddingTop="@dimen/dimen_medium_padding"
-      >
+      android:paddingTop="@dimen/dimen_medium_padding">
 
       <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
           android:id="@+id/size"
+          style="@style/list_item_body"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="File Size"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          />
+          tools:text="File Size" />
 
         <TextView
           android:id="@+id/creator"
+          style="@style/list_item_body"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Author"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          />
+          tools:text="Author" />
 
         <TextView
           android:id="@+id/publisher"
+          style="@style/list_item_body"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Publisher"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          />
+          tools:text="Publisher" />
 
       </LinearLayout>
 
@@ -92,37 +85,31 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="right"
-        android:orientation="vertical"
-        >
+        android:gravity="end"
+        android:orientation="vertical">
 
         <TextView
           android:id="@+id/date"
+          style="@style/list_item_body"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Date"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          />
+          tools:text="Date" />
 
         <TextView
           android:id="@+id/language"
+          style="@style/list_item_body"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Language"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          />
+          tools:text="Language" />
 
         <TextView
           android:id="@+id/fileName"
+          style="@style/list_item_body"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="File Name"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          />
+          tools:text="File Name" />
 
       </LinearLayout>
-
     </LinearLayout>
   </LinearLayout>
-
 </LinearLayout>

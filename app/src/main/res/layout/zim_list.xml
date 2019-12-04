@@ -4,29 +4,24 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?attr/listBackground"
-  android:orientation="vertical"
-  >
+  android:orientation="vertical">
 
   <TextView
     android:id="@+id/file_management_no_files"
-    android:text="@string/no_files_here"
-    tools:ignore="MissingConstraints"
     style="@style/no_list_content_text"
-    />
+    android:text="@string/no_files_here"
+    tools:ignore="MissingConstraints" />
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     android:id="@+id/zim_swiperefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/zimfilelist"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      />
+      app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

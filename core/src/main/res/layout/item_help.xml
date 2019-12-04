@@ -4,8 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:padding="@dimen/activity_horizontal_margin"
-  >
+  android:padding="@dimen/activity_horizontal_margin">
 
   <TextView
     android:id="@+id/item_help_title"
@@ -15,8 +14,7 @@
     app:layout_constraintEnd_toStartOf="@id/item_help_toggle_expand"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:text="@string/help_2"
-    />
+    tools:text="@string/help_2" />
 
   <ImageView
     android:id="@+id/item_help_toggle_expand"
@@ -27,18 +25,16 @@
     app:layout_constraintBottom_toBottomOf="@id/item_help_title"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="@id/item_help_title"
-    app:srcCompat="@drawable/action_find_next"
-    />
+    app:srcCompat="@drawable/action_find_next" />
 
   <TextView
     android:id="@+id/item_help_description"
+    style="@style/list_item_body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:textAppearance="?android:attr/textAppearanceSmall"
     android:visibility="gone"
     app:layout_constraintTop_toBottomOf="@id/item_help_title"
     tools:text="@string/help_3"
-    tools:visibility="visible"
-    />
+    tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

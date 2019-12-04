@@ -226,7 +226,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
     alertDialogShower.show(KiwixDialog.StartHotspotManually(),
       ::launchTetheringSettingsScreen,
-      null,
+      {},
       {
         progressDialog = ProgressDialog.show(
           this,
@@ -264,7 +264,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     )
   }
 
-  override fun onSaveInstanceState(outState: Bundle?) {
+  override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     if (ServerUtils.isServerStarted) {
       outState!!.putString(ipStateKey, ip)
