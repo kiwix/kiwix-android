@@ -15,26 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.webserver
 
-package org.kiwix.kiwixmobile.core.di.components
+import org.kiwix.kiwixmobile.core.base.BaseContract
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 
-import android.app.Service
-import dagger.BindsInstance
-import dagger.Subcomponent
-import org.kiwix.kiwixmobile.core.di.ServiceScope
-import org.kiwix.kiwixmobile.core.di.modules.ServiceModule
-import org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService
+class ZimHostContract {
+  interface View : BaseContract.View<Presenter> {
+    fun addBooks(books: List<BooksOnDiskListItem>)
+  }
 
-@Subcomponent(modules = [ServiceModule::class])
-@ServiceScope
-interface ServiceComponent {
-  fun inject(hotspotService: HotspotService)
-
-  @Subcomponent.Builder
-  interface Builder {
-
-    @BindsInstance fun service(service: Service): Builder
-
-    fun build(): ServiceComponent
+  interface Presenter : BaseContract.Presenter<View> {
+    fun loadBooks(previouslyHostedBooks: Set<String>)
   }
 }

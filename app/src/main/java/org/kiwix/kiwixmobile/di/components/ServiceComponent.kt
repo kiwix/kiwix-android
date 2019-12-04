@@ -16,25 +16,25 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.webserver;
+package org.kiwix.kiwixmobile.di.components
 
-import android.app.Activity;
-import dagger.Module;
-import dagger.Provides;
-import org.kiwix.kiwixmobile.core.di.ActivityScope;
+import android.app.Service
+import dagger.BindsInstance
+import dagger.Subcomponent
+import org.kiwix.kiwixmobile.di.ServiceScope
+import org.kiwix.kiwixmobile.di.modules.ServiceModule
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 
-@Module
-public class ZimHostModule {
+@Subcomponent(modules = [ServiceModule::class])
+@ServiceScope
+interface ServiceComponent {
+  fun inject(hotspotService: HotspotService)
 
-  @ActivityScope
-  @Provides
-  ZimHostContract.Presenter provideZimHostPresenter(ZimHostPresenter zimHostPresenter) {
-    return zimHostPresenter;
-  }
+  @Subcomponent.Builder
+  interface Builder {
 
-  @ActivityScope
-  @Provides Activity providesActivity(ZimHostActivity zimHostActivity) {
-    return zimHostActivity;
+    @BindsInstance fun service(service: Service): Builder
+
+    fun build(): ServiceComponent
   }
 }
-

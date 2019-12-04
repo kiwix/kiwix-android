@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
@@ -167,5 +168,9 @@ class KiwixMainActivity : CoreMainActivity() {
     if (intent?.data != null) {
       openZimFile(intent.data.toFile())
     }
+  }
+
+  override fun onHostBooksMenuClicked() {
+    start<ZimHostActivity>()
   }
 }

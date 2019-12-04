@@ -885,6 +885,10 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
+  @Override public void onHostBooksMenuClicked() {
+    // to be implemented in subclasses
+  }
+
   protected abstract void createNewTab();
 
   /** Creates the full screen AddNoteDialog, which is a DialogFragment */
@@ -1132,8 +1136,8 @@ public abstract class CoreMainActivity extends BaseActivity
     tabsAdapter.notifyDataSetChanged();
     openHomeScreen();
   }
-
   //opens home screen when user closes all tabs
+
   private void openHomeScreen() {
     new Handler().postDelayed(() -> {
       if (webViewList.size() == 0) {

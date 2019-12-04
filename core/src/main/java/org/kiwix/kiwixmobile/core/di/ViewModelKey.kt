@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di
+package org.kiwix.kiwixmobile.core.di
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

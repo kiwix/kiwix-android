@@ -26,6 +26,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import io.reactivex.Flowable;
 import io.reactivex.processors.PublishProcessor;
+import java.util.HashSet;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.core.CoreApp;
@@ -42,18 +44,19 @@ public class SharedPreferenceUtil {
   public static final String PREF_STORAGE = "pref_select_folder";
   public static final String PREF_WIFI_ONLY = "pref_wifi_only";
   public static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
-  public static final String PREF_BACK_TO_TOP = "pref_backtotop";
-  public static final String PREF_HIDE_TOOLBAR = "pref_hidetoolbar";
   public static final String PREF_ZOOM = "pref_zoom_slider";
   public static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
-  public static final String PREF_FULLSCREEN = "pref_fullscreen";
-  public static final String PREF_NEW_TAB_BACKGROUND = "pref_newtab_background";
-  public static final String PREF_STORAGE_TITLE = "pref_selected_title";
-  public static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
-  public static final String PREF_IS_FIRST_RUN = "isFirstRun";
   public static final String PREF_SHOW_INTRO = "showIntro";
+  private static final String PREF_BACK_TO_TOP = "pref_backtotop";
+  private static final String PREF_HIDE_TOOLBAR = "pref_hidetoolbar";
+  private static final String PREF_FULLSCREEN = "pref_fullscreen";
+  private static final String PREF_NEW_TAB_BACKGROUND = "pref_newtab_background";
+  private static final String PREF_STORAGE_TITLE = "pref_selected_title";
+  private static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
+  private static final String PREF_IS_FIRST_RUN = "isFirstRun";
   private static final String PREF_SHOW_BOOKMARKS_CURRENT_BOOK = "show_bookmarks_current_book";
   private static final String PREF_SHOW_HISTORY_CURRENT_BOOK = "show_history_current_book";
+  private static final String PREF_HOSTED_BOOKS = "hosted_books";
   public static final String PREF_NIGHT_MODE = "pref_night_mode";
   private SharedPreferences sharedPreferences;
   private final PublishProcessor<String> prefStorages = PublishProcessor.create();
@@ -202,5 +205,15 @@ public class SharedPreferenceUtil {
 
   public void updateNightMode() {
     nightModes.offer(getNightMode());
+  }
+
+  public Set<String> getHostedBooks() {
+    return sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, new HashSet<>());
+  }
+
+  public void setHostedBooks(Set<String> hostedBooks) {
+    sharedPreferences.edit()
+      .putStringSet(PREF_HOSTED_BOOKS, hostedBooks)
+      .apply();
   }
 }

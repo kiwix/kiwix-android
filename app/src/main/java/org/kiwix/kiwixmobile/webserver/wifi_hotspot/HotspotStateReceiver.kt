@@ -15,12 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.wifi_hotspot
+package org.kiwix.kiwixmobile.webserver.wifi_hotspot
 
 import android.content.Context
 import android.content.Intent
-import org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotStateReceiver.HotspotState.DISABLED
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver.HotspotState.DISABLED
 import javax.inject.Inject
 
 const val EXTRA_WIFI_AP_STATE = "wifi_state"
@@ -32,7 +32,8 @@ const val WIFI_AP_STATE_ENABLING = 12
 const val WIFI_AP_STATE_ENABLED = 13
 const val WIFI_AP_STATE_FAILED = 14
 
-class HotspotStateReceiver @Inject constructor(val callback: Callback) : BaseBroadcastReceiver() {
+class HotspotStateReceiver @Inject constructor(private val callback: Callback) :
+  BaseBroadcastReceiver() {
   override val action: String = ACTION_WIFI_AP_STATE
 
   override fun onIntentWithActionReceived(context: Context, intent: Intent) {

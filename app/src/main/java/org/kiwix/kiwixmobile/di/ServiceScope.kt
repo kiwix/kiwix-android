@@ -15,20 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.di
 
-package org.kiwix.kiwixmobile.core.webserver;
+import javax.inject.Scope
+import kotlin.annotation.AnnotationRetention.RUNTIME
 
-import androidx.annotation.NonNull;
-
-public interface ZimHostCallbacks {
-
-  void onServerStarted(@NonNull String ip);
-
-  void onServerStopped();
-
-  void onServerFailedToStart();
-
-  void onIpAddressValid();
-
-  void onIpAddressInvalid();
-}
+@Scope
+@Retention(RUNTIME)
+annotation class ServiceScope
