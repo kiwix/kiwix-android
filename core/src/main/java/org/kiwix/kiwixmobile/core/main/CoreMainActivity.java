@@ -357,6 +357,7 @@ public abstract class CoreMainActivity extends BaseActivity
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         bookOnDiskItem -> {
           open(bookOnDiskItem);
+          getCurrentWebView().activateNightMode();
           return Unit.INSTANCE;
         },
         null,
