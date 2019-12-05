@@ -19,12 +19,10 @@
 package custom
 
 import com.android.build.gradle.internal.dsl.ProductFlavor
-import custom.CustomApps.CustomApp
 import org.gradle.api.NamedDomainObjectContainer
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
+import java.io.File
 
 object CustomApps {
   private val example = CustomApp(
@@ -143,7 +141,7 @@ object CustomApps {
     enforcedLanguage = "de",
     displayName = "Wikivoyage auf Deutsch"
   )
-  val all = listOf(
+  private val all = listOf(
     example,
     phet,
     tunisie,
@@ -165,48 +163,46 @@ object CustomApps {
     wikivoyagede
   )
 
-  fun createCustomAppFromJson(
-    name: String,
-    url: String,
-    enforcedLanguage: String,
-    displayName: String,
-    versionName: String?
-  ) = if (versionName == null) CustomApp(name, url, enforcedLanguage, displayName)
-  else CustomApp(name, url, enforcedLanguage, displayName, versionName)
-
-  data class CustomApp(
-    val name: String,
-    val url: String,
-    val enforcedLanguage: String,
-    val displayName: String,
-    val versionName: String = parseVersionNameFromUrlOrUsePattern(url, "YYYY-MM")
-  ) {
-    val versionCode: Int = formatDate("YYDDD0").toInt()
-
-    fun createFlavor(namedDomainObjectContainer: NamedDomainObjectContainer<ProductFlavor>) {
-      namedDomainObjectContainer.create(this)
-    }
+  fun createStatically(productFlavors: NamedDomainObjectContainer<ProductFlavor>) {
+    productFlavors.create(all)
   }
 
-  private fun parseVersionNameFromUrlOrUsePattern(url: String, pattern: String) =
-    url.substringAfterLast("_")
-      .substringBeforeLast(".")
-      .takeIf {
-        try {
-          SimpleDateFormat(pattern, Locale.ROOT).parse(it) != null
-        } catch (parseException: ParseException) {
-          false
-        }
-      }
-      ?: formatDate(pattern)
-
-  private fun formatDate(pattern: String) =
-    Date().let(SimpleDateFormat(pattern, Locale.ROOT)::format)
+  fun createDynamically(
+    srcFolder: File,
+    productFlavors: NamedDomainObjectContainer<ProductFlavor>
+  ) {
+    productFlavors.create(
+      srcFolder.walk()
+        .filter { it.name == "info.json" }
+        .map {
+          val parsedJson = JSONParser().parse(it.readText()) as JSONObject
+          createCustomAppFromJson(
+            it.parentFile.name,
+            parsedJson.getAndCast("zim_url"),
+            parsedJson.getAndCast("enforced_lang"),
+            parsedJson.getAndCast("app_name"),
+            parsedJson.getAndCast("version_name")
+          )
+        }.toList()
+    )
+  }
 }
 
 fun NamedDomainObjectContainer<ProductFlavor>.create(customApps: List<CustomApp>) {
   customApps.forEach(this::create)
 }
+
+private fun createCustomAppFromJson(
+  name: String,
+  url: String,
+  enforcedLanguage: String,
+  displayName: String,
+  versionName: String?
+) = if (versionName == null) CustomApp(name, url, enforcedLanguage, displayName)
+else CustomApp(name, url, enforcedLanguage, displayName, versionName)
+
+fun <T> JSONObject.getAndCast(columnName: String): T =
+  getOrDefault(columnName, null) as T
 
 private fun NamedDomainObjectContainer<ProductFlavor>.create(
   customApp: CustomApp
