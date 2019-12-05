@@ -21,13 +21,13 @@ package org.kiwix.kiwixmobile.custom.main
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
+import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
@@ -82,6 +82,8 @@ class CustomMainActivity : CoreMainActivity() {
     webViewCallback: WebViewCallback,
     zimReaderContainer: ZimReaderContainer
   ) = CustomWebViewClient(webViewCallback, zimReaderContainer)
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 
   private fun requireEnforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()

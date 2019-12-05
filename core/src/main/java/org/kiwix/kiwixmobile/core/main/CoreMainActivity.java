@@ -598,9 +598,11 @@ public abstract class CoreMainActivity extends BaseActivity
         tempVisitCount = 0;
         visitCounterPref.setCount(tempVisitCount);
       })
-      .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
+      .setIcon(ContextCompat.getDrawable(this, getIconResId()))
       .show();
   }
+
+  protected abstract int getIconResId();
 
   private void goToSearch(boolean isVoice) {
     final String zimFile = zimReaderContainer.getZimCanonicalPath();

@@ -25,7 +25,7 @@ import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import org.json.JSONArray
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -106,6 +106,8 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
     super.hasValidFileAndUrl(url, zimFileReader) && url != HOME_URL
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 
   override fun urlIsInvalid() =
     super.urlIsInvalid() || currentWebView.url == HOME_URL
