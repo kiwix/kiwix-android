@@ -1580,8 +1580,10 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void webViewFailedLoading(String url) {
-    String error = String.format(getString(R.string.error_article_url_not_found), url);
-    Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    if (url != null && !url.endsWith("null")) {
+      String error = getString(R.string.error_article_url_not_found, url);
+      Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
   }
 
   @Override
