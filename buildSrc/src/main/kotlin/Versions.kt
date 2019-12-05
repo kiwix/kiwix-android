@@ -42,17 +42,17 @@ object Versions {
 
   const val com_github_triplet_play_gradle_plugin: String = "2.5.0" // available: "2.6.1"
 
-  const val kotlin_annotation_processing_gradle: String = "1.3.50" // available: "1.3.61"
+  const val kotlin_annotation_processing_gradle: String = "1.3.61"
 
-  const val kotlin_android_extensions_runtime: String = "1.3.50" // available: "1.3.61"
+  const val kotlin_android_extensions_runtime: String = "1.3.61"
 
-  const val kotlin_android_extensions: String = "1.3.50" // available: "1.3.61"
+  const val kotlin_android_extensions: String = "1.3.61"
 
   const val multidex_instrumentation: String = "2.0.0"
 
   const val javax_annotation_api: String = "1.3.2"
 
-  const val kotlin_gradle_plugin: String = "1.3.60" // available: "1.3.61"
+  const val kotlin_gradle_plugin: String = "1.3.61"
 
   const val logging_interceptor: String = "3.12.1" // available: "4.2.2"
 
