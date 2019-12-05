@@ -1,4 +1,3 @@
-import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -58,9 +57,9 @@ object Versions {
 
   const val ink_page_indicator: String = "1.3.0"
 
-  const val kotlin_stdlib_jdk7: String = "1.3.61" // available: "1.3.61"
+  const val kotlin_stdlib_jdk7: String = "1.3.61"
 
-  const val leakcanary_android: String = "2.0-alpha-2" // available: "2.0"
+  const val leakcanary_android: String = "2.0"
 
   const val constraintlayout: String = "1.1.3"
 
@@ -142,4 +141,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
   inline get() =
-      id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+    id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
