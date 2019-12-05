@@ -17,14 +17,12 @@
  */
 package org.kiwix.kiwixmobile.core.base
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import dagger.android.AndroidInjection
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -44,16 +42,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
   protected open fun injection() {
     AndroidInjection.inject(this)
-  }
-
-  override fun getTheme(): Resources.Theme {
-    val theme = super.getTheme()
-    if (sharedPreferenceUtil.nightMode()) {
-      setTheme(R.style.AppTheme_Night)
-    } else {
-      theme.applyStyle(R.style.StatusBarTheme, true)
-    }
-    return theme
   }
 
   override fun setContentView(@LayoutRes layoutResID: Int) {

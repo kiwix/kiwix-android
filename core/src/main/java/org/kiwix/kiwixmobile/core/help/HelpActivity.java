@@ -38,7 +38,7 @@ public class HelpActivity extends BaseActivity {
 
   private final HashMap<String, String> titleDescriptionMap = new HashMap<>();
 
-  @BindView(R2.id.activity_help_toolbar)
+  @BindView(R2.id.toolbar)
   Toolbar toolbar;
   @BindView(R2.id.activity_help_recycler_view)
   RecyclerView recyclerView;
@@ -58,15 +58,12 @@ public class HelpActivity extends BaseActivity {
     populateMap(R.string.help_5, R.array.description_help_5);
 
     recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-    HelpAdapter helpAdapter =
-      new HelpAdapter(titleDescriptionMap, sharedPreferenceUtil.nightMode());
-    recyclerView.setAdapter(helpAdapter);
+    recyclerView.setAdapter(new HelpAdapter(titleDescriptionMap));
   }
 
   @OnClick({ R2.id.activity_help_feedback_text_view, R2.id.activity_help_feedback_image_view })
   void sendFeedback() {
     Intent intent = new Intent(Intent.ACTION_SENDTO);
-    intent.setType("plain/text");
     String uriText = "mailto:" + Uri.encode(CONTACT_EMAIL_ADDRESS) +
       "?subject=" + Uri.encode(
       "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());

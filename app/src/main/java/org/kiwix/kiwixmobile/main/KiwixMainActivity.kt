@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
@@ -43,11 +42,11 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
 class KiwixMainActivity : CoreMainActivity() {
-  private val homeUrl = "file:///android_asset/home.html"
 
   override fun injection() {
     kiwixActivityComponent.inject(this)
@@ -60,16 +59,8 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer.zimFile == null && homeUrl != currentWebView.url) {
+    if (zimReaderContainer.zimFile == null && HOME_URL != currentWebView.url) {
       showHomePage()
-    }
-
-    if (webViewList.isNotEmpty() && currentWebViewIndex < webViewList.size &&
-      webViewList[currentWebViewIndex].url != null &&
-      webViewList[currentWebViewIndex].url == homeUrl &&
-      webViewList[currentWebViewIndex].findViewById<View>(R.id.get_content_card) != null
-    ) {
-      webViewList[currentWebViewIndex].findViewById<View>(R.id.get_content_card).isEnabled = true
     }
   }
 
@@ -114,22 +105,22 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
-    super.hasValidFileAndUrl(url, zimFileReader) && url != homeUrl
+    super.hasValidFileAndUrl(url, zimFileReader) && url != HOME_URL
 
   override fun urlIsInvalid() =
-    super.urlIsInvalid() || currentWebView.url == homeUrl
+    super.urlIsInvalid() || currentWebView.url == HOME_URL
 
   override fun showHomePage() {
     currentWebView.removeAllViews()
-    currentWebView.loadUrl(homeUrl)
+    currentWebView.loadUrl(HOME_URL)
   }
 
   override fun createNewTab() {
-    newTab(homeUrl)
+    newTab(HOME_URL)
   }
 
   override fun isInvalidTitle(zimFileTitle: String?) =
-    super.isInvalidTitle(zimFileTitle) || homeUrl == currentWebView.url
+    super.isInvalidTitle(zimFileTitle) || HOME_URL == currentWebView.url
 
   private fun uriFromIntent() =
     intent.data ?: intent.getStringExtra(EXTRA_ZIM_FILE)?.let {
@@ -177,5 +168,9 @@ class KiwixMainActivity : CoreMainActivity() {
     if (intent?.data != null) {
       openZimFile(intent.data.toFile())
     }
+  }
+
+  override fun onHostBooksMenuClicked() {
+    start<ZimHostActivity>()
   }
 }

@@ -29,7 +29,7 @@ fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 class HelpRobot : BaseRobot() {
 
   init {
-    isVisible(ViewId(id.activity_help_toolbar))
+    isVisible(ViewId(id.toolbar))
   }
 
   fun clickOnWhatDoesKiwixDo() {

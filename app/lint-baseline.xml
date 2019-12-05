@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="5" by="lint 3.5.0" client="gradle" variant="all" version="3.5.0">
+<issues format="5" by="lint 3.5.2" client="gradle" variant="debug" version="3.5.2">
 
     <issue
         id="ObsoleteLintCustomCheck"
@@ -9,13 +9,35 @@
     </issue>
 
     <issue
+        id="VectorRaster"
+        message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
+        errorLine1="  android:width=&quot;449dp&quot;>"
+        errorLine2="                 ~~~~~">
+        <location
+            file="src\main\res\drawable-night\ic_airplane.xml"
+            line="5"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
+        errorLine1="  android:width=&quot;449dp&quot;>"
+        errorLine2="                 ~~~~~">
+        <location
+            file="src\main\res\drawable\ic_airplane.xml"
+            line="5"
+            column="18"/>
+    </issue>
+
+    <issue
         id="RequiredSize"
         message="The required `layout_width` and `layout_height` attributes are missing"
         errorLine1="  &lt;TextView"
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\activity_library.xml"
-            line="11"
+            line="10"
             column="4"/>
     </issue>
 
@@ -26,7 +48,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\layout_download_management.xml"
-            line="12"
+            line="11"
             column="4"/>
     </issue>
 
@@ -37,52 +59,41 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\zim_list.xml"
-            line="11"
-            column="4"/>
-    </issue>
-
-    <issue
-        id="AllowBackup"
-        message="On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html"
-        errorLine1="  &lt;application android:name=&quot;.KiwixApp&quot;>"
-        errorLine2="   ~~~~~~~~~~~">
-        <location
-            file="src\main\AndroidManifest.xml"
-            line="5"
+            line="9"
             column="4"/>
     </issue>
 
     <issue
         id="UnpackedNativeCode"
         message="Missing attribute android:extractNativeLibs=&quot;false&quot; on the `&lt;application>` tag."
-        errorLine1="  &lt;application android:name=&quot;.KiwixApp&quot;>"
+        errorLine1="  &lt;application"
         errorLine2="  ^">
         <location
             file="src\main\AndroidManifest.xml"
-            line="5"
-            column="3"/>
-    </issue>
-
-    <issue
-        id="DisableBaselineAlignment"
-        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
-        errorLine1="    &lt;LinearLayout"
-        errorLine2="     ~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\library_item.xml"
-            line="51"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="Overdraw"
-        message="Possible overdraw: Root element paints background `?attr/listBackground` with a theme that also paints a background (inferred theme is `@android:style/Theme.Holo`)"
-        errorLine1="  android:background=&quot;?attr/listBackground&quot;"
-        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\zim_list.xml"
             line="7"
             column="3"/>
+    </issue>
+
+    <issue
+        id="VectorPath"
+        message="Very long vector path (1416 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        errorLine1="    android:pathData=&quot;M3564,1035c-3,-8 10,-44 30,-79l36,-65 -57,-11c-141,-28 -345,-96 -428,-143 -34,-19 -40,-28 -43,-60 -3,-33 -6,-37 -32,-37 -16,0 -39,-4 -52,-9 -13,-5 -137,-90 -275,-189 -189,-135 -262,-182 -290,-186 -21,-3 -422,-8 -892,-12l-854,-7 -22,-25c-16,-19 -32,-26 -58,-26 -43,0-72,23 -89,71 -11,30 -15,33 -48,31 -28,-2 -37,1 -45,20 -9,20 -17,22 -82,22 -42,0 -73,-4 -73,-10 0,-6 26,-10 59,-10 52,0 61,-3 75,-25 12,-18 25,-25 50,-25 28,0 36,-5 46,-30 29,-71 120,-94 177,-46l29,24 839,6c462,4 858,9 880,12 57,8 92,30 349,217 187,136 236,167 263,167 38,0 38,0 18,-68 -9,-29 -13,-57 -10,-62 3,-6 30,-10 59,-10 65,0 113,28 139,82 26,54 10,69 -20,19 -27,-46 -67,-71 -114,-71 -28,0 -31,3 -25,23 4,12 12,55 19,96l12,73 58,30c76,38 214,83 347,114l104,23 23,-21c34,-31 29,-15 -27,89 -54,101 -55,100 32,82 85,-18 162,-65 234,-142 68,-74 92,-83 53,-21l-23,37 68,-7c37,-4 102,-18 146,-31 75,-24 170,-78 177,-101 7,-22 -250,-124 -311,-124 -16,0 -27,10 -37,33 -19,43 -71,69 -126,64 -55,-6 -91,-30 -110,-74l-15,-36 -156,7c-86,4 -176,10 -201,13 -35,5 -43,3 -39,-8 3,-8 26,-17 59,-21 77,-11 349,-24 358,-18 5,3 10,11 13,19 2,9 12,1 26,-22 24,-41 63,-57 88,-36 14,11 19,10 36,-11 12,-15 18,-36 16,-57 -1,-18 2,-34 7,-35 6,-2 11,18 13,43 2,37 -2,52 -21,74 -21,25 -22,32 -13,67 12,46 28,44 40,-5 12,-46 25,-47 152,-13 151,41 264,99 264,136 0,10 -16,32 -35,49 -76,67 -219,118 -355,128 -76,6 -88,10 -130,41 -56,43 -112,68 -186,81 -77,15 -94,14 -100,-4z&quot;"
+        errorLine2="                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\res\drawable-night\ic_airplane.xml"
+            line="16"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="VectorPath"
+        message="Very long vector path (1416 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        errorLine1="    android:pathData=&quot;M3564,1035c-3,-8 10,-44 30,-79l36,-65 -57,-11c-141,-28 -345,-96 -428,-143 -34,-19 -40,-28 -43,-60 -3,-33 -6,-37 -32,-37 -16,0 -39,-4 -52,-9 -13,-5 -137,-90 -275,-189 -189,-135 -262,-182 -290,-186 -21,-3 -422,-8 -892,-12l-854,-7 -22,-25c-16,-19 -32,-26 -58,-26 -43,0-72,23 -89,71 -11,30 -15,33 -48,31 -28,-2 -37,1 -45,20 -9,20 -17,22 -82,22 -42,0 -73,-4 -73,-10 0,-6 26,-10 59,-10 52,0 61,-3 75,-25 12,-18 25,-25 50,-25 28,0 36,-5 46,-30 29,-71 120,-94 177,-46l29,24 839,6c462,4 858,9 880,12 57,8 92,30 349,217 187,136 236,167 263,167 38,0 38,0 18,-68 -9,-29 -13,-57 -10,-62 3,-6 30,-10 59,-10 65,0 113,28 139,82 26,54 10,69 -20,19 -27,-46 -67,-71 -114,-71 -28,0 -31,3 -25,23 4,12 12,55 19,96l12,73 58,30c76,38 214,83 347,114l104,23 23,-21c34,-31 29,-15 -27,89 -54,101 -55,100 32,82 85,-18 162,-65 234,-142 68,-74 92,-83 53,-21l-23,37 68,-7c37,-4 102,-18 146,-31 75,-24 170,-78 177,-101 7,-22 -250,-124 -311,-124 -16,0 -27,10 -37,33 -19,43 -71,69 -126,64 -55,-6 -91,-30 -110,-74l-15,-36 -156,7c-86,4 -176,10 -201,13 -35,5 -43,3 -39,-8 3,-8 26,-17 59,-21 77,-11 349,-24 358,-18 5,3 10,11 13,19 2,9 12,1 26,-22 24,-41 63,-57 88,-36 14,11 19,10 36,-11 12,-15 18,-36 16,-57 -1,-18 2,-34 7,-35 6,-2 11,18 13,43 2,37 -2,52 -21,74 -21,25 -22,32 -13,67 12,46 28,44 40,-5 12,-46 25,-47 152,-13 151,41 264,99 264,136 0,10 -16,32 -35,49 -76,67 -219,118 -355,128 -76,6 -88,10 -130,41 -56,43 -112,68 -186,81 -77,15 -94,14 -100,-4z&quot;"
+        errorLine2="                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\res\drawable\ic_airplane.xml"
+            line="16"
+            column="23"/>
     </issue>
 
     <issue
@@ -92,7 +103,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\activity_library.xml"
-            line="11"
+            line="10"
             column="4"/>
     </issue>
 
@@ -147,7 +158,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\header_date.xml"
-            line="9"
+            line="8"
             column="4"/>
     </issue>
 
@@ -158,7 +169,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_language.xml"
-            line="20"
+            line="18"
             column="4"/>
     </issue>
 
@@ -169,7 +180,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_language.xml"
-            line="35"
+            line="32"
             column="4"/>
     </issue>
 
@@ -180,8 +191,96 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_language.xml"
-            line="47"
+            line="43"
             column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="    &lt;TextView"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_library.xml"
+            line="34"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="    &lt;TextView"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_library.xml"
+            line="41"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="        &lt;TextView"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_library.xml"
+            line="61"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="        &lt;TextView"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_library.xml"
+            line="68"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="        &lt;TextView"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_library.xml"
+            line="75"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="        &lt;TextView"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_library.xml"
+            line="91"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="        &lt;TextView"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_library.xml"
+            line="98"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="        &lt;TextView"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_library.xml"
+            line="105"
+            column="10"/>
     </issue>
 
     <issue
@@ -191,7 +290,7 @@
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\library_divider.xml"
-            line="13"
+            line="12"
             column="4"/>
     </issue>
 
@@ -234,20 +333,9 @@
         errorLine1="  &lt;ImageView"
         errorLine2="   ~~~~~~~~~">
         <location
-            file="src\main\res\layout\library_item.xml"
+            file="src\main\res\layout\item_library.xml"
             line="15"
             column="4"/>
-    </issue>
-
-    <issue
-        id="RtlSymmetry"
-        message="When you define `paddingLeft` you should probably also define `paddingRight` for right-to-left symmetry"
-        errorLine1="    android:paddingLeft=&quot;@dimen/dimen_small_padding&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\library_item.xml"
-            line="31"
-            column="5"/>
     </issue>
 
     <issue
@@ -262,43 +350,54 @@
     </issue>
 
     <issue
-        id="RtlHardcoded"
-        message="Consider adding `android:layout_marginEnd=&quot;@dimen/favicon_margin_right&quot;` to better support right-to-left layouts"
-        errorLine1="    android:layout_marginRight=&quot;@dimen/favicon_margin_right&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\library_item.xml"
-            line="20"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider adding `android:paddingStart=&quot;@dimen/dimen_small_padding&quot;` to better support right-to-left layouts"
-        errorLine1="    android:paddingLeft=&quot;@dimen/dimen_small_padding&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\library_item.xml"
-            line="31"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Use &quot;`end`&quot; instead of &quot;`right`&quot; to ensure correct behavior in right-to-left locales"
-        errorLine1="        android:gravity=&quot;right&quot;"
-        errorLine2="                         ~~~~~">
-        <location
-            file="src\main\res\layout\library_item.xml"
-            line="95"
-            column="26"/>
-    </issue>
-
-    <issue
         id="RtlEnabled"
         message="The project references RTL attributes, but does not explicitly enable or disable RTL support with `android:supportsRtl` in the manifest">
         <location
             file="src\main\AndroidManifest.xml"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  public CustomViewPager(Context context) {"
+        errorLine2="                         ~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\intro\CustomViewPager.java"
+            line="36"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  public CustomViewPager(Context context, AttributeSet attrs) {"
+        errorLine2="                         ~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\intro\CustomViewPager.java"
+            line="41"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  public CustomViewPager(Context context, AttributeSet attrs) {"
+        errorLine2="                                          ~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\intro\CustomViewPager.java"
+            line="41"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  protected void onCreate(Bundle savedInstanceState) {"
+        errorLine2="                          ~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\intro\IntroActivity.java"
+            line="87"
+            column="27"/>
     </issue>
 
     <issue

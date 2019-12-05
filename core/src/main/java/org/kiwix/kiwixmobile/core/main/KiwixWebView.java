@@ -43,9 +43,11 @@ import java.io.OutputStream;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+
+import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
 
 public class KiwixWebView extends VideoEnabledWebView {
   public static final float[] NIGHT_MODE_COLORS = {
@@ -104,7 +106,10 @@ public class KiwixWebView extends VideoEnabledWebView {
     setLayerType(LAYER_TYPE_NONE, null);
   }
 
-  public void toggleNightMode() {
+  public void activateNightMode() {
+    if (getUrl().equals(HOME_URL)) {
+      return;
+    }
     Paint paint = new Paint();
     ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
     paint.setColorFilter(filterInvert);
@@ -159,6 +164,17 @@ public class KiwixWebView extends VideoEnabledWebView {
   }
 
   static class SaveHandler extends Handler {
+    private String getDecodedFileName(String url, String src) {
+      String fileName = "";
+      if (url != null) {
+        fileName = url.substring(url.lastIndexOf('/') + 1);
+      }
+      // If url is not a valid file name use src if it isn't null
+      if (!fileName.contains(".") && src != null) {
+        fileName = src.substring(src.lastIndexOf('/') + 1);
+      }
+      return fileName.substring(fileName.indexOf("%3A") + 1);
+    }
 
     @Override
     public void handleMessage(Message msg) {
@@ -166,10 +182,8 @@ public class KiwixWebView extends VideoEnabledWebView {
       String src = (String) msg.getData().get("src");
 
       if (url != null || src != null) {
-        url = url == null ? src : url;
-        url = url.substring(url.lastIndexOf('/') + 1);
-        url = url.substring(url.indexOf("%3A") + 1);
-        int dotIndex = url.lastIndexOf('.');
+        String fileName = getDecodedFileName(url, src);
+        int dotIndex = fileName.lastIndexOf('.');
 
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
@@ -178,10 +192,10 @@ public class KiwixWebView extends VideoEnabledWebView {
           root = CoreApp.getInstance().getExternalMediaDirs()[0];
         }
 
-        File storageDir = new File(root, url);
-        String newUrl = url;
+        File storageDir = new File(root, fileName);
+        String newUrl = fileName;
         for (int i = 2; storageDir.exists(); i++) {
-          newUrl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex);
+          newUrl = fileName.substring(0, dotIndex) + "_" + i + fileName.substring(dotIndex);
           storageDir = new File(root, newUrl);
         }
 
