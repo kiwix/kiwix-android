@@ -32,6 +32,7 @@ import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -50,10 +51,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORM
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
@@ -66,7 +63,6 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFile
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.ShareFiles
-import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
@@ -354,14 +350,6 @@ class ZimManageViewModel @Inject constructor(
     val booksUnfilteredByLanguage =
       applyUserFilter(
         libraryNetworkEntity.books
-          .filter {
-            when (fileSystemState) {
-              Unknown,
-              CannotWrite4GbFile -> isLessThan4GB(it)
-              NotEnoughSpaceFor4GbFile,
-              CanWrite4GbFile -> true
-            }
-          }
           .filterNot { downloadedBooksIds.contains(it.id) }
           .filterNot { downloadingBookIds.contains(it.id) },
         filter
@@ -370,30 +358,29 @@ class ZimManageViewModel @Inject constructor(
     return listOf(
       *createLibrarySection(
         booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) },
+        fileSystemState,
         R.string.your_languages,
         Long.MAX_VALUE
       ),
       *createLibrarySection(
         booksUnfilteredByLanguage.filterNot { activeLanguageCodes.contains(it.language) },
+        fileSystemState,
         R.string.other_languages,
         Long.MIN_VALUE
       )
     )
   }
 
-  private fun isLessThan4GB(it: Book) =
-    it.size.toLongOrNull() ?: 0L <
-      Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
-
   private fun createLibrarySection(
     books: List<Book>,
+    fileSystemState: FileSystemState,
     sectionStringId: Int,
     sectionId: Long
   ) =
     if (books.isNotEmpty())
       arrayOf(
         DividerItem(sectionId, context.getString(sectionStringId)),
-        *toBookItems(books)
+        *toBookItems(books, fileSystemState)
       )
     else emptyArray()
 
@@ -407,8 +394,11 @@ class ZimManageViewModel @Inject constructor(
     booksUnfilteredByLanguage.filter { it.searchMatches > 0 }
   }
 
-  private fun toBookItems(books: List<Book>) =
-    books.map { BookItem(it) }.toTypedArray()
+  private fun toBookItems(
+    books: List<Book>,
+    fileSystemState: FileSystemState
+  ) =
+    books.map { BookItem(it, fileSystemState) }.toTypedArray()
 
   private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<BookOnDisk>>) =
     requestFileSystemCheck

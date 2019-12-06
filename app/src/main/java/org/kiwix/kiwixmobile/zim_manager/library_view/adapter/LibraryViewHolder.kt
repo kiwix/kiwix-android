@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import android.view.View
-import kotlinx.android.synthetic.main.library_divider.divider_text
 import kotlinx.android.synthetic.main.item_library.creator
 import kotlinx.android.synthetic.main.item_library.date
 import kotlinx.android.synthetic.main.item_library.description
@@ -29,14 +28,16 @@ import kotlinx.android.synthetic.main.item_library.language
 import kotlinx.android.synthetic.main.item_library.publisher
 import kotlinx.android.synthetic.main.item_library.size
 import kotlinx.android.synthetic.main.item_library.title
+import kotlinx.android.synthetic.main.item_library.unableToDownload
+import kotlinx.android.synthetic.main.library_divider.divider_text
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
-import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
 
@@ -64,6 +65,8 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       containerView.setOnClickListener {
         clickAction.invoke(item)
       }
+      unableToDownload.setOnTouchListener { _, _ -> true }
+      unableToDownload.visibility = if (item.canBeDownloaded) View.GONE else View.VISIBLE
     }
   }
 

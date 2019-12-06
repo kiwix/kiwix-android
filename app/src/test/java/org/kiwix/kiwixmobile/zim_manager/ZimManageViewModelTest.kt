@@ -392,15 +392,16 @@ class ZimManageViewModelTest {
       .assertValue(
         listOf(
           LibraryListItem.DividerItem(Long.MAX_VALUE, "1"),
-          LibraryListItem.BookItem(bookWithActiveLanguage),
+          LibraryListItem.BookItem(bookWithActiveLanguage, true),
           LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
-          LibraryListItem.BookItem(bookWithInactiveLanguage)
+          LibraryListItem.BookItem(bookWithInactiveLanguage, true)
         )
       )
   }
 
   @Test
-  fun `library filters out files over 4GB if file system state says to`() {
+  fun `library marks files over 4GB as can't download if file system state says to`() {
+    every { application.getString(R.string.other_languages) } returns "2"
     val bookOver4Gb = book(
       id = "0",
       url = "",
@@ -423,6 +424,11 @@ class ZimManageViewModelTest {
     testScheduler.advanceTimeBy(500, MILLISECONDS)
     testScheduler.triggerActions()
     viewModel.libraryItems.test()
-      .assertValue(listOf())
+      .assertValue(
+        listOf(
+          LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
+          LibraryListItem.BookItem(bookOver4Gb, false)
+        )
+      )
   }
 }
