@@ -1080,11 +1080,6 @@ public abstract class CoreMainActivity extends BaseActivity
           if (file != null) {
             openZimFile(file);
           }
-        } else {
-          AlertDialog.Builder builder = new AlertDialog.Builder(this);
-          builder.setMessage(getResources().getString(R.string.reboot_message));
-          AlertDialog dialog = builder.create();
-          dialog.show();
         }
         break;
       }

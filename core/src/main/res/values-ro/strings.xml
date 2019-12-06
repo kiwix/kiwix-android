@@ -103,7 +103,6 @@
   <string name="pref_storage">Stocare</string>
   <string name="pref_current_folder">Folder curent</string>
   <string name="path_not_writable">Nu putem accesa directorul dorit folosind implicit. Pentru a rezolva asta reselectează directorul dorit în setările aplicației.</string>
-  <string name="reboot_message">Datorită că are un bug în Android 6.0 noi vă cerem să vă reporniți dispozitivul pentru a continua fără a ne acorda permisiunea sa stocăm. Ne pare rău pentru neplăcerile cauzate.</string>
   <string name="delete_zim_failed">Ne pare rău că nu am reușit să ștergem această filă. Ar trebui să folosiți un manager de fișier în loc.</string>
   <string name="tts_pause">pauză</string>
   <string name="tts_resume">rezumat</string>

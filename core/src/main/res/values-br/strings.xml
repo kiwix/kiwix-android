@@ -106,7 +106,6 @@
   <string name="pref_storage">Stokañ</string>
   <string name="pref_current_folder">Renkell red</string>
   <string name="path_not_writable">Ne c\'haller diraez ar c\'havlec\'h spisaet, impljout ar c\'havlec\'h dre ziouer. Evit reizhañ an dra-se, dibab ar c\'havlec\'h nevez ho peus c\'hoant en arventennoù an arload.</string>
-  <string name="reboot_message">Abalamour d\'un draen en Android 6.0 e c\'houlennomp ouzhoc\'h adloc\'hañ ho trobarzhell hep reiñ gwirioù stokañ deomp. Ho digarez eus an diazezamant a c\'hallfe bezañ abalmaour da se.</string>
   <string name="delete_zim_failed">Ho tigarez, n\'omp ket gouest da zilemel ar restr-mañ. Rankout a rafec\'h klask implijout ur merour restroù kentoc\'h.</string>
   <string name="tts_pause">ehan</string>
   <string name="tts_resume">adkemer</string>
