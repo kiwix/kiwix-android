@@ -59,7 +59,9 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    requireEnforcedLanguage()
+    if (enforcedLanguage()) {
+      return
+    }
     openObbOrZim()
   }
 
@@ -112,7 +114,7 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun getIconResId() = R.mipmap.ic_launcher
 
-  private fun requireEnforcedLanguage(): Boolean {
+  private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
       LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG)
