@@ -37,11 +37,13 @@
   <TextView
     android:id="@+id/description"
     style="@style/list_item_body"
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
     app:layout_constraintStart_toStartOf="@+id/title"
     app:layout_constraintTop_toBottomOf="@+id/title"
-    tools:text="Description" />
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    tools:text="Description a really really really really really really really really really really long descricption" />
 
   <TextView
     android:id="@+id/size"
