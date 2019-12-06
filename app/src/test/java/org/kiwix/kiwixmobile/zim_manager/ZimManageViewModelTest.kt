@@ -392,9 +392,9 @@ class ZimManageViewModelTest {
       .assertValue(
         listOf(
           LibraryListItem.DividerItem(Long.MAX_VALUE, "1"),
-          LibraryListItem.BookItem(bookWithActiveLanguage, true),
+          LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
           LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
-          LibraryListItem.BookItem(bookWithInactiveLanguage, true)
+          LibraryListItem.BookItem(bookWithInactiveLanguage, CanWrite4GbFile)
         )
       )
   }
@@ -427,7 +427,7 @@ class ZimManageViewModelTest {
       .assertValue(
         listOf(
           LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
-          LibraryListItem.BookItem(bookOver4Gb, false)
+          LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
         )
       )
   }
