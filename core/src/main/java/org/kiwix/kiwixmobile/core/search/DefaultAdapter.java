@@ -26,19 +26,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHolder> {
 
   interface ClickListener {
     void onItemClick(String text);
-
     void onItemLongClick(String text);
   }
 
   private final ClickListener clickListener;
   private final Context context;
-  private List<String> searchList;
+  private final List<String> searchList = new ArrayList<>();
 
   public void addAll(List<String> recentSearches) {
     searchList.addAll(recentSearches);
@@ -70,11 +71,10 @@ public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHold
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
-    TextView recentSearch;
+    @BindView(android.R.id.text1) TextView recentSearch;
 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
-      recentSearch = itemView.findViewById(android.R.id.text1);
       itemView.setOnClickListener(
         v -> clickListener.onItemClick(recentSearch.getText().toString()));
       itemView.setOnLongClickListener(

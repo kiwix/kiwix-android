@@ -26,6 +26,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 import io.reactivex.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,11 +88,10 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
-    TextView title;
+    @BindView(android.R.id.text1) TextView title;
 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
-      title = itemView.findViewById(android.R.id.text1);
     }
   }
 

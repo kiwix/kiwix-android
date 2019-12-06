@@ -32,12 +32,14 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 
@@ -54,11 +56,12 @@ public class SearchActivity extends BaseActivity
   private final int REQ_CODE_SPEECH_INPUT = 100;
   @Inject
   SearchPresenter searchPresenter;
-  private RecyclerView recyclerView;
   private AutoCompleteAdapter autoAdapter;
   private DefaultAdapter defaultAdapter;
   private SearchView searchView;
   private String searchText;
+  @BindView(R2.id.toolbar) Toolbar toolbar;
+  @BindView(R2.id.search_list) RecyclerView recyclerView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +72,12 @@ public class SearchActivity extends BaseActivity
       searchText = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
     }
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_LOCALE);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
 
-    recyclerView = findViewById(R.id.search_list);
     defaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches();
     activateDefaultAdapter();
@@ -105,7 +106,6 @@ public class SearchActivity extends BaseActivity
 
   @Override
   public void finish() {
-    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     int value =
       Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
