@@ -106,7 +106,6 @@
   <string name="pref_storage">التخزين</string>
   <string name="pref_current_folder">المجلد الحالي</string>
   <string name="path_not_writable">لا يمكن الوصول إلى الدليل المطلوب، باستخدام الافتراضي، لإصلاح هذا; قم بإعادة تحديد الدليل المرغوب في إعدادات التطبيق.</string>
-  <string name="reboot_message">نظرا لخطأ في أندرويد 6.0; نطلب منك إعادة تشغيل جهازك للمتابعة دون منحنا إذن التخزين، ونحن نعتذر عن أي إزعاج قد يسببه هذا.</string>
   <string name="delete_zim_failed">آسف لم نتمكن من حذف هذا الملف; يجب أن تحاول استخدام مدير ملفات بدلا من ذلك.</string>
   <string name="tts_pause">وقف</string>
   <string name="tts_resume">استئناف</string>

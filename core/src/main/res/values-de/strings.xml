@@ -102,7 +102,6 @@
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
   <string name="path_not_writable">Auf das gewünschte Verzeichnis kann nicht zugegriffen werden. Es wird das Standardverzeichnis verwendet. Um dieses Problem zu beheben, wählen Sie das gewünschte Verzeichnis in den App-Einstellungen erneut aus.</string>
-  <string name="reboot_message">Aufgrund eines Softwarefehlers in Android 6.0 empfehlen wir Ihnen, das Gerät neu zu starten, um ohne unsere Speichererlaubnis fortzufahren. Wir entschuldigen uns für jede verursachte Unannehmlichkeit.</string>
   <string name="delete_zim_failed">Leider können wir diese Datei nicht löschen. Sie sollten versuchen, stattdessen einen Dateimanager zu verwenden.</string>
   <string name="tts_pause">pausieren</string>
   <string name="tts_resume">fortfahren</string>

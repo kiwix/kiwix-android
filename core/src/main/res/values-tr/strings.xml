@@ -106,7 +106,6 @@
   <string name="pref_storage">Depolama</string>
   <string name="pref_current_folder">Mevcut Klasör</string>
   <string name="path_not_writable">Varsayılan kullanılarak istenen dizine erişilemiyor. Bu durumu çözmek için uygulama ayarlarından istenen dizini yeniden seçin.</string>
-  <string name="reboot_message">Android 6.0 sürümündeki bir hatadan dolayı bize depolama izni vermeden devam edebilmeniz için cihazınızı yeniden başlatmanız gerekmektedir. Verdiğimiz zahmetten dolayı özür dileriz.</string>
   <string name="delete_zim_failed">Üzgünüz, bu dosyayı silemedik. Bir dosya yöneticisi kullanmayı denemelisiniz.</string>
   <string name="tts_pause">duraklat</string>
   <string name="tts_resume">devam et</string>

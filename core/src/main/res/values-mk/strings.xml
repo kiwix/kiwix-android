@@ -106,7 +106,6 @@
   <string name="pref_storage">Склад</string>
   <string name="pref_current_folder">Тековна папка</string>
   <string name="path_not_writable">Не можам да дојдам до саканата папка. Ќе ја користам основната. За да го поправите ова, преизберете папка во поставките на прилогот.</string>
-  <string name="reboot_message">Поради грешка во Андроид 6.0, ќе треба да го превклучите уредот за да продолжите без да ни дадете дозвола за складирање. Се извинуваме за непријатноста.</string>
   <string name="delete_zim_failed">За жал, не можев да ја избришам податотеката. Пробајте со Управувачот со податотеки.</string>
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>

@@ -135,7 +135,6 @@
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
   <string name="path_not_writable">Can not access desired directory, using default. To fix this reselect the desired directory in app settings.</string>
-  <string name="reboot_message">Due to a bug in android 6.0 we require you to reboot your device to continue without granting us the storage permission. We are sorry for any inconvenience this may cause.</string>
   <string name="delete_zim_failed">Sorry we were unable to delete this file. You should try using a file manager instead.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">resume</string>

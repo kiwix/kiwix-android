@@ -101,7 +101,6 @@
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuværende mappe</string>
   <string name="path_not_writable">Kan ikke tilgå ønsket mappe, bruger standarden. For at rette dette så vælg på ny den ønskede mappe under indstillinger.</string>
-  <string name="reboot_message">På grund af en fejl i Android 6.0 så skal du genstarte din enhed for at fortsætte uden at tildele os lagertilladelse. Vi beklager denne ulejlighed.</string>
   <string name="delete_zim_failed">Beklager vi kunne ikke slette denne fil. Du bør prøve at bruge en filhåndtering i stedet for.</string>
   <string name="tts_resume">genoptag</string>
   <string name="internal_storage">Intern lager</string>

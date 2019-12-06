@@ -104,7 +104,6 @@
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuvarande mapp</string>
   <string name="path_not_writable">Kan inte komma åt önskad katalog, använder standardplatsen. För att åtgärda detta, välj önskad katalog i appens inställningar igen.</string>
-  <string name="reboot_message">P.g.a. en bugg i Android 6.0 är det nödvändigt att starta om din enhet för att fortsätta utan att bevilja behörighet för lagring. Vi beklagar eventuella besvär.</string>
   <string name="delete_zim_failed">Tyvärr kunde vi inte radera denna fil. Du kan försöka använda en filhanterare istället.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>

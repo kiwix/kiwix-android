@@ -105,7 +105,6 @@
   <string name="pref_storage">Armazenamento</string>
   <string name="pref_current_folder">Pasta atual</string>
   <string name="path_not_writable">Não foi possível aceder o diretório desejado, utilizando o valor predefinido. Para corrigir isto, selecione novamente o diretório desejado nas configurações da aplicação.</string>
-  <string name="reboot_message">Devido a um erro no android 6.0, nós requisitamos que reinicie o seu dispositivo para continuar sem nos conceder a permissão de armazenamento. Pedimos desculpa por qualquer inconveniência que isso possa causar.</string>
   <string name="delete_zim_failed">Desculpe, não foi possível apagar este ficheiro. Devia tentar usar um administrador de ficheiros.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
