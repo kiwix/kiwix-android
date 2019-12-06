@@ -36,18 +36,17 @@ sealed class LibraryListItem {
 
   data class BookItem constructor(
     val book: Book,
-    val canBeDownloaded: Boolean,
+    val fileSystemState: FileSystemState,
     override val id: Long = book.id.hashCode().toLong()
   ) : LibraryListItem() {
-    constructor(book: Book, fileSystemState: FileSystemState) : this(
-      book,
-      when (fileSystemState) {
-        Unknown, CannotWrite4GbFile -> book.isLessThan4GB()
-        NotEnoughSpaceFor4GbFile, CanWrite4GbFile -> true
-      }
-    )
+
+    val canBeDownloaded: Boolean = when (fileSystemState) {
+      Unknown, CannotWrite4GbFile -> book.isLessThan4GB()
+      NotEnoughSpaceFor4GbFile, CanWrite4GbFile -> true
+    }
 
     companion object {
+
       private fun Book.isLessThan4GB() =
         size.toLongOrNull() ?: 0L < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
     }
