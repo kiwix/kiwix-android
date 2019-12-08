@@ -18,7 +18,7 @@ if: type != push OR tag IS present
 # Build only on master branch
 branches:
   only:
-  - master
+  - master 
 
 install:
   - pip install --user 'requests[security]'
