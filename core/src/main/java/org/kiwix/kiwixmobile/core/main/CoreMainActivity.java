@@ -379,11 +379,11 @@ public abstract class CoreMainActivity extends BaseActivity
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
       newMainPageTab();
-      getCurrentWebView().loadUrl(intent.getStringExtra(EXTRA_CHOSE_X_URL));
+      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_URL));
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
       newMainPageTab();
-      getCurrentWebView().loadUrl(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
+      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
     }
   }
 
@@ -467,7 +467,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
       @Override
       public void onSectionClick(View view, int position) {
-        getCurrentWebView().loadUrl("javascript:document.getElementById('"
+        loadUrlWithCurrentWebview("javascript:document.getElementById('"
           + documentSections.get(position).id
           + "').scrollIntoView();");
         drawerLayout.closeDrawers();
@@ -727,7 +727,17 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void updateTableOfContents() {
-    getCurrentWebView().loadUrl("javascript:(" + documentParserJs + ")()");
+    loadUrlWithCurrentWebview("javascript:(" + documentParserJs + ")()");
+  }
+
+  private void loadUrlWithCurrentWebview(String url) {
+    loadUrl(url, getCurrentWebView());
+  }
+
+  private void loadUrl(String url, KiwixWebView webview) {
+    if (url != null && !url.endsWith("null")) {
+      webview.loadUrl(url);
+    }
   }
 
   private KiwixWebView getWebView(String url) {
@@ -742,7 +752,7 @@ public abstract class CoreMainActivity extends BaseActivity
         this, this, attrs, root, videoView, createWebClient(this, zimReaderContainer),
         sharedPreferenceUtil);
     }
-    webView.loadUrl(url);
+    loadUrl(url, webView);
     webView.loadPrefs();
     return webView;
   }
@@ -1292,7 +1302,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   private void openArticle(String articleUrl) {
     if (articleUrl != null) {
-      getCurrentWebView().loadUrl(redirectOrOriginal(contentUrl(articleUrl)));
+      loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
     }
   }
 
@@ -1441,9 +1451,9 @@ public abstract class CoreMainActivity extends BaseActivity
             }
             newMainPageTab();
             if (url != null) {
-              getCurrentWebView().loadUrl(url);
+              loadUrlWithCurrentWebview(url);
             } else if (title != null) {
-              getCurrentWebView().loadUrl(zimReaderContainer.getPageUrlFromTitle(title));
+              loadUrlWithCurrentWebview(zimReaderContainer.getPageUrlFromTitle(title));
             }
           }
         }
