@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
@@ -73,6 +74,7 @@ public class SearchActivity extends BaseActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    CoreApp.getCoreComponent().inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.search);
 

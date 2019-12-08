@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule;
 import org.kiwix.kiwixmobile.core.di.ActivityScope;
-import org.kiwix.kiwixmobile.core.di.components.SearchActivityComponent;
 import org.kiwix.kiwixmobile.core.error.ErrorActivity;
 import org.kiwix.kiwixmobile.core.help.HelpActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;

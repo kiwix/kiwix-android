@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.di.components.BookmarksActivityComponent;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -52,7 +51,6 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
 public class BookmarksActivity extends BaseActivity implements BookmarksContract.View,
   BookmarksAdapter.OnItemClickListener {
 
-  BookmarksActivityComponent bookmarksActivityComponent;
 
   private final List<BookmarkItem> bookmarksList = new ArrayList<>();
   private final List<BookmarkItem> allBookmarks = new ArrayList<>();
@@ -115,8 +113,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    bookmarksActivityComponent = CoreApp.getCoreComponent().bookmarksActivityComponent().build();
-    bookmarksActivityComponent.inject(this);
+    CoreApp.getCoreComponent().inject(this);
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
     setContentView(R.layout.activity_bookmarks);

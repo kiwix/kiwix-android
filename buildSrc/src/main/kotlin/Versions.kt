@@ -67,7 +67,7 @@ object Versions {
 
   const val leakcanary_android: String = "2.0-alpha-2"
 
-  const val com_google_dagger: String = "2.21" // available: "2.24"
+  const val com_google_dagger: String = "2.25.2" // available: "2.24"
 
   const val com_yahoo_squidb: String = "2.0.0" // available: "3.2.3"
 

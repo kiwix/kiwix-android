@@ -17,7 +17,6 @@ apply plugin: 'com.android.library'
 apply plugin: KiwixConfigurationPlugin
 apply plugin: 'io.objectbox'
 apply plugin: 'com.jakewharton.butterknife'
-apply plugin: 'kotlin-kapt'
 
 android {
   buildTypes {
@@ -36,9 +35,6 @@ dependencies {
 
   // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
   implementation(Libs.threetenabp)
-
-  implementation 'com.google.dagger:dagger:2.25.2'
-  kapt 'com.google.dagger:dagger-compiler:2.25.2'
 
   // Get kiwixlib online if it is not populated locally
   if (!shouldUseLocalVersion()) {

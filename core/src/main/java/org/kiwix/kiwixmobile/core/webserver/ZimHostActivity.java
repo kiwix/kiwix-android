@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.di.components.ZimHostActivityComponent;
+//import org.kiwix.kiwixmobile.core.di.components.ZimHostActivityComponent;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
@@ -62,8 +62,6 @@ import static org.kiwix.kiwixmobile.core.wifi_hotspot.HotspotService.ACTION_STOP
 public class ZimHostActivity extends BaseActivity implements
     ZimHostCallbacks, ZimHostContract.View {
 
-  ZimHostActivityComponent zimHostActivityComponent;
-
   @BindView(R2.id.startServerButton)
   Button startServerButton;
   @BindView(R2.id.server_textView)
@@ -71,7 +69,7 @@ public class ZimHostActivity extends BaseActivity implements
   @BindView(R2.id.recycler_view_zim_host)
   RecyclerView recyclerViewZimHost;
 
-  @Inject
+  //@Inject
   ZimHostContract.Presenter presenter;
 
   //@Inject
@@ -90,8 +88,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
-    zimHostActivityComponent = CoreApp.getCoreComponent().zimHostActivityComponent().build();
-    zimHostActivityComponent.inject(this);
+    CoreApp.getCoreComponent().inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_zim_host);
 

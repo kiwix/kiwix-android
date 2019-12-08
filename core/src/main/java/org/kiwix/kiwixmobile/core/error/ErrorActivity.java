@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.error;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -33,15 +32,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import javax.inject.Inject;
-import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.di.components.ErrorActivityComponent;
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
-import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 
@@ -49,7 +45,7 @@ import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getCurrentLocale;
 
 public class ErrorActivity extends BaseActivity {
 
-  ErrorActivityComponent errorActivityComponent;
+  //ErrorActivityComponent errorActivityComponent;
 
   @Inject
   NewBookDao bookDao;
@@ -85,8 +81,7 @@ public class ErrorActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    errorActivityComponent = CoreApp.getCoreComponent().errorActivityComponent().build();
-    errorActivityComponent.inject(this);
+    CoreApp.getCoreComponent().inject(this);
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_kiwix_error);

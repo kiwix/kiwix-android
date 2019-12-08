@@ -36,8 +36,8 @@ abstract class ActivityModule {
   @Module
   companion object {
     @JvmStatic
-    @Provides
     @ActivityScope
+    @Provides
     fun providesMainPresenter(dataSource: DataSource): MainContract.Presenter =
       MainPresenter(dataSource)
   }

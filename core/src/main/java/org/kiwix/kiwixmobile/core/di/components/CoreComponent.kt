@@ -44,6 +44,13 @@ import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
+import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
+import org.kiwix.kiwixmobile.core.error.ErrorActivity
+import org.kiwix.kiwixmobile.core.help.HelpActivity
+import org.kiwix.kiwixmobile.core.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.search.SearchActivity
+import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity
 import javax.inject.Singleton
 
 @Singleton
@@ -52,7 +59,8 @@ import javax.inject.Singleton
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,
-    DataModule::class]
+    DataModule::class,
+    ActivityModule::class]
 )
 interface CoreComponent {
 
@@ -79,11 +87,6 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun context(): Context
   fun downloader(): Downloader
-  fun bookmarksActivityComponent(): BookmarksActivityComponent.Builder
-  fun errorActivityComponent(): ErrorActivityComponent.Builder
-  fun historyActivityComponent(): HistoryActivityComponent.Builder
-  fun helpActivityComponent(): HelpActivityComponent.Builder
-  fun zimHostActivityComponent(): ZimHostActivityComponent.Builder
 
   fun inject(application: CoreApp)
   fun inject(zimContentProvider: ZimContentProvider)
@@ -92,4 +95,10 @@ interface CoreComponent {
   fun inject(autoCompleteAdapter: AutoCompleteAdapter)
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun inject(addNoteDialog: AddNoteDialog)
+  fun inject(errorActivity: ErrorActivity)
+  fun inject(zimHostActivity: ZimHostActivity)
+  fun inject(searchActivity: SearchActivity)
+  fun inject(helpActivity: HelpActivity)
+  fun inject(historyActivity: HistoryActivity)
+  fun inject(bookmarksActivity: BookmarksActivity)
 }

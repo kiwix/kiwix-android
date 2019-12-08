@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.webserver;
 
+import dagger.Provides;
 import java.util.List;
 import org.kiwix.kiwixmobile.core.base.BaseContract;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
