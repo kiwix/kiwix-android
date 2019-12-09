@@ -1242,6 +1242,7 @@ public abstract class CoreMainActivity extends BaseActivity
       }
     }
     updateWidgets(this);
+    updateNightMode();
   }
 
   private void updateBottomToolbarVisibility() {
@@ -1505,8 +1506,10 @@ public abstract class CoreMainActivity extends BaseActivity
     if (isInFullScreenMode()) {
       openFullScreen();
     }
+    updateNightMode();
+  }
 
-    // Night mode status
+  private void updateNightMode() {
     if (nightModeConfig.isNightModeActive()) {
       getCurrentWebView().activateNightMode();
     } else {
