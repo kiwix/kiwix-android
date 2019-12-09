@@ -244,6 +244,10 @@ class ZimFileReader constructor(
           -webkit-filter: invert(0); 
           filter: invert(0); 
         }
+        div[poster] > video {
+          -webkit-filter: invert(0); 
+          filter: invert(0); 
+        }
       """.trimIndent()
     private val VIDEO_REGEX = Regex("([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))\$)")
   }
