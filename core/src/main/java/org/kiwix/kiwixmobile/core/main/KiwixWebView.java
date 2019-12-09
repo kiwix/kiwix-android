@@ -107,7 +107,7 @@ public class KiwixWebView extends VideoEnabledWebView {
   }
 
   public void activateNightMode() {
-    if (getUrl().equals(HOME_URL)) {
+    if (getUrl() != null && getUrl().equals(HOME_URL)) {
       return;
     }
     Paint paint = new Paint();
