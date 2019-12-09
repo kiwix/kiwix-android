@@ -46,11 +46,8 @@ class CustomMainActivity : CoreMainActivity() {
     newMainPageTab()
   }
 
-  override fun injection() {
-    customActivityComponent.inject(this)
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
+    customActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     requireEnforcedLanguage()
     customFileValidator.validate(

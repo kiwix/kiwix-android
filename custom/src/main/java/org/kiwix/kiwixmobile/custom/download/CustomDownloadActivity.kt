@@ -53,11 +53,8 @@ class CustomDownloadActivity : BaseActivity() {
 
   private val compositeDisposable = CompositeDisposable()
 
-  override fun injection() {
-    customActivityComponent.inject(this)
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
+    customActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_custom_download)
     downloadViewModel.state.observe(this, Observer(::render))

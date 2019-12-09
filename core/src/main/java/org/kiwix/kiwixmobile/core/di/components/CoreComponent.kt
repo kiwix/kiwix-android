@@ -44,6 +44,7 @@ import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
@@ -101,4 +102,5 @@ interface CoreComponent {
   fun inject(helpActivity: HelpActivity)
   fun inject(historyActivity: HistoryActivity)
   fun inject(bookmarksActivity: BookmarksActivity)
+  fun inject(baseActivity: BaseActivity)
 }

@@ -99,12 +99,9 @@ public class LocalFileTransferActivity extends BaseActivity implements
 
   private List<WifiP2pDevice> availablePeerDevices = new ArrayList<WifiP2pDevice>();
 
-  @Override protected void injection() {
-    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
-  }
-
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
+    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_local_file_transfer);
     /*

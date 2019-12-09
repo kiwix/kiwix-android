@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.custom.customActivityComponent
 
 class CustomSettingsActivity : CoreSettingsActivity() {
 
-  override fun injection() {
+  fun injection() {
     customActivityComponent.inject(this)
   }
 

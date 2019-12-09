@@ -56,11 +56,8 @@ class ZimManageActivity : BaseActivity() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var languagesDao: NewLanguagesDao
 
-  override fun injection() {
-    cachedComponent.inject(this)
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
+    kiwixActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
 

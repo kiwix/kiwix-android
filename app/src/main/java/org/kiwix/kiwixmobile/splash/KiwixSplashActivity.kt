@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 class KiwixSplashActivity : CoreSplashActivity() {
 
-  override fun injection() {
+  fun injection() {
     kiwixActivityComponent.inject(this)
   }
 

@@ -49,11 +49,8 @@ import java.io.File
 class KiwixMainActivity : CoreMainActivity() {
   private val homeUrl = "file:///android_asset/home.html"
 
-  override fun injection() {
-    kiwixActivityComponent.inject(this)
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
+    kiwixActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     manageExternalLaunchAndRestoringViewState()
   }

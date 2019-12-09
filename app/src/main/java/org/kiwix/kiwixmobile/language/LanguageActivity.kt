@@ -62,11 +62,8 @@ class LanguageActivity : BaseActivity() {
       HeaderDelegate()
     )
 
-  override fun injection() {
-    kiwixActivityComponent.inject(this)
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
+    kiwixActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_language)
     setSupportActionBar(toolbar)
