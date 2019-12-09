@@ -231,7 +231,7 @@ public class SearchActivity extends BaseActivity
 
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this)
-    .setMessage(getString(R.string.delete_recent_search_item))
+      .setMessage(getString(R.string.delete_recent_search_item))
       .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
         deleteSpecificSearchItem(search);
         Toast.makeText(getBaseContext(),
@@ -305,7 +305,9 @@ public class SearchActivity extends BaseActivity
   }
 
   @Override public void onItemClick(String text) {
+
     searchPresenter.saveSearch(text);
+    sendMessage(text);
   }
 
   @Override public void onItemLongClick(String text) {
