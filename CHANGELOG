@@ -1,3 +1,7 @@
+3.0.5
+BUGFIX: Some zim files could not be downloaded due to missing metadata
+BUGFIX: Some mirrors were not allowed to download via http
+
 3.0.4
 BUGFIX: Some users language was causing a crash due to unstable ISO codes
 BUGFIX: Some unstable zim files were crashing when opened
