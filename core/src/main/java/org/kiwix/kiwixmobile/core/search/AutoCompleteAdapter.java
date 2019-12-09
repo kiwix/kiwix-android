@@ -27,6 +27,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
+      ButterKnife.bind(this, itemView);
     }
   }
 

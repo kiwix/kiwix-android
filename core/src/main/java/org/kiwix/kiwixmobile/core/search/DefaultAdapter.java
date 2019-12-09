@@ -27,6 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +76,7 @@ public class DefaultAdapter extends RecyclerView.Adapter<DefaultAdapter.ViewHold
 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
+      ButterKnife.bind(this,itemView);
       itemView.setOnClickListener(
         v -> clickListener.onItemClick(recentSearch.getText().toString()));
       itemView.setOnLongClickListener(
