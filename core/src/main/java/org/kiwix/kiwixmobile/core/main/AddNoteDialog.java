@@ -56,8 +56,8 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 /**
  * Created by @author Aditya-Sood (21/05/19) as a part of GSoC 2019
@@ -75,7 +75,7 @@ public class AddNoteDialog extends DialogFragment
     Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
   public static final String TAG = "AddNoteDialog";
 
-  @BindView(R2.id.add_note_toolbar)
+  @BindView(R2.id.toolbar)
   Toolbar toolbar;          // Displays options for the note dialog
   @BindView(R2.id.add_note_text_view)
   TextView addNoteTextView; // Displays article title
@@ -102,9 +102,6 @@ public class AddNoteDialog extends DialogFragment
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     CoreApp.getCoreComponent().inject(this);
-    setStyle(DialogFragment.STYLE_NORMAL,
-      sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night
-        : R.style.AddNoteDialogStyle);
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
     zimFileName = zimReaderContainer.getZimCanonicalPath();

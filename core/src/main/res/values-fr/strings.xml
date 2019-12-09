@@ -99,7 +99,6 @@
   <string name="pref_storage">Stockage</string>
   <string name="pref_current_folder">Dossier courant</string>
   <string name="path_not_writable">Impossible d’accéder au répertoire spécifié, utilisation de celui par défaut. Pour corriger cela, sélectionner de nouveau le répertoire voulu dans les paramètres de l’application.</string>
-  <string name="reboot_message">Du fait d’un bogue dans Android 6.0, nous vous demandons de redémarrer votre appareil sans nous accorder de droit de stockage. Nous sommes désolés pour les désagréments que cela peut entraîner.</string>
   <string name="delete_zim_failed">Désolé, nous sommes incapables de supprimer ce fichier. Vous devriez essayer d’utiliser plutôt un gestionnaire de fichiers.</string>
   <string name="tts_resume">reprendre</string>
   <string name="internal_storage">Interne</string>

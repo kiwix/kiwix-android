@@ -18,22 +18,29 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.annotation.TargetApi
+import android.content.pm.PackageManager.PERMISSION_DENIED
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import org.kiwix.kiwixmobile.core.R
+import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
+import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import java.util.Locale
 import javax.inject.Inject
+
+const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
   @Inject lateinit var customFileValidator: CustomFileValidator
@@ -52,7 +59,14 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    requireEnforcedLanguage()
+    if (enforcedLanguage()) {
+      return
+    }
+    openObbOrZim()
+  }
+
+  @TargetApi(VERSION_CODES.M)
+  private fun openObbOrZim() {
     customFileValidator.validate(
       onFilesFound = {
         when (it) {
@@ -64,10 +78,25 @@ class CustomMainActivity : CoreMainActivity() {
         }
       },
       onNoFilesFound = {
-        finish()
-        start<CustomDownloadActivity>()
+        if (ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) == PERMISSION_DENIED) {
+          requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
+        } else {
+          finish()
+          start<CustomDownloadActivity>()
+        }
       }
     )
+  }
+
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (requestCode == REQUEST_READ_FOR_OBB) {
+      openObbOrZim()
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -83,7 +112,9 @@ class CustomMainActivity : CoreMainActivity() {
     zimReaderContainer: ZimReaderContainer
   ) = CustomWebViewClient(webViewCallback, zimReaderContainer)
 
-  private fun requireEnforcedLanguage(): Boolean {
+  override fun getIconResId() = R.mipmap.ic_launcher
+
+  private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
       LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG)

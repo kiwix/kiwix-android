@@ -104,7 +104,6 @@
   <string name="pref_storage">Tárhely</string>
   <string name="pref_current_folder">Aktuális folder</string>
   <string name="path_not_writable">Nem érhető el a kívánt könyvtár, ehelyett az alapértelmezett lesz használva. Ahhoz, hogy ezt helyrehozd, válaszd ki újra a kívánt könyvtárat az alkalmazás beállításainál.</string>
-  <string name="reboot_message">Egy Android 6.0 hiba következtében megkérünk indítsd újra a készüléked, hogy folytassuk a tárolási engedélyek megadása nélkül. Elnézést e kényelmetlenségért, amit ez okozott.</string>
   <string name="delete_zim_failed">Sajnos nem tudjuk ezt a fájlt törölni. Próbáld meg egy fájlkezelőn keresztül törölni.</string>
   <string name="tts_pause">szünet</string>
   <string name="tts_resume">folytat</string>

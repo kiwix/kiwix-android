@@ -42,7 +42,6 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.DialogShower
@@ -199,7 +198,6 @@ class LibraryFragment : BaseFragment() {
       noWifiWithWifiOnlyPreferenceSet -> {
         dialogShower.show(WifiOnly, {
           sharedPreferenceUtil.putPrefWifiOnly(false)
-          CoreMainActivity.wifiOnly = false
           downloadFile(item.book)
         })
         return

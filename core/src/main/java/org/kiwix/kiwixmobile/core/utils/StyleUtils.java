@@ -30,13 +30,6 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.xmlpull.v1.XmlPullParser;
 
 public class StyleUtils {
-  public static int dialogStyle() {
-    if (CoreMainActivity.nightMode) {
-      return R.style.AppTheme_Dialog_Night;
-    } else {
-      return R.style.AppTheme_Dialog;
-    }
-  }
 
   public static AttributeSet getAttributes(Context context, @XmlRes int xml) {
     XmlPullParser parser = context.getResources().getXml(xml);

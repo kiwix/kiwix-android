@@ -4,10 +4,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:paddingEnd="12dp"
   android:paddingStart="12dp"
-  android:theme="@style/AppTheme"
-  >
+  android:paddingEnd="12dp">
 
   <TextView
     android:id="@+id/ic_tab_switcher_text"
@@ -23,6 +21,5 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:text="12"
-    tools:textColor="@android:color/black"
-    />
+    tools:textColor="@android:color/black" />
 </androidx.constraintlayout.widget.ConstraintLayout>

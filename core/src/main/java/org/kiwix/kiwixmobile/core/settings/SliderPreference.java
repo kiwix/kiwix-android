@@ -168,21 +168,12 @@ public class SliderPreference extends DialogPreference {
   private void setGrayState(View view) {
     SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext());
     boolean enabled = sharedPreferenceUtil.getPrefZoomEnabled();
-    boolean nightMode = sharedPreferenceUtil.nightMode();
 
     TextView titleView = view.findViewById(android.R.id.title);
     TextView summaryTV = view.findViewById(android.R.id.summary);
     if (!enabled) {
       titleView.setTextColor(Color.GRAY);
       summaryTV.setTextColor(Color.GRAY);
-    } else {
-      if (nightMode) {
-        titleView.setTextColor(Color.WHITE);
-        summaryTV.setTextColor(Color.WHITE);
-      } else {
-        titleView.setTextColor(Color.BLACK);
-        summaryTV.setTextColor(Color.BLACK);
-      }
     }
   }
 }

@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -38,7 +38,7 @@ class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
   @Inject lateinit var newBookDao: NewBookDao
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
-  override fun invokeWith(activity: Activity) {
+  override fun invokeWith(activity: AppCompatActivity) {
     (activity as ZimManageActivity).cachedComponent.inject(this)
     booksOnDiskListItem.forEach {
       dialogShower.show(DeleteZim(it), {

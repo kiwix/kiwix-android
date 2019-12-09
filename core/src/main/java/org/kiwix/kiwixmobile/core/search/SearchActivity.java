@@ -47,7 +47,6 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
-import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends BaseActivity
   implements SearchViewCallback, DefaultAdapter.ClickListener {
@@ -230,9 +229,9 @@ public class SearchActivity extends BaseActivity
     return value;
   }
 
-  public void deleteSpecificSearchDialog(final String search) {
-    new AlertDialog.Builder(this, dialogStyle())
-      .setMessage(getString(R.string.delete_recent_search_item))
+  private void deleteSpecificSearchDialog(final String search) {
+    new AlertDialog.Builder(this)
+    .setMessage(getString(R.string.delete_recent_search_item))
       .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
         deleteSpecificSearchItem(search);
         Toast.makeText(getBaseContext(),
