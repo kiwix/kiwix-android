@@ -1,7 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 package org.kiwix.kiwixmobile;
 
@@ -27,15 +27,15 @@ public class ZimTest {
   Context context;
 
   @Rule
-  public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
-      MainActivity.class, false, false);
+  public ActivityTestRule<KiwixMainActivity> mActivityTestRule = new ActivityTestRule<>(
+      KiwixMainActivity.class, false, false);
 
   @Before public void setUp() {
     TestComponent component = DaggerTestComponent.builder().applicationModule
         (new ApplicationModule(
-            (KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext())).build();
+            (CoreApp) getInstrumentation().getTargetContext().getApplicationContext())).build();
 
-    ((KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext()).setApplicationComponent(component);
+    ((CoreApp) getInstrumentation().getTargetContext().getApplicationContext()).setCoreComponent(component);
 
     component.inject(this);
     new ZimContentProvider().setupDagger();

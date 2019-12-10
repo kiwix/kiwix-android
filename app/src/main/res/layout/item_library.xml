@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="?selectableItemBackground"
+  android:minHeight="?listPreferredItemHeight"
+  android:orientation="horizontal"
+  tools:ignore="Overdraw, RTLHardcoded">
+
+  <ImageView
+    android:id="@+id/favicon"
+    android:layout_width="@dimen/favicon_width"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/favicon_margin_right"
+    android:adjustViewBounds="true"
+    android:scaleType="fitCenter"
+    android:src="@mipmap/ic_launcher"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:ignore="RtlHardcoded" />
+
+  <TextView
+    android:id="@+id/title"
+    style="@style/list_item_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/favicon_margin_right"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    app:layout_constraintStart_toEndOf="@+id/favicon"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="Title" />
+
+  <TextView
+    android:id="@+id/description"
+    style="@style/list_item_body"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/title"
+    app:layout_constraintTop_toBottomOf="@+id/title"
+    tools:text="Description a really really really really really really really really really really long descricption" />
+
+  <TextView
+    android:id="@+id/size"
+    style="@style/list_item_body"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="@+id/description"
+    app:layout_constraintTop_toBottomOf="@+id/description"
+    tools:text="File Size" />
+
+  <TextView
+    android:id="@+id/creator"
+    style="@style/list_item_body"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="@+id/size"
+    app:layout_constraintTop_toBottomOf="@+id/size"
+    tools:text="Author" />
+
+  <TextView
+    android:id="@+id/publisher"
+    style="@style/list_item_body"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    app:layout_constraintStart_toStartOf="@+id/creator"
+    app:layout_constraintTop_toBottomOf="@+id/creator"
+    tools:text="Publisher" />
+
+
+  <TextView
+    android:id="@+id/date"
+    style="@style/list_item_body"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/size"
+    tools:text="Date" />
+
+  <TextView
+    android:id="@+id/language"
+    style="@style/list_item_body"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="@+id/date"
+    app:layout_constraintTop_toBottomOf="@+id/date"
+    tools:text="Language" />
+
+  <TextView
+    android:id="@+id/fileName"
+    style="@style/list_item_body"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="@+id/language"
+    app:layout_constraintTop_toBottomOf="@+id/language"
+    tools:text="File Name" />
+
+  <org.kiwix.kiwixmobile.core.zim_manager.TagsView
+    android:id="@+id/tags"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/title"
+    app:layout_constraintTop_toBottomOf="@id/fileName" />
+
+
+  <View
+    android:id="@+id/unableToDownload"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:alpha=".5"
+    android:background="@color/pure_grey"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

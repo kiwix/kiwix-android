@@ -5,30 +5,26 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:animateLayoutChanges="true"
-  tools:context=".zim_manager.library_view.LibraryFragment"
-  >
+  tools:context="org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment">
 
   <TextView
     android:id="@+id/libraryErrorText"
-    tools:ignore="MissingConstraints"
     style="@style/no_list_content_text"
-    />
+    tools:ignore="MissingConstraints" />
 
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     android:id="@+id/librarySwipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    >
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/libraryList"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      />
+      app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -1,0 +1,13 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+  <shortcut
+    android:enabled="true"
+    android:icon="@drawable/ic_shortcut_new_tab"
+    android:shortcutDisabledMessage="@string/shortcut_disabled_message"
+    android:shortcutId="new_tab"
+    android:shortcutLongLabel="@string/new_tab_shortcut_label"
+    android:shortcutShortLabel="@string/new_tab_shortcut_label">
+    <intent
+      android:action="NEW_TAB"
+      android:targetClass="org.kiwix.kiwixmobile.custom.main.CustomMainActivity" />
+  </shortcut>
+</shortcuts>

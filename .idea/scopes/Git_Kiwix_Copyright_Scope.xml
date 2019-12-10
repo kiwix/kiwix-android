@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Git Kiwix Copyright Scope" pattern="file:*.kt||file:*.java" />
+</component>

@@ -1,6 +1,23 @@
+/*
+ * Kiwix Android
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package org.kiwix.kiwixmobile.intro;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -13,9 +30,11 @@ import com.pixelcan.inkpageindicator.InkPageIndicator;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.ActivityExtensionsKt;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.core.Intents;
+import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 
 public class IntroActivity extends BaseActivity implements IntroContract.View {
 
@@ -59,6 +78,10 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
       }
     };
   private View[] views;
+
+  @Override protected void injection() {
+    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +129,7 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
   @OnClick(R.id.get_started)
   void startMainActivity() {
     dismissAutoRotate();
-    startActivity(new Intent(this, MainActivity.class));
+    startActivity(Intents.internal(CoreMainActivity.class));
     presenter.setIntroShown();
     finish();
   }

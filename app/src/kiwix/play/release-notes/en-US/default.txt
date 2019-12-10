@@ -1,2 +1,0 @@
-BUGFIX: Some zim files could not be downloaded due to missing metadata
-BUGFIX: Some mirrors were not allowed to download via http

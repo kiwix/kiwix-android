@@ -1,8 +1,6 @@
-package org.kiwix.kiwixmobile.settings;
 /*
  * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,15 +13,18 @@ package org.kiwix.kiwixmobile.settings;
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
+
+package org.kiwix.kiwixmobile.settings;
 
 import android.preference.Preference;
 import androidx.test.rule.ActivityTestRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -37,8 +38,8 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 @Ignore("This is hanging the build") //TODO convert to Kotlin/PageObject
 public class KiwixSettingsActivityTest {
   @Rule
-  public ActivityTestRule<MainActivity> activityTestRule =
-    new ActivityTestRule<>(MainActivity.class);
+  public ActivityTestRule<KiwixMainActivity> activityTestRule =
+    new ActivityTestRule<>(KiwixMainActivity.class);
 
   @Test
   public void testToggle() {
