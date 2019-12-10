@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.header_language.header_language
 import kotlinx.android.synthetic.main.item_book.itemBookCheckbox
 import kotlinx.android.synthetic.main.item_book.item_book_article_count
@@ -69,6 +71,7 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
 
       item_book_icon.setBitmap(Base64String(book.favicon))
 
+      tags.visibility == if (item.tags.isEmpty()) GONE else VISIBLE
       tags.render(item.tags)
 
       itemBookCheckbox.isChecked = item.isSelected

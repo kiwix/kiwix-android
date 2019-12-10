@@ -104,8 +104,7 @@
     android:layout_height="wrap_content"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="@+id/item_book_description"
-    app:layout_constraintTop_toBottomOf="@id/item_book_description"
-    app:singleLine="true" />
+    app:layout_constraintTop_toBottomOf="@id/item_book_description" />
 
   <View
     android:layout_width="0dp"
