@@ -16,14 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
+package org.kiwix.kiwixmobile.core.zim_manager
 
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.KiwixTag.Companion.YesNoValueTag.DetailsTag
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.KiwixTag.Companion.YesNoValueTag.FtIndexTag
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.KiwixTag.Companion.YesNoValueTag.PicturesTag
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.KiwixTag.Companion.YesNoValueTag.VideoTag
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.KiwixTag.TagValue.NO
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.KiwixTag.TagValue.YES
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.DetailsTag
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.FtIndexTag
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.PicturesTag
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.VideoTag
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.NO
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
 
 sealed class KiwixTag {
   companion object {
@@ -34,7 +34,7 @@ sealed class KiwixTag {
         when (val tag = split[0]) {
           "_ftindex" -> FtIndexTag(value!!)
           "_pictures" -> PicturesTag(value!!)
-          "_video" -> VideoTag(value!!)
+          "_videos" -> VideoTag(value!!)
           "_details" -> DetailsTag(value!!)
           "_category" -> CategoryTag(value!!)
           else -> value?.let { ArbitraryTag(tag, it) } ?: TagOnly(tag)

@@ -23,12 +23,12 @@ import io.objectbox.Box
 import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.query
 import io.reactivex.Flowable
+import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
+import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity_
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
-import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity_
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
@@ -85,12 +85,7 @@ class FetchDownloadDao @Inject constructor(
     box.store.callInTx {
       if (doesNotAlreadyExist(book)) {
         insert(
-          downloadRequester.enqueue(
-            DownloadRequest(
-              url,
-              book
-            )
-          ),
+          downloadRequester.enqueue(DownloadRequest(url, book)),
           book = book
         )
       }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:parentTag="com.google.android.material.chip.ChipGroup">
+
+  <com.google.android.material.chip.Chip
+    android:id="@+id/tag_picture"
+    style="@style/Widget.KiwixTheme.Chip.Choice.Static"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/tag_pic" />
+
+  <com.google.android.material.chip.Chip
+    android:id="@+id/tag_video"
+    style="@style/Widget.KiwixTheme.Chip.Choice.Static"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/tag_vid" />
+
+  <com.google.android.material.chip.Chip
+    android:id="@+id/tag_text_only"
+    style="@style/Widget.KiwixTheme.Chip.Choice.Static"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/tag_text_only" />
+
+  <com.google.android.material.chip.Chip
+    android:id="@+id/tag_short_text_only"
+    style="@style/Widget.KiwixTheme.Chip.Choice.Static"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/tag_short_text_only" />
+</merge>

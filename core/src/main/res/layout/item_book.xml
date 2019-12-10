@@ -98,35 +98,14 @@
     app:layout_constraintTop_toBottomOf="@id/item_book_date"
     tools:text="All wikipedia articles" />
 
-  <TextView
-    android:id="@+id/item_book_label_picture"
-    style="@style/list_item_body"
-    android:layout_width="wrap_content"
+  <org.kiwix.kiwixmobile.core.zim_manager.TagsView
+    android:id="@+id/tags"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/border_label_picture"
-    android:paddingStart="6dp"
-    android:paddingEnd="6dp"
-    android:text="@string/pic"
-    android:textAlignment="center"
-    android:textColor="@color/picture_label"
-    app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_description" />
-
-  <TextView
-    android:id="@+id/item_book_label_video"
-    style="@style/list_item_body"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:background="@drawable/border_label_video"
-    android:paddingStart="6dp"
-    android:paddingEnd="6dp"
-    android:text="@string/vid"
-    android:textAlignment="center"
-    android:textColor="@color/video_label"
-    app:layout_constraintStart_toEndOf="@id/item_book_label_picture"
-    app:layout_constraintTop_toTopOf="@id/item_book_label_picture" />
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/item_book_description"
+    app:layout_constraintTop_toBottomOf="@id/item_book_description"
+    app:singleLine="true" />
 
   <View
     android:layout_width="0dp"
@@ -134,7 +113,7 @@
     android:layout_marginTop="@dimen/activity_vertical_margin"
     android:background="?android:attr/dividerVertical"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_label_picture" />
+    app:layout_constraintTop_toBottomOf="@id/tags" />
 
   <View
     android:id="@+id/item_book_clickable_area"

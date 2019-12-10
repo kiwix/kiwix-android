@@ -51,7 +51,8 @@ data class FetchDownloadEntity(
   val mediaCount: String?,
   val size: String,
   val name: String?,
-  val favIcon: String
+  val favIcon: String,
+  val tags: String? = null
 ) {
   constructor(downloadId: Long, book: Book) : this(
     downloadId = downloadId,
@@ -67,7 +68,8 @@ data class FetchDownloadEntity(
     mediaCount = book.getMediaCount(),
     size = book.getSize(),
     name = book.name,
-    favIcon = book.getFavicon()
+    favIcon = book.getFavicon(),
+    tags = book.tags
   )
 
   fun toBook() = Book().apply {
@@ -84,6 +86,7 @@ data class FetchDownloadEntity(
     size = this@FetchDownloadEntity.size
     bookName = name
     favicon = favIcon
+    tags = this@FetchDownloadEntity.tags
   }
 
   fun updateWith(download: Download) = copy(
