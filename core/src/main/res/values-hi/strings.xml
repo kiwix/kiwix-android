@@ -106,7 +106,6 @@
   <string name="pref_storage">संचयन</string>
   <string name="pref_current_folder">वर्तमान फोल्डर</string>
   <string name="path_not_writable">डिफ़ॉल्ट का उपयोग करते हुए, इच्छित निर्देशिका तक नहीं पहुंच सकते। इसे ठीक करने के लिए ऐप सेटिंग्स में वांछित निर्देशिका को फिर से खोजें।</string>
-  <string name="reboot_message">एंड्रॉइड 6.0 में एक बग के कारण हमें स्टोरेज अनुमति देने के बिना आपको अपनी डिवाइस को रिबूट करने की आवश्यकता होती है। इसके कारण होने वाली किसी भी असुविधा के लिए हमें खेद है।</string>
   <string name="delete_zim_failed">क्षमा करें, हम इस फ़ाइल को हटाने में असमर्थ थे। आपको इसके बजाय एक फ़ाइल प्रबंधक का उपयोग करने का प्रयास करना चाहिए।</string>
   <string name="tts_pause">रुका</string>
   <string name="tts_resume">फिर से शुरू करना</string>

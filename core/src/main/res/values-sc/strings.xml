@@ -105,7 +105,6 @@
   <string name="pref_storage">Memòria</string>
   <string name="pref_current_folder">Cartella atuale</string>
   <string name="path_not_writable">Impossìbile abèrrere sa cartella isseberada, impreende sas impostatziones predefinidas. Pro isòrvere su problema torra a ischertare sa cartella in sos inditos de s\'aplicatzione.</string>
-  <string name="reboot_message">Pro more de un\'errore in android 6.0 depes torrare a allùghere su dispositivu pro sighire chene nos dare su permissu pro sa memòria. Nos dispraghet pro cale si siat problema custu diat pòdere causare.</string>
   <string name="delete_zim_failed">Non est istadu possìbile iscantzellare custu documentu. Dias pòdere proare a impreare unu gestore de documentos.</string>
   <string name="tts_pause">pàusa</string>
   <string name="tts_resume">sighi</string>

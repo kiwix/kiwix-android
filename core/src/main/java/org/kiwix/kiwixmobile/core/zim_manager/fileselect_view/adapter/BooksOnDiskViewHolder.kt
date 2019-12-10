@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
-import android.graphics.ColorMatrixColorFilter
 import android.view.View
 import kotlinx.android.synthetic.main.header_language.header_language
 import kotlinx.android.synthetic.main.item_book.itemBookCheckbox
@@ -34,7 +33,6 @@ import kotlinx.android.synthetic.main.item_book.item_book_title
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
-import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
@@ -73,12 +71,6 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
       }
 
       item_book_icon.setBitmap(Base64String(book.favicon))
-
-      if (sharedPreferenceUtil.nightMode()) {
-        item_book_icon.drawable
-          ?.mutate()
-          ?.colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
-      }
 
       val path = item.file.path
       if (path.contains("nopic")) {

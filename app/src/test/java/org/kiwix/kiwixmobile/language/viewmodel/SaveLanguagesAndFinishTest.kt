@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.schedulers.Schedulers
@@ -34,7 +34,7 @@ class SaveLanguagesAndFinishTest {
   fun `invoke saves and finishes`() {
     setScheduler(Schedulers.trampoline())
     val languageDao = mockk<NewLanguagesDao>()
-    val activity = mockk<Activity>()
+    val activity = mockk<AppCompatActivity>()
     val languages = listOf<Language>()
     SaveLanguagesAndFinish(languages, languageDao).invokeWith(activity)
     verify {

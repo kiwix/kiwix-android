@@ -32,11 +32,11 @@ import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixlib.JNIKiwixString
 import org.kiwix.kiwixlib.Pair
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_URI
 import org.kiwix.kiwixmobile.core.search.SearchSuggestion
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
 import java.io.FileDescriptor
 import java.io.FileOutputStream
@@ -46,22 +46,19 @@ import javax.inject.Inject
 
 private const val TAG = "ZimFileReader"
 
-class ZimFileReader(
+class ZimFileReader constructor(
   val zimFile: File,
   val jniKiwixReader: JNIKiwixReader = JNIKiwixReader(zimFile.canonicalPath),
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val nightModeConfig: NightModeConfig
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader?
 
-    class Impl @Inject constructor(val sharedPreferenceUtil: SharedPreferenceUtil) :
+    class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
       override fun create(file: File) =
         try {
-          ZimFileReader(
-            file,
-            sharedPreferenceUtil = sharedPreferenceUtil
-          )
+          ZimFileReader(file, nightModeConfig = nightModeConfig)
         } catch (ignore: JNIKiwixException) {
           null
         }
@@ -183,7 +180,7 @@ class ZimFileReader(
               val size = JNIKiwixInt()
               val url = JNIKiwixString(uri.filePath.removeArguments())
               val content = getContent(url = url, mime = mime, size = size)
-              if ("text/css" == mime.value && sharedPreferenceUtil.nightMode()) {
+              if ("text/css" == mime.value && nightModeConfig.isNightModeActive()) {
                 it.write(INVERT_IMAGES_VIDEO.toByteArray(Charsets.UTF_8))
               }
               it.write(content)
@@ -237,8 +234,21 @@ class ZimFileReader(
     @JvmField
     val CONTENT_URI: Uri? =
       Uri.parse("content://${CoreApp.getInstance().packageName}.zim.base/")
-    private const val INVERT_IMAGES_VIDEO =
-      "img, video { \n -webkit-filter: invert(1); \n filter: invert(1); \n} \n"
+    private val INVERT_IMAGES_VIDEO =
+      """
+        img, video, div[poster], div#header { 
+           -webkit-filter: invert(1); 
+           filter: invert(1); 
+        }
+        img#header-profile{
+          -webkit-filter: invert(0); 
+          filter: invert(0); 
+        }
+        div[poster] > video {
+          -webkit-filter: invert(0); 
+          filter: invert(0); 
+        }
+      """.trimIndent()
     private val VIDEO_REGEX = Regex("([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))\$)")
   }
 }

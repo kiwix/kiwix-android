@@ -106,7 +106,6 @@
   <string name="pref_storage">Konservejo</string>
   <string name="pref_current_folder">Aktuala Dosierujo</string>
   <string name="path_not_writable">Ne povas atingi deziratan dosierujon; uzante la implicitan. Por korekti tion, reelektu la deziratan dosierujon en la aplikaĵaj agordoj.</string>
-  <string name="reboot_message">Pro cimo en Android 6.0, ni postulas vin restartigi vian aparaton por daŭrigi sen la permeso de konservado. Ni bedaŭras ajnan malkonvenaĵon kaŭzatan de tio.</string>
   <string name="delete_zim_failed">Domaĝe, ni ne povis forigi ĉi tiun dosieron. Vi reprovu per dosiermastrumilo.</string>
   <string name="tts_pause">paŭzigi</string>
   <string name="tts_resume">daŭrigi</string>

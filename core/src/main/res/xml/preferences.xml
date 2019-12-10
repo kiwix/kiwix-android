@@ -3,17 +3,13 @@
     android:key="pref_display"
     android:title="@string/pref_display_title">
 
-    <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
-      android:defaultValue="false"
-      android:key="pref_nightmode"
+    <ListPreference
+      android:defaultValue="-1"
+      android:entries="@array/pref_night_modes_entries"
+      android:entryValues="@array/pref_night_modes_values"
+      android:key="pref_night_mode"
       android:summary="@string/pref_night_mode_summary"
       android:title="@string/pref_night_mode" />
-
-    <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
-      android:defaultValue="false"
-      android:key="pref_auto_nightmode"
-      android:summary="@string/pref_auto_night_mode_summary"
-      android:title="@string/pref_auto_night_mode" />
 
     <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
       android:defaultValue="false"
@@ -45,16 +41,6 @@
       android:key="pref_external_link_popup"
       android:summary="@string/pref_external_link_popup_summary"
       android:title="@string/pref_external_link_popup_title" />
-
-    <!--
-    Disabled for 2.4
-    <CustomSwitchPreference
-      android:defaultValue="false"
-      android:key="pref_full_text_search"
-      android:summary="@string/pref_multi_search_summary"
-      android:title="@string/pref_multi_search_title" />
-      -->
-
 
     <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
       android:defaultValue="true"

@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.app.Activity
 import android.content.Intent
-import android.view.ActionMode
-import android.view.ActionMode.Callback
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -32,12 +32,12 @@ import org.kiwix.kiwixmobile.core.Intents
 
 object ActivityExtensions {
 
-  fun Activity.startActionMode(
+  fun AppCompatActivity.startActionMode(
     menuId: Int,
     idsToClickActions: Map<Int, () -> Any>,
     onDestroyAction: () -> Unit
   ): ActionMode? {
-    return startActionMode(object : Callback {
+    return startSupportActionMode(object : ActionMode.Callback {
       override fun onActionItemClicked(
         mode: ActionMode,
         item: MenuItem

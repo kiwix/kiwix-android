@@ -88,6 +88,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.Intents;
+import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
@@ -140,21 +141,18 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
-import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
 public abstract class CoreMainActivity extends BaseActivity
   implements WebViewCallback,
   MainContract.View,
   MainMenu.MenuClickListener {
 
-  public static boolean refresh;
-  public static boolean wifiOnly;
-  public static boolean nightMode;
+  public static final String HOME_URL = "file:///android_asset/home.html";
   private final ArrayList<String> bookmarks = new ArrayList<>();
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R2.id.activity_main_root)
   ConstraintLayout root;
-  @BindView(R2.id.activity_main_toolbar)
+  @BindView(R2.id.toolbar)
   Toolbar toolbar;
   @BindView(R2.id.activity_main_back_to_top_fab)
   FloatingActionButton backToTopButton;
@@ -201,6 +199,8 @@ public abstract class CoreMainActivity extends BaseActivity
   StorageObserver storageObserver;
   @Inject
   protected ZimReaderContainer zimReaderContainer;
+  @Inject
+  protected NightModeConfig nightModeConfig;
   @Inject
   protected MainMenu.Factory menuFactory;
 
@@ -316,8 +316,6 @@ public abstract class CoreMainActivity extends BaseActivity
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
     new WebView(this).destroy(); // Workaround for buggy webViews see #710
-    wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
-    nightMode = sharedPreferenceUtil.nightMode();
     handleLocaleCheck();
     setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);
@@ -359,6 +357,7 @@ public abstract class CoreMainActivity extends BaseActivity
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         bookOnDiskItem -> {
           open(bookOnDiskItem);
+          getCurrentWebView().activateNightMode();
           return Unit.INSTANCE;
         },
         null,
@@ -380,11 +379,11 @@ public abstract class CoreMainActivity extends BaseActivity
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
       newMainPageTab();
-      getCurrentWebView().loadUrl(intent.getStringExtra(EXTRA_CHOSE_X_URL));
+      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_URL));
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
       newMainPageTab();
-      getCurrentWebView().loadUrl(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
+      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
     }
   }
 
@@ -468,7 +467,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
       @Override
       public void onSectionClick(View view, int position) {
-        getCurrentWebView().loadUrl("javascript:document.getElementById('"
+        loadUrlWithCurrentWebview("javascript:document.getElementById('"
           + documentSections.get(position).id
           + "').scrollIntoView();");
         drawerLayout.closeDrawers();
@@ -587,7 +586,7 @@ public abstract class CoreMainActivity extends BaseActivity
     String negative = getString(R.string.rate_dialog_negative);
     String neutral = getString(R.string.rate_dialog_neutral);
 
-    new AlertDialog.Builder(this, dialogStyle())
+    new AlertDialog.Builder(this)
       .setTitle(title)
       .setMessage(message)
       .setPositiveButton(positive, (dialog, id) -> {
@@ -599,9 +598,11 @@ public abstract class CoreMainActivity extends BaseActivity
         tempVisitCount = 0;
         visitCounterPref.setCount(tempVisitCount);
       })
-      .setIcon(ContextCompat.getDrawable(this, R.mipmap.ic_launcher))
+      .setIcon(ContextCompat.getDrawable(this, getIconResId()))
       .show();
   }
+
+  protected abstract int getIconResId();
 
   private void goToSearch(boolean isVoice) {
     final String zimFile = zimReaderContainer.getZimCanonicalPath();
@@ -726,7 +727,17 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void updateTableOfContents() {
-    getCurrentWebView().loadUrl("javascript:(" + documentParserJs + ")()");
+    loadUrlWithCurrentWebview("javascript:(" + documentParserJs + ")()");
+  }
+
+  private void loadUrlWithCurrentWebview(String url) {
+    loadUrl(url, getCurrentWebView());
+  }
+
+  private void loadUrl(String url, KiwixWebView webview) {
+    if (url != null && !url.endsWith("null")) {
+      webview.loadUrl(url);
+    }
   }
 
   private KiwixWebView getWebView(String url) {
@@ -741,7 +752,7 @@ public abstract class CoreMainActivity extends BaseActivity
         this, this, attrs, root, videoView, createWebClient(this, zimReaderContainer),
         sharedPreferenceUtil);
     }
-    webView.loadUrl(url);
+    loadUrl(url, webView);
     webView.loadPrefs();
     return webView;
   }
@@ -999,10 +1010,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void externalLinkPopup(Intent intent) {
-    int warningResId = (sharedPreferenceUtil.nightMode())
-      ? R.drawable.ic_warning_white : R.drawable.ic_warning_black;
-
-    new AlertDialog.Builder(this, dialogStyle())
+    new AlertDialog.Builder(this)
       .setTitle(R.string.external_link_popup_dialog_title)
       .setMessage(R.string.external_link_popup_dialog_message)
       .setNegativeButton(android.R.string.no, (dialogInterface, i) -> {
@@ -1015,7 +1023,7 @@ public abstract class CoreMainActivity extends BaseActivity
         startActivity(intent);
       })
       .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
-      .setIcon(warningResId)
+      .setIcon(R.drawable.ic_warning)
       .show();
   }
 
@@ -1082,11 +1090,6 @@ public abstract class CoreMainActivity extends BaseActivity
           if (file != null) {
             openZimFile(file);
           }
-        } else {
-          AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
-          builder.setMessage(getResources().getString(R.string.reboot_message));
-          AlertDialog dialog = builder.create();
-          dialog.show();
         }
         break;
       }
@@ -1198,10 +1201,6 @@ public abstract class CoreMainActivity extends BaseActivity
       selectTab(currentWebViewIndex);
       setUpWebView();
     }
-    if (refresh) {
-      refresh = false;
-      recreate();
-    }
     presenter.loadCurrentZimBookmarksUrl();
 
     updateBottomToolbarVisibility();
@@ -1243,6 +1242,7 @@ public abstract class CoreMainActivity extends BaseActivity
       }
     }
     updateWidgets(this);
+    updateNightMode();
   }
 
   private void updateBottomToolbarVisibility() {
@@ -1291,11 +1291,11 @@ public abstract class CoreMainActivity extends BaseActivity
   private void contentsDrawerHint() {
     drawerLayout.postDelayed(() -> drawerLayout.openDrawer(GravityCompat.END), 500);
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(getString(R.string.hint_contents_drawer_message))
       .setPositiveButton(getString(R.string.got_it), (dialog, id) -> {
       })
-      .setTitle(getString(R.string.did_you_know))
+      .setTitle(R.string.did_you_know)
       .setIcon(R.drawable.icon_question);
     AlertDialog alert = builder.create();
     alert.show();
@@ -1303,7 +1303,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   private void openArticle(String articleUrl) {
     if (articleUrl != null) {
-      getCurrentWebView().loadUrl(redirectOrOriginal(contentUrl(articleUrl)));
+      loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
     }
   }
 
@@ -1452,9 +1452,9 @@ public abstract class CoreMainActivity extends BaseActivity
             }
             newMainPageTab();
             if (url != null) {
-              getCurrentWebView().loadUrl(url);
+              loadUrlWithCurrentWebview(url);
             } else if (title != null) {
-              getCurrentWebView().loadUrl(zimReaderContainer.getPageUrlFromTitle(title));
+              loadUrlWithCurrentWebview(zimReaderContainer.getPageUrlFromTitle(title));
             }
           }
         }
@@ -1487,7 +1487,6 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void loadPrefs() {
-    nightMode = sharedPreferenceUtil.nightMode();
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
@@ -1507,10 +1506,12 @@ public abstract class CoreMainActivity extends BaseActivity
     if (isInFullScreenMode()) {
       openFullScreen();
     }
+    updateNightMode();
+  }
 
-    // Night mode status
-    if (nightMode) {
-      getCurrentWebView().toggleNightMode();
+  private void updateNightMode() {
+    if (nightModeConfig.isNightModeActive()) {
+      getCurrentWebView().activateNightMode();
     } else {
       getCurrentWebView().deactivateNightMode();
     }
@@ -1639,7 +1640,7 @@ public abstract class CoreMainActivity extends BaseActivity
     }
 
     if (handleEvent) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
       builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
         if (isOpenNewTabInBackground) {
@@ -1663,6 +1664,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void setHomePage(View view) {
+    getCurrentWebView().deactivateNightMode();
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);

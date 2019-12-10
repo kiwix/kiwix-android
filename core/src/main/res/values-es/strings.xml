@@ -104,7 +104,6 @@
   <string name="pref_storage">Almacenamiento</string>
   <string name="pref_current_folder">Carpeta actual</string>
   <string name="path_not_writable">No se pudo acceder al directorio deseado; se usa el predeterminado. Para solucionar esto, vuelve a seleccionar el directorio deseado en las preferencias de la aplicación.</string>
-  <string name="reboot_message">Debido a un error en android 6.0, se requiere que reinicias tu dispositivo para continuar sin permitirnos el acceso al almacenamiento. Lamentamos cualquier inconveniente que este puede causarte.</string>
   <string name="delete_zim_failed">No podemos eliminar este archivo. Deberías probar con un administrador de archivos.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>

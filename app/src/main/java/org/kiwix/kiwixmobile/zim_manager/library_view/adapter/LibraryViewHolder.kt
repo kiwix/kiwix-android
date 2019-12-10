@@ -18,25 +18,33 @@
 
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
+import android.view.Gravity
 import android.view.View
+import android.view.View.MeasureSpec
+import android.widget.Toast
+import androidx.annotation.StringRes
+import kotlinx.android.synthetic.main.item_library.creator
+import kotlinx.android.synthetic.main.item_library.date
+import kotlinx.android.synthetic.main.item_library.description
+import kotlinx.android.synthetic.main.item_library.favicon
+import kotlinx.android.synthetic.main.item_library.fileName
+import kotlinx.android.synthetic.main.item_library.language
+import kotlinx.android.synthetic.main.item_library.publisher
+import kotlinx.android.synthetic.main.item_library.size
+import kotlinx.android.synthetic.main.item_library.title
+import kotlinx.android.synthetic.main.item_library.unableToDownload
 import kotlinx.android.synthetic.main.library_divider.divider_text
-import kotlinx.android.synthetic.main.library_item.creator
-import kotlinx.android.synthetic.main.library_item.date
-import kotlinx.android.synthetic.main.library_item.description
-import kotlinx.android.synthetic.main.library_item.favicon
-import kotlinx.android.synthetic.main.library_item.fileName
-import kotlinx.android.synthetic.main.library_item.language
-import kotlinx.android.synthetic.main.library_item.publisher
-import kotlinx.android.synthetic.main.library_item.size
-import kotlinx.android.synthetic.main.library_item.title
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
-import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
 
@@ -56,13 +64,22 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       date.setTextAndVisibility(item.book.date)
       size.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
       language.text = bookUtils.getLanguage(item.book.getLanguage())
-      fileName.text = NetworkUtils.parseURL(
-        CoreApp.getInstance(), item.book.url
-      )
+      fileName.text = NetworkUtils.parseURL(CoreApp.getInstance(), item.book.url)
       favicon.setBitmap(Base64String(item.book.favicon))
 
-      containerView.setOnClickListener {
-        clickAction.invoke(item)
+      containerView.setOnClickListener { clickAction.invoke(item) }
+      containerView.isClickable = item.canBeDownloaded
+
+      unableToDownload.visibility = if (item.canBeDownloaded) View.GONE else View.VISIBLE
+      unableToDownload.setOnLongClickListener {
+        it.centreToast(
+          when (item.fileSystemState) {
+            CannotWrite4GbFile -> R.string.file_system_does_not_support_4gb
+            Unknown -> R.string.detecting_file_system
+            else -> throw RuntimeException("impossible invalid state: ${item.fileSystemState}")
+          }
+        )
+        true
       }
     }
   }
@@ -72,4 +89,19 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       divider_text.text = item.text
     }
   }
+}
+
+private fun View.centreToast(@StringRes id: Int) {
+  val locationXAndY = intArrayOf(0, 0)
+  getLocationOnScreen(locationXAndY)
+  val midX = locationXAndY[0] + width / 2
+  val midY = locationXAndY[1] + height / 2
+  Toast.makeText(context, id, Toast.LENGTH_LONG).apply {
+    view.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
+    setGravity(
+      Gravity.TOP or Gravity.START,
+      midX - view.measuredWidth / 2,
+      midY - view.measuredHeight
+    )
+  }.show()
 }
