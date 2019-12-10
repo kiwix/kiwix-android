@@ -33,6 +33,10 @@
     <item name="tabTextColor">@color/white</item>
   </style>
 
+  <style name="Widget.KiwixTheme.Chip.Choice.Static" parent="Widget.MaterialComponents.Chip.Choice">
+    <item name="android:clickable">false</item>
+  </style>
+
   <style name="no_list_content_text" parent="TextAppearance.KiwixTheme.Headline6">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
