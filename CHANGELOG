@@ -1,3 +1,9 @@
+3.1.0
+NEW: Revamped Night Mode
+NEW: Books unsupported by file system are greyed out
++ Bugfixes & Lots More
+
+
 3.0.5
 BUGFIX: Some zim files could not be downloaded due to missing metadata
 BUGFIX: Some mirrors were not allowed to download via http
