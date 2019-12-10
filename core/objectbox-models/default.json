@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "3:5536749840871435068",
-      "lastPropertyId": "16:6142333908132117423",
+      "lastPropertyId": "17:2701677664876214591",
       "name": "BookOnDiskEntity",
       "properties": [
         {
@@ -67,6 +67,10 @@
         {
           "id": "16:6142333908132117423",
           "name": "favIcon"
+        },
+        {
+          "id": "17:2701677664876214591",
+          "name": "tags"
         }
       ],
       "relations": []
@@ -197,7 +201,7 @@
     },
     {
       "id": "8:8093454424037540087",
-      "lastPropertyId": "23:5485468735259326535",
+      "lastPropertyId": "24:4272820830206771469",
       "name": "FetchDownloadEntity",
       "properties": [
         {
@@ -287,6 +291,10 @@
         {
           "id": "23:5485468735259326535",
           "name": "progress"
+        },
+        {
+          "id": "24:4272820830206771469",
+          "name": "tags"
         }
       ],
       "relations": []

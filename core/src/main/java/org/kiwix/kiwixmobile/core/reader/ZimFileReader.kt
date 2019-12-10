@@ -80,6 +80,7 @@ class ZimFileReader constructor(
   val description: String get() = jniKiwixReader.description
   val favicon: String get() = jniKiwixReader.favicon
   val language: String get() = jniKiwixReader.language
+  val tags: String get() = "${getContent(Uri.parse("M/Tags"))}"
   private val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
@@ -222,6 +223,7 @@ class ZimFileReader constructor(
     articleCount = this@ZimFileReader.articleCount.toString()
     mediaCount = this@ZimFileReader.mediaCount.toString()
     bookName = name
+    tags = this@ZimFileReader.tags
   }
 
   companion object {

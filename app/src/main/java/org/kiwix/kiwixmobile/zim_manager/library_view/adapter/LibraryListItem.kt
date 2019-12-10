@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -37,6 +38,7 @@ sealed class LibraryListItem {
   data class BookItem constructor(
     val book: Book,
     val fileSystemState: FileSystemState,
+    val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = book.id.hashCode().toLong()
   ) : LibraryListItem() {
 

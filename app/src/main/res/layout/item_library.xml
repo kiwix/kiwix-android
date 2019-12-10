@@ -102,6 +102,15 @@
     app:layout_constraintTop_toBottomOf="@+id/language"
     tools:text="File Name" />
 
+  <org.kiwix.kiwixmobile.core.zim_manager.TagsView
+    android:id="@+id/tags"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/title"
+    app:layout_constraintTop_toBottomOf="@id/fileName" />
+
+
   <View
     android:id="@+id/unableToDownload"
     android:layout_width="0dp"

@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.header_language.header_language
 import kotlinx.android.synthetic.main.item_book.itemBookCheckbox
 import kotlinx.android.synthetic.main.item_book.item_book_article_count
@@ -26,14 +28,12 @@ import kotlinx.android.synthetic.main.item_book.item_book_clickable_area
 import kotlinx.android.synthetic.main.item_book.item_book_date
 import kotlinx.android.synthetic.main.item_book.item_book_description
 import kotlinx.android.synthetic.main.item_book.item_book_icon
-import kotlinx.android.synthetic.main.item_book.item_book_label_picture
-import kotlinx.android.synthetic.main.item_book.item_book_label_video
 import kotlinx.android.synthetic.main.item_book.item_book_size
 import kotlinx.android.synthetic.main.item_book.item_book_title
+import kotlinx.android.synthetic.main.item_book.tags
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
@@ -47,7 +47,6 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
 
   class BookViewHolder(
     containerView: View,
-    private val sharedPreferenceUtil: SharedPreferenceUtil,
     private val clickAction: ((BookOnDisk) -> Unit)?,
     private val longClickAction: ((BookOnDisk) -> Unit)?,
     private val multiSelectAction: ((BookOnDisk) -> Unit)?
@@ -72,14 +71,8 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
 
       item_book_icon.setBitmap(Base64String(book.favicon))
 
-      val path = item.file.path
-      if (path.contains("nopic")) {
-        item_book_label_picture.visibility = View.GONE
-        item_book_label_video.visibility = View.GONE
-      }
-      if (path.contains("novid")) {
-        item_book_label_video.visibility = View.GONE
-      }
+      tags.visibility == if (item.tags.isEmpty()) GONE else VISIBLE
+      tags.render(item.tags)
 
       itemBookCheckbox.isChecked = item.isSelected
       when (selectionMode) {

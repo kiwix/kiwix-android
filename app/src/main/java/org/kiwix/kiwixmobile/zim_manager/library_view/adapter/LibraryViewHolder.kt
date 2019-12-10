@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.item_library.fileName
 import kotlinx.android.synthetic.main.item_library.language
 import kotlinx.android.synthetic.main.item_library.publisher
 import kotlinx.android.synthetic.main.item_library.size
+import kotlinx.android.synthetic.main.item_library.tags
 import kotlinx.android.synthetic.main.item_library.title
 import kotlinx.android.synthetic.main.item_library.unableToDownload
 import kotlinx.android.synthetic.main.library_divider.divider_text
@@ -69,6 +70,8 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
 
       containerView.setOnClickListener { clickAction.invoke(item) }
       containerView.isClickable = item.canBeDownloaded
+
+      tags.render(item.tags)
 
       unableToDownload.visibility = if (item.canBeDownloaded) View.GONE else View.VISIBLE
       unableToDownload.setOnLongClickListener {
