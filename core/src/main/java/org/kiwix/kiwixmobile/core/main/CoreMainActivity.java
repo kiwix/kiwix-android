@@ -128,7 +128,6 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_FILE_SELECT;
 import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_HISTORY_ITEM_CHOSEN;
 import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_PREFERENCES;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_READ_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_HISTORY_CLEARED;
@@ -1090,15 +1089,9 @@ public abstract class CoreMainActivity extends BaseActivity
           if (file != null) {
             openZimFile(file);
           }
-        }
-        break;
-      }
-
-      case REQUEST_READ_STORAGE_PERMISSION: {
-        if (grantResults.length > 0
-          && grantResults[0] == PERMISSION_GRANTED) {
           scanStorageForZims();
-        } else {
+        }
+        else {
           Snackbar.make(snackbarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
             .setAction(R.string.menu_settings, view -> {
               Intent intent = new Intent();
