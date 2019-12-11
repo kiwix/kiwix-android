@@ -16,6 +16,7 @@ dependencies {
   implementation("com.dicedmelon.gradle:jacoco-android:0.1.4")
   implementation("org.jlleitschuh.gradle:ktlint-gradle:8.2.0")
   implementation("com.google.apis:google-api-services-androidpublisher:v3-rev129-1.25.0")
+  implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.2.2")
 
   implementation(gradleApi())
   implementation(localGroovy())

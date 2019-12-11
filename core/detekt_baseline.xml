@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <Blacklist></Blacklist>
+  <Whitelist>
+    <ID>ConstructorParameterNaming:KiwixTag.kt$KiwixTag.Companion.YesNoValueTag$_value: String</ID>
+    <ID>EmptyFunctionBlock:BooksOnDiskViewHolder.kt$BookOnDiskViewHolder.BookViewHolder${ }</ID>
+    <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided&gt;${}</ID>
+    <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
+    <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
+    <ID>MagicNumber:CoreSplashActivity.kt$CoreSplashActivity$10</ID>
+    <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
+    <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
+    <ID>MagicNumber:FetchDownloadNotificationManager.kt$FetchDownloadNotificationManager$100</ID>
+    <ID>MagicNumber:FetchDownloadRequester.kt$10</ID>
+    <ID>MagicNumber:FileUtils.kt$FileUtils$3</ID>
+    <ID>MagicNumber:KiloByte.kt$KiloByte$1024.0</ID>
+    <ID>MagicNumber:MainMenu.kt$MainMenu$99</ID>
+    <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
+    <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
+    <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
+    <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
+    <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
+    <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$canWrite</ID>
+    <ID>PackageNaming:ArticleCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
+    <ID>PackageNaming:BookOnDiskDelegate.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
+    <ID>PackageNaming:BooksOnDiskAdapter.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
+    <ID>PackageNaming:BooksOnDiskListItem.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
+    <ID>PackageNaming:BooksOnDiskViewHolder.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
+    <ID>PackageNaming:KiloByte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:KiwixTag.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:Language.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:SelectionMode.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
+    <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File&gt;</ID>
+    <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
+    <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun hasPart(file: File): Boolean</ID>
+    <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
+    <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
+    <ID>SpreadOperator:AlertDialogShower.kt$AlertDialogShower$(dialog.message, *bodyArguments(dialog))</ID>
+    <ID>SpreadOperator:BooksOnDiskAdapter.kt$BooksOnDiskAdapter$( *delegates )</ID>
+    <ID>SpreadOperator:FileSearch.kt$FileSearch$(*zimFileExtensions)</ID>
+    <ID>TooGenericExceptionThrown:AbstractContentProvider.kt$AbstractContentProvider$throw RuntimeException("Operation not supported")</ID>
+    <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
+    <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
+    <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("$columnName not found in $columnNames")</ID>
+    <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("Unexpected return type ${T::class.java.simpleName}")</ID>
+    <ID>TooGenericExceptionThrown:NightModeConfig.kt$NightModeConfig.Mode.Companion$throw RuntimeException("Invalid night mode $nightMode")</ID>
+    <ID>TooGenericExceptionThrown:NightModeConfig.kt$NightModeConfig.UiMode.Companion$throw RuntimeException("Invalid night mode $uiMode")</ID>
+    <ID>TooManyFunctions:CoreComponent.kt$CoreComponent$CoreComponent</ID>
+    <ID>TooManyFunctions:FetchDownloadMonitor.kt$FetchDownloadMonitor$&lt;no name provided&gt; : FetchListener</ID>
+    <ID>TooManyFunctions:FileUtils.kt$FileUtils$FileUtils</ID>
+    <ID>TooManyFunctions:Repository.kt$Repository$Repository</ID>
+    <ID>TooManyFunctions:ZimFileReader.kt$ZimFileReader$ZimFileReader</ID>
+    <ID>TooManyFunctions:ZimReaderContainer.kt$ZimReaderContainer$ZimReaderContainer</ID>
+    <ID>TopLevelPropertyNaming:Bytes.kt$const val Eb = Pb * 1024</ID>
+    <ID>TopLevelPropertyNaming:Bytes.kt$const val Gb = Mb * 1024</ID>
+    <ID>TopLevelPropertyNaming:Bytes.kt$const val Kb = 1 * 1024L</ID>
+    <ID>TopLevelPropertyNaming:Bytes.kt$const val Mb = Kb * 1024</ID>
+    <ID>TopLevelPropertyNaming:Bytes.kt$const val Pb = Tb * 1024</ID>
+    <ID>TopLevelPropertyNaming:Bytes.kt$const val Tb = Gb * 1024</ID>
+  </Whitelist>
+</SmellBaseline>

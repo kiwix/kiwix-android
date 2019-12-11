@@ -49,6 +49,36 @@ object Libs {
   const val retrofit: String = "com.squareup.retrofit2:retrofit:" + Versions.com_squareup_retrofit2
 
   /**
+   * https://kotlinlang.org/
+   */
+  const val kotlin_android_extensions: String = "org.jetbrains.kotlin:kotlin-android-extensions:" +
+      Versions.org_jetbrains_kotlin
+
+  /**
+   * https://kotlinlang.org/
+   */
+  const val kotlin_android_extensions_runtime: String =
+      "org.jetbrains.kotlin:kotlin-android-extensions-runtime:" + Versions.org_jetbrains_kotlin
+
+  /**
+   * https://kotlinlang.org/
+   */
+  const val kotlin_annotation_processing_gradle: String =
+      "org.jetbrains.kotlin:kotlin-annotation-processing-gradle:" + Versions.org_jetbrains_kotlin
+
+  /**
+   * https://kotlinlang.org/
+   */
+  const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
+      Versions.org_jetbrains_kotlin
+
+  /**
+   * https://kotlinlang.org/
+   */
+  const val kotlin_stdlib_jdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" +
+      Versions.org_jetbrains_kotlin
+
+  /**
    * https://github.com/google/dagger
    */
   const val dagger: String = "com.google.dagger:dagger:" + Versions.com_google_dagger
@@ -192,40 +222,17 @@ object Libs {
       "com.github.triplet.play:com.github.triplet.play.gradle.plugin:" +
       Versions.com_github_triplet_play_gradle_plugin
 
-  /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_annotation_processing_gradle: String =
-      "org.jetbrains.kotlin:kotlin-annotation-processing-gradle:" +
-      Versions.kotlin_annotation_processing_gradle
-
-  /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_android_extensions_runtime: String =
-      "org.jetbrains.kotlin:kotlin-android-extensions-runtime:" +
-      Versions.kotlin_android_extensions_runtime
-
-  /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_android_extensions: String = "org.jetbrains.kotlin:kotlin-android-extensions:" +
-      Versions.kotlin_android_extensions
-
   const val multidex_instrumentation: String = "androidx.multidex:multidex-instrumentation:" +
       Versions.multidex_instrumentation
+
+  const val detekt_gradle_plugin: String = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:" +
+      Versions.detekt_gradle_plugin
 
   /**
    * http://jcp.org/en/jsr/detail?id=250
    */
   const val javax_annotation_api: String = "javax.annotation:javax.annotation-api:" +
       Versions.javax_annotation_api
-
-  /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
-      Versions.kotlin_gradle_plugin
 
   /**
    * https://github.com/square/okhttp
@@ -235,12 +242,6 @@ object Libs {
 
   const val ink_page_indicator: String = "com.pacioianu.david:ink-page-indicator:" +
       Versions.ink_page_indicator
-
-  /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_stdlib_jdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" +
-      Versions.kotlin_stdlib_jdk7
 
   /**
    * http://github.com/square/leakcanary/

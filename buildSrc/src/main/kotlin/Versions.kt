@@ -1,3 +1,4 @@
+import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -13,7 +14,9 @@ import org.gradle.plugin.use.PluginDependencySpec
 object Versions {
   const val androidx_test_espresso: String = "3.1.1" // available: "3.2.0"
 
-  const val com_squareup_retrofit2: String = "2.5.0" // available: "2.6.2"
+  const val com_squareup_retrofit2: String = "2.5.0" // available: "2.7.0"
+
+  const val org_jetbrains_kotlin: String = "1.3.61"
 
   const val com_google_dagger: String = "2.21" // available: "2.25.2"
 
@@ -29,7 +32,7 @@ object Versions {
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "3.5.2"
+  const val com_android_tools_build_gradle: String = "3.5.2" // available: "3.5.3"
 
   const val androidx_test_runner: String = "1.2.0"
 
@@ -41,23 +44,15 @@ object Versions {
 
   const val com_github_triplet_play_gradle_plugin: String = "2.5.0" // available: "2.6.1"
 
-  const val kotlin_annotation_processing_gradle: String = "1.3.61"
-
-  const val kotlin_android_extensions_runtime: String = "1.3.61"
-
-  const val kotlin_android_extensions: String = "1.3.61"
-
   const val multidex_instrumentation: String = "2.0.0"
 
-  const val javax_annotation_api: String = "1.3.2"
+  const val detekt_gradle_plugin: String = "1.2.2"
 
-  const val kotlin_gradle_plugin: String = "1.3.61"
+  const val javax_annotation_api: String = "1.3.2"
 
   const val logging_interceptor: String = "3.12.1" // available: "4.2.2"
 
   const val ink_page_indicator: String = "1.3.0"
-
-  const val kotlin_stdlib_jdk7: String = "1.3.61"
 
   const val leakcanary_android: String = "2.0"
 
@@ -85,7 +80,7 @@ object Versions {
 
   const val orchestrator: String = "1.1.0" // available: "1.2.0"
 
-  const val lint_gradle: String = "26.5.2"
+  const val lint_gradle: String = "26.5.2" // available: "26.5.3"
 
   const val testing_ktx: String = "1.1.1"
 
@@ -105,7 +100,7 @@ object Versions {
 
   const val core_ktx: String = "1.1.0"
 
-  const val kiwixlib: String = "8.2.1"
+  const val kiwixlib: String = "8.2.1" // available: "8.2.2"
 
   const val material: String = "1.1.0-beta02"
 
@@ -123,7 +118,7 @@ object Versions {
 
   const val rxjava: String = "2.2.5" // available: "2.2.15"
 
-  const val aapt2: String = "3.5.2-5435860"
+  const val aapt2: String = "3.5.2-5435860" // available: "3.5.3-5435860"
 
   const val junit: String = "1.1.1"
 
@@ -141,4 +136,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
   inline get() =
-    id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+      id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)

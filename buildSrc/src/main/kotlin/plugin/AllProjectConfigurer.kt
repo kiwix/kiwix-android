@@ -21,6 +21,7 @@ package plugin
 import Config
 import Libs
 import com.android.build.gradle.BaseExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.KotlinClosure1
@@ -39,6 +40,7 @@ class AllProjectConfigurer {
     target.plugins.apply("kotlin-kapt")
     target.plugins.apply("jacoco-android")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
+    target.plugins.apply("io.gitlab.arturbosch.detekt")
   }
 
   fun configureBaseExtension(target: Project, path: String) {
@@ -134,6 +136,10 @@ class AllProjectConfigurer {
       configureExtension<AndroidExtensionsExtension> { isExperimental = true }
       configureExtension<JacocoPluginExtension> { toolVersion = "0.8.3" }
       configureExtension<KtlintExtension> { android.set(true) }
+      configureExtension<DetektExtension> {
+        baseline = project.file("detekt_baseline.xml")
+      }
+
     }
   }
 
