@@ -3,6 +3,7 @@
   package="org.kiwix.kiwixmobile">
 
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
   <application
     android:name=".KiwixApp"
