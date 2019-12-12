@@ -1090,8 +1090,7 @@ public abstract class CoreMainActivity extends BaseActivity
             openZimFile(file);
           }
           scanStorageForZims();
-        }
-        else {
+        } else {
           Snackbar.make(snackbarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
             .setAction(R.string.menu_settings, view -> {
               Intent intent = new Intent();

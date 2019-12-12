@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 
-const val WAIT_TIMEOUT_MS = 10000L
+const val WAIT_TIMEOUT_MS = 10_000L
 
 abstract class BaseRobot(
   private val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation(),
@@ -70,7 +70,7 @@ abstract class BaseRobot(
   }
 
   protected fun clickOnTab(textId: Int) {
-    clickOn(ContentDesc(textId))
+    clickOn(ContentDesc(textId), 20_000L)
   }
 
   protected fun waitFor(milliseconds: Long) {
@@ -85,8 +85,8 @@ abstract class BaseRobot(
 
   private fun UiObject2.customSwipe(
     direction: Direction,
-    fl: Float = 1.0f
+    percent: Float = 0.8f
   ) {
-    swipe(direction, fl)
+    swipe(direction, percent)
   }
 }

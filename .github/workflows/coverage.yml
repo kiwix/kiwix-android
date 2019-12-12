@@ -1,0 +1,34 @@
+name: Coverage Reporting
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+
+  coverageReport:
+    runs-on: macOS-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: create instrumentation coverage
+        uses: reactivecircus/android-emulator-runner@v2.0.0
+        with:
+          api-level: 21
+          arch: x86_64
+          script: bash instrumentation.sh
+
+      - name: create unit coverage
+        run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
+
+      - name: upload coverage
+        run: bash <(curl -s https://codecov.io/bash)

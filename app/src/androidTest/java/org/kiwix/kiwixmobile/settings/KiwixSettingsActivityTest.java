@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.settings;
 
 import android.preference.Preference;
 import androidx.test.rule.ActivityTestRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.core.R;
@@ -35,7 +34,6 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 
-@Ignore("This is hanging the build") //TODO convert to Kotlin/PageObject
 public class KiwixSettingsActivityTest {
   @Rule
   public ActivityTestRule<KiwixMainActivity> activityTestRule =
@@ -44,15 +42,15 @@ public class KiwixSettingsActivityTest {
   @Test
   public void testToggle() {
     enterSettings();
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_nightmode")))
-      .perform(click());
+    //onData(allOf(
+    //  is(instanceOf(Preference.class)),
+    //  withKey("pref_nightmode")))
+    //  .perform(click());
 
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_auto_nightmode")))
-      .perform(click());
+    //onData(allOf(
+    //  is(instanceOf(Preference.class)),
+    //  withKey("pref_auto_nightmode")))
+    //  .perform(click());
 
     onData(allOf(
       is(instanceOf(Preference.class)),

@@ -1,0 +1,66 @@
+name: Publish App
+
+on:
+  push:
+    branches-ignore:
+      - '*'
+      - '*/**'
+    tags:
+      - '*'
+      - '*/**'
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Decrypt files
+        env:
+          keystore: ${{ secrets.keystore }}
+          google_json: ${{ secrets.google_json }}
+          ssh_key: ${{ secrets.ssh_key }}
+        run: |
+          echo "$google_json" | base64 -d > google.json
+          echo "$keystore" | base64 -d > kiwix-android.keystore
+          echo "$ssh_key" | base64 -d > ssh_key
+
+      - name: Publish app to play store
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+        run: ./gradlew publishReleaseApk
+
+      - name: Publish app to download.kiwix.org
+        env:
+          UNIVERSAL_RELEASE_APK: app/build/outputs/apk/release/*universal*.apk
+          TAG: $(echo ${GITHUB_REF:10})
+          OUTPUT_NAME: kiwix-$TAG.apk
+        run: |
+          cp $UNIVERSAL_RELEASE_APK $OUTPUT_NAME
+          scp -vrp -i ssh_key -o StrictHostKeyChecking=no $OUTPUT_NAME ci@download.kiwix.org:/data/download/release/kiwix-android/
+
+      - name: Create Github Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: true
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_DIR: ${{app/build/outputs/apk}}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: $OUTPUT_DIR
+          asset_name: assets.zip
+          asset_content_type: application/vnd.android.package-archive

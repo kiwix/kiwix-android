@@ -32,7 +32,7 @@ fun zimManage(func: ZimManageRobot.() -> Unit) =
 
 class ZimManageRobot : BaseRobot() {
   init {
-    isVisible(ViewId(R.id.manageViewPager))
+    isVisible(ViewId(R.id.manageViewPager), 40_000L)
   }
 
   fun clickOnOnline(func: LibraryRobot.() -> Unit): LibraryRobot {
@@ -67,7 +67,7 @@ class ZimManageRobot : BaseRobot() {
     }
 
     fun clickOnSearch() {
-      clickOn(ViewId(R.id.action_search))
+      clickOn(ViewId(R.id.action_search), 20_000L)
     }
 
     fun searchFor(book: Book) {
@@ -75,18 +75,18 @@ class ZimManageRobot : BaseRobot() {
     }
 
     fun waitForEmptyView() {
-      isVisible(ViewId(R.id.libraryErrorText))
+      isVisible(ViewId(R.id.libraryErrorText), 40_000L)
     }
   }
 
   private fun download(func: DownloadRobot.() -> Unit) = DownloadRobot().apply(func)
   inner class DownloadRobot : BaseRobot() {
     init {
-      isVisible(ViewId(R.id.zim_download_root), 20000L)
+      isVisible(ViewId(R.id.zim_download_root))
     }
 
     fun clickStop() {
-      clickOn(ViewId(R.id.stop))
+      clickOn(ViewId(R.id.stop), 20_000L)
     }
 
     fun waitForEmptyView() {
