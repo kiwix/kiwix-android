@@ -26,15 +26,15 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope;
 @Module
 public class ZimHostModule {
 
-  @ActivityScope
+  //@ActivityScope
   @Provides
   ZimHostContract.Presenter provideZimHostPresenter(ZimHostPresenter zimHostPresenter) {
     return zimHostPresenter;
   }
 
-  @ActivityScope
-  @Provides Activity providesActivity(ZimHostActivity zimHostActivity) {
-    return zimHostActivity;
-  }
+  //@ActivityScope
+  //@Provides Activity providesActivity(ZimHostActivity zimHostActivity) {
+  //  return zimHostActivity;
+  //}
 }
 

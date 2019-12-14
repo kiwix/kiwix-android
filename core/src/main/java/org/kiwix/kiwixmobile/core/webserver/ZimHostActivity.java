@@ -69,7 +69,7 @@ public class ZimHostActivity extends BaseActivity implements
   @BindView(R2.id.recycler_view_zim_host)
   RecyclerView recyclerViewZimHost;
 
-  //@Inject
+  @Inject
   ZimHostContract.Presenter presenter;
 
   //@Inject

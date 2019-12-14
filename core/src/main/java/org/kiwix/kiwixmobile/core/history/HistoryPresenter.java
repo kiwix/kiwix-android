@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope;
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread;
 
-@ActivityScope
+//@ActivityScope
 class HistoryPresenter extends BasePresenter<HistoryContract.View>
   implements HistoryContract.Presenter {
 

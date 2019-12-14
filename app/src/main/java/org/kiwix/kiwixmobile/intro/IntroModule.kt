@@ -19,10 +19,10 @@ package org.kiwix.kiwixmobile.intro
 
 import dagger.Binds
 import dagger.Module
-import org.kiwix.kiwixmobile.core.di.ActivityScope
 
 @Module
 abstract class IntroModule {
-  @ActivityScope @Binds
+  // @ActivityScope
+  @Binds
   abstract fun bindsPresenter(presenter: IntroPresenter): IntroContract.Presenter
 }

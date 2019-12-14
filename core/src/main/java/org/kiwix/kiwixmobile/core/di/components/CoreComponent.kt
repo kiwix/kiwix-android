@@ -46,17 +46,24 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
+import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.history.HistoryModule
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity
+import org.kiwix.kiwixmobile.core.webserver.ZimHostModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(
   modules = [
+    ZimHostModule::class,
+
+    BookmarksModule::class,
+    HistoryModule::class,
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,

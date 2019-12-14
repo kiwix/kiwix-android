@@ -24,7 +24,7 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope;
 
 @Module
 public class HistoryModule {
-  @ActivityScope
+  //@ActivityScope
   @Provides
   HistoryContract.Presenter provideHistoryPresenter(HistoryPresenter presenter) {
     return presenter;

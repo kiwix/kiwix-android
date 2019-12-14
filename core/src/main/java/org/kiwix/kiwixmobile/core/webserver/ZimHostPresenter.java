@@ -28,7 +28,7 @@ import org.kiwix.kiwixmobile.core.data.DataSource;
 import org.kiwix.kiwixmobile.core.di.ActivityScope;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
-@ActivityScope
+//@ActivityScope
 class ZimHostPresenter extends BasePresenter<ZimHostContract.View>
   implements ZimHostContract.Presenter {
 

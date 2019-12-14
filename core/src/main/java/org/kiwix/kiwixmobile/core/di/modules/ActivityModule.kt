@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.utils.DialogShower
 @Module
 abstract class ActivityModule {
   @Binds
-  @ActivityScope
+  // @ActivityScope
   abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
 
   @Module

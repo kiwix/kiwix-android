@@ -62,7 +62,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   Toolbar toolbar;
   @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
-  //@Inject
+  @Inject
   BookmarksContract.Presenter presenter;
   @Inject
   ZimReaderContainer zimReaderContainer;

@@ -63,7 +63,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
 
   @BindView(R2.id.toolbar)
   Toolbar toolbar;
-  //@Inject
+  @Inject
   HistoryContract.Presenter presenter;
   @Inject
   ZimReaderContainer zimReaderContainer;
