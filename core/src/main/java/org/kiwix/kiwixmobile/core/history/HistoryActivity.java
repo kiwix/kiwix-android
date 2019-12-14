@@ -39,11 +39,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -126,9 +128,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   };
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    //Dagger injection
-    CoreApp.getCoreComponent().inject(this);
     super.onCreate(savedInstanceState);
+    injection(CoreApp.getCoreComponent());
     presenter.attachView(this);
     setContentView(R.layout.activity_history);
     setSupportActionBar(toolbar);
@@ -286,5 +287,9 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     if (deleteList.size() == 0) {
       actionMode.finish();
     }
+  }
+
+  @Override public void injection(@NotNull CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

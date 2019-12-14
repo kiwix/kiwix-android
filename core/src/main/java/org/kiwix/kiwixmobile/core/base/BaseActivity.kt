@@ -25,6 +25,7 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -35,6 +36,8 @@ abstract class BaseActivity : AppCompatActivity() {
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   private var unbinder: Unbinder? = null
+
+  abstract fun injection(coreComponent: CoreComponent)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     CoreApp.getCoreComponent().inject(this)

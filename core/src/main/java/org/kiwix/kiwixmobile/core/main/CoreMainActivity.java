@@ -92,6 +92,7 @@ import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
@@ -99,6 +100,7 @@ import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.help.HelpActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
@@ -325,6 +327,8 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    injection(CoreApp.getCoreComponent());
+
     presenter.attachView(this);
     new WebView(this).destroy(); // Workaround for buggy webViews see #710
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
@@ -1830,5 +1834,9 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
 
   private boolean checkNull(View view) {
     return view != null;
+  }
+
+  @Override public void injection(@NotNull CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

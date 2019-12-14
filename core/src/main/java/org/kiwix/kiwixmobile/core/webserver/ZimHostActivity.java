@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-//import org.kiwix.kiwixmobile.core.di.components.ZimHostActivityComponent;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
@@ -88,9 +88,9 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
-    CoreApp.getCoreComponent().inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_zim_host);
+    injection(CoreApp.getCoreComponent());
 
     setUpToolbar();
 
@@ -309,5 +309,9 @@ public class ZimHostActivity extends BaseActivity implements
     Toast.makeText(this, R.string.server_failed_message,
       Toast.LENGTH_SHORT)
       .show();
+  }
+
+  @Override public void injection(@NotNull CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

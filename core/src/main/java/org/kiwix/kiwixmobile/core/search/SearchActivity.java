@@ -44,10 +44,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
@@ -74,8 +76,9 @@ public class SearchActivity extends BaseActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    CoreApp.getCoreComponent().inject(this);
     super.onCreate(savedInstanceState);
+    injection(CoreApp.getCoreComponent());
+
     setContentView(R.layout.search);
 
     if (savedInstanceState != null) {
@@ -350,5 +353,9 @@ public class SearchActivity extends BaseActivity
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
+  }
+
+  @Override public void injection(@NotNull CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

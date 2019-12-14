@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.zim_manager.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.startWithActionFrom
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
@@ -74,6 +75,10 @@ class ZimManageActivity : BaseActivity() {
       addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
     }
     setViewPagerPositionFromIntent(intent)
+  }
+
+  override fun injection(coreComponent: CoreComponent) {
+    coreComponent.inject(this)
   }
 
   override fun onNewIntent(intent: Intent?) {

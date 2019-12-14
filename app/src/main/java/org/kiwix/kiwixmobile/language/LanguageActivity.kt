@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import kotlinx.android.synthetic.main.activity_language.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
@@ -61,6 +62,10 @@ class LanguageActivity : BaseActivity() {
       LanguageItemDelegate { languageViewModel.actions.offer(Select(it)) },
       HeaderDelegate()
     )
+
+  override fun injection(coreComponent: CoreComponent) {
+    coreComponent.inject(this)
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     kiwixActivityComponent.inject(this)

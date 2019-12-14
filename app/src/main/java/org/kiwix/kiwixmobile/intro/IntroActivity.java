@@ -30,10 +30,12 @@ import com.pixelcan.inkpageindicator.InkPageIndicator;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.ActivityExtensionsKt;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 
 public class IntroActivity extends BaseActivity implements IntroContract.View {
@@ -134,5 +136,9 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
   private void dismissAutoRotate() {
     handler.removeCallbacksAndMessages(null);
     timer.cancel();
+  }
+
+  @Override public void injection(@NotNull CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

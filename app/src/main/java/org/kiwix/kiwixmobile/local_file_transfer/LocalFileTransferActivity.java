@@ -52,9 +52,11 @@ import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.ActivityExtensionsKt;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 
@@ -400,5 +402,9 @@ public class LocalFileTransferActivity extends BaseActivity implements
   @Override protected void onDestroy() {
     wifiDirectManager.stopWifiDirectManager();
     super.onDestroy();
+  }
+
+  @Override public void injection(@NotNull CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

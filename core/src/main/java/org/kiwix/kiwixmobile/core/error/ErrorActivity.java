@@ -32,10 +32,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -80,8 +82,7 @@ public class ErrorActivity extends BaseActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-
-    CoreApp.getCoreComponent().inject(this);
+    injection(CoreApp.getCoreComponent());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_kiwix_error);
@@ -184,5 +185,9 @@ public class ErrorActivity extends BaseActivity {
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     restartApp();
+  }
+
+  @Override public void injection(@NotNull CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }
