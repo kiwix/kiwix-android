@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.ColorMatrixColorFilter;
@@ -41,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -66,15 +68,21 @@ public class KiwixWebView extends VideoEnabledWebView {
     super(context);
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
     ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient) {
     super(context, attrs);
+    if (BuildConfig.DEBUG == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      setWebContentsDebuggingEnabled(true);
+    }
     this.callback = callback;
     CoreApp.getCoreComponent().inject(this);
     // Set the user agent to the current locale so it can be read with navigator.userAgent
     final WebSettings settings = getSettings();
     settings.setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
     settings.setDomStorageEnabled(true);
+    settings.setJavaScriptEnabled(true);
+    clearCache(true);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       settings.setAllowUniversalAccessFromFileURLs(true);
     }
