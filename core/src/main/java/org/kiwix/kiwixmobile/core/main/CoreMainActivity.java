@@ -494,16 +494,18 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   protected void hideTabSwitcher() {
-    actionBar.setDisplayHomeAsUpEnabled(false);
-    actionBar.setDisplayShowTitleEnabled(true);
+    if (actionBar != null) {
+      actionBar.setDisplayHomeAsUpEnabled(false);
+      actionBar.setDisplayShowTitleEnabled(true);
 
-    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    closeAllTabsButton.setImageDrawable(
-      ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
-    tabSwitcherRoot.setVisibility(View.GONE);
-    progressBar.setVisibility(View.VISIBLE);
-    contentFrame.setVisibility(View.VISIBLE);
-    mainMenu.showWebViewOptions(!urlIsInvalid());
+      drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+      closeAllTabsButton.setImageDrawable(
+        ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
+      tabSwitcherRoot.setVisibility(View.GONE);
+      progressBar.setVisibility(View.VISIBLE);
+      contentFrame.setVisibility(View.VISIBLE);
+      mainMenu.showWebViewOptions(!urlIsInvalid());
+    }
   }
 
   @OnClick(R2.id.bottom_toolbar_arrow_back)
