@@ -346,6 +346,8 @@ public class SearchActivity extends BaseActivity
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
+    if (searchView != null && searchView.getQuery() != null) {
+      outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
+    }
   }
 }
