@@ -23,7 +23,7 @@ import android.util.AttributeSet
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.tag_content.view.tag_picture
-import kotlinx.android.synthetic.main.tag_content.view.tag_short_text_only
+import kotlinx.android.synthetic.main.tag_content.view.tag_short_text
 import kotlinx.android.synthetic.main.tag_content.view.tag_text_only
 import kotlinx.android.synthetic.main.tag_content.view.tag_video
 import org.kiwix.kiwixmobile.core.R
@@ -43,11 +43,10 @@ class TagsView(context: Context, attrs: AttributeSet) : ChipGroup(context, attrs
   fun render(tags: List<KiwixTag>) {
     val pictureTagIsSet = tags.isSet<PicturesTag>()
     val videoTagIsSet = tags.isSet<VideoTag>()
-    val detailsTagIsSet = tags.isSet<DetailsTag>()
     tag_picture.selectBy(pictureTagIsSet)
     tag_video.selectBy(videoTagIsSet)
-    tag_text_only.selectBy(!pictureTagIsSet && !videoTagIsSet && detailsTagIsSet)
-    tag_short_text_only.selectBy(!pictureTagIsSet && !videoTagIsSet && !detailsTagIsSet)
+    tag_text_only.selectBy(!pictureTagIsSet && !videoTagIsSet)
+    tag_short_text.selectBy(!tags.isSet<DetailsTag>())
   }
 
   private inline fun <reified T : YesNoValueTag> List<KiwixTag>.isSet() =

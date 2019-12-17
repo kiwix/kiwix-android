@@ -288,7 +288,7 @@
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Text Only</string>
-  <string name="tag_short_text_only">Short Text Only</string>
+  <string name="tag_short_text">Short Text</string>
   <string-array name="pref_night_modes_entries">
     <item>On</item>
     <item>Off</item>
