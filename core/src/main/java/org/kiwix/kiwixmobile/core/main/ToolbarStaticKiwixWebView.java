@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.main;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -28,11 +27,14 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
  * {@link KiwixWebView} which keeps the app bar fixed.
  */
 
-@SuppressLint("ViewConstructor")
 public class ToolbarStaticKiwixWebView extends KiwixWebView {
 
-  private final int heightDifference;
-  private final SharedPreferenceUtil sharedPreferenceUtil;
+  private int heightDifference;
+  private SharedPreferenceUtil sharedPreferenceUtil;
+
+  public ToolbarStaticKiwixWebView(Context context) {
+    super(context);
+  }
 
   public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback,
     AttributeSet attrs, ViewGroup nonVideoView, ViewGroup videoView,

@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.main;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -27,13 +26,17 @@ import android.view.ViewGroup;
 import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
-@SuppressLint("ViewConstructor") public class ToolbarScrollingKiwixWebView extends KiwixWebView {
+public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
   private final int toolbarHeight = DimenUtils.getToolbarHeight(getContext());
-  private final View toolbarView;
-  private final View bottomBarView;
-  private final SharedPreferenceUtil sharedPreferenceUtil;
+  private View toolbarView;
+  private View bottomBarView;
+  private SharedPreferenceUtil sharedPreferenceUtil;
   private float startY;
+
+  public ToolbarScrollingKiwixWebView(Context context) {
+    super(context);
+  }
 
   public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
     ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient, View toolbarView,

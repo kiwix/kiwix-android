@@ -42,7 +42,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.inject.Inject;
-import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
@@ -52,7 +51,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
 
-@SuppressLint("ViewConstructor")
 public class KiwixWebView extends VideoEnabledWebView {
   public static final float[] NIGHT_MODE_COLORS = {
     -1.0f, 0, 0, 0, 255, // red
@@ -60,19 +58,20 @@ public class KiwixWebView extends VideoEnabledWebView {
     0, 0, -1.0f, 0, 255, // blue
     0, 0, 0, 1.0f, 0 // alpha
   };
-  private final ViewGroup videoView;
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   ZimReaderContainer zimReaderContainer;
-  private final WebViewCallback callback;
-  private final Paint invertedPaint = createInvertedPaint();
+  private WebViewCallback callback;
+
+  public KiwixWebView(Context context) {
+    super(context);
+  }
 
   @SuppressLint("SetJavaScriptEnabled")
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
     ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient) {
     super(context, attrs);
-    this.videoView = videoView;
     if (BuildConfig.DEBUG == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       setWebContentsDebuggingEnabled(true);
     }
@@ -113,22 +112,16 @@ public class KiwixWebView extends VideoEnabledWebView {
 
   public void deactivateNightMode() {
     setLayerType(LAYER_TYPE_NONE, null);
-    videoView.setLayerType(LAYER_TYPE_NONE, null);
   }
 
   public void activateNightMode() {
     if (getUrl() != null && getUrl().equals(HOME_URL)) {
       return;
     }
-    setLayerType(LAYER_TYPE_HARDWARE, invertedPaint);
-    videoView.setLayerType(LAYER_TYPE_HARDWARE, invertedPaint);
-  }
-
-  @NotNull private Paint createInvertedPaint() {
     Paint paint = new Paint();
     ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
     paint.setColorFilter(filterInvert);
-    return paint;
+    setLayerType(LAYER_TYPE_HARDWARE, paint);
   }
 
   @Override
