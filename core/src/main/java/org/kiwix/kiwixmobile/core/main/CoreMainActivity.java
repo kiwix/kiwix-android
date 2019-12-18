@@ -43,7 +43,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -356,7 +355,7 @@ public abstract class CoreMainActivity extends BaseActivity
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         bookOnDiskItem -> {
           open(bookOnDiskItem);
-          getCurrentWebView().activateNightMode();
+          updateNightMode();
           return Unit.INSTANCE;
         },
         null,
@@ -495,16 +494,20 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   protected void hideTabSwitcher() {
-    actionBar.setDisplayHomeAsUpEnabled(false);
-    actionBar.setDisplayShowTitleEnabled(true);
+    if (actionBar != null) {
+      actionBar.setDisplayHomeAsUpEnabled(false);
+      actionBar.setDisplayShowTitleEnabled(true);
 
-    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    closeAllTabsButton.setImageDrawable(
-      ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
-    tabSwitcherRoot.setVisibility(View.GONE);
-    progressBar.setVisibility(View.VISIBLE);
-    contentFrame.setVisibility(View.VISIBLE);
-    mainMenu.showWebViewOptions(!urlIsInvalid());
+      drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+      closeAllTabsButton.setImageDrawable(
+        ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
+      tabSwitcherRoot.setVisibility(View.GONE);
+      progressBar.setVisibility(View.VISIBLE);
+      contentFrame.setVisibility(View.VISIBLE);
+      if (mainMenu != null) {
+        mainMenu.showWebViewOptions(!urlIsInvalid());
+      }
+    }
   }
 
   @OnClick(R2.id.bottom_toolbar_arrow_back)
@@ -769,7 +772,7 @@ public abstract class CoreMainActivity extends BaseActivity
     webViewList.add(webView);
     selectTab(webViewList.size() - 1);
     tabsAdapter.notifyDataSetChanged();
-    setUpWebView();
+    setUpWebViewWithTextToSpeech();
     documentParser.initInterface(webView);
     return webView;
   }
@@ -778,7 +781,7 @@ public abstract class CoreMainActivity extends BaseActivity
     KiwixWebView webView = getWebView(url);
     webViewList.add(webView);
     tabsAdapter.notifyDataSetChanged();
-    setUpWebView();
+    setUpWebViewWithTextToSpeech();
     documentParser.initInterface(webView);
   }
 
@@ -791,7 +794,7 @@ public abstract class CoreMainActivity extends BaseActivity
       .setAction(R.string.undo, v -> {
         webViewList.add(index, tempForUndo);
         tabsAdapter.notifyItemInserted(index);
-        setUpWebView();
+        setUpWebViewWithTextToSpeech();
       })
       .show();
     openHomeScreen();
@@ -1191,7 +1194,7 @@ public abstract class CoreMainActivity extends BaseActivity
         webViewList.set(i, getWebView(webViewList.get(i).getUrl()));
       }
       selectTab(currentWebViewIndex);
-      setUpWebView();
+      setUpWebViewWithTextToSpeech();
     }
     presenter.loadCurrentZimBookmarksUrl();
 
@@ -1323,22 +1326,7 @@ public abstract class CoreMainActivity extends BaseActivity
     openArticle(articleUrl);
   }
 
-  private void setUpWebView() {
-    getCurrentWebView().getSettings().setJavaScriptEnabled(true);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      WebView.setWebContentsDebuggingEnabled(true);
-    }
-
-    // webView.getSettings().setLoadsImagesAutomatically(false);
-    // Does not make much sense to cache data from zim files.(Not clear whether
-    // this actually has any effect)
-    getCurrentWebView().getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-
-    // Should basically resemble the behavior when setWebClient not done
-    // (i.p. internal urls load in webView, external urls in browser)
-    // as currently no custom setWebViewClient required it is commented
-    // However, it must notify the bookmark system when a page is finished loading
-    // so that it can refresh the menu.
+  private void setUpWebViewWithTextToSpeech() {
     tts.initWebView(getCurrentWebView());
   }
 

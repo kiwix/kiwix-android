@@ -32,27 +32,27 @@ sealed class KiwixTag {
         val split = tags.split(":")
         val value = split.getOrNull(1)
         when (val tag = split[0]) {
-          "_ftindex" -> FtIndexTag(value!!)
-          "_pictures" -> PicturesTag(value!!)
-          "_videos" -> VideoTag(value!!)
-          "_details" -> DetailsTag(value!!)
-          "_category" -> CategoryTag(value!!)
+          "_ftindex" -> FtIndexTag(value)
+          "_pictures" -> PicturesTag(value)
+          "_videos" -> VideoTag(value)
+          "_details" -> DetailsTag(value)
+          "_category" -> CategoryTag(value)
           else -> value?.let { ArbitraryTag(tag, it) } ?: TagOnly(tag)
         }
       } ?: emptyList()
 
-    data class CategoryTag(val categoryValue: String) : KiwixTag()
+    data class CategoryTag(val categoryValue: String?) : KiwixTag()
     data class ArbitraryTag(val tag: String, val value: String) : KiwixTag()
     data class TagOnly(val tag: String) : KiwixTag()
 
-    sealed class YesNoValueTag(
-      _value: String,
-      val value: TagValue = if (_value == "yes") YES else NO
-    ) : KiwixTag() {
-      class FtIndexTag(value: String) : YesNoValueTag(value)
-      class PicturesTag(value: String) : YesNoValueTag(value)
-      class VideoTag(value: String) : YesNoValueTag(value)
-      class DetailsTag(value: String) : YesNoValueTag(value)
+    sealed class YesNoValueTag() : KiwixTag() {
+      abstract val inputValue: String?
+      val value: TagValue by lazy { if (inputValue == "no") NO else YES }
+
+      data class FtIndexTag(override val inputValue: String?) : YesNoValueTag()
+      data class PicturesTag(override val inputValue: String?) : YesNoValueTag()
+      data class VideoTag(override val inputValue: String?) : YesNoValueTag()
+      data class DetailsTag(override val inputValue: String?) : YesNoValueTag()
     }
   }
 
