@@ -23,7 +23,9 @@ import attempt
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
+import org.kiwix.kiwixmobile.LONG_WAIT
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.VERY_LONG_WAIT
 import org.kiwix.kiwixmobile.main.MainRobot
 import org.kiwix.kiwixmobile.main.main
 
@@ -35,7 +37,7 @@ class IntroRobot : BaseRobot() {
   private val viewPager = ViewId(R.id.view_pager)
 
   init {
-    isVisible(getStarted, 20_000L)
+    isVisible(getStarted, LONG_WAIT)
   }
 
   fun swipeLeft() {
@@ -49,8 +51,8 @@ class IntroRobot : BaseRobot() {
   fun swipeRight() {
     attempt(10) {
       isVisible(viewPager).swipeRight()
-      isVisible(TextId(R.string.welcome_to_the_family), 40_000L)
-      isVisible(TextId(R.string.human_kind_knowledge), 40_000L)
+      isVisible(TextId(R.string.welcome_to_the_family), VERY_LONG_WAIT)
+      isVisible(TextId(R.string.human_kind_knowledge), VERY_LONG_WAIT)
     }
   }
 

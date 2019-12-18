@@ -22,7 +22,9 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
+import org.kiwix.kiwixmobile.LONG_WAIT
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.VERY_LONG_WAIT
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.language.LanguageRobot
 import org.kiwix.kiwixmobile.language.language
@@ -32,7 +34,7 @@ fun zimManage(func: ZimManageRobot.() -> Unit) =
 
 class ZimManageRobot : BaseRobot() {
   init {
-    isVisible(ViewId(R.id.manageViewPager), 40_000L)
+    isVisible(ViewId(R.id.manageViewPager), VERY_LONG_WAIT)
   }
 
   fun clickOnOnline(func: LibraryRobot.() -> Unit): LibraryRobot {
@@ -67,7 +69,7 @@ class ZimManageRobot : BaseRobot() {
     }
 
     fun clickOnSearch() {
-      clickOn(ViewId(R.id.action_search), 20_000L)
+      clickOn(ViewId(R.id.action_search), LONG_WAIT)
     }
 
     fun searchFor(book: Book) {
@@ -75,7 +77,7 @@ class ZimManageRobot : BaseRobot() {
     }
 
     fun waitForEmptyView() {
-      isVisible(ViewId(R.id.libraryErrorText), 40_000L)
+      isVisible(ViewId(R.id.libraryErrorText), VERY_LONG_WAIT)
     }
   }
 
@@ -86,7 +88,7 @@ class ZimManageRobot : BaseRobot() {
     }
 
     fun clickStop() {
-      clickOn(ViewId(R.id.stop), 20_000L)
+      clickOn(ViewId(R.id.stop), LONG_WAIT)
     }
 
     fun waitForEmptyView() {
