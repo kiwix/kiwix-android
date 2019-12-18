@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.settings;
 
 import android.preference.Preference;
 import androidx.test.rule.ActivityTestRule;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.core.R;
@@ -42,15 +43,6 @@ public class KiwixSettingsActivityTest {
   @Test
   public void testToggle() {
     enterSettings();
-    //onData(allOf(
-    //  is(instanceOf(Preference.class)),
-    //  withKey("pref_nightmode")))
-    //  .perform(click());
-
-    //onData(allOf(
-    //  is(instanceOf(Preference.class)),
-    //  withKey("pref_auto_nightmode")))
-    //  .perform(click());
 
     onData(allOf(
       is(instanceOf(Preference.class)),
@@ -135,6 +127,25 @@ public class KiwixSettingsActivityTest {
       .perform(click());
 
     assertDisplayed(R.string.clear_all_history_dialog_title);
+  }
+
+  @Test
+  public void testNightModeDialog() {
+    enterSettings();
+    onData(allOf(
+      is(instanceOf(Preference.class)),
+      withKey("pref_night_mode")))
+      .perform(click());
+
+    for (String nightModeString : nightModeStrings()) {
+      assertDisplayed(nightModeString);
+    }
+  }
+
+  @NotNull private String[] nightModeStrings() {
+    return activityTestRule.getActivity()
+      .getResources()
+      .getStringArray(R.array.pref_night_modes_entries);
   }
 }
 
