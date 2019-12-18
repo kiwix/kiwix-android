@@ -504,7 +504,9 @@ public abstract class CoreMainActivity extends BaseActivity
       tabSwitcherRoot.setVisibility(View.GONE);
       progressBar.setVisibility(View.VISIBLE);
       contentFrame.setVisibility(View.VISIBLE);
-      mainMenu.showWebViewOptions(!urlIsInvalid());
+      if (mainMenu != null) {
+        mainMenu.showWebViewOptions(!urlIsInvalid());
+      }
     }
   }
 
