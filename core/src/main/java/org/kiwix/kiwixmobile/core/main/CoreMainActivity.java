@@ -20,10 +20,7 @@ package org.kiwix.kiwixmobile.core.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -119,8 +116,6 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_SEARCH;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_STAR;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE;
@@ -263,19 +258,6 @@ public abstract class CoreMainActivity extends BaseActivity
       closeTab(viewHolder.getAdapterPosition());
     }
   };
-
-  private static void updateWidgets(Context context) {
-    Intent intent = new Intent(context.getApplicationContext(), KiwixSearchWidget.class);
-    intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-    // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
-    // since it seems the onUpdate() is only fired on that:
-    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-    int[] ids = widgetManager.getAppWidgetIds(new ComponentName(context, KiwixSearchWidget.class));
-
-    widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
-    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-    context.sendBroadcast(intent);
-  }
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -1215,13 +1197,13 @@ public abstract class CoreMainActivity extends BaseActivity
           startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
           break;
         }
-        case KiwixSearchWidget.TEXT_CLICKED:
+        case CoreSearchWidget.TEXT_CLICKED:
           goToSearch(false);
           break;
-        case KiwixSearchWidget.STAR_CLICKED:
+        case CoreSearchWidget.STAR_CLICKED:
           goToBookmarks();
           break;
-        case KiwixSearchWidget.MIC_CLICKED:
+        case CoreSearchWidget.MIC_CLICKED:
           goToSearch(true);
           break;
         case Intent.ACTION_VIEW:
@@ -1236,7 +1218,6 @@ public abstract class CoreMainActivity extends BaseActivity
           break;
       }
     }
-    updateWidgets(this);
     updateNightMode();
   }
 
@@ -1261,18 +1242,28 @@ public abstract class CoreMainActivity extends BaseActivity
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
-    boolean isWidgetSearch = intent.getBooleanExtra(EXTRA_IS_WIDGET_SEARCH, false);
-    boolean isWidgetVoiceSearch = intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false);
-    boolean isWidgetStar = intent.getBooleanExtra(EXTRA_IS_WIDGET_STAR, false);
-
-    if (isWidgetStar && zimReaderContainer.getId() != null) {
-      goToBookmarks();
-    } else if (isWidgetSearch && zimReaderContainer.getId() != null) {
-      goToSearch(false);
-    } else if (isWidgetVoiceSearch && zimReaderContainer.getId() != null) {
-      goToSearch(true);
-    } else if (isWidgetStar || isWidgetSearch || isWidgetVoiceSearch) {
-      manageZimFiles(0);
+    if (intent.getAction() != null) {
+      if (zimReaderContainer.getId() != null) {
+        switch (intent.getAction()) {
+          case CoreSearchWidget.STAR_CLICKED:
+            goToBookmarks();
+            break;
+          case CoreSearchWidget.TEXT_CLICKED:
+            goToSearch(false);
+            break;
+          case CoreSearchWidget.MIC_CLICKED:
+            goToSearch(true);
+            break;
+          default:
+        }
+      } else {
+        switch (intent.getAction()) {
+          case CoreSearchWidget.STAR_CLICKED:
+          case CoreSearchWidget.TEXT_CLICKED:
+          case CoreSearchWidget.MIC_CLICKED:
+            manageZimFiles(0);
+        }
+      }
     }
   }
 
