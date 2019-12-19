@@ -1254,7 +1254,6 @@ public abstract class CoreMainActivity extends BaseActivity
           case CoreSearchWidget.MIC_CLICKED:
             goToSearch(true);
             break;
-          default:
         }
       } else {
         switch (intent.getAction()) {
