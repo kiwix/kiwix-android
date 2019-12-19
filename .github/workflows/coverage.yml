@@ -17,7 +17,7 @@ jobs:
       matrix:
         api-level: [21, 29]
       fail-fast: false
-      runs-on: macOS-latest
+    runs-on: macOS-latest
     steps:
       - name: checkout
         uses: actions/checkout@v1
