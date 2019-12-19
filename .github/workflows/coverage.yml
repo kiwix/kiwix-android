@@ -12,11 +12,12 @@ on:
 
 jobs:
 
-  coverageReport:strategy:
-    matrix:
-      api-level: [21, 22]
-    fail-fast: false
-    runs-on: macOS-latest
+  coverageReport:
+    strategy:
+      matrix:
+        api-level: [21, 29]
+      fail-fast: false
+      runs-on: macOS-latest
     steps:
       - name: checkout
         uses: actions/checkout@v1
