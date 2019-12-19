@@ -12,8 +12,11 @@ on:
 
 jobs:
 
-  coverageReport:
-    runs-on: macOS-latest
+  coverageReport:strategy:
+    matrix:
+      api-level: [21, 22]
+    fail-fast: false
+    runs-on: macOS-latestruns-on: macOS-latest
     steps:
       - name: checkout
         uses: actions/checkout@v1
@@ -23,7 +26,7 @@ jobs:
       - name: create instrumentation coverage
         uses: reactivecircus/android-emulator-runner@v2.0.0
         with:
-          api-level: 21
+          api-level: ${{ matrix.api-level }}
           arch: x86_64
           script: bash instrumentation.sh
 
