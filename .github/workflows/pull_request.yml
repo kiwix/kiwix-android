@@ -26,4 +26,4 @@ jobs:
           fetch-depth: 1
 
       - name: Build all configurations
-        run: ./gradlew app:assemble custom:assemble
+        run: ./gradlew assemble
