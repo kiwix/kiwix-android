@@ -167,8 +167,9 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
-    if (intent?.data != null) {
-      openZimFile(intent.data.toFile())
+    intent?.data?.let {
+      if ("file" == it.scheme) openZimFile(it.toFile())
+      else toast(R.string.cannot_open_file)
     }
   }
 
