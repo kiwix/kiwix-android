@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.LONG_WAIT
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.VERY_LONG_WAIT
 import org.kiwix.kiwixmobile.main.MainRobot
 import org.kiwix.kiwixmobile.main.main
 
@@ -38,6 +37,8 @@ class IntroRobot : BaseRobot() {
 
   init {
     isVisible(getStarted, LONG_WAIT)
+    isVisible(TextId(R.string.welcome_to_the_family))
+    isVisible(TextId(R.string.human_kind_knowledge))
   }
 
   fun swipeLeft() {
@@ -45,14 +46,6 @@ class IntroRobot : BaseRobot() {
       isVisible(viewPager).swipeLeft()
       isVisible(TextId(R.string.save_books_offline))
       isVisible(TextId(R.string.download_books_message))
-    }
-  }
-
-  fun swipeRight() {
-    attempt(10) {
-      isVisible(viewPager).swipeRight()
-      isVisible(TextId(R.string.welcome_to_the_family), VERY_LONG_WAIT)
-      isVisible(TextId(R.string.human_kind_knowledge), VERY_LONG_WAIT)
     }
   }
 
