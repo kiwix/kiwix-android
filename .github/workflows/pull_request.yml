@@ -25,5 +25,5 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Build app and custom
-        run: ./gradlew app:assembleDebug custom:assembleCustomexampleDebug
+      - name: Build all configurations
+        run: ./gradlew assemble
