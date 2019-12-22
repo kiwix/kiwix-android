@@ -103,7 +103,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
       bookDelegate,
       BookOnDiskDelegate.LanguageDelegate
     )
-    if (savedInstanceState != null) {
+    if (savedInstanceState != null && ServerUtils.isServerStarted) {
       ip = savedInstanceState.getString(ipStateKey)
       layoutServerStarted()
     }
