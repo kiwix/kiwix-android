@@ -24,35 +24,46 @@ import dagger.BindsInstance
 import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
+import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.error.ErrorActivity
+import org.kiwix.kiwixmobile.core.help.HelpActivity
+import org.kiwix.kiwixmobile.core.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.history.HistoryModule
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimContentProvider
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.AutoCompleteAdapter
+import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.error.ErrorActivity
-import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.search.SearchActivity
+import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity
+import org.kiwix.kiwixmobile.core.webserver.ZimHostModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(
   modules = [
+    BookmarksModule::class,
+    HistoryModule::class,
+    ZimHostModule::class,
+    ActivityModule::class,
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,
@@ -69,7 +80,6 @@ interface CoreComponent {
   }
 
   fun serviceComponent(): ServiceComponent.Builder
-  fun activityComponent(): ActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
   fun zimFileReaderFactory(): ZimFileReader.Factory
@@ -93,11 +103,11 @@ interface CoreComponent {
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun inject(addNoteDialog: AddNoteDialog)
   fun inject(errorActivity: ErrorActivity)
-  // fun inject(zimHostActivity: ZimHostActivity)
+  fun inject(zimHostActivity: ZimHostActivity)
   fun inject(searchActivity: SearchActivity)
 
   fun inject(helpActivity: HelpActivity)
-  // fun inject(historyActivity: HistoryActivity)
-  // fun inject(bookmarksActivity: BookmarksActivity)
+  fun inject(historyActivity: HistoryActivity)
+  fun inject(bookmarksActivity: BookmarksActivity)
   fun inject(baseActivity: BaseActivity)
 }

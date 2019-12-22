@@ -23,7 +23,6 @@ import dagger.Module
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.main.MainContract
 import org.kiwix.kiwixmobile.core.main.MainPresenter
-import org.kiwix.kiwixmobile.core.search.SearchPresenter
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 
@@ -37,6 +36,6 @@ abstract class DialogModule {
   @Binds
   abstract fun bindMainPresenter(mainPresenter: MainPresenter): MainContract.Presenter
 
-  @Binds
-  abstract fun bindSearchPresenter(searchPresenter: SearchPresenter): SearchPresenter
+  // @Binds
+  // abstract fun bindSearchPresenter(searchPresenter: SearchPresenter): SearchPresenter
 }

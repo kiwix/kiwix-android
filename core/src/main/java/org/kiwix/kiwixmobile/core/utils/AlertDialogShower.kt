@@ -21,12 +21,10 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.StartHotspotManually
 import javax.inject.Inject
 import javax.inject.Named
 
-@ActivityScope
 class AlertDialogShower @Inject constructor(
   @Named("activity") private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil

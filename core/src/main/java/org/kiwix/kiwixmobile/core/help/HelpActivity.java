@@ -49,11 +49,8 @@ public class HelpActivity extends BaseActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    injection(CoreApp.getCoreComponent());
-
-    CoreApp.getCoreComponent().inject(this);
-
     super.onCreate(savedInstanceState);
+    injection(CoreApp.getCoreComponent());
     setContentView(R.layout.activity_help);
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(v -> onBackPressed());

@@ -328,7 +328,6 @@ public abstract class CoreMainActivity extends BaseActivity implements WebViewCa
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     injection(CoreApp.getCoreComponent());
-
     presenter.attachView(this);
     new WebView(this).destroy(); // Workaround for buggy webViews see #710
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
