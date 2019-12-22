@@ -35,7 +35,4 @@ abstract class DialogModule {
 
   @Binds
   abstract fun bindMainPresenter(mainPresenter: MainPresenter): MainContract.Presenter
-
-  // @Binds
-  // abstract fun bindSearchPresenter(searchPresenter: SearchPresenter): SearchPresenter
 }
