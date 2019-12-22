@@ -128,8 +128,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   };
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
     injection(CoreApp.getCoreComponent());
+    super.onCreate(savedInstanceState);
     presenter.attachView(this);
     setContentView(R.layout.activity_history);
     setSupportActionBar(toolbar);

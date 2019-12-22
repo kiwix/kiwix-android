@@ -16,25 +16,27 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.webserver;
+package org.kiwix.kiwixmobile.core.di.modules
 
-import android.app.Activity;
-import dagger.Module;
-import dagger.Provides;
-import org.kiwix.kiwixmobile.core.di.ActivityScope;
+import dagger.Binds
+import dagger.Module
+import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.main.MainContract
+import org.kiwix.kiwixmobile.core.main.MainPresenter
+import org.kiwix.kiwixmobile.core.search.SearchPresenter
+import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.DialogShower
 
 @Module
-public class ZimHostModule {
+abstract class DialogModule {
 
+  @Binds
   @ActivityScope
-  @Provides
-  ZimHostContract.Presenter provideZimHostPresenter(ZimHostPresenter zimHostPresenter) {
-    return zimHostPresenter;
-  }
+  abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
 
-  @ActivityScope
-  @Provides Activity providesActivity(ZimHostActivity zimHostActivity) {
-    return zimHostActivity;
-  }
+  @Binds
+  abstract fun bindMainPresenter(mainPresenter: MainPresenter): MainContract.Presenter
+
+  @Binds
+  abstract fun bindSearchPresenter(searchPresenter: SearchPresenter): SearchPresenter
 }
-

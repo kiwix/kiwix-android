@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.ActivityComponent;
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
@@ -72,7 +73,7 @@ public class ZimHostActivity extends BaseActivity implements
   @Inject
   ZimHostContract.Presenter presenter;
 
-  //@Inject
+  @Inject
   AlertDialogShower alertDialogShower;
 
   private static final String TAG = "ZimHostActivity";
@@ -88,6 +89,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
+    CoreApp.getCoreComponent().activityComponent().activity(this).build().inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_zim_host);
     injection(CoreApp.getCoreComponent());

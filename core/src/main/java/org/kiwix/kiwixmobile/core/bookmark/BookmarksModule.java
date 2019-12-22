@@ -24,7 +24,7 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope;
 
 @Module
 public class BookmarksModule {
-  //@ActivityScope
+  @ActivityScope
   @Provides
   BookmarksContract.Presenter provideBookmarksPresenter(BookmarksPresenter presenter) {
     return presenter;

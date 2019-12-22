@@ -17,28 +17,15 @@
  */
 package org.kiwix.kiwixmobile.core.di.modules
 
-import dagger.Binds
+import android.app.Activity
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.core.data.DataSource
-import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.main.MainContract
-import org.kiwix.kiwixmobile.core.main.MainPresenter
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.DialogShower
+import javax.inject.Named
 
-@Module
-abstract class ActivityModule {
-  @Binds
-  // @ActivityScope
-  abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
+@Module(includes = [DialogModule::class])
+class ActivityModule {
 
-  @Module
-  companion object {
-    @JvmStatic
-    @ActivityScope
-    @Provides
-    fun providesMainPresenter(dataSource: DataSource): MainContract.Presenter =
-      MainPresenter(dataSource)
-  }
+  @Provides
+  @Named("activity")
+  fun provideActivity(): Activity = Activity()
 }

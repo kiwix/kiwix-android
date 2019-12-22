@@ -45,30 +45,18 @@ import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
-import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
-import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.history.HistoryActivity
-import org.kiwix.kiwixmobile.core.history.HistoryModule
 import org.kiwix.kiwixmobile.core.search.SearchActivity
-import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity
-import org.kiwix.kiwixmobile.core.webserver.ZimHostModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(
   modules = [
-    ZimHostModule::class,
-
-    BookmarksModule::class,
-    HistoryModule::class,
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,
-    DataModule::class,
-    ActivityModule::class]
+    DataModule::class]
 )
 interface CoreComponent {
 
@@ -81,6 +69,7 @@ interface CoreComponent {
   }
 
   fun serviceComponent(): ServiceComponent.Builder
+  fun activityComponent(): ActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
   fun zimFileReaderFactory(): ZimFileReader.Factory
@@ -104,10 +93,11 @@ interface CoreComponent {
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun inject(addNoteDialog: AddNoteDialog)
   fun inject(errorActivity: ErrorActivity)
-  fun inject(zimHostActivity: ZimHostActivity)
+  // fun inject(zimHostActivity: ZimHostActivity)
   fun inject(searchActivity: SearchActivity)
+
   fun inject(helpActivity: HelpActivity)
-  fun inject(historyActivity: HistoryActivity)
-  fun inject(bookmarksActivity: BookmarksActivity)
+  // fun inject(historyActivity: HistoryActivity)
+  // fun inject(bookmarksActivity: BookmarksActivity)
   fun inject(baseActivity: BaseActivity)
 }
