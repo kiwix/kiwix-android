@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="menu_help">Pomocník</string>
   <string name="menu_home">Domov</string>
@@ -49,7 +49,6 @@
   <string name="pref_newtab_background_title">Otvoriť novú kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Pri otvorení novej karty bude karta otvorená na pozadí</string>
   <string name="zim_manager">Knižnica</string>
-
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -61,14 +60,5 @@
     <item>@string/help_9</item>
     <item>@string/help_10</item>
     <item>@string/help_11</item>
-  </string-array>
-  <string-array name="description_help_12">
-    <item>@string/help_13</item>
-    <item>@string/help_14</item>
-    <item>@string/help_15</item>
-    <item>@string/help_16</item>
-    <item>@string/help_17</item>
-    <item>@string/help_18</item>
-    <item>@string/help_19</item>
   </string-array>
 </resources>

@@ -46,6 +46,8 @@ public abstract class CoreApp extends MultiDexApplication  {
   @Inject
   DownloadMonitor downloadMonitor;
   @Inject
+  NightModeConfig nightModeConfig;
+  @Inject
   KiwixDatabase kiwixDatabase;
 
   public static CoreApp getInstance() {
@@ -77,6 +79,7 @@ public abstract class CoreApp extends MultiDexApplication  {
     coreComponent.inject(this);
     kiwixDatabase.forceMigration();
     downloadMonitor.init();
+    nightModeConfig.init();
     if (BuildConfig.DEBUG) {
       StrictMode.setThreadPolicy(buildThreadPolicy(new StrictMode.ThreadPolicy.Builder()));
       StrictMode.setVmPolicy(buildVmPolicy(new StrictMode.VmPolicy.Builder()));

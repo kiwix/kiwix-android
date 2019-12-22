@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.di.components
 
 import android.app.Application
+import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import dagger.BindsInstance
@@ -79,7 +80,6 @@ interface CoreComponent {
     fun build(): CoreComponent
   }
 
-  fun serviceComponent(): ServiceComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
   fun zimFileReaderFactory(): ZimFileReader.Factory
@@ -94,6 +94,7 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun context(): Context
   fun downloader(): Downloader
+  fun notificationManager(): NotificationManager
 
   fun inject(application: CoreApp)
   fun inject(zimContentProvider: ZimContentProvider)

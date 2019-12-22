@@ -62,7 +62,7 @@ data class DownloadItem(
   )
 }
 
-sealed class DownloadState(val stringId: Int) {
+sealed class DownloadState(private val stringId: Int) {
 
   companion object {
     fun from(state: Status, error: Error): DownloadState =

@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_language.language_progressbar
 import kotlinx.android.synthetic.main.activity_language.language_recycler_view
-import kotlinx.android.synthetic.main.activity_language.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -71,7 +70,7 @@ class LanguageActivity : BaseActivity() {
     kiwixActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_language)
-    setSupportActionBar(toolbar)
+    setSupportActionBar(findViewById(R.id.toolbar))
 
     supportActionBar?.let {
       it.setDisplayHomeAsUpEnabled(true)

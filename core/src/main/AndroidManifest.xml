@@ -8,8 +8,6 @@
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
   <!-- Device with versions >= Pie need this permission -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -19,38 +17,19 @@
     android:allowBackup="true"
     android:fullBackupContent="@xml/backup_rules"
     android:hardwareAccelerated="true"
-    android:icon="@mipmap/kiwix_icon"
     android:label="@string/app_name"
-    android:roundIcon="@mipmap/kiwix_icon_round"
     android:supportsRtl="true"
-    android:theme="@style/AppTheme"
+    android:theme="@style/KiwixTheme"
     android:usesCleartextTraffic="true"
     tools:targetApi="m">
 
     <activity android:name=".search.SearchActivity" />
     <activity android:name=".bookmark.BookmarksActivity" />
-    <activity android:name=".webserver.ZimHostActivity" />
 
     <provider
       android:name=".reader.ZimContentProvider"
       android:authorities="${applicationId}.zim.base"
       android:exported="true" />
-
-    <receiver android:name=".main.KiwixSearchWidget">
-      <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
-      </intent-filter>
-
-      <meta-data
-        android:name="android.appwidget.provider"
-        android:resource="@xml/kiwix_widget_provider_info" />
-    </receiver>
-
-    <service android:name=".wifi_hotspot.HotspotService" />
 
     <activity
       android:name=".error.ErrorActivity"

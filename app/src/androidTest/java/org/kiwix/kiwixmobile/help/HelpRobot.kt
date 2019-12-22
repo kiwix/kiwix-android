@@ -29,7 +29,7 @@ fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 class HelpRobot : BaseRobot() {
 
   init {
-    isVisible(ViewId(id.activity_help_toolbar))
+    isVisible(ViewId(id.toolbar))
   }
 
   fun clickOnWhatDoesKiwixDo() {
@@ -61,26 +61,6 @@ class HelpRobot : BaseRobot() {
           string.help_9,
           string.help_10,
           string.help_11
-        )
-      )
-    )
-  }
-
-  fun clickOnLargeZimFiles() {
-    clickOn(TextId(string.help_12))
-  }
-
-  fun assertLargeZimsIsExpanded() {
-    isVisible(
-      Text(
-        helpTextFormat(
-          string.help_13,
-          string.help_14,
-          string.help_15,
-          string.help_16,
-          string.help_17,
-          string.help_18,
-          string.help_19
         )
       )
     )

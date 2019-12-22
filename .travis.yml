@@ -48,7 +48,7 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew jacocoInstrumentationTestReport ktlintCheck lint jacocoTestReport app:assembleDebug
+  - ./gradlew jacocoInstrumentationTestReport ktlintCheck app:lintDebug core:lintDebug custom:lintCustomexampleDebug jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport app:assembleDebug
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

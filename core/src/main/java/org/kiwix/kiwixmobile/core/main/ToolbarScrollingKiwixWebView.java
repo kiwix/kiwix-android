@@ -18,31 +18,30 @@
 
 package org.kiwix.kiwixmobile.core.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import org.kiwix.kiwixmobile.core.utils.DimenUtils;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
-public class ToolbarScrollingKiwixWebView extends KiwixWebView {
+@SuppressLint("ViewConstructor") public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
   private final int toolbarHeight = DimenUtils.getToolbarHeight(getContext());
-  private View toolbarView;
-  private View bottomBarView;
+  private final View toolbarView;
+  private final View bottomBarView;
+  private final SharedPreferenceUtil sharedPreferenceUtil;
   private float startY;
 
-  public ToolbarScrollingKiwixWebView(Context context) {
-    super(context);
-  }
-
-  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView,
-    View bottomBarView, ViewGroup nonVideoView, ViewGroup videoView,
-    AttributeSet attrs, CoreWebViewClient webViewClient) {
-    super(context, callback, attrs, nonVideoView, videoView,
-      webViewClient);
+  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
+    ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient, View toolbarView,
+    View bottomBarView, SharedPreferenceUtil sharedPreferenceUtil) {
+    super(context, callback, attrs, nonVideoView, videoView, webViewClient);
     this.toolbarView = toolbarView;
     this.bottomBarView = bottomBarView;
+    this.sharedPreferenceUtil = sharedPreferenceUtil;
   }
 
   private boolean moveToolbar(int scrollDelta) {
@@ -73,7 +72,7 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
         break;
       case MotionEvent.ACTION_MOVE:
         // If we are in fullscreen don't scroll bar
-        if (CoreMainActivity.isFullscreenOpened) {
+        if (sharedPreferenceUtil.getPrefFullScreen()) {
           return super.onTouchEvent(event);
         }
         // Filter out zooms since we don't want to affect the toolbar when zooming

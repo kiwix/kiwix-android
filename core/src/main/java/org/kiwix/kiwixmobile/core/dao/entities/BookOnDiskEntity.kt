@@ -43,7 +43,8 @@ data class BookOnDiskEntity(
   val mediaCount: String?,
   val size: String,
   val name: String?,
-  val favIcon: String
+  val favIcon: String,
+  val tags: String? = null
 ) {
   constructor(bookOnDisk: BookOnDisk) : this(
     0,
@@ -60,7 +61,8 @@ data class BookOnDiskEntity(
     bookOnDisk.book.getMediaCount(),
     bookOnDisk.book.getSize(),
     bookOnDisk.book.name,
-    bookOnDisk.book.getFavicon()
+    bookOnDisk.book.getFavicon(),
+    bookOnDisk.book.tags
   )
 
   fun toBook() = Book().apply {
@@ -77,6 +79,7 @@ data class BookOnDiskEntity(
     size = this@BookOnDiskEntity.size
     bookName = name
     favicon = favIcon
+    tags = this@BookOnDiskEntity.tags
   }
 }
 

@@ -23,7 +23,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
+import android.util.TypedValue
 import android.widget.Toast
+import androidx.annotation.AttrRes
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import java.util.Locale
 
@@ -54,3 +56,10 @@ val Context.locale: Locale
   get() =
     if (VERSION.SDK_INT >= VERSION_CODES.N) resources.configuration.locales.get(0)
     else resources.configuration.locale
+
+fun Context.getColorAttribute(@AttrRes attributeRes: Int) = with(TypedValue()) {
+  if (theme.resolveAttribute(attributeRes, this, true))
+    data
+  else
+    throw RuntimeException("invalid attribute $attributeRes")
+}

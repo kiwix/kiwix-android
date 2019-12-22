@@ -56,7 +56,6 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
-import static org.kiwix.kiwixmobile.core.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends BaseActivity
   implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
@@ -265,7 +264,7 @@ public class SearchActivity extends BaseActivity
   }
 
   private void deleteSpecificSearchDialog(final String search) {
-    new AlertDialog.Builder(this, dialogStyle())
+    new AlertDialog.Builder(this)
       .setMessage(getString(R.string.delete_recent_search_item))
       .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
         deleteSpecificSearchItem(search);
@@ -352,7 +351,9 @@ public class SearchActivity extends BaseActivity
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
+    if (searchView != null && searchView.getQuery() != null) {
+      outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
+    }
   }
 
   @Override public void injection(@NotNull CoreComponent coreComponent) {

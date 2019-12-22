@@ -1,4 +1,0 @@
-include ':core'
-include ':app'
-include ':custom'
-rootProject.name='kiwix-android'

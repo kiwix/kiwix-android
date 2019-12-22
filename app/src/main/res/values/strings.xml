@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources><!--placeholder for translation scripts--></resources>
+<resources>
+  <string name="file_system_does_not_support_4gb">Your file system doesn’t support files over 4GB</string>
+  <string name="detecting_file_system">Detecting if file system can create 4GB files</string>
+  <string name="cannot_open_file">Failed to open file\nPlease try looking for this file in the Device Tab of your Library</string>
+</resources>

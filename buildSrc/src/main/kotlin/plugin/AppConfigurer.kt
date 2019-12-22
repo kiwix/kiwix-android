@@ -85,7 +85,7 @@ class AppConfigurer {
       androidTestImplementation(Libs.espresso_web)
       androidTestImplementation(Libs.espresso_intents)
       androidTestImplementation(Libs.espresso_contrib)
-      androidTestImplementation(Libs.androidx_annotation)
+      androidTestImplementation(Libs.annotation)
       androidTestImplementation(Libs.junit)
       androidTestImplementation(Libs.junit_jupiter)
       androidTestImplementation(Libs.androidx_test_runner)

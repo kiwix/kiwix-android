@@ -26,14 +26,14 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
+import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 
@@ -118,10 +118,10 @@ public abstract class CoreWebViewClient extends WebViewClient {
       return;
     }
 
-    if (!url.equals("file:///android_asset/home.html")) {
-      view.removeView(home);
-    } else{
+    if (url.equals(HOME_URL)) {
       onUrlEqualToHome(view);
+    } else {
+      view.removeView(home);
     }
     callback.webViewUrlFinishedLoading();
   }
@@ -134,10 +134,6 @@ public abstract class CoreWebViewClient extends WebViewClient {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
     home = inflater.inflate(R.layout.content_main, view, false);
     callback.setHomePage(home);
-    if (sharedPreferenceUtil.nightMode()) {
-      ImageView cardImage = home.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
-    }
     view.removeAllViews();
     view.addView(home);
   }

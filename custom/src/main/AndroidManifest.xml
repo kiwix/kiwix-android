@@ -3,11 +3,14 @@
   package="org.kiwix.kiwixmobile.custom">
 
 
-  <application android:name=".CustomApp">
+  <application
+    android:name=".CustomApp"
+    android:icon="@mipmap/ic_launcher"
+    android:roundIcon="@mipmap/ic_launcher_round">
     <activity
       android:name=".splash.CustomSplashActivity"
       android:label="@string/app_name"
-      android:theme="@style/AppTheme.Launcher">
+      android:theme="@style/ThemeOverlay.KiwixTheme.Launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -55,5 +58,20 @@
       </intent-filter>
     </activity>
     <activity android:name=".download.CustomDownloadActivity" />
+
+    <receiver android:name=".main.CustomSearchWidget">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="KiwixSearchWidget.TEXT_CLICKED" />
+        <action android:name="KiwixSearchWidget.ICON_CLICKED" />
+        <action android:name="KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="KiwixSearchWidget.STAR_CLICKED" />
+      </intent-filter>
+
+      <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/kiwix_widget_provider_info" />
+    </receiver>
+
   </application>
 </manifest>
