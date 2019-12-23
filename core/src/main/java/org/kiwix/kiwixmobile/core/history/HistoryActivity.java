@@ -210,7 +210,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     } else if (itemId == R.id.menu_history_clear) {
       presenter.deleteHistory(new ArrayList<>(fullHistory));
 
-      if (fullHistory.isEmpty() & historyList.isEmpty()) {
+      if (fullHistory.isEmpty() && historyList.isEmpty()) {
         Toast.makeText(this, "No history present", Toast.LENGTH_SHORT).show();
       } else {
         fullHistory.clear();
