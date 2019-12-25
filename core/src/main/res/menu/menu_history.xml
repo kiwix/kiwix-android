@@ -21,5 +21,6 @@
   <item
     android:id="@+id/menu_history_clear"
     android:title="@string/pref_clear_all_history_title"
-    app:showAsAction="never" />
+    app:showAsAction="never"
+    />
 </menu>

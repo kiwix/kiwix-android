@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="No_history_present">No History Present</string>
   <string name="kiwi">Kiwi</string>
   <string name="menu_zim_manager">Library</string>
   <string name="menu_help">Help</string>
