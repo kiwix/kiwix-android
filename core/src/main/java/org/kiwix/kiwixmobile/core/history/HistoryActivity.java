@@ -24,9 +24,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
@@ -212,14 +210,9 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     } else if (itemId == R.id.menu_history_clear) {
       presenter.deleteHistory(new ArrayList<>(fullHistory));
 
-
-      if(historyList.isEmpty() && fullHistory.isEmpty())
-      {
-        item.setVisible(false);
+      if (fullHistory.isEmpty() & historyList.isEmpty()) {
         Toast.makeText(this, "No history present", Toast.LENGTH_SHORT).show();
-      }
-      else
-      {
+      } else {
         fullHistory.clear();
         historyList.clear();
         historyAdapter.notifyDataSetChanged();
