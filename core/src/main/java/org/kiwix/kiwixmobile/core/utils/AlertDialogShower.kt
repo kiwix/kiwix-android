@@ -45,6 +45,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
               ?.invoke()
           }
         }
+        setCancelable(dialog.cancelable)
       }
       .show()
   }
