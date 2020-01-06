@@ -30,7 +30,9 @@ import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 
-const val WAIT_TIMEOUT_MS = 10000L
+const val DEFAULT_WAIT = 10_000L
+const val LONG_WAIT = 20_000L
+const val VERY_LONG_WAIT = 40_000L
 
 abstract class BaseRobot(
   private val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation(),
@@ -50,7 +52,7 @@ abstract class BaseRobot(
     uiDevice.pressBack()
   }
 
-  protected fun isVisible(findable: Findable, timeout: Long = WAIT_TIMEOUT_MS) =
+  protected fun isVisible(findable: Findable, timeout: Long = DEFAULT_WAIT) =
     waitFor(findable, timeout) ?: throw RuntimeException(findable.errorMessage(this))
 
   protected fun UiObject2.swipeLeft() {
@@ -61,7 +63,7 @@ abstract class BaseRobot(
     customSwipe(Direction.RIGHT)
   }
 
-  protected fun clickOn(findable: Findable, timeout: Long = WAIT_TIMEOUT_MS) {
+  protected fun clickOn(findable: Findable, timeout: Long = DEFAULT_WAIT) {
     isVisible(findable, timeout).click()
   }
 
@@ -70,7 +72,7 @@ abstract class BaseRobot(
   }
 
   protected fun clickOnTab(textId: Int) {
-    clickOn(ContentDesc(textId))
+    clickOn(ContentDesc(textId), LONG_WAIT)
   }
 
   protected fun waitFor(milliseconds: Long) {
@@ -79,14 +81,14 @@ abstract class BaseRobot(
 
   private fun waitFor(
     findable: Findable,
-    timeout: Long = WAIT_TIMEOUT_MS
+    timeout: Long = DEFAULT_WAIT
   ): UiObject2? =
     uiDevice.wait(Until.findObject(findable.selector(this)), timeout)
 
   private fun UiObject2.customSwipe(
     direction: Direction,
-    fl: Float = 1.0f
+    percent: Float = 0.8f
   ) {
-    swipe(direction, fl)
+    swipe(direction, percent)
   }
 }

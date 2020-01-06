@@ -25,7 +25,6 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,8 +55,6 @@ public class MainActivityTest {
   }
 
   @Test
-  @Ignore("This is hanging on travis")
-  //TODO fix as part of https://github.com/kiwix/kiwix-android/issues/1428
   public void navigateSettings() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     enterSettings();
