@@ -52,10 +52,10 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
   private fun zimFiles() =
     scanDirs(ContextCompat.getExternalFilesDirs(context, null), "zim")
 
-  private fun scanDirs(dirs: Array<out File>, extensionToMatch: String): List<File> =
-    dirs.fold(listOf()) { acc, dir ->
+  private fun scanDirs(dirs: Array<out File?>?, extensionToMatch: String): List<File> =
+    dirs?.filterNotNull()?.fold(listOf()) { acc, dir ->
       acc + dir.walk().filter { it.extension.startsWith(extensionToMatch) }.toList()
-    }
+    } ?: emptyList()
 }
 
 sealed class ValidationState {
