@@ -25,7 +25,6 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.kiwix.sharedFunctions.TEST_PORT
 import org.simpleframework.xml.core.Persister
 import java.io.StringWriter
-import java.util.Stack
 
 class KiwixMockServer {
 
@@ -62,10 +61,6 @@ class KiwixMockServer {
   fun forceResponse(mockResponse: MockResponse) {
     forcedResponse = mockResponse
   }
-
-  private fun <E> Stack<E>.popOrNull() =
-    if (empty()) null
-    else pop()
 
   private fun Any.asXmlString() = StringWriter().let {
     Persister().write(this, it)
