@@ -28,7 +28,6 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest
 
   unit_test_and_release:
-    needs: instrumentation_tests
     runs-on: ubuntu-latest
     steps:
 
@@ -48,11 +47,14 @@ jobs:
           ssh_key: ${{ secrets.ssh_key }}
         run: |
           echo "$ssh_key" | base64 -d > ssh_key
+          chmod 600 ssh_key
+
+      - name: Set date variable
+        run: echo ::set-env name=DATE::$(echo $(date +%Y-%m-%d))
 
       - name: release debug to kiwix.download.org
         env:
           UNIVERSAL_DEBUG_APK: app/build/outputs/apk/debug/*universal*.apk
-          DATE: $(echo $(date +%Y-%m-%d))
         run: |
           mkdir $DATE
           cp $UNIVERSAL_DEBUG_APK $DATE
