@@ -11,7 +11,7 @@ apply(from = rootProject.file("jacoco.gradle"))
 ext {
   set("versionMajor", 3)
   set("versionMinor", 1)
-  set("versionPatch", 2)
+  set("versionPatch", 3)
 }
 
 fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext["versionPatch"]}"
@@ -34,12 +34,12 @@ fun generateVersionCode() =
     ((ext["versionMinor"] as Int) * 100) +
     ext["versionPatch"] as Int
 
-val buildNumber get() = System.getenv("TRAVIS_BUILD_NUMBER") ?: "dev"
+val apkPrefix get() = System.getenv("TAG") ?: "dev"
 
 android {
 
   defaultConfig {
-    base.archivesBaseName = buildNumber
+    base.archivesBaseName = apkPrefix
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = generateVersionCode()
