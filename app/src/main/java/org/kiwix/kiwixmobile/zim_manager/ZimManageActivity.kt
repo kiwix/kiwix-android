@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.zim_manager
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings.System
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
@@ -31,9 +30,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.startWithActionFrom
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
@@ -46,7 +43,7 @@ class ZimManageActivity : BaseActivity() {
 
   private val zimManageViewModel by lazy { viewModel<ZimManageViewModel>(viewModelFactory) }
   private val mSectionsPagerAdapter: SectionsPagerAdapter by lazy {
-    SectionsPagerAdapter(this, supportFragmentManager)
+    SectionsPagerAdapter(this, fm = supportFragmentManager)
   }
 
   private var searchItem: MenuItem? = null
@@ -68,7 +65,7 @@ class ZimManageActivity : BaseActivity() {
     setUpToolbar()
     manageViewPager.run {
       adapter = mSectionsPagerAdapter
-      offscreenPageLimit = 2
+      offscreenPageLimit = mSectionsPagerAdapter.count - 1
       tabs.setupWithViewPager(this)
       addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
     }
@@ -105,24 +102,14 @@ class ZimManageActivity : BaseActivity() {
     }
   }
 
-  override fun onBackPressed() {
-    val value = System.getInt(contentResolver, System.ALWAYS_FINISH_ACTIVITIES, 0)
-    if (value == 1) {
-      startWithActionFrom<CoreMainActivity>()
-    } else {
-      super.onBackPressed() // optional depending on your needs
-    }
-  }
-
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     // Inflate the menu; this adds items to the action bar if it is present.
     menuInflater.inflate(R.menu.menu_zim_manager, menu)
     searchItem = menu.findItem(R.id.action_search)
     languageItem = menu.findItem(R.id.select_language)
     getZimItem = menu.findItem(R.id.get_zim_nearby_device)
-    val searchView = searchItem!!.actionView as SearchView
     updateMenu(manageViewPager.currentItem)
-    searchView.setOnQueryTextListener(
+    (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
       SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
     )
     return true

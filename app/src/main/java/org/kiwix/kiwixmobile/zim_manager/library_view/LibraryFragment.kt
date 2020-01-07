@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -57,6 +58,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.BookDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.DividerDelegate
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.DownloadDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import java.io.File
@@ -78,7 +80,11 @@ class LibraryFragment : BaseFragment() {
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-      BookDelegate(bookUtils, ::onBookItemClick), DividerDelegate
+      BookDelegate(bookUtils, ::onBookItemClick),
+      DownloadDelegate {
+        dialogShower.show(StopDownload, { downloader.cancelDownload(it.downloadId) })
+      },
+      DividerDelegate
     )
   }
 
