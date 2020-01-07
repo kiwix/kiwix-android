@@ -38,7 +38,6 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -67,6 +66,7 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.StartMultiSelec
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.LibraryDownloadItem
 import java.util.LinkedList
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -97,7 +97,6 @@ class ZimManageViewModel @Inject constructor(
 
   val sideEffects = PublishProcessor.create<SideEffect<out Any?>>()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
-  val downloadItems: MutableLiveData<List<DownloadItem>> = MutableLiveData()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
@@ -132,7 +131,6 @@ class ZimManageViewModel @Inject constructor(
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages()
     return arrayOf(
-      updateDownloadItems(downloads),
       updateBookItems(),
       checkFileSystemForBooksOnRequest(booksFromDao),
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
@@ -343,64 +341,65 @@ class ZimManageViewModel @Inject constructor(
     filter: String,
     fileSystemState: FileSystemState
   ): List<LibraryListItem> {
-    val downloadedBooksIds = booksOnFileSystem.map { it.book.id }
-    val downloadingBookIds = activeDownloads.map { it.book.id }
     val activeLanguageCodes = allLanguages.filter(Language::active)
       .map(Language::languageCode)
     val booksUnfilteredByLanguage =
-      applyUserFilter(
-        libraryNetworkEntity.books
-          .filterNot { downloadedBooksIds.contains(it.id) }
-          .filterNot { downloadingBookIds.contains(it.id) },
+      applySearchFilter(
+        libraryNetworkEntity.books - booksOnFileSystem.map(BookOnDisk::book),
         filter
       )
 
-    return listOf(
-      *createLibrarySection(
-        booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) },
-        fileSystemState,
-        R.string.your_languages,
-        Long.MAX_VALUE
-      ),
-      *createLibrarySection(
-        booksUnfilteredByLanguage.filterNot { activeLanguageCodes.contains(it.language) },
+    val booksWithActiveLanguages =
+      booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) }
+    return createLibrarySection(
+      booksWithActiveLanguages,
+      activeDownloads,
+      fileSystemState,
+      R.string.your_languages,
+      Long.MAX_VALUE
+    ) +
+      createLibrarySection(
+        booksUnfilteredByLanguage - booksWithActiveLanguages,
+        activeDownloads,
         fileSystemState,
         R.string.other_languages,
         Long.MIN_VALUE
       )
-    )
   }
 
   private fun createLibrarySection(
     books: List<Book>,
+    activeDownloads: List<DownloadModel>,
     fileSystemState: FileSystemState,
     sectionStringId: Int,
     sectionId: Long
   ) =
     if (books.isNotEmpty())
-      arrayOf(
-        DividerItem(sectionId, context.getString(sectionStringId)),
-        *toBookItems(books, fileSystemState)
-      )
-    else emptyArray()
+      listOf(DividerItem(sectionId, context.getString(sectionStringId))) +
+        books.asLibraryItems(activeDownloads, fileSystemState)
+    else emptyList()
 
-  private fun applyUserFilter(
-    booksUnfilteredByLanguage: List<Book>,
+  private fun applySearchFilter(
+    unDownloadedBooks: List<Book>,
     filter: String
   ) = if (filter.isEmpty()) {
-    booksUnfilteredByLanguage
+    unDownloadedBooks
   } else {
-    booksUnfilteredByLanguage.forEach { it.calculateSearchMatches(filter, bookUtils) }
-    booksUnfilteredByLanguage.filter { it.searchMatches > 0 }
+    unDownloadedBooks.forEach { it.calculateSearchMatches(filter, bookUtils) }
+    unDownloadedBooks.filter { it.searchMatches > 0 }
   }
 
-  private fun toBookItems(
-    books: List<Book>,
+  private fun List<Book>.asLibraryItems(
+    activeDownloads: List<DownloadModel>,
     fileSystemState: FileSystemState
-  ) =
-    books.map { BookItem(it, fileSystemState) }.toTypedArray()
+  ) = map { book ->
+    activeDownloads.firstOrNull { download -> download.book == book }
+      ?.let(::LibraryDownloadItem)
+      ?: BookItem(book, fileSystemState)
+  }
 
-  private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<BookOnDisk>>) =
+  private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<BookOnDisk>>):
+    Disposable =
     requestFileSystemCheck
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
@@ -462,12 +461,4 @@ class ZimManageViewModel @Inject constructor(
         newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
       })
   }
-
-  private fun updateDownloadItems(downloadModels: Flowable<List<DownloadModel>>) =
-    downloadModels
-      .map { it.map(::DownloadItem) }
-      .subscribe(
-        downloadItems::postValue,
-        Throwable::printStackTrace
-      )
 }

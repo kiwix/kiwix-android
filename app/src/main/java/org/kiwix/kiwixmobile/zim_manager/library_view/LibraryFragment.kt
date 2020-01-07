@@ -49,7 +49,6 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TestingUtils
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
@@ -104,10 +103,7 @@ class LibraryFragment : BaseFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    TestingUtils.bindResource(LibraryFragment::class.java)
-    return inflater.inflate(R.layout.activity_library, container, false)
-  }
+  ): View = inflater.inflate(R.layout.activity_library, container, false)
 
   override fun onViewCreated(
     view: View,
@@ -154,7 +150,6 @@ class LibraryFragment : BaseFragment() {
         else string.no_items_msg
       )
       libraryErrorText.visibility = VISIBLE
-      TestingUtils.unbindResource(LibraryFragment::class.java)
     } else {
       libraryErrorText.visibility = GONE
     }

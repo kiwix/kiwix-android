@@ -68,7 +68,7 @@ sealed class LibraryListItem {
     val progress: Int,
     val eta: Seconds,
     val downloadState: DownloadState,
-    override val id: Long = downloadId
+    override val id: Long
   ) : LibraryListItem() {
 
     val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
@@ -82,7 +82,8 @@ sealed class LibraryListItem {
       downloadModel.totalSizeOfDownload,
       downloadModel.progress,
       Seconds(downloadModel.etaInMilliSeconds / 1000L),
-      DownloadState.from(downloadModel.state, downloadModel.error)
+      DownloadState.from(downloadModel.state, downloadModel.error),
+      downloadModel.book.id.hashCode().toLong()
     )
   }
 }
