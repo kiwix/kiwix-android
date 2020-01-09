@@ -22,6 +22,7 @@ import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.core.view.MenuCompat.setShowAsAction
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
@@ -32,6 +33,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_COME_FROM
 import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE
 
 const val REQUEST_FILE_SEARCH = 1236
@@ -86,6 +88,7 @@ class MainMenu(
   private val help = menu.findItem(R.id.menu_help)
   private val settings = menu.findItem(R.id.menu_settings)
   private val supportKiwix = menu.findItem(R.id.menu_support_kiwix)
+  private var originOfRequest = ""
 
   init {
     randomArticle.setShowAsAction(
@@ -144,6 +147,12 @@ class MainMenu(
   private fun navigateToSearch(zimFileReader: ZimFileReader): Boolean {
     activity.startActivityForResult(
       activity.intent<SearchActivity> {
+        when (originOfRequest) {
+          "TAB_SWITCHER" -> putExtra(EXTRA_COME_FROM, "TAB_SWITCHER")
+          else -> {
+            putExtra(EXTRA_COME_FROM, "")
+          }
+        }
         putExtra(EXTRA_ZIM_FILE, zimFileReader.zimFile.absolutePath)
       },
       REQUEST_FILE_SEARCH
@@ -161,12 +170,16 @@ class MainMenu(
   }
 
   fun showTabSwitcherOptions() {
-    setVisibility(false, search, fullscreen, randomArticle, readAloud)
+    setVisibility(false, addNote, fullscreen, randomArticle, readAloud)
+    setVisibility(true, search)
+    originOfRequest = "TAB_SWITCHER"
   }
 
   fun showWebViewOptions(urlIsValid: Boolean) {
     fullscreen.isVisible = true
     setVisibility(urlIsValid, search, readAloud, randomArticle, addNote)
+    addNote.setShowAsAction(1)
+    originOfRequest = "TAB"
   }
 
   private fun setVisibility(visibility: Boolean, vararg menuItems: MenuItem) {
