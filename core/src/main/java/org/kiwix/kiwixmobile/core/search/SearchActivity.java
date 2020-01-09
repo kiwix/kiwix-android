@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,6 +54,7 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_COME_FROM;
 
 public class SearchActivity extends BaseActivity
   implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
@@ -82,6 +84,9 @@ public class SearchActivity extends BaseActivity
     ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_LOCALE);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
+    getSupportActionBar().setHomeActionContentDescription(
+      getResources().getString(R.string.return_from_search)
+    );
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
     listView = findViewById(R.id.search_list);
@@ -118,11 +123,13 @@ public class SearchActivity extends BaseActivity
   @Override
   public void finish() {
     Toolbar toolbar = findViewById(R.id.toolbar);
+    Intent previous = getIntent();
     setSupportActionBar(toolbar);
     int value =
       Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent intent = Intents.internal(CoreMainActivity.class);
+      intent.putExtra(EXTRA_COME_FROM, previous.getStringExtra(EXTRA_COME_FROM));
       startActivity(intent);
     } else {
       super.finish();
@@ -142,6 +149,10 @@ public class SearchActivity extends BaseActivity
       activateAutoAdapter();
       autoAdapter.getFilter().filter(searchText.toLowerCase());
     }
+    if (getIntent().getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER")) {
+      View item = findViewById(R.id.menu_searchintext);
+      item.setVisibility(View.GONE);
+    }
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String s) {
@@ -150,21 +161,24 @@ public class SearchActivity extends BaseActivity
 
       @Override
       public boolean onQueryTextChange(String s) {
-        if (s.equals("")) {
-          View item = findViewById(R.id.menu_searchintext);
-          item.setVisibility(View.VISIBLE);
-          activateDefaultAdapter();
-        } else {
-          View item = findViewById(R.id.menu_searchintext);
-          item.setVisibility(View.GONE);
+        if (getIntent().getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER")) {
           activateAutoAdapter();
           autoAdapter.getFilter().filter(s.toLowerCase());
-        }
-
+        } else {
+          if (s.equals("")) {
+            View item = findViewById(R.id.menu_searchintext);
+            item.setVisibility(View.VISIBLE);
+            activateDefaultAdapter();
+          } else {
+            View item = findViewById(R.id.menu_searchintext);
+            item.setVisibility(View.GONE);
+            activateAutoAdapter();
+            autoAdapter.getFilter().filter(s.toLowerCase());
+          }
+         }
         return true;
       }
     });
-
     searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
       @Override
       public boolean onMenuItemActionExpand(MenuItem item) {
@@ -173,6 +187,10 @@ public class SearchActivity extends BaseActivity
 
       @Override
       public boolean onMenuItemActionCollapse(MenuItem item) {
+        Intent previous = getIntent();
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_COME_FROM, previous.getStringExtra(EXTRA_COME_FROM));
+        setResult(RESULT_CANCELED, intent);
         finish();
         return false;
       }
@@ -191,21 +209,23 @@ public class SearchActivity extends BaseActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.menu_searchintext) {
-      String queryText = "";
-      if (searchView != null) {
-        queryText = searchView.getQuery().toString();
+    if (!getIntent().getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER")) {
+      if (item.getItemId() == R.id.menu_searchintext) {
+        String queryText = "";
+        if (searchView != null) {
+          queryText = searchView.getQuery().toString();
+        }
+        Intent resultIntent = Intents.internal(CoreMainActivity.class);
+        resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
+        resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
+        if (shouldStartNewActivity() != 1) {
+          setResult(RESULT_OK, resultIntent);
+          finish();
+        } else {
+          startActivity(resultIntent);
+        }
+        return true;
       }
-      Intent resultIntent = Intents.internal(CoreMainActivity.class);
-      resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
-      resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
-      if (shouldStartNewActivity() != 1) {
-        setResult(RESULT_OK, resultIntent);
-        finish();
-      } else {
-        startActivity(resultIntent);
-      }
-      return true;
     }
     return super.onOptionsItemSelected(item);
   }
@@ -219,13 +239,16 @@ public class SearchActivity extends BaseActivity
 
   private void sendMessage(String uri) {
     int value = shouldStartNewActivity();
+    Intent previous = getIntent();
     if (value == 1) {
       Intent i = Intents.internal(CoreMainActivity.class);
       i.putExtra(TAG_FILE_SEARCHED, uri);
+      i.putExtra(EXTRA_COME_FROM, previous.getStringExtra(EXTRA_COME_FROM));
       startActivity(i);
     } else {
       Intent i = new Intent();
       i.putExtra(TAG_FILE_SEARCHED, uri);
+      i.putExtra(EXTRA_COME_FROM, previous.getStringExtra(EXTRA_COME_FROM));
       setResult(RESULT_OK, i);
       finish();
     }
