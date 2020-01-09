@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -74,6 +75,7 @@ import com.google.android.material.snackbar.Snackbar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,6 +117,7 @@ import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_COME_FROM;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
@@ -354,7 +357,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED));
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), false);
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -460,8 +463,10 @@ public abstract class CoreMainActivity extends BaseActivity
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeAsUpIndicator(
       ContextCompat.getDrawable(this, R.drawable.ic_round_add_white_36dp));
+    actionBar.setHomeActionContentDescription(
+      getResources().getString(R.string.open_new_tab)
+    );
     actionBar.setDisplayShowTitleEnabled(false);
-
     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     bottomToolbar.setVisibility(View.GONE);
     contentFrame.setVisibility(View.GONE);
@@ -1286,9 +1291,13 @@ public abstract class CoreMainActivity extends BaseActivity
     alert.show();
   }
 
-  private void openArticle(String articleUrl) {
+  private void openArticle(String articleUrl, boolean isInNewTab) {
     if (articleUrl != null) {
-      loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
+      if (isInNewTab) {
+        newTab(contentUrl(articleUrl));
+      } else {
+        loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
+      }
     }
   }
 
@@ -1307,13 +1316,13 @@ public abstract class CoreMainActivity extends BaseActivity
   private void openRandomArticle() {
     String articleUrl = zimReaderContainer.getRandomArticleUrl();
     Log.d(TAG_KIWIX, "openRandomArticle: " + articleUrl);
-    openArticle(articleUrl);
+    openArticle(articleUrl, false);
   }
 
   @OnClick(R2.id.bottom_toolbar_home)
   public void openMainPage() {
     String articleUrl = zimReaderContainer.getMainPage();
-    openArticle(articleUrl);
+    openArticle(articleUrl, false);
   }
 
   private void setUpWebViewWithTextToSpeech() {
@@ -1332,7 +1341,7 @@ public abstract class CoreMainActivity extends BaseActivity
     tabRecyclerView.setAdapter(tabsAdapter);
   }
 
-  private void searchForTitle(String title) {
+  private void searchForTitle(String title, Boolean newTab) {
     String articleUrl;
 
     if (title.startsWith("A/")) {
@@ -1340,14 +1349,13 @@ public abstract class CoreMainActivity extends BaseActivity
     } else {
       articleUrl = zimReaderContainer.getPageUrlFromTitle(title);
     }
-    openArticle(articleUrl);
+     openArticle(articleUrl, newTab);
   }
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     hideTabSwitcher();
     Log.i(TAG_KIWIX, "Intent data: " + data);
-
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
@@ -1364,9 +1372,13 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            searchForTitle(title);
+            Boolean isInNewTab = data.getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER");
+            searchForTitle(title, isInNewTab);
           }
         } else { //TODO: Inform the User
+          if (data.getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER")){
+            showTabSwitcher();
+          }
           Log.w(TAG_KIWIX, "Unhandled search failure");
         }
         break;
