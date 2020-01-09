@@ -8,12 +8,14 @@
     android:title="@string/menu_search"
     android:visible="false"
     app:showAsAction="always"
+    android:orderInCategory="2"
     tools:visible="true" />
 
   <item
     android:id="@+id/menu_tab_switcher"
     android:title="@string/switch_tabs"
     app:actionLayout="@layout/ic_tab_switcher"
+    android:orderInCategory="3"
     app:showAsAction="always" />
 
   <item
@@ -38,7 +40,6 @@
     android:title="@string/note"
     android:visible="false"
     app:showAsAction="ifRoom" />
-
 
   <item
     android:id="@+id/menu_random_article"
