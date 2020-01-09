@@ -58,6 +58,8 @@ public final class Constants {
 
   public static final String EXTRA_CHOSE_X_URL = "choseXURL";
 
+  public static final String EXTRA_COME_FROM = "comeFrom";
+
   public static final String EXTRA_CHOSE_X_TITLE = "choseXTitle";
 
   public static final String EXTRA_EXTERNAL_LINK = "external_link";
