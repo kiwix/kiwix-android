@@ -27,15 +27,13 @@ class MountFileSystemChecker : FileSystemChecker {
   override fun checkFilesystemSupports4GbFiles(path: String) =
     recursivelyDetermineFilesystem(mountPoints(), path)
 
-  private fun recursivelyDetermineFilesystem(
-    mountPoints: List<MountInfo>,
-    path: String
-  ): FileSystemCapability =
+  private fun recursivelyDetermineFilesystem(mountPoints: List<MountInfo>, path: String):
+    FileSystemCapability =
     mountPoints.maxBy { it.matchCount(path) }
       ?.takeIf { it.matchCount(path) > 0 }
       ?.let {
         when {
-          it.isVirtual -> recursivelyDetermineFilesystem(mountPoints, it.device)
+          it.isVirtual -> recursivelyDetermineFilesystem(mountPoints - it, it.device)
           it.supports4GBFiles -> CAN_WRITE_4GB
           it.doesNotSupport4GBFiles -> CANNOT_WRITE_4GB
           else -> INCONCLUSIVE
@@ -65,8 +63,8 @@ data class MountInfo(val device: String, val mountPoint: String, val fileSystem:
   val doesNotSupport4GBFiles = DOES_NOT_SUPPORT_4GB_FILE_SYSTEMS.contains(fileSystem)
 
   companion object {
-    private val VIRTUAL_FILE_SYSTEMS = listOf("fuse", "sdcardfs", "tmpfs")
+    private val VIRTUAL_FILE_SYSTEMS = listOf("fuse", "sdcardfs")
     private val SUPPORTS_4GB_FILE_SYSTEMS = listOf("ext4", "exfat")
-    private val DOES_NOT_SUPPORT_4GB_FILE_SYSTEMS = listOf("fat32")
+    private val DOES_NOT_SUPPORT_4GB_FILE_SYSTEMS = listOf("fat32", "vfat")
   }
 }
