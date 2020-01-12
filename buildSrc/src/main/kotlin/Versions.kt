@@ -83,7 +83,7 @@ object Versions {
 
   const val fragment_ktx: String = "1.1.0"
 
-  const val orchestrator: String = "1.1.0" // available: "1.2.0"
+  const val orchestrator: String = "1.2.0"
 
   const val lint_gradle: String = "26.5.2"
 
