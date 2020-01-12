@@ -21,21 +21,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Process
 import org.kiwix.kiwixmobile.core.BuildConfig
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import kotlin.system.exitProcess
 
 abstract class CoreSplashActivity : BaseActivity() {
-  override fun injection(coreComponent: CoreComponent) {
-    coreComponent.inject(this)
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    injection(CoreApp.getCoreComponent())
-
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
       Thread.setDefaultUncaughtExceptionHandler { paramThread: Thread?,

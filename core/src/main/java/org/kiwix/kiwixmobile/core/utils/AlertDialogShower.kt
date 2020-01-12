@@ -22,18 +22,7 @@ import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.StartHotspotManually
 import javax.inject.Inject
-import javax.inject.Named
 
-class AlertDialogShower @Inject constructor(
-  @Named("activity") private val activity: Activity,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
-) : DialogShower {
-  override fun show(
-    dialog: KiwixDialog,
-    vararg clickListeners: () -> Unit
-  ) {
-
-    AlertDialog.Builder(activity, dialogStyle())
 class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
   override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit) {
     AlertDialog.Builder(activity)
@@ -56,6 +45,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
               ?.invoke()
           }
         }
+        setCancelable(dialog.cancelable)
       }
       .show()
   }

@@ -113,10 +113,13 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     }
   };
 
+  @Override protected void injection() {
+    CoreApp.getCoreComponent().inject(this);
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    injection(CoreApp.getCoreComponent());
 
     presenter.attachView(this);
     setContentView(R.layout.activity_bookmarks);
@@ -253,7 +256,4 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     }
   }
 
-  @Override public void injection(@NotNull CoreComponent coreComponent) {
-    coreComponent.inject(this);
-  }
 }

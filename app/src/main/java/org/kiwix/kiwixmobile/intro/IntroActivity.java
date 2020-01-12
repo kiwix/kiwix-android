@@ -81,9 +81,12 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
     };
   private View[] views;
 
+  @Override protected void injection() {
+    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_intro);
     LayoutInflater layoutInflater = getLayoutInflater();
@@ -138,7 +141,4 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
     timer.cancel();
   }
 
-  @Override public void injection(@NotNull CoreComponent coreComponent) {
-    coreComponent.inject(this);
-  }
 }

@@ -73,11 +73,13 @@ public class SearchActivity extends BaseActivity
   private SearchView searchView;
   private String searchText;
 
+  @Override protected void injection() {
+      CoreApp.getCoreComponent().inject(this);
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    injection(CoreApp.getCoreComponent());
-
     setContentView(R.layout.search);
 
     if (savedInstanceState != null) {
@@ -356,7 +358,4 @@ public class SearchActivity extends BaseActivity
     }
   }
 
-  @Override public void injection(@NotNull CoreComponent coreComponent) {
-    coreComponent.inject(this);
-  }
 }

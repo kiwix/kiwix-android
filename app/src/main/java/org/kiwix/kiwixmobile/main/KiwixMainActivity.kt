@@ -101,6 +101,10 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
+  override fun injection() {
+    this.kiwixActivityComponent.inject(this)
+  }
+
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
     super.hasValidFileAndUrl(url, zimFileReader) && url != HOME_URL
 

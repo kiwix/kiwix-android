@@ -50,7 +50,6 @@ public class HelpActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    injection(CoreApp.getCoreComponent());
     setContentView(R.layout.activity_help);
     setSupportActionBar(toolbar);
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -86,8 +85,7 @@ public class HelpActivity extends BaseActivity {
     titleDescriptionMap.put(getString(title), description.toString());
   }
 
-  @Override public void injection(@NotNull CoreComponent coreComponent) {
-    coreComponent.inject(this);
-
+  @Override protected void injection() {
+    CoreApp.getCoreComponent().inject(this);
   }
 }

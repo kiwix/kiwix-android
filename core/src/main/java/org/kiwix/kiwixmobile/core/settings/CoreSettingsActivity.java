@@ -38,8 +38,6 @@ public abstract class CoreSettingsActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    injection(CoreApp.getCoreComponent());
-
     setContentView(R.layout.settings);
 
     allHistoryCleared = false;
@@ -75,7 +73,7 @@ public abstract class CoreSettingsActivity extends BaseActivity {
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
-  @Override public void injection(@NotNull CoreComponent coreComponent) {
-    coreComponent.inject(this);
+  @Override protected void injection() {
+    CoreApp.getCoreComponent().inject(this);
   }
 }

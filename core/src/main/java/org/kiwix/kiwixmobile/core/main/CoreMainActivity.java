@@ -296,7 +296,6 @@ public abstract class CoreMainActivity extends BaseActivity
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    injection(CoreApp.getCoreComponent());
     presenter.attachView(this);
     new WebView(this).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
@@ -1666,7 +1665,4 @@ public abstract class CoreMainActivity extends BaseActivity
     return view != null;
   }
 
-  @Override public void injection(@NotNull CoreComponent coreComponent) {
-    coreComponent.inject(this);
-  }
 }

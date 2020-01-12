@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.core.di.modules
 
 import android.app.Activity
 import android.view.Menu
-import dagger.Binds
+// import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -33,13 +33,17 @@ import org.kiwix.kiwixmobile.core.main.MainPresenter
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import javax.inject.Named
 
-@Module(includes = [DialogModule::class])
+@Module
 class ActivityModule {
+
+  @Provides
+  @ActivityScope
+  internal fun providesDialogShower(activity: Activity): DialogShower = AlertDialogShower(activity)
 
   @Module
   companion object {
+
     @JvmStatic
     @Provides
     @ActivityScope
@@ -66,7 +70,4 @@ class ActivityModule {
       )
     }
   }
-  @Provides
-  @Named("activity")
-  fun provideActivity(): Activity = Activity()
 }

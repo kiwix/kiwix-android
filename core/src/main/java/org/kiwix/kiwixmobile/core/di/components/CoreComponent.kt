@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.di.components
 
 import android.app.Application
-import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import dagger.BindsInstance
@@ -26,7 +25,6 @@ import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
@@ -34,8 +32,10 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.data.local.dao.BookDao
+import org.kiwix.kiwixmobile.core.data.local.dao.BookmarksDao
+import org.kiwix.kiwixmobile.core.data.local.dao.RecentSearchDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
@@ -47,15 +47,13 @@ import org.kiwix.kiwixmobile.core.history.HistoryModule
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimContentProvider
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.AutoCompleteAdapter
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
+import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.webserver.ZimHostActivity
-import org.kiwix.kiwixmobile.core.webserver.ZimHostModule
 import javax.inject.Singleton
 
 @Singleton
@@ -63,8 +61,6 @@ import javax.inject.Singleton
   modules = [
     BookmarksModule::class,
     HistoryModule::class,
-    ZimHostModule::class,
-    ActivityModule::class,
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,
@@ -82,7 +78,6 @@ interface CoreComponent {
 
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
-  fun zimFileReaderFactory(): ZimFileReader.Factory
   fun storageObserver(): StorageObserver
   fun kiwixService(): KiwixService
   fun application(): Application
@@ -94,7 +89,9 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun context(): Context
   fun downloader(): Downloader
-  fun notificationManager(): NotificationManager
+  fun bookDao(): BookDao
+  fun bookmarksDao(): BookmarksDao
+  fun recentSearchDao(): RecentSearchDao
 
   fun inject(application: CoreApp)
   fun inject(zimContentProvider: ZimContentProvider)
@@ -103,12 +100,13 @@ interface CoreComponent {
   fun inject(autoCompleteAdapter: AutoCompleteAdapter)
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun inject(addNoteDialog: AddNoteDialog)
-  fun inject(errorActivity: ErrorActivity)
-  fun inject(zimHostActivity: ZimHostActivity)
-  fun inject(searchActivity: SearchActivity)
 
+  fun inject(errorActivity: ErrorActivity)
+  // fun inject(zimHostActivity: ZimHostActivity)
+  fun inject(searchActivity: SearchActivity)
   fun inject(helpActivity: HelpActivity)
   fun inject(historyActivity: HistoryActivity)
   fun inject(bookmarksActivity: BookmarksActivity)
-  fun inject(baseActivity: BaseActivity)
+ // fun inject(mainActivity: CoreMainActivity)
+  fun inject(settingsActivity: CoreSettingsActivity)
 }

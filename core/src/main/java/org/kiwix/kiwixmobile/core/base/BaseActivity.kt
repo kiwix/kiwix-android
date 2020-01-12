@@ -24,36 +24,29 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
 
+  private lateinit var activityComponent: ActivityComponent
+
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   private var unbinder: Unbinder? = null
 
-  abstract fun injection(coreComponent: CoreComponent)
+  protected abstract fun injection()
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    CoreApp.getCoreComponent().inject(this)
+
+    activityComponent.activityComponentBuilder().activity(this).build()
+
+    injection()
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
-  }
-
-  override fun getTheme(): Resources.Theme {
-    val theme = super.getTheme()
-    if (sharedPreferenceUtil.nightMode()) {
-      setTheme(R.style.AppTheme_Night)
-    } else {
-      theme.applyStyle(R.style.StatusBarTheme, true)
-    }
-    return theme
   }
 
   override fun setContentView(@LayoutRes layoutResID: Int) {
