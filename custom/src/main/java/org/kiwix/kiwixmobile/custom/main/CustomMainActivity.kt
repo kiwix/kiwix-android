@@ -49,6 +49,11 @@ import javax.inject.Inject
 const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
+
+  override fun injection() {
+    customActivityComponent.inject(this)
+  }
+
   @Inject lateinit var customFileValidator: CustomFileValidator
   @Inject lateinit var dialogShower: DialogShower
 
@@ -61,7 +66,6 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    customActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     if (enforcedLanguage()) {
       return

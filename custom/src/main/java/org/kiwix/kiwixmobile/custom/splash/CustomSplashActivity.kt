@@ -24,9 +24,10 @@ import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 
 class CustomSplashActivity : CoreSplashActivity() {
-  fun injection() {
+  override fun injection() {
     customActivityComponent.inject(this)
   }
+
   override val intentForNextScreen: Intent
     get() = Intent(this, CustomMainActivity::class.java)
 }

@@ -55,6 +55,7 @@ import kotlin.jvm.functions.Function0;
 import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.ActivityExtensionsKt;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
@@ -404,7 +405,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
     super.onDestroy();
   }
 
-  @Override public void injection(@NotNull CoreComponent coreComponent) {
-    coreComponent.inject(this);
+  @Override protected void injection() {
+    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
   }
 }

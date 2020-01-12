@@ -45,8 +45,8 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import javax.inject.Inject
 
 class CustomDownloadActivity : BaseActivity() {
-  override fun injection(coreComponent: CoreComponent) {
-    coreComponent.inject(this)
+  override fun injection() {
+    customActivityComponent.inject(this)
   }
 
   private val downloadViewModel by lazy {
@@ -58,7 +58,6 @@ class CustomDownloadActivity : BaseActivity() {
   private val compositeDisposable = CompositeDisposable()
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    customActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_custom_download)
     downloadViewModel.state.observe(this, Observer(::render))

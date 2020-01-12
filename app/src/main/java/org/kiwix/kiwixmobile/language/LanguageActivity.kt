@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.activity_language.language_progressbar
 import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
@@ -49,6 +48,9 @@ import org.kiwix.kiwixmobile.zim_manager.SimpleTextListener
 import javax.inject.Inject
 
 class LanguageActivity : BaseActivity() {
+  override fun injection() {
+    kiwixActivityComponent.inject(this)
+  }
 
   private val languageViewModel by lazy { viewModel<LanguageViewModel>(viewModelFactory) }
 
@@ -62,12 +64,7 @@ class LanguageActivity : BaseActivity() {
       HeaderDelegate()
     )
 
-  override fun injection(coreComponent: CoreComponent) {
-    coreComponent.inject(this)
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
-    kiwixActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_language)
     setSupportActionBar(findViewById(R.id.toolbar))

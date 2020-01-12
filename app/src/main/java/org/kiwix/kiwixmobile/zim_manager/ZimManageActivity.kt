@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.zim_manager.tabs
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.startWithActionFrom
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
@@ -42,6 +41,9 @@ import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import javax.inject.Inject
 
 class ZimManageActivity : BaseActivity() {
+  override fun injection() {
+    kiwixActivityComponent.inject(this)
+  }
 
   val cachedComponent by lazy { kiwixActivityComponent }
 
@@ -58,7 +60,6 @@ class ZimManageActivity : BaseActivity() {
   @Inject lateinit var languagesDao: NewLanguagesDao
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    kiwixActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
     setContentView(R.layout.zim_manager)
@@ -71,10 +72,6 @@ class ZimManageActivity : BaseActivity() {
       addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
     }
     setViewPagerPositionFromIntent(intent)
-  }
-
-  override fun injection(coreComponent: CoreComponent) {
-    coreComponent.inject(this)
   }
 
   override fun onNewIntent(intent: Intent?) {
