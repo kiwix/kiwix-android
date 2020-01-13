@@ -17,10 +17,9 @@
  */
 package org.kiwix.kiwixmobile.core.downloader
 
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 
 interface DownloadRequester {
   fun enqueue(downloadRequest: DownloadRequest): Long
-  fun cancel(downloadItem: DownloadItem)
+  fun cancel(downloadId: Long)
 }

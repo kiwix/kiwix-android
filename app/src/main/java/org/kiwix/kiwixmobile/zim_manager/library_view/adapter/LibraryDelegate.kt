@@ -19,11 +19,13 @@ package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import android.view.ViewGroup
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.LibraryDownloadItem
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryViewHolder.DownloadViewHolder
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryViewHolder.LibraryBookViewHolder
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryViewHolder.LibraryDividerViewHolder
 
@@ -42,6 +44,14 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
         bookUtils,
         clickAction
       )
+  }
+
+  class DownloadDelegate(private val clickAction: (LibraryDownloadItem) -> Unit) :
+    LibraryDelegate<LibraryDownloadItem, DownloadViewHolder>() {
+    override val itemClass = LibraryDownloadItem::class.java
+
+    override fun createViewHolder(parent: ViewGroup) =
+      DownloadViewHolder(parent.inflate(R.layout.item_download, false), clickAction)
   }
 
   object DividerDelegate : LibraryDelegate<DividerItem, LibraryDividerViewHolder>() {

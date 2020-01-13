@@ -81,12 +81,4 @@ public class MainActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     clickOn(R.string.remote_zims);
   }
-
-  @Test
-  public void navigateDownloadingContent() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.zim_downloads);
-  }
 }

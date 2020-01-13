@@ -10,7 +10,7 @@
   tools:ignore="Overdraw, RTLHardcoded">
 
   <ImageView
-    android:id="@+id/favicon"
+    android:id="@+id/libraryBookFavicon"
     android:layout_width="@dimen/favicon_width"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -24,82 +24,82 @@
     tools:ignore="RtlHardcoded" />
 
   <TextView
-    android:id="@+id/title"
+    android:id="@+id/libraryBookTitle"
     style="@style/list_item_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/favicon_margin_right"
     android:layout_marginTop="@dimen/activity_horizontal_margin"
-    app:layout_constraintStart_toEndOf="@+id/favicon"
+    app:layout_constraintStart_toEndOf="@+id/libraryBookFavicon"
     app:layout_constraintTop_toTopOf="parent"
     tools:text="Title" />
 
   <TextView
-    android:id="@+id/description"
+    android:id="@+id/libraryBookDescription"
     style="@style/list_item_body"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="@+id/title"
-    app:layout_constraintTop_toBottomOf="@+id/title"
+    app:layout_constraintStart_toStartOf="@+id/libraryBookTitle"
+    app:layout_constraintTop_toBottomOf="@+id/libraryBookTitle"
     tools:text="Description a really really really really really really really really really really long descricption" />
 
   <TextView
-    android:id="@+id/size"
+    android:id="@+id/libraryBookSize"
     style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintStart_toStartOf="@+id/description"
-    app:layout_constraintTop_toBottomOf="@+id/description"
+    app:layout_constraintStart_toStartOf="@+id/libraryBookDescription"
+    app:layout_constraintTop_toBottomOf="@+id/libraryBookDescription"
     tools:text="File Size" />
 
   <TextView
-    android:id="@+id/creator"
+    android:id="@+id/libraryBookCreator"
     style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintStart_toStartOf="@+id/size"
-    app:layout_constraintTop_toBottomOf="@+id/size"
+    app:layout_constraintStart_toStartOf="@+id/libraryBookSize"
+    app:layout_constraintTop_toBottomOf="@+id/libraryBookSize"
     tools:text="Author" />
 
   <TextView
-    android:id="@+id/publisher"
+    android:id="@+id/libraryBookPublisher"
     style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/activity_horizontal_margin"
-    app:layout_constraintStart_toStartOf="@+id/creator"
-    app:layout_constraintTop_toBottomOf="@+id/creator"
+    app:layout_constraintStart_toStartOf="@+id/libraryBookCreator"
+    app:layout_constraintTop_toBottomOf="@+id/libraryBookCreator"
     tools:text="Publisher" />
 
 
   <TextView
-    android:id="@+id/date"
+    android:id="@+id/libraryBookDate"
     style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/size"
+    app:layout_constraintTop_toTopOf="@+id/libraryBookSize"
     tools:text="Date" />
 
   <TextView
-    android:id="@+id/language"
+    android:id="@+id/libraryBookLanguage"
     style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintEnd_toEndOf="@+id/date"
-    app:layout_constraintTop_toBottomOf="@+id/date"
+    app:layout_constraintEnd_toEndOf="@+id/libraryBookDate"
+    app:layout_constraintTop_toBottomOf="@+id/libraryBookDate"
     tools:text="Language" />
 
   <TextView
-    android:id="@+id/fileName"
+    android:id="@+id/libraryBookFileName"
     style="@style/list_item_body"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintEnd_toEndOf="@+id/language"
-    app:layout_constraintTop_toBottomOf="@+id/language"
+    app:layout_constraintEnd_toEndOf="@+id/libraryBookLanguage"
+    app:layout_constraintTop_toBottomOf="@+id/libraryBookLanguage"
     tools:text="File Name" />
 
   <org.kiwix.kiwixmobile.core.zim_manager.TagsView
@@ -107,8 +107,8 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="@+id/title"
-    app:layout_constraintTop_toBottomOf="@id/fileName" />
+    app:layout_constraintStart_toStartOf="@+id/libraryBookTitle"
+    app:layout_constraintTop_toBottomOf="@id/libraryBookFileName" />
 
 
   <View

@@ -42,20 +42,9 @@ class ZimManageRobot : BaseRobot() {
     return library(func)
   }
 
-  fun clickOnDownloading(func: DownloadRobot.() -> Unit): DownloadRobot {
-    clickOnTab(R.string.zim_downloads)
-    return download(func)
-  }
-
   fun clickOnDevice(func: DeviceRobot.() -> Unit): DeviceRobot {
     clickOnTab(R.string.local_zims)
     return device(func)
-  }
-
-  infix fun clickOnLanguageIcon(function: LanguageRobot.() -> Unit): LanguageRobot {
-    TextId(R.string.remote_zims)
-    clickOn(ViewId(R.id.select_language))
-    return language(function)
   }
 
   private fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().apply(func)
@@ -79,20 +68,15 @@ class ZimManageRobot : BaseRobot() {
     fun waitForEmptyView() {
       isVisible(ViewId(R.id.libraryErrorText), VERY_LONG_WAIT)
     }
-  }
-
-  private fun download(func: DownloadRobot.() -> Unit) = DownloadRobot().apply(func)
-  inner class DownloadRobot : BaseRobot() {
-    init {
-      isVisible(ViewId(R.id.zim_download_root))
-    }
 
     fun clickStop() {
       clickOn(ViewId(R.id.stop), LONG_WAIT)
     }
 
-    fun waitForEmptyView() {
-      isVisible(ViewId(R.id.download_management_no_downloads), 11000L)
+    infix fun clickOnLanguageIcon(function: LanguageRobot.() -> Unit): LanguageRobot {
+      TextId(R.string.remote_zims)
+      clickOn(ViewId(R.id.select_language))
+      return language(function)
     }
   }
 
