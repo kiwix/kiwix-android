@@ -42,7 +42,7 @@ class ZimManageActivity : BaseActivity() {
   val cachedComponent by lazy { kiwixActivityComponent }
 
   private val zimManageViewModel by lazy { viewModel<ZimManageViewModel>(viewModelFactory) }
-  private val mSectionsPagerAdapter: SectionsPagerAdapter by lazy {
+  private val sectionsPagerAdapter: SectionsPagerAdapter by lazy {
     SectionsPagerAdapter(this, fm = supportFragmentManager)
   }
 
@@ -64,8 +64,8 @@ class ZimManageActivity : BaseActivity() {
 
     setUpToolbar()
     manageViewPager.run {
-      adapter = mSectionsPagerAdapter
-      offscreenPageLimit = mSectionsPagerAdapter.count - 1
+      adapter = sectionsPagerAdapter
+      offscreenPageLimit = sectionsPagerAdapter.count - 1
       tabs.setupWithViewPager(this)
       addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
     }
