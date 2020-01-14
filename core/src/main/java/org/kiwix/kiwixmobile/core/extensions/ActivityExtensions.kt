@@ -28,6 +28,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
 
 object ActivityExtensions {
@@ -87,4 +88,7 @@ object ActivityExtensions {
   ) =
     ViewModelProviders.of(this, viewModelFactory)
       .get(T::class.java)
+
+  val Activity.coreActivityComponent
+    get() = CoreApp.getCoreComponent().activityComponentBuilder().activity(this).build()
 }

@@ -16,19 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.core.utils
 
-import androidx.lifecycle.ViewModel;
-import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.di.KiwixScope;
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 
-@KiwixScope
-public class KiwixViewModelFactory extends ViewModelFactory {
-  @Inject
-  public KiwixViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-    super(creators);
+class SimpleTextListener(private val onQueryTextChangeAction: (String) -> Unit) :
+  OnQueryTextListener {
+  override fun onQueryTextSubmit(s: String): Boolean = false
+
+  override fun onQueryTextChange(s: String): Boolean {
+    onQueryTextChangeAction.invoke(s)
+    return true
   }
 }

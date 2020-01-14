@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.custom.di.CustomScope;
 
 @CustomScope
 public class CustomViewModelFactory extends ViewModelFactory {
-
   @Inject
   public CustomViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
     super(creators);

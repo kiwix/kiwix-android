@@ -9,5 +9,5 @@
     android:layout_height="wrap_content"
     app:popupTheme="@style/KiwixTheme"
     app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-    tools:showIn="@layout/search" />
+    tools:showIn="@layout/activity_search" />
 </merge>

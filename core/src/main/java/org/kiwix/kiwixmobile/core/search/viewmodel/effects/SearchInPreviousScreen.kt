@@ -16,19 +16,27 @@
  *
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import androidx.lifecycle.ViewModel;
-import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.di.KiwixScope;
+import android.app.Activity
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.utils.Constants
 
-@KiwixScope
-public class KiwixViewModelFactory extends ViewModelFactory {
-  @Inject
-  public KiwixViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-    super(creators);
+data class SearchInPreviousScreen(val searchString: String) : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    activity.setResult(
+      Activity.RESULT_OK,
+      Intent().apply {
+        putExtra(EXTRA_SEARCH_IN_TEXT, true)
+        putExtra(Constants.TAG_FILE_SEARCHED, searchString)
+      }
+    )
+    activity.finish()
+  }
+
+  companion object {
+    const val EXTRA_SEARCH_IN_TEXT = "bool_searchintext"
   }
 }

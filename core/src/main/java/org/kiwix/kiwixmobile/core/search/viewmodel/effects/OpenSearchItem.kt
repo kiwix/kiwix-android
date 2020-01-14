@@ -16,19 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import androidx.lifecycle.ViewModel;
-import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.di.KiwixScope;
+import android.app.Activity
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.utils.Constants
 
-@KiwixScope
-public class KiwixViewModelFactory extends ViewModelFactory {
-  @Inject
-  public KiwixViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-    super(creators);
+class OpenSearchItem(private val searchListItem: SearchListItem) : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    activity.setResult(
+      Activity.RESULT_OK,
+      Intent().putExtra(Constants.TAG_FILE_SEARCHED, searchListItem.value)
+    )
+    activity.finish()
   }
 }

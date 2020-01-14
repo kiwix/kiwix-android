@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.core.search.adapter
 
-import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
+import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
-class SimpleTextListener(private val onQueryTextChangeAction: (String) -> Unit) :
-  OnQueryTextListener {
-  override fun onQueryTextSubmit(s: String): Boolean = false
-
-  override fun onQueryTextChange(s: String): Boolean {
-    onQueryTextChangeAction.invoke(s)
-    return true
-  }
+class SearchAdapter(
+  vararg delegates: AdapterDelegate<SearchListItem>
+) : BaseDelegateAdapter<SearchListItem>(*delegates) {
+  override fun getIdFor(item: SearchListItem) = item.value.hashCode().toLong()
 }

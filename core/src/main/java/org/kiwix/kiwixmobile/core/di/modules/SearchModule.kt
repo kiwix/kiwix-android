@@ -16,19 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.core.di.modules
 
-import androidx.lifecycle.ViewModel;
-import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.di.KiwixScope;
+import dagger.Binds
+import dagger.Module
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
+import org.kiwix.kiwixmobile.core.search.viewmodel.ZimSearchResultGenerator
 
-@KiwixScope
-public class KiwixViewModelFactory extends ViewModelFactory {
-  @Inject
-  public KiwixViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-    super(creators);
-  }
+@Module
+abstract class SearchModule {
+  @Binds
+  abstract fun bindsSearchResultGenerator(zimSearchResultGenerator: ZimSearchResultGenerator):
+    SearchResultGenerator
 }

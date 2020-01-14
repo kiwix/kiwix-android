@@ -16,19 +16,27 @@
  *
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.core.di.modules
 
-import androidx.lifecycle.ViewModel;
-import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.di.KiwixScope;
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
+import org.kiwix.kiwixmobile.core.ViewModelFactory
+import org.kiwix.kiwixmobile.core.di.ViewModelKey
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
+import javax.inject.Singleton
 
-@KiwixScope
-public class KiwixViewModelFactory extends ViewModelFactory {
-  @Inject
-  public KiwixViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-    super(creators);
-  }
+@Module
+abstract class CoreViewModelModule {
+  @Binds
+  @IntoMap
+  @ViewModelKey(SearchViewModel::class)
+  abstract fun bindSearchViewModel(searchViewModel: SearchViewModel): ViewModel
+
+  @Binds
+  @Singleton
+  abstract fun bindViewModelFactory(factory: ViewModelFactory):
+    ViewModelProvider.Factory
 }

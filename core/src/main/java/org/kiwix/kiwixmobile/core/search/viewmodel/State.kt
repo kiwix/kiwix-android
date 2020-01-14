@@ -16,19 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import androidx.lifecycle.ViewModel;
-import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.di.KiwixScope;
+import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
-@KiwixScope
-public class KiwixViewModelFactory extends ViewModelFactory {
-  @Inject
-  public KiwixViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-    super(creators);
-  }
+sealed class State {
+  data class Results(val searchString: String, val values: List<SearchListItem>) : State()
+  object Empty : State()
+  object Initialising : State()
 }

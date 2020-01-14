@@ -23,7 +23,10 @@
     android:usesCleartextTraffic="true"
     tools:targetApi="m">
 
-    <activity android:name=".search.SearchActivity" />
+    <activity
+      android:name=".search.SearchActivity"
+      android:windowSoftInputMode="adjustResize" />
+
     <activity android:name=".bookmark.BookmarksActivity" />
 
     <provider
