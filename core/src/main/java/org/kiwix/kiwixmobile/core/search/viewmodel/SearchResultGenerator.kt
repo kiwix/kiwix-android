@@ -42,13 +42,13 @@ class ZimSearchResultGenerator @Inject constructor(
     else
       zimReaderContainer.searchSuggestions(it, 200).run { suggestionResults() }
 
+  private fun fullTextResults() = generateSequence {
+    zimReaderContainer.getNextResult()?.title?.let(::ZimSearchResultListItem)
+  }.filter { it.value.isNotBlank() }
+    .toList()
+
   private fun suggestionResults() = generateSequence {
     zimReaderContainer.getNextSuggestion()?.let { ZimSearchResultListItem(it.title) }
   }.distinct()
-    .toList()
-
-  private fun fullTextResults() = generateSequence {
-    zimReaderContainer.getNextResult()?.let { ZimSearchResultListItem(it.title) }
-  }.filter { it.value.isNotBlank() }
     .toList()
 }

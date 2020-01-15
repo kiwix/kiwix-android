@@ -16,22 +16,24 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.viewmodel
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 
-sealed class Action {
-  object ExitedSearch : Action()
-  object ClickedSearchInText : Action()
-  object ReceivedPromptForSpeechInput : Action()
-  object StartSpeechInputFailed : Action()
+internal class DeleteRecentSearchTest {
 
-  data class OnItemClick(val searchListItem: SearchListItem) : Action()
-  data class OnItemLongClick(val searchListItem: SearchListItem) : Action()
-  data class Filter(val term: String) : Action()
-  data class ConfirmedDelete(val searchListItem: SearchListItem) : Action()
-  data class CreatedWithIntent(val intent: Intent?) : Action()
-  data class ActivityResultReceived(val requestCode: Int, val resultCode: Int, val data: Intent?) :
-    Action()
+  @Test
+  fun `invoke with deletes a search`() {
+    val searchListItem: SearchListItem = RecentSearchListItem("")
+    val recentSearchDao: NewRecentSearchDao = mockk()
+    val activity: AppCompatActivity = mockk()
+    DeleteRecentSearch(searchListItem, recentSearchDao).invokeWith(activity)
+    verify { recentSearchDao.deleteSearchString(searchListItem.value) }
+  }
 }

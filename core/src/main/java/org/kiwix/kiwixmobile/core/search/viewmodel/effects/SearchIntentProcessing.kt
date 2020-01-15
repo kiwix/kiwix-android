@@ -18,30 +18,32 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
+import android.annotation.TargetApi
 import android.content.Intent
-import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.utils.Constants
 
 data class SearchIntentProcessing(
   val intent: Intent?,
   val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {
+  @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {
     if (intent != null) {
-      if (VERSION.SDK_INT >= VERSION_CODES.M && intent.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
+      if (intent.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
         actions.offer(Filter(intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
       }
       if (intent.hasExtra(Constants.EXTRA_SEARCH)) {
         actions.offer(Filter(intent.getStringExtra(Constants.EXTRA_SEARCH)))
       }
       if (intent.getBooleanExtra(Constants.EXTRA_IS_WIDGET_VOICE, false)) {
-        actions.offer(Action.ReceivedPromptForSpeechInput)
+        actions.offer(ReceivedPromptForSpeechInput)
       }
     }
   }

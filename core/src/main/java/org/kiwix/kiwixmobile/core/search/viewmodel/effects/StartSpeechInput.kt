@@ -26,6 +26,7 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
 
 data class StartSpeechInput(val actions: PublishProcessor<Action>) : SideEffect<Unit> {
@@ -44,7 +45,7 @@ data class StartSpeechInput(val actions: PublishProcessor<Action>) : SideEffect<
         REQ_CODE_SPEECH_INPUT
       )
     } catch (a: ActivityNotFoundException) {
-      actions.offer(Action.StartSpechInputFailed)
+      actions.offer(StartSpeechInputFailed)
     }
   }
 

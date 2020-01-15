@@ -16,19 +16,25 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom;
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import androidx.lifecycle.ViewModel;
-import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.custom.di.CustomScope;
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import org.junit.jupiter.api.Test
 
-@CustomScope
-public class CustomViewModelFactory extends ViewModelFactory {
-  @Inject
-  public CustomViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-    super(creators);
+internal class ShowToastTest {
+
+  @Test
+  fun `invoke with shows short toast`() {
+    mockkStatic(Toast::class)
+    val activity = mockk<AppCompatActivity>()
+    val stringId = 0
+    every { Toast.makeText(activity, stringId, Toast.LENGTH_SHORT).show() } just Runs
+    ShowToast(stringId).invokeWith(activity)
   }
 }
