@@ -29,7 +29,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.Intents
 
 object ActivityExtensions {
 
@@ -78,10 +77,6 @@ object ActivityExtensions {
     noinline intentFunc: (Intent.() -> Unit)? = null
   ) =
     Intent(this, T::class.java).apply { intentFunc?.invoke(this) }
-
-  inline fun <reified T : Activity> Activity.startWithActionFrom() {
-    startActivity(Intents.internal(T::class.java))
-  }
 
   inline fun <reified T : ViewModel> FragmentActivity.viewModel(
     viewModelFactory: ViewModelProvider.Factory

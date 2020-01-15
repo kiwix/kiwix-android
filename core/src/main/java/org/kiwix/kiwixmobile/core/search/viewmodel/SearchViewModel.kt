@@ -26,6 +26,7 @@ import io.reactivex.functions.Function3
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
@@ -103,7 +104,7 @@ class SearchViewModel @Inject constructor(
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
     effects.offer(DeleteRecentSearch(it.searchListItem, recentSearchDao))
-    effects.offer(ShowToast(string.delete_specific_search_toast))
+    effects.offer(ShowToast(R.string.delete_specific_search_toast))
   }
 
   private fun searchPreviousScreenhenStateIsValid(): Any =

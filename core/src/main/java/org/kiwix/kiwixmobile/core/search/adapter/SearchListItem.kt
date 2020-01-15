@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.search.adapter
 
-sealed class SearchListItem() {
+sealed class SearchListItem {
   abstract val value: String
 
   data class RecentSearchListItem(override val value: String) : SearchListItem()

@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.Constants
 
-class OpenSearchItem(private val searchListItem: SearchListItem) : SideEffect<Unit> {
+data class OpenSearchItem(private val searchListItem: SearchListItem) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.setResult(
       Activity.RESULT_OK,

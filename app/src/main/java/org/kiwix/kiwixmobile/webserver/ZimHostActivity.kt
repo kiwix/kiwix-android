@@ -267,7 +267,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     if (ServerUtils.isServerStarted) {
-      outState!!.putString(ipStateKey, ip)
+      outState.putString(ipStateKey, ip)
     }
   }
 

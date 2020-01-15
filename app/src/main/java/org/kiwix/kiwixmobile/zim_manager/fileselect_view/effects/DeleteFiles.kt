@@ -60,7 +60,7 @@ class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
     if (file.exists()) {
       return false
     }
-    newBookDao.delete(book.databaseId!!)
+    newBookDao.delete(book.databaseId)
     return true
   }
 }

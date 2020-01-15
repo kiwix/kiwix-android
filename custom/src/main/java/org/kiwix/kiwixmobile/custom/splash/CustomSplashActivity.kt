@@ -27,6 +27,7 @@ class CustomSplashActivity : CoreSplashActivity() {
   override fun injection() {
     customActivityComponent.inject(this)
   }
+
   override val intentForNextScreen: Intent
     get() = Intent(this, CustomMainActivity::class.java)
 }

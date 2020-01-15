@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
-class SaveSearchToRecents(
+data class SaveSearchToRecents(
   private val recentSearchDao: NewRecentSearchDao,
   private val searchListItem: SearchListItem,
   private val id: String?
