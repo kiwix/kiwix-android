@@ -24,12 +24,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.KiwixViewModelFactory
-import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
+import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 
 @Module
-abstract class ViewModelModule {
+abstract class KiwixViewModelModule {
   @Binds
   @IntoMap
   @ViewModelKey(ZimManageViewModel::class)
