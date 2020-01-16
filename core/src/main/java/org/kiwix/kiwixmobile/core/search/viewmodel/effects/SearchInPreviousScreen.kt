@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.Constants
 
-data class SearchInPreviousScreen(val searchString: String) : SideEffect<Unit> {
+data class SearchInPreviousScreen(private val searchString: String) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.setResult(
       Activity.RESULT_OK,

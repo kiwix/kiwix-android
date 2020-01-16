@@ -59,8 +59,8 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
-  val recentSearchDao: NewRecentSearchDao,
-  val zimReaderContainer: ZimReaderContainer,
+  private val recentSearchDao: NewRecentSearchDao,
+  private val zimReaderContainer: ZimReaderContainer,
   private val searchResultGenerator: SearchResultGenerator
 ) : ViewModel() {
 
@@ -89,7 +89,7 @@ class SearchViewModel @Inject constructor(
       is OnItemClick -> saveSearchAndOpenItem(it)
       is OnItemLongClick -> showDeleteDialog(it)
       is Filter -> filter.offer(it.term)
-      ClickedSearchInText -> searchPreviousScreenhenStateIsValid()
+      ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
       is ConfirmedDelete -> deleteItemAndShowToast(it)
       is CreatedWithIntent -> effects.offer(SearchIntentProcessing(it.intent, actions))
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
@@ -107,7 +107,7 @@ class SearchViewModel @Inject constructor(
     effects.offer(ShowToast(R.string.delete_specific_search_toast))
   }
 
-  private fun searchPreviousScreenhenStateIsValid(): Any =
+  private fun searchPreviousScreenWhenStateIsValid(): Any =
     when (val currentState = state.value) {
       is Results -> effects.offer(SearchInPreviousScreen(currentState.searchString))
       else -> Unit

@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.toast
 
-data class ShowToast(@StringRes val stringId: Int) : SideEffect<Unit> {
+data class ShowToast(@StringRes private val stringId: Int) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.toast(stringId, Toast.LENGTH_SHORT)
   }

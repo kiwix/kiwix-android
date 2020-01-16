@@ -30,8 +30,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeec
 import org.kiwix.kiwixmobile.core.utils.Constants
 
 data class SearchIntentProcessing(
-  val intent: Intent?,
-  val actions: PublishProcessor<Action>
+  private val intent: Intent?,
+  private val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {
   @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {

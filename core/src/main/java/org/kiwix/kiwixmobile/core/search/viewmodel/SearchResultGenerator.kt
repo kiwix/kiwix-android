@@ -29,8 +29,8 @@ interface SearchResultGenerator {
 }
 
 class ZimSearchResultGenerator @Inject constructor(
-  val sharedPreferenceUtil: SharedPreferenceUtil,
-  val zimReaderContainer: ZimReaderContainer
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val zimReaderContainer: ZimReaderContainer
 ) : SearchResultGenerator {
   override fun generateSearchResults(searchTerm: String) =
     if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm)

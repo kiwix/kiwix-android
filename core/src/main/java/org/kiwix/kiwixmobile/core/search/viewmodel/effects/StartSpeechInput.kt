@@ -29,7 +29,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
 
-data class StartSpeechInput(val actions: PublishProcessor<Action>) : SideEffect<Unit> {
+data class StartSpeechInput(private val actions: PublishProcessor<Action>) : SideEffect<Unit> {
 
   override fun invokeWith(activity: AppCompatActivity) {
     try {

@@ -28,10 +28,10 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 
 data class ProcessActivityResult(
-  val requestCode: Int,
-  val resultCode: Int,
-  val data: Intent?,
-  val actions: PublishProcessor<Action>
+  private val requestCode: Int,
+  private val resultCode: Int,
+  private val data: Intent?,
+  private val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     if (requestCode == StartSpeechInput.REQ_CODE_SPEECH_INPUT &&

@@ -29,8 +29,8 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSearch
 import javax.inject.Inject
 
 data class ShowDeleteSearchDialog(
-  val searchListItem: SearchListItem,
-  val actions: PublishProcessor<Action>
+  private val searchListItem: SearchListItem,
+  private val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {
 
   @Inject lateinit var dialogShower: DialogShower

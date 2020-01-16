@@ -24,8 +24,8 @@ import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
 data class DeleteRecentSearch(
-  val searchListItem: SearchListItem,
-  val recentSearchDao: NewRecentSearchDao
+  private val searchListItem: SearchListItem,
+  private val recentSearchDao: NewRecentSearchDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     recentSearchDao.deleteSearchString(searchListItem.value)
