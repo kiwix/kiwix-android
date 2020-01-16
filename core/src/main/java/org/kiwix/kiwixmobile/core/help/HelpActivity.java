@@ -85,7 +85,7 @@ public class HelpActivity extends BaseActivity {
     titleDescriptionMap.put(getString(title), description.toString());
   }
 
-  @Override protected void injection() {
-    CoreApp.getCoreComponent().inject(this);
+  @Override protected void injection(CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

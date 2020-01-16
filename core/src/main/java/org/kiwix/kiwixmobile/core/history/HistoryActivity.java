@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
+import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -288,7 +289,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     }
   }
 
-  @Override protected void injection() {
-    CoreApp.getCoreComponent().inject(this);
+  @Override protected void injection(CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

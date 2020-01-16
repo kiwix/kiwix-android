@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.splash
 
 import android.content.Intent
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity
 import org.kiwix.kiwixmobile.intro.IntroActivity
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -26,7 +27,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 class KiwixSplashActivity : CoreSplashActivity() {
 
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     kiwixActivityComponent.inject(this)
   }
 

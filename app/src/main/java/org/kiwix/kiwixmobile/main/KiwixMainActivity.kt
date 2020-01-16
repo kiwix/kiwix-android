@@ -26,6 +26,7 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -101,7 +102,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     this.kiwixActivityComponent.inject(this)
   }
 

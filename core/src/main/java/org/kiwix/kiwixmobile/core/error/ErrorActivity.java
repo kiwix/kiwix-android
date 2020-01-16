@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
@@ -78,7 +79,6 @@ public class ErrorActivity extends BaseActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    injection();
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_kiwix_error);
     Intent callingIntent = getIntent();
@@ -182,7 +182,7 @@ public class ErrorActivity extends BaseActivity {
     restartApp();
   }
 
-  @Override protected void injection() {
-    CoreApp.getCoreComponent().inject(this);
+  @Override protected void injection(CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

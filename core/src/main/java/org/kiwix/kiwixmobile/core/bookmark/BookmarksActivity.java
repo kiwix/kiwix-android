@@ -113,8 +113,8 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     }
   };
 
-  @Override protected void injection() {
-    CoreApp.getCoreComponent().inject(this);
+  @Override protected void injection(CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 
   @Override

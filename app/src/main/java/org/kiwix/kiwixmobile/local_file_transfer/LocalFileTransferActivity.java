@@ -405,7 +405,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
     super.onDestroy();
   }
 
-  @Override protected void injection() {
+  @Override protected void injection(CoreComponent coreComponent) {
     ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
   }
 }

@@ -81,7 +81,7 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
     };
   private View[] views;
 
-  @Override protected void injection() {
+  @Override protected void injection(CoreComponent coreComponent) {
     ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
   }
 

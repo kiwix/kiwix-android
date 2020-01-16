@@ -73,8 +73,8 @@ public class SearchActivity extends BaseActivity
   private SearchView searchView;
   private String searchText;
 
-  @Override protected void injection() {
-      CoreApp.getCoreComponent().inject(this);
+  @Override protected void injection(CoreComponent coreComponent) {
+      coreComponent.inject(this);
   }
 
   @Override

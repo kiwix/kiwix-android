@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
@@ -123,7 +124,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     startServerButton.setOnClickListener { startStopServer() }
   }
 
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     kiwixActivityComponent.inject(this)
   }
 
@@ -267,7 +268,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     if (ServerUtils.isServerStarted) {
-      outState!!.putString(ipStateKey, ip)
+      outState.putString(ipStateKey, ip)
     }
   }
 
