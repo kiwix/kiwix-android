@@ -212,7 +212,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun showStorageSelectDialog() = StorageSelectDialog()
     .apply {
-      setOnSelectListener(::storeDeviceInPreferences)
+      onSelectAction = ::storeDeviceInPreferences
     }
     .show(fragmentManager!!, getString(string.pref_storage))
 }

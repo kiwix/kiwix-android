@@ -275,7 +275,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   public void openFolderSelect() {
     StorageSelectDialog dialogFragment = new StorageSelectDialog();
-    dialogFragment.setOnSelectListener(this::onStorageDeviceSelected);
+    dialogFragment.setOnSelectAction(this::onStorageDeviceSelected);
     dialogFragment.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(),
       getResources().getString(R.string.pref_storage));
   }
