@@ -34,7 +34,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,8 +45,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import butterknife.OnItemClick;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
@@ -57,6 +56,8 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
+import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiP2pDelegate;
+import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiPeerListAdapter;
 
 /**
  * Created by @Aditya-Sood as a part of GSoC 2019.
@@ -88,7 +89,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
   @BindView(R.id.toolbar) Toolbar actionBar;
   @BindView(R.id.text_view_device_name) TextView deviceName;
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
-  @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;
+  @BindView(R.id.list_peer_devices) RecyclerView peerDeviceList;
   @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
   @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
@@ -97,7 +98,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
   private ArrayList<FileItem> filesForTransfer = new ArrayList<>();
   private FileListAdapter fileListAdapter;
 
-  private List<WifiP2pDevice> availablePeerDevices = new ArrayList<WifiP2pDevice>();
+  private WifiPeerListAdapter wifiPeerListAdapter;
 
   @Override protected void injection() {
     ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
@@ -123,8 +124,16 @@ public class LocalFileTransferActivity extends BaseActivity implements
     actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     actionBar.setNavigationOnClickListener(v -> finish());
 
-    listViewPeerDevices.setAdapter(
-      new WifiPeerListAdapter(this, R.layout.row_peer_device, availablePeerDevices));
+    wifiPeerListAdapter = new WifiPeerListAdapter(
+      new WifiP2pDelegate(wifiP2pDevice -> {
+        wifiDirectManager.sendToDevice(wifiP2pDevice);
+        return Unit.INSTANCE;
+      }
+      )
+    );
+    peerDeviceList.setAdapter(wifiPeerListAdapter);
+    peerDeviceList.setLayoutManager(new LinearLayoutManager(this));
+    peerDeviceList.setHasFixedSize(true);
 
     if (isFileSender) {
       for (int i = 0; i < fileUriArrayList.size(); i++) {
@@ -135,13 +144,6 @@ public class LocalFileTransferActivity extends BaseActivity implements
     }
 
     wifiDirectManager.startWifiDirectManager(filesForTransfer);
-  }
-
-  @OnItemClick(R.id.list_peer_devices)
-  void onItemClick(int position) {
-    WifiP2pDevice senderSelectedPeerDevice =
-      (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
-    wifiDirectManager.sendToDevice(senderSelectedPeerDevice);
   }
 
   @Override
@@ -185,7 +187,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
 
   private void showPeerDiscoveryProgressBar() { // Setup UI for searching peers
     searchingPeersProgressBar.setVisibility(View.VISIBLE);
-    listViewPeerDevices.setVisibility(View.INVISIBLE);
+    peerDeviceList.setVisibility(View.INVISIBLE);
     textViewPeerDevices.setVisibility(View.INVISIBLE);
   }
 
@@ -201,8 +203,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
 
   @Override
   public void onConnectionToPeersLost() {
-    availablePeerDevices.clear();
-    ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
+    wifiPeerListAdapter.setItems(Collections.EMPTY_LIST);
   }
 
   @Override
@@ -224,14 +225,13 @@ public class LocalFileTransferActivity extends BaseActivity implements
 
   @Override
   public void updateListOfAvailablePeers(@NonNull WifiP2pDeviceList peers) {
-    availablePeerDevices.clear();
-    availablePeerDevices.addAll(peers.getDeviceList());
+    final List<WifiP2pDevice> deviceList = new ArrayList(peers.getDeviceList());
 
     searchingPeersProgressBar.setVisibility(View.GONE);
-    listViewPeerDevices.setVisibility(View.VISIBLE);
-    ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
+    peerDeviceList.setVisibility(View.VISIBLE);
+    wifiPeerListAdapter.setItems(deviceList);
 
-    if (availablePeerDevices.size() == 0) {
+    if (deviceList.size() == 0) {
       Log.d(LocalFileTransferActivity.TAG, "No devices found");
     }
   }
@@ -249,13 +249,11 @@ public class LocalFileTransferActivity extends BaseActivity implements
       if (ActivityCompat.shouldShowRequestPermissionRationale(this,
         Manifest.permission.ACCESS_COARSE_LOCATION)) {
         alertDialogShower.show(KiwixDialog.LocationPermissionRationale.INSTANCE,
-          new Function0<Unit>() {
-            @Override public Unit invoke() {
-              ActivityCompat.requestPermissions(LocalFileTransferActivity.this,
-                new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
-                PERMISSION_REQUEST_CODE_COARSE_LOCATION);
-              return Unit.INSTANCE;
-            }
+          (Function0<Unit>) () -> {
+            ActivityCompat.requestPermissions(this,
+              new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+              PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+            return Unit.INSTANCE;
           });
       } else {
         ActivityCompat.requestPermissions(this,

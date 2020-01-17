@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,15 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.base.adapter
+package org.kiwix.kiwixmobile.local_file_transfer.adapter
 
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import android.net.wifi.p2p.WifiP2pDevice
+import android.view.View
+import kotlinx.android.synthetic.main.row_peer_device.row_device_name
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 
-interface AdapterDelegate<in T> {
-  fun createViewHolder(parent: ViewGroup): ViewHolder
-
-  fun bind(viewHolder: ViewHolder, itemToBind: T)
-
-  fun isFor(item: T): Boolean
+class WifiP2pViewHolder(
+  override val containerView: View,
+  private val onItemClickAction: (WifiP2pDevice) -> Unit
+) : BaseViewHolder<WifiP2pDevice>(containerView) {
+  override fun bind(item: WifiP2pDevice) {
+    row_device_name.text = item.deviceName
+    containerView.setOnClickListener {
+      onItemClickAction.invoke(item)
+    }
+  }
 }
