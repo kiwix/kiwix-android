@@ -84,7 +84,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
             }
           }
         }
-        as ArrayList<String>
+          as ArrayList<String>
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,10 +103,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
       bookDelegate,
       BookOnDiskDelegate.LanguageDelegate
     )
-    if (savedInstanceState != null && ServerUtils.isServerStarted) {
-      ip = savedInstanceState.getString(ipStateKey)
-      layoutServerStarted()
-    }
+
     recyclerViewZimHost.adapter = booksAdapter
     presenter.attachView(this)
 
@@ -262,13 +259,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
       }
     )
-  }
-
-  override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    if (ServerUtils.isServerStarted) {
-      outState!!.putString(ipStateKey, ip)
-    }
   }
 
   override fun addBooks(books: List<BooksOnDiskListItem>) {
