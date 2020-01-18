@@ -14,7 +14,7 @@ object Versions {
   const val androidx_test_espresso: String = "3.1.1" // available: "3.2.0"
 
   const val com_squareup_retrofit2: String = "2.5.0" // available: "2.6.2"
-  
+
   const val com_yahoo_squidb: String = "2.0.0" // available: "3.2.3"
 
   const val com_jakewharton: String = "10.2.0"
