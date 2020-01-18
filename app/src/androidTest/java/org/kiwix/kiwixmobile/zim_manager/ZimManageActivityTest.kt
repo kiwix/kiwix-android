@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.zim_manager
 
 import android.os.Build
 import androidx.test.filters.SdkSuppress
+import attempt
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -59,20 +60,16 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         searchFor(book)
         pressBack()
         pressBack()
-        forceResponse("0123456789")
-        clickOn(book)
-      }
-      clickOnDownloading {
-        clickStop()
-        clickNegativeDialogButton()
-        clickStop()
-        clickPositiveDialogButton()
-      }
-      clickOnOnline {
+        forceResponse("012345678901234567890123456789012345678901234567890123456789012345678")
+        attempt(10) {
+          clickOn(book)
+          clickStop()
+          clickNegativeDialogButton()
+          clickStop()
+          clickPositiveDialogButton()
+        }
         forceResponse("01234")
         clickOn(book)
-      }
-      clickOnDownloading {
         waitForEmptyView()
       }
       clickOnDevice {
@@ -86,17 +83,16 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         clickPositiveDialogButton()
         waitForEmptyView()
       }
-      clickOnOnline { }
-    } clickOnLanguageIcon { }
+      clickOnOnline {
+      } clickOnLanguageIcon { }
+    }
   }
 
   private fun forceResponse(body: String) {
     mockServer.forceResponse(
       MockResponse()
         .setBody(body)
-        .throttleBody(
-          1L, 1L, SECONDS
-        )
+        .throttleBody(1L, 1L, SECONDS)
     )
   }
 

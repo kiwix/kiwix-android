@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,11 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.downloader
 
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+package org.kiwix.kiwixmobile.zim_manager
 
-interface Downloader {
-  fun download(book: LibraryNetworkEntity.Book)
-  fun cancelDownload(downloadId: Long)
+interface FileSystemChecker {
+  fun checkFilesystemSupports4GbFiles(path: String): FileSystemCapability
+}
+
+enum class FileSystemCapability {
+  CAN_WRITE_4GB,
+  CANNOT_WRITE_4GB,
+  INCONCLUSIVE
 }

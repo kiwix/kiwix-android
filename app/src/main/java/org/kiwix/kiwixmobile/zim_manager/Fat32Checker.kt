@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.os.FileObserver
-import android.util.Log
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.processors.BehaviorProcessor
@@ -28,11 +27,15 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4G
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
+import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
+import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
+import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
-import java.io.RandomAccessFile
-import javax.inject.Inject
 
-class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUtil) {
+class Fat32Checker constructor(
+  sharedPreferenceUtil: SharedPreferenceUtil,
+  private val fileSystemCheckers: List<FileSystemChecker>
+) {
   val fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
   private var fileObserver: FileObserver? = null
   private val requestCheckSystemFileType = BehaviorProcessor.createDefault(Unit)
@@ -59,10 +62,7 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
 
   private fun fileObserver(it: String?): FileObserver {
     return object : FileObserver(it, MOVED_FROM or DELETE) {
-      override fun onEvent(
-        event: Int,
-        path: String?
-      ) {
+      override fun onEvent(event: Int, path: String?) {
         requestCheckSystemFileType.onNext(Unit)
       }
     }.apply { startWatching() }
@@ -77,20 +77,16 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
     }
 
   private fun canCreate4GbFile(storage: String): Boolean {
-    val path = "$storage/large_file_test.txt"
-    File(path).deleteIfExists()
-    try {
-      RandomAccessFile(path, "rw").use {
-        it.setLength(FOUR_GIGABYTES_IN_BYTES)
-        return@canCreate4GbFile true
+    fileSystemCheckers.forEach {
+      when (it.checkFilesystemSupports4GbFiles(storage)) {
+        CAN_WRITE_4GB -> return@canCreate4GbFile true
+        CANNOT_WRITE_4GB -> return@canCreate4GbFile false
+        INCONCLUSIVE -> {
+          /*do nothing*/
+        }
       }
-    } catch (e: Exception) {
-      e.printStackTrace()
-      Log.d("Fat32Checker", e.message)
-      return false
-    } finally {
-      File(path).deleteIfExists()
     }
+    return false
   }
 
   companion object {
@@ -104,8 +100,4 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
     object CannotWrite4GbFile : FileSystemState()
     object Unknown : FileSystemState()
   }
-}
-
-private fun File.deleteIfExists() {
-  if (exists()) delete()
 }

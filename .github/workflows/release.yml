@@ -1,0 +1,54 @@
+name: Publish App
+
+on:
+  push:
+    branches-ignore:
+      - '*'
+      - '*/**'
+    tags:
+      - '*'
+      - '*/**'
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Decrypt files
+        env:
+          keystore: ${{ secrets.keystore }}
+          google_json: ${{ secrets.google_json }}
+          ssh_key: ${{ secrets.ssh_key }}
+        run: |
+          echo "$google_json" | base64 -d > google.json
+          echo "$keystore" | base64 -d > kiwix-android.keystore
+          echo "$ssh_key" | base64 -d > ssh_key
+          chmod 600 ssh_key
+
+      - name: Set tag variable
+        run: echo ::set-env name=TAG::$(echo ${GITHUB_REF:10})
+
+      - name: Publish app to play store
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+        run: ./gradlew publishReleaseApk
+
+      - name: Publish app to download.kiwix.org
+        env:
+          UNIVERSAL_RELEASE_APK: app/build/outputs/apk/release/*universal*.apk
+        run: |
+          cp $UNIVERSAL_RELEASE_APK kiwix-${TAG}.apk
+          scp -vrp -i ssh_key -o StrictHostKeyChecking=no kiwix-${TAG}.apk ci@download.kiwix.org:/data/download/release/kiwix-android/
+
+      - name: Publish to github releases
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "app/build/outputs/apk/release/**"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+          prerelease: true

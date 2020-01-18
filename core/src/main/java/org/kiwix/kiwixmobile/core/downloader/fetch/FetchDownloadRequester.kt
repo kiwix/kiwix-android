@@ -22,7 +22,6 @@ import com.tonyodev.fetch2.NetworkType.ALL
 import com.tonyodev.fetch2.NetworkType.WIFI_ONLY
 import com.tonyodev.fetch2.Request
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -38,8 +37,8 @@ class FetchDownloadRequester @Inject constructor(
     return request.id.toLong()
   }
 
-  override fun cancel(downloadItem: DownloadItem) {
-    fetch.delete(downloadItem.downloadId.toInt())
+  override fun cancel(downloadId: Long) {
+    fetch.delete(downloadId.toInt())
   }
 }
 

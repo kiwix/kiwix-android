@@ -56,7 +56,6 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
-import org.kiwix.sharedFunctions.downloadItem
 import org.kiwix.sharedFunctions.downloadModel
 import org.kiwix.sharedFunctions.language
 import org.kiwix.sharedFunctions.libraryNetworkEntity
@@ -64,7 +63,6 @@ import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
-import java.util.concurrent.TimeUnit.SECONDS
 
 @ExtendWith(InstantExecutorExtension::class)
 class ZimManageViewModelTest {
@@ -146,29 +144,6 @@ class ZimManageViewModelTest {
       verify {
         application.unregisterReceiver(connectivityBroadcastReceiver)
       }
-    }
-  }
-
-  @Nested
-  inner class Downloads {
-    @Test
-    fun `on emission from database render downloads`() {
-      expectDownloads()
-      viewModel.downloadItems
-        .test()
-        .assertValue(listOf(downloadItem()))
-    }
-
-    private fun expectDownloads(
-      expectedDownloads: List<DownloadModel> = listOf(
-        downloadModel()
-      )
-    ) {
-      every { application.getString(any()) } returns ""
-      downloads.offer(expectedDownloads)
-      testScheduler.triggerActions()
-      testScheduler.advanceTimeBy(1, SECONDS)
-      testScheduler.triggerActions()
     }
   }
 
@@ -344,7 +319,7 @@ class ZimManageViewModelTest {
   }
 
   @Test
-  fun `library update removes from sources`() {
+  fun `library update removes from sources and maps to list items`() {
     every { application.getString(R.string.your_languages) } returns "1"
     every { application.getString(R.string.other_languages) } returns "2"
     val bookAlreadyOnDisk = book(
@@ -394,7 +369,7 @@ class ZimManageViewModelTest {
           LibraryListItem.DividerItem(Long.MAX_VALUE, "1"),
           LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
           LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
-          LibraryListItem.BookItem(bookWithInactiveLanguage, CanWrite4GbFile)
+          LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading))
         )
       )
   }

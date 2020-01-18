@@ -31,7 +31,6 @@ class IntroActivityTest : BaseActivityTest<IntroActivity>() {
   fun viewIsSwipeableAndNavigatesToMain() {
     intro {
       swipeLeft()
-      swipeRight()
     } clickGetStarted { }
   }
 }

@@ -26,7 +26,8 @@ sealed class KiwixDialog(
   val title: Int?,
   val message: Int,
   val positiveMessage: Int,
-  val negativeMessage: Int?
+  val negativeMessage: Int?,
+  val cancelable: Boolean = true
 ) {
 
   data class DeleteZim(override val args: List<Any>) : KiwixDialog(
@@ -62,6 +63,14 @@ sealed class KiwixDialog(
     R.string.hotspot_failed_message,
     R.string.go_to_wifi_settings_label,
     null
+  )
+
+  object ReadPermissionRequired : KiwixDialog(
+    R.string.storage_permission_denied,
+    R.string.grant_read_storage_permission,
+    R.string.go_to_permissions,
+    null,
+    cancelable = false
   )
 
   data class ShowHotspotDetails(override val args: List<Any>) : KiwixDialog(
