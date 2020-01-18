@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import javax.inject.Inject
 
 class CustomDownloadActivity : BaseActivity() {
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
   }
 

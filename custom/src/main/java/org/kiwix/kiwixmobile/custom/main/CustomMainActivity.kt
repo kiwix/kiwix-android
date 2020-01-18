@@ -30,6 +30,7 @@ import android.util.Log
 import android.view.Menu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
@@ -50,7 +51,7 @@ const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
 
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
   }
 

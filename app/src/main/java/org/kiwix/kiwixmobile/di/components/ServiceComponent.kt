@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.di.components
 
-import android.app.NotificationManager
 import android.app.Service
 import dagger.BindsInstance
 import dagger.Subcomponent
@@ -35,8 +34,6 @@ interface ServiceComponent {
   interface Builder {
 
     @BindsInstance fun service(service: Service): Builder
-
-    @BindsInstance fun notificationManager(notificationManager: NotificationManager): Builder
 
     fun build(): ServiceComponent
   }

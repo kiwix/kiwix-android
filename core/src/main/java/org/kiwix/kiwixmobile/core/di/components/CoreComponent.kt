@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.di.components
 
 import android.app.Application
+import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import dagger.BindsInstance
@@ -92,6 +93,7 @@ interface CoreComponent {
   fun bookDao(): BookDao
   fun bookmarksDao(): BookmarksDao
   fun recentSearchDao(): RecentSearchDao
+  fun notificationManager(): NotificationManager
 
   fun inject(application: CoreApp)
   fun inject(zimContentProvider: ZimContentProvider)
@@ -102,11 +104,9 @@ interface CoreComponent {
   fun inject(addNoteDialog: AddNoteDialog)
 
   fun inject(errorActivity: ErrorActivity)
-  // fun inject(zimHostActivity: ZimHostActivity)
   fun inject(searchActivity: SearchActivity)
   fun inject(helpActivity: HelpActivity)
   fun inject(historyActivity: HistoryActivity)
   fun inject(bookmarksActivity: BookmarksActivity)
- // fun inject(mainActivity: CoreMainActivity)
   fun inject(settingsActivity: CoreSettingsActivity)
 }
