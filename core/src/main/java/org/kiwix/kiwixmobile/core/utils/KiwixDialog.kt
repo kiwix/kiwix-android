@@ -99,6 +99,10 @@ sealed class KiwixDialog(
     constructor(selectedPeerDeviceName: String) : this(listOf(selectedPeerDeviceName))
   }
 
+  object DeleteSearch : KiwixDialog(
+    null, R.string.delete_recent_search_item, R.string.delete, R.string.no
+  )
+
   open class YesNoDialog(
     title: Int,
     message: Int

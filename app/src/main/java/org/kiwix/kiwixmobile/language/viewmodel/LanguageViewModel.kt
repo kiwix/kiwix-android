@@ -51,12 +51,15 @@ class LanguageViewModel @Inject constructor(
         .subscribe(state::postValue, Throwable::printStackTrace),
       languageDao.languages().filter { it.isNotEmpty() }
         .subscribe(
-          {
-            actions.offer(UpdateLanguages(it))
-          },
+          { actions.offer(UpdateLanguages(it)) },
           Throwable::printStackTrace
         )
     )
+  }
+
+  override fun onCleared() {
+    compositeDisposable.clear()
+    super.onCleared()
   }
 
   private fun reduce(

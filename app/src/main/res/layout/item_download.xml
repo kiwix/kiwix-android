@@ -91,6 +91,6 @@
       android:minWidth="@dimen/stop_min_width"
       android:minHeight="@dimen/stop_min_height"
       android:text="@string/download_stop"
-      app:srcCompat="@drawable/ic_stop_black_24dp" />
+      app:srcCompat="@drawable/ic_stop_24dp" />
   </LinearLayout>
 </LinearLayout>
