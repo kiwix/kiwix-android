@@ -22,9 +22,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import eu.mhutti1.utils.storage.adapter.StorageAdapter
+import eu.mhutti1.utils.storage.adapter.StorageDelegate
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -37,11 +40,20 @@ import javax.inject.Inject
 
 class StorageSelectDialog : DialogFragment() {
 
-  private var onSelectAction: ((StorageDevice) -> Unit)? = null
-  private var adapter: StorageSelectArrayAdapter? = null
-  private var aTitle: String? = null
+  var onSelectAction: ((StorageDevice) -> Unit)? = null
 
   @Inject lateinit var storageCalculator: StorageCalculator
+
+  private var aTitle: String? = null
+
+  private val storageAdapter: StorageAdapter by lazy {
+    StorageAdapter(
+      StorageDelegate(storageCalculator) {
+        onSelectAction?.invoke(it)
+        dismiss()
+      }
+    )
+  }
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -53,29 +65,22 @@ class StorageSelectDialog : DialogFragment() {
     super.onViewCreated(view, savedInstanceState)
     CoreApp.getCoreComponent().inject(this)
     title.text = aTitle
+    device_list.run {
+      adapter = storageAdapter
+      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+      setHasFixedSize(true)
+    }
     Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(activity!!) }
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe(
-        {
-          adapter = StorageSelectArrayAdapter(activity!!, it, storageCalculator)
-          device_list.adapter = adapter
-        },
+        { storageAdapter.items = it },
         Throwable::printStackTrace
       )
-
-    device_list.onItemClickListener = OnItemClickListener { _, _, position, _ ->
-      onSelectAction?.invoke(adapter!!.getItem(position)!!)
-      dismiss()
-    }
   }
 
   override fun show(fm: FragmentManager, text: String?) {
     aTitle = text
     super.show(fm, text)
-  }
-
-  fun setOnSelectListener(onSelectAction: (StorageDevice) -> Unit) {
-    this.onSelectAction = onSelectAction
   }
 }

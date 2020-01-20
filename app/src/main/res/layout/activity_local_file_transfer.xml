@@ -73,7 +73,7 @@
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toBottomOf="@id/view_device_list_boundary" />
 
-  <ListView
+  <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/list_peer_devices"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

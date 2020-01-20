@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,15 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.base.adapter
+package eu.mhutti1.utils.storage.adapter
 
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import eu.mhutti1.utils.storage.StorageDevice
+import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
-interface AdapterDelegate<in T> {
-  fun createViewHolder(parent: ViewGroup): ViewHolder
-
-  fun bind(viewHolder: ViewHolder, itemToBind: T)
-
-  fun isFor(item: T): Boolean
+internal class StorageAdapter(storageDelegate: StorageDelegate) :
+  BaseDelegateAdapter<StorageDevice>(storageDelegate) {
+  override fun getIdFor(item: StorageDevice) = item.hashCode().toLong()
 }
