@@ -53,7 +53,6 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
 public class BookmarksActivity extends BaseActivity implements BookmarksContract.View,
   BookmarksAdapter.OnItemClickListener {
 
-
   private final List<BookmarkItem> bookmarksList = new ArrayList<>();
   private final List<BookmarkItem> allBookmarks = new ArrayList<>();
   private final List<BookmarkItem> deleteList = new ArrayList<>();
@@ -120,7 +119,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     presenter.attachView(this);
     setContentView(R.layout.activity_bookmarks);
     setSupportActionBar(toolbar);

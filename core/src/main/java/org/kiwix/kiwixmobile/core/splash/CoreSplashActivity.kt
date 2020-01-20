@@ -26,7 +26,6 @@ import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import kotlin.system.exitProcess
 
 abstract class CoreSplashActivity : BaseActivity() {
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {

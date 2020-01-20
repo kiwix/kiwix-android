@@ -39,7 +39,6 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.CONTACT_EMAIL_ADDRESS;
 
 public class HelpActivity extends BaseActivity {
 
-
   private final HashMap<String, String> titleDescriptionMap = new HashMap<>();
 
   @BindView(R2.id.toolbar)

@@ -23,7 +23,6 @@ import dagger.Provides;
 
 @Module
 public class BookmarksModule {
-
   @Provides
   BookmarksContract.Presenter provideBookmarksPresenter(BookmarksPresenter presenter) {
     return presenter;

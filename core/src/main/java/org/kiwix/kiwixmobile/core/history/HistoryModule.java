@@ -23,7 +23,6 @@ import dagger.Provides;
 
 @Module
 public class HistoryModule {
-
   @Provides
   HistoryContract.Presenter provideHistoryPresenter(HistoryPresenter presenter) {
     return presenter;

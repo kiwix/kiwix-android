@@ -15,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package org.kiwix.kiwixmobile.webserver
 
 import org.kiwix.kiwixmobile.core.base.BaseContract
