@@ -1,9 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Alireza Ivaz
+* Ebraminio
+* FarsiNevis
+* Fatemi127
+* Reza1615
+-->
 <resources>
+  <string name="kiwi">کیوی</string>
+  <string name="menu_zim_manager">کتابخانه</string>
   <string name="menu_help">راهنما</string>
-  <string name="menu_home">آغازه</string>
+  <string name="menu_home">خانه</string>
   <string name="menu_settings">تنظیمات</string>
-  <string name="menu_search">جستجوی مقاله</string>
+  <string name="menu_search">جستجوی نوشتار</string>
   <string name="menu_search_in_text">جستجو در صفحه</string>
   <string name="menu_bookmarks">نشانک‌ها</string>
   <string name="menu_random_article">مقالهٔ تصادفی</string>
@@ -11,13 +20,18 @@
   <string name="menu_exit_full_screen">خروج از تمام‌صفحه</string>
   <string name="menu_read_aloud">خواندن با صدای بلند</string>
   <string name="menu_read_aloud_stop">توقف خواندن با صدای بلند</string>
+  <string name="menu_support_kiwix">پشتیبانی از کیویکس</string>
+  <string name="menu_host_books">کتاب‌های میزبان</string>
   <string name="save_media">ذخیرهٔ رسانه</string>
   <string name="save_media_error">خطایی در حین ذخیره‌سازی این رسانه رخ داد!</string>
-  <string name="save_media_saved">ذخیره کردن رسانه  با عنوان %1$s در پوشه تصویر شما</string>
-  <string name="rescan_fs_warning">چستچو برای پرونده‌های ZIM، لطفاً صبر کنید…</string>
+  <string name="save_media_saved">رسانه با نام %s در Android/media/org.kiwix.../ ذخیره شد</string>
+  <string name="rescan_fs_warning">چستچو برای محتوای قابل بارگیری، لطفا صبر کنید…</string>
   <string name="search_label">جستجو</string>
   <string name="choose_file">یک پروندهٔ محتوایی را انتخاب کنید (*.zim)</string>
   <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
+  <string name="go_to_wifi_settings_label">برو به تنظیمات وای‌فای</string>
+  <string name="go_to_settings_label">برو به تنظیمات</string>
+  <string name="stop_hotspot_button">توقف</string>
   <string name="error_file_not_found">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد.</string>
   <string name="error_file_invalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>
   <string name="error_article_url_not_found">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
@@ -34,20 +48,24 @@
   <string name="pref_language_title">زبان</string>
   <string name="pref_language_chooser">انتخاب زبان</string>
   <string name="custom_app_missing_content">نرم‌افزار شما خراب است.\nعلت آن ممکن است حذف بعضی پرونده‌ها از روی کارت حافظه باشد.\nبهتر است نرم‌افزار را پاک کنید و دوباره نصب کنید.</string>
+  <string name="go_to_play_store">برو به فروشگاه پلی</string>
   <string name="menu_bookmarks_list">نشانک‌ها</string>
   <string name="clear_recent_and_tabs_history_dialog">آیا مطمئن هستید که می‌خواهید تمامی تاریخچه جستجو را پاک کنید و تمام زبانه‌های فعال را ریست کنید؟</string>
   <string name="delete_recent_search_item">این مورد حذف شود؟</string>
   <string name="pref_clear_all_history_title">پاک کردن تاریخچه</string>
   <string name="all_history_cleared_toast">تمامی تاریخچه پاک شد</string>
   <string name="clear_all_history_dialog_title">پاک کردن تمامی تاریخچه</string>
+  <string name="share">اشتراک‌گذاری</string>
+  <string name="selected_file_cab_app_chooser_title">اشتراک‌گذاری پرونده‌های ZIM با:</string>
   <string name="delete">حذف</string>
   <string name="delete_specific_search_toast">جستجوی اخیر حذف شد</string>
   <string name="hint_contents_drawer_message">برای مشاهدهٔ مقاله، انگشت خود را روی صفحهٔ نمایش به سمت چپ بکشید</string>
-  <string name="got_it">فهمیدم</string>
+  <string name="got_it">بزن بریم</string>
   <string name="did_you_know">آیا می‌دانستید که؟</string>
-  <string name="undo">خنثی‌سازی</string>
+  <string name="undo">واگردانی</string>
   <string name="tab_closed">زبانه بسته شد</string>
   <string name="bookmark_added">نشانک افزوده شد</string>
+  <string name="rate_dialog_title">لطفا به ما امتیاز بدهید</string>
   <string name="rate_dialog_positive">امتیاز دهید!</string>
   <string name="rate_dialog_negative">نه، سپاس</string>
   <string name="rate_dialog_neutral">بعداً</string>
@@ -95,16 +113,4 @@
   <string name="do_not_ask_anymore">لطفاً دیگر درخواست نکنید</string>
   <string name="your_languages">زبان‌های انتخاب‌شده:</string>
   <string name="other_languages">زبان‌های دیگر:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

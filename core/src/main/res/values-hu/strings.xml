@@ -1,6 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* ‑‑szabi‑‑
+* Bencoke
+* Csega
+* Dj
+* Fitoschido
+* Kelson
+* Macofe
+* Tacsipacsi
+* Urbalazs
+-->
 <resources>
-  <string name="menu_zim_manager">Tartalom lekérése</string>
+  <string name="menu_zim_manager" fuzzy="true">Tartalom lekérése</string>
   <string name="menu_help">Súgó</string>
   <string name="menu_home">Kezdőlap</string>
   <string name="menu_settings">Beállítások</string>
@@ -19,6 +30,7 @@
   <string name="search_label">Keresés</string>
   <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
+  <string name="stop_hotspot_button">LEÁLLÍTÁS</string>
   <string name="error_file_not_found">Hiba: A kijelölt ZIM-fájl nem található.</string>
   <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
   <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
@@ -73,6 +85,7 @@
   <string name="pref_extras">Extrák</string>
   <string name="new_tab_snack_bar">A cikk megnyitva egy új fülön</string>
   <string name="search_widget_text">Kiwix keresése</string>
+  <string name="speech_prompt_text" fuzzy="true">A kereséshez beszélj %s</string>
   <string name="speech_not_supported">Sajnálom, az eszközöd nem támogatja a beszédbevitelt</string>
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
@@ -82,6 +95,7 @@
   <string name="zim_file_downloading">A letöltés folyamatban</string>
   <string name="zim_file_downloaded">Letöltve</string>
   <string name="download_pause">Szünet</string>
+  <string name="download_stop">Stop</string>
   <string name="download_paused">szüneteltetve</string>
   <string name="no_downloads_here">Nincsenek letöltések</string>
   <string name="no_files_here">Nincsenek fájlok</string>
@@ -93,13 +107,13 @@
   <string name="no_network_connection">Nincs hálózati kapcsolat</string>
   <string name="help_2">Mit csinál a Kiwix?</string>
   <string name="help_3">A Kiwix egy offline tartalom olvasó. Úgy viselkedik, mint egy böngésző, de az online weboldalak betöltése helyett a tartalmát egy ZIM formátumú fájlból olvassa.</string>
-  <string name="help_4">Bár a Kiwix eredetileg az offline Wikipédia megvalósítására lett tervezve, más tartalmakat is olvas.</string>
+  <string name="help_4" fuzzy="true">Bár a Kiwix eredetileg az offline Wikipédia megvalósítására lett tervezve, más tartalmakat is olvas.</string>
   <string name="help_5">Hol van a tartalom?</string>
   <string name="help_6">A tartalmunk a Kiwix weboldalán van hosztolva.</string>
   <string name="help_7">ZIM fájlokként érhetők el. Sok közülük itt van:</string>
-  <string name="help_8">\u2022 a Wikipédia elérhető külön minden nyelven</string>
-  <string name="help_9">\u2022 Más tartalmak, mint a Wikileaks vagy a Wikisource úgyszint elérhetőek</string>
-  <string name="help_10">Letöltheted a kiválasztott ZIM fájljaidat alkalmazáson belül vagy kiválaszthatod és letöltheted ezeket egy asztali számítógépről mielőtt átküldenéd a ZIM fájlokat az SD-kártyádra.</string>
+  <string name="help_8">• a Wikipédia elérhető külön minden nyelven</string>
+  <string name="help_9">• Más tartalmak, mint a Wikileaks vagy a Wikisource úgyszint elérhetőek</string>
+  <string name="help_10" fuzzy="true">Letöltheted a kiválasztott ZIM fájljaidat alkalmazáson belül vagy kiválaszthatod és letöltheted ezeket egy asztali számítógépről mielőtt átküldenéd a ZIM fájlokat az SD-kártyádra.</string>
   <string name="help_11">Az alkalmazáson belül letöltött ZIM fájlok a külső tároló könyvtár Kiwix nevű mappájában vannak elhelyezve.</string>
   <string name="pref_storage">Tárhely</string>
   <string name="pref_current_folder">Aktuális folder</string>
@@ -135,16 +149,11 @@
   <string name="do_not_ask_anymore">Ne kérdezz többször</string>
   <string name="your_languages">Nyelvek kiválasztása:</string>
   <string name="other_languages">További nyelvek:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="crash_checkbox_device">Az eszköz részletei</string>
+  <string name="crash_button_confirm">RÉSZLETEK KÜLDÉSE</string>
+  <string name="crash_button_decline">KÖSZÖNÖM NEM</string>
+  <string name="download_books">Könyvek letöltése</string>
+  <string name="close_all_tabs">Az összes lap bezárása</string>
+  <string name="delete_notes_confirmation_msg">Törölsz minden jegyzetet?</string>
+  <string name="pref_clear_all_notes_title" fuzzy="true">Minden megjegyzés törlése</string>
 </resources>

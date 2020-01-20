@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Amire80
+-->
+<resources>
+  <string name="retry">לנסות שוב</string>
+  <string name="download">הורדה</string>
+  <string name="invalid_installation">התקנה בלתי־תקינה. נא להוריד Zim.\nיש לוודא שמופעל ויי־פיי ושיש לך מספיק נפח אחסון</string>
+  <string name="complete">הושלם</string>
+</resources>

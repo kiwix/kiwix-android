@@ -1,6 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* Nike
+* Pyscowicz
+* Silvonen
+* Spude
+-->
 <resources>
-  <string name="menu_zim_manager">Hanki sisältöä</string>
+  <string name="kiwi">Kiwi</string>
+  <string name="menu_zim_manager">Kirjasto</string>
   <string name="menu_help">Ohje</string>
   <string name="menu_home">Koti</string>
   <string name="menu_settings">Asetukset</string>
@@ -12,6 +20,7 @@
   <string name="menu_exit_full_screen">Poistu kokoruututilasta</string>
   <string name="menu_read_aloud">Lue ääneen</string>
   <string name="menu_read_aloud_stop">Lopeta ääneen lukeminen</string>
+  <string name="menu_support_kiwix">Tue Kiwixiä</string>
   <string name="save_media">Tallenna media</string>
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
   <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix…/</string>
@@ -19,6 +28,19 @@
   <string name="search_label">Hae</string>
   <string name="choose_file">Valitse sisältötiedosto (*.zim)</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
+  <string name="hotspot_failed_title">Virhe käynnistettäessä hotspottia</string>
+  <string name="go_to_wifi_settings_label">Siirry WiFi-asetuksiin</string>
+  <string name="go_to_settings_label">Siirry asetuksiin</string>
+  <string name="stop_hotspot_button">PYSÄYTÄ</string>
+  <string name="no_books_selected_toast_message">Valitse ensin kirjat</string>
+  <string name="server_failed_toast_message">Ei voitu käynnistää palvelinta.</string>
+  <string name="hotspot_turned_on">Hotspot kytketty päälle</string>
+  <string name="progress_dialog_starting_server">Käynnistetään palvelinta</string>
+  <string name="hotspot_dialog_title">Kytke WiFi-hotspottisi päälle</string>
+  <string name="hotspot_dialog_neutral_button">KYLLÄ, OLEN KYTKENYT SEN PÄÄLLE</string>
+  <string name="hotspot_notification_content_title">Kiwix-hotspot</string>
+  <string name="start_server_label">Käynnistä palvelin</string>
+  <string name="stop_server_label">Pysäytä palvelin</string>
   <string name="error_file_not_found">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
@@ -32,6 +54,7 @@
   <string name="pref_night_mode_summary">Näytä artikkelit käänteisillä väreillä</string>
   <string name="pref_back_to_top">Takaisin alkuun</string>
   <string name="pref_back_to_top_summary">Näytä painike sivun lopussa rullataksesi ylös alkuun</string>
+  <string name="pref_hide_toolbar">Pidä työkalupalkki näkyvissä</string>
   <string name="pref_language_title">Kieli</string>
   <string name="pref_language_chooser">Valitse kieli</string>
   <string name="pref_credits">Avustajat ja lisenssit</string>
@@ -48,6 +71,7 @@
   <string name="pref_clear_all_history_title">Tyhjennä historia</string>
   <string name="all_history_cleared_toast">Kaikki historia tyhjennetty</string>
   <string name="clear_all_history_dialog_title">Tyhjennä kaikki historia</string>
+  <string name="share">Jaa</string>
   <string name="delete">Poista</string>
   <string name="hint_contents_drawer_message">Voit tarkastella tämän artikkelin sisältöä pyyhkäisemällä vasemmalle</string>
   <string name="got_it">Selvä</string>
@@ -71,8 +95,10 @@
   <string name="speech_prompt_text">Puhu hakeaksesi %s</string>
   <string name="speech_not_supported">Sori! Laitteesi ei tue puheensyöttöä</string>
   <string name="local_zims">Laite</string>
+  <string name="remote_zims">Online</string>
   <string name="zim_downloads">Ladataan</string>
   <string name="zim_manager">Kirjasto</string>
+  <string name="delete_zim_body">Poista %s?</string>
   <string name="delete_specific_zim_toast">Tiedosto poistettu</string>
   <string name="zim_file_downloading">Ladataan</string>
   <string name="zim_file_downloaded">ladattu</string>
@@ -89,8 +115,8 @@
   <string name="help_2">Mitä Kiwix tekee?</string>
   <string name="help_5">Missä sisältö on?</string>
   <string name="help_6">Sisältöämme ylläpidetään Kiwixin verkkosivulla.</string>
-  <string name="help_8">\u2022 Wikipedia on saatavilla erikseen kullekin kielelle</string>
-  <string name="help_9">\u2022 Muut sisällöt kuten Wikileaks tai Wikiaineisto ovat myös käytettävissä</string>
+  <string name="help_8">• Wikipedia on saatavilla erikseen kullekin kielelle</string>
+  <string name="help_9">• Muut sisällöt kuten Wikileaks tai Wikiaineisto ovat myös käytettävissä</string>
   <string name="pref_storage">Tallennuslaite</string>
   <string name="pref_current_folder">Nykyinen kansio</string>
   <string name="delete_zim_failed">Emme pystyneet poistamaan tätä tiedostoa. Sinun pitäisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
@@ -111,23 +137,66 @@
   <string name="pref_wifi_only">Lataa sisältöä vain WiFin kautta</string>
   <string name="time_day">päivä</string>
   <string name="time_hour">t</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">jäljellä</string>
+  <string name="time_today">Tänään</string>
+  <string name="time_yesterday">Eilen</string>
   <string name="pref_auto_night_mode_summary">Vaihda automaattisesti päivä- ja yötilan välillä.</string>
   <string name="pref_auto_night_mode">Automatisoitu yötila</string>
   <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
   <string name="your_languages">Valitut kielet:</string>
   <string name="other_languages">Muut kielet:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="ongoing_download_channel_name">Keskeneräiset lataukset</string>
+  <string name="crash_title">Jaha... Tämä on noloa</string>
+  <string name="crash_checkbox_language">Omat kieliasetukset</string>
+  <string name="crash_checkbox_zimfiles">Luettelo Zim-tiedostoistasi</string>
+  <string name="crash_checkbox_exception">Tiedot kaatumisesta</string>
+  <string name="crash_checkbox_device">Laitteen tiedot</string>
+  <string name="crash_button_confirm">LÄHETÄ TIEDOT</string>
+  <string name="crash_button_decline">EI KIITOS</string>
+  <string name="new_tab_shortcut_label">Uusi välilehti</string>
+  <string name="get_content_shortcut_label">Hanki sisältöä</string>
+  <string name="vid">Vid</string>
+  <string name="articleCount">%s artikkelia</string>
+  <string name="get_started">Aloittaminen</string>
+  <string name="download_books">Lataa kirjoja</string>
+  <string name="human_kind_knowledge">Ihmiskunnan tieto puhelimessasi.</string>
+  <string name="welcome_to_the_family">Tervetuloa perheeseen</string>
+  <string name="save_books_offline">Tallenna kirjoja offline-tilassa</string>
+  <string name="unable_to_add_to_bookmarks">Ei voitu lisätä kirjanmerkkeihin</string>
+  <string name="go_to_previous_page">Siirry edelliselle sivulle</string>
+  <string name="go_to_next_page">Siirry seuraavalle sivulle</string>
+  <string name="table_of_contents">Sisällysluettelo</string>
+  <string name="select_languages">Valitse kielet</string>
+  <string name="save_languages">Tallenna kielet</string>
+  <string name="send_feedback">Lähetä palautetta</string>
+  <string name="expand">Laajenna</string>
+  <string name="history">Historia</string>
+  <string name="search_history">Hakuhistoria</string>
+  <string name="selected_items">%1$d valittu</string>
+  <string name="search_bookmarks">Hae kirjanmerkkejä</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Sulje kaikki välilehdet</string>
+  <string name="pending_state">Avoin</string>
+  <string name="running_state">Käynnissä</string>
+  <string name="paused_state">Pysäytetty</string>
+  <string name="paused_wifi">Odotetaan Wifi-yhteyttä</string>
+  <string name="paused_connectivity">Odotetaan yhteyden muodostamista verkkoon</string>
+  <string name="paused_unknown">Tuntematon</string>
+  <string name="failed_file_already_exists">Tiedosto on jo olemassa</string>
+  <string name="failed_unknown_file_error">Tuntematon tiedostojärjestelmävirhe</string>
+  <string name="failed_http_error">HTTP-datavirhe</string>
+  <string name="failed_insufficient_space">Ei tarpeeksi tilaa tallennuslaitteessa</string>
+  <string name="failed_too_many_redirects">Liian monta uudelleenohjausta</string>
+  <string name="failed_unknown">Tuntematon</string>
+  <string name="failed_http_code">HTTP-koodi %s</string>
+  <string name="save">Tallenna</string>
+  <string name="wiki_article_title">Wikiartikkelin otsikko</string>
+  <string name="confirmation_alert_dialog_message">Hylkää tallentamattomat muutokset?</string>
+  <string name="notes_deletion_unsuccessful">Joitakin tiedostoja ei poistettu</string>
+  <string name="your_device">Laitteesi:</string>
+  <string name="nearby_devices">LÄHELLÄ OLEVAT LAITTEET</string>
+  <string name="status">Tila</string>
 </resources>

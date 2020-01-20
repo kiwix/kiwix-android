@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Gongsoonyee
+-->
+<resources>
+  <string name="retry">재시도</string>
+  <string name="download">다운로드</string>
+  <string name="invalid_installation">유효하지 않은 설치입니다. Zim을 다운로드 해주세요.\nWIFI가 켜져있는지 확인해주시고, 용량이 충분한지 확인하십시오.</string>
+  <string name="complete">완료</string>
+</resources>

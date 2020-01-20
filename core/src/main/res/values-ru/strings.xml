@@ -1,6 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Avd2ev
+* DevilishSkull
+* Facenapalm
+* Fitoschido
+* Gehhrr
+* Helpau
+* Kareyac
+* Link2xt
+* Movses
+* Okras
+* Putnik
+-->
 <resources>
-  <string name="menu_zim_manager">Получить Контент</string>
+  <string name="menu_zim_manager" fuzzy="true">Получить Контент</string>
   <string name="menu_help">Помощь</string>
   <string name="menu_home">Главная</string>
   <string name="menu_settings">Настройки</string>
@@ -19,6 +32,7 @@
   <string name="search_label">Поиск</string>
   <string name="choose_file">Выберите файл содержимого (*.zim)</string>
   <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
+  <string name="stop_hotspot_button">ОСТАНОВИТЬ</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
@@ -99,8 +113,8 @@
   <string name="help_5">Где содержимое?</string>
   <string name="help_6">Наш контент размещён на сайте Kiwix.</string>
   <string name="help_7">Они доступны как ZIM файлы. Их существует много:</string>
-  <string name="help_8">\u2022 Wikipedia доступна отдельно для каждого языка</string>
-  <string name="help_9">\u2022 Такое содержимое, как Wikleaks или Wikisource, также доступно</string>
+  <string name="help_8">• Wikipedia доступна отдельно для каждого языка</string>
+  <string name="help_9">• Такое содержимое, как Wikleaks или Wikisource, также доступно</string>
   <string name="help_10">Вы можете или загрузить выбранные ZIM файлы через приложение, или тщательно выбрать те, которые вам нужны, и загрузить их с настольного компьютера, прежде чем передавать ZIM файлы на вашу SD-карту.</string>
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
@@ -137,16 +151,27 @@
   <string name="do_not_ask_anymore">Больше не спрашивай</string>
   <string name="your_languages">Выбранные языки:</string>
   <string name="other_languages">Другие языки:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="crash_description">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
+  <string name="crash_checkbox_language">Ваши Языковые Настройки</string>
+  <string name="crash_checkbox_zimfiles">Список Ваших Zim Файлов</string>
+  <string name="crash_checkbox_logs">Журнал Действий Приложения</string>
+  <string name="crash_checkbox_device">Подробности об Устройстве</string>
+  <string name="crash_button_confirm">ОТПРАВИТЬ ПОДРОБНОСТИ</string>
+  <string name="crash_button_decline">НЕТ, СПАСИБО</string>
+  <string name="download_books">Скачивайте книги</string>
+  <string name="download_books_message">Скачивайте книги и читайте, где бы вы ни были.</string>
+  <string name="expand">Развернуть</string>
+  <string name="bookmarks_from_current_book">Закладки в текущей книге</string>
+  <string name="close_all_tabs">Закрыть все вкладки</string>
+  <string name="failed_state">Ошибка: %s</string>
+  <string name="failed_cannot_resume">Не удалось продолжить по неизвестной причине</string>
+  <string name="failed_file_already_exists">Файл уже существует</string>
+  <string name="failed_insufficient_space">Недостаточно места на диске</string>
+  <string name="failed_http_code">HTTP код %s</string>
+  <string name="ext_storage_permission_rationale_add_note">Разрешение на хранение необходимо для Заметок</string>
+  <string name="ext_storage_write_permission_denied_add_note">Заметки не могут быть использованы без разрешения на хранение</string>
+  <string name="confirmation_alert_dialog_message">Отменить несохранённые изменения?</string>
+  <string name="delete_notes_confirmation_msg">Удалить все заметки?</string>
+  <string name="ext_storage_permission_not_granted">Ошибка: Отсутствует разрешение на хранение</string>
+  <string name="pref_clear_all_notes_title" fuzzy="true">Очистить Все Заметки</string>
 </resources>

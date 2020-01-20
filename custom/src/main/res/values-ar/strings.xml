@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* ديفيد
+-->
+<resources>
+  <string name="retry">إعادة المحاولة</string>
+  <string name="download">تنزيل</string>
+  <string name="invalid_installation">تثبيت غير صالح؛ يُرجَى تنزيل Zim.\nتأكد من تشغيل واي فاي وأن لديك مساحة تخزين كافية</string>
+  <string name="complete">اكتمال</string>
+</resources>

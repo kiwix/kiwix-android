@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Mirzali
+* Orbot707
+-->
+<resources>
+  <string name="retry">Anciya bıcerrebne</string>
+  <string name="download">Biya war</string>
+  <string name="invalid_installation">Nêraverde saz kerdış. Kerem kerê Zimvi ronê.  WiFi u hafızaya telefoni kontrol kerê</string>
+  <string name="complete">Temam</string>
+</resources>

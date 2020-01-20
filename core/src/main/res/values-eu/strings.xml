@@ -1,6 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* EukeneFL
+* Fitoschido
+* Macofe
+* Mikel Ibaiba
+* Subi
+-->
 <resources>
-  <string name="menu_zim_manager">Edukia Lortu</string>
+  <string name="menu_zim_manager" fuzzy="true">Edukia Lortu</string>
   <string name="menu_help">Laguntza</string>
   <string name="menu_home">Hasiera</string>
   <string name="menu_settings">Ezarpenak</string>
@@ -19,6 +26,7 @@
   <string name="search_label">Bilatu</string>
   <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>
   <string name="open_in_new_tab">Ireki lotura fitxa berri batean?</string>
+  <string name="stop_hotspot_button">GELDITU</string>
   <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
@@ -33,6 +41,7 @@
   <string name="pref_back_to_top">Gora itzuli</string>
   <string name="pref_back_to_top_summary">Bistaratu botoi bat orrialdearen amaieran goiko aldera mugitzeko</string>
   <string name="pref_hide_toolbar">Tresna-barra ezkutatu desplazatzean</string>
+  <string name="pref_hide_toolbar_summary">\u2022 On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
   <string name="pref_language_title">Hizkuntza</string>
   <string name="pref_language_chooser">Hizkuntza aukeratu</string>
   <string name="pref_credits">Ekarpen eta lizentziak</string>
@@ -94,13 +103,13 @@
   <string name="no_network_connection">Ez dago konexiorik</string>
   <string name="help_2">Zer egiten du Kiwix-ek?</string>
   <string name="help_3">Kiwix konexio gabeko eduki irakurlea da. Nabigatzaile baten moduan erabiltzen da, baina sarean dauden web orrialdeetan sartu beharrean, ZIM formatoko edukia irakurtzen du.</string>
-  <string name="help_4">Nahiz eta, Kiwix, berez, Wikipedia konexiorik gabe erabiltzeko sortu, beste edukiak ere eskeintzen ditu.</string>
+  <string name="help_4" fuzzy="true">Nahiz eta, Kiwix, berez, Wikipedia konexiorik gabe erabiltzeko sortu, beste edukiak ere eskeintzen ditu.</string>
   <string name="help_5">Non dago edukia?</string>
   <string name="help_6">Kiwik webgunean dago gure edukia.</string>
   <string name="help_7">ZIM artxibo gisa prest daude. Asko daude:</string>
-  <string name="help_8">\u2022 Wikipedia hizkuntza bakoitzean erabili daiteke.</string>
-  <string name="help_9">\u2022 Beste edukiak Wikileaks edo Wikisource gisa baliogarriak dira ere.</string>
-  <string name="help_10">ZIM artxiboak in-app-aren bidez jaitsi ditzakezu edo aukeratu deskargatu nahi dituzunak eta ordengailuan egin, ZIM artxiboak SD-ra aldatu baino lehen.</string>
+  <string name="help_8">• Wikipedia hizkuntza bakoitzean erabili daiteke.</string>
+  <string name="help_9">• Beste edukiak Wikileaks edo Wikisource gisa baliogarriak dira ere.</string>
+  <string name="help_10" fuzzy="true">ZIM artxiboak in-app-aren bidez jaitsi ditzakezu edo aukeratu deskargatu nahi dituzunak eta ordengailuan egin, ZIM artxiboak SD-ra aldatu baino lehen.</string>
   <string name="help_11">In-app-eko jaitsitako ZIM artxiboak kanpoko memorian daude, Kiwix deritzon karpeta batean.</string>
   <string name="pref_storage">Biltegia</string>
   <string name="pref_current_folder">Oraingo Artxiboa</string>
@@ -123,6 +132,8 @@
   <string name="wifi_only_msg">“Bai” aukeratzen baduzu, etorkizunean ez dizugu abisatuko. Baina, hau aldatu dezakezu “Doikuntza” atalean.</string>
   <string name="pref_wifi_only">Edukia WiFi-arekin baino ez deskargatu.</string>
   <string name="time_day">eguna</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
   <string name="time_second">k</string>
   <string name="time_left">joanda</string>
   <string name="pref_auto_night_mode_summary">Automatikoki piztu egun eta gauaren arteko modoa.</string>
@@ -134,16 +145,4 @@
   <string name="do_not_ask_anymore">Ez galdetu berriz</string>
   <string name="your_languages">Hautatutako hizkuntzak:</string>
   <string name="other_languages">Beste hizkuntzak:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

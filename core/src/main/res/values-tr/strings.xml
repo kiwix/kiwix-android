@@ -1,5 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* 1917 Ekim Devrimi
+* Alidemirtas
+* BaRaN6161 TURK
+* Captantrips
+* Grkn gll
+* Hedda
+* Joseph
+* Kumkumuk
+* McAang
+* Rapsar
+* Sayginer
+* Trockya
+-->
 <resources>
+  <string name="kiwi">Kiwi</string>
   <string name="menu_zim_manager">İçerik al</string>
   <string name="menu_help">Yardım</string>
   <string name="menu_home">Ana sayfa</string>
@@ -12,6 +27,8 @@
   <string name="menu_exit_full_screen">Tam ekrandan çık</string>
   <string name="menu_read_aloud">Yüksek sesle oku</string>
   <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
+  <string name="menu_support_kiwix">Kiwix\'i destekle</string>
+  <string name="menu_host_books">Ana Kitaplar</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
   <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix…/</string>
@@ -19,6 +36,29 @@
   <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
+  <string name="hotspot_service_channel_name">Hotspot Hizmet Kanalı</string>
+  <string name="hotspot_failed_title">Sıcak nokta başlatılamadı</string>
+  <string name="hotspot_failed_message">Etkin noktanız zaten açıkmış gibi görünüyor. Devam etmek için lütfen wifi erişim noktanızı devre dışı bırakın.</string>
+  <string name="go_to_wifi_settings_label">WIFI ayarlarına gidin</string>
+  <string name="go_to_settings_label">Ayarlara gidin</string>
+  <string name="hotspot_running">Sıcak Noktayı Çalıştırılıyor</string>
+  <string name="stop_hotspot_button">DURDUR</string>
+  <string name="no_books_selected_toast_message">Lütfen önce kitapları seçin</string>
+  <string name="server_failed_message">Sunucu başlatılamadı. Lütfen etkin noktanızı açın</string>
+  <string name="server_failed_toast_message">Sunucu başlatılamadı.</string>
+  <string name="server_started__successfully_toast_message">Sunucu başarıyla başladı.</string>
+  <string name="hotspot_turned_on">Hotspot açık</string>
+  <string name="hotspot_details_message">Aşağıda yerel etkin noktanızın ayrıntıları verilmiştir.\nSSID: %1$s\nGeçiş: %2$s</string>
+  <string name="server_textview_default_message">Sunucuda barındırmak istediğiniz dosyaları seçin</string>
+  <string name="progress_dialog_starting_server">Sunucu başlatılıyor</string>
+  <string name="hotspot_dialog_title">WIFI etkin noktanızı açın</string>
+  <string name="hotspot_dialog_message">Bu özelliğin çalışması için önce WIFI hotspot\'unuzu manüel olarak açmanız gerekir.</string>
+  <string name="hotspot_dialog_neutral_button">EVET, AÇTIM</string>
+  <string name="hotspot_channel_description">Hotspot/sunucunuzun durumu ile ilgili güncellemeler.</string>
+  <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
+  <string name="start_server_label">Sunucuyu Başlat</string>
+  <string name="stop_server_label">Sunucuyu durdur</string>
+  <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı.</string>
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
   <string name="error_article_url_not_found">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
@@ -52,6 +92,8 @@
   <string name="pref_clear_all_history_summary">Son aramalar ve sekmeler geçmişini temizle</string>
   <string name="all_history_cleared_toast">Tüm geçmiş temizlendi</string>
   <string name="clear_all_history_dialog_title">Tüm geçmişi temizle</string>
+  <string name="share">Paylaş</string>
+  <string name="selected_file_cab_app_chooser_title">ZIM dosyalarını şu kişilerle paylaş:</string>
   <string name="delete">Sil</string>
   <string name="delete_specific_search_toast">Yakın arama geçmişi kaldırıldı</string>
   <string name="hint_contents_drawer_message">Bu makalenin içeriğini görüntülemek için sola hızlıca kaydırabilirsiniz</string>
@@ -79,6 +121,7 @@
   <string name="remote_zims">Çevrimiçi</string>
   <string name="zim_downloads">İndiriliyor</string>
   <string name="zim_manager">Kütüphane</string>
+  <string name="delete_zim_body">%s silinsin mi?</string>
   <string name="delete_specific_zim_toast">Dosya silindi</string>
   <string name="zim_file_downloading">İndiriliyor</string>
   <string name="zim_file_downloaded">İndirildi</string>
@@ -99,8 +142,8 @@
   <string name="help_5">İçerik nerededir?</string>
   <string name="help_6">İçeriğimiz Kiwix web sayfasındadır.</string>
   <string name="help_7">ZIM dosyaları olarak kullanılabilir durumdadırlar. Onlardan çok sayıda vardır:</string>
-  <string name="help_8">\u2022 Vikipedi her dil için ayrı ayrı kullanılabilir durumdadır.</string>
-  <string name="help_9">\u2022 Wikileaks veya Vikikaynak gibi diğer kaynaklarımız da kullanılabilir durumdadır</string>
+  <string name="help_8">• Vikipedi her dil için ayrı ayrı kullanılabilir durumdadır.</string>
+  <string name="help_9">• Wikileaks veya Vikikaynak gibi diğer kaynaklarımız da kullanılabilir durumdadır</string>
   <string name="help_10">Seçtiğiniz ZIM dosyalarını uygulama içerisinden indirebilir veya istediklerinizi seçerek SD kartınıza aktarmadan önce bir Masaüstü bilgisayarından indirebilirsiniz.</string>
   <string name="help_11">Uygulama içinden indirilen ZIM dosyaları harici depolama aygıtındaki Kiwix başlıklı bir klasördedir.</string>
   <string name="pref_storage">Depolama</string>
@@ -128,6 +171,8 @@
   <string name="time_minute">dk</string>
   <string name="time_second">sn</string>
   <string name="time_left">kaldı</string>
+  <string name="time_today">Bugün</string>
+  <string name="time_yesterday">Dün</string>
   <string name="pref_auto_night_mode_summary">Gece ve gündüz modu arasında otomatik geçiş.</string>
   <string name="pref_auto_night_mode">Otomatik gece modu</string>
   <string name="pref_external_link_popup_title">Harici bağlantı girilirken uyarı ver</string>
@@ -137,16 +182,116 @@
   <string name="do_not_ask_anymore">Artık sorma</string>
   <string name="your_languages">Seçilen diller:</string>
   <string name="other_languages">Diğer diller:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_items_msg">Kullanılabilir öğe yok</string>
+  <string name="ongoing_download_channel_name">Devam Eden İndirmeler</string>
+  <string name="ongoing_download_channel_desc">Devam eden zim dosyası indirmeleri için kategori.</string>
+  <string name="crash_title">Peki… Bu utanç verici.</string>
+  <string name="crash_description">Düşmüş gibiyiz.\n\nAşağıdaki bilgileri göndererek bu sorunu çözmemize yardımcı olur musunuz?</string>
+  <string name="crash_checkbox_language">Dil Ayarlarınız</string>
+  <string name="crash_checkbox_zimfiles">Zim Dosyalarınızın Listesi</string>
+  <string name="crash_checkbox_exception">Çökme Detayları</string>
+  <string name="crash_checkbox_logs">Uygulama Günlükleri</string>
+  <string name="crash_checkbox_device">Cihaz Detayları</string>
+  <string name="crash_button_confirm">DETAYLARI GÖNDER</string>
+  <string name="crash_button_decline">HAYIR TEŞEKKÜRLER</string>
+  <string name="shortcut_disabled_message">Kısayol mevcut değil</string>
+  <string name="new_tab_shortcut_label">Yeni sekme</string>
+  <string name="get_content_shortcut_label">İçerik alın</string>
+  <string name="fav_icon">Favicon</string>
+  <string name="pic">Resim</string>
+  <string name="vid">Video</string>
+  <string name="articleCount">%s makale</string>
+  <string name="get_started">Başla</string>
+  <string name="download_books">Kitapları indir</string>
+  <string name="human_kind_knowledge">İnsan türünün bilgisi, telefonunuzda.</string>
+  <string name="welcome_to_the_family">Aileye hoş geldiniz</string>
+  <string name="save_books_offline">Kitapları çevrimdışı kaydet</string>
+  <string name="download_books_message">Kitapları indirin ve nerede olursanız olun okuyun.</string>
+  <string name="unable_to_add_to_bookmarks">Yer imlerine eklenemiyor</string>
+  <string name="go_to_previous_page">Önceki sayfaya git</string>
+  <string name="go_to_next_page">Sonraki sayfaya git</string>
+  <string name="table_of_contents">İçindekiler</string>
+  <string name="select_languages">Dilleri seç</string>
+  <string name="save_languages">Dilleri kaydet</string>
+  <string name="send_feedback">Geri bildirim gönder</string>
+  <string name="expand">Genişlet</string>
+  <string name="history">Geçmiş</string>
+  <string name="history_from_current_book">Mevcut kitaptan tarih</string>
+  <string name="search_history">Geçmişi ara</string>
+  <string name="selected_items">%1$d seçili</string>
+  <string name="bookmarks_from_current_book">Mevcut kitaptaki yer imleri</string>
+  <string name="search_bookmarks">Yer imlerini ara</string>
+  <string name="switch_tabs">Sekmeleri değiştir</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Tüm sekmeleri kapat</string>
+  <string name="pending_state">Beklemede</string>
+  <string name="running_state">Devam Ediyor</string>
+  <string name="successful_state">Tamamlandı</string>
+  <string name="paused_state">Durduruldu</string>
+  <string name="failed_state">Başarısız: %s</string>
+  <string name="paused_wifi">Wifi Bekleniyor</string>
+  <string name="paused_connectivity">Bir ağa bağlanmak için bekleniyor</string>
+  <string name="paused_retry">Yeniden denemek için bekleniyor</string>
+  <string name="paused_unknown">Bilinmiyor</string>
+  <string name="failed_cannot_resume">Bilinmeyen bir nedenden dolayı devam edilemiyor</string>
+  <string name="failed_storage_not_found">Depolama bulunamadı</string>
+  <string name="failed_file_already_exists">Dosya zaten mevcut</string>
+  <string name="failed_unknown_file_error">Bilinmeyen dosya sistemi hatası</string>
+  <string name="failed_http_error">HTTP veri hatası</string>
+  <string name="failed_insufficient_space">Depolamada yeterli alan yok</string>
+  <string name="failed_too_many_redirects">Çok fazla yönlendirme</string>
+  <string name="failed_unhandled_http_code">Bilinmeyen HTTP kodu alındı</string>
+  <string name="failed_unknown">Bilinmiyor</string>
+  <string name="failed_http_code">HTTP kodu %s</string>
+  <string name="save">Kaydet</string>
+  <string name="note">Not</string>
+  <string name="wiki_article_title">Wiki Makale Başlığı</string>
+  <string name="ext_storage_permission_rationale_add_note">Notlar için depolama erişimi gerekir</string>
+  <string name="ext_storage_write_permission_denied_add_note">Notlar depolama erişimi olmadan kullanılamaz</string>
+  <string name="note_save_unsuccessful">Not kaydetme başarısız oldu</string>
+  <string name="note_save_successful">Not kaydedildi</string>
+  <string name="note_save_error_storage_not_writable">Not kaydedilirken hata oluştu: Depolama yazdırılamıyor</string>
+  <string name="note_share_error_file_missing">Not dosyası mevcut değil</string>
+  <string name="note_share_app_chooser_title">Not dosyasını şununla paylaş:</string>
+  <string name="confirmation_alert_dialog_message">Kaydedilmemiş değişiklikleri silinsin mi?</string>
+  <string name="delete_notes_confirmation_msg">Tüm notları silinsin mi?</string>
+  <string name="ext_storage_permission_not_granted">Hata: Depolama izinleri verilmemiş</string>
+  <string name="notes_deletion_successful">Tüm notlar klasörü silindi</string>
+  <string name="notes_deletion_unsuccessful">Bazı dosyalar silinmedi</string>
+  <string name="books_count">%d kitap</string>
+  <string name="discovery_initiated">Keşif başladı</string>
+  <string name="discovery_failed">Keşif başarısız oldu</string>
+  <string name="severe_loss_error">Ağır hata! WiFi P2P\'yi Devre Dışı Bırak/Yeniden Etkinleştir\'i deneyin</string>
+  <string name="connection_failed">Bağlantı kurulamadı</string>
+  <string name="permission_rationale_location">Uygulamanın eş aygıtları algılamasına izin vermek için Android tarafından konum izni gerekir</string>
+  <string name="permission_refused_location">Konum izinleri olmadan eş aygıtlar bulunamıyor</string>
+  <string name="permission_refused_storage">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
+  <string name="request_enable_location">Eşlerin algılanmasına izin vermek için konumu etkinleştir</string>
+  <string name="discovery_needs_location">Konum servisleri olmadan eşleri bulamıyor</string>
+  <string name="request_enable_wifi">WiFi P2P\'yi sistem ayarlarından etkinleştir</string>
+  <string name="discovery_needs_wifi">WiFi AÇIK olmadan eş keşfedemiyor</string>
+  <string name="transfer_to">%s dosyasına aktarılsın mı?</string>
+  <string name="device_not_cooperating">Seçilen cihaz aktarım için işbirliği yapmıyor</string>
+  <string name="file_transfer_complete">Dosya aktarımı tamamlandı</string>
+  <string name="error_during_transfer">Aktarım sırasında bir hatayla karşılaşıldı</string>
+  <string name="error_transferring">%s dosyası aktarılırken hata oluştu</string>
+  <string name="get_content_from_nearby_device">Yakındaki cihazdan içerik alın</string>
+  <string name="search_for_peers">Akranları Ara</string>
+  <string name="your_device">Cihazınız:</string>
+  <string name="nearby_devices">YAKINDAKİ CİHAZLAR</string>
+  <string name="no_devices_found">Cihaz algılanmadı. Tekrar denemek için arama düğmesine dokunun.</string>
+  <string name="files_for_transfer">TRANSFER İÇİN DOSYALAR</string>
+  <string name="preparing_files">Dosyaları aktarıma hazırlanıyor....</string>
+  <string name="performing_handshake">El sıkışma gerçekleştiriliyor....</string>
+  <string name="local_zim_sharing">Yerel ZIM Paylaşımı</string>
+  <string name="status">Durum</string>
+  <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
+  <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
+  <string name="tag_pic">Resim</string>
+  <string name="tag_vid">Video</string>
+  <string name="tag_text_only">Sadece Metin</string>
+  <string name="tag_short_text">Kısa Metin</string>
+  <string name="storage_permission_denied">Depolama İzni Reddedildi</string>
+  <string name="grant_read_storage_permission">Bu uygulama çalışması için depolama okuma yeteneği gerektirir. Lütfen ayarlarınızda izin verin</string>
+  <string name="go_to_permissions">Ayarlara Gidin</string>
 </resources>

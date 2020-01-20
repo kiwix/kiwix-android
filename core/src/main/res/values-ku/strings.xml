@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Bikarhêner
+* George Animal
+* Ghybu
+* Kur
+-->
+<resources>
+  <string name="menu_zim_manager" fuzzy="true">Bigihije Naverokê</string>
+  <string name="menu_help">Alîkarî</string>
+  <string name="menu_home">Mal</string>
+  <string name="menu_settings">Mîheng</string>
+  <string name="menu_search">Gotar bigere</string>
+  <string name="menu_search_in_text">Di nav rûpelê de bibîne</string>
+  <string name="menu_bookmarks">Bijare</string>
+  <string name="menu_random_article">Gotara ketober</string>
+  <string name="menu_full_screen">Dîmendera tije</string>
+  <string name="menu_exit_full_screen">Ji dîmendera tije derkeve</string>
+  <string name="menu_read_aloud">Bi dengê bilind bixwîne</string>
+  <string name="menu_read_aloud_stop">Xwendina dengê bilind rawestîne</string>
+  <string name="save_media">Medyayê Tomar Bike</string>
+  <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
+  <string name="save_media_saved" fuzzy="true">Medya wek %s ji Android/media/org.kiwix.../ re hate qeydkirin</string>
+  <string name="rescan_fs_warning">Li naverokekî ya daxistinê tê gerîn, ji kerema xwe bisekine...</string>
+  <string name="search_label">Lê bigere</string>
+  <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
+  <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
+  <string name="stop_hotspot_button" fuzzy="true">Bisekine</string>
+  <string name="error_file_not_found">Çewtîː Peldanka ZIM\'ê ya bijartî nehate dîtin.</string>
+  <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
+  <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
+  <string name="pref_display_title">Nîşan bide</string>
+  <string name="pref_zoom_sub_title">Nêzîk bike</string>
+  <string name="pref_zoom_dialog">Asta zûmê</string>
+  <string name="pref_info_title">Agahî</string>
+  <string name="pref_info_version">Guherto</string>
+  <string name="pref_zoom_enable">Kontrolên zûmê</string>
+  <string name="pref_night_mode">Moda êvarê</string>
+  <string name="pref_night_mode_summary">Gotaran bi rengên vajîkirî nîşan bide</string>
+  <string name="pref_back_to_top">Vegere Jor</string>
+  <string name="pref_back_to_top_summary">Ji bo vegerî jor, li binê rûpelê wê bişkojek nîşan bide</string>
+  <string name="pref_hide_toolbar">Dema xijkirinê darikê alavan veşêre</string>
+  <string name="pref_hide_toolbar_summary">Dema xijkirina rûpelê darikê alavan veşêre</string>
+  <string name="pref_language_title">Ziman</string>
+  <string name="pref_language_chooser">Zimanekî hilbijêre</string>
+  <string name="pref_credits">Kedkar û Lîsans</string>
+  <string name="pref_credits_title">Kedyarên me</string>
+  <string name="tts_lang_not_supported">Zimanê vê rûpelê nayê piştgirîkirin, an jî daneya zimanê naehatiye sazkirin. Dibe ku ev gotar rast nê xwendin.</string>
+  <string name="no_reader_application_installed">Ji bo cureya vê peldankê sepanekî sazkirî nehat dîtin</string>
+  <string name="custom_app_missing_content">Sepana te xerabe ye.\nEv, dibe ku dema te peldankên li SD Cardê rakir, qewimîbe.\nHewce dike ku tu sepanê rakî û ji Play Store-ê dîsa saz bikî.</string>
+  <string name="go_to_play_store">Here Play Store-ê</string>
+  <string name="menu_bookmarks_list">Bijare</string>
+  <string name="no_section_info">Sernavê Naverok Nehat Dîtin</string>
+  <string name="request_storage">Ji bo ku em têkevin naveroka offline divê em têkevin depoya we</string>
+  <string name="request_storage_custom">Heke tu li ser dîmenderê hişyariyeke bibînî, ji bo ku çareser bibe amûra xwe ji nû ve bide destpêkirin.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Tu ji daxwazên xwe yên jêbirina raboriya lêgerînê û sifirkirina hemû paceyên çalak bawer î?</string>
+  <string name="delete_recent_search_item">Vê pelê jê bibe?</string>
+  <string name="pref_clear_all_history_title">Raboriyê paqij bike</string>
+  <string name="pref_clear_all_history_summary">Lêgerînên dawî û raboriya hilpekînan paqij bike</string>
+  <string name="all_history_cleared_toast">Hemû Raborî Hat Paqijkirin</string>
+  <string name="clear_all_history_dialog_title">Hemû Raboriyê Paqij Bike</string>
+  <string name="delete">Jê bibe</string>
+  <string name="delete_specific_search_toast">Lêgerîna dawî hat rakirin</string>
+  <string name="hint_contents_drawer_message">Tu dikarî çepê veguherîne ku ji bo naveroka vê gotarê binêre</string>
+  <string name="got_it">Min fêm kir</string>
+  <string name="did_you_know">Gelo te zanibû?</string>
+  <string name="undo">Betal bike</string>
+  <string name="tab_closed">Hilpekîn hat girtin</string>
+  <string name="bookmark_added">Bijare hat tevlîkirin</string>
+  <string name="rate_dialog_title">Ji kerema xwe Deng Bide Me</string>
+  <string name="rate_dialog_msg_1">Heke kêfa te ji bikaranînê tê</string>
+  <string name="rate_dialog_msg_2">ji kerema xwe deqekê xwe bide û wê binirxîne. Spas ji bo piştgiriya te!</string>
+  <string name="rate_dialog_positive">Deng Bide!</string>
+  <string name="rate_dialog_negative">Na, spas</string>
+  <string name="rate_dialog_neutral">Paşê</string>
+  <string name="open">Veke</string>
+  <string name="bookmark_removed">Bijare hat rakirin</string>
+  <string name="pref_newtab_background_title">Hilpekîna nû li paşzemînê veke</string>
+  <string name="pref_newtab_background_summary">Dema tu hilpekînekî nû veke hilpekîn dê li paşzemînê vebe</string>
+  <string name="pref_extras">Xizmetên din</string>
+  <string name="new_tab_snack_bar">Gotar li hilpekînekî nû vebû</string>
+  <string name="search_widget_text">Li Kiwixê bigere</string>
+  <string name="speech_prompt_text">Ji bo ku li %s bigerî xeber bide</string>
+  <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava axaftinê</string>
+  <string name="local_zims">Amûr</string>
+  <string name="remote_zims">Online</string>
+  <string name="zim_downloads">Tê daxistin</string>
+  <string name="zim_manager">Pirtûkxane</string>
+  <string name="delete_specific_zim_toast">Pel hat jêbirin</string>
+  <string name="zim_file_downloading">Tê daxistin</string>
+  <string name="zim_file_downloaded">Hat daxistin</string>
+  <string name="download_pause">Rawestîne</string>
+  <string name="download_stop">Bisekinîne</string>
+  <string name="download_paused">rawestî</string>
+  <string name="no_downloads_here">Li vir ti tiştek daxistî tine ye</string>
+  <string name="no_files_here">Li vir peldank tune ne</string>
+  <string name="download_no_space">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
+  <string name="space_available">Cihê berdestː</string>
+  <string name="zim_simple">Basît</string>
+  <string name="zim_no_pic">Wêne Tune ye</string>
+  <string name="zim_no_vid">Vîdyo Tune ye</string>
+  <string name="no_network_connection">Girêdana torê tune ye</string>
+  <string name="help_2">Kiwix çi dike?</string>
+  <string name="help_3">Kiwix xwînereke naverokên offline (derhêl) e. Mîna gerokan tev dide lê li cihê ku bigihije rûpelên torê yên online (liserhêl), naverokê ji peldankekî formata ZIM-ê dixwîne.</string>
+  <string name="help_4" fuzzy="true">Kiwix herçiqas di bingehê de ji bo peydekirina Wikipedia-ya derhêl hatiye sêwirandin jî, naverokên din jî dixwîne.</string>
+  <string name="help_5">Naverok li kû derê ye?</string>
+  <string name="help_6">Naveroka me di malpera me de tê hewandin.</string>
+  <string name="help_7">Wekî peldankên ZIMê hene. Li wir gelek hene:</string>
+  <string name="help_8">• Wikipedia ji bo her zimanî di bikaranînê de ye</string>
+  <string name="help_9">• Mîna Wikileaks an jî Wikisource naverokên din jî hene</string>
+  <string name="help_10" fuzzy="true">Tu dikarî peldankên ZIMê yên ku te bijartiye ji nav sepanê daxînî yan jî berî ku peldankên ZIMê li SD card-ê neqil bikî, yên ku tu dixwazî bibijêrî û ji kompûtereke sermaseyê daxînî.</string>
+  <string name="help_11">Peldankên ZIMê yên ku yên ji nava sepanê hatine daxistin, di nav pelbendekî bi navê Kiwix-ê de ne ya ku li nav cîhaza depokirinê ya derveyî ye.</string>
+  <string name="pref_storage">Depokirin</string>
+  <string name="pref_current_folder">Peldanka niha</string>
+  <string name="path_not_writable">Wekî jixweber li pelrêça ku tê xwestin nayê têketin . Ji bo sererastkirinê pelrêça ku di mîhenga sepanan de tê xwestin, dîsa hilbijêrin.</string>
+  <string name="delete_zim_failed">Mixabin nebû ku em vê peldankê jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
+  <string name="tts_pause">rawestîne</string>
+  <string name="tts_resume">dewam bike</string>
+  <string name="tts_stop">rawestîne</string>
+  <string name="internal_storage">xwemalî</string>
+  <string name="external_storage">Derveyî</string>
+  <string name="yes">Erê</string>
+  <string name="no">Na</string>
+  <string name="confirm_stop_download_title">Daxistinê rabiwestîne?</string>
+  <string name="confirm_stop_download_msg">Tu ji daxwaza xwe ya rawestandina vê daxistinê bawer î?</string>
+  <string name="download_change_storage">Hilbijêra amûra depokirinê</string>
+  <string name="tts_not_enabled">Ji bo vê peldanka ZIM-ê xwendina nivîsê ne ya sepandinê ye</string>
+  <string name="next">Pêşve</string>
+  <string name="previous">Yê berê</string>
+  <string name="wifi_only_title">Bira ji tora mobîlê destûra daxistina naverokê bê dayîn?</string>
+  <string name="wifi_only_msg">Heke li \"Erê\" hilbijêrî tu yê êdî hişyarî nebîne. Lê tu dikarî her tim vê li Mîhengê biguherîne</string>
+  <string name="pref_wifi_only">Naverokê tenê bi WIFIyê daxe</string>
+  <string name="time_day">roj</string>
+  <string name="time_hour">s</string>
+  <string name="time_minute">dq</string>
+  <string name="time_second">sn</string>
+  <string name="time_left">çep</string>
+  <string name="pref_auto_night_mode_summary">Di navbera modên şev û rojê de derbasiya otomatîk.</string>
+  <string name="pref_auto_night_mode">Moda şevê ya otomatîk</string>
+  <string name="pref_external_link_popup_title">Dema ku têketina girêdanên derveyî hişyariyê bide</string>
+  <string name="pref_external_link_popup_summary">Bi popup-ê hişyarî bide gava ku bi girêdanên online û di bihayên zêde de nexebite.</string>
+  <string name="external_link_popup_dialog_title">Tevlîkirina Girêdana Derveyî</string>
+  <string name="external_link_popup_dialog_message">Tu girêdanekî derveyî tevlî dikî. Ev tişt dibe ku ji ber neqla daneyê bibe sedema mesrefan an jî dema ku tu derhêl (offline) bî, nexebite. Gelo tu dixwazî dewam bikî?</string>
+  <string name="do_not_ask_anymore">Zêdetir nepirse</string>
+  <string name="your_languages">Zimanên bijartîː</string>
+  <string name="other_languages">Zimanên din:</string>
+</resources>

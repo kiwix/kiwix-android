@@ -1,6 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Alvaro Vidal-Abarca
+* Fitoschido
+* Grondin
+* Joan manel
+* Macondo
+-->
 <resources>
-  <string name="menu_zim_manager">Obtenir contingut</string>
+  <string name="menu_zim_manager">Biblioteca</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Inici</string>
   <string name="menu_settings">Configuració</string>
@@ -13,17 +20,25 @@
   <string name="menu_read_aloud">Llegir en veu alta</string>
   <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
   <string name="save_media">Anomena i desa el fitxer…</string>
-  <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
-  <string name="save_media_saved">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
+  <string name="save_media_error" fuzzy="true">S\'ha produït un error en mirar de desar el fitxer!</string>
+  <string name="save_media_saved" fuzzy="true">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
   <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu…</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
+  <string name="go_to_settings_label">Vés a Configuració</string>
+  <string name="stop_hotspot_button">ATURA</string>
+  <string name="no_books_selected_toast_message">Seleccioneu llibres primer</string>
+  <string name="server_failed_toast_message">No s’ha pogut iniciar el servidor.</string>
+  <string name="progress_dialog_starting_server">S’està iniciant el servidor</string>
+  <string name="hotspot_dialog_neutral_button">SÍ, L’HE ACTIVAT</string>
+  <string name="start_server_label">Inicia el servidor</string>
+  <string name="stop_server_label">Atura el servidor</string>
   <string name="error_file_not_found">Error: no s\'ha trobat el fitxer ZIM.</string>
   <string name="error_file_invalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>
   <string name="error_article_url_not_found">Error: no s\'ha pogut carregar l\'article (Url: %1$s).</string>
   <string name="pref_display_title">Visualitzar</string>
-  <string name="pref_zoom_dialog">Nivell de zoom</string>
+  <string name="pref_zoom_dialog" fuzzy="true">Nivell de zoom</string>
   <string name="pref_info_title">Informació</string>
   <string name="pref_info_version">Versió</string>
   <string name="pref_zoom_enable">Controls de zoom</string>
@@ -54,6 +69,7 @@
   <string name="new_tab_snack_bar">Article obert en una pestanya nova</string>
   <string name="local_zims">Dispositiu</string>
   <string name="zim_manager">Biblioteca</string>
+  <string name="delete_zim_body">Voleu suprimir %s?</string>
   <string name="delete_specific_zim_toast">Fitxer esborrat</string>
   <string name="download_pause">Aturar</string>
   <string name="download_stop">Detenir</string>
@@ -64,19 +80,20 @@
   <string name="no_network_connection">Cap connexió de xarxa</string>
   <string name="help_2">Què fa Kiwix?</string>
   <string name="help_3">Kiwix és un lector de contingut sense connexió. Actua molt semblant a un navegador però en comptes d\'accedir a pàgines web en línia, llegeix el contingut d\'un fitxer en format ZIM.</string>
-  <string name="help_4">Si bé Kiwix es va dissenyar originalment per a proporcionar una Wikipedia sense connexió, també pot llegir altres continguts.</string>
+  <string name="help_4" fuzzy="true">Si bé Kiwix es va dissenyar originalment per a proporcionar una Wikipedia sense connexió, també pot llegir altres continguts.</string>
   <string name="help_5">On està el contingut?</string>
   <string name="help_6">El nostre contingut està allotjat en el lloc web de Kiwix</string>
   <string name="help_7">Estan disponibles com a fitxers ZIM. Hi ha molts d\'ells:</string>
-  <string name="help_8">\u2022 La Viquipèdia està disponible per separat per a cada idioma</string>
-  <string name="help_9">\u2022 Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
-  <string name="help_10">Pots descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulguis, descarregar-los des d\'un ordinador i transferir-los a la targeta SD.</string>
+  <string name="help_8">• La Viquipèdia està disponible per separat per a cada idioma</string>
+  <string name="help_9">• Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
+  <string name="help_10" fuzzy="true">Pots descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulguis, descarregar-los des d\'un ordinador i transferir-los a la targeta SD.</string>
   <string name="help_11">Els fitxers ZIM descarregats en l\'aplicació es troben al directori d\'emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
   <string name="path_not_writable">No s\'ha pogut accedir al directori desitjat, s\'usa el predeterminat. Per solucionar això, torna a seleccionar el directori desitjat en les preferències de l\'aplicació.</string>
   <string name="delete_zim_failed">No podem eliminar aquest fitxer. Hauries de provar amb un administrador de fitxers.</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Sí</string>
+  <string name="no">No</string>
   <string name="confirm_stop_download_title">Aturar la descàrrega?</string>
   <string name="confirm_stop_download_msg">Segur que vols aturar aquesta descàrrega?</string>
   <string name="download_change_storage">Selector de dispositiu d\'emmagatzematge</string>
@@ -87,16 +104,26 @@
   <string name="do_not_ask_anymore">No tornar a preguntar</string>
   <string name="your_languages">Idiomes seleccionats:</string>
   <string name="other_languages">Altres idiomes:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="crash_checkbox_device">Detalls de l’aparell</string>
+  <string name="crash_button_confirm">ENVIA LES DADES</string>
+  <string name="crash_button_decline">NO, MERCÈS</string>
+  <string name="new_tab_shortcut_label">Pestanya nova</string>
+  <string name="articleCount">%s articles</string>
+  <string name="table_of_contents">Taula</string>
+  <string name="running_state">En curs</string>
+  <string name="paused_unknown">Desconegut</string>
+  <string name="failed_unknown">Desconegut</string>
+  <string name="save">Desa</string>
+  <string name="note">Nota</string>
+  <string name="note_share_error_file_missing">El fitxer de la nota no existeix</string>
+  <string name="connection_failed">Ha fallat la connexió</string>
+  <string name="error_transferring">S’ha produït un error en transferir el fitxer %s</string>
+  <string name="your_device">El vostre dispositiu:</string>
+  <string name="nearby_devices">DISPOSITIUS A PROP</string>
+  <string name="files_for_transfer">FITXERS PENDENTS DE TRANSFERIR</string>
+  <string name="preparing_files">S’estan preparant els fitxers a transferir…</string>
+  <string name="performing_handshake">S’està realitzant el protocol d’enllaç…</string>
+  <string name="status">Estat</string>
+  <string name="tag_text_only">Només text</string>
+  <string name="tag_short_text">Text breu</string>
 </resources>

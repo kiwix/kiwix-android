@@ -1,6 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Chmee2
+* DemonioCZ
+* Dvorapa
+* Juandev
+* Meliganai
+* Tchoř
+* Walter Klosse
+-->
 <resources>
-  <string name="menu_zim_manager">Získat obsah</string>
+  <string name="kiwi">Kiwi</string>
+  <string name="menu_zim_manager">Knihovna</string>
   <string name="menu_help">Nápověda</string>
   <string name="menu_home">Domů</string>
   <string name="menu_settings">Nastavení</string>
@@ -12,6 +22,8 @@
   <string name="menu_exit_full_screen">Ukončit režim na celou obrazovku</string>
   <string name="menu_read_aloud">Číst nahlas</string>
   <string name="menu_read_aloud_stop">Zastavit čtení nahlas</string>
+  <string name="menu_support_kiwix">Podpořte Kiwix</string>
+  <string name="menu_host_books">Hostujte Knihy</string>
   <string name="save_media">Uložit médium jako…</string>
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
   <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix…/</string>
@@ -19,10 +31,34 @@
   <string name="search_label">Vyhledávání</string>
   <string name="choose_file">Vyberte obsahový soubor (*.zim)</string>
   <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>
+  <string name="hotspot_service_channel_name">Servisní Kanál Hotspotu</string>
+  <string name="hotspot_failed_title">Selhal start hotspotu</string>
+  <string name="hotspot_failed_message">Zdá se, že Váš hotspot je již zapnutý. Vypněte svůj hotspot prosím, aby jste mohli pokračovat.</string>
+  <string name="go_to_wifi_settings_label">Jít na nastavení WIFI</string>
+  <string name="go_to_settings_label">Přejít na nastavení</string>
+  <string name="hotspot_running">Spouštím Hotspot</string>
+  <string name="stop_hotspot_button">ZASTAVIT</string>
+  <string name="no_books_selected_toast_message">Vyberte nejprve knihy</string>
+  <string name="server_failed_message">Nemohu spustit server. Zapněte prosím svůj hotspot</string>
+  <string name="server_failed_toast_message">Nelze spustit server.</string>
+  <string name="server_started__successfully_toast_message">Server úspěšně spuštěn.</string>
+  <string name="hotspot_turned_on">Hotspot spuštěn</string>
+  <string name="hotspot_details_message">Následují podrobnosti vašeho hotspotu.\nSSID : %1$s \nPass : %2$s</string>
+  <string name="server_textview_default_message">Vyberte soubory, které si přejete hostovat na svém serveru</string>
+  <string name="progress_dialog_starting_server">Server se spouští</string>
+  <string name="hotspot_dialog_title">Zapněte Váš WIFI hotspot</string>
+  <string name="hotspot_dialog_message">Aby tento nástroj fungoval je potřeba ručně nejprve zapnout Váš hotspot.</string>
+  <string name="hotspot_dialog_neutral_button">ANO, ZAPNUL/A JSEM HO</string>
+  <string name="hotspot_channel_description">Update o stavu Vašeho hotspotu/serveru.</string>
+  <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
+  <string name="start_server_label">Spustit server</string>
+  <string name="stop_server_label">Zastavit server</string>
+  <string name="server_started_message">Vložte tuto IP adresu do svého prohlížeče, aby jste se dostali na server %s</string>
   <string name="error_file_not_found">Chyba: Nelze najít vybraný soubor ZIM.</string>
   <string name="error_file_invalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>
   <string name="error_article_url_not_found">Chyba: Načtení článku (Url: %1$s ) se nezdařilo.</string>
   <string name="pref_display_title">Zobrazení</string>
+  <string name="pref_zoom_sub_title">Přiblížení</string>
   <string name="pref_zoom_dialog">Úroveň zvětšení</string>
   <string name="pref_info_title">Informace</string>
   <string name="pref_info_version">Verze</string>
@@ -31,6 +67,7 @@
   <string name="pref_night_mode_summary">Zobrazuje stránky v obrácených barvách.</string>
   <string name="pref_back_to_top">Zpět na začátek</string>
   <string name="pref_back_to_top_summary">Zobrazit tlačítko “Zpět na začátek” na konci stránky</string>
+  <string name="pref_hide_toolbar">Ponechat viditelný panel nástrojů</string>
   <string name="pref_language_title">Jazyk</string>
   <string name="pref_language_chooser">Vyberte jazyk</string>
   <string name="pref_credits">Přispěvatelé a licence</string>
@@ -44,7 +81,14 @@
   <string name="request_storage">Pro přístup k obsahu offline potřebujeme přístup k vašemu úložišti.</string>
   <string name="clear_recent_and_tabs_history_dialog">Jste si jistí, že chcete smazat svou historii vyhledávání a resetovat všechny aktivní záložky?</string>
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
+  <string name="pref_clear_all_history_title">Vyčistit historii</string>
+  <string name="pref_clear_all_history_summary">Vyčistit poslední hledání a tabulky historie</string>
+  <string name="all_history_cleared_toast">Všechna historie odstraněna</string>
+  <string name="clear_all_history_dialog_title">Vyčistit celou historii</string>
+  <string name="share">Sdílet</string>
+  <string name="selected_file_cab_app_chooser_title">Sdílet soubory ZIM s:</string>
   <string name="delete">Smazat</string>
+  <string name="delete_specific_search_toast">Nedávné hledání smazáno</string>
   <string name="got_it">Rozumím!</string>
   <string name="did_you_know">Věděli jste, že…?</string>
   <string name="undo">Zpět</string>
@@ -57,45 +101,143 @@
   <string name="rate_dialog_negative">Ne, děkuji</string>
   <string name="rate_dialog_neutral">Později</string>
   <string name="open">Otevřít</string>
+  <string name="bookmark_removed">Záložka odstraněna</string>
   <string name="pref_newtab_background_title">Otevřít novou kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Otevře novou záložku na pozadí</string>
+  <string name="pref_extras">Další</string>
   <string name="new_tab_snack_bar">Článek otevřený na nové kartě</string>
+  <string name="search_widget_text">Prohledat Kiwix</string>
+  <string name="speech_not_supported">Promiňte! Vaše zařízení nepodporuje hlasový vstup</string>
+  <string name="local_zims">Zařízení</string>
+  <string name="remote_zims">Online</string>
   <string name="zim_downloads">Stahování</string>
   <string name="zim_manager">Knihovna</string>
+  <string name="delete_zim_body">Vymazat %s?</string>
   <string name="delete_specific_zim_toast">Soubor byl smazán</string>
+  <string name="zim_file_downloading">Stahuji</string>
   <string name="zim_file_downloaded">Staženo</string>
   <string name="download_pause">Pozastavit</string>
   <string name="download_stop">Zastavit</string>
   <string name="download_paused">pozastaveno</string>
+  <string name="no_downloads_here">Žádná stahování</string>
   <string name="no_files_here">Zde nejsou žádné soubory</string>
   <string name="download_no_space">Nedostatečný prostor ke stažení tohoto souboru.</string>
+  <string name="space_available">Dostupné místo:</string>
   <string name="zim_simple">Jednoduché</string>
+  <string name="zim_no_pic">Žádné Obrázky</string>
+  <string name="zim_no_vid">Žádná Videa</string>
+  <string name="no_network_connection">Bez připojení k Internetu</string>
+  <string name="help_2">Co Kiwix dělá?</string>
+  <string name="help_5">Kde je obsah?</string>
+  <string name="help_6">Náš obsah se nachází na stránkách Kiwix.</string>
+  <string name="help_7">Jsou dostupné v ZIM souborech. Je jich mnoho:</string>
+  <string name="help_8">• Wikipedie je pro každý jazyk dostupná zvlášť</string>
+  <string name="help_9">• Další obsahy jako Wikileaks nebo Wikizdroje jsou také dostupné</string>
   <string name="pref_storage">Úložiště</string>
+  <string name="pref_current_folder">Stávající Adresář</string>
+  <string name="delete_zim_failed">Omlouváme se, ale nebyli jsme schopni smazat tento soubor. Měli by jste na místo toho zkustit správce souborů.</string>
   <string name="tts_pause">Pozastavit</string>
   <string name="tts_resume">Obnovit</string>
+  <string name="tts_stop">stop</string>
+  <string name="internal_storage">Interní</string>
+  <string name="external_storage">Externí</string>
   <string name="yes">Ano</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Zastavit stahování?</string>
+  <string name="confirm_stop_download_msg">Jste si jisti, že chcete zastavit toto nahrávání?</string>
+  <string name="download_change_storage">Nástroj výběru úloženého zařízení</string>
   <string name="tts_not_enabled">Výstup textu na řeč není u tohoto ZIM souboru umožněn</string>
   <string name="next">Další</string>
   <string name="previous">Předchozí</string>
   <string name="wifi_only_title">Povolit stahování obsahu přes mobilní připojení?</string>
   <string name="pref_wifi_only">Stahovat obsah pouze přes WiFi</string>
   <string name="time_day">den</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">Vlevo</string>
+  <string name="time_today">Dnes</string>
+  <string name="time_yesterday">Včera</string>
+  <string name="pref_auto_night_mode_summary">Automaticky přepínat mezi denním a nočním módem.</string>
+  <string name="pref_auto_night_mode">Automatizovaný noční mód</string>
+  <string name="external_link_popup_dialog_title">Vkládám externí odkaz</string>
+  <string name="external_link_popup_dialog_message">Když vkládáte externí odkaz. Může to vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
   <string name="your_languages">Vybrané jazyky:</string>
   <string name="other_languages">Jiné jazyky:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_items_msg">Žádné dostupné položky</string>
+  <string name="ongoing_download_channel_name">Stahování stále probíhá</string>
+  <string name="ongoing_download_channel_desc">Kategorie pro probíhající stahování zim souborů.</string>
+  <string name="crash_title">Inu...to je trapné</string>
+  <string name="crash_description">Nevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
+  <string name="crash_checkbox_language">Vaše nastavení jazyka</string>
+  <string name="crash_checkbox_zimfiles">Seznam Vašich Zim souborů</string>
+  <string name="crash_checkbox_exception">Informace o výpadku</string>
+  <string name="crash_checkbox_logs">Záznamy aplikace</string>
+  <string name="crash_checkbox_device">Informace o zařízení</string>
+  <string name="crash_button_confirm">POSLAT DETAILY</string>
+  <string name="crash_button_decline">NE DÍKY</string>
+  <string name="shortcut_disabled_message">Klávesová zkratka není dostupná</string>
+  <string name="new_tab_shortcut_label">Nový panel</string>
+  <string name="get_content_shortcut_label">Získej obsah</string>
+  <string name="fav_icon">Favicon</string>
+  <string name="articleCount">%s článků</string>
+  <string name="download_books">Stáhnout knihy</string>
+  <string name="human_kind_knowledge">Znalosti lidstva na vašem telefonu.</string>
+  <string name="welcome_to_the_family">Vítejte do rodiny</string>
+  <string name="save_books_offline">Uložit knihy offline</string>
+  <string name="download_books_message">Stáhnout knihy a číst ať jste kdekoliv.</string>
+  <string name="go_to_previous_page">Jdi na předchozí stránku</string>
+  <string name="go_to_next_page">Přejít na následující stránku</string>
+  <string name="table_of_contents">Obsah</string>
+  <string name="select_languages">Vyberte jazyky</string>
+  <string name="save_languages">Uložit jazyky</string>
+  <string name="send_feedback">Pošlete zpětnou vazbu</string>
+  <string name="expand">Rozšířit</string>
+  <string name="history">Historie</string>
+  <string name="search_history">Historie vyhledávání</string>
+  <string name="bookmarks_from_current_book">Záložky z aktuální knihy</string>
+  <string name="switch_tabs">Přepnout panely</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Zavřít všechny záložky</string>
+  <string name="running_state">Probíhá</string>
+  <string name="successful_state">Hotovo!</string>
+  <string name="paused_state">Pozastaveno</string>
+  <string name="failed_state">Selhalo: %s</string>
+  <string name="paused_wifi">Čekám na Wifi</string>
+  <string name="paused_connectivity">Čekám na připojení k síti</string>
+  <string name="paused_retry">Čekám na opakování</string>
+  <string name="paused_unknown">Neznámý</string>
+  <string name="failed_cannot_resume">Nemohu obnovit v důsledku neznáme chyby</string>
+  <string name="failed_storage_not_found">Nemohu najít uložiště</string>
+  <string name="failed_file_already_exists">Soubor již existuje</string>
+  <string name="failed_unknown_file_error">Neznámá chyba systému souborů</string>
+  <string name="failed_http_error">Chyba dat HTTP</string>
+  <string name="failed_insufficient_space">Nemáte dostatek místa na uložišti</string>
+  <string name="failed_too_many_redirects">Příliš mnoho redirektů</string>
+  <string name="failed_unhandled_http_code">Přijat neznámý HTTP kód</string>
+  <string name="failed_unknown">Neznámý</string>
+  <string name="failed_http_code">HTTP kód %s</string>
+  <string name="save">Uložit</string>
+  <string name="note">Poznámka</string>
+  <string name="wiki_article_title">Název wiki článku</string>
+  <string name="ext_storage_permission_rationale_add_note">Poznámky vyžadují přístup do uložiště</string>
+  <string name="ext_storage_write_permission_denied_add_note">Poznámky mohou/nemohou být používány bez přístupu do uložiště</string>
+  <string name="note_save_unsuccessful">Poznámka neuložena</string>
+  <string name="note_save_successful">Poznámka uložena</string>
+  <string name="note_save_error_storage_not_writable">Chyba při ukládání poznámky: nelze zapisovat na uložiště</string>
+  <string name="note_share_error_file_missing">Soubor neexistuje</string>
+  <string name="note_share_app_chooser_title">Sdílet poznámkový soubor s:</string>
+  <string name="confirmation_alert_dialog_message">Zahodit neuložené změny?</string>
+  <string name="delete_notes_confirmation_msg">Smazat všechny poznámky?</string>
+  <string name="ext_storage_permission_not_granted">Chyba: Oprávnění k úložišti nebyla přidělena</string>
+  <string name="notes_deletion_successful">Celý poznámkový adresář smazán</string>
+  <string name="notes_deletion_unsuccessful">Některé soubory nebyly vymazány</string>
+  <string name="discovery_initiated">Objevování započato</string>
+  <string name="discovery_failed">Objevování selhalo</string>
+  <string name="connection_failed">Spojení selhalo</string>
+  <string name="file_transfer_complete">Přenos souborů dokončen</string>
+  <string name="error_during_transfer">Nastala chyba v průběhu přenosu</string>
+  <string name="get_content_from_nearby_device">Získet obsah ze zařízení v blízkosti</string>
+  <string name="pref_clear_all_notes_title" fuzzy="true">Vyčistit všechny poznámky</string>
 </resources>

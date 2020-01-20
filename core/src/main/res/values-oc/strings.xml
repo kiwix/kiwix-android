@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Cedric31
+* Fitoschido
+-->
 <resources>
-  <string name="menu_zim_manager">Obténer de contengut</string>
+  <string name="menu_zim_manager" fuzzy="true">Obténer de contengut</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Acuèlh</string>
   <string name="menu_settings">Opcions</string>
@@ -14,17 +18,20 @@
   <string name="menu_read_aloud_stop">Arrestar de legir a votz nauta</string>
   <string name="save_media">Enregistrar lo mèdia</string>
   <string name="save_media_error">Una error s\'es produita al moment de la temptativa d\'enregistrar lo mèdia !</string>
-  <string name="save_media_saved">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
+  <string name="save_media_saved" fuzzy="true">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
   <string name="rescan_fs_warning">Analisi del contengut telecargable en cors, pacientatz…</string>
   <string name="search_label">Recercar</string>
   <string name="choose_file">Seleccionar un fichièr de contengut (*.zim)</string>
   <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
+  <string name="stop_hotspot_button">ARRÈST</string>
   <string name="error_file_not_found">Error : Lo fichièr ZIM seleccionat es introbable.</string>
   <string name="error_file_invalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid.</string>
   <string name="error_article_url_not_found">Error : Lo cargament de l’article (Url: %1$s) a fracassat.</string>
   <string name="pref_display_title">Afichatge</string>
+  <string name="pref_zoom_sub_title">Zoom</string>
   <string name="pref_zoom_dialog">Nivèl de zoom</string>
   <string name="pref_info_title">Informacion</string>
+  <string name="pref_info_version">Version</string>
   <string name="pref_zoom_enable">Contraròtles del zoom</string>
   <string name="pref_night_mode">Mòde nocturne</string>
   <string name="pref_night_mode_summary">Afichar los articles en colors inversadas</string>
@@ -62,12 +69,13 @@
   <string name="bookmark_removed">Favorit suprimit</string>
   <string name="pref_newtab_background_title">Dobrir un onglet novèl en rèireplan</string>
   <string name="pref_newtab_background_summary">Al moment de la dobertura d\'un onglet novèl, se dobrirà en rèireplan</string>
+  <string name="pref_extras">Extras</string>
   <string name="search_widget_text">Recercar dins Kiwix</string>
   <string name="speech_prompt_text">Parlar per recercar %s</string>
   <string name="local_zims">Aparelh</string>
   <string name="remote_zims">En linha</string>
   <string name="zim_downloads">En cors de telecargament</string>
-  <string name="zim_manager">Gestion del contengut</string>
+  <string name="zim_manager" fuzzy="true">Gestion del contengut</string>
   <string name="delete_specific_zim_toast">Fichièr suprimit</string>
   <string name="zim_file_downloading">En cors de telecargament</string>
   <string name="zim_file_downloaded">Telecargat</string>
@@ -77,6 +85,7 @@
   <string name="no_downloads_here">Pas cap de telecargament aicí</string>
   <string name="no_files_here">Pas cap de fichièr aicí</string>
   <string name="space_available">Espaci disponible :</string>
+  <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sens imatges</string>
   <string name="zim_no_vid">Pas cap de vidèo</string>
   <string name="no_network_connection">Pas cap de connexion de ret</string>
@@ -93,17 +102,8 @@
   <string name="next">Seguent</string>
   <string name="previous">Precedent</string>
   <string name="time_day">jorn</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">esquèrra</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

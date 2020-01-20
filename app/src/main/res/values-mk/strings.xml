@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Bjankuloski06
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Вашиот систем не поддржува податотеки преку 4 ГБ.</string>
+  <string name="detecting_file_system">Утврдувам дали системот може да создава податотеки од 4 ГБ</string>
+  <string name="cannot_open_file">Не можев да ја отворам податотеката\nВидете дали можете да ја најдете во јазичето „Уред“ на вашата Библиотека</string>
+</resources>

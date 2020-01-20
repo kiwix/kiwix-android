@@ -1,5 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* A Chinese Wikipedian
+* Akagisoy
+* Josephine W.
+* Liuxinyu970226
+* VulpesVulpes825
+* Yfdyh000
+* Ywang
+* Zjzengdongyang
+* 沈澄心
+-->
 <resources>
+  <string name="menu_zim_manager" fuzzy="true">获取内容</string>
   <string name="menu_help">帮助</string>
   <string name="menu_home">主页</string>
   <string name="menu_settings">首选项</string>
@@ -8,21 +20,174 @@
   <string name="menu_bookmarks">书签</string>
   <string name="menu_random_article">随机页面</string>
   <string name="menu_full_screen">全屏</string>
+  <string name="menu_exit_full_screen">退出全屏</string>
+  <string name="menu_read_aloud">朗读</string>
+  <string name="menu_read_aloud_stop">停止朗读</string>
+  <string name="save_media">保存媒体</string>
+  <string name="save_media_error">尝试保存该媒体时出错！</string>
+  <string name="save_media_saved" fuzzy="true">已将媒体作为%s保存至Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning">正在扫描可下载内容，请稍候…</string>
   <string name="search_label">搜索</string>
+  <string name="choose_file">选择一个内容文件（*.zim）</string>
+  <string name="open_in_new_tab">在新标签页打开链接?</string>
+  <string name="go_to_wifi_settings_label">转到WIFI设置</string>
+  <string name="go_to_settings_label">转到设置</string>
+  <string name="stop_hotspot_button">停止</string>
+  <string name="error_file_not_found">错误：找不到选定的ZIM文件。</string>
+  <string name="error_file_invalid">错误：选定的文件不是有效ZIM文件。</string>
+  <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
   <string name="pref_display_title">显示</string>
+  <string name="pref_zoom_sub_title">缩放</string>
+  <string name="pref_zoom_dialog">缩放级别</string>
   <string name="pref_info_title">信息</string>
+  <string name="pref_info_version">版本</string>
+  <string name="pref_zoom_enable">缩放控制</string>
+  <string name="pref_night_mode">夜间模式</string>
+  <string name="pref_night_mode_summary">以反色调显示文章</string>
+  <string name="pref_back_to_top">返回顶端</string>
+  <string name="pref_back_to_top_summary">在页底显示一个按钮以供返回顶端</string>
+  <string name="pref_hide_toolbar">当滚动时隐藏工具栏</string>
+  <string name="pref_hide_toolbar_summary">当页面向下滚动时隐藏工具栏</string>
   <string name="pref_language_title">语言</string>
+  <string name="pref_language_chooser">选择语言</string>
+  <string name="pref_credits">贡献者和授权</string>
+  <string name="pref_credits_title">制作人员</string>
+  <string name="tts_lang_not_supported">此页面的语言不被支持，或未安装合适的语言数据。条目可能不能被正确朗读。</string>
+  <string name="no_reader_application_installed">找不到用于此种文件类型的已安装应用程序</string>
+  <string name="custom_app_missing_content">您的应用程序已受损。这可能在您SD卡中移除文件时发生。您需要从Play Store中卸载并重新安装应用程序。</string>
+  <string name="go_to_play_store">前往Play Store</string>
   <string name="menu_bookmarks_list">书签</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_section_info">未找到内容标题</string>
+  <string name="request_storage">要访问离线内容，我们需要访问您的存储</string>
+  <string name="request_storage_custom">如果您看到屏幕覆盖了警告，可直接重启您的设备即可修复。</string>
+  <string name="clear_recent_and_tabs_history_dialog">您确定要删除您的搜索历史，并重置所有活跃标签么？</string>
+  <string name="delete_recent_search_item">删除此项？</string>
+  <string name="pref_clear_all_history_title">清空历史</string>
+  <string name="pref_clear_all_history_summary">清空最近搜索及标签历史</string>
+  <string name="all_history_cleared_toast">已清空所有历史</string>
+  <string name="clear_all_history_dialog_title">清空所有历史</string>
+  <string name="share">分享</string>
+  <string name="delete">删除</string>
+  <string name="delete_specific_search_toast">已移除最近搜索</string>
+  <string name="hint_contents_drawer_message">您可以向左滑动来查看此条目的内容</string>
+  <string name="got_it">明白了</string>
+  <string name="did_you_know">您知道吗？</string>
+  <string name="undo">撤销</string>
+  <string name="tab_closed">标签已关闭</string>
+  <string name="bookmark_added">书签已添加</string>
+  <string name="rate_dialog_title">请评价我们</string>
+  <string name="rate_dialog_msg_1">如果您喜欢使用</string>
+  <string name="rate_dialog_msg_2">，请花一些时间评价它。感谢您的支持！</string>
+  <string name="rate_dialog_positive">评价吧！</string>
+  <string name="rate_dialog_negative">不用了，谢谢</string>
+  <string name="rate_dialog_neutral">以后再说</string>
+  <string name="open">打开</string>
+  <string name="bookmark_removed">书签已移除</string>
+  <string name="pref_newtab_background_title">在后台打开新标签页</string>
+  <string name="pref_newtab_background_summary">在打开新标签页时，它将在后台被打开</string>
+  <string name="pref_extras">附加</string>
+  <string name="new_tab_snack_bar">条目已在新标签中打开</string>
+  <string name="search_widget_text">搜索Kiwix</string>
+  <string name="speech_prompt_text">讲话来搜索%s</string>
+  <string name="speech_not_supported">对不起！您的设备不支持语音输入</string>
+  <string name="local_zims">设备</string>
+  <string name="remote_zims">在线</string>
+  <string name="zim_downloads">正在下载..</string>
+  <string name="zim_manager">图书馆</string>
+  <string name="delete_specific_zim_toast">文件已删除</string>
+  <string name="zim_file_downloading">正在下载</string>
+  <string name="zim_file_downloaded">已下载</string>
+  <string name="download_pause">暂停</string>
+  <string name="download_stop">停止</string>
+  <string name="download_paused">已暂停</string>
+  <string name="no_downloads_here">没有下载内容</string>
+  <string name="no_files_here">没有文件</string>
+  <string name="download_no_space">缺少下载此文件所需的空间。</string>
+  <string name="space_available">可用空间：</string>
+  <string name="zim_simple">简单</string>
+  <string name="zim_no_pic">没有图片</string>
+  <string name="zim_no_vid">没有视频</string>
+  <string name="no_network_connection">没有网络连接</string>
+  <string name="help_2">Kiwix可以做什么？</string>
+  <string name="help_3">Kiwix是一个离线内容阅读器。它的功能就好像一个浏览器，但它不需要访问在线网页，而是从ZIM格式文件中读取内容。</string>
+  <string name="help_4" fuzzy="true">尽管Kiwix原本设计用于提供维基百科离线内容，但它也可以阅读其他内容。</string>
+  <string name="help_5">内容在哪里？</string>
+  <string name="help_6">我们的内容存储在Kiwix网站中。</string>
+  <string name="help_7">它们以ZIM格式的文件存在。这里是其中一些：</string>
+  <string name="help_8" fuzzy="true">\u2022维基百科分别提供每种语言版本</string>
+  <string name="help_9" fuzzy="true">\u2022同样可用于例如维基解密或维基文库等其他内容</string>
+  <string name="help_10" fuzzy="true">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
+  <string name="help_11">在应用中下载的ZIM文件被存放于外部存储中一个名为Kiwix的文件夹内。</string>
+  <string name="pref_storage">存储</string>
+  <string name="pref_current_folder">当前文件夹</string>
+  <string name="path_not_writable">不能访问要求的目录，使用默认目录。要修复这一问题，请在应用设置中重新选择要求的目录。</string>
+  <string name="delete_zim_failed">对不起，我们无法删除此文件。您应尝试改用文件管理器。</string>
+  <string name="tts_pause">暂停</string>
+  <string name="tts_resume">恢复</string>
+  <string name="tts_stop">停止</string>
+  <string name="internal_storage">内部</string>
+  <string name="external_storage">外部</string>
+  <string name="yes">是</string>
+  <string name="no">否</string>
+  <string name="confirm_stop_download_title">停止下载？</string>
+  <string name="confirm_stop_download_msg">您确定要停止此次下载么？</string>
+  <string name="download_change_storage">存储设备选择器</string>
+  <string name="tts_not_enabled">文字转换语音功能未对该ZIM文件启用</string>
+  <string name="next">下一页</string>
+  <string name="previous">上一页</string>
+  <string name="wifi_only_title">允许通过移动网络下载内容？</string>
+  <string name="wifi_only_msg">如果您选择“是”，您今后就不会再被警告了。然而，您总是可以在设置中更改它</string>
+  <string name="pref_wifi_only">只通过WiFi下载内容</string>
+  <string name="time_day">日</string>
+  <string name="time_hour">时</string>
+  <string name="time_minute">分</string>
+  <string name="time_second">秒</string>
+  <string name="time_left">左</string>
+  <string name="time_today">今日</string>
+  <string name="time_yesterday">昨天</string>
+  <string name="pref_auto_night_mode_summary">在白天和夜间模式之间自动切换。</string>
+  <string name="pref_auto_night_mode">自动化夜间模式</string>
+  <string name="pref_external_link_popup_title">访问外部链接时警告</string>
+  <string name="pref_external_link_popup_summary">对额外费用或离线时链接不可用弹出警告</string>
+  <string name="external_link_popup_dialog_title">正在进入外部链接</string>
+  <string name="external_link_popup_dialog_message">您正在输入外部链接。这可能导致额外数据转移费用，或当您离线时不能工作。您是否要继续？</string>
+  <string name="do_not_ask_anymore">不要再次询问</string>
+  <string name="your_languages">选择的语言：</string>
+  <string name="other_languages">其他语言：</string>
+  <string name="crash_title">这太尴尬了</string>
+  <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>
+  <string name="crash_checkbox_language">您的语言设置</string>
+  <string name="crash_checkbox_exception">崩溃详情</string>
+  <string name="crash_checkbox_logs">应用程序日志</string>
+  <string name="crash_checkbox_device">设备细节</string>
+  <string name="crash_button_confirm">发送详情</string>
+  <string name="crash_button_decline">不需要</string>
+  <string name="get_content_shortcut_label">获取内容</string>
+  <string name="articleCount">%s个条目</string>
+  <string name="get_started">入门</string>
+  <string name="download_books">下载书籍</string>
+  <string name="welcome_to_the_family">欢迎到来</string>
+  <string name="download_books_message">随时随地下载书籍并阅读。</string>
+  <string name="go_to_previous_page">楼上</string>
+  <string name="go_to_next_page">下一楼</string>
+  <string name="select_languages">选择的语言</string>
+  <string name="send_feedback">发送反馈</string>
+  <string name="expand">展开</string>
+  <string name="history">历史</string>
+  <string name="close_all_tabs">关闭所有标签</string>
+  <string name="running_state">进行中</string>
+  <string name="successful_state">完成</string>
+  <string name="paused_state">暂停</string>
+  <string name="paused_unknown">未知</string>
+  <string name="failed_file_already_exists">文件已经存在</string>
+  <string name="failed_unknown">未知</string>
+  <string name="save">保存</string>
+  <string name="note">请注意</string>
+  <string name="confirmation_alert_dialog_message">丢弃没保存的更改？</string>
+  <string name="delete_notes_confirmation_msg">删除所有笔记？</string>
+  <string name="nearby_devices">附近的设备</string>
+  <string name="status">状态</string>
+  <string name="pref_clear_all_notes_title">清空所有备注</string>
+  <string name="storage_permission_denied">存储权限被拒绝</string>
+  <string name="go_to_permissions">转到设置</string>
 </resources>

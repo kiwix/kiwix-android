@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* WikiPhoenix
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Ditt filsystem har inte stöd för filer över 4GB</string>
+  <string name="detecting_file_system">Upptäcker om filsystemet kan skapa filer på 4GB</string>
+</resources>

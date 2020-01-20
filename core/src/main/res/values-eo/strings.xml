@@ -1,6 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Blahma
+* Fitoschido
+* Kelson
+* KuboF
+* Mirin
+* Robin van der Vliet
+-->
 <resources>
-  <string name="menu_zim_manager">Akiri Enhavon</string>
+  <string name="kiwi">Kiwi</string>
+  <string name="menu_zim_manager">Biblioteko</string>
   <string name="menu_help">Helpo</string>
   <string name="menu_home">Hejmo</string>
   <string name="menu_settings">Agordoj</string>
@@ -12,6 +21,7 @@
   <string name="menu_exit_full_screen">Eliri plenekranan reĝimon</string>
   <string name="menu_read_aloud">Laŭtlegi</string>
   <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
+  <string name="menu_support_kiwix">Subteni Kiwix</string>
   <string name="save_media">Konservi Aŭdvidaĵon</string>
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
   <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
@@ -19,6 +29,7 @@
   <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu Dosieron de Enhavo (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
+  <string name="stop_hotspot_button">HALTI</string>
   <string name="error_file_not_found">Eraro: Ne eblis trovi la elektitan ZIM-dosieron.</string>
   <string name="error_file_invalid">Eraro: La elektita dosiero ne estas valida ZIM-dosiero.</string>
   <string name="error_article_url_not_found">Eraro: Ŝargado de la artikolo (Url: %1$s) fiaskis.</string>
@@ -52,6 +63,8 @@
   <string name="pref_clear_all_history_summary">Forviŝi ĵusajn serĉojn kaj historion de langetoj</string>
   <string name="all_history_cleared_toast">Forviŝis Ĉiun Historion</string>
   <string name="clear_all_history_dialog_title">Forviŝi Ĉiun da Historio</string>
+  <string name="share">Diskonigi</string>
+  <string name="selected_file_cab_app_chooser_title">Diskonigi ZIM-dosierojn al:</string>
   <string name="delete">Forigi</string>
   <string name="delete_specific_search_toast">Forigis lastatempajn serĉojn</string>
   <string name="hint_contents_drawer_message">Vi povas ŝovumi maldekstren por vidi la enhavon de ĉi tiu artikolo</string>
@@ -99,8 +112,8 @@
   <string name="help_5">Kie estas la enhavo?</string>
   <string name="help_6">La Kiwix-retejo gastigas nian enhavon.</string>
   <string name="help_7">Ili estas haveblaj kiel ZIM-dosieroj. Jen multe da ili:</string>
-  <string name="help_8">\u2022 Vikipedio estas havebla aparte por ĉiu lingvo</string>
-  <string name="help_9">\u2022 Alia enhavo, kiel Wikileaks aŭ Vikifontaro, estas havebla</string>
+  <string name="help_8">• Vikipedio estas havebla aparte por ĉiu lingvo</string>
+  <string name="help_9">• Alia enhavo, kiel Wikileaks aŭ Vikifontaro, estas havebla</string>
   <string name="help_10">Vi povas aŭ elŝuti vian elektitajn ZIM-dosierojn per ĉi tiu aplikaĵo, aŭ zorge elekti tiu(j)n kiu(j) vi deziras kaj elŝuti ilin per surtabla komputilo, antaŭ transigi la ZIM-dosierojn per SD-karto.</string>
   <string name="help_11">ZIM-dosieroj elŝutitaj per ĉi tiu aplikaĵo estas en la dosierujo nomita Kiwix en ekstera konservejo.</string>
   <string name="pref_storage">Konservejo</string>
@@ -124,7 +137,12 @@
   <string name="wifi_only_msg">Se vi elektas “Jes”, vi ne avertiĝos de nun. Tamen, vi povas ŝanĝi tion en Agordoj</string>
   <string name="pref_wifi_only">Elŝuti nur per vifio</string>
   <string name="time_day">tago</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">restas</string>
+  <string name="time_today">Hodiaŭ</string>
+  <string name="time_yesterday">Hieraŭ</string>
   <string name="pref_auto_night_mode_summary">Aŭtomate ŝalti tagan/noktan reĝimon</string>
   <string name="pref_auto_night_mode">Aŭtomata nokta reĝimo</string>
   <string name="pref_external_link_popup_title">Averti pri aliro al eksteraj ligiloj</string>
@@ -134,16 +152,81 @@
   <string name="do_not_ask_anymore">Ne demandu plu</string>
   <string name="your_languages">Elektitaj lingvoj:</string>
   <string name="other_languages">Aliaj Lingvoj:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_items_msg">Neniu ero havebla</string>
+  <string name="ongoing_download_channel_name">Daŭrantaj Elŝutoj</string>
+  <string name="ongoing_download_channel_desc">Kategorio pri daŭrantaj elŝutoj de ZIM-dosieroj.</string>
+  <string name="crash_title">Nu… Tio estas Hontinda</string>
+  <string name="crash_description">Ŝajne ni fiaskis.\n\nĈu vi povas helpi la korektadon de ĉi tiu problemo per sendado de la jena informo?</string>
+  <string name="crash_checkbox_language">Viaj Agordoj pri Lingvoj</string>
+  <string name="crash_checkbox_zimfiles">Listo de Viaj Zim-Dosieroj</string>
+  <string name="crash_checkbox_exception">Detaloj pri la Fiasko</string>
+  <string name="crash_checkbox_logs">Protokoloj de la Aplikaĵo</string>
+  <string name="crash_checkbox_device">Detaloj pri aparato</string>
+  <string name="crash_button_confirm">SENDI DETALOJN</string>
+  <string name="crash_button_decline">NE, DANKON</string>
+  <string name="shortcut_disabled_message">Fulmoklavo ne estas havebla</string>
+  <string name="new_tab_shortcut_label">Nova langeto</string>
+  <string name="get_content_shortcut_label">Akiri enhavon</string>
+  <string name="fav_icon">Retpaĝsimbolo</string>
+  <string name="pic">Bildo</string>
+  <string name="vid">Videaĵo</string>
+  <string name="articleCount">%s artikoloj</string>
+  <string name="get_started">Komenci</string>
+  <string name="download_books">Elŝuti librojn</string>
+  <string name="human_kind_knowledge">La sciaro de la homaro, en via telefono.</string>
+  <string name="welcome_to_the_family">Bonvenon al la familio</string>
+  <string name="save_books_offline">Konservi librojn por senkonekta uzo</string>
+  <string name="download_books_message">Elŝuti librojn kaj legi ilin ĉie ajn.</string>
+  <string name="unable_to_add_to_bookmarks">Ne povas aldoni legosignojn</string>
+  <string name="go_to_previous_page">Iri al antaŭa paĝo</string>
+  <string name="go_to_next_page">Iri al sekva paĝo</string>
+  <string name="table_of_contents">Enhavtabelo</string>
+  <string name="select_languages">Elekti lingvojn</string>
+  <string name="save_languages">Konservi lingvojn</string>
+  <string name="send_feedback">Sendi rimarkojn</string>
+  <string name="expand">Etendi</string>
+  <string name="history">Historio</string>
+  <string name="history_from_current_book">Historio el la aktuala libro</string>
+  <string name="search_history">Serĉi historion</string>
+  <string name="selected_items">%1$d elektita(j)</string>
+  <string name="bookmarks_from_current_book">Legosignoj en la aktuala libro</string>
+  <string name="search_bookmarks">Serĉi legosignojn</string>
+  <string name="switch_tabs">Ŝanĝi langetojn</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Fermi ĉiujn langetojn</string>
+  <string name="pending_state">Envicigita</string>
+  <string name="running_state">Progresante</string>
+  <string name="successful_state">Kompleta</string>
+  <string name="paused_state" fuzzy="true">Paŭzita</string>
+  <string name="failed_state">Malsukceso: %s</string>
+  <string name="paused_wifi">Atendante retan konekton</string>
+  <string name="paused_connectivity">Atendante konekton al reto</string>
+  <string name="paused_retry">Atendante reprovon</string>
+  <string name="paused_unknown">Nekonata</string>
+  <string name="failed_cannot_resume">Ne povas rekomenci pro nekonata kialo</string>
+  <string name="failed_storage_not_found">Ne povis trovi konservejon</string>
+  <string name="failed_file_already_exists">Dosiero jam ekzistas</string>
+  <string name="failed_unknown_file_error">Nekonata dosiersistema eraro</string>
+  <string name="failed_http_error">HTTP-dateneraro</string>
+  <string name="failed_insufficient_space">Spaco en konservejo ne sufiĉas</string>
+  <string name="failed_too_many_redirects">Tro da alidirektiloj</string>
+  <string name="failed_unhandled_http_code">Nekonata HTTP-kodo riceviĝis</string>
+  <string name="failed_unknown">Nekonata</string>
+  <string name="failed_http_code">HTTP-kodo %s</string>
+  <string name="save">Konservi</string>
+  <string name="note">Noto</string>
+  <string name="wiki_article_title">Titolo de Vikia Artikolo</string>
+  <string name="ext_storage_permission_rationale_add_note">Notoj postulas atingon al konservejo</string>
+  <string name="ext_storage_write_permission_denied_add_note">Notoj ne povas esti uzataj sen atingo al konservejo</string>
+  <string name="note_save_unsuccessful">Malsukcesis konservo de noto</string>
+  <string name="note_save_successful">Noto konserviĝis</string>
+  <string name="note_save_error_storage_not_writable">Eraro pri konservado de noto: Konservejo ne estas surskribebla</string>
+  <string name="note_share_error_file_missing">Notodosiero ne ekzistas</string>
+  <string name="note_share_app_chooser_title">Diskonigi noto-dosieron al:</string>
+  <string name="confirmation_alert_dialog_message">Ĉu forĵeti nekonservitajn ŝanĝojn?</string>
+  <string name="delete_notes_confirmation_msg">Ĉu forigi ĉiujn notojn?</string>
+  <string name="ext_storage_permission_not_granted">Eraro: Permeso pri konservejo mankas</string>
+  <string name="notes_deletion_successful">La tuta dosierujo da notoj foriĝis</string>
+  <string name="notes_deletion_unsuccessful">Iuj dosieroj ne foriĝis</string>
+  <string name="pref_clear_all_notes_title" fuzzy="true">Forviŝi Ĉiujn Notojn</string>
 </resources>

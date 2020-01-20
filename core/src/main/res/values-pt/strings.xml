@@ -1,6 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Athena in Wonderland
+* Fitoschido
+* Freeedusoft
+* Hamilton Abreu
+* Imperadeiro90
+* Imperadeiro98
+* Kelson
+* Macofe
+* Rukasuoribera
+* Vitorvicentevalente
+* Waldyrious
+-->
 <resources>
-  <string name="menu_zim_manager">Obter conteúdo</string>
+  <string name="menu_zim_manager" fuzzy="true">Obter conteúdo</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Início</string>
   <string name="menu_settings">Configurações</string>
@@ -9,16 +22,17 @@
   <string name="menu_bookmarks">Marcadores</string>
   <string name="menu_random_article">Artigo aleatório</string>
   <string name="menu_full_screen">Ecrã inteiro</string>
-  <string name="menu_exit_full_screen">Sair do modo de ecrã inteiro</string>
+  <string name="menu_exit_full_screen">Sair do ecrã inteiro</string>
   <string name="menu_read_aloud">Ler em voz alta</string>
   <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
   <string name="save_media">Guardar conteúdo</string>
   <string name="save_media_error">Ocorreu um erro ao tentar guardar o conteúdo!</string>
   <string name="save_media_saved">Conteúdo guardado como %s em Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">A procurar conteúdo disponível; aguarde, por favor…</string>
+  <string name="rescan_fs_warning">A procurar conteúdo descarregável; aguarde, por favor…</string>
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecionar um ficheiro de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir ligação num novo separador?</string>
+  <string name="stop_hotspot_button">PARAR</string>
   <string name="error_file_not_found">Erro: não foi possível encontrar o ficheiro ZIM selecionado.</string>
   <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: o carregamento do artigo falhou (URL: %1$s).</string>
@@ -56,7 +70,7 @@
   <string name="delete_specific_search_toast">Pesquisa recente removida</string>
   <string name="hint_contents_drawer_message">Pode passar o dedo para a esquerda para ver o conteúdo deste artigo</string>
   <string name="got_it">Entendi</string>
-  <string name="did_you_know">Sabia que …?</string>
+  <string name="did_you_know">Sabia que…?</string>
   <string name="undo">Desfazer</string>
   <string name="tab_closed">Separador fechado</string>
   <string name="bookmark_added">Marcador adicionado</string>
@@ -70,6 +84,7 @@
   <string name="bookmark_removed">Marcador removido</string>
   <string name="pref_newtab_background_title">Abrir separador novo em segundo plano</string>
   <string name="pref_newtab_background_summary">Ao abrir um separador novo, ele será aberto em segundo plano</string>
+  <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artigo aberto num novo separador</string>
   <string name="search_widget_text">Procurar no Kiwix</string>
   <string name="speech_prompt_text">Falar para pesquisar %s</string>
@@ -94,13 +109,13 @@
   <string name="no_network_connection">Nenhuma ligação de rede</string>
   <string name="help_2">O que faz o Kiwix?</string>
   <string name="help_3">O Kiwix é um leitor de conteúdo offline. Funciona tal como um navegador mas, em vez de aceder a páginas da Internet online, lê o conteúdo de um ficheiro no formato ZIM.</string>
-  <string name="help_4">Embora o Kiwix tenha sido originalmente desenhado para fornecer a Wikipédia offline, também lê outros conteúdos.</string>
+  <string name="help_4" fuzzy="true">Embora o Kiwix tenha sido originalmente desenhado para fornecer a Wikipédia offline, também lê outros conteúdos.</string>
   <string name="help_5">Onde está o conteúdo?</string>
   <string name="help_6">O nosso conteúdos estão alojados no site do Kiwix.</string>
   <string name="help_7">Estão disponíveis como ficheiros ZIM. Há muitos deles:</string>
-  <string name="help_8">\u2022 A Wikipédia está disponível em separado para cada língua</string>
-  <string name="help_9">\u2022 Também estão disponíveis outros conteúdos, tais como Wikileaks ou Wikisource</string>
-  <string name="help_10">Pode descarregar os ficheiros ZIM que selecionou dentro da aplicação ou selecionar cuidadosamente os que deseja e fazer o download a partir de um computador de secretária antes de transferi-los para o seu cartão SD.</string>
+  <string name="help_8">• A Wikipédia está disponível em separado para cada língua</string>
+  <string name="help_9">• Também estão disponíveis outros conteúdos, tais como Wikileaks ou Wikisource</string>
+  <string name="help_10" fuzzy="true">Pode descarregar os ficheiros ZIM que selecionou dentro da aplicação ou selecionar cuidadosamente os que deseja e fazer o download a partir de um computador de secretária antes de transferi-los para o seu cartão SD.</string>
   <string name="help_11">Os ficheiros ZIM descarregados dentro da aplicação estão localizados no diretório de armazenamento externo numa pasta intitulada Kiwix.</string>
   <string name="pref_storage">Armazenamento</string>
   <string name="pref_current_folder">Pasta atual</string>
@@ -120,9 +135,12 @@
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir a transferência de conteúdo pela rede móvel?</string>
-  <string name="wifi_only_msg">Se escolheu “Sim”, não será avisado no futuro. No entanto, pode sempre alterar isto nas Configurações</string>
+  <string name="wifi_only_msg">Se escolher \"Sim\", não será avisado no futuro. No entanto, pode sempre alterar isto nas Configurações</string>
   <string name="pref_wifi_only">Descarregar conteúdo apenas por WiFi</string>
   <string name="time_day">dia</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">esquerda</string>
   <string name="pref_auto_night_mode_summary">Alternar automaticamente entre o modo diurno e noturno.</string>
   <string name="pref_auto_night_mode">Modo noturno automático</string>
@@ -133,16 +151,6 @@
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>
   <string name="other_languages">Outras línguas:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="tag_short_text">Texto breve</string>
+  <string name="storage_permission_denied">Permissão de armazenamento negada</string>
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Eduardo Addad de Oliveira
+-->
+<resources>
+  <string name="retry">Atualizar</string>
+  <string name="download">Baixar</string>
+  <string name="invalid_installation">Instalação inválida. Faça o download do Zim.\n  Verifique se o Wi-Fi está ativado e você tem armazenamento suficiente</string>
+  <string name="complete">Completo</string>
+</resources>

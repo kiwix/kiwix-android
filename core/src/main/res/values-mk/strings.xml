@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Bjankuloski06
+-->
 <resources>
-  <string name="menu_zim_manager">Дај содржини</string>
+  <string name="kiwi">Киви</string>
+  <string name="menu_zim_manager">Библиотека</string>
   <string name="menu_help">Помош</string>
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Поставки</string>
@@ -12,6 +16,8 @@
   <string name="menu_exit_full_screen">Излези од цел екран</string>
   <string name="menu_read_aloud">Прочитај на глас</string>
   <string name="menu_read_aloud_stop">Запри читање на глас</string>
+  <string name="menu_support_kiwix">Поддржете го Кивикс</string>
+  <string name="menu_host_books">Книги на домаќинот</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
   <string name="save_media_saved">Податотеката е зачувана како %s во Android/media/org.kiwix…/</string>
@@ -19,6 +25,29 @@
   <string name="search_label">Пребарај</string>
   <string name="choose_file">Изберете содржинска податотека (*.zim)</string>
   <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
+  <string name="hotspot_service_channel_name">Известувач за пристапната точка</string>
+  <string name="hotspot_failed_title">Не успеав да ја покренам пристапната точка</string>
+  <string name="hotspot_failed_message">Се чини дека точката за безжичен пристап е веќе вклучена. Исклучете ја за да продолжите.</string>
+  <string name="go_to_wifi_settings_label">Оди во поставките за безжичен пристап</string>
+  <string name="go_to_settings_label">Оди во поставките</string>
+  <string name="hotspot_running">Активна пристапна точка</string>
+  <string name="stop_hotspot_button">ЗАПРИ</string>
+  <string name="no_books_selected_toast_message">Најпрвин одберете книги</string>
+  <string name="server_failed_message">Не можев да го покренам опслужувачот. Вклучете ја пристапната точка</string>
+  <string name="server_failed_toast_message">Не можев да го покренам опслужувачот.</string>
+  <string name="server_started__successfully_toast_message">Опслужувачот е успешно покренат.</string>
+  <string name="hotspot_turned_on">Пристапната точка е вклучена</string>
+  <string name="hotspot_details_message">Следат поединости за вашата месна точка на пристап. \nSSID : %1$s \nЈавка : %2$s</string>
+  <string name="server_textview_default_message">Изберете ги податотеките што сакате да ги вдомите на опслужувачот</string>
+  <string name="progress_dialog_starting_server">Го покренувам опслужувачот</string>
+  <string name="hotspot_dialog_title">Вклучете ја вашата точка на безжичнен пристап</string>
+  <string name="hotspot_dialog_message">За да работи оваа можност, најпрвин ќе треба рачно да ја вклучите точката за безжичен пристап.</string>
+  <string name="hotspot_dialog_neutral_button">ДА, ЈА ВКЛУЧИВ</string>
+  <string name="hotspot_channel_description">Известувања за состојбата на вашата пристапна точка/опслужувач.</string>
+  <string name="hotspot_notification_content_title">Пристапна точка на Кивикс</string>
+  <string name="start_server_label">Покрени го опслужувачот</string>
+  <string name="stop_server_label">Запри го опслужувачот</string>
+  <string name="server_started_message">Внесете ја оваа IP-адреса во прелистувачот за да пристапите на опслужувачот %s</string>
   <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека.</string>
   <string name="error_file_invalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
   <string name="error_article_url_not_found">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
@@ -52,6 +81,8 @@
   <string name="pref_clear_all_history_summary">Исчисти скорешни пребарувања и јазичиња</string>
   <string name="all_history_cleared_toast">Сета историја е исчистена</string>
   <string name="clear_all_history_dialog_title">Исчисти ја сета историја</string>
+  <string name="share">Сподели</string>
+  <string name="selected_file_cab_app_chooser_title">Сподели ZIM-податотеки со:</string>
   <string name="delete">Избриши</string>
   <string name="delete_specific_search_toast">Скорешните пребарувања се отстранети</string>
   <string name="hint_contents_drawer_message">Можете да повлечете налево за да ја погледате содржината на статијава</string>
@@ -72,13 +103,14 @@
   <string name="pref_newtab_background_summary">Кога отворате ново јазиче, ќе се отвори во позадината</string>
   <string name="pref_extras">Дополнително</string>
   <string name="new_tab_snack_bar">Статијата е отворена во ново јазиче</string>
-  <string name="search_widget_text">Пребарај по Kiwix</string>
+  <string name="search_widget_text">Пребарај по Кивикс</string>
   <string name="speech_prompt_text">Гласовно пребарајте го %s</string>
   <string name="speech_not_supported">Жалиме! Вашиот уред не поддржува гласовно внесување</string>
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
   <string name="zim_downloads">Преземам</string>
   <string name="zim_manager">Библиотека</string>
+  <string name="delete_zim_body">Да го избришам %s?</string>
   <string name="delete_specific_zim_toast">Податотеката е избришана</string>
   <string name="zim_file_downloading">Преземам</string>
   <string name="zim_file_downloaded">Преземено</string>
@@ -93,14 +125,14 @@
   <string name="zim_no_pic">Без слики</string>
   <string name="zim_no_vid">Нема видеа</string>
   <string name="no_network_connection">Немате мрежна врска</string>
-  <string name="help_2">Што прави Kiwix?</string>
-  <string name="help_3">Kiwix е вонмрежен читач на содржини. Работи како прелистувач но чита содржини од податотека во ZIM-формат место од семрежјето.</string>
-  <string name="help_4">Иако Kiwix е првично предвиден како вонмрежен читач на Википедија, но сега чита и други содржини.</string>
+  <string name="help_2">Што прави Кивикс?</string>
+  <string name="help_3">Кивикс е вонмрежен читач на содржини. Работи како прелистувач но чита содржини од податотека во ZIM-формат место од семрежјето.</string>
+  <string name="help_4">Иако Кивикс е првично предвиден како вонмрежен читач на Википедија, но сега чита и други содржини.</string>
   <string name="help_5">Каде се содржините?</string>
-  <string name="help_6">Нашите содржини се вдомени на мрежното место Kiwix.</string>
+  <string name="help_6">Нашите содржини се вдомени на мрежното место Кивикс.</string>
   <string name="help_7">Достапни се како ZIM-податотеки. Ги има многу:</string>
-  <string name="help_8">\u2022 Википедија е достапна одделно за секој јазик</string>
-  <string name="help_9">\u2022 Достапни се и други содржини Викиликс и Викиизвор</string>
+  <string name="help_8">• Википедија е достапна одделно за секој јазик</string>
+  <string name="help_9">• Достапни се и други содржини Викиликс и Викиизвор</string>
   <string name="help_10">Можете да ги преземете избраните ZIM-податотеки во прилогот, или пак внимателно да ги изберете посакуваните и да ги преземете од столен сметач, а потоа да ги префрлите ZIM-податотеките на SD-картичка.</string>
   <string name="help_11">Преземањето на ZIM-податотеките во прилогот се сместени во надворешниот склад во папка наречена Kiwix.</string>
   <string name="pref_storage">Склад</string>
@@ -122,12 +154,14 @@
   <string name="previous">Претходно</string>
   <string name="wifi_only_title">Дозволувате преземање на содржини преку мобилна мрежа?</string>
   <string name="wifi_only_msg">Ако изберете „Да“, во иднина нема да бидете предупредувани. Но можете да го смените ова во Поставките</string>
-  <string name="pref_wifi_only">Презеај содржини само преку WiFi</string>
+  <string name="pref_wifi_only">Преземај содржини само преку безжична врска</string>
   <string name="time_day">ден</string>
   <string name="time_hour">ч</string>
   <string name="time_minute">мин</string>
   <string name="time_second">с</string>
   <string name="time_left">лево</string>
+  <string name="time_today">Денес</string>
+  <string name="time_yesterday">Вчера</string>
   <string name="pref_auto_night_mode_summary">Автоматски префрлај меѓу дневен и ноќен режим.</string>
   <string name="pref_auto_night_mode">Автоматски ноќен режим</string>
   <string name="pref_external_link_popup_title">Предупреди ме кога се внесуваат надворешни врски</string>
@@ -137,16 +171,116 @@
   <string name="do_not_ask_anymore">Повеќе не прашувај</string>
   <string name="your_languages">Избрани јазици:</string>
   <string name="other_languages">Други јазици:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_items_msg">Нема ставки</string>
+  <string name="ongoing_download_channel_name">Тековни преземања</string>
+  <string name="ongoing_download_channel_desc">Категорија за тековни преземања на ZIM-податотеки.</string>
+  <string name="crash_title">Ова е незгодно</string>
+  <string name="crash_description">Се чини дека се урнавме.\n\nБи сакале ли да ни ги испратите следниве информации за да го поправиме проблемот?</string>
+  <string name="crash_checkbox_language">Ваши јазични поставки</string>
+  <string name="crash_checkbox_zimfiles">Список на ваши ZIM-податотеки</string>
+  <string name="crash_checkbox_exception">Поединости за уривањето</string>
+  <string name="crash_checkbox_logs">Дневници на прилози</string>
+  <string name="crash_checkbox_device">Поединости за уредот</string>
+  <string name="crash_button_confirm">ИСПРАТИ ПОЕДИНОСТИ</string>
+  <string name="crash_button_decline">НЕ, БЛАГОДАРАМ</string>
+  <string name="shortcut_disabled_message">Кратенката е недостапна</string>
+  <string name="new_tab_shortcut_label">Ново јазиче</string>
+  <string name="get_content_shortcut_label">Земи содржини</string>
+  <string name="fav_icon">Иконка</string>
+  <string name="pic">Слика</string>
+  <string name="vid">Видео</string>
+  <string name="articleCount">%s статии</string>
+  <string name="get_started">Започни</string>
+  <string name="download_books">Преземи книги</string>
+  <string name="human_kind_knowledge">Севкупното знаење на човештвото, на вашиот телефон.</string>
+  <string name="welcome_to_the_family">Добре дојдовте во семејството</string>
+  <string name="save_books_offline">Зачувај книги вонмрежно</string>
+  <string name="download_books_message">Преземајте книги и читајте ги каде и да сте.</string>
+  <string name="unable_to_add_to_bookmarks">Не можам да додадам обележувачи</string>
+  <string name="go_to_previous_page">Оди на претходната страница</string>
+  <string name="go_to_next_page">Оди на следната страница</string>
+  <string name="table_of_contents">Содржина</string>
+  <string name="select_languages">Одберете јазици</string>
+  <string name="save_languages">Зачувај јазици</string>
+  <string name="send_feedback">Испрати мислење</string>
+  <string name="expand">Прикажи</string>
+  <string name="history">Историја</string>
+  <string name="history_from_current_book">Историја од тековната книга</string>
+  <string name="search_history">Историја на пребарувањето</string>
+  <string name="selected_items">Избрани %1$d</string>
+  <string name="bookmarks_from_current_book">Обележувачи од тековна книга</string>
+  <string name="search_bookmarks">Пребарај по бележниците</string>
+  <string name="switch_tabs">Смени јазичиња</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Затвори ги сите јазичиња</string>
+  <string name="pending_state">Во исчекување</string>
+  <string name="running_state">Во тек</string>
+  <string name="successful_state">Готово</string>
+  <string name="paused_state">Паузирано</string>
+  <string name="failed_state">Не успеа: %s</string>
+  <string name="paused_wifi">Чекам на безжичен пристап</string>
+  <string name="paused_connectivity">Чекам да се поврзам со мрежа</string>
+  <string name="paused_retry">Чекам за повторен обид</string>
+  <string name="paused_unknown">Непознато</string>
+  <string name="failed_cannot_resume">Не можам да продолжам од непозната причина</string>
+  <string name="failed_storage_not_found">Не можев да го најдам складот</string>
+  <string name="failed_file_already_exists">Податотеката веќе постои</string>
+  <string name="failed_unknown_file_error">Непозната грешка во податотечниот систем</string>
+  <string name="failed_http_error">Грешка во HTTP-податоците</string>
+  <string name="failed_insufficient_space">Нема доволно простор во складот</string>
+  <string name="failed_too_many_redirects">Премногу пренасочувања</string>
+  <string name="failed_unhandled_http_code">Добиен непознат HTTP-код</string>
+  <string name="failed_unknown">Непознато</string>
+  <string name="failed_http_code">HTTP-код %s</string>
+  <string name="save">Зачувај</string>
+  <string name="note">Белешка</string>
+  <string name="wiki_article_title">Наслов на викистатијата</string>
+  <string name="ext_storage_permission_rationale_add_note">Белешките бараат пристап до складот</string>
+  <string name="ext_storage_write_permission_denied_add_note">Не можете да користите белешки без пристап до складот</string>
+  <string name="note_save_unsuccessful">Не успеав да ја зачувам белешката</string>
+  <string name="note_save_successful">Белешката е зачувана</string>
+  <string name="note_save_error_storage_not_writable">Напомена пред грешка: Не можам да запишам во складот</string>
+  <string name="note_share_error_file_missing">Податотеката со белешката не постои</string>
+  <string name="note_share_app_chooser_title">Сподели ја белешката со:</string>
+  <string name="confirmation_alert_dialog_message">Да ги отфрлам незачуваните промени?</string>
+  <string name="delete_notes_confirmation_msg">Да ги избришам сите белешки?</string>
+  <string name="ext_storage_permission_not_granted">Грешка: Немате дадено дозвола за складирање</string>
+  <string name="notes_deletion_successful">Избришана е цела папка со белешки</string>
+  <string name="notes_deletion_unsuccessful">Некои податотеки не беа избришани</string>
+  <string name="books_count">%d книга/ги</string>
+  <string name="discovery_initiated">Откривањето започна</string>
+  <string name="discovery_failed">Откривањето не успеа</string>
+  <string name="severe_loss_error">Голема грешка! Исклучете го и пак вклучете го поврзувањето на уреди со безжичен пристап</string>
+  <string name="connection_failed">Врската е прекината</string>
+  <string name="permission_rationale_location">Андроид бара дозвола за местоположба за да му даде на прилогот да пронаоѓа уреди за сврзување</string>
+  <string name="permission_refused_location">Не можам да пронаоѓам уреди за сврзување без дозвола за местоположба</string>
+  <string name="permission_refused_storage">Не можам да дојдам до ZIM-податотеките без дозвола за складирање</string>
+  <string name="request_enable_location">Овозможете местоположба за да можам да пронаоѓам уреди за сврзување</string>
+  <string name="discovery_needs_location">Не можам да откривам уреди за сврзување без да е овозможена местоположбата</string>
+  <string name="request_enable_wifi">Овозможете поврзување на уреди преку безжичен пристап во системските поставки</string>
+  <string name="discovery_needs_wifi">Не можам да откривам уреди за поврзување без да е вклучена безжичната врска</string>
+  <string name="transfer_to">Да ги пренесам податотеките во %s?</string>
+  <string name="device_not_cooperating">Избраниот уред не соработува во преносот</string>
+  <string name="file_transfer_complete">Податотечниот пренос е завршен</string>
+  <string name="error_during_transfer">Се јави грешка при преносот</string>
+  <string name="error_transferring">Грешка при пренесување на податотеката %s</string>
+  <string name="get_content_from_nearby_device">Земи содржини од уред во близина</string>
+  <string name="search_for_peers">Пребарај уреди за сврзување</string>
+  <string name="your_device">Вашиот уред:</string>
+  <string name="nearby_devices">УРЕДИ ВО БЛИЗИНА</string>
+  <string name="no_devices_found">Не пронајдов уред. Допрете на пребарувањето за да пробате повторно.</string>
+  <string name="files_for_transfer">ПОДАТОТЕКИ ЗА ПРЕНЕСУВАЊЕ</string>
+  <string name="preparing_files">Ги подготвувам податотеките за пренос...</string>
+  <string name="performing_handshake">Поврзувам...</string>
+  <string name="local_zim_sharing">Место споделување на ZIM</string>
+  <string name="status">Состојба</string>
+  <string name="pref_clear_all_notes_summary">Ги чисти сите белешки на сите статии</string>
+  <string name="pref_clear_all_notes_title">Исчисти ги сите белешки</string>
+  <string name="tag_pic">Слика</string>
+  <string name="tag_vid">Видео</string>
+  <string name="tag_text_only">Само текст</string>
+  <string name="tag_short_text">Краток текст</string>
+  <string name="storage_permission_denied">Дозволата за складирање е одбиена</string>
+  <string name="grant_read_storage_permission">Прилогов бара пристап до складот за да работи. Дајте му ја таа дозвола во поставките</string>
+  <string name="go_to_permissions">Оди во поставките</string>
 </resources>

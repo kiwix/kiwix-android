@@ -1,5 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Anzeljg
+* Dbc334
+* Eleassar
+* Fitoschido
+* HairyFotr
+* Macofe
+* P̲̳l̳eo
+-->
 <resources>
+  <string name="kiwi">Kivi</string>
+  <string name="menu_zim_manager">Knjižnica</string>
   <string name="menu_help">Pomoč</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
@@ -11,11 +22,15 @@
   <string name="menu_exit_full_screen">Izhod iz celozaslonskega načina</string>
   <string name="menu_read_aloud">Beri naglas</string>
   <string name="menu_read_aloud_stop">Nehaj z branjem na glas</string>
+  <string name="menu_support_kiwix">Kiwix Pomoč</string>
   <string name="save_media">Shrani predstavnost kot …</string>
+  <string name="save_media_error">Pri poskusu shranjevanja medija je prišlo do napake!</string>
+  <string name="save_media_saved">Shrani medij kot %s na Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte …</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
+  <string name="stop_hotspot_button">USTAVI</string>
   <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
   <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
   <string name="error_article_url_not_found">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
@@ -29,16 +44,31 @@
   <string name="pref_night_mode_summary">Prikaz člankov z obrnjenimi barvami</string>
   <string name="pref_back_to_top">Nazaj na vrh</string>
   <string name="pref_back_to_top_summary">Na dnu strani prikaži gumb za pomik na vrh strani</string>
+  <string name="pref_hide_toolbar">Naj bo orodna vrstica vidna</string>
+  <string name="pref_hide_toolbar_summary">Med brskanjem po vsebini preprečuje, da se orodna vrstica pomika po pogledu</string>
   <string name="pref_language_title">Jezik</string>
   <string name="pref_language_chooser">Izberite jezik</string>
   <string name="pref_credits">Sodelujoči in licence</string>
   <string name="pref_credits_title">Zasluge</string>
   <string name="tts_lang_not_supported">Jezik na tej strani ni podprt ali pa ustrezni jezikovni podatki niso bili nameščeni. Članek morda ne bo pravilno prebran.</string>
+  <string name="no_reader_application_installed">Za to vrsto datoteke ni bilo mogoče najti nameščene aplikacije</string>
+  <string name="custom_app_missing_content">Vaša aplikacija je poškodovana.\nTo se lahko zgodi, ko odstranite datoteke na kartici SD.\nOdstraniti morate aplikacijo in jo nato znova namestiti iz trgovine Play.</string>
+  <string name="go_to_play_store">Pojdi v trgovino Play</string>
   <string name="menu_bookmarks_list">Zaznamki</string>
+  <string name="no_section_info">Ni najdene vsebine glave</string>
+  <string name="request_storage">Za dostop do vsebine brez povezave potrebujemo dostop do vašega pomnilnika</string>
+  <string name="request_storage_custom">Če vidite opozorilo o prekrivanju zaslona, preprosto znova zaženite napravo, da jo popravite.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Ali ste prepričani, da želite izbrisati vašo zgodovino iskanja in ponastaviti vse aktivne zavihke?</string>
   <string name="delete_recent_search_item">Izbriši ta element?</string>
   <string name="pref_clear_all_history_title">Izbriši zgodovino</string>
+  <string name="pref_clear_all_history_summary">Počisti zgodovino nedavnih iskanj in zavihkov</string>
+  <string name="all_history_cleared_toast">Vsa zgodovina izbrisana</string>
+  <string name="clear_all_history_dialog_title">Počisti vso zgodovino</string>
+  <string name="share">Deli</string>
+  <string name="selected_file_cab_app_chooser_title">Deli ZIM datoteke z:</string>
   <string name="delete">Odstrani</string>
   <string name="delete_specific_search_toast">Nedavno iskanje je bilo odstranjeno</string>
+  <string name="hint_contents_drawer_message">Za ogled vsebine tega članka lahko povlecite v levo</string>
   <string name="got_it">Razumem</string>
   <string name="did_you_know">Ali ste vedeli?</string>
   <string name="undo">Razveljavi</string>
@@ -52,7 +82,13 @@
   <string name="rate_dialog_neutral">Kasneje</string>
   <string name="open">Odpri</string>
   <string name="bookmark_removed">Zaznamek je odstranjen</string>
+  <string name="pref_newtab_background_title">Odprite nov zavihek v ozadju</string>
+  <string name="pref_newtab_background_summary">Ko odprete nov zavihek, se odpre v ozadju</string>
+  <string name="pref_extras">Pripomočki</string>
+  <string name="new_tab_snack_bar">Članek odprt v novem zavihku</string>
   <string name="search_widget_text">Iskanje Kiwix</string>
+  <string name="speech_prompt_text">Govori za iskanje %s</string>
+  <string name="speech_not_supported">Žal vaša naprava ne podpira vnosa govora</string>
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
   <string name="zim_downloads">Prenos</string>
@@ -62,36 +98,136 @@
   <string name="zim_file_downloaded">Preneseno</string>
   <string name="download_pause">Premor</string>
   <string name="download_stop">Ustavi</string>
+  <string name="download_paused">premor</string>
+  <string name="no_downloads_here">Ni prenosov tukaj</string>
+  <string name="no_files_here">Ni datotek tukaj</string>
+  <string name="download_no_space">Premalo prostora za prenos te datoteke.</string>
   <string name="space_available">Prostor na voljo:</string>
   <string name="zim_simple">Enostavno</string>
   <string name="zim_no_pic">Ni slik</string>
   <string name="zim_no_vid">Ni videoposnetkov</string>
+  <string name="no_network_connection">Ni omrežne povezave</string>
+  <string name="help_2">Kaj počne Kivi?</string>
+  <string name="help_3">Kivi je bralnik vsebine brez povezave. Deluje podobno kot brskalnik, vendar namesto da dostopa do spletnih strani, bere vsebino iz datoteke v formatu ZIM.</string>
+  <string name="help_4">Medtem je Kivi bil prvotno zasnovan za zagotavljanje Wikipedije brez povezave, prebere pa tudi druge vsebine.</string>
+  <string name="help_5">Kje je vsebina?</string>
+  <string name="help_6">Naša vsebina gostuje na spletni strani Kivi.</string>
+  <string name="help_7">Na voljo so kot datoteke ZIM. Veliko jih je:</string>
+  <string name="help_8">• Wikipedija je na voljo za vsak jezik posebej</string>
+  <string name="help_9">• Na voljo so tudi druge vsebine, npr. WikiLeaks ali WikiSource</string>
+  <string name="help_10">Pred prenosom datotek ZIM na SD kartico lahko v aplikaciji naložite izbrane datoteke ZIM ali pazljivo izberete želene in jih prenesete s namiznega računalnika.</string>
+  <string name="help_11">ZIM datoteke za prenos v aplikaciji se nahajajo v imeniku zunanjih pomnilnikov v mapi z imenom Kiwix</string>
   <string name="pref_storage">Shranjevanje</string>
   <string name="pref_current_folder">Trenutna mapa</string>
+  <string name="path_not_writable">Do želenega imenika ne morete dostopati privzeto. Če želite to popraviti, znova izberite želeni imenik v nastavitvah aplikacije.</string>
+  <string name="delete_zim_failed">Žal te datoteke ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
   <string name="tts_pause">premor</string>
   <string name="tts_resume">nadaljuj</string>
   <string name="tts_stop">ustavi</string>
   <string name="internal_storage">Interni</string>
+  <string name="external_storage">Zunanji</string>
   <string name="yes">Da</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Ustavi prenos?</string>
+  <string name="confirm_stop_download_msg">Ali ste prepričani, da želite ustaviti ta prenos?</string>
+  <string name="download_change_storage">Izbirnik naprave za shranjevanje</string>
+  <string name="tts_not_enabled">Tvorjenje govora iz besedil za to ZIM datoteko ni omogočeno</string>
   <string name="next">Naprej</string>
   <string name="previous">Predhodni</string>
   <string name="wifi_only_title">Omogoči prenos vsebin prek mobilnega omrežja?</string>
+  <string name="wifi_only_msg">Če izberete \"Da\", vas v prihodnje ne bomo opozarjali. Vendar lahko to vedno spremenite v nastavitvah</string>
   <string name="pref_wifi_only">Prenašanje vsebine samo prek WiFi</string>
   <string name="time_day">dan</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">levo</string>
+  <string name="time_today">Danes</string>
+  <string name="time_yesterday">Včeraj</string>
+  <string name="pref_auto_night_mode_summary">Samodejno preklopi med dnevnim in nočnim načinom.</string>
+  <string name="pref_auto_night_mode">Samodejni nočni način</string>
+  <string name="pref_external_link_popup_title">Opozori pri vnosu zunanjih povezav</string>
+  <string name="pref_external_link_popup_summary">Prikaže pojavno okno, da opozori na dodatne stroške ali da ne delujejo povezave v načinu brez povezave.</string>
+  <string name="external_link_popup_dialog_title">Vnesi zunanjo povezavo</string>
+  <string name="external_link_popup_dialog_message">Vnašate zunanjo povezavo. To bi lahko povzročilo dodatne stroške za prenos podatkov ali preprosto ne bo delovalo, ko ste brez povezave. Ali želite nadaljevati?</string>
+  <string name="do_not_ask_anymore">Ne sprašuj več</string>
   <string name="your_languages">Izbrani jeziki:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="other_languages">Drugi jeziki:</string>
+  <string name="no_items_msg">Ni na voljo nobenih elementov</string>
+  <string name="ongoing_download_channel_name">Tekoči prenosi</string>
+  <string name="ongoing_download_channel_desc">Kategorija za tekoče prenose datotek zim.</string>
+  <string name="crash_title">No... To je neprijetno</string>
+  <string name="crash_description">Izgleda, da smo se zrušili.</string>
+  <string name="crash_checkbox_language">Jezikovne nastavitve</string>
+  <string name="crash_checkbox_zimfiles">Seznam tvojih Zim datotek</string>
+  <string name="crash_checkbox_exception">Podrobnosti o sesutju</string>
+  <string name="crash_checkbox_logs">Dnevniki aplikacije</string>
+  <string name="crash_checkbox_device">Podrobnosti o napravi</string>
+  <string name="crash_button_confirm">Pošlji podatke</string>
+  <string name="crash_button_decline">Ne hvala</string>
+  <string name="shortcut_disabled_message">Bližnjica ni na voljo</string>
+  <string name="new_tab_shortcut_label">Nov zavihek</string>
+  <string name="get_content_shortcut_label">Pridobi vsebino</string>
+  <string name="fav_icon">Zaznamka</string>
+  <string name="pic">Slika</string>
+  <string name="vid">Vid</string>
+  <string name="articleCount">%s člankov</string>
+  <string name="get_started">Prični</string>
+  <string name="download_books">Prenesi knjige</string>
+  <string name="human_kind_knowledge">Znanje človeške vrste, na vašem telefonu.</string>
+  <string name="welcome_to_the_family">Dobrodošli v družini</string>
+  <string name="save_books_offline">Shrani knjige brez povezave</string>
+  <string name="download_books_message">Prenesi knjige in preberi, kjer koli že si.</string>
+  <string name="unable_to_add_to_bookmarks">Zaznamkov ni mogoče dodati</string>
+  <string name="go_to_previous_page">Pojdi na prejšnjo stran</string>
+  <string name="go_to_next_page">Pojdi na naslednjo stran</string>
+  <string name="table_of_contents">Kazalo vsebine</string>
+  <string name="select_languages">Izberi jezike</string>
+  <string name="save_languages">Shrani jezike</string>
+  <string name="send_feedback">Sporoči svoje mnenje</string>
+  <string name="expand">Razširi</string>
+  <string name="history">Zgodovina</string>
+  <string name="history_from_current_book">Zgodovina iz trenutne knjige</string>
+  <string name="search_history">Zgodovina iskanja</string>
+  <string name="selected_items">%1$d izbrano</string>
+  <string name="bookmarks_from_current_book">Zaznamki iz trenutne knjige</string>
+  <string name="search_bookmarks">Iskanje zaznamkov</string>
+  <string name="switch_tabs">Preklopi zavihke</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Zapri vse zavihke</string>
+  <string name="pending_state">V delu</string>
+  <string name="running_state">V teku</string>
+  <string name="successful_state">Končano</string>
+  <string name="paused_state" fuzzy="true">Premor</string>
+  <string name="failed_state">Neuspešno: %s</string>
+  <string name="paused_wifi">Čakanje na Wifi</string>
+  <string name="paused_connectivity">Čakanje na povezavo z omrežjem</string>
+  <string name="paused_retry">Čakam na ponovni poskus</string>
+  <string name="paused_unknown">Neznano</string>
+  <string name="failed_cannot_resume">Ni mogoče nadaljevati iz neznanega razloga</string>
+  <string name="failed_storage_not_found">Pomnilnik ni bil najden</string>
+  <string name="failed_file_already_exists">Datoteka že obstaja</string>
+  <string name="failed_unknown_file_error">Neznana napaka datotečnega sistema</string>
+  <string name="failed_http_error">Napaka podatkov HTTP</string>
+  <string name="failed_insufficient_space">Ni dovolj prostora za shranjevanje</string>
+  <string name="failed_too_many_redirects">Preveč preusmeritev</string>
+  <string name="failed_unhandled_http_code">Prejeta je neznana koda HTTP</string>
+  <string name="failed_unknown">Neznano</string>
+  <string name="failed_http_code">HTTP koda %s</string>
+  <string name="save">Shrani</string>
+  <string name="note">Beležka</string>
+  <string name="wiki_article_title">Naslov članka Wiki</string>
+  <string name="ext_storage_permission_rationale_add_note">Dostop za shranjevanje se zahteva za Beležke</string>
+  <string name="ext_storage_write_permission_denied_add_note">Beležke ni mogoče uporabiti brez dostopa do prostora za shranjevanje</string>
+  <string name="note_save_unsuccessful">Shranjevanje beležke ni uspelo</string>
+  <string name="note_save_successful">Beležka je shranjena</string>
+  <string name="note_save_error_storage_not_writable">Napaka pri shranjevanju beležke: Na pomnilnik ni mogoče pisati</string>
+  <string name="note_share_error_file_missing">Datoteka beležke ne obstaja</string>
+  <string name="note_share_app_chooser_title">Deli datoteko beležke z:</string>
+  <string name="confirmation_alert_dialog_message">Zavrzi neshranjene spremembe?</string>
+  <string name="delete_notes_confirmation_msg">Zbrišem vse beležke?</string>
+  <string name="ext_storage_permission_not_granted">Napaka: Dovoljenja za shranjevanje niso odobrena</string>
+  <string name="notes_deletion_successful">Izbrisana je celotna mapa z beležkami</string>
+  <string name="notes_deletion_unsuccessful">Nekatere datoteke niso izbrisane</string>
+  <string name="pref_clear_all_notes_title" fuzzy="true">Počisti vse beležke</string>
 </resources>

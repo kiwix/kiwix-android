@@ -1,6 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Fitoschido
+* Geraki
+* Glavkos
+* Nikosgranturismogt
+-->
 <resources>
-  <string name="menu_zim_manager">Λάβετε περιεχόμενο</string>
+  <string name="menu_zim_manager" fuzzy="true">Λάβετε περιεχόμενο</string>
   <string name="menu_help">Βοήθεια</string>
   <string name="menu_home">Αρχική</string>
   <string name="menu_settings">Ρυθμίσεις</string>
@@ -19,6 +25,7 @@
   <string name="search_label">Αναζήτηση</string>
   <string name="choose_file">Επιλογή ZIM Content File (*.zim)</string>
   <string name="open_in_new_tab">Άνοιγμα συνδέσμου σε νέα καρτέλα;</string>
+  <string name="stop_hotspot_button">ΔΙΑΚΟΠΉ</string>
   <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί.</string>
   <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
   <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
@@ -89,8 +96,8 @@
   <string name="help_5">Που είναι το περιεχόμενο;</string>
   <string name="help_6">Το περιεχόμενό μας φιλοξενείται στην ιστοσελίδα του Kiwix.</string>
   <string name="help_7">Είναι διαθέσιμα ως αρχεία ZIM. Υπάρχουν πολλά από αυτά:</string>
-  <string name="help_8">\u2022 Η Βικιπαίδεια είναι διαθέσιμη ξεχωριστά για κάθε γλώσσα</string>
-  <string name="help_9">\u2022 Άλλα περιεχόμενα όπως το Wikileaks ή η Βικιθήκη είναι επίσης διαθέσιμα</string>
+  <string name="help_8">• Η Βικιπαίδεια είναι διαθέσιμη ξεχωριστά για κάθε γλώσσα</string>
+  <string name="help_9">• Άλλα περιεχόμενα όπως το Wikileaks ή η Βικιθήκη είναι επίσης διαθέσιμα</string>
   <string name="pref_storage">Αποθηκευτικός χώρος</string>
   <string name="pref_current_folder">Τρέχων φάκελος</string>
   <string name="delete_zim_failed">Λυπούμαστε, δεν μπορέσαμε να διαγράψουμε αυτό το αρχείο. Αντί γι\'αυτού θα έπρεπε να χρησιμοποιήσετε ένα διαχειριστή αρχείων.</string>
@@ -123,16 +130,4 @@
   <string name="do_not_ask_anymore">Μη με ρωτήσεις άλλο</string>
   <string name="your_languages">Επιλεγμένες γλώσσες:</string>
   <string name="other_languages">Άλλες γλώσσες:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

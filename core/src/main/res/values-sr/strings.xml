@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Acamicamacaraca
+* BadDog
+* Fitoschido
+* Macofe
+* Srdjan m
+* Zoranzoki21
+-->
+<resources>
+  <string name="menu_help">Помоћ</string>
+  <string name="menu_home">Почетна</string>
+  <string name="menu_settings">Подешавања</string>
+  <string name="menu_search">Претражите чланак</string>
+  <string name="menu_bookmarks">Обележивачи</string>
+  <string name="menu_random_article">Случајан чланак</string>
+  <string name="menu_full_screen">Цео екран</string>
+  <string name="menu_exit_full_screen">Изађи из целог екрана</string>
+  <string name="menu_read_aloud">Читај на глас</string>
+  <string name="menu_read_aloud_stop">Престани да читаш на глас</string>
+  <string name="save_media_error">Дошло је до грешке при чувању мултимедије!</string>
+  <string name="save_media_saved" fuzzy="true">Сачувана мултимедија као %s у Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning">Тражим преузимљиве датотеке, сачекај...</string>
+  <string name="choose_file">Изаберите датотеку са садржајем (*.zim)</string>
+  <string name="open_in_new_tab">Отворити везу у новој картици?</string>
+  <string name="stop_hotspot_button">ЗАУСТАВИ</string>
+  <string name="error_file_not_found">Грешка: изабрана ZIM датотека се не може наћи.</string>
+  <string name="error_file_invalid">Грешка: изабрана датотека није важећа ZIM датотека.</string>
+  <string name="error_article_url_not_found">Грешка: учитавање чланка (Url: %1$s) није успело.</string>
+  <string name="pref_zoom_dialog">Ниво зума</string>
+  <string name="pref_info_title">Информације</string>
+  <string name="pref_info_version">Верзија</string>
+  <string name="pref_zoom_enable">Контроле зума</string>
+  <string name="pref_night_mode">Ноћни режим</string>
+  <string name="pref_night_mode_summary">Прикажи чланке с обрнутим бојама</string>
+  <string name="pref_back_to_top">Назад на врх</string>
+  <string name="pref_back_to_top_summary">Прикажи дугме на крају странице како би се могли отићи на врх</string>
+  <string name="pref_language_chooser">Изаберите језик</string>
+  <string name="tts_lang_not_supported">Језик на овој страници није подржан, или одговарајући језички подаци нису инсталирани. Чланак не може бити исправно прочитан.</string>
+  <string name="no_reader_application_installed">Није могуће наћи инсталирану апликацију за ову врсту датотеке</string>
+  <string name="custom_app_missing_content">Ваша апликација је оштећена.\nОво се може десити када уклоните датотеке на SD картици.\nТреба да деинсталирате, а затим поново инсталирате апликацију из Play Store-а.</string>
+  <string name="go_to_play_store">Иди на Play продавницу</string>
+  <string name="menu_bookmarks_list">Обележивачи</string>
+  <string name="no_section_info">не могу да пронађем странице са садржајем</string>
+  <string name="request_storage">Да приступите офлајн садржају потребан је приступ твојој меморији</string>
+  <string name="clear_recent_and_tabs_history_dialog">Желите ли заиста да избришете своју историју претраге и ресетујете све активне картице?</string>
+  <string name="delete_recent_search_item">Избрисати ову ставку?</string>
+  <string name="all_history_cleared_toast">Цела историја је обрисана</string>
+  <string name="clear_all_history_dialog_title">Брисање целе историје</string>
+  <string name="delete">Избриши</string>
+  <string name="delete_specific_search_toast">Недавне претраге су уклоњене</string>
+  <string name="got_it">Разумем</string>
+  <string name="did_you_know">Јесте ли знали?</string>
+  <string name="bookmark_added">Обележивачи су додати</string>
+  <string name="rate_dialog_title">Молимо Вас да нас оцените</string>
+  <string name="rate_dialog_msg_1">Ако уживате користећи</string>
+  <string name="rate_dialog_msg_2">, сачекајте моменат да оцените. Хвала на подршци!</string>
+  <string name="rate_dialog_positive">Оцени!</string>
+  <string name="rate_dialog_negative">Не, хвала</string>
+  <string name="rate_dialog_neutral">Касније</string>
+  <string name="open">Отвори</string>
+  <string name="bookmark_removed">Обележивачи су уклоњени</string>
+  <string name="pref_newtab_background_title">Отвори нову картицу у позадини</string>
+  <string name="pref_newtab_background_summary">Када отвараш нову картицу она ће бити отворена у позадини</string>
+  <string name="new_tab_snack_bar">Чланак је отворен у новој картици</string>
+  <string name="local_zims">Уређај</string>
+  <string name="delete_specific_zim_toast">Датотека је избрисана</string>
+  <string name="download_pause">Паузирај</string>
+  <string name="download_stop">Заустави</string>
+  <string name="download_paused">паузирано</string>
+  <string name="no_downloads_here">Овде нема преузимања</string>
+  <string name="no_files_here">Овде нема датотека</string>
+  <string name="download_no_space">Недовољно простора за преузимање ове датотеке.</string>
+  <string name="no_network_connection">Нема мрежне везе</string>
+  <string name="delete_zim_failed">Није могуће избрисати ову датотеку. Требали бисте покушати да користите управљач датотека.</string>
+  <string name="internal_storage">Унутрашњи</string>
+  <string name="external_storage">Спољашњи</string>
+  <string name="no">Не</string>
+  <string name="confirm_stop_download_title">Зауставити преузимање?</string>
+  <string name="confirm_stop_download_msg">Желите ли заиста да зауставите ово преузимање?</string>
+  <string name="download_change_storage">Бирач уређаја за складиштење</string>
+  <string name="next">Следеће</string>
+  <string name="pref_auto_night_mode_summary">Аутоматски пребаци између режима дана и ноћи.</string>
+  <string name="pref_auto_night_mode">Аутоматизовани ноћни режим</string>
+  <string name="external_link_popup_dialog_title">Уношење спољашње везе</string>
+  <string name="external_link_popup_dialog_message">Уносите спољашњу везу. То може довести до додатних трошкова за пренос података или неће радити када сте офлајн. Желите ли да наставите?</string>
+  <string name="do_not_ask_anymore">Не питај више</string>
+  <string name="other_languages">Други језици:</string>
+  <string name="tag_short_text">Кратак текст</string>
+</resources>

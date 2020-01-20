@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Robby
+-->
+<resources>
+  <string name="retry">Nach eng Kéier probéieren</string>
+  <string name="download">Eroflueden</string>
+  <string name="complete">Komplettéieren</string>
+</resources>

@@ -1,6 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Bl707
+* Innocentbunny
+* Nikhilsheth
+* Nitin1485
+* Sachinkatiyar
+* Sfic
+* Siddhartha Ghai
+* Suyash.dwivedi
+* संजीव कुमार
+-->
 <resources>
-  <string name="menu_zim_manager">सामग्री पायें</string>
+  <string name="menu_zim_manager" fuzzy="true">सामग्री पायें</string>
   <string name="menu_help">सहायता</string>
   <string name="menu_home">घर</string>
   <string name="menu_settings">पसंद</string>
@@ -19,6 +30,7 @@
   <string name="search_label">खोजें</string>
   <string name="choose_file">सामग्री फ़ाइल चुनें (*.zim)</string>
   <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
+  <string name="stop_hotspot_button">रोकें</string>
   <string name="error_file_not_found">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी।</string>
   <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है।</string>
   <string name="error_article_url_not_found">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
@@ -95,13 +107,13 @@
   <string name="no_network_connection">नेटवर्क कनेक्शन नहीं</string>
   <string name="help_2">किविक्स क्या करता है?</string>
   <string name="help_3">किवीक्स ऑफ़लाइन सामग्री रीडर है यह एक ब्राउज़र की तरह बहुत ज्यादा काम करता है लेकिन ऑनलाइन वेब पेजों को एक्सेस करने के बजाय, यह ZIM प्रारूप में फ़ाइल से सामग्री पढ़ता है।</string>
-  <string name="help_4">जबकि किवीक्स को मूल रूप से विकिपीडिया ऑफ़लाइन उपलब्ध कराने के लिए डिज़ाइन किया गया है, यह अन्य सामग्री भी पढ़ता है।</string>
+  <string name="help_4" fuzzy="true">जबकि किवीक्स को मूल रूप से विकिपीडिया ऑफ़लाइन उपलब्ध कराने के लिए डिज़ाइन किया गया है, यह अन्य सामग्री भी पढ़ता है।</string>
   <string name="help_5">सामग्री कहाँ है?</string>
   <string name="help_6">हमारी सामग्री कीविक्स वेबसाइट पर होस्ट की गई है।</string>
   <string name="help_7">वे ZIM फाइलों के रूप में उपलब्ध हैं।उनमें से ऐसे बहुत से हैं:</string>
-  <string name="help_8">\U2022 विकिपीडिया प्रत्येक भाषा के लिए अलग से उपलब्ध है</string>
-  <string name="help_9">\U2022 विकिलीक्स या विकीसोर्स जैसी अन्य सामग्री भी उपलब्ध हैं</string>
-  <string name="help_10">आप या तो अपने चुने हुए ZIM फ़ाइलों को इन-ऐप में डाउनलोड कर सकते हैं या सावधानीपूर्वक जिन्हें आप चाहते हैं उन्हे चुन सकते हैं और अपने SD कार्ड पर ZIM फ़ाइलों को ट्रांसफर करने से पहले डेस्कटॉप कंप्यूटर से डाउनलोड कर सकते हैं।</string>
+  <string name="help_8">• विकिपीडिया प्रत्येक भाषा के लिए अलग से उपलब्ध है</string>
+  <string name="help_9">• विकिलीक्स या विकीसोर्स जैसी अन्य सामग्री भी उपलब्ध हैं</string>
+  <string name="help_10" fuzzy="true">आप या तो अपने चुने हुए ZIM फ़ाइलों को इन-ऐप में डाउनलोड कर सकते हैं या सावधानीपूर्वक जिन्हें आप चाहते हैं उन्हे चुन सकते हैं और अपने SD कार्ड पर ZIM फ़ाइलों को ट्रांसफर करने से पहले डेस्कटॉप कंप्यूटर से डाउनलोड कर सकते हैं।</string>
   <string name="help_11">ZIM फाइलें जो इन-ऐप में डाउनलोड हैं, एक बाहरी फ़ोल्डर में स्थित हैं, जिसमें किवीक्स नामक एक फ़ोल्डर है।</string>
   <string name="pref_storage">संचयन</string>
   <string name="pref_current_folder">वर्तमान फोल्डर</string>
@@ -137,16 +149,4 @@
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
   <string name="your_languages">चयनित भाषाएं</string>
   <string name="other_languages">अन्य भाषाएँ</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

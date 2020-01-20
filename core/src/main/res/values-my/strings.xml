@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Dr Lotus Black
+* Lionslayer
+* Ninjastrikers
+-->
 <resources>
   <string name="menu_help">အ​ကူ​အ​ညီ​</string>
   <string name="menu_home">ပင်မ</string>
@@ -18,6 +23,7 @@
   <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
+  <string name="stop_hotspot_button">ရပ်</string>
   <string name="error_file_not_found">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
   <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
   <string name="error_article_url_not_found">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
@@ -41,6 +47,7 @@
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
   <string name="all_history_cleared_toast">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>
   <string name="clear_all_history_dialog_title">မှတ်တမ်းများအားလုံး ရှင်းလင်းရန်</string>
+  <string name="share">မျှဝေ</string>
   <string name="delete">ဖျက်</string>
   <string name="delete_specific_search_toast">မကြာမီက ရှာဖွေမှုကို ဖယ်ရှားပြီးပြီ</string>
   <string name="got_it">ရပြီဟေ့</string>
@@ -85,19 +92,17 @@
   <string name="time_minute">မိနစ်</string>
   <string name="time_second">စက္ကန့်</string>
   <string name="time_left">ကျန်ရှိ</string>
+  <string name="time_today">ယနေ့</string>
+  <string name="time_yesterday">မနေ့</string>
   <string name="do_not_ask_anymore">နောက်ထပ် မမေးတော့</string>
   <string name="your_languages">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
   <string name="other_languages">အခြားဘာသာစကားများ</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="crash_checkbox_language">သင်၏ ဘာသာစကား အပြင်အဆင်များ</string>
+  <string name="articleCount">%s ဆောင်းပါးများ</string>
+  <string name="go_to_previous_page">ယခင်စာမျက်နှာသို့သွားရန်</string>
+  <string name="go_to_next_page">နောက်စာမျက်နှာသို့သွားရန်</string>
+  <string name="table_of_contents">မာတိကာ</string>
+  <string name="expand">ချဲ့ရန်</string>
+  <string name="history">ရာဇဝင်</string>
+  <string name="failed_file_already_exists">ဖိုင် ရှိနှင့်ပြီးသားဖြစ်သည်</string>
 </resources>

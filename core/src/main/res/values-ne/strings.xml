@@ -1,6 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Ganesh Paudel
+* Macofe
+* राम प्रसाद जोशी
+* सरोज कुमार ढकाल
+-->
 <resources>
-  <string name="menu_zim_manager">सामग्रीहरू प्राप्त गर्नुहोस्</string>
+  <string name="menu_zim_manager" fuzzy="true">सामग्रीहरू प्राप्त गर्नुहोस्</string>
   <string name="menu_help">सहायता</string>
   <string name="menu_home">गृह</string>
   <string name="menu_settings">सेटिङहरू</string>
@@ -13,16 +19,17 @@
   <string name="menu_read_aloud">पढेर सुनाउनुहोस्</string>
   <string name="menu_read_aloud_stop">पढेर सुनाउन बन्द गर्नुहोस्</string>
   <string name="save_media">मेडियालाई यसरूपमा सङ्ग्रह गर्नुहोस्…</string>
-  <string name="rescan_fs_warning">कृपया पर्खनुहोस्, जिम फाइलहरू स्क्यान हुँदैछ</string>
+  <string name="rescan_fs_warning" fuzzy="true">कृपया पर्खनुहोस्, जिम फाइलहरू स्क्यान हुँदैछ</string>
   <string name="search_label">खोज्नुहोस्</string>
   <string name="choose_file">सामग्री फाइल छान्नुहोस् (*.zim)</string>
   <string name="open_in_new_tab">लिङ्कलाई नयाँ ट्याबमा खोल्ने?</string>
+  <string name="stop_hotspot_button">रोक्ने</string>
   <string name="error_file_not_found">त्रुटी: छानिएको ZIM फाइल भेटाउन सकिएन।</string>
   <string name="error_file_invalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन।</string>
   <string name="error_article_url_not_found">त्रुटी: लेख खोल्न असफल । (Url: %1$s)</string>
   <string name="pref_display_title">देखाउनुहोस्</string>
   <string name="pref_zoom_sub_title">जुम</string>
-  <string name="pref_zoom_dialog">जुम स्तर</string>
+  <string name="pref_zoom_dialog" fuzzy="true">जुम स्तर</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
   <string name="pref_zoom_enable">जुम नियन्त्रणहरू</string>
@@ -91,23 +98,13 @@
   <string name="previous">पहिलेको</string>
   <string name="pref_wifi_only">WiFi बाट मात्र सामग्री डाउनलोड गर्नुहोस्</string>
   <string name="time_day">दिन</string>
+  <string name="time_hour">h</string>
   <string name="time_minute">मिनेट</string>
+  <string name="time_second">s</string>
   <string name="time_left">बाँकी</string>
   <string name="external_link_popup_dialog_title">वाह्य लिङ्कमा जाँदै</string>
   <string name="external_link_popup_dialog_message">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline. जारी राख्न चाहनुहुन्छ?</string>
   <string name="do_not_ask_anymore">फेरि नसोध्नुहोस्</string>
   <string name="your_languages">छानिएको भाष:</string>
   <string name="other_languages">अन्य भाषाहरू:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

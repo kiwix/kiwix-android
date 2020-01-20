@@ -1,19 +1,152 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Arifin.wijaya
+* Arifpedia
+* Iwan Novirion
+* Kenrick95
+* Relly Komaruzaman
+* Rizkiahmadz
+-->
 <resources>
+  <string name="menu_zim_manager" fuzzy="true">Dapatkan Konten</string>
+  <string name="menu_help">Bantuan</string>
+  <string name="menu_home">Halaman Utama</string>
+  <string name="menu_settings">Pengaturan</string>
+  <string name="menu_search">Cari artikel</string>
+  <string name="menu_search_in_text">Temukan dalam halaman</string>
+  <string name="menu_bookmarks">Markah</string>
+  <string name="menu_random_article">Artikel sembarang</string>
+  <string name="menu_full_screen">Layar penuh</string>
+  <string name="menu_exit_full_screen">Keluar dari modus layar penuh</string>
+  <string name="menu_read_aloud">Bacakan</string>
+  <string name="menu_read_aloud_stop">Hentikan pembacaan</string>
+  <string name="save_media">Simpan Media</string>
+  <string name="save_media_error">Terjadi kesalahan saat menyimpan media!</string>
+  <string name="save_media_saved" fuzzy="true">Simpan media sebagai %s pada Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning">Memindai konten yang dapat diunduh, harap tunggu...</string>
+  <string name="search_label">Cari</string>
+  <string name="choose_file">Pilih Berkas Konten (*.zim)</string>
+  <string name="open_in_new_tab">Buka pranala di tab baru?</string>
+  <string name="stop_hotspot_button" fuzzy="true">Berhenti</string>
+  <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
+  <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>
+  <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
+  <string name="pref_display_title">Tampilan</string>
+  <string name="pref_zoom_sub_title">Pembesaran</string>
+  <string name="pref_zoom_dialog">Tingkat perbesaran</string>
+  <string name="pref_info_title">Informasi</string>
+  <string name="pref_info_version">Versi</string>
+  <string name="pref_zoom_enable">Kontrol perbesaran</string>
+  <string name="pref_night_mode">Modus malam</string>
+  <string name="pref_night_mode_summary">Tampilkan artikel dengan warna terbalik</string>
+  <string name="pref_back_to_top">Kembali ke Atas</string>
+  <string name="pref_back_to_top_summary">Tampilkan tombol di akhir halaman untuk menggulir ke atas</string>
+  <string name="pref_hide_toolbar">Sembunyikan bilah alat saat menggulir</string>
+  <string name="pref_hide_toolbar_summary">Sembunyikan bilah alat saat halaman bergulir ke bawah</string>
+  <string name="pref_language_title">Bahasa</string>
+  <string name="pref_language_chooser">Pilih bahasa</string>
+  <string name="pref_credits">Kontributor dan Lisensi</string>
+  <string name="pref_credits_title">Kredit</string>
+  <string name="tts_lang_not_supported">Bahasa halaman ini tidak didukung, atau data bahasa yang tepat tidak dipasang. Artikel mungkin tidak dapat dibaca dengan benar.</string>
+  <string name="no_reader_application_installed">Tidak dapat menemukan aplikasi yang terpasang untuk jenis berkas ini</string>
+  <string name="custom_app_missing_content">Aplikasi Anda rusak\nHal ini mungkin terjadi saat Anda menghapus berkas di SD Card.\nAnda perlu mencopot pemasangan lalu memasang ulang Apl ini dari Play Store.</string>
+  <string name="go_to_play_store">Pergi ke Play Store</string>
+  <string name="menu_bookmarks_list">Markah</string>
+  <string name="no_section_info">Tidak Ada Judul Konten yang Ditemukan</string>
+  <string name="request_storage">Untuk mengakses konten luring, kami memerlukan akses ke penyimpanan Anda</string>
+  <string name="request_storage_custom">Jika Anda melihat peringatan menutupi layar, cukup jalankan ulang perangkat untuk memperbaikinya.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Apakah Anda yakin ingin menghapus riwayat penelusuran dan menutup semua tab yang aktif?</string>
+  <string name="delete_recent_search_item">Hapus item ini?</string>
+  <string name="pref_clear_all_history_title">Hapus riwayat</string>
+  <string name="pref_clear_all_history_summary">Hapus riwayat penelusuran dan tab terakhir</string>
+  <string name="all_history_cleared_toast">Semua Markah Telah Dibersihkan</string>
+  <string name="clear_all_history_dialog_title">Bersihkan Semua Markah</string>
+  <string name="delete">Hapus</string>
+  <string name="delete_specific_search_toast">Penelusuran terakhir telah dihapus</string>
+  <string name="hint_contents_drawer_message">Anda bisa menggulir ke kiri untuk melihat isi artikel ini</string>
+  <string name="got_it">Mengerti</string>
+  <string name="did_you_know">Tahukah Anda?</string>
+  <string name="undo">Urungkan</string>
+  <string name="tab_closed">Tab ditutup</string>
+  <string name="bookmark_added">Markah ditambahkan</string>
+  <string name="rate_dialog_title">Silakan Nilai Kami</string>
+  <string name="rate_dialog_msg_1">Jika Anda menikmati menggunakan</string>
+  <string name="rate_dialog_msg_2">, silakan luangkan waktu Anda untuk menilainya. Terima kasih atas dukungan Anda!</string>
+  <string name="rate_dialog_positive">Nilai!</string>
+  <string name="rate_dialog_negative">Tidak, terima kasih</string>
+  <string name="rate_dialog_neutral">Nanti</string>
+  <string name="open">Buka</string>
+  <string name="bookmark_removed">Markah dihapus</string>
+  <string name="pref_newtab_background_title">Buka tab baru di latar belakang</string>
+  <string name="pref_newtab_background_summary">Ketika membuka tab baru itu akan dibuka di latar belakang</string>
+  <string name="pref_extras">Ekstra</string>
+  <string name="new_tab_snack_bar">Artikel dibuka di tab baru</string>
+  <string name="search_widget_text">Cari Kiwix</string>
+  <string name="speech_prompt_text">Bicaralah untuk mencari %s</string>
+  <string name="speech_not_supported">Maaf! Perangkat Anda tidak mendukung input ucapan</string>
+  <string name="local_zims">Perangkat</string>
+  <string name="remote_zims">Daring</string>
+  <string name="zim_downloads">Mengunduh</string>
+  <string name="zim_manager">Perpustakaan</string>
+  <string name="delete_specific_zim_toast">Berkas telah dihapus</string>
+  <string name="zim_file_downloading">Mengunduh</string>
+  <string name="zim_file_downloaded">Diunduh</string>
+  <string name="download_pause">Jeda</string>
+  <string name="download_stop">Hentikan</string>
+  <string name="download_paused">dijeda</string>
+  <string name="no_downloads_here">Tidak ada unduhan disini</string>
+  <string name="no_files_here">Tidak ada berkas disini</string>
+  <string name="download_no_space">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
+  <string name="space_available">Ruang yang Tersedia:</string>
+  <string name="zim_simple">Sederhana</string>
+  <string name="zim_no_pic">Tanpa Gambar</string>
+  <string name="zim_no_vid">Tanpa Video</string>
+  <string name="no_network_connection">Tidak ada sambungan jaringan</string>
+  <string name="help_2">Apa yang Kiwix lakukan?</string>
+  <string name="help_3">Kiwix adalah pembaca konten luring. Ini sangat mirip peramban tapi bukannya mengakses halaman web daring, Kiwix membaca konten dari sebuah berkas dalam format ZIM.</string>
+  <string name="help_4" fuzzy="true">Pada awalnya Kiwix dirancang untuk menyediakan Wikipedia luring, namun juga dapat membaca konten lainnya.</string>
+  <string name="help_5">Dimana kontennya?</string>
+  <string name="help_6">Konten kami disimpan di situs web Kiwix.</string>
+  <string name="help_7">Mereka tersedia sebagai berkas ZIM. Ada banyak dari mereka:</string>
+  <string name="help_8">• Wikipedia tersedia terpisah untuk setiap bahasa</string>
+  <string name="help_9">• Konten lain seperti Wikileaks atau Wikisource juga tersedia</string>
+  <string name="help_10" fuzzy="true">Anda dapat mengunduh berkas ZIM yang diinginkan dari dalam apl atau mengunduhnya dari komputer Desktop sebelum mentransfernya ke kartu SD Anda.</string>
+  <string name="help_11">Berkas ZIM yang diunduh dari dalam apl terletak di direktori penyimpanan eksternal didalam folder Kiwix.</string>
+  <string name="pref_storage">Penyimpanan</string>
+  <string name="pref_current_folder">Folder Saat Ini</string>
+  <string name="path_not_writable">Tidak dapat mengakses direktori yang diinginkan, menggunakan standar. Untuk memperbaikinya, pilih ulang direktori yang diinginkan dalam pengaturan aplikasi.</string>
+  <string name="delete_zim_failed">Maaf kami tidak dapat menghapus berkas ini. Anda sebaiknya mencoba menggunakan manajer berkas.</string>
+  <string name="tts_pause">jeda</string>
+  <string name="tts_resume">lanjut</string>
+  <string name="tts_stop">berhenti</string>
+  <string name="internal_storage">Internal</string>
+  <string name="external_storage">Eksternal</string>
+  <string name="yes">Ya</string>
+  <string name="no">Tidak</string>
+  <string name="confirm_stop_download_title">Hentikan unduhan?</string>
+  <string name="confirm_stop_download_msg">Apakah Anda yakin ingin menghentikan unduhan ini?</string>
+  <string name="download_change_storage">Pemilih perangkat penyimpanan</string>
+  <string name="tts_not_enabled">Teks ke bicara tidak diaktifkan untuk berkas ZIM ini</string>
+  <string name="next">Berikutnya</string>
+  <string name="previous">Sebelumnya</string>
+  <string name="wifi_only_title">Izinkan mengunduh konten via jaringan seluler?</string>
   <string name="wifi_only_msg">If you choose “Yes” you won\'t be warned in future. However, you can always change this in Settings</string>
+  <string name="pref_wifi_only">Unduh konten hanya via WiFi</string>
+  <string name="time_day">hari</string>
+  <string name="time_hour">jam</string>
+  <string name="time_minute">mnt</string>
+  <string name="time_second">dtk</string>
+  <string name="time_left">kiri</string>
+  <string name="pref_auto_night_mode_summary">Beralih antara modus siang dan malam secara otomatis.</string>
+  <string name="pref_auto_night_mode">Modus malam otomatis</string>
+  <string name="pref_external_link_popup_title">Peringatkan saat mengunjungi pranala luar</string>
+  <string name="pref_external_link_popup_summary">Tampilkan popup untuk memperingatkan tentang biaya tambahan atau tidak bekerja dalam pranala luring.</string>
+  <string name="external_link_popup_dialog_title">Mengunjungi Pranala Luar</string>
+  <string name="external_link_popup_dialog_message">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring. Apakah Anda ingin melanjutkan?</string>
+  <string name="do_not_ask_anymore">Jangan tanya lagi</string>
+  <string name="your_languages">Bahasa terpilih:</string>
+  <string name="other_languages">Bahasa lain:</string>
   <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
   <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
   <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
 </resources>

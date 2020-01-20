@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Ykhwong
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">파일 시스템이 4GB를 초과하는 파일을 지원하지 않습니다</string>
+  <string name="detecting_file_system">파일 시스템이 4GB 파일을 생성할 수 있는지 확인 중</string>
+  <string name="cannot_open_file">파일 열기를 실패했습니다\n라이브러리의 장치 탭에서 이 파일을 검색해 보십시오</string>
+</resources>
