@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
@@ -30,7 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.core.di.components.ActivityComponent;
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent;
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor;
@@ -39,7 +37,6 @@ public abstract class CoreApp extends MultiDexApplication  {
 
   private static CoreApp app;
   private static CoreComponent coreComponent;
-  private static ActivityComponent activityComponent;
 
   static {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -59,8 +56,6 @@ public abstract class CoreApp extends MultiDexApplication  {
   public static CoreComponent getCoreComponent() {
     return coreComponent;
   }
-
-  public static ActivityComponent getActivityComponent() { return activityComponent; }
 
   public static void setCoreComponent(CoreComponent appComponent) {
     CoreApp.coreComponent = appComponent;

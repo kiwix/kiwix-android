@@ -15,6 +15,8 @@ object Versions {
 
   const val com_squareup_retrofit2: String = "2.5.0" // available: "2.6.2"
 
+  const val com_google_dagger: String = "2.21" // available: "2.25.2"
+
   const val com_yahoo_squidb: String = "2.0.0" // available: "3.2.3"
 
   const val com_jakewharton: String = "10.2.0"
@@ -58,8 +60,6 @@ object Versions {
   const val kotlin_stdlib_jdk7: String = "1.3.61"
 
   const val leakcanary_android: String = "2.0"
-
-  const val com_google_dagger: String = "2.25.2" // available: "2.24"
 
   const val constraintlayout: String = "1.1.3"
 

@@ -22,7 +22,6 @@ import dagger.Module
 
 @Module
 abstract class IntroModule {
-  // @ActivityScope
   @Binds
   abstract fun bindsPresenter(presenter: IntroPresenter): IntroContract.Presenter
 }

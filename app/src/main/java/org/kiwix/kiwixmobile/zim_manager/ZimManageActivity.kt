@@ -43,7 +43,7 @@ import javax.inject.Inject
 
 class ZimManageActivity : BaseActivity() {
   override fun injection(coreComponent: CoreComponent) {
-    kiwixActivityComponent.inject(this)
+    cachedComponent.inject(this)
   }
 
   val cachedComponent by lazy { kiwixActivityComponent }

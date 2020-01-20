@@ -50,7 +50,6 @@ import java.io.File
 class KiwixMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    kiwixActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     manageExternalLaunchAndRestoringViewState()
   }
@@ -103,7 +102,7 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun injection(coreComponent: CoreComponent) {
-    this.kiwixActivityComponent.inject(this)
+    kiwixActivityComponent.inject(this)
   }
 
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
