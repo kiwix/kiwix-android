@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,21 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di.components
+package org.kiwix.kiwixmobile.core.utils
 
-import dagger.Component
-import org.kiwix.kiwixmobile.di.KiwixScope
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.di.components.ServiceComponent.Builder
-import org.kiwix.kiwixmobile.di.modules.KiwixModule
-import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 
-@KiwixScope
-@Component(
-  dependencies = [CoreComponent::class],
-  modules = [KiwixViewModelModule::class, KiwixModule::class]
-)
-interface KiwixComponent {
-  fun activityComponentBuilder(): KiwixActivityComponent.Builder
-  fun serviceComponent(): Builder
+class SimpleTextListener(private val onQueryTextChangeAction: (String) -> Unit) :
+  OnQueryTextListener {
+  override fun onQueryTextSubmit(s: String): Boolean = false
+
+  override fun onQueryTextChange(s: String): Boolean {
+    onQueryTextChangeAction.invoke(s)
+    return true
+  }
 }

@@ -110,7 +110,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
-import static org.kiwix.kiwixmobile.core.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
+import static org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;

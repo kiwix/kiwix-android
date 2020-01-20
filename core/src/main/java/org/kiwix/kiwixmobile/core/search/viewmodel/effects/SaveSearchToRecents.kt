@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,15 +15,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.search;
 
-import java.util.List;
-import org.kiwix.kiwixmobile.core.base.BaseContract;
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-/**
- * Created by srv_twry on 14/2/18.
- */
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
-public interface SearchViewCallback extends BaseContract.View {
-  void addRecentSearches(List<String> recentSearches);
+data class SaveSearchToRecents(
+  private val recentSearchDao: NewRecentSearchDao,
+  private val searchListItem: SearchListItem,
+  private val id: String?
+) : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    id?.let { recentSearchDao.saveSearch(searchListItem.value, it) }
+  }
 }

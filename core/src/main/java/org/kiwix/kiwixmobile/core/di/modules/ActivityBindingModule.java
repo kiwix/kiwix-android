@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.core.error.ErrorActivity;
 import org.kiwix.kiwixmobile.core.help.HelpActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryModule;
-import org.kiwix.kiwixmobile.core.search.SearchActivity;
 
 /**
  * Dagger.Android annotation processor will create the sub-components. We also specify the modules
@@ -37,10 +36,6 @@ import org.kiwix.kiwixmobile.core.search.SearchActivity;
 
 @Module
 public abstract class ActivityBindingModule {
-
-  @ActivityScope
-  @ContributesAndroidInjector
-  public abstract SearchActivity provideSearchActivity();
 
   @ActivityScope
   @ContributesAndroidInjector(modules = BookmarksModule.class)

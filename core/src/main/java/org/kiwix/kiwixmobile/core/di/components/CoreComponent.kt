@@ -29,19 +29,21 @@ import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
+import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
+import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimContentProvider
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.search.AutoCompleteAdapter
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -53,7 +55,10 @@ import javax.inject.Singleton
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,
-    DataModule::class]
+    DataModule::class,
+    CoreViewModelModule::class,
+    SearchModule::class
+  ]
 )
 interface CoreComponent {
 
@@ -65,6 +70,7 @@ interface CoreComponent {
     fun build(): CoreComponent
   }
 
+  fun activityComponentBuilder(): CoreActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
   fun zimFileReaderFactory(): ZimFileReader.Factory
@@ -76,6 +82,7 @@ interface CoreComponent {
   fun fetchDownloadDao(): FetchDownloadDao
   fun newBookDao(): NewBookDao
   fun newLanguagesDao(): NewLanguagesDao
+  fun recentSearchDao(): NewRecentSearchDao
   fun connectivityManager(): ConnectivityManager
   fun context(): Context
   fun downloader(): Downloader
@@ -85,7 +92,6 @@ interface CoreComponent {
   fun inject(zimContentProvider: ZimContentProvider)
   fun inject(kiwixWebView: KiwixWebView)
   fun inject(prefsFragment: CorePrefsFragment)
-  fun inject(autoCompleteAdapter: AutoCompleteAdapter)
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun inject(addNoteDialog: AddNoteDialog)
 }

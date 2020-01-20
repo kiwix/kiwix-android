@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,18 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.splash
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
+import android.app.Activity
 import android.content.Intent
-import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity
-import org.kiwix.kiwixmobile.custom.customActivityComponent
-import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.utils.Constants
 
-class CustomSplashActivity : CoreSplashActivity() {
-  override fun injection() {
-    customActivityComponent.inject(this)
+data class OpenSearchItem(private val searchListItem: SearchListItem) : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    activity.setResult(
+      Activity.RESULT_OK,
+      Intent().putExtra(Constants.TAG_FILE_SEARCHED, searchListItem.value)
+    )
+    activity.finish()
   }
-
-  override val intentForNextScreen: Intent
-    get() = Intent(this, CustomMainActivity::class.java)
 }
