@@ -64,7 +64,7 @@ class ZimReaderContainer @Inject constructor(
     jniKiwixSearcher?.search(query, count)
   }
 
-  fun getNextResult() = jniKiwixSearcher?.nextResult
+  fun getNextResult() = jniKiwixSearcher?.nextResult?.let { SearchResult(it.title) }
   fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
   fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
 
@@ -82,3 +82,5 @@ class ZimReaderContainer @Inject constructor(
   val favicon get() = zimFileReader?.favicon
   val language get() = zimFileReader?.language
 }
+
+data class SearchResult(val title: String?)

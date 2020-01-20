@@ -23,16 +23,23 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.widget.Toast
 import androidx.annotation.StringRes
-import kotlinx.android.synthetic.main.item_library.creator
-import kotlinx.android.synthetic.main.item_library.date
-import kotlinx.android.synthetic.main.item_library.description
-import kotlinx.android.synthetic.main.item_library.favicon
-import kotlinx.android.synthetic.main.item_library.fileName
-import kotlinx.android.synthetic.main.item_library.language
-import kotlinx.android.synthetic.main.item_library.publisher
-import kotlinx.android.synthetic.main.item_library.size
+import kotlinx.android.synthetic.main.item_download.downloadProgress
+import kotlinx.android.synthetic.main.item_download.downloadState
+import kotlinx.android.synthetic.main.item_download.eta
+import kotlinx.android.synthetic.main.item_download.libraryDownloadDescription
+import kotlinx.android.synthetic.main.item_download.libraryDownloadFavicon
+import kotlinx.android.synthetic.main.item_download.libraryDownloadTitle
+import kotlinx.android.synthetic.main.item_download.stop
+import kotlinx.android.synthetic.main.item_library.libraryBookCreator
+import kotlinx.android.synthetic.main.item_library.libraryBookDate
+import kotlinx.android.synthetic.main.item_library.libraryBookDescription
+import kotlinx.android.synthetic.main.item_library.libraryBookFavicon
+import kotlinx.android.synthetic.main.item_library.libraryBookFileName
+import kotlinx.android.synthetic.main.item_library.libraryBookLanguage
+import kotlinx.android.synthetic.main.item_library.libraryBookPublisher
+import kotlinx.android.synthetic.main.item_library.libraryBookSize
+import kotlinx.android.synthetic.main.item_library.libraryBookTitle
 import kotlinx.android.synthetic.main.item_library.tags
-import kotlinx.android.synthetic.main.item_library.title
 import kotlinx.android.synthetic.main.item_library.unableToDownload
 import kotlinx.android.synthetic.main.library_divider.divider_text
 import org.kiwix.kiwixmobile.R
@@ -48,6 +55,7 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrit
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.LibraryDownloadItem
 
 sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
@@ -58,15 +66,15 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
     private val clickAction: (BookItem) -> Unit
   ) : LibraryViewHolder<BookItem>(view) {
     override fun bind(item: BookItem) {
-      title.setTextAndVisibility(item.book.title)
-      description.setTextAndVisibility(item.book.description)
-      creator.setTextAndVisibility(item.book.creator)
-      publisher.setTextAndVisibility(item.book.publisher)
-      date.setTextAndVisibility(item.book.date)
-      size.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
-      language.text = bookUtils.getLanguage(item.book.getLanguage())
-      fileName.text = NetworkUtils.parseURL(CoreApp.getInstance(), item.book.url)
-      favicon.setBitmap(Base64String(item.book.favicon))
+      libraryBookTitle.setTextAndVisibility(item.book.title)
+      libraryBookDescription.setTextAndVisibility(item.book.description)
+      libraryBookCreator.setTextAndVisibility(item.book.creator)
+      libraryBookPublisher.setTextAndVisibility(item.book.publisher)
+      libraryBookDate.setTextAndVisibility(item.book.date)
+      libraryBookSize.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
+      libraryBookLanguage.text = bookUtils.getLanguage(item.book.getLanguage())
+      libraryBookFileName.text = NetworkUtils.parseURL(CoreApp.getInstance(), item.book.url)
+      libraryBookFavicon.setBitmap(Base64String(item.book.favicon))
 
       containerView.setOnClickListener { clickAction.invoke(item) }
       containerView.isClickable = item.canBeDownloaded
@@ -84,6 +92,20 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
         )
         true
       }
+    }
+  }
+
+  class DownloadViewHolder(view: View, private val clickAction: (LibraryDownloadItem) -> Unit) :
+    LibraryViewHolder<LibraryDownloadItem>(view) {
+
+    override fun bind(item: LibraryDownloadItem) {
+      libraryDownloadFavicon.setBitmap(item.favIcon)
+      libraryDownloadTitle.text = item.title
+      libraryDownloadDescription.text = item.description
+      downloadProgress.progress = item.progress
+      stop.setOnClickListener { clickAction.invoke(item) }
+      downloadState.text = item.downloadState.toReadableState(containerView.context)
+      eta.text = item.readableEta
     }
   }
 

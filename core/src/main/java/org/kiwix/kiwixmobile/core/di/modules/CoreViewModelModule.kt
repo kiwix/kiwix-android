@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,31 +16,27 @@
  *
  */
 
-package org.kiwix.kiwixmobile.di.modules
+package org.kiwix.kiwixmobile.core.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import org.kiwix.kiwixmobile.KiwixViewModelFactory
-import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
+import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
+import javax.inject.Singleton
 
 @Module
-abstract class ViewModelModule {
+abstract class CoreViewModelModule {
   @Binds
   @IntoMap
-  @ViewModelKey(ZimManageViewModel::class)
-  abstract fun bindZimManageViewModel(zimManageViewModel: ZimManageViewModel): ViewModel
+  @ViewModelKey(SearchViewModel::class)
+  abstract fun bindSearchViewModel(searchViewModel: SearchViewModel): ViewModel
 
   @Binds
-  @IntoMap
-  @ViewModelKey(LanguageViewModel::class)
-  abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
-
-  @Binds
-  abstract fun bindViewModelFactory(factory: KiwixViewModelFactory):
+  @Singleton
+  abstract fun bindViewModelFactory(factory: ViewModelFactory):
     ViewModelProvider.Factory
 }

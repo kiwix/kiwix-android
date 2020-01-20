@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
-import org.kiwix.kiwixmobile.zim_manager.download_view.DownloadFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
@@ -46,7 +45,6 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
   ]
 )
 interface KiwixActivityComponent {
-  fun inject(downloadFragment: DownloadFragment)
   fun inject(libraryFragment: LibraryFragment)
   fun inject(zimFileSelectFragment: ZimFileSelectFragment)
   fun inject(deleteFiles: DeleteFiles)

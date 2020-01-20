@@ -23,12 +23,12 @@ import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.di.components.ServiceComponent.Builder
 import org.kiwix.kiwixmobile.di.modules.KiwixModule
-import org.kiwix.kiwixmobile.di.modules.ViewModelModule
+import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
 
 @KiwixScope
 @Component(
   dependencies = [CoreComponent::class],
-  modules = [ViewModelModule::class, KiwixModule::class]
+  modules = [KiwixViewModelModule::class, KiwixModule::class]
 )
 interface KiwixComponent {
   fun activityComponentBuilder(): KiwixActivityComponent.Builder

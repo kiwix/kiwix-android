@@ -292,6 +292,7 @@
   <string name="storage_permission_denied">Storage Permission Denied</string>
   <string name="grant_read_storage_permission">This app requires the ability to read storage to function. Please grant the permission in your settings</string>
   <string name="go_to_permissions">Go to Settings</string>
+  <string name="no_results">No Results</string>
   <string-array name="pref_night_modes_entries">
     <item>On</item>
     <item>Off</item>

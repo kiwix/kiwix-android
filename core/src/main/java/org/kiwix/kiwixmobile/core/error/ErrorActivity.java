@@ -182,8 +182,7 @@ public class ErrorActivity extends BaseActivity {
     restartApp();
   }
 
-  @Override protected void injection(
-    CoreComponent coreComponent) {
+  @Override protected void injection(CoreComponent coreComponent) {
     coreComponent.inject(this);
   }
 }

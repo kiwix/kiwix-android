@@ -31,15 +31,17 @@ import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.local.dao.BookDao
 import org.kiwix.kiwixmobile.core.data.local.dao.BookmarksDao
-import org.kiwix.kiwixmobile.core.data.local.dao.RecentSearchDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
+import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
+import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.help.HelpActivity
@@ -48,8 +50,8 @@ import org.kiwix.kiwixmobile.core.history.HistoryModule
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimContentProvider
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.search.AutoCompleteAdapter
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
@@ -65,7 +67,10 @@ import javax.inject.Singleton
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,
-    DataModule::class]
+    DataModule::class,
+    CoreViewModelModule::class,
+    SearchModule::class
+  ]
 )
 interface CoreComponent {
 
@@ -77,8 +82,10 @@ interface CoreComponent {
     fun build(): CoreComponent
   }
 
+  fun activityComponentBuilder(): CoreActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
+  fun zimFileReaderFactory(): ZimFileReader.Factory
   fun storageObserver(): StorageObserver
   fun kiwixService(): KiwixService
   fun application(): Application
@@ -87,19 +94,18 @@ interface CoreComponent {
   fun fetchDownloadDao(): FetchDownloadDao
   fun newBookDao(): NewBookDao
   fun newLanguagesDao(): NewLanguagesDao
+  fun recentSearchDao(): NewRecentSearchDao
   fun connectivityManager(): ConnectivityManager
   fun context(): Context
   fun downloader(): Downloader
   fun bookDao(): BookDao
   fun bookmarksDao(): BookmarksDao
-  fun recentSearchDao(): RecentSearchDao
   fun notificationManager(): NotificationManager
 
   fun inject(application: CoreApp)
   fun inject(zimContentProvider: ZimContentProvider)
   fun inject(kiwixWebView: KiwixWebView)
   fun inject(prefsFragment: CorePrefsFragment)
-  fun inject(autoCompleteAdapter: AutoCompleteAdapter)
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun inject(addNoteDialog: AddNoteDialog)
 

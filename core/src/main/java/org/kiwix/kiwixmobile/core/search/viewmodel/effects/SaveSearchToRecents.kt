@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,19 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
-class SimpleTextListener(private val onQueryTextChangeAction: (String) -> Unit) :
-  OnQueryTextListener {
-  override fun onQueryTextSubmit(s: String): Boolean = false
-
-  override fun onQueryTextChange(s: String): Boolean {
-    onQueryTextChangeAction.invoke(s)
-    return true
+data class SaveSearchToRecents(
+  private val recentSearchDao: NewRecentSearchDao,
+  private val searchListItem: SearchListItem,
+  private val id: String?
+) : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    id?.let { recentSearchDao.saveSearch(searchListItem.value, it) }
   }
 }

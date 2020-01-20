@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,20 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom;
+package org.kiwix.kiwixmobile.core.search.adapter
 
-import androidx.lifecycle.ViewModel;
-import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.kiwix.kiwixmobile.core.ViewModelFactory;
-import org.kiwix.kiwixmobile.custom.di.CustomScope;
+import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
+import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
-@CustomScope
-public class CustomViewModelFactory extends ViewModelFactory {
-
-  @Inject
-  public CustomViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-    super(creators);
-  }
+class SearchAdapter(
+  vararg delegates: AdapterDelegate<SearchListItem>
+) : BaseDelegateAdapter<SearchListItem>(*delegates) {
+  override fun getIdFor(item: SearchListItem) = item.value.hashCode().toLong()
 }

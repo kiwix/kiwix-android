@@ -45,10 +45,10 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TestingUtils
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.BookDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.DividerDelegate
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.DownloadDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import java.io.File
@@ -78,7 +79,11 @@ class LibraryFragment : BaseFragment() {
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-      BookDelegate(bookUtils, ::onBookItemClick), DividerDelegate
+      BookDelegate(bookUtils, ::onBookItemClick),
+      DownloadDelegate {
+        dialogShower.show(StopDownload, { downloader.cancelDownload(it.downloadId) })
+      },
+      DividerDelegate
     )
   }
 
@@ -98,10 +103,7 @@ class LibraryFragment : BaseFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    TestingUtils.bindResource(LibraryFragment::class.java)
-    return inflater.inflate(R.layout.activity_library, container, false)
-  }
+  ): View = inflater.inflate(R.layout.activity_library, container, false)
 
   override fun onViewCreated(
     view: View,
@@ -148,7 +150,6 @@ class LibraryFragment : BaseFragment() {
         else string.no_items_msg
       )
       libraryErrorText.visibility = VISIBLE
-      TestingUtils.unbindResource(LibraryFragment::class.java)
     } else {
       libraryErrorText.visibility = GONE
     }
@@ -211,7 +212,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun showStorageSelectDialog() = StorageSelectDialog()
     .apply {
-      setOnSelectListener(::storeDeviceInPreferences)
+      onSelectAction = ::storeDeviceInPreferences
     }
     .show(fragmentManager!!, getString(string.pref_storage))
 }

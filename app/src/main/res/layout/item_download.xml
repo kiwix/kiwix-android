@@ -11,7 +11,7 @@
   android:paddingRight="@dimen/activity_horizontal_margin">
 
   <ImageView
-    android:id="@+id/favicon"
+    android:id="@+id/libraryDownloadFavicon"
     android:layout_width="@dimen/favicon_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -19,7 +19,8 @@
     android:adjustViewBounds="true"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:scaleType="fitCenter"
-    android:src="@mipmap/ic_launcher" />
+    android:src="@mipmap/ic_launcher"
+    tools:ignore="RtlHardcoded" />
 
   <LinearLayout
     android:layout_width="0dp"
@@ -29,7 +30,7 @@
     android:orientation="vertical">
 
     <TextView
-      android:id="@+id/title"
+      android:id="@+id/libraryDownloadTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="start"
@@ -37,7 +38,7 @@
       tools:text="Title" />
 
     <TextView
-      android:id="@+id/description"
+      android:id="@+id/libraryDownloadDescription"
       style="@style/list_item_body"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -90,6 +91,6 @@
       android:minWidth="@dimen/stop_min_width"
       android:minHeight="@dimen/stop_min_height"
       android:text="@string/download_stop"
-      app:srcCompat="@drawable/ic_stop_black_24dp" />
+      app:srcCompat="@drawable/ic_stop_24dp" />
   </LinearLayout>
 </LinearLayout>
