@@ -67,7 +67,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private var serviceConnection: ServiceConnection? = null
   private var progressDialog: ProgressDialog? = null
   private val tag = "ZimHostActivity"
-  private val ipStateKey = "ip_state_key"
 
   private val selectedBooksPath: ArrayList<String>
     get() {
