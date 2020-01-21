@@ -67,7 +67,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private var serviceConnection: ServiceConnection? = null
   private var progressDialog: ProgressDialog? = null
   private val tag = "ZimHostActivity"
-  private val ipStateKey = "ip_state_key"
 
   private val selectedBooksPath: ArrayList<String>
     get() {
@@ -84,7 +83,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
             }
           }
         }
-        as ArrayList<String>
+          as ArrayList<String>
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,10 +102,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
       bookDelegate,
       BookOnDiskDelegate.LanguageDelegate
     )
-    if (savedInstanceState != null) {
-      ip = savedInstanceState.getString(ipStateKey)
-      layoutServerStarted()
-    }
+
     recyclerViewZimHost.adapter = booksAdapter
     presenter.attachView(this)
 
@@ -262,13 +258,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
       }
     )
-  }
-
-  override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    if (ServerUtils.isServerStarted) {
-      outState.putString(ipStateKey, ip)
-    }
   }
 
   override fun addBooks(books: List<BooksOnDiskListItem>) {
