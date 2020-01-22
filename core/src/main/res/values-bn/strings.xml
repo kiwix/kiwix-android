@@ -1,6 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Bellayet
+* Bodhisattwa
+* Sohom Datta
+* আজিজ
+* আফতাবুজ্জামান
+* এম আবু সাঈদ
+-->
 <resources>
-  <string name="menu_zim_manager">বিষয়বস্তু পান</string>
+  <string name="menu_zim_manager" fuzzy="true">বিষয়বস্তু পান</string>
   <string name="menu_help">সাহায্য</string>
   <string name="menu_home">প্রধান পাতা</string>
   <string name="menu_settings">সেটিংস</string>
@@ -19,6 +27,7 @@
   <string name="search_label">অনুসন্ধান</string>
   <string name="choose_file">একটি বিষয়বস্তুর ফাইল নির্বাচন করুন (*.zim)</string>
   <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
+  <string name="stop_hotspot_button">থামুন</string>
   <string name="error_file_not_found">ত্রুটি: নির্বাচিত ZIM ফাইলটি খুঁজে পাওয়া যায় নি।</string>
   <string name="error_file_invalid">ত্রুটি: নির্বাচিত ফাইলটি বৈধ ZIM ফাইল নয়।</string>
   <string name="error_article_url_not_found">ত্রুটি: নিবন্ধ লোডে (Url: %1$s) ব্যর্থ।</string>
@@ -95,13 +104,13 @@
   <string name="no_network_connection">কোন নেটওয়ার্ক সংযোগ নেই</string>
   <string name="help_2">কিউইক্স কি কাজ করে?</string>
   <string name="help_3">কিউইক্স একটি অফলাইনভিত্তিক নিবন্ধ পাঠক। এটি একটি ব্রাউজারের মত অনেকটা কাজ করে কিন্তু অনলাইনে ওয়েব পৃষ্ঠাগুলিতে ঢুকার পরিবর্তে, এটি ZIM ফরম্যাটে একটি ফাইল থেকে বিষয়বস্তু পড়ে।</string>
-  <string name="help_4">কিউইক্স মূলত উইকিপিডিয়াকে অফলাইনে সরবরাহ করার জন্য নকশা করা হয়েছে, তবে এটি অন্যান্য বিষয়গুলিও পড়ে থাকে।</string>
+  <string name="help_4" fuzzy="true">কিউইক্স মূলত উইকিপিডিয়াকে অফলাইনে সরবরাহ করার জন্য নকশা করা হয়েছে, তবে এটি অন্যান্য বিষয়গুলিও পড়ে থাকে।</string>
   <string name="help_5">বিষয়বস্তু কোথায়?</string>
   <string name="help_6">আমাদের বিষয়বস্তু কিউইক্স ওয়েবসাইটে হোস্ট করা আছে।</string>
   <string name="help_7">সেগুলি জিম ফাইল হিসেবে উপলব্ধ। এরকম অনেক রয়েছে:</string>
-  <string name="help_8">\u2022 উইকিপিডিয়া প্রতিটি ভাষার জন্য আলাদাভাবে উপলব্ধ</string>
-  <string name="help_9">\u2022 এছাড়া উইকিপিডিয়া বা উইকিসংকলনের মত অন্যান্য সামগ্রীও উপলব্ধ</string>
-  <string name="help_10">আপনি আপনার পছন্দসই ZIM ফাইলগুলি অ্যাপের মধ্যে ডাউনলোড করতে পারেন বা ZIM ফাইলগুলিকে সাবধানে নির্বাচন করুন এবং আপনার এসডি কার্ডে স্থানান্তর করার আগে আপনি যে ডেস্কটপ কম্পিউটার থেকে ডাউনলোড করতে চান তা নির্ধারণ করুন।</string>
+  <string name="help_8">• উইকিপিডিয়া প্রতিটি ভাষার জন্য আলাদাভাবে উপলব্ধ</string>
+  <string name="help_9">• এছাড়া উইকিপিডিয়া বা উইকিসংকলনের মত অন্যান্য সামগ্রীও উপলব্ধ</string>
+  <string name="help_10" fuzzy="true">আপনি আপনার পছন্দসই ZIM ফাইলগুলি অ্যাপের মধ্যে ডাউনলোড করতে পারেন বা ZIM ফাইলগুলিকে সাবধানে নির্বাচন করুন এবং আপনার এসডি কার্ডে স্থানান্তর করার আগে আপনি যে ডেস্কটপ কম্পিউটার থেকে ডাউনলোড করতে চান তা নির্ধারণ করুন।</string>
   <string name="help_11">অ্যাপ্লিকেশনের মাধ্যমে ডাউনলোড করা ZIM ফাইলগুলি বাহ্যিক সঞ্চয়স্থানে Kiwix নামক ফোল্ডারে অবস্থিত।</string>
   <string name="pref_storage">সংগ্রহস্থল</string>
   <string name="pref_current_folder">বর্তমান ফোল্ডার</string>
@@ -128,21 +137,18 @@
   <string name="time_minute">মিনিট</string>
   <string name="time_second">সে</string>
   <string name="time_left">বামে</string>
+  <string name="time_today">আজ</string>
+  <string name="time_yesterday">গতকাল</string>
   <string name="pref_auto_night_mode_summary">স্বয়ংক্রিয়ভাবে দিন এবং রাতের মোডে স্যুইচ করুন।</string>
   <string name="pref_auto_night_mode">স্বয়ংক্রিয় রাত্রি মোড</string>
   <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
   <string name="your_languages">নির্বাচিত ভাষা</string>
   <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="crash_button_decline">না ধন্যবাদ</string>
+  <string name="new_tab_shortcut_label">নতুন ট্যাব</string>
+  <string name="pending_state">মুলতুবী</string>
+  <string name="failed_unknown">অজানা</string>
+  <string name="note">টীকা</string>
+  <string name="books_count">%dটি বই</string>
+  <string name="tag_text_only">শুধুমাত্র পাঠ্য</string>
 </resources>

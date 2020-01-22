@@ -1,6 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Fohanno
+* Gwenn-Ael
+* Y-M D
+-->
 <resources>
-  <string name="menu_zim_manager">Kaout endalc\'had</string>
+  <string name="kiwi">Kiwi</string>
+  <string name="menu_zim_manager" fuzzy="true">Kaout endalc\'had</string>
   <string name="menu_help">Skoazell</string>
   <string name="menu_home">Degemer</string>
   <string name="menu_settings">Arventennoù</string>
@@ -19,9 +25,10 @@
   <string name="search_label">Klask</string>
   <string name="choose_file">Dibab ur restr endac\'h (*.zim)</string>
   <string name="open_in_new_tab">Digeriñ al liamm en un ivinell nevez ?</string>
+  <string name="stop_hotspot_button" fuzzy="true">Paouez</string>
   <string name="error_file_not_found">Fazi : N\'eus ket bet gallet kavout ar restr ZIM diuzet.</string>
   <string name="error_file_invalid">Fazi : Ar restr diuzet n\'eo ket ur restr ZIM reizh.</string>
-  <string name="error_article_url_not_found">Fazi : N\'eus ket bet gallet kargañ ar pennad \“%1$s\”</string>
+  <string name="error_article_url_not_found">Fazi : N\'eus ket bet gallet kargañ ar pennad “%1$s”</string>
   <string name="pref_display_title">Diskwel</string>
   <string name="pref_zoom_sub_title">Zoum</string>
   <string name="pref_zoom_dialog">Live zoumañ</string>
@@ -52,6 +59,8 @@
   <string name="pref_clear_all_history_summary">Diverkañ an enklaskoù nevez ha roll-isor an ivinelloù</string>
   <string name="all_history_cleared_toast">Diverket eo ar roll-istor a-bezh</string>
   <string name="clear_all_history_dialog_title">Dilemel ar roll-istor a-bezh</string>
+  <string name="share">Rannañ</string>
+  <string name="selected_file_cab_app_chooser_title">Rannañ ar restroù ZIM gant :</string>
   <string name="delete">Dilemel</string>
   <string name="delete_specific_search_toast">Enklask nevez lamet</string>
   <string name="hint_contents_drawer_message">Gallout a rit klikañ a-gleiz evit gwelet endalc\'had ar pennad-mañ</string>
@@ -99,8 +108,8 @@
   <string name="help_5">Pelec\'h emañ an endalc\'had ?</string>
   <string name="help_6">War lec\'hienn web Kiwik eo herberc\'hiet hon endalc\'had.</string>
   <string name="help_7">Gallout a reer kaout anezho e stumm restroù ZIM. Kalz anezho zo :</string>
-  <string name="help_8">/u2022 Wikipedia a c\'haller kaout a-ziforc\'h\nevit pep yezh.</string>
-  <string name="help_9">\u2022 Endalc\'hadoù all evel Wikileaks pe Wikisource a a c\'haller kaout ivez.</string>
+  <string name="help_8" fuzzy="true">/u2022 Wikipedia a c\'haller kaout a-ziforc\'h\nevit pep yezh.</string>
+  <string name="help_9">• Endalc\'hadoù all evel Wikileaks pe Wikisource a a c\'haller kaout ivez.</string>
   <string name="help_10">Gallout a reot pe pellgargañ ho restroù ZIM dibabet en arload, pe dibab, gant aked, ar re ho peus c\'hoant da bellgargañ diwar hoc\'h urhiataer burev a-raok treuzkas ar restroù ZIM war ho kartenn SD.</string>
   <string name="help_11">Ar restroù ZIM pellgarget en arload zo er c\'havlec\'h skokañ diavaez en ur c\'havlec\'h anvet Kiwix.</string>
   <string name="pref_storage">Stokañ</string>
@@ -124,7 +133,12 @@
   <string name="wifi_only_msg">Ma tibabit “Ya” ne vo ket mui sachet hoc\'h evezh. Gallout a reot bepred, koulskoude, kemmañ an dra-se en arventennoù.</string>
   <string name="pref_wifi_only">Pellgargañ an endalc\'had dre WiFi hepken</string>
   <string name="time_day">deiz</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">kleiz</string>
+  <string name="time_today">Hiziv</string>
+  <string name="time_yesterday">Dec\'h</string>
   <string name="pref_auto_night_mode_summary">Cheñch ent emgefre etre ar modoù noz ha deiz.</string>
   <string name="pref_auto_night_mode">Mod noz emgefreek</string>
   <string name="pref_external_link_popup_title">Kemenn pa\'z eer liammoù diavaez</string>
@@ -134,16 +148,58 @@
   <string name="do_not_ask_anymore">Chom hep goulenn ken</string>
   <string name="your_languages">Yezhoù diuzet</string>
   <string name="other_languages">Yezhoù all :</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_items_msg">Elfenn ebet da gaout</string>
+  <string name="ongoing_download_channel_name">O pellgargañ</string>
+  <string name="crash_description">Gallout a rafec\'h sikour ac\'hanomp da renkañ ar gudenn-mañ en ur gas an titouroù-mañ ?</string>
+  <string name="crash_checkbox_language">Hoc\'h arventennoù yezh</string>
+  <string name="crash_checkbox_zimfiles">Ur roll eus ho restroù ZIM</string>
+  <string name="crash_checkbox_device">Munudoù ar stignad</string>
+  <string name="crash_button_confirm">KAS AR MUNUDOÙ</string>
+  <string name="new_tab_shortcut_label">Invinell nevz</string>
+  <string name="fav_icon">Favicon</string>
+  <string name="pic">Skeudenn</string>
+  <string name="vid">Video</string>
+  <string name="articleCount">%s pennad</string>
+  <string name="get_started">Kregiñ</string>
+  <string name="download_books">Pellgargañ al levrioù</string>
+  <string name="save_books_offline">Enrollañ levrioù ezlinenn</string>
+  <string name="download_books_message">Pellgargit ha lennit al levrioù ne vern pelec\'h e vefec\'h.</string>
+  <string name="unable_to_add_to_bookmarks">Ne c\'haller ket ouzhpennañ sinedoù</string>
+  <string name="go_to_previous_page">Mont d\'ar bajenn gent</string>
+  <string name="go_to_next_page">Mont d\'ar bajenn da-heul</string>
+  <string name="table_of_contents">Taolenn</string>
+  <string name="select_languages">Dibab ar yezhoù</string>
+  <string name="save_languages">Enrollañ ar yezhoù</string>
+  <string name="send_feedback">Kas un ali</string>
+  <string name="expand">Dispakañ</string>
+  <string name="history">Istor</string>
+  <string name="history_from_current_book">Istor al levr a vremañ</string>
+  <string name="search_history">Klask er roll-istor</string>
+  <string name="selected_items">%1$d dibabet</string>
+  <string name="bookmarks_from_current_book">Sinedoù eus al levr a vremañ</string>
+  <string name="search_bookmarks">Klask sinedoù</string>
+  <string name="switch_tabs">Cheñch ivinell</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Serriñ an holl ivinoù</string>
+  <string name="pending_state">O c\'hortoz</string>
+  <string name="successful_state">Echuiñ</string>
+  <string name="failed_state">C\'hwitet : %s</string>
+  <string name="paused_wifi">O c\'hortoz Wifi</string>
+  <string name="paused_retry">Gortoz evit esaeañ en-dro</string>
+  <string name="paused_unknown">Dianav</string>
+  <string name="failed_file_already_exists">Restr zo anezhi dija</string>
+  <string name="failed_http_error">Fazi roadennoù HTTP</string>
+  <string name="failed_unhandled_http_code">Kod HTTP degemeret dianav</string>
+  <string name="failed_unknown">Dianav</string>
+  <string name="failed_http_code">Kod HTTP %s</string>
+  <string name="save">Enrollañ</string>
+  <string name="note">Notenn</string>
+  <string name="wiki_article_title">Titl ar pennad Wiki</string>
+  <string name="note_save_unsuccessful">Notenn enrollet gant berzh</string>
+  <string name="note_save_successful">Notenn enrollet</string>
+  <string name="note_share_app_chooser_title">Restr notenn rannet gant :</string>
+  <string name="confirmation_alert_dialog_message">Tennañ ar c\'hemmoù n\'int ket saveteer ?</string>
+  <string name="delete_notes_confirmation_msg">Dilemel an holl notennoù ?</string>
+  <string name="notes_deletion_unsuccessful">Restoù zo n\'int ket bet lamet</string>
+  <string name="pref_clear_all_notes_title" fuzzy="true">Lemel an holl notennoù</string>
 </resources>

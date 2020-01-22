@@ -1,6 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* InsomniHat
+* ShockD
+* StanProg
+* Ted Masters
+* Termininja
+* Vladimir Penov
+* Vodnokon4e
+* АдмиралАнимЕ
+-->
 <resources>
-  <string name="menu_zim_manager">Вземете съдържание</string>
+  <string name="menu_zim_manager">Библиотека</string>
   <string name="menu_help">Помощ</string>
   <string name="menu_home">Начало</string>
   <string name="menu_settings">Настройки</string>
@@ -19,6 +29,7 @@
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
+  <string name="stop_hotspot_button">СПИРАНЕ</string>
   <string name="error_file_not_found">Грешка: Избраният ZIM файл не е намерен.</string>
   <string name="error_file_invalid">Грешка: Избраният файл не е валиден ZIM файл.</string>
   <string name="error_article_url_not_found">Грешка: Зареждането на статия (Url: %1$s) е неуспешно.</string>
@@ -32,8 +43,8 @@
   <string name="pref_night_mode_summary">Показване на статии в „нощен режим“</string>
   <string name="pref_back_to_top">Връщане в началото</string>
   <string name="pref_back_to_top_summary">Показване на бутон в края на страницата за превъртане нагоре</string>
-  <string name="pref_hide_toolbar">Скривайте туулбара, когато скролирате</string>
-  <string name="pref_hide_toolbar_summary">Скривайте туулбара, когато скролирате страницата надолу</string>
+  <string name="pref_hide_toolbar">Лентата с инструменти винаги видима</string>
+  <string name="pref_hide_toolbar_summary">Предпазва лентата с инструменти от превъртане извън видимата област, при преглеждане на съдържание</string>
   <string name="pref_language_title">Език</string>
   <string name="pref_language_chooser">Избиране на език</string>
   <string name="pref_credits">Сътрудници и лицензи</string>
@@ -95,15 +106,15 @@
   <string name="no_network_connection">Няма връзка с мрежата</string>
   <string name="help_2">Какво прави Kiwix?</string>
   <string name="help_3">Kiwix е офлайн четец на съдържание. Той действа като браузър, но вместо да зарежда съдържанието от онлайн уеб страници, той зарежда съдържанието от файл в ZIM формат.</string>
-  <string name="help_4">Въпреки че Kiwix е проектиран първоначално, да предоставя достъп до Уикипедия офлайн, той е способен, да предоставя достъп и до друго съдържание.</string>
+  <string name="help_4">Въпреки че Kiwix е проектиран първоначално да предоставя достъп до Уикипедия офлайн, той е способен да предоставя достъп и до друго съдържание.</string>
   <string name="help_5">Къде е съдържанието?</string>
   <string name="help_6">Нашето съдържание се хоства на сайта на Kiwix.</string>
   <string name="help_7">Те са достъпни като ZIM файлове. Съществуват много от тях:</string>
-  <string name="help_8">\u2022 Уикипедия е налична отделно за всеки език.</string>
-  <string name="help_9">\u2022 Също така е налично и съдържание от други източници, като Уикилиийкс и Уикисорс.</string>
+  <string name="help_8">• Уикипедия е налична отделно за всеки език.</string>
+  <string name="help_9">• Също така е налично и съдържание от други източници, като Уикилиийкс и Уикиизточник.</string>
   <string name="help_10">Вие можете или да смъкнете избраните от вас ZIM файлове, докато сте в мобилното приложение, или да изберете внимателно желаните от вас и да ги смъкнете от десктоп компютър, след което да прехвърлите ZIM файловете във вашата SD карта.</string>
   <string name="help_11">ZIM файловете, които са смъкнати в мобилното приложение, се намират във външната памет, в папка с име Kiwix.</string>
-  <string name="pref_storage">Съхраняване на данни</string>
+  <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текуща папка</string>
   <string name="path_not_writable">Няма достъп до желаната директория, използва се директорията по подразбиране. За да коригирате това, изберете отново желана директория в настройките на приложението.</string>
   <string name="delete_zim_failed">За съжаление не успяхме да изтрием този файл. Необходимо е да използвате файлов мениджър за тази цел.</string>
@@ -121,7 +132,7 @@
   <string name="next">Следващи</string>
   <string name="previous">Предишни</string>
   <string name="wifi_only_title">Ще позволите ли смъкването на съдържание, чрез мобилната мрежа?</string>
-  <string name="wifi_only_msg">Ако изберет “Да”, Вие няма да бъдете предупреждавани в бъдеще. Както и да е, Вие винаги може да промените това в Настройки</string>
+  <string name="wifi_only_msg">Ако изберете “Да”, няма да бъдете предупреждавани повече. Иначе, винаги можете да промените това в Настройки.</string>
   <string name="pref_wifi_only">Смъквай съдържание само чрез  WiFi</string>
   <string name="time_day">ден</string>
   <string name="time_hour">ч.</string>
@@ -137,16 +148,5 @@
   <string name="do_not_ask_anymore">Не питайте отново за това</string>
   <string name="your_languages">Избрани езици:</string>
   <string name="other_languages">Други езици:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="save">Съхраняване</string>
 </resources>

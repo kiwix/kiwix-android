@@ -1,6 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Fitoschido
+* MSClaudiu
+* Minisarm
+-->
 <resources>
-  <string name="menu_zim_manager">Preia conținut</string>
+  <string name="menu_zim_manager" fuzzy="true">Preia conținut</string>
   <string name="menu_help">Ajutor</string>
   <string name="menu_home">Acasă</string>
   <string name="menu_settings">Setări</string>
@@ -19,10 +24,12 @@
   <string name="search_label">Caută</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
+  <string name="stop_hotspot_button">OPREȘTE</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
   <string name="pref_display_title">Ecran</string>
+  <string name="pref_zoom_sub_title">Zoom</string>
   <string name="pref_zoom_dialog">Nivel de zoom</string>
   <string name="pref_info_title">Informații</string>
   <string name="pref_info_version">Versiune</string>
@@ -75,12 +82,14 @@
   <string name="speech_prompt_text">Vorbește pentru a căuta %s</string>
   <string name="speech_not_supported">Ne pare rău! Dispozitivul tău nu susține opțiunea de vorbire</string>
   <string name="local_zims">Dispozitiv</string>
+  <string name="remote_zims">Online</string>
   <string name="zim_downloads">Descărcare</string>
   <string name="zim_manager">Bibliotecă</string>
   <string name="delete_specific_zim_toast">Filă ștearsă</string>
   <string name="zim_file_downloading">Descărcare</string>
   <string name="zim_file_downloaded">Descărcat</string>
   <string name="download_pause">Pauză</string>
+  <string name="download_stop">Stop</string>
   <string name="download_paused">oprită</string>
   <string name="no_downloads_here">Nici o descărcare</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
@@ -92,13 +101,13 @@
   <string name="no_network_connection">Nu există conexiune de rețea</string>
   <string name="help_2">Ce face Kiwix?</string>
   <string name="help_3">Kiwix este un server de citit conținut off-line. Este aproape ca un browser dar în loc să acceseze paginile web online citește conținut de la un fișier în formatul ZIM.</string>
-  <string name="help_4">În timp ce Kiwix a fost făcut inițial să ofere Wikipedia off-line de asemenea citește și alt conținut.</string>
+  <string name="help_4" fuzzy="true">În timp ce Kiwix a fost făcut inițial să ofere Wikipedia off-line de asemenea citește și alt conținut.</string>
   <string name="help_5">Unde este conținutul?</string>
   <string name="help_6">Conținutul este găzduit de Kiwix pe site-ul web.</string>
   <string name="help_7">Există mai multe fișiere ZIM. Sunt multe:</string>
-  <string name="help_8">\u2022 Wikipedia este disponibilă în mod separat pentru fiecare limbă</string>
-  <string name="help_9">\u2022 Alt conținut ca Wikileaks sa Wikisursă este de asemenea disponibil</string>
-  <string name="help_10">Fișiere ZIM pe cardul SD.</string>
+  <string name="help_8">• Wikipedia este disponibilă în mod separat pentru fiecare limbă</string>
+  <string name="help_9">• Alt conținut ca Wikileaks sa Wikisursă este de asemenea disponibil</string>
+  <string name="help_10" fuzzy="true">Fișiere ZIM pe cardul SD.</string>
   <string name="help_11">Fișierele ZIM descărcate în aplicație sunt localizate în directorul extern de stocare într-un folder denumit Kiwix.</string>
   <string name="pref_storage">Stocare</string>
   <string name="pref_current_folder">Folder curent</string>
@@ -106,6 +115,7 @@
   <string name="delete_zim_failed">Ne pare rău că nu am reușit să ștergem această filă. Ar trebui să folosiți un manager de fișier în loc.</string>
   <string name="tts_pause">pauză</string>
   <string name="tts_resume">rezumat</string>
+  <string name="tts_stop">stop</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Externă</string>
   <string name="yes">Da</string>
@@ -120,6 +130,9 @@
   <string name="wifi_only_msg">Dacă alegi „Da” nu vei fi avertizat în viitor. Oricum, poți oricând să schimbi asta în Setări</string>
   <string name="pref_wifi_only">Descarcă conținut numai prin WiFi</string>
   <string name="time_day">zi</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">stânga</string>
   <string name="pref_auto_night_mode_summary">Schimbă automat între modul de zi și de noapte.</string>
   <string name="pref_auto_night_mode">Mod automat de noapte</string>
@@ -130,16 +143,4 @@
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
   <string name="your_languages">Limbi selectate:</string>
   <string name="other_languages">Alte limbi:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Orbot707
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Sistemê dosyay şıma 4GB ra cori rê peşti nêdana</string>
+  <string name="detecting_file_system">Sistemê dosyaya şıma heta 4GB vıraştışi hesneyê</string>
+  <string name="cannot_open_file">Dosya nêabiye. Kerem kerê ena dosyay Kıtabgahê Taba Cihazi de cı geyre</string>
+</resources>

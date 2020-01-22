@@ -1,4 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Beta16
+* Einreiher
+* G.garatti
+* Matteocng
+* Nivit
+* Purodha
+-->
 <resources>
   <string name="menu_help">Aiuto</string>
   <string name="menu_home">Pagina principale</string>
@@ -18,6 +26,8 @@
   <string name="search_label">Ricerca</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
   <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
+  <string name="go_to_settings_label">Vai alle impostazioni</string>
+  <string name="stop_hotspot_button">STOP</string>
   <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato.</string>
   <string name="error_file_invalid">Errore: il file selezionato non è un file ZIM valido.</string>
   <string name="error_article_url_not_found">Errore: caricamento della voce (url: %1$s) non riuscito.</string>
@@ -77,6 +87,7 @@
   <string name="tts_pause">pausa</string>
   <string name="external_storage">Esterno</string>
   <string name="yes">Sì</string>
+  <string name="no">No</string>
   <string name="confirm_stop_download_title">Interrompere il download?</string>
   <string name="confirm_stop_download_msg">Sei sicuro di voler interrompere il download?</string>
   <string name="download_change_storage">Selettore di strumento di archiviazione</string>
@@ -84,20 +95,18 @@
   <string name="previous">Precedente</string>
   <string name="pref_wifi_only">Scarica contenuto solo tramite WiFi</string>
   <string name="time_day">giorno</string>
+  <string name="time_yesterday">Ieri</string>
   <string name="pref_auto_night_mode_summary">Commuta automaticamente tra la modalità giorno e notte.</string>
   <string name="pref_auto_night_mode">Modalità notte automatica</string>
   <string name="your_languages">Lingue selezionate:</string>
   <string name="other_languages">Altre lingue:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="crash_checkbox_device">Dettagli dispositivo</string>
+  <string name="new_tab_shortcut_label">Nuova scheda</string>
+  <string name="articleCount">%s voci</string>
+  <string name="table_of_contents">Indice</string>
+  <string name="failed_unknown">Sconosciuto</string>
+  <string name="nearby_devices">DISPOSITIVI VICINI</string>
+  <string name="status">Stato</string>
+  <string name="tag_short_text">Testo breve</string>
+  <string name="go_to_permissions">Vai alle impostazioni</string>
 </resources>

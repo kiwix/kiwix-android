@@ -1,5 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Dyolf77
+* Eyas
+* Meno25
+* بدارين
+* ديفيد
+* محمد أحمد عبد الفتاح
+-->
 <resources>
+  <string name="kiwi">كيوي</string>
   <string name="menu_zim_manager">الحصول على المحتوى</string>
   <string name="menu_help">مساعدة</string>
   <string name="menu_home">الصفحة الرئيسية</string>
@@ -12,6 +21,8 @@
   <string name="menu_exit_full_screen">إنهاء وضع الشاشة الكاملة</string>
   <string name="menu_read_aloud">اقرأ بصوت عال</string>
   <string name="menu_read_aloud_stop">توقف عن القراءة بصوت عال</string>
+  <string name="menu_support_kiwix">دعم كيويكس</string>
+  <string name="menu_host_books">كتب المضيف</string>
   <string name="save_media">حفظ الوسائل</string>
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
   <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
@@ -19,6 +30,29 @@
   <string name="search_label">بحث</string>
   <string name="choose_file">حدد ملف محتوى (*.zim)</string>
   <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة</string>
+  <string name="hotspot_service_channel_name">قناة خدمة نقطة ساخنة</string>
+  <string name="hotspot_failed_title">فشل بدء نقطة فعالة</string>
+  <string name="hotspot_failed_message">يبدو أن نقطة الاتصال قيد التشغيل بالفعل؛ الرجاء تعطيل نقطة اتصال الواي فاي للمتابعة.</string>
+  <string name="go_to_wifi_settings_label">انتقل إلى إعدادات الواي فاي</string>
+  <string name="go_to_settings_label">اذهب للإعدادات</string>
+  <string name="hotspot_running">تشغيل نقطة ساخنة</string>
+  <string name="stop_hotspot_button">قف</string>
+  <string name="no_books_selected_toast_message">يُرجَى اختيار الكتب أولا</string>
+  <string name="server_failed_message">لا يمكن بدء الخادم؛ يُرجَى تشغيل نقطة الاتصال الخاصة بك</string>
+  <string name="server_failed_toast_message">لا يمكن بدء الخادم.</string>
+  <string name="server_started__successfully_toast_message">بدأ الخادم بنجاح.</string>
+  <string name="hotspot_turned_on">نقطة ساخنة قيد التشغيل</string>
+  <string name="hotspot_details_message">فيما يلي تفاصيل نقطة الاتصال المحلية.\nSSID : %1$s \nPass : %2$s</string>
+  <string name="server_textview_default_message">حدد الملفات التي ترغب في استضافتها على الخادم</string>
+  <string name="progress_dialog_starting_server">جارٍ بدء الخادم</string>
+  <string name="hotspot_dialog_title">قم بتشغيل نقطة اتصال الواي فاي الخاصة بك</string>
+  <string name="hotspot_dialog_message">لكي تعمل هذه الميزة؛ يجب أولا تشغيل نقطة اتصال الواي فاي يدويا.</string>
+  <string name="hotspot_dialog_neutral_button">نعم، لقد حولته</string>
+  <string name="hotspot_channel_description">تحديثات حول حالة نقطة الاتصال/الخادم.</string>
+  <string name="hotspot_notification_content_title">نقطة كيويكس ساخنة</string>
+  <string name="start_server_label">بدء الخادم</string>
+  <string name="stop_server_label">إيقاف الخادم</string>
+  <string name="server_started_message">أدخل عنوان الآيبي هذا في متصفحك للوصول إلى الخادم %s</string>
   <string name="error_file_not_found">خطأ: تعذر العثور على الملف المحدد زيم (ZIM)</string>
   <string name="error_file_invalid">خطأ: ملف زيم (ZIM) المحدد ليس ملفا صالحا.</string>
   <string name="error_article_url_not_found">خطأ: تحميل المقالة (Url: %1$s) لم يتم بنجاح.</string>
@@ -52,6 +86,8 @@
   <string name="pref_clear_all_history_summary">مسح تاريخ أحدث عمليات البحث وعلامات التبويب</string>
   <string name="all_history_cleared_toast">تم مسح كل التاريخ</string>
   <string name="clear_all_history_dialog_title">مسح كل التاريخ</string>
+  <string name="share">مشاركة</string>
+  <string name="selected_file_cab_app_chooser_title">مشاركة ملفات ZIM مع:</string>
   <string name="delete">حذف</string>
   <string name="delete_specific_search_toast">تمة إزالة البحث الأخير</string>
   <string name="hint_contents_drawer_message">يمكنك التمرير لليسار لعرض محتويات هذه المقالة</string>
@@ -79,6 +115,7 @@
   <string name="remote_zims">على الإنترنت</string>
   <string name="zim_downloads">جارٍ التنزيل</string>
   <string name="zim_manager">مكتبة</string>
+  <string name="delete_zim_body">حذف %s؟</string>
   <string name="delete_specific_zim_toast">تم حذف الملف</string>
   <string name="zim_file_downloading">جارٍ التنزيل</string>
   <string name="zim_file_downloaded">تم التنزيل</string>
@@ -99,8 +136,8 @@
   <string name="help_5">أين هو المحتوى؟</string>
   <string name="help_6">تتم استضافة محتوانا على موقع كيويكس.</string>
   <string name="help_7">هي متاحة كملفات ZIM، وهناك الكثير منها:</string>
-  <string name="help_8">\u2022 تتوفر ويكيبيديا بشكل منفصل لكل لغة</string>
-  <string name="help_9">\u2022 تتوفر أيضًا محتويات أخرى مثل ويكيليكس أو ويكي مصدر</string>
+  <string name="help_8">• تتوفر ويكيبيديا بشكل منفصل لكل لغة</string>
+  <string name="help_9">• تتوفر أيضًا محتويات أخرى مثل ويكيليكس أو ويكي مصدر</string>
   <string name="help_10">يمكنك إما تنزيل ملفات ZIM المختارة داخل التطبيق أو اختيار التطبيق(ات) الذي تريده وتنزيله من حاسوب مكتبي قبل نقل ملفات ZIM إلى بطاقة SD الخاصة بك.</string>
   <string name="help_11">توجد ملفات ZIM القابلة للتنزيل داخل التطبيق في دليل التخزين الخارجي في مجلد بعنوان Kiwix.</string>
   <string name="pref_storage">التخزين</string>
@@ -128,6 +165,8 @@
   <string name="time_minute">دق</string>
   <string name="time_second">ث</string>
   <string name="time_left">متبقي</string>
+  <string name="time_today">اليوم</string>
+  <string name="time_yesterday">أمس</string>
   <string name="pref_auto_night_mode_summary">التبديل تلقائيا بين وضع اليلي والنهاري.</string>
   <string name="pref_auto_night_mode">الوضع الليلي الآلي</string>
   <string name="pref_external_link_popup_title">التحذير عند إدخال وصلات خارجية</string>
@@ -137,16 +176,116 @@
   <string name="do_not_ask_anymore">لا تسأل بعد الآن</string>
   <string name="your_languages">اللغات المختارة:</string>
   <string name="other_languages">لغات أخرى:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_items_msg">لا توجد عناصر متاحة</string>
+  <string name="ongoing_download_channel_name">التنزيلات الجارية</string>
+  <string name="ongoing_download_channel_desc">تصنيف لتنزيلات ملف zim المستمرة.</string>
+  <string name="crash_title">حسنا، هذا أمر محرج</string>
+  <string name="crash_description">يبدو أننا انهرنا.\n\nهل تمانع في مساعدتنا في حل هذه المشكلة عن طريق إرسال المعلومات التالية؟</string>
+  <string name="crash_checkbox_language">إعدادات لغتك</string>
+  <string name="crash_checkbox_zimfiles">قائمة ملفات Zim الخاصة بك</string>
+  <string name="crash_checkbox_exception">تفاصيل الانهيار</string>
+  <string name="crash_checkbox_logs">سجلات التطبيق</string>
+  <string name="crash_checkbox_device">تفاصيل الجهاز</string>
+  <string name="crash_button_confirm">إرسال التفاصيل</string>
+  <string name="crash_button_decline">لا شكرا</string>
+  <string name="shortcut_disabled_message">اختصار غير متوفر</string>
+  <string name="new_tab_shortcut_label">علامة تبويب جديدة</string>
+  <string name="get_content_shortcut_label">الحصول على المحتوى</string>
+  <string name="fav_icon">أيقونة المفضلة</string>
+  <string name="pic">صورة</string>
+  <string name="vid">فيد</string>
+  <string name="articleCount">%s مقالات</string>
+  <string name="get_started">ابدأ</string>
+  <string name="download_books">تنزيل الكتب</string>
+  <string name="human_kind_knowledge">المعرفة الإنسانية، على هاتفك.</string>
+  <string name="welcome_to_the_family">مرحبا بك في العائلة</string>
+  <string name="save_books_offline">حفظ الكتب دون اتصال</string>
+  <string name="download_books_message">قم بتنزيل الكتب واقرأ أينما كنت.</string>
+  <string name="unable_to_add_to_bookmarks">غير قادر على الإضافة إلى الإشارات المرجعية</string>
+  <string name="go_to_previous_page">الانتقال إلى الصفحة السابقة</string>
+  <string name="go_to_next_page">انتقل إلى الصفحة التالية</string>
+  <string name="table_of_contents">جدول المحتويات</string>
+  <string name="select_languages">اختر اللغات</string>
+  <string name="save_languages">حفظ اللغات</string>
+  <string name="send_feedback">إرسال تعليق</string>
+  <string name="expand">وسع</string>
+  <string name="history">تاريخ</string>
+  <string name="history_from_current_book">التاريخ من الكتاب الحالي</string>
+  <string name="search_history">سجل البحث</string>
+  <string name="selected_items">تم تحديد %1$d</string>
+  <string name="bookmarks_from_current_book">الإشارات المرجعية من الكتاب الحالي</string>
+  <string name="search_bookmarks">البحث في الإشارات</string>
+  <string name="switch_tabs">تبديل علامات التبويب</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">غلق جميع علامات التبويب</string>
+  <string name="pending_state">قيد الانتظار</string>
+  <string name="running_state">في تقدم</string>
+  <string name="successful_state">اكتمال</string>
+  <string name="paused_state">متوقفة مؤقتا</string>
+  <string name="failed_state">فشل: %s</string>
+  <string name="paused_wifi">في انتظار واي فاي</string>
+  <string name="paused_connectivity">في انتظار الاتصال بشبكة</string>
+  <string name="paused_retry">في انتظار إعادة المحاولة</string>
+  <string name="paused_unknown">غير معروف</string>
+  <string name="failed_cannot_resume">لا يمكن الاستئناف بسبب سبب غير معروف</string>
+  <string name="failed_storage_not_found">لا يمكن العثور على وسيط التخزين</string>
+  <string name="failed_file_already_exists">الملف موجود بالفعل</string>
+  <string name="failed_unknown_file_error">خطأ غير معروف في نظام الملفات</string>
+  <string name="failed_http_error">خطأ في بيانات HTTP</string>
+  <string name="failed_insufficient_space">لا توجد مساحة كافية للتخزين</string>
+  <string name="failed_too_many_redirects">تحويلات كثيرة جدا</string>
+  <string name="failed_unhandled_http_code">تلقى رمز HTTP غير معروف</string>
+  <string name="failed_unknown">غير معروف</string>
+  <string name="failed_http_code">كود HTTP %s</string>
+  <string name="save">حفظ</string>
+  <string name="note">ملاحظة</string>
+  <string name="wiki_article_title">عنوان مقالة الويكي</string>
+  <string name="ext_storage_permission_rationale_add_note">الوصول إلى التخزين مطلوب للملاحظات</string>
+  <string name="ext_storage_write_permission_denied_add_note">لا يمكن استخدام الملاحظات دون الوصول إلى التخزين</string>
+  <string name="note_save_unsuccessful">حفظ الملاحظة غير ناجح</string>
+  <string name="note_save_successful">تم حفظ الملاحظة</string>
+  <string name="note_save_error_storage_not_writable">خطأ في حفظ الملاحظة: التخزين غير قابل للكتابة</string>
+  <string name="note_share_error_file_missing">ملف الملاحظة غير موجود</string>
+  <string name="note_share_app_chooser_title">مشاركة ملف الملاحظة مع:</string>
+  <string name="confirmation_alert_dialog_message">تجاهل التغييرات غير المحفوظة؟</string>
+  <string name="delete_notes_confirmation_msg">حذف جميع الملاحظات؟</string>
+  <string name="ext_storage_permission_not_granted">خطأ: أذونات التخزين غير ممنوحة</string>
+  <string name="notes_deletion_successful">تم حذف مجلد الملاحظات بالكامل</string>
+  <string name="notes_deletion_unsuccessful">لم يتم حذف بعض الملفات</string>
+  <string name="books_count">%d كتاب(كتب)</string>
+  <string name="discovery_initiated">بدأ الاكتشاف</string>
+  <string name="discovery_failed">فشل الاكتشاف</string>
+  <string name="severe_loss_error">خطأ شديد! حاول تعطيل/إعادة تمكين واي فاي P2P</string>
+  <string name="connection_failed">فشل الاتصال</string>
+  <string name="permission_rationale_location">مطلوب إذن للموقع بواسطة أندرويد للسماح للتطبيق باكتشاف أجهزة النظير</string>
+  <string name="permission_refused_location">لا يمكن تحديد موقع الأجهزة النظيرة دون أذونات الموقع</string>
+  <string name="permission_refused_storage">لا يمكن الوصول إلى ملفات zim دون إذن تخزين</string>
+  <string name="request_enable_location">تمكين الموقع للسماح باكتشاف الأقران</string>
+  <string name="discovery_needs_location">لا يمكن اكتشاف النظراء دون خدمات الموقع</string>
+  <string name="request_enable_wifi">تمكين واي فاي P2P من إعدادات النظام</string>
+  <string name="discovery_needs_wifi">لا يمكن اكتشاف النظراء دون تشغيل الواي فاي</string>
+  <string name="transfer_to">نقل الملفات إلى %s؟</string>
+  <string name="device_not_cooperating">الجهاز المحدد لا يتعاون للنقل</string>
+  <string name="file_transfer_complete">اكتمل نقل الملفات</string>
+  <string name="error_during_transfer">حدث خطأ أثناء النقل</string>
+  <string name="error_transferring">خطأ في نقل الملف %s</string>
+  <string name="get_content_from_nearby_device">الحصول على محتوى من جهاز قريب</string>
+  <string name="search_for_peers">البحث عن الأقران</string>
+  <string name="your_device">جهازك:</string>
+  <string name="nearby_devices">الأجهزة القريبة</string>
+  <string name="no_devices_found">لم يتم اكتشاف أية أجهزة؛ اضغط على زر البحث للمحاولة مرة أخرى.</string>
+  <string name="files_for_transfer">ملفات للتحويل</string>
+  <string name="preparing_files">جارٍ تحضير الملفات للنقل....</string>
+  <string name="performing_handshake">جارٍ أداء المصافحة....</string>
+  <string name="local_zim_sharing">مشاركة ZIM المحلي</string>
+  <string name="status">الحالة</string>
+  <string name="pref_clear_all_notes_summary">مسح جميع الملاحظات على جميع المقالات</string>
+  <string name="pref_clear_all_notes_title">مسح جميع الملاحظات</string>
+  <string name="tag_pic">صو</string>
+  <string name="tag_vid">فيد</string>
+  <string name="tag_text_only">نص فقط</string>
+  <string name="tag_short_text">نص قصير</string>
+  <string name="storage_permission_denied">إِذن التّخزين قد رُفِض</string>
+  <string name="grant_read_storage_permission">يتطلب هذا التطبيق القدرة على قراءة وظيفة التخزين؛ يُرجَى منح الإذن في إعداداتك</string>
+  <string name="go_to_permissions">اذهب للإعدادات</string>
 </resources>

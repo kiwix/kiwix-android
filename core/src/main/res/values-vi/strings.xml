@@ -1,6 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Baonguyen21022003
+* Dinhxuanduyet
+* Fitoschido
+* Leducthn
+* Minh Nguyen
+-->
 <resources>
-  <string name="menu_zim_manager">Lấy Nội dung</string>
+  <string name="menu_zim_manager" fuzzy="true">Lấy Nội dung</string>
   <string name="menu_help">Trợ giúp</string>
   <string name="menu_home">Trang đầu</string>
   <string name="menu_settings">Thiết lập</string>
@@ -14,11 +21,12 @@
   <string name="menu_read_aloud_stop">Dừng đọc to</string>
   <string name="save_media">Lưu tập tin đa phương tiện</string>
   <string name="save_media_error">Đã xuất hiện lỗi khi lưu phương tiện!</string>
-  <string name="save_media_saved">Đã lưu phương tiện thành %s trong thư mục hình ảnh Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Đã lưu phương tiện thành %s trong thư mục hình ảnh Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Đang tìm nội dung có thể tải về, xin vui lòng chờ…</string>
   <string name="search_label">Tìm kiếm</string>
   <string name="choose_file">Chọn một Tập tin Nội dung (*.zim)</string>
   <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
+  <string name="stop_hotspot_button">NGỪNG</string>
   <string name="error_file_not_found">Lỗi: Không tìm thấy tập tin ZIM đã chọn</string>
   <string name="error_file_invalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
   <string name="error_article_url_not_found">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>
@@ -94,13 +102,13 @@
   <string name="no_network_connection">Không có kết nối mạng</string>
   <string name="help_2">Kiwix dùng để làm gì?</string>
   <string name="help_3">Kiwix là một chương trình đọc nội dung ngoại tuyến. Kiwix hoạt động như trình duyệt, tuy nhiên, thay vì truy cập các trang web trực tuyến thì Kiwix lại đọc nội dung từ các tập tin định dạng ZIM.</string>
-  <string name="help_4">Mặc dù Kiwix lúc ban đầu được tạo ra để giúp bạn truy cập Wikipedia ngoại tuyến, chương trình cũng có thể đọc các nội dung khác nữa.</string>
+  <string name="help_4" fuzzy="true">Mặc dù Kiwix lúc ban đầu được tạo ra để giúp bạn truy cập Wikipedia ngoại tuyến, chương trình cũng có thể đọc các nội dung khác nữa.</string>
   <string name="help_5">Lấy nội dung ở đâu?</string>
   <string name="help_6">Nội dung nằm trên trang web của Kiwix.</string>
   <string name="help_7">Nội dung dùng định dạng ZIM. Có rất nhiều loại nội dung:</string>
-  <string name="help_8">\u2022 Các bản Wikipedia riêng biệt cho từng ngôn ngữ</string>
-  <string name="help_9">\u2022 Các nội dung khác như Wikileaks hay Wikisource cũng có sẵn</string>
-  <string name="help_10">Bạn có thể chọn tập tin ZIM muốn tải về từ ứng dụng hoặc cẩn thận chọn tập tin ZIM bạn muốn và tải về từ máy tính trước khi chuyển tập tin đó sang thẻ SD.</string>
+  <string name="help_8">• Các bản Wikipedia riêng biệt cho từng ngôn ngữ</string>
+  <string name="help_9">• Các nội dung khác như Wikileaks hay Wikisource cũng có sẵn</string>
+  <string name="help_10" fuzzy="true">Bạn có thể chọn tập tin ZIM muốn tải về từ ứng dụng hoặc cẩn thận chọn tập tin ZIM bạn muốn và tải về từ máy tính trước khi chuyển tập tin đó sang thẻ SD.</string>
   <string name="help_11">Các tập tin ZIM được tải về bằng ứng dụng sẽ được lưu trữ ở bộ nhớ ngoài, trong thư mục có tên Kiwix.</string>
   <string name="pref_storage">Lưu trữ</string>
   <string name="pref_current_folder">Thư mục Hiện tại</string>
@@ -135,16 +143,4 @@
   <string name="do_not_ask_anymore">Đừng hỏi lại</string>
   <string name="your_languages">Ngôn ngữ được chọn:</string>
   <string name="other_languages">Ngôn ngữ khác:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

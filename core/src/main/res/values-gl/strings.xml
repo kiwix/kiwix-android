@@ -1,6 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Athena in Wonderland
+* Elisardojm
+* Fitoschido
+* Toliño
+-->
 <resources>
-  <string name="menu_zim_manager">Obter contido</string>
+  <string name="menu_zim_manager" fuzzy="true">Obter contido</string>
   <string name="menu_help">Axuda</string>
   <string name="menu_home">Inicio</string>
   <string name="menu_settings">Configuración</string>
@@ -19,10 +25,12 @@
   <string name="search_label">Procurar</string>
   <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
+  <string name="stop_hotspot_button">DETER</string>
   <string name="error_file_not_found">Erro: Non se puido atopar o ficheiro ZIM seleccionado.</string>
   <string name="error_file_invalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: Non se puido cargar o artigo (URL: %1$s).</string>
   <string name="pref_display_title">Visualización</string>
+  <string name="pref_zoom_sub_title">Zoom</string>
   <string name="pref_zoom_dialog">Nivel de zoom</string>
   <string name="pref_info_title">Información</string>
   <string name="pref_info_version">Versión</string>
@@ -69,6 +77,7 @@
   <string name="bookmark_removed">Marcador borrado</string>
   <string name="pref_newtab_background_title">Abrir unha lapela nova en segundo plano</string>
   <string name="pref_newtab_background_summary">Ó abrir unha lapela nova abrirase en segundo plano</string>
+  <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artigo aberto nunha lapela nova</string>
   <string name="search_widget_text">Procurar en Kiwix</string>
   <string name="speech_prompt_text">Fale para procurar %s</string>
@@ -87,18 +96,19 @@
   <string name="no_files_here">Ningún ficheiro aquí</string>
   <string name="download_no_space">Espacio insuficiente para descargar este ficheiro.</string>
   <string name="space_available">Espazo dispoñible:</string>
+  <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sen imaxes</string>
   <string name="zim_no_vid">Sen vídeos</string>
   <string name="no_network_connection">Ningunha conexión de rede</string>
   <string name="help_2">Que fai Kiwix?</string>
   <string name="help_3">Kiwix é un lector de contido desconectado. Actúa como un navegador web, pero en vez de acceder a páxinas web en liña, le o contido dun ficheiro en formato ZIM.</string>
-  <string name="help_4">Se ben Kiwix deseñouse orixinalmente para proporcionar Wikipedia sen conexión, tamén pode ler outros contidos.</string>
+  <string name="help_4" fuzzy="true">Se ben Kiwix deseñouse orixinalmente para proporcionar Wikipedia sen conexión, tamén pode ler outros contidos.</string>
   <string name="help_5">Onde esta o contido?</string>
   <string name="help_6">O noso contido está aloxado no sitio web de Kiwix.</string>
   <string name="help_7">Están dispoñibles como ficheiros ZIM. Hai unha chea deles:</string>
-  <string name="help_8">\u2022 Wikipedia está dispoñible para cada lingua por separado</string>
-  <string name="help_9">\u2022 Outros contidos, como Wikileaks ou Wikisource tamén están dispoñibles</string>
-  <string name="help_10">Pode descargar os ficheiros ZIM elixidos na aplicación, ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
+  <string name="help_8">• Wikipedia está dispoñible para cada lingua por separado</string>
+  <string name="help_9">• Outros contidos, como Wikileaks ou Wikisource tamén están dispoñibles</string>
+  <string name="help_10" fuzzy="true">Pode descargar os ficheiros ZIM elixidos na aplicación, ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
   <string name="help_11">Os ficheiros ZIM descargados na aplicación atópanse no directorio de almacenamento externo, nunha carpeta chamada Kiwix.</string>
   <string name="pref_storage">Almacenamento</string>
   <string name="pref_current_folder">Carpeta actual</string>
@@ -121,6 +131,9 @@
   <string name="wifi_only_msg">Se escolle “Si”, non será advertido no futuro. Porén, sempre pode cambiar isto en Configuración</string>
   <string name="pref_wifi_only">Descargar contido só mediante WiFi</string>
   <string name="time_day">día</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">esquerda</string>
   <string name="pref_auto_night_mode_summary">Cambiar automaticamente entre o modo diurno e o nocturno</string>
   <string name="pref_auto_night_mode">Modo nocturno automatizado</string>
@@ -131,16 +144,4 @@
   <string name="do_not_ask_anymore">Non preguntar máis</string>
   <string name="your_languages">Linguas escollidas:</string>
   <string name="other_languages">Outras linguas:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

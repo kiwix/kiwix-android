@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Killarnee
+* Metalhead64
+-->
 <resources>
-  <string name="menu_zim_manager">Inhalt abrufen</string>
+  <string name="menu_zim_manager" fuzzy="true">Inhalt abrufen</string>
   <string name="menu_help">Hilfe</string>
   <string name="menu_home">Start</string>
   <string name="menu_settings">Einstellungen</string>
@@ -19,12 +23,15 @@
   <string name="search_label">Suchen</string>
   <string name="choose_file">Wähle eine Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
+  <string name="stop_hotspot_button">STOPP</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
   <string name="error_article_url_not_found">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
   <string name="pref_display_title">Anzeige</string>
   <string name="pref_zoom_sub_title">Vergrößerung</string>
   <string name="pref_zoom_dialog">Vergrößerungsstufe</string>
+  <string name="pref_info_title">Information</string>
+  <string name="pref_info_version">Version</string>
   <string name="pref_zoom_enable">Zoom-Steuerung</string>
   <string name="pref_night_mode">Nachtmodus</string>
   <string name="pref_night_mode_summary">Artikel mit umgekehrten Farben ansehen</string>
@@ -68,11 +75,13 @@
   <string name="bookmark_removed">Lesezeichen entfernt</string>
   <string name="pref_newtab_background_title">Neue Registerkarte im Hintergrund öffnen</string>
   <string name="pref_newtab_background_summary">Beim Öffnen einer neuen Registerkarte wird sie im Hintergrund geöffnet</string>
+  <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artikel in neuem Reiter geöffnet</string>
   <string name="search_widget_text">Kiwix durchsuchen</string>
   <string name="speech_prompt_text">Sprechen, um %s zu suchen</string>
   <string name="speech_not_supported">Leider unterstützt Ihr Gerät keine Spracheingabe!</string>
   <string name="local_zims">Gerät</string>
+  <string name="remote_zims">Online</string>
   <string name="zim_downloads">Herunterladen</string>
   <string name="zim_manager">Bibliothek</string>
   <string name="delete_specific_zim_toast">Datei gelöscht</string>
@@ -91,13 +100,13 @@
   <string name="no_network_connection">Keine Netzwerkverbindung</string>
   <string name="help_2">Was macht Kiwix?</string>
   <string name="help_3">Kiwix ist eine Lesesoftware für Offlineinhalte. Sie funktioniert wie ein Browser, aber anstatt auf Webseiten online zuzugreifen, liest sie Inhalte von einer Datei im ZIM-Format.</string>
-  <string name="help_4">Obwohl Kiwix ursprünglich entwickelt wurde, um Wikipedia offline zur Verfügung zu stellen, liest es auch andere Inhalte.</string>
+  <string name="help_4" fuzzy="true">Obwohl Kiwix ursprünglich entwickelt wurde, um Wikipedia offline zur Verfügung zu stellen, liest es auch andere Inhalte.</string>
   <string name="help_5">Wo ist der Inhalt?</string>
   <string name="help_6">Unser Inhalt wird auf der Kiwix-Website zur Verfügung gestellt.</string>
   <string name="help_7">Sie sind verfügbar als ZIM-Dateien. Es gibt viele von ihnen:</string>
-  <string name="help_8">\u2022 Wikipedia ist für jede Sprache getrennt verfügbar</string>
-  <string name="help_9">\u2022 Andere Inhalte wie Wikileaks oder Wikisource sind ebenfalls verfügbar</string>
-  <string name="help_10">Sie können entweder Ihre ausgewählten ZIM-Dateien in der App herunterladen oder die gewünschten Datei(en) sorgsam auf einem Desktopcomputer auswählen und herunterladen, bevor Sie die ZIM-Dateien auf Ihre SD-Karte übertragen.</string>
+  <string name="help_8">• Wikipedia ist für jede Sprache getrennt verfügbar</string>
+  <string name="help_9">• Andere Inhalte wie Wikileaks oder Wikisource sind ebenfalls verfügbar</string>
+  <string name="help_10" fuzzy="true">Sie können entweder Ihre ausgewählten ZIM-Dateien in der App herunterladen oder die gewünschten Datei(en) sorgsam auf einem Desktopcomputer auswählen und herunterladen, bevor Sie die ZIM-Dateien auf Ihre SD-Karte übertragen.</string>
   <string name="help_11">Heruntergeladene ZIM-Dateien in der App befinden sich im Verzeichnis des externen Speichers in einem Ordner namens Kiwix.</string>
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
@@ -133,16 +142,4 @@
   <string name="do_not_ask_anymore">Nicht mehr fragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="other_languages">Weitere Sprachen:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

@@ -1,6 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Ark74
+* Ejegg
+* Fitoschido
+* Johny Weissmuller Jr
+* Macofe
+* Macondo
+* MarcoAurelio
+* VegaDark
+-->
 <resources>
-  <string name="menu_zim_manager">Obtener contenido</string>
+  <string name="kiwi">Kiwi</string>
+  <string name="menu_zim_manager">Biblioteca</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Inicio</string>
   <string name="menu_settings">Configuración</string>
@@ -12,6 +23,7 @@
   <string name="menu_exit_full_screen">Salir de pantalla completa</string>
   <string name="menu_read_aloud">Leer en voz alta</string>
   <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
+  <string name="menu_support_kiwix">Apoyar a Kiwix</string>
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
   <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
@@ -19,6 +31,15 @@
   <string name="search_label">Buscar</string>
   <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
+  <string name="go_to_wifi_settings_label">Ir a config. de wifi</string>
+  <string name="go_to_settings_label">Ir a configuración</string>
+  <string name="stop_hotspot_button">DETENER</string>
+  <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
+  <string name="server_started__successfully_toast_message">Se inició el servidor correctamente.</string>
+  <string name="progress_dialog_starting_server">Iniciando el servidor</string>
+  <string name="hotspot_dialog_neutral_button">SÍ, LO HE INICIADO</string>
+  <string name="start_server_label">Iniciar servidor</string>
+  <string name="stop_server_label">Detener servidor</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
   <string name="error_file_invalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>
   <string name="error_article_url_not_found">Error: falló la carga del artículo (URL: %1$s).</string>
@@ -52,6 +73,7 @@
   <string name="pref_clear_all_history_summary">Borrar las búsquedas recientes y el historial de pestañas</string>
   <string name="all_history_cleared_toast">Borrado todo el historial</string>
   <string name="clear_all_history_dialog_title">Borrar todo el historial</string>
+  <string name="share">Compartir</string>
   <string name="delete">Borrar</string>
   <string name="delete_specific_search_toast">Búsquedas recientes eliminadas</string>
   <string name="hint_contents_drawer_message">Puedes deslizar a la izquierda para ver los contenidos de este artículo</string>
@@ -70,6 +92,7 @@
   <string name="bookmark_removed">Marcador borrado</string>
   <string name="pref_newtab_background_title">Abrir una pestaña nueva en segundo plano</string>
   <string name="pref_newtab_background_summary">Al abrir una pestaña nueva se abrirá en segundo plano</string>
+  <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artículo abierto en una pestaña nueva</string>
   <string name="search_widget_text">Buscar en Kiwix</string>
   <string name="speech_prompt_text">Habla para buscar %s</string>
@@ -88,6 +111,7 @@
   <string name="no_files_here">Ningún archivo aquí</string>
   <string name="download_no_space">Espacio insuficiente para descargar este archivo.</string>
   <string name="space_available">Espacio disponible:</string>
+  <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Ninguna imagen</string>
   <string name="zim_no_vid">Ningún video</string>
   <string name="no_network_connection">Ninguna conexión de red</string>
@@ -97,9 +121,9 @@
   <string name="help_5">¿Dónde está el contenido?</string>
   <string name="help_6">Nuestro contenido está alojado en el sitio web de Kiwix.</string>
   <string name="help_7">Están disponibles como archivos ZIM. Hay un montón:</string>
-  <string name="help_8">\u2022 Wikipedia está disponible para cada idioma por separado</string>
-  <string name="help_9">\u2022 Otros contenidos, como Wikileaks o Wikisource también están disponibles</string>
-  <string name="help_10">Puedes descargar los archivos ZIM elegidos en la aplicación, o bien seleccionar cuidadosamente los que quieras, descargarlos desde una computadora y transferirlos a tu tarjeta SD.</string>
+  <string name="help_8">• Wikipedia está disponible para cada idioma por separado</string>
+  <string name="help_9">• Otros contenidos, como Wikileaks o Wikisource también están disponibles</string>
+  <string name="help_10" fuzzy="true">Puedes descargar los archivos ZIM elegidos en la aplicación, o bien seleccionar cuidadosamente los que quieras, descargarlos desde una computadora y transferirlos a tu tarjeta SD.</string>
   <string name="help_11">Los archivos ZIM descargados en la aplicación se encuentran en el directorio de almacenamiento externo, en una carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamiento</string>
   <string name="pref_current_folder">Carpeta actual</string>
@@ -111,6 +135,7 @@
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="yes">Sí</string>
+  <string name="no">No</string>
   <string name="confirm_stop_download_title">¿Detener descarga?</string>
   <string name="confirm_stop_download_msg">¿Seguro que quieres detener esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
@@ -121,7 +146,12 @@
   <string name="wifi_only_msg">Si eliges “Sí”, no se te advertirá en el futuro. Sin embargo, siempre puedes cambiar esto en Configuración</string>
   <string name="pref_wifi_only">Descargar contenido solo mediante wifi</string>
   <string name="time_day">día</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">faltan</string>
+  <string name="time_today">Hoy</string>
+  <string name="time_yesterday">Ayer</string>
   <string name="pref_auto_night_mode_summary">Cambiar automáticamente entre el modo diurno y el nocturno</string>
   <string name="pref_auto_night_mode">Modo nocturno automatizado</string>
   <string name="pref_external_link_popup_title">Advertir al seguir enlaces externos</string>
@@ -131,16 +161,80 @@
   <string name="do_not_ask_anymore">No preguntar de nuevo</string>
   <string name="your_languages">Idiomas seleccionados:</string>
   <string name="other_languages">Otros idiomas:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_items_msg">No hay ningún elemento disponible</string>
+  <string name="ongoing_download_channel_name">Descargas en curso</string>
+  <string name="crash_title">Bien, esto es vergonzoso</string>
+  <string name="crash_description">Parece que nos colgamos.\n¿Te importaría ayudarnos a solucionar este problema enviándonos la siguiente información?</string>
+  <string name="crash_checkbox_language">Tu configuración de idioma</string>
+  <string name="crash_checkbox_exception">Detalles del bloqueo</string>
+  <string name="crash_checkbox_logs">Registros de la aplicación</string>
+  <string name="crash_checkbox_device">Datos del dispositivo</string>
+  <string name="crash_button_confirm">ENVIAR DETALLES</string>
+  <string name="crash_button_decline">NO, GRACIAS</string>
+  <string name="shortcut_disabled_message">Atajo no disponible</string>
+  <string name="new_tab_shortcut_label">Pestaña nueva</string>
+  <string name="fav_icon">Favicono</string>
+  <string name="articleCount">%s artículos</string>
+  <string name="get_started">Primeros pasos</string>
+  <string name="download_books">Descargar libros</string>
+  <string name="human_kind_knowledge">El conocimiento de la humanidad en tu teléfono.</string>
+  <string name="welcome_to_the_family">Te damos la bienvenida a la familia</string>
+  <string name="download_books_message">Descarga libros y lee en cualquier lugar.</string>
+  <string name="unable_to_add_to_bookmarks">No se puede añadir a los marcadores</string>
+  <string name="go_to_previous_page">Ir a la página anterior</string>
+  <string name="go_to_next_page">Ir a la página siguiente</string>
+  <string name="table_of_contents">Sumario</string>
+  <string name="select_languages">Seleccionar idiomas</string>
+  <string name="save_languages">Guardar idiomas</string>
+  <string name="send_feedback">Enviar comentarios</string>
+  <string name="history">Historial</string>
+  <string name="history_from_current_book">Historial del libro actual</string>
+  <string name="search_history">Historial de búsquedas</string>
+  <string name="selected_items">%1$d seleccionado</string>
+  <string name="bookmarks_from_current_book">Marcadores del libro actual</string>
+  <string name="search_bookmarks">Buscar en marcadores</string>
+  <string name="switch_tabs">Cambiar de pestaña</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Cerrar todas las pestañas</string>
+  <string name="pending_state">Pendiente</string>
+  <string name="running_state">En proceso</string>
+  <string name="successful_state">Completado</string>
+  <string name="paused_state">En pausa</string>
+  <string name="paused_wifi">A la espera de wifi</string>
+  <string name="paused_connectivity">A la espera de una conexión de red</string>
+  <string name="paused_unknown">Desconocido</string>
+  <string name="failed_cannot_resume">No se puede reanudar por un motivo desconocido</string>
+  <string name="failed_storage_not_found">No se pudo encontrar el almacenamiento</string>
+  <string name="failed_file_already_exists">El archivo ya existe</string>
+  <string name="failed_unknown_file_error">Error desconocido del sistema de archivos</string>
+  <string name="failed_http_error">Error de datos HTTP</string>
+  <string name="failed_too_many_redirects">Demasiadas redirecciones</string>
+  <string name="failed_unhandled_http_code">Se recibió un código HTTP desconocido</string>
+  <string name="failed_unknown">Desconocido</string>
+  <string name="failed_http_code">Código HTTP %s</string>
+  <string name="save">Guardar</string>
+  <string name="note">Nota</string>
+  <string name="ext_storage_write_permission_denied_add_note">No se pueden utilizar las notas sin acceso al almacenamiento</string>
+  <string name="note_save_unsuccessful">No se pudo guardar la nota</string>
+  <string name="note_save_error_storage_not_writable">Error al guardar la nota: no se puede escribir en el almacenamiento</string>
+  <string name="note_share_error_file_missing">El archivo de la nota no existe</string>
+  <string name="note_share_app_chooser_title">Compartir archivo de nota con:</string>
+  <string name="confirmation_alert_dialog_message">¿Descartar cambios no guardados?</string>
+  <string name="delete_notes_confirmation_msg">¿Quieres eliminar todas las notas?</string>
+  <string name="ext_storage_permission_not_granted">Error: no se concedió el permiso de almacenamiento</string>
+  <string name="notes_deletion_unsuccessful">No se borraron algunos artículos</string>
+  <string name="books_count">%d libros</string>
+  <string name="connection_failed">Falló la conexión</string>
+  <string name="error_during_transfer">Se encontró un error durante la transferencia</string>
+  <string name="error_transferring">Error al transferir el archivo %s</string>
+  <string name="nearby_devices">DISPOSITIVOS CERCANOS</string>
+  <string name="files_for_transfer">ARCHIVOS QUE TRANSFERIR</string>
+  <string name="preparing_files">Preparando archivos para su transferencia…</string>
+  <string name="performing_handshake">Realizando protocolo de enlace…</string>
+  <string name="status">Estado</string>
+  <string name="pref_clear_all_notes_title" fuzzy="true">Borrar todas las notas</string>
+  <string name="tag_text_only">Solo texto</string>
+  <string name="tag_short_text">Texto breve</string>
+  <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
+  <string name="go_to_permissions">Ir a Configuración</string>
 </resources>

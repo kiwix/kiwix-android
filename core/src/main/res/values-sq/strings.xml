@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Besnik b
+* Fitoschido
+-->
 <resources>
-  <string name="menu_zim_manager">Merrni Lëndë</string>
+  <string name="menu_zim_manager" fuzzy="true">Merrni Lëndë</string>
   <string name="menu_help">Ndihmë</string>
   <string name="menu_home">Kreu</string>
   <string name="menu_settings">Rregullime</string>
@@ -14,22 +18,25 @@
   <string name="menu_read_aloud_stop">Ndale leximin me zë</string>
   <string name="save_media">Ruajë Median</string>
   <string name="save_media_error">Ndodhi një gabim teksa provohej të ruhej media!</string>
-  <string name="save_media_saved">U ruajt media si %s te Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">U ruajt media si %s te Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Po skanohet për lëndë të shkarkueshme, ju lutemi, prisni…</string>
   <string name="search_label">Kērko</string>
   <string name="choose_file">Përzgjidhni një Kartelë Lënde  (*.zim)</string>
   <string name="open_in_new_tab">Të hapet lidhja në skedë të re?</string>
-  <string name="error_file_not_found">Gabim: S\’u gjet dot kartela ZIM e përzgjedhur.</string>
+  <string name="stop_hotspot_button">NDALE</string>
+  <string name="error_file_not_found">Gabim: S’u gjet dot kartela ZIM e përzgjedhur.</string>
   <string name="error_file_invalid">Gabim: Kartela e përzgjedhur s’është kartelë ZIM e vlefshme.</string>
   <string name="error_article_url_not_found">Gabim: Dështoi ngarkimi i artikullit (Url: %1$s).</string>
   <string name="pref_display_title">Ekran</string>
+  <string name="pref_zoom_sub_title">Zoom</string>
   <string name="pref_zoom_dialog">Shkallë zmadhimi/zvogëlimi</string>
   <string name="pref_info_title">Informacione</string>
+  <string name="pref_info_version">Version</string>
   <string name="pref_zoom_enable">Kontrolle zmadhimi/zvogëlimi</string>
   <string name="pref_night_mode">Mënyra mbrëmje</string>
   <string name="pref_night_mode_summary">Shfaqi artikujt me ngjyra së prapthi</string>
   <string name="pref_back_to_top">Mbrapsht te Kreu</string>
-  <string name="pref_back_to_top_summary">Shfaq në fund të faqes një buton për t\’u ngjitur sipër në krye</string>
+  <string name="pref_back_to_top_summary">Shfaq në fund të faqes një buton për t’u ngjitur sipër në krye</string>
   <string name="pref_hide_toolbar">Fshihe panelin gjatë rrëshqitjesh</string>
   <string name="pref_hide_toolbar_summary">Fshihe panelin kur rrëshqitet poshtë në faqe</string>
   <string name="pref_language_title">Gjuhë</string>
@@ -37,11 +44,11 @@
   <string name="pref_credits">Ndihmëtarë dhe Licenca</string>
   <string name="pref_credits_title">Falënderime</string>
   <string name="tts_lang_not_supported">Gjuha e kësaj faqeje nuk mbulohet, ose s’janë instaluar të dhëna të gjuhës përkatëse. Artikulli mund të mos lexohet si duhet.</string>
-  <string name="no_reader_application_installed">S\’u gjet dot ndonjë aplikacion i instaluar për këtë lloj kartele</string>
+  <string name="no_reader_application_installed">S’u gjet dot ndonjë aplikacion i instaluar për këtë lloj kartele</string>
   <string name="custom_app_missing_content">Aplikacioni juaj është i cenuar.\nKjo mund të ndodhë kur hiqni kartela te Kujtesa SD.\nLypset ta çinstaloni dhe mandej ta riinstaloni Aplikacioni që nga Play Store.</string>
   <string name="go_to_play_store">Kaloni te Play Store</string>
   <string name="menu_bookmarks_list">Faqerojtës</string>
-  <string name="no_section_info">S\’u gjetën Krye Lënde</string>
+  <string name="no_section_info">S’u gjetën Krye Lënde</string>
   <string name="request_storage">Që të përdorni lëndë jashtë interneti, na duhet hyrje te depoja juaj</string>
   <string name="request_storage_custom">Nëse shihni një skenë mbishtesë sinjalizim, thjesht rinisni pajisjen tuaj që ta ndreqni këtë.</string>
   <string name="clear_recent_and_tabs_history_dialog">Jeni i sigurt se doni të fshihet historiku juaj i kërkimeve dhe të rikthehen krejt skedat aktive?</string>
@@ -71,7 +78,7 @@
   <string name="pref_extras">Ekstra</string>
   <string name="new_tab_snack_bar">Artikulli u hap në skedë të re</string>
   <string name="search_widget_text">Kërkoni në Kiwix</string>
-  <string name="speech_prompt_text">Flisni që të kërkohet \‘%s\’</string>
+  <string name="speech_prompt_text">Flisni që të kërkohet ‘%s’</string>
   <string name="speech_not_supported">Na ndjeni! Pajisja juaj nuk mbulon input përmes të folurës</string>
   <string name="local_zims">Pajisje</string>
   <string name="remote_zims">Në linjë</string>
@@ -83,28 +90,28 @@
   <string name="download_pause">Ndalesë</string>
   <string name="download_stop">Ndale</string>
   <string name="download_paused">i ndalur</string>
-  <string name="no_downloads_here">S\’ka shkarkime këtu</string>
-  <string name="no_files_here">S\’ka kartela këtu</string>
+  <string name="no_downloads_here">S’ka shkarkime këtu</string>
+  <string name="no_files_here">S’ka kartela këtu</string>
   <string name="download_no_space">Hapësirë e pamjaftueshme për shkarkimin e kësaj kartele.</string>
   <string name="space_available">Hapësirë e Përdorshme:</string>
   <string name="zim_simple">I thjeshtë</string>
-  <string name="zim_no_pic">S\’ka Foto</string>
-  <string name="zim_no_vid">S\’ka Video</string>
-  <string name="no_network_connection">S\’ka lidhje rrjeti</string>
+  <string name="zim_no_pic">S’ka Foto</string>
+  <string name="zim_no_vid">S’ka Video</string>
+  <string name="no_network_connection">S’ka lidhje rrjeti</string>
   <string name="help_2">Ç’kryen Kiwix-i?</string>
   <string name="help_3">Kiwix është një lexues lënde pa internet. Funksionon shumë ngjashëm me një shfletues, por në vend të përdorimit\n“online” të faqeve web, lëndën e lexon që nga një kartelë në formatin ZIM.</string>
-  <string name="help_4">Edhe pse fillimisht qe konceptuar për të lejuar përdorimin pa internet të Wikipedia-s, mund të përdoret edhe për lëndë tjetër.</string>
+  <string name="help_4" fuzzy="true">Edhe pse fillimisht qe konceptuar për të lejuar përdorimin pa internet të Wikipedia-s, mund të përdoret edhe për lëndë tjetër.</string>
   <string name="help_5">Ku është lënda?</string>
   <string name="help_6">Lënda strehohet në sajtin Kiwix.</string>
   <string name="help_7">Janë të përdorshme në trajtë kartelash ZIM. Ka plot të tilla:</string>
-  <string name="help_8">\u2022 Wikipedia mund të kihet ndaras për çdo gjuhë</string>
-  <string name="help_9">\u2022 Ka të gatshme lëndë tjetër, të tillë si Wikileaks ose Wikisource</string>
-  <string name="help_10">Mundeni ose t\’i shkarkoni brenda aplikacionit kartelat ZIM që keni zgjedhur, ose të përzgjidhni me kujdes atë(ato) që doni dhe ta(t\’i) shkarkoni nga një kompjuter desktop përpara se të shpërngulni kartelat ZIM te kujtesa juaj SD card.</string>
+  <string name="help_8">• Wikipedia mund të kihet ndaras për çdo gjuhë</string>
+  <string name="help_9">• Ka të gatshme lëndë tjetër, të tillë si Wikileaks ose Wikisource</string>
+  <string name="help_10">Mundeni ose t’i shkarkoni brenda aplikacionit kartelat ZIM që keni zgjedhur, ose të përzgjidhni me kujdes atë(ato) që doni dhe ta(t’i) shkarkoni nga një kompjuter desktop përpara se të shpërngulni kartelat ZIM te kujtesa juaj SD card.</string>
   <string name="help_11">Kartelat ZIM të shkarkuara brenda aplikacionit gjenden te drejtoria e depozitimit të jashtëm, në një dosje të quajtu Kiwix.</string>
   <string name="pref_storage">Depozitim</string>
   <string name="pref_current_folder">Dosja e Tanishme</string>
-  <string name="path_not_writable">S\’hyhet dot te drejtori e dëshiruar, po përdoret parazgjedhja. Që të ndreqet kjo, ripërzgjidhni drejtorinë e dëshiruar te rregullimet e aplikacionit.</string>
-  <string name="delete_zim_failed">Na ndjeni, s\’qemë në gjendje ta fshinim këtë kartelë. Në vend të kësaj, duhet të provoni duke përdorur një përgjegjës kartelash.</string>
+  <string name="path_not_writable">S’hyhet dot te drejtori e dëshiruar, po përdoret parazgjedhja. Që të ndreqet kjo, ripërzgjidhni drejtorinë e dëshiruar te rregullimet e aplikacionit.</string>
+  <string name="delete_zim_failed">Na ndjeni, s’qemë në gjendje ta fshinim këtë kartelë. Në vend të kësaj, duhet të provoni duke përdorur një përgjegjës kartelash.</string>
   <string name="tts_pause">ndalesë</string>
   <string name="tts_resume">rimerre</string>
   <string name="tts_stop">ndale</string>
@@ -122,7 +129,9 @@
   <string name="wifi_only_msg">Nëse zgjidhni “Po”, s’do të sinjalizoheni më në të ardhmen. Sidoqoftë, mundeni përherë ta ndryshoni këtë, te Rregullimet</string>
   <string name="pref_wifi_only">Shkarko lëndë vetëm përmes WiFi-it</string>
   <string name="time_day">ditë</string>
+  <string name="time_hour">h</string>
   <string name="time_minute">min.</string>
+  <string name="time_second">s</string>
   <string name="time_left">edhe</string>
   <string name="pref_auto_night_mode_summary">Mënyrat ditë dhe mbrëmje këmbeji automatikisht.</string>
   <string name="pref_auto_night_mode">Mënyrë mbrëmje automatike</string>
@@ -133,16 +142,4 @@
   <string name="do_not_ask_anymore">Mos pyet më</string>
   <string name="your_languages">Gjuhë të përzgjedhura:</string>
   <string name="other_languages">Gjuhë të tjera:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

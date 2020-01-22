@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Gomoko
+* Verdy p
+-->
+<resources>
+  <string name="retry">Réessayer</string>
+  <string name="download">Télécharger</string>
+  <string name="invalid_installation">Installation non valide. Veuillez télécharger Zim.\n Assurez-vous que le Wi-Fi est actif et que vous disposez d’assez d\'espace de stockage.</string>
+  <string name="complete">Terminer</string>
+</resources>

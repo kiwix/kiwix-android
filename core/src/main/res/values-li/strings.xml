@@ -1,6 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Ooswesthoesbes
+-->
 <resources>
-  <string name="menu_zim_manager">Haol inhawd op</string>
+  <string name="menu_zim_manager" fuzzy="true">Haol inhawd op</string>
   <string name="menu_help">Hölp</string>
   <string name="menu_home">Heim</string>
   <string name="menu_settings">Instèllinge</string>
@@ -53,6 +56,7 @@
   <string name="rate_dialog_msg_2">, gaef den efkes \'n beoeardeiling. Danke veure stäön!</string>
   <string name="rate_dialog_positive">Beoeardeil!</string>
   <string name="rate_dialog_negative">Nae, danke</string>
+  <string name="rate_dialog_neutral">Later</string>
   <string name="open">Äöpen</string>
   <string name="bookmark_removed">Blaadwiezer eweggehaold</string>
   <string name="pref_newtab_background_title">Äöpen nuuj tabblaad in achtergróndj</string>
@@ -60,6 +64,7 @@
   <string name="pref_extras">Extra</string>
   <string name="new_tab_snack_bar">Artikel äöpent zich in nuuj tabblaad</string>
   <string name="local_zims">Toustèl</string>
+  <string name="remote_zims">Online</string>
   <string name="delete_specific_zim_toast">Bestandj eweggesjaf</string>
   <string name="download_pause">Pauseer</string>
   <string name="download_stop">Oetgesjèd</string>
@@ -72,8 +77,8 @@
   <string name="help_5">Wo is d\'n inhawd?</string>
   <string name="help_6">Ozen inhawd is óngergebrach oppe Kiwix-website.</string>
   <string name="help_7">ZIM-bestenj zint te kriege. Väöl daovan bestaon:</string>
-  <string name="help_8">\u2022 Wikipedia is apaart besjikbaar veur eder spraok</string>
-  <string name="help_9">\u2022 Angeren inhawd wie Wikileaks or Wikisource is ouch besjikbaar</string>
+  <string name="help_8">• Wikipedia is apaart besjikbaar veur eder spraok</string>
+  <string name="help_9">• Angeren inhawd wie Wikileaks or Wikisource is ouch besjikbaar</string>
   <string name="pref_storage">Opslaag</string>
   <string name="pref_current_folder">Hujige Map</string>
   <string name="path_not_writable">Kan de gewunsjde map neet äöpene mitte standerdinstèlling. Veur dit op te losse mós se de gewunsjde map oppernuuj aanvinke inne toepassingsinstèllinge.</string>
@@ -90,6 +95,7 @@
   <string name="time_day">daag</string>
   <string name="time_hour">o</string>
   <string name="time_minute">m</string>
+  <string name="time_second">s</string>
   <string name="time_left">links</string>
   <string name="pref_auto_night_mode_summary">Sjakel autematis tösse daag- en nachmodus</string>
   <string name="pref_auto_night_mode">Automatiseerde nachmodus</string>
@@ -98,16 +104,4 @@
   <string name="external_link_popup_dialog_message">Doe bös \'nen externe link in \'nt tikke. Det kan leie toet extra köste veur \'t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>
   <string name="do_not_ask_anymore">Vraog nimmieë</string>
   <string name="other_languages">Anger spraoke:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

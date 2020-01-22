@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Kly
+-->
+<resources>
+  <string name="retry">重試</string>
+  <string name="download">下載</string>
+  <string name="invalid_installation">安裝無效，請下載 Zim。\n 啟動 WiFi 並確認有足夠儲存空間</string>
+  <string name="complete">完成</string>
+</resources>

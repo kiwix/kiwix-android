@@ -1,6 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Andriykopanytsia
+* Base
+* Lxlalexlxl
+* Movses
+* Piramidion
+* Vlad5250
+* Ypryima
+-->
 <resources>
-  <string name="menu_zim_manager">Отримати контент</string>
+  <string name="menu_zim_manager">Бібліотека</string>
   <string name="menu_help">Довідка</string>
   <string name="menu_home">Головна</string>
   <string name="menu_settings">Налаштування</string>
@@ -19,6 +28,7 @@
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>
+  <string name="stop_hotspot_button">ЗУПИНИТИ</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
   <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
@@ -99,8 +109,8 @@
   <string name="help_5">Де саме розташований контент?</string>
   <string name="help_6">Наш контент зберігається на веб-сайті Kiwix.</string>
   <string name="help_7">Він доступний у формі ZIM-файлів. Їх є чимало:</string>
-  <string name="help_8">\u2022 Вікіпедія доступна окремо для кожної мови</string>
-  <string name="help_9">\u2022 Доступний також інший контент, такий як Вікілікс чи Вікіджерела</string>
+  <string name="help_8">• Вікіпедія доступна окремо для кожної мови</string>
+  <string name="help_9">• Доступний також інший контент, такий як Вікілікс чи Вікіджерела</string>
   <string name="help_10">Ви можете або завантажити свої обрані ZIM-файли в межах застосунка, або обережно вибрати ті, які Ви хочете, й завантажити їх зі стаціонарного комп\'ютера, перед тим як переносити ZIM-файли на свою SD-карту.</string>
   <string name="help_11">ZIM-файли, завантажені із застосунка, розташовані в каталозі зовнішнього зберігання даних у папці під назвою Kiwix.</string>
   <string name="pref_storage">Зберігання даних</string>
@@ -137,16 +147,8 @@
   <string name="do_not_ask_anymore">Більш не питати</string>
   <string name="your_languages">Вибір мови:</string>
   <string name="other_languages">Інші мови:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="send_feedback">Надіслати відгук</string>
+  <string name="close_all_tabs">Закрити усі вкладки</string>
+  <string name="failed_storage_not_found">Неможливо знайти зберігання</string>
+  <string name="delete_notes_confirmation_msg">Видалити всі нотатки?</string>
 </resources>

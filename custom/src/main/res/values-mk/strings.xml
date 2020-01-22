@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Bjankuloski06
+-->
+<resources>
+  <string name="retry">Пробај пак</string>
+  <string name="download">Преземи</string>
+  <string name="invalid_installation">Неважечка воспоставка. Преземете ZIM.\n Проверете дали ви е вклучена безжичната врска и дали имате доволно складиштен простор</string>
+  <string name="complete">Завршено</string>
+</resources>

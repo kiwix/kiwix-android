@@ -1,5 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Alan ffm
+* DeRudySoulStorm
+* InternerowyGołąb
+* Kelson
+* Macofe
+* Rail
+* Rzuwig
+* Stojex
+* WaldiSt
+* Woytecr
+-->
 <resources>
+  <string name="kiwi">Kiwi</string>
+  <string name="menu_zim_manager">Biblioteka</string>
   <string name="menu_help">Pomoc</string>
   <string name="menu_home">Start</string>
   <string name="menu_settings">Ustawienia</string>
@@ -11,6 +25,7 @@
   <string name="menu_exit_full_screen">Wyjdź z trybu pełnoekranowego</string>
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
+  <string name="menu_support_kiwix">Wspieraj Kiwix</string>
   <string name="save_media">Zapisz plik multimedialny jako…</string>
   <string name="save_media_error">Wystąpił błąd podczas próby zapisania multimediów!</string>
   <string name="save_media_saved">Zapisano plik multimedialny jako %s w folderze Android/media/org.kiwix…/</string>
@@ -18,6 +33,25 @@
   <string name="search_label">Szukaj</string>
   <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
   <string name="open_in_new_tab">Otwórz odnośnik na nowej karcie</string>
+  <string name="hotspot_service_channel_name">Kanał Usługi Hotspot</string>
+  <string name="hotspot_failed_title">Nie udało się uruchomić hotspotu</string>
+  <string name="hotspot_failed_message">Wygląda na to, że Twój punkt dostępu jest już włączony. Wyłącz hotspot Wi-Fi, aby kontynuować.</string>
+  <string name="go_to_wifi_settings_label">Przejdź do ustawień WIFI</string>
+  <string name="go_to_settings_label">Przejdź do ustawień</string>
+  <string name="hotspot_running">Uruchamianie Hotspot</string>
+  <string name="stop_hotspot_button">STOP</string>
+  <string name="server_failed_toast_message">Nie można uruchomić serwera.</string>
+  <string name="server_started__successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
+  <string name="hotspot_turned_on">Hotspot włączony</string>
+  <string name="hotspot_details_message">Poniżej znajdują się szczegółowe informacje o lokalnym hotspocie.\nSSID : %1$s \nPass : %2$s</string>
+  <string name="server_textview_default_message">Wybierz pliki, które chcesz hostować na serwerze</string>
+  <string name="progress_dialog_starting_server">Uruchamianie serwera</string>
+  <string name="hotspot_dialog_message">Aby ta funkcja działała, musisz najpierw ręcznie włączyć WIFI hotspot.</string>
+  <string name="hotspot_dialog_neutral_button">TAK, WŁĄCZYŁEM GO</string>
+  <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
+  <string name="start_server_label">Uruchom serwer</string>
+  <string name="stop_server_label">Zatrzymaj serwer</string>
+  <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
   <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
   <string name="error_file_invalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>
   <string name="error_article_url_not_found">Błąd: Ładowanie artykułu (Url:  %1$s ) się nie powiodło.</string>
@@ -26,12 +60,13 @@
   <string name="pref_zoom_dialog">Poziom powiększenia</string>
   <string name="pref_info_title">Informacje</string>
   <string name="pref_info_version">Wersja</string>
-  <string name="pref_zoom_enable">Zarządzanie skali</string>
+  <string name="pref_zoom_enable">Sterowanie powiększeniem</string>
   <string name="pref_night_mode">Tryb nocny</string>
   <string name="pref_night_mode_summary">Pokaż artykuły w trybie nocnym</string>
   <string name="pref_back_to_top">Powrót do góry</string>
   <string name="pref_back_to_top_summary">Wyświetl przycisk na końcu strony, aby przewinąć do góry</string>
   <string name="pref_hide_toolbar">Ukryj pasek narzędzi gdy przesuwasz stronę</string>
+  <string name="pref_hide_toolbar_summary">Uniemożliwia przewijanie paska narzędzi podczas przeglądania zawartości</string>
   <string name="pref_language_title">Język</string>
   <string name="pref_language_chooser">Wybierz język</string>
   <string name="pref_credits">Współtwórcy i licencje</string>
@@ -43,14 +78,18 @@
   <string name="menu_bookmarks_list">Zakładki</string>
   <string name="no_section_info">Nie znaleziono nagłówków treści</string>
   <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do twojego nośnika</string>
+  <string name="request_storage_custom">Jeśli zostanie wyświetlone wyskakujące ostrzeżenie na ekranie, ponowne uruchomienie urządzenia, może to naprawić.</string>
   <string name="clear_recent_and_tabs_history_dialog">Czy na pewno chcesz usunąć historię wyszukiwania i zresetować wszystkie aktywne karty?</string>
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
   <string name="pref_clear_all_history_title">Wyczyść historię</string>
   <string name="pref_clear_all_history_summary">Wyczyść historię ostatnich wyszukiwań i kart</string>
   <string name="all_history_cleared_toast">Usunięto całą historię</string>
   <string name="clear_all_history_dialog_title">Wyczyść całą historię</string>
+  <string name="share">Udostępnij</string>
+  <string name="selected_file_cab_app_chooser_title">Udostępnij pliki ZIM:</string>
   <string name="delete">Usuń</string>
   <string name="delete_specific_search_toast">Ostatnie wyszukiwanie zostało usunięte</string>
+  <string name="hint_contents_drawer_message">Możesz przesunąć w lewo, aby wyświetlić zawartość tego artykułu</string>
   <string name="got_it">Wszystko jasne</string>
   <string name="did_you_know">Czy wiesz, że?</string>
   <string name="undo">Cofnij</string>
@@ -75,11 +114,14 @@
   <string name="remote_zims">Dostępny</string>
   <string name="zim_downloads">Pobieranie</string>
   <string name="zim_manager">Biblioteka</string>
+  <string name="delete_zim_body">Usunąć %s?</string>
   <string name="delete_specific_zim_toast">Plik został usunięty</string>
   <string name="zim_file_downloading">Pobieranie</string>
   <string name="zim_file_downloaded">Pobrano</string>
   <string name="download_pause">Pauza</string>
+  <string name="download_stop">Stop</string>
   <string name="download_paused">wstrzymane</string>
+  <string name="no_downloads_here">Brak plików do pobrania</string>
   <string name="no_files_here">Tu nie ma plików</string>
   <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
   <string name="space_available">Dostępne miejsce:</string>
@@ -87,40 +129,150 @@
   <string name="zim_no_pic">Brak obrazka</string>
   <string name="zim_no_vid">Brak wideo</string>
   <string name="no_network_connection">Brak połączenia z siecią</string>
+  <string name="help_2">Co robi Kiwix?</string>
   <string name="help_3">Kiwix to czytnik zawartości offline. Zachowuje się jak przeglądarka, jednak zamiast stron internetowych, czyta zawartość z pliku w formacie ZIM.</string>
+  <string name="help_4">Chociaż Kiwix został pierwotnie zaprojektowany do udostępniania Wikipedii offline, czyta także inne treści.</string>
   <string name="help_5">Gdzie jest zawartość?</string>
+  <string name="help_6">Nasze treści są hostowane na stronie Kiwix.</string>
+  <string name="help_7">Są one dostępne w postaci plików ZIM. Jest ich wiele:</string>
+  <string name="help_8">• Wikipedia jest dostępna osobno dla każdego języka</string>
+  <string name="help_9">• Dostępne są również inne treści jak Wikileaks czy Wikiźródła</string>
+  <string name="help_10">Możesz pobrać wybrane pliki ZIM w aplikacji lub starannie wybrać żądane pliki i pobrać je z komputera stacjonarnego przed przesłaniem plików ZIM na kartę SD.</string>
   <string name="help_11">Pliki ZIM pobrane rzez aplikacje znajdują się w zewnętrznym katalogu dysku w folderze o nazwie Kiwix.</string>
   <string name="pref_storage">Magazyn</string>
   <string name="pref_current_folder">Bieżący folder</string>
+  <string name="path_not_writable">Nie można uzyskać dostęp do wybranego katalogu, przy użyciu domyślnego. Aby to naprawić, ponownie wybierz żądany katalog w ustawieniach aplikacji.</string>
   <string name="delete_zim_failed">Niestety nie udało się usunąć tego pliku. Zamiast tego powinieneś spróbować użyć menedżera plików.</string>
   <string name="tts_pause">pauza</string>
   <string name="tts_resume">Podsumuj</string>
+  <string name="tts_stop">stop</string>
+  <string name="internal_storage">Wewnętrzny</string>
   <string name="external_storage">Zewnętrzne</string>
   <string name="yes">Tak</string>
   <string name="no">Nie</string>
   <string name="confirm_stop_download_title">Zatrzymać pobieranie?</string>
   <string name="confirm_stop_download_msg">Czy na pewno chcesz zatrzymać pobieranie?</string>
+  <string name="download_change_storage">Wybór urządzenia pamięci</string>
   <string name="tts_not_enabled">Tekst na mowę nie jest włączony dla tego pliku ZIM</string>
   <string name="next">Następny</string>
   <string name="previous">Poprzednia</string>
+  <string name="wifi_only_title">Zezwolić na pobieranie zawartości przez sieć komórkową?</string>
+  <string name="wifi_only_msg">eśli wybierzesz „Tak”, nie będziesz ostrzegany w przyszłości. Jednak zawsze możesz to zmienić w Ustawieniach</string>
   <string name="pref_wifi_only">Pobierz zawartość tylko poprzez WiFi</string>
   <string name="time_day">dzień</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">do lewej</string>
+  <string name="time_today">Dzisiaj</string>
+  <string name="time_yesterday">Wczoraj</string>
   <string name="pref_auto_night_mode_summary">Przełączaj automatycznie między trybami dnia i nocy.</string>
   <string name="pref_auto_night_mode">Zautomatyzowany tryb nocny.</string>
+  <string name="pref_external_link_popup_title">Ostrzegaj podczas wchodzenia w linki zewnętrzne</string>
+  <string name="pref_external_link_popup_summary">Wyświetl wyskakujące okienko, aby ostrzec o dodatkowych kosztach lub braku działania w linkach offline.</string>
+  <string name="external_link_popup_dialog_title">Wprowadzanie linku zewnętrznego</string>
+  <string name="external_link_popup_dialog_message">Wprowadzasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, gdy będziesz offline. Czy chcesz kontynuować?</string>
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>
   <string name="your_languages">Wybierz język</string>
   <string name="other_languages">Inne języki:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_items_msg">Brak dostępnych pozycji</string>
+  <string name="ongoing_download_channel_name">Bieżące pobieranie</string>
+  <string name="ongoing_download_channel_desc">Kategoria dla trwającego pobierania plików zim.</string>
+  <string name="crash_title">Cóż… To jest krępujące</string>
+  <string name="crash_description">Czy mógłbyś pomóc nam rozwiązać ten problem, wysyłając następujące informacje?</string>
+  <string name="crash_checkbox_language">Ustawienia języka</string>
+  <string name="crash_checkbox_zimfiles">Lista twoich plików Zim</string>
+  <string name="crash_checkbox_exception">Szczegóły awarii</string>
+  <string name="crash_checkbox_logs">Dzienniki aplikacji</string>
+  <string name="crash_checkbox_device">Szczegóły urządzenia</string>
+  <string name="crash_button_confirm">WYŚLIJ SZCZEGÓŁY</string>
+  <string name="crash_button_decline">NIE, DZIĘKUJĘ</string>
+  <string name="shortcut_disabled_message">Skrót niedostępny</string>
+  <string name="new_tab_shortcut_label">Nowa karta</string>
+  <string name="get_content_shortcut_label">Pobierz zawartość</string>
+  <string name="fav_icon">Favicon</string>
+  <string name="pic">Fotka</string>
+  <string name="vid">Wideo</string>
+  <string name="articleCount">%s artykułów</string>
+  <string name="get_started">Rozpocznij</string>
+  <string name="download_books">Pobierz książki</string>
+  <string name="human_kind_knowledge">Wiedza ludzka w twoim telefonie.</string>
+  <string name="welcome_to_the_family">Witamy w rodzinie</string>
+  <string name="save_books_offline">Zapisz książki offline</string>
+  <string name="download_books_message">Pobierz książki i czytaj gdziekolwiek jesteś.</string>
+  <string name="unable_to_add_to_bookmarks">Nie można dodać do zakładek</string>
+  <string name="go_to_previous_page">Przejdź do poprzedniej strony</string>
+  <string name="go_to_next_page">Przejdź do następnej strony</string>
+  <string name="table_of_contents">Spis treści</string>
+  <string name="select_languages">Wybierz język</string>
+  <string name="save_languages">Zapisz języki</string>
+  <string name="send_feedback">Prześlij opinię</string>
+  <string name="expand">Rozwiń</string>
+  <string name="history">Historia</string>
+  <string name="history_from_current_book">Historia z bieżącej książki</string>
+  <string name="search_history">Historia wyszukiwania</string>
+  <string name="selected_items">%1$d wybrane</string>
+  <string name="bookmarks_from_current_book">Zakładki z bieżącej książki</string>
+  <string name="search_bookmarks">Szukaj zakładek</string>
+  <string name="switch_tabs">Przełącz zakładki</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Zamknij wszystkie zakładki</string>
+  <string name="pending_state">Oczekujące</string>
+  <string name="running_state">W trakcie</string>
+  <string name="successful_state">Zakończono</string>
+  <string name="paused_state">Wstrzymano</string>
+  <string name="failed_state">Błąd: %s</string>
+  <string name="paused_wifi">Czekam na Wifi</string>
+  <string name="paused_connectivity">Czekam na połączenie z siecią</string>
+  <string name="paused_retry">Czekam na ponowienie</string>
+  <string name="paused_unknown">Nieznany</string>
+  <string name="failed_cannot_resume">Nie można wznowić z nieznanego powodu</string>
+  <string name="failed_storage_not_found">Nie można znaleźć pamięci</string>
+  <string name="failed_file_already_exists">Plik już istnieje</string>
+  <string name="failed_unknown_file_error">Nieznany błąd systemu plików</string>
+  <string name="failed_http_error">Błąd danych HTTP</string>
+  <string name="failed_insufficient_space">Za mało miejsca w pamięci</string>
+  <string name="failed_too_many_redirects">Zbyt wiele przekierowań</string>
+  <string name="failed_unhandled_http_code">Otrzymano nieznany kod HTTP</string>
+  <string name="failed_unknown">Nieznany</string>
+  <string name="failed_http_code">Kod HTTP %s</string>
+  <string name="save">Zapisz</string>
+  <string name="note">Uwaga</string>
+  <string name="wiki_article_title">Tytuł Artykułu Wiki</string>
+  <string name="ext_storage_permission_rationale_add_note">Notatki wymagają dostępu do pamięci</string>
+  <string name="ext_storage_write_permission_denied_add_note">Notatek nie można używać bez dostępu do pamięci</string>
+  <string name="note_save_unsuccessful">Zapisywanie nie powiodło się</string>
+  <string name="note_save_successful">Notatka zapisana</string>
+  <string name="note_save_error_storage_not_writable">Błąd zapisywania notatki: Nie można zapisać w pamięci</string>
+  <string name="note_share_error_file_missing">Plik notatek nie istnieje</string>
+  <string name="note_share_app_chooser_title">Udostępnij plik notatki:</string>
+  <string name="confirmation_alert_dialog_message">Odrzucić niezapisane zmiany?</string>
+  <string name="delete_notes_confirmation_msg">Usunąć wszystkie notatki?</string>
+  <string name="ext_storage_permission_not_granted">Błąd: Nie przyznano uprawnień do przechowywania</string>
+  <string name="notes_deletion_successful">Usunięto cały folder notatek</string>
+  <string name="notes_deletion_unsuccessful">Niektóre pliki nie zostały usunięte</string>
+  <string name="books_count">%d książka(książek)</string>
+  <string name="connection_failed">Połączenie nie powiodło się</string>
+  <string name="permission_rationale_location">Uprawnienie lokalizacja jest wymagane przez system Android, aby umożliwić aplikacji do wykrywania urządzeń</string>
+  <string name="permission_refused_location">Nie można zlokalizować urządzeń bez uprawnień do lokalizacji</string>
+  <string name="request_enable_wifi">Włącz WiFi P2P w ustawieniach systemu</string>
+  <string name="transfer_to">Przesłać pliki do %s?</string>
+  <string name="file_transfer_complete">Przesyłanie pliku zakończone</string>
+  <string name="error_during_transfer">Wystąpił błąd podczas przesyłania</string>
+  <string name="error_transferring">Błąd podczas przesyłania pliku %s</string>
+  <string name="your_device">Twoje urządzenie:</string>
+  <string name="nearby_devices">URZĄDZENIA W POBLIŻU</string>
+  <string name="no_devices_found">Nie wykryto urządzeń. Naciśnij przycisk wyszukiwania, aby spróbować ponownie.</string>
+  <string name="files_for_transfer">PLIKI DO PRZESŁANIA</string>
+  <string name="preparing_files">Przygotowywanie plików do przesłania....</string>
+  <string name="performing_handshake">Wykonywanie uzgadniania....</string>
+  <string name="local_zim_sharing">Lokalne udostępnianie ZIM</string>
+  <string name="status">Status</string>
+  <string name="pref_clear_all_notes_summary">Usuwa wszystkie notatki ze wszystkich artykułów</string>
+  <string name="pref_clear_all_notes_title">Wyczyść wszystkie notatki</string>
+  <string name="tag_text_only">Tylko tekst</string>
+  <string name="tag_short_text" fuzzy="true">Tylko krótki tekst</string>
+  <string name="storage_permission_denied">Odrzucono dostęp do pamięci</string>
+  <string name="grant_read_storage_permission">Ta aplikacja aby funkcjonować wymaga uprawnień do odczytywania zawartości pamięci. Nadaj jej te uprawnienia w ustawieniach.</string>
+  <string name="go_to_permissions">Przejdź do ustawień</string>
 </resources>
