@@ -20,8 +20,8 @@
   <string name="menu_read_aloud_stop">Xwendina dengê bilind rawestîne</string>
   <string name="save_media">Medyayê Tomar Bike</string>
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
-  <string name="save_media_saved" fuzzy="true">Medya wek %s ji Android/media/org.kiwix.../ re hate qeydkirin</string>
-  <string name="rescan_fs_warning">Li naverokekî ya daxistinê tê gerîn, ji kerema xwe bisekine...</string>
+  <string name="save_media_saved" fuzzy="true">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
+  <string name="rescan_fs_warning">Li naverokekî ya daxistinê tê gerîn, ji kerema xwe bisekine…</string>
   <string name="search_label">Lê bigere</string>
   <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
@@ -128,7 +128,7 @@
   <string name="next">Pêşve</string>
   <string name="previous">Yê berê</string>
   <string name="wifi_only_title">Bira ji tora mobîlê destûra daxistina naverokê bê dayîn?</string>
-  <string name="wifi_only_msg">Heke li \"Erê\" hilbijêrî tu yê êdî hişyarî nebîne. Lê tu dikarî her tim vê li Mîhengê biguherîne</string>
+  <string name="wifi_only_msg">Heke li \“Erê\” hilbijêrî tu yê êdî hişyarî nebîne. Lê tu dikarî her tim vê li Mîhengê biguherîne</string>
   <string name="pref_wifi_only">Naverokê tenê bi WIFIyê daxe</string>
   <string name="time_day">roj</string>
   <string name="time_hour">s</string>

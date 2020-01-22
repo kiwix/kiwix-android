@@ -168,7 +168,7 @@
   <string name="no_items_msg">Žádné dostupné položky</string>
   <string name="ongoing_download_channel_name">Stahování stále probíhá</string>
   <string name="ongoing_download_channel_desc">Kategorie pro probíhající stahování zim souborů.</string>
-  <string name="crash_title">Inu...to je trapné</string>
+  <string name="crash_title">Inu…to je trapné</string>
   <string name="crash_description">Nevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
   <string name="crash_checkbox_language">Vaše nastavení jazyka</string>
   <string name="crash_checkbox_zimfiles">Seznam Vašich Zim souborů</string>

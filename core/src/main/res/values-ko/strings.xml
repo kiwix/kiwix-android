@@ -277,7 +277,7 @@
   <string name="no_devices_found">발견된 장치가 없습니다. 다시 시도하려면 검색 버튼에 탭하십시오.</string>
   <string name="files_for_transfer">전송하려는 파일</string>
   <string name="preparing_files">전송을 위해 파일을 준비중입니다.</string>
-  <string name="performing_handshake">핸드셰이크 수행 중...</string>
+  <string name="performing_handshake">핸드셰이크 수행 중…</string>
   <string name="local_zim_sharing">로컬 ZIM 공유</string>
   <string name="status">상태</string>
   <string name="pref_clear_all_notes_summary">모든 문서의 모든 노트 지우기</string>

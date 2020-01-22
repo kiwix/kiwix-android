@@ -5,5 +5,5 @@
 <resources>
   <string name="file_system_does_not_support_4gb">מערכת הקבצים שלך אינה תומכת בקבצים גדולים מ־4GB</string>
   <string name="detecting_file_system">בדיקה אם מערכת הקבצים שלך יכולה ליצור קבצים גדולים מ־4GB</string>
-  <string name="cannot_open_file">פתיחת הקובץ נכשלה\nנא לנסות לחפש את הקובץ הזה בלשונית \"מכשיר\" בספרייה שלך</string>
+  <string name="cannot_open_file">פתיחת הקובץ נכשלה\nנא לנסות לחפש את הקובץ הזה בלשונית \“מכשיר\” בספרייה שלך</string>
 </resources>

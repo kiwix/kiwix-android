@@ -149,7 +149,7 @@
   <string name="your_languages">Valitut kielet:</string>
   <string name="other_languages">Muut kielet:</string>
   <string name="ongoing_download_channel_name">Keskeneräiset lataukset</string>
-  <string name="crash_title">Jaha... Tämä on noloa</string>
+  <string name="crash_title">Jaha… Tämä on noloa</string>
   <string name="crash_checkbox_language">Omat kieliasetukset</string>
   <string name="crash_checkbox_zimfiles">Luettelo Zim-tiedostoistasi</string>
   <string name="crash_checkbox_exception">Tiedot kaatumisesta</string>

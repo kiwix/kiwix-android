@@ -270,8 +270,8 @@
   <string name="nearby_devices">УРЕДИ ВО БЛИЗИНА</string>
   <string name="no_devices_found">Не пронајдов уред. Допрете на пребарувањето за да пробате повторно.</string>
   <string name="files_for_transfer">ПОДАТОТЕКИ ЗА ПРЕНЕСУВАЊЕ</string>
-  <string name="preparing_files">Ги подготвувам податотеките за пренос...</string>
-  <string name="performing_handshake">Поврзувам...</string>
+  <string name="preparing_files">Ги подготвувам податотеките за пренос…</string>
+  <string name="performing_handshake">Поврзувам…</string>
   <string name="local_zim_sharing">Место споделување на ZIM</string>
   <string name="status">Состојба</string>
   <string name="pref_clear_all_notes_summary">Ги чисти сите белешки на сите статии</string>

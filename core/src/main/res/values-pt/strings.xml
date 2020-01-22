@@ -135,7 +135,7 @@
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir a transferência de conteúdo pela rede móvel?</string>
-  <string name="wifi_only_msg">Se escolher \"Sim\", não será avisado no futuro. No entanto, pode sempre alterar isto nas Configurações</string>
+  <string name="wifi_only_msg">Se escolher \“Sim\”, não será avisado no futuro. No entanto, pode sempre alterar isto nas Configurações</string>
   <string name="pref_wifi_only">Descarregar conteúdo apenas por WiFi</string>
   <string name="time_day">dia</string>
   <string name="time_hour">h</string>

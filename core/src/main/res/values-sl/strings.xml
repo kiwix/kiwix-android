@@ -135,7 +135,7 @@
   <string name="next">Naprej</string>
   <string name="previous">Predhodni</string>
   <string name="wifi_only_title">Omogoči prenos vsebin prek mobilnega omrežja?</string>
-  <string name="wifi_only_msg">Če izberete \"Da\", vas v prihodnje ne bomo opozarjali. Vendar lahko to vedno spremenite v nastavitvah</string>
+  <string name="wifi_only_msg">Če izberete \“Da\”, vas v prihodnje ne bomo opozarjali. Vendar lahko to vedno spremenite v nastavitvah</string>
   <string name="pref_wifi_only">Prenašanje vsebine samo prek WiFi</string>
   <string name="time_day">dan</string>
   <string name="time_hour">h</string>
@@ -156,7 +156,7 @@
   <string name="no_items_msg">Ni na voljo nobenih elementov</string>
   <string name="ongoing_download_channel_name">Tekoči prenosi</string>
   <string name="ongoing_download_channel_desc">Kategorija za tekoče prenose datotek zim.</string>
-  <string name="crash_title">No... To je neprijetno</string>
+  <string name="crash_title">No… To je neprijetno</string>
   <string name="crash_description">Izgleda, da smo se zrušili.</string>
   <string name="crash_checkbox_language">Jezikovne nastavitve</string>
   <string name="crash_checkbox_zimfiles">Seznam tvojih Zim datotek</string>

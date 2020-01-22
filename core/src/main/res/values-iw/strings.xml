@@ -25,8 +25,8 @@
   <string name="menu_host_books">לארח ספרים</string>
   <string name="save_media">שמירת מדיה</string>
   <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
-  <string name="save_media_saved">המדיה נשמרה בתור %s אל Android/media/org.kiwix.../‎</string>
-  <string name="rescan_fs_warning">מתבצעת סריקה לאיתור תכנים הניתנים להורדה, נא להמתין...</string>
+  <string name="save_media_saved">המדיה נשמרה בתור %s אל Android/media/org.kiwix…/‎</string>
+  <string name="rescan_fs_warning">מתבצעת סריקה לאיתור תכנים הניתנים להורדה, נא להמתין…</string>
   <string name="search_label">חיפוש</string>
   <string name="choose_file">בחירת קובץ תוכן (‎*.zim)</string>
   <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
@@ -179,7 +179,7 @@
   <string name="no_items_msg">אין פריטים זמינים</string>
   <string name="ongoing_download_channel_name">הורדות נוכחיות</string>
   <string name="ongoing_download_channel_desc">קטגוריה להורדות קובצי zim נוכחיות.</string>
-  <string name="crash_title">טוב... זה מביך</string>
+  <string name="crash_title">טוב… זה מביך</string>
   <string name="crash_description">נראה שקרסנו.\n\nהאם ברצונך לעזור לנו לתקן את הבעיה הזאת באמצעות שליחת המידע הבא?</string>
   <string name="crash_checkbox_language">הגדרות השפה שלך</string>
   <string name="crash_checkbox_zimfiles">רשימה של קובצי ה־Zim שלך</string>
@@ -215,7 +215,7 @@
   <string name="bookmarks_from_current_book">סימניות מהספר הנוכחי</string>
   <string name="search_bookmarks">חיפוש סימניות</string>
   <string name="switch_tabs">החלפת כרטיסיות</string>
-  <string name="smiling_face">&lt;bdi direction=\"ltr\"&gt;:D&lt;/bdi&gt;</string>
+  <string name="smiling_face"><![CDATA[<bdi direction=\“ltr\”>:D</bdi>]]></string>
   <string name="close_all_tabs">סגירת כל הכרטיסיות</string>
   <string name="pending_state">ממתין</string>
   <string name="running_state">בעבודה</string>
@@ -274,8 +274,8 @@
   <string name="nearby_devices">מכשירים בסביבה</string>
   <string name="no_devices_found">לא זוהו מכשירים. נא ללחוץ על כפתור החיפוש כדי לנסות שוב.</string>
   <string name="files_for_transfer">קבצים להעברה</string>
-  <string name="preparing_files">הכנת קבצים להעברה...</string>
-  <string name="performing_handshake">ביצוע לחיצת־יד...</string>
+  <string name="preparing_files">הכנת קבצים להעברה…</string>
+  <string name="performing_handshake">ביצוע לחיצת־יד…</string>
   <string name="local_zim_sharing">שיתוף ZIM מקומי</string>
   <string name="status">מצב</string>
   <string name="pref_clear_all_notes_summary">ניקוי כל ההערות בכל הערכים</string>

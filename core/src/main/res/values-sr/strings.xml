@@ -19,8 +19,8 @@
   <string name="menu_read_aloud">Читај на глас</string>
   <string name="menu_read_aloud_stop">Престани да читаш на глас</string>
   <string name="save_media_error">Дошло је до грешке при чувању мултимедије!</string>
-  <string name="save_media_saved" fuzzy="true">Сачувана мултимедија као %s у Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Тражим преузимљиве датотеке, сачекај...</string>
+  <string name="save_media_saved" fuzzy="true">Сачувана мултимедија као %s у Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Тражим преузимљиве датотеке, сачекај…</string>
   <string name="choose_file">Изаберите датотеку са садржајем (*.zim)</string>
   <string name="open_in_new_tab">Отворити везу у новој картици?</string>
   <string name="stop_hotspot_button">ЗАУСТАВИ</string>

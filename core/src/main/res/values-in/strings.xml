@@ -22,8 +22,8 @@
   <string name="menu_read_aloud_stop">Hentikan pembacaan</string>
   <string name="save_media">Simpan Media</string>
   <string name="save_media_error">Terjadi kesalahan saat menyimpan media!</string>
-  <string name="save_media_saved" fuzzy="true">Simpan media sebagai %s pada Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Memindai konten yang dapat diunduh, harap tunggu...</string>
+  <string name="save_media_saved" fuzzy="true">Simpan media sebagai %s pada Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Memindai konten yang dapat diunduh, harap tunggu…</string>
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Berkas Konten (*.zim)</string>
   <string name="open_in_new_tab">Buka pranala di tab baru?</string>

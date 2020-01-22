@@ -21,7 +21,7 @@
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">Hebo un error al intentar guardar el mediu.</string>
   <string name="save_media_saved">Mediu guardáu como %s en Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Buscando conteníu descargable; espera, por favor...</string>
+  <string name="rescan_fs_warning">Buscando conteníu descargable; espera, por favor…</string>
   <string name="search_label">Buscar</string>
   <string name="choose_file">Seleiciona un ficheru de conteníu (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir l\'enllaz nuna llingüeta nueva?</string>
@@ -68,7 +68,7 @@
   <string name="delete_specific_search_toast">Desanicióse la gueta recién</string>
   <string name="hint_contents_drawer_message">Puedes esmucir a la izquierda pa ver el conteníu d\'esti artículu</string>
   <string name="got_it">Entendílo</string>
-  <string name="did_you_know">¿Sabíes que...?</string>
+  <string name="did_you_know">¿Sabíes que…?</string>
   <string name="undo">Desfacer</string>
   <string name="tab_closed">Llingüeta zarrada</string>
   <string name="bookmark_added">Marcador amestáu</string>
@@ -155,7 +155,7 @@
   <string name="no_items_msg">Nun hai nengún elementu disponible</string>
   <string name="ongoing_download_channel_name">Descargues en cursu</string>
   <string name="ongoing_download_channel_desc">Categoría pa les descargues en cursu de ficheros zim.</string>
-  <string name="crash_title">Bien... esto ye vergonzoso</string>
+  <string name="crash_title">Bien… esto ye vergonzoso</string>
   <string name="crash_description">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">La to configuración de llingua</string>
   <string name="crash_checkbox_zimfiles">Una llista de los tos ficheros Zim</string>

@@ -22,7 +22,7 @@
   <string name="menu_support_kiwix">پشتگیریی کیویکس بکە</string>
   <string name="save_media">میدیا پاشەکەوت بکە</string>
   <string name="save_media_error">ھەڵەیەک ڕوویدا لەکاتی ھەوڵدان لە خەزێنەکردنی میدیاکە!</string>
-  <string name="rescan_fs_warning">پشکنین بۆ ناوەڕۆکی داگیراو، تکایە چاوەروان بە...</string>
+  <string name="rescan_fs_warning">پشکنین بۆ ناوەڕۆکی داگیراو، تکایە چاوەروان بە…</string>
   <string name="search_label">گەڕان</string>
   <string name="open_in_new_tab">بەستەرەکە لە تابێکی نوێدا بکرێتەوە؟</string>
   <string name="go_to_wifi_settings_label">بڕۆ بۆ ڕێکخستنەکانی وای-فای</string>

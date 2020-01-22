@@ -25,7 +25,7 @@
   <string name="menu_read_aloud_stop">停止朗读</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
-  <string name="save_media_saved" fuzzy="true">已将媒体作为%s保存至Android/media/org.kiwix.../</string>
+  <string name="save_media_saved" fuzzy="true">已将媒体作为%s保存至Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">正在扫描可下载内容，请稍候…</string>
   <string name="search_label">搜索</string>
   <string name="choose_file">选择一个内容文件（*.zim）</string>
