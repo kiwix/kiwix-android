@@ -468,7 +468,6 @@ public abstract class CoreMainActivity extends BaseActivity
     contentFrame.setVisibility(View.GONE);
     progressBar.setVisibility(View.GONE);
     backToTopButton.hide();
-
     tabSwitcherRoot.setVisibility(View.VISIBLE);
     tabSwitcherRoot.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_down));
     if (tabsAdapter.getSelected() < webViewList.size() &&
