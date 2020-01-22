@@ -1051,7 +1051,7 @@ public abstract class CoreMainActivity extends BaseActivity
     zimReaderContainer.setZimFile(file);
     if (zimReaderContainer.getZimFileReader() != null) {
       if (mainMenu != null) {
-        mainMenu.onFileOpened(zimReaderContainer.getZimFileReader());
+        mainMenu.onFileOpened(zimReaderContainer.getZimFileReader(), !urlIsInvalid());
       }
       openMainPage();
       presenter.loadCurrentZimBookmarksUrl();
