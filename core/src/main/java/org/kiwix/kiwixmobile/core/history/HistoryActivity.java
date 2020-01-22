@@ -25,7 +25,9 @@ import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
@@ -66,6 +68,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   ZimReaderContainer zimReaderContainer;
   @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
+  @BindView(R2.id.no_history)
+  TextView noHistory;
   private boolean refreshAdapter = true;
   private HistoryAdapter historyAdapter;
   private LinearLayoutManager layoutManager;
@@ -121,6 +125,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       if (refreshAdapter) {
         historyAdapter.notifyDataSetChanged();
       }
+      checkEmpty();
     }
   };
 
@@ -141,6 +146,15 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     recyclerView.setAdapter(historyAdapter);
     layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     recyclerView.setLayoutManager(layoutManager);
+    checkEmpty();
+  }
+
+  private void checkEmpty() {
+    if (historyList.size() == 0) {
+      noHistory.setVisibility(View.VISIBLE);
+    } else {
+      noHistory.setVisibility(View.GONE);
+    }
   }
 
   @Override
@@ -149,6 +163,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
     if (listState != null) {
       layoutManager.onRestoreInstanceState(listState);
+    checkEmpty();
     }
   }
 
@@ -230,6 +245,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     fullHistory.clear();
     fullHistory.addAll(historyList);
     notifyHistoryListFiltered(historyList);
+    checkEmpty();
   }
 
   @Override

@@ -24,7 +24,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
@@ -58,6 +61,8 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   Toolbar toolbar;
   @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
+  @BindView(R2.id.no_bookmarks)
+  TextView noBookmarks;
   @Inject
   BookmarksContract.Presenter presenter;
   @Inject
@@ -106,6 +111,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       if (refreshAdapter) {
         bookmarksAdapter.notifyDataSetChanged();
       }
+      checkEmpty();
     }
   };
 
@@ -124,6 +130,15 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
     bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
     recyclerView.setAdapter(bookmarksAdapter);
+    checkEmpty();
+  }
+
+  private void checkEmpty() {
+    if (bookmarksList.size() == 0) {
+      noBookmarks.setVisibility(View.VISIBLE);
+    } else {
+      noBookmarks.setVisibility(View.GONE);
+    }
   }
 
   @Override
@@ -187,6 +202,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     allBookmarks.clear();
     allBookmarks.addAll(bookmarksList);
     notifyBookmarksListFiltered(bookmarksList);
+    checkEmpty();
   }
 
   @Override

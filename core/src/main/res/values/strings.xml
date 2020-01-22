@@ -293,6 +293,8 @@
   <string name="grant_read_storage_permission">This app requires the ability to read storage to function. Please grant the permission in your settings</string>
   <string name="go_to_permissions">Go to Settings</string>
   <string name="no_results">No Results</string>
+  <string name="no_bookmarks">No bookmarks yet</string>
+  <string name="no_history">No history yet</string>
   <string-array name="pref_night_modes_entries">
     <item>On</item>
     <item>Off</item>
