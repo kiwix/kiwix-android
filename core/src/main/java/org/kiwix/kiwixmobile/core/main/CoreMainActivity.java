@@ -40,6 +40,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -467,7 +468,9 @@ public abstract class CoreMainActivity extends BaseActivity
     contentFrame.setVisibility(View.GONE);
     progressBar.setVisibility(View.GONE);
     backToTopButton.hide();
+
     tabSwitcherRoot.setVisibility(View.VISIBLE);
+    tabSwitcherRoot.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_down));
     if (tabsAdapter.getSelected() < webViewList.size() &&
       tabRecyclerView.getLayoutManager() != null) {
       tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
@@ -483,6 +486,7 @@ public abstract class CoreMainActivity extends BaseActivity
       drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
       closeAllTabsButton.setImageDrawable(
         ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
+      tabSwitcherRoot.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
       tabSwitcherRoot.setVisibility(View.GONE);
       progressBar.setVisibility(View.VISIBLE);
       contentFrame.setVisibility(View.VISIBLE);
