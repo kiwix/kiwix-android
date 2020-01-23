@@ -146,15 +146,10 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     recyclerView.setAdapter(historyAdapter);
     layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     recyclerView.setLayoutManager(layoutManager);
-    checkEmpty();
   }
 
   private void checkEmpty() {
-    if (historyList.size() == 0) {
-      noHistory.setVisibility(View.VISIBLE);
-    } else {
-      noHistory.setVisibility(View.GONE);
-    }
+    noHistory.setVisibility(historyList.size()==0 ? View.VISIBLE : View.GONE);
   }
 
   @Override

@@ -130,15 +130,10 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
     bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
     recyclerView.setAdapter(bookmarksAdapter);
-    checkEmpty();
   }
 
   private void checkEmpty() {
-    if (bookmarksList.size() == 0) {
-      noBookmarks.setVisibility(View.VISIBLE);
-    } else {
-      noBookmarks.setVisibility(View.GONE);
-    }
+    noBookmarks.setVisibility(bookmarksList.size()==0 ? View.VISIBLE : View.GONE);
   }
 
   @Override
