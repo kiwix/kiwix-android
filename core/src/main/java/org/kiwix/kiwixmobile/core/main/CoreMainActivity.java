@@ -1348,7 +1348,7 @@ public abstract class CoreMainActivity extends BaseActivity
     } else {
       articleUrl = zimReaderContainer.getPageUrlFromTitle(title);
     }
-     openArticle(articleUrl, newTab);
+    openArticle(articleUrl, newTab);
   }
 
   @Override
