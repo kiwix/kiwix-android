@@ -72,8 +72,4 @@ public abstract class CoreSettingsActivity extends BaseActivity {
 
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
-
-  @Override protected void injection(CoreComponent coreComponent) {
-    coreComponent.inject(this);
-  }
 }
