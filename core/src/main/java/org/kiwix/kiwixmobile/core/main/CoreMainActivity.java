@@ -40,6 +40,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -235,21 +238,21 @@ public abstract class CoreMainActivity extends BaseActivity
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder) {
+                                @NonNull RecyclerView.ViewHolder viewHolder) {
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-      boolean isCurrentlyActive) {
+                            @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+                            boolean isCurrentlyActive) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
       viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                          @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
       return false;
     }
 
@@ -308,6 +311,22 @@ public abstract class CoreMainActivity extends BaseActivity
       public void onSwipeBottom() {
         showTabSwitcher();
       }
+
+      @Override
+      public void onSwipeLeft() {
+        if (currentWebViewIndex < webViewList.size() - 1) {
+          View current = getCurrentWebView();
+          current.setAnimation(transitionLeft());
+        }
+      }
+
+      @Override
+      public void onSwipeRight() {
+        if (currentWebViewIndex > 0) {
+          View current = getCurrentWebView();
+          current.setAnimation(transitionRight());
+        }
+      }
     });
 
     tableDrawerRight =
@@ -348,6 +367,32 @@ public abstract class CoreMainActivity extends BaseActivity
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+  }
+
+  public Animation transitionRight() {
+    Animation inFromRight = new TranslateAnimation(
+      Animation.RELATIVE_TO_PARENT, +1.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f
+    );
+    inFromRight.setDuration(240);
+    inFromRight.setInterpolator(new AccelerateInterpolator());
+    selectTab(currentWebViewIndex - 1);
+    return inFromRight;
+  }
+
+  public Animation transitionLeft() {
+    Animation inFromLeft = new TranslateAnimation(
+      Animation.RELATIVE_TO_PARENT, -1.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f
+    );
+    inFromLeft.setDuration(240);
+    inFromLeft.setInterpolator(new AccelerateInterpolator());
+    selectTab(currentWebViewIndex + 1);
+    return inFromLeft;
   }
 
   //End of onCreate
@@ -1067,7 +1112,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-    @NonNull String[] permissions, @NonNull int[] grantResults) {
+                                         @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
