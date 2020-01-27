@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -319,7 +320,7 @@ public abstract class CoreMainActivity extends BaseActivity
       public void onSwipeLeft() {
         if (currentWebViewIndex < webViewList.size() - 1) {
           View current = getCurrentWebView();
-          current.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.transition_left));
+          setAnimation(current, current.getContext(), R.anim.transition_left);
           selectTab(currentWebViewIndex + 1);
         }
       }
@@ -328,7 +329,7 @@ public abstract class CoreMainActivity extends BaseActivity
       public void onSwipeRight() {
         if (currentWebViewIndex > 0) {
           View current = getCurrentWebView();
-          current.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.transition_right));
+          setAnimation(current, current.getContext(), R.anim.transition_right);
           selectTab(currentWebViewIndex - 1);
         }
       }
@@ -492,12 +493,16 @@ public abstract class CoreMainActivity extends BaseActivity
     progressBar.setVisibility(View.GONE);
     backToTopButton.hide();
     tabSwitcherRoot.setVisibility(View.VISIBLE);
-    tabSwitcherRoot.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_down));
+    setAnimation(tabSwitcherRoot, this, R.anim.slide_down);
     if (tabsAdapter.getSelected() < webViewList.size() &&
       tabRecyclerView.getLayoutManager() != null) {
       tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
     }
     mainMenu.showTabSwitcherOptions();
+  }
+
+  private void setAnimation(View view, Context context, int anim) {
+    view.startAnimation(AnimationUtils.loadAnimation(context, anim));
   }
 
   protected void hideTabSwitcher() {
@@ -508,7 +513,7 @@ public abstract class CoreMainActivity extends BaseActivity
       drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
       closeAllTabsButton.setImageDrawable(
         ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
-      tabSwitcherRoot.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
+      setAnimation(tabSwitcherRoot, this, R.anim.slide_up);
       tabSwitcherRoot.setVisibility(View.GONE);
       progressBar.setVisibility(View.VISIBLE);
       contentFrame.setVisibility(View.VISIBLE);
