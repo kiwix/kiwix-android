@@ -28,11 +28,9 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.base.BasePresenter;
 import org.kiwix.kiwixmobile.core.data.DataSource;
-import org.kiwix.kiwixmobile.core.di.ActivityScope;
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread;
 
-@ActivityScope
 class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
   implements BookmarksContract.Presenter {
 

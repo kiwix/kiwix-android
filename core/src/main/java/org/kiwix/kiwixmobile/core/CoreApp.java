@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
@@ -26,9 +25,6 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
 import com.jakewharton.threetenabp.AndroidThreeTen;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
 import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -37,7 +33,7 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent;
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor;
 
-public abstract class CoreApp extends MultiDexApplication implements HasActivityInjector {
+public abstract class CoreApp extends MultiDexApplication  {
 
   private static CoreApp app;
   private static CoreComponent coreComponent;
@@ -46,8 +42,6 @@ public abstract class CoreApp extends MultiDexApplication implements HasActivity
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
   }
 
-  @Inject
-  DispatchingAndroidInjector<Activity> activityInjector;
   @Inject
   DownloadMonitor downloadMonitor;
   @Inject
@@ -159,8 +153,4 @@ public abstract class CoreApp extends MultiDexApplication implements HasActivity
     return Environment.MEDIA_MOUNTED.equals(state);
   }
 
-  @Override
-  public AndroidInjector<Activity> activityInjector() {
-    return activityInjector;
-  }
 }

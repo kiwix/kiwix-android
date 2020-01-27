@@ -24,7 +24,8 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import dagger.android.AndroidInjection
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -36,14 +37,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
   private var unbinder: Unbinder? = null
 
+  protected abstract fun injection(coreComponent: CoreComponent)
+
   override fun onCreate(savedInstanceState: Bundle?) {
-    injection()
+    injection(CoreApp.getCoreComponent())
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
-  }
-
-  protected open fun injection() {
-    AndroidInjection.inject(this)
   }
 
   override fun setContentView(@LayoutRes layoutResID: Int) {

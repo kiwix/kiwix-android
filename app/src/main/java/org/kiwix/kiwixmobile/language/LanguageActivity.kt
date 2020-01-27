@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_language.language_progressbar
 import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -48,6 +49,9 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import javax.inject.Inject
 
 class LanguageActivity : BaseActivity() {
+  override fun injection(coreComponent: CoreComponent) {
+    kiwixActivityComponent.inject(this)
+  }
 
   private val languageViewModel by lazy { viewModel<LanguageViewModel>(viewModelFactory) }
 
@@ -60,10 +64,6 @@ class LanguageActivity : BaseActivity() {
       LanguageItemDelegate { languageViewModel.actions.offer(Select(it)) },
       HeaderDelegate()
     )
-
-  override fun injection() {
-    kiwixActivityComponent.inject(this)
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

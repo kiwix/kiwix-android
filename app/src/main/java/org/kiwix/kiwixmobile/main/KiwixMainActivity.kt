@@ -26,6 +26,7 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -47,10 +48,6 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
 class KiwixMainActivity : CoreMainActivity() {
-
-  override fun injection() {
-    kiwixActivityComponent.inject(this)
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -102,6 +99,10 @@ class KiwixMainActivity : CoreMainActivity() {
         showHomePage()
       }
     }
+  }
+
+  override fun injection(coreComponent: CoreComponent) {
+    kiwixActivityComponent.inject(this)
   }
 
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =

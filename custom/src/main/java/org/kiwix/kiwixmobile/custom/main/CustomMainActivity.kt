@@ -30,6 +30,7 @@ import android.util.Log
 import android.view.Menu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
@@ -49,6 +50,11 @@ import javax.inject.Inject
 const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
+
+  override fun injection(coreComponent: CoreComponent) {
+    customActivityComponent.inject(this)
+  }
+
   @Inject lateinit var customFileValidator: CustomFileValidator
   @Inject lateinit var dialogShower: DialogShower
 
@@ -58,10 +64,6 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  override fun injection() {
-    customActivityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

@@ -36,10 +36,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -108,6 +111,10 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       }
     }
   };
+
+  @Override protected void injection(CoreComponent coreComponent) {
+    coreComponent.inject(this);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -246,4 +253,5 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       actionMode.finish();
     }
   }
+
 }

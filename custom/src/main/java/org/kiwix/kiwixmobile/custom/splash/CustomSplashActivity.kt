@@ -19,12 +19,13 @@
 package org.kiwix.kiwixmobile.custom.splash
 
 import android.content.Intent
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 
 class CustomSplashActivity : CoreSplashActivity() {
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
   }
 

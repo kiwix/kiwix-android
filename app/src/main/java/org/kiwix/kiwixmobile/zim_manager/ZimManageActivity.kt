@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.zim_manager.tabs
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -39,6 +40,9 @@ import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import javax.inject.Inject
 
 class ZimManageActivity : BaseActivity() {
+  override fun injection(coreComponent: CoreComponent) {
+    cachedComponent.inject(this)
+  }
 
   val cachedComponent by lazy { kiwixActivityComponent }
 
@@ -53,10 +57,6 @@ class ZimManageActivity : BaseActivity() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var languagesDao: NewLanguagesDao
-
-  override fun injection() {
-    cachedComponent.inject(this)
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

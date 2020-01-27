@@ -84,6 +84,7 @@ import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
@@ -92,6 +93,7 @@ import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryListItem;
@@ -1665,4 +1667,5 @@ public abstract class CoreMainActivity extends BaseActivity
   private boolean checkNull(View view) {
     return view != null;
   }
+
 }
