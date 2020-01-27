@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Authors:
+<?xml version="1.0" encoding="utf-8"?><!-- Authors:
 * Amire80
 * Ghsuvr
 * Guycn2
@@ -7,7 +6,7 @@
 * YaronSh
 * יאיר מן
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyQuotes,TypographyEllipsis">
   <string name="kiwi">קיווי</string>
   <string name="menu_zim_manager">ספרייה</string>
   <string name="menu_help">עזרה</string>
