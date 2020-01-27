@@ -5,6 +5,7 @@
   android:id="@+id/activity_main_root"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:animateLayoutChanges="true"
   tools:showIn="@layout/activity_main">
 
   <com.google.android.material.appbar.AppBarLayout

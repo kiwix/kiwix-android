@@ -22,8 +22,11 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_WEBVIEWS_LIST;
 import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_HISTORY_CLEARED;
@@ -34,7 +37,6 @@ public abstract class CoreSettingsActivity extends BaseActivity {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-
     super.onCreate(savedInstanceState);
     setContentView(R.layout.settings);
 

@@ -35,6 +35,7 @@ import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
@@ -76,7 +77,7 @@ class SearchActivity : BaseActivity() {
     )
   }
 
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     activityComponent.inject(this)
   }
 

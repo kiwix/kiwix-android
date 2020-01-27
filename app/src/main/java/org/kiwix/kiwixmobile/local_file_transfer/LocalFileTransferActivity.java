@@ -51,9 +51,12 @@ import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.ActivityExtensionsKt;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiP2pDelegate;
@@ -99,10 +102,6 @@ public class LocalFileTransferActivity extends BaseActivity implements
   private FileListAdapter fileListAdapter;
 
   private WifiPeerListAdapter wifiPeerListAdapter;
-
-  @Override protected void injection() {
-    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
-  }
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -401,5 +400,9 @@ public class LocalFileTransferActivity extends BaseActivity implements
   @Override protected void onDestroy() {
     wifiDirectManager.stopWifiDirectManager();
     super.onDestroy();
+  }
+
+  @Override protected void injection(CoreComponent coreComponent) {
+    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
   }
 }
