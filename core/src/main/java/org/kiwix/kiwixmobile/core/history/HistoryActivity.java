@@ -25,7 +25,9 @@ import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
@@ -70,6 +72,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   ZimReaderContainer zimReaderContainer;
   @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
+  @BindView(R2.id.no_history)
+  TextView noHistory;
   private boolean refreshAdapter = true;
   private HistoryAdapter historyAdapter;
   private LinearLayoutManager layoutManager;
@@ -140,10 +144,20 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       actionBar.setTitle(R.string.history);
     }
 
-    historyAdapter = new HistoryAdapter(historyList, deleteList, this);
+    setupHistoryAdapter();
     recyclerView.setAdapter(historyAdapter);
     layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     recyclerView.setLayoutManager(layoutManager);
+  }
+
+  private void setupHistoryAdapter() {
+    historyAdapter = new HistoryAdapter(historyList, deleteList, this);
+    historyAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+      @Override public void onChanged() {
+        super.onChanged();
+        noHistory.setVisibility(historyList.size() == 0 ? View.VISIBLE : View.GONE);
+      }
+    });
   }
 
   @Override
