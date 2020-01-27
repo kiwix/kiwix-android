@@ -319,7 +319,8 @@ public abstract class CoreMainActivity extends BaseActivity
       public void onSwipeLeft() {
         if (currentWebViewIndex < webViewList.size() - 1) {
           View current = getCurrentWebView();
-          current.setAnimation(transitionLeft());
+          current.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.transition_left));
+          selectTab(currentWebViewIndex + 1);
         }
       }
 
@@ -327,7 +328,8 @@ public abstract class CoreMainActivity extends BaseActivity
       public void onSwipeRight() {
         if (currentWebViewIndex > 0) {
           View current = getCurrentWebView();
-          current.setAnimation(transitionRight());
+          current.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.transition_right));
+          selectTab(currentWebViewIndex - 1);
         }
       }
     });
@@ -370,32 +372,6 @@ public abstract class CoreMainActivity extends BaseActivity
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
-  }
-
-  public Animation transitionRight() {
-    Animation inFromRight = new TranslateAnimation(
-      Animation.RELATIVE_TO_PARENT, +1.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f
-    );
-    inFromRight.setDuration(240);
-    inFromRight.setInterpolator(new AccelerateInterpolator());
-    selectTab(currentWebViewIndex - 1);
-    return inFromRight;
-  }
-
-  public Animation transitionLeft() {
-    Animation inFromLeft = new TranslateAnimation(
-      Animation.RELATIVE_TO_PARENT, -1.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f
-    );
-    inFromLeft.setDuration(240);
-    inFromLeft.setInterpolator(new AccelerateInterpolator());
-    selectTab(currentWebViewIndex + 1);
-    return inFromLeft;
   }
 
   //End of onCreate
