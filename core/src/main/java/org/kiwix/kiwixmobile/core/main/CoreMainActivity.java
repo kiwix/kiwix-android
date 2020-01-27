@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -41,9 +40,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -88,7 +84,6 @@ import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
-import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
@@ -97,7 +92,6 @@ import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryListItem;
@@ -320,7 +314,7 @@ public abstract class CoreMainActivity extends BaseActivity
       public void onSwipeLeft() {
         if (currentWebViewIndex < webViewList.size() - 1) {
           View current = getCurrentWebView();
-          setAnimation(current, current.getContext(), R.anim.transition_left);
+          startAnimation(current, R.anim.transition_left);
           selectTab(currentWebViewIndex + 1);
         }
       }
@@ -329,7 +323,7 @@ public abstract class CoreMainActivity extends BaseActivity
       public void onSwipeRight() {
         if (currentWebViewIndex > 0) {
           View current = getCurrentWebView();
-          setAnimation(current, current.getContext(), R.anim.transition_right);
+          startAnimation(current, R.anim.transition_right);
           selectTab(currentWebViewIndex - 1);
         }
       }
@@ -493,7 +487,7 @@ public abstract class CoreMainActivity extends BaseActivity
     progressBar.setVisibility(View.GONE);
     backToTopButton.hide();
     tabSwitcherRoot.setVisibility(View.VISIBLE);
-    setAnimation(tabSwitcherRoot, this, R.anim.slide_down);
+    startAnimation(tabSwitcherRoot, R.anim.slide_down);
     if (tabsAdapter.getSelected() < webViewList.size() &&
       tabRecyclerView.getLayoutManager() != null) {
       tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
@@ -501,8 +495,8 @@ public abstract class CoreMainActivity extends BaseActivity
     mainMenu.showTabSwitcherOptions();
   }
 
-  private void setAnimation(View view, Context context, int anim) {
-    view.startAnimation(AnimationUtils.loadAnimation(context, anim));
+  private void startAnimation(View view, int anim) {
+    view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), anim));
   }
 
   protected void hideTabSwitcher() {
@@ -513,7 +507,7 @@ public abstract class CoreMainActivity extends BaseActivity
       drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
       closeAllTabsButton.setImageDrawable(
         ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
-      setAnimation(tabSwitcherRoot, this, R.anim.slide_up);
+      startAnimation(tabSwitcherRoot, R.anim.slide_up);
       tabSwitcherRoot.setVisibility(View.GONE);
       progressBar.setVisibility(View.VISIBLE);
       contentFrame.setVisibility(View.VISIBLE);
