@@ -238,21 +238,21 @@ public abstract class CoreMainActivity extends BaseActivity
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
-                                @NonNull RecyclerView.ViewHolder viewHolder) {
+      @NonNull RecyclerView.ViewHolder viewHolder) {
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-                            @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-                            boolean isCurrentlyActive) {
+      @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+      boolean isCurrentlyActive) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
       viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView,
-                          @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+      @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
       return false;
     }
 
@@ -1112,7 +1112,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-                                         @NonNull String[] permissions, @NonNull int[] grantResults) {
+    @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
