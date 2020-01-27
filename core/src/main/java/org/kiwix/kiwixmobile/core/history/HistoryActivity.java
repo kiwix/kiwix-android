@@ -125,7 +125,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       if (refreshAdapter) {
         historyAdapter.notifyDataSetChanged();
       }
-      checkEmpty();
     }
   };
 
@@ -142,14 +141,20 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       actionBar.setTitle(R.string.history);
     }
 
-    historyAdapter = new HistoryAdapter(historyList, deleteList, this);
+    setupHistoryAdapter();
     recyclerView.setAdapter(historyAdapter);
     layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     recyclerView.setLayoutManager(layoutManager);
   }
 
-  private void checkEmpty() {
-    noHistory.setVisibility(historyList.size()==0 ? View.VISIBLE : View.GONE);
+  private void setupHistoryAdapter() {
+    historyAdapter = new HistoryAdapter(historyList, deleteList, this);
+    historyAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+      @Override public void onChanged() {
+        super.onChanged();
+        noHistory.setVisibility(historyList.size() == 0 ? View.VISIBLE : View.GONE);
+      }
+    });
   }
 
   @Override
@@ -158,7 +163,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
     if (listState != null) {
       layoutManager.onRestoreInstanceState(listState);
-    checkEmpty();
     }
   }
 
@@ -240,7 +244,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     fullHistory.clear();
     fullHistory.addAll(historyList);
     notifyHistoryListFiltered(historyList);
-    checkEmpty();
   }
 
   @Override

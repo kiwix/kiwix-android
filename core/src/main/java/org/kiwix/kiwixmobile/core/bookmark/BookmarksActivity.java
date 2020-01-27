@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.bookmark;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -111,7 +112,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       if (refreshAdapter) {
         bookmarksAdapter.notifyDataSetChanged();
       }
-      checkEmpty();
     }
   };
 
@@ -128,12 +128,19 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       actionBar.setTitle(R.string.menu_bookmarks);
     }
 
-    bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
+    setupBookmarksAdapter();
     recyclerView.setAdapter(bookmarksAdapter);
+
   }
 
-  private void checkEmpty() {
-    noBookmarks.setVisibility(bookmarksList.size()==0 ? View.VISIBLE : View.GONE);
+  private void setupBookmarksAdapter() {
+    bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
+    bookmarksAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+      @Override public void onChanged() {
+        super.onChanged();
+        noBookmarks.setVisibility(bookmarksList.size() == 0 ? View.VISIBLE : View.GONE);
+      }
+    });
   }
 
   @Override
@@ -197,7 +204,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     allBookmarks.clear();
     allBookmarks.addAll(bookmarksList);
     notifyBookmarksListFiltered(bookmarksList);
-    checkEmpty();
   }
 
   @Override
