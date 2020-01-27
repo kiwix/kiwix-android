@@ -48,6 +48,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -495,7 +496,7 @@ public abstract class CoreMainActivity extends BaseActivity
     mainMenu.showTabSwitcherOptions();
   }
 
-  private void startAnimation(View view, int anim) {
+  private void startAnimation(View view, @AnimRes int anim) {
     view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), anim));
   }
 
