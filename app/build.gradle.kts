@@ -54,6 +54,9 @@ android {
 
     getByName("release") {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
+      if (properties.containsKey("disableSigning")) {
+        signingConfig = null
+      }
     }
   }
 
