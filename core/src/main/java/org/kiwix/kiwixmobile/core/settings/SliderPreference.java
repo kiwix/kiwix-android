@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.core.settings;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -174,22 +173,15 @@ public class SliderPreference extends DialogPreference {
   private void setGrayState(View view) {
     SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext());
     boolean enabled = sharedPreferenceUtil.getPrefZoomEnabled();
-    NightModeConfig nightMode = new NightModeConfig(sharedPreferenceUtil,getContext());
-    boolean nightMode_enabled = nightMode.isNightModeActive();
 
     TextView titleView = view.findViewById(android.R.id.title);
     TextView summaryTV = view.findViewById(android.R.id.summary);
-    if (!enabled) {
-      titleView.setTextColor(Color.GRAY);
-      summaryTV.setTextColor(Color.GRAY);
-    }else{
-      if(nightMode_enabled){
-        titleView.setTextColor(Color.WHITE);
-        summaryTV.setTextColor(Color.WHITE);
-      }else{
-        titleView.setTextColor(Color.BLACK);
-        summaryTV.setTextColor(Color.BLACK);
-      }
+    if (enabled) {
+      titleView.setEnabled(true);
+      summaryTV.setEnabled(true);
+    } else {
+      titleView.setEnabled(false);
+      summaryTV.setEnabled(false);
     }
   }
 }
