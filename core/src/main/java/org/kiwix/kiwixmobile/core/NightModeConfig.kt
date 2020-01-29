@@ -61,7 +61,8 @@ class NightModeConfig @Inject constructor(
   enum class UiMode(val value: Int) {
     ON(Configuration.UI_MODE_NIGHT_YES),
     OFF(Configuration.UI_MODE_NIGHT_NO),
-    NOT_SET(Configuration.UI_MODE_NIGHT_UNDEFINED);
+    NOT_SET(Configuration.UI_MODE_NIGHT_UNDEFINED),
+    UNKNOWN(Configuration.UI_MODE_NIGHT_MASK); // Value returned from amazon devices
 
     companion object {
       @JvmStatic
