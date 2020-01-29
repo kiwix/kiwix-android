@@ -73,7 +73,10 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.processors.BehaviorProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -93,12 +96,14 @@ import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryListItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
 import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
@@ -112,7 +117,6 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
-import static org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
@@ -143,8 +147,8 @@ public abstract class CoreMainActivity extends BaseActivity
   MainMenu.MenuClickListener {
 
   public static final String HOME_URL = "file:///android_asset/home.html";
-  private final ArrayList<String> bookmarks = new ArrayList<>();
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
+  private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
   @BindView(R2.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R2.id.toolbar)
@@ -198,6 +202,8 @@ public abstract class CoreMainActivity extends BaseActivity
   protected NightModeConfig nightModeConfig;
   @Inject
   protected MainMenu.Factory menuFactory;
+  @Inject
+  protected NewBookmarksDao newBookmarksDao;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -260,6 +266,8 @@ public abstract class CoreMainActivity extends BaseActivity
       closeTab(viewHolder.getAdapterPosition());
     }
   };
+  private Disposable bookmarkingDisposable;
+  private Boolean isBookmarked;
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -728,6 +736,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   protected void onDestroy() {
+    safeDispose();
     presenter.detachView();
     if (downloadBookButton != null) {
       downloadBookButton.setOnClickListener(null);
@@ -826,7 +835,7 @@ public abstract class CoreMainActivity extends BaseActivity
     tabsAdapter.setSelected(currentWebViewIndex);
     updateBottomToolbarVisibility();
     loadPrefs();
-    refreshBookmarkSymbol();
+    updateUrlProcessor();
     updateTableOfContents();
     updateTitle();
 
@@ -1081,15 +1090,35 @@ public abstract class CoreMainActivity extends BaseActivity
       e.printStackTrace();
     }
     zimReaderContainer.setZimFile(file);
-    if (zimReaderContainer.getZimFileReader() != null) {
+    final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
+    if (zimFileReader != null) {
       if (mainMenu != null) {
-        mainMenu.onFileOpened(zimReaderContainer.getZimFileReader(), !urlIsInvalid());
+        mainMenu.onFileOpened(zimFileReader, !urlIsInvalid());
       }
       openMainPage();
-      presenter.loadCurrentZimBookmarksUrl();
+      safeDispose();
+      bookmarkingDisposable = Flowable.combineLatest(
+        newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader),
+        webUrlsProcessor,
+        (bookmarkUrls, currentUrl) -> bookmarkUrls.contains(currentUrl)
+      ).subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(isBookmarked -> {
+            this.isBookmarked = isBookmarked;
+            bottomToolbarBookmark.setImageResource(
+              isBookmarked ? R.drawable.ic_bookmark_24dp : R.drawable.ic_bookmark_border_24dp);
+          },
+          Throwable::printStackTrace
+        );
+      updateUrlProcessor();
     } else {
       ContextExtensionsKt.toast(this, R.string.error_file_invalid, Toast.LENGTH_LONG);
       showHomePage();
+    }
+  }
+
+  private void safeDispose() {
+    if (bookmarkingDisposable != null) {
+      bookmarkingDisposable.dispose();
     }
   }
 
@@ -1166,36 +1195,26 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @OnClick(R2.id.bottom_toolbar_bookmark)
   public void toggleBookmark() {
-    //Check maybe need refresh
     String articleUrl = getCurrentWebView().getUrl();
-    boolean isBookmark = false;
-    if (articleUrl != null && !bookmarks.contains(articleUrl)) {
+    if (articleUrl != null) {
+      if (isBookmarked) {
+        presenter.deleteBookmark(articleUrl);
+        Snackbar.make(snackbarRoot, R.string.bookmark_removed, Snackbar.LENGTH_LONG)
+          .show();
+      }
+    } else {
       final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
       if (zimFileReader != null) {
         presenter.saveBookmark(
           new BookmarkItem(getCurrentWebView().getTitle(), articleUrl,
             zimReaderContainer.getZimFileReader()));
+        Snackbar.make(snackbarRoot, R.string.bookmark_added, Snackbar.LENGTH_LONG)
+          .setAction(getString(R.string.open), v -> goToBookmarks())
+          .setActionTextColor(getResources().getColor(R.color.white))
+          .show();
       } else {
         Toast.makeText(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT).show();
       }
-      isBookmark = true;
-    } else if (articleUrl != null) {
-      presenter.deleteBookmark(articleUrl);
-      isBookmark = false;
-    }
-    popBookmarkSnackbar(isBookmark);
-    presenter.loadCurrentZimBookmarksUrl();
-  }
-
-  private void popBookmarkSnackbar(boolean isBookmark) {
-    if (isBookmark) {
-      Snackbar.make(snackbarRoot, R.string.bookmark_added, Snackbar.LENGTH_LONG)
-        .setAction(getString(R.string.open), v -> goToBookmarks())
-        .setActionTextColor(getResources().getColor(R.color.white))
-        .show();
-    } else {
-      Snackbar.make(snackbarRoot, R.string.bookmark_removed, Snackbar.LENGTH_LONG)
-        .show();
     }
   }
 
@@ -1210,7 +1229,6 @@ public abstract class CoreMainActivity extends BaseActivity
       selectTab(currentWebViewIndex);
       setUpWebViewWithTextToSpeech();
     }
-    presenter.loadCurrentZimBookmarksUrl();
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
@@ -1298,13 +1316,6 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @Override
-  public void refreshBookmarksUrl(List<String> urls) {
-    bookmarks.clear();
-    bookmarks.addAll(urls);
-    refreshBookmarkSymbol();
-  }
-
   private void contentsDrawerHint() {
     drawerLayout.postDelayed(() -> drawerLayout.openDrawer(GravityCompat.END), 500);
 
@@ -1385,7 +1396,8 @@ public abstract class CoreMainActivity extends BaseActivity
         if (resultCode == RESULT_OK) {
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
-          boolean isSearchInText = data.getBooleanExtra(EXTRA_SEARCH_IN_TEXT, false);
+          boolean isSearchInText =
+            data.getBooleanExtra(SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT, false);
           if (isSearchInText) {
             //if the search is localized trigger find in page UI.
             KiwixWebView webView = getCurrentWebView();
@@ -1479,12 +1491,10 @@ public abstract class CoreMainActivity extends BaseActivity
     return getCurrentWebView().getUrl() == null;
   }
 
-  private void refreshBookmarkSymbol() {
-    if (checkNull(bottomToolbarBookmark)) {
-      bottomToolbarBookmark.setImageResource(
-        bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp
-          : R.drawable.ic_bookmark_border_24dp
-      );
+  private void updateUrlProcessor() {
+    final String url = getCurrentWebView().getUrl();
+    if (url != null) {
+      webUrlsProcessor.offer(url);
     }
   }
 
@@ -1564,7 +1574,7 @@ public abstract class CoreMainActivity extends BaseActivity
   public void webViewUrlFinishedLoading() {
     updateTableOfContents();
     tabsAdapter.notifyDataSetChanged();
-    refreshBookmarkSymbol();
+    updateUrlProcessor();
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
     final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
@@ -1694,5 +1704,4 @@ public abstract class CoreMainActivity extends BaseActivity
   private boolean checkNull(View view) {
     return view != null;
   }
-
 }

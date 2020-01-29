@@ -110,13 +110,6 @@ public class MainPresenter extends BasePresenter<MainContract.View>
   }
 
   @Override
-  public void loadCurrentZimBookmarksUrl() {
-    compositeDisposable.add(dataSource.getCurrentZimBookmarksUrl()
-      .subscribe(view::refreshBookmarksUrl,
-        e -> Log.e(TAG, "Unable to load current ZIM urls", e)));
-  }
-
-  @Override
   public void saveBookmark(BookmarkItem bookmark) {
     dataSource.saveBookmark(bookmark)
       .subscribe(new CompletableObserver() {

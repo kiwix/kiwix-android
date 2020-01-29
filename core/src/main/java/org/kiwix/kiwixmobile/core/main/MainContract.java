@@ -32,8 +32,6 @@ public class MainContract {
 
   interface View extends BaseContract.View<Presenter> {
     void addBooks(List<BooksOnDiskListItem> books);
-
-    void refreshBookmarksUrl(List<String> urls);
   }
 
   public interface Presenter extends BaseContract.Presenter<View> {
@@ -42,8 +40,6 @@ public class MainContract {
     void saveBooks(List<BooksOnDiskListItem.BookOnDisk> books);
 
     void saveHistory(HistoryListItem.HistoryItem history);
-
-    void loadCurrentZimBookmarksUrl();
 
     void saveBookmark(BookmarkItem bookmark);
 
