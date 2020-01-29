@@ -26,11 +26,10 @@ private val BaseActivity.customComponent: CustomComponent
     """
         applicationContext is ${applicationContext::class.java.simpleName}
         application is ${application::class.java.simpleName} 
-    """".trimIndent()
+    """.trimIndent()
   )
 
-private fun BaseActivity.customApp() =
-  (applicationContext as? CustomApp) ?: (application as? CustomApp)
+private fun BaseActivity.customApp() = applicationContext as? CustomApp ?: application as? CustomApp
 
 internal inline val BaseActivity.customActivityComponent
   get() = customComponent.activityComponentBuilder().activity(this).build()
