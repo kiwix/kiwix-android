@@ -22,7 +22,15 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.custom.di.CustomComponent
 
 private val BaseActivity.customComponent: CustomComponent
-  get() = (applicationContext as CustomApp).customComponent
+  get() = customApp()?.customComponent ?: throw RuntimeException(
+    """
+        applicationContext is ${applicationContext::class.java.simpleName}
+        application is ${application::class.java.simpleName} 
+    """".trimIndent()
+  )
+
+private fun BaseActivity.customApp() =
+  (applicationContext as? CustomApp) ?: (application as? CustomApp)
 
 internal inline val BaseActivity.customActivityComponent
   get() = customComponent.activityComponentBuilder().activity(this).build()
