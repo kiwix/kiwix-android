@@ -5,7 +5,23 @@
   android:layout_height="match_parent"
   android:fitsSystemWindows="true">
 
-  <include layout="@layout/layout_standard_app_bar" />
+  <com.google.android.material.appbar.AppBarLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:showIn="@layout/activity_help">
+
+    <include layout="@layout/layout_toolbar" />
+
+    <Switch
+      android:id="@+id/history_switch"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/history_from_current_book"
+      android:switchPadding="@dimen/switch_padding"/>
+
+  </com.google.android.material.appbar.AppBarLayout>
 
   <TextView
     android:id="@+id/no_history"
