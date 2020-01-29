@@ -28,7 +28,7 @@ sealed class HistoryListItem {
     val zimId: String,
     val zimName: String,
     val zimFilePath: String,
-    val favicon: String,
+    val favicon: String?,
     val historyUrl: String,
     val historyTitle: String,
     val dateString: String,
