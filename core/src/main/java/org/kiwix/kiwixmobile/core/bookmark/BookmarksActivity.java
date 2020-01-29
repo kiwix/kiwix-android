@@ -19,16 +19,12 @@
 package org.kiwix.kiwixmobile.core.bookmark;
 
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
@@ -36,12 +32,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import org.jetbrains.annotations.NotNull;
-import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
@@ -51,6 +44,7 @@ import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
 
@@ -137,7 +131,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
     setupBookmarksAdapter();
     recyclerView.setAdapter(bookmarksAdapter);
-
   }
 
   private void setupBookmarksAdapter() {
@@ -231,14 +224,9 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       }
       if (bookmark.getZimFilePath() != null && !bookmark.getZimFilePath()
         .equals(zimReaderContainer.getZimCanonicalPath())) {
-        intent.setData(Uri.fromFile(new File(bookmark.getZimFilePath())));
+        intent.putExtra(EXTRA_CHOSE_X_FILE, bookmark.getZimFilePath());
       }
-      if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0)
-        == 1) {
-        startActivity(intent);
-      } else {
-        setResult(RESULT_OK, intent);
-      }
+      setResult(RESULT_OK, intent);
       finish();
     } else {
       toggleSelection(favicon, bookmark);
@@ -270,5 +258,4 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       actionMode.finish();
     }
   }
-
 }

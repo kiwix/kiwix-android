@@ -115,6 +115,7 @@ import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListe
 import static org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
@@ -1422,36 +1423,20 @@ public abstract class CoreMainActivity extends BaseActivity
           } else {
             String title = data.getStringExtra(EXTRA_CHOSE_X_TITLE);
             String url = data.getStringExtra(EXTRA_CHOSE_X_URL);
-            if (data.getData() != null) {
-              final Uri uri = data.getData();
-              File file = null;
-              if (uri != null) {
-                String path = uri.getPath();
-                if (path != null) {
-                  file = new File(path);
-                }
-              }
-              if (file == null) {
+            String pathExtra = data.getStringExtra(EXTRA_CHOSE_X_FILE);
+            if (pathExtra != null) {
+              final File file = new File(pathExtra);
+              if (!file.exists()) {
                 Toast.makeText(this, R.string.error_file_not_found, Toast.LENGTH_LONG).show();
                 return;
               }
-              Intent zimFile = Intents.internal(CoreMainActivity.class);
-              zimFile.setData(uri);
-              if (url != null) {
-                zimFile.putExtra(EXTRA_CHOSE_X_URL, url);
-              } else if (title != null) {
-                zimFile.putExtra(EXTRA_CHOSE_X_URL, zimReaderContainer.getPageUrlFromTitle(title));
-              }
-              startActivity(zimFile);
-              finish();
-              return;
+              openZimFile(file);
             }
-            newMainPageTab();
-            if (url != null) {
-              loadUrlWithCurrentWebview(url);
-            } else if (title != null) {
-              loadUrlWithCurrentWebview(zimReaderContainer.getPageUrlFromTitle(title));
+            else {
+              newMainPageTab();
             }
+            loadUrlWithCurrentWebview(url != null ? url
+              : zimReaderContainer.getPageUrlFromTitle(title));
           }
         }
         return;
@@ -1688,5 +1673,4 @@ public abstract class CoreMainActivity extends BaseActivity
   private boolean checkNull(View view) {
     return view != null;
   }
-
 }
