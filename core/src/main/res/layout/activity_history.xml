@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true">
 
-  <com.google.android.material.appbar.AppBarLayout xmlns:tools="http://schemas.android.com/tools"
+  <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/app_bar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,12 +18,13 @@
 
     <Switch
       android:id="@+id/history_switch"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/history_from_current_book"
       android:paddingStart="@dimen/switch_text_padding"
+      android:paddingBottom="@dimen/switch_padding_bottom"
+      android:text="@string/history_from_current_book"
       android:textColor="@android:color/white"
-      android:switchPadding="@dimen/switch_padding"/>
+      app:theme="@style/ThemeOverlay.MaterialComponents.Dark" />
 
   </com.google.android.material.appbar.AppBarLayout>
 

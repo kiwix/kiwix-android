@@ -5,6 +5,7 @@
   <dimen name="activity_vertical_margin">16dp</dimen>
   <dimen name="dimen_small_padding">4dp</dimen>
   <dimen name="dimen_medium_padding">8dp</dimen>
+  <dimen name="switch_padding_bottom">10dp</dimen>
   <dimen name="switch_padding">15dp</dimen>
   <dimen name="switch_text_padding">20dp</dimen>
   <dimen name="abc_dropdownitem_text_padding_left">8dip</dimen>
