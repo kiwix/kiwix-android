@@ -24,12 +24,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
-import javax.inject.Inject;
 public class SliderPreference extends DialogPreference {
 
   protected final static int SEEKBAR_MAX = 500;
@@ -41,9 +38,6 @@ public class SliderPreference extends DialogPreference {
   protected CharSequence[] mSummaries;
 
   private TextView mMessage;
-
-  @Inject
-  protected NightModeConfig nightModeConfig;
 
   /**
    *
