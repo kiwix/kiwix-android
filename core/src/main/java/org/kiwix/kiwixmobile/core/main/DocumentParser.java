@@ -80,12 +80,11 @@ public class DocumentParser {
     @JavascriptInterface
     @SuppressWarnings("unused")
     public void stop() {
-      List<DocumentSection> listToBeSentToMainThread = new ArrayList<>();
+      List<DocumentSection> listToBeSentToMainThread = new ArrayList<>(sections);
       listToBeSentToMainThread.addAll(sections);
       new Handler(Looper.getMainLooper()).post(() ->
         listener.sectionsLoaded(title, listToBeSentToMainThread));
     }
   }
 }
-
 
