@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 public class SliderPreference extends DialogPreference {
 
@@ -156,26 +155,5 @@ public class SliderPreference extends DialogPreference {
       mSeekBarValue = initialSeekBarValue;
     }
     super.onDialogClosed(positiveResult);
-  }
-
-  @Override
-  protected void onBindView(View view) {
-    super.onBindView(view);
-    setGrayState(view);
-  }
-
-  private void setGrayState(View view) {
-    SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext());
-    boolean enabled = sharedPreferenceUtil.getPrefZoomEnabled();
-
-    TextView titleView = view.findViewById(android.R.id.title);
-    TextView summaryTV = view.findViewById(android.R.id.summary);
-    if (enabled) {
-      titleView.setEnabled(true);
-      summaryTV.setEnabled(true);
-    } else {
-      titleView.setEnabled(false);
-      summaryTV.setEnabled(false);
-    }
   }
 }

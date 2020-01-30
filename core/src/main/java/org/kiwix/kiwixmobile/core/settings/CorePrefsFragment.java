@@ -96,11 +96,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   private void setSliderState() {
     boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(
       PREF_ZOOM_ENABLED, false);
-    if (enabled) {
-      mSlider.setEnabled(true);
-    } else {
-      mSlider.setEnabled(false);
-    }
+    mSlider.setEnabled(enabled);
   }
 
   @Override
