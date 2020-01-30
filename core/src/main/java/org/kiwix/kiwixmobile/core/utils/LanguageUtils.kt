@@ -30,6 +30,7 @@ import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.core.os.ConfigurationCompat
 import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -65,7 +66,7 @@ class LanguageUtils(private val context: Context) {
   }
 
   private fun haveToChangeFont(sharedPreferenceUtil: SharedPreferenceUtil): Boolean {
-    if (sharedPreferenceUtil.getPrefLanguage("").isEmpty()) {
+    if (sharedPreferenceUtil.prefLanguage == Locale.ROOT.toString()) {
       return false
     }
     return Locale.getAvailableLocales().firstOrNull { locale ->
@@ -183,16 +184,16 @@ class LanguageUtils(private val context: Context) {
       context: Context,
       sharedPreferenceUtil: SharedPreferenceUtil
     ) {
-      val language = sharedPreferenceUtil.getPrefLanguage("")
-      if (language.isEmpty()) {
-        return
+      sharedPreferenceUtil.prefLanguage.takeIf { it != Locale.ROOT.toString() }?.let {
+        handleLocaleChange(context, it)
       }
-      handleLocaleChange(context, language)
     }
 
     @JvmStatic
     fun handleLocaleChange(context: Context, language: String) {
-      val locale = Locale(language)
+      val locale =
+        if (language != Locale.ROOT.toString()) Locale(language)
+        else ConfigurationCompat.getLocales(context.applicationContext.resources.configuration)[0]
       Locale.setDefault(locale)
       val config = Configuration()
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

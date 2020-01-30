@@ -28,6 +28,7 @@ import io.reactivex.Flowable;
 import io.reactivex.processors.PublishProcessor;
 import java.io.File;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -104,8 +105,8 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
   }
 
-  public String getPrefLanguage(String defaultLanguage) {
-    return sharedPreferences.getString(PREF_LANG, defaultLanguage);
+  public String getPrefLanguage() {
+    return sharedPreferences.getString(PREF_LANG, Locale.ROOT.toString());
   }
 
   public String getPrefStorage() {
