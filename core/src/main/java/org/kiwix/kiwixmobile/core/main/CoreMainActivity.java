@@ -1694,5 +1694,4 @@ public abstract class CoreMainActivity extends BaseActivity
   private boolean checkNull(View view) {
     return view != null;
   }
-
 }
