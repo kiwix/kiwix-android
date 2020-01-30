@@ -18,12 +18,12 @@
 
     <Switch
       android:id="@+id/history_switch"
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:paddingStart="@dimen/switch_text_padding"
+      android:layout_gravity="end"
       android:paddingBottom="@dimen/switch_padding_bottom"
+      android:switchPadding="@dimen/switch_padding"
       android:text="@string/history_from_current_book"
-      android:textColor="@android:color/white"
       app:theme="@style/ThemeOverlay.MaterialComponents.Dark" />
 
   </com.google.android.material.appbar.AppBarLayout>
