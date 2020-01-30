@@ -192,8 +192,10 @@ class LanguageUtils(private val context: Context) {
     @JvmStatic
     fun handleLocaleChange(context: Context, language: String) {
       val locale =
-        if (language != Locale.ROOT.toString()) Locale(language)
-        else ConfigurationCompat.getLocales(context.applicationContext.resources.configuration)[0]
+        if (language == Locale.ROOT.toString())
+          ConfigurationCompat.getLocales(context.applicationContext.resources.configuration)[0]
+        else
+          Locale(language)
       Locale.setDefault(locale)
       val config = Configuration()
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -230,11 +232,7 @@ class LanguageUtils(private val context: Context) {
         resourceName = resourceName.replace("REPLACE_", "")
       }
       val resourceId = appContext.resources
-        .getIdentifier(
-          resourceName,
-          "string",
-          appContext.packageName
-        )
+        .getIdentifier(resourceName, "string", appContext.packageName)
       return appContext.resources.getString(resourceId)
     }
   }
