@@ -1101,7 +1101,7 @@ public abstract class CoreMainActivity extends BaseActivity
         newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader),
         webUrlsProcessor,
         (bookmarkUrls, currentUrl) -> bookmarkUrls.contains(currentUrl)
-      ).subscribeOn(AndroidSchedulers.mainThread())
+      ).observeOn(AndroidSchedulers.mainThread())
         .subscribe(isBookmarked -> {
             this.isBookmarked = isBookmarked;
             bottomToolbarBookmark.setImageResource(
