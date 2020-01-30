@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true">
 
-  <include layout="@layout/layout_standard_app_bar" />
+  <com.google.android.material.appbar.AppBarLayout
+    android:id="@+id/app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    android:background="@color/black"
+    tools:showIn="@layout/activity_help">
+
+    <include layout="@layout/layout_toolbar" />
+
+    <Switch
+      android:id="@+id/history_switch"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:paddingBottom="@dimen/switch_padding_bottom"
+      android:switchPadding="@dimen/switch_padding"
+      android:text="@string/history_from_current_book"
+      android:textAppearance="@style/TextAppearance.KiwixTheme.Body2"
+      app:theme="@style/ThemeOverlay.MaterialComponents.Dark" />
+
+  </com.google.android.material.appbar.AppBarLayout>
 
   <TextView
     android:id="@+id/no_history"
