@@ -24,6 +24,7 @@
       android:paddingBottom="@dimen/switch_padding_bottom"
       android:switchPadding="@dimen/switch_padding"
       android:text="@string/history_from_current_book"
+      android:textAppearance="@style/TextAppearance.KiwixTheme.Body2"
       app:theme="@style/ThemeOverlay.MaterialComponents.Dark" />
 
   </com.google.android.material.appbar.AppBarLayout>
