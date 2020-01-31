@@ -38,28 +38,19 @@ object ActivityExtensions {
     onDestroyAction: () -> Unit
   ): ActionMode? {
     return startSupportActionMode(object : ActionMode.Callback {
-      override fun onActionItemClicked(
-        mode: ActionMode,
-        item: MenuItem
-      ) = idsToClickActions[item.itemId]?.let {
-        it()
-        mode.finish()
-        true
-      } ?: false
+      override fun onActionItemClicked(mode: ActionMode, item: MenuItem) =
+        idsToClickActions[item.itemId]?.let {
+          it()
+          mode.finish()
+          true
+        } ?: false
 
-      override fun onCreateActionMode(
-        mode: ActionMode,
-        menu: Menu?
-      ): Boolean {
-        mode.menuInflater
-          .inflate(menuId, menu)
+      override fun onCreateActionMode(mode: ActionMode, menu: Menu?): Boolean {
+        mode.menuInflater.inflate(menuId, menu)
         return true
       }
 
-      override fun onPrepareActionMode(
-        mode: ActionMode?,
-        menu: Menu?
-      ) = false
+      override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?) = false
 
       override fun onDestroyActionMode(mode: ActionMode?) {
         onDestroyAction()

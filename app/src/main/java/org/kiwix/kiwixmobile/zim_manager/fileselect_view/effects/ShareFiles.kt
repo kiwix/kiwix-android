@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
-class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
+data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
   SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     val selectedFileShareIntent = Intent()

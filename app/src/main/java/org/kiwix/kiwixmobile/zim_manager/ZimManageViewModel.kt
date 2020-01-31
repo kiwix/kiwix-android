@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
@@ -93,6 +94,7 @@ class ZimManageViewModel @Inject constructor(
     object RequestDeleteMultiSelection : FileSelectActions()
     object RequestShareMultiSelection : FileSelectActions()
     object MultiModeFinished : FileSelectActions()
+    object RestartActionMode : FileSelectActions()
   }
 
   val sideEffects = PublishProcessor.create<SideEffect<out Any?>>()
@@ -150,6 +152,7 @@ class ZimManageViewModel @Inject constructor(
         RequestShareMultiSelection -> ShareFiles(selectionsFromState())
         MultiModeFinished -> noSideEffectAndClearSelectionState()
         is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
+        RestartActionMode -> StartMultiSelection(fileSelectActions)
       }
     )
   }, Throwable::printStackTrace)
@@ -165,7 +168,7 @@ class ZimManageViewModel @Inject constructor(
         )
       )
     }
-    return StartMultiSelection(bookOnDisk, fileSelectActions)
+    return StartMultiSelection(fileSelectActions)
   }
 
   private fun selectBook(
@@ -181,10 +184,7 @@ class ZimManageViewModel @Inject constructor(
   private fun noSideEffectSelectBook(bookOnDisk: BookOnDisk): SideEffect<Unit> {
     fileSelectListStates.value?.let {
       fileSelectListStates.postValue(
-        it.copy(bookOnDiskListItems = it.bookOnDiskListItems.map { listItem ->
-          if (listItem.id == bookOnDisk.id) listItem.apply { isSelected = !isSelected }
-          else listItem
-        })
+        it.copy(bookOnDiskListItems = selectBook(it, bookOnDisk))
       )
     }
     return None
