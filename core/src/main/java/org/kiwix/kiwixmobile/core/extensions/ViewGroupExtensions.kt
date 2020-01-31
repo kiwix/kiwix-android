@@ -20,12 +20,14 @@ package org.kiwix.kiwixmobile.core.extensions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.children
 
 object ViewGroupExtensions {
 
-  fun ViewGroup.inflate(
-    layoutId: Int,
-    attachToRoot: Boolean = true
-  ): View =
+  fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
+
+  @JvmStatic
+  fun ViewGroup.findFirstTextView() = children.firstOrNull { it is TextView }
 }

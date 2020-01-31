@@ -174,6 +174,12 @@ class MainMenu(
   private fun setVisibility(visibility: Boolean, vararg menuItems: MenuItem) {
     menuItems.forEach { it.isVisible = visibility }
   }
+
+  fun tryExpandSearch(zimFileReader: ZimFileReader?) {
+    if (search.isVisible) {
+      zimFileReader?.let(::navigateToSearch)
+    }
+  }
 }
 
 private fun MenuItem.menuItemClickListener(function: (MenuItem) -> Unit) {

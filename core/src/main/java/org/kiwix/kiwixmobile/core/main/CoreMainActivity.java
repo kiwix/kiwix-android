@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -37,6 +38,7 @@ import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -94,6 +96,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryListItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
@@ -326,6 +329,18 @@ public abstract class CoreMainActivity extends BaseActivity
           View current = getCurrentWebView();
           startAnimation(current, R.anim.transition_right);
           selectTab(currentWebViewIndex - 1);
+        }
+      }
+
+      @Override public void onTap(MotionEvent e) {
+        final View titleTextView = ViewGroupExtensions.findFirstTextView(toolbar);
+        if (titleTextView == null) return;
+        final Rect hitRect = new Rect();
+        titleTextView.getHitRect(hitRect);
+        if (hitRect.contains((int) e.getX(), (int) e.getY())) {
+          if (mainMenu != null) {
+            mainMenu.tryExpandSearch(zimReaderContainer.getZimFileReader());
+          }
         }
       }
     });
