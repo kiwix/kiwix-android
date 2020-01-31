@@ -26,9 +26,12 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
@@ -61,12 +64,16 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   private final List<BookmarkItem> allBookmarks = new ArrayList<>();
   private final List<BookmarkItem> deleteList = new ArrayList<>();
 
+  public static final String USER_CLEARED_BOOKMARKS = "user_cleared_history";
+
   @BindView(R2.id.toolbar)
   Toolbar toolbar;
   @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
   @BindView(R2.id.no_bookmarks)
   TextView noBookmarks;
+  @BindView(R2.id.bookmarks_switch)
+  Switch bookmarksSwitch;
   @Inject
   BookmarksContract.Presenter presenter;
   @Inject
@@ -138,6 +145,15 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     setupBookmarksAdapter();
     recyclerView.setAdapter(bookmarksAdapter);
 
+    bookmarksSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked);
+        presenter.loadBookmarks(sharedPreferenceUtil.getShowHistoryCurrentBook());
+      }
+    });
+
+    bookmarksSwitch.setChecked(!sharedPreferenceUtil.getShowHistoryCurrentBook());
+
   }
 
   private void setupBookmarksAdapter() {
@@ -158,30 +174,31 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_bookmarks, menu);
-    MenuItem toggle = menu.findItem(R.id.menu_bookmarks_toggle);
-    toggle.setChecked(sharedPreferenceUtil.getShowBookmarksCurrentBook());
 
-    SearchView search = (SearchView) menu.findItem(R.id.menu_bookmarks_search).getActionView();
-    search.setQueryHint(getString(R.string.search_bookmarks));
-    search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-      @Override
-      public boolean onQueryTextSubmit(String query) {
-        return false;
-      }
+    if (!bookmarksList.isEmpty()) {
+      getMenuInflater().inflate(R.menu.menu_bookmarks, menu);
 
-      @Override
-      public boolean onQueryTextChange(String newText) {
-        bookmarksList.clear();
-        bookmarksList.addAll(allBookmarks);
-        if ("".equals(newText)) {
-          bookmarksAdapter.notifyDataSetChanged();
+      SearchView search = (SearchView) menu.findItem(R.id.menu_bookmarks_search).getActionView();
+      search.setQueryHint(getString(R.string.search_bookmarks));
+      search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+          return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+          bookmarksList.clear();
+          bookmarksList.addAll(allBookmarks);
+          if ("".equals(newText)) {
+            bookmarksAdapter.notifyDataSetChanged();
+            return true;
+          }
+          presenter.filterBookmarks(bookmarksList, newText);
           return true;
         }
-        presenter.filterBookmarks(bookmarksList, newText);
-        return true;
-      }
-    });
+      });
+    }
     return true;
   }
 
@@ -191,10 +208,13 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     if (itemId == android.R.id.home) {
       onBackPressed();
       return true;
-    } else if (itemId == R.id.menu_bookmarks_toggle) {
-      item.setChecked(!item.isChecked());
-      sharedPreferenceUtil.setShowBookmarksCurrentBook(item.isChecked());
-      presenter.loadBookmarks(sharedPreferenceUtil.getShowBookmarksCurrentBook());
+    } else if (itemId == R.id.menu_bookmarks_clear) {
+      presenter.deleteBookmarks(new ArrayList<>(allBookmarks));
+      allBookmarks.clear();
+      bookmarksList.clear();
+      bookmarksAdapter.notifyDataSetChanged();
+      setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_BOOKMARKS, true));
+      Toast.makeText(this, R.string.all_bookmarks_cleared_toast, Toast.LENGTH_SHORT).show();
       return true;
     }
     return super.onOptionsItemSelected(item);
