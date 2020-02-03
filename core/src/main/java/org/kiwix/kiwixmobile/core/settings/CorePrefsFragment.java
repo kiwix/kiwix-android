@@ -175,7 +175,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
     if (key.equals(PREF_ZOOM_ENABLED)) {
       setSliderState();
     }
@@ -185,6 +184,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
     }
     if (key.equals(PREF_NIGHT_MODE)) {
       sharedPreferenceUtil.updateNightMode();
+      restartActivity();
     }
   }
 
