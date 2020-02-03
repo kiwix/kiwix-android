@@ -11,21 +11,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toTopOf="parent"
-    android:background="@color/black"
     tools:showIn="@layout/activity_help">
 
     <include layout="@layout/layout_toolbar" />
 
     <Switch
       android:id="@+id/history_switch"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="end"
-      android:paddingBottom="@dimen/switch_padding_bottom"
-      android:switchPadding="@dimen/switch_padding"
       android:text="@string/history_from_current_book"
-      android:textAppearance="@style/TextAppearance.KiwixTheme.Body2"
-      app:theme="@style/ThemeOverlay.MaterialComponents.Dark" />
+      style="@style/switch_style" />
 
   </com.google.android.material.appbar.AppBarLayout>
 

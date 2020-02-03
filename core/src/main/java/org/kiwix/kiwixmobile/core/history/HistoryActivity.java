@@ -135,6 +135,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       }
     }
   };
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -153,11 +154,9 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     recyclerView.setLayoutManager(layoutManager);
 
-    historySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked);
-        presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
-      }
+    historySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+      sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked);
+      presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
     });
 
     historySwitch.setChecked(!sharedPreferenceUtil.getShowHistoryCurrentBook());
@@ -200,30 +199,29 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
 
-    if (!historyList.isEmpty()) {
-      getMenuInflater().inflate(R.menu.menu_history, menu);
+    getMenuInflater().inflate(R.menu.menu_history, menu);
 
-      SearchView search = (SearchView) menu.findItem(R.id.menu_history_search).getActionView();
-      search.setQueryHint(getString(R.string.search_history));
-      search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-          return false;
-        }
+    SearchView search = (SearchView) menu.findItem(R.id.menu_history_search).getActionView();
+    search.setQueryHint(getString(R.string.search_history));
+    search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        return false;
+      }
 
-        @Override
-        public boolean onQueryTextChange(String newText) {
-          historyList.clear();
-          historyList.addAll(fullHistory);
-          if ("".equals(newText)) {
-            historyAdapter.notifyDataSetChanged();
-            return true;
-          }
-          presenter.filterHistory(historyList, newText);
+      @Override
+      public boolean onQueryTextChange(String newText) {
+        historyList.clear();
+        historyList.addAll(fullHistory);
+        if ("".equals(newText)) {
+          historyAdapter.notifyDataSetChanged();
           return true;
         }
-      });
-    }
+        presenter.filterHistory(historyList, newText);
+        return true;
+      }
+    });
+
     return true;
   }
 
