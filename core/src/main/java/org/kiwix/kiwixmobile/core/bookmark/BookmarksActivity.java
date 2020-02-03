@@ -149,7 +149,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     });
 
     bookmarksSwitch.setChecked(!sharedPreferenceUtil.getShowBookmarksCurrentBook());
-
   }
 
   private void setupBookmarksAdapter() {
@@ -171,30 +170,29 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
 
-    if (!bookmarksList.isEmpty()) {
-      getMenuInflater().inflate(R.menu.menu_bookmarks, menu);
+    getMenuInflater().inflate(R.menu.menu_bookmarks, menu);
 
-      SearchView search = (SearchView) menu.findItem(R.id.menu_bookmarks_search).getActionView();
-      search.setQueryHint(getString(R.string.search_bookmarks));
-      search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-          return false;
-        }
+    SearchView search = (SearchView) menu.findItem(R.id.menu_bookmarks_search).getActionView();
+    search.setQueryHint(getString(R.string.search_bookmarks));
+    search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        return false;
+      }
 
-        @Override
-        public boolean onQueryTextChange(String newText) {
-          bookmarksList.clear();
-          bookmarksList.addAll(allBookmarks);
-          if ("".equals(newText)) {
-            bookmarksAdapter.notifyDataSetChanged();
-            return true;
-          }
-          presenter.filterBookmarks(bookmarksList, newText);
+      @Override
+      public boolean onQueryTextChange(String newText) {
+        bookmarksList.clear();
+        bookmarksList.addAll(allBookmarks);
+        if ("".equals(newText)) {
+          bookmarksAdapter.notifyDataSetChanged();
           return true;
         }
-      });
-    }
+        presenter.filterBookmarks(bookmarksList, newText);
+        return true;
+      }
+    });
+
     return true;
   }
 
@@ -285,5 +283,4 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       actionMode.finish();
     }
   }
-
 }
