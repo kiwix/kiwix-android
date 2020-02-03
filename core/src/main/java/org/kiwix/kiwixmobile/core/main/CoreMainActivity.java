@@ -1404,8 +1404,7 @@ public abstract class CoreMainActivity extends BaseActivity
         break;
       case REQUEST_PREFERENCES:
         if (resultCode == RESULT_RESTART) {
-          startActivity(Intents.internal(CoreMainActivity.class));
-          finish();
+          recreate();
         }
         if (resultCode == RESULT_HISTORY_CLEARED) {
           webViewList.clear();
