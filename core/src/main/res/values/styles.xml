@@ -24,6 +24,10 @@
     <item name="android:background">@color/black</item>
   </style>
 
+  <style name="Widget.KiwixTheme.AppBar" parent="Widget.MaterialComponents.AppBarLayout.PrimarySurface">
+    <item name="android:background">@color/black</item>
+  </style>
+
   <style name="ThemeOverlay.KiwixTheme.Launcher" parent="">
     <item name="android:windowBackground">@drawable/launch_screen</item>
   </style>
@@ -51,5 +55,14 @@
   <style name="list_item_title" parent="TextAppearance.KiwixTheme.Subtitle1" />
 
   <style name="list_item_body" parent="TextAppearance.KiwixTheme.Subtitle2" />
+
+  <style name="switch_style">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">end</item>
+    <item name="android:paddingBottom">@dimen/switch_padding_bottom</item>
+    <item name="android:switchPadding">@dimen/switch_padding</item>
+    <item name="android:textAppearance">@style/TextAppearance.KiwixTheme.Body2</item>
+  </style>
 
 </resources>

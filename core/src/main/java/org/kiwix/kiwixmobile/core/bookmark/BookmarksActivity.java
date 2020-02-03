@@ -64,8 +64,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   private final List<BookmarkItem> allBookmarks = new ArrayList<>();
   private final List<BookmarkItem> deleteList = new ArrayList<>();
 
-  public static final String USER_CLEARED_BOOKMARKS = "user_cleared_history";
-
   @BindView(R2.id.toolbar)
   Toolbar toolbar;
   @BindView(R2.id.recycler_view)
@@ -213,7 +211,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       allBookmarks.clear();
       bookmarksList.clear();
       bookmarksAdapter.notifyDataSetChanged();
-      setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_BOOKMARKS, true));
       Toast.makeText(this, R.string.all_bookmarks_cleared_toast, Toast.LENGTH_SHORT).show();
       return true;
     }
