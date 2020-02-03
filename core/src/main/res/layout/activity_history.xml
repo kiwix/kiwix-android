@@ -18,7 +18,6 @@
     <Switch
       android:id="@+id/history_switch"
       android:text="@string/history_from_current_book"
-      app:theme="@style/ThemeOverlay.MaterialComponents.Dark"
       style="@style/switch_style" />
 
   </com.google.android.material.appbar.AppBarLayout>

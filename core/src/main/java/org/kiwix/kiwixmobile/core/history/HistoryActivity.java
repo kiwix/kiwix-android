@@ -153,11 +153,9 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     recyclerView.setLayoutManager(layoutManager);
 
-    historySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked);
-        presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
-      }
+    historySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+      sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked);
+      presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
     });
 
     historySwitch.setChecked(!sharedPreferenceUtil.getShowHistoryCurrentBook());

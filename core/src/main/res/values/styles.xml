@@ -63,6 +63,7 @@
     <item name="android:paddingBottom">@dimen/switch_padding_bottom</item>
     <item name="android:switchPadding">@dimen/switch_padding</item>
     <item name="android:textAppearance">@style/TextAppearance.KiwixTheme.Body2</item>
+    <item name="theme">@style/ThemeOverlay.MaterialComponents.Dark</item>
   </style>
 
 </resources>

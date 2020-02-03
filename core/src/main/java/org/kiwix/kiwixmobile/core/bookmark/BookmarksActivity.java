@@ -143,14 +143,12 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     setupBookmarksAdapter();
     recyclerView.setAdapter(bookmarksAdapter);
 
-    bookmarksSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked);
-        presenter.loadBookmarks(sharedPreferenceUtil.getShowHistoryCurrentBook());
-      }
+    bookmarksSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+      sharedPreferenceUtil.setShowBookmarksCurrentBook(!isChecked);
+      presenter.loadBookmarks(sharedPreferenceUtil.getShowBookmarksCurrentBook());
     });
 
-    bookmarksSwitch.setChecked(!sharedPreferenceUtil.getShowHistoryCurrentBook());
+    bookmarksSwitch.setChecked(!sharedPreferenceUtil.getShowBookmarksCurrentBook());
 
   }
 
