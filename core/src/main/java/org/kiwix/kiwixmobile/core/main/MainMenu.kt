@@ -22,7 +22,6 @@ import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import androidx.core.view.MenuCompat.setShowAsAction
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
@@ -33,7 +32,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.Constants
-import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_COME_FROM
+import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_REFERRER
 import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE
 
 const val REQUEST_FILE_SEARCH = 1236
@@ -148,9 +147,9 @@ class MainMenu(
     activity.startActivityForResult(
       activity.intent<SearchActivity> {
         when (originOfRequest) {
-          "TAB_SWITCHER" -> putExtra(EXTRA_COME_FROM, "TAB_SWITCHER")
+          "TAB_SWITCHER" -> putExtra(EXTRA_REFERRER, "TAB_SWITCHER")
           else -> {
-            putExtra(EXTRA_COME_FROM, "")
+            putExtra(EXTRA_REFERRER, "")
           }
         }
         putExtra(EXTRA_ZIM_FILE, zimFileReader.zimFile.absolutePath)

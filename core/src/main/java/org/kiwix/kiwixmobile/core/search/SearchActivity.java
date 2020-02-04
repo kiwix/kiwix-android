@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +53,7 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_COME_FROM;
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_REFERRER;
 
 public class SearchActivity extends BaseActivity
   implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
@@ -129,7 +128,7 @@ public class SearchActivity extends BaseActivity
       Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent intent = Intents.internal(CoreMainActivity.class);
-      intent.putExtra(EXTRA_COME_FROM, previous.getStringExtra(EXTRA_COME_FROM));
+      intent.putExtra(EXTRA_REFERRER, previous.getStringExtra(EXTRA_REFERRER));
       startActivity(intent);
     } else {
       super.finish();
@@ -149,7 +148,7 @@ public class SearchActivity extends BaseActivity
       activateAutoAdapter();
       autoAdapter.getFilter().filter(searchText.toLowerCase());
     }
-    if (getIntent().getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER")) {
+    if (getIntent().getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER")) {
       View item = findViewById(R.id.menu_searchintext);
       item.setVisibility(View.GONE);
     }
@@ -161,7 +160,7 @@ public class SearchActivity extends BaseActivity
 
       @Override
       public boolean onQueryTextChange(String s) {
-        if (getIntent().getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER")) {
+        if (getIntent().getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER")) {
           activateAutoAdapter();
           autoAdapter.getFilter().filter(s.toLowerCase());
         } else {
@@ -189,7 +188,7 @@ public class SearchActivity extends BaseActivity
       public boolean onMenuItemActionCollapse(MenuItem item) {
         Intent previous = getIntent();
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_COME_FROM, previous.getStringExtra(EXTRA_COME_FROM));
+        intent.putExtra(EXTRA_REFERRER, previous.getStringExtra(EXTRA_REFERRER));
         setResult(RESULT_CANCELED, intent);
         finish();
         return false;
@@ -209,7 +208,7 @@ public class SearchActivity extends BaseActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (!getIntent().getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER")) {
+    if (!getIntent().getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER")) {
       if (item.getItemId() == R.id.menu_searchintext) {
         String queryText = "";
         if (searchView != null) {
@@ -243,12 +242,12 @@ public class SearchActivity extends BaseActivity
     if (value == 1) {
       Intent i = Intents.internal(CoreMainActivity.class);
       i.putExtra(TAG_FILE_SEARCHED, uri);
-      i.putExtra(EXTRA_COME_FROM, previous.getStringExtra(EXTRA_COME_FROM));
+      i.putExtra(EXTRA_REFERRER, previous.getStringExtra(EXTRA_REFERRER));
       startActivity(i);
     } else {
       Intent i = new Intent();
       i.putExtra(TAG_FILE_SEARCHED, uri);
-      i.putExtra(EXTRA_COME_FROM, previous.getStringExtra(EXTRA_COME_FROM));
+      i.putExtra(EXTRA_REFERRER, previous.getStringExtra(EXTRA_REFERRER));
       setResult(RESULT_OK, i);
       finish();
     }

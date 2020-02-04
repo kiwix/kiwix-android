@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -116,7 +115,7 @@ import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_COME_FROM;
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_REFERRER;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
@@ -1371,11 +1370,11 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            Boolean isInNewTab = data.getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER");
+            Boolean isInNewTab = data.getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER");
             searchForTitle(title, isInNewTab);
           }
         } else { //TODO: Inform the User
-          if (data.getStringExtra(EXTRA_COME_FROM).equals("TAB_SWITCHER")){
+          if (data.getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER")){
             showTabSwitcher();
           }
           Log.w(TAG_KIWIX, "Unhandled search failure");
