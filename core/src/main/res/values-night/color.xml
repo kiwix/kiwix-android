@@ -8,7 +8,7 @@
   <color name="color_primary">#42a5f5</color> <!--blue400-->
 
   <color name="color_surface">#212121</color> <!--grey900-->
-  <color name="color_error">#f06292</color> <!--#f06292-->
+  <color name="color_error">#f06292</color> <!--pink300-->
 
   <color name="color_on_primary">@color/white</color>
   <color name="color_on_surface">@color/white</color>
