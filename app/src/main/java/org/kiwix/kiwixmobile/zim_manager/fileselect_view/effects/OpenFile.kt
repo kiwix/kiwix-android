@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
-class OpenFile(private val bookOnDisk: BookOnDisk) :
+data class OpenFile(private val bookOnDisk: BookOnDisk) :
   SideEffect<Unit> {
 
   override fun invokeWith(activity: AppCompatActivity) {

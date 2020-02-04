@@ -44,6 +44,8 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
@@ -51,7 +53,19 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4G
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFile
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.ShareFiles
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.book
@@ -405,5 +419,102 @@ class ZimManageViewModelTest {
           LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
         )
       )
+  }
+
+  @Nested
+  inner class SideEffects {
+    @Test
+    fun `RequestOpen offers OpenFile`() {
+      val bookOnDisk = bookOnDisk()
+      viewModel.sideEffects.test()
+        .also { viewModel.fileSelectActions.offer(RequestOpen(bookOnDisk)) }
+        .assertValues(OpenFile(bookOnDisk))
+    }
+
+    @Test
+    fun `RequestMultiSelection offers StartMultiSelection and selects a book`() {
+      val bookToSelect = bookOnDisk(databaseId = 0L)
+      val unSelectedBook = bookOnDisk(databaseId = 1L)
+      viewModel.fileSelectListStates.value = FileSelectListState(
+        listOf(
+          bookToSelect,
+          unSelectedBook
+        ),
+        NORMAL
+      )
+      viewModel.sideEffects.test()
+        .also { viewModel.fileSelectActions.offer(RequestMultiSelection(bookToSelect)) }
+        .assertValues(StartMultiSelection(viewModel.fileSelectActions))
+      viewModel.fileSelectListStates.test()
+        .assertValue(
+          FileSelectListState(
+            listOf(bookToSelect.apply { isSelected = !isSelected }, unSelectedBook),
+            MULTI
+          )
+        )
+    }
+
+    @Test
+    fun `RequestDeleteMultiSelection offers DeleteFiles with selected books`() {
+      val selectedBook = bookOnDisk().apply { isSelected = true }
+      viewModel.fileSelectListStates.value =
+        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+      viewModel.sideEffects.test()
+        .also { viewModel.fileSelectActions.offer(RequestDeleteMultiSelection) }
+        .assertValues(DeleteFiles(listOf(selectedBook)))
+    }
+
+    @Test
+    fun `RequestShareMultiSelection offers ShareFiles with selected books`() {
+      val selectedBook = bookOnDisk().apply { isSelected = true }
+      viewModel.fileSelectListStates.value =
+        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+      viewModel.sideEffects.test()
+        .also { viewModel.fileSelectActions.offer(RequestShareMultiSelection) }
+        .assertValues(ShareFiles(listOf(selectedBook)))
+    }
+
+    @Test
+    fun `MultiModeFinished offers None`() {
+      val selectedBook = bookOnDisk().apply { isSelected = true }
+      viewModel.fileSelectListStates.value =
+        FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
+      viewModel.sideEffects.test()
+        .also { viewModel.fileSelectActions.offer(MultiModeFinished) }
+        .assertValues(None)
+      viewModel.fileSelectListStates.test().assertValue(
+        FileSelectListState(
+          listOf(
+            selectedBook.apply { isSelected = false },
+            bookOnDisk()
+          )
+        )
+      )
+    }
+
+    @Test
+    fun `RequestSelect offers None and inverts selection`() {
+      val selectedBook = bookOnDisk(0L).apply { isSelected = true }
+      viewModel.fileSelectListStates.value =
+        FileSelectListState(listOf(selectedBook, bookOnDisk(1L)), NORMAL)
+      viewModel.sideEffects.test()
+        .also { viewModel.fileSelectActions.offer(RequestSelect(selectedBook)) }
+        .assertValues(None)
+      viewModel.fileSelectListStates.test().assertValue(
+        FileSelectListState(
+          listOf(
+            selectedBook.apply { isSelected = false },
+            bookOnDisk(1L)
+          )
+        )
+      )
+    }
+
+    @Test
+    fun `RestartActionMode offers StartMultiSelection`() {
+      viewModel.sideEffects.test()
+        .also { viewModel.fileSelectActions.offer(RestartActionMode) }
+        .assertValues(StartMultiSelection(viewModel.fileSelectActions))
+    }
   }
 }
