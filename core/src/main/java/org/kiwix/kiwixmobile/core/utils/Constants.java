@@ -58,7 +58,7 @@ public final class Constants {
 
   public static final String EXTRA_CHOSE_X_URL = "choseXURL";
 
-  public static final String EXTRA_REFERRER = "comeFrom";
+  public static final String EXTRA_OPENED_FROM_TAB_VIEW = "comeFrom";
 
   public static final String EXTRA_CHOSE_X_TITLE = "choseXTitle";
 

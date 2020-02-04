@@ -47,6 +47,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -64,22 +65,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.OnLongClick;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.inject.Inject;
-import kotlin.Unit;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
@@ -106,6 +97,21 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import kotlin.Unit;
+
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
@@ -115,9 +121,9 @@ import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_REFERRER;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_OPENED_FROM_TAB_VIEW;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_FILE_SELECT;
@@ -1370,11 +1376,11 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            Boolean isInNewTab = data.getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER");
+            Boolean isInNewTab = data.getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false);
             searchForTitle(title, isInNewTab);
           }
         } else { //TODO: Inform the User
-          if (data.getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER")){
+          if (data.getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false)){
             showTabSwitcher();
           }
           Log.w(TAG_KIWIX, "Unhandled search failure");

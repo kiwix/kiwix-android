@@ -34,26 +34,30 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import javax.inject.Inject;
+
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.inject.Inject;
+
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_OPENED_FROM_TAB_VIEW;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_REFERRER;
 
 public class SearchActivity extends BaseActivity
   implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
@@ -128,7 +132,7 @@ public class SearchActivity extends BaseActivity
       Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent intent = Intents.internal(CoreMainActivity.class);
-      intent.putExtra(EXTRA_REFERRER, previous.getStringExtra(EXTRA_REFERRER));
+      intent.putExtra(EXTRA_OPENED_FROM_TAB_VIEW, previous.getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false));
       startActivity(intent);
     } else {
       super.finish();
@@ -148,7 +152,7 @@ public class SearchActivity extends BaseActivity
       activateAutoAdapter();
       autoAdapter.getFilter().filter(searchText.toLowerCase());
     }
-    if (getIntent().getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER")) {
+    if (getIntent().getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false)) {
       View item = findViewById(R.id.menu_searchintext);
       item.setVisibility(View.GONE);
     }
@@ -160,7 +164,7 @@ public class SearchActivity extends BaseActivity
 
       @Override
       public boolean onQueryTextChange(String s) {
-        if (getIntent().getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER")) {
+        if (getIntent().getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false)) {
           activateAutoAdapter();
           autoAdapter.getFilter().filter(s.toLowerCase());
         } else {
@@ -188,7 +192,7 @@ public class SearchActivity extends BaseActivity
       public boolean onMenuItemActionCollapse(MenuItem item) {
         Intent previous = getIntent();
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_REFERRER, previous.getStringExtra(EXTRA_REFERRER));
+        intent.putExtra(EXTRA_OPENED_FROM_TAB_VIEW, previous.getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false));
         setResult(RESULT_CANCELED, intent);
         finish();
         return false;
@@ -208,7 +212,7 @@ public class SearchActivity extends BaseActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (!getIntent().getStringExtra(EXTRA_REFERRER).equals("TAB_SWITCHER")) {
+    if (!getIntent().getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false)) {
       if (item.getItemId() == R.id.menu_searchintext) {
         String queryText = "";
         if (searchView != null) {
@@ -242,12 +246,12 @@ public class SearchActivity extends BaseActivity
     if (value == 1) {
       Intent i = Intents.internal(CoreMainActivity.class);
       i.putExtra(TAG_FILE_SEARCHED, uri);
-      i.putExtra(EXTRA_REFERRER, previous.getStringExtra(EXTRA_REFERRER));
+      i.putExtra(EXTRA_OPENED_FROM_TAB_VIEW, previous.getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false));
       startActivity(i);
     } else {
       Intent i = new Intent();
       i.putExtra(TAG_FILE_SEARCHED, uri);
-      i.putExtra(EXTRA_REFERRER, previous.getStringExtra(EXTRA_REFERRER));
+      i.putExtra(EXTRA_OPENED_FROM_TAB_VIEW, previous.getBooleanExtra(EXTRA_OPENED_FROM_TAB_VIEW, false));
       setResult(RESULT_OK, i);
       finish();
     }
