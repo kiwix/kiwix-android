@@ -291,7 +291,6 @@
   <string name="tag_short_text">Short Text</string>
   <string name="open_new_tab">Open new tab</string>
   <string name="return_from_search">Return from search</string>
-  <!-- Another test -->
   <string-array name="pref_night_modes_entries">
     <item>On</item>
     <item>Off</item>
