@@ -60,6 +60,8 @@ public final class Constants {
 
   public static final String EXTRA_CHOSE_X_TITLE = "choseXTitle";
 
+  public static final String EXTRA_CHOSE_X_FILE = "choseXFile";
+
   public static final String EXTRA_EXTERNAL_LINK = "external_link";
 
   public static final String EXTRA_SEARCH = "search";
