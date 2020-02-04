@@ -61,6 +61,7 @@
     <item name="navigationViewStyle">@style/Widget.KiwixTheme.NavigationView</item>
     <item name="toolbarStyle">@style/Widget.KiwixTheme.Toolbar</item>
     <item name="tabStyle">@style/Widget.KiwixTheme.TabLayout</item>
+    <item name="appBarLayoutStyle">@style/Widget.KiwixTheme.AppBar</item>
   </style>
 
   <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">

@@ -494,7 +494,9 @@ public abstract class CoreMainActivity extends BaseActivity
       tabRecyclerView.getLayoutManager() != null) {
       tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
     }
-    mainMenu.showTabSwitcherOptions();
+    if (mainMenu != null) {
+      mainMenu.showTabSwitcherOptions();
+    }
   }
 
   private void startAnimation(View view, @AnimRes int anim) {
@@ -663,7 +665,9 @@ public abstract class CoreMainActivity extends BaseActivity
       @Override
       public void onSpeakingStarted() {
         runOnUiThread(() -> {
-          mainMenu.onTextToSpeechStartedTalking();
+          if (mainMenu != null) {
+            mainMenu.onTextToSpeechStartedTalking();
+          }
           TTSControls.setVisibility(View.VISIBLE);
         });
       }
@@ -671,7 +675,9 @@ public abstract class CoreMainActivity extends BaseActivity
       @Override
       public void onSpeakingEnded() {
         runOnUiThread(() -> {
-          mainMenu.onTextToSpeechStoppedTalking();
+          if (mainMenu != null) {
+            mainMenu.onTextToSpeechStoppedTalking();
+          }
           TTSControls.setVisibility(View.GONE);
           pauseTTSButton.setText(R.string.tts_pause);
         });
@@ -1399,8 +1405,7 @@ public abstract class CoreMainActivity extends BaseActivity
         break;
       case REQUEST_PREFERENCES:
         if (resultCode == RESULT_RESTART) {
-          startActivity(Intents.internal(CoreMainActivity.class));
-          finish();
+          recreate();
         }
         if (resultCode == RESULT_HISTORY_CLEARED) {
           webViewList.clear();
