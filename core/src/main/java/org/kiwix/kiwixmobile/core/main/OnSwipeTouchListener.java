@@ -47,6 +47,11 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
       return true;
     }
 
+    @Override public boolean onSingleTapUp(MotionEvent e) {
+      onTap(e);
+      return super.onSingleTapUp(e);
+    }
+
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
       boolean result = false;
@@ -88,5 +93,8 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
   }
 
   public void onSwipeBottom() {
+  }
+
+  public void onTap(MotionEvent e) {
   }
 }
