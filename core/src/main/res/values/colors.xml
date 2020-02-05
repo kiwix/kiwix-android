@@ -7,10 +7,13 @@
   <color name="white">#fafafa</color>
   <color name="black_regular_mat_design">#212121</color>
   <color name="grey">#5a5a5a</color>
+  <color name="grey900">#212121</color>
   <color name="pure_grey">#808080</color>
   <color name="blue_grey">#ECEFF1</color>
+  <color name="blue400">#42a5f5</color>
   <color name="blue800">#1565c0</color>
   <color name="blueTransparent">#962e7ac4</color>
+  <color name="pink300">#f06292</color>
   <color name="actionModeBackground">#4285F4</color>
   <color name="greenTick">#4CAF50</color>
   <color name="stopServer">#E53935</color>
