@@ -22,6 +22,7 @@ import android.os.Build
 import androidx.test.filters.SdkSuppress
 import attempt
 import okhttp3.mockwebserver.MockResponse
+import org.junit.Ignore
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.KiwixMockServer
@@ -50,6 +51,7 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
   }
 
   @Test
+  @Ignore("Ignored due to flakiness on nightly build")
   fun testZimManageDataFlow() {
     SharedPreferenceUtil(activityRule.activity).putPrefWifiOnly(false)
     zimManage {
