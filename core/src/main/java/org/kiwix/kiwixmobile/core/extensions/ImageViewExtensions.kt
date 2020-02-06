@@ -26,10 +26,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 
 fun ImageView.setBitmap(base64String: Base64String) {
   base64String.toBitmap()
-    ?.let {
-      setImageBitmap(it)
-      tag = base64String
-    }
+    ?.let(::setImageBitmap)
 }
 
 // methods that accept inline classes as parameters are not allowed to be called from java
