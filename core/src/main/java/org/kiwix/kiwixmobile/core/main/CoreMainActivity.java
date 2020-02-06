@@ -90,7 +90,6 @@ import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
-import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
@@ -100,6 +99,7 @@ import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
+import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.history.HistoryActivity;
 import org.kiwix.kiwixmobile.core.history.HistoryListItem;
@@ -1215,21 +1215,26 @@ public abstract class CoreMainActivity extends BaseActivity
     if (articleUrl != null) {
       if (isBookmarked) {
         presenter.deleteBookmark(articleUrl);
-        Snackbar.make(snackbarRoot, R.string.bookmark_removed, Snackbar.LENGTH_LONG)
-          .show();
-      }
-    } else {
-      final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-      if (zimFileReader != null) {
-        presenter.saveBookmark(
-          new BookmarkItem(getCurrentWebView().getTitle(), articleUrl,
-            zimReaderContainer.getZimFileReader()));
-        Snackbar.make(snackbarRoot, R.string.bookmark_added, Snackbar.LENGTH_LONG)
-          .setAction(getString(R.string.open), v -> goToBookmarks())
-          .setActionTextColor(getResources().getColor(R.color.white))
-          .show();
+        ViewExtensionsKt.snack(snackbarRoot, R.string.bookmark_removed);
       } else {
-        Toast.makeText(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT).show();
+        final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
+        if (zimFileReader != null) {
+          presenter.saveBookmark(
+            new BookmarkItem(getCurrentWebView().getTitle(), articleUrl, zimFileReader)
+          );
+          ViewExtensionsKt.snack(
+            snackbarRoot,
+            R.string.bookmark_added,
+            R.string.open,
+            () -> {
+              goToBookmarks();
+              return Unit.INSTANCE;
+            },
+            getResources().getColor(R.color.white)
+          );
+        } else {
+          ContextExtensionsKt.toast(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT);
+        }
       }
     }
   }
@@ -1463,8 +1468,7 @@ public abstract class CoreMainActivity extends BaseActivity
                 return;
               }
               openZimFile(file);
-            }
-            else {
+            } else {
               newMainPageTab();
             }
             loadUrlWithCurrentWebview(url != null ? url
