@@ -117,9 +117,9 @@
   <string name="send_feedback">ڕەخنە و پێشنیار بنێرە</string>
   <string name="expand">فراوان بکەوە</string>
   <string name="history">مێژوو</string>
-  <string name="history_from_current_book">مێژووی کتێبی ھەنووکە</string>
+  <string name="history_from_current_book" fuzzy="true">مێژووی کتێبی ھەنووکە</string>
   <string name="search_history">مێژوو بگەڕێ</string>
-  <string name="bookmarks_from_current_book">نیشانکراوەکانی کتێبی ھەنووکە</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">نیشانکراوەکانی کتێبی ھەنووکە</string>
   <string name="search_bookmarks">نیشانکراوەکان بگەڕێ</string>
   <string name="switch_tabs">گۆڕینی تابەکان</string>
   <string name="close_all_tabs">ھەموو تابەکان داخە</string>

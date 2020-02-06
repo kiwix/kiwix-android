@@ -173,10 +173,10 @@
   <string name="send_feedback">Kas un ali</string>
   <string name="expand">Dispakañ</string>
   <string name="history">Istor</string>
-  <string name="history_from_current_book">Istor al levr a vremañ</string>
+  <string name="history_from_current_book" fuzzy="true">Istor al levr a vremañ</string>
   <string name="search_history">Klask er roll-istor</string>
   <string name="selected_items">%1$d dibabet</string>
-  <string name="bookmarks_from_current_book">Sinedoù eus al levr a vremañ</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Sinedoù eus al levr a vremañ</string>
   <string name="search_bookmarks">Klask sinedoù</string>
   <string name="switch_tabs">Cheñch ivinell</string>
   <string name="smiling_face">:D</string>
@@ -202,4 +202,5 @@
   <string name="delete_notes_confirmation_msg">Dilemel an holl notennoù ?</string>
   <string name="notes_deletion_unsuccessful">Restoù zo n\'int ket bet lamet</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Lemel an holl notennoù</string>
+  <string name="no_bookmarks">N\'eus sined ebet</string>
 </resources>

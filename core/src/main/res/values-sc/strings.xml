@@ -78,7 +78,7 @@
   <string name="request_storage_custom">Si bides un\'avertimentu subrapostu in s\'ischermu torra a allùghere su dispositivu pro l\'acontzare.</string>
   <string name="clear_recent_and_tabs_history_dialog">Seguru ses de bòlere iscantzellare sa cronologia de sas chircas e ripristinare totu sas ischedas ativas?</string>
   <string name="delete_recent_search_item">Iscantzellare custu elementu?</string>
-  <string name="pref_clear_all_history_title">Iscantzella s\'istòria</string>
+  <string name="pref_clear_all_history_title">Iscantzella sa cronologia</string>
   <string name="pref_clear_all_history_summary">Iscantzella sa cronologia de sas chircas e de sas ischedas reghentes</string>
   <string name="all_history_cleared_toast">Cronologia iscantzellada de su totu</string>
   <string name="clear_all_history_dialog_title">Iscantzella totu sa cronologia</string>
@@ -206,10 +206,10 @@
   <string name="send_feedback">Imbia cummentos</string>
   <string name="expand">Ismànnia</string>
   <string name="history">Cronologia</string>
-  <string name="history_from_current_book">Cronologia dae su libru atuale</string>
+  <string name="history_from_current_book">Pòmpia sa cronologia de totu sos libros</string>
   <string name="search_history">Chirca in sa cronologia</string>
   <string name="selected_items">%1$d ischertadu(os)</string>
-  <string name="bookmarks_from_current_book">Sinnalibros dae su libru atuale</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Sinnalibros dae su libru atuale</string>
   <string name="search_bookmarks">Chirca sinnalibros</string>
   <string name="switch_tabs">Muda ischedas</string>
   <string name="smiling_face">:D</string>
@@ -281,4 +281,10 @@
   <string name="tag_vid">Vìdeu</string>
   <string name="tag_text_only">Testu ebbia</string>
   <string name="tag_short_text">Testu curtzu</string>
+  <string name="storage_permission_denied">Permissu de archiviatzione negadu</string>
+  <string name="grant_read_storage_permission">Cust\'aplicatzione tenet bisòngiu de sa possibilidade de pòdere lèghere sa memòria pro funtzionare. Pro praghere dae·li su permissu in sas impostatziones.</string>
+  <string name="go_to_permissions">Bae a sas impostatziones</string>
+  <string name="no_results">Perunu resurtadu</string>
+  <string name="no_bookmarks">Perunu sinnalibru!</string>
+  <string name="no_history">Peruna cronologia</string>
 </resources>

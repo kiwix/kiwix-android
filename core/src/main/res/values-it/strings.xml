@@ -109,4 +109,6 @@
   <string name="status">Stato</string>
   <string name="tag_short_text">Testo breve</string>
   <string name="go_to_permissions">Vai alle impostazioni</string>
+  <string name="no_results">Nessun risultato</string>
+  <string name="no_bookmarks">Nessun segnalibro</string>
 </resources>

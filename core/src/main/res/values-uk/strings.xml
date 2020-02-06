@@ -151,4 +151,5 @@
   <string name="close_all_tabs">Закрити усі вкладки</string>
   <string name="failed_storage_not_found">Неможливо знайти зберігання</string>
   <string name="delete_notes_confirmation_msg">Видалити всі нотатки?</string>
+  <string name="no_bookmarks">Немає закладок</string>
 </resources>

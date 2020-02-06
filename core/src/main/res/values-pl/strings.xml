@@ -209,10 +209,10 @@
   <string name="send_feedback">Prześlij opinię</string>
   <string name="expand">Rozwiń</string>
   <string name="history">Historia</string>
-  <string name="history_from_current_book">Historia z bieżącej książki</string>
+  <string name="history_from_current_book" fuzzy="true">Historia z bieżącej książki</string>
   <string name="search_history">Historia wyszukiwania</string>
   <string name="selected_items">%1$d wybrane</string>
-  <string name="bookmarks_from_current_book">Zakładki z bieżącej książki</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Zakładki z bieżącej książki</string>
   <string name="search_bookmarks">Szukaj zakładek</string>
   <string name="switch_tabs">Przełącz zakładki</string>
   <string name="smiling_face">:D</string>
@@ -275,4 +275,6 @@
   <string name="storage_permission_denied">Odrzucono dostęp do pamięci</string>
   <string name="grant_read_storage_permission">Ta aplikacja aby funkcjonować wymaga uprawnień do odczytywania zawartości pamięci. Nadaj jej te uprawnienia w ustawieniach.</string>
   <string name="go_to_permissions">Przejdź do ustawień</string>
+  <string name="no_results">Brak wyników</string>
+  <string name="no_bookmarks">Brak zakładek</string>
 </resources>

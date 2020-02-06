@@ -126,4 +126,5 @@
   <string name="status">Estat</string>
   <string name="tag_text_only">Només text</string>
   <string name="tag_short_text">Text breu</string>
+  <string name="no_bookmarks">No hi ha marcadors</string>
 </resources>

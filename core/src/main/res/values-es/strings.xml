@@ -188,10 +188,10 @@
   <string name="save_languages">Guardar idiomas</string>
   <string name="send_feedback">Enviar comentarios</string>
   <string name="history">Historial</string>
-  <string name="history_from_current_book">Historial del libro actual</string>
+  <string name="history_from_current_book" fuzzy="true">Historial del libro actual</string>
   <string name="search_history">Historial de búsquedas</string>
   <string name="selected_items">%1$d seleccionado</string>
-  <string name="bookmarks_from_current_book">Marcadores del libro actual</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Marcadores del libro actual</string>
   <string name="search_bookmarks">Buscar en marcadores</string>
   <string name="switch_tabs">Cambiar de pestaña</string>
   <string name="smiling_face">:D</string>
@@ -237,4 +237,6 @@
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
   <string name="go_to_permissions">Ir a Configuración</string>
+  <string name="no_results">No hay ningún resultado</string>
+  <string name="no_bookmarks">No hay marcadores</string>
 </resources>

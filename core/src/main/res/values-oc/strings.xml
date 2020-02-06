@@ -106,4 +106,5 @@
   <string name="time_minute">min</string>
   <string name="time_second">s</string>
   <string name="time_left">esquèrra</string>
+  <string name="no_bookmarks">I a pas de signets</string>
 </resources>

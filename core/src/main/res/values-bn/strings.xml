@@ -151,4 +151,5 @@
   <string name="note">টীকা</string>
   <string name="books_count">%dটি বই</string>
   <string name="tag_text_only">শুধুমাত্র পাঠ্য</string>
+  <string name="no_bookmarks">কোন বুকমার্ক নেই</string>
 </resources>

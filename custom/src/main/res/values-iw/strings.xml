@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Authors:
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
 * Amire80
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyQuotes,TypographyEllipsis">
+<resources>
   <string name="retry">לנסות שוב</string>
   <string name="download">הורדה</string>
   <string name="invalid_installation">התקנה בלתי־תקינה. נא להוריד Zim.\nיש לוודא שמופעל ויי־פיי ושיש לך מספיק נפח אחסון</string>

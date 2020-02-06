@@ -46,6 +46,7 @@
   <string name="go_to_play_store">An de Play Store goen</string>
   <string name="menu_bookmarks_list">Lieszeechen</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
+  <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
   <string name="delete">Läschen</string>
   <string name="got_it">Verstan</string>
   <string name="did_you_know">Wousst Dir?</string>
@@ -124,4 +125,7 @@
   <string name="tag_text_only">Nëmmen Text</string>
   <string name="tag_short_text">Kuerzen Text</string>
   <string name="go_to_permissions">Op d\'Astellunge goen</string>
+  <string name="no_results">Keng Resultater</string>
+  <string name="no_bookmarks">Keng Lieszeechen!</string>
+  <string name="no_history">Keen Historique</string>
 </resources>
