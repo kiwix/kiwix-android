@@ -97,7 +97,9 @@ import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.dao.NewBookDao;
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;
+import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
@@ -118,6 +120,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION_CODES;
+import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
@@ -208,6 +211,8 @@ public abstract class CoreMainActivity extends BaseActivity
   protected MainMenu.Factory menuFactory;
   @Inject
   protected NewBookmarksDao newBookmarksDao;
+  @Inject
+  protected NewBookDao newBookDao;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -408,6 +413,20 @@ public abstract class CoreMainActivity extends BaseActivity
     if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
       newMainPageTab();
       loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
+    }
+    handleNotificationIntent(intent);
+  }
+
+  private void handleNotificationIntent(Intent intent) {
+    if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
+      new Handler().postDelayed(() -> {
+          final BookOnDiskEntity bookMatchingTitle =
+            newBookDao.bookMatching(intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE));
+          if (bookMatchingTitle != null) {
+            openZimFile(bookMatchingTitle.getFile());
+          }
+        },
+        300);
     }
   }
 
@@ -1313,6 +1332,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
+    handleNotificationIntent(intent);
     if (intent.getAction() != null) {
       if (zimReaderContainer.getId() != null) {
         switch (intent.getAction()) {
