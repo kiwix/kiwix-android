@@ -80,6 +80,8 @@
   <string name="pref_clear_all_history_title">Исчисти историја</string>
   <string name="pref_clear_all_history_summary">Исчисти скорешни пребарувања и јазичиња</string>
   <string name="all_history_cleared_toast">Сета историја е исчистена</string>
+  <string name="pref_clear_all_bookmarks_title">Исчисти обележувачи</string>
+  <string name="all_bookmarks_cleared_toast">Сите обележувачи се исчистени</string>
   <string name="clear_all_history_dialog_title">Исчисти ја сета историја</string>
   <string name="share">Сподели</string>
   <string name="selected_file_cab_app_chooser_title">Сподели ZIM-податотеки со:</string>
@@ -205,11 +207,11 @@
   <string name="send_feedback">Испрати мислење</string>
   <string name="expand">Прикажи</string>
   <string name="history">Историја</string>
-  <string name="history_from_current_book">Историја од тековната книга</string>
+  <string name="history_from_current_book">Историја од сите книги</string>
   <string name="search_history">Историја на пребарувањето</string>
   <string name="selected_items">Избрани %1$d</string>
-  <string name="bookmarks_from_current_book">Обележувачи од тековна книга</string>
-  <string name="search_bookmarks">Пребарај по бележниците</string>
+  <string name="bookmarks_from_current_book">Погл. обележувачи од сите книги</string>
+  <string name="search_bookmarks">Пребарај по обележувачите</string>
   <string name="switch_tabs">Смени јазичиња</string>
   <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Затвори ги сите јазичиња</string>
@@ -283,4 +285,8 @@
   <string name="storage_permission_denied">Дозволата за складирање е одбиена</string>
   <string name="grant_read_storage_permission">Прилогов бара пристап до складот за да работи. Дајте му ја таа дозвола во поставките</string>
   <string name="go_to_permissions">Оди во поставките</string>
+  <string name="no_results">Нема исход</string>
+  <string name="no_bookmarks">Нема обележувачи</string>
+  <string name="no_history">Нема историја</string>
+  <string name="device_default">Основно на уредот</string>
 </resources>

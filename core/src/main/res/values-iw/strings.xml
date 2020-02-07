@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Authors:
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
 * Amire80
 * Ghsuvr
 * Guycn2
+* IKhitron
 * Steeve815
 * YaronSh
 * יאיר מן
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyQuotes,TypographyEllipsis">
+<resources>
   <string name="kiwi">קיווי</string>
   <string name="menu_zim_manager">ספרייה</string>
   <string name="menu_help">עזרה</string>
@@ -209,12 +211,13 @@
   <string name="send_feedback">שליחת משוב</string>
   <string name="expand">הרחבה</string>
   <string name="history">היסטוריה</string>
-  <string name="history_from_current_book">היסטוריה מהספר הנוכחי</string>
+  <string name="history_from_current_book">צפייה בהיסטוריה מכל הספרים</string>
+  <string name="search_history">חיפוש בהיסטוריה</string>
   <string name="selected_items">נבחרו %1$d</string>
-  <string name="bookmarks_from_current_book">סימניות מהספר הנוכחי</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">סימניות מהספר הנוכחי</string>
   <string name="search_bookmarks">חיפוש סימניות</string>
   <string name="switch_tabs">החלפת כרטיסיות</string>
-  <string name="smiling_face"><![CDATA[<bdi direction=\“ltr\”>:D</bdi>]]></string>
+  <string name="smiling_face">&lt;bdi direction=“ltr”&gt;:D&lt;/bdi&gt;</string>
   <string name="close_all_tabs">סגירת כל הכרטיסיות</string>
   <string name="pending_state">ממתין</string>
   <string name="running_state">בעבודה</string>
@@ -286,4 +289,6 @@
   <string name="storage_permission_denied">אישור האחסון נדחה</string>
   <string name="grant_read_storage_permission">אפליקציה זו דורשת את אפשרות לקרוא את האחסון שלך כדי לתפקד. אנא הענק את ההרשאה בהגדרות שלך</string>
   <string name="go_to_permissions">לך להגדרות</string>
+  <string name="no_results">אין תוצאות</string>
+  <string name="no_bookmarks">אין סימניות</string>
 </resources>

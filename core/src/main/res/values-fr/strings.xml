@@ -90,6 +90,8 @@
   <string name="pref_clear_all_history_title">Effacer l’historique</string>
   <string name="pref_clear_all_history_summary">Effacer les recherches récentes et l’historique des onglets</string>
   <string name="all_history_cleared_toast">Tout l’historique est effacé</string>
+  <string name="pref_clear_all_bookmarks_title">Retirer les marque-pages</string>
+  <string name="all_bookmarks_cleared_toast">Marque-pages retirés</string>
   <string name="clear_all_history_dialog_title">Effacer tout l’historique</string>
   <string name="share">Partager</string>
   <string name="selected_file_cab_app_chooser_title">Partager des fichiers ZIM avec :</string>
@@ -163,7 +165,7 @@
   <string name="next">Suivant</string>
   <string name="previous">Précédent</string>
   <string name="wifi_only_title">Permettre le téléchargement de contenu via le réseau mobile ?</string>
-  <string name="wifi_only_msg">Si vous choisissez « Oui », vous ne serez plus alerté. Cependant, vous pouvez toujours modifier cela dans les paramètres.</string>
+  <string name="wifi_only_msg">Si vous choisissez « Oui », vous ne serez plus averti à l’avenir. Cependant, vous pouvez toujours modifier cela dans les paramètres.</string>
   <string name="pref_wifi_only">Télécharger le contenu uniquement via WiFi</string>
   <string name="time_day">jour</string>
   <string name="time_hour"> h</string>
@@ -215,10 +217,10 @@
   <string name="send_feedback">Envoyer un avis</string>
   <string name="expand">Développer</string>
   <string name="history">Historique</string>
-  <string name="history_from_current_book">Historique du livre actuel</string>
+  <string name="history_from_current_book">Afficher l’historique de tous les livres</string>
   <string name="search_history">Rechercher dans l’historique</string>
   <string name="selected_items">%1$d sélectionné</string>
-  <string name="bookmarks_from_current_book">Marque-pages du livre actuel</string>
+  <string name="bookmarks_from_current_book">Voir les marque-pages de tous les livres</string>
   <string name="search_bookmarks">Rechercher des marque-pages</string>
   <string name="switch_tabs">Changer d’onglet</string>
   <string name="smiling_face">:D</string>
@@ -257,6 +259,7 @@
   <string name="ext_storage_permission_not_granted">Erreur : permissions de stockage non accordées</string>
   <string name="notes_deletion_successful">Dossier entier de notes supprimé</string>
   <string name="notes_deletion_unsuccessful">Certains fichiers n’ont pas été supprimés</string>
+  <string name="books_count">%d livre(s)</string>
   <string name="discovery_initiated">Découverte lancée</string>
   <string name="discovery_failed">La découverte a échoué</string>
   <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair WiFi</string>
@@ -280,7 +283,7 @@
   <string name="no_devices_found">Aucun appareil détecté. Tapez le bouton Rechercher pour essayer à nouveau.</string>
   <string name="files_for_transfer">FICHIERS À TRANSFÉRER</string>
   <string name="preparing_files">Préparation des fichiers pour le transfert…</string>
-  <string name="performing_handshake">Établissement d’une liaison en cours…</string>
+  <string name="performing_handshake">Établissement de liaison en cours…</string>
   <string name="local_zim_sharing">Partage local ZIM</string>
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
@@ -292,4 +295,8 @@
   <string name="storage_permission_denied">Autorisation de stockage refusée</string>
   <string name="grant_read_storage_permission">Cette application a besoin de la possibilité de lire le stockage pour pouvoir fonctionner. Veuillez accorder le droit dans vos paramètres.</string>
   <string name="go_to_permissions">Aller aux paramètres</string>
+  <string name="no_results">Aucun résultat</string>
+  <string name="no_bookmarks">Aucun marque-page</string>
+  <string name="no_history">Aucun historique</string>
+  <string name="device_default">Appareil par défaut</string>
 </resources>

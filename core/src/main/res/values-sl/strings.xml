@@ -135,7 +135,7 @@
   <string name="next">Naprej</string>
   <string name="previous">Predhodni</string>
   <string name="wifi_only_title">Omogoči prenos vsebin prek mobilnega omrežja?</string>
-  <string name="wifi_only_msg">Če izberete \“Da\”, vas v prihodnje ne bomo opozarjali. Vendar lahko to vedno spremenite v nastavitvah</string>
+  <string name="wifi_only_msg">Če izberete “Da”, vas v prihodnje ne bomo opozarjali. Vendar lahko to vedno spremenite v nastavitvah</string>
   <string name="pref_wifi_only">Prenašanje vsebine samo prek WiFi</string>
   <string name="time_day">dan</string>
   <string name="time_hour">h</string>
@@ -187,10 +187,10 @@
   <string name="send_feedback">Sporoči svoje mnenje</string>
   <string name="expand">Razširi</string>
   <string name="history">Zgodovina</string>
-  <string name="history_from_current_book">Zgodovina iz trenutne knjige</string>
+  <string name="history_from_current_book" fuzzy="true">Zgodovina iz trenutne knjige</string>
   <string name="search_history">Zgodovina iskanja</string>
   <string name="selected_items">%1$d izbrano</string>
-  <string name="bookmarks_from_current_book">Zaznamki iz trenutne knjige</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Zaznamki iz trenutne knjige</string>
   <string name="search_bookmarks">Iskanje zaznamkov</string>
   <string name="switch_tabs">Preklopi zavihke</string>
   <string name="smiling_face">:D</string>
@@ -230,4 +230,5 @@
   <string name="notes_deletion_successful">Izbrisana je celotna mapa z beležkami</string>
   <string name="notes_deletion_unsuccessful">Nekatere datoteke niso izbrisane</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Počisti vse beležke</string>
+  <string name="no_bookmarks">Ni zaznamkov</string>
 </resources>

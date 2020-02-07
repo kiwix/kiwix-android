@@ -199,4 +199,5 @@
   <string name="your_device">Laitteesi:</string>
   <string name="nearby_devices">LÄHELLÄ OLEVAT LAITTEET</string>
   <string name="status">Tila</string>
+  <string name="no_bookmarks">Ei kirjanmerkkejä</string>
 </resources>

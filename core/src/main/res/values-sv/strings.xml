@@ -193,10 +193,10 @@
   <string name="send_feedback">Skicka återkoppling</string>
   <string name="expand">Utvidga</string>
   <string name="history">Historik</string>
-  <string name="history_from_current_book">Historik från nuvarande bok</string>
+  <string name="history_from_current_book">Visa historik från alla böcker</string>
   <string name="search_history">Sökhistorik</string>
   <string name="selected_items">%1$d markerade</string>
-  <string name="bookmarks_from_current_book">Bokmärken från nuvarande bok</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Bokmärken från nuvarande bok</string>
   <string name="search_bookmarks">Sök bokmärken</string>
   <string name="switch_tabs">Byt flikar</string>
   <string name="smiling_face">:D</string>
@@ -253,4 +253,7 @@
   <string name="tag_text_only">Endast text</string>
   <string name="tag_short_text">Kort text</string>
   <string name="go_to_permissions">Gå till inställningar</string>
+  <string name="no_results">Inga resultat</string>
+  <string name="no_bookmarks">Inga bokmärken</string>
+  <string name="no_history">Ingen historik</string>
 </resources>

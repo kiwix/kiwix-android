@@ -196,7 +196,7 @@
   <string name="expand">Rozšířit</string>
   <string name="history">Historie</string>
   <string name="search_history">Historie vyhledávání</string>
-  <string name="bookmarks_from_current_book">Záložky z aktuální knihy</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Záložky z aktuální knihy</string>
   <string name="switch_tabs">Přepnout panely</string>
   <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Zavřít všechny záložky</string>
@@ -240,4 +240,5 @@
   <string name="error_during_transfer">Nastala chyba v průběhu přenosu</string>
   <string name="get_content_from_nearby_device">Získet obsah ze zařízení v blízkosti</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Vyčistit všechny poznámky</string>
+  <string name="no_bookmarks">Žádné záložky</string>
 </resources>

@@ -18,8 +18,8 @@
   <string name="menu_random_article">{{Identical|Random article}}</string>
   <string name="menu_full_screen">{{Identical|Full screen}}</string>
   <string name="search_label">{{Identical|Search}}</string>
-  <string name="stop_hotspot_button"><![CDATA[Clicking on the \“Stop\” button shuts down the Kiwix server. This server allows to stop sharing the Kiwix local library on the LAN with the HTTP protocol.\n\n<gallery>\nFile:Kiwix-ui.server.start-0.png\nFile:Kiwix-ui.server.start-1.png\n</gallery>\n{{Identical|Stop}}]]></string>
-  <string name="hotspot_details_message"><![CDATA[Do not change:\n* <code>%1$s</code> (replaced by the \“SSID\” value identifying the WiFi hotspot identity for users)\n* <code>%2$s</code> (replaced by the password or code configured in the hotspot to authorize the association and network connection)]]></string>
+  <string name="stop_hotspot_button">Clicking on the “Stop” button shuts down the Kiwix server. This server allows to stop sharing the Kiwix local library on the LAN with the HTTP protocol.\n\n&lt;gallery&gt;\nFile:Kiwix-ui.server.start-0.png\nFile:Kiwix-ui.server.start-1.png\n&lt;/gallery&gt;\n{{Identical|Stop}}</string>
+  <string name="hotspot_details_message">Do not change:\n* &lt;code&gt;%1$s&lt;/code&gt; (replaced by the “SSID” value identifying the WiFi hotspot identity for users)\n* &lt;code&gt;%2$s&lt;/code&gt; (replaced by the password or code configured in the hotspot to authorize the association and network connection)</string>
   <string name="pref_display_title">{{Identical|Display}}</string>
   <string name="pref_zoom_sub_title">{{Identical|Zoom}}</string>
   <string name="pref_info_title">{{Identical|Information}}</string>
@@ -42,9 +42,10 @@
   <string name="yes">{{Identical|Yes}}</string>
   <string name="no">{{Identical|No}}</string>
   <string name="previous">{{Identical|Previous}}</string>
-  <string name="time_left">This is the past participle of the verb \“to leave\” (meaning \“quitted\” or \“exited\”). This is used in a context of \“X minutes left\” to finish a download.</string>
+  <string name="time_left">This is the past participle of the verb “to leave” (meaning “quitted” or “exited”). This is used in a context of “X minutes left” to finish a download.</string>
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
   <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
   <string name="paused_unknown">{{Identical|Unknown}}</string>
   <string name="save">{{Identical|Save}}</string>
+  <string name="no_bookmarks">This means \"there are no bookmarks\"</string>
 </resources>

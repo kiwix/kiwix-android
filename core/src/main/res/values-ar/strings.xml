@@ -210,10 +210,10 @@
   <string name="send_feedback">إرسال تعليق</string>
   <string name="expand">وسع</string>
   <string name="history">تاريخ</string>
-  <string name="history_from_current_book">التاريخ من الكتاب الحالي</string>
+  <string name="history_from_current_book" fuzzy="true">التاريخ من الكتاب الحالي</string>
   <string name="search_history">سجل البحث</string>
   <string name="selected_items">تم تحديد %1$d</string>
-  <string name="bookmarks_from_current_book">الإشارات المرجعية من الكتاب الحالي</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">الإشارات المرجعية من الكتاب الحالي</string>
   <string name="search_bookmarks">البحث في الإشارات</string>
   <string name="switch_tabs">تبديل علامات التبويب</string>
   <string name="smiling_face">:D</string>
@@ -288,4 +288,6 @@
   <string name="storage_permission_denied">إِذن التّخزين قد رُفِض</string>
   <string name="grant_read_storage_permission">يتطلب هذا التطبيق القدرة على قراءة وظيفة التخزين؛ يُرجَى منح الإذن في إعداداتك</string>
   <string name="go_to_permissions">اذهب للإعدادات</string>
+  <string name="no_results">لا نتائج</string>
+  <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
 </resources>

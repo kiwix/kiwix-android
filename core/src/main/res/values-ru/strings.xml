@@ -161,7 +161,7 @@
   <string name="download_books">Скачивайте книги</string>
   <string name="download_books_message">Скачивайте книги и читайте, где бы вы ни были.</string>
   <string name="expand">Развернуть</string>
-  <string name="bookmarks_from_current_book">Закладки в текущей книге</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Закладки в текущей книге</string>
   <string name="close_all_tabs">Закрыть все вкладки</string>
   <string name="failed_state">Ошибка: %s</string>
   <string name="failed_cannot_resume">Не удалось продолжить по неизвестной причине</string>
@@ -174,4 +174,5 @@
   <string name="delete_notes_confirmation_msg">Удалить все заметки?</string>
   <string name="ext_storage_permission_not_granted">Ошибка: Отсутствует разрешение на хранение</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Очистить Все Заметки</string>
+  <string name="no_bookmarks">Нет Закладок</string>
 </resources>

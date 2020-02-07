@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * ‑‑szabi‑‑
+* Bencemac
 * Bencoke
 * Csega
 * Dj
@@ -156,4 +157,5 @@
   <string name="close_all_tabs">Az összes lap bezárása</string>
   <string name="delete_notes_confirmation_msg">Törölsz minden jegyzetet?</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Minden megjegyzés törlése</string>
+  <string name="no_bookmarks">Nincsenek könyvjelzők!</string>
 </resources>

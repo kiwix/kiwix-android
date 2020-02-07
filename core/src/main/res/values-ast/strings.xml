@@ -186,10 +186,10 @@
   <string name="send_feedback">Unviar opiniones</string>
   <string name="expand">Espander</string>
   <string name="history">Historial</string>
-  <string name="history_from_current_book">Historial del llibru actual</string>
+  <string name="history_from_current_book" fuzzy="true">Historial del llibru actual</string>
   <string name="search_history">Historial de busques</string>
   <string name="selected_items">%1$d seleicionáu</string>
-  <string name="bookmarks_from_current_book">Marcadores del llibru actual</string>
+  <string name="bookmarks_from_current_book" fuzzy="true">Marcadores del llibru actual</string>
   <string name="search_bookmarks">Buscar nos marcadores</string>
   <string name="switch_tabs">Intercambiar llingüetes</string>
   <string name="smiling_face">:D</string>
@@ -225,4 +225,5 @@
   <string name="books_count">%d llibros</string>
   <string name="status">Estáu</string>
   <string name="pref_clear_all_notes_title">Llimpiar toles notes</string>
+  <string name="no_bookmarks">Nun hai marcadores</string>
 </resources>
