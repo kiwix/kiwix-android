@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.core.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
-import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
+import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.util.ArrayList
 import javax.inject.Inject
@@ -85,4 +85,8 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     }.find().getOrNull(0)
     return bookOnDiskEntity?.let { Pair(it.favIcon, it.file.path) } ?: Pair(null, null)
   }
+
+  fun bookMatching(downloadTitle: String) = box.query {
+    endsWith(BookOnDiskEntity_.file, downloadTitle)
+  }.findFirst()
 }
