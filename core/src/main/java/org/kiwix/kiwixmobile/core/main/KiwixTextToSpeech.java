@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 
@@ -131,23 +132,14 @@ public class KiwixTextToSpeech {
           context.getResources().getString(R.string.tts_lang_not_supported),
           Toast.LENGTH_LONG).show();
       } else {
-        // check if voice needs to be installed for API below 21
-        if(VERSION.SDK_INT < VERSION_CODES.LOLLIPOP
-          && tts.getFeatures(locale).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)){
-          Toast.makeText(context,
-            context.getResources().getString(R.string.tts_lang_not_supported),
-            Toast.LENGTH_LONG).show();
-          return;
-        }
-
         tts.setLanguage(locale);
 
-        // check if voice needs to be installed for API 21 or higher
-        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP
-          && tts.getVoice().getFeatures().contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)){
-          Toast.makeText(context,
-            context.getResources().getString(R.string.tts_lang_not_supported),
-            Toast.LENGTH_LONG).show();
+        if ((VERSION.SDK_INT < VERSION_CODES.LOLLIPOP // check if voice needs to be installed for API below 21
+          && tts.getFeatures(locale).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED))
+          // check if voice needs to be installed for API 21 or higher
+          ||(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP
+          && tts.getVoice().getFeatures().contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED))){
+          ContextExtensionsKt.toast(this.context,R.string.tts_lang_not_supported,Toast.LENGTH_LONG);
           return;
         }
 
