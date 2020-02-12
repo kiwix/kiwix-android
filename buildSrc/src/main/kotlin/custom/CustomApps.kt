@@ -213,6 +213,9 @@ private fun NamedDomainObjectContainer<ProductFlavor>.create(
     applicationIdSuffix = ".kiwixcustom${customApp.name}"
     buildConfigField("String", "ZIM_URL", "\"${customApp.url}\"")
     buildConfigField("String", "ENFORCED_LANG", "\"${customApp.enforcedLanguage}\"")
+    buildConfigField("Boolean", "DISABLE_SIDEBAR", "false")
+    buildConfigField("Boolean", "DISABLE_READ_ALOUD", "false")
+    buildConfigField("Boolean", "DISABLE_TABS", "false")
     configureStrings(customApp.displayName)
   }
 }

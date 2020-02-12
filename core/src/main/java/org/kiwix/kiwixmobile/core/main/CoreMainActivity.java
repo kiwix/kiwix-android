@@ -175,7 +175,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
   @BindView(R2.id.activity_main_drawer_layout)
-  DrawerLayout drawerLayout;
+  protected DrawerLayout drawerLayout;
   @BindView(R2.id.activity_main_nav_view)
   NavigationView tableDrawerRightContainer;
   @BindView(R2.id.activity_main_content_frame)
@@ -285,7 +285,7 @@ public abstract class CoreMainActivity extends BaseActivity
       Menu menu = mode.getMenu();
       // Inflate custom menu icon.
       getMenuInflater().inflate(R.menu.menu_webview_action, menu);
-      readAloudSelection(menu);
+      configureWebViewSelectionHandler(menu);
     }
     super.onActionModeStarted(mode);
   }
@@ -296,7 +296,7 @@ public abstract class CoreMainActivity extends BaseActivity
     super.onActionModeFinished(mode);
   }
 
-  private void readAloudSelection(Menu menu) {
+  protected void configureWebViewSelectionHandler(Menu menu) {
     if (menu != null) {
       menu.findItem(R.id.menu_speak_text)
         .setOnMenuItemClickListener(item -> {
@@ -525,7 +525,7 @@ public abstract class CoreMainActivity extends BaseActivity
       ContextCompat.getDrawable(this, R.drawable.ic_round_add_white_36dp));
     actionBar.setDisplayShowTitleEnabled(false);
 
-    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     bottomToolbar.setVisibility(View.GONE);
     contentFrame.setVisibility(View.GONE);
     progressBar.setVisibility(View.GONE);
@@ -550,7 +550,7 @@ public abstract class CoreMainActivity extends BaseActivity
       actionBar.setDisplayHomeAsUpEnabled(false);
       actionBar.setDisplayShowTitleEnabled(true);
 
-      drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
       closeAllTabsButton.setImageDrawable(
         ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
       startAnimation(tabSwitcherRoot, R.anim.slide_up);
@@ -561,6 +561,10 @@ public abstract class CoreMainActivity extends BaseActivity
         mainMenu.showWebViewOptions(!urlIsInvalid());
       }
     }
+  }
+
+  protected void setDrawerLockMode(int lockMode) {
+    drawerLayout.setDrawerLockMode(lockMode);
   }
 
   @OnClick(R2.id.bottom_toolbar_arrow_back)
@@ -1506,8 +1510,12 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    mainMenu = menuFactory.create(menu, webViewList, !urlIsInvalid(), this);
+    mainMenu = createMainMenu(menu);
     return true;
+  }
+
+  @NotNull protected MainMenu createMainMenu(Menu menu) {
+    return menuFactory.create(menu, webViewList, !urlIsInvalid(), this, false, false);
   }
 
   protected boolean urlIsInvalid() {
@@ -1675,26 +1683,30 @@ public abstract class CoreMainActivity extends BaseActivity
     }
 
     if (handleEvent) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-      builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
-        if (isOpenNewTabInBackground) {
-          newTabInBackground(url);
-          Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
-            .setAction(getString(R.string.open), v -> {
-              if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
-            })
-            .setActionTextColor(getResources().getColor(R.color.white))
-            .show();
-        } else {
-          newTab(url);
-        }
-      });
-      builder.setNegativeButton(android.R.string.no, null);
-      builder.setMessage(getString(R.string.open_in_new_tab));
-      AlertDialog dialog = builder.create();
-      dialog.show();
+      showOpenInNewTabDialog(url);
     }
+  }
+
+  protected void showOpenInNewTabDialog(String url) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+    builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
+      if (isOpenNewTabInBackground) {
+        newTabInBackground(url);
+        Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
+          .setAction(getString(R.string.open), v -> {
+            if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
+          })
+          .setActionTextColor(getResources().getColor(R.color.white))
+          .show();
+      } else {
+        newTab(url);
+      }
+    });
+    builder.setNegativeButton(android.R.string.no, null);
+    builder.setMessage(getString(R.string.open_in_new_tab));
+    AlertDialog dialog = builder.create();
+    dialog.show();
   }
 
   @Override
