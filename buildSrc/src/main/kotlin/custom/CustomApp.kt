@@ -18,32 +18,55 @@
 
 package custom
 
+import org.json.simple.JSONObject
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+const val dateFormat = "YYYY-MM"
 
 data class CustomApp(
   val name: String,
   val url: String,
   val enforcedLanguage: String,
   val displayName: String,
-  val versionName: String = parseVersionNameFromUrlOrUsePattern(url, "YYYY-MM")
+  val versionName: String,
+  val disableSideBar: Boolean = false,
+  val disableTabs: Boolean = false,
+  val disableReadAloud: Boolean = false
 ) {
-  val versionCode: Int = formatDate("YYDDD0").toInt()
+  constructor(name: String, parsedJson: JSONObject) : this(
+    name,
+    parsedJson.getAndCast("zim_url"),
+    parsedJson.getAndCast("enforced_lang"),
+    parsedJson.getAndCast("app_name"),
+    readVersionOrInfer(parsedJson),
+    parsedJson.getAndCast("disable_sidebar") ?: false,
+    parsedJson.getAndCast("disable_tabs") ?: false,
+    parsedJson.getAndCast("disable_read_aloud") ?: false
+  )
+
+  val versionCode: Int = formatCurrentDate("YYDDD0").toInt()
+
+  companion object {
+    private fun readVersionOrInfer(parsedJson: JSONObject) =
+      (parsedJson.getAndCast("version_name")
+        ?: versionNameFromUrl(parsedJson.getAndCast("zim_url")))
+        ?: formatCurrentDate()
+  }
 }
 
-private fun parseVersionNameFromUrlOrUsePattern(url: String, pattern: String) =
+private fun versionNameFromUrl(url: String) =
   url.substringAfterLast("_")
     .substringBeforeLast(".")
     .takeIf {
       try {
-        SimpleDateFormat(pattern, Locale.ROOT).parse(it) != null
+        SimpleDateFormat(dateFormat, Locale.ROOT).parse(it) != null
       } catch (parseException: ParseException) {
         false
       }
     }
-    ?: formatDate(pattern)
 
-private fun formatDate(pattern: String) =
+private fun formatCurrentDate(pattern: String = dateFormat) =
   Date().let(SimpleDateFormat(pattern, Locale.ROOT)::format)
