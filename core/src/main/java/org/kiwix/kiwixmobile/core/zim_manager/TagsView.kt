@@ -62,5 +62,6 @@ class TagsView(context: Context, attrs: AttributeSet) : ChipGroup(context, attrs
   private fun Chip.selectBy(criteria: Boolean) {
     isChecked = criteria
     isEnabled = criteria
+    visibility = if (criteria) VISIBLE else GONE
   }
 }
