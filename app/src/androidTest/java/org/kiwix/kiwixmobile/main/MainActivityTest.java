@@ -28,7 +28,7 @@ import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.R;
 
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
