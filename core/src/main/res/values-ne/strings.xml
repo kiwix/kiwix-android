@@ -9,9 +9,8 @@
   <string name="menu_help">सहायता</string>
   <string name="menu_home">गृह</string>
   <string name="menu_settings">सेटिङहरू</string>
-  <string name="menu_search">लेख खोज्नुहोस्</string>
   <string name="menu_search_in_text">पृष्ठमा खोज्नुहोस्</string>
-  <string name="menu_bookmarks">पुस्तक चिनोहरू</string>
+  <string name="bookmarks">पुस्तक चिनोहरू</string>
   <string name="menu_random_article">कुनै लेख</string>
   <string name="menu_full_screen">पूरा पर्दा</string>
   <string name="menu_exit_full_screen">पूरा पर्दाबाट बाहिरिने</string>
@@ -19,7 +18,7 @@
   <string name="menu_read_aloud_stop">पढेर सुनाउन बन्द गर्नुहोस्</string>
   <string name="save_media">मेडियालाई यसरूपमा सङ्ग्रह गर्नुहोस्…</string>
   <string name="rescan_fs_warning" fuzzy="true">कृपया पर्खनुहोस्, जिम फाइलहरू स्क्यान हुँदैछ</string>
-  <string name="search_label">खोज्नुहोस्</string>
+  <string name="search">खोज्नुहोस्</string>
   <string name="open_in_new_tab">लिङ्कलाई नयाँ ट्याबमा खोल्ने?</string>
   <string name="error_file_not_found">त्रुटी: छानिएको ZIM फाइल भेटाउन सकिएन।</string>
   <string name="error_file_invalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन।</string>
@@ -37,7 +36,6 @@
   <string name="pref_language_title">भाषा</string>
   <string name="pref_language_chooser">भाषा चुन्ने</string>
   <string name="pref_credits_title">श्रेयहरू</string>
-  <string name="menu_bookmarks_list">पुस्तक चिनोहरू</string>
   <string name="no_section_info">कुनै पनि कन्टेन्ट हेडरहरू भेटिएन</string>
   <string name="clear_recent_and_tabs_history_dialog">के तपाईं साँच्चिकै आफ्नो खोज इतिहास खाली गर्न चाहनुहुन्छ र सबै सक्रिय ट्याबहरू पूर्ववत् गर्न चाहनुहुन्छ?</string>
   <string name="delete_recent_search_item">यस वस्तुलाई मेट्ने हो?</string>

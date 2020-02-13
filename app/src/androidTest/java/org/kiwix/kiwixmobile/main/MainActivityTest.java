@@ -63,7 +63,7 @@ public class MainActivityTest {
   @Test
   public void navigateBookmarks() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_bookmarks));
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.bookmarks));
   }
 
   @Test

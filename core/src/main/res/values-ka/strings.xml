@@ -3,9 +3,8 @@
   <string name="menu_help">დახმარება</string>
   <string name="menu_home">მთავარი</string>
   <string name="menu_settings">კონფიგურაცია</string>
-  <string name="menu_search">ძიება</string>
   <string name="menu_search_in_text">ძიება ტექსტში</string>
-  <string name="menu_bookmarks">სანიშნები</string>
+  <string name="bookmarks">სანიშნები</string>
   <string name="menu_random_article">შემთხვევითი სტატია</string>
   <string name="menu_full_screen">სრულ ეკრანზე</string>
   <string name="menu_exit_full_screen">მთლიანი ეკრანიდან გამოსვლა</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
   <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
   <string name="rescan_fs_warning">ZIM-ფაილების ძიება, გთხოვთ, მოიცადოთ…</string>
-  <string name="search_label">ძიება</string>
+  <string name="search">ძიება</string>
   <string name="open_in_new_tab">ბმული ახალ ჩანართში გაიხსნას?</string>
   <string name="error_file_not_found">შეცდომა: არჩეული ZIM ფაილი ვერ მოიძებნა.</string>
   <string name="error_file_invalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი.</string>
@@ -31,7 +30,6 @@
   <string name="pref_back_to_top_summary">გვერდის ბოლოში ზევით დაბრუნების ღილაკის ჩვენება</string>
   <string name="pref_language_title">ენა</string>
   <string name="pref_language_chooser">აირჩიეთ ენა</string>
-  <string name="menu_bookmarks_list">სანიშნები</string>
   <string name="bookmark_added">სანიშნი დამატებულია</string>
   <string name="rate_dialog_title">გთხოვთ, შეგვაფასეთ</string>
   <string name="rate_dialog_msg_1">თუ თქვენ მოგწონთ</string>

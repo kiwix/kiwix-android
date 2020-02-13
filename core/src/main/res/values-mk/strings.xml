@@ -7,9 +7,8 @@
   <string name="menu_help">Помош</string>
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Поставки</string>
-  <string name="menu_search">Пребарај статија</string>
   <string name="menu_search_in_text">Најди на страницата</string>
-  <string name="menu_bookmarks">Обележани</string>
+  <string name="bookmarks">Обележани</string>
   <string name="menu_random_article">Случајна статија</string>
   <string name="menu_full_screen">На цел екран</string>
   <string name="menu_exit_full_screen">Излези од цел екран</string>
@@ -21,12 +20,12 @@
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
   <string name="save_media_saved">Податотеката е зачувана како %s во Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Пребарувам преземлива содржина. Почекајте…</string>
-  <string name="search_label">Пребарај</string>
+  <string name="search">Пребарај</string>
   <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
   <string name="hotspot_failed_title">Не успеав да ја покренам пристапната точка</string>
   <string name="hotspot_failed_message">Се чини дека точката за безжичен пристап е веќе вклучена. Исклучете ја за да продолжите.</string>
   <string name="go_to_wifi_settings_label">Оди во поставките за безжичен пристап</string>
-  <string name="go_to_settings_label">Оди во поставките</string>
+  <string name="go_to_settings">Оди во поставките</string>
   <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека.</string>
   <string name="error_file_invalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
   <string name="error_article_url_not_found">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
@@ -48,7 +47,6 @@
   <string name="pref_credits_title">Признанија</string>
   <string name="tts_lang_not_supported">Јазикот на оваа страница не е поддржан, или пак немате воспоставено соодветни јазични податоци. Статијата може да биде неправилно испишана.</string>
   <string name="no_reader_application_installed">Не можев да најдам воспоставен приложник за овој вид податотека</string>
-  <string name="menu_bookmarks_list">Обележани</string>
   <string name="no_section_info">Не пронајдов содржински заглавија</string>
   <string name="request_storage">Ќе треба пристап до вашиот склад за да дојдам до вонмрежната содржина</string>
   <string name="clear_recent_and_tabs_history_dialog">Дали сугурно сакате да ја избришете историјата на пребарувања и да ги отфрлите сите активни јазичиња?</string>
@@ -187,7 +185,6 @@
   <string name="tag_short_text">Краток текст</string>
   <string name="storage_permission_denied">Дозволата за складирање е одбиена</string>
   <string name="grant_read_storage_permission">Прилогов бара пристап до складот за да работи. Дајте му ја таа дозвола во поставките</string>
-  <string name="go_to_permissions">Оди во поставките</string>
   <string name="no_results">Нема исход</string>
   <string name="no_bookmarks">Нема обележувачи</string>
   <string name="no_history">Нема историја</string>

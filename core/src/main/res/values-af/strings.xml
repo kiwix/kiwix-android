@@ -3,14 +3,13 @@
   <string name="menu_help">Hulp</string>
   <string name="menu_home">Tuisblad</string>
   <string name="menu_settings">Voorkeure</string>
-  <string name="menu_search">Soek</string>
   <string name="menu_search_in_text">Soek in teks</string>
-  <string name="menu_bookmarks">Boekmerke</string>
+  <string name="bookmarks">Boekmerke</string>
   <string name="menu_random_article">Lukrake artikel</string>
   <string name="menu_full_screen">Volle skerm</string>
   <string name="menu_exit_full_screen">Verlaat volskerm-modus</string>
   <string name="rescan_fs_warning">Soek ZIM-lêers. Wag asb…</string>
-  <string name="search_label">Soek</string>
+  <string name="search">Soek</string>
   <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
   <string name="error_file_not_found">Fout: die geselekteerde ZIM-lêer kon nie gevind word nie.</string>
   <string name="error_file_invalid">Fout: die geselekteerde lêer is nie \'n geldige ZIM-lêer nie.</string>
@@ -26,7 +25,6 @@
   <string name="pref_back_to_top_summary">Wys \'n knop onder die bladsy om na bo terug te spring</string>
   <string name="pref_language_title">Taal</string>
   <string name="pref_language_chooser">Kies \'n taal</string>
-  <string name="menu_bookmarks_list">Boekmerke</string>
   <string name="library">Biblioteek</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>

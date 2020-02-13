@@ -11,9 +11,8 @@
   <string name="menu_help">Ohje</string>
   <string name="menu_home">Koti</string>
   <string name="menu_settings">Asetukset</string>
-  <string name="menu_search">Hae artikkelia</string>
   <string name="menu_search_in_text">Etsi sivulta</string>
-  <string name="menu_bookmarks">Kirjanmerkit</string>
+  <string name="bookmarks">Kirjanmerkit</string>
   <string name="menu_random_article">Satunnainen artikkeli</string>
   <string name="menu_full_screen">Koko näyttö</string>
   <string name="menu_exit_full_screen">Poistu kokoruututilasta</string>
@@ -24,11 +23,11 @@
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
   <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Skannataan ladattavaa sisältöä, odota…</string>
-  <string name="search_label">Hae</string>
+  <string name="search">Hae</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
   <string name="hotspot_failed_title">Virhe käynnistettäessä hotspottia</string>
   <string name="go_to_wifi_settings_label">Siirry WiFi-asetuksiin</string>
-  <string name="go_to_settings_label">Siirry asetuksiin</string>
+  <string name="go_to_settings">Siirry asetuksiin</string>
   <string name="error_file_not_found">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
@@ -49,7 +48,6 @@
   <string name="pref_credits_title">Tekijät</string>
   <string name="tts_lang_not_supported">Tämän sivun kieltä ei tueta, tai kielellistä tietoa ei ole asennettu. Artikkelia ei voida lukea kunnolla.</string>
   <string name="no_reader_application_installed">Ei voitu löytää asennettua sovellusta tämän tyyppiselle tiedostolle</string>
-  <string name="menu_bookmarks_list">Kirjanmerkit</string>
   <string name="no_section_info">Sisältöotsikoita ei löydy</string>
   <string name="request_storage">Käyttääksemme offline-sisältöä, tarvitsemme pääsyn tallennuslaitteeseesi</string>
   <string name="clear_recent_and_tabs_history_dialog">Haluatko varmasti poistaa hakuhistoriasi ja resetoida kaikki aktiiviset välilehdet?</string>

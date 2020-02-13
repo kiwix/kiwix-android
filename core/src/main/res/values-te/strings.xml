@@ -3,9 +3,8 @@
   <string name="menu_help">సహాయం</string>
   <string name="menu_home">ముంగిలి</string>
   <string name="menu_settings">అభిరుచులు</string>
-  <string name="menu_search">వెతుకు</string>
   <string name="menu_search_in_text">పాఠ్యంలో వెతుకు</string>
-  <string name="menu_bookmarks">మడతపేజీలు</string>
+  <string name="bookmarks">మడతపేజీలు</string>
   <string name="menu_random_article">యాదృచ్ఛిక వ్యాసం</string>
   <string name="menu_full_screen">నిండుతెర</string>
   <string name="menu_exit_full_screen">నిండుతెరను చాలించు</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">మీడియాను భద్రపరచడంలో తప్పు జరిగింది.</string>
   <string name="save_media_saved">మీడియాని మీ బొమ్మల సంచయంలోని %1$s వద్ద భద్రపరచాము</string>
   <string name="rescan_fs_warning">ZIM దస్త్రాలను స్కాన్ చేస్తున్నాం, దయచేసి వేచి ఉండండి…</string>
-  <string name="search_label">వెతుకు</string>
+  <string name="search">వెతుకు</string>
   <string name="open_in_new_tab">లంకెను కొత్త ట్యాబులో తెరువాలా?</string>
   <string name="error_file_not_found">దోషం‌ :‌ మీరు ఎంపిక చేసిన ZIM దస్త్రం దొరకలేదు.</string>
   <string name="error_file_invalid">దోషం : మీరు ఎంపిక చేసిన దస్త్రం సరియైన ZIM దస్త్రం కాదు.</string>
@@ -33,7 +32,6 @@
   <string name="pref_language_chooser">భాషను ఎంచుకోండి</string>
   <string name="tts_lang_not_supported">ఈ పేజి నందు ఈ భాష సహకరించదు లేదా తగిన భాష ఇన్స్టాల్ చేయలేదు.బహుస ఈ పేజి ని చదువలేరు.</string>
   <string name="no_reader_application_installed">ఈ దస్త్రం చూపడానికి సహకరించే ఎప్ప్ ఇన్స్టాల్ చేయలేదు.</string>
-  <string name="menu_bookmarks_list">మడతపేజీలు</string>
   <string name="no_section_info">వ్యాస శీరిక్ష కనుగోనలేదు</string>
   <string name="request_storage">ZIM Filesలో పోందుపరచడానికి మేము మీ నిల్వ లను పోందుపరచాలి</string>
   <string name="bookmark_added">పుస్తకగుర్తులు జతచేయబడింది</string>

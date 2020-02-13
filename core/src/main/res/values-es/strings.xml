@@ -14,9 +14,8 @@
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Inicio</string>
   <string name="menu_settings">Configuración</string>
-  <string name="menu_search">Buscar artículo</string>
   <string name="menu_search_in_text">Buscar en la página</string>
-  <string name="menu_bookmarks">Marcadores</string>
+  <string name="bookmarks">Marcadores</string>
   <string name="menu_random_article">Artículo aleatorio</string>
   <string name="menu_full_screen">Pantalla completa</string>
   <string name="menu_exit_full_screen">Salir de pantalla completa</string>
@@ -27,10 +26,10 @@
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
   <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Buscando contenido descargable; espera…</string>
-  <string name="search_label">Buscar</string>
+  <string name="search">Buscar</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
   <string name="go_to_wifi_settings_label">Ir a config. de wifi</string>
-  <string name="go_to_settings_label">Ir a configuración</string>
+  <string name="go_to_settings">Ir a configuración</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
   <string name="error_file_invalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>
   <string name="error_article_url_not_found">Error: falló la carga del artículo (URL: %1$s).</string>
@@ -52,7 +51,6 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">No se admite el idioma de esta página, o no se instalaron los datos de idioma apropiados. Puede que el artículo no se pueda leer correctamente.</string>
   <string name="no_reader_application_installed">No se pudo encontrar una aplicación instalada para este tipo de archivo</string>
-  <string name="menu_bookmarks_list">Marcadores</string>
   <string name="no_section_info">No se encontraron cabeceras de contenido</string>
   <string name="request_storage">Para acceder a contenido sin conexión necesitamos tener acceso a tu almacenamiento</string>
   <string name="clear_recent_and_tabs_history_dialog">¿Seguro que quieres eliminar tu historial de búsqueda y restablecer todas las pestañas activas?</string>
@@ -173,7 +171,6 @@
   <string name="tag_text_only">Solo texto</string>
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
-  <string name="go_to_permissions">Ir a Configuración</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
 </resources>

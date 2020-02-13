@@ -7,9 +7,8 @@
   <string name="menu_help">Hilfe</string>
   <string name="menu_home">Start</string>
   <string name="menu_settings">Einstellungen</string>
-  <string name="menu_search">Artikel suchen</string>
   <string name="menu_search_in_text">In Seite suchen</string>
-  <string name="menu_bookmarks">Lesezeichen</string>
+  <string name="bookmarks">Lesezeichen</string>
   <string name="menu_random_article">Zufälliger Artikel</string>
   <string name="menu_full_screen">Vollbild</string>
   <string name="menu_exit_full_screen">Vollbild beenden</string>
@@ -19,7 +18,7 @@
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
   <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
   <string name="rescan_fs_warning">Scanne herunterladbaren Inhalt. Bitte warten …</string>
-  <string name="search_label">Suchen</string>
+  <string name="search">Suchen</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
@@ -42,7 +41,6 @@
   <string name="pref_credits_title">Danksagungen</string>
   <string name="tts_lang_not_supported">Die Sprache dieser Seite wird nicht unterstützt oder es sind keine passenden Sprachdaten installiert. Der Artikel kann eventuell nicht ordnungsgemäß gelesen werden.</string>
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
-  <string name="menu_bookmarks_list">Lesezeichen</string>
   <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf Offlineinhalt zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
   <string name="clear_recent_and_tabs_history_dialog">Sind Sie sicher, dass Sie Ihren Suchverlauf löschen und alle aktiven Reiter zurücksetzen möchten?</string>

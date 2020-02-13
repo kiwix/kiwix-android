@@ -12,9 +12,8 @@
   <string name="menu_help">Довідка</string>
   <string name="menu_home">Головна</string>
   <string name="menu_settings">Налаштування</string>
-  <string name="menu_search">Знайти статтю</string>
   <string name="menu_search_in_text">Знайти на сторінці</string>
-  <string name="menu_bookmarks">Закладки</string>
+  <string name="bookmarks">Закладки</string>
   <string name="menu_random_article">Випадкова стаття</string>
   <string name="menu_full_screen">На весь екран</string>
   <string name="menu_exit_full_screen">Вийти з повноекранного режиму</string>
@@ -24,7 +23,7 @@
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
   <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте…</string>
-  <string name="search_label">Пошук</string>
+  <string name="search">Пошук</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
@@ -47,7 +46,6 @@
   <string name="pref_credits_title">Автори</string>
   <string name="tts_lang_not_supported">Мова цієї сторінки не підтримується, або не було встановлено відповідні дані мови. Стаття може не читатись правильним чином.</string>
   <string name="no_reader_application_installed">Не вдалось знайти встановлений застосунок для файлу цього типу</string>
-  <string name="menu_bookmarks_list">Закладки</string>
   <string name="no_section_info">Не знайдено заголовків вмісту</string>
   <string name="request_storage">Для доступу до офлайнового контенту нам потрібен доступ до Вашого зберігання даних</string>
   <string name="clear_recent_and_tabs_history_dialog">Ви впевнені, що хочете вилучити свою історію пошуку і скинути всі активні вкладки?</string>

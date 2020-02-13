@@ -11,8 +11,7 @@
   <string name="menu_help">Помоћ</string>
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Подешавања</string>
-  <string name="menu_search">Претражите чланак</string>
-  <string name="menu_bookmarks">Обележивачи</string>
+  <string name="bookmarks">Обележивачи</string>
   <string name="menu_random_article">Случајан чланак</string>
   <string name="menu_full_screen">Цео екран</string>
   <string name="menu_exit_full_screen">Изађи из целог екрана</string>
@@ -36,7 +35,6 @@
   <string name="pref_language_chooser">Изаберите језик</string>
   <string name="tts_lang_not_supported">Језик на овој страници није подржан, или одговарајући језички подаци нису инсталирани. Чланак не може бити исправно прочитан.</string>
   <string name="no_reader_application_installed">Није могуће наћи инсталирану апликацију за ову врсту датотеке</string>
-  <string name="menu_bookmarks_list">Обележивачи</string>
   <string name="no_section_info">не могу да пронађем странице са садржајем</string>
   <string name="request_storage">Да приступите офлајн садржају потребан је приступ твојој меморији</string>
   <string name="clear_recent_and_tabs_history_dialog">Желите ли заиста да избришете своју историју претраге и ресетујете све активне картице?</string>

@@ -9,9 +9,8 @@
   <string name="menu_help">အ​ကူ​အ​ညီ​</string>
   <string name="menu_home">ပင်မ</string>
   <string name="menu_settings">အပြင်အဆင်များ</string>
-  <string name="menu_search">ဆောင်းပါး ရှာဖွေရန်</string>
   <string name="menu_search_in_text">စာမျက်နှာတွင် ရှာဖွေရန်</string>
-  <string name="menu_bookmarks">ဖတ်ရန်မှတ်ထားမှု</string>
+  <string name="bookmarks">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="menu_random_article">ကျပန်း ဆောင်းပါး</string>
   <string name="menu_full_screen">မျက်နှာဖွင့်အပြည့်</string>
   <string name="menu_exit_full_screen">မျက်နှာဖွင့်အပြည့်မှ ထွက်ရန်</string>
@@ -21,7 +20,7 @@
   <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
   <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix…/ တွင် သိမ်းပြီးဖြစ်သည်။</string>
   <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ …</string>
-  <string name="search_label">ရှာဖွေရန်</string>
+  <string name="search">ရှာဖွေရန်</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
   <string name="error_file_not_found">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
   <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
@@ -40,7 +39,6 @@
   <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
   <string name="pref_credits">ပံပိုးပေးသူများနှင့် လိုင်စင်များ</string>
   <string name="tts_lang_not_supported">ဤစာမျက်နှာ၏ ဘာသာစကားကို မထောက်ပံ့ထားပါ၊ သို့မဟုတ် သင့်လျော်သော ဘာသာစကားဒေတာကို သွင်းမထားပါ။ ဆောင်းပါးကို မှန်ကန်စွာ ဖတ်နိုင်မည်မဟုတ်ပါ။</string>
-  <string name="menu_bookmarks_list">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="delete_recent_search_item">ဤဟာကို ဖျက်မည်လား</string>
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
   <string name="all_history_cleared_toast">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>

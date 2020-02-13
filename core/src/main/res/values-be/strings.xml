@@ -3,9 +3,8 @@
   <string name="menu_help">Даведка</string>
   <string name="menu_home">Дадому</string>
   <string name="menu_settings">Настройкі</string>
-  <string name="menu_search">Пошук</string>
   <string name="menu_search_in_text">Знайсці ў тэксце</string>
-  <string name="menu_bookmarks">Закладкі</string>
+  <string name="bookmarks">Закладкі</string>
   <string name="menu_random_article">Выпадковы артыкул</string>
   <string name="menu_full_screen">Поўны экран</string>
   <string name="menu_exit_full_screen">Выйсці з рэжыму поўнага экрану</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">Узнікла памылка пры захаванні медыя-файла!</string>
   <string name="save_media_saved">Медыя захавана як %1$s у тэчцы вашых выяваў</string>
   <string name="rescan_fs_warning">Пошук сярод ZIM-файлаў. Калі ласка, пачакайце…</string>
-  <string name="search_label">Пошук</string>
+  <string name="search">Пошук</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новым вакенцы?</string>
   <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены.</string>
   <string name="error_file_invalid">Памылка: абраны файл не з\'яўляецца слушным ZIM-файлам.</string>
@@ -33,7 +32,6 @@
   <string name="pref_language_chooser">Абярыце мову</string>
   <string name="tts_lang_not_supported">Мова гэтай старонкі не падтрымліваецца або адпаведныя звесткі мовы не былі ўсталяваныя. Артыкул можа быць няправільна прачытаны.</string>
   <string name="no_reader_application_installed">Не ўдалося знайсці ўсталяваную праграму для гэтага тыпу файлаў</string>
-  <string name="menu_bookmarks_list">Закладкі</string>
   <string name="no_section_info">Ня знойдзеныя загалоўкі кантэнту</string>
   <string name="request_storage">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
   <string name="bookmark_added">Закладка дададзеная</string>

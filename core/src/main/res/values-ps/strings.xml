@@ -3,9 +3,8 @@
   <string name="menu_help">مرسته</string>
   <string name="menu_home">کور</string>
   <string name="menu_settings">غوره توبونه</string>
-  <string name="menu_search">پلټل</string>
   <string name="menu_search_in_text">په متن کې موندل</string>
-  <string name="menu_bookmarks">کتاب نخښې</string>
+  <string name="bookmarks">کتاب نخښې</string>
   <string name="menu_random_article">ناټاکلې ليکنه</string>
   <string name="menu_full_screen">ډکه پرده</string>
   <string name="menu_exit_full_screen">بشپړ پردې څخه وتل</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
   <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
   <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ…</string>
-  <string name="search_label">پلټل</string>
+  <string name="search">پلټل</string>
   <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
   <string name="error_file_not_found">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه.</string>
   <string name="error_file_invalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده.</string>
@@ -33,7 +32,6 @@
   <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
   <string name="tts_lang_not_supported">د همدې مخ د ژبې ملاتړ نه کېږي، يا کېدای شي د کاروړ ژب اومتوک نه وي نصب شوی. دا ليکنه به په سمه توگه د لوستلو وړ نه وي.</string>
   <string name="no_reader_application_installed">د دې ډول دوتنې لپاره يو نصب شوی کاريال و نه موندل شو</string>
-  <string name="menu_bookmarks_list">کتاب نخښې</string>
   <string name="no_section_info">هېڅ نيوليک سرليکونه نشته</string>
   <string name="request_storage">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
   <string name="undo">پريښودل</string>

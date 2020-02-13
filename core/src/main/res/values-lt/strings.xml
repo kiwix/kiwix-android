@@ -3,9 +3,8 @@
   <string name="menu_help">Pagalba</string>
   <string name="menu_home">Pradžia</string>
   <string name="menu_settings">Nustatymai</string>
-  <string name="menu_search">Paieška</string>
   <string name="menu_search_in_text">Rasti tekste</string>
-  <string name="menu_bookmarks">Žymės</string>
+  <string name="bookmarks">Žymės</string>
   <string name="menu_random_article">Atsitiktinis straipsnis</string>
   <string name="menu_full_screen">Visas ekranas</string>
   <string name="menu_exit_full_screen">Išeiti iš viso ekrano režimo</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">Įvyko klaida bandant išsaugoti duomenis!</string>
   <string name="save_media_saved">Duomenys išsaugoti jūsų Paveikslėlių aplanke kaip %1$s</string>
   <string name="rescan_fs_warning">Ieškoma ZIM failų, prašome palaukti…</string>
-  <string name="search_label">Paieška</string>
+  <string name="search">Paieška</string>
   <string name="open_in_new_tab">Atidaryti nuorodą naujame skirtuke?</string>
   <string name="error_file_not_found">Klaida: pasirinktas ZIM failas nerastas.</string>
   <string name="error_file_invalid">Klaida: pasirinktas failas nėra galiojantis ZIM failas.</string>
@@ -31,7 +30,6 @@
   <string name="pref_back_to_top_summary">Rodyti  puslapio pabaigoje mygtuką sugrįžti į viršų</string>
   <string name="pref_language_title">Kalba</string>
   <string name="pref_language_chooser">Pasirinkite kalbą</string>
-  <string name="menu_bookmarks_list">Žymės</string>
   <string name="no_section_info">Nerasta jokių turinio puslapių.</string>
   <string name="bookmark_added">Pridėtos žymos</string>
   <string name="rate_dialog_title">Įvertinkite mus</string>

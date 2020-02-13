@@ -10,9 +10,8 @@
   <string name="menu_help">یارمەتی</string>
   <string name="menu_home">ماڵەوە</string>
   <string name="menu_settings">ڕێکخستنەکان</string>
-  <string name="menu_search">گەڕانی وتار</string>
   <string name="menu_search_in_text">دۆزینەوە لەنێو پەڕە</string>
-  <string name="menu_bookmarks">نیشانکراوەکان</string>
+  <string name="bookmarks">نیشانکراوەکان</string>
   <string name="menu_random_article">وتاری هەڕەمەکی</string>
   <string name="menu_full_screen">پڕ بە شاشە</string>
   <string name="menu_exit_full_screen">چونە دەرەوە لە پڕ بەشاشە</string>
@@ -22,10 +21,10 @@
   <string name="save_media">میدیا پاشەکەوت بکە</string>
   <string name="save_media_error">ھەڵەیەک ڕوویدا لەکاتی ھەوڵدان لە خەزێنەکردنی میدیاکە!</string>
   <string name="rescan_fs_warning">پشکنین بۆ ناوەڕۆکی داگیراو، تکایە چاوەروان بە…</string>
-  <string name="search_label">گەڕان</string>
+  <string name="search">گەڕان</string>
   <string name="open_in_new_tab">بەستەرەکە لە تابێکی نوێدا بکرێتەوە؟</string>
   <string name="go_to_wifi_settings_label">بڕۆ بۆ ڕێکخستنەکانی وای-فای</string>
-  <string name="go_to_settings_label">بڕۆ بۆ ڕێکخستنەکان</string>
+  <string name="go_to_settings">بڕۆ بۆ ڕێکخستنەکان</string>
   <string name="pref_display_title">پیشاندان</string>
   <string name="pref_zoom_sub_title">گەورەکردن</string>
   <string name="pref_zoom_dialog">ئاستی گەورەکردن</string>
@@ -37,7 +36,6 @@
   <string name="pref_back_to_top">گەڕانەوە بۆ سەرەوە</string>
   <string name="pref_language_title">زمان</string>
   <string name="pref_language_chooser">ھەڵبژاردنی زمان</string>
-  <string name="menu_bookmarks_list">نیشانکراوەکان</string>
   <string name="delete_recent_search_item">بسڕدرێتەوە؟</string>
   <string name="pref_clear_all_history_title">سڕینەوەی مێژوو</string>
   <string name="all_history_cleared_toast">ھەموو مێژووەکە سڕدرایەوە</string>
@@ -109,5 +107,4 @@
   <string name="tag_pic">وێنە</string>
   <string name="tag_vid">ڤیدیۆ</string>
   <string name="tag_text_only">تەنیا دەق</string>
-  <string name="go_to_permissions">بڕۆ بۆ ڕێکخستنەکان</string>
 </resources>

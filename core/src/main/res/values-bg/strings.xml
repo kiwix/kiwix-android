@@ -13,9 +13,8 @@
   <string name="menu_help">Помощ</string>
   <string name="menu_home">Начало</string>
   <string name="menu_settings">Настройки</string>
-  <string name="menu_search">Търси публикация</string>
   <string name="menu_search_in_text">Търси в страницата</string>
-  <string name="menu_bookmarks">Отметки</string>
+  <string name="bookmarks">Отметки</string>
   <string name="menu_random_article">Случайна статия</string>
   <string name="menu_full_screen">Цял екран</string>
   <string name="menu_exit_full_screen">Изход от цял екран</string>
@@ -25,7 +24,7 @@
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
   <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Сканиране на файлове за изтегляне, моля, изчакайте…</string>
-  <string name="search_label">Търсене</string>
+  <string name="search">Търсене</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
   <string name="error_file_not_found">Грешка: Избраният ZIM файл не е намерен.</string>
   <string name="error_file_invalid">Грешка: Избраният файл не е валиден ZIM файл.</string>
@@ -48,7 +47,6 @@
   <string name="pref_credits_title">За участниците в проекта</string>
   <string name="tts_lang_not_supported">Езикът на тази страница не се поддържа, или не е инсталиран подходящ език за данни. Статията не може да бъде разчетена правилно.</string>
   <string name="no_reader_application_installed">Не бе намерено инсталирано приложение за този тип файлове</string>
-  <string name="menu_bookmarks_list">Отметки</string>
   <string name="no_section_info">Не са открити заглавки на съдържанието</string>
   <string name="request_storage">За достъп до офлайн съдържание, ни е нужен достъп до файловото Ви хранилище</string>
   <string name="clear_recent_and_tabs_history_dialog">Сигурни ли сте, че желаете да изтриете историята на вашите търсения и да рестартирате всички активни табове?</string>

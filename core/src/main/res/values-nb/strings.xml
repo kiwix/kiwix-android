@@ -3,9 +3,8 @@
   <string name="menu_help">Hjelp</string>
   <string name="menu_home">Hjem</string>
   <string name="menu_settings">Innstillinger</string>
-  <string name="menu_search">Søk</string>
   <string name="menu_search_in_text">Finn i tekst</string>
-  <string name="menu_bookmarks">Bokmerker</string>
+  <string name="bookmarks">Bokmerker</string>
   <string name="menu_random_article">Tilfeldig artikkel</string>
   <string name="menu_full_screen">Fullskjerm</string>
   <string name="menu_exit_full_screen">Avslutt fullskjerm</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
   <string name="save_media_saved">Lagret media som %1$s i din bildemappe.</string>
   <string name="rescan_fs_warning">Søker etter ZIM-filer, vennligst vent…</string>
-  <string name="search_label">Søk</string>
+  <string name="search">Søk</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet</string>
   <string name="error_file_invalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil</string>
@@ -33,7 +32,6 @@
   <string name="pref_language_chooser">Velg et språk</string>
   <string name="tts_lang_not_supported">Dette språket er ikke tilgjengelig for siden eller så er ikke dette språket installert. Denne artikkelen kan kanskje ikke bli riktig lest av.</string>
   <string name="no_reader_application_installed">Kunne ikke finne en installert app for denne typen fil</string>
-  <string name="menu_bookmarks_list">Bokmerker</string>
   <string name="no_section_info">Ingen innholdstitteler funnet.</string>
   <string name="request_storage">For å få åpnet ZIM-filer trenger vi tilgang til lagringsplassen din</string>
   <string name="bookmark_added">Bokmerke lagt til</string>

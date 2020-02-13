@@ -9,9 +9,8 @@
   <string name="menu_help">Alîkarî</string>
   <string name="menu_home">Mal</string>
   <string name="menu_settings">Mîheng</string>
-  <string name="menu_search">Gotar bigere</string>
   <string name="menu_search_in_text">Di nav rûpelê de bibîne</string>
-  <string name="menu_bookmarks">Bijare</string>
+  <string name="bookmarks">Bijare</string>
   <string name="menu_random_article">Gotara ketober</string>
   <string name="menu_full_screen">Dîmendera tije</string>
   <string name="menu_exit_full_screen">Ji dîmendera tije derkeve</string>
@@ -21,7 +20,7 @@
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
   <string name="save_media_saved">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
   <string name="rescan_fs_warning">Li naverokekî ya daxistinê tê gerîn, ji kerema xwe bisekine…</string>
-  <string name="search_label">Lê bigere</string>
+  <string name="search">Lê bigere</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
   <string name="error_file_not_found">Çewtîː Peldanka ZIM\'ê ya bijartî nehate dîtin.</string>
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
@@ -44,7 +43,6 @@
   <string name="pref_credits_title">Kedyarên me</string>
   <string name="tts_lang_not_supported">Zimanê vê rûpelê nayê piştgirîkirin, an jî daneya zimanê naehatiye sazkirin. Dibe ku ev gotar rast nê xwendin.</string>
   <string name="no_reader_application_installed">Ji bo cureya vê peldankê sepanekî sazkirî nehat dîtin</string>
-  <string name="menu_bookmarks_list">Bijare</string>
   <string name="no_section_info">Sernavê Naverok Nehat Dîtin</string>
   <string name="request_storage">Ji bo ku em têkevin naveroka offline divê em têkevin depoya we</string>
   <string name="clear_recent_and_tabs_history_dialog">Tu ji daxwazên xwe yên jêbirina raboriya lêgerînê û sifirkirina hemû paceyên çalak bawer î?</string>

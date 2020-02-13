@@ -3,9 +3,8 @@
   <string name="menu_help">Pomocník</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavenia</string>
-  <string name="menu_search">Hľadať</string>
   <string name="menu_search_in_text">Nájsť v texte</string>
-  <string name="menu_bookmarks">Záložky</string>
+  <string name="bookmarks">Záložky</string>
   <string name="menu_random_article">Náhodný článok</string>
   <string name="menu_full_screen">Celá obrazovka</string>
   <string name="menu_exit_full_screen">Ukončiť režim celej obrazovky</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">Pri ukladaní došlo k chybe!</string>
   <string name="save_media_saved">Médiá uložené ako %1$s v priečinku Obrázky</string>
   <string name="rescan_fs_warning">Vyhľadávanie ZIM súborov, čakajte prosím…</string>
-  <string name="search_label">Hľadať</string>
+  <string name="search">Hľadať</string>
   <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
   <string name="error_file_not_found">Chyba: Vybraný súbor ZIM sa nenašiel.</string>
   <string name="error_file_invalid">Chyba: Vybraný súbor nie je platný ZIM súbor.</string>
@@ -33,7 +32,6 @@
   <string name="pref_language_chooser">Zvoliť jazyk</string>
   <string name="tts_lang_not_supported">Jazyk tejto stránky buď nie je podporovaný, alebo neboli nainštalované príslušné jazykové balíčky. Článok nemusí byť správne prečítaný.</string>
   <string name="no_reader_application_installed">Nebola nájdená nainštalovaná aplikácia pre tento typ súboru</string>
-  <string name="menu_bookmarks_list">Záložky</string>
   <string name="no_section_info">Neboly nájdené hlavičky obsahu (content headers)</string>
   <string name="request_storage">Na prístup k súborom typu ZIM potrebujeme prístup k vášmu úložisku</string>
   <string name="bookmark_added">Záložka bola pridaná</string>

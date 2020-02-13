@@ -3,9 +3,8 @@
   <string name="menu_help">Bantuan</string>
   <string name="menu_home">Laman utama</string>
   <string name="menu_settings">Keutamaan</string>
-  <string name="menu_search">Cari</string>
   <string name="menu_search_in_text">Cari dalam teks</string>
-  <string name="menu_bookmarks">Kegemaran</string>
+  <string name="bookmarks">Kegemaran</string>
   <string name="menu_random_article">Rencana rawak</string>
   <string name="menu_full_screen">Skrin penuh</string>
   <string name="menu_exit_full_screen">Keluar dari skrin penuh</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">Ralat berlaku ketika cubaan menyimpan media!</string>
   <string name="save_media_saved">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
   <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu…</string>
-  <string name="search_label">Cari</string>
+  <string name="search">Cari</string>
   <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
   <string name="error_file_not_found">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
   <string name="error_file_invalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>
@@ -33,7 +32,6 @@
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="tts_lang_not_supported">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
   <string name="no_reader_application_installed">Tidak terjumpa aplikasi yang dipasang untuk jenis fail ini</string>
-  <string name="menu_bookmarks_list">Kegemaran</string>
   <string name="no_section_info">Tiada judul kandungan ditemui</string>
   <string name="request_storage">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>
   <string name="library">Perpustakaan</string>

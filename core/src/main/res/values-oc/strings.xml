@@ -7,9 +7,8 @@
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Acuèlh</string>
   <string name="menu_settings">Opcions</string>
-  <string name="menu_search">Recercar un article</string>
   <string name="menu_search_in_text">Trobar dins la pagina</string>
-  <string name="menu_bookmarks">Favorits</string>
+  <string name="bookmarks">Favorits</string>
   <string name="menu_random_article">Article a l\'azard</string>
   <string name="menu_full_screen">Ecran complet</string>
   <string name="menu_exit_full_screen">Quitar l\'ecran complet</string>
@@ -19,7 +18,7 @@
   <string name="save_media_error">Una error s\'es produita al moment de la temptativa d\'enregistrar lo mèdia !</string>
   <string name="save_media_saved" fuzzy="true">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
   <string name="rescan_fs_warning">Analisi del contengut telecargable en cors, pacientatz…</string>
-  <string name="search_label">Recercar</string>
+  <string name="search">Recercar</string>
   <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
   <string name="error_file_not_found">Error : Lo fichièr ZIM seleccionat es introbable.</string>
   <string name="error_file_invalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid.</string>
@@ -40,7 +39,6 @@
   <string name="pref_credits_title">Mercejaments</string>
   <string name="tts_lang_not_supported">La lenga d\'aquesta pagina es pas presa en carga, o las donadas apropriadas de la lenga son pas installadas. L’article poirà pas èsser legit corrèctament.</string>
   <string name="no_reader_application_installed">Impossible de trobar una aplicacion d\'installada per aqueste tipe de fichièr</string>
-  <string name="menu_bookmarks_list">Marcapaginas</string>
   <string name="no_section_info">Cap d\'entèsta de contengut pas trobada</string>
   <string name="request_storage">Per accedir als fichièrs ZIM, avèm besonh d\'un accès a vòstre espaci d\'emmagazinatge</string>
   <string name="delete_recent_search_item">Suprimir aqueste element ?</string>

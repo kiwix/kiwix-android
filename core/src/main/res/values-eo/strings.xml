@@ -12,9 +12,8 @@
   <string name="menu_help">Helpo</string>
   <string name="menu_home">Hejmo</string>
   <string name="menu_settings">Agordoj</string>
-  <string name="menu_search">Serĉi artikolon</string>
   <string name="menu_search_in_text">Trovi en paĝo</string>
-  <string name="menu_bookmarks">Legosignoj</string>
+  <string name="bookmarks">Legosignoj</string>
   <string name="menu_random_article">Hazarda artikolo</string>
   <string name="menu_full_screen">Plenekrane</string>
   <string name="menu_exit_full_screen">Eliri plenekranan reĝimon</string>
@@ -25,7 +24,7 @@
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
   <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Daŭras serĉado de elŝutebla enhavo, bonvolu atendi…</string>
-  <string name="search_label">Serĉi</string>
+  <string name="search">Serĉi</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
   <string name="error_file_not_found">Eraro: Ne eblis trovi la elektitan ZIM-dosieron.</string>
   <string name="error_file_invalid">Eraro: La elektita dosiero ne estas valida ZIM-dosiero.</string>
@@ -48,7 +47,6 @@
   <string name="pref_credits_title">Agnoskoj</string>
   <string name="tts_lang_not_supported">La lingvo de ĉi tiu paĝo ne estas subtenata, aŭ la lingva dateno ne estis instalita. Ĉi tiu artikolo ne povas esti ĝuste legata.</string>
   <string name="no_reader_application_installed">Ne povis trovi instalitan aplikaĵon por ĉi tiu dosiertipo</string>
-  <string name="menu_bookmarks_list">Legosignoj</string>
   <string name="no_section_info">Ne Trovis Enhavajn Ĉapojn</string>
   <string name="request_storage">Por atingi konservitan enhavon ni bezonas atingon al via konservejo</string>
   <string name="clear_recent_and_tabs_history_dialog">Ĉu vi certas ke vi volas forviŝi vian serĉadan historion kaj restarigi ĉiujn aktivajn langetojn?</string>

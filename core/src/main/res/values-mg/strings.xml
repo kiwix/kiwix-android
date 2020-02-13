@@ -3,9 +3,8 @@
   <string name="menu_help">Fanoroana</string>
   <string name="menu_home">Fandraisana</string>
   <string name="menu_settings">Safidy</string>
-  <string name="menu_search">Hikaroka</string>
   <string name="menu_search_in_text">Hitady anaty lahatsoratra</string>
-  <string name="menu_bookmarks">Marika pejy</string>
+  <string name="bookmarks">Marika pejy</string>
   <string name="menu_random_article">Takelaka kisendra</string>
   <string name="menu_full_screen">Fisehoana mameno ekrà</string>
   <string name="menu_exit_full_screen">Hiala amin\'ny fisehoana mameno fikandra</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">Nisy hadisoana nitranga tam-pitahirizana ny haino aman-jery!</string>
   <string name="save_media_saved">Haino aman-jery voatahiry ao amin\'ny %1$s ao amin\'ny petra-tsarinao</string>
   <string name="rescan_fs_warning">Am-pandinihana ny raktra ZIM, miandrasa azafady....</string>
-  <string name="search_label">Hikaroka</string>
+  <string name="search">Hikaroka</string>
   <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
   <string name="error_file_not_found">Hadisoana: Tsy nahita ilay rakitra ZIM voafidinao.</string>
   <string name="error_file_invalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao.</string>
@@ -33,7 +32,6 @@
   <string name="pref_language_chooser">Hifidy tenim-pirenena</string>
   <string name="tts_lang_not_supported">Tsy zaka ny fiteny ampiasaina ato amin\'ity pejy ity, na tsy napetraka ny angona mety aminy. Mety tsy ho voavaky tsara ny lahatsoratra.</string>
   <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an\'ity karazan-drakitra ity</string>
-  <string name="menu_bookmarks_list">Marika pejy</string>
   <string name="no_section_info">Tsy misy loham-botoatiny hita</string>
   <string name="request_storage">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>
   <string name="bookmark_added">Mari-boky nampiana</string>

@@ -3,9 +3,8 @@
   <string name="menu_help">Adjuta</string>
   <string name="menu_home">Initio</string>
   <string name="menu_settings">Preferentias</string>
-  <string name="menu_search">Cercar</string>
   <string name="menu_search_in_text">Cercar in texto</string>
-  <string name="menu_bookmarks">Marcapaginas</string>
+  <string name="bookmarks">Marcapaginas</string>
   <string name="menu_random_article">Articulo aleatori</string>
   <string name="menu_full_screen">Schermo complete</string>
   <string name="menu_exit_full_screen">Exir del schermo complete</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
   <string name="save_media_saved">File multimedial salveguardate como %1$s in tu dossier de imagines</string>
   <string name="rescan_fs_warning">Cerca files ZIM, per favor attende…</string>
-  <string name="search_label">Cercar</string>
+  <string name="search">Cercar</string>
   <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
   <string name="error_file_not_found">Error: Le file ZIM seligite non poteva esser trovate.</string>
   <string name="error_file_invalid">Error: Le file seligite non es un file ZIM valide.</string>
@@ -29,7 +28,6 @@
   <string name="pref_back_to_top_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
   <string name="pref_language_title">Lingua</string>
   <string name="pref_language_chooser">Selige un lingua</string>
-  <string name="menu_bookmarks_list">Marcapaginas</string>
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
   <string name="library">Bibliotheca</string>
   <string name="do_not_ask_anymore">Non demandar plus</string>

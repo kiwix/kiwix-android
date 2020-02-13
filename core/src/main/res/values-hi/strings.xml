@@ -14,9 +14,8 @@
   <string name="menu_help">सहायता</string>
   <string name="menu_home">घर</string>
   <string name="menu_settings">पसंद</string>
-  <string name="menu_search">लेख खोजें</string>
   <string name="menu_search_in_text">पृष्ठ में ढूंढें</string>
-  <string name="menu_bookmarks">बूकमार्क</string>
+  <string name="bookmarks">बूकमार्क</string>
   <string name="menu_random_article">कोई भी लेख</string>
   <string name="menu_full_screen">पूरा स्क्रीन</string>
   <string name="menu_exit_full_screen">पूरे स्क्रीन से बाहर निकलें</string>
@@ -26,7 +25,7 @@
   <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
   <string name="save_media_saved">सहेजे गये मीडिया को %s के रूप में Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">डाउनलोड करने योग्य सामग्री के लिए खोजबीन जारी, कृपया प्रतीक्षा करें …</string>
-  <string name="search_label">खोजें</string>
+  <string name="search">खोजें</string>
   <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
   <string name="error_file_not_found">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी।</string>
   <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है।</string>
@@ -49,7 +48,6 @@
   <string name="pref_credits_title">श्रेय</string>
   <string name="tts_lang_not_supported">इस पृष्ठ की भाषा समर्थित नहीं है, या उपयुक्त भाषा डेटा इंस्टॉल नहीं किया गया था।  \nलेख ठीक से नहीं पढ़ा जा सकता है।</string>
   <string name="no_reader_application_installed">इस प्रकार की फ़ाइल के लिए एक इंस्टॉल किया गया एप्लिकेशन नहीं मिला</string>
-  <string name="menu_bookmarks_list">बूकमार्क</string>
   <string name="no_section_info">कोई सामग्री शीर्षलेख नहीं मिला</string>
   <string name="request_storage">ऑफ़लाइन सामग्री का उपयोग करने के लिए हमें आपके संग्रहण में पहुंच की आवश्यकता है</string>
   <string name="clear_recent_and_tabs_history_dialog">क्या आप वाकई अपना खोज इतिहास हटाना चाहते हैं और सभी सक्रिय टैब फिर से कायम करना चाहते हैं?</string>

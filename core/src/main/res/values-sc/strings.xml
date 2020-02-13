@@ -8,9 +8,8 @@
   <string name="menu_help">Agiudu</string>
   <string name="menu_home">Pàgina printzipale</string>
   <string name="menu_settings">Impostatziones</string>
-  <string name="menu_search">Chirca artìculu</string>
   <string name="menu_search_in_text">Agata in sa pàgina</string>
-  <string name="menu_bookmarks">Sinnalibros</string>
+  <string name="bookmarks">Sinnalibros</string>
   <string name="menu_random_article">Artìculu a sa tzurpa</string>
   <string name="menu_full_screen">Ischermu intreu</string>
   <string name="menu_exit_full_screen">Essi dae s\'ichermu intreu</string>
@@ -22,12 +21,12 @@
   <string name="save_media_error">B\'est istadu un\'errore durante su tentativu de sarvamentu de su mèdia!</string>
   <string name="save_media_saved">Mèdia sarvadu comente %s in Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Iscansende pro documentos ZIM, pro praghere iseta…</string>
-  <string name="search_label">Chirca</string>
+  <string name="search">Chirca</string>
   <string name="open_in_new_tab">Abèrrere su ligàmene in un\'ischeda noa?</string>
   <string name="hotspot_failed_title">Aviamentu de s\'hotspot fallidu</string>
   <string name="hotspot_failed_message">Paret chi s\'hotspot tuo siat allutu. Pro praghere disabìlita s\'hotspot wifi tuo pro sighire.</string>
   <string name="go_to_wifi_settings_label">Bae a sas impostatziones de su WIFI</string>
-  <string name="go_to_settings_label">Bae a sas impostatziones</string>
+  <string name="go_to_settings">Bae a sas impostatziones</string>
   <string name="error_file_not_found">Errore: su documentu ZIM ischertadu no est istadu agatadu.</string>
   <string name="error_file_invalid">Errore: su documentu ischertadu no est unu documentu ZIM vàlidu.</string>
   <string name="error_article_url_not_found">Errore: carrigamentu de s\'artìculu (Url: %1$s) non resèssidu.</string>
@@ -49,7 +48,6 @@
   <string name="pref_credits_title">Crèditos</string>
   <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada, o sos datos pro sa limba adeguada non sunt installados. S\'artìculu diat pòdere èssere letu in manera non adeguada.</string>
   <string name="no_reader_application_installed">Impossìbile agatare un\'aplicatzione installada pro custa casta de documentu</string>
-  <string name="menu_bookmarks_list">Sinnalibros</string>
   <string name="no_section_info">Peruna intestatzione de cuntenutu agatada</string>
   <string name="request_storage">Pro atzèdere a su documentu ZIM tenimus bisòngiu de pòdere atzèdere a sa memòria tua</string>
   <string name="clear_recent_and_tabs_history_dialog">Seguru ses de bòlere iscantzellare sa cronologia de sas chircas e ripristinare totu sas ischedas ativas?</string>
@@ -186,7 +184,6 @@
   <string name="tag_short_text">Testu curtzu</string>
   <string name="storage_permission_denied">Permissu de archiviatzione negadu</string>
   <string name="grant_read_storage_permission">Cust\'aplicatzione tenet bisòngiu de sa possibilidade de pòdere lèghere sa memòria pro funtzionare. Pro praghere dae·li su permissu in sas impostatziones.</string>
-  <string name="go_to_permissions">Bae a sas impostatziones</string>
   <string name="no_results">Perunu resurtadu</string>
   <string name="no_bookmarks">Perunu sinnalibru!</string>
   <string name="no_history">Peruna cronologia</string>

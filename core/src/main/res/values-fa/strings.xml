@@ -11,9 +11,8 @@
   <string name="menu_help">راهنما</string>
   <string name="menu_home">خانه</string>
   <string name="menu_settings">تنظیمات</string>
-  <string name="menu_search">جستجوی نوشتار</string>
   <string name="menu_search_in_text">جستجو در صفحه</string>
-  <string name="menu_bookmarks">نشانک‌ها</string>
+  <string name="bookmarks">نشانک‌ها</string>
   <string name="menu_random_article">مقالهٔ تصادفی</string>
   <string name="menu_full_screen">تمام‌صفحه</string>
   <string name="menu_exit_full_screen">خروج از تمام‌صفحه</string>
@@ -25,10 +24,10 @@
   <string name="save_media_error">خطایی در حین ذخیره‌سازی این رسانه رخ داد!</string>
   <string name="save_media_saved">رسانه با نام %s در Android/media/org.kiwix…/ ذخیره شد</string>
   <string name="rescan_fs_warning">چستچو برای محتوای قابل بارگیری، لطفا صبر کنید…</string>
-  <string name="search_label">جستجو</string>
+  <string name="search">جستجو</string>
   <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
   <string name="go_to_wifi_settings_label">برو به تنظیمات وای‌فای</string>
-  <string name="go_to_settings_label">برو به تنظیمات</string>
+  <string name="go_to_settings">برو به تنظیمات</string>
   <string name="error_file_not_found">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد.</string>
   <string name="error_file_invalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>
   <string name="error_article_url_not_found">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
@@ -44,7 +43,6 @@
   <string name="pref_back_to_top_summary">نمایش دکمه در پایان صفحه برای انتقال به بالا</string>
   <string name="pref_language_title">زبان</string>
   <string name="pref_language_chooser">انتخاب زبان</string>
-  <string name="menu_bookmarks_list">نشانک‌ها</string>
   <string name="clear_recent_and_tabs_history_dialog">آیا مطمئن هستید که می‌خواهید تمامی تاریخچه جستجو را پاک کنید و تمام زبانه‌های فعال را ریست کنید؟</string>
   <string name="delete_recent_search_item">این مورد حذف شود؟</string>
   <string name="pref_clear_all_history_title">پاک کردن تاریخچه</string>

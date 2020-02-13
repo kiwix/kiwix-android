@@ -5,7 +5,7 @@
   <item
     android:id="@+id/menu_search"
     android:icon="@drawable/action_search"
-    android:title="@string/menu_search"
+    android:title="@string/search"
     android:visible="false"
     app:showAsAction="always"
     tools:visible="true" />
@@ -18,7 +18,7 @@
 
   <item
     android:id="@+id/menu_bookmarks_list"
-    android:title="@string/menu_bookmarks_list"
+    android:title="@string/bookmarks"
     app:showAsAction="never" />
 
   <item

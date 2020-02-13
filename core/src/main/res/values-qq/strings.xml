@@ -12,10 +12,10 @@
   <string name="menu_help">{{Identical|Help}}</string>
   <string name="menu_home">{{Identical|Home}}</string>
   <string name="menu_settings">{{Identical|Settings}}</string>
-  <string name="menu_bookmarks">{{Identical|Bookmark}}</string>
+  <string name="bookmarks">{{Identical|Bookmark}}</string>
   <string name="menu_random_article">{{Identical|Random article}}</string>
   <string name="menu_full_screen">{{Identical|Full screen}}</string>
-  <string name="search_label">{{Identical|Search}}</string>
+  <string name="search">{{Identical|Search}}</string>
   <string name="pref_display_title">{{Identical|Display}}</string>
   <string name="pref_zoom_sub_title">{{Identical|Zoom}}</string>
   <string name="pref_info_title">{{Identical|Information}}</string>
@@ -23,7 +23,6 @@
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
-  <string name="menu_bookmarks_list">{{Identical|Bookmark}}</string>
   <string name="delete">{{Identical|Delete}}</string>
   <string name="undo">{{Identical|Undo}}</string>
   <string name="rate_dialog_positive">{{Identical|Rate}}</string>

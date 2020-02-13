@@ -12,9 +12,8 @@
   <string name="menu_help">說明</string>
   <string name="menu_home">首頁</string>
   <string name="menu_settings">設定</string>
-  <string name="menu_search">搜尋條目</string>
   <string name="menu_search_in_text">於頁面中尋找</string>
-  <string name="menu_bookmarks">書籤</string>
+  <string name="bookmarks">書籤</string>
   <string name="menu_random_article">隨機條目</string>
   <string name="menu_full_screen">全螢幕</string>
   <string name="menu_exit_full_screen">結束全螢幕</string>
@@ -26,12 +25,12 @@
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>
   <string name="save_media_saved">已將媒體以 %1$s 儲存到 Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">正在掃描可下載內容，請稍候…</string>
-  <string name="search_label">搜尋</string>
+  <string name="search">搜尋</string>
   <string name="open_in_new_tab">在新分頁打開連結？</string>
   <string name="hotspot_failed_title">開啟熱點失敗</string>
   <string name="hotspot_failed_message">看起來似乎是您的熱點已開啟，請停用您的 WiFi 熱點來繼續。</string>
   <string name="go_to_wifi_settings_label">前往 WIFI 設定</string>
-  <string name="go_to_settings_label">前往設定</string>
+  <string name="go_to_settings">前往設定</string>
   <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。</string>
   <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。</string>
   <string name="error_article_url_not_found">錯誤：載入條目(網址：%1$s)失敗。</string>
@@ -53,7 +52,6 @@
   <string name="pref_credits_title">參與名單</string>
   <string name="tts_lang_not_supported">本頁面不支援這個語言，或是未安裝合適的語言數據。條目可能無法正確讀取。</string>
   <string name="no_reader_application_installed">找不到開啟這類型檔案的應用程式</string>
-  <string name="menu_bookmarks_list">書籤</string>
   <string name="no_section_info">未找到內容標題</string>
   <string name="request_storage">我們需要進入你的儲存裝置以存取離線內容。</string>
   <string name="clear_recent_and_tabs_history_dialog">您確定要刪除您的搜尋歷史記錄，並且重新設定所有啟用的分頁嗎？</string>
@@ -192,7 +190,6 @@
   <string name="tag_short_text">簡短文字</string>
   <string name="storage_permission_denied">儲存裝置權限被拒絕</string>
   <string name="grant_read_storage_permission">此應用程式需要可讀取儲存裝置的功能。請在您的設定裡授予權限</string>
-  <string name="go_to_permissions">前往設定</string>
   <string name="no_results">沒有結果</string>
   <string name="no_bookmarks">沒有書籤！</string>
   <string name="no_history">沒有歷史</string>

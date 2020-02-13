@@ -9,9 +9,8 @@
   <string name="menu_help">Βοήθεια</string>
   <string name="menu_home">Αρχική</string>
   <string name="menu_settings">Ρυθμίσεις</string>
-  <string name="menu_search">Αναζήτηση άρθρου</string>
   <string name="menu_search_in_text">Βρείτε στην σελίδα</string>
-  <string name="menu_bookmarks">Σελιδοδείκτες</string>
+  <string name="bookmarks">Σελιδοδείκτες</string>
   <string name="menu_random_article">Τυχαίο άρθρο</string>
   <string name="menu_full_screen">Πλήρης οθόνη</string>
   <string name="menu_exit_full_screen">Έξοδος από πλήρη οθόνη</string>
@@ -21,7 +20,7 @@
   <string name="save_media_error">Προέκυψε σφάλμα κατά την προσπάθεια αποθήκευσης του αρχείου πολυμέσων!</string>
   <string name="save_media_saved">Αποθήκευση αρχείων πολυμέσων ως το %1$s  στο Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Σάρωση για εγκαταστάσιμο περιεχόμενο, παρακαλώ περιμένετε…</string>
-  <string name="search_label">Αναζήτηση</string>
+  <string name="search">Αναζήτηση</string>
   <string name="open_in_new_tab">Άνοιγμα συνδέσμου σε νέα καρτέλα;</string>
   <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί.</string>
   <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
@@ -41,7 +40,6 @@
   <string name="pref_credits">Συντάκτες και Άδειες</string>
   <string name="pref_credits_title">Συντελεστές</string>
   <string name="tts_lang_not_supported">Η γλώσσα αυτής της σελίδας δεν υποστηρίζεται, ή κατάλληλα γλωσσικά δεδομένα δεν εγκαταστάθηκαν. Το άρθρο μπορεί να μην αναγνωστεί σωστά.</string>
-  <string name="menu_bookmarks_list">Σελιδοδείκτες</string>
   <string name="no_section_info">Δεν βρέθηκαν επικεφαλίδες περιεχομένου</string>
   <string name="clear_recent_and_tabs_history_dialog">Είστε σίγουροι ότι θέλετε να διαγράψετε το ιστορικό αναζητήσεων σας και να επαναφέρετε όλες τις ενεργές καρτέλες;</string>
   <string name="delete_recent_search_item">Διαγραφή αυτού του αντικειμένου;</string>

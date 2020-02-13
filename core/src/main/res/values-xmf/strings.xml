@@ -7,9 +7,8 @@
   <string name="menu_help">მოხვარა</string>
   <string name="menu_home">დუდხასჷლა</string>
   <string name="menu_settings">პარამეტრეფი</string>
-  <string name="menu_search">სტატიაშ გორუა</string>
   <string name="menu_search_in_text">ხასჷლას გორუა</string>
-  <string name="menu_bookmarks">მიკაწონებელეფი</string>
+  <string name="bookmarks">მიკაწონებელეფი</string>
   <string name="menu_random_article">შემთხვევითი სტატია</string>
   <string name="menu_full_screen">სრულ ეკრანზე</string>
   <string name="menu_exit_full_screen">მთლიანი ეკრანიდან გამოსვლა</string>
@@ -20,10 +19,10 @@
   <string name="save_media_error">მედიაფაილიშ ჩუალას ჩილათაქ მოხვადჷ!</string>
   <string name="save_media_saved">მედიაფაილი ჩუალირი რე მუჭოთ %s, ქძ. Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">გიმახარგალი დინოხიშ გორუა, ქორთხინთ ქუჯინით…</string>
-  <string name="search_label">გორუა</string>
+  <string name="search">გორუა</string>
   <string name="open_in_new_tab">გონბწყათო რცხუ ახალი აშნაკიდას?</string>
   <string name="go_to_wifi_settings_label">WIFI პარამეტრეფშა გინულა</string>
-  <string name="go_to_settings_label">პარამეტრეფშა გინულა</string>
+  <string name="go_to_settings">პარამეტრეფშა გინულა</string>
   <string name="error_file_not_found">ჩილათა: გიშაგორილი ZIM-ფაილქ ვეგორუ.</string>
   <string name="error_file_invalid">ჩილათა: გიშაგორილი ფაილი ვა რე თინი ZIM-ფაილი.</string>
   <string name="error_article_url_not_found">ჩილათა: სტატიაშ (Url: %1$s) გიმოხარგუაქ ვემიხუჯინუ.</string>
@@ -45,7 +44,6 @@
   <string name="pref_credits_title">ავტორეფი</string>
   <string name="tts_lang_not_supported">თე ხასჷლაშ ნინა ვა რე აზარელი ვარ-და ნინაშ ომანგური მუნაჩემეფი დიო ვარე გერინაფილი. თე სტატიაშ თინას კითხირი უშულებუ რე.</string>
   <string name="no_reader_application_installed">თე ტიპიშ ფაილშო გერინაფილი აპლიკაციაქ ვეგორუ</string>
-  <string name="menu_bookmarks_list">მიკაწონებელეფი</string>
   <string name="no_section_info">დინოხიშ დუდჯოხოქ ვეგორინუ</string>
   <string name="request_storage">ოფლაინ დინოხიშა მეჭირინაფაშო ჩქი ვოხვილუათ თქვანი ნებაშ მეჩამას თქვანი ფაილიშ ოჩუაშეშა</string>
   <string name="clear_recent_and_tabs_history_dialog">დასურო გოკონანო გორუაშ ისტორიაშ ლასუა დო არძა აქტიური აშნაკიდეფიშ კილუა?</string>

@@ -3,9 +3,8 @@
   <string name="menu_help">Жардам</string>
   <string name="menu_home">Башкы</string>
   <string name="menu_settings">Параметрлер</string>
-  <string name="menu_search">Издөө</string>
   <string name="menu_search_in_text">Тексттен табуу</string>
-  <string name="menu_bookmarks">Чөп каттар</string>
+  <string name="bookmarks">Чөп каттар</string>
   <string name="menu_random_article">Тушкелди макала</string>
   <string name="menu_full_screen">Толук көрүнүшү</string>
   <string name="menu_exit_full_screen">Толук көрүнүштөн чыгуу</string>
@@ -14,14 +13,13 @@
   <string name="save_media">Медиафайлды мындай түрдө сактоо…</string>
   <string name="save_media_error">Медиафайлды сактоодо катачылыктар кетти!</string>
   <string name="save_media_saved">Медиафайл %1$ түрүндө Сүрөт папкаңызга сакталды</string>
-  <string name="search_label">Издөө</string>
+  <string name="search">Издөө</string>
   <string name="pref_display_title">Көрсөтүү</string>
   <string name="pref_info_title">Маалымат</string>
   <string name="pref_info_version">Версия</string>
   <string name="pref_back_to_top">Жогоруга кайтуу</string>
   <string name="pref_language_title">Тил</string>
   <string name="pref_language_chooser">Тилин тандаңыз</string>
-  <string name="menu_bookmarks_list">Чөп каттар</string>
   <string name="library">Китепкана</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>

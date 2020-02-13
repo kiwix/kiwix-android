@@ -43,7 +43,7 @@
     <inspection_tool class="AndroidLintDrawAllocation" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintDuplicateDivider" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintDuplicateIncludedIds" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintDuplicateStrings" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AndroidLintDuplicateStrings" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintDuplicateUsesFeature" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintEasterEgg" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintEnqueueWork" enabled="true" level="ERROR" enabled_by_default="true" />

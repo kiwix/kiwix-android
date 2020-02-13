@@ -10,9 +10,8 @@
   <string name="menu_help">Trợ giúp</string>
   <string name="menu_home">Trang đầu</string>
   <string name="menu_settings">Thiết lập</string>
-  <string name="menu_search">Tìm bài</string>
   <string name="menu_search_in_text">Tìm trong trang</string>
-  <string name="menu_bookmarks">Dấu trang</string>
+  <string name="bookmarks">Dấu trang</string>
   <string name="menu_random_article">Bài viết ngẫu nhiên</string>
   <string name="menu_full_screen">Toàn màn hình</string>
   <string name="menu_exit_full_screen">Thoát toàn màn hình</string>
@@ -22,7 +21,7 @@
   <string name="save_media_error">Đã xuất hiện lỗi khi lưu phương tiện!</string>
   <string name="save_media_saved" fuzzy="true">Đã lưu phương tiện thành %s trong thư mục hình ảnh Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Đang tìm nội dung có thể tải về, xin vui lòng chờ…</string>
-  <string name="search_label">Tìm kiếm</string>
+  <string name="search">Tìm kiếm</string>
   <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
   <string name="error_file_not_found">Lỗi: Không tìm thấy tập tin ZIM đã chọn</string>
   <string name="error_file_invalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
@@ -45,7 +44,6 @@
   <string name="pref_credits_title">Ghi công</string>
   <string name="tts_lang_not_supported">Ngôn ngữ của trang này không được hỗ trợ, hoặc dữ liệu ngôn ngữ thích hợp chưa được cài đặt. Có thể không có khả năng đọc bài.</string>
   <string name="no_reader_application_installed">Không tìm thấy ứng dụng đã cài đặt ứng với kiểu tập tin này</string>
-  <string name="menu_bookmarks_list">Dấu trang</string>
   <string name="no_section_info">Không tìm thấy Đầu đề Nội dung</string>
   <string name="request_storage">Để truy cập các nội dung ngoại tuyến, chúng tôi cần được phép truy cập thiết bị lưu trữ của bạn</string>
   <string name="clear_recent_and_tabs_history_dialog">Bạn có chắc muốn xoá hết lịch sử tìm kiếm và các tab đang mở?</string>

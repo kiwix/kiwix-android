@@ -26,7 +26,7 @@
     android:layout_marginRight="@dimen/webview_search_edit_text_margin_right"
     android:layout_weight="1"
     android:focusableInTouchMode="true"
-    android:hint="@string/search_label"
+    android:hint="@string/search"
     android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
     android:inputType="text"
     android:scrollHorizontally="true"

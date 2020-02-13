@@ -3,9 +3,8 @@
   <string name="menu_help">ସହଯୋଗ</string>
   <string name="menu_home">ମୂଳ ଜାଗା</string>
   <string name="menu_settings">ପସନ୍ଦସବୁ</string>
-  <string name="menu_search">ଖୋଜିବେ</string>
   <string name="menu_search_in_text">ଲେଖାରେ ଖୋଜିବେ</string>
-  <string name="menu_bookmarks">ବୁକମାର୍କ</string>
+  <string name="bookmarks">ବୁକମାର୍କ</string>
   <string name="menu_random_article">ଯାହିତାହି ପ୍ରସଙ୍ଗ</string>
   <string name="menu_full_screen">ପୁରା ସ୍କ୍ରିନ</string>
   <string name="menu_exit_full_screen">ପୁରା ସ୍କ୍ରିନ ସ୍ଥିତିରୁ ବାହାରି ଆସନ୍ତୁ</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">ମିଡ଼ିଆ ସାଇତିଲା ବେଳେ ଅସୁବିଧା ହେଲା!</string>
   <string name="save_media_saved">ମେଡ଼ିଆକୁ %1$ ଭାବେ ଆପଣଙ୍କ ଛବି ଫୋଲ୍ଡରରେ ରଖାଗଲା</string>
   <string name="rescan_fs_warning">ଜିମ ଫାଇଲ ସ୍କାନ କରୁଛୁ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ…</string>
-  <string name="search_label">ଖୋଜିବେ</string>
+  <string name="search">ଖୋଜିବେ</string>
   <string name="open_in_new_tab">ନୂଆ ଟ୍ୟାବରେ ଲିଙ୍କଟି ଖୋଲିବେ?</string>
   <string name="error_file_not_found">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ ।</string>
   <string name="error_file_invalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ ।</string>
@@ -31,7 +30,6 @@
   <string name="pref_back_to_top_summary">ପୃଷ୍ଠାର ତଳୁ ଉପରକୁ ଯିବେ</string>
   <string name="pref_language_title">ଭାଷା</string>
   <string name="pref_language_chooser">ଭାଷା ଚୟନ କରନ୍ତୁ</string>
-  <string name="menu_bookmarks_list">ବୁକମାର୍କ</string>
   <string name="library">ପାଠାଗାର</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>

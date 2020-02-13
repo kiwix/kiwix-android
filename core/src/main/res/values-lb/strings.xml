@@ -9,9 +9,8 @@
   <string name="menu_help">Hëllef</string>
   <string name="menu_home">Haaptsäit</string>
   <string name="menu_settings">Astellungen</string>
-  <string name="menu_search">Artikel sichen</string>
   <string name="menu_search_in_text">Op der Säit sichen</string>
-  <string name="menu_bookmarks">Lieszeechen</string>
+  <string name="bookmarks">Lieszeechen</string>
   <string name="menu_random_article">Zoufällegen Artikel</string>
   <string name="menu_full_screen">Ganzen Ecran</string>
   <string name="menu_exit_full_screen">Aus dem ganzen Ecran erausgoen</string>
@@ -21,9 +20,9 @@
   <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d\'Medium ze späicheren!</string>
   <string name="save_media_saved">Medium als %1$s op Android/media/org.kiwix…/ gespäichert</string>
   <string name="rescan_fs_warning">Sichen no Inhalt deen erofgeluede ka ginn, waart w.e.g. …</string>
-  <string name="search_label">Sichen</string>
+  <string name="search">Sichen</string>
   <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
-  <string name="go_to_settings_label">Op d\'Astellunge goen</string>
+  <string name="go_to_settings">Op d\'Astellunge goen</string>
   <string name="error_file_not_found">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
   <string name="error_file_invalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>
   <string name="error_article_url_not_found">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
@@ -40,7 +39,6 @@
   <string name="pref_language_title">Sprooch</string>
   <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
   <string name="pref_credits">Auteuren a Lizenzen</string>
-  <string name="menu_bookmarks_list">Lieszeechen</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
   <string name="delete">Läschen</string>
@@ -95,7 +93,6 @@
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nëmmen Text</string>
   <string name="tag_short_text">Kuerzen Text</string>
-  <string name="go_to_permissions">Op d\'Astellunge goen</string>
   <string name="no_results">Keng Resultater</string>
   <string name="no_bookmarks">Keng Lieszeechen!</string>
   <string name="no_history">Keen Historique</string>

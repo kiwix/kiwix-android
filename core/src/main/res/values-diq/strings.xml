@@ -12,9 +12,8 @@
   <string name="menu_help">Peşti</string>
   <string name="menu_home">Keye</string>
   <string name="menu_settings">Eyari</string>
-  <string name="menu_search">Meqale cı geyre</string>
   <string name="menu_search_in_text">Pele de bıvêne</string>
-  <string name="menu_bookmarks">Nişani</string>
+  <string name="bookmarks">Nişani</string>
   <string name="menu_random_article">Nuşteyo raştameye</string>
   <string name="menu_full_screen">Tam asenge</string>
   <string name="menu_exit_full_screen">Tam asenge ra bıvıciye</string>
@@ -26,7 +25,7 @@
   <string name="save_media_error">Medya qeyd kerdış de yew xeta ameyê meydan!</string>
   <string name="save_media_saved">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Ronıyaye zerreko vineyêno, reca kem bıpawê…</string>
-  <string name="search_label">Cı geyre</string>
+  <string name="search">Cı geyre</string>
   <string name="open_in_new_tab">Gıre xıldayışo newe de abo?</string>
   <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye.</string>
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>
@@ -47,7 +46,6 @@
   <string name="pref_credits_title">İştirakwani</string>
   <string name="tts_lang_not_supported">Ena pela de zıwan desteg nêvineno,  yana qebul biyayê datay zıwani bar nêbiya. Tercihê wesiqi wanayê niyo qay.</string>
   <string name="no_reader_application_installed">Seba ena dosya barbiyayi applikasyon nêvineyê</string>
-  <string name="menu_bookmarks_list">Nişani</string>
   <string name="no_section_info">Sernameyê zerreki nêvêniya</string>
   <string name="request_storage">Offline depoyê şıma reştışi rê şıma ra icazet wazenê</string>
   <string name="clear_recent_and_tabs_history_dialog">Şıma qayılê tabanê aktivan reset kerê u cıgeyrayışê xo yê verêni pak kerê?</string>

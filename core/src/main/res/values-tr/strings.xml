@@ -18,9 +18,8 @@
   <string name="menu_help">Yardım</string>
   <string name="menu_home">Anasayfa</string>
   <string name="menu_settings">Ayarlar</string>
-  <string name="menu_search">Makale ara</string>
   <string name="menu_search_in_text">Sayfada bul</string>
-  <string name="menu_bookmarks">Yer imleri</string>
+  <string name="bookmarks">Yer imleri</string>
   <string name="menu_random_article">Rastgele makale</string>
   <string name="menu_full_screen">Tam ekran</string>
   <string name="menu_exit_full_screen">Tam ekrandan çık</string>
@@ -32,12 +31,12 @@
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
   <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">İndirilebilir içerik aranıyor, lütfen bekleyin…</string>
-  <string name="search_label">Ara</string>
+  <string name="search">Ara</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
   <string name="hotspot_failed_title">Sıcak nokta başlatılamadı</string>
   <string name="hotspot_failed_message">Etkin noktanız zaten açıkmış gibi görünüyor. Devam etmek için lütfen wifi erişim noktanızı devre dışı bırakın.</string>
   <string name="go_to_wifi_settings_label">WIFI ayarlarına gidin</string>
-  <string name="go_to_settings_label">Ayarlara gidin</string>
+  <string name="go_to_settings">Ayarlara gidin</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı.</string>
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
   <string name="error_article_url_not_found">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
@@ -59,7 +58,6 @@
   <string name="pref_credits_title">Katkıda bulunanlar</string>
   <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor veya uygun dil verileri yüklenmemiş. Makale düzgün okunmamış olabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
-  <string name="menu_bookmarks_list">Yer imleri</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
   <string name="clear_recent_and_tabs_history_dialog">Tüm aktif sekmeleri sıfırlamak ve arama geçmişinizi silmek istediğinize emin misiniz?</string>
@@ -198,7 +196,6 @@
   <string name="tag_short_text">Kısa Metin</string>
   <string name="storage_permission_denied">Depolama İzni Reddedildi</string>
   <string name="grant_read_storage_permission">Bu uygulama çalışması için depolama okuma yeteneği gerektirir. Lütfen ayarlarınızda izin verin</string>
-  <string name="go_to_permissions">Ayarlara Gidin</string>
   <string name="no_results">Bulunamadı</string>
   <string name="no_bookmarks">Yer İmi Yok</string>
   <string name="no_history">Geçmiş Yok</string>

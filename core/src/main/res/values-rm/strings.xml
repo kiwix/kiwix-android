@@ -3,14 +3,13 @@
   <string name="menu_help">Agid</string>
   <string name="menu_home">Pagina da partenza</string>
   <string name="menu_settings">Preferenzas</string>
-  <string name="menu_search">Tschertgar</string>
   <string name="menu_search_in_text">Tschertgar en il text</string>
-  <string name="menu_bookmarks">Segnapaginas</string>
+  <string name="bookmarks">Segnapaginas</string>
   <string name="menu_random_article">Artitgel casual</string>
   <string name="menu_full_screen">Maletg entir</string>
   <string name="menu_exit_full_screen">Ord il maletg entir</string>
   <string name="rescan_fs_warning">Tschertga datotecas ZIM, spetgai per plaschair…</string>
-  <string name="search_label">Tschertgar</string>
+  <string name="search">Tschertgar</string>
   <string name="open_in_new_tab">Avrir il link en in nov tab?</string>
   <string name="error_file_not_found">Errur: la datoteca ZIM selecziunada è betg vegnida chattada.</string>
   <string name="error_file_invalid">Errur: la datoteca selecziunada è betg ina datoteca ZIM valida.</string>
@@ -25,7 +24,6 @@
   <string name="pref_back_to_top">Enavos a l\'entschatta</string>
   <string name="pref_back_to_top_summary">Mussar in buttun a la fin da la pagina per ir enavos a l\'entschatta</string>
   <string name="pref_language_title">Lingua</string>
-  <string name="menu_bookmarks_list">Segnapaginas</string>
   <string name="library">Biblioteca</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>

@@ -6,7 +6,7 @@
   <item
     android:id="@+id/menu_bookmarks_search"
     android:icon="@drawable/action_search"
-    android:title="@string/search_label"
+    android:title="@string/search"
     app:actionViewClass="androidx.appcompat.widget.SearchView"
     app:iconifiedByDefault="true"
     app:showAsAction="always|collapseActionView"

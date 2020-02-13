@@ -3,14 +3,13 @@
   <string name="menu_help">મદદ</string>
   <string name="menu_home">ઘર</string>
   <string name="menu_settings">પસંદ</string>
-  <string name="menu_search">શોધો</string>
   <string name="menu_search_in_text">ભાષા ના સંદર્ભ  માં શોધો</string>
-  <string name="menu_bookmarks">બુકમાર્કો</string>
+  <string name="bookmarks">બુકમાર્કો</string>
   <string name="menu_random_article">કોઈપણ એક લેખ</string>
   <string name="menu_full_screen">આખી સ્ક્રિન</string>
   <string name="menu_exit_full_screen">પૂર્ણ સ્ક્રીનથી બહાર નીકળો</string>
   <string name="rescan_fs_warning">ZIM ફાઇલ્સ શોધો છે, મહેરબાની કરી થોડી રાહ જુઓ…</string>
-  <string name="search_label">શોધો</string>
+  <string name="search">શોધો</string>
   <string name="open_in_new_tab">કડી નવી ટેબમાં ખોલશો?</string>
   <string name="error_file_not_found">ક્ષતિ: પસંદ કરેલ ZIM ફાઇલ મળી શકી નહી.</string>
   <string name="error_file_invalid">ક્ષતિ: પસંદ કરેલ ફાઇલ યોગ્ય ZIM ફાઇલ નથી.</string>
@@ -23,7 +22,6 @@
   <string name="pref_back_to_top">ટોપ પર પાછા જાઓ</string>
   <string name="pref_language_title">ભાષા</string>
   <string name="pref_language_chooser">ભાષા પસંદ કરો</string>
-  <string name="menu_bookmarks_list">બુકમાર્કો</string>
   <string name="library">લાઇબ્રેરી</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>

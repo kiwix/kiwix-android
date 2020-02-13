@@ -8,9 +8,8 @@
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Entamu</string>
   <string name="menu_settings">Configuración</string>
-  <string name="menu_search">Buscar artículu</string>
   <string name="menu_search_in_text">Alcontrar na páxina</string>
-  <string name="menu_bookmarks">Marcadores</string>
+  <string name="bookmarks">Marcadores</string>
   <string name="menu_random_article">Artículu al debalu</string>
   <string name="menu_full_screen">Pantalla completa</string>
   <string name="menu_exit_full_screen">Colar de pantalla completa</string>
@@ -21,10 +20,10 @@
   <string name="save_media_error">Hebo un error al intentar guardar el mediu.</string>
   <string name="save_media_saved">Mediu guardáu como %s en Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Buscando conteníu descargable; espera, por favor…</string>
-  <string name="search_label">Buscar</string>
+  <string name="search">Buscar</string>
   <string name="open_in_new_tab">¿Abrir l\'enllaz nuna llingüeta nueva?</string>
   <string name="go_to_wifi_settings_label">Dir a config. de WIFI</string>
-  <string name="go_to_settings_label">Dir a configuración</string>
+  <string name="go_to_settings">Dir a configuración</string>
   <string name="error_file_not_found">Error: Nun pudo alcontrase\'l ficheru ZIM seleicionáu.</string>
   <string name="error_file_invalid">Error: El ficheru seleicionáu nun ye un ficheru ZIM válidu.</string>
   <string name="error_article_url_not_found">Error: Falló la carga del artículu (Url: %1$s).</string>
@@ -46,7 +45,6 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">Nun s\'almite la llingua d\'esta páxina, o nun s\'instalaron los datos d\'idioma apropiaos. Seique l\'artículu nun pueda lleese correutamente.</string>
   <string name="no_reader_application_installed">Nun s\'alcontró una aplicación instalada pa esti tipu de ficheru</string>
-  <string name="menu_bookmarks_list">Marcadores</string>
   <string name="no_section_info">Nun s\'atoparon cabeceres de conteníu</string>
   <string name="request_storage">P\'aportar a conteníu ensin conexón precisamos tener accesu al almacenamientu</string>
   <string name="clear_recent_and_tabs_history_dialog">¿Tas seguru de que quies desaniciar l\'historial de gueta y reaniciar toles llingüetes actives?</string>

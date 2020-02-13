@@ -13,9 +13,8 @@
   <string name="menu_help">Pomoč</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
-  <string name="menu_search">Išči članek</string>
   <string name="menu_search_in_text">Najdi na strani</string>
-  <string name="menu_bookmarks">Zaznamki</string>
+  <string name="bookmarks">Zaznamki</string>
   <string name="menu_random_article">Naključni članek</string>
   <string name="menu_full_screen">Celozaslonski način</string>
   <string name="menu_exit_full_screen">Izhod iz celozaslonskega načina</string>
@@ -26,7 +25,7 @@
   <string name="save_media_error">Pri poskusu shranjevanja medija je prišlo do napake!</string>
   <string name="save_media_saved">Shrani medij kot %s na Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte …</string>
-  <string name="search_label">Iskanje</string>
+  <string name="search">Iskanje</string>
   <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
   <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
   <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
@@ -49,7 +48,6 @@
   <string name="pref_credits_title">Zasluge</string>
   <string name="tts_lang_not_supported">Jezik na tej strani ni podprt ali pa ustrezni jezikovni podatki niso bili nameščeni. Članek morda ne bo pravilno prebran.</string>
   <string name="no_reader_application_installed">Za to vrsto datoteke ni bilo mogoče najti nameščene aplikacije</string>
-  <string name="menu_bookmarks_list">Zaznamki</string>
   <string name="no_section_info">Ni najdene vsebine glave</string>
   <string name="request_storage">Za dostop do vsebine brez povezave potrebujemo dostop do vašega pomnilnika</string>
   <string name="clear_recent_and_tabs_history_dialog">Ali ste prepričani, da želite izbrisati vašo zgodovino iskanja in ponastaviti vse aktivne zavihke?</string>

@@ -6,15 +6,14 @@
   <string name="menu_help">Hölp</string>
   <string name="menu_home">Heim</string>
   <string name="menu_settings">Instèllinge</string>
-  <string name="menu_search">Zeuk artikel</string>
   <string name="menu_search_in_text">Zeuk op pagina</string>
-  <string name="menu_bookmarks">Blaadwiezers</string>
+  <string name="bookmarks">Blaadwiezers</string>
   <string name="menu_random_article">Willekäörig artikel</string>
   <string name="menu_full_screen">Volstenjig sjerm</string>
   <string name="menu_exit_full_screen">Sloet volstenjig sjerm aaf</string>
   <string name="menu_read_aloud">Laes veur</string>
   <string name="menu_read_aloud_stop">Sjei oet mit veurlaeze</string>
-  <string name="search_label">Zeuk</string>
+  <string name="search">Zeuk</string>
   <string name="open_in_new_tab">Äöpen link in nuuj tabblaad?</string>
   <string name="error_file_not_found">Fout: \'t geselecteerd ZIM-bestandj kós neet waere gevónje.</string>
   <string name="error_file_invalid">Fout: \'t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
@@ -33,7 +32,6 @@
   <string name="pref_language_chooser">Kees \'n spraok</string>
   <string name="pref_credits">Mitwirkers en Licensies</string>
   <string name="pref_credits_title">Toesjrif</string>
-  <string name="menu_bookmarks_list">Blaadwiezers</string>
   <string name="no_section_info">Gein inhawdsköpkes gevónje</string>
   <string name="clear_recent_and_tabs_history_dialog">Wèts se zeker det se dien zeukgesjiechte wils ewegsjaffen en alle aktief tabblajer oppernuuj wils instèlle?</string>
   <string name="delete_recent_search_item">Sjaf dit deil eweg?</string>

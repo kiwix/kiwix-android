@@ -14,9 +14,8 @@
   <string name="menu_help">帮助</string>
   <string name="menu_home">主页</string>
   <string name="menu_settings">首选项</string>
-  <string name="menu_search">搜索</string>
   <string name="menu_search_in_text">在文本中查找</string>
-  <string name="menu_bookmarks">书签</string>
+  <string name="bookmarks">书签</string>
   <string name="menu_random_article">随机页面</string>
   <string name="menu_full_screen">全屏</string>
   <string name="menu_exit_full_screen">退出全屏</string>
@@ -26,10 +25,10 @@
   <string name="save_media_error">尝试保存该媒体时出错！</string>
   <string name="save_media_saved">已将媒体作为%s保存至Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">正在扫描可下载内容，请稍候…</string>
-  <string name="search_label">搜索</string>
+  <string name="search">搜索</string>
   <string name="open_in_new_tab">在新标签页打开链接?</string>
   <string name="go_to_wifi_settings_label">转到WIFI设置</string>
-  <string name="go_to_settings_label">转到设置</string>
+  <string name="go_to_settings">转到设置</string>
   <string name="error_file_not_found">错误：找不到选定的ZIM文件。</string>
   <string name="error_file_invalid">错误：选定的文件不是有效ZIM文件。</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
@@ -51,7 +50,6 @@
   <string name="pref_credits_title">制作人员</string>
   <string name="tts_lang_not_supported">此页面的语言不被支持，或未安装合适的语言数据。条目可能不能被正确朗读。</string>
   <string name="no_reader_application_installed">找不到用于此种文件类型的已安装应用程序</string>
-  <string name="menu_bookmarks_list">书签</string>
   <string name="no_section_info">未找到内容标题</string>
   <string name="request_storage">要访问离线内容，我们需要访问您的存储</string>
   <string name="clear_recent_and_tabs_history_dialog">您确定要删除您的搜索历史，并重置所有活跃标签么？</string>
@@ -152,6 +150,5 @@
   <string name="delete_notes_confirmation_msg">删除所有笔记？</string>
   <string name="pref_clear_all_notes_title">清空所有备注</string>
   <string name="storage_permission_denied">存储权限被拒绝</string>
-  <string name="go_to_permissions">转到设置</string>
   <string name="no_bookmarks">没有书签</string>
 </resources>

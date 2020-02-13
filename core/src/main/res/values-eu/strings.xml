@@ -10,9 +10,8 @@
   <string name="menu_help">Laguntza</string>
   <string name="menu_home">Hasiera</string>
   <string name="menu_settings">Ezarpenak</string>
-  <string name="menu_search">Artikulua bilatu</string>
   <string name="menu_search_in_text">Aurkitu orrialdean</string>
-  <string name="menu_bookmarks">Lastermarkak</string>
+  <string name="bookmarks">Lastermarkak</string>
   <string name="menu_random_article">Ausazko artikulua</string>
   <string name="menu_full_screen">Pantaila osoa</string>
   <string name="menu_exit_full_screen">Irten pantaila osotik</string>
@@ -22,7 +21,7 @@
   <string name="save_media_error">Akats bat gertatu da media gordetzen zen bitartean!</string>
   <string name="save_media_saved">Media %s to Android/media/org.kiwix…/ bezala gordeta</string>
   <string name="rescan_fs_warning">Deskargatu daiteken edukia eskaneatzen, itxaron mesedez…</string>
-  <string name="search_label">Bilatu</string>
+  <string name="search">Bilatu</string>
   <string name="open_in_new_tab">Ireki lotura fitxa berri batean?</string>
   <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
@@ -45,7 +44,6 @@
   <string name="pref_credits_title">Kredituak</string>
   <string name="tts_lang_not_supported">Orrialde honetako hizkuntza ez dago babestuta, edo hizkuntza-egokitasun data ez dago instalatuta. Artikulua beharbada ez da ondo irakurriko.</string>
   <string name="no_reader_application_installed">Ezin izan da aurkitu mota honetako artxiborako instalatutako aplikazioa</string>
-  <string name="menu_bookmarks_list">Lastermarkak</string>
   <string name="no_section_info">Ez da edukiaren goibururik aurkitu</string>
   <string name="request_storage">Konexiorik gabeko edukian sartzeko zure biltegira sartu behar gara.</string>
   <string name="clear_recent_and_tabs_history_dialog">Ziur zaude historiala ezabatu eta aktibatutako erailtz guztiak berrabiarazi nahi dituzula?</string>

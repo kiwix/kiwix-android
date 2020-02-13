@@ -3,14 +3,13 @@
   <string name="menu_help">Kömək</string>
   <string name="menu_home">Ana səhifə</string>
   <string name="menu_settings">Nizamlamalar</string>
-  <string name="menu_search">Axtar</string>
   <string name="menu_search_in_text">Mətndə axtar</string>
-  <string name="menu_bookmarks">Əlfəcinlər</string>
+  <string name="bookmarks">Əlfəcinlər</string>
   <string name="menu_random_article">Təsadüfi məqalə</string>
   <string name="menu_full_screen">Tam ekran</string>
   <string name="menu_exit_full_screen">Tam ekran rejimini bağla</string>
   <string name="rescan_fs_warning">ZIM fayllar axtarılır, xahiş edirik, gözləyin…</string>
-  <string name="search_label">Axtar</string>
+  <string name="search">Axtar</string>
   <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>
   <string name="error_file_not_found">Xəta: Seçilmiş ZIM fayl mövcud deyil.</string>
   <string name="error_file_invalid">Xəta: Seçilmiş ZIM faylı yararlı deyil.</string>
@@ -26,7 +25,6 @@
   <string name="pref_back_to_top_summary">Səhifənin sonunda göstərilən və səhifənin əvvəlinə qaytaran düymə.</string>
   <string name="pref_language_title">Dil</string>
   <string name="pref_language_chooser">Dili seçin</string>
-  <string name="menu_bookmarks_list">Əlfəcinlər</string>
   <string name="no_section_info">Məzmunun heç bir başlıqı tapılmadı.</string>
   <string name="rate_dialog_title">Xahiş edirik bizi dəyərləndirin</string>
   <string name="rate_dialog_msg_1">Əgər, istifadədən xoşlandınızsa</string>

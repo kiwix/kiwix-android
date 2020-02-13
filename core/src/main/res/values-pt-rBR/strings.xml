@@ -13,9 +13,8 @@
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Início</string>
   <string name="menu_settings">Configurações</string>
-  <string name="menu_search">Pesquisar artigo</string>
   <string name="menu_search_in_text">Encontrar na página</string>
-  <string name="menu_bookmarks">Favoritos</string>
+  <string name="bookmarks">Favoritos</string>
   <string name="menu_random_article">Artigo aleatório</string>
   <string name="menu_full_screen">Tela inteira</string>
   <string name="menu_exit_full_screen">Sair do modo de tela inteira</string>
@@ -27,12 +26,12 @@
   <string name="save_media_error">Ocorreu um erro ao tentar salvar a mídia!</string>
   <string name="save_media_saved">Midia salva como  %s para Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Escaneando por conteúdo para download, aguarde …</string>
-  <string name="search_label">Pesquisar</string>
+  <string name="search">Pesquisar</string>
   <string name="open_in_new_tab">Abrir link em uma nova aba?</string>
   <string name="hotspot_failed_title">Falha ao iniciar o ponto de acesso</string>
   <string name="hotspot_failed_message">Parece que seu ponto de acesso já está ativado. Desative seu ponto de acesso wi-fi para continuar.</string>
   <string name="go_to_wifi_settings_label">Vá para configurações de wi-fi</string>
-  <string name="go_to_settings_label">Vá para as configurações</string>
+  <string name="go_to_settings">Vá para as configurações</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado.</string>
   <string name="error_file_invalid">Erro: O arquivo selecionado não é um arquivo ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: Falha no carregamento do artigo (Url: %1$s).</string>
@@ -54,7 +53,6 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">O idioma desta página não é suportado, ou dados do idioma apropriado não estão instalados. O artigo pode não ser lido propriamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para esse tipo de arquivo</string>
-  <string name="menu_bookmarks_list">Favoritos</string>
   <string name="no_section_info">Nenhum cabeçalho de conteúdo encontrado</string>
   <string name="request_storage">Para acessar conteúdo off-line precisamos de acesso ao seu armazenamento</string>
   <string name="clear_recent_and_tabs_history_dialog">Tem certeza de que deseja excluir o histórico de pesquisa e redefinir todas as guias ativas?</string>
@@ -193,7 +191,6 @@
   <string name="tag_short_text">Texto curto</string>
   <string name="storage_permission_denied">Permissão de armazenamento negada</string>
   <string name="grant_read_storage_permission">Este aplicativo requer a capacidade de ler o armazenamento para funcionar. Conceda a permissão nas suas configurações</string>
-  <string name="go_to_permissions">Vá para as configurações</string>
   <string name="no_results">Sem resultados</string>
   <string name="no_bookmarks">Sem Favoritos</string>
   <string name="no_history">Sem histórico</string>

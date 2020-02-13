@@ -3,9 +3,8 @@
   <string name="menu_help">Msaada</string>
   <string name="menu_home">Mwanzo</string>
   <string name="menu_settings">Mipangilio</string>
-  <string name="menu_search">Tafuta makala</string>
   <string name="menu_search_in_text">Tafuta katika ukurasa</string>
-  <string name="menu_bookmarks">Maalamisho</string>
+  <string name="bookmarks">Maalamisho</string>
   <string name="menu_random_article">Ukurasa wa bahati</string>
   <string name="menu_full_screen">Skrini nzima</string>
   <string name="menu_exit_full_screen">Toka kwa modi ya Skrini nzima</string>
@@ -15,7 +14,7 @@
   <string name="save_media_error">Kosa lilitokea wakati wa kuhifadhi midia!</string>
   <string name="save_media_saved">Midia imehifadhiwa kwa jina la %1$s katika kabrasha yako ya picha</string>
   <string name="rescan_fs_warning">Tafadhali subiri, faili za ZIM zatafutwa</string>
-  <string name="search_label">Tafuta</string>
+  <string name="search">Tafuta</string>
   <string name="open_in_new_tab">Fungua kiungo kwenye kivinjari kipya</string>
   <string name="error_file_not_found">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana.</string>
   <string name="error_file_invalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
@@ -32,7 +31,6 @@
   <string name="pref_back_to_top_summary">Onyesha kidude kwenye mwisho wa kurasa ili kurudi hadi sehemu ya juu</string>
   <string name="pref_language_title">Lugha</string>
   <string name="pref_language_chooser">Chagua lugha</string>
-  <string name="menu_bookmarks_list">Maalamisho</string>
   <string name="delete">Futa</string>
   <string name="got_it">Nimeipata</string>
   <string name="undo">Tengua</string>

@@ -12,9 +12,8 @@
   <string name="menu_help">مساعدة</string>
   <string name="menu_home">الصفحة الرئيسية</string>
   <string name="menu_settings">إعدادات</string>
-  <string name="menu_search">البحث عن مقالة</string>
   <string name="menu_search_in_text">البحث في الصفحة</string>
-  <string name="menu_bookmarks">العلامات</string>
+  <string name="bookmarks">العلامات</string>
   <string name="menu_random_article">مقالة عشوائية</string>
   <string name="menu_full_screen">ملء الشاشة</string>
   <string name="menu_exit_full_screen">إنهاء وضع الشاشة الكاملة</string>
@@ -26,12 +25,12 @@
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
   <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">جارٍ البحث عن محتوى قابل للتنزيل، يُرجَى الانتظار…</string>
-  <string name="search_label">بحث</string>
+  <string name="search">بحث</string>
   <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة</string>
   <string name="hotspot_failed_title">فشل بدء نقطة فعالة</string>
   <string name="hotspot_failed_message">يبدو أن نقطة الاتصال قيد التشغيل بالفعل؛ الرجاء تعطيل نقطة اتصال الواي فاي للمتابعة.</string>
   <string name="go_to_wifi_settings_label">انتقل إلى إعدادات الواي فاي</string>
-  <string name="go_to_settings_label">اذهب للإعدادات</string>
+  <string name="go_to_settings">اذهب للإعدادات</string>
   <string name="error_file_not_found">خطأ: تعذر العثور على الملف المحدد زيم (ZIM)</string>
   <string name="error_file_invalid">خطأ: ملف زيم (ZIM) المحدد ليس ملفا صالحا.</string>
   <string name="error_article_url_not_found">خطأ: تحميل المقالة (Url: %1$s) لم يتم بنجاح.</string>
@@ -53,7 +52,6 @@
   <string name="pref_credits_title">الإحالات</string>
   <string name="tts_lang_not_supported">لم يتم اعتماد اللغة من هذه الصفحة، أو لم يتم تثبيت البيانات باللغة المناسبة. المقالة قد لا تتم قراءتها بشكل صحيح.</string>
   <string name="no_reader_application_installed">تعذر العثور على تطبيق مثبت لهذا النوع من الملفات</string>
-  <string name="menu_bookmarks_list">العلامات</string>
   <string name="no_section_info">لم يتم العثور على عناوين محتوى</string>
   <string name="request_storage">للوصول إلى المحتوى بلا اتصال; نحتاج إلى الوصول إلى مخزنك</string>
   <string name="clear_recent_and_tabs_history_dialog">هل أنت متأكد من أنك تريد حذف سجل بحثك وإعادة تعيين كافة علامات التبويب النشطة؟</string>
@@ -190,7 +188,6 @@
   <string name="tag_short_text">نص قصير</string>
   <string name="storage_permission_denied">إِذن التّخزين قد رُفِض</string>
   <string name="grant_read_storage_permission">يتطلب هذا التطبيق القدرة على قراءة وظيفة التخزين؛ يُرجَى منح الإذن في إعداداتك</string>
-  <string name="go_to_permissions">اذهب للإعدادات</string>
   <string name="no_results">لا نتائج</string>
   <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
 </resources>

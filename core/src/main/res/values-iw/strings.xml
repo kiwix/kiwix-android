@@ -13,9 +13,8 @@
   <string name="menu_help">עזרה</string>
   <string name="menu_home">בית</string>
   <string name="menu_settings">הגדרות</string>
-  <string name="menu_search">חיפוש ערך</string>
   <string name="menu_search_in_text">למצוא בדף</string>
-  <string name="menu_bookmarks">סימניות</string>
+  <string name="bookmarks">סימניות</string>
   <string name="menu_random_article">ערך אקראי</string>
   <string name="menu_full_screen">מסך מלא</string>
   <string name="menu_exit_full_screen">יציאה ממסך מלא</string>
@@ -27,12 +26,12 @@
   <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
   <string name="save_media_saved">המדיה נשמרה בתור %s אל Android/media/org.kiwix…/‎</string>
   <string name="rescan_fs_warning">מתבצעת סריקה לאיתור תכנים הניתנים להורדה, נא להמתין…</string>
-  <string name="search_label">חיפוש</string>
+  <string name="search">חיפוש</string>
   <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
   <string name="hotspot_failed_title">הפעלת נקודת חיבור לא עבדה</string>
   <string name="hotspot_failed_message">נראה שנקודת החיבור כבר מופעלת אצלך. נא לכבות את נקודת החיבור שלך כדי להמשיך.</string>
   <string name="go_to_wifi_settings_label">לעבור להגדרות וייפיי</string>
-  <string name="go_to_settings_label">לעבור להגדרות</string>
+  <string name="go_to_settings">לעבור להגדרות</string>
   <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
   <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין.</string>
   <string name="error_article_url_not_found">שגיאה: טעינת הערך נכשלה (כתובת: %1$s).</string>
@@ -54,7 +53,6 @@
   <string name="pref_credits_title">תודות</string>
   <string name="tts_lang_not_supported">השפה של הדף הזה אינה נתמכת, או שלא הותקנו נתוני שפה מתאימים. ייתכן שהערך לא יהיה קריא.</string>
   <string name="no_reader_application_installed">לא נמצאה אפליקציה מותקנת עבור סוג הקובץ הזה</string>
-  <string name="menu_bookmarks_list">סימניות</string>
   <string name="no_section_info">לא נמצאו כותרות תוכן</string>
   <string name="request_storage">על מנת לגשת לתכנים לא-מקוונים אנחנו צריכים לגשת לאחסון שלך</string>
   <string name="clear_recent_and_tabs_history_dialog">למחוק את היסטוריית החיפוש ולאפס את כל הלשוניות הפעילות?</string>
@@ -191,7 +189,6 @@
   <string name="tag_short_text">טקסט קצר</string>
   <string name="storage_permission_denied">אישור האחסון נדחה</string>
   <string name="grant_read_storage_permission">אפליקציה זו דורשת את אפשרות לקרוא את האחסון שלך כדי לתפקד. אנא הענק את ההרשאה בהגדרות שלך</string>
-  <string name="go_to_permissions">לך להגדרות</string>
   <string name="no_results">אין תוצאות</string>
   <string name="no_bookmarks">אין סימניות</string>
 </resources>

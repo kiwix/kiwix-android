@@ -17,9 +17,8 @@
   <string name="menu_help">Aide</string>
   <string name="menu_home">Accueil</string>
   <string name="menu_settings">Options</string>
-  <string name="menu_search">Rechercher un article</string>
   <string name="menu_search_in_text">Trouver dans la page</string>
-  <string name="menu_bookmarks">Marque-pages</string>
+  <string name="bookmarks">Marque-pages</string>
   <string name="menu_random_article">Article au hasard</string>
   <string name="menu_full_screen">Plein écran</string>
   <string name="menu_exit_full_screen">Sortir du mode plein écran</string>
@@ -31,12 +30,12 @@
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
   <string name="save_media_saved">Média enregistré sous %s dans le dossier Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Recherche de contenu téléchargeable, veuillez patienter…</string>
-  <string name="search_label">Rechercher</string>
+  <string name="search">Rechercher</string>
   <string name="open_in_new_tab">Ouvrir le lien dans un nouvel onglet ?</string>
   <string name="hotspot_failed_title">Échec de démarrage du point d’accès</string>
   <string name="hotspot_failed_message">il semble que votre point d’accès soit déjà activé. Veuillez d’abord désactiver votre point d’accès WiFi  pour continuer.</string>
   <string name="go_to_wifi_settings_label">Aller aux paramètres WiFi</string>
-  <string name="go_to_settings_label">Aller aux paramètres</string>
+  <string name="go_to_settings">Aller aux paramètres</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
   <string name="error_article_url_not_found">Erreur : le chargement de l’article (URL : %1$s) a échoué.</string>
@@ -58,7 +57,6 @@
   <string name="pref_credits_title">Remerciements</string>
   <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge ou les données linguistiques appropriées n’ont pas été installées. L’article risque d’être difficile à lire.</string>
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
-  <string name="menu_bookmarks_list">Marque-pages</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
   <string name="clear_recent_and_tabs_history_dialog">Êtes-vous sûr de vouloir supprimer votre historique de recherche et de réinitialiser tous les onglets actifs ?</string>
@@ -197,7 +195,6 @@
   <string name="tag_short_text">Texte bref</string>
   <string name="storage_permission_denied">Autorisation de stockage refusée</string>
   <string name="grant_read_storage_permission">Cette application a besoin de la possibilité de lire le stockage pour pouvoir fonctionner. Veuillez accorder le droit dans vos paramètres.</string>
-  <string name="go_to_permissions">Aller aux paramètres</string>
   <string name="no_results">Aucun résultat</string>
   <string name="no_bookmarks">Aucun marque-page</string>
   <string name="no_history">Aucun historique</string>

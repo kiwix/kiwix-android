@@ -16,9 +16,8 @@
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Início</string>
   <string name="menu_settings">Configurações</string>
-  <string name="menu_search">Pesquisar artigo</string>
   <string name="menu_search_in_text">Localizar na página</string>
-  <string name="menu_bookmarks">Marcadores</string>
+  <string name="bookmarks">Marcadores</string>
   <string name="menu_random_article">Artigo aleatório</string>
   <string name="menu_full_screen">Ecrã inteiro</string>
   <string name="menu_exit_full_screen">Sair do ecrã inteiro</string>
@@ -28,7 +27,7 @@
   <string name="save_media_error">Ocorreu um erro ao tentar guardar o conteúdo!</string>
   <string name="save_media_saved">Conteúdo guardado como %s em Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">A procurar conteúdo descarregável; aguarde, por favor…</string>
-  <string name="search_label">Pesquisar</string>
+  <string name="search">Pesquisar</string>
   <string name="open_in_new_tab">Abrir ligação num novo separador?</string>
   <string name="error_file_not_found">Erro: não foi possível encontrar o ficheiro ZIM selecionado.</string>
   <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido.</string>
@@ -51,7 +50,6 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">O idioma desta página não é suportada, ou não foram instalados os dados de língua apropriados. O artigo pode não ser lido corretamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para este tipo de ficheiro</string>
-  <string name="menu_bookmarks_list">Marcadores</string>
   <string name="no_section_info">Não foram encontrados cabeçalhos de conteúdo</string>
   <string name="request_storage">Para aceder ao conteúdo offline, precisamos de acesso ao seu armazenamento</string>
   <string name="clear_recent_and_tabs_history_dialog">Tem a certeza de que deseja apagar o seu histórico de pesquisa e reiniciar todos os separadores ativos?</string>
