@@ -25,13 +25,8 @@
   <string name="save_media_saved">Gemte medie som %s til Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Søger efter indhold, vent venligst …</string>
   <string name="search_label">Søg</string>
-  <string name="choose_file">Vælg en indholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
   <string name="go_to_settings_label">Gå til indstillinger</string>
-  <string name="stop_hotspot_button">STOP</string>
-  <string name="no_books_selected_toast_message">Vælg venligst bøger først</string>
-  <string name="server_failed_toast_message">Kunne ikke starte serveren.</string>
-  <string name="progress_dialog_starting_server">Starter serveren</string>
   <string name="error_file_not_found">Fejl: Den valgte ZIM fil blev ikke fundet.</string>
   <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil.</string>
   <string name="error_article_url_not_found">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
@@ -86,17 +81,10 @@
   <string name="search_widget_text">Søg i Kiwix</string>
   <string name="speech_prompt_text">Tal for at søge %s</string>
   <string name="speech_not_supported">Beklager! Din enhed understøtter ikke tale</string>
-  <string name="local_zims">Enhed</string>
-  <string name="remote_zims">På nettet</string>
   <string name="library">Bibliotek</string>
-  <string name="delete_specific_zim_toast">Fil slettet</string>
-  <string name="no_files_here">Ingen filer her</string>
-  <string name="download_no_space">Utilstrækkelig med plads til at hente denne fil.</string>
-  <string name="space_available">Ledig plads:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Ingen billeder</string>
   <string name="zim_no_vid">Ingen videoer</string>
-  <string name="no_network_connection">Ingen netværksforbindelse</string>
   <string name="help_2">Hvad gør Kiwix?</string>
   <string name="help_3">Kiwix er en lokal indholdlæser. Den fungerer meget lig en browser, men i stedet for at tilgå internetsider, så læser den indhold fra en fil i ZIM-formatet.</string>
   <string name="help_4" fuzzy="true">Selvom Kiwix oprindelig blev designet for at tilbyde Wikipedia lokalt, så læser det også andet indhold.</string>
@@ -109,7 +97,6 @@
   <string name="help_11">ZIM-filer hentet inden i programmet placeres i det ekstern lager i mappen Kiwix.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuværende mappe</string>
-  <string name="delete_zim_failed">Beklager vi kunne ikke slette denne fil. Du bør prøve at bruge en filhåndtering i stedet for.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">genoptag</string>
   <string name="tts_stop">stop</string>
@@ -119,7 +106,6 @@
   <string name="no">Nej</string>
   <string name="confirm_stop_download_title">Stop overførsel</string>
   <string name="confirm_stop_download_msg">Er du sikker på, at du ønsker at stoppe denne overførsel?</string>
-  <string name="download_change_storage">Valg af lagerenhed</string>
   <string name="tts_not_enabled">Tekst til tale er ikke aktiveret for denne ZIM-fil</string>
   <string name="next">Næste</string>
   <string name="previous">Forrige</string>
@@ -138,18 +124,12 @@
   <string name="external_link_popup_dialog_title">Gå til ekstern henvisning</string>
   <string name="external_link_popup_dialog_message">Du er på vej mod en ekstern henvisning. Det kan medføre ekstra omkostninger til dataoverførsel eller vil bare ikke fungere når du ikke er på nettet. Ønsker du at fortsætte?</string>
   <string name="do_not_ask_anymore">Spørg ikke igen</string>
-  <string name="your_languages">Valgte sprog:</string>
-  <string name="other_languages">Andre sprog:</string>
   <string name="crash_button_decline">NEJ TAK</string>
   <string name="new_tab_shortcut_label">Ny fane</string>
   <string name="articleCount">%s artikler</string>
-  <string name="get_started">Kom igang</string>
-  <string name="welcome_to_the_family">Velkommen i familien</string>
   <string name="go_to_previous_page">Gå til forrige side</string>
   <string name="go_to_next_page">Gå til næste side</string>
   <string name="table_of_contents">Indholdsfortegnelse</string>
-  <string name="select_languages">Vælg sprog</string>
-  <string name="save_languages">Gem sprog</string>
   <string name="send_feedback">Giv en tilbagemelding</string>
   <string name="expand">Udvid</string>
   <string name="history">Historik</string>
@@ -157,8 +137,6 @@
   <string name="close_all_tabs">Luk alle faner</string>
   <string name="running_state">I gang</string>
   <string name="save">Gem</string>
-  <string name="books_count">%d bog/bøger</string>
-  <string name="your_device">Din enhed:</string>
   <string name="tag_pic">Billede</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Kun tekst</string>

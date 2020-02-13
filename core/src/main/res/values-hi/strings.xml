@@ -27,9 +27,7 @@
   <string name="save_media_saved">सहेजे गये मीडिया को %s के रूप में Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">डाउनलोड करने योग्य सामग्री के लिए खोजबीन जारी, कृपया प्रतीक्षा करें …</string>
   <string name="search_label">खोजें</string>
-  <string name="choose_file">सामग्री फ़ाइल चुनें (*.zim)</string>
   <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
-  <string name="stop_hotspot_button">रोकें</string>
   <string name="error_file_not_found">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी।</string>
   <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है।</string>
   <string name="error_article_url_not_found">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
@@ -83,17 +81,10 @@
   <string name="search_widget_text">किवीक्स खोजें</string>
   <string name="speech_prompt_text">%s को खोजने के लिए बोलें</string>
   <string name="speech_not_supported">माफ़ कीजिये! आपका उपकरण भाषण इनपुट का समर्थन नहीं करता है</string>
-  <string name="local_zims">डिवाइस</string>
-  <string name="remote_zims">ऑनलाइन</string>
   <string name="library">पुस्तकालय</string>
-  <string name="delete_specific_zim_toast">फाइल हटा दी गई</string>
-  <string name="no_files_here">यहां कोई फ़ाइल नहीं</string>
-  <string name="download_no_space">इस फ़ाइल को डाउनलोड करने के लिए अपर्याप्त जगह।</string>
-  <string name="space_available">उपलब्ध जगह:</string>
   <string name="zim_simple">साधारण</string>
   <string name="zim_no_pic">चित्र नहीं</string>
   <string name="zim_no_vid">चलचित्र नहीं</string>
-  <string name="no_network_connection">नेटवर्क कनेक्शन नहीं</string>
   <string name="help_2">किविक्स क्या करता है?</string>
   <string name="help_3">किवीक्स ऑफ़लाइन सामग्री रीडर है यह एक ब्राउज़र की तरह बहुत ज्यादा काम करता है लेकिन ऑनलाइन वेब पेजों को एक्सेस करने के बजाय, यह ZIM प्रारूप में फ़ाइल से सामग्री पढ़ता है।</string>
   <string name="help_4" fuzzy="true">जबकि किवीक्स को मूल रूप से विकिपीडिया ऑफ़लाइन उपलब्ध कराने के लिए डिज़ाइन किया गया है, यह अन्य सामग्री भी पढ़ता है।</string>
@@ -106,7 +97,6 @@
   <string name="help_11">ZIM फाइलें जो इन-ऐप में डाउनलोड हैं, एक बाहरी फ़ोल्डर में स्थित हैं, जिसमें किवीक्स नामक एक फ़ोल्डर है।</string>
   <string name="pref_storage">संचयन</string>
   <string name="pref_current_folder">वर्तमान फोल्डर</string>
-  <string name="delete_zim_failed">क्षमा करें, हम इस फ़ाइल को हटाने में असमर्थ थे। आपको इसके बजाय एक फ़ाइल प्रबंधक का उपयोग करने का प्रयास करना चाहिए।</string>
   <string name="tts_pause">रुका</string>
   <string name="tts_resume">फिर से शुरू करना</string>
   <string name="tts_stop">रोकें</string>
@@ -116,7 +106,6 @@
   <string name="no">नहीं</string>
   <string name="confirm_stop_download_title">डाउनलोड रोकें?</string>
   <string name="confirm_stop_download_msg">क्या आप वास्तव में इस डाउनलोड को रोकना चाहते हैं?</string>
-  <string name="download_change_storage">संग्रहण यंत्र चयनकर्ता</string>
   <string name="tts_not_enabled">इस ZIM फ़ाइल के भाषण के लिए पाठ सक्षम नहीं है</string>
   <string name="next">अगला</string>
   <string name="previous">पिछला</string>
@@ -133,7 +122,5 @@
   <string name="external_link_popup_dialog_title">बहरी कड़ी में प्रवेश किया जा रहा है</string>
   <string name="external_link_popup_dialog_message">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप अभी भी आगे बढ़ना चाहते हैं?</string>
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
-  <string name="your_languages">चयनित भाषाएं</string>
-  <string name="other_languages">अन्य भाषाएँ</string>
   <string name="no_bookmarks">बुकमार्क्स नहीं</string>
 </resources>

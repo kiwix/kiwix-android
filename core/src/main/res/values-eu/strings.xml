@@ -23,9 +23,7 @@
   <string name="save_media_saved">Media %s to Android/media/org.kiwix…/ bezala gordeta</string>
   <string name="rescan_fs_warning">Deskargatu daiteken edukia eskaneatzen, itxaron mesedez…</string>
   <string name="search_label">Bilatu</string>
-  <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>
   <string name="open_in_new_tab">Ireki lotura fitxa berri batean?</string>
-  <string name="stop_hotspot_button">GELDITU</string>
   <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
@@ -79,17 +77,10 @@
   <string name="search_widget_text">Kiwix bilatu</string>
   <string name="speech_prompt_text">Hitz egin %s bilatzeko</string>
   <string name="speech_not_supported">Sentitzen dut! Zure gailuak ez du ahots bidezko sarrera onartzen.</string>
-  <string name="local_zims">Gailua</string>
-  <string name="remote_zims">Konektatuta</string>
   <string name="library">Liburutegia</string>
-  <string name="delete_specific_zim_toast">Fitxategi ezabatua</string>
-  <string name="no_files_here">Artxiborik ez hemen</string>
-  <string name="download_no_space">Ez dago espaziorik artxibo hau jaisteko.</string>
-  <string name="space_available">Libre dagoen espazioa:</string>
   <string name="zim_simple">Arrunta</string>
   <string name="zim_no_pic">Ez dago argazkirik</string>
   <string name="zim_no_vid">Bideorik ez</string>
-  <string name="no_network_connection">Ez dago konexiorik</string>
   <string name="help_2">Zer egiten du Kiwix-ek?</string>
   <string name="help_3">Kiwix konexio gabeko eduki irakurlea da. Nabigatzaile baten moduan erabiltzen da, baina sarean dauden web orrialdeetan sartu beharrean, ZIM formatoko edukia irakurtzen du.</string>
   <string name="help_4" fuzzy="true">Nahiz eta, Kiwix, berez, Wikipedia konexiorik gabe erabiltzeko sortu, beste edukiak ere eskeintzen ditu.</string>
@@ -102,7 +93,6 @@
   <string name="help_11">In-app-eko jaitsitako ZIM artxiboak kanpoko memorian daude, Kiwix deritzon karpeta batean.</string>
   <string name="pref_storage">Biltegia</string>
   <string name="pref_current_folder">Oraingo Artxiboa</string>
-  <string name="delete_zim_failed">Barkatu, ezin izan dugu artxibo hau ezabatu. Artxibo kudeatzailea erabiltzen saiatu dezakezu.</string>
   <string name="tts_pause">pausatua</string>
   <string name="tts_resume">jarraitu</string>
   <string name="tts_stop">Gelditu</string>
@@ -112,7 +102,6 @@
   <string name="no">Ez</string>
   <string name="confirm_stop_download_title">Deskarga geldiarazi?</string>
   <string name="confirm_stop_download_msg">Ziur zaude deskarga eten nahi duzula?</string>
-  <string name="download_change_storage">Memoria hautatzaile gailua</string>
   <string name="tts_not_enabled">Testuak ez du balio ZIM artxibo honetarako</string>
   <string name="next">Hurrengoa</string>
   <string name="previous">Aurrekoa</string>
@@ -129,7 +118,5 @@
   <string name="external_link_popup_dialog_title">Kanpo estekara sartzen</string>
   <string name="external_link_popup_dialog_message">Kanpo-esteka batera sartzen ari zara. Honek datu transferentziarako gastu gehigarrietara eraman dezake edo besterik gabe, ez du funtzionatuko konexiorik ez dagoenean. Jarraitu nahi duzu?</string>
   <string name="do_not_ask_anymore">Ez galdetu berriz</string>
-  <string name="your_languages">Hautatutako hizkuntzak:</string>
-  <string name="other_languages">Beste hizkuntzak:</string>
   <string name="no_bookmarks">Lastermarkarik ez</string>
 </resources>

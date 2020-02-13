@@ -21,9 +21,7 @@
   <string name="save_media_error">Дошло је до грешке при чувању мултимедије!</string>
   <string name="save_media_saved">Медијска датотека је сачувана (%s) у Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Тражење садржаја који се може преузети, сачекајте…</string>
-  <string name="choose_file">Изаберите датотеку са садржајем (*.zim)</string>
   <string name="open_in_new_tab">Отворити везу у новој картици?</string>
-  <string name="stop_hotspot_button">ЗАУСТАВИ</string>
   <string name="error_file_not_found">Грешка: изабрана ZIM датотека се не може наћи.</string>
   <string name="error_file_invalid">Грешка: изабрана датотека није важећа ZIM датотека.</string>
   <string name="error_article_url_not_found">Грешка: учитавање чланка (Url: %1$s) није успело.</string>
@@ -61,23 +59,15 @@
   <string name="pref_newtab_background_title">Отвори нову картицу у позадини</string>
   <string name="pref_newtab_background_summary">Када отвараш нову картицу она ће бити отворена у позадини</string>
   <string name="new_tab_snack_bar">Чланак је отворен у новој картици</string>
-  <string name="local_zims">Уређај</string>
-  <string name="delete_specific_zim_toast">Датотека је избрисана</string>
-  <string name="no_files_here">Овде нема датотека</string>
-  <string name="download_no_space">Недовољно простора за преузимање ове датотеке.</string>
-  <string name="no_network_connection">Нема мрежне везе</string>
-  <string name="delete_zim_failed">Није могуће избрисати ову датотеку. Требали бисте покушати да користите управљач датотека.</string>
   <string name="internal_storage">Унутрашњи</string>
   <string name="external_storage">Спољашњи</string>
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Зауставити преузимање?</string>
   <string name="confirm_stop_download_msg">Желите ли заиста да зауставите ово преузимање?</string>
-  <string name="download_change_storage">Бирач уређаја за складиштење</string>
   <string name="next">Следеће</string>
   <string name="external_link_popup_dialog_title">Уношење спољашње везе</string>
   <string name="external_link_popup_dialog_message">Уносите спољашњу везу. То може довести до додатних трошкова за пренос података или неће радити када сте офлајн. Желите ли да наставите?</string>
   <string name="do_not_ask_anymore">Не питај више</string>
-  <string name="other_languages">Други језици:</string>
   <string name="tag_short_text">Кратак текст</string>
   <string name="no_bookmarks">Нема обележивача</string>
 </resources>

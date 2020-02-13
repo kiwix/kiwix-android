@@ -22,9 +22,7 @@
   <string name="save_media_saved">Multimedia gardado como %s en Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Procurando contido descargable; espere…</string>
   <string name="search_label">Procurar</string>
-  <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
-  <string name="stop_hotspot_button">DETER</string>
   <string name="error_file_not_found">Erro: Non se puido atopar o ficheiro ZIM seleccionado.</string>
   <string name="error_file_invalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: Non se puido cargar o artigo (URL: %1$s).</string>
@@ -78,17 +76,10 @@
   <string name="search_widget_text">Procurar en Kiwix</string>
   <string name="speech_prompt_text">Fale para procurar %s</string>
   <string name="speech_not_supported">Sentímoloǃ O seu dispositivo non admite entrada de voz</string>
-  <string name="local_zims">Dispositivo</string>
-  <string name="remote_zims">En liña</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_specific_zim_toast">Ficheiro eliminado</string>
-  <string name="no_files_here">Ningún ficheiro aquí</string>
-  <string name="download_no_space">Espacio insuficiente para descargar este ficheiro.</string>
-  <string name="space_available">Espazo dispoñible:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sen imaxes</string>
   <string name="zim_no_vid">Sen vídeos</string>
-  <string name="no_network_connection">Ningunha conexión de rede</string>
   <string name="help_2">Que fai Kiwix?</string>
   <string name="help_3">Kiwix é un lector de contido desconectado. Actúa como un navegador web, pero en vez de acceder a páxinas web en liña, le o contido dun ficheiro en formato ZIM.</string>
   <string name="help_4" fuzzy="true">Se ben Kiwix deseñouse orixinalmente para proporcionar Wikipedia sen conexión, tamén pode ler outros contidos.</string>
@@ -101,7 +92,6 @@
   <string name="help_11">Os ficheiros ZIM descargados na aplicación atópanse no directorio de almacenamento externo, nunha carpeta chamada Kiwix.</string>
   <string name="pref_storage">Almacenamento</string>
   <string name="pref_current_folder">Carpeta actual</string>
-  <string name="delete_zim_failed">Non podemos eliminar este ficheiro. Debería probar cun administrador de ficheiros.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
   <string name="tts_stop">deter</string>
@@ -111,7 +101,6 @@
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Deter descarga?</string>
   <string name="confirm_stop_download_msg">Seguro que quere deter esta descarga?</string>
-  <string name="download_change_storage">Selector de dispositivo de almacenamento</string>
   <string name="tts_not_enabled">A síntese vocal non está activa para este ficheiro ZIM</string>
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
@@ -128,7 +117,5 @@
   <string name="external_link_popup_dialog_title">Introducindo ligazón externa</string>
   <string name="external_link_popup_dialog_message">Estás introducindo unha ligazón externa. Isto pode xerar gastos por transferencia de datos ou simplemente non funcionará cando está desconectado. Aínda quere continuar?</string>
   <string name="do_not_ask_anymore">Non preguntar máis</string>
-  <string name="your_languages">Linguas escollidas:</string>
-  <string name="other_languages">Outras linguas:</string>
   <string name="no_bookmarks">Non hai marcadores</string>
 </resources>

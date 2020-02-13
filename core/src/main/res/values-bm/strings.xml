@@ -10,7 +10,6 @@
   <string name="menu_full_screen">Ekaran fa</string>
   <string name="menu_exit_full_screen">Bɔ ekaran falen na</string>
   <string name="search_label">Ɲinini kɛ</string>
-  <string name="choose_file">I mago bɛ fisiye min na ZIMU kɔnɔ, o suganti yan.</string>
   <string name="error_file_not_found">Fili: Fisiye sugantilen ma se ka ye fan si.</string>
   <string name="error_file_invalid">Fili: fisiye sugantilen tɛ fisiye yamaruyalen ye.</string>
   <string name="error_article_url_not_found">Fili: Kunnafoni (Url: %1$s)  sariziyeli tigɛra sira la.</string>

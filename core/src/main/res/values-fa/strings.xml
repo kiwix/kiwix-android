@@ -26,11 +26,9 @@
   <string name="save_media_saved">رسانه با نام %s در Android/media/org.kiwix…/ ذخیره شد</string>
   <string name="rescan_fs_warning">چستچو برای محتوای قابل بارگیری، لطفا صبر کنید…</string>
   <string name="search_label">جستجو</string>
-  <string name="choose_file">یک پروندهٔ محتوایی را انتخاب کنید (*.zim)</string>
   <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
   <string name="go_to_wifi_settings_label">برو به تنظیمات وای‌فای</string>
   <string name="go_to_settings_label">برو به تنظیمات</string>
-  <string name="stop_hotspot_button">توقف</string>
   <string name="error_file_not_found">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد.</string>
   <string name="error_file_invalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>
   <string name="error_article_url_not_found">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
@@ -53,7 +51,6 @@
   <string name="all_history_cleared_toast">تمامی تاریخچه پاک شد</string>
   <string name="clear_all_history_dialog_title">پاک کردن تمامی تاریخچه</string>
   <string name="share">اشتراک‌گذاری</string>
-  <string name="selected_file_cab_app_chooser_title">اشتراک‌گذاری پرونده‌های ZIM با:</string>
   <string name="delete">حذف</string>
   <string name="delete_specific_search_toast">جستجوی اخیر حذف شد</string>
   <string name="hint_contents_drawer_message">برای مشاهدهٔ مقاله، انگشت خود را روی صفحهٔ نمایش به سمت چپ بکشید</string>
@@ -68,22 +65,14 @@
   <string name="rate_dialog_neutral">بعداً</string>
   <string name="open">گشودن</string>
   <string name="bookmark_removed">نشانک حذف شد</string>
-  <string name="local_zims">دستگاه</string>
-  <string name="remote_zims">برخط</string>
   <string name="library">کتابخانه</string>
-  <string name="delete_specific_zim_toast">پرونده حذف شد</string>
-  <string name="no_files_here">هیچ پرونده‌ای در این‌جا نیست</string>
-  <string name="download_no_space">فضای ناکافی برای بارگیری پرونده</string>
-  <string name="space_available">فضای موجود:</string>
   <string name="zim_simple">ساده</string>
   <string name="zim_no_pic">هیچ تصویری نیست</string>
   <string name="zim_no_vid">هیچ ویدئویی نیست</string>
-  <string name="no_network_connection">شبکه وصل نیست</string>
   <string name="help_2">Kiwix چه‌کار می‌کند؟</string>
   <string name="help_5">محتوا کجاست؟</string>
   <string name="help_6">محتوای ما در وبگاه Kiwix میزبانی می‌شود.</string>
   <string name="pref_storage">ذخیره‌سازی</string>
-  <string name="delete_zim_failed">متأسفانه امکان حذف پرونده وجود ندارد. بهتر است از یک نرم‌افزار مدیریت پرونده‌ها استفاده کنید.</string>
   <string name="tts_pause">مکث</string>
   <string name="tts_resume">ادامه</string>
   <string name="tts_stop">توقف</string>
@@ -93,7 +82,6 @@
   <string name="no">نه!</string>
   <string name="confirm_stop_download_title">بارگیری متوقف شود؟</string>
   <string name="confirm_stop_download_msg">آیا اطمینان دارید که می‌خواهید این بارگیری را متوقف کنید؟</string>
-  <string name="download_change_storage">انتخاب دستگاه ذخیره‌سازی</string>
   <string name="next">بعدی</string>
   <string name="previous">قبلی</string>
   <string name="time_day">روز</string>
@@ -102,6 +90,4 @@
   <string name="time_second">ثانیه</string>
   <string name="time_left">سمت چپ</string>
   <string name="do_not_ask_anymore">لطفاً دیگر درخواست نکنید</string>
-  <string name="your_languages">زبان‌های انتخاب‌شده:</string>
-  <string name="other_languages">زبان‌های دیگر:</string>
 </resources>

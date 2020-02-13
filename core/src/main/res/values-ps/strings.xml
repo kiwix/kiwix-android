@@ -16,7 +16,6 @@
   <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
   <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ…</string>
   <string name="search_label">پلټل</string>
-  <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
   <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
   <string name="error_file_not_found">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه.</string>
   <string name="error_file_invalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده.</string>
@@ -52,7 +51,6 @@
   <string name="speech_prompt_text">خبري د لټون لپاره %s</string>
   <string name="speech_not_supported">وبخښي! ستاسو وسیله د بیان انډول ملاتړ نه کوي</string>
   <string name="library">د منځپانګې مدیریت</string>
-  <string name="space_available">ځای شتون لري:</string>
   <string name="zim_simple">اسان</string>
   <string name="zim_no_pic">هيڅ دوتنه نشته</string>
   <string name="zim_no_vid">هيڅ ويډيو نسته</string>

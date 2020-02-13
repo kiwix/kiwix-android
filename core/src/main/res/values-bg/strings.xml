@@ -26,9 +26,7 @@
   <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Сканиране на файлове за изтегляне, моля, изчакайте…</string>
   <string name="search_label">Търсене</string>
-  <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
-  <string name="stop_hotspot_button">СПИРАНЕ</string>
   <string name="error_file_not_found">Грешка: Избраният ZIM файл не е намерен.</string>
   <string name="error_file_invalid">Грешка: Избраният файл не е валиден ZIM файл.</string>
   <string name="error_article_url_not_found">Грешка: Зареждането на статия (Url: %1$s) е неуспешно.</string>
@@ -82,17 +80,10 @@
   <string name="search_widget_text">Търсене в Kiwix</string>
   <string name="speech_prompt_text">Говорете, за да търсите %s</string>
   <string name="speech_not_supported">Съжаляваме! Вашето устройство не поддържа  въвеждане чрез глас.</string>
-  <string name="local_zims">Устройство</string>
-  <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_specific_zim_toast">Файлът е изтрит</string>
-  <string name="no_files_here">Тук няма файлове</string>
-  <string name="download_no_space">Няма достатъчно място за даунлоуд на този файл.</string>
-  <string name="space_available">Налично пространство:</string>
   <string name="zim_simple">Просто</string>
   <string name="zim_no_pic">Без картинки</string>
   <string name="zim_no_vid">Без видео клипове</string>
-  <string name="no_network_connection">Няма връзка с мрежата</string>
   <string name="help_2">Какво прави Kiwix?</string>
   <string name="help_3">Kiwix е офлайн четец на съдържание. Той действа като браузър, но вместо да зарежда съдържанието от онлайн уеб страници, той зарежда съдържанието от файл в ZIM формат.</string>
   <string name="help_4">Въпреки че Kiwix е проектиран първоначално да предоставя достъп до Уикипедия офлайн, той е способен да предоставя достъп и до друго съдържание.</string>
@@ -105,7 +96,6 @@
   <string name="help_11">ZIM файловете, които са смъкнати в мобилното приложение, се намират във външната памет, в папка с име Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текуща папка</string>
-  <string name="delete_zim_failed">За съжаление не успяхме да изтрием този файл. Необходимо е да използвате файлов мениджър за тази цел.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продължете</string>
   <string name="tts_stop">стоп</string>
@@ -115,7 +105,6 @@
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Да се прекрати ли даунлоуда?</string>
   <string name="confirm_stop_download_msg">Сигурни ли сте, че желаете да прекъснете този даунлоуд?</string>
-  <string name="download_change_storage">Селектор на устройство за съхраняване на данни</string>
   <string name="tts_not_enabled">Текст към говор не е позволен за този ZIM файл</string>
   <string name="next">Следващи</string>
   <string name="previous">Предишни</string>
@@ -132,8 +121,6 @@
   <string name="external_link_popup_dialog_title">Зареждане на външна препратка</string>
   <string name="external_link_popup_dialog_message">Предстои Ви, да заредите външна препратка. Това може да доведе до допълнителни разходи за трансфер на данни или просто няма да работи, когато сте офлайн. Желаете ли да продължите?</string>
   <string name="do_not_ask_anymore">Не питайте отново за това</string>
-  <string name="your_languages">Избрани езици:</string>
-  <string name="other_languages">Други езици:</string>
   <string name="save">Съхраняване</string>
   <string name="no_bookmarks">Няма отметки</string>
 </resources>

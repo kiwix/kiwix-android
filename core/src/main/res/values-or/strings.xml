@@ -16,7 +16,6 @@
   <string name="save_media_saved">ମେଡ଼ିଆକୁ %1$ ଭାବେ ଆପଣଙ୍କ ଛବି ଫୋଲ୍ଡରରେ ରଖାଗଲା</string>
   <string name="rescan_fs_warning">ଜିମ ଫାଇଲ ସ୍କାନ କରୁଛୁ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ…</string>
   <string name="search_label">ଖୋଜିବେ</string>
-  <string name="choose_file">ଜିମ ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>
   <string name="open_in_new_tab">ନୂଆ ଟ୍ୟାବରେ ଲିଙ୍କଟି ଖୋଲିବେ?</string>
   <string name="error_file_not_found">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ ।</string>
   <string name="error_file_invalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ ।</string>

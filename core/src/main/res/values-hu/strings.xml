@@ -28,9 +28,7 @@
   <string name="save_media_saved">Média elmentve %s néven ide: Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Letölthető tartalom pásztázása, kis türelmet…</string>
   <string name="search_label">Keresés</string>
-  <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
-  <string name="stop_hotspot_button">LEÁLLÍTÁS</string>
   <string name="error_file_not_found">Hiba: A kijelölt ZIM-fájl nem található.</string>
   <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
   <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
@@ -84,17 +82,10 @@
   <string name="search_widget_text">Kiwix keresése</string>
   <string name="speech_prompt_text" fuzzy="true">A kereséshez beszélj %s</string>
   <string name="speech_not_supported">Sajnálom, az eszközöd nem támogatja a beszédbevitelt</string>
-  <string name="local_zims">Eszköz</string>
-  <string name="remote_zims">Elérhető</string>
   <string name="library">Könyvtár</string>
-  <string name="delete_specific_zim_toast">Fájl törölve</string>
-  <string name="no_files_here">Nincsenek fájlok</string>
-  <string name="download_no_space">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
-  <string name="space_available">Szabad tárhely:</string>
   <string name="zim_simple">Egyszerű</string>
   <string name="zim_no_pic">Nincsenek képek</string>
   <string name="zim_no_vid">Nincsenek videók</string>
-  <string name="no_network_connection">Nincs hálózati kapcsolat</string>
   <string name="help_2">Mit csinál a Kiwix?</string>
   <string name="help_3">A Kiwix egy offline tartalom olvasó. Úgy viselkedik, mint egy böngésző, de az online weboldalak betöltése helyett a tartalmát egy ZIM formátumú fájlból olvassa.</string>
   <string name="help_4" fuzzy="true">Bár a Kiwix eredetileg az offline Wikipédia megvalósítására lett tervezve, más tartalmakat is olvas.</string>
@@ -107,7 +98,6 @@
   <string name="help_11">Az alkalmazáson belül letöltött ZIM fájlok a külső tároló könyvtár Kiwix nevű mappájában vannak elhelyezve.</string>
   <string name="pref_storage">Tárhely</string>
   <string name="pref_current_folder">Aktuális folder</string>
-  <string name="delete_zim_failed">Sajnos nem tudjuk ezt a fájlt törölni. Próbáld meg egy fájlkezelőn keresztül törölni.</string>
   <string name="tts_pause">szünet</string>
   <string name="tts_resume">folytat</string>
   <string name="tts_stop">leállítás</string>
@@ -117,7 +107,6 @@
   <string name="no">Nem</string>
   <string name="confirm_stop_download_title">Letöltés megállítása?</string>
   <string name="confirm_stop_download_msg">Biztosan le szeretnéd állítani ezt a letöltést?</string>
-  <string name="download_change_storage">Tároló eszköz kiválasztó</string>
   <string name="tts_not_enabled">A szöveg ehhez a beszédhez nincs engedélyezve ennél a ZIM fájlnál</string>
   <string name="next">Következő</string>
   <string name="previous">Előző</string>
@@ -134,8 +123,6 @@
   <string name="external_link_popup_dialog_title">Külső hivatkozás megadása</string>
   <string name="external_link_popup_dialog_message">Egy külső hivatkozásra mentél. Ez további adatátviteli költségekhez vezethet, vagy csak egyszerűen nem fog működni, ha offline vagy. Folytatni szeretnéd?</string>
   <string name="do_not_ask_anymore">Ne kérdezz többször</string>
-  <string name="your_languages">Nyelvek kiválasztása:</string>
-  <string name="other_languages">További nyelvek:</string>
   <string name="crash_checkbox_device">Az eszköz részletei</string>
   <string name="crash_button_confirm">RÉSZLETEK KÜLDÉSE</string>
   <string name="crash_button_decline">KÖSZÖNÖM NEM</string>

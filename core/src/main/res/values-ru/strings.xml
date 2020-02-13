@@ -29,9 +29,7 @@
   <string name="save_media_saved">Медиафайл сохранён как %s в Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Поиск загружаемого контента, пожалуйста, подождите…</string>
   <string name="search_label">Поиск</string>
-  <string name="choose_file">Выберите файл содержимого (*.zim)</string>
   <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
-  <string name="stop_hotspot_button">ОСТАНОВИТЬ</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
@@ -85,17 +83,10 @@
   <string name="search_widget_text">Поиск Kiwix</string>
   <string name="speech_prompt_text">Говорите, чтобы искать %s</string>
   <string name="speech_not_supported">Приносим извинения! Ваше устройство не поддерживает ввод речи.</string>
-  <string name="local_zims">Устройство</string>
-  <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_specific_zim_toast">Файл удалён</string>
-  <string name="no_files_here">Файлы отсутствуют</string>
-  <string name="download_no_space">Недостаточно места для загрузки этого файла.</string>
-  <string name="space_available">Доступно Места:</string>
   <string name="zim_simple">Простой</string>
   <string name="zim_no_pic">Без картинок</string>
   <string name="zim_no_vid">Нет видео</string>
-  <string name="no_network_connection">Отсутствует сетевое подключение</string>
   <string name="help_2">Что делает Kiwix?</string>
   <string name="help_3">Kiwix - это автономный контент-ридер. Он действует схоже с браузером, но вместо обращения к онлайн страницам, он считывает содержимое из файла в формате ZIM.</string>
   <string name="help_4">Хотя Kiwix и был изначально разработан, чтобы просматривать Wikipedia офлайн, он также пригоден и для другого содержимого.</string>
@@ -108,7 +99,6 @@
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
-  <string name="delete_zim_failed">Извините, мы не смогли удалить этот файл. Вместо этого вам стоит попробовать использовать файловый менеджер.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
   <string name="tts_stop">остановить</string>
@@ -118,7 +108,6 @@
   <string name="no">Нет</string>
   <string name="confirm_stop_download_title">Остановить загрузку?</string>
   <string name="confirm_stop_download_msg">Вы уверены, что хотите остановить эту загрузку?</string>
-  <string name="download_change_storage">Выбор носителя информации</string>
   <string name="tts_not_enabled">Перевод текста в речь не доступен для этого ZIM файла</string>
   <string name="next">Далее</string>
   <string name="previous">Предыдущий</string>
@@ -135,8 +124,6 @@
   <string name="external_link_popup_dialog_title">Ввод внешней ссылки</string>
   <string name="external_link_popup_dialog_message">Вы указали внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн. Хотите продолжить?</string>
   <string name="do_not_ask_anymore">Больше не спрашивай</string>
-  <string name="your_languages">Выбранные языки:</string>
-  <string name="other_languages">Другие языки:</string>
   <string name="crash_description">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
   <string name="crash_checkbox_language">Ваши Языковые Настройки</string>
   <string name="crash_checkbox_zimfiles">Список Ваших Zim Файлов</string>
@@ -145,7 +132,6 @@
   <string name="crash_button_confirm">ОТПРАВИТЬ ПОДРОБНОСТИ</string>
   <string name="crash_button_decline">НЕТ, СПАСИБО</string>
   <string name="download_books">Скачивайте книги</string>
-  <string name="download_books_message">Скачивайте книги и читайте, где бы вы ни были.</string>
   <string name="expand">Развернуть</string>
   <string name="bookmarks_from_current_book" fuzzy="true">Закладки в текущей книге</string>
   <string name="close_all_tabs">Закрыть все вкладки</string>

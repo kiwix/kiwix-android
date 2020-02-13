@@ -20,9 +20,7 @@
   <string name="save_media_saved" fuzzy="true">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
   <string name="rescan_fs_warning">Analisi del contengut telecargable en cors, pacientatz…</string>
   <string name="search_label">Recercar</string>
-  <string name="choose_file">Seleccionar un fichièr de contengut (*.zim)</string>
   <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
-  <string name="stop_hotspot_button">ARRÈST</string>
   <string name="error_file_not_found">Error : Lo fichièr ZIM seleccionat es introbable.</string>
   <string name="error_file_invalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid.</string>
   <string name="error_article_url_not_found">Error : Lo cargament de l’article (Url: %1$s) a fracassat.</string>
@@ -69,16 +67,10 @@
   <string name="pref_extras">Extras</string>
   <string name="search_widget_text">Recercar dins Kiwix</string>
   <string name="speech_prompt_text">Parlar per recercar %s</string>
-  <string name="local_zims">Aparelh</string>
-  <string name="remote_zims">En linha</string>
   <string name="library" fuzzy="true">Gestion del contengut</string>
-  <string name="delete_specific_zim_toast">Fichièr suprimit</string>
-  <string name="no_files_here">Pas cap de fichièr aicí</string>
-  <string name="space_available">Espaci disponible :</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sens imatges</string>
   <string name="zim_no_vid">Pas cap de vidèo</string>
-  <string name="no_network_connection">Pas cap de connexion de ret</string>
   <string name="pref_storage">Emmagazinatge</string>
   <string name="pref_current_folder">Dorsièr actual</string>
   <string name="tts_pause">pausa</string>

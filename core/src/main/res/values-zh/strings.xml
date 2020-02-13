@@ -27,11 +27,9 @@
   <string name="save_media_saved">已将媒体作为%s保存至Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">正在扫描可下载内容，请稍候…</string>
   <string name="search_label">搜索</string>
-  <string name="choose_file">选择一个内容文件（*.zim）</string>
   <string name="open_in_new_tab">在新标签页打开链接?</string>
   <string name="go_to_wifi_settings_label">转到WIFI设置</string>
   <string name="go_to_settings_label">转到设置</string>
-  <string name="stop_hotspot_button">停止</string>
   <string name="error_file_not_found">错误：找不到选定的ZIM文件。</string>
   <string name="error_file_invalid">错误：选定的文件不是有效ZIM文件。</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
@@ -86,17 +84,10 @@
   <string name="search_widget_text">搜索Kiwix</string>
   <string name="speech_prompt_text">讲话来搜索%s</string>
   <string name="speech_not_supported">对不起！您的设备不支持语音输入</string>
-  <string name="local_zims">设备</string>
-  <string name="remote_zims">在线</string>
   <string name="library">图书馆</string>
-  <string name="delete_specific_zim_toast">文件已删除</string>
-  <string name="no_files_here">没有文件</string>
-  <string name="download_no_space">缺少下载此文件所需的空间。</string>
-  <string name="space_available">可用空间：</string>
   <string name="zim_simple">简单</string>
   <string name="zim_no_pic">没有图片</string>
   <string name="zim_no_vid">没有视频</string>
-  <string name="no_network_connection">没有网络连接</string>
   <string name="help_2">Kiwix可以做什么？</string>
   <string name="help_3">Kiwix是一个离线内容阅读器。它的功能就好像一个浏览器，但它不需要访问在线网页，而是从ZIM格式文件中读取内容。</string>
   <string name="help_4" fuzzy="true">尽管Kiwix原本设计用于提供维基百科离线内容，但它也可以阅读其他内容。</string>
@@ -109,7 +100,6 @@
   <string name="help_11">在应用中下载的ZIM文件被存放于外部存储中一个名为Kiwix的文件夹内。</string>
   <string name="pref_storage">存储</string>
   <string name="pref_current_folder">当前文件夹</string>
-  <string name="delete_zim_failed">对不起，我们无法删除此文件。您应尝试改用文件管理器。</string>
   <string name="tts_pause">暂停</string>
   <string name="tts_resume">恢复</string>
   <string name="tts_stop">停止</string>
@@ -119,7 +109,6 @@
   <string name="no">否</string>
   <string name="confirm_stop_download_title">停止下载？</string>
   <string name="confirm_stop_download_msg">您确定要停止此次下载么？</string>
-  <string name="download_change_storage">存储设备选择器</string>
   <string name="tts_not_enabled">文字转换语音功能未对该ZIM文件启用</string>
   <string name="next">下一页</string>
   <string name="previous">上一页</string>
@@ -138,8 +127,6 @@
   <string name="external_link_popup_dialog_title">正在进入外部链接</string>
   <string name="external_link_popup_dialog_message">您正在输入外部链接。这可能导致额外数据转移费用，或当您离线时不能工作。您是否要继续？</string>
   <string name="do_not_ask_anymore">不要再次询问</string>
-  <string name="your_languages">选择的语言：</string>
-  <string name="other_languages">其他语言：</string>
   <string name="crash_title">这太尴尬了</string>
   <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>
   <string name="crash_checkbox_language">您的语言设置</string>
@@ -148,15 +135,10 @@
   <string name="crash_checkbox_device">设备细节</string>
   <string name="crash_button_confirm">发送详情</string>
   <string name="crash_button_decline">不需要</string>
-  <string name="get_content_shortcut_label">获取内容</string>
   <string name="articleCount">%s个条目</string>
-  <string name="get_started">入门</string>
   <string name="download_books">下载书籍</string>
-  <string name="welcome_to_the_family">欢迎到来</string>
-  <string name="download_books_message">随时随地下载书籍并阅读。</string>
   <string name="go_to_previous_page">楼上</string>
   <string name="go_to_next_page">下一楼</string>
-  <string name="select_languages">选择的语言</string>
   <string name="send_feedback">发送反馈</string>
   <string name="expand">展开</string>
   <string name="history">历史</string>
@@ -168,8 +150,6 @@
   <string name="note">请注意</string>
   <string name="confirmation_alert_dialog_message">丢弃没保存的更改？</string>
   <string name="delete_notes_confirmation_msg">删除所有笔记？</string>
-  <string name="nearby_devices">附近的设备</string>
-  <string name="status">状态</string>
   <string name="pref_clear_all_notes_title">清空所有备注</string>
   <string name="storage_permission_denied">存储权限被拒绝</string>
   <string name="go_to_permissions">转到设置</string>

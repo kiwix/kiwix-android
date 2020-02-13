@@ -16,7 +16,6 @@
   <string name="save_media_saved">Haino aman-jery voatahiry ao amin\'ny %1$s ao amin\'ny petra-tsarinao</string>
   <string name="rescan_fs_warning">Am-pandinihana ny raktra ZIM, miandrasa azafady....</string>
   <string name="search_label">Hikaroka</string>
-  <string name="choose_file">Hisafidy rakitra misy votoatiny (*.zim)</string>
   <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
   <string name="error_file_not_found">Hadisoana: Tsy nahita ilay rakitra ZIM voafidinao.</string>
   <string name="error_file_invalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao.</string>

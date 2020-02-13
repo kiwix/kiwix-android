@@ -133,9 +133,9 @@ class LibraryFragment : BaseFragment() {
       }
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
-          context.toast(string.no_network_connection)
+          context.toast(R.string.no_network_connection)
         } else {
-          libraryErrorText.setText(string.no_network_connection)
+          libraryErrorText.setText(R.string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
         }
       }
@@ -146,8 +146,8 @@ class LibraryFragment : BaseFragment() {
     libraryAdapter.items = it!!
     if (it.isEmpty()) {
       libraryErrorText.setText(
-        if (isNotConnected) string.no_network_connection
-        else string.no_items_msg
+        if (isNotConnected) R.string.no_network_connection
+        else R.string.no_items_msg
       )
       libraryErrorText.visibility = VISIBLE
     } else {
@@ -157,7 +157,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun refreshFragment() {
     if (isNotConnected) {
-      context.toast(string.no_network_connection)
+      context.toast(R.string.no_network_connection)
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
@@ -181,19 +181,19 @@ class LibraryFragment : BaseFragment() {
     when {
       notEnoughSpaceAvailable(item) -> {
         context.toast(
-          getString(string.download_no_space) +
-            "\n" + getString(string.space_available) + " " +
+          getString(R.string.download_no_space) +
+            "\n" + getString(R.string.space_available) + " " +
             storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage))
         )
         libraryList.snack(
-          string.download_change_storage,
+          R.string.download_change_storage,
           string.open,
           ::showStorageSelectDialog
         )
         return
       }
       isNotConnected -> {
-        context.toast(string.no_network_connection)
+        context.toast(R.string.no_network_connection)
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {

@@ -25,9 +25,7 @@
   <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте…</string>
   <string name="search_label">Пошук</string>
-  <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>
-  <string name="stop_hotspot_button">ЗУПИНИТИ</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
   <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
@@ -81,17 +79,10 @@
   <string name="search_widget_text">Пошук у Kiwix</string>
   <string name="speech_prompt_text">Промовте, щоб здійснити пошук %s</string>
   <string name="speech_not_supported">Вибачте! Ваш пристрій не підтримує голосове управління</string>
-  <string name="local_zims">Пристрій</string>
-  <string name="remote_zims">Онлайн</string>
   <string name="library">Бібліотека</string>
-  <string name="delete_specific_zim_toast">Файл вилучено</string>
-  <string name="no_files_here">Тут немає файлів</string>
-  <string name="download_no_space">Недостатньо простору для завантаження цього файлу.</string>
-  <string name="space_available">Доступний простір:</string>
   <string name="zim_simple">Простий</string>
   <string name="zim_no_pic">Без зображень</string>
   <string name="zim_no_vid">Немає відео</string>
-  <string name="no_network_connection">Відсутнє з\'єднання з мережею</string>
   <string name="help_2">Що робить Kiwix?</string>
   <string name="help_3">Kiwix — це офлайновий читач контенту. Він багато в чому поводиться як браузер, але замість доступу до онлайнових веб-сторінок, він зчитує контент із файлу у форматі ZIM.</string>
   <string name="help_4">Тоді як початково Kiwix було розроблено для забезпечення доступу до Вікіпедії в режимі офлайн, він також зчитує інші типи контенту.</string>
@@ -104,7 +95,6 @@
   <string name="help_11">ZIM-файли, завантажені із застосунка, розташовані в каталозі зовнішнього зберігання даних у папці під назвою Kiwix.</string>
   <string name="pref_storage">Зберігання даних</string>
   <string name="pref_current_folder">Поточна папка</string>
-  <string name="delete_zim_failed">Вибачте, нам не вдалося вилучити цей файл. Вам треба спробувати скористатися натомість менеджером файлів.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продовжити</string>
   <string name="tts_stop">зупинити</string>
@@ -114,7 +104,6 @@
   <string name="no">Ні</string>
   <string name="confirm_stop_download_title">Зупинити завантаження?</string>
   <string name="confirm_stop_download_msg">Ви впевнені, що хочете зупинити це завантаження?</string>
-  <string name="download_change_storage">Селектор пристрою зберігання даних</string>
   <string name="tts_not_enabled">Читання тексту вголос не увімкнене для цього ZIM-файлу</string>
   <string name="next">Наступна</string>
   <string name="previous">Попереднє</string>
@@ -131,8 +120,6 @@
   <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання</string>
   <string name="external_link_popup_dialog_message">Ви вказали зовнішнє посилання. Будь ласка пам\'ятайте, що якщо ви офлайн, то воно не буде відкрито. Також зауважте, що відкриття цього посилання може призвести до зняття грошей мобільним оператором. Дійсно бажаєте відкрити зовнішнє посилання?</string>
   <string name="do_not_ask_anymore">Більш не питати</string>
-  <string name="your_languages">Вибір мови:</string>
-  <string name="other_languages">Інші мови:</string>
   <string name="send_feedback">Надіслати відгук</string>
   <string name="close_all_tabs">Закрити усі вкладки</string>
   <string name="delete_notes_confirmation_msg">Видалити всі нотатки?</string>

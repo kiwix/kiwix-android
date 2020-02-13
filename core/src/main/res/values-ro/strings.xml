@@ -21,9 +21,7 @@
   <string name="save_media_saved">Media salvată %s în Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Scanează pentru conținut descărcabil, vă rugăm așteptați…</string>
   <string name="search_label">Caută</string>
-  <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
-  <string name="stop_hotspot_button">OPREȘTE</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
@@ -77,17 +75,10 @@
   <string name="search_widget_text">Caută Kiwix</string>
   <string name="speech_prompt_text">Vorbește pentru a căuta %s</string>
   <string name="speech_not_supported">Ne pare rău! Dispozitivul tău nu susține opțiunea de vorbire</string>
-  <string name="local_zims">Dispozitiv</string>
-  <string name="remote_zims">Online</string>
   <string name="library">Bibliotecă</string>
-  <string name="delete_specific_zim_toast">Filă ștearsă</string>
-  <string name="no_files_here">Nu sunt fișiere aici</string>
-  <string name="download_no_space">Spațiu insuficient pentru a descarca această filă.</string>
-  <string name="space_available">Spațiu disponibil:</string>
   <string name="zim_simple">Simplu</string>
   <string name="zim_no_pic">Fără imagini</string>
   <string name="zim_no_vid">Fără video</string>
-  <string name="no_network_connection">Nu există conexiune de rețea</string>
   <string name="help_2">Ce face Kiwix?</string>
   <string name="help_3">Kiwix este un server de citit conținut off-line. Este aproape ca un browser dar în loc să acceseze paginile web online citește conținut de la un fișier în formatul ZIM.</string>
   <string name="help_4" fuzzy="true">În timp ce Kiwix a fost făcut inițial să ofere Wikipedia off-line de asemenea citește și alt conținut.</string>
@@ -100,7 +91,6 @@
   <string name="help_11">Fișierele ZIM descărcate în aplicație sunt localizate în directorul extern de stocare într-un folder denumit Kiwix.</string>
   <string name="pref_storage">Stocare</string>
   <string name="pref_current_folder">Folder curent</string>
-  <string name="delete_zim_failed">Ne pare rău că nu am reușit să ștergem această filă. Ar trebui să folosiți un manager de fișier în loc.</string>
   <string name="tts_pause">pauză</string>
   <string name="tts_resume">rezumat</string>
   <string name="tts_stop">stop</string>
@@ -110,7 +100,6 @@
   <string name="no">Nu</string>
   <string name="confirm_stop_download_title">Oprești descărcarea?</string>
   <string name="confirm_stop_download_msg">Ești sigur că vrei să oprești această descărcare?</string>
-  <string name="download_change_storage">Selectează mediul de descărcare</string>
   <string name="tts_not_enabled">Text la vorbire nu este disponibil pentru acest fișier ZIM</string>
   <string name="next">Următoarea</string>
   <string name="previous">Precedenta</string>
@@ -127,7 +116,5 @@
   <string name="external_link_popup_dialog_title">Introdu legătură externă</string>
   <string name="external_link_popup_dialog_message">Introduci o legătură externă. Acesta ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când ești off-line. Vrei să continui?</string>
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
-  <string name="your_languages">Limbi selectate:</string>
-  <string name="other_languages">Alte limbi:</string>
   <string name="no_bookmarks">Nici un semn de carte</string>
 </resources>

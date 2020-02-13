@@ -31,7 +31,6 @@
   <string name="all_history_cleared_toast">全履歴を削除しました</string>
   <string name="library">ライブラリ</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
-  <string name="other_languages">その他の言語:</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

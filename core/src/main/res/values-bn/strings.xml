@@ -24,9 +24,7 @@
   <string name="save_media_saved">%s হিসাবে Android/media/org.kiwix…/ এ মিডিয়া সংরক্ষিত হয়েছে</string>
   <string name="rescan_fs_warning">ডাউনলোডযোগ্য বিষয়বস্তুর জন্য স্ক্যান করা হচ্ছে, দয়া করে অপেক্ষা করুন…</string>
   <string name="search_label">অনুসন্ধান</string>
-  <string name="choose_file">একটি বিষয়বস্তুর ফাইল নির্বাচন করুন (*.zim)</string>
   <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
-  <string name="stop_hotspot_button">থামুন</string>
   <string name="error_file_not_found">ত্রুটি: নির্বাচিত ZIM ফাইলটি খুঁজে পাওয়া যায় নি।</string>
   <string name="error_file_invalid">ত্রুটি: নির্বাচিত ফাইলটি বৈধ ZIM ফাইল নয়।</string>
   <string name="error_article_url_not_found">ত্রুটি: নিবন্ধ লোডে (Url: %1$s) ব্যর্থ।</string>
@@ -80,17 +78,10 @@
   <string name="search_widget_text">কিউইক্স অনুসন্ধান</string>
   <string name="speech_prompt_text">%s অনুসন্ধান করতে কথা বলুন</string>
   <string name="speech_not_supported">দুঃখিত! আপনার ডিভাইস কথ্য ইনপুট সমর্থন করে না</string>
-  <string name="local_zims">ডিভাইস</string>
-  <string name="remote_zims">অনলাইন</string>
   <string name="library">পাঠাগার</string>
-  <string name="delete_specific_zim_toast">ফাইল অপসারণ করা হয়েছে</string>
-  <string name="no_files_here">এখানে কোন ফাইল নেই</string>
-  <string name="download_no_space">এই ফাইল ডাউনলোড করার মত যথেষ্ট স্থান নেই</string>
-  <string name="space_available">উপলব্ধ খালিস্থান:</string>
   <string name="zim_simple">সরল</string>
   <string name="zim_no_pic">ছবি নেই</string>
   <string name="zim_no_vid">কোন ভিডিও নেই</string>
-  <string name="no_network_connection">কোন নেটওয়ার্ক সংযোগ নেই</string>
   <string name="help_2">কিউইক্স কি কাজ করে?</string>
   <string name="help_3">কিউইক্স একটি অফলাইনভিত্তিক নিবন্ধ পাঠক। এটি একটি ব্রাউজারের মত অনেকটা কাজ করে কিন্তু অনলাইনে ওয়েব পৃষ্ঠাগুলিতে ঢুকার পরিবর্তে, এটি ZIM ফরম্যাটে একটি ফাইল থেকে বিষয়বস্তু পড়ে।</string>
   <string name="help_4" fuzzy="true">কিউইক্স মূলত উইকিপিডিয়াকে অফলাইনে সরবরাহ করার জন্য নকশা করা হয়েছে, তবে এটি অন্যান্য বিষয়গুলিও পড়ে থাকে।</string>
@@ -103,7 +94,6 @@
   <string name="help_11">অ্যাপ্লিকেশনের মাধ্যমে ডাউনলোড করা ZIM ফাইলগুলি বাহ্যিক সঞ্চয়স্থানে Kiwix নামক ফোল্ডারে অবস্থিত।</string>
   <string name="pref_storage">সংগ্রহস্থল</string>
   <string name="pref_current_folder">বর্তমান ফোল্ডার</string>
-  <string name="delete_zim_failed">দুঃখিত আমরা এই ফাইলটি মুছে দিতে সমর্থ নই। এর পরিবর্তে আপনি একটি ফাইল ব্যবস্থাপক ব্যবহার করে চেষ্টা করতে পারেন।</string>
   <string name="tts_pause">বিরতি</string>
   <string name="tts_resume">পুনরায় শুরু করুন</string>
   <string name="tts_stop">বন্ধ</string>
@@ -113,7 +103,6 @@
   <string name="no">না</string>
   <string name="confirm_stop_download_title">ডাউনলোড বন্ধ করবেন?</string>
   <string name="confirm_stop_download_msg">আপনি কি নিশ্চিত যে আপনি এই ডাউনলোড বন্ধ করতে চান?</string>
-  <string name="download_change_storage">ডিভাইসের সংগ্রহস্থল নির্বাচক</string>
   <string name="tts_not_enabled">এই জিম ফাইলের জন্য লেখা থেকে বলা সক্রিয় নয়</string>
   <string name="next">পরবর্তী</string>
   <string name="previous">পূর্ববর্তী</string>
@@ -128,13 +117,10 @@
   <string name="time_today">আজ</string>
   <string name="time_yesterday">গতকাল</string>
   <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
-  <string name="your_languages">নির্বাচিত ভাষা</string>
-  <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
   <string name="crash_button_decline">না ধন্যবাদ</string>
   <string name="new_tab_shortcut_label">নতুন ট্যাব</string>
   <string name="pending_state">মুলতুবী</string>
   <string name="note">টীকা</string>
-  <string name="books_count">%dটি বই</string>
   <string name="tag_text_only">শুধুমাত্র পাঠ্য</string>
   <string name="no_bookmarks">কোন বুকমার্ক নেই</string>
 </resources>

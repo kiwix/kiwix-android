@@ -27,10 +27,7 @@
   <string name="save_media_saved">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Ronıyaye zerreko vineyêno, reca kem bıpawê…</string>
   <string name="search_label">Cı geyre</string>
-  <string name="choose_file">Yew dosyay zerreki weçine (*.zim)</string>
   <string name="open_in_new_tab">Gıre xıldayışo newe de abo?</string>
-  <string name="hotspot_service_channel_name">Kanalê xızmeti Hotspot</string>
-  <string name="stop_hotspot_button">BIVINDARNE</string>
   <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye.</string>
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>
   <string name="error_article_url_not_found">Xeta: Barkerdışê meqaleyê (Url: %1$s) nêbi.</string>
@@ -79,17 +76,10 @@
   <string name="pref_extras">Ekstray</string>
   <string name="new_tab_snack_bar">Meqale tabê neweyi de bi a</string>
   <string name="search_widget_text">Kiwix\'i cıgeyre</string>
-  <string name="local_zims">Cihaz</string>
-  <string name="remote_zims">Online</string>
   <string name="library">Kıtıbxane</string>
-  <string name="delete_specific_zim_toast">Dosya esteriye</string>
-  <string name="no_files_here">Tiya dosyeyi çıniyê</string>
-  <string name="download_no_space">Seba barkerdışê na dosya rê ca bes niyo.</string>
-  <string name="space_available">Karnıyayiye erd:</string>
   <string name="zim_simple">Besit</string>
   <string name="zim_no_pic">Resımi çıniyê</string>
   <string name="zim_no_vid">Videoyi çıniyê</string>
-  <string name="no_network_connection">Gıreyê torre çıniyo</string>
   <string name="help_2">Kiwix se keno ?</string>
   <string name="help_5">Zerrek kam ca de yo?</string>
   <string name="help_6">Zerrekê ma pela websita Kiwixi de yo.</string>
@@ -104,7 +94,6 @@
   <string name="no">Nê</string>
   <string name="confirm_stop_download_title">Wa ronayış vındero?</string>
   <string name="confirm_stop_download_msg">Şıma qayılê nê ronayışi vındarne?</string>
-  <string name="download_change_storage">Weçinoğê cihazê depokerdışi</string>
   <string name="next">Bahdoyên</string>
   <string name="previous">Verên</string>
   <string name="pref_wifi_only">Zerreki teyna pê Wifi ya rone</string>
@@ -117,6 +106,5 @@
   <string name="time_yesterday">Vızêr</string>
   <string name="external_link_popup_dialog_title">Şono gıreyê beberi</string>
   <string name="do_not_ask_anymore">Endi meperse</string>
-  <string name="status">Weziyet</string>
   <string name="no_bookmarks">Nişani çıniyê</string>
 </resources>

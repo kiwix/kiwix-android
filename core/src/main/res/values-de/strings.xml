@@ -20,9 +20,7 @@
   <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
   <string name="rescan_fs_warning">Scanne herunterladbaren Inhalt. Bitte warten …</string>
   <string name="search_label">Suchen</string>
-  <string name="choose_file">Wähle eine Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
-  <string name="stop_hotspot_button">STOPP</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
   <string name="error_article_url_not_found">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
@@ -76,17 +74,10 @@
   <string name="search_widget_text">Kiwix durchsuchen</string>
   <string name="speech_prompt_text">Sprechen, um %s zu suchen</string>
   <string name="speech_not_supported">Leider unterstützt Ihr Gerät keine Spracheingabe!</string>
-  <string name="local_zims">Gerät</string>
-  <string name="remote_zims">Online</string>
   <string name="library">Bibliothek</string>
-  <string name="delete_specific_zim_toast">Datei gelöscht</string>
-  <string name="no_files_here">Hier gibt es keine Dateien</string>
-  <string name="download_no_space">Nicht ausreichender Speicher, um diese Datei herunterzuladen.</string>
-  <string name="space_available">Verfügbarer Speicher:</string>
   <string name="zim_simple">Einfach</string>
   <string name="zim_no_pic">Keine Bilder</string>
   <string name="zim_no_vid">Keine Videos</string>
-  <string name="no_network_connection">Keine Netzwerkverbindung</string>
   <string name="help_2">Was macht Kiwix?</string>
   <string name="help_3">Kiwix ist eine Lesesoftware für Offlineinhalte. Sie funktioniert wie ein Browser, aber anstatt auf Webseiten online zuzugreifen, liest sie Inhalte von einer Datei im ZIM-Format.</string>
   <string name="help_4" fuzzy="true">Obwohl Kiwix ursprünglich entwickelt wurde, um Wikipedia offline zur Verfügung zu stellen, liest es auch andere Inhalte.</string>
@@ -99,7 +90,6 @@
   <string name="help_11">Heruntergeladene ZIM-Dateien in der App befinden sich im Verzeichnis des externen Speichers in einem Ordner namens Kiwix.</string>
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
-  <string name="delete_zim_failed">Leider können wir diese Datei nicht löschen. Sie sollten versuchen, stattdessen einen Dateimanager zu verwenden.</string>
   <string name="tts_pause">pausieren</string>
   <string name="tts_resume">fortfahren</string>
   <string name="tts_stop">abbrechen</string>
@@ -109,7 +99,6 @@
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>
   <string name="confirm_stop_download_msg">Sind Sie sicher, dass Sie diesen Download abbrechen möchten?</string>
-  <string name="download_change_storage">Speichergeräteauswahl</string>
   <string name="tts_not_enabled">Text-to-Speech ist für diese ZIM-Datei nicht aktiviert</string>
   <string name="next">Nächste</string>
   <string name="previous">Vorherige</string>
@@ -126,7 +115,5 @@
   <string name="external_link_popup_dialog_title">Externen Link einfügen</string>
   <string name="external_link_popup_dialog_message">Du fügst einen externen Link ein. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn du offline bist. Möchtest du fortfahren?</string>
   <string name="do_not_ask_anymore">Nicht mehr fragen</string>
-  <string name="your_languages">Ausgewählte Sprachen:</string>
-  <string name="other_languages">Weitere Sprachen:</string>
   <string name="no_bookmarks">Keine Lesezeichen</string>
 </resources>

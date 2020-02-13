@@ -15,7 +15,6 @@
   <string name="menu_read_aloud">Laes veur</string>
   <string name="menu_read_aloud_stop">Sjei oet mit veurlaeze</string>
   <string name="search_label">Zeuk</string>
-  <string name="choose_file">Sillekteer \'n Inhawdsbestandj (*.zim)</string>
   <string name="open_in_new_tab">Äöpen link in nuuj tabblaad?</string>
   <string name="error_file_not_found">Fout: \'t geselecteerd ZIM-bestandj kós neet waere gevónje.</string>
   <string name="error_file_invalid">Fout: \'t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
@@ -60,12 +59,6 @@
   <string name="pref_newtab_background_summary">Wen se e nuuj tabblaad äöpens den kump det oppen achtergróndj</string>
   <string name="pref_extras">Extra</string>
   <string name="new_tab_snack_bar">Artikel äöpent zich in nuuj tabblaad</string>
-  <string name="local_zims">Toustèl</string>
-  <string name="remote_zims">Online</string>
-  <string name="delete_specific_zim_toast">Bestandj eweggesjaf</string>
-  <string name="no_files_here">Gein bestenj hie</string>
-  <string name="download_no_space">Neet zat ruumdje veur dit bestandj te downloade.</string>
-  <string name="no_network_connection">Gein netwerkverbinjing</string>
   <string name="help_2">Waat doon v\'r bie Kiwix?</string>
   <string name="help_5">Wo is d\'n inhawd?</string>
   <string name="help_6">Ozen inhawd is óngergebrach oppe Kiwix-website.</string>
@@ -74,13 +67,11 @@
   <string name="help_9">• Angeren inhawd wie Wikileaks or Wikisource is ouch besjikbaar</string>
   <string name="pref_storage">Opslaag</string>
   <string name="pref_current_folder">Hujige Map</string>
-  <string name="delete_zim_failed">V\'r kóste dit bestandj neet ewegsjaffe. Doe mós dit noe perbere mit \'ne bestandjsbehieërder.</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Exterm</string>
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Sjei oet mit downloade?</string>
   <string name="confirm_stop_download_msg">Wèts se zeker det se dezen download wils laote oetsjeie?</string>
-  <string name="download_change_storage">Opslaagapparaatsillekteerder</string>
   <string name="next">Volgende</string>
   <string name="previous">Veurige</string>
   <string name="pref_wifi_only">Download inhawd allein via de WiFi</string>
@@ -93,6 +84,5 @@
   <string name="external_link_popup_dialog_title">Externe link in \'nt tikke</string>
   <string name="external_link_popup_dialog_message">Doe bös \'nen externe link in \'nt tikke. Det kan leie toet extra köste veur \'t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>
   <string name="do_not_ask_anymore">Vraog nimmieë</string>
-  <string name="other_languages">Anger spraoke:</string>
   <string name="no_bookmarks">Gein blaadwiezers</string>
 </resources>

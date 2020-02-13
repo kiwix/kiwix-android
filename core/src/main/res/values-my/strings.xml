@@ -22,9 +22,7 @@
   <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix…/ တွင် သိမ်းပြီးဖြစ်သည်။</string>
   <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ …</string>
   <string name="search_label">ရှာဖွေရန်</string>
-  <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
-  <string name="stop_hotspot_button">ရပ်</string>
   <string name="error_file_not_found">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
   <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
   <string name="error_article_url_not_found">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
@@ -60,17 +58,10 @@
   <string name="rate_dialog_negative">မလိုပါ၊ ကျေးဇူးတင်ပါသည်။</string>
   <string name="rate_dialog_neutral">နောက်မှ</string>
   <string name="open">ဖွင့်ပါ</string>
-  <string name="local_zims">စက်ပစ္စည်း</string>
-  <string name="remote_zims">အွန်လိုင်း</string>
   <string name="library">မှတ်ထားမှုများ</string>
-  <string name="delete_specific_zim_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
-  <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
-  <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
-  <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>
   <string name="zim_simple">ရိုးရိုး</string>
   <string name="zim_no_pic">ပုံများ မရှိပါ</string>
   <string name="zim_no_vid">ဗီဒီယိုများ မရှိပါ</string>
-  <string name="no_network_connection">နက်ဝက်ကွန်နက်ရှင် မရှိပါ</string>
   <string name="help_5">အကြောင်းအရာ ဘယ်မှာနည်း?</string>
   <string name="pref_storage">သိုလှောင်ခန်း</string>
   <string name="pref_current_folder">လက်ရှိ ဖိုလ်ဒါ</string>
@@ -91,8 +82,6 @@
   <string name="time_today">ယနေ့</string>
   <string name="time_yesterday">မနေ့</string>
   <string name="do_not_ask_anymore">နောက်ထပ် မမေးတော့</string>
-  <string name="your_languages">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
-  <string name="other_languages">အခြားဘာသာစကားများ</string>
   <string name="crash_checkbox_language">သင်၏ ဘာသာစကား အပြင်အဆင်များ</string>
   <string name="articleCount">%s ဆောင်းပါးများ</string>
   <string name="go_to_previous_page">ယခင်စာမျက်နှာသို့သွားရန်</string>

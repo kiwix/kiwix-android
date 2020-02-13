@@ -22,9 +22,7 @@
   <string name="save_media_saved">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
   <string name="rescan_fs_warning">Li naverokekî ya daxistinê tê gerîn, ji kerema xwe bisekine…</string>
   <string name="search_label">Lê bigere</string>
-  <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
-  <string name="stop_hotspot_button" fuzzy="true">Bisekine</string>
   <string name="error_file_not_found">Çewtîː Peldanka ZIM\'ê ya bijartî nehate dîtin.</string>
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
@@ -78,17 +76,10 @@
   <string name="search_widget_text">Li Kiwixê bigere</string>
   <string name="speech_prompt_text">Ji bo ku li %s bigerî xeber bide</string>
   <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava axaftinê</string>
-  <string name="local_zims">Amûr</string>
-  <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
-  <string name="delete_specific_zim_toast">Pel hat jêbirin</string>
-  <string name="no_files_here">Li vir peldank tune ne</string>
-  <string name="download_no_space">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
-  <string name="space_available">Cihê berdestː</string>
   <string name="zim_simple">Basît</string>
   <string name="zim_no_pic">Wêne Tune ye</string>
   <string name="zim_no_vid">Vîdyo Tune ye</string>
-  <string name="no_network_connection">Girêdana torê tune ye</string>
   <string name="help_2">Kiwix çi dike?</string>
   <string name="help_3">Kiwix xwînereke naverokên offline (derhêl) e. Mîna gerokan tev dide lê li cihê ku bigihije rûpelên torê yên online (liserhêl), naverokê ji peldankekî formata ZIM-ê dixwîne.</string>
   <string name="help_4" fuzzy="true">Kiwix herçiqas di bingehê de ji bo peydekirina Wikipedia-ya derhêl hatiye sêwirandin jî, naverokên din jî dixwîne.</string>
@@ -101,7 +92,6 @@
   <string name="help_11">Peldankên ZIMê yên ku yên ji nava sepanê hatine daxistin, di nav pelbendekî bi navê Kiwix-ê de ne ya ku li nav cîhaza depokirinê ya derveyî ye.</string>
   <string name="pref_storage">Depokirin</string>
   <string name="pref_current_folder">Peldanka niha</string>
-  <string name="delete_zim_failed">Mixabin nebû ku em vê peldankê jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
   <string name="tts_pause">rawestîne</string>
   <string name="tts_resume">dewam bike</string>
   <string name="tts_stop">rawestîne</string>
@@ -111,7 +101,6 @@
   <string name="no">Na</string>
   <string name="confirm_stop_download_title">Daxistinê rabiwestîne?</string>
   <string name="confirm_stop_download_msg">Tu ji daxwaza xwe ya rawestandina vê daxistinê bawer î?</string>
-  <string name="download_change_storage">Hilbijêra amûra depokirinê</string>
   <string name="tts_not_enabled">Ji bo vê peldanka ZIM-ê xwendina nivîsê ne ya sepandinê ye</string>
   <string name="next">Pêşve</string>
   <string name="previous">Yê berê</string>
@@ -128,7 +117,5 @@
   <string name="external_link_popup_dialog_title">Tevlîkirina Girêdana Derveyî</string>
   <string name="external_link_popup_dialog_message">Tu girêdanekî derveyî tevlî dikî. Ev tişt dibe ku ji ber neqla daneyê bibe sedema mesrefan an jî dema ku tu derhêl (offline) bî, nexebite. Gelo tu dixwazî dewam bikî?</string>
   <string name="do_not_ask_anymore">Zêdetir nepirse</string>
-  <string name="your_languages">Zimanên bijartîː</string>
-  <string name="other_languages">Zimanên din:</string>
   <string name="no_bookmarks">Bijare Tune ne</string>
 </resources>

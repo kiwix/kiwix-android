@@ -23,7 +23,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 

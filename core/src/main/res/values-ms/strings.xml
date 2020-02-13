@@ -16,7 +16,6 @@
   <string name="save_media_saved">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
   <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu…</string>
   <string name="search_label">Cari</string>
-  <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
   <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
   <string name="error_file_not_found">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
   <string name="error_file_invalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>

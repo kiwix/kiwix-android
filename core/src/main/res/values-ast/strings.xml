@@ -22,12 +22,9 @@
   <string name="save_media_saved">Mediu guardáu como %s en Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Buscando conteníu descargable; espera, por favor…</string>
   <string name="search_label">Buscar</string>
-  <string name="choose_file">Seleiciona un ficheru de conteníu (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir l\'enllaz nuna llingüeta nueva?</string>
   <string name="go_to_wifi_settings_label">Dir a config. de WIFI</string>
   <string name="go_to_settings_label">Dir a configuración</string>
-  <string name="stop_hotspot_button">APARAR</string>
-  <string name="no_books_selected_toast_message">Primero esbilla llibros</string>
   <string name="error_file_not_found">Error: Nun pudo alcontrase\'l ficheru ZIM seleicionáu.</string>
   <string name="error_file_invalid">Error: El ficheru seleicionáu nun ye un ficheru ZIM válidu.</string>
   <string name="error_article_url_not_found">Error: Falló la carga del artículu (Url: %1$s).</string>
@@ -59,7 +56,6 @@
   <string name="all_history_cleared_toast">Llimpióse tol historial</string>
   <string name="clear_all_history_dialog_title">Llimpiar tol historial</string>
   <string name="share">Compartir</string>
-  <string name="selected_file_cab_app_chooser_title">Compartir los ficheros ZIM con:</string>
   <string name="delete">Desaniciar</string>
   <string name="delete_specific_search_toast">Desanicióse la gueta recién</string>
   <string name="hint_contents_drawer_message">Puedes esmucir a la izquierda pa ver el conteníu d\'esti artículu</string>
@@ -83,18 +79,11 @@
   <string name="search_widget_text">Guetar en Kiwix</string>
   <string name="speech_prompt_text">Fala pa guetar %s</string>
   <string name="speech_not_supported">Sentímoslo, el to preséu nun tien encontu pa entrada de voz</string>
-  <string name="local_zims">Preséu</string>
-  <string name="remote_zims">En llinia</string>
   <string name="library">Biblioteca</string>
   <string name="delete_zim_body">¿Desaniciar %s?</string>
-  <string name="delete_specific_zim_toast">Ficheru desaniciáu</string>
-  <string name="no_files_here">Nun hai nengún ficheru equí</string>
-  <string name="download_no_space">Nun hai espaciu abondo pa descargar esti ficheru.</string>
-  <string name="space_available">Espaciu disponible:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Nun hai imáxenes</string>
   <string name="zim_no_vid">Nun hai videos</string>
-  <string name="no_network_connection">Nun hai conexón a la rede</string>
   <string name="help_2">¿Qué fai Kiwix?</string>
   <string name="help_3">Kiwix ye un llector de conteníu ensin conexón. Actúa de mou asemeyáu a un navegador pero en cuenta d\'aportar a páxines web en llinia, llee\'l conteníu d\'un ficheru en formatu ZIM.</string>
   <string name="help_4">Magar Kiwix diseñóse orixinalmente p\'apurrir Wikipedia ensin conexón, tamién puede lleer otros conteníos.</string>
@@ -107,7 +96,6 @@
   <string name="help_11">Los ficheros ZIM descargaos na aplicación alcuéntrense nel direutoriu d\'almacenamientu esternu, nuna carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamientu</string>
   <string name="pref_current_folder">Carpeta actual</string>
-  <string name="delete_zim_failed">Nun pudimos desaniciar esti ficheru. Tendríes de tentar usando un alministrador de ficheros.</string>
   <string name="tts_pause">posar</string>
   <string name="tts_resume">siguir</string>
   <string name="tts_stop">aparar</string>
@@ -117,7 +105,6 @@
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">¿Parar la descarga?</string>
   <string name="confirm_stop_download_msg">¿Tas seguru de que quies parar esta descarga?</string>
-  <string name="download_change_storage">Selector de preséu d\'almacenamientu</string>
   <string name="tts_not_enabled">El testu a voz nun ta activáu pa esti ficheru ZIM</string>
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
@@ -136,9 +123,6 @@
   <string name="external_link_popup_dialog_title">Entrando n\'enllaz esternu</string>
   <string name="external_link_popup_dialog_message">Tas por siguir un enllaz esternu. Ello podría xenerar gastos por tresferencia de datos o cenciellamente nun va funcionar si nun tienes conexón. ¿Quies siguir?</string>
   <string name="do_not_ask_anymore">Nun preguntar más</string>
-  <string name="your_languages">Llingües seleicionaes:</string>
-  <string name="other_languages">Otres llingües:</string>
-  <string name="no_items_msg">Nun hai nengún elementu disponible</string>
   <string name="crash_title">Bien… esto ye vergonzoso</string>
   <string name="crash_description">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">La to configuración de llingua</string>
@@ -150,21 +134,13 @@
   <string name="crash_button_decline">NON, GRACIES</string>
   <string name="shortcut_disabled_message">Atayu non disponible</string>
   <string name="new_tab_shortcut_label">Llingüeta nueva</string>
-  <string name="get_content_shortcut_label">Recibir conteníu</string>
   <string name="fav_icon">Favicon</string>
   <string name="articleCount">%s artículos</string>
-  <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar llibros</string>
-  <string name="human_kind_knowledge">La conocencia de la humanidá, nel to teléfonu.</string>
-  <string name="welcome_to_the_family">Afáyate na familia</string>
-  <string name="save_books_offline">Guardar llibros ensin conexón</string>
-  <string name="download_books_message">Descarga llibros y llei auquiera que teas.</string>
   <string name="unable_to_add_to_bookmarks">Nun pudo añadise a los marcadores</string>
   <string name="go_to_previous_page">Dir a la páxina anterior</string>
   <string name="go_to_next_page">Dir a la páxina siguiente</string>
   <string name="table_of_contents">Índiz</string>
-  <string name="select_languages">Escoyer llingües</string>
-  <string name="save_languages">Guardar llingües</string>
   <string name="send_feedback">Unviar opiniones</string>
   <string name="expand">Espander</string>
   <string name="history">Historial</string>
@@ -193,8 +169,6 @@
   <string name="confirmation_alert_dialog_message">¿Refugar cambeos ensin guardar?</string>
   <string name="delete_notes_confirmation_msg">¿Desaniciar toles notes?</string>
   <string name="ext_storage_permission_not_granted">Error: nun se concedió\'l permisu d\'almacenamientu</string>
-  <string name="books_count">%d llibros</string>
-  <string name="status">Estáu</string>
   <string name="pref_clear_all_notes_title">Llimpiar toles notes</string>
   <string name="no_bookmarks">Nun hai marcadores</string>
 </resources>

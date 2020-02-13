@@ -16,7 +16,6 @@
   <string name="save_media_saved">File multimedial salveguardate como %1$s in tu dossier de imagines</string>
   <string name="rescan_fs_warning">Cerca files ZIM, per favor attende…</string>
   <string name="search_label">Cercar</string>
-  <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
   <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
   <string name="error_file_not_found">Error: Le file ZIM seligite non poteva esser trovate.</string>
   <string name="error_file_invalid">Error: Le file seligite non es un file ZIM valide.</string>
@@ -34,7 +33,6 @@
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
   <string name="library">Bibliotheca</string>
   <string name="do_not_ask_anymore">Non demandar plus</string>
-  <string name="your_languages">Linguas eligite:</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

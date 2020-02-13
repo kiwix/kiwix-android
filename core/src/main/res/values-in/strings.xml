@@ -24,9 +24,7 @@
   <string name="save_media_saved">Simpan media sebagai %s pada Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Memindai konten yang dapat diunduh, harap tunggu…</string>
   <string name="search_label">Cari</string>
-  <string name="choose_file">Pilih Berkas Konten (*.zim)</string>
   <string name="open_in_new_tab">Buka pranala di tab baru?</string>
-  <string name="stop_hotspot_button" fuzzy="true">Berhenti</string>
   <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
   <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>
   <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
@@ -80,17 +78,10 @@
   <string name="search_widget_text">Cari Kiwix</string>
   <string name="speech_prompt_text">Bicaralah untuk mencari %s</string>
   <string name="speech_not_supported">Maaf! Perangkat Anda tidak mendukung input ucapan</string>
-  <string name="local_zims">Perangkat</string>
-  <string name="remote_zims">Daring</string>
   <string name="library">Perpustakaan</string>
-  <string name="delete_specific_zim_toast">Berkas telah dihapus</string>
-  <string name="no_files_here">Tidak ada berkas disini</string>
-  <string name="download_no_space">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
-  <string name="space_available">Ruang yang Tersedia:</string>
   <string name="zim_simple">Sederhana</string>
   <string name="zim_no_pic">Tanpa Gambar</string>
   <string name="zim_no_vid">Tanpa Video</string>
-  <string name="no_network_connection">Tidak ada sambungan jaringan</string>
   <string name="help_2">Apa yang Kiwix lakukan?</string>
   <string name="help_3">Kiwix adalah pembaca konten luring. Ini sangat mirip peramban tapi bukannya mengakses halaman web daring, Kiwix membaca konten dari sebuah berkas dalam format ZIM.</string>
   <string name="help_4" fuzzy="true">Pada awalnya Kiwix dirancang untuk menyediakan Wikipedia luring, namun juga dapat membaca konten lainnya.</string>
@@ -103,7 +94,6 @@
   <string name="help_11">Berkas ZIM yang diunduh dari dalam apl terletak di direktori penyimpanan eksternal didalam folder Kiwix.</string>
   <string name="pref_storage">Penyimpanan</string>
   <string name="pref_current_folder">Folder Saat Ini</string>
-  <string name="delete_zim_failed">Maaf kami tidak dapat menghapus berkas ini. Anda sebaiknya mencoba menggunakan manajer berkas.</string>
   <string name="tts_pause">jeda</string>
   <string name="tts_resume">lanjut</string>
   <string name="tts_stop">berhenti</string>
@@ -113,7 +103,6 @@
   <string name="no">Tidak</string>
   <string name="confirm_stop_download_title">Hentikan unduhan?</string>
   <string name="confirm_stop_download_msg">Apakah Anda yakin ingin menghentikan unduhan ini?</string>
-  <string name="download_change_storage">Pemilih perangkat penyimpanan</string>
   <string name="tts_not_enabled">Teks ke bicara tidak diaktifkan untuk berkas ZIM ini</string>
   <string name="next">Berikutnya</string>
   <string name="previous">Sebelumnya</string>
@@ -130,9 +119,6 @@
   <string name="external_link_popup_dialog_title">Mengunjungi Pranala Luar</string>
   <string name="external_link_popup_dialog_message">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring. Apakah Anda ingin melanjutkan?</string>
   <string name="do_not_ask_anymore">Jangan tanya lagi</string>
-  <string name="your_languages">Bahasa terpilih:</string>
-  <string name="other_languages">Bahasa lain:</string>
-  <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
   <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
   <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
   <string name="no_bookmarks">Tidak Ada Markah</string>

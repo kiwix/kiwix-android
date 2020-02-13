@@ -16,7 +16,6 @@
   <string name="save_media_saved">మీడియాని మీ బొమ్మల సంచయంలోని %1$s వద్ద భద్రపరచాము</string>
   <string name="rescan_fs_warning">ZIM దస్త్రాలను స్కాన్ చేస్తున్నాం, దయచేసి వేచి ఉండండి…</string>
   <string name="search_label">వెతుకు</string>
-  <string name="choose_file">ZIM విషయ దస్త్రాన్ని ఎంచుకోండి (*.zim)</string>
   <string name="open_in_new_tab">లంకెను కొత్త ట్యాబులో తెరువాలా?</string>
   <string name="error_file_not_found">దోషం‌ :‌ మీరు ఎంపిక చేసిన ZIM దస్త్రం దొరకలేదు.</string>
   <string name="error_file_invalid">దోషం : మీరు ఎంపిక చేసిన దస్త్రం సరియైన ZIM దస్త్రం కాదు.</string>

@@ -16,7 +16,6 @@
   <string name="save_media_saved">Медыя захавана як %1$s у тэчцы вашых выяваў</string>
   <string name="rescan_fs_warning">Пошук сярод ZIM-файлаў. Калі ласка, пачакайце…</string>
   <string name="search_label">Пошук</string>
-  <string name="choose_file">Абярыце ZIM-файл (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новым вакенцы?</string>
   <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены.</string>
   <string name="error_file_invalid">Памылка: абраны файл не з\'яўляецца слушным ZIM-файлам.</string>

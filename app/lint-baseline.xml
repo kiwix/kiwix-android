@@ -3,9 +3,9 @@
 
     <issue
         id="ObsoleteLintCustomCheck"
-        message="Lint found one or more custom checks that could not be loaded. The most likely reason for this is that it is using an older, incompatible or unsupported API in lint. Make sure these lint checks are updated to the new APIs. The issue registry class is com.lint.CustomIssueRegistry. The class loading issue is com/android/tools/lint/detector/api/Detector$JavaPsiScanner: ClassLoader.defineClass1(ClassLoader.java:-2)←ClassLoader.defineClass(ClassLoader.java:763)←ClassLoader.defineClass(ClassLoader.java:642)←UrlClassLoader._defineClass(UrlClassLoader.java:306)←UrlClassLoader.defineClass(UrlClassLoader.java:302)←UrlClassLoader._findClass(UrlClassLoader.java:271)←UrlClassLoader.findClass(UrlClassLoader.java:254)←ClassLoader.loadClass(ClassLoader.java:424)">
+        message="Lint found an issue registry (`butterknife.lint.LintRegistry`) which is older than the current API level; these checks may not work correctly.&#xA;&#xA;Recompile the checks against the latest version. Custom check API version is 2 (3.2), current lint API level is 5 (3.5+)">
         <location
-            file="..\..\..\.android\lint\customlint.jar"/>
+            file="..\..\..\.gradle\caches\transforms-2\files-2.1\d4e4db16c3ebe89d166f257ffd22686a\butterknife-runtime-10.2.0\jars\lint.jar"/>
     </issue>
 
     <issue
@@ -31,46 +31,13 @@
     </issue>
 
     <issue
-        id="RequiredSize"
-        message="The required `layout_width` and `layout_height` attributes are missing"
-        errorLine1="  &lt;TextView"
-        errorLine2="   ~~~~~~~~">
-        <location
-            file="src\main\res\layout\activity_library.xml"
-            line="10"
-            column="4"/>
-    </issue>
-
-    <issue
-        id="RequiredSize"
-        message="The required `layout_width` and `layout_height` attributes are missing"
-        errorLine1="  &lt;TextView"
-        errorLine2="   ~~~~~~~~">
-        <location
-            file="src\main\res\layout\layout_download_management.xml"
-            line="11"
-            column="4"/>
-    </issue>
-
-    <issue
-        id="RequiredSize"
-        message="The required `layout_width` and `layout_height` attributes are missing"
-        errorLine1="  &lt;TextView"
-        errorLine2="   ~~~~~~~~">
-        <location
-            file="src\main\res\layout\zim_list.xml"
-            line="9"
-            column="4"/>
-    </issue>
-
-    <issue
         id="UnpackedNativeCode"
         message="Missing attribute android:extractNativeLibs=&quot;false&quot; on the `&lt;application>` tag."
         errorLine1="  &lt;application"
         errorLine2="  ^">
         <location
             file="src\main\AndroidManifest.xml"
-            line="7"
+            line="8"
             column="3"/>
     </issue>
 
@@ -110,56 +77,56 @@
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="    &lt;TextView"
-        errorLine2="     ~~~~~~~~">
-        <location
-            file="src\main\res\layout\download_item.xml"
-            line="31"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="SelectableText"
-        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="    &lt;TextView"
-        errorLine2="     ~~~~~~~~">
-        <location
-            file="src\main\res\layout\download_item.xml"
-            line="39"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="SelectableText"
-        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="      &lt;TextView"
-        errorLine2="       ~~~~~~~~">
-        <location
-            file="src\main\res\layout\download_item.xml"
-            line="60"
-            column="8"/>
-    </issue>
-
-    <issue
-        id="SelectableText"
-        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="      &lt;TextView"
-        errorLine2="       ~~~~~~~~">
-        <location
-            file="src\main\res\layout\download_item.xml"
-            line="68"
-            column="8"/>
-    </issue>
-
-    <issue
-        id="SelectableText"
-        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
         errorLine1="  &lt;TextView"
         errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\header_date.xml"
             line="8"
             column="4"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="    &lt;TextView"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_download.xml"
+            line="32"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="    &lt;TextView"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_download.xml"
+            line="40"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="      &lt;TextView"
+        errorLine2="       ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_download.xml"
+            line="61"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="SelectableText"
+        message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
+        errorLine1="      &lt;TextView"
+        errorLine2="       ~~~~~~~~">
+        <location
+            file="src\main\res\layout\item_download.xml"
+            line="69"
+            column="8"/>
     </issue>
 
     <issue
@@ -198,89 +165,89 @@
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="    &lt;TextView"
-        errorLine2="     ~~~~~~~~">
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="34"
-            column="6"/>
+            line="26"
+            column="4"/>
     </issue>
 
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="    &lt;TextView"
-        errorLine2="     ~~~~~~~~">
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="41"
-            column="6"/>
+            line="37"
+            column="4"/>
     </issue>
 
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="        &lt;TextView"
-        errorLine2="         ~~~~~~~~">
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="61"
-            column="10"/>
+            line="48"
+            column="4"/>
     </issue>
 
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="        &lt;TextView"
-        errorLine2="         ~~~~~~~~">
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="68"
-            column="10"/>
+            line="57"
+            column="4"/>
     </issue>
 
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="        &lt;TextView"
-        errorLine2="         ~~~~~~~~">
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="75"
-            column="10"/>
+            line="66"
+            column="4"/>
     </issue>
 
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="        &lt;TextView"
-        errorLine2="         ~~~~~~~~">
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="91"
-            column="10"/>
+            line="77"
+            column="4"/>
     </issue>
 
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="        &lt;TextView"
-        errorLine2="         ~~~~~~~~">
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="98"
-            column="10"/>
+            line="87"
+            column="4"/>
     </issue>
 
     <issue
         id="SelectableText"
         message="Consider making the text value selectable by specifying `android:textIsSelectable=&quot;true&quot;`"
-        errorLine1="        &lt;TextView"
-        errorLine2="         ~~~~~~~~">
+        errorLine1="  &lt;TextView"
+        errorLine2="   ~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="105"
-            column="10"/>
+            line="96"
+            column="4"/>
     </issue>
 
     <issue
@@ -301,8 +268,23 @@
         errorLine2="      ~~~~~~~~~~~~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\main\KiwixMainActivity.kt"
-            line="49"
+            line="50"
             column="7"/>
+    </issue>
+
+    <issue
+        id="AlwaysShowAction"
+        message="Prefer &quot;`ifRoom`&quot; instead of &quot;`always`&quot;"
+        errorLine1="    app:showAsAction=&quot;always&quot; />"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src\main\res\menu\menu_zim_files_contextual.xml"
+            line="11"
+            column="5"/>
+        <location
+            file="src\main\res\menu\menu_zim_files_contextual.xml"
+            line="19"
+            column="5"/>
     </issue>
 
     <issue
@@ -311,7 +293,7 @@
         errorLine1="  &lt;ImageView"
         errorLine2="   ~~~~~~~~~">
         <location
-            file="src\main\res\layout\download_item.xml"
+            file="src\main\res\layout\item_download.xml"
             line="13"
             column="4"/>
     </issue>
@@ -322,8 +304,8 @@
         errorLine1="    &lt;ImageView"
         errorLine2="     ~~~~~~~~~">
         <location
-            file="src\main\res\layout\download_item.xml"
-            line="82"
+            file="src\main\res\layout\item_download.xml"
+            line="83"
             column="6"/>
     </issue>
 
@@ -334,19 +316,8 @@
         errorLine2="   ~~~~~~~~~">
         <location
             file="src\main\res\layout\item_library.xml"
-            line="15"
+            line="12"
             column="4"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider adding `android:layout_marginEnd=&quot;@dimen/favicon_margin_right&quot;` to better support right-to-left layouts"
-        errorLine1="    android:layout_marginRight=&quot;@dimen/favicon_margin_right&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\res\layout\download_item.xml"
-            line="18"
-            column="5"/>
     </issue>
 
     <issue
@@ -396,19 +367,8 @@
         errorLine2="                          ~~~~~~">
         <location
             file="src\main\java\org\kiwix\kiwixmobile\intro\IntroActivity.java"
-            line="87"
+            line="89"
             column="27"/>
-    </issue>
-
-    <issue
-        id="UnknownNullness"
-        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
-        errorLine1="  public KiwixViewModelFactory(Map&lt;Class&lt;? extends ViewModel>, Provider&lt;ViewModel>> creators) {"
-        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\KiwixViewModelFactory.java"
-            line="32"
-            column="32"/>
     </issue>
 
     <issue
@@ -431,6 +391,17 @@
             file="src\main\java\org\kiwix\kiwixmobile\zim_manager\library_view\LibraryViewCallback.java"
             line="43"
             column="21"/>
+    </issue>
+
+    <issue
+        id="UnknownNullness"
+        message="Unknown nullability; explicitly declare as `@Nullable` or `@NonNull` to improve Kotlin interoperability; see https://android.github.io/kotlin-guides/interop.html#nullability-annotations"
+        errorLine1="  @Override protected void injection(CoreComponent coreComponent) {"
+        errorLine2="                                     ~~~~~~~~~~~~~">
+        <location
+            file="src\main\java\org\kiwix\kiwixmobile\local_file_transfer\LocalFileTransferActivity.java"
+            line="405"
+            column="38"/>
     </issue>
 
 </issues>

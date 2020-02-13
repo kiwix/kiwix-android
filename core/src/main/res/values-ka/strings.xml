@@ -16,7 +16,6 @@
   <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
   <string name="rescan_fs_warning">ZIM-ფაილების ძიება, გთხოვთ, მოიცადოთ…</string>
   <string name="search_label">ძიება</string>
-  <string name="choose_file">აირჩიეთ ZIM-ფაილი (*.zim)</string>
   <string name="open_in_new_tab">ბმული ახალ ჩანართში გაიხსნას?</string>
   <string name="error_file_not_found">შეცდომა: არჩეული ZIM ფაილი ვერ მოიძებნა.</string>
   <string name="error_file_invalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი.</string>

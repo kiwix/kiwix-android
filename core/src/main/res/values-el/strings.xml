@@ -22,9 +22,7 @@
   <string name="save_media_saved">Αποθήκευση αρχείων πολυμέσων ως το %1$s  στο Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Σάρωση για εγκαταστάσιμο περιεχόμενο, παρακαλώ περιμένετε…</string>
   <string name="search_label">Αναζήτηση</string>
-  <string name="choose_file">Επιλογή ZIM Content File (*.zim)</string>
   <string name="open_in_new_tab">Άνοιγμα συνδέσμου σε νέα καρτέλα;</string>
-  <string name="stop_hotspot_button">ΔΙΑΚΟΠΉ</string>
   <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί.</string>
   <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
   <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
@@ -71,17 +69,10 @@
   <string name="new_tab_snack_bar">Άρθρο άνοιξε σε νέα καρτέλα</string>
   <string name="search_widget_text">Αναζήτηση Kiwix</string>
   <string name="speech_prompt_text">Ομιλήστε για αναζήτηση %s</string>
-  <string name="local_zims">Συσκευή</string>
-  <string name="remote_zims">Συνδεδεμένος</string>
   <string name="library">Βιβλιοθήκη</string>
-  <string name="delete_specific_zim_toast">Το αρχείο διαγράφηκε</string>
-  <string name="no_files_here">Δεν υπάρχουν αρχεία εδώ</string>
-  <string name="download_no_space">Μη επαρκής αποθηκευτικός χώρος για την λήψη του αρχείου.</string>
-  <string name="space_available">Διαθέσιμος αποθηκευτικός χώρος:</string>
   <string name="zim_simple">Απλό</string>
   <string name="zim_no_pic">Χωρίς εικόνες</string>
   <string name="zim_no_vid">Χωρίς βίντεο</string>
-  <string name="no_network_connection">Δεν υπάρχει σύνδεση στο δίκτυο</string>
   <string name="help_2">Τι κάνει το Kiwix;</string>
   <string name="help_3">Το Kiwix είναι ένας αναγνώστης περιεχομένου εκτός σύνδεσης. Φέρεται πολύ σαν περιηγητής αλλά αντί να έχει πρόσβαση σε διαδικτυακές σελίδες, διαβάζει περιεχόμενο από ένα αρχείο σε μορφοποίηση ZIM.</string>
   <string name="help_5">Που είναι το περιεχόμενο;</string>
@@ -91,7 +82,6 @@
   <string name="help_9">• Άλλα περιεχόμενα όπως το Wikileaks ή η Βικιθήκη είναι επίσης διαθέσιμα</string>
   <string name="pref_storage">Αποθηκευτικός χώρος</string>
   <string name="pref_current_folder">Τρέχων φάκελος</string>
-  <string name="delete_zim_failed">Λυπούμαστε, δεν μπορέσαμε να διαγράψουμε αυτό το αρχείο. Αντί γι\'αυτού θα έπρεπε να χρησιμοποιήσετε ένα διαχειριστή αρχείων.</string>
   <string name="tts_pause">παύση</string>
   <string name="tts_resume">συνέχεια</string>
   <string name="tts_stop">Διακοπή</string>
@@ -101,7 +91,6 @@
   <string name="no">Όχι</string>
   <string name="confirm_stop_download_title">Σταμάτημα λήψης;</string>
   <string name="confirm_stop_download_msg">Είστε σίγουροι ότι θέλετε να σταματήσετε αυτή τη λήψη;</string>
-  <string name="download_change_storage">Επιλογέας συσκευής αποθηκευτικού χώρου</string>
   <string name="tts_not_enabled">Το κείμενο σε ομιλία δεν είναι ενεργοποιημένο για αυτό το αρχείο ZIM</string>
   <string name="next">Επόμενο</string>
   <string name="previous">Προηγούμενο</string>
@@ -117,7 +106,5 @@
   <string name="external_link_popup_dialog_title">Είσοδος σε εξωτερικό σύνδεσμο</string>
   <string name="external_link_popup_dialog_message">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>
   <string name="do_not_ask_anymore">Μη με ρωτήσεις άλλο</string>
-  <string name="your_languages">Επιλεγμένες γλώσσες:</string>
-  <string name="other_languages">Άλλες γλώσσες:</string>
   <string name="no_bookmarks">Χωρίς σελιδοδείκτες</string>
 </resources>

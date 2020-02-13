@@ -28,17 +28,9 @@
   <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Buscando contenido descargable; espera…</string>
   <string name="search_label">Buscar</string>
-  <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
   <string name="go_to_wifi_settings_label">Ir a config. de wifi</string>
   <string name="go_to_settings_label">Ir a configuración</string>
-  <string name="stop_hotspot_button">DETENER</string>
-  <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
-  <string name="server_started__successfully_toast_message">Se inició el servidor correctamente.</string>
-  <string name="progress_dialog_starting_server">Iniciando el servidor</string>
-  <string name="hotspot_dialog_neutral_button">SÍ, LO HE INICIADO</string>
-  <string name="start_server_label">Iniciar servidor</string>
-  <string name="stop_server_label">Detener servidor</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
   <string name="error_file_invalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>
   <string name="error_article_url_not_found">Error: falló la carga del artículo (URL: %1$s).</string>
@@ -93,17 +85,10 @@
   <string name="search_widget_text">Buscar en Kiwix</string>
   <string name="speech_prompt_text">Habla para buscar %s</string>
   <string name="speech_not_supported">Tu dispositivo no admite entrada de voz</string>
-  <string name="local_zims">Dispositivo</string>
-  <string name="remote_zims">En línea</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_specific_zim_toast">Archivo eliminado</string>
-  <string name="no_files_here">Ningún archivo aquí</string>
-  <string name="download_no_space">Espacio insuficiente para descargar este archivo.</string>
-  <string name="space_available">Espacio disponible:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Ninguna imagen</string>
   <string name="zim_no_vid">Ningún video</string>
-  <string name="no_network_connection">Ninguna conexión de red</string>
   <string name="help_2">¿Qué hace Kiwix?</string>
   <string name="help_3">Kiwix es un lector de contenido desconectado. Actúa mucho como un navegador pero en vez de acceder páginas web en línea, lee contenido de un archivo en formato ZIM.</string>
   <string name="help_4">Si bien Kiwix se diseñó originalmente para proporcionar una Wikipedia sin conexión, también puede leer otros contenidos.</string>
@@ -116,7 +101,6 @@
   <string name="help_11">Los archivos ZIM descargados en la aplicación se encuentran en el directorio de almacenamiento externo, en una carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamiento</string>
   <string name="pref_current_folder">Carpeta actual</string>
-  <string name="delete_zim_failed">No podemos eliminar este archivo. Deberías probar con un administrador de archivos.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
   <string name="tts_stop">detener</string>
@@ -126,7 +110,6 @@
   <string name="no">No</string>
   <string name="confirm_stop_download_title">¿Detener descarga?</string>
   <string name="confirm_stop_download_msg">¿Seguro que quieres detener esta descarga?</string>
-  <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
   <string name="tts_not_enabled">Texto a voz no está activado para este archivo ZIM</string>
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
@@ -145,9 +128,6 @@
   <string name="external_link_popup_dialog_title">Acceso a enlace externo</string>
   <string name="external_link_popup_dialog_message">Estás a punto de seguir un enlace externo. Ello podría generarte gastos por transferencia de datos o sencillamente no funcionará si no tienes conexión. ¿Quieres continuar?</string>
   <string name="do_not_ask_anymore">No preguntar de nuevo</string>
-  <string name="your_languages">Idiomas seleccionados:</string>
-  <string name="other_languages">Otros idiomas:</string>
-  <string name="no_items_msg">No hay ningún elemento disponible</string>
   <string name="crash_title">Bien, esto es vergonzoso</string>
   <string name="crash_description">Parece que nos colgamos.\n¿Te importaría ayudarnos a solucionar este problema enviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">Tu configuración de idioma</string>
@@ -160,17 +140,11 @@
   <string name="new_tab_shortcut_label">Pestaña nueva</string>
   <string name="fav_icon">Favicono</string>
   <string name="articleCount">%s artículos</string>
-  <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar libros</string>
-  <string name="human_kind_knowledge">El conocimiento de la humanidad en tu teléfono.</string>
-  <string name="welcome_to_the_family">Te damos la bienvenida a la familia</string>
-  <string name="download_books_message">Descarga libros y lee en cualquier lugar.</string>
   <string name="unable_to_add_to_bookmarks">No se puede añadir a los marcadores</string>
   <string name="go_to_previous_page">Ir a la página anterior</string>
   <string name="go_to_next_page">Ir a la página siguiente</string>
   <string name="table_of_contents">Sumario</string>
-  <string name="select_languages">Seleccionar idiomas</string>
-  <string name="save_languages">Guardar idiomas</string>
   <string name="send_feedback">Enviar comentarios</string>
   <string name="history">Historial</string>
   <string name="history_from_current_book" fuzzy="true">Historial del libro actual</string>
@@ -195,15 +169,6 @@
   <string name="delete_notes_confirmation_msg">¿Quieres eliminar todas las notas?</string>
   <string name="ext_storage_permission_not_granted">Error: no se concedió el permiso de almacenamiento</string>
   <string name="notes_deletion_unsuccessful">No se borraron algunos artículos</string>
-  <string name="books_count">%d libros</string>
-  <string name="connection_failed">Falló la conexión</string>
-  <string name="error_during_transfer">Se encontró un error durante la transferencia</string>
-  <string name="error_transferring">Error al transferir el archivo %s</string>
-  <string name="nearby_devices">DISPOSITIVOS CERCANOS</string>
-  <string name="files_for_transfer">ARCHIVOS QUE TRANSFERIR</string>
-  <string name="preparing_files">Preparando archivos para su transferencia…</string>
-  <string name="performing_handshake">Realizando protocolo de enlace…</string>
-  <string name="status">Estado</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Borrar todas las notas</string>
   <string name="tag_text_only">Solo texto</string>
   <string name="tag_short_text">Texto breve</string>

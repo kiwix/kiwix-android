@@ -11,7 +11,6 @@
   <string name="menu_exit_full_screen">Verlaat volskerm-modus</string>
   <string name="rescan_fs_warning">Soek ZIM-lêers. Wag asb…</string>
   <string name="search_label">Soek</string>
-  <string name="choose_file">Kies \'n ZIM-inhoudslêer (*.zim)</string>
   <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
   <string name="error_file_not_found">Fout: die geselekteerde ZIM-lêer kon nie gevind word nie.</string>
   <string name="error_file_invalid">Fout: die geselekteerde lêer is nie \'n geldige ZIM-lêer nie.</string>
