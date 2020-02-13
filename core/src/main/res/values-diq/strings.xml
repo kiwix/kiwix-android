@@ -9,7 +9,6 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Zerreki bıgê</string>
   <string name="menu_help">Peşti</string>
   <string name="menu_home">Keye</string>
   <string name="menu_settings">Eyari</string>
@@ -51,8 +50,6 @@
   <string name="pref_credits_title">İştirakwani</string>
   <string name="tts_lang_not_supported">Ena pela de zıwan desteg nêvineno,  yana qebul biyayê datay zıwani bar nêbiya. Tercihê wesiqi wanayê niyo qay.</string>
   <string name="no_reader_application_installed">Seba ena dosya barbiyayi applikasyon nêvineyê</string>
-  <string name="custom_app_missing_content">Aplikasyona şıma xerpiyayiya. No hal belki zi kerta SD miyan ra dosyay wedarna yê, cı ki ra biyo. Aplikasyon wedarne u Play Store ra fına ronayış ganiyo.</string>
-  <string name="go_to_play_store">Şo be Play Store</string>
   <string name="menu_bookmarks_list">Nişani</string>
   <string name="no_section_info">Sernameyê zerreki nêvêniya</string>
   <string name="request_storage">Offline depoyê şıma reştışi rê şıma ra icazet wazenê</string>
@@ -84,15 +81,8 @@
   <string name="search_widget_text">Kiwix\'i cıgeyre</string>
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_downloads">Niyeno ro</string>
   <string name="library">Kıtıbxane</string>
   <string name="delete_specific_zim_toast">Dosya esteriye</string>
-  <string name="zim_file_downloading">Niyeno ro</string>
-  <string name="zim_file_downloaded">Niya ro</string>
-  <string name="download_pause">Bıvındarne</string>
-  <string name="download_stop">Bıvındarne</string>
-  <string name="download_paused">vındarna</string>
-  <string name="no_downloads_here">Tiya barkerdışi çıniyê</string>
   <string name="no_files_here">Tiya dosyeyi çıniyê</string>
   <string name="download_no_space">Seba barkerdışê na dosya rê ca bes niyo.</string>
   <string name="space_available">Karnıyayiye erd:</string>

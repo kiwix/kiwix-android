@@ -10,7 +10,6 @@
 * Verdy p
 -->
 <resources>
-  <string name="menu_zim_manager">Displayed in application menu</string>
   <string name="menu_help">{{Identical|Help}}</string>
   <string name="menu_home">{{Identical|Home}}</string>
   <string name="menu_settings">{{Identical|Settings}}</string>
@@ -35,8 +34,6 @@
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>
   <string name="open">{{Identical|Open}}</string>
   <string name="library">{{Identical|Library}}</string>
-  <string name="download_pause">{{Identical|Pause}}</string>
-  <string name="download_stop">{{Identical|Stop}}</string>
   <string name="tts_stop">{{Identical|Stop}}</string>
   <string name="external_storage">{{Identical|External}}</string>
   <string name="yes">{{Identical|Yes}}</string>
@@ -45,7 +42,6 @@
   <string name="time_left">This is the past participle of the verb “to leave” (meaning “quitted” or “exited”). This is used in a context of “X minutes left” to finish a download.</string>
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
   <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
-  <string name="paused_unknown">{{Identical|Unknown}}</string>
   <string name="save">{{Identical|Save}}</string>
   <string name="no_bookmarks">This means \"there are no bookmarks\"</string>
 </resources>

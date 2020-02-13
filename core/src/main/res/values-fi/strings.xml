@@ -8,7 +8,6 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Kirjasto</string>
   <string name="menu_help">Ohje</string>
   <string name="menu_home">Koti</string>
   <string name="menu_settings">Asetukset</string>
@@ -61,8 +60,6 @@
   <string name="pref_credits_title">Tekijät</string>
   <string name="tts_lang_not_supported">Tämän sivun kieltä ei tueta, tai kielellistä tietoa ei ole asennettu. Artikkelia ei voida lukea kunnolla.</string>
   <string name="no_reader_application_installed">Ei voitu löytää asennettua sovellusta tämän tyyppiselle tiedostolle</string>
-  <string name="custom_app_missing_content">Sovelluksesi on viottunut.\nTämä voi tapahtua kun poistat tiedostoja SD-kortilta.\nSinun pitää poistaa ja sitten uudelleenasentaa sovellus Play-kaupasta.</string>
-  <string name="go_to_play_store">Mene Play-kauppaan</string>
   <string name="menu_bookmarks_list">Kirjanmerkit</string>
   <string name="no_section_info">Sisältöotsikoita ei löydy</string>
   <string name="request_storage">Käyttääksemme offline-sisältöä, tarvitsemme pääsyn tallennuslaitteeseesi</string>
@@ -96,16 +93,9 @@
   <string name="speech_not_supported">Sori! Laitteesi ei tue puheensyöttöä</string>
   <string name="local_zims">Laite</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_downloads">Ladataan</string>
   <string name="library">Kirjasto</string>
   <string name="delete_zim_body">Poista %s?</string>
   <string name="delete_specific_zim_toast">Tiedosto poistettu</string>
-  <string name="zim_file_downloading">Ladataan</string>
-  <string name="zim_file_downloaded">ladattu</string>
-  <string name="download_pause">Tauko</string>
-  <string name="download_stop">Pysäytä</string>
-  <string name="download_paused">keskeytetty</string>
-  <string name="no_downloads_here">Ei latauksia täällä</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
   <string name="space_available">Tilaa käytettävissä:</string>
   <string name="zim_simple">Yksinkertainen</string>
@@ -142,13 +132,10 @@
   <string name="time_left">jäljellä</string>
   <string name="time_today">Tänään</string>
   <string name="time_yesterday">Eilen</string>
-  <string name="pref_auto_night_mode_summary">Vaihda automaattisesti päivä- ja yötilan välillä.</string>
-  <string name="pref_auto_night_mode">Automatisoitu yötila</string>
   <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
   <string name="your_languages">Valitut kielet:</string>
   <string name="other_languages">Muut kielet:</string>
-  <string name="ongoing_download_channel_name">Keskeneräiset lataukset</string>
   <string name="crash_title">Jaha… Tämä on noloa</string>
   <string name="crash_checkbox_language">Omat kieliasetukset</string>
   <string name="crash_checkbox_zimfiles">Luettelo Zim-tiedostoistasi</string>
@@ -158,7 +145,6 @@
   <string name="crash_button_decline">EI KIITOS</string>
   <string name="new_tab_shortcut_label">Uusi välilehti</string>
   <string name="get_content_shortcut_label">Hanki sisältöä</string>
-  <string name="vid">Vid</string>
   <string name="articleCount">%s artikkelia</string>
   <string name="get_started">Aloittaminen</string>
   <string name="download_books">Lataa kirjoja</string>
@@ -177,21 +163,10 @@
   <string name="search_history">Hakuhistoria</string>
   <string name="selected_items">%1$d valittu</string>
   <string name="search_bookmarks">Hae kirjanmerkkejä</string>
-  <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Sulje kaikki välilehdet</string>
   <string name="pending_state">Avoin</string>
   <string name="running_state">Käynnissä</string>
   <string name="paused_state">Pysäytetty</string>
-  <string name="paused_wifi">Odotetaan Wifi-yhteyttä</string>
-  <string name="paused_connectivity">Odotetaan yhteyden muodostamista verkkoon</string>
-  <string name="paused_unknown">Tuntematon</string>
-  <string name="failed_file_already_exists">Tiedosto on jo olemassa</string>
-  <string name="failed_unknown_file_error">Tuntematon tiedostojärjestelmävirhe</string>
-  <string name="failed_http_error">HTTP-datavirhe</string>
-  <string name="failed_insufficient_space">Ei tarpeeksi tilaa tallennuslaitteessa</string>
-  <string name="failed_too_many_redirects">Liian monta uudelleenohjausta</string>
-  <string name="failed_unknown">Tuntematon</string>
-  <string name="failed_http_code">HTTP-koodi %s</string>
   <string name="save">Tallenna</string>
   <string name="wiki_article_title">Wikiartikkelin otsikko</string>
   <string name="confirmation_alert_dialog_message">Hylkää tallentamattomat muutokset?</string>

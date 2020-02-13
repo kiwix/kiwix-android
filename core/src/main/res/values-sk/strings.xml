@@ -34,8 +34,6 @@
   <string name="pref_language_chooser">Zvoliť jazyk</string>
   <string name="tts_lang_not_supported">Jazyk tejto stránky buď nie je podporovaný, alebo neboli nainštalované príslušné jazykové balíčky. Článok nemusí byť správne prečítaný.</string>
   <string name="no_reader_application_installed">Nebola nájdená nainštalovaná aplikácia pre tento typ súboru</string>
-  <string name="custom_app_missing_content">Vaša aplikácia je poškodená.\nToto sa stáva, keď vymažete súbory na SD Karte.\nMusíte odinštalovať a potom znovu nainštalovať aplikáciu z Obchodu Play.</string>
-  <string name="go_to_play_store">Prejsť do Obchodu Play</string>
   <string name="menu_bookmarks_list">Záložky</string>
   <string name="no_section_info">Neboly nájdené hlavičky obsahu (content headers)</string>
   <string name="request_storage">Na prístup k súborom typu ZIM potrebujeme prístup k vášmu úložisku</string>

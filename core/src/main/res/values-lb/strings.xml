@@ -6,7 +6,6 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Inhalt ofruffen</string>
   <string name="menu_help">Hëllef</string>
   <string name="menu_home">Haaptsäit</string>
   <string name="menu_settings">Astellungen</string>
@@ -43,7 +42,6 @@
   <string name="pref_language_title">Sprooch</string>
   <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
   <string name="pref_credits">Auteuren a Lizenzen</string>
-  <string name="go_to_play_store">An de Play Store goen</string>
   <string name="menu_bookmarks_list">Lieszeechen</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
@@ -62,14 +60,9 @@
   <string name="search_widget_text">Op Kiwix sichen</string>
   <string name="local_zims">Apparat</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_downloads">Eroflueden</string>
   <string name="library">Bibliothéik</string>
   <string name="delete_zim_body">%s läschen?</string>
   <string name="delete_specific_zim_toast">Fichier geläscht</string>
-  <string name="zim_file_downloading">Eroflueden</string>
-  <string name="zim_file_downloaded">Erofgelueden</string>
-  <string name="download_pause">Paus</string>
-  <string name="download_stop">Stopp</string>
   <string name="no_files_here">Keng Fichieren hei?</string>
   <string name="download_no_space">Net genuch Plaz fir dëse Fichier erofzelueden.</string>
   <string name="space_available">Plaz disponibel:</string>
@@ -111,11 +104,6 @@
   <string name="go_to_previous_page">Op déi vireg Säit goen</string>
   <string name="select_languages">Sproochen eraussichen</string>
   <string name="save_languages">Sprooche späicheren</string>
-  <string name="paused_unknown">Onbekannt</string>
-  <string name="failed_file_already_exists">Fichier gëtt et schonn</string>
-  <string name="failed_unknown_file_error">Onbekannte System-Feeler</string>
-  <string name="failed_too_many_redirects">Ze vill Viruleedungen</string>
-  <string name="failed_unknown">Onbekannt</string>
   <string name="save">Späicheren</string>
   <string name="note_share_error_file_missing">De Fichier mat den Notizze gëtt et net</string>
   <string name="your_device">Ären Apparat:</string>

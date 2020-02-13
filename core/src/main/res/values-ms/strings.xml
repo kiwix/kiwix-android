@@ -34,8 +34,6 @@
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="tts_lang_not_supported">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
   <string name="no_reader_application_installed">Tidak terjumpa aplikasi yang dipasang untuk jenis fail ini</string>
-  <string name="custom_app_missing_content">Aplikasi anda tercemar.\nIni mungkin berlaku apabila anda mengalihkan keluar fail pada kad SD.\nAnda perlu menyahpasang lalu memasang semula aplikasi berkenaan dari App Store.</string>
-  <string name="go_to_play_store">Pergi ke Play Store</string>
   <string name="menu_bookmarks_list">Kegemaran</string>
   <string name="no_section_info">Tiada judul kandungan ditemui</string>
   <string name="request_storage">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>

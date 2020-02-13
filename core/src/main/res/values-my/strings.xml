@@ -42,7 +42,6 @@
   <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
   <string name="pref_credits">ပံပိုးပေးသူများနှင့် လိုင်စင်များ</string>
   <string name="tts_lang_not_supported">ဤစာမျက်နှာ၏ ဘာသာစကားကို မထောက်ပံ့ထားပါ၊ သို့မဟုတ် သင့်လျော်သော ဘာသာစကားဒေတာကို သွင်းမထားပါ။ ဆောင်းပါးကို မှန်ကန်စွာ ဖတ်နိုင်မည်မဟုတ်ပါ။</string>
-  <string name="go_to_play_store">Play စတိုးသို့ သွားရန်</string>
   <string name="menu_bookmarks_list">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="delete_recent_search_item">ဤဟာကို ဖျက်မည်လား</string>
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
@@ -63,14 +62,8 @@
   <string name="open">ဖွင့်ပါ</string>
   <string name="local_zims">စက်ပစ္စည်း</string>
   <string name="remote_zims">အွန်လိုင်း</string>
-  <string name="zim_downloads">ဒေါင်းလုတ်ဆွဲနေသည်</string>
   <string name="library">မှတ်ထားမှုများ</string>
   <string name="delete_specific_zim_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
-  <string name="zim_file_downloading">ဒေါင်းလုတ်ဆွဲနေသည်</string>
-  <string name="zim_file_downloaded">ဒေါင်းလုဒ်ဆွဲပြီးပြီ</string>
-  <string name="download_pause">ခေတ္တရပ်</string>
-  <string name="download_stop">ရပ်</string>
-  <string name="download_paused">ခေတ္တရပ်ပြီး</string>
   <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
   <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
   <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>
@@ -108,7 +101,6 @@
   <string name="expand">ချဲ့ရန်</string>
   <string name="history">ရာဇဝင်</string>
   <string name="bookmarks_from_current_book">စာအုပ်များအားလုံးမှ မှတ်သားထားသော စာအုပ်များကိုကြည့်ရန်</string>
-  <string name="failed_file_already_exists">ဖိုင် ရှိနှင့်ပြီးသားဖြစ်သည်</string>
   <string name="no_results">ရလဒ်များ မရှိပါ</string>
   <string name="no_bookmarks">စာညှပ်မှတ်ထားခြင်း မရှိ!</string>
   <string name="no_history">ရာဇဝင် မရှိ</string>

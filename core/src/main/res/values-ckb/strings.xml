@@ -7,7 +7,6 @@
 -->
 <resources>
   <string name="kiwi">کیوی</string>
-  <string name="menu_zim_manager">کتێبخانە</string>
   <string name="menu_help">یارمەتی</string>
   <string name="menu_home">ماڵەوە</string>
   <string name="menu_settings">ڕێکخستنەکان</string>
@@ -64,15 +63,8 @@
   <string name="new_tab_snack_bar">وتارەکە لە تابێکی نوێ کرایەوە</string>
   <string name="local_zims">ئامێر</string>
   <string name="remote_zims">سەرھێڵ</string>
-  <string name="zim_downloads">دادەگیرێت</string>
   <string name="library">کتێبخانە</string>
   <string name="delete_specific_zim_toast">پەڕگە سڕدرایەوە</string>
-  <string name="zim_file_downloading">دادەگیرێت</string>
-  <string name="zim_file_downloaded">داگیرا</string>
-  <string name="download_pause">ڕاگرتن</string>
-  <string name="download_stop">وەستاندن</string>
-  <string name="download_paused">ڕاگیرا</string>
-  <string name="no_downloads_here">ھیچ داگرتنێک لێرە نییە</string>
   <string name="no_files_here">ھیچ پەڕگەیەک لێرە نییە</string>
   <string name="zim_simple">سادە</string>
   <string name="zim_no_pic">بەبێ وێنە</string>
@@ -127,8 +119,6 @@
   <string name="running_state">لەژێر کاردا</string>
   <string name="successful_state">تەواو</string>
   <string name="paused_state">ڕاگیرا</string>
-  <string name="paused_unknown">نەزانراو</string>
-  <string name="failed_unknown">نەزانراو</string>
   <string name="save">پاشەکەوت</string>
   <string name="note">تێبینی</string>
   <string name="wiki_article_title">ناونیشانی وتاری ویکی</string>

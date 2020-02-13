@@ -5,7 +5,6 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Biblioteca</string>
   <string name="menu_help">Agiudu</string>
   <string name="menu_home">Pàgina printzipale</string>
   <string name="menu_settings">Impostatziones</string>
@@ -70,12 +69,9 @@
   <string name="pref_credits_title">Crèditos</string>
   <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada, o sos datos pro sa limba adeguada non sunt installados. S\'artìculu diat pòdere èssere letu in manera non adeguada.</string>
   <string name="no_reader_application_installed">Impossìbile agatare un\'aplicatzione installada pro custa casta de documentu</string>
-  <string name="custom_app_missing_content">S\'aplicatzione tua est corrùmpida.\nCustu podet acontèssere cando bogas documentos dae s\'ischeda SD.\nDepes disinstallare e torrare a installare s\'aplicatzione dae su Play Store.</string>
-  <string name="go_to_play_store">Bae a su Play Store</string>
   <string name="menu_bookmarks_list">Sinnalibros</string>
   <string name="no_section_info">Peruna intestatzione de cuntenutu agatada</string>
   <string name="request_storage">Pro atzèdere a su documentu ZIM tenimus bisòngiu de pòdere atzèdere a sa memòria tua</string>
-  <string name="request_storage_custom">Si bides un\'avertimentu subrapostu in s\'ischermu torra a allùghere su dispositivu pro l\'acontzare.</string>
   <string name="clear_recent_and_tabs_history_dialog">Seguru ses de bòlere iscantzellare sa cronologia de sas chircas e ripristinare totu sas ischedas ativas?</string>
   <string name="delete_recent_search_item">Iscantzellare custu elementu?</string>
   <string name="pref_clear_all_history_title">Iscantzella sa cronologia</string>
@@ -109,16 +105,9 @@
   <string name="speech_not_supported">Làstima! Su dispositivu tuo non suportat sa sintetizatzione vocale</string>
   <string name="local_zims">Dispositivu</string>
   <string name="remote_zims">In lìnia</string>
-  <string name="zim_downloads">Iscarrighende</string>
   <string name="library">Libreria</string>
   <string name="delete_zim_body">Iscantzellare %s?</string>
   <string name="delete_specific_zim_toast">Documentu iscantzelladu</string>
-  <string name="zim_file_downloading">Iscarrighende</string>
-  <string name="zim_file_downloaded">Iscarrigadu</string>
-  <string name="download_pause">Pàusa</string>
-  <string name="download_stop">Firma</string>
-  <string name="download_paused">in pàusa</string>
-  <string name="no_downloads_here">Perunu iscarrigamentu inoghe</string>
   <string name="no_files_here">Perunu documentu inoghe</string>
   <string name="download_no_space">Sa memòria non bastat pro iscarrigare custu documentu.</string>
   <string name="space_available">Ispàtziu disponìbile:</string>
@@ -138,7 +127,6 @@
   <string name="help_11">Sos documentos ZIM iscarrigados dae intro de s\'aplicatzione sunt sarvados in sa memòria esterna in una cartella mutida “Kiwix”.</string>
   <string name="pref_storage">Memòria</string>
   <string name="pref_current_folder">Cartella atuale</string>
-  <string name="path_not_writable">Impossìbile abèrrere sa cartella isseberada, impreende sas impostatziones predefinidas. Pro isòrvere su problema torra a ischertare sa cartella in sos inditos de s\'aplicatzione.</string>
   <string name="delete_zim_failed">Non est istadu possìbile iscantzellare custu documentu. Dias pòdere proare a impreare unu gestore de documentos.</string>
   <string name="tts_pause">pàusa</string>
   <string name="tts_resume">sighi</string>
@@ -163,8 +151,6 @@
   <string name="time_left">galu</string>
   <string name="time_today">Oe</string>
   <string name="time_yesterday">Eris</string>
-  <string name="pref_auto_night_mode_summary">Cola in manera automàtica intre sa modalidade die e note.</string>
-  <string name="pref_auto_night_mode">Modalidade note automàtica</string>
   <string name="pref_external_link_popup_title">Avisa cando ses aberende unu ligàmene esternu</string>
   <string name="pref_external_link_popup_summary">Ammustra ventaneddas pro t\'avisare de costos agiuntivos o ligàmenes chi non funtzionant chene una connessione a ìnternet.</string>
   <string name="external_link_popup_dialog_title">Aberende unu ligàmene esternu</string>
@@ -173,8 +159,6 @@
   <string name="your_languages">Limbas ischertadas:</string>
   <string name="other_languages">Àteras limbas:</string>
   <string name="no_items_msg">Perunu elementu disponìbile</string>
-  <string name="ongoing_download_channel_name">Iscarrigamentos in cursu</string>
-  <string name="ongoing_download_channel_desc">Categoria pro sos iscarrigamentos in cursu de sos documentos zim.</string>
   <string name="crash_title">Oja… Custu est imbaratzante</string>
   <string name="crash_description">Paret chi s\'aplicatzione si siat serrada pro more de carchi errore.\n\nNon cheres agiudare a acontzare custu problema imbiende·nos sos datos chi sighint?</string>
   <string name="crash_checkbox_language">Sas impostatziones de sa limba tuas</string>
@@ -188,8 +172,6 @@
   <string name="new_tab_shortcut_label">Ischeda noa</string>
   <string name="get_content_shortcut_label">Iscàrriga cuntenutos</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pic">Immàgine</string>
-  <string name="vid">Vìdeu</string>
   <string name="articleCount">%s artìculos</string>
   <string name="get_started">Incumintza</string>
   <string name="download_books">Iscàrriga libros</string>
@@ -212,27 +194,12 @@
   <string name="bookmarks_from_current_book" fuzzy="true">Sinnalibros dae su libru atuale</string>
   <string name="search_bookmarks">Chirca sinnalibros</string>
   <string name="switch_tabs">Muda ischedas</string>
-  <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Serra totu sas ischedas</string>
   <string name="pending_state">In isetu</string>
   <string name="running_state">In caminu</string>
   <string name="successful_state">Acabadu</string>
   <string name="paused_state">In pàusa</string>
   <string name="failed_state">Fallidu: %s</string>
-  <string name="paused_wifi">Isetende su Wifi</string>
-  <string name="paused_connectivity">Isetende pro si cunnètere a una retza</string>
-  <string name="paused_retry">Isetende pro torrare a proare</string>
-  <string name="paused_unknown">Disconnotu</string>
-  <string name="failed_cannot_resume">Impossìbile sighire pro more de una resone disconnota</string>
-  <string name="failed_storage_not_found">Impossìbile agatare sa memòria</string>
-  <string name="failed_file_already_exists">Su documentu esistit giai</string>
-  <string name="failed_unknown_file_error">Errore disconnotu de su sistema de documentos</string>
-  <string name="failed_http_error">Errore de datos HTTP</string>
-  <string name="failed_insufficient_space">Non b\'at logu bastante in memòria</string>
-  <string name="failed_too_many_redirects">Tropos reindiritzamentos</string>
-  <string name="failed_unhandled_http_code">Còdighe HTTP disconnotu retzidu</string>
-  <string name="failed_unknown">Disconnotu</string>
-  <string name="failed_http_code">Còdighe HTTP %s</string>
   <string name="save">Sarva</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Tìtulu de s\'artìculu de sa Wiki</string>
@@ -273,7 +240,6 @@
   <string name="files_for_transfer">DOCUMENTOS DE TRAMUDARE</string>
   <string name="preparing_files">Preparende sos documentos pro los tramudare…</string>
   <string name="performing_handshake">Ammaniende su protocollu de ligàmene…</string>
-  <string name="local_zim_sharing">Cumpartzidura locale de ZIM</string>
   <string name="status">Istadu</string>
   <string name="pref_clear_all_notes_summary">Iscantzella totu sas notas in totu sos artìculos</string>
   <string name="pref_clear_all_notes_title">Iscantzella totu sas notas</string>

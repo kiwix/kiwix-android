@@ -4,7 +4,6 @@
 -->
 <resources>
   <string name="kiwi">Киви</string>
-  <string name="menu_zim_manager">Библиотека</string>
   <string name="menu_help">Помош</string>
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Поставки</string>
@@ -69,12 +68,9 @@
   <string name="pref_credits_title">Признанија</string>
   <string name="tts_lang_not_supported">Јазикот на оваа страница не е поддржан, или пак немате воспоставено соодветни јазични податоци. Статијата може да биде неправилно испишана.</string>
   <string name="no_reader_application_installed">Не можев да најдам воспоставен приложник за овој вид податотека</string>
-  <string name="custom_app_missing_content">Прилогот ви е расипан.\nОва може да се случи при отстранување податотеки од SD-картичка.\nЌе треба да го отстраните прилогот и повторно да го воспоставите преку Play Store.</string>
-  <string name="go_to_play_store">Оди на Play Store</string>
   <string name="menu_bookmarks_list">Обележани</string>
   <string name="no_section_info">Не пронајдов содржински заглавија</string>
   <string name="request_storage">Ќе треба пристап до вашиот склад за да дојдам до вонмрежната содржина</string>
-  <string name="request_storage_custom">Ако имате предупредување на екранска облога, просто превклучете го уредот.</string>
   <string name="clear_recent_and_tabs_history_dialog">Дали сугурно сакате да ја избришете историјата на пребарувања и да ги отфрлите сите активни јазичиња?</string>
   <string name="delete_recent_search_item">Да ја избришам ставкава?</string>
   <string name="pref_clear_all_history_title">Исчисти историја</string>
@@ -110,16 +106,9 @@
   <string name="speech_not_supported">Жалиме! Вашиот уред не поддржува гласовно внесување</string>
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
-  <string name="zim_downloads">Преземам</string>
   <string name="library">Библиотека</string>
   <string name="delete_zim_body">Да го избришам %s?</string>
   <string name="delete_specific_zim_toast">Податотеката е избришана</string>
-  <string name="zim_file_downloading">Преземам</string>
-  <string name="zim_file_downloaded">Преземено</string>
-  <string name="download_pause">Паузирај</string>
-  <string name="download_stop">Запри</string>
-  <string name="download_paused">паузирано</string>
-  <string name="no_downloads_here">Нема преземања</string>
   <string name="no_files_here">Нема податотеки</string>
   <string name="download_no_space">Немате доволно место за преземање на податотекава.</string>
   <string name="space_available">Достапен простор:</string>
@@ -139,7 +128,6 @@
   <string name="help_11">Преземањето на ZIM-податотеките во прилогот се сместени во надворешниот склад во папка наречена Kiwix.</string>
   <string name="pref_storage">Склад</string>
   <string name="pref_current_folder">Тековна папка</string>
-  <string name="path_not_writable">Не можам да дојдам до саканата папка. Ќе ја користам основната. За да го поправите ова, преизберете папка во поставките на прилогот.</string>
   <string name="delete_zim_failed">За жал, не можев да ја избришам податотеката. Пробајте со Управувачот со податотеки.</string>
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>
@@ -164,8 +152,6 @@
   <string name="time_left">лево</string>
   <string name="time_today">Денес</string>
   <string name="time_yesterday">Вчера</string>
-  <string name="pref_auto_night_mode_summary">Автоматски префрлај меѓу дневен и ноќен режим.</string>
-  <string name="pref_auto_night_mode">Автоматски ноќен режим</string>
   <string name="pref_external_link_popup_title">Предупреди ме кога се внесуваат надворешни врски</string>
   <string name="pref_external_link_popup_summary">Прикажи отскочници со предупредување за дополнителни трошоци или неработа во вонмрежни врски.</string>
   <string name="external_link_popup_dialog_title">Внесување на надворешна врска</string>
@@ -174,8 +160,6 @@
   <string name="your_languages">Избрани јазици:</string>
   <string name="other_languages">Други јазици:</string>
   <string name="no_items_msg">Нема ставки</string>
-  <string name="ongoing_download_channel_name">Тековни преземања</string>
-  <string name="ongoing_download_channel_desc">Категорија за тековни преземања на ZIM-податотеки.</string>
   <string name="crash_title">Ова е незгодно</string>
   <string name="crash_description">Се чини дека се урнавме.\n\nБи сакале ли да ни ги испратите следниве информации за да го поправиме проблемот?</string>
   <string name="crash_checkbox_language">Ваши јазични поставки</string>
@@ -189,8 +173,6 @@
   <string name="new_tab_shortcut_label">Ново јазиче</string>
   <string name="get_content_shortcut_label">Земи содржини</string>
   <string name="fav_icon">Иконка</string>
-  <string name="pic">Слика</string>
-  <string name="vid">Видео</string>
   <string name="articleCount">%s статии</string>
   <string name="get_started">Започни</string>
   <string name="download_books">Преземи книги</string>
@@ -213,27 +195,12 @@
   <string name="bookmarks_from_current_book">Погл. обележувачи од сите книги</string>
   <string name="search_bookmarks">Пребарај по обележувачите</string>
   <string name="switch_tabs">Смени јазичиња</string>
-  <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Затвори ги сите јазичиња</string>
   <string name="pending_state">Во исчекување</string>
   <string name="running_state">Во тек</string>
   <string name="successful_state">Готово</string>
   <string name="paused_state">Паузирано</string>
   <string name="failed_state">Не успеа: %s</string>
-  <string name="paused_wifi">Чекам на безжичен пристап</string>
-  <string name="paused_connectivity">Чекам да се поврзам со мрежа</string>
-  <string name="paused_retry">Чекам за повторен обид</string>
-  <string name="paused_unknown">Непознато</string>
-  <string name="failed_cannot_resume">Не можам да продолжам од непозната причина</string>
-  <string name="failed_storage_not_found">Не можев да го најдам складот</string>
-  <string name="failed_file_already_exists">Податотеката веќе постои</string>
-  <string name="failed_unknown_file_error">Непозната грешка во податотечниот систем</string>
-  <string name="failed_http_error">Грешка во HTTP-податоците</string>
-  <string name="failed_insufficient_space">Нема доволно простор во складот</string>
-  <string name="failed_too_many_redirects">Премногу пренасочувања</string>
-  <string name="failed_unhandled_http_code">Добиен непознат HTTP-код</string>
-  <string name="failed_unknown">Непознато</string>
-  <string name="failed_http_code">HTTP-код %s</string>
   <string name="save">Зачувај</string>
   <string name="note">Белешка</string>
   <string name="wiki_article_title">Наслов на викистатијата</string>
@@ -274,7 +241,6 @@
   <string name="files_for_transfer">ПОДАТОТЕКИ ЗА ПРЕНЕСУВАЊЕ</string>
   <string name="preparing_files">Ги подготвувам податотеките за пренос…</string>
   <string name="performing_handshake">Поврзувам…</string>
-  <string name="local_zim_sharing">Место споделување на ZIM</string>
   <string name="status">Состојба</string>
   <string name="pref_clear_all_notes_summary">Ги чисти сите белешки на сите статии</string>
   <string name="pref_clear_all_notes_title">Исчисти ги сите белешки</string>

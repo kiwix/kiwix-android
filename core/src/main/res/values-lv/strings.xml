@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="menu_zim_manager">Iegūt saturu</string>
   <string name="menu_help">Palīdzība</string>
   <string name="menu_home">Sākums</string>
   <string name="menu_settings">Izvēles</string>
@@ -26,7 +25,6 @@
   <string name="undo">Atsaukt</string>
   <string name="open">Atvērt</string>
   <string name="search_widget_text">Meklēt Kiwix</string>
-  <string name="zim_downloads">Lejupielādē</string>
   <string name="library">Bibliotēka</string>
   <string name="delete_specific_zim_toast">Fails dzēsts</string>
   <string name="tts_resume">turpināt</string>

@@ -10,7 +10,6 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Knihovna</string>
   <string name="menu_help">Nápověda</string>
   <string name="menu_home">Domů</string>
   <string name="menu_settings">Nastavení</string>
@@ -74,8 +73,6 @@
   <string name="pref_credits_title">O souboru</string>
   <string name="tts_lang_not_supported">Jazyk této stránky není podporován nebo odpovídající jazyková data nejsou nainstalována. Článek nemusí být správně přečten.</string>
   <string name="no_reader_application_installed">Pro tento typ souboru nebylo možné najít nainstalovanou aplikaci</string>
-  <string name="custom_app_missing_content">Vaše aplikace je poškozena. To se může stát, jestliže jste {{GENDER:|odstranil|odstranila|odstranil(a)}} soubory z SD karty. Musíte aplikaci odinstalovat a pak ji znovu nainstalovat z Play Store.</string>
-  <string name="go_to_play_store">Přejděte do Play Store</string>
   <string name="menu_bookmarks_list">Záložky</string>
   <string name="no_section_info">Nebyly nalezeny žádné hlavičky obsahu.</string>
   <string name="request_storage">Pro přístup k obsahu offline potřebujeme přístup k vašemu úložišti.</string>
@@ -110,16 +107,9 @@
   <string name="speech_not_supported">Promiňte! Vaše zařízení nepodporuje hlasový vstup</string>
   <string name="local_zims">Zařízení</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_downloads">Stahování</string>
   <string name="library">Knihovna</string>
   <string name="delete_zim_body">Vymazat %s?</string>
   <string name="delete_specific_zim_toast">Soubor byl smazán</string>
-  <string name="zim_file_downloading">Stahuji</string>
-  <string name="zim_file_downloaded">Staženo</string>
-  <string name="download_pause">Pozastavit</string>
-  <string name="download_stop">Zastavit</string>
-  <string name="download_paused">pozastaveno</string>
-  <string name="no_downloads_here">Žádná stahování</string>
   <string name="no_files_here">Zde nejsou žádné soubory</string>
   <string name="download_no_space">Nedostatečný prostor ke stažení tohoto souboru.</string>
   <string name="space_available">Dostupné místo:</string>
@@ -158,16 +148,12 @@
   <string name="time_left">Vlevo</string>
   <string name="time_today">Dnes</string>
   <string name="time_yesterday">Včera</string>
-  <string name="pref_auto_night_mode_summary">Automaticky přepínat mezi denním a nočním módem.</string>
-  <string name="pref_auto_night_mode">Automatizovaný noční mód</string>
   <string name="external_link_popup_dialog_title">Vkládám externí odkaz</string>
   <string name="external_link_popup_dialog_message">Když vkládáte externí odkaz. Může to vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
   <string name="your_languages">Vybrané jazyky:</string>
   <string name="other_languages">Jiné jazyky:</string>
   <string name="no_items_msg">Žádné dostupné položky</string>
-  <string name="ongoing_download_channel_name">Stahování stále probíhá</string>
-  <string name="ongoing_download_channel_desc">Kategorie pro probíhající stahování zim souborů.</string>
   <string name="crash_title">Inu…to je trapné</string>
   <string name="crash_description">Nevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
   <string name="crash_checkbox_language">Vaše nastavení jazyka</string>
@@ -198,26 +184,11 @@
   <string name="search_history">Historie vyhledávání</string>
   <string name="bookmarks_from_current_book" fuzzy="true">Záložky z aktuální knihy</string>
   <string name="switch_tabs">Přepnout panely</string>
-  <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Zavřít všechny záložky</string>
   <string name="running_state">Probíhá</string>
   <string name="successful_state">Hotovo!</string>
   <string name="paused_state">Pozastaveno</string>
   <string name="failed_state">Selhalo: %s</string>
-  <string name="paused_wifi">Čekám na Wifi</string>
-  <string name="paused_connectivity">Čekám na připojení k síti</string>
-  <string name="paused_retry">Čekám na opakování</string>
-  <string name="paused_unknown">Neznámý</string>
-  <string name="failed_cannot_resume">Nemohu obnovit v důsledku neznáme chyby</string>
-  <string name="failed_storage_not_found">Nemohu najít uložiště</string>
-  <string name="failed_file_already_exists">Soubor již existuje</string>
-  <string name="failed_unknown_file_error">Neznámá chyba systému souborů</string>
-  <string name="failed_http_error">Chyba dat HTTP</string>
-  <string name="failed_insufficient_space">Nemáte dostatek místa na uložišti</string>
-  <string name="failed_too_many_redirects">Příliš mnoho redirektů</string>
-  <string name="failed_unhandled_http_code">Přijat neznámý HTTP kód</string>
-  <string name="failed_unknown">Neznámý</string>
-  <string name="failed_http_code">HTTP kód %s</string>
   <string name="save">Uložit</string>
   <string name="note">Poznámka</string>
   <string name="wiki_article_title">Název wiki článku</string>

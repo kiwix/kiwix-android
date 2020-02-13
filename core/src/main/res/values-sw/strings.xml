@@ -33,16 +33,12 @@
   <string name="pref_back_to_top_summary">Onyesha kidude kwenye mwisho wa kurasa ili kurudi hadi sehemu ya juu</string>
   <string name="pref_language_title">Lugha</string>
   <string name="pref_language_chooser">Chagua lugha</string>
-  <string name="go_to_play_store">Enda kwa Play Store</string>
   <string name="menu_bookmarks_list">Maalamisho</string>
   <string name="delete">Futa</string>
   <string name="got_it">Nimeipata</string>
   <string name="undo">Tengua</string>
   <string name="search_widget_text">Tafuta Kiwix</string>
-  <string name="zim_downloads">Inapakua</string>
   <string name="library">Maktaba</string>
-  <string name="zim_file_downloading">Inapakua</string>
-  <string name="zim_file_downloaded">Imepakua</string>
   <string name="zim_no_pic">Hakuna picha</string>
   <string name="zim_no_vid">Hakuna video</string>
   <string name="internal_storage">Ndani</string>

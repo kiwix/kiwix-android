@@ -34,8 +34,6 @@
   <string name="pref_language_chooser">Taal kiezen</string>
   <string name="tts_lang_not_supported">De taak van deze pagina wordt niet ondersteund, of de juiste taalgegevens zijn niet geïnstalleerd. De pagina kan niet correct gelezen worden.</string>
   <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
-  <string name="custom_app_missing_content">Uw programma is beschadigd.\nDit kan gebeuren als u bestanden van de SD-kaart verwijdert.\nU moet de App verwijderen opnieuw installeren uit de Play Store.</string>
-  <string name="go_to_play_store">Naar de Play Store gaan</string>
   <string name="menu_bookmarks_list">Bladwijzers</string>
   <string name="no_section_info">Geen inhoudsheaders gevonden</string>
   <string name="request_storage">Om toegang te krijgen tot ZIM-bestanden is toegang tot uw opslag nodig</string>
@@ -50,8 +48,6 @@
   <string name="library">Bibliotheek</string>
   <string name="zim_no_vid">Geen video\'s</string>
   <string name="help_6">Onze inhoud is ondergebracht op de Kiwix website</string>
-  <string name="pref_auto_night_mode_summary">Automatisch veranderen tussen de dag- en nachtmodus</string>
-  <string name="pref_auto_night_mode">Geautomatiseerde nachtmodus</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
