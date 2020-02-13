@@ -76,7 +76,7 @@
   <string name="local_zims">Συσκευή</string>
   <string name="remote_zims">Συνδεδεμένος</string>
   <string name="zim_downloads">Λήψη…</string>
-  <string name="zim_manager">Βιβλιοθήκη</string>
+  <string name="library">Βιβλιοθήκη</string>
   <string name="delete_specific_zim_toast">Το αρχείο διαγράφηκε</string>
   <string name="zim_file_downloading">Λήψη…</string>
   <string name="zim_file_downloaded">Εγκατεστημένο</string>

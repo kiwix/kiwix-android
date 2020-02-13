@@ -90,7 +90,7 @@
   <string name="local_zims">Preséu</string>
   <string name="remote_zims">En llinia</string>
   <string name="zim_downloads">Descargando</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_zim_body">¿Desaniciar %s?</string>
   <string name="delete_specific_zim_toast">Ficheru desaniciáu</string>
   <string name="zim_file_downloading">Descargando</string>

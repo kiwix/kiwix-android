@@ -111,7 +111,7 @@
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
   <string name="zim_downloads">Преземам</string>
-  <string name="zim_manager">Библиотека</string>
+  <string name="library">Библиотека</string>
   <string name="delete_zim_body">Да го избришам %s?</string>
   <string name="delete_specific_zim_toast">Податотеката е избришана</string>
   <string name="zim_file_downloading">Преземам</string>

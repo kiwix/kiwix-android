@@ -92,7 +92,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
   <string name="zim_downloads">A descarregar</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_specific_zim_toast">Ficheiro apagado</string>
   <string name="zim_file_downloading">A descarregar</string>
   <string name="zim_file_downloaded">Descarregado</string>

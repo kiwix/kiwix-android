@@ -85,7 +85,7 @@
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Niyeno ro</string>
-  <string name="zim_manager">Kıtıbxane</string>
+  <string name="library">Kıtıbxane</string>
   <string name="delete_specific_zim_toast">Dosya esteriye</string>
   <string name="zim_file_downloading">Niyeno ro</string>
   <string name="zim_file_downloaded">Niya ro</string>

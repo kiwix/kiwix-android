@@ -87,7 +87,7 @@
   <string name="local_zims">ডিভাইস</string>
   <string name="remote_zims">অনলাইন</string>
   <string name="zim_downloads">ডাউনলোড হচ্ছে</string>
-  <string name="zim_manager">পাঠাগার</string>
+  <string name="library">পাঠাগার</string>
   <string name="delete_specific_zim_toast">ফাইল অপসারণ করা হয়েছে</string>
   <string name="zim_file_downloading">ডাউনলোড হচ্ছে</string>
   <string name="zim_file_downloaded">ডাউনলোড হয়েছে</string>

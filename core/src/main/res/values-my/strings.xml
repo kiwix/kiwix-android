@@ -64,7 +64,7 @@
   <string name="local_zims">စက်ပစ္စည်း</string>
   <string name="remote_zims">အွန်လိုင်း</string>
   <string name="zim_downloads">ဒေါင်းလုတ်ဆွဲနေသည်</string>
-  <string name="zim_manager">မှတ်ထားမှုများ</string>
+  <string name="library">မှတ်ထားမှုများ</string>
   <string name="delete_specific_zim_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
   <string name="zim_file_downloading">ဒေါင်းလုတ်ဆွဲနေသည်</string>
   <string name="zim_file_downloaded">ဒေါင်းလုဒ်ဆွဲပြီးပြီ</string>

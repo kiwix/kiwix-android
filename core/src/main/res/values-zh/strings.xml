@@ -93,7 +93,7 @@
   <string name="local_zims">设备</string>
   <string name="remote_zims">在线</string>
   <string name="zim_downloads">正在下载..</string>
-  <string name="zim_manager">图书馆</string>
+  <string name="library">图书馆</string>
   <string name="delete_specific_zim_toast">文件已删除</string>
   <string name="zim_file_downloading">正在下载</string>
   <string name="zim_file_downloaded">已下载</string>

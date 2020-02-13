@@ -18,7 +18,7 @@
   <string name="menu_bookmarks_list">Һалынмалар</string>
   <string name="rate_dialog_positive">Баһаларға!</string>
   <string name="rate_dialog_negative">Юҡ, рәхмәт</string>
-  <string name="zim_manager">Китапхана</string>
+  <string name="library">Китапхана</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

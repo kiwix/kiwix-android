@@ -83,7 +83,7 @@
   <string name="local_zims">Gerät</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Herunterladen</string>
-  <string name="zim_manager">Bibliothek</string>
+  <string name="library">Bibliothek</string>
   <string name="delete_specific_zim_toast">Datei gelöscht</string>
   <string name="zim_file_downloading">Herunterladen</string>
   <string name="zim_file_downloaded">Heruntergeladen</string>

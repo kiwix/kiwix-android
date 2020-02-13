@@ -53,7 +53,7 @@
   <string name="search_widget_text">کيويس پلټل</string>
   <string name="speech_prompt_text">خبري د لټون لپاره %s</string>
   <string name="speech_not_supported">وبخښي! ستاسو وسیله د بیان انډول ملاتړ نه کوي</string>
-  <string name="zim_manager">د منځپانګې مدیریت</string>
+  <string name="library">د منځپانګې مدیریت</string>
   <string name="zim_file_downloading">ډاونلوډيږي</string>
   <string name="zim_file_downloaded">ډاونلوډ سو</string>
   <string name="space_available">ځای شتون لري:</string>

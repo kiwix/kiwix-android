@@ -33,7 +33,7 @@
   <string name="menu_bookmarks_list">ബൂക്ക്മാർക്കുകൾ</string>
   <string name="rate_dialog_negative">വേണ്ട, നന്ദി</string>
   <string name="rate_dialog_neutral">പിന്നീട്</string>
-  <string name="zim_manager">ഗ്രന്ഥപ്പുര</string>
+  <string name="library">ഗ്രന്ഥപ്പുര</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

@@ -85,7 +85,7 @@
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Tê daxistin</string>
-  <string name="zim_manager">Pirtûkxane</string>
+  <string name="library">Pirtûkxane</string>
   <string name="delete_specific_zim_toast">Pel hat jêbirin</string>
   <string name="zim_file_downloading">Tê daxistin</string>
   <string name="zim_file_downloaded">Hat daxistin</string>

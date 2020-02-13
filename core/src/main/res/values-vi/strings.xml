@@ -85,7 +85,7 @@
   <string name="local_zims">Thiết bị</string>
   <string name="remote_zims">Trực tuyến</string>
   <string name="zim_downloads">Đang tải về</string>
-  <string name="zim_manager">Thư viện</string>
+  <string name="library">Thư viện</string>
   <string name="delete_specific_zim_toast">Đã xóa tập tin</string>
   <string name="zim_file_downloading">Đang tải về</string>
   <string name="zim_file_downloaded">Đã tải về</string>

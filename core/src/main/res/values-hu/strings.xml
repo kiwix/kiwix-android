@@ -91,7 +91,7 @@
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
   <string name="zim_downloads">A letöltés folyamatban</string>
-  <string name="zim_manager">Könyvtár</string>
+  <string name="library">Könyvtár</string>
   <string name="delete_specific_zim_toast">Fájl törölve</string>
   <string name="zim_file_downloading">A letöltés folyamatban</string>
   <string name="zim_file_downloaded">Letöltve</string>

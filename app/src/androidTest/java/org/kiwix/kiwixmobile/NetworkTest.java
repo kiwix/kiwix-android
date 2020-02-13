@@ -121,7 +121,7 @@ public class NetworkTest {
     mActivityTestRule.launchActivity(null);
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
 
     TestUtils.allowPermissionsIfNeeded();
 
@@ -154,7 +154,7 @@ public class NetworkTest {
       // TODO how can we get a count of the items matching the dataInteraction?
       dataInteraction.atPosition(0).perform(click());
 
-      clickMenu(R.string.menu_zim_manager);
+      clickMenu(R.string.library);
 
       DataInteraction dataInteraction1 =
         onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));

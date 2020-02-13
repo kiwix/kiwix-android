@@ -83,7 +83,7 @@
   <string name="local_zims">Pajisje</string>
   <string name="remote_zims">Në linjë</string>
   <string name="zim_downloads">Shkarkim</string>
-  <string name="zim_manager">Bibliotekë</string>
+  <string name="library">Bibliotekë</string>
   <string name="delete_specific_zim_toast">Kartela u fshi</string>
   <string name="zim_file_downloading">Po shkarkim</string>
   <string name="zim_file_downloaded">U shkarkua</string>

@@ -89,7 +89,7 @@
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="zim_downloads">Изтегляне</string>
-  <string name="zim_manager">Библиотека</string>
+  <string name="library">Библиотека</string>
   <string name="delete_specific_zim_toast">Файлът е изтрит</string>
   <string name="zim_file_downloading">Изтегляне</string>
   <string name="zim_file_downloaded">Изтеглено</string>

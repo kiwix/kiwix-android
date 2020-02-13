@@ -110,7 +110,7 @@
   <string name="local_zims">Dispositivu</string>
   <string name="remote_zims">In lìnia</string>
   <string name="zim_downloads">Iscarrighende</string>
-  <string name="zim_manager">Libreria</string>
+  <string name="library">Libreria</string>
   <string name="delete_zim_body">Iscantzellare %s?</string>
   <string name="delete_specific_zim_toast">Documentu iscantzelladu</string>
   <string name="zim_file_downloading">Iscarrighende</string>

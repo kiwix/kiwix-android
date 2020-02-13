@@ -115,7 +115,7 @@
   <string name="local_zims">מכשיר</string>
   <string name="remote_zims">מקוון</string>
   <string name="zim_downloads">מוריד</string>
-  <string name="zim_manager">ספרייה</string>
+  <string name="library">ספרייה</string>
   <string name="delete_zim_body">למחוק את %s?</string>
   <string name="delete_specific_zim_toast">הקובץ נמחק</string>
   <string name="zim_file_downloading">מוריד</string>

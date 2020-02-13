@@ -16,7 +16,7 @@
   <string name="pref_language_title">Basa</string>
   <string name="pref_language_chooser">Pilih basa</string>
   <string name="menu_bookmarks_list">Tenger wacan</string>
-  <string name="zim_manager">Perpustakan</string>
+  <string name="library">Perpustakan</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

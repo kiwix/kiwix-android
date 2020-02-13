@@ -97,7 +97,7 @@
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
   <string name="zim_downloads">Laddar ned</string>
-  <string name="zim_manager">Bibliotek</string>
+  <string name="library">Bibliotek</string>
   <string name="delete_zim_body">Radera %s?</string>
   <string name="delete_specific_zim_toast">Fil raderades</string>
   <string name="zim_file_downloading">Laddar ned</string>

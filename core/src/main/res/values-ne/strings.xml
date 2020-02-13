@@ -67,7 +67,7 @@
   <string name="new_tab_snack_bar">लेख नयाँ ट्याबमा खोल्नुहोस्</string>
   <string name="local_zims">उपकरण</string>
   <string name="zim_downloads">डाउनलोड गर्दै</string>
-  <string name="zim_manager">पुस्तकालय</string>
+  <string name="library">पुस्तकालय</string>
   <string name="delete_specific_zim_toast">फाइल मेटियो</string>
   <string name="zim_file_downloading">डाउनलोड गर्दै</string>
   <string name="zim_file_downloaded">डाउनलोड</string>

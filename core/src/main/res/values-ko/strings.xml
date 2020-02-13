@@ -116,7 +116,7 @@
   <string name="local_zims">장치</string>
   <string name="remote_zims">온라인</string>
   <string name="zim_downloads">다운로드 중</string>
-  <string name="zim_manager">라이브러리</string>
+  <string name="library">라이브러리</string>
   <string name="delete_zim_body">%s을(를) 삭제하시겠습니까?</string>
   <string name="delete_specific_zim_toast">파일이 삭제되었습니다</string>
   <string name="zim_file_downloading">다운로드 중</string>

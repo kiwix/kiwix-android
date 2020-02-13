@@ -86,7 +86,7 @@
   <string name="local_zims">Gailua</string>
   <string name="remote_zims">Konektatuta</string>
   <string name="zim_downloads">Jaisten</string>
-  <string name="zim_manager">Liburutegia</string>
+  <string name="library">Liburutegia</string>
   <string name="delete_specific_zim_toast">Fitxategi ezabatua</string>
   <string name="zim_file_downloading">Jaisten</string>
   <string name="zim_file_downloaded">Jaitsita</string>

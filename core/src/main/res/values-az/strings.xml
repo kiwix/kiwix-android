@@ -36,7 +36,7 @@
   <string name="rate_dialog_positive">Dəyərləndir!</string>
   <string name="rate_dialog_negative">Yox, sağ olun</string>
   <string name="rate_dialog_neutral">Daha sonra</string>
-  <string name="zim_manager">Kitabxana</string>
+  <string name="library">Kitabxana</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

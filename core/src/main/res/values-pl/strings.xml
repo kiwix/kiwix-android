@@ -113,7 +113,7 @@
   <string name="local_zims">Urządzenie</string>
   <string name="remote_zims">Dostępny</string>
   <string name="zim_downloads">Pobieranie</string>
-  <string name="zim_manager">Biblioteka</string>
+  <string name="library">Biblioteka</string>
   <string name="delete_zim_body">Usunąć %s?</string>
   <string name="delete_specific_zim_toast">Plik został usunięty</string>
   <string name="zim_file_downloading">Pobieranie</string>

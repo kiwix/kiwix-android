@@ -93,7 +93,7 @@
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
   <string name="zim_downloads">Henter</string>
-  <string name="zim_manager">Bibliotek</string>
+  <string name="library">Bibliotek</string>
   <string name="delete_specific_zim_toast">Fil slettet</string>
   <string name="zim_file_downloading">Henter</string>
   <string name="zim_file_downloaded">Hentet</string>

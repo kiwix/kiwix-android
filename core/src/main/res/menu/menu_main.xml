@@ -29,7 +29,7 @@
   <item
     android:id="@+id/menu_openfile"
     android:icon="@drawable/action_open_file"
-    android:title="@string/menu_zim_manager"
+    android:title="@string/library"
     app:showAsAction="never" />
 
   <item

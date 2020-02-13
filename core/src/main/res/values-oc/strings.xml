@@ -75,7 +75,7 @@
   <string name="local_zims">Aparelh</string>
   <string name="remote_zims">En linha</string>
   <string name="zim_downloads">En cors de telecargament</string>
-  <string name="zim_manager" fuzzy="true">Gestion del contengut</string>
+  <string name="library" fuzzy="true">Gestion del contengut</string>
   <string name="delete_specific_zim_toast">Fichièr suprimit</string>
   <string name="zim_file_downloading">En cors de telecargament</string>
   <string name="zim_file_downloaded">Telecargat</string>

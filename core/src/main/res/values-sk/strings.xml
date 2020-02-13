@@ -48,7 +48,7 @@
   <string name="rate_dialog_neutral">Neskôr</string>
   <string name="pref_newtab_background_title">Otvoriť novú kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Pri otvorení novej karty bude karta otvorená na pozadí</string>
-  <string name="zim_manager">Knižnica</string>
+  <string name="library">Knižnica</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

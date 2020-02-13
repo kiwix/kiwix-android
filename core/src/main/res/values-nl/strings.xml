@@ -47,7 +47,7 @@
   <string name="rate_dialog_negative">Nee, bedankt</string>
   <string name="pref_newtab_background_title">Nieuw tabblab in de achtergrond openen</string>
   <string name="pref_newtab_background_summary">Nieuwe tabbladen worden niet actief gemaakt</string>
-  <string name="zim_manager">Bibliotheek</string>
+  <string name="library">Bibliotheek</string>
   <string name="zim_no_vid">Geen video\'s</string>
   <string name="help_6">Onze inhoud is ondergebracht op de Kiwix website</string>
   <string name="pref_auto_night_mode_summary">Automatisch veranderen tussen de dag- en nachtmodus</string>

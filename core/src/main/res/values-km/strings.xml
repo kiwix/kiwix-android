@@ -25,7 +25,7 @@
   <string name="pref_back_to_top">ត្រឡប់ទៅលើ</string>
   <string name="pref_language_title">ភាសា​</string>
   <string name="menu_bookmarks_list">ការកត់ចំណាំ</string>
-  <string name="zim_manager">បណ្ណាល័យ</string>
+  <string name="library">បណ្ណាល័យ</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

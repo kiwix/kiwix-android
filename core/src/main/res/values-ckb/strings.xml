@@ -65,7 +65,7 @@
   <string name="local_zims">ئامێر</string>
   <string name="remote_zims">سەرھێڵ</string>
   <string name="zim_downloads">دادەگیرێت</string>
-  <string name="zim_manager">کتێبخانە</string>
+  <string name="library">کتێبخانە</string>
   <string name="delete_specific_zim_toast">پەڕگە سڕدرایەوە</string>
   <string name="zim_file_downloading">دادەگیرێت</string>
   <string name="zim_file_downloaded">داگیرا</string>

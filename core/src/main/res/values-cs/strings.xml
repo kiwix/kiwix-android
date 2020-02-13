@@ -111,7 +111,7 @@
   <string name="local_zims">Zařízení</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Stahování</string>
-  <string name="zim_manager">Knihovna</string>
+  <string name="library">Knihovna</string>
   <string name="delete_zim_body">Vymazat %s?</string>
   <string name="delete_specific_zim_toast">Soubor byl smazán</string>
   <string name="zim_file_downloading">Stahuji</string>

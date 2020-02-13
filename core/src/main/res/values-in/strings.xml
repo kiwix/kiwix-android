@@ -87,7 +87,7 @@
   <string name="local_zims">Perangkat</string>
   <string name="remote_zims">Daring</string>
   <string name="zim_downloads">Mengunduh</string>
-  <string name="zim_manager">Perpustakaan</string>
+  <string name="library">Perpustakaan</string>
   <string name="delete_specific_zim_toast">Berkas telah dihapus</string>
   <string name="zim_file_downloading">Mengunduh</string>
   <string name="zim_file_downloaded">Diunduh</string>

@@ -74,7 +74,7 @@
   <string name="local_zims">دستگاه</string>
   <string name="remote_zims">برخط</string>
   <string name="zim_downloads">در حال بارگیری</string>
-  <string name="zim_manager">کتابخانه</string>
+  <string name="library">کتابخانه</string>
   <string name="delete_specific_zim_toast">پرونده حذف شد</string>
   <string name="zim_file_downloading">در حال بارگیری</string>
   <string name="zim_file_downloaded">بارگیری شد</string>

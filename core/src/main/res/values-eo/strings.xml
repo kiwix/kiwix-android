@@ -91,7 +91,7 @@
   <string name="local_zims">Aparato</string>
   <string name="remote_zims">Konektita</string>
   <string name="zim_downloads">Elŝutante</string>
-  <string name="zim_manager">Biblioteko</string>
+  <string name="library">Biblioteko</string>
   <string name="delete_specific_zim_toast">Forigis dosieron</string>
   <string name="zim_file_downloading">Elŝutante</string>
   <string name="zim_file_downloaded">Elŝutita</string>

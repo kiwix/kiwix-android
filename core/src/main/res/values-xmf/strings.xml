@@ -90,7 +90,7 @@
   <string name="local_zims">მონწყილობა</string>
   <string name="remote_zims">ონლაინ</string>
   <string name="zim_downloads">გიმიხარგუაფუ</string>
-  <string name="zim_manager">ბიბლიოთეკა</string>
+  <string name="library">ბიბლიოთეკა</string>
   <string name="delete_zim_body">დობლასათო %s?</string>
   <string name="delete_specific_zim_toast">ფაილქ დილასუ</string>
   <string name="zim_file_downloading">გიმიხარგუაფუ</string>

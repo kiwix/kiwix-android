@@ -87,7 +87,7 @@
   <string name="local_zims">Trobarzhell</string>
   <string name="remote_zims">Enlinenn</string>
   <string name="zim_downloads">O pellgargañ…</string>
-  <string name="zim_manager">Levraoueg</string>
+  <string name="library">Levraoueg</string>
   <string name="delete_specific_zim_toast">Restr dilamet</string>
   <string name="zim_file_downloading">O pellgargañ…</string>
   <string name="zim_file_downloaded">Pellgarget</string>

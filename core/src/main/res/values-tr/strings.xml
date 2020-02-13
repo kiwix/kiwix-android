@@ -122,7 +122,7 @@
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Çevrimiçi</string>
   <string name="zim_downloads">İndiriliyor</string>
-  <string name="zim_manager">Kütüphane</string>
+  <string name="library">Kütüphane</string>
   <string name="delete_zim_body">%s silinsin mi?</string>
   <string name="delete_specific_zim_toast">Dosya silindi</string>
   <string name="zim_file_downloading">İndiriliyor</string>

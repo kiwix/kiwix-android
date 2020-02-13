@@ -90,7 +90,7 @@
   <string name="local_zims">डिवाइस</string>
   <string name="remote_zims">ऑनलाइन</string>
   <string name="zim_downloads">डाउनलोड हो रहा</string>
-  <string name="zim_manager">पुस्तकालय</string>
+  <string name="library">पुस्तकालय</string>
   <string name="delete_specific_zim_toast">फाइल हटा दी गई</string>
   <string name="zim_file_downloading">डाउनलोड हो रहा</string>
   <string name="zim_file_downloaded">डाउनलोड हो गया</string>

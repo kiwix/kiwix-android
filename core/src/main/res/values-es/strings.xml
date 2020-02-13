@@ -100,7 +100,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En línea</string>
   <string name="zim_downloads">Descargando</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_specific_zim_toast">Archivo eliminado</string>
   <string name="zim_file_downloading">Descargando</string>
   <string name="zim_file_downloaded">Descargado</string>

@@ -28,7 +28,7 @@
   <string name="pref_language_title">Хэл</string>
   <string name="pref_language_chooser">Хэлээ сонгоно уу</string>
   <string name="menu_bookmarks_list">Тэмдэглэсэн хуудсууд</string>
-  <string name="zim_manager">Сан</string>
+  <string name="library">Сан</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

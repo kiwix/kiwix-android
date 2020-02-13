@@ -22,7 +22,7 @@
   <string name="pref_night_mode_summary">Kunnafoni minnu ɲɛ cogoya yɛlɛmanen don, olu jira.</string>
   <string name="pref_language_title">Kan</string>
   <string name="menu_bookmarks_list">Ɲɛ dogo</string>
-  <string name="zim_manager">Gafeso</string>
+  <string name="library">Gafeso</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

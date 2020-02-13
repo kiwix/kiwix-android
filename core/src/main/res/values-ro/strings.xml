@@ -84,7 +84,7 @@
   <string name="local_zims">Dispozitiv</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Descărcare</string>
-  <string name="zim_manager">Bibliotecă</string>
+  <string name="library">Bibliotecă</string>
   <string name="delete_specific_zim_toast">Filă ștearsă</string>
   <string name="zim_file_downloading">Descărcare</string>
   <string name="zim_file_downloaded">Descărcat</string>

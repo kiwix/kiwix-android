@@ -117,7 +117,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Baixando</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_zim_body">Excluir %s?</string>
   <string name="delete_specific_zim_toast">Arquivo apagado</string>
   <string name="zim_file_downloading">Baixando</string>

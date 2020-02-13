@@ -116,7 +116,7 @@
   <string name="local_zims">設備</string>
   <string name="remote_zims">線上</string>
   <string name="zim_downloads">下載中</string>
-  <string name="zim_manager">圖書館</string>
+  <string name="library">圖書館</string>
   <string name="delete_zim_body">刪除%s？</string>
   <string name="delete_specific_zim_toast">檔案已刪除</string>
   <string name="zim_file_downloading">下載中</string>

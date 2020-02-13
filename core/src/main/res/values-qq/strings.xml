@@ -34,7 +34,7 @@
   <string name="rate_dialog_negative">{{Identical|No thanks}}</string>
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>
   <string name="open">{{Identical|Open}}</string>
-  <string name="zim_manager">{{Identical|Library}}</string>
+  <string name="library">{{Identical|Library}}</string>
   <string name="download_pause">{{Identical|Pause}}</string>
   <string name="download_stop">{{Identical|Stop}}</string>
   <string name="tts_stop">{{Identical|Stop}}</string>

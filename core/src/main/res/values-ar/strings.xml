@@ -114,7 +114,7 @@
   <string name="local_zims">جهاز</string>
   <string name="remote_zims">على الإنترنت</string>
   <string name="zim_downloads">جارٍ التنزيل</string>
-  <string name="zim_manager">مكتبة</string>
+  <string name="library">مكتبة</string>
   <string name="delete_zim_body">حذف %s؟</string>
   <string name="delete_specific_zim_toast">تم حذف الملف</string>
   <string name="zim_file_downloading">جارٍ التنزيل</string>

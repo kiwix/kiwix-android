@@ -92,7 +92,7 @@
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
   <string name="zim_downloads">Prenos</string>
-  <string name="zim_manager">Knjižnica</string>
+  <string name="library">Knjižnica</string>
   <string name="delete_specific_zim_toast">Datoteka je izbrisana</string>
   <string name="zim_file_downloading">Prenos</string>
   <string name="zim_file_downloaded">Preneseno</string>

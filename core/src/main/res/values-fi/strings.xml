@@ -97,7 +97,7 @@
   <string name="local_zims">Laite</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Ladataan</string>
-  <string name="zim_manager">Kirjasto</string>
+  <string name="library">Kirjasto</string>
   <string name="delete_zim_body">Poista %s?</string>
   <string name="delete_specific_zim_toast">Tiedosto poistettu</string>
   <string name="zim_file_downloading">Ladataan</string>

@@ -34,7 +34,7 @@
   <string name="rate_dialog_negative">ไม่ ขอบคุณ</string>
   <string name="rate_dialog_neutral">ทีหลัง</string>
   <string name="bookmark_removed">ลบบุ๊คมาร์คแล้ว</string>
-  <string name="zim_manager">รายการ</string>
+  <string name="library">รายการ</string>
   <string name="delete_specific_zim_toast">ไฟล์ถูกลบ</string>
   <string name="download_pause">หยุดชั่วคราว</string>
   <string name="download_stop">หยุด</string>

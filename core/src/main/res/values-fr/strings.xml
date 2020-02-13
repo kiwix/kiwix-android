@@ -121,7 +121,7 @@
   <string name="local_zims">Appareil</string>
   <string name="remote_zims">En ligne</string>
   <string name="zim_downloads">En cours de téléchargement</string>
-  <string name="zim_manager">Bibliothèque</string>
+  <string name="library">Bibliothèque</string>
   <string name="delete_zim_body">Supprimer %s ?</string>
   <string name="delete_specific_zim_toast">Fichier supprimé</string>
   <string name="zim_file_downloading">En cours de téléchargement</string>
