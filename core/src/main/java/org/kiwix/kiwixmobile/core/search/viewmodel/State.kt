@@ -21,7 +21,8 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
 sealed class State {
-  data class Results(val searchString: String, val values: List<SearchListItem>) : State()
-  object Empty : State()
-  object Initialising : State()
+  abstract val searchString: String
+
+  data class Results(override val searchString: String, val values: List<SearchListItem>) : State()
+  data class NoResults(override val searchString: String) : State()
 }

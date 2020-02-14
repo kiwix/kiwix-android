@@ -47,8 +47,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.Empty
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.Initialising
+import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
@@ -99,7 +98,7 @@ internal class SearchViewModelTest {
   inner class StateTests {
     @Test
     fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(Initialising)
+      viewModel.state.test().assertValue(NoResults(""))
     }
 
     @Test
@@ -115,13 +114,13 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `non empty search string with no search results is Empty`() {
+    fun `non empty search string with no search results is NoResults`() {
       emissionOf(
         searchTerm = "a",
         searchResults = emptyList(),
         databaseResults = listOf(RecentSearchListItem(""))
       )
-      resultsIn(Empty)
+      resultsIn(NoResults("a"))
     }
 
     @Test
@@ -136,13 +135,13 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `empty search string with no database results is Empty`() {
+    fun `empty search string with no database results is NoResults`() {
       emissionOf(
         searchTerm = "",
         searchResults = listOf(ZimSearchResultListItem("")),
         databaseResults = emptyList()
       )
-      resultsIn(Empty)
+      resultsIn(NoResults(""))
     }
 
     @Test
@@ -157,7 +156,7 @@ internal class SearchViewModelTest {
       viewModel.actions.offer(Filter(searchString))
       viewModel.state.test()
         .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(Initialising, Results(searchString, listOf(item)))
+        .assertValueHistory(NoResults(""), Results(searchString, listOf(item)))
     }
 
     @Test
@@ -175,7 +174,7 @@ internal class SearchViewModelTest {
       )
       viewModel.state.test()
         .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(Initialising, Results("b", listOf(item)))
+        .assertValueHistory(NoResults(""), Results("b", listOf(item)))
     }
   }
 
@@ -203,11 +202,6 @@ internal class SearchViewModelTest {
         OnItemLongClick(searchListItem),
         ShowDeleteSearchDialog(searchListItem, viewModel.actions)
       )
-    }
-
-    @Test
-    fun `ClickedSearchInText in invalid state does nothing`() {
-      actionResultsInEffects(ClickedSearchInText)
     }
 
     @Test
@@ -288,8 +282,7 @@ internal class SearchViewModelTest {
     searchResults: List<ZimSearchResultListItem>,
     databaseResults: List<RecentSearchListItem>
   ) {
-    val item =
-      every { searchResultGenerator.generateSearchResults(searchTerm) } returns searchResults
+    every { searchResultGenerator.generateSearchResults(searchTerm) } returns searchResults
     viewModel.actions.offer(Filter(searchTerm))
     recentsFromDb.offer(databaseResults)
   }
