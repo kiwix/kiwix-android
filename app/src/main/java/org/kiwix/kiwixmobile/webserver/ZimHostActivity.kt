@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
@@ -67,7 +68,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private var serviceConnection: ServiceConnection? = null
   private var progressDialog: ProgressDialog? = null
   private val tag = "ZimHostActivity"
-  private val ipStateKey = "ip_state_key"
 
   private val selectedBooksPath: ArrayList<String>
     get() {
@@ -84,7 +84,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
             }
           }
         }
-        as ArrayList<String>
+          as ArrayList<String>
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,10 +103,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
       bookDelegate,
       BookOnDiskDelegate.LanguageDelegate
     )
-    if (savedInstanceState != null) {
-      ip = savedInstanceState.getString(ipStateKey)
-      layoutServerStarted()
-    }
+
     recyclerViewZimHost.adapter = booksAdapter
     presenter.attachView(this)
 
@@ -123,7 +120,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     startServerButton.setOnClickListener { startStopServer() }
   }
 
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     kiwixActivityComponent.inject(this)
   }
 
@@ -262,13 +259,6 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
       }
     )
-  }
-
-  override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    if (ServerUtils.isServerStarted) {
-      outState!!.putString(ipStateKey, ip)
-    }
   }
 
   override fun addBooks(books: List<BooksOnDiskListItem>) {

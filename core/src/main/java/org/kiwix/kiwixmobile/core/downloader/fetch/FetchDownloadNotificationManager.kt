@@ -19,8 +19,10 @@ package org.kiwix.kiwixmobile.core.downloader.fetch
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.app.PendingIntent.getActivity
 import android.content.Context
-import android.media.AudioManager
+import android.content.Intent
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.annotation.RequiresApi
@@ -28,9 +30,12 @@ import androidx.core.app.NotificationCompat
 import com.tonyodev.fetch2.DefaultFetchNotificationManager
 import com.tonyodev.fetch2.DownloadNotification
 import com.tonyodev.fetch2.Fetch
-import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
+import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+
+const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 
 class FetchDownloadNotificationManager(context: Context) :
   DefaultFetchNotificationManager(context) {
@@ -53,38 +58,14 @@ class FetchDownloadNotificationManager(context: Context) :
     downloadNotification: DownloadNotification,
     context: Context
   ) {
-    val smallIcon = if (downloadNotification.isDownloading) {
-      android.R.drawable.stat_sys_download
-    } else {
-      android.R.drawable.stat_sys_download_done
-    }
-    notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-      .setSmallIcon(smallIcon)
-      .setContentTitle(downloadNotification.title)
-      .setContentText(getSubtitleText(context, downloadNotification))
-      .setOngoing(downloadNotification.isOnGoingNotification)
-      .setGroup(downloadNotification.groupId.toString())
-      .setSound(null)
-      .setSound(null, AudioManager.STREAM_NOTIFICATION)
-      .setVibrate(null)
-      .setGroupSummary(false)
-    if (downloadNotification.isFailed || downloadNotification.isCompleted) {
-      notificationBuilder.setProgress(0, 0, false)
-    } else {
-      val progressIndeterminate = downloadNotification.progressIndeterminate
-      val maxProgress = if (downloadNotification.progressIndeterminate) 0 else 100
-      val progress = if (downloadNotification.progress < 0) 0 else downloadNotification.progress
-      notificationBuilder.setProgress(maxProgress, progress, progressIndeterminate)
-    }
-    when {
-      downloadNotification.isDownloading ||
-        downloadNotification.isPaused ||
-        downloadNotification.isQueued -> {
-        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+    super.updateNotification(notificationBuilder, downloadNotification, context)
+    if (downloadNotification.isCompleted) {
+      val internal = Intents.internal(CoreMainActivity::class.java).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotification.title)
       }
-      else -> {
-        notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
-      }
+      notificationBuilder.setContentIntent(getActivity(context, 0, internal, FLAG_UPDATE_CURRENT))
+      notificationBuilder.setAutoCancel(true)
     }
   }
 

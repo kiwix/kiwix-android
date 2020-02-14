@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* WaldiSt
+-->
+<resources>
+  <string name="retry">Ponów próbę</string>
+  <string name="download">Pobierz</string>
+  <string name="invalid_installation">Nieprawidłowa instalacja. Proszę pobrać Zim.\nUpewnij się, że WiFi jest włączone i masz wystarczającą ilość miejsca</string>
+  <string name="complete">Zakończono</string>
+</resources>

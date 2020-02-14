@@ -32,6 +32,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
+import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 
 import static org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight;
 import static org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowHeight;
@@ -67,6 +69,8 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     ImageView close = new ImageView(context);
     close.setId(2);
     close.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_clear_white_24dp));
+    ImageViewExtensionsKt.tint(close,
+      ContextExtensionsKt.getColorAttribute(context, R.attr.colorOnSurface));
 
     CardView cardView = new CardView(context);
     cardView.setId(3);
@@ -90,7 +94,6 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     textView.setId(4);
     textView.setMaxLines(1);
     textView.setEllipsize(TextUtils.TruncateAt.END);
-    textView.setTextColor(activity.getResources().getColor(R.color.white));
     constraintLayout.addView(textView,
       new ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT));
 

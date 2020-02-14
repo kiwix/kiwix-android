@@ -119,7 +119,9 @@ class MainMenu(
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
 
     showWebViewOptions(urlIsValid)
-    zimFileReader?.let(::onFileOpened)
+    zimFileReader?.let {
+      onFileOpened(it, urlIsValid)
+    }
     updateTabIcon(webViews.size)
   }
 
@@ -132,9 +134,18 @@ class MainMenu(
       else -> false
     }
 
-  fun onFileOpened(zimFileReader: ZimFileReader) {
-    setVisibility(true, randomArticle, fullscreen, search, readAloud, addNote)
+  fun onFileOpened(zimFileReader: ZimFileReader, urlIsValid: Boolean) {
+    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen)
     search.setOnMenuItemClickListener { navigateToSearch(zimFileReader) }
+  }
+
+  fun showTabSwitcherOptions() {
+    setVisibility(false, randomArticle, search, readAloud, addNote, fullscreen)
+  }
+
+  fun showWebViewOptions(urlIsValid: Boolean) {
+    fullscreen.isVisible = true
+    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote)
   }
 
   fun updateTabIcon(tabs: Int) {
@@ -160,17 +171,14 @@ class MainMenu(
     readAloud.setTitle(R.string.menu_read_aloud)
   }
 
-  fun showTabSwitcherOptions() {
-    setVisibility(false, search, fullscreen, randomArticle, readAloud)
-  }
-
-  fun showWebViewOptions(urlIsValid: Boolean) {
-    fullscreen.isVisible = true
-    setVisibility(urlIsValid, search, readAloud, randomArticle, addNote)
-  }
-
   private fun setVisibility(visibility: Boolean, vararg menuItems: MenuItem) {
     menuItems.forEach { it.isVisible = visibility }
+  }
+
+  fun tryExpandSearch(zimFileReader: ZimFileReader?) {
+    if (search.isVisible) {
+      zimFileReader?.let(::navigateToSearch)
+    }
   }
 }
 

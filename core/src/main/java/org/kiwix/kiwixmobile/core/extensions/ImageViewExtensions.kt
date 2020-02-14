@@ -18,21 +18,23 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import android.content.res.ColorStateList
 import android.widget.ImageView
+import androidx.annotation.ColorInt
+import androidx.core.widget.ImageViewCompat
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 
 fun ImageView.setBitmap(base64String: Base64String) {
-  if (tag != base64String) {
-    base64String.toBitmap()
-      ?.let {
-        setImageBitmap(it)
-        tag = base64String
-      }
-  }
+  base64String.toBitmap()
+    ?.let(::setImageBitmap)
 }
 
 // methods that accept inline classes as parameters are not allowed to be called from java
 // hence this facade
 fun ImageView.setBitmapFromString(string: String?) {
   setBitmap(Base64String(string))
+}
+
+fun ImageView.tint(@ColorInt colorId: Int) {
+  ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(colorId))
 }

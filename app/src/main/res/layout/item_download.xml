@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="?android:attr/listPreferredItemHeight"
+  android:orientation="horizontal"
+  android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingTop="@dimen/activity_vertical_margin"
+  android:paddingRight="@dimen/activity_horizontal_margin">
+
+  <ImageView
+    android:id="@+id/libraryDownloadFavicon"
+    android:layout_width="@dimen/favicon_width"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginRight="@dimen/favicon_margin_right"
+    android:adjustViewBounds="true"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:scaleType="fitCenter"
+    android:src="@mipmap/ic_launcher"
+    tools:ignore="RtlHardcoded" />
+
+  <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/libraryDownloadTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="start"
+      android:textAppearance="?android:attr/textAppearanceListItem"
+      tools:text="Title" />
+
+    <TextView
+      android:id="@+id/libraryDownloadDescription"
+      style="@style/list_item_body"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="start"
+      tools:text="Description" />
+
+    <ProgressBar
+      android:id="@+id/downloadProgress"
+      style="?android:attr/progressBarStyleHorizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:indeterminate="false"
+      android:padding="@dimen/download_progress_padding" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+      <TextView
+        android:id="@+id/downloadState"
+        style="@style/list_item_body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:text="In Progress" />
+
+      <TextView
+        android:id="@+id/eta"
+        style="@style/list_item_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="1min 10secs" />
+    </LinearLayout>
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ImageView
+      android:id="@+id/stop"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="@dimen/stop_horizontal_margin"
+      android:layout_marginRight="@dimen/stop_horizontal_margin"
+      android:layout_weight="0.5"
+      android:minWidth="@dimen/stop_min_width"
+      android:minHeight="@dimen/stop_min_height"
+      android:text="@string/download_stop"
+      app:srcCompat="@drawable/ic_stop_24dp" />
+  </LinearLayout>
+</LinearLayout>

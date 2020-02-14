@@ -2,7 +2,6 @@
 <SmellBaseline>
   <Blacklist></Blacklist>
   <Whitelist>
-    <ID>ConstructorParameterNaming:KiwixTag.kt$KiwixTag.Companion.YesNoValueTag$_value: String</ID>
     <ID>EmptyFunctionBlock:BooksOnDiskViewHolder.kt$BookOnDiskViewHolder.BookViewHolder${ }</ID>
     <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided&gt;${}</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
@@ -10,11 +9,12 @@
     <ID>MagicNumber:CoreSplashActivity.kt$CoreSplashActivity$10</ID>
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
     <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
-    <ID>MagicNumber:FetchDownloadNotificationManager.kt$FetchDownloadNotificationManager$100</ID>
     <ID>MagicNumber:FetchDownloadRequester.kt$10</ID>
     <ID>MagicNumber:FileUtils.kt$FileUtils$3</ID>
     <ID>MagicNumber:KiloByte.kt$KiloByte$1024.0</ID>
     <ID>MagicNumber:MainMenu.kt$MainMenu$99</ID>
+    <ID>MagicNumber:SearchResultGenerator.kt$ZimSearchResultGenerator$200</ID>
+    <ID>MagicNumber:SearchViewModel.kt$SearchViewModel$100</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
@@ -39,9 +39,11 @@
     <ID>SpreadOperator:AlertDialogShower.kt$AlertDialogShower$(dialog.message, *bodyArguments(dialog))</ID>
     <ID>SpreadOperator:BooksOnDiskAdapter.kt$BooksOnDiskAdapter$( *delegates )</ID>
     <ID>SpreadOperator:FileSearch.kt$FileSearch$(*zimFileExtensions)</ID>
+    <ID>SpreadOperator:SearchAdapter.kt$SearchAdapter$(*delegates)</ID>
     <ID>TooGenericExceptionThrown:AbstractContentProvider.kt$AbstractContentProvider$throw RuntimeException("Operation not supported")</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
     <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
+    <ID>TooGenericExceptionThrown:ContextExtensions.kt$throw RuntimeException("invalid attribute $attributeRes")</ID>
     <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("$columnName not found in $columnNames")</ID>
     <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("Unexpected return type ${T::class.java.simpleName}")</ID>
     <ID>TooGenericExceptionThrown:NightModeConfig.kt$NightModeConfig.Mode.Companion$throw RuntimeException("Invalid night mode $nightMode")</ID>
@@ -49,6 +51,7 @@
     <ID>TooManyFunctions:CoreComponent.kt$CoreComponent$CoreComponent</ID>
     <ID>TooManyFunctions:FetchDownloadMonitor.kt$FetchDownloadMonitor$&lt;no name provided&gt; : FetchListener</ID>
     <ID>TooManyFunctions:FileUtils.kt$FileUtils$FileUtils</ID>
+    <ID>TooManyFunctions:NewBookDao.kt$NewBookDao$NewBookDao</ID>
     <ID>TooManyFunctions:Repository.kt$Repository$Repository</ID>
     <ID>TooManyFunctions:ZimFileReader.kt$ZimFileReader$ZimFileReader</ID>
     <ID>TooManyFunctions:ZimReaderContainer.kt$ZimReaderContainer$ZimReaderContainer</ID>

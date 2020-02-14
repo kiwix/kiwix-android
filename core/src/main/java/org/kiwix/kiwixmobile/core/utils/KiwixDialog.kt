@@ -26,7 +26,8 @@ sealed class KiwixDialog(
   val title: Int?,
   val message: Int,
   val positiveMessage: Int,
-  val negativeMessage: Int?
+  val negativeMessage: Int?,
+  val cancelable: Boolean = true
 ) {
 
   data class DeleteZim(override val args: List<Any>) : KiwixDialog(
@@ -64,6 +65,14 @@ sealed class KiwixDialog(
     null
   )
 
+  object ReadPermissionRequired : KiwixDialog(
+    R.string.storage_permission_denied,
+    R.string.grant_read_storage_permission,
+    R.string.go_to_permissions,
+    null,
+    cancelable = false
+  )
+
   data class ShowHotspotDetails(override val args: List<Any>) : KiwixDialog(
     R.string.hotspot_turned_on,
     R.string.hotspot_details_message,
@@ -89,6 +98,10 @@ sealed class KiwixDialog(
   ), HasBodyFormatArgs {
     constructor(selectedPeerDeviceName: String) : this(listOf(selectedPeerDeviceName))
   }
+
+  object DeleteSearch : KiwixDialog(
+    null, R.string.delete_recent_search_item, R.string.delete, R.string.no
+  )
 
   open class YesNoDialog(
     title: Int,

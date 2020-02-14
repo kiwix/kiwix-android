@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* L2212
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Su sistema de documentos (file system) tuo non suportat documentos prus mannos de 4GB</string>
+  <string name="detecting_file_system">Verifichende si su sistema de documentos podet creare documentos de 4GB</string>
+  <string name="cannot_open_file">Abertura de su documentu fallida\nPro praghere proa a chircare custu documentu in s\'Ischeda de sos Dispositivos de sa Biblioteca tua</string>
+</resources>

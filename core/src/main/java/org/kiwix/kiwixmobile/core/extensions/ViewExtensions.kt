@@ -20,20 +20,23 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.graphics.Color
 import android.view.View
+import androidx.annotation.ColorInt
 import com.google.android.material.snackbar.Snackbar
 
 fun View.snack(
   stringId: Int,
-  actionStringId: Int,
-  actionClick: () -> Unit,
-  actionTextColor: Int = Color.WHITE
+  actionStringId: Int? = null,
+  actionClick: (() -> Unit)? = null,
+  @ColorInt actionTextColor: Int = Color.WHITE
 ) {
   Snackbar.make(
     this, stringId, Snackbar.LENGTH_LONG
-  )
-    .setAction(actionStringId) {
-      actionClick.invoke()
-    }
-    .setActionTextColor(actionTextColor)
-    .show()
+  ).apply {
+    actionStringId?.let { setAction(it) { actionClick?.invoke() } }
+    setActionTextColor(actionTextColor)
+  }.show()
+}
+
+fun View.snack(stringId: Int) {
+  snack(stringId, null, null)
 }

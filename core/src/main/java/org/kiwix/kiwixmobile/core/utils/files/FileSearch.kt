@@ -71,17 +71,8 @@ class FileSearch @Inject constructor(private val context: Context) {
   private fun directoryRoots() =
     StorageDeviceUtils.getReadableStorage(context).map(StorageDevice::name)
 
-  private fun scanDirectory(directory: String): List<File> = File(directory).listFiles()
-    ?.fold(
-      mutableListOf(), { acc, file ->
-        acc.apply {
-          if (file.isDirectory) {
-            addAll(scanDirectory(file.path))
-          } else if (file.extension.isAny(*zimFileExtensions)) {
-            add(file)
-          }
-        }
-      }) ?: emptyList()
+  private fun scanDirectory(directory: String): List<File> =
+    File(directory).walk().filter { it.extension.isAny(*zimFileExtensions) }.toList()
 }
 
 internal fun String.isAny(vararg suffixes: String) =

@@ -65,6 +65,15 @@ The default build is `debug`, with this variant you can use a debugger while dev
 
 By default we fetch kiwix-lib, the key component for interacting with ZIM files from maven, but if you wish to use your own locally compiled version for testing purposes, then you can create the directory `app/libs` and place your .aar file inside it to have it used instead.
 
+### Linting
+
+PR should be linted properly locally. The linter is a git hooks and always run automatically.
+
+If you have a good reason to ignore it, please run:
+```bash
+git commit --no-verify
+```
+
 ### Testing
 
 Unit tests are located in `[module]/src/test` and to run them locally you

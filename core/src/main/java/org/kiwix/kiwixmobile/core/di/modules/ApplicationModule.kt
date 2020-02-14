@@ -24,7 +24,6 @@ import android.content.Context
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
-import dagger.android.AndroidInjectionModule
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -40,8 +39,6 @@ import javax.inject.Singleton
 
 @Module(
   includes = [
-    ActivityBindingModule::class,
-    AndroidInjectionModule::class,
     DownloaderModule::class,
     DatabaseModule::class
   ]

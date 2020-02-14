@@ -44,6 +44,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.io.FilesKt;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
@@ -96,11 +97,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   private void setSliderState() {
     boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(
       PREF_ZOOM_ENABLED, false);
-    if (enabled) {
-      mSlider.setEnabled(true);
-    } else {
-      mSlider.setEnabled(false);
-    }
+    mSlider.setEnabled(enabled);
   }
 
   @Override
@@ -123,25 +120,20 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   protected void setUpLanguageChooser(String preferenceId) {
     ListPreference languagePref = (ListPreference) findPreference(preferenceId);
-    String selectedLang = sharedPreferenceUtil.getPrefLanguage(Locale.getDefault().toString());
     List<String> languageCodeList = new LanguageUtils(getActivity()).getKeys();
-    selectedLang = languageCodeList.contains(selectedLang) ? selectedLang : "en";
-    String code[] = languageCodeList.toArray(new String[0]);
-    String[] entries = new String[code.length];
-    for (int index = 0; index < code.length; index++) {
-      Locale locale = new Locale(code[index]);
-      entries[index] =
-        locale.getDisplayLanguage() + " (" + locale.getDisplayLanguage(locale) + ") ";
-    }
-    languagePref.setEntries(entries);
-    languagePref.setEntryValues(code);
+    languageCodeList.add(0, Locale.ROOT.getLanguage());
+    final String selectedLang =
+      selectedLanguage(languageCodeList, sharedPreferenceUtil.getPrefLanguage());
+    languagePref.setEntries(languageDisplayValues(languageCodeList));
+    languagePref.setEntryValues(languageCodeList.toArray(new String[0]));
     languagePref.setDefaultValue(selectedLang);
     languagePref.setValue(selectedLang);
-    languagePref.setTitle(new Locale(selectedLang).getDisplayLanguage());
+    languagePref.setTitle(selectedLang.equals(Locale.ROOT.toString())
+      ? getString(R.string.device_default)
+      : new Locale(selectedLang).getDisplayLanguage());
     languagePref.setOnPreferenceChangeListener((preference, newValue) -> {
       String languageCode = (String) newValue;
       LanguageUtils.handleLocaleChange(getActivity(), languageCode);
-      preference.setTitle(new Locale(languageCode).getLanguage());
       sharedPreferenceUtil.putPrefLanguage(languageCode);
       restartActivity();
       return true;
@@ -152,6 +144,20 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
     getActivity().setResult(RESULT_RESTART);
     getActivity().finish();
     getActivity().startActivity(new Intent(getActivity(), getActivity().getClass()));
+  }
+
+  @NotNull private String selectedLanguage(List<String> languageCodeList, String langPref) {
+    return languageCodeList.contains(langPref) ? langPref : "en";
+  }
+
+  @NotNull private String[] languageDisplayValues(List<String> languageCodeList) {
+    String[] entries = new String[languageCodeList.size()];
+    entries[0] = getString(R.string.device_default);
+    for (int i = 1; i < languageCodeList.size(); i++) {
+      Locale locale = new Locale(languageCodeList.get(i));
+      entries[i] = locale.getDisplayLanguage() + " (" + locale.getDisplayLanguage(locale) + ") ";
+    }
+    return entries;
   }
 
   private void setAppVersionNumber() {
@@ -179,7 +185,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
     if (key.equals(PREF_ZOOM_ENABLED)) {
       setSliderState();
     }
@@ -189,6 +194,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
     }
     if (key.equals(PREF_NIGHT_MODE)) {
       sharedPreferenceUtil.updateNightMode();
+      restartActivity();
     }
   }
 
@@ -275,7 +281,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   public void openFolderSelect() {
     StorageSelectDialog dialogFragment = new StorageSelectDialog();
-    dialogFragment.setOnSelectListener(this::onStorageDeviceSelected);
+    dialogFragment.setOnSelectAction(this::onStorageDeviceSelected);
     dialogFragment.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(),
       getResources().getString(R.string.pref_storage));
   }

@@ -27,9 +27,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.CONTACT_EMAIL_ADDRESS;
@@ -79,5 +82,9 @@ public class HelpActivity extends BaseActivity {
       description.append(System.getProperty("line.separator"));
     }
     titleDescriptionMap.put(getString(title), description.toString());
+  }
+
+  @Override protected void injection(CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

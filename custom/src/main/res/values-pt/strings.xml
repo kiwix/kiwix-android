@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Hamilton Abreu
+* Mansil alfalb
+-->
+<resources>
+  <string name="retry">Repetir</string>
+  <string name="download">Transferir</string>
+  <string name="invalid_installation">Instalação inválida. Descarregue o Zim, por favor.\n Certifique-se que a Wi-Fi está ligada e que tem espaço suficiente</string>
+</resources>

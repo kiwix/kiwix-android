@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Kly
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">您的檔案系統不支援超過 4GB 大小的檔案</string>
+  <string name="detecting_file_system">檢測檔案系統可建立 4GB 大小的檔案</string>
+  <string name="cannot_open_file">檔案開啟失敗\n請嘗試查看在您圖書館設備分頁裡的該檔案</string>
+</resources>

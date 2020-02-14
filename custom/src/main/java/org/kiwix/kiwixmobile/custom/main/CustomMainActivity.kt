@@ -20,16 +20,23 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.TargetApi
+import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_DENIED
+import android.net.Uri
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
@@ -43,7 +50,13 @@ import javax.inject.Inject
 const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
+
+  override fun injection(coreComponent: CoreComponent) {
+    customActivityComponent.inject(this)
+  }
+
   @Inject lateinit var customFileValidator: CustomFileValidator
+  @Inject lateinit var dialogShower: DialogShower
 
   override fun showHomePage() {
     Log.e("CustomMain", "tried to show home page")
@@ -51,10 +64,6 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  override fun injection() {
-    customActivityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,10 +103,25 @@ class CustomMainActivity : CoreMainActivity() {
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (requestCode == REQUEST_READ_FOR_OBB) {
-      openObbOrZim()
+    if (permissions.isNotEmpty() && permissions[0] == READ_EXTERNAL_STORAGE) {
+      if (readStorageHasBeenPermanentlyDenied(grantResults)) {
+        dialogShower.show(KiwixDialog.ReadPermissionRequired, ::goToSettings)
+      } else {
+        openObbOrZim()
+      }
     }
   }
+
+  private fun goToSettings() {
+    startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+      data = Uri.fromParts("package", packageName, null)
+    })
+  }
+
+  @TargetApi(VERSION_CODES.JELLY_BEAN)
+  private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
+    grantResults[0] == PERMISSION_DENIED &&
+      !ActivityCompat.shouldShowRequestPermissionRationale(this, READ_EXTERNAL_STORAGE)
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     val onCreateOptionsMenu = super.onCreateOptionsMenu(menu)

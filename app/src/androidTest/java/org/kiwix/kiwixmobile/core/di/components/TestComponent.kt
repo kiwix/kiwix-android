@@ -22,10 +22,14 @@ import dagger.BindsInstance
 import dagger.Component
 import org.kiwix.kiwixmobile.NetworkTest
 import org.kiwix.kiwixmobile.ZimTest
+import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
+import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
+import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.di.modules.TestNetworkModule
+import org.kiwix.kiwixmobile.core.history.HistoryModule
 import javax.inject.Singleton
 
 /**
@@ -35,10 +39,14 @@ import javax.inject.Singleton
 @Singleton
 @Component(
   modules = [
+    BookmarksModule::class,
+    HistoryModule::class,
     ApplicationModule::class,
     TestNetworkModule::class,
     JNIModule::class,
-    DataModule::class
+    DataModule::class,
+    CoreViewModelModule::class,
+    SearchModule::class
   ]
 )
 interface TestComponent : CoreComponent {

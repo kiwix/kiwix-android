@@ -4,6 +4,7 @@
   <Whitelist>
     <ID>LongParameterList:DownloadCustom.kt$DownloadCustom$( id: String = "", title: String = "", description: String = "", language: String = "", creator: String = "", publisher: String = "", date: String = "", url: String = "", articleCount: String = "", mediaCount: String = "", size: String = "", name: String = "", favIcon: String = "" )</ID>
     <ID>MagicNumber:CustomDownloadActivity.kt$CustomDownloadActivity$3</ID>
+    <ID>TooGenericExceptionThrown:ActivityExtensions.kt$throw RuntimeException( """ applicationContext is ${applicationContext::class.java.simpleName} application is ${application::class.java.simpleName} """.trimIndent() )</ID>
     <ID>TooManyFunctions:CustomMainActivity.kt$CustomMainActivity$CustomMainActivity</ID>
   </Whitelist>
 </SmellBaseline>

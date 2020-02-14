@@ -60,16 +60,13 @@ public final class Constants {
 
   public static final String EXTRA_CHOSE_X_TITLE = "choseXTitle";
 
+  public static final String EXTRA_CHOSE_X_FILE = "choseXFile";
+
   public static final String EXTRA_EXTERNAL_LINK = "external_link";
 
   public static final String EXTRA_SEARCH = "search";
 
   public static final String EXTRA_IS_WIDGET_VOICE = "isWidgetVoice";
-
-  public static final String EXTRA_IS_WIDGET_SEARCH = "isWidgetSearch";
-
-  public static final String EXTRA_IS_WIDGET_STAR = "isWidgetStar";
-
   public static final String HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService";
 
   public static final String EXTRA_WEBVIEWS_LIST = "webviewsList";

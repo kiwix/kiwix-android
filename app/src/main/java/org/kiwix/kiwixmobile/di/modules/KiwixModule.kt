@@ -22,7 +22,11 @@ import android.content.Context
 import android.location.LocationManager
 import dagger.Module
 import dagger.Provides
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.di.KiwixScope
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker
+import org.kiwix.kiwixmobile.zim_manager.FileWritingFileSystemChecker
+import org.kiwix.kiwixmobile.zim_manager.MountFileSystemChecker
 
 @Module
 object KiwixModule {
@@ -31,4 +35,13 @@ object KiwixModule {
   @JvmStatic
   internal fun provideLocationManager(context: Context): LocationManager =
     context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+  @Provides
+  @KiwixScope
+  @JvmStatic
+  internal fun provideFat32Checker(sharedPreferenceUtil: SharedPreferenceUtil): Fat32Checker =
+    Fat32Checker(
+      sharedPreferenceUtil,
+      listOf(MountFileSystemChecker(), FileWritingFileSystemChecker())
+    )
 }

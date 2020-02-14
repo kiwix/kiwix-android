@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* WikiPhoenix
+-->
+<resources>
+  <string name="retry">Försök igen</string>
+  <string name="download">Ladda ned</string>
+  <string name="complete">Färdig</string>
+</resources>

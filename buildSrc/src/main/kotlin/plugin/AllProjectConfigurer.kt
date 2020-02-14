@@ -109,6 +109,7 @@ class AllProjectConfigurer {
           "IconDipSize"
         )
         baseline("${path}/lint-baseline.xml")
+        lintConfig = target.rootProject.file("lintConfig.xml")
       }
       packagingOptions {
         exclude("META-INF/DEPENDENCIES")

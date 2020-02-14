@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import javax.inject.Inject
 
-class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
+data class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
   SideEffect<Unit> {
 
   @Inject lateinit var dialogShower: DialogShower
@@ -60,7 +60,7 @@ class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
     if (file.exists()) {
       return false
     }
-    newBookDao.delete(book.databaseId!!)
+    newBookDao.delete(book.databaseId)
     return true
   }
 }
