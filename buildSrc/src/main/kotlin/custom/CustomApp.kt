@@ -51,8 +51,8 @@ data class CustomApp(
 
   companion object {
     private fun readVersionOrInfer(parsedJson: JSONObject) =
-      (parsedJson.getAndCast("version_name")
-        ?: versionNameFromUrl(parsedJson.getAndCast("zim_url")))
+      parsedJson.getAndCast("version_name")
+        ?: versionNameFromUrl(parsedJson.getAndCast("zim_url"))
         ?: formatCurrentDate()
   }
 }
