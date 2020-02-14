@@ -20,8 +20,6 @@ package org.kiwix.sharedFunctions
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.NONE
-import java.io.File
-import java.util.LinkedList
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -36,6 +34,8 @@ import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Pieces
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Url
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import java.io.File
+import java.util.LinkedList
 
 fun bookOnDisk(
   databaseId: Long = 0L,

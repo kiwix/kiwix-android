@@ -22,7 +22,6 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_custom_download.cd_view_animator
 import kotlinx.android.synthetic.main.layout_custom_download_error.cd_error_text
 import kotlinx.android.synthetic.main.layout_custom_download_error.cd_retry_button
@@ -43,6 +42,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadComplete
 import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
 import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
+import javax.inject.Inject
 
 class CustomDownloadActivity : BaseActivity() {
   override fun injection(coreComponent: CoreComponent) {

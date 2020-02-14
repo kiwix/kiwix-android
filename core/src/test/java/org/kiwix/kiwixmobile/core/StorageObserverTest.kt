@@ -24,7 +24,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import java.io.File
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -38,6 +37,7 @@ import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
+import java.io.File
 
 class StorageObserverTest {
 

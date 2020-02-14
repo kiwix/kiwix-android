@@ -22,7 +22,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
@@ -37,6 +36,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadCustom
 import org.kiwix.kiwixmobile.custom.download.effects.FinishAndStartMain
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
+import javax.inject.Inject
 
 class CustomDownloadViewModel @Inject constructor(
   downloadDao: FetchDownloadDao,

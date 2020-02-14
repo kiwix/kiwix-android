@@ -25,7 +25,6 @@ import com.tonyodev.fetch2.FetchNotificationManager
 import com.tonyodev.fetch2okhttp.OkHttpDownloader
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
@@ -36,6 +35,7 @@ import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadRequester
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import javax.inject.Singleton
 
 @Module
 object DownloaderModule {

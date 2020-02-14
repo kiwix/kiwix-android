@@ -27,7 +27,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_language.language_progressbar
 import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import org.kiwix.kiwixmobile.R
@@ -47,6 +46,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
+import javax.inject.Inject
 
 class LanguageActivity : BaseActivity() {
   override fun injection(coreComponent: CoreComponent) {

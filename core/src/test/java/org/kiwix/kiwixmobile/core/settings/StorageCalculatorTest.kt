@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.core.settings
 
 import io.mockk.every
 import io.mockk.mockk
-import java.io.File
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.io.File
 
 internal class StorageCalculatorTest {
 

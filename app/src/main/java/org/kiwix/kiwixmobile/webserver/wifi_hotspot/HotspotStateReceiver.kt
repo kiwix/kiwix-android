@@ -19,9 +19,9 @@ package org.kiwix.kiwixmobile.webserver.wifi_hotspot
 
 import android.content.Context
 import android.content.Intent
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver.HotspotState.DISABLED
+import javax.inject.Inject
 
 const val EXTRA_WIFI_AP_STATE = "wifi_state"
 const val ACTION_WIFI_AP_STATE = "android.net.wifi.WIFI_AP_STATE_CHANGED"

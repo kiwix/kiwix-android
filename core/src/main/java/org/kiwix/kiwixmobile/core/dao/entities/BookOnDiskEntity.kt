@@ -22,9 +22,9 @@ import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.converter.PropertyConverter
-import java.io.File
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import java.io.File
 
 @Entity
 data class BookOnDiskEntity(

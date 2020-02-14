@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.core
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.SYSTEM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import javax.inject.Inject
 
 class NightModeConfig @Inject constructor(
   val sharedPreferenceUtil: SharedPreferenceUtil,

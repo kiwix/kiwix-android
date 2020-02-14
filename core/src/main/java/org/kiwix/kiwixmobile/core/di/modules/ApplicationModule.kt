@@ -27,7 +27,6 @@ import dagger.Provides
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Singleton
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
@@ -36,6 +35,7 @@ import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadMonitor
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import javax.inject.Singleton
 
 @Module(
   includes = [

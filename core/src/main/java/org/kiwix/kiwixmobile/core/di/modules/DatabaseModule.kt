@@ -22,7 +22,6 @@ import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import javax.inject.Singleton
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -30,6 +29,7 @@ import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.entities.MyObjectBox
+import javax.inject.Singleton
 
 @Module
 open class DatabaseModule {

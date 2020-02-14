@@ -21,10 +21,10 @@ import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.NetworkType.ALL
 import com.tonyodev.fetch2.NetworkType.WIFI_ONLY
 import com.tonyodev.fetch2.Request
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import javax.inject.Inject
 
 class FetchDownloadRequester @Inject constructor(
   private val fetch: Fetch,

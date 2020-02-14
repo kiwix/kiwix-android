@@ -30,11 +30,6 @@ import io.reactivex.functions.Function6
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import java.util.LinkedList
-import java.util.Locale
-import java.util.concurrent.TimeUnit.MILLISECONDS
-import java.util.concurrent.TimeUnit.SECONDS
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -73,6 +68,11 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.LibraryDownloadItem
+import java.util.LinkedList
+import java.util.Locale
+import java.util.concurrent.TimeUnit.MILLISECONDS
+import java.util.concurrent.TimeUnit.SECONDS
+import javax.inject.Inject
 
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: FetchDownloadDao,

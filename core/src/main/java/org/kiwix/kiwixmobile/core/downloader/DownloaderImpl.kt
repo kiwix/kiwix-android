@@ -19,11 +19,11 @@
 package org.kiwix.kiwixmobile.core.downloader
 
 import io.reactivex.Observable
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(
   private val downloadRequester: DownloadRequester,

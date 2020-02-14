@@ -169,9 +169,7 @@ public class CompatFindActionModeCallback
       editText.requestFocus();
       //show the keyboard
       input.showSoftInput(editText, 0);
-
     }, 100);
-
   }
 
   @Override

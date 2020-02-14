@@ -4,9 +4,9 @@ import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps
 import custom.createPublisher
 import custom.transactionWithCommit
+import plugin.KiwixConfigurationPlugin
 import java.net.URI
 import java.net.URL
-import plugin.KiwixConfigurationPlugin
 
 plugins {
   android

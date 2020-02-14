@@ -19,11 +19,11 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
 import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
+import javax.inject.Inject
 
 class NewRecentSearchDao @Inject constructor(
   val box: Box<RecentSearchEntity>

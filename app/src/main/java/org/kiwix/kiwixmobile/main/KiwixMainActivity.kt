@@ -24,7 +24,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import java.io.File
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -46,6 +45,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
+import java.io.File
 
 class KiwixMainActivity : CoreMainActivity() {
 

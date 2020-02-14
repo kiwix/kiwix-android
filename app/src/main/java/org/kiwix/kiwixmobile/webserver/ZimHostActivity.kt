@@ -31,8 +31,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
-import java.util.ArrayList
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -51,6 +49,8 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_SERVER
+import java.util.ArrayList
+import javax.inject.Inject
 
 class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   @Inject
@@ -84,7 +84,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
             }
           }
         }
-          as ArrayList<String>
+        as ArrayList<String>
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {

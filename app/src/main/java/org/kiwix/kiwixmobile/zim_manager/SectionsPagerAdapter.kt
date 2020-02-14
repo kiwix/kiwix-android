@@ -20,11 +20,11 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import kotlin.reflect.KFunction0
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
+import kotlin.reflect.KFunction0
 
 class SectionsPagerAdapter(
   private val context: Context,

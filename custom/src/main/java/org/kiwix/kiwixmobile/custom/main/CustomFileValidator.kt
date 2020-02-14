@@ -20,11 +20,11 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import java.io.File
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasNothing
+import java.io.File
+import javax.inject.Inject
 
 class CustomFileValidator @Inject constructor(private val context: Context) {
 

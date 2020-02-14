@@ -37,8 +37,8 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 
