@@ -18,10 +18,10 @@
 package org.kiwix.kiwixmobile.custom
 
 import androidx.lifecycle.ViewModel
-import org.kiwix.kiwixmobile.core.ViewModelFactory
-import org.kiwix.kiwixmobile.custom.di.CustomScope
 import javax.inject.Inject
 import javax.inject.Provider
+import org.kiwix.kiwixmobile.core.ViewModelFactory
+import org.kiwix.kiwixmobile.custom.di.CustomScope
 
 @CustomScope
 class CustomViewModelFactory @Inject constructor(

@@ -31,12 +31,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.core.os.ConfigurationCompat
-import org.kiwix.kiwixmobile.core.extensions.locale
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.text.Collator
 import java.util.Locale
 import java.util.MissingResourceException
+import org.kiwix.kiwixmobile.core.extensions.locale
+import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 
 class LanguageUtils(private val context: Context) {
   private val localeLanguageCodes: List<String> = languageCodesFromAssets()

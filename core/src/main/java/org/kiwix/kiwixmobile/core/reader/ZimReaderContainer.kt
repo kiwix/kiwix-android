@@ -18,11 +18,11 @@
 package org.kiwix.kiwixmobile.core.reader
 
 import android.net.Uri
-import org.kiwix.kiwixlib.JNIKiwixSearcher
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.kiwix.kiwixlib.JNIKiwixSearcher
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 
 @Singleton
 class ZimReaderContainer @Inject constructor(

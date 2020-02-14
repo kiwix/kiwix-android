@@ -22,24 +22,24 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
-import org.kiwix.kiwixmobile.core.di.qualifiers.IO
-import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
-import org.kiwix.kiwixmobile.core.history.HistoryListItem
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
-import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.core.di.qualifiers.IO
+import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
+import org.kiwix.kiwixmobile.core.history.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * A central repository of data which should provide the presenters with the required data.

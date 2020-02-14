@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.os.Build
 import androidx.test.filters.SdkSuppress
 import attempt
+import java.util.concurrent.TimeUnit.SECONDS
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Ignore
 import org.junit.Test
@@ -33,7 +34,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.libraryNetworkEntity
 import org.kiwix.sharedFunctions.metaLinkNetworkEntity
-import java.util.concurrent.TimeUnit.SECONDS
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {

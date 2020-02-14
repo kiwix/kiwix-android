@@ -19,8 +19,8 @@ package org.kiwix.kiwixmobile.core.downloader.model
 
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 
 data class DownloadModel(

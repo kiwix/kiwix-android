@@ -136,6 +136,26 @@ object Libs {
       Versions.com_jakewharton
 
   /**
+   * https://developer.android.com/testing
+   */
+  const val androidx_test_core: String = "androidx.test:core:" + Versions.androidx_test
+
+  /**
+   * https://developer.android.com/testing
+   */
+  const val orchestrator: String = "androidx.test:orchestrator:" + Versions.androidx_test
+
+  /**
+   * https://developer.android.com/testing
+   */
+  const val androidx_test_rules: String = "androidx.test:rules:" + Versions.androidx_test
+
+  /**
+   * https://developer.android.com/testing
+   */
+  const val androidx_test_runner: String = "androidx.test:runner:" + Versions.androidx_test
+
+  /**
    * https://objectbox.io
    */
   const val objectbox_android: String = "io.objectbox:objectbox-android:" + Versions.io_objectbox
@@ -198,21 +218,6 @@ object Libs {
    */
   const val com_android_tools_build_gradle: String = "com.android.tools.build:gradle:" +
       Versions.com_android_tools_build_gradle
-
-  /**
-   * https://developer.android.com/testing
-   */
-  const val androidx_test_runner: String = "androidx.test:runner:" + Versions.androidx_test_runner
-
-  /**
-   * https://developer.android.com/testing
-   */
-  const val androidx_test_rules: String = "androidx.test:rules:" + Versions.androidx_test_rules
-
-  /**
-   * https://developer.android.com/testing
-   */
-  const val androidx_test_core: String = "androidx.test:core:" + Versions.androidx_test_core
 
   const val de_fayard_buildsrcversions_gradle_plugin: String =
       "de.fayard.buildSrcVersions:de.fayard.buildSrcVersions.gradle.plugin:" +
@@ -299,11 +304,6 @@ object Libs {
   const val fragment_ktx: String = "androidx.fragment:fragment-ktx:" + Versions.fragment_ktx
 
   /**
-   * https://developer.android.com/testing
-   */
-  const val orchestrator: String = "androidx.test:orchestrator:" + Versions.orchestrator
-
-  /**
    * https://developer.android.com/studio
    */
   const val lint_gradle: String = "com.android.tools.lint:lint-gradle:" + Versions.lint_gradle
@@ -349,7 +349,7 @@ object Libs {
   const val cardview: String = "androidx.cardview:cardview:" + Versions.cardview
 
   /**
-   * http://developer.android.com/tools/extras/support-library.html
+   * https://developer.android.com/jetpack/androidx
    */
   const val core_ktx: String = "androidx.core:core-ktx:" + Versions.core_ktx
 

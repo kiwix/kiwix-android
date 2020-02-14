@@ -24,8 +24,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage.RESUMED
 import androidx.viewpager.widget.ViewPager
-import org.kiwix.kiwixmobile.BaseRobot
 import java.io.File
+import org.kiwix.kiwixmobile.BaseRobot
 
 inline fun <reified T : BaseRobot> T.applyWithViewHierarchyPrinting(
   crossinline function: T.() -> Unit

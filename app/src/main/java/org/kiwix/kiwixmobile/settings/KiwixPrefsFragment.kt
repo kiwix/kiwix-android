@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.settings
 
 import android.os.Bundle
 import android.os.Environment
+import java.io.File
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_LANG
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE
-import java.io.File
 
 class KiwixPrefsFragment : CorePrefsFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {

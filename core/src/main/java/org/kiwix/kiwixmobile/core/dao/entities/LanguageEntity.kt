@@ -22,8 +22,8 @@ import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.converter.PropertyConverter
-import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.util.Locale
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 
 @Entity
 data class LanguageEntity(

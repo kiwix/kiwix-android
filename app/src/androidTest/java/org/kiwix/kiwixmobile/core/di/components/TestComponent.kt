@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.di.components
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 import org.kiwix.kiwixmobile.NetworkTest
 import org.kiwix.kiwixmobile.ZimTest
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
@@ -30,7 +31,6 @@ import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.di.modules.TestNetworkModule
 import org.kiwix.kiwixmobile.core.history.HistoryModule
-import javax.inject.Singleton
 
 /**
  * Created by mhutti1 on 13/04/17.

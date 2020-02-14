@@ -19,10 +19,10 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.util.Log
-import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
-import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
 import java.io.File
 import java.io.RandomAccessFile
+import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
+import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
 
 class FileWritingFileSystemChecker : FileSystemChecker {
   override fun checkFilesystemSupports4GbFiles(path: String): FileSystemCapability {

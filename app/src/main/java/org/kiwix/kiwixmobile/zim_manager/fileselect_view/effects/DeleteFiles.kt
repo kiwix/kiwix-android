@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -29,7 +30,6 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteZim
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
-import javax.inject.Inject
 
 data class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
   SideEffect<Unit> {

@@ -116,11 +116,11 @@ class LibraryFragment : BaseFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    zimManageViewModel.libraryItems.observe(this, Observer(::onLibraryItemsChange))
+    zimManageViewModel.libraryItems.observe(viewLifecycleOwner, Observer(::onLibraryItemsChange))
     zimManageViewModel.libraryListIsRefreshing.observe(
-      this, Observer(::onRefreshStateChange)
+      viewLifecycleOwner, Observer(::onRefreshStateChange)
     )
-    zimManageViewModel.networkStates.observe(this, Observer(::onNetworkStateChange))
+    zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {

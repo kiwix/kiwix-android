@@ -18,10 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.downloader.model
 
-import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.R
 import java.util.Locale
 import kotlin.math.roundToLong
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
 
 inline class Seconds(val seconds: Long) {
   fun toHumanReadableTime(): String {

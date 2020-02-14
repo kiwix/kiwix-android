@@ -26,6 +26,12 @@ import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import java.io.File
+import java.io.FileDescriptor
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.RandomAccessFile
+import javax.inject.Inject
 import org.kiwix.kiwixlib.JNIKiwixException
 import org.kiwix.kiwixlib.JNIKiwixInt
 import org.kiwix.kiwixlib.JNIKiwixReader
@@ -37,12 +43,6 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_URI
 import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import java.io.File
-import java.io.FileDescriptor
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.RandomAccessFile
-import javax.inject.Inject
 
 private const val TAG = "ZimFileReader"
 

@@ -19,11 +19,11 @@
 package org.kiwix.kiwixmobile.custom.download.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.custom.BuildConfig
-import javax.inject.Inject
 
 data class DownloadCustom @Inject constructor(val downloader: Downloader) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {

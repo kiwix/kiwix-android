@@ -19,10 +19,10 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity_
-import javax.inject.Inject
+import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 
 class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) {
 

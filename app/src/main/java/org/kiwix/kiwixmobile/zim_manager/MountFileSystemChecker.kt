@@ -18,10 +18,10 @@
 
 package org.kiwix.kiwixmobile.zim_manager
 
+import java.io.File
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.INCONCLUSIVE
-import java.io.File
 
 class MountFileSystemChecker : FileSystemChecker {
   override fun checkFilesystemSupports4GbFiles(path: String) =

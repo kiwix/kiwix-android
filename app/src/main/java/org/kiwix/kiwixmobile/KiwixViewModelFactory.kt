@@ -18,10 +18,10 @@
 package org.kiwix.kiwixmobile
 
 import androidx.lifecycle.ViewModel
-import org.kiwix.kiwixmobile.core.ViewModelFactory
-import org.kiwix.kiwixmobile.di.KiwixScope
 import javax.inject.Inject
 import javax.inject.Provider
+import org.kiwix.kiwixmobile.core.ViewModelFactory
+import org.kiwix.kiwixmobile.di.KiwixScope
 
 @KiwixScope
 class KiwixViewModelFactory @Inject constructor(

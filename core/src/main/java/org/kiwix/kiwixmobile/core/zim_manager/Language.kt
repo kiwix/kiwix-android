@@ -19,8 +19,8 @@
 package org.kiwix.kiwixmobile.core.zim_manager
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 import java.util.Locale
+import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Language constructor(

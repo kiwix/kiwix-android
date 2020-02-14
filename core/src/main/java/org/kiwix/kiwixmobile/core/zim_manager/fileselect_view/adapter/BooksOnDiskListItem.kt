@@ -18,13 +18,13 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
+import java.io.File
+import java.util.Locale
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
-import java.io.File
-import java.util.Locale
 
 sealed class BooksOnDiskListItem {
   var isSelected: Boolean = false

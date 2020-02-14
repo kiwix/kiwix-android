@@ -22,6 +22,7 @@ import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.schedulers.Schedulers
+import java.io.File
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -30,7 +31,6 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.INCONCLUSIVE
-import java.io.File
 
 class Fat32Checker constructor(
   sharedPreferenceUtil: SharedPreferenceUtil,

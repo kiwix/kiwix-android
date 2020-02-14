@@ -23,8 +23,8 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import org.kiwix.kiwixmobile.core.R
 import kotlin.reflect.KClass
+import org.kiwix.kiwixmobile.core.R
 
 abstract class CoreSearchWidget : AppWidgetProvider() {
 

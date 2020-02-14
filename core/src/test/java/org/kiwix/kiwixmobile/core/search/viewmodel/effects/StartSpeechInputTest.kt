@@ -27,11 +27,11 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
+import java.util.Locale
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
-import java.util.Locale
 
 internal class StartSpeechInputTest {
 

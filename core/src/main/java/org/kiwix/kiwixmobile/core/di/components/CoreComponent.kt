@@ -24,6 +24,7 @@ import android.net.ConnectivityManager
 import dagger.BindsInstance
 import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
+import javax.inject.Singleton
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
@@ -58,7 +59,6 @@ import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import javax.inject.Singleton
 
 @Singleton
 @Component(

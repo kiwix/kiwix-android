@@ -21,13 +21,13 @@ package org.kiwix.kiwixmobile.core
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import java.io.File
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import java.io.File
-import javax.inject.Inject
 
 class StorageObserver @Inject constructor(
   private val downloadDao: FetchDownloadDao,

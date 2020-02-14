@@ -30,6 +30,8 @@ import android.util.Log
 import android.view.Menu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.util.Locale
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -44,8 +46,6 @@ import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
-import java.util.Locale
-import javax.inject.Inject
 
 const val REQUEST_READ_FOR_OBB = 5002
 

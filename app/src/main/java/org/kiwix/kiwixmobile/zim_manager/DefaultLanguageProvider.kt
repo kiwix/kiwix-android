@@ -19,8 +19,8 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.content.Context
-import org.kiwix.kiwixmobile.core.zim_manager.Language
 import javax.inject.Inject
+import org.kiwix.kiwixmobile.core.zim_manager.Language
 
 class DefaultLanguageProvider @Inject constructor(private val context: Context) {
   fun provide() = Language(

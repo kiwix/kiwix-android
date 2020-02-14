@@ -26,8 +26,8 @@ import android.os.Build.VERSION_CODES
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.AttrRes
-import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import java.util.Locale
+import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 
 fun Context?.toast(
   stringId: Int,

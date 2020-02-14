@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.core.splash
 import android.content.Intent
 import android.os.Bundle
 import android.os.Process
+import kotlin.system.exitProcess
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
-import kotlin.system.exitProcess
 
 abstract class CoreSplashActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {

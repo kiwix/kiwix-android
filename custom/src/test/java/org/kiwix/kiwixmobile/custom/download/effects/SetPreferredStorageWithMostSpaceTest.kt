@@ -24,10 +24,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
+import java.io.File
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import java.io.File
 
 internal class SetPreferredStorageWithMostSpaceTest {
 

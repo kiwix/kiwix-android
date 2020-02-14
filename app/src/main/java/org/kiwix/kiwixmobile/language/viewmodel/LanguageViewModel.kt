@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
@@ -32,7 +33,6 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
-import javax.inject.Inject
 
 class LanguageViewModel @Inject constructor(
   private val languageDao: NewLanguagesDao

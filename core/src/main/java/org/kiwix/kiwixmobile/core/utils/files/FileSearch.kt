@@ -26,10 +26,10 @@ import eu.mhutti1.utils.storage.StorageDeviceUtils
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.core.extensions.forEachRow
-import org.kiwix.kiwixmobile.core.extensions.get
 import java.io.File
 import javax.inject.Inject
+import org.kiwix.kiwixmobile.core.extensions.forEachRow
+import org.kiwix.kiwixmobile.core.extensions.get
 
 class FileSearch @Inject constructor(private val context: Context) {
 

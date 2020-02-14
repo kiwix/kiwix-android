@@ -26,6 +26,8 @@ import io.reactivex.functions.Function3
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit.MILLISECONDS
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -55,8 +57,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessin
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
-import java.util.concurrent.TimeUnit.MILLISECONDS
-import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
   private val recentSearchDao: NewRecentSearchDao,

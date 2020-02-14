@@ -28,6 +28,8 @@ import io.reactivex.Single
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
+import java.util.Locale
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -75,8 +77,6 @@ import org.kiwix.sharedFunctions.language
 import org.kiwix.sharedFunctions.libraryNetworkEntity
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
-import java.util.Locale
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
 @ExtendWith(InstantExecutorExtension::class)
 class ZimManageViewModelTest {

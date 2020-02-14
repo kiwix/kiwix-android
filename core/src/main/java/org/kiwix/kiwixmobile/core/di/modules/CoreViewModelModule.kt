@@ -23,10 +23,10 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import javax.inject.Singleton
 import org.kiwix.kiwixmobile.core.ViewModelFactory
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
-import javax.inject.Singleton
 
 @Module
 abstract class CoreViewModelModule {

@@ -24,9 +24,9 @@ import com.tonyodev.fetch2.FetchListener
 import com.tonyodev.fetch2core.DownloadBlock
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
-import javax.inject.Inject
 
 class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: FetchDownloadDao) :
   DownloadMonitor {

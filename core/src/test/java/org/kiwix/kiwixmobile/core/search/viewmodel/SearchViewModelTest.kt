@@ -25,6 +25,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -63,7 +64,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class SearchViewModelTest {

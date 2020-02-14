@@ -1,5 +1,6 @@
 build:
-  maxIssues: 10
+  maxIssues: 0
+  excludeCorrectable: false
   weights:
     # complexity: 2
     # LongParameterList: 1
@@ -14,7 +15,7 @@ config:
 processors:
   active: true
   exclude:
-  # - 'DetektProgressListener'
+    - 'DetektProgressListener'
   # - 'FunctionCountProcessor'
   # - 'PropertyCountProcessor'
   # - 'ClassCountProcessor'
@@ -24,12 +25,11 @@ processors:
 console-reports:
   active: true
   exclude:
-  #  - 'ProjectStatisticsReport'
-  #  - 'ComplexityReport'
-  #  - 'NotificationReport'
+     - 'ProjectStatisticsReport'
+     - 'ComplexityReport'
+     - 'NotificationReport'
   #  - 'FindingsReport'
      - 'FileBasedFindingsReport'
-  #  - 'BuildFailureReport'
 
 comments:
   active: true
@@ -106,6 +106,13 @@ complexity:
     ignorePrivate: false
     ignoreOverridden: false
 
+coroutines:
+  active: true
+  GlobalCoroutineUsage:
+    active: false
+  RedundantSuspendModifier:
+    active: false
+
 empty-blocks:
   active: true
   EmptyCatchBlock:
@@ -125,7 +132,7 @@ empty-blocks:
     active: true
   EmptyFunctionBlock:
     active: true
-    ignoreOverriddenFunctions: false
+    ignoreOverridden: false
   EmptyIfBlock:
     active: true
   EmptyInitBlock:
@@ -203,6 +210,9 @@ formatting:
   CommentSpacing:
     active: true
     autoCorrect: true
+  EnumEntryNameCase:
+    active: false
+    autoCorrect: true
   Filename:
     active: true
   FinalNewline:
@@ -233,6 +243,9 @@ formatting:
     autoCorrect: true
   NoEmptyClassBody:
     active: true
+    autoCorrect: true
+  NoEmptyFirstLineInMethodBlock:
+    active: false
     autoCorrect: true
   NoLineBreakAfterElse:
     active: true
@@ -332,7 +345,7 @@ naming:
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     parameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
-    ignoreOverriddenFunctions: true
+    ignoreOverridden: true
   InvalidPackageDeclaration:
     active: false
     rootPackage: ''
@@ -340,7 +353,7 @@ naming:
     active: true
   MemberNameEqualsClassName:
     active: true
-    ignoreOverriddenFunction: true
+    ignoreOverridden: true
   ObjectPropertyNaming:
     active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
@@ -413,6 +426,8 @@ potential-bugs:
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     excludeAnnotatedProperties: ""
     ignoreOnClassesPattern: ""
+  MapGetWithNotNullAssertionOperator:
+    active: false
   MissingWhenCase:
     active: true
   RedundantElseInWhen:
@@ -443,6 +458,8 @@ style:
     active: true
   EqualsOnSignatureLine:
     active: false
+  ExplicitCollectionElementAccessMethod:
+    active: false
   ExplicitItLambdaParameter:
     active: false
   ExpressionBodySyntax:
@@ -456,6 +473,12 @@ style:
     active: false
     imports: ''
     forbiddenPatterns: ""
+  ForbiddenMethodCall:
+    active: false
+    methods: ''
+  ForbiddenPublicDataClass:
+    active: false
+    ignorePackages: '*.internal,*.internal.*'
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
@@ -539,6 +562,8 @@ style:
   UnnecessaryAbstractClass:
     active: true
     excludeAnnotatedClasses: "dagger.Module"
+  UnnecessaryAnnotationUseSiteTarget:
+    active: false
   UnnecessaryApply:
     active: false
   UnnecessaryInheritance:

@@ -30,6 +30,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 class AllProjectConfigurer {
@@ -64,6 +65,9 @@ class AllProjectConfigurer {
         encoding = "UTF-8"
         sourceCompatibility = Config.javaVersion
         targetCompatibility = Config.javaVersion
+      }
+      target.tasks.withType(KotlinCompile::class.java) {
+        kotlinOptions.jvmTarget = "1.8"
       }
 
       testOptions {

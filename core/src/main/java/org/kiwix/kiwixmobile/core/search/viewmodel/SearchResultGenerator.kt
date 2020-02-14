@@ -18,11 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import javax.inject.Inject
 
 interface SearchResultGenerator {
   fun generateSearchResults(searchTerm: String): List<SearchListItem>

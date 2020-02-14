@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_search.searchViewAnimator
 import kotlinx.android.synthetic.main.activity_search.search_list
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
@@ -56,7 +57,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.State.Empty
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Initialising
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
-import javax.inject.Inject
 
 class SearchActivity : BaseActivity() {
 

@@ -20,13 +20,13 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
+import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSearch
-import javax.inject.Inject
 
 data class ShowDeleteSearchDialog(
   private val searchListItem: SearchListItem,

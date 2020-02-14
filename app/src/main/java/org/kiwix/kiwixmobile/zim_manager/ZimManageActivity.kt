@@ -24,6 +24,7 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
 import org.kiwix.kiwixmobile.R
@@ -37,7 +38,6 @@ import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
-import javax.inject.Inject
 
 class ZimManageActivity : BaseActivity() {
   override fun injection(coreComponent: CoreComponent) {
