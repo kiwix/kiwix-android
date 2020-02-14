@@ -205,16 +205,8 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `ClickedSearchInText in Result state offers SearchInPreviousScreen`() {
-      val item = ZimSearchResultListItem("")
-      val searchTerm = "searchTerm"
-      emissionOf(
-        searchTerm = searchTerm,
-        searchResults = listOf(item),
-        databaseResults = listOf(RecentSearchListItem(""))
-      )
-      resultsIn(Results(searchTerm, listOf(item)))
-      actionResultsInEffects(ClickedSearchInText, SearchInPreviousScreen(searchTerm))
+    fun `ClickedSearchInText offers SearchInPreviousScreen`() {
+      actionResultsInEffects(ClickedSearchInText, SearchInPreviousScreen(""))
     }
 
     @Test
