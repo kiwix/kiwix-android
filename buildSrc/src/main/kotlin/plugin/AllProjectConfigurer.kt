@@ -92,7 +92,6 @@ class AllProjectConfigurer {
         ignore(
           "SyntheticAccessor",
           //TODO stop ignoring below this
-          "MissingTranslation",
           "CheckResult",
           "LabelFor",
           "DuplicateStrings",
