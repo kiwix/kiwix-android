@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
@@ -134,11 +135,7 @@ public class KiwixTextToSpeech {
       } else {
         tts.setLanguage(locale);
 
-        if ((VERSION.SDK_INT < VERSION_CODES.LOLLIPOP // check if voice needs to be installed for API below 21
-          && tts.getFeatures(locale).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED))
-          // check if voice needs to be installed for API 21 or higher
-          ||(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP
-          && tts.getVoice().getFeatures().contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED))){
+        if (getFeatures(tts,locale).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)){
           ContextExtensionsKt.toast(this.context,R.string.tts_lang_not_supported,Toast.LENGTH_LONG);
           return;
         }
@@ -149,7 +146,9 @@ public class KiwixTextToSpeech {
       }
     }
   }
-
+  private Set<String> getFeatures(TextToSpeech tts, Locale locale){
+    return (VERSION.SDK_INT < VERSION_CODES.LOLLIPOP)? tts.getFeatures(locale) : tts.getVoice().getFeatures();
+  }
   private void loadURL(WebView webView) {
     // We use JavaScript to get the content of the page conveniently, earlier making some
     // changes in the page
