@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInNewTab
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
@@ -50,6 +51,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInNewTab
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessing
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
@@ -90,6 +92,7 @@ class SearchViewModel @Inject constructor(
       is OnItemLongClick -> showDeleteDialog(it)
       is Filter -> filter.offer(it.term)
       ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
+      ClickedSearchInNewTab -> searchInNewTab()
       is ConfirmedDelete -> deleteItemAndShowToast(it)
       is CreatedWithIntent -> effects.offer(SearchIntentProcessing(it.intent, actions))
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
@@ -110,6 +113,12 @@ class SearchViewModel @Inject constructor(
   private fun searchPreviousScreenWhenStateIsValid(): Any =
     when (val currentState = state.value) {
       is Results -> effects.offer(SearchInPreviousScreen(currentState.searchString))
+      else -> Unit
+    }
+
+  private fun searchInNewTab(): Any =
+    when (val currentState = state.value) {
+      is Results -> effects.offer(SearchInNewTab(currentState.searchString))
       else -> Unit
     }
 

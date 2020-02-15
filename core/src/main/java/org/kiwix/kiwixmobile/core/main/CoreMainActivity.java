@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -112,6 +112,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
+import static org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInNewTab.EXTRA_SEARCH_IN_NEW_TAB;
 import static org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
@@ -1383,9 +1384,13 @@ public abstract class CoreMainActivity extends BaseActivity
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
+          Log.d("kiwix", "RESULT_OK");
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           boolean isSearchInText = data.getBooleanExtra(EXTRA_SEARCH_IN_TEXT, false);
+          //check extra for boolean to open in new tab
+          boolean isSearchInNewTab = data.getBooleanExtra(EXTRA_SEARCH_IN_NEW_TAB, false);
+          Log.d("kiwix", "isSearchInNewTab = " + isSearchInNewTab);
           if (isSearchInText) {
             //if the search is localized trigger find in page UI.
             KiwixWebView webView = getCurrentWebView();
@@ -1398,9 +1403,18 @@ public abstract class CoreMainActivity extends BaseActivity
           } else {
             searchForTitle(title);
           }
+          if (isSearchInNewTab) {
+            Log.d("kiwix", "MainActivity search in new tab enacted");
+            //TODO: need to launch a new tab with search string
+            newTab(title);
+
+          } else {
+            searchForTitle(title);
+          }
         } else { //TODO: Inform the User
           Log.w(TAG_KIWIX, "Unhandled search failure");
         }
+
         break;
       case REQUEST_PREFERENCES:
         if (resultCode == RESULT_RESTART) {

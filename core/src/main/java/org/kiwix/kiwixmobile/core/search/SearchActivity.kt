@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -44,6 +44,7 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchDelegate.RecentSearchDele
 import org.kiwix.kiwixmobile.core.search.adapter.SearchDelegate.ZimSearchResultDelegate
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInNewTab
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
@@ -65,6 +66,7 @@ class SearchActivity : BaseActivity() {
 
   private lateinit var searchView: SearchView
   private lateinit var searchInTextMenuItem: MenuItem
+  private lateinit var searchInNewTabMenuItem: MenuItem
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private val compositeDisposable = CompositeDisposable()
@@ -121,6 +123,11 @@ class SearchActivity : BaseActivity() {
         return false
       }
     })
+    searchInNewTabMenuItem = menu.findItem(R.id.search_in_new_tab)
+    searchInNewTabMenuItem.setOnMenuItemClickListener {
+      searchViewModel.actions.offer(ClickedSearchInNewTab)
+      true
+    }
     searchInTextMenuItem = menu.findItem(R.id.menu_searchintext)
     searchInTextMenuItem.setOnMenuItemClickListener {
       searchViewModel.actions.offer(ClickedSearchInText)

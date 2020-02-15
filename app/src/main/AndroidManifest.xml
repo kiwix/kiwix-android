@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Kiwix Android
+  ~ Copyright (c) 2020 Kiwix <android.kiwix.org>
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.kiwix.kiwixmobile">
 
@@ -143,6 +161,7 @@
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.NEW_WINDOW_ICON_CLICKED" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
     </activity>
@@ -174,6 +193,7 @@
         <action android:name="KiwixSearchWidget.ICON_CLICKED" />
         <action android:name="KiwixSearchWidget.MIC_CLICKED" />
         <action android:name="KiwixSearchWidget.STAR_CLICKED" />
+        <action android:name="KiwixSearchWidget.NEW_WINDOW_ICON_CLICKED" />
       </intent-filter>
 
       <meta-data

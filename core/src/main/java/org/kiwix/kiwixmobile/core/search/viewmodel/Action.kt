@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 sealed class Action {
   object ExitedSearch : Action()
   object ClickedSearchInText : Action()
+  object ClickedSearchInNewTab : Action()
   object ReceivedPromptForSpeechInput : Action()
   object StartSpeechInputFailed : Action()
 

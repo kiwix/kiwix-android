@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -57,13 +57,15 @@ abstract class CoreSearchWidget : AppWidgetProvider() {
     const val TEXT_CLICKED = "KiwixSearchWidget.TEXT_CLICKED"
     const val MIC_CLICKED = "KiwixSearchWidget.MIC_CLICKED"
     const val STAR_CLICKED = "KiwixSearchWidget.STAR_CLICKED"
+    const val NEW_TAB_ICON_CLICKED = "KiwixSearchWidget.NEW_TAB_ICON_CLICKED"
     private const val ICON_CLICKED = "KiwixSearchWidget.ICON_CLICKED"
 
     private val idsToActions = mapOf(
       R.id.search_widget_text to TEXT_CLICKED,
       R.id.search_widget_icon to ICON_CLICKED,
       R.id.search_widget_star to STAR_CLICKED,
-      R.id.search_widget_mic to MIC_CLICKED
+      R.id.search_widget_mic to MIC_CLICKED,
+      R.id.search_in_new_tab to NEW_TAB_ICON_CLICKED
     )
   }
 }
