@@ -1384,13 +1384,11 @@ public abstract class CoreMainActivity extends BaseActivity
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
-          Log.d("kiwix", "RESULT_OK");
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           boolean isSearchInText = data.getBooleanExtra(EXTRA_SEARCH_IN_TEXT, false);
           //check extra for boolean to open in new tab
           boolean isSearchInNewTab = data.getBooleanExtra(EXTRA_SEARCH_IN_NEW_TAB, false);
-          Log.d("kiwix", "isSearchInNewTab = " + isSearchInNewTab);
           if (isSearchInText) {
             //if the search is localized trigger find in page UI.
             KiwixWebView webView = getCurrentWebView();
@@ -1404,9 +1402,16 @@ public abstract class CoreMainActivity extends BaseActivity
             searchForTitle(title);
           }
           if (isSearchInNewTab) {
-            Log.d("kiwix", "MainActivity search in new tab enacted");
-            //TODO: need to launch a new tab with search string
-            newTab(title);
+            //launch a new tab with search string and search
+            KiwixWebView webView = getCurrentWebView();
+            newTab(getValidTitle(webView.getUrl()));
+            compatCallback.setActive();
+            compatCallback.setWebView(webView);
+            startSupportActionMode(compatCallback);
+            compatCallback.setText(title);
+            compatCallback.findAll();
+            compatCallback.showSoftInput();
+
 
           } else {
             searchForTitle(title);

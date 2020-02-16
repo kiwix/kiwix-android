@@ -24,7 +24,7 @@
     android:icon="@drawable/ic_open_in_new_24dp"
     android:title="@string/open_in_new_tab"
     android:visible="true"
-    app:showAsAction="always"/>
+    app:showAsAction="ifRoom|collapseActionView"/>
   <item
     android:id="@+id/menu_search"
     android:icon="@drawable/action_search"
