@@ -19,14 +19,12 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.Constants
 
 data class SearchInNewTab(private val searchString: String) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    Log.d("kiwix", "SearchInNewTab invoked")
     activity.setResult(
       Activity.RESULT_OK,
       Intent().apply {
