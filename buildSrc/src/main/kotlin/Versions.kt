@@ -29,7 +29,7 @@ object Versions {
 
   const val org_jacoco: String = "0.7.9"
 
-  const val io_mockk: String = "1.9.3"
+  const val io_mockk: String = "1.9.2"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
