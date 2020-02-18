@@ -69,7 +69,7 @@
   <string name="rate_dialog_msg_1">Si t\'agradat impreare</string>
   <string name="rate_dialog_msg_2">, pro praghere piga·ti unu momentu pro l\'avalorare. Ti torramus gràtzias pro su suportu tuo!</string>
   <string name="rate_dialog_positive">Vota!</string>
-  <string name="rate_dialog_negative">Nono, gràtzias</string>
+  <string name="no_thanks">Nono, gràtzias</string>
   <string name="rate_dialog_neutral">Prus a tardu</string>
   <string name="open">Aberi</string>
   <string name="bookmark_removed">Sinnalibru bogadu</string>
@@ -132,7 +132,6 @@
   <string name="crash_checkbox_logs">Registros de s\'aplicatzione</string>
   <string name="crash_checkbox_device">Detàllios de su dispositivu</string>
   <string name="crash_button_confirm">IMBIA SOS DETÀLLIOS</string>
-  <string name="crash_button_decline">NONO, GRÀTZIAS</string>
   <string name="shortcut_disabled_message">Incurtzada non disponìbile</string>
   <string name="new_tab_shortcut_label">Ischeda noa</string>
   <string name="fav_icon">Favicon</string>

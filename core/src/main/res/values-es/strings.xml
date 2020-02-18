@@ -72,7 +72,7 @@
   <string name="rate_dialog_msg_1">Si disfrutas usar</string>
   <string name="rate_dialog_msg_2">, toma un momento para calificarla. ¡Gracias por tu apoyo!</string>
   <string name="rate_dialog_positive">¡Califica!</string>
-  <string name="rate_dialog_negative">No, gracias</string>
+  <string name="no_thanks">No, gracias</string>
   <string name="rate_dialog_neutral">Después</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Marcador borrado</string>
@@ -133,7 +133,6 @@
   <string name="crash_checkbox_logs">Registros de la aplicación</string>
   <string name="crash_checkbox_device">Datos del dispositivo</string>
   <string name="crash_button_confirm">ENVIAR DETALLES</string>
-  <string name="crash_button_decline">NO, GRACIAS</string>
   <string name="shortcut_disabled_message">Atajo no disponible</string>
   <string name="new_tab_shortcut_label">Pestaña nueva</string>
   <string name="fav_icon">Favicono</string>

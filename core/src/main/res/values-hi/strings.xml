@@ -68,7 +68,7 @@
   <string name="rate_dialog_msg_1">क्या आप का उपयोग का आनंद ले रहे</string>
   <string name="rate_dialog_msg_2">, कृपया इसे दर करने के लिए कुछ समय दें आपके समर्थन के लिए धन्यवाद!</string>
   <string name="rate_dialog_positive">दरनिर्धारण!</string>
-  <string name="rate_dialog_negative">नहीं, धन्यवाद</string>
+  <string name="no_thanks">नहीं, धन्यवाद</string>
   <string name="rate_dialog_neutral">बाद में</string>
   <string name="open">खोलें</string>
   <string name="bookmark_removed">बुकमार्क हटाया गया</string>

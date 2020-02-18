@@ -39,7 +39,7 @@
   <string name="rate_dialog_msg_1">మీరు ఒకవేళ ఉపయోగిస్తు ఆనందిస్తున్నారా</string>
   <string name="rate_dialog_msg_2">, మమల్ని నక్షత్రాలతో వెల కట్టడానికి చర్య తీసుకోండి.మమల్ని సహకరించినందుకు ధన్యవాదములు!</string>
   <string name="rate_dialog_positive">నక్షత్రాలతో వెల కట్టు!</string>
-  <string name="rate_dialog_negative">వద్దు, ధన్యవాదములు</string>
+  <string name="no_thanks">వద్దు, ధన్యవాదములు</string>
   <string name="rate_dialog_neutral">తరువాత</string>
   <string name="pref_newtab_background_title">కొత్త ట్యబ్ ను వెనుకస్థలంలో తెరవండి</string>
   <string name="pref_newtab_background_summary">ఎప్పుడైతే కొత్త ట్యాబ్ ను తెరుస్తారో అప్పుడు అది వెనుకస్థలంలో తెరుచుకుంటుంది.</string>

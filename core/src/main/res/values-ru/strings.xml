@@ -70,7 +70,7 @@
   <string name="rate_dialog_msg_1">Если вам нравится</string>
   <string name="rate_dialog_msg_2">, пожалуйста, найдите минутку, чтобы оценить его. Спасибо за вашу поддержку!</string>
   <string name="rate_dialog_positive">Оценить!</string>
-  <string name="rate_dialog_negative">Нет, спасибо</string>
+  <string name="no_thanks">Нет, спасибо</string>
   <string name="rate_dialog_neutral">Позже</string>
   <string name="open">Открыть</string>
   <string name="bookmark_removed">Закладка удалена</string>
@@ -128,7 +128,6 @@
   <string name="crash_checkbox_logs">Журнал Действий Приложения</string>
   <string name="crash_checkbox_device">Подробности об Устройстве</string>
   <string name="crash_button_confirm">ОТПРАВИТЬ ПОДРОБНОСТИ</string>
-  <string name="crash_button_decline">НЕТ, СПАСИБО</string>
   <string name="download_books">Скачивайте книги</string>
   <string name="expand">Развернуть</string>
   <string name="bookmarks_from_current_book" fuzzy="true">Закладки в текущей книге</string>

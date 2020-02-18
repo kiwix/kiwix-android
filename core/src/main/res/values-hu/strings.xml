@@ -69,7 +69,7 @@
   <string name="rate_dialog_msg_1">Ha szereted a(z)</string>
   <string name="rate_dialog_msg_2">alkalmazást, szánj egy percet az értékelésére. Köszönjük a támogatásodat!</string>
   <string name="rate_dialog_positive">Értékelés!</string>
-  <string name="rate_dialog_negative">Nem, köszönöm</string>
+  <string name="no_thanks">Nem, köszönöm</string>
   <string name="rate_dialog_neutral">Később</string>
   <string name="open">Megnyitás</string>
   <string name="bookmark_removed">Könyvjelző eltávolítva</string>
@@ -123,7 +123,6 @@
   <string name="do_not_ask_anymore">Ne kérdezz többször</string>
   <string name="crash_checkbox_device">Az eszköz részletei</string>
   <string name="crash_button_confirm">RÉSZLETEK KÜLDÉSE</string>
-  <string name="crash_button_decline">KÖSZÖNÖM NEM</string>
   <string name="download_books">Könyvek letöltése</string>
   <string name="close_all_tabs">Az összes lap bezárása</string>
   <string name="delete_notes_confirmation_msg">Törölsz minden jegyzetet?</string>

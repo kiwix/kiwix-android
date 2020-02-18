@@ -68,7 +68,7 @@
   <string name="rate_dialog_msg_1">Se vi ĝuas uzadon de</string>
   <string name="rate_dialog_msg_2">, bonvolu taksi ĝin. Dankon pro via subteno!</string>
   <string name="rate_dialog_positive">Taksi!</string>
-  <string name="rate_dialog_negative">Ne, dankon</string>
+  <string name="no_thanks">Ne, dankon</string>
   <string name="rate_dialog_neutral">Poste</string>
   <string name="open">Malfermi</string>
   <string name="bookmark_removed">Forigis legosignon</string>
@@ -130,7 +130,6 @@
   <string name="crash_checkbox_logs">Protokoloj de la Aplikaĵo</string>
   <string name="crash_checkbox_device">Detaloj pri aparato</string>
   <string name="crash_button_confirm">SENDI DETALOJN</string>
-  <string name="crash_button_decline">NE, DANKON</string>
   <string name="shortcut_disabled_message">Fulmoklavo ne estas havebla</string>
   <string name="new_tab_shortcut_label">Nova langeto</string>
   <string name="fav_icon">Retpaĝsimbolo</string>

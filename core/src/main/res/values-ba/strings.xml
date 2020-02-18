@@ -15,7 +15,7 @@
   <string name="pref_info_version">Версия</string>
   <string name="pref_language_title">Тел</string>
   <string name="rate_dialog_positive">Баһаларға!</string>
-  <string name="rate_dialog_negative">Юҡ, рәхмәт</string>
+  <string name="no_thanks">Юҡ, рәхмәт</string>
   <string name="library">Китапхана</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>

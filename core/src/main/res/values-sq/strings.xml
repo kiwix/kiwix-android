@@ -61,7 +61,7 @@
   <string name="rate_dialog_msg_1">Nëse ju pëlqen përdorimi i</string>
   <string name="rate_dialog_msg_2">, ju lutemi, ndaluni një çast dhe vlerësojeni. Faleminderit për përkrahjen që na bëni!</string>
   <string name="rate_dialog_positive">Vlerësojeni!</string>
-  <string name="rate_dialog_negative">Jo, faleminderit</string>
+  <string name="no_thanks">Jo, faleminderit</string>
   <string name="rate_dialog_neutral">Më vonë</string>
   <string name="open">Hape</string>
   <string name="bookmark_removed">U hoq faqerojtës</string>

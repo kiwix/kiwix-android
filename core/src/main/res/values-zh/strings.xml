@@ -71,7 +71,7 @@
   <string name="rate_dialog_msg_1">如果您喜欢使用</string>
   <string name="rate_dialog_msg_2">，请花一些时间评价它。感谢您的支持！</string>
   <string name="rate_dialog_positive">评价吧！</string>
-  <string name="rate_dialog_negative">不用了，谢谢</string>
+  <string name="no_thanks">不用了，谢谢</string>
   <string name="rate_dialog_neutral">以后再说</string>
   <string name="open">打开</string>
   <string name="bookmark_removed">书签已移除</string>
@@ -132,7 +132,6 @@
   <string name="crash_checkbox_logs">应用程序日志</string>
   <string name="crash_checkbox_device">设备细节</string>
   <string name="crash_button_confirm">发送详情</string>
-  <string name="crash_button_decline">不需要</string>
   <string name="articleCount">%s个条目</string>
   <string name="download_books">下载书籍</string>
   <string name="go_to_previous_page">楼上</string>

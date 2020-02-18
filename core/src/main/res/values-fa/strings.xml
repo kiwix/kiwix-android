@@ -59,7 +59,7 @@
   <string name="bookmark_added">نشانک افزوده شد</string>
   <string name="rate_dialog_title">لطفا به ما امتیاز بدهید</string>
   <string name="rate_dialog_positive">امتیاز دهید!</string>
-  <string name="rate_dialog_negative">نه، سپاس</string>
+  <string name="no_thanks">نه، سپاس</string>
   <string name="rate_dialog_neutral">بعداً</string>
   <string name="open">گشودن</string>
   <string name="bookmark_removed">نشانک حذف شد</string>

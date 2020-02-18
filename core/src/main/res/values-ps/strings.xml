@@ -41,7 +41,7 @@
   <string name="rate_dialog_msg_1">که تاسې يې په کارولو خوند اخيستی وي</string>
   <string name="rate_dialog_msg_2">، نو مهرباني وکړئ يوه شېبه وخت مو د دې په ارزولو کې ولگوئ. ستاسې له ملاتړ څخه مننه!</string>
   <string name="rate_dialog_positive">ارزول!</string>
-  <string name="rate_dialog_negative">نه، مننه</string>
+  <string name="no_thanks">نه، مننه</string>
   <string name="rate_dialog_neutral">وروسته</string>
   <string name="pref_newtab_background_title">نوې کړکۍ په شاځمکه کې پرانيستل</string>
   <string name="pref_newtab_background_summary">کله چې يوه نوې کړکۍ پرانيزئ هغه به په شاځمکه کې پرانيستل شي</string>

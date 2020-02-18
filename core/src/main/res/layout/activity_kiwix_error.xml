@@ -24,15 +24,12 @@
 
   <Button
     android:id="@+id/reportButton"
-    style="@style/Widget.AppCompat.Button"
     android:layout_width="120dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="32dp"
-    android:background="@color/white"
     android:text="@string/crash_button_confirm"
-    android:textColor="@color/black_regular_mat_design"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.173"
@@ -40,14 +37,12 @@
 
   <Button
     android:id="@+id/restartButton"
-    style="?android:attr/borderlessButtonStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="32dp"
-    android:text="@string/crash_button_decline"
-    android:textColor="@color/blue_grey"
+    android:text="@string/no_thanks"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.769"

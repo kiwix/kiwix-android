@@ -64,7 +64,7 @@
   <string name="rate_dialog_msg_1">ქომორქონა-და</string>
   <string name="rate_dialog_msg_2">, ქორთხინთ, ართ წუთი ქემიჩომილეთ ჩქინი დაფასებელო. მარდი თქვანი აზარაშ გეშა!</string>
   <string name="rate_dialog_positive">დაფასება!</string>
-  <string name="rate_dialog_negative">ვარი, მარდი</string>
+  <string name="no_thanks">ვარი, მარდი</string>
   <string name="rate_dialog_neutral">შხვა ბორჯის</string>
   <string name="open">გონწყუმა</string>
   <string name="bookmark_removed">მიკოწონებელქ დილასუ</string>
@@ -111,7 +111,6 @@
   <string name="crash_checkbox_zimfiles">თქვანი Zim ფაილეფიშ ერკებული</string>
   <string name="crash_checkbox_device">მონწყილობაშ ინფორმაცია</string>
   <string name="crash_button_confirm">ინფორმაციაშ ჯღონუა</string>
-  <string name="crash_button_decline">ვარი, მარდი</string>
   <string name="new_tab_shortcut_label">ახალი აშნაკიდა</string>
   <string name="expand">გოფაჩუა</string>
   <string name="history">ისტორია</string>

@@ -68,7 +68,7 @@
   <string name="rate_dialog_msg_1">Hvis du kan lide at bruge</string>
   <string name="rate_dialog_msg_2">, så brug et øjeblik til at bedømme det. Tak for din støtte!</string>
   <string name="rate_dialog_positive">Bedøm!</string>
-  <string name="rate_dialog_negative">Nej, tak</string>
+  <string name="no_thanks">Nej, tak</string>
   <string name="rate_dialog_neutral">Senere</string>
   <string name="open">Åbn</string>
   <string name="bookmark_removed">Bogmærke fjernet</string>
@@ -122,7 +122,6 @@
   <string name="external_link_popup_dialog_title">Gå til ekstern henvisning</string>
   <string name="external_link_popup_dialog_message">Du er på vej mod en ekstern henvisning. Det kan medføre ekstra omkostninger til dataoverførsel eller vil bare ikke fungere når du ikke er på nettet. Ønsker du at fortsætte?</string>
   <string name="do_not_ask_anymore">Spørg ikke igen</string>
-  <string name="crash_button_decline">NEJ TAK</string>
   <string name="new_tab_shortcut_label">Ny fane</string>
   <string name="articleCount">%s artikler</string>
   <string name="go_to_previous_page">Gå til forrige side</string>

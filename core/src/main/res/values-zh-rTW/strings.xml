@@ -75,7 +75,7 @@
   <string name="rate_dialog_msg_1">如果您喜歡使用</string>
   <string name="rate_dialog_msg_2">，請花點時間評價它。感謝您的支持！</string>
   <string name="rate_dialog_positive">評價！</string>
-  <string name="rate_dialog_negative">不用了，謝謝</string>
+  <string name="no_thanks">不用了，謝謝</string>
   <string name="rate_dialog_neutral">以後再說</string>
   <string name="open">開啟</string>
   <string name="bookmark_removed">書籤已移除</string>
@@ -138,7 +138,6 @@
   <string name="crash_checkbox_logs">應用程式日誌</string>
   <string name="crash_checkbox_device">設備詳情</string>
   <string name="crash_button_confirm">發送詳情</string>
-  <string name="crash_button_decline">不必了，謝謝</string>
   <string name="shortcut_disabled_message">快捷不可用</string>
   <string name="new_tab_shortcut_label">新分頁</string>
   <string name="fav_icon">圖示</string>

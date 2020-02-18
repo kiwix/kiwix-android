@@ -56,7 +56,7 @@
   <string name="rate_dialog_msg_1">Se vos agradar d\'utilizar</string>
   <string name="rate_dialog_msg_2">, prenètz un moment per l\'avalorar. Mercé per vòstre sosten !</string>
   <string name="rate_dialog_positive">Notatz !</string>
-  <string name="rate_dialog_negative">Non, mercé</string>
+  <string name="no_thanks">Non, mercé</string>
   <string name="rate_dialog_neutral">Pus tard</string>
   <string name="open">Dobrir</string>
   <string name="bookmark_removed">Favorit suprimit</string>

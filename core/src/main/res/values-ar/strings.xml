@@ -73,7 +73,7 @@
   <string name="rate_dialog_msg_1">إذا كنت تتمتع باستخدام</string>
   <string name="rate_dialog_msg_2">يرجى ان نتوقف لحظة لتقييمنا. شكرا لدعمك!</string>
   <string name="rate_dialog_positive">قيّم!</string>
-  <string name="rate_dialog_negative">لا، شكراً</string>
+  <string name="no_thanks">لا، شكراً</string>
   <string name="rate_dialog_neutral">لاحقاً</string>
   <string name="open">فتح</string>
   <string name="bookmark_removed">تمت إزالة الإشارة المرجعية</string>
@@ -136,7 +136,6 @@
   <string name="crash_checkbox_logs">سجلات التطبيق</string>
   <string name="crash_checkbox_device">تفاصيل الجهاز</string>
   <string name="crash_button_confirm">إرسال التفاصيل</string>
-  <string name="crash_button_decline">لا شكرا</string>
   <string name="shortcut_disabled_message">اختصار غير متوفر</string>
   <string name="new_tab_shortcut_label">علامة تبويب جديدة</string>
   <string name="fav_icon">أيقونة المفضلة</string>

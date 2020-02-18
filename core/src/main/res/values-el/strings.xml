@@ -58,7 +58,7 @@
   <string name="rate_dialog_msg_1">Εάν απολαμβάνετε να το χρησιμοποιείτε,</string>
   <string name="rate_dialog_msg_2">, παρακαλούμε βαθμολογήστε το μια στιγμή. Ευχαριστούμε για την υποστήριξή σας!</string>
   <string name="rate_dialog_positive">Βαθμολόγηση!</string>
-  <string name="rate_dialog_negative">Όχι, ευχαριστώ</string>
+  <string name="no_thanks">Όχι, ευχαριστώ</string>
   <string name="rate_dialog_neutral">Αργότερα</string>
   <string name="open">Ανοιχτό</string>
   <string name="bookmark_removed">Αφαιρέθηκε σελιδοδείκτης</string>

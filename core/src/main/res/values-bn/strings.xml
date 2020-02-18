@@ -65,7 +65,7 @@
   <string name="rate_dialog_msg_1">যদি আপনি ব্যবহার করতে পছন্দ করেন</string>
   <string name="rate_dialog_msg_2">, দয়া করে এক মিনিট ব্যয় করে মূল্যায়ন করুন। আপনার সমর্থনের জন্য ধন্যবাদ!</string>
   <string name="rate_dialog_positive">মূল্যায়ন করুন!</string>
-  <string name="rate_dialog_negative">না, ধন্যবাদ</string>
+  <string name="no_thanks">না, ধন্যবাদ</string>
   <string name="rate_dialog_neutral">পরে</string>
   <string name="open">খুলুন</string>
   <string name="bookmark_removed">বুকমার্ক সরানো হয়েছে</string>
@@ -115,7 +115,6 @@
   <string name="time_today">আজ</string>
   <string name="time_yesterday">গতকাল</string>
   <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
-  <string name="crash_button_decline">না ধন্যবাদ</string>
   <string name="new_tab_shortcut_label">নতুন ট্যাব</string>
   <string name="pending_state">মুলতুবী</string>
   <string name="note">টীকা</string>

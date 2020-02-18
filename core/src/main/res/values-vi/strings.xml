@@ -64,7 +64,7 @@
   <string name="rate_dialog_msg_1">Nếu bạn thích sử dụng</string>
   <string name="rate_dialog_msg_2">, xin vui lòng mất một chút thời gian để đánh giá nó. Chân thành cảm ơn bạn vì sự ủng hộ!</string>
   <string name="rate_dialog_positive">Đánh giá!</string>
-  <string name="rate_dialog_negative">Thôi</string>
+  <string name="no_thanks">Thôi</string>
   <string name="rate_dialog_neutral">Lát nữa</string>
   <string name="open">Mở</string>
   <string name="bookmark_removed">Đã xóa dấu trang</string>

@@ -64,7 +64,7 @@
   <string name="rate_dialog_msg_1">Ma plij deoc\'h implijout</string>
   <string name="rate_dialog_msg_2">, kemerit ur mare evit prizañ anezhañ, mar plij ! Trugarez evit ho skoazell !</string>
   <string name="rate_dialog_positive">Notennit !</string>
-  <string name="rate_dialog_negative">Nann, trugarez</string>
+  <string name="no_thanks">Nann, trugarez</string>
   <string name="rate_dialog_neutral">Diwezhatoc\'h</string>
   <string name="open">Digeriñ</string>
   <string name="bookmark_removed">Sined lamet</string>

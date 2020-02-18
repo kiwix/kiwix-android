@@ -74,7 +74,7 @@
   <string name="rate_dialog_msg_1">אם אתם נהנים להשתמש</string>
   <string name="rate_dialog_msg_2">, אנא הקדישו רגע ודרגו את התכונה הזאת. תודה על התמיכה!</string>
   <string name="rate_dialog_positive">דירוג!</string>
-  <string name="rate_dialog_negative">לא, תודה</string>
+  <string name="no_thanks">לא, תודה</string>
   <string name="rate_dialog_neutral">פעם אחרת</string>
   <string name="open">פתיחה</string>
   <string name="bookmark_removed">הסימנייה הוסרה</string>
@@ -137,7 +137,6 @@
   <string name="crash_checkbox_logs">יומני היישום</string>
   <string name="crash_checkbox_device">פרטי המכשיר</string>
   <string name="crash_button_confirm">שליחת הפרטים</string>
-  <string name="crash_button_decline">לא תודה</string>
   <string name="shortcut_disabled_message">קיצור הדרך לא זמין</string>
   <string name="new_tab_shortcut_label">לשונית חדשה</string>
   <string name="fav_icon">סמל לסימנייה</string>

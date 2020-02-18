@@ -76,7 +76,7 @@
   <string name="rate_dialog_msg_1">Jeśli podoba ci się korzystanie z</string>
   <string name="rate_dialog_msg_2">, znajdź chwilę na jego ocenienie. Dziękujemy za Twoje wsparcie!</string>
   <string name="rate_dialog_positive">Oceń!</string>
-  <string name="rate_dialog_negative">Nie, dziękuję</string>
+  <string name="no_thanks">Nie, dziękuję</string>
   <string name="rate_dialog_neutral">Później</string>
   <string name="open">Otwórz</string>
   <string name="bookmark_removed">Usunięto zakładkę</string>
@@ -139,7 +139,6 @@
   <string name="crash_checkbox_logs">Dzienniki aplikacji</string>
   <string name="crash_checkbox_device">Szczegóły urządzenia</string>
   <string name="crash_button_confirm">WYŚLIJ SZCZEGÓŁY</string>
-  <string name="crash_button_decline">NIE, DZIĘKUJĘ</string>
   <string name="shortcut_disabled_message">Skrót niedostępny</string>
   <string name="new_tab_shortcut_label">Nowa karta</string>
   <string name="fav_icon">Favicon</string>

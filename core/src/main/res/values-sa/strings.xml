@@ -35,7 +35,7 @@
   <string name="rate_dialog_msg_1">यदि त्वया उपयोगन लाभः स्वीकृतः</string>
   <string name="rate_dialog_msg_2">, कृपया क्षणमात्रं मूल्याङ्कनं कुरु. तव प्रतिस्पन्दार्थं कृतज्ञता !</string>
   <string name="rate_dialog_positive">मूल्याङ्कनम्</string>
-  <string name="rate_dialog_negative">न, कृतज्ञताः</string>
+  <string name="no_thanks">न, कृतज्ञताः</string>
   <string name="rate_dialog_neutral">पश्चात्</string>
   <string name="pref_newtab_background_title">पृष्ठे नवीनं प्लवनम् उद्घाट्यताम्</string>
   <string name="pref_newtab_background_summary">यदा नवीनप्लवनम् आरप्स्यते, तदा पृष्ठभागे एव भविष्यति</string>

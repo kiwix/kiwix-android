@@ -52,7 +52,7 @@
   <string name="rate_dialog_title">हामीलाई स्तर दिनुहोस्</string>
   <string name="rate_dialog_msg_1">प्रयोग गर्न रमाइलो लागेमा</string>
   <string name="rate_dialog_positive">स्तर दिनुहोस्!</string>
-  <string name="rate_dialog_negative">पर्दैन, धन्यवाद</string>
+  <string name="no_thanks">पर्दैन, धन्यवाद</string>
   <string name="rate_dialog_neutral">पछि</string>
   <string name="open">खोल्नुहोस्</string>
   <string name="bookmark_removed">पुस्तक चिनो हटाइयो</string>

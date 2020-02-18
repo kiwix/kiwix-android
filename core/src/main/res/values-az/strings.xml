@@ -30,7 +30,7 @@
   <string name="rate_dialog_msg_1">Əgər, istifadədən xoşlandınızsa</string>
   <string name="rate_dialog_msg_2">xahiş edirik, dəyərləndirmək üçün bir az vaxt ayırın. Dəstəklədiyiniz üçün təşəkkür edirik!</string>
   <string name="rate_dialog_positive">Dəyərləndir!</string>
-  <string name="rate_dialog_negative">Yox, sağ olun</string>
+  <string name="no_thanks">Yox, sağ olun</string>
   <string name="rate_dialog_neutral">Daha sonra</string>
   <string name="library">Kitabxana</string>
   <string-array name="description_help_2">

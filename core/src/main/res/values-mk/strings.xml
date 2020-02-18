@@ -70,7 +70,7 @@
   <string name="rate_dialog_msg_1">Ако ви се допаѓа</string>
   <string name="rate_dialog_msg_2">, ќе ве молиме да одвоите еден миг за да дадете своја оценка. Ви благодариме на поддршката!</string>
   <string name="rate_dialog_positive">Оцени!</string>
-  <string name="rate_dialog_negative">Не, благодарам</string>
+  <string name="no_thanks">Не, благодарам</string>
   <string name="rate_dialog_neutral">Подоцна</string>
   <string name="open">Отвори</string>
   <string name="bookmark_removed">Обележаните се отстранети</string>
@@ -133,7 +133,6 @@
   <string name="crash_checkbox_logs">Дневници на прилози</string>
   <string name="crash_checkbox_device">Поединости за уредот</string>
   <string name="crash_button_confirm">ИСПРАТИ ПОЕДИНОСТИ</string>
-  <string name="crash_button_decline">НЕ, БЛАГОДАРАМ</string>
   <string name="shortcut_disabled_message">Кратенката е недостапна</string>
   <string name="new_tab_shortcut_label">Ново јазиче</string>
   <string name="fav_icon">Иконка</string>

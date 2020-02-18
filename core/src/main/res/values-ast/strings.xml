@@ -66,7 +66,7 @@
   <string name="rate_dialog_msg_1">Si esfrutes usando</string>
   <string name="rate_dialog_msg_2">, toma un momentu pa calificala. ¡Gracies pol to sofitu!</string>
   <string name="rate_dialog_positive">¡Calificar!</string>
-  <string name="rate_dialog_negative">Non, gracies</string>
+  <string name="no_thanks">Non, gracies</string>
   <string name="rate_dialog_neutral">Sero</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Desanicióse\'l marcador</string>
@@ -129,7 +129,6 @@
   <string name="crash_checkbox_logs">Rexistros de l\'aplicación</string>
   <string name="crash_checkbox_device">Detalles del preséu</string>
   <string name="crash_button_confirm">UNVIAR LOS DATOS</string>
-  <string name="crash_button_decline">NON, GRACIES</string>
   <string name="shortcut_disabled_message">Atayu non disponible</string>
   <string name="new_tab_shortcut_label">Llingüeta nueva</string>
   <string name="fav_icon">Favicon</string>

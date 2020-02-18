@@ -67,7 +67,7 @@
   <string name="rate_dialog_msg_1">Ако ви допадна</string>
   <string name="rate_dialog_msg_2">,моля, отделете малко време, за да го оцените. Благодаря за подкрепата!</string>
   <string name="rate_dialog_positive">Оцени!</string>
-  <string name="rate_dialog_negative">Не, благодаря</string>
+  <string name="no_thanks">Не, благодаря</string>
   <string name="rate_dialog_neutral">По-късно</string>
   <string name="open">Отваряне</string>
   <string name="bookmark_removed">Отметката е премахната</string>

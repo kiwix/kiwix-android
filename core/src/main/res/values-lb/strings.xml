@@ -47,7 +47,7 @@
   <string name="undo">Réckgängeg maachen</string>
   <string name="bookmark_added">Lieszeechen derbäigesat</string>
   <string name="rate_dialog_positive">Bewäerten!</string>
-  <string name="rate_dialog_negative">Nee, merci</string>
+  <string name="no_thanks">Nee, merci</string>
   <string name="rate_dialog_neutral">Méi spéit</string>
   <string name="open">Opmaachen</string>
   <string name="bookmark_removed">Lieszeechen ewechgeholl</string>
@@ -83,7 +83,6 @@
   <string name="external_link_popup_dialog_title">Externe Link aginn</string>
   <string name="do_not_ask_anymore">Net méi froen</string>
   <string name="crash_checkbox_device">Detailer vum Apparat</string>
-  <string name="crash_button_decline">NEE MERCI</string>
   <string name="articleCount">%s Artikelen</string>
   <string name="download_books">Bicher eroflueden</string>
   <string name="go_to_previous_page">Op déi vireg Säit goen</string>

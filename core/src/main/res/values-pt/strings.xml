@@ -70,7 +70,7 @@
   <string name="rate_dialog_msg_1">Se gosta de usar</string>
   <string name="rate_dialog_msg_2">, avalie-o por favor. Obrigado pelo seu apoio!</string>
   <string name="rate_dialog_positive">Avalie!</string>
-  <string name="rate_dialog_negative">Não, obrigado</string>
+  <string name="no_thanks">Não, obrigado</string>
   <string name="rate_dialog_neutral">Mais tarde</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Marcador removido</string>

@@ -63,7 +63,7 @@
   <string name="rate_dialog_msg_1">Se gozas co uso</string>
   <string name="rate_dialog_msg_2">, por favor bote un momento para cualificala. Grazas polo seu apoio!</string>
   <string name="rate_dialog_positive">Cualificaǃ</string>
-  <string name="rate_dialog_negative">Non, grazas</string>
+  <string name="no_thanks">Non, grazas</string>
   <string name="rate_dialog_neutral">Máis tarde</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Marcador borrado</string>

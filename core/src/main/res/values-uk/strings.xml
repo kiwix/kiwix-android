@@ -66,7 +66,7 @@
   <string name="rate_dialog_msg_1">Якщо Ви насолоджуєтесь використанням</string>
   <string name="rate_dialog_msg_2">, будь ласка, виділіть хвильку, щоб оцінити його. Дякуємо за Вашу підтримку!</string>
   <string name="rate_dialog_positive">Оцінити!</string>
-  <string name="rate_dialog_negative">Ні, дякую</string>
+  <string name="no_thanks">Ні, дякую</string>
   <string name="rate_dialog_neutral">Пізніше</string>
   <string name="open">Відкрити</string>
   <string name="bookmark_removed">Закладку вилучено</string>

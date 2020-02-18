@@ -65,7 +65,7 @@
   <string name="rate_dialog_msg_1">Jika Anda menikmati menggunakan</string>
   <string name="rate_dialog_msg_2">, silakan luangkan waktu Anda untuk menilainya. Terima kasih atas dukungan Anda!</string>
   <string name="rate_dialog_positive">Nilai!</string>
-  <string name="rate_dialog_negative">Tidak, terima kasih</string>
+  <string name="no_thanks">Tidak, terima kasih</string>
   <string name="rate_dialog_neutral">Nanti</string>
   <string name="open">Buka</string>
   <string name="bookmark_removed">Markah dihapus</string>

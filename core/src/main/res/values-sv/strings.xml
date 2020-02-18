@@ -67,7 +67,7 @@
   <string name="rate_dialog_msg_1">Om du gillar att använda</string>
   <string name="rate_dialog_msg_2">, ta dig tid att betygsätta den. Tack för ditt stöd!</string>
   <string name="rate_dialog_positive">Betygsätt!</string>
-  <string name="rate_dialog_negative">Nej, tack</string>
+  <string name="no_thanks">Nej, tack</string>
   <string name="rate_dialog_neutral">Senare</string>
   <string name="open">Öppna</string>
   <string name="bookmark_removed">Bokmärke togs bort</string>
@@ -130,7 +130,6 @@
   <string name="crash_checkbox_logs">Applikationsloggar</string>
   <string name="crash_checkbox_device">Enhetsdetaljer</string>
   <string name="crash_button_confirm">SKICKA DETALJER</string>
-  <string name="crash_button_decline">NEJ TACK</string>
   <string name="shortcut_disabled_message">Genväg är inte tillgänglig</string>
   <string name="new_tab_shortcut_label">Ny flik</string>
   <string name="fav_icon">Flikikon</string>

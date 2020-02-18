@@ -76,7 +76,7 @@
   <string name="rate_dialog_msg_1">Se você gosta de usar</string>
   <string name="rate_dialog_msg_2">, por favor leve um momento para avaliá-lo. Obrigado por seu apoio!</string>
   <string name="rate_dialog_positive">Avalie!</string>
-  <string name="rate_dialog_negative">Não, obrigado</string>
+  <string name="no_thanks">Não, obrigado</string>
   <string name="rate_dialog_neutral">Mais tarde</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Favorito removido</string>
@@ -139,7 +139,6 @@
   <string name="crash_checkbox_logs">Registros de aplicativos</string>
   <string name="crash_checkbox_device">Detalhes do dispositivo</string>
   <string name="crash_button_confirm">ENVIAR DETALHES</string>
-  <string name="crash_button_decline">NÃO, OBRIGADO</string>
   <string name="shortcut_disabled_message">Atalho não disponível</string>
   <string name="new_tab_shortcut_label">Nova guia</string>
   <string name="fav_icon">Favicon</string>

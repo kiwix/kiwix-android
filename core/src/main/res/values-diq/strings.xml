@@ -65,7 +65,7 @@
   <string name="rate_dialog_msg_1">Qayılê bıkarnê se</string>
   <string name="rate_dialog_msg_2">, reca kem deqekê nısbi kerê.  Qandê destegi teşekur kem</string>
   <string name="rate_dialog_positive">Nısbi!</string>
-  <string name="rate_dialog_negative">Nê, teşekur</string>
+  <string name="no_thanks">Nê, teşekur</string>
   <string name="rate_dialog_neutral">Bahdo</string>
   <string name="open">Ake</string>
   <string name="bookmark_removed">Cayek wedariya</string>

@@ -69,7 +69,7 @@
   <string name="rate_dialog_msg_1">Če ste uživali ob uporabi</string>
   <string name="rate_dialog_msg_2">, prosimo vzemite si trenutek in ocenite. Hvala za vašo podporo!</string>
   <string name="rate_dialog_positive">Oceniti!</string>
-  <string name="rate_dialog_negative">Ne, hvala</string>
+  <string name="no_thanks">Ne, hvala</string>
   <string name="rate_dialog_neutral">Kasneje</string>
   <string name="open">Odpri</string>
   <string name="bookmark_removed">Zaznamek je odstranjen</string>
@@ -131,7 +131,6 @@
   <string name="crash_checkbox_logs">Dnevniki aplikacije</string>
   <string name="crash_checkbox_device">Podrobnosti o napravi</string>
   <string name="crash_button_confirm">Pošlji podatke</string>
-  <string name="crash_button_decline">Ne hvala</string>
   <string name="shortcut_disabled_message">Bližnjica ni na voljo</string>
   <string name="new_tab_shortcut_label">Nov zavihek</string>
   <string name="fav_icon">Zaznamka</string>

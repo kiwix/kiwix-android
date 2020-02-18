@@ -39,7 +39,7 @@
   <string name="rate_dialog_msg_1">Als u geniet van het gebruik van</string>
   <string name="rate_dialog_msg_2">, geef dan even een beoordeling. Dank u wel voor uw steun!</string>
   <string name="rate_dialog_positive">Beoordelen!</string>
-  <string name="rate_dialog_negative">Nee, bedankt</string>
+  <string name="no_thanks">Nee, bedankt</string>
   <string name="pref_newtab_background_title">Nieuw tabblab in de achtergrond openen</string>
   <string name="pref_newtab_background_summary">Nieuwe tabbladen worden niet actief gemaakt</string>
   <string name="library">Bibliotheek</string>

@@ -638,7 +638,7 @@ public abstract class CoreMainActivity extends BaseActivity
       + getString(R.string.app_name)
       + getString(R.string.rate_dialog_msg_2);
     String positive = getString(R.string.rate_dialog_positive);
-    String negative = getString(R.string.rate_dialog_negative);
+    String negative = getString(R.string.no_thanks);
     String neutral = getString(R.string.rate_dialog_neutral);
 
     new AlertDialog.Builder(this)

@@ -78,7 +78,7 @@
   <string name="rate_dialog_msg_1">If you enjoy using</string>
   <string name="rate_dialog_msg_2">, please take a moment to rate it. Thanks for your support!</string>
   <string name="rate_dialog_positive">Rate!</string>
-  <string name="rate_dialog_negative">No, thanks</string>
+  <string name="no_thanks">No, thanks</string>
   <string name="rate_dialog_neutral">Later</string>
   <string name="open">Open</string>
   <string name="bookmark_removed">Bookmark removed</string>
@@ -140,9 +140,8 @@
   <string name="crash_checkbox_logs">Application Logs</string>
   <string name="crash_checkbox_device">Device Details</string>
   <string name="crash_button_confirm">SEND DETAILS</string>
-  <string name="crash_button_decline">NO THANKS</string>
-  <string name="shortcut_disabled_message">Shortcut not available</string>
-  <string name="new_tab_shortcut_label">New tab</string>
+  <string name="shortcut_disabled_message" tools:ignore="UnusedResources">Shortcut not available</string>
+  <string name="new_tab_shortcut_label" tools:ignore="UnusedResources">New tab</string>
   <string name="fav_icon">Favicon</string>
 
 

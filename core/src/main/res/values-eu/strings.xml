@@ -64,7 +64,7 @@
   <string name="rate_dialog_msg_1">Erabiltzen gozatzen baduzu</string>
   <string name="rate_dialog_msg_2">Mesedez, har ezazu momentu bat puntuatzeko. Eskerrik asko zure laguntzagatik!</string>
   <string name="rate_dialog_positive">Puntuatu!</string>
-  <string name="rate_dialog_negative">Ez, eskerrik asko</string>
+  <string name="no_thanks">Ez, eskerrik asko</string>
   <string name="rate_dialog_neutral">Geroago</string>
   <string name="open">Ireki</string>
   <string name="bookmark_removed">Orri-markatzailea ezabatuta</string>

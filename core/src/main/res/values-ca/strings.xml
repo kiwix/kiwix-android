@@ -78,7 +78,6 @@
   <string name="do_not_ask_anymore">No tornar a preguntar</string>
   <string name="crash_checkbox_device">Detalls de l’aparell</string>
   <string name="crash_button_confirm">ENVIA LES DADES</string>
-  <string name="crash_button_decline">NO, MERCÈS</string>
   <string name="new_tab_shortcut_label">Pestanya nova</string>
   <string name="articleCount">%s articles</string>
   <string name="table_of_contents">Taula</string>

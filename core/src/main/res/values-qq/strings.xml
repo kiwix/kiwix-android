@@ -26,7 +26,7 @@
   <string name="delete">{{Identical|Delete}}</string>
   <string name="undo">{{Identical|Undo}}</string>
   <string name="rate_dialog_positive">{{Identical|Rate}}</string>
-  <string name="rate_dialog_negative">{{Identical|No thanks}}</string>
+  <string name="no_thanks">{{Identical|No thanks}}</string>
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>
   <string name="open">{{Identical|Open}}</string>
   <string name="library">{{Identical|Library}}</string>

@@ -26,7 +26,7 @@
   <string name="did_you_know">คุณรู้หรือไม่?</string>
   <string name="bookmark_added">เพิ่มบุ๊คมาร์คแล้ว</string>
   <string name="rate_dialog_title">โปรดให้คะแนนเรา</string>
-  <string name="rate_dialog_negative">ไม่ ขอบคุณ</string>
+  <string name="no_thanks">ไม่ ขอบคุณ</string>
   <string name="rate_dialog_neutral">ทีหลัง</string>
   <string name="bookmark_removed">ลบบุ๊คมาร์คแล้ว</string>
   <string name="library">รายการ</string>

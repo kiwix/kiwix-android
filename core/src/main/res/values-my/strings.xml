@@ -53,7 +53,7 @@
   <string name="undo">နောက်ပြန် ပြန်ပြင်ရန်</string>
   <string name="bookmark_added">စာညှပ်မှတ် ထည့်ပေါင်းပြီး</string>
   <string name="rate_dialog_title">ကျေးဇူးပြု၍ ကျွန်ုပ်တို့အား အဆင့်သတ်မှတ်ပေးပါ</string>
-  <string name="rate_dialog_negative">မလိုပါ၊ ကျေးဇူးတင်ပါသည်။</string>
+  <string name="no_thanks">မလိုပါ၊ ကျေးဇူးတင်ပါသည်။</string>
   <string name="rate_dialog_neutral">နောက်မှ</string>
   <string name="open">ဖွင့်ပါ</string>
   <string name="library">မှတ်ထားမှုများ</string>

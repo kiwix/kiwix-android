@@ -61,7 +61,7 @@
   <string name="rate_dialog_msg_1">Wenn du</string>
   <string name="rate_dialog_msg_2">magst, nimm dir zur Bewertung einen Moment Zeit. Vielen Dank für deine Unterstützung!</string>
   <string name="rate_dialog_positive">Bewerten!</string>
-  <string name="rate_dialog_negative">Nein danke</string>
+  <string name="no_thanks">Nein danke</string>
   <string name="rate_dialog_neutral">Später</string>
   <string name="open">Öffnen</string>
   <string name="bookmark_removed">Lesezeichen entfernt</string>

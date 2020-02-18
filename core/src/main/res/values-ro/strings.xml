@@ -62,7 +62,7 @@
   <string name="rate_dialog_msg_1">Dacă v-a plăcut</string>
   <string name="rate_dialog_msg_2">, oferiți-ne câteva momente pentru a o evalua. Mulțumim pentru sprijin!</string>
   <string name="rate_dialog_positive">Evaluează!</string>
-  <string name="rate_dialog_negative">Nu, mulțumesc</string>
+  <string name="no_thanks">Nu, mulțumesc</string>
   <string name="rate_dialog_neutral">Mai târziu</string>
   <string name="open">Deschis</string>
   <string name="bookmark_removed">Semn de carte îndepărtat</string>

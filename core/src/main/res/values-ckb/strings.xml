@@ -47,7 +47,7 @@
   <string name="undo">پووچەڵکردنەوە</string>
   <string name="tab_closed">تاب داخرا</string>
   <string name="bookmark_added">بووکمارک زیادکرا</string>
-  <string name="rate_dialog_negative">نا، سپاس</string>
+  <string name="no_thanks">نا، سپاس</string>
   <string name="rate_dialog_neutral">دواتر</string>
   <string name="bookmark_removed">بووکمارک سڕدرایەوە</string>
   <string name="pref_newtab_background_title">تابێکی نوێ لە پشتینەدا بکەرەوە</string>
@@ -80,7 +80,6 @@
   <string name="do_not_ask_anymore">زیاتر مەپرسە</string>
   <string name="crash_checkbox_language">ڕێکخستنەکانی زمانەکەت</string>
   <string name="crash_checkbox_logs">لۆگەکانی ئەپلیکەیشن</string>
-  <string name="crash_button_decline">نە، سپاس!</string>
   <string name="shortcut_disabled_message">ناوبڕ بەردەست نییە</string>
   <string name="new_tab_shortcut_label">تابی نوێ</string>
   <string name="download_books">داگرتنی کتێبەکان</string>

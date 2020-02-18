@@ -39,7 +39,7 @@
   <string name="rate_dialog_msg_1">Калі вам падабаецца</string>
   <string name="rate_dialog_msg_2">, калі ласка, знайдзіце час, каб ацаніць. Дзякуем за Вашу падтрымку!</string>
   <string name="rate_dialog_positive">Ацаніць!</string>
-  <string name="rate_dialog_negative">Не, дзякуй</string>
+  <string name="no_thanks">Не, дзякуй</string>
   <string name="rate_dialog_neutral">Пазней</string>
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
