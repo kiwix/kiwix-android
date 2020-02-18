@@ -21,9 +21,6 @@ android {
 
   flavorDimensions("default")
   productFlavors {
-
-    // Uncomment for static productFlavors
-    // CustomApps.createStatically(this)
     CustomApps.createDynamically(project.file("src"), this)
     all {
       File("$projectDir/src", "$name/$name.zim").let {

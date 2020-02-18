@@ -57,13 +57,17 @@ abstract class ActivityModule {
         menu: Menu,
         webViews: MutableList<KiwixWebView>,
         urlIsValid: Boolean,
-        menuClickListener: MenuClickListener
+        menuClickListener: MenuClickListener,
+        disableReadAloud: Boolean,
+        disableTabs: Boolean
       ): MainMenu = MainMenu(
         activity,
         zimReaderContainer.zimFileReader,
         menu,
         webViews,
         urlIsValid,
+        disableReadAloud,
+        disableTabs,
         menuClickListener
       )
     }

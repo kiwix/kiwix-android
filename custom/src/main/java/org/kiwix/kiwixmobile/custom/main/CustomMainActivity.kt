@@ -28,11 +28,14 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
@@ -72,6 +75,19 @@ class CustomMainActivity : CoreMainActivity() {
       return
     }
     openObbOrZim()
+    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    if (BuildConfig.DISABLE_SIDEBAR) {
+      val toolbarToc = findViewById<ImageView>(R.id.bottom_toolbar_toc)
+      toolbarToc.isEnabled = false
+      toolbarToc.alpha = .25f
+    }
+  }
+
+  override fun setDrawerLockMode(lockMode: Int) {
+    super.setDrawerLockMode(
+      if (BuildConfig.DISABLE_SIDEBAR) DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+      else lockMode
+    )
   }
 
   @TargetApi(VERSION_CODES.M)
@@ -151,5 +167,28 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun manageZimFiles(tab: Int) {
     // Do nothing
+  }
+
+  override fun createMainMenu(menu: Menu?): MainMenu {
+    return menuFactory.create(
+      menu!!,
+      webViewList,
+      !urlIsInvalid(),
+      this,
+      BuildConfig.DISABLE_READ_ALOUD,
+      BuildConfig.DISABLE_TABS
+    )
+  }
+
+  override fun showOpenInNewTabDialog(url: String?) {
+    if (BuildConfig.DISABLE_TABS) return
+    super.showOpenInNewTabDialog(url)
+  }
+
+  override fun configureWebViewSelectionHandler(menu: Menu?) {
+    if (BuildConfig.DISABLE_READ_ALOUD) {
+      menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
+    }
+    super.configureWebViewSelectionHandler(menu)
   }
 }
