@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
@@ -30,8 +30,8 @@ class SectionsPagerAdapter(
   private val context: Context,
   private val pagerData: Array<PagerData> =
     arrayOf(
-      PagerData(::ZimFileSelectFragment, string.local_zims),
-      PagerData(::LibraryFragment, string.remote_zims)
+      PagerData(::ZimFileSelectFragment, R.string.local_zims),
+      PagerData(::LibraryFragment, R.string.remote_zims)
     ),
   fm: FragmentManager
 ) : FragmentPagerAdapter(fm) {

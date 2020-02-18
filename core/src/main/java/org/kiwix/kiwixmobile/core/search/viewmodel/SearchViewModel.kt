@@ -27,7 +27,6 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -92,7 +91,7 @@ class SearchViewModel @Inject constructor(
       is ConfirmedDelete -> deleteItemAndShowToast(it)
       is CreatedWithIntent -> effects.offer(SearchIntentProcessing(it.intent, actions))
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
-      StartSpeechInputFailed -> effects.offer(ShowToast(string.speech_not_supported))
+      StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
       is ActivityResultReceived ->
         effects.offer(ProcessActivityResult(it.requestCode, it.resultCode, it.data, actions))
     }

@@ -45,12 +45,9 @@
   <string name="pref_credits_title">Falënderime</string>
   <string name="tts_lang_not_supported">Gjuha e kësaj faqeje nuk mbulohet, ose s’janë instaluar të dhëna të gjuhës përkatëse. Artikulli mund të mos lexohet si duhet.</string>
   <string name="no_reader_application_installed">S’u gjet dot ndonjë aplikacion i instaluar për këtë lloj kartele</string>
-  <string name="custom_app_missing_content">Aplikacioni juaj është i cenuar.\nKjo mund të ndodhë kur hiqni kartela te Kujtesa SD.\nLypset ta çinstaloni dhe mandej ta riinstaloni Aplikacioni që nga Play Store.</string>
-  <string name="go_to_play_store">Kaloni te Play Store</string>
   <string name="menu_bookmarks_list">Faqerojtës</string>
   <string name="no_section_info">S’u gjetën Krye Lënde</string>
   <string name="request_storage">Që të përdorni lëndë jashtë interneti, na duhet hyrje te depoja juaj</string>
-  <string name="request_storage_custom">Nëse shihni një skenë mbishtesë sinjalizim, thjesht rinisni pajisjen tuaj që ta ndreqni këtë.</string>
   <string name="clear_recent_and_tabs_history_dialog">Jeni i sigurt se doni të fshihet historiku juaj i kërkimeve dhe të rikthehen krejt skedat aktive?</string>
   <string name="delete_recent_search_item">Të fshihet ky objekt?</string>
   <string name="pref_clear_all_history_title">Pastro historikun</string>
@@ -82,15 +79,9 @@
   <string name="speech_not_supported">Na ndjeni! Pajisja juaj nuk mbulon input përmes të folurës</string>
   <string name="local_zims">Pajisje</string>
   <string name="remote_zims">Në linjë</string>
-  <string name="zim_downloads">Shkarkim</string>
   <string name="zim_manager">Bibliotekë</string>
   <string name="delete_specific_zim_toast">Kartela u fshi</string>
-  <string name="zim_file_downloading">Po shkarkim</string>
-  <string name="zim_file_downloaded">U shkarkua</string>
-  <string name="download_pause">Ndalesë</string>
   <string name="download_stop">Ndale</string>
-  <string name="download_paused">i ndalur</string>
-  <string name="no_downloads_here">S’ka shkarkime këtu</string>
   <string name="no_files_here">S’ka kartela këtu</string>
   <string name="download_no_space">Hapësirë e pamjaftueshme për shkarkimin e kësaj kartele.</string>
   <string name="space_available">Hapësirë e Përdorshme:</string>
@@ -110,7 +101,6 @@
   <string name="help_11">Kartelat ZIM të shkarkuara brenda aplikacionit gjenden te drejtoria e depozitimit të jashtëm, në një dosje të quajtu Kiwix.</string>
   <string name="pref_storage">Depozitim</string>
   <string name="pref_current_folder">Dosja e Tanishme</string>
-  <string name="path_not_writable">S’hyhet dot te drejtori e dëshiruar, po përdoret parazgjedhja. Që të ndreqet kjo, ripërzgjidhni drejtorinë e dëshiruar te rregullimet e aplikacionit.</string>
   <string name="delete_zim_failed">Na ndjeni, s’qemë në gjendje ta fshinim këtë kartelë. Në vend të kësaj, duhet të provoni duke përdorur një përgjegjës kartelash.</string>
   <string name="tts_pause">ndalesë</string>
   <string name="tts_resume">rimerre</string>
@@ -133,8 +123,6 @@
   <string name="time_minute">min.</string>
   <string name="time_second">s</string>
   <string name="time_left">edhe</string>
-  <string name="pref_auto_night_mode_summary">Mënyrat ditë dhe mbrëmje këmbeji automatikisht.</string>
-  <string name="pref_auto_night_mode">Mënyrë mbrëmje automatike</string>
   <string name="pref_external_link_popup_title">Sinjalizo kur hyhet në lidhje të jashtme</string>
   <string name="pref_external_link_popup_summary">Shfaq një flluskë për të sinjalizuar mbi kosto shtesë ose për mosfunksionim lidhjesh “offline”</string>
   <string name="external_link_popup_dialog_title">Po hyhet Në Lidhje të Jashtme</string>

@@ -46,6 +46,10 @@ android {
     versionName = generateVersionName()
   }
 
+  lintOptions {
+    isCheckDependencies = true
+  }
+
   buildTypes {
     getByName("debug") {
       multiDexKeepProguard = file("multidex-instrumentation-config.pro")

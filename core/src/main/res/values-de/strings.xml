@@ -45,12 +45,9 @@
   <string name="pref_credits_title">Danksagungen</string>
   <string name="tts_lang_not_supported">Die Sprache dieser Seite wird nicht unterstützt oder es sind keine passenden Sprachdaten installiert. Der Artikel kann eventuell nicht ordnungsgemäß gelesen werden.</string>
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
-  <string name="custom_app_missing_content">Ihre Anwendung ist beschädigt.\nDies kann passieren, wenn Sie Dateien auf der SD-Karte entfernen.\nSie müssen die App deinstallieren und sie aus dem Play Store neu installieren.</string>
-  <string name="go_to_play_store">Zum Play Store gehen</string>
   <string name="menu_bookmarks_list">Lesezeichen</string>
   <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf Offlineinhalt zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
-  <string name="request_storage_custom">Falls Sie eine eingeblendete Bildschirmwarnung sehen, starten Sie zur Behebung einfach Ihr Gerät neu.</string>
   <string name="clear_recent_and_tabs_history_dialog">Sind Sie sicher, dass Sie Ihren Suchverlauf löschen und alle aktiven Reiter zurücksetzen möchten?</string>
   <string name="delete_recent_search_item">Dieses Element löschen?</string>
   <string name="pref_clear_all_history_title">Verlauf löschen</string>
@@ -82,15 +79,9 @@
   <string name="speech_not_supported">Leider unterstützt Ihr Gerät keine Spracheingabe!</string>
   <string name="local_zims">Gerät</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_downloads">Herunterladen</string>
   <string name="zim_manager">Bibliothek</string>
   <string name="delete_specific_zim_toast">Datei gelöscht</string>
-  <string name="zim_file_downloading">Herunterladen</string>
-  <string name="zim_file_downloaded">Heruntergeladen</string>
-  <string name="download_pause">Pausieren</string>
   <string name="download_stop">Abbrechen</string>
-  <string name="download_paused">pausiert</string>
-  <string name="no_downloads_here">Hier gibt es keine Downloads</string>
   <string name="no_files_here">Hier gibt es keine Dateien</string>
   <string name="download_no_space">Nicht ausreichender Speicher, um diese Datei herunterzuladen.</string>
   <string name="space_available">Verfügbarer Speicher:</string>
@@ -110,7 +101,6 @@
   <string name="help_11">Heruntergeladene ZIM-Dateien in der App befinden sich im Verzeichnis des externen Speichers in einem Ordner namens Kiwix.</string>
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
-  <string name="path_not_writable">Auf das gewünschte Verzeichnis kann nicht zugegriffen werden. Es wird das Standardverzeichnis verwendet. Um dieses Problem zu beheben, wählen Sie das gewünschte Verzeichnis in den App-Einstellungen erneut aus.</string>
   <string name="delete_zim_failed">Leider können wir diese Datei nicht löschen. Sie sollten versuchen, stattdessen einen Dateimanager zu verwenden.</string>
   <string name="tts_pause">pausieren</string>
   <string name="tts_resume">fortfahren</string>
@@ -133,8 +123,6 @@
   <string name="time_minute">Minuten</string>
   <string name="time_second">Sekunden</string>
   <string name="time_left">verbleibend</string>
-  <string name="pref_auto_night_mode_summary">Automatisch zwischen Tag- und Nachtmodus umschalten.</string>
-  <string name="pref_auto_night_mode">Automatischer Nachtmodus</string>
   <string name="pref_external_link_popup_title">Beim Einfügen von externen Links warnen</string>
   <string name="pref_external_link_popup_summary">Popups für Warnungen über zusätzliche Kosten oder das Nichtfunktionieren von Offlinelinks anzeigen.</string>
   <string name="external_link_popup_dialog_title">Externen Link einfügen</string>

@@ -54,8 +54,6 @@
   <string name="pref_credits_title">ავტორეფი</string>
   <string name="tts_lang_not_supported">თე ხასჷლაშ ნინა ვა რე აზარელი ვარ-და ნინაშ ომანგური მუნაჩემეფი დიო ვარე გერინაფილი. თე სტატიაშ თინას კითხირი უშულებუ რე.</string>
   <string name="no_reader_application_installed">თე ტიპიშ ფაილშო გერინაფილი აპლიკაციაქ ვეგორუ</string>
-  <string name="custom_app_missing_content">აპლიკაცია კილუამი რე.\nთქე შილებე მოხვადუკო SD-ბარათშე მარცხო ფაილეფიშ ლასუაშ შვანს.\nთქვა დოლასათ ოკო აპლიკაცია, დო კინ გეგმოხარგათ Play Store-შე.</string>
-  <string name="go_to_play_store">Play Store-შა გინულა</string>
   <string name="menu_bookmarks_list">მიკაწონებელეფი</string>
   <string name="no_section_info">დინოხიშ დუდჯოხოქ ვეგორინუ</string>
   <string name="request_storage">ოფლაინ დინოხიშა მეჭირინაფაშო ჩქი ვოხვილუათ თქვანი ნებაშ მეჩამას თქვანი ფაილიშ ოჩუაშეშა</string>
@@ -89,16 +87,10 @@
   <string name="speech_not_supported">მინავათის ვორეთ! თქანი მონწყილობას ვაუღუ რაგადით მიშაჸონაფაშ ფუნქცუა.</string>
   <string name="local_zims">მონწყილობა</string>
   <string name="remote_zims">ონლაინ</string>
-  <string name="zim_downloads">გიმიხარგუაფუ</string>
   <string name="zim_manager">ბიბლიოთეკა</string>
   <string name="delete_zim_body">დობლასათო %s?</string>
   <string name="delete_specific_zim_toast">ფაილქ დილასუ</string>
-  <string name="zim_file_downloading">გიმიხარგუაფუ</string>
-  <string name="zim_file_downloaded">გიმოხარგილი რე</string>
-  <string name="download_pause">საგურუა</string>
   <string name="download_stop">საგურუა</string>
-  <string name="download_paused">პაუზა</string>
-  <string name="no_downloads_here">გიმოხარგილეფი ვა რე</string>
   <string name="no_files_here">ფაილეფი ვა რე</string>
   <string name="download_no_space">თე ფაილიშ გიმახარგალო შვენა ვაბაღუ.</string>
   <string name="space_available">ხემიოჭირინაფუ შვენა:</string>
@@ -133,8 +125,6 @@
   <string name="time_left">დოსქიდუ</string>
   <string name="time_today">ამდღა</string>
   <string name="time_yesterday">გოღა</string>
-  <string name="pref_auto_night_mode_summary">დღაშ დო სერიშ რეჟიმეფიშ ავტომატური ჩართება.</string>
-  <string name="pref_auto_night_mode">ავტომატური სერიშ რეჟიმი</string>
   <string name="external_link_popup_dialog_title">გალენური რცხუშ მიშაჸონაფა</string>
   <string name="do_not_ask_anymore">ანწი ვაბკითხა</string>
   <string name="your_languages">გიშაგორილი ნინეფი:</string>
@@ -152,7 +142,6 @@
   <string name="history">ისტორია</string>
   <string name="search_history">გორუაშ ისტორია</string>
   <string name="failed_state">ჩილათა: %s</string>
-  <string name="paused_unknown">უჩინებუ</string>
   <string name="save">ჩუალა</string>
   <string name="note">ხვილაფა</string>
 </resources>

@@ -47,12 +47,9 @@
   <string name="pref_credits_title">Kedyarên me</string>
   <string name="tts_lang_not_supported">Zimanê vê rûpelê nayê piştgirîkirin, an jî daneya zimanê naehatiye sazkirin. Dibe ku ev gotar rast nê xwendin.</string>
   <string name="no_reader_application_installed">Ji bo cureya vê peldankê sepanekî sazkirî nehat dîtin</string>
-  <string name="custom_app_missing_content">Sepana te xerabe ye.\nEv, dibe ku dema te peldankên li SD Cardê rakir, qewimîbe.\nHewce dike ku tu sepanê rakî û ji Play Store-ê dîsa saz bikî.</string>
-  <string name="go_to_play_store">Here Play Store-ê</string>
   <string name="menu_bookmarks_list">Bijare</string>
   <string name="no_section_info">Sernavê Naverok Nehat Dîtin</string>
   <string name="request_storage">Ji bo ku em têkevin naveroka offline divê em têkevin depoya we</string>
-  <string name="request_storage_custom">Heke tu li ser dîmenderê hişyariyeke bibînî, ji bo ku çareser bibe amûra xwe ji nû ve bide destpêkirin.</string>
   <string name="clear_recent_and_tabs_history_dialog">Tu ji daxwazên xwe yên jêbirina raboriya lêgerînê û sifirkirina hemû paceyên çalak bawer î?</string>
   <string name="delete_recent_search_item">Vê pelê jê bibe?</string>
   <string name="pref_clear_all_history_title">Raboriyê paqij bike</string>
@@ -84,15 +81,9 @@
   <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava axaftinê</string>
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_downloads">Tê daxistin</string>
   <string name="zim_manager">Pirtûkxane</string>
   <string name="delete_specific_zim_toast">Pel hat jêbirin</string>
-  <string name="zim_file_downloading">Tê daxistin</string>
-  <string name="zim_file_downloaded">Hat daxistin</string>
-  <string name="download_pause">Rawestîne</string>
   <string name="download_stop">Bisekinîne</string>
-  <string name="download_paused">rawestî</string>
-  <string name="no_downloads_here">Li vir ti tiştek daxistî tine ye</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
   <string name="download_no_space">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
   <string name="space_available">Cihê berdestː</string>
@@ -112,7 +103,6 @@
   <string name="help_11">Peldankên ZIMê yên ku yên ji nava sepanê hatine daxistin, di nav pelbendekî bi navê Kiwix-ê de ne ya ku li nav cîhaza depokirinê ya derveyî ye.</string>
   <string name="pref_storage">Depokirin</string>
   <string name="pref_current_folder">Peldanka niha</string>
-  <string name="path_not_writable">Wekî jixweber li pelrêça ku tê xwestin nayê têketin . Ji bo sererastkirinê pelrêça ku di mîhenga sepanan de tê xwestin, dîsa hilbijêrin.</string>
   <string name="delete_zim_failed">Mixabin nebû ku em vê peldankê jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
   <string name="tts_pause">rawestîne</string>
   <string name="tts_resume">dewam bike</string>
@@ -135,8 +125,6 @@
   <string name="time_minute">dq</string>
   <string name="time_second">sn</string>
   <string name="time_left">çep</string>
-  <string name="pref_auto_night_mode_summary">Di navbera modên şev û rojê de derbasiya otomatîk.</string>
-  <string name="pref_auto_night_mode">Moda şevê ya otomatîk</string>
   <string name="pref_external_link_popup_title">Dema ku têketina girêdanên derveyî hişyariyê bide</string>
   <string name="pref_external_link_popup_summary">Bi popup-ê hişyarî bide gava ku bi girêdanên online û di bihayên zêde de nexebite.</string>
   <string name="external_link_popup_dialog_title">Tevlîkirina Girêdana Derveyî</string>

@@ -34,8 +34,6 @@
   <string name="pref_language_chooser">Velg et språk</string>
   <string name="tts_lang_not_supported">Dette språket er ikke tilgjengelig for siden eller så er ikke dette språket installert. Denne artikkelen kan kanskje ikke bli riktig lest av.</string>
   <string name="no_reader_application_installed">Kunne ikke finne en installert app for denne typen fil</string>
-  <string name="custom_app_missing_content">Appen din er korrupt.\nDette kan skje når du fjerner filer på SD-kortet.\nDu må avinstallere og installere appen igjen fra Play Butikk.</string>
-  <string name="go_to_play_store">Gå til Play Butikk</string>
   <string name="menu_bookmarks_list">Bokmerker</string>
   <string name="no_section_info">Ingen innholdstitteler funnet.</string>
   <string name="request_storage">For å få åpnet ZIM-filer trenger vi tilgang til lagringsplassen din</string>

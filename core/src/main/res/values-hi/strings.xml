@@ -52,12 +52,9 @@
   <string name="pref_credits_title">श्रेय</string>
   <string name="tts_lang_not_supported">इस पृष्ठ की भाषा समर्थित नहीं है, या उपयुक्त भाषा डेटा इंस्टॉल नहीं किया गया था।  \nलेख ठीक से नहीं पढ़ा जा सकता है।</string>
   <string name="no_reader_application_installed">इस प्रकार की फ़ाइल के लिए एक इंस्टॉल किया गया एप्लिकेशन नहीं मिला</string>
-  <string name="custom_app_missing_content">आपका आवेदन दूषित है।  \nऐसा तब हो सकता है जब आप SD कार्ड पर फ़ाइलें निकालते हैं। \nआपको इसे अनइंस्टॉल करके प्ले स्टोर से ऐप को फिर से स्थापित करने की आवश्यकता है।</string>
-  <string name="go_to_play_store">प्ले स्टोर पर जाएं</string>
   <string name="menu_bookmarks_list">बूकमार्क</string>
   <string name="no_section_info">कोई सामग्री शीर्षलेख नहीं मिला</string>
   <string name="request_storage">ऑफ़लाइन सामग्री का उपयोग करने के लिए हमें आपके संग्रहण में पहुंच की आवश्यकता है</string>
-  <string name="request_storage_custom">यदि आप एक स्क्रीन ओवरले चेतावनी देखते हैं, तो साधारण तरीके से अपना डिवाइस ठीक करने के लिए पुन: प्रारंभ करें।</string>
   <string name="clear_recent_and_tabs_history_dialog">क्या आप वाकई अपना खोज इतिहास हटाना चाहते हैं और सभी सक्रिय टैब फिर से कायम करना चाहते हैं?</string>
   <string name="delete_recent_search_item">इस फ़ाइल को हटाएँ?</string>
   <string name="pref_clear_all_history_title">इतिहास साफ़ करें</string>
@@ -89,15 +86,9 @@
   <string name="speech_not_supported">माफ़ कीजिये! आपका उपकरण भाषण इनपुट का समर्थन नहीं करता है</string>
   <string name="local_zims">डिवाइस</string>
   <string name="remote_zims">ऑनलाइन</string>
-  <string name="zim_downloads">डाउनलोड हो रहा</string>
   <string name="zim_manager">पुस्तकालय</string>
   <string name="delete_specific_zim_toast">फाइल हटा दी गई</string>
-  <string name="zim_file_downloading">डाउनलोड हो रहा</string>
-  <string name="zim_file_downloaded">डाउनलोड हो गया</string>
-  <string name="download_pause">रोकें</string>
   <string name="download_stop">रोकें</string>
-  <string name="download_paused">रुका</string>
-  <string name="no_downloads_here">यहां कोई डाउनलोड नहीं</string>
   <string name="no_files_here">यहां कोई फ़ाइल नहीं</string>
   <string name="download_no_space">इस फ़ाइल को डाउनलोड करने के लिए अपर्याप्त जगह।</string>
   <string name="space_available">उपलब्ध जगह:</string>
@@ -117,7 +108,6 @@
   <string name="help_11">ZIM फाइलें जो इन-ऐप में डाउनलोड हैं, एक बाहरी फ़ोल्डर में स्थित हैं, जिसमें किवीक्स नामक एक फ़ोल्डर है।</string>
   <string name="pref_storage">संचयन</string>
   <string name="pref_current_folder">वर्तमान फोल्डर</string>
-  <string name="path_not_writable">डिफ़ॉल्ट का उपयोग करते हुए, इच्छित निर्देशिका तक नहीं पहुंच सकते। इसे ठीक करने के लिए ऐप सेटिंग्स में वांछित निर्देशिका को फिर से खोजें।</string>
   <string name="delete_zim_failed">क्षमा करें, हम इस फ़ाइल को हटाने में असमर्थ थे। आपको इसके बजाय एक फ़ाइल प्रबंधक का उपयोग करने का प्रयास करना चाहिए।</string>
   <string name="tts_pause">रुका</string>
   <string name="tts_resume">फिर से शुरू करना</string>
@@ -140,8 +130,6 @@
   <string name="time_minute">मिन</string>
   <string name="time_second">स्</string>
   <string name="time_left">बाएँ ओर</string>
-  <string name="pref_auto_night_mode_summary">स्वचालित रूप से दिन और रात मोड के बीच स्विच करें।</string>
-  <string name="pref_auto_night_mode">स्वचालित रात मोड</string>
   <string name="pref_external_link_popup_title">बाह्य कड़ियों में प्रवेश करने पर सावधान करें</string>
   <string name="pref_external_link_popup_summary">“अतिरिक्त खर्च एवं ऑफलाइन होने पर काम नहीं करने वाली कड़ी” से सावधान करने हेतु पॉपअप संदेश प्रदर्शित करें।</string>
   <string name="external_link_popup_dialog_title">बहरी कड़ी में प्रवेश किया जा रहा है</string>

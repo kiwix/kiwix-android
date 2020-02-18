@@ -44,7 +44,6 @@
   <string name="pref_credits">Συντάκτες και Άδειες</string>
   <string name="pref_credits_title">Συντελεστές</string>
   <string name="tts_lang_not_supported">Η γλώσσα αυτής της σελίδας δεν υποστηρίζεται, ή κατάλληλα γλωσσικά δεδομένα δεν εγκαταστάθηκαν. Το άρθρο μπορεί να μην αναγνωστεί σωστά.</string>
-  <string name="go_to_play_store">Μετάβαση στο Play Store</string>
   <string name="menu_bookmarks_list">Σελιδοδείκτες</string>
   <string name="no_section_info">Δεν βρέθηκαν επικεφαλίδες περιεχομένου</string>
   <string name="clear_recent_and_tabs_history_dialog">Είστε σίγουροι ότι θέλετε να διαγράψετε το ιστορικό αναζητήσεων σας και να επαναφέρετε όλες τις ενεργές καρτέλες;</string>
@@ -75,15 +74,9 @@
   <string name="speech_prompt_text">Ομιλήστε για αναζήτηση %s</string>
   <string name="local_zims">Συσκευή</string>
   <string name="remote_zims">Συνδεδεμένος</string>
-  <string name="zim_downloads">Λήψη…</string>
   <string name="zim_manager">Βιβλιοθήκη</string>
   <string name="delete_specific_zim_toast">Το αρχείο διαγράφηκε</string>
-  <string name="zim_file_downloading">Λήψη…</string>
-  <string name="zim_file_downloaded">Εγκατεστημένο</string>
-  <string name="download_pause">Παύση</string>
   <string name="download_stop">Διακοπή</string>
-  <string name="download_paused">σε παύση</string>
-  <string name="no_downloads_here">Δεν υπάρχουν λήψεις εδώ</string>
   <string name="no_files_here">Δεν υπάρχουν αρχεία εδώ</string>
   <string name="download_no_space">Μη επαρκής αποθηκευτικός χώρος για την λήψη του αρχείου.</string>
   <string name="space_available">Διαθέσιμος αποθηκευτικός χώρος:</string>
@@ -122,8 +115,6 @@
   <string name="time_minute">λεπτά</string>
   <string name="time_second">δ</string>
   <string name="time_left">έμεινε</string>
-  <string name="pref_auto_night_mode_summary">Εναλλαγή ανάμεσα σε λειτουργία ημέρας και νύχτας αυτόματα.</string>
-  <string name="pref_auto_night_mode">Αυτοματοποιημένη λειτουργία νύχτας</string>
   <string name="pref_external_link_popup_title">Προειδοποίησέ με όταν μπαίνω σε εξωτερικούς συνδέσμους</string>
   <string name="external_link_popup_dialog_title">Είσοδος σε εξωτερικό σύνδεσμο</string>
   <string name="external_link_popup_dialog_message">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>

@@ -49,12 +49,9 @@
   <string name="pref_credits_title">Kredit</string>
   <string name="tts_lang_not_supported">Bahasa halaman ini tidak didukung, atau data bahasa yang tepat tidak dipasang. Artikel mungkin tidak dapat dibaca dengan benar.</string>
   <string name="no_reader_application_installed">Tidak dapat menemukan aplikasi yang terpasang untuk jenis berkas ini</string>
-  <string name="custom_app_missing_content">Aplikasi Anda rusak\nHal ini mungkin terjadi saat Anda menghapus berkas di SD Card.\nAnda perlu mencopot pemasangan lalu memasang ulang Apl ini dari Play Store.</string>
-  <string name="go_to_play_store">Pergi ke Play Store</string>
   <string name="menu_bookmarks_list">Markah</string>
   <string name="no_section_info">Tidak Ada Judul Konten yang Ditemukan</string>
   <string name="request_storage">Untuk mengakses konten luring, kami memerlukan akses ke penyimpanan Anda</string>
-  <string name="request_storage_custom">Jika Anda melihat peringatan menutupi layar, cukup jalankan ulang perangkat untuk memperbaikinya.</string>
   <string name="clear_recent_and_tabs_history_dialog">Apakah Anda yakin ingin menghapus riwayat penelusuran dan menutup semua tab yang aktif?</string>
   <string name="delete_recent_search_item">Hapus item ini?</string>
   <string name="pref_clear_all_history_title">Hapus riwayat</string>
@@ -86,15 +83,9 @@
   <string name="speech_not_supported">Maaf! Perangkat Anda tidak mendukung input ucapan</string>
   <string name="local_zims">Perangkat</string>
   <string name="remote_zims">Daring</string>
-  <string name="zim_downloads">Mengunduh</string>
   <string name="zim_manager">Perpustakaan</string>
   <string name="delete_specific_zim_toast">Berkas telah dihapus</string>
-  <string name="zim_file_downloading">Mengunduh</string>
-  <string name="zim_file_downloaded">Diunduh</string>
-  <string name="download_pause">Jeda</string>
   <string name="download_stop">Hentikan</string>
-  <string name="download_paused">dijeda</string>
-  <string name="no_downloads_here">Tidak ada unduhan disini</string>
   <string name="no_files_here">Tidak ada berkas disini</string>
   <string name="download_no_space">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
   <string name="space_available">Ruang yang Tersedia:</string>
@@ -114,7 +105,6 @@
   <string name="help_11">Berkas ZIM yang diunduh dari dalam apl terletak di direktori penyimpanan eksternal didalam folder Kiwix.</string>
   <string name="pref_storage">Penyimpanan</string>
   <string name="pref_current_folder">Folder Saat Ini</string>
-  <string name="path_not_writable">Tidak dapat mengakses direktori yang diinginkan, menggunakan standar. Untuk memperbaikinya, pilih ulang direktori yang diinginkan dalam pengaturan aplikasi.</string>
   <string name="delete_zim_failed">Maaf kami tidak dapat menghapus berkas ini. Anda sebaiknya mencoba menggunakan manajer berkas.</string>
   <string name="tts_pause">jeda</string>
   <string name="tts_resume">lanjut</string>
@@ -137,8 +127,6 @@
   <string name="time_minute">mnt</string>
   <string name="time_second">dtk</string>
   <string name="time_left">kiri</string>
-  <string name="pref_auto_night_mode_summary">Beralih antara modus siang dan malam secara otomatis.</string>
-  <string name="pref_auto_night_mode">Modus malam otomatis</string>
   <string name="pref_external_link_popup_title">Peringatkan saat mengunjungi pranala luar</string>
   <string name="pref_external_link_popup_summary">Tampilkan popup untuk memperingatkan tentang biaya tambahan atau tidak bekerja dalam pranala luring.</string>
   <string name="external_link_popup_dialog_title">Mengunjungi Pranala Luar</string>

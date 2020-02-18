@@ -34,8 +34,6 @@
   <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
   <string name="tts_lang_not_supported">د همدې مخ د ژبې ملاتړ نه کېږي، يا کېدای شي د کاروړ ژب اومتوک نه وي نصب شوی. دا ليکنه به په سمه توگه د لوستلو وړ نه وي.</string>
   <string name="no_reader_application_installed">د دې ډول دوتنې لپاره يو نصب شوی کاريال و نه موندل شو</string>
-  <string name="custom_app_missing_content">ستاسې کاريال ناکارنده دی.\nدا کېدای شي هغه وخت راپېښ شي کله چې تاسې د SD کارت څخه دوتنې وغورځوئ.\nتاسې بايد ځانگړی کاريال له پلې سټور څخه نانصب او بيانصب کړئ.</string>
-  <string name="go_to_play_store">پلې پلورنځي ته ورځه</string>
   <string name="menu_bookmarks_list">کتاب نخښې</string>
   <string name="no_section_info">هېڅ نيوليک سرليکونه نشته</string>
   <string name="request_storage">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
@@ -54,8 +52,6 @@
   <string name="speech_prompt_text">خبري د لټون لپاره %s</string>
   <string name="speech_not_supported">وبخښي! ستاسو وسیله د بیان انډول ملاتړ نه کوي</string>
   <string name="zim_manager">د منځپانګې مدیریت</string>
-  <string name="zim_file_downloading">ډاونلوډيږي</string>
-  <string name="zim_file_downloaded">ډاونلوډ سو</string>
   <string name="space_available">ځای شتون لري:</string>
   <string name="zim_simple">اسان</string>
   <string name="zim_no_pic">هيڅ دوتنه نشته</string>

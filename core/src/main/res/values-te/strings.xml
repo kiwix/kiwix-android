@@ -34,8 +34,6 @@
   <string name="pref_language_chooser">భాషను ఎంచుకోండి</string>
   <string name="tts_lang_not_supported">ఈ పేజి నందు ఈ భాష సహకరించదు లేదా తగిన భాష ఇన్స్టాల్ చేయలేదు.బహుస ఈ పేజి ని చదువలేరు.</string>
   <string name="no_reader_application_installed">ఈ దస్త్రం చూపడానికి సహకరించే ఎప్ప్ ఇన్స్టాల్ చేయలేదు.</string>
-  <string name="custom_app_missing_content">మీ దస్త్రం పాడైనది.\nబహుశా ఈ దస్త్రం SD card నుండి తొలగించబడింది.\nమీరు మీ ఎప్ప్ ని తొలగించి మరల Play Store నుండి దిగుమతి చేసుకోవాలి.</string>
-  <string name="go_to_play_store">Play Store నకు వెళ్ళండి</string>
   <string name="menu_bookmarks_list">మడతపేజీలు</string>
   <string name="no_section_info">వ్యాస శీరిక్ష కనుగోనలేదు</string>
   <string name="request_storage">ZIM Filesలో పోందుపరచడానికి మేము మీ నిల్వ లను పోందుపరచాలి</string>

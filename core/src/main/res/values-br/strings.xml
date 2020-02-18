@@ -47,12 +47,9 @@
   <string name="pref_credits_title">Kredoù</string>
   <string name="tts_lang_not_supported">N\'eo ket kemeret yezh ar bajenn-mañ e karg, pe n\'eo ket staliet ar roadennoù azas ar yezh.\nNe c\'hallo ket ar pennad bezañ lennet.</string>
   <string name="no_reader_application_installed">Ne c\'haller kavout arload ebet staliet evit ar seurt restr</string>
-  <string name="custom_app_missing_content">Brein eo hoc\'h arload.\nGallout a ra c\'hoarvezout pa lamit restroù eus ar gartenn SD. Rankout a rit distaliañ an arload hag adstaliañ anezhañ adal ar Play Store.</string>
-  <string name="go_to_play_store">Mont war ar Play Store</string>
   <string name="menu_bookmarks_list">Sinedoù</string>
   <string name="no_section_info">N\'eus bet kavet Talbenn endalc\'h ebet</string>
   <string name="request_storage">Evit tizhout an endalc\'h ezlinenn hon eus ezhomm da dizhout ho lec\'h stokañ</string>
-  <string name="request_storage_custom">Ma welit ur c\'hemenn diwall dreistlakaet war ar skramm, adloc\'hit ho trobarzhell evit renkañ ar gudenn, tra ken.</string>
   <string name="clear_recent_and_tabs_history_dialog">Ha sur eo hoc\'h eus c\'hoant da zilemel ho roll-istor enklask ha da ziweredekaat an holl ivinelloù oberiat ?</string>
   <string name="delete_recent_search_item">Dilemel an elfenn-mañ ?</string>
   <string name="pref_clear_all_history_title">Diverkañ ar roll-istor</string>
@@ -86,15 +83,9 @@
   <string name="speech_not_supported">Ho tigarez ! Ho trobarzhell ne gemer ket ar skrivañ dre gomz e karg</string>
   <string name="local_zims">Trobarzhell</string>
   <string name="remote_zims">Enlinenn</string>
-  <string name="zim_downloads">O pellgargañ…</string>
   <string name="zim_manager">Levraoueg</string>
   <string name="delete_specific_zim_toast">Restr dilamet</string>
-  <string name="zim_file_downloading">O pellgargañ…</string>
-  <string name="zim_file_downloaded">Pellgarget</string>
-  <string name="download_pause">Ehan</string>
   <string name="download_stop">Paouez</string>
-  <string name="download_paused">ehanet</string>
-  <string name="no_downloads_here">N\'eus pellgargadur ebet amañ</string>
   <string name="no_files_here">N\'eus restr ebet amañ</string>
   <string name="download_no_space">N\'eus ket plas a-walc\'h evit pellgargañ ar restr-mañ.</string>
   <string name="space_available">Egorenn a c\'haller kaout :</string>
@@ -114,7 +105,6 @@
   <string name="help_11">Ar restroù ZIM pellgarget en arload zo er c\'havlec\'h skokañ diavaez en ur c\'havlec\'h anvet Kiwix.</string>
   <string name="pref_storage">Stokañ</string>
   <string name="pref_current_folder">Renkell red</string>
-  <string name="path_not_writable">Ne c\'haller diraez ar c\'havlec\'h spisaet, impljout ar c\'havlec\'h dre ziouer. Evit reizhañ an dra-se, dibab ar c\'havlec\'h nevez ho peus c\'hoant en arventennoù an arload.</string>
   <string name="delete_zim_failed">Ho tigarez, n\'omp ket gouest da zilemel ar restr-mañ. Rankout a rafec\'h klask implijout ur merour restroù kentoc\'h.</string>
   <string name="tts_pause">ehan</string>
   <string name="tts_resume">adkemer</string>
@@ -139,8 +129,6 @@
   <string name="time_left">kleiz</string>
   <string name="time_today">Hiziv</string>
   <string name="time_yesterday">Dec\'h</string>
-  <string name="pref_auto_night_mode_summary">Cheñch ent emgefre etre ar modoù noz ha deiz.</string>
-  <string name="pref_auto_night_mode">Mod noz emgefreek</string>
   <string name="pref_external_link_popup_title">Kemenn pa\'z eer liammoù diavaez</string>
   <string name="pref_external_link_popup_summary">Diskwel ur popup evit reiñ da c\'houzout e vo koustoù ouzhpenn pe e vo liammoù ha ned aint ket en-dro ezlinenn.</string>
   <string name="external_link_popup_dialog_title">Diraez al liamm diavaez</string>
@@ -149,7 +137,6 @@
   <string name="your_languages">Yezhoù diuzet</string>
   <string name="other_languages">Yezhoù all :</string>
   <string name="no_items_msg">Elfenn ebet da gaout</string>
-  <string name="ongoing_download_channel_name">O pellgargañ</string>
   <string name="crash_description">Gallout a rafec\'h sikour ac\'hanomp da renkañ ar gudenn-mañ en ur gas an titouroù-mañ ?</string>
   <string name="crash_checkbox_language">Hoc\'h arventennoù yezh</string>
   <string name="crash_checkbox_zimfiles">Ur roll eus ho restroù ZIM</string>
@@ -157,8 +144,6 @@
   <string name="crash_button_confirm">KAS AR MUNUDOÙ</string>
   <string name="new_tab_shortcut_label">Invinell nevz</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pic">Skeudenn</string>
-  <string name="vid">Video</string>
   <string name="articleCount">%s pennad</string>
   <string name="get_started">Kregiñ</string>
   <string name="download_books">Pellgargañ al levrioù</string>
@@ -179,19 +164,10 @@
   <string name="bookmarks_from_current_book" fuzzy="true">Sinedoù eus al levr a vremañ</string>
   <string name="search_bookmarks">Klask sinedoù</string>
   <string name="switch_tabs">Cheñch ivinell</string>
-  <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Serriñ an holl ivinoù</string>
   <string name="pending_state">O c\'hortoz</string>
   <string name="successful_state">Echuiñ</string>
   <string name="failed_state">C\'hwitet : %s</string>
-  <string name="paused_wifi">O c\'hortoz Wifi</string>
-  <string name="paused_retry">Gortoz evit esaeañ en-dro</string>
-  <string name="paused_unknown">Dianav</string>
-  <string name="failed_file_already_exists">Restr zo anezhi dija</string>
-  <string name="failed_http_error">Fazi roadennoù HTTP</string>
-  <string name="failed_unhandled_http_code">Kod HTTP degemeret dianav</string>
-  <string name="failed_unknown">Dianav</string>
-  <string name="failed_http_code">Kod HTTP %s</string>
   <string name="save">Enrollañ</string>
   <string name="note">Notenn</string>
   <string name="wiki_article_title">Titl ar pennad Wiki</string>

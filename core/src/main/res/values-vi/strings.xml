@@ -48,8 +48,6 @@
   <string name="pref_credits_title">Ghi công</string>
   <string name="tts_lang_not_supported">Ngôn ngữ của trang này không được hỗ trợ, hoặc dữ liệu ngôn ngữ thích hợp chưa được cài đặt. Có thể không có khả năng đọc bài.</string>
   <string name="no_reader_application_installed">Không tìm thấy ứng dụng đã cài đặt ứng với kiểu tập tin này</string>
-  <string name="custom_app_missing_content">Ứng dụng bị hư hỏng.\nĐiều này có thể xảy ra sau khi bạn xóa tập tin khỏi thẻ SD.\nBạn có thể cần gỡ bỏ rồi cài đặt lại ứng dụng từ Cửa hàng Play.</string>
-  <string name="go_to_play_store">Đi đến Cửa hàng Play</string>
   <string name="menu_bookmarks_list">Dấu trang</string>
   <string name="no_section_info">Không tìm thấy Đầu đề Nội dung</string>
   <string name="request_storage">Để truy cập các nội dung ngoại tuyến, chúng tôi cần được phép truy cập thiết bị lưu trữ của bạn</string>
@@ -84,15 +82,9 @@
   <string name="speech_not_supported">Xin lỗi! Thiết bị của bạn không hỗ trợ nhập bằng guọng nói</string>
   <string name="local_zims">Thiết bị</string>
   <string name="remote_zims">Trực tuyến</string>
-  <string name="zim_downloads">Đang tải về</string>
   <string name="zim_manager">Thư viện</string>
   <string name="delete_specific_zim_toast">Đã xóa tập tin</string>
-  <string name="zim_file_downloading">Đang tải về</string>
-  <string name="zim_file_downloaded">Đã tải về</string>
-  <string name="download_pause">Tạm ngừng</string>
   <string name="download_stop">Dừng</string>
-  <string name="download_paused">đang tạm ngừng</string>
-  <string name="no_downloads_here">Không có dữ liệu tải về nào ở đây</string>
   <string name="no_files_here">Không có tập tin nào ở đây</string>
   <string name="download_no_space">Không đủ dung lượng trống để tải về tập tin này.</string>
   <string name="space_available">Dung lượng trống còn lại:</string>
@@ -134,8 +126,6 @@
   <string name="time_minute">phút</string>
   <string name="time_second">giây</string>
   <string name="time_left">còn lại</string>
-  <string name="pref_auto_night_mode_summary">Tự động chuyển qua lại giữa chế độ đêm và ngày.</string>
-  <string name="pref_auto_night_mode">Chế độ đêm tự động</string>
   <string name="pref_external_link_popup_title">Cảnh báo khi truy cập đường dẫn ngoài</string>
   <string name="pref_external_link_popup_summary">Hiện cảnh báo về việc mất thêm cước truy cập hoặc không hoạt động đối với các đường dẫn ngoại tuyến.</string>
   <string name="external_link_popup_dialog_title">Đang truy cập đường dẫn ngoài</string>

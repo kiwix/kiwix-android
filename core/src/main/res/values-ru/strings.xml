@@ -54,12 +54,9 @@
   <string name="pref_credits_title">Создатели</string>
   <string name="tts_lang_not_supported">Язык этой страницы не поддерживается или соответствующие языковые данные не были установлены. Эта статья не может быть правильно прочитана.</string>
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
-  <string name="custom_app_missing_content">Приложение повреждено.\nЭто может случиться при удалении файлов с SD-карты.\nВам необходимо удалить приложение, а затем переустановить его из Play Store.</string>
-  <string name="go_to_play_store">Перейти в Play Маркет</string>
   <string name="menu_bookmarks_list">Закладки</string>
   <string name="no_section_info">Не Найдены Заголовки Содержимого.</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
-  <string name="request_storage_custom">Если вы видите предупреждение об оверлее экрана, просто перезапустите ваше устройство, чтобы исправить это.</string>
   <string name="clear_recent_and_tabs_history_dialog">Вы уверены, что хотите удалить историю поиска и закрыть все активные вкладки?</string>
   <string name="delete_recent_search_item">Удалить этот элемент?</string>
   <string name="pref_clear_all_history_title">Очистить историю</string>
@@ -91,15 +88,9 @@
   <string name="speech_not_supported">Приносим извинения! Ваше устройство не поддерживает ввод речи.</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
-  <string name="zim_downloads">Загрузка</string>
   <string name="zim_manager">Библиотека</string>
   <string name="delete_specific_zim_toast">Файл удалён</string>
-  <string name="zim_file_downloading">Загрузка</string>
-  <string name="zim_file_downloaded">Загружено</string>
-  <string name="download_pause">Пауза</string>
   <string name="download_stop">Остановить</string>
-  <string name="download_paused">пауза</string>
-  <string name="no_downloads_here">Загрузки отсутствуют</string>
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space">Недостаточно места для загрузки этого файла.</string>
   <string name="space_available">Доступно Места:</string>
@@ -119,7 +110,6 @@
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
-  <string name="path_not_writable">Нет доступа к желаемой директории, используя значение по умолчанию. Чтобы исправить это, выберите желаемую директорию заново в настройках приложения.</string>
   <string name="delete_zim_failed">Извините, мы не смогли удалить этот файл. Вместо этого вам стоит попробовать использовать файловый менеджер.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
@@ -142,8 +132,6 @@
   <string name="time_minute">м</string>
   <string name="time_second">с</string>
   <string name="time_left">осталось</string>
-  <string name="pref_auto_night_mode_summary">Автоматически переключать между дневным и ночным режимами.</string>
-  <string name="pref_auto_night_mode">Автоматический ночной режим</string>
   <string name="pref_external_link_popup_title">Предупреждать когда происходит ввод внешних ссылок</string>
   <string name="pref_external_link_popup_summary">Показать всплывающее сообщение про снятие дополнительных средств мобильным оператором или невозможности работы ссылок в офлайне.</string>
   <string name="external_link_popup_dialog_title">Ввод внешней ссылки</string>
@@ -164,10 +152,6 @@
   <string name="bookmarks_from_current_book" fuzzy="true">Закладки в текущей книге</string>
   <string name="close_all_tabs">Закрыть все вкладки</string>
   <string name="failed_state">Ошибка: %s</string>
-  <string name="failed_cannot_resume">Не удалось продолжить по неизвестной причине</string>
-  <string name="failed_file_already_exists">Файл уже существует</string>
-  <string name="failed_insufficient_space">Недостаточно места на диске</string>
-  <string name="failed_http_code">HTTP код %s</string>
   <string name="ext_storage_permission_rationale_add_note">Разрешение на хранение необходимо для Заметок</string>
   <string name="ext_storage_write_permission_denied_add_note">Заметки не могут быть использованы без разрешения на хранение</string>
   <string name="confirmation_alert_dialog_message">Отменить несохранённые изменения?</string>

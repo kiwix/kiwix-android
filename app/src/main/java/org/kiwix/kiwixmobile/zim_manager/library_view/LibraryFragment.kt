@@ -34,7 +34,6 @@ import kotlinx.android.synthetic.main.activity_library.libraryErrorText
 import kotlinx.android.synthetic.main.activity_library.libraryList
 import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.downloader.Downloader
@@ -133,9 +132,9 @@ class LibraryFragment : BaseFragment() {
       }
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
-          context.toast(string.no_network_connection)
+          context.toast(R.string.no_network_connection)
         } else {
-          libraryErrorText.setText(string.no_network_connection)
+          libraryErrorText.setText(R.string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
         }
       }
@@ -146,8 +145,8 @@ class LibraryFragment : BaseFragment() {
     libraryAdapter.items = it!!
     if (it.isEmpty()) {
       libraryErrorText.setText(
-        if (isNotConnected) string.no_network_connection
-        else string.no_items_msg
+        if (isNotConnected) R.string.no_network_connection
+        else R.string.no_items_msg
       )
       libraryErrorText.visibility = VISIBLE
     } else {
@@ -157,7 +156,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun refreshFragment() {
     if (isNotConnected) {
-      context.toast(string.no_network_connection)
+      context.toast(R.string.no_network_connection)
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
@@ -171,8 +170,8 @@ class LibraryFragment : BaseFragment() {
     sharedPreferenceUtil.putPrefStorage(storageDevice.name)
     sharedPreferenceUtil.putPrefStorageTitle(
       getString(
-        if (storageDevice.isInternal) string.internal_storage
-        else string.external_storage
+        if (storageDevice.isInternal) R.string.internal_storage
+        else R.string.external_storage
       )
     )
   }
@@ -181,19 +180,19 @@ class LibraryFragment : BaseFragment() {
     when {
       notEnoughSpaceAvailable(item) -> {
         context.toast(
-          getString(string.download_no_space) +
-            "\n" + getString(string.space_available) + " " +
+          getString(R.string.download_no_space) +
+            "\n" + getString(R.string.space_available) + " " +
             storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage))
         )
         libraryList.snack(
-          string.download_change_storage,
-          string.open,
+          R.string.download_change_storage,
+          R.string.open,
           ::showStorageSelectDialog
         )
         return
       }
       isNotConnected -> {
-        context.toast(string.no_network_connection)
+        context.toast(R.string.no_network_connection)
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {
@@ -214,5 +213,5 @@ class LibraryFragment : BaseFragment() {
     .apply {
       onSelectAction = ::storeDeviceInPreferences
     }
-    .show(fragmentManager!!, getString(string.pref_storage))
+    .show(fragmentManager!!, getString(R.string.pref_storage))
 }
