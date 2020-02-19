@@ -3,9 +3,8 @@
   <string name="menu_help">साहाय्यम्</string>
   <string name="menu_home">गृहम्</string>
   <string name="menu_settings">इष्टतमानि</string>
-  <string name="menu_search">अन्विष्यताम्</string>
   <string name="menu_search_in_text">पाठे अन्विष्यताम्</string>
-  <string name="menu_bookmarks">पुस्तकचिह्नानि</string>
+  <string name="bookmarks">पुस्तकचिह्नानि</string>
   <string name="menu_random_article">यादृच्छिकं (Random) पृष्ठम्</string>
   <string name="menu_full_screen">सम्पूर्णपटलम्</string>
   <string name="menu_exit_full_screen">सम्पूर्णपटलात् निर्गम्यताम्</string>
@@ -32,17 +31,16 @@
   <string name="pref_back_to_top_summary">साक्षात् उपरि गन्तु पृष्ठस्य अन्ते सारणकुड्मलं (scroll button) दर्श्यताम्</string>
   <string name="pref_language_title">भाषा</string>
   <string name="pref_language_chooser">भाषां चिनोतु</string>
-  <string name="menu_bookmarks_list">पुस्तकचिह्नानि</string>
   <string name="no_section_info">पाठस्य शीर्षकं न प्राप्तम्</string>
   <string name="rate_dialog_title">कृपया अस्माकं मूलाङ्कनं कुरु</string>
   <string name="rate_dialog_msg_1">यदि त्वया उपयोगन लाभः स्वीकृतः</string>
   <string name="rate_dialog_msg_2">, कृपया क्षणमात्रं मूल्याङ्कनं कुरु. तव प्रतिस्पन्दार्थं कृतज्ञता !</string>
   <string name="rate_dialog_positive">मूल्याङ्कनम्</string>
-  <string name="rate_dialog_negative">न, कृतज्ञताः</string>
+  <string name="no_thanks">न, कृतज्ञताः</string>
   <string name="rate_dialog_neutral">पश्चात्</string>
   <string name="pref_newtab_background_title">पृष्ठे नवीनं प्लवनम् उद्घाट्यताम्</string>
   <string name="pref_newtab_background_summary">यदा नवीनप्लवनम् आरप्स्यते, तदा पृष्ठभागे एव भविष्यति</string>
-  <string name="zim_manager">ग्रन्थालयः</string>
+  <string name="library">ग्रन्थालयः</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

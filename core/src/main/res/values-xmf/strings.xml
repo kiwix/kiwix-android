@@ -4,13 +4,11 @@
 * Narazeni
 -->
 <resources>
-  <string name="menu_zim_manager">ბიბლიოთეკა</string>
   <string name="menu_help">მოხვარა</string>
   <string name="menu_home">დუდხასჷლა</string>
   <string name="menu_settings">პარამეტრეფი</string>
-  <string name="menu_search">სტატიაშ გორუა</string>
   <string name="menu_search_in_text">ხასჷლას გორუა</string>
-  <string name="menu_bookmarks">მიკაწონებელეფი</string>
+  <string name="bookmarks">მიკაწონებელეფი</string>
   <string name="menu_random_article">შემთხვევითი სტატია</string>
   <string name="menu_full_screen">სრულ ეკრანზე</string>
   <string name="menu_exit_full_screen">მთლიანი ეკრანიდან გამოსვლა</string>
@@ -25,8 +23,6 @@
   <string name="choose_file">გეგშაგორით დინოხიშ ფაილი (*.zim)</string>
   <string name="open_in_new_tab">გონბწყათო რცხუ ახალი აშნაკიდას?</string>
   <string name="go_to_wifi_settings_label">WIFI პარამეტრეფშა გინულა</string>
-  <string name="go_to_settings_label">პარამეტრეფშა გინულა</string>
-  <string name="stop_hotspot_button">გაჩემება</string>
   <string name="server_failed_message">სერვერქ ვაჩქართინესო. ქორთხინთ, ჩართით ინტერნეტი</string>
   <string name="server_failed_toast_message">სერვერქ ვეჩირთინუ.</string>
   <string name="server_started__successfully_toast_message">ჩერვერქ ჩერთუ.</string>
@@ -54,7 +50,6 @@
   <string name="pref_credits_title">ავტორეფი</string>
   <string name="tts_lang_not_supported">თე ხასჷლაშ ნინა ვა რე აზარელი ვარ-და ნინაშ ომანგური მუნაჩემეფი დიო ვარე გერინაფილი. თე სტატიაშ თინას კითხირი უშულებუ რე.</string>
   <string name="no_reader_application_installed">თე ტიპიშ ფაილშო გერინაფილი აპლიკაციაქ ვეგორუ</string>
-  <string name="menu_bookmarks_list">მიკაწონებელეფი</string>
   <string name="no_section_info">დინოხიშ დუდჯოხოქ ვეგორინუ</string>
   <string name="request_storage">ოფლაინ დინოხიშა მეჭირინაფაშო ჩქი ვოხვილუათ თქვანი ნებაშ მეჩამას თქვანი ფაილიშ ოჩუაშეშა</string>
   <string name="clear_recent_and_tabs_history_dialog">დასურო გოკონანო გორუაშ ისტორიაშ ლასუა დო არძა აქტიური აშნაკიდეფიშ კილუა?</string>
@@ -75,7 +70,7 @@
   <string name="rate_dialog_msg_1">ქომორქონა-და</string>
   <string name="rate_dialog_msg_2">, ქორთხინთ, ართ წუთი ქემიჩომილეთ ჩქინი დაფასებელო. მარდი თქვანი აზარაშ გეშა!</string>
   <string name="rate_dialog_positive">დაფასება!</string>
-  <string name="rate_dialog_negative">ვარი, მარდი</string>
+  <string name="no_thanks">ვარი, მარდი</string>
   <string name="rate_dialog_neutral">შხვა ბორჯის</string>
   <string name="open">გონწყუმა</string>
   <string name="bookmark_removed">მიკოწონებელქ დილასუ</string>
@@ -87,10 +82,9 @@
   <string name="speech_not_supported">მინავათის ვორეთ! თქანი მონწყილობას ვაუღუ რაგადით მიშაჸონაფაშ ფუნქცუა.</string>
   <string name="local_zims">მონწყილობა</string>
   <string name="remote_zims">ონლაინ</string>
-  <string name="zim_manager">ბიბლიოთეკა</string>
+  <string name="library">ბიბლიოთეკა</string>
   <string name="delete_zim_body">დობლასათო %s?</string>
   <string name="delete_specific_zim_toast">ფაილქ დილასუ</string>
-  <string name="download_stop">საგურუა</string>
   <string name="no_files_here">ფაილეფი ვა რე</string>
   <string name="download_no_space">თე ფაილიშ გიმახარგალო შვენა ვაბაღუ.</string>
   <string name="space_available">ხემიოჭირინაფუ შვენა:</string>
@@ -107,7 +101,7 @@
   <string name="pref_storage">შვენა</string>
   <string name="pref_current_folder">ასეიანი საქაღარდე</string>
   <string name="tts_resume">გაგჷრძოლება</string>
-  <string name="tts_stop">საგურუა</string>
+  <string name="stop">საგურუა</string>
   <string name="internal_storage">დინოხოლენი</string>
   <string name="external_storage">გალენური</string>
   <string name="yes">ქო</string>
@@ -133,7 +127,6 @@
   <string name="crash_checkbox_zimfiles">თქვანი Zim ფაილეფიშ ერკებული</string>
   <string name="crash_checkbox_device">მონწყილობაშ ინფორმაცია</string>
   <string name="crash_button_confirm">ინფორმაციაშ ჯღონუა</string>
-  <string name="crash_button_decline">ვარი, მარდი</string>
   <string name="new_tab_shortcut_label">ახალი აშნაკიდა</string>
   <string name="get_content_shortcut_label">დინოხიშ მეღება</string>
   <string name="select_languages">ნინეფიშ გიშაგორუა</string>

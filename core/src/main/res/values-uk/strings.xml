@@ -9,13 +9,11 @@
 * Ypryima
 -->
 <resources>
-  <string name="menu_zim_manager">Бібліотека</string>
   <string name="menu_help">Довідка</string>
   <string name="menu_home">Головна</string>
   <string name="menu_settings">Налаштування</string>
-  <string name="menu_search">Знайти статтю</string>
   <string name="menu_search_in_text">Знайти на сторінці</string>
-  <string name="menu_bookmarks">Закладки</string>
+  <string name="bookmarks">Закладки</string>
   <string name="menu_random_article">Випадкова стаття</string>
   <string name="menu_full_screen">На весь екран</string>
   <string name="menu_exit_full_screen">Вийти з повноекранного режиму</string>
@@ -28,7 +26,6 @@
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>
-  <string name="stop_hotspot_button">ЗУПИНИТИ</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
   <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
@@ -50,7 +47,6 @@
   <string name="pref_credits_title">Автори</string>
   <string name="tts_lang_not_supported">Мова цієї сторінки не підтримується, або не було встановлено відповідні дані мови. Стаття може не читатись правильним чином.</string>
   <string name="no_reader_application_installed">Не вдалось знайти встановлений застосунок для файлу цього типу</string>
-  <string name="menu_bookmarks_list">Закладки</string>
   <string name="no_section_info">Не знайдено заголовків вмісту</string>
   <string name="request_storage">Для доступу до офлайнового контенту нам потрібен доступ до Вашого зберігання даних</string>
   <string name="clear_recent_and_tabs_history_dialog">Ви впевнені, що хочете вилучити свою історію пошуку і скинути всі активні вкладки?</string>
@@ -71,7 +67,7 @@
   <string name="rate_dialog_msg_1">Якщо Ви насолоджуєтесь використанням</string>
   <string name="rate_dialog_msg_2">, будь ласка, виділіть хвильку, щоб оцінити його. Дякуємо за Вашу підтримку!</string>
   <string name="rate_dialog_positive">Оцінити!</string>
-  <string name="rate_dialog_negative">Ні, дякую</string>
+  <string name="no_thanks">Ні, дякую</string>
   <string name="rate_dialog_neutral">Пізніше</string>
   <string name="open">Відкрити</string>
   <string name="bookmark_removed">Закладку вилучено</string>
@@ -84,9 +80,8 @@
   <string name="speech_not_supported">Вибачте! Ваш пристрій не підтримує голосове управління</string>
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
-  <string name="zim_manager">Бібліотека</string>
+  <string name="library">Бібліотека</string>
   <string name="delete_specific_zim_toast">Файл вилучено</string>
-  <string name="download_stop">Зупинити</string>
   <string name="no_files_here">Тут немає файлів</string>
   <string name="download_no_space">Недостатньо простору для завантаження цього файлу.</string>
   <string name="space_available">Доступний простір:</string>
@@ -109,7 +104,7 @@
   <string name="delete_zim_failed">Вибачте, нам не вдалося вилучити цей файл. Вам треба спробувати скористатися натомість менеджером файлів.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продовжити</string>
-  <string name="tts_stop">зупинити</string>
+  <string name="stop">зупинити</string>
   <string name="internal_storage">Внутрішнє</string>
   <string name="external_storage">Зовнішні</string>
   <string name="yes">Так</string>

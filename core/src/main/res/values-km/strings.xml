@@ -3,9 +3,8 @@
   <string name="menu_help">ជំនួយ</string>
   <string name="menu_home">ទំព័រដើម</string>
   <string name="menu_settings">ចំណង់ចំណូលចិត្ត</string>
-  <string name="menu_search">ស្វែងរក</string>
   <string name="menu_search_in_text">ស្វែងរកក្នុងអត្ថបទ</string>
-  <string name="menu_bookmarks">ការកត់ចំណាំ</string>
+  <string name="bookmarks">ការកត់ចំណាំ</string>
   <string name="menu_random_article">អត្ថបទចៃដន្យ</string>
   <string name="menu_full_screen">ទំហំពេញអេក្រង់</string>
   <string name="menu_exit_full_screen">ចាកចេញពីម៉ូដទំហំពេញអេក្រង់</string>
@@ -24,8 +23,7 @@
   <string name="pref_night_mode_summary">បង្ហាញអត្ថបទជាមួយនឹងពណ៌ដើម</string>
   <string name="pref_back_to_top">ត្រឡប់ទៅលើ</string>
   <string name="pref_language_title">ភាសា​</string>
-  <string name="menu_bookmarks_list">ការកត់ចំណាំ</string>
-  <string name="zim_manager">បណ្ណាល័យ</string>
+  <string name="library">បណ្ណាល័យ</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

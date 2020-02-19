@@ -8,13 +8,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Kirjasto</string>
   <string name="menu_help">Ohje</string>
   <string name="menu_home">Koti</string>
   <string name="menu_settings">Asetukset</string>
-  <string name="menu_search">Hae artikkelia</string>
   <string name="menu_search_in_text">Etsi sivulta</string>
-  <string name="menu_bookmarks">Kirjanmerkit</string>
+  <string name="bookmarks">Kirjanmerkit</string>
   <string name="menu_random_article">Satunnainen artikkeli</string>
   <string name="menu_full_screen">Koko näyttö</string>
   <string name="menu_exit_full_screen">Poistu kokoruututilasta</string>
@@ -30,8 +28,6 @@
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
   <string name="hotspot_failed_title">Virhe käynnistettäessä hotspottia</string>
   <string name="go_to_wifi_settings_label">Siirry WiFi-asetuksiin</string>
-  <string name="go_to_settings_label">Siirry asetuksiin</string>
-  <string name="stop_hotspot_button">PYSÄYTÄ</string>
   <string name="no_books_selected_toast_message">Valitse ensin kirjat</string>
   <string name="server_failed_toast_message">Ei voitu käynnistää palvelinta.</string>
   <string name="hotspot_turned_on">Hotspot kytketty päälle</string>
@@ -61,7 +57,6 @@
   <string name="pref_credits_title">Tekijät</string>
   <string name="tts_lang_not_supported">Tämän sivun kieltä ei tueta, tai kielellistä tietoa ei ole asennettu. Artikkelia ei voida lukea kunnolla.</string>
   <string name="no_reader_application_installed">Ei voitu löytää asennettua sovellusta tämän tyyppiselle tiedostolle</string>
-  <string name="menu_bookmarks_list">Kirjanmerkit</string>
   <string name="no_section_info">Sisältöotsikoita ei löydy</string>
   <string name="request_storage">Käyttääksemme offline-sisältöä, tarvitsemme pääsyn tallennuslaitteeseesi</string>
   <string name="clear_recent_and_tabs_history_dialog">Haluatko varmasti poistaa hakuhistoriasi ja resetoida kaikki aktiiviset välilehdet?</string>
@@ -81,7 +76,7 @@
   <string name="rate_dialog_msg_1">Jos nautit</string>
   <string name="rate_dialog_msg_2">, pidä pieni hetki arvioidaksesi sen. Kiitos tuestasi!</string>
   <string name="rate_dialog_positive">Arvioi!</string>
-  <string name="rate_dialog_negative">Ei kiitos</string>
+  <string name="no_thanks">Ei kiitos</string>
   <string name="rate_dialog_neutral">Myöhemmin</string>
   <string name="open">Avaa</string>
   <string name="bookmark_removed">Kirjanmerkki poistettu</string>
@@ -94,10 +89,9 @@
   <string name="speech_not_supported">Sori! Laitteesi ei tue puheensyöttöä</string>
   <string name="local_zims">Laite</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_manager">Kirjasto</string>
+  <string name="library">Kirjasto</string>
   <string name="delete_zim_body">Poista %s?</string>
   <string name="delete_specific_zim_toast">Tiedosto poistettu</string>
-  <string name="download_stop">Pysäytä</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
   <string name="space_available">Tilaa käytettävissä:</string>
   <string name="zim_simple">Yksinkertainen</string>
@@ -114,7 +108,7 @@
   <string name="delete_zim_failed">Emme pystyneet poistamaan tätä tiedostoa. Sinun pitäisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
   <string name="tts_pause">keskeytä</string>
   <string name="tts_resume">jatka</string>
-  <string name="tts_stop">pysäytä</string>
+  <string name="stop">pysäytä</string>
   <string name="internal_storage">Sisäinen</string>
   <string name="external_storage">Ulkoinen</string>
   <string name="yes">Kyllä</string>
@@ -144,7 +138,6 @@
   <string name="crash_checkbox_exception">Tiedot kaatumisesta</string>
   <string name="crash_checkbox_device">Laitteen tiedot</string>
   <string name="crash_button_confirm">LÄHETÄ TIEDOT</string>
-  <string name="crash_button_decline">EI KIITOS</string>
   <string name="new_tab_shortcut_label">Uusi välilehti</string>
   <string name="get_content_shortcut_label">Hanki sisältöä</string>
   <string name="articleCount">%s artikkelia</string>

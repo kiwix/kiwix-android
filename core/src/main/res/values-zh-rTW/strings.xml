@@ -9,13 +9,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">圖書館</string>
   <string name="menu_help">說明</string>
   <string name="menu_home">首頁</string>
   <string name="menu_settings">設定</string>
-  <string name="menu_search">搜尋條目</string>
   <string name="menu_search_in_text">於頁面中尋找</string>
-  <string name="menu_bookmarks">書籤</string>
+  <string name="bookmarks">書籤</string>
   <string name="menu_random_article">隨機條目</string>
   <string name="menu_full_screen">全螢幕</string>
   <string name="menu_exit_full_screen">結束全螢幕</string>
@@ -34,9 +32,7 @@
   <string name="hotspot_failed_title">開啟熱點失敗</string>
   <string name="hotspot_failed_message">看起來似乎是您的熱點已開啟，請停用您的 WiFi 熱點來繼續。</string>
   <string name="go_to_wifi_settings_label">前往 WIFI 設定</string>
-  <string name="go_to_settings_label">前往設定</string>
   <string name="hotspot_running">運行熱點</string>
-  <string name="stop_hotspot_button">停止</string>
   <string name="no_books_selected_toast_message">請先選擇書籍</string>
   <string name="server_failed_message">無法開啟伺服器，請啟動您的熱點</string>
   <string name="server_failed_toast_message">無法開啟伺服器。</string>
@@ -74,7 +70,6 @@
   <string name="pref_credits_title">參與名單</string>
   <string name="tts_lang_not_supported">本頁面不支援這個語言，或是未安裝合適的語言數據。條目可能無法正確讀取。</string>
   <string name="no_reader_application_installed">找不到開啟這類型檔案的應用程式</string>
-  <string name="menu_bookmarks_list">書籤</string>
   <string name="no_section_info">未找到內容標題</string>
   <string name="request_storage">我們需要進入你的儲存裝置以存取離線內容。</string>
   <string name="clear_recent_and_tabs_history_dialog">您確定要刪除您的搜尋歷史記錄，並且重新設定所有啟用的分頁嗎？</string>
@@ -99,7 +94,7 @@
   <string name="rate_dialog_msg_1">如果您喜歡使用</string>
   <string name="rate_dialog_msg_2">，請花點時間評價它。感謝您的支持！</string>
   <string name="rate_dialog_positive">評價！</string>
-  <string name="rate_dialog_negative">不用了，謝謝</string>
+  <string name="no_thanks">不用了，謝謝</string>
   <string name="rate_dialog_neutral">以後再說</string>
   <string name="open">開啟</string>
   <string name="bookmark_removed">書籤已移除</string>
@@ -112,10 +107,9 @@
   <string name="speech_not_supported">很抱歉！您的設備不支援語音輸入</string>
   <string name="local_zims">設備</string>
   <string name="remote_zims">線上</string>
-  <string name="zim_manager">圖書館</string>
+  <string name="library">圖書館</string>
   <string name="delete_zim_body">刪除%s？</string>
   <string name="delete_specific_zim_toast">檔案已刪除</string>
-  <string name="download_stop">停止</string>
   <string name="no_files_here">沒有檔案在此</string>
   <string name="download_no_space">沒有足夠的空間來下載此檔案。</string>
   <string name="space_available">可用空間：</string>
@@ -138,7 +132,7 @@
   <string name="delete_zim_failed">很抱歉我們無法刪除此檔案。您應該嘗試改用檔案管理器。</string>
   <string name="tts_pause">暫停</string>
   <string name="tts_resume">繼續</string>
-  <string name="tts_stop">停止</string>
+  <string name="stop">停止</string>
   <string name="internal_storage">內部</string>
   <string name="external_storage">外部</string>
   <string name="yes">是</string>
@@ -175,7 +169,6 @@
   <string name="crash_checkbox_logs">應用程式日誌</string>
   <string name="crash_checkbox_device">設備詳情</string>
   <string name="crash_button_confirm">發送詳情</string>
-  <string name="crash_button_decline">不必了，謝謝</string>
   <string name="shortcut_disabled_message">快捷不可用</string>
   <string name="new_tab_shortcut_label">新分頁</string>
   <string name="get_content_shortcut_label">獲得內容</string>
@@ -205,7 +198,7 @@
   <string name="close_all_tabs">關閉所有分頁</string>
   <string name="pending_state">待定</string>
   <string name="running_state">進行中</string>
-  <string name="successful_state">完成</string>
+  <string name="complete">完成</string>
   <string name="paused_state">暫停</string>
   <string name="failed_state">失敗：%s</string>
   <string name="save">儲存</string>
@@ -257,7 +250,7 @@
   <string name="tag_short_text">簡短文字</string>
   <string name="storage_permission_denied">儲存裝置權限被拒絕</string>
   <string name="grant_read_storage_permission">此應用程式需要可讀取儲存裝置的功能。請在您的設定裡授予權限</string>
-  <string name="go_to_permissions">前往設定</string>
+  <string name="go_to_settings">前往設定</string>
   <string name="no_results">沒有結果</string>
   <string name="no_bookmarks">沒有書籤！</string>
   <string name="no_history">沒有歷史</string>

@@ -3,9 +3,8 @@
   <string name="menu_help">Kömək</string>
   <string name="menu_home">Ana səhifə</string>
   <string name="menu_settings">Nizamlamalar</string>
-  <string name="menu_search">Axtar</string>
   <string name="menu_search_in_text">Mətndə axtar</string>
-  <string name="menu_bookmarks">Əlfəcinlər</string>
+  <string name="bookmarks">Əlfəcinlər</string>
   <string name="menu_random_article">Təsadüfi məqalə</string>
   <string name="menu_full_screen">Tam ekran</string>
   <string name="menu_exit_full_screen">Tam ekran rejimini bağla</string>
@@ -27,15 +26,14 @@
   <string name="pref_back_to_top_summary">Səhifənin sonunda göstərilən və səhifənin əvvəlinə qaytaran düymə.</string>
   <string name="pref_language_title">Dil</string>
   <string name="pref_language_chooser">Dili seçin</string>
-  <string name="menu_bookmarks_list">Əlfəcinlər</string>
   <string name="no_section_info">Məzmunun heç bir başlıqı tapılmadı.</string>
   <string name="rate_dialog_title">Xahiş edirik bizi dəyərləndirin</string>
   <string name="rate_dialog_msg_1">Əgər, istifadədən xoşlandınızsa</string>
   <string name="rate_dialog_msg_2">xahiş edirik, dəyərləndirmək üçün bir az vaxt ayırın. Dəstəklədiyiniz üçün təşəkkür edirik!</string>
   <string name="rate_dialog_positive">Dəyərləndir!</string>
-  <string name="rate_dialog_negative">Yox, sağ olun</string>
+  <string name="no_thanks">Yox, sağ olun</string>
   <string name="rate_dialog_neutral">Daha sonra</string>
-  <string name="zim_manager">Kitabxana</string>
+  <string name="library">Kitabxana</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

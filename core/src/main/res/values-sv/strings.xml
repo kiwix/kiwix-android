@@ -6,13 +6,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Hämta innehåll</string>
   <string name="menu_help">Hjälp</string>
   <string name="menu_home">Hem</string>
   <string name="menu_settings">Inställningar</string>
-  <string name="menu_search">Sök artikel</string>
   <string name="menu_search_in_text">Hitta på sidan</string>
-  <string name="menu_bookmarks">Bokmärken</string>
+  <string name="bookmarks">Bokmärken</string>
   <string name="menu_random_article">Slumpartikel</string>
   <string name="menu_full_screen">Fullskärm</string>
   <string name="menu_exit_full_screen">Stäng fullskärm</string>
@@ -27,8 +25,6 @@
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
   <string name="go_to_wifi_settings_label">Gå till WiFi-inställningar</string>
-  <string name="go_to_settings_label">Gå till inställningar</string>
-  <string name="stop_hotspot_button">STOPP</string>
   <string name="no_books_selected_toast_message">Välj böcker först</string>
   <string name="server_failed_toast_message">Kunde inte starta server.</string>
   <string name="server_started__successfully_toast_message">Servern startades.</string>
@@ -57,7 +53,6 @@
   <string name="pref_credits_title">Erkännanden</string>
   <string name="tts_lang_not_supported">Språket på denna sida stöds inte, eller så har lämplig språkdata inte installerats. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
-  <string name="menu_bookmarks_list">Bokmärken</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
   <string name="clear_recent_and_tabs_history_dialog">Är du säker på att du vill radera din sökhistorik och återställa alla aktiva flikar?</string>
@@ -80,7 +75,7 @@
   <string name="rate_dialog_msg_1">Om du gillar att använda</string>
   <string name="rate_dialog_msg_2">, ta dig tid att betygsätta den. Tack för ditt stöd!</string>
   <string name="rate_dialog_positive">Betygsätt!</string>
-  <string name="rate_dialog_negative">Nej, tack</string>
+  <string name="no_thanks">Nej, tack</string>
   <string name="rate_dialog_neutral">Senare</string>
   <string name="open">Öppna</string>
   <string name="bookmark_removed">Bokmärke togs bort</string>
@@ -93,10 +88,9 @@
   <string name="speech_not_supported">Tyvärr! Din enhet stöder inte tal-till-text.</string>
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
-  <string name="zim_manager">Bibliotek</string>
+  <string name="library">Bibliotek</string>
   <string name="delete_zim_body">Radera %s?</string>
   <string name="delete_specific_zim_toast">Fil raderades</string>
-  <string name="download_stop">Stoppa</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned denna fil.</string>
   <string name="space_available">Tillgängligt utrymme:</string>
@@ -119,7 +113,7 @@
   <string name="delete_zim_failed">Tyvärr kunde vi inte radera denna fil. Du kan försöka använda en filhanterare istället.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>
-  <string name="tts_stop">stoppa</string>
+  <string name="stop">stoppa</string>
   <string name="internal_storage">Internt</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Ja</string>
@@ -156,7 +150,6 @@
   <string name="crash_checkbox_logs">Applikationsloggar</string>
   <string name="crash_checkbox_device">Enhetsdetaljer</string>
   <string name="crash_button_confirm">SKICKA DETALJER</string>
-  <string name="crash_button_decline">NEJ TACK</string>
   <string name="shortcut_disabled_message">Genväg är inte tillgänglig</string>
   <string name="new_tab_shortcut_label">Ny flik</string>
   <string name="get_content_shortcut_label">Hämta innehåll</string>
@@ -186,7 +179,7 @@
   <string name="close_all_tabs">Stäng alla flikar</string>
   <string name="pending_state">Väntande</string>
   <string name="running_state">Pågående</string>
-  <string name="successful_state">Slutförd</string>
+  <string name="complete">Slutförd</string>
   <string name="paused_state">Pausad</string>
   <string name="failed_state">Misslyckades: %s</string>
   <string name="save">Spara</string>
@@ -221,7 +214,7 @@
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Endast text</string>
   <string name="tag_short_text">Kort text</string>
-  <string name="go_to_permissions">Gå till inställningar</string>
+  <string name="go_to_settings">Gå till inställningar</string>
   <string name="no_results">Inga resultat</string>
   <string name="no_bookmarks">Inga bokmärken</string>
   <string name="no_history">Ingen historik</string>

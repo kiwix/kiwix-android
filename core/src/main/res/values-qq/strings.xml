@@ -10,15 +10,13 @@
 * Verdy p
 -->
 <resources>
-  <string name="menu_zim_manager">Displayed in application menu</string>
   <string name="menu_help">{{Identical|Help}}</string>
   <string name="menu_home">{{Identical|Home}}</string>
   <string name="menu_settings">{{Identical|Settings}}</string>
-  <string name="menu_bookmarks">{{Identical|Bookmark}}</string>
+  <string name="bookmarks">{{Identical|Bookmark}}</string>
   <string name="menu_random_article">{{Identical|Random article}}</string>
   <string name="menu_full_screen">{{Identical|Full screen}}</string>
   <string name="search_label">{{Identical|Search}}</string>
-  <string name="stop_hotspot_button">Clicking on the “Stop” button shuts down the Kiwix server. This server allows to stop sharing the Kiwix local library on the LAN with the HTTP protocol.\n\n&lt;gallery&gt;\nFile:Kiwix-ui.server.start-0.png\nFile:Kiwix-ui.server.start-1.png\n&lt;/gallery&gt;\n{{Identical|Stop}}</string>
   <string name="hotspot_details_message">Do not change:\n* &lt;code&gt;%1$s&lt;/code&gt; (replaced by the “SSID” value identifying the WiFi hotspot identity for users)\n* &lt;code&gt;%2$s&lt;/code&gt; (replaced by the password or code configured in the hotspot to authorize the association and network connection)</string>
   <string name="pref_display_title">{{Identical|Display}}</string>
   <string name="pref_zoom_sub_title">{{Identical|Zoom}}</string>
@@ -27,16 +25,14 @@
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
-  <string name="menu_bookmarks_list">{{Identical|Bookmark}}</string>
   <string name="delete">{{Identical|Delete}}</string>
   <string name="undo">{{Identical|Undo}}</string>
   <string name="rate_dialog_positive">{{Identical|Rate}}</string>
-  <string name="rate_dialog_negative">{{Identical|No thanks}}</string>
+  <string name="no_thanks">{{Identical|No thanks}}</string>
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>
   <string name="open">{{Identical|Open}}</string>
-  <string name="zim_manager">{{Identical|Library}}</string>
-  <string name="download_stop">{{Identical|Stop}}</string>
-  <string name="tts_stop">{{Identical|Stop}}</string>
+  <string name="library">{{Identical|Library}}</string>
+  <string name="stop">{{Identical|Stop}}</string>
   <string name="external_storage">{{Identical|External}}</string>
   <string name="yes">{{Identical|Yes}}</string>
   <string name="no">{{Identical|No}}</string>

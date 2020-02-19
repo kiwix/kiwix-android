@@ -11,13 +11,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Biblioteca</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Inicio</string>
   <string name="menu_settings">Configuración</string>
-  <string name="menu_search">Buscar artículo</string>
   <string name="menu_search_in_text">Buscar en la página</string>
-  <string name="menu_bookmarks">Marcadores</string>
+  <string name="bookmarks">Marcadores</string>
   <string name="menu_random_article">Artículo aleatorio</string>
   <string name="menu_full_screen">Pantalla completa</string>
   <string name="menu_exit_full_screen">Salir de pantalla completa</string>
@@ -32,8 +30,6 @@
   <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
   <string name="go_to_wifi_settings_label">Ir a config. de wifi</string>
-  <string name="go_to_settings_label">Ir a configuración</string>
-  <string name="stop_hotspot_button">DETENER</string>
   <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
   <string name="server_started__successfully_toast_message">Se inició el servidor correctamente.</string>
   <string name="progress_dialog_starting_server">Iniciando el servidor</string>
@@ -61,7 +57,6 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">No se admite el idioma de esta página, o no se instalaron los datos de idioma apropiados. Puede que el artículo no se pueda leer correctamente.</string>
   <string name="no_reader_application_installed">No se pudo encontrar una aplicación instalada para este tipo de archivo</string>
-  <string name="menu_bookmarks_list">Marcadores</string>
   <string name="no_section_info">No se encontraron cabeceras de contenido</string>
   <string name="request_storage">Para acceder a contenido sin conexión necesitamos tener acceso a tu almacenamiento</string>
   <string name="clear_recent_and_tabs_history_dialog">¿Seguro que quieres eliminar tu historial de búsqueda y restablecer todas las pestañas activas?</string>
@@ -83,7 +78,7 @@
   <string name="rate_dialog_msg_1">Si disfrutas usar</string>
   <string name="rate_dialog_msg_2">, toma un momento para calificarla. ¡Gracias por tu apoyo!</string>
   <string name="rate_dialog_positive">¡Califica!</string>
-  <string name="rate_dialog_negative">No, gracias</string>
+  <string name="no_thanks">No, gracias</string>
   <string name="rate_dialog_neutral">Después</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Marcador borrado</string>
@@ -96,9 +91,8 @@
   <string name="speech_not_supported">Tu dispositivo no admite entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En línea</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_specific_zim_toast">Archivo eliminado</string>
-  <string name="download_stop">Detener</string>
   <string name="no_files_here">Ningún archivo aquí</string>
   <string name="download_no_space">Espacio insuficiente para descargar este archivo.</string>
   <string name="space_available">Espacio disponible:</string>
@@ -121,7 +115,7 @@
   <string name="delete_zim_failed">No podemos eliminar este archivo. Deberías probar con un administrador de archivos.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
-  <string name="tts_stop">detener</string>
+  <string name="stop">detener</string>
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="yes">Sí</string>
@@ -157,7 +151,6 @@
   <string name="crash_checkbox_logs">Registros de la aplicación</string>
   <string name="crash_checkbox_device">Datos del dispositivo</string>
   <string name="crash_button_confirm">ENVIAR DETALLES</string>
-  <string name="crash_button_decline">NO, GRACIAS</string>
   <string name="shortcut_disabled_message">Atajo no disponible</string>
   <string name="new_tab_shortcut_label">Pestaña nueva</string>
   <string name="fav_icon">Favicono</string>
@@ -184,7 +177,7 @@
   <string name="close_all_tabs">Cerrar todas las pestañas</string>
   <string name="pending_state">Pendiente</string>
   <string name="running_state">En proceso</string>
-  <string name="successful_state">Completado</string>
+  <string name="complete">Completado</string>
   <string name="paused_state">En pausa</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
@@ -210,7 +203,7 @@
   <string name="tag_text_only">Solo texto</string>
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
-  <string name="go_to_permissions">Ir a Configuración</string>
+  <string name="go_to_settings">Ir a Configuración</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
 </resources>

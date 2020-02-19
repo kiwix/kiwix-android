@@ -95,7 +95,6 @@ class AllProjectConfigurer {
           "MissingTranslation",
           "CheckResult",
           "LabelFor",
-          "DuplicateStrings",
           "LogConditional"
         )
 

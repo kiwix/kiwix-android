@@ -7,13 +7,11 @@
 -->
 <resources>
   <string name="kiwi">کیوی</string>
-  <string name="menu_zim_manager">کتێبخانە</string>
   <string name="menu_help">یارمەتی</string>
   <string name="menu_home">ماڵەوە</string>
   <string name="menu_settings">ڕێکخستنەکان</string>
-  <string name="menu_search">گەڕانی وتار</string>
   <string name="menu_search_in_text">دۆزینەوە لەنێو پەڕە</string>
-  <string name="menu_bookmarks">نیشانکراوەکان</string>
+  <string name="bookmarks">نیشانکراوەکان</string>
   <string name="menu_random_article">وتاری هەڕەمەکی</string>
   <string name="menu_full_screen">پڕ بە شاشە</string>
   <string name="menu_exit_full_screen">چونە دەرەوە لە پڕ بەشاشە</string>
@@ -26,8 +24,6 @@
   <string name="search_label">گەڕان</string>
   <string name="open_in_new_tab">بەستەرەکە لە تابێکی نوێدا بکرێتەوە؟</string>
   <string name="go_to_wifi_settings_label">بڕۆ بۆ ڕێکخستنەکانی وای-فای</string>
-  <string name="go_to_settings_label">بڕۆ بۆ ڕێکخستنەکان</string>
-  <string name="stop_hotspot_button">وەستاندن</string>
   <string name="no_books_selected_toast_message">تکایە سەرەتا کتێبەکان ھەڵبژێرە</string>
   <string name="progress_dialog_starting_server">داگیرساندنی ڕاژە</string>
   <string name="hotspot_dialog_neutral_button">بەڵێ، دام گیرساند</string>
@@ -44,7 +40,6 @@
   <string name="pref_back_to_top">گەڕانەوە بۆ سەرەوە</string>
   <string name="pref_language_title">زمان</string>
   <string name="pref_language_chooser">ھەڵبژاردنی زمان</string>
-  <string name="menu_bookmarks_list">نیشانکراوەکان</string>
   <string name="delete_recent_search_item">بسڕدرێتەوە؟</string>
   <string name="pref_clear_all_history_title">سڕینەوەی مێژوو</string>
   <string name="all_history_cleared_toast">ھەموو مێژووەکە سڕدرایەوە</string>
@@ -56,7 +51,7 @@
   <string name="undo">پووچەڵکردنەوە</string>
   <string name="tab_closed">تاب داخرا</string>
   <string name="bookmark_added">بووکمارک زیادکرا</string>
-  <string name="rate_dialog_negative">نا، سپاس</string>
+  <string name="no_thanks">نا، سپاس</string>
   <string name="rate_dialog_neutral">دواتر</string>
   <string name="bookmark_removed">بووکمارک سڕدرایەوە</string>
   <string name="pref_newtab_background_title">تابێکی نوێ لە پشتینەدا بکەرەوە</string>
@@ -64,9 +59,8 @@
   <string name="new_tab_snack_bar">وتارەکە لە تابێکی نوێ کرایەوە</string>
   <string name="local_zims">ئامێر</string>
   <string name="remote_zims">سەرھێڵ</string>
-  <string name="zim_manager">کتێبخانە</string>
+  <string name="library">کتێبخانە</string>
   <string name="delete_specific_zim_toast">پەڕگە سڕدرایەوە</string>
-  <string name="download_stop">وەستاندن</string>
   <string name="no_files_here">ھیچ پەڕگەیەک لێرە نییە</string>
   <string name="zim_simple">سادە</string>
   <string name="zim_no_pic">بەبێ وێنە</string>
@@ -77,7 +71,7 @@
   <string name="pref_current_folder">بوخچەی ھەنووکە</string>
   <string name="tts_pause">ڕاگرتن</string>
   <string name="tts_resume">دەستپێکردنەوە</string>
-  <string name="tts_stop">وەستاندن</string>
+  <string name="stop">وەستاندن</string>
   <string name="internal_storage">ناوەکی</string>
   <string name="external_storage">دەرەکی</string>
   <string name="yes">بەڵێ</string>
@@ -98,7 +92,6 @@
   <string name="no_items_msg">ھیچ بەندێک بەردەست نییە</string>
   <string name="crash_checkbox_language">ڕێکخستنەکانی زمانەکەت</string>
   <string name="crash_checkbox_logs">لۆگەکانی ئەپلیکەیشن</string>
-  <string name="crash_button_decline">نە، سپاس!</string>
   <string name="shortcut_disabled_message">ناوبڕ بەردەست نییە</string>
   <string name="new_tab_shortcut_label">تابی نوێ</string>
   <string name="get_started">دەست پێ بکە</string>
@@ -119,7 +112,7 @@
   <string name="close_all_tabs">ھەموو تابەکان داخە</string>
   <string name="pending_state">ھەڵواسراو</string>
   <string name="running_state">لەژێر کاردا</string>
-  <string name="successful_state">تەواو</string>
+  <string name="complete">تەواو</string>
   <string name="paused_state">ڕاگیرا</string>
   <string name="save">پاشەکەوت</string>
   <string name="note">تێبینی</string>
@@ -133,5 +126,5 @@
   <string name="tag_pic">وێنە</string>
   <string name="tag_vid">ڤیدیۆ</string>
   <string name="tag_text_only">تەنیا دەق</string>
-  <string name="go_to_permissions">بڕۆ بۆ ڕێکخستنەکان</string>
+  <string name="go_to_settings">بڕۆ بۆ ڕێکخستنەکان</string>
 </resources>

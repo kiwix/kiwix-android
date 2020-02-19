@@ -5,13 +5,11 @@
 * Minisarm
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Preia conținut</string>
   <string name="menu_help">Ajutor</string>
   <string name="menu_home">Acasă</string>
   <string name="menu_settings">Setări</string>
-  <string name="menu_search">Caută articol</string>
   <string name="menu_search_in_text">Găsește în pagină</string>
-  <string name="menu_bookmarks">Semn de carte</string>
+  <string name="bookmarks">Semn de carte</string>
   <string name="menu_random_article">Articol aleatoriu</string>
   <string name="menu_full_screen">Ecran complet</string>
   <string name="menu_exit_full_screen">Ieși din modul ecran complet</string>
@@ -24,7 +22,6 @@
   <string name="search_label">Caută</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
-  <string name="stop_hotspot_button">OPREȘTE</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
@@ -46,7 +43,6 @@
   <string name="pref_credits_title">Credite</string>
   <string name="tts_lang_not_supported">Fie limba acestei pagini nu este acceptată, fie nu s-au instalat datele corespunzătoare limbii. Este posibil ca articolul să nu fie corect afișat.</string>
   <string name="no_reader_application_installed">Nu s-a găsit nicio aplicație instalată pentru acest tip de fișier</string>
-  <string name="menu_bookmarks_list">Semne de carte</string>
   <string name="no_section_info">Nu s-a găsit niciun antet de conținut</string>
   <string name="request_storage">Pentru a accesa conținut off-line trebuie să vă accesăm spațiul de stocare</string>
   <string name="clear_recent_and_tabs_history_dialog">Ești sigur că vrei să ștergi tot istoricul de căutare și să resetezi toate filele active?</string>
@@ -67,7 +63,7 @@
   <string name="rate_dialog_msg_1">Dacă v-a plăcut</string>
   <string name="rate_dialog_msg_2">, oferiți-ne câteva momente pentru a o evalua. Mulțumim pentru sprijin!</string>
   <string name="rate_dialog_positive">Evaluează!</string>
-  <string name="rate_dialog_negative">Nu, mulțumesc</string>
+  <string name="no_thanks">Nu, mulțumesc</string>
   <string name="rate_dialog_neutral">Mai târziu</string>
   <string name="open">Deschis</string>
   <string name="bookmark_removed">Semn de carte îndepărtat</string>
@@ -80,9 +76,8 @@
   <string name="speech_not_supported">Ne pare rău! Dispozitivul tău nu susține opțiunea de vorbire</string>
   <string name="local_zims">Dispozitiv</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_manager">Bibliotecă</string>
+  <string name="library">Bibliotecă</string>
   <string name="delete_specific_zim_toast">Filă ștearsă</string>
-  <string name="download_stop">Stop</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
   <string name="download_no_space">Spațiu insuficient pentru a descarca această filă.</string>
   <string name="space_available">Spațiu disponibil:</string>
@@ -105,7 +100,7 @@
   <string name="delete_zim_failed">Ne pare rău că nu am reușit să ștergem această filă. Ar trebui să folosiți un manager de fișier în loc.</string>
   <string name="tts_pause">pauză</string>
   <string name="tts_resume">rezumat</string>
-  <string name="tts_stop">stop</string>
+  <string name="stop">stop</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Externă</string>
   <string name="yes">Da</string>

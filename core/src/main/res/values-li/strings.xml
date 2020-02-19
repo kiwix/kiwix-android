@@ -3,13 +3,11 @@
 * Ooswesthoesbes
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Haol inhawd op</string>
   <string name="menu_help">Hölp</string>
   <string name="menu_home">Heim</string>
   <string name="menu_settings">Instèllinge</string>
-  <string name="menu_search">Zeuk artikel</string>
   <string name="menu_search_in_text">Zeuk op pagina</string>
-  <string name="menu_bookmarks">Blaadwiezers</string>
+  <string name="bookmarks">Blaadwiezers</string>
   <string name="menu_random_article">Willekäörig artikel</string>
   <string name="menu_full_screen">Volstenjig sjerm</string>
   <string name="menu_exit_full_screen">Sloet volstenjig sjerm aaf</string>
@@ -35,7 +33,6 @@
   <string name="pref_language_chooser">Kees \'n spraok</string>
   <string name="pref_credits">Mitwirkers en Licensies</string>
   <string name="pref_credits_title">Toesjrif</string>
-  <string name="menu_bookmarks_list">Blaadwiezers</string>
   <string name="no_section_info">Gein inhawdsköpkes gevónje</string>
   <string name="clear_recent_and_tabs_history_dialog">Wèts se zeker det se dien zeukgesjiechte wils ewegsjaffen en alle aktief tabblajer oppernuuj wils instèlle?</string>
   <string name="delete_recent_search_item">Sjaf dit deil eweg?</string>
@@ -53,7 +50,7 @@
   <string name="rate_dialog_msg_1">Es se blie bös mit</string>
   <string name="rate_dialog_msg_2">, gaef den efkes \'n beoeardeiling. Danke veure stäön!</string>
   <string name="rate_dialog_positive">Beoeardeil!</string>
-  <string name="rate_dialog_negative">Nae, danke</string>
+  <string name="no_thanks">Nae, danke</string>
   <string name="rate_dialog_neutral">Later</string>
   <string name="open">Äöpen</string>
   <string name="bookmark_removed">Blaadwiezer eweggehaold</string>
@@ -64,7 +61,6 @@
   <string name="local_zims">Toustèl</string>
   <string name="remote_zims">Online</string>
   <string name="delete_specific_zim_toast">Bestandj eweggesjaf</string>
-  <string name="download_stop">Oetgesjèd</string>
   <string name="no_files_here">Gein bestenj hie</string>
   <string name="download_no_space">Neet zat ruumdje veur dit bestandj te downloade.</string>
   <string name="no_network_connection">Gein netwerkverbinjing</string>

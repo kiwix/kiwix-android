@@ -8,13 +8,11 @@
 * Rizkiahmadz
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Dapatkan Konten</string>
   <string name="menu_help">Bantuan</string>
   <string name="menu_home">Halaman Utama</string>
   <string name="menu_settings">Pengaturan</string>
-  <string name="menu_search">Cari artikel</string>
   <string name="menu_search_in_text">Temukan dalam halaman</string>
-  <string name="menu_bookmarks">Markah</string>
+  <string name="bookmarks">Markah</string>
   <string name="menu_random_article">Artikel sembarang</string>
   <string name="menu_full_screen">Layar penuh</string>
   <string name="menu_exit_full_screen">Keluar dari modus layar penuh</string>
@@ -27,7 +25,6 @@
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Berkas Konten (*.zim)</string>
   <string name="open_in_new_tab">Buka pranala di tab baru?</string>
-  <string name="stop_hotspot_button" fuzzy="true">Berhenti</string>
   <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
   <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>
   <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
@@ -49,7 +46,6 @@
   <string name="pref_credits_title">Kredit</string>
   <string name="tts_lang_not_supported">Bahasa halaman ini tidak didukung, atau data bahasa yang tepat tidak dipasang. Artikel mungkin tidak dapat dibaca dengan benar.</string>
   <string name="no_reader_application_installed">Tidak dapat menemukan aplikasi yang terpasang untuk jenis berkas ini</string>
-  <string name="menu_bookmarks_list">Markah</string>
   <string name="no_section_info">Tidak Ada Judul Konten yang Ditemukan</string>
   <string name="request_storage">Untuk mengakses konten luring, kami memerlukan akses ke penyimpanan Anda</string>
   <string name="clear_recent_and_tabs_history_dialog">Apakah Anda yakin ingin menghapus riwayat penelusuran dan menutup semua tab yang aktif?</string>
@@ -70,7 +66,7 @@
   <string name="rate_dialog_msg_1">Jika Anda menikmati menggunakan</string>
   <string name="rate_dialog_msg_2">, silakan luangkan waktu Anda untuk menilainya. Terima kasih atas dukungan Anda!</string>
   <string name="rate_dialog_positive">Nilai!</string>
-  <string name="rate_dialog_negative">Tidak, terima kasih</string>
+  <string name="no_thanks">Tidak, terima kasih</string>
   <string name="rate_dialog_neutral">Nanti</string>
   <string name="open">Buka</string>
   <string name="bookmark_removed">Markah dihapus</string>
@@ -83,9 +79,8 @@
   <string name="speech_not_supported">Maaf! Perangkat Anda tidak mendukung input ucapan</string>
   <string name="local_zims">Perangkat</string>
   <string name="remote_zims">Daring</string>
-  <string name="zim_manager">Perpustakaan</string>
+  <string name="library">Perpustakaan</string>
   <string name="delete_specific_zim_toast">Berkas telah dihapus</string>
-  <string name="download_stop">Hentikan</string>
   <string name="no_files_here">Tidak ada berkas disini</string>
   <string name="download_no_space">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
   <string name="space_available">Ruang yang Tersedia:</string>
@@ -108,7 +103,7 @@
   <string name="delete_zim_failed">Maaf kami tidak dapat menghapus berkas ini. Anda sebaiknya mencoba menggunakan manajer berkas.</string>
   <string name="tts_pause">jeda</string>
   <string name="tts_resume">lanjut</string>
-  <string name="tts_stop">berhenti</string>
+  <string name="stop">berhenti</string>
   <string name="internal_storage">Internal</string>
   <string name="external_storage">Eksternal</string>
   <string name="yes">Ya</string>

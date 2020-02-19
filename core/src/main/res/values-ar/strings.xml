@@ -9,13 +9,11 @@
 -->
 <resources>
   <string name="kiwi">كيوي</string>
-  <string name="menu_zim_manager">الحصول على المحتوى</string>
   <string name="menu_help">مساعدة</string>
   <string name="menu_home">الصفحة الرئيسية</string>
   <string name="menu_settings">إعدادات</string>
-  <string name="menu_search">البحث عن مقالة</string>
   <string name="menu_search_in_text">البحث في الصفحة</string>
-  <string name="menu_bookmarks">العلامات</string>
+  <string name="bookmarks">العلامات</string>
   <string name="menu_random_article">مقالة عشوائية</string>
   <string name="menu_full_screen">ملء الشاشة</string>
   <string name="menu_exit_full_screen">إنهاء وضع الشاشة الكاملة</string>
@@ -34,9 +32,7 @@
   <string name="hotspot_failed_title">فشل بدء نقطة فعالة</string>
   <string name="hotspot_failed_message">يبدو أن نقطة الاتصال قيد التشغيل بالفعل؛ الرجاء تعطيل نقطة اتصال الواي فاي للمتابعة.</string>
   <string name="go_to_wifi_settings_label">انتقل إلى إعدادات الواي فاي</string>
-  <string name="go_to_settings_label">اذهب للإعدادات</string>
   <string name="hotspot_running">تشغيل نقطة ساخنة</string>
-  <string name="stop_hotspot_button">قف</string>
   <string name="no_books_selected_toast_message">يُرجَى اختيار الكتب أولا</string>
   <string name="server_failed_message">لا يمكن بدء الخادم؛ يُرجَى تشغيل نقطة الاتصال الخاصة بك</string>
   <string name="server_failed_toast_message">لا يمكن بدء الخادم.</string>
@@ -74,7 +70,6 @@
   <string name="pref_credits_title">الإحالات</string>
   <string name="tts_lang_not_supported">لم يتم اعتماد اللغة من هذه الصفحة، أو لم يتم تثبيت البيانات باللغة المناسبة. المقالة قد لا تتم قراءتها بشكل صحيح.</string>
   <string name="no_reader_application_installed">تعذر العثور على تطبيق مثبت لهذا النوع من الملفات</string>
-  <string name="menu_bookmarks_list">العلامات</string>
   <string name="no_section_info">لم يتم العثور على عناوين محتوى</string>
   <string name="request_storage">للوصول إلى المحتوى بلا اتصال; نحتاج إلى الوصول إلى مخزنك</string>
   <string name="clear_recent_and_tabs_history_dialog">هل أنت متأكد من أنك تريد حذف سجل بحثك وإعادة تعيين كافة علامات التبويب النشطة؟</string>
@@ -97,7 +92,7 @@
   <string name="rate_dialog_msg_1">إذا كنت تتمتع باستخدام</string>
   <string name="rate_dialog_msg_2">يرجى ان نتوقف لحظة لتقييمنا. شكرا لدعمك!</string>
   <string name="rate_dialog_positive">قيّم!</string>
-  <string name="rate_dialog_negative">لا، شكراً</string>
+  <string name="no_thanks">لا، شكراً</string>
   <string name="rate_dialog_neutral">لاحقاً</string>
   <string name="open">فتح</string>
   <string name="bookmark_removed">تمت إزالة الإشارة المرجعية</string>
@@ -110,10 +105,9 @@
   <string name="speech_not_supported">آسف! جهازك لا يدعم إدخال الكلام</string>
   <string name="local_zims">جهاز</string>
   <string name="remote_zims">على الإنترنت</string>
-  <string name="zim_manager">مكتبة</string>
+  <string name="library">مكتبة</string>
   <string name="delete_zim_body">حذف %s؟</string>
   <string name="delete_specific_zim_toast">تم حذف الملف</string>
-  <string name="download_stop">إيقاف</string>
   <string name="no_files_here">لا توجد ملفات هنا</string>
   <string name="download_no_space">مساحة غير كافية لتنزيل هذا الملف.</string>
   <string name="space_available">المساحة المتاحة:</string>
@@ -136,7 +130,7 @@
   <string name="delete_zim_failed">آسف لم نتمكن من حذف هذا الملف; يجب أن تحاول استخدام مدير ملفات بدلا من ذلك.</string>
   <string name="tts_pause">وقف</string>
   <string name="tts_resume">استئناف</string>
-  <string name="tts_stop">إيقاف</string>
+  <string name="stop">إيقاف</string>
   <string name="internal_storage">داخلي</string>
   <string name="external_storage">خارجي</string>
   <string name="yes">نعم</string>
@@ -173,7 +167,6 @@
   <string name="crash_checkbox_logs">سجلات التطبيق</string>
   <string name="crash_checkbox_device">تفاصيل الجهاز</string>
   <string name="crash_button_confirm">إرسال التفاصيل</string>
-  <string name="crash_button_decline">لا شكرا</string>
   <string name="shortcut_disabled_message">اختصار غير متوفر</string>
   <string name="new_tab_shortcut_label">علامة تبويب جديدة</string>
   <string name="get_content_shortcut_label">الحصول على المحتوى</string>
@@ -203,7 +196,7 @@
   <string name="close_all_tabs">غلق جميع علامات التبويب</string>
   <string name="pending_state">قيد الانتظار</string>
   <string name="running_state">في تقدم</string>
-  <string name="successful_state">اكتمال</string>
+  <string name="complete">اكتمال</string>
   <string name="paused_state">متوقفة مؤقتا</string>
   <string name="failed_state">فشل: %s</string>
   <string name="save">حفظ</string>
@@ -255,7 +248,7 @@
   <string name="tag_short_text">نص قصير</string>
   <string name="storage_permission_denied">إِذن التّخزين قد رُفِض</string>
   <string name="grant_read_storage_permission">يتطلب هذا التطبيق القدرة على قراءة وظيفة التخزين؛ يُرجَى منح الإذن في إعداداتك</string>
-  <string name="go_to_permissions">اذهب للإعدادات</string>
+  <string name="go_to_settings">اذهب للإعدادات</string>
   <string name="no_results">لا نتائج</string>
   <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
 </resources>

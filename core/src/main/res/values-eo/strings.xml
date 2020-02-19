@@ -9,13 +9,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Biblioteko</string>
   <string name="menu_help">Helpo</string>
   <string name="menu_home">Hejmo</string>
   <string name="menu_settings">Agordoj</string>
-  <string name="menu_search">Serĉi artikolon</string>
   <string name="menu_search_in_text">Trovi en paĝo</string>
-  <string name="menu_bookmarks">Legosignoj</string>
+  <string name="bookmarks">Legosignoj</string>
   <string name="menu_random_article">Hazarda artikolo</string>
   <string name="menu_full_screen">Plenekrane</string>
   <string name="menu_exit_full_screen">Eliri plenekranan reĝimon</string>
@@ -29,7 +27,6 @@
   <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu Dosieron de Enhavo (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
-  <string name="stop_hotspot_button">HALTI</string>
   <string name="error_file_not_found">Eraro: Ne eblis trovi la elektitan ZIM-dosieron.</string>
   <string name="error_file_invalid">Eraro: La elektita dosiero ne estas valida ZIM-dosiero.</string>
   <string name="error_article_url_not_found">Eraro: Ŝargado de la artikolo (Url: %1$s) fiaskis.</string>
@@ -51,7 +48,6 @@
   <string name="pref_credits_title">Agnoskoj</string>
   <string name="tts_lang_not_supported">La lingvo de ĉi tiu paĝo ne estas subtenata, aŭ la lingva dateno ne estis instalita. Ĉi tiu artikolo ne povas esti ĝuste legata.</string>
   <string name="no_reader_application_installed">Ne povis trovi instalitan aplikaĵon por ĉi tiu dosiertipo</string>
-  <string name="menu_bookmarks_list">Legosignoj</string>
   <string name="no_section_info">Ne Trovis Enhavajn Ĉapojn</string>
   <string name="request_storage">Por atingi konservitan enhavon ni bezonas atingon al via konservejo</string>
   <string name="clear_recent_and_tabs_history_dialog">Ĉu vi certas ke vi volas forviŝi vian serĉadan historion kaj restarigi ĉiujn aktivajn langetojn?</string>
@@ -74,7 +70,7 @@
   <string name="rate_dialog_msg_1">Se vi ĝuas uzadon de</string>
   <string name="rate_dialog_msg_2">, bonvolu taksi ĝin. Dankon pro via subteno!</string>
   <string name="rate_dialog_positive">Taksi!</string>
-  <string name="rate_dialog_negative">Ne, dankon</string>
+  <string name="no_thanks">Ne, dankon</string>
   <string name="rate_dialog_neutral">Poste</string>
   <string name="open">Malfermi</string>
   <string name="bookmark_removed">Forigis legosignon</string>
@@ -87,9 +83,8 @@
   <string name="speech_not_supported">Domaĝe, via aparato ne subtenas voĉan enigon</string>
   <string name="local_zims">Aparato</string>
   <string name="remote_zims">Konektita</string>
-  <string name="zim_manager">Biblioteko</string>
+  <string name="library">Biblioteko</string>
   <string name="delete_specific_zim_toast">Forigis dosieron</string>
-  <string name="download_stop">Halti</string>
   <string name="no_files_here">Neniu dosiero ĉi tie</string>
   <string name="download_no_space">Ne estas sufiĉa spaco por elŝuti ĉi tiun dosieron.</string>
   <string name="space_available">Havebla Spaco:</string>
@@ -112,7 +107,7 @@
   <string name="delete_zim_failed">Domaĝe, ni ne povis forigi ĉi tiun dosieron. Vi reprovu per dosiermastrumilo.</string>
   <string name="tts_pause">paŭzigi</string>
   <string name="tts_resume">daŭrigi</string>
-  <string name="tts_stop">haltigi</string>
+  <string name="stop">haltigi</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Ekstera</string>
   <string name="yes">Jes</string>
@@ -149,7 +144,6 @@
   <string name="crash_checkbox_logs">Protokoloj de la Aplikaĵo</string>
   <string name="crash_checkbox_device">Detaloj pri aparato</string>
   <string name="crash_button_confirm">SENDI DETALOJN</string>
-  <string name="crash_button_decline">NE, DANKON</string>
   <string name="shortcut_disabled_message">Fulmoklavo ne estas havebla</string>
   <string name="new_tab_shortcut_label">Nova langeto</string>
   <string name="get_content_shortcut_label">Akiri enhavon</string>
@@ -179,7 +173,7 @@
   <string name="close_all_tabs">Fermi ĉiujn langetojn</string>
   <string name="pending_state">Envicigita</string>
   <string name="running_state">Progresante</string>
-  <string name="successful_state">Kompleta</string>
+  <string name="complete">Kompleta</string>
   <string name="paused_state" fuzzy="true">Paŭzita</string>
   <string name="failed_state">Malsukceso: %s</string>
   <string name="save">Konservi</string>

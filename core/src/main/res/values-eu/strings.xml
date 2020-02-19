@@ -7,13 +7,11 @@
 * Subi
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Edukia Lortu</string>
   <string name="menu_help">Laguntza</string>
   <string name="menu_home">Hasiera</string>
   <string name="menu_settings">Ezarpenak</string>
-  <string name="menu_search">Artikulua bilatu</string>
   <string name="menu_search_in_text">Aurkitu orrialdean</string>
-  <string name="menu_bookmarks">Lastermarkak</string>
+  <string name="bookmarks">Lastermarkak</string>
   <string name="menu_random_article">Ausazko artikulua</string>
   <string name="menu_full_screen">Pantaila osoa</string>
   <string name="menu_exit_full_screen">Irten pantaila osotik</string>
@@ -26,7 +24,6 @@
   <string name="search_label">Bilatu</string>
   <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>
   <string name="open_in_new_tab">Ireki lotura fitxa berri batean?</string>
-  <string name="stop_hotspot_button">GELDITU</string>
   <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
@@ -48,7 +45,6 @@
   <string name="pref_credits_title">Kredituak</string>
   <string name="tts_lang_not_supported">Orrialde honetako hizkuntza ez dago babestuta, edo hizkuntza-egokitasun data ez dago instalatuta. Artikulua beharbada ez da ondo irakurriko.</string>
   <string name="no_reader_application_installed">Ezin izan da aurkitu mota honetako artxiborako instalatutako aplikazioa</string>
-  <string name="menu_bookmarks_list">Lastermarkak</string>
   <string name="no_section_info">Ez da edukiaren goibururik aurkitu</string>
   <string name="request_storage">Konexiorik gabeko edukian sartzeko zure biltegira sartu behar gara.</string>
   <string name="clear_recent_and_tabs_history_dialog">Ziur zaude historiala ezabatu eta aktibatutako erailtz guztiak berrabiarazi nahi dituzula?</string>
@@ -69,7 +65,7 @@
   <string name="rate_dialog_msg_1">Erabiltzen gozatzen baduzu</string>
   <string name="rate_dialog_msg_2">Mesedez, har ezazu momentu bat puntuatzeko. Eskerrik asko zure laguntzagatik!</string>
   <string name="rate_dialog_positive">Puntuatu!</string>
-  <string name="rate_dialog_negative">Ez, eskerrik asko</string>
+  <string name="no_thanks">Ez, eskerrik asko</string>
   <string name="rate_dialog_neutral">Geroago</string>
   <string name="open">Ireki</string>
   <string name="bookmark_removed">Orri-markatzailea ezabatuta</string>
@@ -82,9 +78,8 @@
   <string name="speech_not_supported">Sentitzen dut! Zure gailuak ez du ahots bidezko sarrera onartzen.</string>
   <string name="local_zims">Gailua</string>
   <string name="remote_zims">Konektatuta</string>
-  <string name="zim_manager">Liburutegia</string>
+  <string name="library">Liburutegia</string>
   <string name="delete_specific_zim_toast">Fitxategi ezabatua</string>
-  <string name="download_stop">Gelditu</string>
   <string name="no_files_here">Artxiborik ez hemen</string>
   <string name="download_no_space">Ez dago espaziorik artxibo hau jaisteko.</string>
   <string name="space_available">Libre dagoen espazioa:</string>
@@ -107,7 +102,7 @@
   <string name="delete_zim_failed">Barkatu, ezin izan dugu artxibo hau ezabatu. Artxibo kudeatzailea erabiltzen saiatu dezakezu.</string>
   <string name="tts_pause">pausatua</string>
   <string name="tts_resume">jarraitu</string>
-  <string name="tts_stop">Gelditu</string>
+  <string name="stop">Gelditu</string>
   <string name="internal_storage">Barneko</string>
   <string name="external_storage">Kanpokoa</string>
   <string name="yes">Bai</string>

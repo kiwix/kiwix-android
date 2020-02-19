@@ -6,5 +6,4 @@
   <string name="retry">Tekrar dene</string>
   <string name="download">İndir</string>
   <string name="invalid_installation">Geçersiz Kurulum Lütfen Zim\'i indirin.\n  WiFi\'nin açık olduğundan ve yeterli depolama alanınız olduğundan emin olun</string>
-  <string name="complete">Tamamlandı</string>
 </resources>

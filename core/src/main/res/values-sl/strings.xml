@@ -10,13 +10,11 @@
 -->
 <resources>
   <string name="kiwi">Kivi</string>
-  <string name="menu_zim_manager">Knjižnica</string>
   <string name="menu_help">Pomoč</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
-  <string name="menu_search">Išči članek</string>
   <string name="menu_search_in_text">Najdi na strani</string>
-  <string name="menu_bookmarks">Zaznamki</string>
+  <string name="bookmarks">Zaznamki</string>
   <string name="menu_random_article">Naključni članek</string>
   <string name="menu_full_screen">Celozaslonski način</string>
   <string name="menu_exit_full_screen">Izhod iz celozaslonskega načina</string>
@@ -30,7 +28,6 @@
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
-  <string name="stop_hotspot_button">USTAVI</string>
   <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
   <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
   <string name="error_article_url_not_found">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
@@ -52,7 +49,6 @@
   <string name="pref_credits_title">Zasluge</string>
   <string name="tts_lang_not_supported">Jezik na tej strani ni podprt ali pa ustrezni jezikovni podatki niso bili nameščeni. Članek morda ne bo pravilno prebran.</string>
   <string name="no_reader_application_installed">Za to vrsto datoteke ni bilo mogoče najti nameščene aplikacije</string>
-  <string name="menu_bookmarks_list">Zaznamki</string>
   <string name="no_section_info">Ni najdene vsebine glave</string>
   <string name="request_storage">Za dostop do vsebine brez povezave potrebujemo dostop do vašega pomnilnika</string>
   <string name="clear_recent_and_tabs_history_dialog">Ali ste prepričani, da želite izbrisati vašo zgodovino iskanja in ponastaviti vse aktivne zavihke?</string>
@@ -75,7 +71,7 @@
   <string name="rate_dialog_msg_1">Če ste uživali ob uporabi</string>
   <string name="rate_dialog_msg_2">, prosimo vzemite si trenutek in ocenite. Hvala za vašo podporo!</string>
   <string name="rate_dialog_positive">Oceniti!</string>
-  <string name="rate_dialog_negative">Ne, hvala</string>
+  <string name="no_thanks">Ne, hvala</string>
   <string name="rate_dialog_neutral">Kasneje</string>
   <string name="open">Odpri</string>
   <string name="bookmark_removed">Zaznamek je odstranjen</string>
@@ -88,9 +84,8 @@
   <string name="speech_not_supported">Žal vaša naprava ne podpira vnosa govora</string>
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
-  <string name="zim_manager">Knjižnica</string>
+  <string name="library">Knjižnica</string>
   <string name="delete_specific_zim_toast">Datoteka je izbrisana</string>
-  <string name="download_stop">Ustavi</string>
   <string name="no_files_here">Ni datotek tukaj</string>
   <string name="download_no_space">Premalo prostora za prenos te datoteke.</string>
   <string name="space_available">Prostor na voljo:</string>
@@ -113,7 +108,7 @@
   <string name="delete_zim_failed">Žal te datoteke ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
   <string name="tts_pause">premor</string>
   <string name="tts_resume">nadaljuj</string>
-  <string name="tts_stop">ustavi</string>
+  <string name="stop">ustavi</string>
   <string name="internal_storage">Interni</string>
   <string name="external_storage">Zunanji</string>
   <string name="yes">Da</string>
@@ -150,7 +145,6 @@
   <string name="crash_checkbox_logs">Dnevniki aplikacije</string>
   <string name="crash_checkbox_device">Podrobnosti o napravi</string>
   <string name="crash_button_confirm">Pošlji podatke</string>
-  <string name="crash_button_decline">Ne hvala</string>
   <string name="shortcut_disabled_message">Bližnjica ni na voljo</string>
   <string name="new_tab_shortcut_label">Nov zavihek</string>
   <string name="get_content_shortcut_label">Pridobi vsebino</string>
@@ -180,7 +174,7 @@
   <string name="close_all_tabs">Zapri vse zavihke</string>
   <string name="pending_state">V delu</string>
   <string name="running_state">V teku</string>
-  <string name="successful_state">Končano</string>
+  <string name="complete">Končano</string>
   <string name="paused_state" fuzzy="true">Premor</string>
   <string name="failed_state">Neuspešno: %s</string>
   <string name="save">Shrani</string>

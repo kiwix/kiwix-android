@@ -5,13 +5,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Biblioteca</string>
   <string name="menu_help">Agiudu</string>
   <string name="menu_home">Pàgina printzipale</string>
   <string name="menu_settings">Impostatziones</string>
-  <string name="menu_search">Chirca artìculu</string>
   <string name="menu_search_in_text">Agata in sa pàgina</string>
-  <string name="menu_bookmarks">Sinnalibros</string>
+  <string name="bookmarks">Sinnalibros</string>
   <string name="menu_random_article">Artìculu a sa tzurpa</string>
   <string name="menu_full_screen">Ischermu intreu</string>
   <string name="menu_exit_full_screen">Essi dae s\'ichermu intreu</string>
@@ -30,9 +28,7 @@
   <string name="hotspot_failed_title">Aviamentu de s\'hotspot fallidu</string>
   <string name="hotspot_failed_message">Paret chi s\'hotspot tuo siat allutu. Pro praghere disabìlita s\'hotspot wifi tuo pro sighire.</string>
   <string name="go_to_wifi_settings_label">Bae a sas impostatziones de su WIFI</string>
-  <string name="go_to_settings_label">Bae a sas impostatziones</string>
   <string name="hotspot_running">Hotspot ativu</string>
-  <string name="stop_hotspot_button">FIRMA</string>
   <string name="no_books_selected_toast_message">In antis ischerta libros</string>
   <string name="server_failed_message">Aviamentu de su servidore fallidu. Pro praghere allughe s\'hotspot tuo</string>
   <string name="server_failed_toast_message">Aviamentu de su servidore fallidu.</string>
@@ -70,7 +66,6 @@
   <string name="pref_credits_title">Crèditos</string>
   <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada, o sos datos pro sa limba adeguada non sunt installados. S\'artìculu diat pòdere èssere letu in manera non adeguada.</string>
   <string name="no_reader_application_installed">Impossìbile agatare un\'aplicatzione installada pro custa casta de documentu</string>
-  <string name="menu_bookmarks_list">Sinnalibros</string>
   <string name="no_section_info">Peruna intestatzione de cuntenutu agatada</string>
   <string name="request_storage">Pro atzèdere a su documentu ZIM tenimus bisòngiu de pòdere atzèdere a sa memòria tua</string>
   <string name="clear_recent_and_tabs_history_dialog">Seguru ses de bòlere iscantzellare sa cronologia de sas chircas e ripristinare totu sas ischedas ativas?</string>
@@ -93,7 +88,7 @@
   <string name="rate_dialog_msg_1">Si t\'agradat impreare</string>
   <string name="rate_dialog_msg_2">, pro praghere piga·ti unu momentu pro l\'avalorare. Ti torramus gràtzias pro su suportu tuo!</string>
   <string name="rate_dialog_positive">Vota!</string>
-  <string name="rate_dialog_negative">Nono, gràtzias</string>
+  <string name="no_thanks">Nono, gràtzias</string>
   <string name="rate_dialog_neutral">Prus a tardu</string>
   <string name="open">Aberi</string>
   <string name="bookmark_removed">Sinnalibru bogadu</string>
@@ -106,10 +101,9 @@
   <string name="speech_not_supported">Làstima! Su dispositivu tuo non suportat sa sintetizatzione vocale</string>
   <string name="local_zims">Dispositivu</string>
   <string name="remote_zims">In lìnia</string>
-  <string name="zim_manager">Libreria</string>
+  <string name="library">Libreria</string>
   <string name="delete_zim_body">Iscantzellare %s?</string>
   <string name="delete_specific_zim_toast">Documentu iscantzelladu</string>
-  <string name="download_stop">Firma</string>
   <string name="no_files_here">Perunu documentu inoghe</string>
   <string name="download_no_space">Sa memòria non bastat pro iscarrigare custu documentu.</string>
   <string name="space_available">Ispàtziu disponìbile:</string>
@@ -132,7 +126,7 @@
   <string name="delete_zim_failed">Non est istadu possìbile iscantzellare custu documentu. Dias pòdere proare a impreare unu gestore de documentos.</string>
   <string name="tts_pause">pàusa</string>
   <string name="tts_resume">sighi</string>
-  <string name="tts_stop">firma</string>
+  <string name="stop">firma</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Esterna</string>
   <string name="yes">Eja</string>
@@ -169,7 +163,6 @@
   <string name="crash_checkbox_logs">Registros de s\'aplicatzione</string>
   <string name="crash_checkbox_device">Detàllios de su dispositivu</string>
   <string name="crash_button_confirm">IMBIA SOS DETÀLLIOS</string>
-  <string name="crash_button_decline">NONO, GRÀTZIAS</string>
   <string name="shortcut_disabled_message">Incurtzada non disponìbile</string>
   <string name="new_tab_shortcut_label">Ischeda noa</string>
   <string name="get_content_shortcut_label">Iscàrriga cuntenutos</string>
@@ -199,7 +192,7 @@
   <string name="close_all_tabs">Serra totu sas ischedas</string>
   <string name="pending_state">In isetu</string>
   <string name="running_state">In caminu</string>
-  <string name="successful_state">Acabadu</string>
+  <string name="complete">Acabadu</string>
   <string name="paused_state">In pàusa</string>
   <string name="failed_state">Fallidu: %s</string>
   <string name="save">Sarva</string>
@@ -251,7 +244,7 @@
   <string name="tag_short_text">Testu curtzu</string>
   <string name="storage_permission_denied">Permissu de archiviatzione negadu</string>
   <string name="grant_read_storage_permission">Cust\'aplicatzione tenet bisòngiu de sa possibilidade de pòdere lèghere sa memòria pro funtzionare. Pro praghere dae·li su permissu in sas impostatziones.</string>
-  <string name="go_to_permissions">Bae a sas impostatziones</string>
+  <string name="go_to_settings">Bae a sas impostatziones</string>
   <string name="no_results">Perunu resurtadu</string>
   <string name="no_bookmarks">Perunu sinnalibru!</string>
   <string name="no_history">Peruna cronologia</string>

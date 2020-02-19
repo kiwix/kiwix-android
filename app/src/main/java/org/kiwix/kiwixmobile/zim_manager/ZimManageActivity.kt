@@ -95,7 +95,7 @@ class ZimManageActivity : BaseActivity() {
     setSupportActionBar(toolbar)
     supportActionBar!!.setHomeButtonEnabled(true)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    supportActionBar!!.setTitle(R.string.zim_manager)
+    supportActionBar!!.setTitle(R.string.library)
     toolbar.setNavigationOnClickListener { onBackPressed() }
     toolbar.setOnClickListener {
       if (manageViewPager.currentItem == 1)

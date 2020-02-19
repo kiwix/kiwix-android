@@ -6,13 +6,11 @@
 * Kur
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Bigihije Naverokê</string>
   <string name="menu_help">Alîkarî</string>
   <string name="menu_home">Mal</string>
   <string name="menu_settings">Mîheng</string>
-  <string name="menu_search">Gotar bigere</string>
   <string name="menu_search_in_text">Di nav rûpelê de bibîne</string>
-  <string name="menu_bookmarks">Bijare</string>
+  <string name="bookmarks">Bijare</string>
   <string name="menu_random_article">Gotara ketober</string>
   <string name="menu_full_screen">Dîmendera tije</string>
   <string name="menu_exit_full_screen">Ji dîmendera tije derkeve</string>
@@ -25,7 +23,6 @@
   <string name="search_label">Lê bigere</string>
   <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
-  <string name="stop_hotspot_button" fuzzy="true">Bisekine</string>
   <string name="error_file_not_found">Çewtîː Peldanka ZIM\'ê ya bijartî nehate dîtin.</string>
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
@@ -47,7 +44,6 @@
   <string name="pref_credits_title">Kedyarên me</string>
   <string name="tts_lang_not_supported">Zimanê vê rûpelê nayê piştgirîkirin, an jî daneya zimanê naehatiye sazkirin. Dibe ku ev gotar rast nê xwendin.</string>
   <string name="no_reader_application_installed">Ji bo cureya vê peldankê sepanekî sazkirî nehat dîtin</string>
-  <string name="menu_bookmarks_list">Bijare</string>
   <string name="no_section_info">Sernavê Naverok Nehat Dîtin</string>
   <string name="request_storage">Ji bo ku em têkevin naveroka offline divê em têkevin depoya we</string>
   <string name="clear_recent_and_tabs_history_dialog">Tu ji daxwazên xwe yên jêbirina raboriya lêgerînê û sifirkirina hemû paceyên çalak bawer î?</string>
@@ -68,7 +64,7 @@
   <string name="rate_dialog_msg_1">Heke kêfa te ji bikaranînê tê</string>
   <string name="rate_dialog_msg_2">ji kerema xwe deqekê xwe bide û wê binirxîne. Spas ji bo piştgiriya te!</string>
   <string name="rate_dialog_positive">Deng Bide!</string>
-  <string name="rate_dialog_negative">Na, spas</string>
+  <string name="no_thanks">Na, spas</string>
   <string name="rate_dialog_neutral">Paşê</string>
   <string name="open">Veke</string>
   <string name="bookmark_removed">Bijare hat rakirin</string>
@@ -81,9 +77,8 @@
   <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava axaftinê</string>
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_manager">Pirtûkxane</string>
+  <string name="library">Pirtûkxane</string>
   <string name="delete_specific_zim_toast">Pel hat jêbirin</string>
-  <string name="download_stop">Bisekinîne</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
   <string name="download_no_space">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
   <string name="space_available">Cihê berdestː</string>
@@ -106,7 +101,7 @@
   <string name="delete_zim_failed">Mixabin nebû ku em vê peldankê jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
   <string name="tts_pause">rawestîne</string>
   <string name="tts_resume">dewam bike</string>
-  <string name="tts_stop">rawestîne</string>
+  <string name="stop">rawestîne</string>
   <string name="internal_storage">xwemalî</string>
   <string name="external_storage">Derveyî</string>
   <string name="yes">Erê</string>

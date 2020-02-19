@@ -14,13 +14,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Bibliothèque</string>
   <string name="menu_help">Aide</string>
   <string name="menu_home">Accueil</string>
   <string name="menu_settings">Options</string>
-  <string name="menu_search">Rechercher un article</string>
   <string name="menu_search_in_text">Trouver dans la page</string>
-  <string name="menu_bookmarks">Marque-pages</string>
+  <string name="bookmarks">Marque-pages</string>
   <string name="menu_random_article">Article au hasard</string>
   <string name="menu_full_screen">Plein écran</string>
   <string name="menu_exit_full_screen">Sortir du mode plein écran</string>
@@ -39,9 +37,7 @@
   <string name="hotspot_failed_title">Échec de démarrage du point d’accès</string>
   <string name="hotspot_failed_message">il semble que votre point d’accès soit déjà activé. Veuillez d’abord désactiver votre point d’accès WiFi  pour continuer.</string>
   <string name="go_to_wifi_settings_label">Aller aux paramètres WiFi</string>
-  <string name="go_to_settings_label">Aller aux paramètres</string>
   <string name="hotspot_running">Point d’accès WiFi actif</string>
-  <string name="stop_hotspot_button">ARRÊTER</string>
   <string name="no_books_selected_toast_message">Veuillez d’abord choisir les livres</string>
   <string name="server_failed_message">Impossible de démarrer le serveur. Veuillez activer votre point d’accès WiFi</string>
   <string name="server_failed_toast_message">Impossible de démarrer le serveur.</string>
@@ -79,7 +75,6 @@
   <string name="pref_credits_title">Remerciements</string>
   <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge ou les données linguistiques appropriées n’ont pas été installées. L’article risque d’être difficile à lire.</string>
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
-  <string name="menu_bookmarks_list">Marque-pages</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
   <string name="clear_recent_and_tabs_history_dialog">Êtes-vous sûr de vouloir supprimer votre historique de recherche et de réinitialiser tous les onglets actifs ?</string>
@@ -104,7 +99,7 @@
   <string name="rate_dialog_msg_1">Si vous aimez utiliser</string>
   <string name="rate_dialog_msg_2">, veuillez prendre un moment pour l’évaluer. Merci pour votre soutien !</string>
   <string name="rate_dialog_positive">Notez !</string>
-  <string name="rate_dialog_negative">Non merci</string>
+  <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>
   <string name="open">Ouvrir</string>
   <string name="bookmark_removed">Marque-page supprimé</string>
@@ -117,10 +112,9 @@
   <string name="speech_not_supported">Désolé ! Votre appareil ne prend pas en charge la saisie vocale</string>
   <string name="local_zims">Appareil</string>
   <string name="remote_zims">En ligne</string>
-  <string name="zim_manager">Bibliothèque</string>
+  <string name="library">Bibliothèque</string>
   <string name="delete_zim_body">Supprimer %s ?</string>
   <string name="delete_specific_zim_toast">Fichier supprimé</string>
-  <string name="download_stop">Arrêter</string>
   <string name="no_files_here">Aucun fichier ici</string>
   <string name="download_no_space">Espace insuffisant pour télécharger ce fichier.</string>
   <string name="space_available">Espace disponible :</string>
@@ -143,7 +137,7 @@
   <string name="delete_zim_failed">Désolé, nous sommes incapables de supprimer ce fichier. Vous devriez essayer d’utiliser plutôt un gestionnaire de fichiers.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">reprendre</string>
-  <string name="tts_stop">arrêter</string>
+  <string name="stop">arrêter</string>
   <string name="internal_storage">Interne</string>
   <string name="external_storage">Externe</string>
   <string name="yes">Oui</string>
@@ -180,7 +174,6 @@
   <string name="crash_checkbox_logs">Journaux de l’application</string>
   <string name="crash_checkbox_device">Détails du dispositif</string>
   <string name="crash_button_confirm">ENVOYER LES DÉTAILS</string>
-  <string name="crash_button_decline">NON, MERCI</string>
   <string name="shortcut_disabled_message">Raccourci indisponible</string>
   <string name="new_tab_shortcut_label">Nouvel onglet</string>
   <string name="get_content_shortcut_label">Obtenir le contenu</string>
@@ -210,7 +203,7 @@
   <string name="close_all_tabs">Fermer tous les onglets</string>
   <string name="pending_state">En attente</string>
   <string name="running_state">En cours</string>
-  <string name="successful_state">Terminer</string>
+  <string name="complete">Terminer</string>
   <string name="paused_state">En pause</string>
   <string name="failed_state">Échec : %s</string>
   <string name="save">Enregistrer</string>
@@ -262,7 +255,7 @@
   <string name="tag_short_text">Texte bref</string>
   <string name="storage_permission_denied">Autorisation de stockage refusée</string>
   <string name="grant_read_storage_permission">Cette application a besoin de la possibilité de lire le stockage pour pouvoir fonctionner. Veuillez accorder le droit dans vos paramètres.</string>
-  <string name="go_to_permissions">Aller aux paramètres</string>
+  <string name="go_to_settings">Aller aux paramètres</string>
   <string name="no_results">Aucun résultat</string>
   <string name="no_bookmarks">Aucun marque-page</string>
   <string name="no_history">Aucun historique</string>

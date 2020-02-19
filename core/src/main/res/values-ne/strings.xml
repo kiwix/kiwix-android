@@ -6,13 +6,11 @@
 * सरोज कुमार ढकाल
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">सामग्रीहरू प्राप्त गर्नुहोस्</string>
   <string name="menu_help">सहायता</string>
   <string name="menu_home">गृह</string>
   <string name="menu_settings">सेटिङहरू</string>
-  <string name="menu_search">लेख खोज्नुहोस्</string>
   <string name="menu_search_in_text">पृष्ठमा खोज्नुहोस्</string>
-  <string name="menu_bookmarks">पुस्तक चिनोहरू</string>
+  <string name="bookmarks">पुस्तक चिनोहरू</string>
   <string name="menu_random_article">कुनै लेख</string>
   <string name="menu_full_screen">पूरा पर्दा</string>
   <string name="menu_exit_full_screen">पूरा पर्दाबाट बाहिरिने</string>
@@ -23,7 +21,6 @@
   <string name="search_label">खोज्नुहोस्</string>
   <string name="choose_file">सामग्री फाइल छान्नुहोस् (*.zim)</string>
   <string name="open_in_new_tab">लिङ्कलाई नयाँ ट्याबमा खोल्ने?</string>
-  <string name="stop_hotspot_button">रोक्ने</string>
   <string name="error_file_not_found">त्रुटी: छानिएको ZIM फाइल भेटाउन सकिएन।</string>
   <string name="error_file_invalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन।</string>
   <string name="error_article_url_not_found">त्रुटी: लेख खोल्न असफल । (Url: %1$s)</string>
@@ -40,7 +37,6 @@
   <string name="pref_language_title">भाषा</string>
   <string name="pref_language_chooser">भाषा चुन्ने</string>
   <string name="pref_credits_title">श्रेयहरू</string>
-  <string name="menu_bookmarks_list">पुस्तक चिनोहरू</string>
   <string name="no_section_info">कुनै पनि कन्टेन्ट हेडरहरू भेटिएन</string>
   <string name="clear_recent_and_tabs_history_dialog">के तपाईं साँच्चिकै आफ्नो खोज इतिहास खाली गर्न चाहनुहुन्छ र सबै सक्रिय ट्याबहरू पूर्ववत् गर्न चाहनुहुन्छ?</string>
   <string name="delete_recent_search_item">यस वस्तुलाई मेट्ने हो?</string>
@@ -57,16 +53,15 @@
   <string name="rate_dialog_title">हामीलाई स्तर दिनुहोस्</string>
   <string name="rate_dialog_msg_1">प्रयोग गर्न रमाइलो लागेमा</string>
   <string name="rate_dialog_positive">स्तर दिनुहोस्!</string>
-  <string name="rate_dialog_negative">पर्दैन, धन्यवाद</string>
+  <string name="no_thanks">पर्दैन, धन्यवाद</string>
   <string name="rate_dialog_neutral">पछि</string>
   <string name="open">खोल्नुहोस्</string>
   <string name="bookmark_removed">पुस्तक चिनो हटाइयो</string>
   <string name="pref_extras">थप</string>
   <string name="new_tab_snack_bar">लेख नयाँ ट्याबमा खोल्नुहोस्</string>
   <string name="local_zims">उपकरण</string>
-  <string name="zim_manager">पुस्तकालय</string>
+  <string name="library">पुस्तकालय</string>
   <string name="delete_specific_zim_toast">फाइल मेटियो</string>
-  <string name="download_stop">रोक्नुहोस्</string>
   <string name="no_files_here">यहाँ कुनै फाइलहरू छैनन्</string>
   <string name="download_no_space">यो फाइल डाउनलोड गर्न पर्याप्त स्थान छैन।</string>
   <string name="zim_simple">साधारण</string>
@@ -78,7 +73,7 @@
   <string name="delete_zim_failed">माफ गर्नुहोस् हामीले यो फाइल मेट्न सकेनौं। तपाईंले यसको सट्टामा फाइल व्यवस्थापक प्रयोगको प्रयास गर्नुपर्छ ।</string>
   <string name="tts_pause">रोक्नुहोस्</string>
   <string name="tts_resume">पुनः निरन्तरता दिनुहोस्</string>
-  <string name="tts_stop">रोक्नुहोस्</string>
+  <string name="stop">रोक्नुहोस्</string>
   <string name="internal_storage">आन्तरिक</string>
   <string name="external_storage">बाह्य</string>
   <string name="yes">हो</string>

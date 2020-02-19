@@ -6,13 +6,11 @@
 * Toliño
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Obter contido</string>
   <string name="menu_help">Axuda</string>
   <string name="menu_home">Inicio</string>
   <string name="menu_settings">Configuración</string>
-  <string name="menu_search">Procurar artigo</string>
   <string name="menu_search_in_text">Procurar na páxina</string>
-  <string name="menu_bookmarks">Favoritos</string>
+  <string name="bookmarks">Favoritos</string>
   <string name="menu_random_article">Artigo ao chou</string>
   <string name="menu_full_screen">Pantalla completa</string>
   <string name="menu_exit_full_screen">Saír da pantalla completa</string>
@@ -25,7 +23,6 @@
   <string name="search_label">Procurar</string>
   <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
-  <string name="stop_hotspot_button">DETER</string>
   <string name="error_file_not_found">Erro: Non se puido atopar o ficheiro ZIM seleccionado.</string>
   <string name="error_file_invalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: Non se puido cargar o artigo (URL: %1$s).</string>
@@ -47,7 +44,6 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">Non se admite a lingua desta páxina, ou non se instalaron os datos de lingua axeitados. Pode que o artigo non se poida ler correctamente.</string>
   <string name="no_reader_application_installed">Non se puido atopar unha aplicación instalada para este tipo de ficheiro</string>
-  <string name="menu_bookmarks_list">Favoritos</string>
   <string name="no_section_info">Non se atoparon cabeceiras de contido.</string>
   <string name="request_storage">Para acceder a contido sen conexión necesitamos ter acceso ó seu almacenamento</string>
   <string name="clear_recent_and_tabs_history_dialog">Seguro que quere eliminar o seu historial de procura e restablecer tódalas pestanas activas?</string>
@@ -68,7 +64,7 @@
   <string name="rate_dialog_msg_1">Se gozas co uso</string>
   <string name="rate_dialog_msg_2">, por favor bote un momento para cualificala. Grazas polo seu apoio!</string>
   <string name="rate_dialog_positive">Cualificaǃ</string>
-  <string name="rate_dialog_negative">Non, grazas</string>
+  <string name="no_thanks">Non, grazas</string>
   <string name="rate_dialog_neutral">Máis tarde</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Marcador borrado</string>
@@ -81,9 +77,8 @@
   <string name="speech_not_supported">Sentímoloǃ O seu dispositivo non admite entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En liña</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_specific_zim_toast">Ficheiro eliminado</string>
-  <string name="download_stop">Deter</string>
   <string name="no_files_here">Ningún ficheiro aquí</string>
   <string name="download_no_space">Espacio insuficiente para descargar este ficheiro.</string>
   <string name="space_available">Espazo dispoñible:</string>
@@ -106,7 +101,7 @@
   <string name="delete_zim_failed">Non podemos eliminar este ficheiro. Debería probar cun administrador de ficheiros.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
-  <string name="tts_stop">deter</string>
+  <string name="stop">deter</string>
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="yes">Si</string>

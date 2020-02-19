@@ -13,13 +13,11 @@
 * Putnik
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Получить Контент</string>
   <string name="menu_help">Помощь</string>
   <string name="menu_home">Главная</string>
   <string name="menu_settings">Настройки</string>
-  <string name="menu_search">Искать статью</string>
   <string name="menu_search_in_text">Найти на странице</string>
-  <string name="menu_bookmarks">Закладки</string>
+  <string name="bookmarks">Закладки</string>
   <string name="menu_random_article">Случайная статья</string>
   <string name="menu_full_screen">Полный экран</string>
   <string name="menu_exit_full_screen">Выйти из режима полного экрана</string>
@@ -32,7 +30,6 @@
   <string name="search_label">Поиск</string>
   <string name="choose_file">Выберите файл содержимого (*.zim)</string>
   <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
-  <string name="stop_hotspot_button">ОСТАНОВИТЬ</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
@@ -54,7 +51,6 @@
   <string name="pref_credits_title">Создатели</string>
   <string name="tts_lang_not_supported">Язык этой страницы не поддерживается или соответствующие языковые данные не были установлены. Эта статья не может быть правильно прочитана.</string>
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
-  <string name="menu_bookmarks_list">Закладки</string>
   <string name="no_section_info">Не Найдены Заголовки Содержимого.</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
   <string name="clear_recent_and_tabs_history_dialog">Вы уверены, что хотите удалить историю поиска и закрыть все активные вкладки?</string>
@@ -75,7 +71,7 @@
   <string name="rate_dialog_msg_1">Если вам нравится</string>
   <string name="rate_dialog_msg_2">, пожалуйста, найдите минутку, чтобы оценить его. Спасибо за вашу поддержку!</string>
   <string name="rate_dialog_positive">Оценить!</string>
-  <string name="rate_dialog_negative">Нет, спасибо</string>
+  <string name="no_thanks">Нет, спасибо</string>
   <string name="rate_dialog_neutral">Позже</string>
   <string name="open">Открыть</string>
   <string name="bookmark_removed">Закладка удалена</string>
@@ -88,9 +84,8 @@
   <string name="speech_not_supported">Приносим извинения! Ваше устройство не поддерживает ввод речи.</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
-  <string name="zim_manager">Библиотека</string>
+  <string name="library">Библиотека</string>
   <string name="delete_specific_zim_toast">Файл удалён</string>
-  <string name="download_stop">Остановить</string>
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space">Недостаточно места для загрузки этого файла.</string>
   <string name="space_available">Доступно Места:</string>
@@ -113,7 +108,7 @@
   <string name="delete_zim_failed">Извините, мы не смогли удалить этот файл. Вместо этого вам стоит попробовать использовать файловый менеджер.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
-  <string name="tts_stop">остановить</string>
+  <string name="stop">остановить</string>
   <string name="internal_storage">Внутренний</string>
   <string name="external_storage">Внешний</string>
   <string name="yes">Да</string>
@@ -145,7 +140,6 @@
   <string name="crash_checkbox_logs">Журнал Действий Приложения</string>
   <string name="crash_checkbox_device">Подробности об Устройстве</string>
   <string name="crash_button_confirm">ОТПРАВИТЬ ПОДРОБНОСТИ</string>
-  <string name="crash_button_decline">НЕТ, СПАСИБО</string>
   <string name="download_books">Скачивайте книги</string>
   <string name="download_books_message">Скачивайте книги и читайте, где бы вы ни были.</string>
   <string name="expand">Развернуть</string>

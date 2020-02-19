@@ -130,7 +130,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     ActionBar actionBar = getSupportActionBar();
     if (actionBar != null) {
       actionBar.setDisplayHomeAsUpEnabled(true);
-      actionBar.setTitle(R.string.menu_bookmarks);
+      actionBar.setTitle(R.string.bookmarks);
     }
 
     setupBookmarksAdapter();

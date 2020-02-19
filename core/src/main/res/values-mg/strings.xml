@@ -3,9 +3,8 @@
   <string name="menu_help">Fanoroana</string>
   <string name="menu_home">Fandraisana</string>
   <string name="menu_settings">Safidy</string>
-  <string name="menu_search">Hikaroka</string>
   <string name="menu_search_in_text">Hitady anaty lahatsoratra</string>
-  <string name="menu_bookmarks">Marika pejy</string>
+  <string name="bookmarks">Marika pejy</string>
   <string name="menu_random_article">Takelaka kisendra</string>
   <string name="menu_full_screen">Fisehoana mameno ekrà</string>
   <string name="menu_exit_full_screen">Hiala amin\'ny fisehoana mameno fikandra</string>
@@ -34,7 +33,6 @@
   <string name="pref_language_chooser">Hifidy tenim-pirenena</string>
   <string name="tts_lang_not_supported">Tsy zaka ny fiteny ampiasaina ato amin\'ity pejy ity, na tsy napetraka ny angona mety aminy. Mety tsy ho voavaky tsara ny lahatsoratra.</string>
   <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an\'ity karazan-drakitra ity</string>
-  <string name="menu_bookmarks_list">Marika pejy</string>
   <string name="no_section_info">Tsy misy loham-botoatiny hita</string>
   <string name="request_storage">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>
   <string name="bookmark_added">Mari-boky nampiana</string>
@@ -42,11 +40,11 @@
   <string name="rate_dialog_msg_1">Raha tianao ny mampiasa</string>
   <string name="rate_dialog_msg_2">, makà fotoana kely dia kely hanomezana naoty an\'ilay izy. Misaotra anao manohana!</string>
   <string name="rate_dialog_positive">Naoteo!</string>
-  <string name="rate_dialog_negative">Aoka fa misaotra</string>
+  <string name="no_thanks">Aoka fa misaotra</string>
   <string name="rate_dialog_neutral">Amin\'ny manaraka</string>
   <string name="pref_newtab_background_title">Hanokatra vakizoro any aoriana</string>
   <string name="pref_newtab_background_summary">Rehefa manokatra vakizoro dia hosokafany any aoriana</string>
-  <string name="zim_manager">Tahirim-boky</string>
+  <string name="library">Tahirim-boky</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

@@ -7,13 +7,11 @@
 * Macondo
 -->
 <resources>
-  <string name="menu_zim_manager">Biblioteca</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Inici</string>
   <string name="menu_settings">Configuració</string>
-  <string name="menu_search">Cercar article</string>
   <string name="menu_search_in_text">Cercar a la pàgina</string>
-  <string name="menu_bookmarks">Marcadors</string>
+  <string name="bookmarks">Marcadors</string>
   <string name="menu_random_article">Article aleatori</string>
   <string name="menu_full_screen">Pantalla completa</string>
   <string name="menu_exit_full_screen">Sortir de pantalla completa</string>
@@ -26,8 +24,6 @@
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
-  <string name="go_to_settings_label">Vés a Configuració</string>
-  <string name="stop_hotspot_button">ATURA</string>
   <string name="no_books_selected_toast_message">Seleccioneu llibres primer</string>
   <string name="server_failed_toast_message">No s’ha pogut iniciar el servidor.</string>
   <string name="progress_dialog_starting_server">S’està iniciant el servidor</string>
@@ -49,7 +45,6 @@
   <string name="pref_language_title">Idioma</string>
   <string name="pref_language_chooser">Trieu un idioma</string>
   <string name="no_reader_application_installed">No s\'ha pogut trobar una aplicació instal·lada per a aquest tipus de fitxer</string>
-  <string name="menu_bookmarks_list">Marcadors</string>
   <string name="no_section_info">No es van trobar capçaleres de contingut</string>
   <string name="clear_recent_and_tabs_history_dialog">Segur que vols esborrar l\'historial de cerques i restablir totes les pestanyes actives?</string>
   <string name="delete_recent_search_item">Esborrar aquest element?</string>
@@ -66,10 +61,9 @@
   <string name="bookmark_removed">Marcador eliminat</string>
   <string name="new_tab_snack_bar">Article obert en una pestanya nova</string>
   <string name="local_zims">Dispositiu</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_zim_body">Voleu suprimir %s?</string>
   <string name="delete_specific_zim_toast">Fitxer esborrat</string>
-  <string name="download_stop">Detenir</string>
   <string name="no_files_here">Cap fitxer aquí</string>
   <string name="download_no_space">Espai insuficient per descarregar aquest fitxer.</string>
   <string name="no_network_connection">Cap connexió de xarxa</string>
@@ -99,7 +93,6 @@
   <string name="other_languages">Altres idiomes:</string>
   <string name="crash_checkbox_device">Detalls de l’aparell</string>
   <string name="crash_button_confirm">ENVIA LES DADES</string>
-  <string name="crash_button_decline">NO, MERCÈS</string>
   <string name="new_tab_shortcut_label">Pestanya nova</string>
   <string name="articleCount">%s articles</string>
   <string name="table_of_contents">Taula</string>

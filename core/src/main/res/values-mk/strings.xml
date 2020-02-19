@@ -4,13 +4,11 @@
 -->
 <resources>
   <string name="kiwi">Киви</string>
-  <string name="menu_zim_manager">Библиотека</string>
   <string name="menu_help">Помош</string>
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Поставки</string>
-  <string name="menu_search">Пребарај статија</string>
   <string name="menu_search_in_text">Најди на страницата</string>
-  <string name="menu_bookmarks">Обележани</string>
+  <string name="bookmarks">Обележани</string>
   <string name="menu_random_article">Случајна статија</string>
   <string name="menu_full_screen">На цел екран</string>
   <string name="menu_exit_full_screen">Излези од цел екран</string>
@@ -29,9 +27,7 @@
   <string name="hotspot_failed_title">Не успеав да ја покренам пристапната точка</string>
   <string name="hotspot_failed_message">Се чини дека точката за безжичен пристап е веќе вклучена. Исклучете ја за да продолжите.</string>
   <string name="go_to_wifi_settings_label">Оди во поставките за безжичен пристап</string>
-  <string name="go_to_settings_label">Оди во поставките</string>
   <string name="hotspot_running">Активна пристапна точка</string>
-  <string name="stop_hotspot_button">ЗАПРИ</string>
   <string name="no_books_selected_toast_message">Најпрвин одберете книги</string>
   <string name="server_failed_message">Не можев да го покренам опслужувачот. Вклучете ја пристапната точка</string>
   <string name="server_failed_toast_message">Не можев да го покренам опслужувачот.</string>
@@ -69,7 +65,6 @@
   <string name="pref_credits_title">Признанија</string>
   <string name="tts_lang_not_supported">Јазикот на оваа страница не е поддржан, или пак немате воспоставено соодветни јазични податоци. Статијата може да биде неправилно испишана.</string>
   <string name="no_reader_application_installed">Не можев да најдам воспоставен приложник за овој вид податотека</string>
-  <string name="menu_bookmarks_list">Обележани</string>
   <string name="no_section_info">Не пронајдов содржински заглавија</string>
   <string name="request_storage">Ќе треба пристап до вашиот склад за да дојдам до вонмрежната содржина</string>
   <string name="clear_recent_and_tabs_history_dialog">Дали сугурно сакате да ја избришете историјата на пребарувања и да ги отфрлите сите активни јазичиња?</string>
@@ -94,7 +89,7 @@
   <string name="rate_dialog_msg_1">Ако ви се допаѓа</string>
   <string name="rate_dialog_msg_2">, ќе ве молиме да одвоите еден миг за да дадете своја оценка. Ви благодариме на поддршката!</string>
   <string name="rate_dialog_positive">Оцени!</string>
-  <string name="rate_dialog_negative">Не, благодарам</string>
+  <string name="no_thanks">Не, благодарам</string>
   <string name="rate_dialog_neutral">Подоцна</string>
   <string name="open">Отвори</string>
   <string name="bookmark_removed">Обележаните се отстранети</string>
@@ -107,10 +102,9 @@
   <string name="speech_not_supported">Жалиме! Вашиот уред не поддржува гласовно внесување</string>
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
-  <string name="zim_manager">Библиотека</string>
+  <string name="library">Библиотека</string>
   <string name="delete_zim_body">Да го избришам %s?</string>
   <string name="delete_specific_zim_toast">Податотеката е избришана</string>
-  <string name="download_stop">Запри</string>
   <string name="no_files_here">Нема податотеки</string>
   <string name="download_no_space">Немате доволно место за преземање на податотекава.</string>
   <string name="space_available">Достапен простор:</string>
@@ -133,7 +127,7 @@
   <string name="delete_zim_failed">За жал, не можев да ја избришам податотеката. Пробајте со Управувачот со податотеки.</string>
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>
-  <string name="tts_stop">запри</string>
+  <string name="stop">запри</string>
   <string name="internal_storage">Внатрешен</string>
   <string name="external_storage">Надворешен</string>
   <string name="yes">Да</string>
@@ -170,7 +164,6 @@
   <string name="crash_checkbox_logs">Дневници на прилози</string>
   <string name="crash_checkbox_device">Поединости за уредот</string>
   <string name="crash_button_confirm">ИСПРАТИ ПОЕДИНОСТИ</string>
-  <string name="crash_button_decline">НЕ, БЛАГОДАРАМ</string>
   <string name="shortcut_disabled_message">Кратенката е недостапна</string>
   <string name="new_tab_shortcut_label">Ново јазиче</string>
   <string name="get_content_shortcut_label">Земи содржини</string>
@@ -200,7 +193,7 @@
   <string name="close_all_tabs">Затвори ги сите јазичиња</string>
   <string name="pending_state">Во исчекување</string>
   <string name="running_state">Во тек</string>
-  <string name="successful_state">Готово</string>
+  <string name="complete">Готово</string>
   <string name="paused_state">Паузирано</string>
   <string name="failed_state">Не успеа: %s</string>
   <string name="save">Зачувај</string>
@@ -252,7 +245,7 @@
   <string name="tag_short_text">Краток текст</string>
   <string name="storage_permission_denied">Дозволата за складирање е одбиена</string>
   <string name="grant_read_storage_permission">Прилогов бара пристап до складот за да работи. Дајте му ја таа дозвола во поставките</string>
-  <string name="go_to_permissions">Оди во поставките</string>
+  <string name="go_to_settings">Оди во поставките</string>
   <string name="no_results">Нема исход</string>
   <string name="no_bookmarks">Нема обележувачи</string>
   <string name="no_history">Нема историја</string>

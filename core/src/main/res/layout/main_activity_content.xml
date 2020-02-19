@@ -81,7 +81,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:alpha="0.6"
-    android:text="@string/tts_stop"
+    android:text="@string/stop"
     android:textStyle="bold"
     android:visibility="gone"
     app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"

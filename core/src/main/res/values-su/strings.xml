@@ -3,9 +3,8 @@
   <string name="menu_help">Pitulung</string>
   <string name="menu_home">Tepas</string>
   <string name="menu_settings">Préferénsi</string>
-  <string name="menu_search">Paluruh</string>
   <string name="menu_search_in_text">Téangan dina téks</string>
-  <string name="menu_bookmarks">Tatanda buku</string>
+  <string name="bookmarks">Tatanda buku</string>
   <string name="menu_random_article">Artikel acak</string>
   <string name="menu_full_screen">Layar pinuh</string>
   <string name="menu_exit_full_screen">Kaluar ti modeu layar pinuh</string>
@@ -17,7 +16,6 @@
   <string name="pref_info_title">Émbaran</string>
   <string name="pref_info_version">Vérsi</string>
   <string name="pref_language_title">Basa</string>
-  <string name="menu_bookmarks_list">Tatanda buku</string>
   <string name="all_history_cleared_toast">Sakum Jujutan Dibersihkeun</string>
   <string name="clear_all_history_dialog_title">Bersihkeun Sakum Markah</string>
   <string name="delete">Pupus</string>
@@ -25,9 +23,8 @@
   <string name="bookmark_added">Markah ditambahkeun</string>
   <string name="open">Buka</string>
   <string name="bookmark_removed">Markah dipupus</string>
-  <string name="zim_manager">Pabukon</string>
+  <string name="library">Pabukon</string>
   <string name="delete_specific_zim_toast">Berkas geus dipupus</string>
-  <string name="download_stop">Eureun</string>
   <string name="no_files_here">Euweuh berkas di dieu</string>
   <string name="download_no_space">Rohang teu nyukupan pikeun ngundeur ieu berkas.</string>
   <string name="no_network_connection">Euweuh sambungan jaringan</string>

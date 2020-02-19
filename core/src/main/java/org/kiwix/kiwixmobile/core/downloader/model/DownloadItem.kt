@@ -82,7 +82,7 @@ sealed class DownloadState(private val stringId: Int) {
 
   object Pending : DownloadState(R.string.pending_state)
   object Running : DownloadState(R.string.running_state)
-  object Successful : DownloadState(R.string.successful_state)
+  object Successful : DownloadState(R.string.complete)
   object Paused : DownloadState(R.string.paused_state)
   data class Failed(val reason: Error) : DownloadState(R.string.failed_state)
 

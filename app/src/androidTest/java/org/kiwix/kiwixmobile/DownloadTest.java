@@ -87,7 +87,7 @@ public class DownloadTest {
   @Ignore("Broken in 2.5")//TODO: Fix in 3.0
   public void downloadTest() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
 
     clickOn(R.string.local_zims);
 
