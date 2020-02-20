@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.R
@@ -37,6 +38,7 @@ data class OpenFile(private val bookOnDisk: BookOnDisk) :
       activity.finish()
       activity.start<KiwixMainActivity> {
         data = file.toUri()
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
       }
     }
   }
