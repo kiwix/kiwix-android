@@ -2,6 +2,7 @@
 <!-- Authors:
 * Ganesh Paudel
 * Macofe
+* पर्वत सुबेदी
 * राम प्रसाद जोशी
 * सरोज कुमार ढकाल
 -->
@@ -107,5 +108,9 @@
   <string name="do_not_ask_anymore">फेरि नसोध्नुहोस्</string>
   <string name="your_languages">छानिएको भाष:</string>
   <string name="other_languages">अन्य भाषाहरू:</string>
+  <string name="history_from_current_book">सबै किताबहरूबाट इतिहास हेर्नुहोस्</string>
+  <string name="status">स्थिति</string>
   <string name="no_bookmarks">कुनै पनि पुस्तक चिनोहरू छैनन्</string>
+  <string name="no_history">कुनैपनि इतिहास छैन</string>
+  <string name="device_default">पुनर्निधारित उपकरण</string>
 </resources>

@@ -4,6 +4,7 @@
 * DeRudySoulStorm
 * InternerowyGołąb
 * Kelson
+* Krzyz23
 * Macofe
 * Rail
 * Rzuwig
@@ -40,6 +41,7 @@
   <string name="go_to_settings_label">Przejdź do ustawień</string>
   <string name="hotspot_running">Uruchamianie Hotspot</string>
   <string name="stop_hotspot_button">STOP</string>
+  <string name="no_books_selected_toast_message">Proszę wybrać najpierw książki</string>
   <string name="server_failed_toast_message">Nie można uruchomić serwera.</string>
   <string name="server_started__successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
   <string name="hotspot_turned_on">Hotspot włączony</string>
@@ -277,4 +279,5 @@
   <string name="go_to_permissions">Przejdź do ustawień</string>
   <string name="no_results">Brak wyników</string>
   <string name="no_bookmarks">Brak zakładek</string>
+  <string name="no_history">Nie ma Historii</string>
 </resources>

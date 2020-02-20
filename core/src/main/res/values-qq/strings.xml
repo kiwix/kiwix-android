@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Amire80
 * Fitoschido
 * Kelson
@@ -35,7 +36,7 @@
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>
   <string name="open">{{Identical|Open}}</string>
   <string name="zim_manager">{{Identical|Library}}</string>
-  <string name="download_pause">{{Identical|Pause}}</string>
+  <string name="download_pause">{{Identical|Pause}}\n\nShould not be confused with {{msg-kiwix|Android.ui.tts_stop}}</string>
   <string name="download_stop">{{Identical|Stop}}</string>
   <string name="tts_stop">{{Identical|Stop}}</string>
   <string name="external_storage">{{Identical|External}}</string>
