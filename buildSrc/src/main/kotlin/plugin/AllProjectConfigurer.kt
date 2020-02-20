@@ -101,6 +101,7 @@ class AllProjectConfigurer {
         warning(
           "UnknownNullness",
           "SelectableText",
+          "MissingTranslation",
           "IconDensities",
           "ContentDescription",
           "IconDipSize"
