@@ -146,11 +146,9 @@ public class KiwixTextToSpeech {
       }
     }
   }
+  @SuppressLint("NewApi")
   private Set<String> getFeatures(TextToSpeech tts, Locale locale){
-    if(VERSION.SDK_INT < VERSION_CODES.LOLLIPOP)
-      return tts.getFeatures(locale);
-    else
-      return tts.getVoice().getFeatures();
+    return ((VERSION.SDK_INT < VERSION_CODES.LOLLIPOP)?tts.getFeatures(locale):tts.getVoice().getFeatures());
   }
   private void loadURL(WebView webView) {
     // We use JavaScript to get the content of the page conveniently, earlier making some
