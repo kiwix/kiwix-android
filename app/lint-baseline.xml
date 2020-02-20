@@ -2,6 +2,13 @@
 <issues format="5" by="lint 3.5.2" client="gradle" variant="debug" version="3.5.2">
 
     <issue
+        id="ObsoleteLintCustomCheck"
+        message="Lint found an issue registry (`butterknife.lint.LintRegistry`) which is older than the current API level; these checks may not work correctly.&#xA;&#xA;Recompile the checks against the latest version. Custom check API version is 2 (3.2), current lint API level is 5 (3.5+)">
+        <location
+            file="..\..\..\.gradle\caches\transforms-2\files-2.1\20f70e90041f0dd6e3bdcab89c1e2960\butterknife-runtime-10.2.0\jars\lint.jar"/>
+    </issue>
+
+    <issue
         id="ScrollViewSize"
         message="This LinearLayout should use `android:layout_height=&quot;wrap_content&quot;`"
         errorLine1="      android:layout_height=&quot;match_parent&quot;"
@@ -285,6 +292,85 @@
 
     <issue
         id="DuplicateStrings"
+        message="Duplicate string value `ଜୁମ ବଢ଼ାଇବା/କମାଇବା`, used in `pref_zoom_dialog` and `pref_zoom_enable`"
+        errorLine1="  &lt;string name=&quot;pref_zoom_dialog&quot;>ଜୁମ ବଢ଼ାଇବା/କମାଇବା&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-or\strings.xml"
+            line="24"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-or\strings.xml"
+            line="27"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `הרצת השרת`, used in `progress_dialog_starting_server` and `start_server_label`"
+        errorLine1="  &lt;string name=&quot;progress_dialog_starting_server&quot;>הרצת השרת&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-iw\strings.xml"
+            line="44"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-iw\strings.xml"
+            line="50"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `دواتر`, used in `next` and `rate_dialog_neutral`"
+        errorLine1="  &lt;string name=&quot;rate_dialog_neutral&quot;>دواتر&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-ckb\strings.xml"
+            line="55"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-ckb\strings.xml"
+            line="80"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `Wybierz język`, used in `pref_language_chooser`, `select_languages` and `your_languages`"
+        errorLine1="  &lt;string name=&quot;pref_language_chooser&quot;>Wybierz język&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-pl\strings.xml"
+            line="67"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-pl\strings.xml"
+            line="158"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-pl\strings.xml"
+            line="184"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `選擇語言`, used in `pref_language_chooser` and `select_languages`"
+        errorLine1="  &lt;string name=&quot;pref_language_chooser&quot;>選擇語言&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-zh-rTW\strings.xml"
+            line="68"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-zh-rTW\strings.xml"
+            line="187"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
         message="Duplicate string value `Borrar`, used in `delete` and `leak_canary_delete`"
         errorLine1="  &lt;string name=&quot;delete&quot;>Borrar&lt;/string>"
         errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
@@ -296,6 +382,126 @@
             file="..\..\..\.gradle\caches\transforms-2\files-2.1\003b1de908fd2758cf984e1490e5b1e5\jetified-leakcanary-android-core-2.0\res\values-es\values-es.xml"
             line="9"
             column="5"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `언어 선택`, used in `pref_language_chooser` and `select_languages`"
+        errorLine1="  &lt;string name=&quot;pref_language_chooser&quot;>언어 선택&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-ko\strings.xml"
+            line="70"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-ko\strings.xml"
+            line="187"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `रोक्नुहोस्`, used in `stop` and `tts_pause`"
+        errorLine1="  &lt;string name=&quot;tts_pause&quot;>रोक्नुहोस्&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-ne\strings.xml"
+            line="74"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-ne\strings.xml"
+            line="76"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `bıvındarne`, used in `stop` and `tts_pause`"
+        errorLine1="  &lt;string name=&quot;tts_pause&quot;>bıvındarne&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-diq\strings.xml"
+            line="95"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-diq\strings.xml"
+            line="97"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `Další`, used in `next` and `pref_extras`"
+        errorLine1="  &lt;string name=&quot;pref_extras&quot;>Další&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-cs\strings.xml"
+            line="100"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-cs\strings.xml"
+            line="136"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `rawestîne`, used in `stop` and `tts_pause`"
+        errorLine1="  &lt;string name=&quot;tts_pause&quot;>rawestîne&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-ku\strings.xml"
+            line="102"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-ku\strings.xml"
+            line="104"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `Premor`, used in `paused_state` and `tts_pause`. Use `android:inputType` or `android:capitalize` to treat these as the same and avoid string duplication."
+        errorLine1="  &lt;string name=&quot;tts_pause&quot;>premor&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-sl\strings.xml"
+            line="109"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-sl\strings.xml"
+            line="178"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `暂停`, used in `paused_state` and `tts_pause`"
+        errorLine1="  &lt;string name=&quot;tts_pause&quot;>暂停&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-zh\strings.xml"
+            line="109"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-zh\strings.xml"
+            line="161"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `暫停`, used in `paused_state` and `tts_pause`"
+        errorLine1="  &lt;string name=&quot;tts_pause&quot;>暫停&lt;/string>"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="..\core\src\main\res\values-zh-rTW\strings.xml"
+            line="133"
+            column="3"/>
+        <location
+            file="..\core\src\main\res\values-zh-rTW\strings.xml"
+            line="202"
+            column="3"/>
     </issue>
 
     <issue
