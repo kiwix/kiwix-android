@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwixException;
-import org.kiwix.kiwixlib.JNIKiwixLibrary;
+import org.kiwix.kiwixlib.Library;
 import org.kiwix.kiwixlib.JNIKiwixServer;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks;
@@ -41,12 +41,12 @@ import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
 
 public class WebServerHelper {
   private static final String TAG = "WebServerHelper";
-  private JNIKiwixLibrary kiwixLibrary;
+  private Library kiwixLibrary;
   private JNIKiwixServer kiwixServer;
   private IpAddressCallbacks ipAddressCallbacks;
   private boolean isServerStarted;
 
-  @Inject public WebServerHelper(@NonNull JNIKiwixLibrary kiwixLibrary,
+  @Inject public WebServerHelper(@NonNull Library kiwixLibrary,
     @NonNull JNIKiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
     this.kiwixLibrary = kiwixLibrary;
     this.kiwixServer = kiwixServer;

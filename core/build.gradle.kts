@@ -39,7 +39,7 @@ dependencies {
     api(Libs.kiwixlib)
   } else {
     implementation("com.getkeepsafe.relinker:relinker:1.3.1")
-    implementation(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
+    api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
   }
 
   // Android Support
