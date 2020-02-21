@@ -34,11 +34,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 
@@ -133,11 +135,23 @@ public class KiwixTextToSpeech {
       } else {
         tts.setLanguage(locale);
 
+        if (getFeatures(tts, locale).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) {
+          ContextExtensionsKt.toast(context, R.string.tts_lang_not_supported,
+            Toast.LENGTH_LONG);
+          return;
+        }
+
         if (requestAudioFocus()) {
           loadURL(webView);
         }
       }
     }
+  }
+
+  @SuppressLint("NewApi")
+  private Set<String> getFeatures(TextToSpeech tts, Locale locale) {
+    return VERSION.SDK_INT < VERSION_CODES.LOLLIPOP ? tts.getFeatures(locale)
+      : tts.getVoice().getFeatures();
   }
 
   private void loadURL(WebView webView) {
