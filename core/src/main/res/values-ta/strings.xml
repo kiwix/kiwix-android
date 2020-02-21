@@ -3,9 +3,8 @@
   <string name="menu_help">உதவி</string>
   <string name="menu_home">முகப்பு</string>
   <string name="menu_settings">விருப்பங்கள்</string>
-  <string name="menu_search">தேடு</string>
   <string name="menu_search_in_text">உரையில் கண்டுபிடி</string>
-  <string name="menu_bookmarks">புத்தகக்குறிகள்</string>
+  <string name="bookmarks">புத்தகக்குறிகள்</string>
   <string name="menu_random_article">தொடர்பற்ற கட்டுரை</string>
   <string name="menu_full_screen">முழு திரை</string>
   <string name="menu_exit_full_screen">முழு திரையிலிருந்து வெளியேறுக</string>
@@ -30,8 +29,7 @@
   <string name="pref_back_to_top_summary">மேற்பகுதிக்குச் செல்ல, பக்கத்‌தின் அடியில் ஒரு பொத்தானை காண்பி</string>
   <string name="pref_language_title">மொழி</string>
   <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
-  <string name="menu_bookmarks_list">புத்தகக்குறிகள்</string>
-  <string name="zim_manager">நூலகம்</string>
+  <string name="library">நூலகம்</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

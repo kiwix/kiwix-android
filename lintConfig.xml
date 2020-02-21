@@ -8,5 +8,8 @@
   <issue id="TypographyEllipsis">
     <ignore path="**-iw/**.xml" />
   </issue>
+  <issue id="DuplicateStrings">
+    <ignore path="**/.gradle/caches/**" />
+  </issue>
 
 </lint>

@@ -3,9 +3,8 @@
   <string name="menu_help">സഹായം</string>
   <string name="menu_home">പ്രധാനം</string>
   <string name="menu_settings">ഐച്ഛികങ്ങള്‍</string>
-  <string name="menu_search">തിരയുക</string>
   <string name="menu_search_in_text">എഴുത്തിൽ തിരയുക</string>
-  <string name="menu_bookmarks">ബൂക്ക്മാർക്കുകൾ</string>
+  <string name="bookmarks">ബൂക്ക്മാർക്കുകൾ</string>
   <string name="menu_random_article">ഏതെങ്കിലും ലേഖനം</string>
   <string name="menu_full_screen">മുഴുവന്‍ സ്ക്രീനില്‍</string>
   <string name="menu_exit_full_screen">പൂർണ സ്ക്രീനിൽ നിന്ന് പുറത്തു കടക്കുക</string>
@@ -29,11 +28,9 @@
   <string name="pref_back_to_top_summary">താളിനു താഴെയായി മുകളിലേക്ക് തിരികെ പോകാനുള്ള ബട്ടൺ കാണിക്കുക.</string>
   <string name="pref_language_title">ഭാഷ</string>
   <string name="pref_language_chooser">ഭാഷ തിരഞ്ഞെടുക്കുക</string>
-  <string name="go_to_play_store">പ്ലേ സ്റ്റോറിൽ പോകുക</string>
-  <string name="menu_bookmarks_list">ബൂക്ക്മാർക്കുകൾ</string>
-  <string name="rate_dialog_negative">വേണ്ട, നന്ദി</string>
+  <string name="no_thanks">വേണ്ട, നന്ദി</string>
   <string name="rate_dialog_neutral">പിന്നീട്</string>
-  <string name="zim_manager">ഗ്രന്ഥപ്പുര</string>
+  <string name="library">ഗ്രന്ഥപ്പുര</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

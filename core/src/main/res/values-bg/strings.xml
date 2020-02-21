@@ -10,13 +10,11 @@
 * АдмиралАнимЕ
 -->
 <resources>
-  <string name="menu_zim_manager">Библиотека</string>
   <string name="menu_help">Помощ</string>
   <string name="menu_home">Начало</string>
   <string name="menu_settings">Настройки</string>
-  <string name="menu_search">Търси публикация</string>
   <string name="menu_search_in_text">Търси в страницата</string>
-  <string name="menu_bookmarks">Отметки</string>
+  <string name="bookmarks">Отметки</string>
   <string name="menu_random_article">Случайна статия</string>
   <string name="menu_full_screen">Цял екран</string>
   <string name="menu_exit_full_screen">Изход от цял екран</string>
@@ -29,7 +27,6 @@
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
-  <string name="stop_hotspot_button">СПИРАНЕ</string>
   <string name="error_file_not_found">Грешка: Избраният ZIM файл не е намерен.</string>
   <string name="error_file_invalid">Грешка: Избраният файл не е валиден ZIM файл.</string>
   <string name="error_article_url_not_found">Грешка: Зареждането на статия (Url: %1$s) е неуспешно.</string>
@@ -51,12 +48,8 @@
   <string name="pref_credits_title">За участниците в проекта</string>
   <string name="tts_lang_not_supported">Езикът на тази страница не се поддържа, или не е инсталиран подходящ език за данни. Статията не може да бъде разчетена правилно.</string>
   <string name="no_reader_application_installed">Не бе намерено инсталирано приложение за този тип файлове</string>
-  <string name="custom_app_missing_content">Приложението Ви е повредено.\nТова може да се случи, когато премахвате файлове от SD картата.\nТрябва да деинсталирате, след това да инсталирате приложението от Play Store.</string>
-  <string name="go_to_play_store">Към Play Store</string>
-  <string name="menu_bookmarks_list">Отметки</string>
   <string name="no_section_info">Не са открити заглавки на съдържанието</string>
   <string name="request_storage">За достъп до офлайн съдържание, ни е нужен достъп до файловото Ви хранилище</string>
-  <string name="request_storage_custom">Ако виждате предупреждение за припокриване на екрана, просто рестартирайте своето устройство, за да коригирате проблема.</string>
   <string name="clear_recent_and_tabs_history_dialog">Сигурни ли сте, че желаете да изтриете историята на вашите търсения и да рестартирате всички активни табове?</string>
   <string name="delete_recent_search_item">Изтриване на този елемент?</string>
   <string name="pref_clear_all_history_title">Изтрий история</string>
@@ -75,7 +68,7 @@
   <string name="rate_dialog_msg_1">Ако ви допадна</string>
   <string name="rate_dialog_msg_2">,моля, отделете малко време, за да го оцените. Благодаря за подкрепата!</string>
   <string name="rate_dialog_positive">Оцени!</string>
-  <string name="rate_dialog_negative">Не, благодаря</string>
+  <string name="no_thanks">Не, благодаря</string>
   <string name="rate_dialog_neutral">По-късно</string>
   <string name="open">Отваряне</string>
   <string name="bookmark_removed">Отметката е премахната</string>
@@ -88,15 +81,8 @@
   <string name="speech_not_supported">Съжаляваме! Вашето устройство не поддържа  въвеждане чрез глас.</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
-  <string name="zim_downloads">Изтегляне</string>
-  <string name="zim_manager">Библиотека</string>
+  <string name="library">Библиотека</string>
   <string name="delete_specific_zim_toast">Файлът е изтрит</string>
-  <string name="zim_file_downloading">Изтегляне</string>
-  <string name="zim_file_downloaded">Изтеглено</string>
-  <string name="download_pause">Пауза</string>
-  <string name="download_stop">Стоп</string>
-  <string name="download_paused">на пауза</string>
-  <string name="no_downloads_here">Тук няма смъкнати файлове</string>
   <string name="no_files_here">Тук няма файлове</string>
   <string name="download_no_space">Няма достатъчно място за даунлоуд на този файл.</string>
   <string name="space_available">Налично пространство:</string>
@@ -116,11 +102,10 @@
   <string name="help_11">ZIM файловете, които са смъкнати в мобилното приложение, се намират във външната памет, в папка с име Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текуща папка</string>
-  <string name="path_not_writable">Няма достъп до желаната директория, използва се директорията по подразбиране. За да коригирате това, изберете отново желана директория в настройките на приложението.</string>
   <string name="delete_zim_failed">За съжаление не успяхме да изтрием този файл. Необходимо е да използвате файлов мениджър за тази цел.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продължете</string>
-  <string name="tts_stop">стоп</string>
+  <string name="stop">стоп</string>
   <string name="internal_storage">Вътрешни</string>
   <string name="external_storage">Външни</string>
   <string name="yes">Да</string>
@@ -139,8 +124,6 @@
   <string name="time_minute">мин.</string>
   <string name="time_second">сек.</string>
   <string name="time_left">остават</string>
-  <string name="pref_auto_night_mode_summary">Превключвай автоматично между дневен и нощен режим.</string>
-  <string name="pref_auto_night_mode">Автоматичен нощен режим.</string>
   <string name="pref_external_link_popup_title">При зареждане на външни препратки</string>
   <string name="pref_external_link_popup_summary">Показва попъп, за да предупреди за допълнителни разходи или неработещи в офлайн режим препратки.</string>
   <string name="external_link_popup_dialog_title">Зареждане на външна препратка</string>

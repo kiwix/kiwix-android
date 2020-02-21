@@ -13,13 +13,11 @@
 * Waldyrious
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Obter conteúdo</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Início</string>
   <string name="menu_settings">Configurações</string>
-  <string name="menu_search">Pesquisar artigo</string>
   <string name="menu_search_in_text">Localizar na página</string>
-  <string name="menu_bookmarks">Marcadores</string>
+  <string name="bookmarks">Marcadores</string>
   <string name="menu_random_article">Artigo aleatório</string>
   <string name="menu_full_screen">Ecrã inteiro</string>
   <string name="menu_exit_full_screen">Sair do ecrã inteiro</string>
@@ -32,7 +30,6 @@
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecionar um ficheiro de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir ligação num novo separador?</string>
-  <string name="stop_hotspot_button">PARAR</string>
   <string name="error_file_not_found">Erro: não foi possível encontrar o ficheiro ZIM selecionado.</string>
   <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: o carregamento do artigo falhou (URL: %1$s).</string>
@@ -54,12 +51,8 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">O idioma desta página não é suportada, ou não foram instalados os dados de língua apropriados. O artigo pode não ser lido corretamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para este tipo de ficheiro</string>
-  <string name="custom_app_missing_content">A sua aplicação está corrompida.\nIsto pode acontecer quando remove ficheiros do seu cartão SD.\nÉ preciso desinstalar a aplicação e depois reinstalá-la a partir da Play Store.</string>
-  <string name="go_to_play_store">Ir para a Play Store</string>
-  <string name="menu_bookmarks_list">Marcadores</string>
   <string name="no_section_info">Não foram encontrados cabeçalhos de conteúdo</string>
   <string name="request_storage">Para aceder ao conteúdo offline, precisamos de acesso ao seu armazenamento</string>
-  <string name="request_storage_custom">Se ver um aviso de sobreposição de ecrã, simplesmente reinicie o seu dispositivo para consertar.</string>
   <string name="clear_recent_and_tabs_history_dialog">Tem a certeza de que deseja apagar o seu histórico de pesquisa e reiniciar todos os separadores ativos?</string>
   <string name="delete_recent_search_item">Apagar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpar o histórico</string>
@@ -78,7 +71,7 @@
   <string name="rate_dialog_msg_1">Se gosta de usar</string>
   <string name="rate_dialog_msg_2">, avalie-o por favor. Obrigado pelo seu apoio!</string>
   <string name="rate_dialog_positive">Avalie!</string>
-  <string name="rate_dialog_negative">Não, obrigado</string>
+  <string name="no_thanks">Não, obrigado</string>
   <string name="rate_dialog_neutral">Mais tarde</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Marcador removido</string>
@@ -91,15 +84,8 @@
   <string name="speech_not_supported">Desculpe! O seu dispositivo não suporta entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
-  <string name="zim_downloads">A descarregar</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_specific_zim_toast">Ficheiro apagado</string>
-  <string name="zim_file_downloading">A descarregar</string>
-  <string name="zim_file_downloaded">Descarregado</string>
-  <string name="download_pause">Pausar</string>
-  <string name="download_stop">Parar</string>
-  <string name="download_paused">pausado</string>
-  <string name="no_downloads_here">Não há transferências aqui</string>
   <string name="no_files_here">Não há ficheiros aqui</string>
   <string name="download_no_space">Espaço insuficiente para o download deste ficheiro.</string>
   <string name="space_available">Espaço disponível:</string>
@@ -119,11 +105,10 @@
   <string name="help_11">Os ficheiros ZIM descarregados dentro da aplicação estão localizados no diretório de armazenamento externo numa pasta intitulada Kiwix.</string>
   <string name="pref_storage">Armazenamento</string>
   <string name="pref_current_folder">Pasta atual</string>
-  <string name="path_not_writable">Não foi possível aceder o diretório desejado, utilizando o valor predefinido. Para corrigir isto, selecione novamente o diretório desejado nas configurações da aplicação.</string>
   <string name="delete_zim_failed">Desculpe, não foi possível apagar este ficheiro. Devia tentar usar um administrador de ficheiros.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
-  <string name="tts_stop">parar</string>
+  <string name="stop">parar</string>
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="yes">Sim</string>
@@ -142,8 +127,6 @@
   <string name="time_minute">min</string>
   <string name="time_second">s</string>
   <string name="time_left">esquerda</string>
-  <string name="pref_auto_night_mode_summary">Alternar automaticamente entre o modo diurno e noturno.</string>
-  <string name="pref_auto_night_mode">Modo noturno automático</string>
   <string name="pref_external_link_popup_title">Avisar quando introduzir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
   <string name="external_link_popup_dialog_title">Hiperligação externa de entrada</string>

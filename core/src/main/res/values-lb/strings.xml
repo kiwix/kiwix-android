@@ -6,13 +6,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Inhalt ofruffen</string>
   <string name="menu_help">Hëllef</string>
   <string name="menu_home">Haaptsäit</string>
   <string name="menu_settings">Astellungen</string>
-  <string name="menu_search">Artikel sichen</string>
   <string name="menu_search_in_text">Op der Säit sichen</string>
-  <string name="menu_bookmarks">Lieszeechen</string>
+  <string name="bookmarks">Lieszeechen</string>
   <string name="menu_random_article">Zoufällegen Artikel</string>
   <string name="menu_full_screen">Ganzen Ecran</string>
   <string name="menu_exit_full_screen">Aus dem ganzen Ecran erausgoen</string>
@@ -25,8 +23,6 @@
   <string name="search_label">Sichen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
-  <string name="go_to_settings_label">Op d\'Astellunge goen</string>
-  <string name="stop_hotspot_button">Ophalen</string>
   <string name="error_file_not_found">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
   <string name="error_file_invalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>
   <string name="error_article_url_not_found">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
@@ -43,8 +39,6 @@
   <string name="pref_language_title">Sprooch</string>
   <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
   <string name="pref_credits">Auteuren a Lizenzen</string>
-  <string name="go_to_play_store">An de Play Store goen</string>
-  <string name="menu_bookmarks_list">Lieszeechen</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
   <string name="delete">Läschen</string>
@@ -53,7 +47,7 @@
   <string name="undo">Réckgängeg maachen</string>
   <string name="bookmark_added">Lieszeechen derbäigesat</string>
   <string name="rate_dialog_positive">Bewäerten!</string>
-  <string name="rate_dialog_negative">Nee, merci</string>
+  <string name="no_thanks">Nee, merci</string>
   <string name="rate_dialog_neutral">Méi spéit</string>
   <string name="open">Opmaachen</string>
   <string name="bookmark_removed">Lieszeechen ewechgeholl</string>
@@ -62,14 +56,9 @@
   <string name="search_widget_text">Op Kiwix sichen</string>
   <string name="local_zims">Apparat</string>
   <string name="remote_zims">Online</string>
-  <string name="zim_downloads">Eroflueden</string>
-  <string name="zim_manager">Bibliothéik</string>
+  <string name="library">Bibliothéik</string>
   <string name="delete_zim_body">%s läschen?</string>
   <string name="delete_specific_zim_toast">Fichier geläscht</string>
-  <string name="zim_file_downloading">Eroflueden</string>
-  <string name="zim_file_downloaded">Erofgelueden</string>
-  <string name="download_pause">Paus</string>
-  <string name="download_stop">Stopp</string>
   <string name="no_files_here">Keng Fichieren hei?</string>
   <string name="download_no_space">Net genuch Plaz fir dëse Fichier erofzelueden.</string>
   <string name="space_available">Plaz disponibel:</string>
@@ -82,7 +71,7 @@
   <string name="help_6">Eisen Inhalt ass um Kiwix Internetsite gehost.</string>
   <string name="pref_current_folder">Aktuelle Repertoire</string>
   <string name="tts_resume">virufueren</string>
-  <string name="tts_stop">stopp</string>
+  <string name="stop">stopp</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Jo</string>
@@ -103,7 +92,6 @@
   <string name="your_languages">Erausgesicht Sproochen:</string>
   <string name="other_languages">Aner Sproochen:</string>
   <string name="crash_checkbox_device">Detailer vum Apparat</string>
-  <string name="crash_button_decline">NEE MERCI</string>
   <string name="articleCount">%s Artikelen</string>
   <string name="get_started">Fir unzefänken</string>
   <string name="download_books">Bicher eroflueden</string>
@@ -111,11 +99,6 @@
   <string name="go_to_previous_page">Op déi vireg Säit goen</string>
   <string name="select_languages">Sproochen eraussichen</string>
   <string name="save_languages">Sprooche späicheren</string>
-  <string name="paused_unknown">Onbekannt</string>
-  <string name="failed_file_already_exists">Fichier gëtt et schonn</string>
-  <string name="failed_unknown_file_error">Onbekannte System-Feeler</string>
-  <string name="failed_too_many_redirects">Ze vill Viruleedungen</string>
-  <string name="failed_unknown">Onbekannt</string>
   <string name="save">Späicheren</string>
   <string name="note_share_error_file_missing">De Fichier mat den Notizze gëtt et net</string>
   <string name="your_device">Ären Apparat:</string>
@@ -124,7 +107,7 @@
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nëmmen Text</string>
   <string name="tag_short_text">Kuerzen Text</string>
-  <string name="go_to_permissions">Op d\'Astellunge goen</string>
+  <string name="go_to_settings">Op d\'Astellunge goen</string>
   <string name="no_results">Keng Resultater</string>
   <string name="no_bookmarks">Keng Lieszeechen!</string>
   <string name="no_history">Keen Historique</string>

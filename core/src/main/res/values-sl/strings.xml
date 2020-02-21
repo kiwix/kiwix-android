@@ -10,13 +10,11 @@
 -->
 <resources>
   <string name="kiwi">Kivi</string>
-  <string name="menu_zim_manager">Knjižnica</string>
   <string name="menu_help">Pomoč</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
-  <string name="menu_search">Išči članek</string>
   <string name="menu_search_in_text">Najdi na strani</string>
-  <string name="menu_bookmarks">Zaznamki</string>
+  <string name="bookmarks">Zaznamki</string>
   <string name="menu_random_article">Naključni članek</string>
   <string name="menu_full_screen">Celozaslonski način</string>
   <string name="menu_exit_full_screen">Izhod iz celozaslonskega načina</string>
@@ -30,7 +28,6 @@
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
-  <string name="stop_hotspot_button">USTAVI</string>
   <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
   <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
   <string name="error_article_url_not_found">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
@@ -52,12 +49,8 @@
   <string name="pref_credits_title">Zasluge</string>
   <string name="tts_lang_not_supported">Jezik na tej strani ni podprt ali pa ustrezni jezikovni podatki niso bili nameščeni. Članek morda ne bo pravilno prebran.</string>
   <string name="no_reader_application_installed">Za to vrsto datoteke ni bilo mogoče najti nameščene aplikacije</string>
-  <string name="custom_app_missing_content">Vaša aplikacija je poškodovana.\nTo se lahko zgodi, ko odstranite datoteke na kartici SD.\nOdstraniti morate aplikacijo in jo nato znova namestiti iz trgovine Play.</string>
-  <string name="go_to_play_store">Pojdi v trgovino Play</string>
-  <string name="menu_bookmarks_list">Zaznamki</string>
   <string name="no_section_info">Ni najdene vsebine glave</string>
   <string name="request_storage">Za dostop do vsebine brez povezave potrebujemo dostop do vašega pomnilnika</string>
-  <string name="request_storage_custom">Če vidite opozorilo o prekrivanju zaslona, preprosto znova zaženite napravo, da jo popravite.</string>
   <string name="clear_recent_and_tabs_history_dialog">Ali ste prepričani, da želite izbrisati vašo zgodovino iskanja in ponastaviti vse aktivne zavihke?</string>
   <string name="delete_recent_search_item">Izbriši ta element?</string>
   <string name="pref_clear_all_history_title">Izbriši zgodovino</string>
@@ -78,7 +71,7 @@
   <string name="rate_dialog_msg_1">Če ste uživali ob uporabi</string>
   <string name="rate_dialog_msg_2">, prosimo vzemite si trenutek in ocenite. Hvala za vašo podporo!</string>
   <string name="rate_dialog_positive">Oceniti!</string>
-  <string name="rate_dialog_negative">Ne, hvala</string>
+  <string name="no_thanks">Ne, hvala</string>
   <string name="rate_dialog_neutral">Kasneje</string>
   <string name="open">Odpri</string>
   <string name="bookmark_removed">Zaznamek je odstranjen</string>
@@ -91,15 +84,8 @@
   <string name="speech_not_supported">Žal vaša naprava ne podpira vnosa govora</string>
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
-  <string name="zim_downloads">Prenos</string>
-  <string name="zim_manager">Knjižnica</string>
+  <string name="library">Knjižnica</string>
   <string name="delete_specific_zim_toast">Datoteka je izbrisana</string>
-  <string name="zim_file_downloading">Prenos</string>
-  <string name="zim_file_downloaded">Preneseno</string>
-  <string name="download_pause">Premor</string>
-  <string name="download_stop">Ustavi</string>
-  <string name="download_paused">premor</string>
-  <string name="no_downloads_here">Ni prenosov tukaj</string>
   <string name="no_files_here">Ni datotek tukaj</string>
   <string name="download_no_space">Premalo prostora za prenos te datoteke.</string>
   <string name="space_available">Prostor na voljo:</string>
@@ -119,11 +105,10 @@
   <string name="help_11">ZIM datoteke za prenos v aplikaciji se nahajajo v imeniku zunanjih pomnilnikov v mapi z imenom Kiwix</string>
   <string name="pref_storage">Shranjevanje</string>
   <string name="pref_current_folder">Trenutna mapa</string>
-  <string name="path_not_writable">Do želenega imenika ne morete dostopati privzeto. Če želite to popraviti, znova izberite želeni imenik v nastavitvah aplikacije.</string>
   <string name="delete_zim_failed">Žal te datoteke ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
   <string name="tts_pause">premor</string>
   <string name="tts_resume">nadaljuj</string>
-  <string name="tts_stop">ustavi</string>
+  <string name="stop">ustavi</string>
   <string name="internal_storage">Interni</string>
   <string name="external_storage">Zunanji</string>
   <string name="yes">Da</string>
@@ -144,8 +129,6 @@
   <string name="time_left">levo</string>
   <string name="time_today">Danes</string>
   <string name="time_yesterday">Včeraj</string>
-  <string name="pref_auto_night_mode_summary">Samodejno preklopi med dnevnim in nočnim načinom.</string>
-  <string name="pref_auto_night_mode">Samodejni nočni način</string>
   <string name="pref_external_link_popup_title">Opozori pri vnosu zunanjih povezav</string>
   <string name="pref_external_link_popup_summary">Prikaže pojavno okno, da opozori na dodatne stroške ali da ne delujejo povezave v načinu brez povezave.</string>
   <string name="external_link_popup_dialog_title">Vnesi zunanjo povezavo</string>
@@ -154,8 +137,6 @@
   <string name="your_languages">Izbrani jeziki:</string>
   <string name="other_languages">Drugi jeziki:</string>
   <string name="no_items_msg">Ni na voljo nobenih elementov</string>
-  <string name="ongoing_download_channel_name">Tekoči prenosi</string>
-  <string name="ongoing_download_channel_desc">Kategorija za tekoče prenose datotek zim.</string>
   <string name="crash_title">No… To je neprijetno</string>
   <string name="crash_description">Izgleda, da smo se zrušili.</string>
   <string name="crash_checkbox_language">Jezikovne nastavitve</string>
@@ -164,13 +145,10 @@
   <string name="crash_checkbox_logs">Dnevniki aplikacije</string>
   <string name="crash_checkbox_device">Podrobnosti o napravi</string>
   <string name="crash_button_confirm">Pošlji podatke</string>
-  <string name="crash_button_decline">Ne hvala</string>
   <string name="shortcut_disabled_message">Bližnjica ni na voljo</string>
   <string name="new_tab_shortcut_label">Nov zavihek</string>
   <string name="get_content_shortcut_label">Pridobi vsebino</string>
   <string name="fav_icon">Zaznamka</string>
-  <string name="pic">Slika</string>
-  <string name="vid">Vid</string>
   <string name="articleCount">%s člankov</string>
   <string name="get_started">Prični</string>
   <string name="download_books">Prenesi knjige</string>
@@ -193,27 +171,12 @@
   <string name="bookmarks_from_current_book" fuzzy="true">Zaznamki iz trenutne knjige</string>
   <string name="search_bookmarks">Iskanje zaznamkov</string>
   <string name="switch_tabs">Preklopi zavihke</string>
-  <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Zapri vse zavihke</string>
   <string name="pending_state">V delu</string>
   <string name="running_state">V teku</string>
-  <string name="successful_state">Končano</string>
+  <string name="complete">Končano</string>
   <string name="paused_state" fuzzy="true">Premor</string>
   <string name="failed_state">Neuspešno: %s</string>
-  <string name="paused_wifi">Čakanje na Wifi</string>
-  <string name="paused_connectivity">Čakanje na povezavo z omrežjem</string>
-  <string name="paused_retry">Čakam na ponovni poskus</string>
-  <string name="paused_unknown">Neznano</string>
-  <string name="failed_cannot_resume">Ni mogoče nadaljevati iz neznanega razloga</string>
-  <string name="failed_storage_not_found">Pomnilnik ni bil najden</string>
-  <string name="failed_file_already_exists">Datoteka že obstaja</string>
-  <string name="failed_unknown_file_error">Neznana napaka datotečnega sistema</string>
-  <string name="failed_http_error">Napaka podatkov HTTP</string>
-  <string name="failed_insufficient_space">Ni dovolj prostora za shranjevanje</string>
-  <string name="failed_too_many_redirects">Preveč preusmeritev</string>
-  <string name="failed_unhandled_http_code">Prejeta je neznana koda HTTP</string>
-  <string name="failed_unknown">Neznano</string>
-  <string name="failed_http_code">HTTP koda %s</string>
   <string name="save">Shrani</string>
   <string name="note">Beležka</string>
   <string name="wiki_article_title">Naslov članka Wiki</string>

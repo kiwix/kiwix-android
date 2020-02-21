@@ -3,9 +3,8 @@
   <string name="menu_help">Adjuta</string>
   <string name="menu_home">Initio</string>
   <string name="menu_settings">Preferentias</string>
-  <string name="menu_search">Cercar</string>
   <string name="menu_search_in_text">Cercar in texto</string>
-  <string name="menu_bookmarks">Marcapaginas</string>
+  <string name="bookmarks">Marcapaginas</string>
   <string name="menu_random_article">Articulo aleatori</string>
   <string name="menu_full_screen">Schermo complete</string>
   <string name="menu_exit_full_screen">Exir del schermo complete</string>
@@ -30,9 +29,8 @@
   <string name="pref_back_to_top_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
   <string name="pref_language_title">Lingua</string>
   <string name="pref_language_chooser">Selige un lingua</string>
-  <string name="menu_bookmarks_list">Marcapaginas</string>
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
-  <string name="zim_manager">Bibliotheca</string>
+  <string name="library">Bibliotheca</string>
   <string name="do_not_ask_anymore">Non demandar plus</string>
   <string name="your_languages">Linguas eligite:</string>
   <string-array name="description_help_2">

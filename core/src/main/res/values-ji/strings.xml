@@ -3,9 +3,8 @@
   <string name="menu_help">הילף</string>
   <string name="menu_home">היים</string>
   <string name="menu_settings">פרעפֿערענצן</string>
-  <string name="menu_search">זוכן</string>
   <string name="menu_search_in_text">זוכן אין טעקסט</string>
-  <string name="menu_bookmarks">ליין־צייכנס</string>
+  <string name="bookmarks">ליין־צייכנס</string>
   <string name="menu_random_article">צופֿעליגער ארטיקל</string>
   <string name="menu_full_screen">פֿולער עקראן</string>
   <string name="menu_exit_full_screen">אוועקגיין פון פולן עקראן</string>
@@ -27,14 +26,11 @@
   <string name="pref_language_title">שפראַך</string>
   <string name="pref_language_chooser">קלויבט א שפראך</string>
   <string name="pref_credits_title">קרעדיטן</string>
-  <string name="menu_bookmarks_list">ליין־צייכנס</string>
   <string name="delete">אויסמעקן</string>
   <string name="did_you_know">צי האט איר געוואוסט?</string>
   <string name="undo">אַנולירן</string>
-  <string name="zim_manager">ביבליאטעק</string>
+  <string name="library">ביבליאטעק</string>
   <string name="delete_specific_zim_toast">טעקע אויסגעמעקט</string>
-  <string name="zim_file_downloaded">אַראָפגעלאָדן</string>
-  <string name="download_stop">אויפֿהערן</string>
   <string name="no_files_here">קיין טעקעס דא</string>
   <string name="yes">יא</string>
   <string-array name="description_help_2">

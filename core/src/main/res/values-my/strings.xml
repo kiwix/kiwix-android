@@ -9,9 +9,8 @@
   <string name="menu_help">အ​ကူ​အ​ညီ​</string>
   <string name="menu_home">ပင်မ</string>
   <string name="menu_settings">အပြင်အဆင်များ</string>
-  <string name="menu_search">ဆောင်းပါး ရှာဖွေရန်</string>
   <string name="menu_search_in_text">စာမျက်နှာတွင် ရှာဖွေရန်</string>
-  <string name="menu_bookmarks">ဖတ်ရန်မှတ်ထားမှု</string>
+  <string name="bookmarks">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="menu_random_article">ကျပန်း ဆောင်းပါး</string>
   <string name="menu_full_screen">မျက်နှာဖွင့်အပြည့်</string>
   <string name="menu_exit_full_screen">မျက်နှာဖွင့်အပြည့်မှ ထွက်ရန်</string>
@@ -24,7 +23,6 @@
   <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
-  <string name="stop_hotspot_button">ရပ်</string>
   <string name="error_file_not_found">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
   <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
   <string name="error_article_url_not_found">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
@@ -42,8 +40,6 @@
   <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
   <string name="pref_credits">ပံပိုးပေးသူများနှင့် လိုင်စင်များ</string>
   <string name="tts_lang_not_supported">ဤစာမျက်နှာ၏ ဘာသာစကားကို မထောက်ပံ့ထားပါ၊ သို့မဟုတ် သင့်လျော်သော ဘာသာစကားဒေတာကို သွင်းမထားပါ။ ဆောင်းပါးကို မှန်ကန်စွာ ဖတ်နိုင်မည်မဟုတ်ပါ။</string>
-  <string name="go_to_play_store">Play စတိုးသို့ သွားရန်</string>
-  <string name="menu_bookmarks_list">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="delete_recent_search_item">ဤဟာကို ဖျက်မည်လား</string>
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
   <string name="all_history_cleared_toast">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>
@@ -58,19 +54,13 @@
   <string name="undo">နောက်ပြန် ပြန်ပြင်ရန်</string>
   <string name="bookmark_added">စာညှပ်မှတ် ထည့်ပေါင်းပြီး</string>
   <string name="rate_dialog_title">ကျေးဇူးပြု၍ ကျွန်ုပ်တို့အား အဆင့်သတ်မှတ်ပေးပါ</string>
-  <string name="rate_dialog_negative">မလိုပါ၊ ကျေးဇူးတင်ပါသည်။</string>
+  <string name="no_thanks">မလိုပါ၊ ကျေးဇူးတင်ပါသည်။</string>
   <string name="rate_dialog_neutral">နောက်မှ</string>
   <string name="open">ဖွင့်ပါ</string>
   <string name="local_zims">စက်ပစ္စည်း</string>
   <string name="remote_zims">အွန်လိုင်း</string>
-  <string name="zim_downloads">ဒေါင်းလုတ်ဆွဲနေသည်</string>
-  <string name="zim_manager">မှတ်ထားမှုများ</string>
+  <string name="library">မှတ်ထားမှုများ</string>
   <string name="delete_specific_zim_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
-  <string name="zim_file_downloading">ဒေါင်းလုတ်ဆွဲနေသည်</string>
-  <string name="zim_file_downloaded">ဒေါင်းလုဒ်ဆွဲပြီးပြီ</string>
-  <string name="download_pause">ခေတ္တရပ်</string>
-  <string name="download_stop">ရပ်</string>
-  <string name="download_paused">ခေတ္တရပ်ပြီး</string>
   <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
   <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
   <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>
@@ -82,7 +72,7 @@
   <string name="pref_storage">သိုလှောင်ခန်း</string>
   <string name="pref_current_folder">လက်ရှိ ဖိုလ်ဒါ</string>
   <string name="tts_pause">ခေတ္တရပ်</string>
-  <string name="tts_stop">ရပ်</string>
+  <string name="stop">ရပ်</string>
   <string name="external_storage">ပြင်ပ</string>
   <string name="yes">ဟုတ်ကဲ့</string>
   <string name="no">မလုပ်ပါ</string>
@@ -108,7 +98,6 @@
   <string name="expand">ချဲ့ရန်</string>
   <string name="history">ရာဇဝင်</string>
   <string name="bookmarks_from_current_book">စာအုပ်များအားလုံးမှ မှတ်သားထားသော စာအုပ်များကိုကြည့်ရန်</string>
-  <string name="failed_file_already_exists">ဖိုင် ရှိနှင့်ပြီးသားဖြစ်သည်</string>
   <string name="no_results">ရလဒ်များ မရှိပါ</string>
   <string name="no_bookmarks">စာညှပ်မှတ်ထားခြင်း မရှိ!</string>
   <string name="no_history">ရာဇဝင် မရှိ</string>

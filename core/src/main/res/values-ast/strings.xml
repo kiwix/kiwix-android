@@ -5,13 +5,11 @@
 -->
 <resources>
   <string name="kiwi">Kiwi</string>
-  <string name="menu_zim_manager">Biblioteca</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Entamu</string>
   <string name="menu_settings">Configuración</string>
-  <string name="menu_search">Buscar artículu</string>
   <string name="menu_search_in_text">Alcontrar na páxina</string>
-  <string name="menu_bookmarks">Marcadores</string>
+  <string name="bookmarks">Marcadores</string>
   <string name="menu_random_article">Artículu al debalu</string>
   <string name="menu_full_screen">Pantalla completa</string>
   <string name="menu_exit_full_screen">Colar de pantalla completa</string>
@@ -26,8 +24,6 @@
   <string name="choose_file">Seleiciona un ficheru de conteníu (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir l\'enllaz nuna llingüeta nueva?</string>
   <string name="go_to_wifi_settings_label">Dir a config. de WIFI</string>
-  <string name="go_to_settings_label">Dir a configuración</string>
-  <string name="stop_hotspot_button">APARAR</string>
   <string name="no_books_selected_toast_message">Primero esbilla llibros</string>
   <string name="error_file_not_found">Error: Nun pudo alcontrase\'l ficheru ZIM seleicionáu.</string>
   <string name="error_file_invalid">Error: El ficheru seleicionáu nun ye un ficheru ZIM válidu.</string>
@@ -50,12 +46,8 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">Nun s\'almite la llingua d\'esta páxina, o nun s\'instalaron los datos d\'idioma apropiaos. Seique l\'artículu nun pueda lleese correutamente.</string>
   <string name="no_reader_application_installed">Nun s\'alcontró una aplicación instalada pa esti tipu de ficheru</string>
-  <string name="custom_app_missing_content">L\'aplicación ta estropiada.\nEsto puede asoceder cuando desanicies ficheros de la tarxeta SD.\nTienes de desinstalar y volver a instalar l\'aplicación dende la Play Store.</string>
-  <string name="go_to_play_store">Dir a la Play Store</string>
-  <string name="menu_bookmarks_list">Marcadores</string>
   <string name="no_section_info">Nun s\'atoparon cabeceres de conteníu</string>
   <string name="request_storage">P\'aportar a conteníu ensin conexón precisamos tener accesu al almacenamientu</string>
-  <string name="request_storage_custom">Si ves una alvertencia na pantalla, simplemente reanicia\'l preséu pa igualo.</string>
   <string name="clear_recent_and_tabs_history_dialog">¿Tas seguru de que quies desaniciar l\'historial de gueta y reaniciar toles llingüetes actives?</string>
   <string name="delete_recent_search_item">¿Desaniciar esti elementu?</string>
   <string name="pref_clear_all_history_title">Llimpiar historial</string>
@@ -76,7 +68,7 @@
   <string name="rate_dialog_msg_1">Si esfrutes usando</string>
   <string name="rate_dialog_msg_2">, toma un momentu pa calificala. ¡Gracies pol to sofitu!</string>
   <string name="rate_dialog_positive">¡Calificar!</string>
-  <string name="rate_dialog_negative">Non, gracies</string>
+  <string name="no_thanks">Non, gracies</string>
   <string name="rate_dialog_neutral">Sero</string>
   <string name="open">Abrir</string>
   <string name="bookmark_removed">Desanicióse\'l marcador</string>
@@ -89,16 +81,9 @@
   <string name="speech_not_supported">Sentímoslo, el to preséu nun tien encontu pa entrada de voz</string>
   <string name="local_zims">Preséu</string>
   <string name="remote_zims">En llinia</string>
-  <string name="zim_downloads">Descargando</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_zim_body">¿Desaniciar %s?</string>
   <string name="delete_specific_zim_toast">Ficheru desaniciáu</string>
-  <string name="zim_file_downloading">Descargando</string>
-  <string name="zim_file_downloaded">Descargóse</string>
-  <string name="download_pause">Pausa</string>
-  <string name="download_stop">Parar</string>
-  <string name="download_paused">en pausa</string>
-  <string name="no_downloads_here">Nun hai nenguna descarga equí</string>
   <string name="no_files_here">Nun hai nengún ficheru equí</string>
   <string name="download_no_space">Nun hai espaciu abondo pa descargar esti ficheru.</string>
   <string name="space_available">Espaciu disponible:</string>
@@ -118,11 +103,10 @@
   <string name="help_11">Los ficheros ZIM descargaos na aplicación alcuéntrense nel direutoriu d\'almacenamientu esternu, nuna carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamientu</string>
   <string name="pref_current_folder">Carpeta actual</string>
-  <string name="path_not_writable">Nun pudo entrase nel direutoriu deseáu; úsase\'l predetermináu. Pa solucionar esto, vuelve escoyer el direutoriu deseáu nes preferencies de l\'aplicación.</string>
   <string name="delete_zim_failed">Nun pudimos desaniciar esti ficheru. Tendríes de tentar usando un alministrador de ficheros.</string>
   <string name="tts_pause">posar</string>
   <string name="tts_resume">siguir</string>
-  <string name="tts_stop">aparar</string>
+  <string name="stop">aparar</string>
   <string name="internal_storage">Internu</string>
   <string name="external_storage">Esternu</string>
   <string name="yes">Sí</string>
@@ -143,8 +127,6 @@
   <string name="time_left">p\'acabar</string>
   <string name="time_today">Güei</string>
   <string name="time_yesterday">Ayeri</string>
-  <string name="pref_auto_night_mode_summary">Cambiar automáticamente ente\'l mou de día ya\'l de nueche</string>
-  <string name="pref_auto_night_mode">Mou nocherniegu automáticu</string>
   <string name="pref_external_link_popup_title">Alvertir al siguir enllaces esternos</string>
   <string name="pref_external_link_popup_summary">Amuesa un cuadru emerxente p\'avisar sobre posibles gastos por consumu de datos o nun funcionamientu d\'enllaces ensin conexón.</string>
   <string name="external_link_popup_dialog_title">Entrando n\'enllaz esternu</string>
@@ -153,8 +135,6 @@
   <string name="your_languages">Llingües seleicionaes:</string>
   <string name="other_languages">Otres llingües:</string>
   <string name="no_items_msg">Nun hai nengún elementu disponible</string>
-  <string name="ongoing_download_channel_name">Descargues en cursu</string>
-  <string name="ongoing_download_channel_desc">Categoría pa les descargues en cursu de ficheros zim.</string>
   <string name="crash_title">Bien… esto ye vergonzoso</string>
   <string name="crash_description">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">La to configuración de llingua</string>
@@ -163,13 +143,10 @@
   <string name="crash_checkbox_logs">Rexistros de l\'aplicación</string>
   <string name="crash_checkbox_device">Detalles del preséu</string>
   <string name="crash_button_confirm">UNVIAR LOS DATOS</string>
-  <string name="crash_button_decline">NON, GRACIES</string>
   <string name="shortcut_disabled_message">Atayu non disponible</string>
   <string name="new_tab_shortcut_label">Llingüeta nueva</string>
   <string name="get_content_shortcut_label">Recibir conteníu</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pic">Pic</string>
-  <string name="vid">Vid</string>
   <string name="articleCount">%s artículos</string>
   <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar llibros</string>
@@ -192,23 +169,12 @@
   <string name="bookmarks_from_current_book" fuzzy="true">Marcadores del llibru actual</string>
   <string name="search_bookmarks">Buscar nos marcadores</string>
   <string name="switch_tabs">Intercambiar llingüetes</string>
-  <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Zarrar toles llingüetes</string>
   <string name="pending_state">Pendiente</string>
   <string name="running_state">En cursu</string>
-  <string name="successful_state">Completáu</string>
+  <string name="complete">Completáu</string>
   <string name="paused_state">En posa</string>
   <string name="failed_state">Falló: %s</string>
-  <string name="paused_wifi">Esperando pola Wifi</string>
-  <string name="paused_connectivity">Esperando una conexón a la rede</string>
-  <string name="failed_file_already_exists">El ficheru yá esiste</string>
-  <string name="failed_unknown_file_error">Error desconocíu del sistema de ficheros</string>
-  <string name="failed_http_error">Error de datos HTTP</string>
-  <string name="failed_insufficient_space">Nun hai espaciu bastante nel almacenamientu</string>
-  <string name="failed_too_many_redirects">Demasiaes redireiciones</string>
-  <string name="failed_unhandled_http_code">Recibióse un códigu HTTP desconocíu</string>
-  <string name="failed_unknown">Desconocíu</string>
-  <string name="failed_http_code">Códigu HTTP %s</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Títulu del artículu de la wiki</string>

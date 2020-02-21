@@ -3,9 +3,8 @@
   <string name="menu_help">Даведка</string>
   <string name="menu_home">Дадому</string>
   <string name="menu_settings">Настройкі</string>
-  <string name="menu_search">Пошук</string>
   <string name="menu_search_in_text">Знайсці ў тэксце</string>
-  <string name="menu_bookmarks">Закладкі</string>
+  <string name="bookmarks">Закладкі</string>
   <string name="menu_random_article">Выпадковы артыкул</string>
   <string name="menu_full_screen">Поўны экран</string>
   <string name="menu_exit_full_screen">Выйсці з рэжыму поўнага экрану</string>
@@ -34,9 +33,6 @@
   <string name="pref_language_chooser">Абярыце мову</string>
   <string name="tts_lang_not_supported">Мова гэтай старонкі не падтрымліваецца або адпаведныя звесткі мовы не былі ўсталяваныя. Артыкул можа быць няправільна прачытаны.</string>
   <string name="no_reader_application_installed">Не ўдалося знайсці ўсталяваную праграму для гэтага тыпу файлаў</string>
-  <string name="custom_app_missing_content">Вашая праграма пашкоджаная.\nГэта можа адбывацца, калі вы выдаляеце файлы з SD-карткі.\nВам трэба выдаліць праграму, а пасля пераўсталяваць яе з Play Store.</string>
-  <string name="go_to_play_store">Перайсці ў Play Store</string>
-  <string name="menu_bookmarks_list">Закладкі</string>
   <string name="no_section_info">Ня знойдзеныя загалоўкі кантэнту</string>
   <string name="request_storage">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
   <string name="bookmark_added">Закладка дададзеная</string>
@@ -44,11 +40,11 @@
   <string name="rate_dialog_msg_1">Калі вам падабаецца</string>
   <string name="rate_dialog_msg_2">, калі ласка, знайдзіце час, каб ацаніць. Дзякуем за Вашу падтрымку!</string>
   <string name="rate_dialog_positive">Ацаніць!</string>
-  <string name="rate_dialog_negative">Не, дзякуй</string>
+  <string name="no_thanks">Не, дзякуй</string>
   <string name="rate_dialog_neutral">Пазней</string>
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
-  <string name="zim_manager">Бібліятэка</string>
+  <string name="library">Бібліятэка</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

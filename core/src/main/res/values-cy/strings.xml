@@ -3,9 +3,8 @@
   <string name="menu_help">Cymorth</string>
   <string name="menu_home">Hafan</string>
   <string name="menu_settings">Dewisiadau</string>
-  <string name="menu_search">Chwilio</string>
   <string name="menu_search_in_text">Chwilio\'r testun</string>
-  <string name="menu_bookmarks">Llyfrnodau</string>
+  <string name="bookmarks">Llyfrnodau</string>
   <string name="menu_random_article">Erthygl ar hap</string>
   <string name="menu_full_screen">Sgrin lawn</string>
   <string name="menu_exit_full_screen">Gadael modd sgrin-llawn</string>
@@ -32,8 +31,7 @@
   <string name="pref_back_to_top_summary">Arddangos botwm ar waelod y dudalen i sgrolio hyd at y brig</string>
   <string name="pref_language_title">Iaith</string>
   <string name="pref_language_chooser">Dewis iaith</string>
-  <string name="menu_bookmarks_list">Llyfrnodau</string>
-  <string name="zim_manager">Llyfrgell</string>
+  <string name="library">Llyfrgell</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

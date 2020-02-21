@@ -8,13 +8,11 @@
 -->
 <resources>
   <string name="kiwi">کیوی</string>
-  <string name="menu_zim_manager">کتابخانه</string>
   <string name="menu_help">راهنما</string>
   <string name="menu_home">خانه</string>
   <string name="menu_settings">تنظیمات</string>
-  <string name="menu_search">جستجوی نوشتار</string>
   <string name="menu_search_in_text">جستجو در صفحه</string>
-  <string name="menu_bookmarks">نشانک‌ها</string>
+  <string name="bookmarks">نشانک‌ها</string>
   <string name="menu_random_article">مقالهٔ تصادفی</string>
   <string name="menu_full_screen">تمام‌صفحه</string>
   <string name="menu_exit_full_screen">خروج از تمام‌صفحه</string>
@@ -30,8 +28,6 @@
   <string name="choose_file">یک پروندهٔ محتوایی را انتخاب کنید (*.zim)</string>
   <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
   <string name="go_to_wifi_settings_label">برو به تنظیمات وای‌فای</string>
-  <string name="go_to_settings_label">برو به تنظیمات</string>
-  <string name="stop_hotspot_button">توقف</string>
   <string name="error_file_not_found">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد.</string>
   <string name="error_file_invalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>
   <string name="error_article_url_not_found">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
@@ -47,9 +43,6 @@
   <string name="pref_back_to_top_summary">نمایش دکمه در پایان صفحه برای انتقال به بالا</string>
   <string name="pref_language_title">زبان</string>
   <string name="pref_language_chooser">انتخاب زبان</string>
-  <string name="custom_app_missing_content">نرم‌افزار شما خراب است.\nعلت آن ممکن است حذف بعضی پرونده‌ها از روی کارت حافظه باشد.\nبهتر است نرم‌افزار را پاک کنید و دوباره نصب کنید.</string>
-  <string name="go_to_play_store">برو به فروشگاه پلی</string>
-  <string name="menu_bookmarks_list">نشانک‌ها</string>
   <string name="clear_recent_and_tabs_history_dialog">آیا مطمئن هستید که می‌خواهید تمامی تاریخچه جستجو را پاک کنید و تمام زبانه‌های فعال را ریست کنید؟</string>
   <string name="delete_recent_search_item">این مورد حذف شود؟</string>
   <string name="pref_clear_all_history_title">پاک کردن تاریخچه</string>
@@ -67,20 +60,14 @@
   <string name="bookmark_added">نشانک افزوده شد</string>
   <string name="rate_dialog_title">لطفا به ما امتیاز بدهید</string>
   <string name="rate_dialog_positive">امتیاز دهید!</string>
-  <string name="rate_dialog_negative">نه، سپاس</string>
+  <string name="no_thanks">نه، سپاس</string>
   <string name="rate_dialog_neutral">بعداً</string>
   <string name="open">گشودن</string>
   <string name="bookmark_removed">نشانک حذف شد</string>
   <string name="local_zims">دستگاه</string>
   <string name="remote_zims">برخط</string>
-  <string name="zim_downloads">در حال بارگیری</string>
-  <string name="zim_manager">کتابخانه</string>
+  <string name="library">کتابخانه</string>
   <string name="delete_specific_zim_toast">پرونده حذف شد</string>
-  <string name="zim_file_downloading">در حال بارگیری</string>
-  <string name="zim_file_downloaded">بارگیری شد</string>
-  <string name="download_pause">مکث</string>
-  <string name="download_stop">توقف</string>
-  <string name="download_paused">در حالت مکث</string>
   <string name="no_files_here">هیچ پرونده‌ای در این‌جا نیست</string>
   <string name="download_no_space">فضای ناکافی برای بارگیری پرونده</string>
   <string name="space_available">فضای موجود:</string>
@@ -95,7 +82,7 @@
   <string name="delete_zim_failed">متأسفانه امکان حذف پرونده وجود ندارد. بهتر است از یک نرم‌افزار مدیریت پرونده‌ها استفاده کنید.</string>
   <string name="tts_pause">مکث</string>
   <string name="tts_resume">ادامه</string>
-  <string name="tts_stop">توقف</string>
+  <string name="stop">توقف</string>
   <string name="internal_storage">داخلی</string>
   <string name="external_storage">خارجی</string>
   <string name="yes">آری</string>
