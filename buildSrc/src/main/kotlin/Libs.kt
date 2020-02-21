@@ -259,11 +259,6 @@ object Libs {
       Versions.constraintlayout
 
   /**
-   * https://github.com/mockito/mockito
-   */
-  const val mockito_android: String = "org.mockito:mockito-android:" + Versions.mockito_android
-
-  /**
    * http://developer.android.com/tools/extras/support-library.html
    */
   const val collection_ktx: String = "androidx.collection:collection-ktx:" + Versions.collection_ktx

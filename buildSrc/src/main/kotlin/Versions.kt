@@ -53,8 +53,6 @@ object Versions {
 
   const val constraintlayout: String = "1.1.3"
 
-  const val mockito_android: String = "2.24.5" // available: "3.2.4"
-
   const val collection_ktx: String = "1.1.0"
 
   const val jacoco_android: String = "0.1.4"
