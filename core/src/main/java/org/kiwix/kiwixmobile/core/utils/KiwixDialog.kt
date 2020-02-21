@@ -68,7 +68,7 @@ sealed class KiwixDialog(
   object ReadPermissionRequired : KiwixDialog(
     R.string.storage_permission_denied,
     R.string.grant_read_storage_permission,
-    R.string.go_to_permissions,
+    R.string.go_to_settings,
     null,
     cancelable = false
   )
@@ -89,7 +89,7 @@ sealed class KiwixDialog(
   ) : KiwixDialog(
     R.string.hotspot_dialog_title,
     R.string.hotspot_dialog_message,
-    R.string.go_to_settings_label,
+    R.string.go_to_settings,
     null
   )
 

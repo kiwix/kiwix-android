@@ -18,7 +18,7 @@
       android:id="@+id/bottom_toolbar_bookmark"
       android:layout_width="0dp"
       android:layout_height="0dp"
-      android:contentDescription="@string/menu_bookmarks"
+      android:contentDescription="@string/bookmarks"
       android:paddingTop="12dp"
       android:paddingBottom="12dp"
       app:layout_constraintBottom_toBottomOf="parent"

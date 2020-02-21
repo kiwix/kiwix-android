@@ -21,7 +21,7 @@ package eu.mhutti1.utils.storage.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import eu.mhutti1.utils.storage.StorageDevice
-import org.kiwix.kiwixmobile.core.R.layout
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
@@ -32,13 +32,13 @@ class StorageDelegate(
 ) : AdapterDelegate<StorageDevice> {
   override fun createViewHolder(parent: ViewGroup): ViewHolder =
     StorageViewHolder(
-      parent.inflate(layout.device_item, false),
+      parent.inflate(R.layout.device_item, false),
       storageCalculator,
       onClickAction
     )
 
   override fun bind(viewHolder: ViewHolder, itemToBind: StorageDevice) {
-    (viewHolder as eu.mhutti1.utils.storage.adapter.StorageViewHolder).bind(itemToBind)
+    (viewHolder as StorageViewHolder).bind(itemToBind)
   }
 
   override fun isFor(item: StorageDevice) = true

@@ -3,9 +3,8 @@
   <string name="menu_help">Agid</string>
   <string name="menu_home">Pagina da partenza</string>
   <string name="menu_settings">Preferenzas</string>
-  <string name="menu_search">Tschertgar</string>
   <string name="menu_search_in_text">Tschertgar en il text</string>
-  <string name="menu_bookmarks">Segnapaginas</string>
+  <string name="bookmarks">Segnapaginas</string>
   <string name="menu_random_article">Artitgel casual</string>
   <string name="menu_full_screen">Maletg entir</string>
   <string name="menu_exit_full_screen">Ord il maletg entir</string>
@@ -26,8 +25,7 @@
   <string name="pref_back_to_top">Enavos a l\'entschatta</string>
   <string name="pref_back_to_top_summary">Mussar in buttun a la fin da la pagina per ir enavos a l\'entschatta</string>
   <string name="pref_language_title">Lingua</string>
-  <string name="menu_bookmarks_list">Segnapaginas</string>
-  <string name="zim_manager">Biblioteca</string>
+  <string name="library">Biblioteca</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

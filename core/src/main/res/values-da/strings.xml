@@ -9,13 +9,11 @@
 * Tinamalmgren
 -->
 <resources>
-  <string name="menu_zim_manager">Hent indhold</string>
   <string name="menu_help">Hjælp</string>
   <string name="menu_home">Hjem</string>
   <string name="menu_settings">Indstillinger</string>
-  <string name="menu_search">Søg i artikel</string>
   <string name="menu_search_in_text">Søg på siden</string>
-  <string name="menu_bookmarks">Bogmærker</string>
+  <string name="bookmarks">Bogmærker</string>
   <string name="menu_random_article">Vilkårlig artikel</string>
   <string name="menu_full_screen">Fuldskærm</string>
   <string name="menu_exit_full_screen">Forlad fuldskærm</string>
@@ -28,8 +26,6 @@
   <string name="search_label">Søg</string>
   <string name="choose_file">Vælg en indholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
-  <string name="go_to_settings_label">Gå til indstillinger</string>
-  <string name="stop_hotspot_button">STOP</string>
   <string name="no_books_selected_toast_message">Vælg venligst bøger først</string>
   <string name="server_failed_toast_message">Kunne ikke starte serveren.</string>
   <string name="progress_dialog_starting_server">Starter serveren</string>
@@ -54,12 +50,8 @@
   <string name="pref_credits_title">Tak til</string>
   <string name="tts_lang_not_supported">Sproget på denne side er ikke understøttet, eller passende sprogdata blev ikke installeret. Artiklen kan måske ikke læses korrekt.</string>
   <string name="no_reader_application_installed">Kunne ikke finde et installeret program for denne filtype</string>
-  <string name="custom_app_missing_content">Dit program er ødelagt.\nDette kan ske hvis du fjerner filer på SD-kortet.\nDu skal afinstallere og så installere programmet igen fra Play Store.</string>
-  <string name="go_to_play_store">Gå til Play Store</string>
-  <string name="menu_bookmarks_list">Bogmærker</string>
   <string name="no_section_info">Ingen indholdsoverskrifter fundet</string>
   <string name="request_storage">For at tilgå indholdet lokalt skal vi bruge adgang til dit lager</string>
-  <string name="request_storage_custom">Hvis du ser en skærmadvarsel, så genstart din enhed for at klare problemet.</string>
   <string name="clear_recent_and_tabs_history_dialog">Er du sikker på, at du ønsker at slette sige søgehistorik og nulstille alle aktive faneblade?</string>
   <string name="delete_recent_search_item">Slet dette element?</string>
   <string name="pref_clear_all_history_title">Ryd historik</string>
@@ -79,7 +71,7 @@
   <string name="rate_dialog_msg_1">Hvis du kan lide at bruge</string>
   <string name="rate_dialog_msg_2">, så brug et øjeblik til at bedømme det. Tak for din støtte!</string>
   <string name="rate_dialog_positive">Bedøm!</string>
-  <string name="rate_dialog_negative">Nej, tak</string>
+  <string name="no_thanks">Nej, tak</string>
   <string name="rate_dialog_neutral">Senere</string>
   <string name="open">Åbn</string>
   <string name="bookmark_removed">Bogmærke fjernet</string>
@@ -92,15 +84,8 @@
   <string name="speech_not_supported">Beklager! Din enhed understøtter ikke tale</string>
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
-  <string name="zim_downloads">Henter</string>
-  <string name="zim_manager">Bibliotek</string>
+  <string name="library">Bibliotek</string>
   <string name="delete_specific_zim_toast">Fil slettet</string>
-  <string name="zim_file_downloading">Henter</string>
-  <string name="zim_file_downloaded">Hentet</string>
-  <string name="download_pause">Pause</string>
-  <string name="download_stop">Stop</string>
-  <string name="download_paused">På pause</string>
-  <string name="no_downloads_here">Ingen overførsler her</string>
   <string name="no_files_here">Ingen filer her</string>
   <string name="download_no_space">Utilstrækkelig med plads til at hente denne fil.</string>
   <string name="space_available">Ledig plads:</string>
@@ -120,11 +105,10 @@
   <string name="help_11">ZIM-filer hentet inden i programmet placeres i det ekstern lager i mappen Kiwix.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuværende mappe</string>
-  <string name="path_not_writable">Kan ikke tilgå ønsket mappe, bruger standarden. For at rette dette så vælg på ny den ønskede mappe under indstillinger.</string>
   <string name="delete_zim_failed">Beklager vi kunne ikke slette denne fil. Du bør prøve at bruge en filhåndtering i stedet for.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">genoptag</string>
-  <string name="tts_stop">stop</string>
+  <string name="stop">stop</string>
   <string name="internal_storage">Intern lager</string>
   <string name="external_storage">Eksternt lager</string>
   <string name="yes">Ja</string>
@@ -145,8 +129,6 @@
   <string name="time_left">tilbage</string>
   <string name="time_today">I dag</string>
   <string name="time_yesterday">I går</string>
-  <string name="pref_auto_night_mode_summary">Skift automatisk mellem dag- og nattilstand.</string>
-  <string name="pref_auto_night_mode">Automatisk nattilstand</string>
   <string name="pref_external_link_popup_title">Advar når man bruger eksterne henvisninger</string>
   <string name="pref_external_link_popup_summary">Vis pop op for at advare om yderligere omkostninger eller manglende funktion uden internet i henvisninger.</string>
   <string name="external_link_popup_dialog_title">Gå til ekstern henvisning</string>
@@ -154,7 +136,6 @@
   <string name="do_not_ask_anymore">Spørg ikke igen</string>
   <string name="your_languages">Valgte sprog:</string>
   <string name="other_languages">Andre sprog:</string>
-  <string name="crash_button_decline">NEJ TAK</string>
   <string name="new_tab_shortcut_label">Ny fane</string>
   <string name="articleCount">%s artikler</string>
   <string name="get_started">Kom igang</string>
@@ -168,12 +149,8 @@
   <string name="expand">Udvid</string>
   <string name="history">Historik</string>
   <string name="search_bookmarks">Søg i bogmærker</string>
-  <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Luk alle faner</string>
   <string name="running_state">I gang</string>
-  <string name="paused_unknown">Ukendt</string>
-  <string name="failed_file_already_exists">Filen findes allerede</string>
-  <string name="failed_unknown">Ukendt</string>
   <string name="save">Gem</string>
   <string name="books_count">%d bog/bøger</string>
   <string name="your_device">Din enhed:</string>
@@ -181,6 +158,6 @@
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Kun tekst</string>
   <string name="tag_short_text">kort tekst</string>
-  <string name="go_to_permissions">Gå til indstillinger</string>
+  <string name="go_to_settings">Gå til indstillinger</string>
   <string name="no_bookmarks">Ingen bogmærker</string>
 </resources>

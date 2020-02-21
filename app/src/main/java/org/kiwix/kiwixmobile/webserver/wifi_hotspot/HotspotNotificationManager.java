@@ -79,7 +79,7 @@ public class HotspotNotificationManager {
       .setSmallIcon(R.mipmap.ic_launcher)
       .setWhen(System.currentTimeMillis())
       .addAction(R.drawable.ic_close_white_24dp,
-        context.getString(R.string.stop_hotspot_button),
+        context.getString(R.string.stop),
         stopHotspot)
       .setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID)
       .build();

@@ -2,7 +2,7 @@
 
 echo "Running lint..."
 
-./gradlew ktlintCheck detekt app:lintDebug core:lintDebug custom:lintCustomexampleDebug --daemon
+./gradlew ktlintCheck detekt app:lintDebug custom:lintCustomexampleDebug --daemon
 
 status=$?
 

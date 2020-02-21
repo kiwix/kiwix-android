@@ -63,13 +63,13 @@ public class MainActivityTest {
   @Test
   public void navigateBookmarks() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_bookmarks));
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.bookmarks));
   }
 
   @Test
   public void navigateDeviceContent() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     clickOn(R.string.local_zims);
   }
@@ -77,7 +77,7 @@ public class MainActivityTest {
   @Test
   public void navigateOnlineContent() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     clickOn(R.string.remote_zims);
   }

@@ -12,13 +12,11 @@
 * Urbalazs
 -->
 <resources>
-  <string name="menu_zim_manager" fuzzy="true">Tartalom lekérése</string>
   <string name="menu_help">Súgó</string>
   <string name="menu_home">Kezdőlap</string>
   <string name="menu_settings">Beállítások</string>
-  <string name="menu_search">Cikk keresése</string>
   <string name="menu_search_in_text">Keresés a lapon</string>
-  <string name="menu_bookmarks">Könyvjelzők</string>
+  <string name="bookmarks">Könyvjelzők</string>
   <string name="menu_random_article">Véletlenszerű cikk</string>
   <string name="menu_full_screen">Teljes képernyő</string>
   <string name="menu_exit_full_screen">Kilépés a teljes képernyős nézetből</string>
@@ -31,7 +29,6 @@
   <string name="search_label">Keresés</string>
   <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
-  <string name="stop_hotspot_button">LEÁLLÍTÁS</string>
   <string name="error_file_not_found">Hiba: A kijelölt ZIM-fájl nem található.</string>
   <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
   <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
@@ -53,12 +50,8 @@
   <string name="pref_credits_title">Készítők</string>
   <string name="tts_lang_not_supported">Az oldal nyelve nem támogatott, vagy a megfelelő nyelvi adatok nincsenek telepítve. A szócikk nem biztos, hogy tökéletesen olvasható.</string>
   <string name="no_reader_application_installed">Nem található telepített alkalmazás ehhez a fájltípushoz</string>
-  <string name="custom_app_missing_content">Az alkalmazás sérült.\nEz megtörténhet olyankor, ha eltávolítsz fájlokat az SD-kártyán.\nEl kell távolítanod, majd újra kell telepítened az alkalmazást a Play Áruházból.</string>
-  <string name="go_to_play_store">Play Áruház megnyitása</string>
-  <string name="menu_bookmarks_list">Könyvjelzők</string>
   <string name="no_section_info">Nem található tartalomfejléc</string>
   <string name="request_storage">Az offline tartalom eléréséhez hozzáférésre van szükségünk a tárhelyedhez</string>
-  <string name="request_storage_custom">Ha látsz egy képernyőt lefedő figyelmeztetést, a helyrehozáshoz egyszerűen indítsd újra az eszközöd.</string>
   <string name="clear_recent_and_tabs_history_dialog">Biztosan törölni szeretnéd a keresési előzményeidet és visszaállítani az összes aktív lapot?</string>
   <string name="delete_recent_search_item">Törli ezt az elemet?</string>
   <string name="pref_clear_all_history_title">Előzmények törlése</string>
@@ -77,7 +70,7 @@
   <string name="rate_dialog_msg_1">Ha szereted a(z)</string>
   <string name="rate_dialog_msg_2">alkalmazást, szánj egy percet az értékelésére. Köszönjük a támogatásodat!</string>
   <string name="rate_dialog_positive">Értékelés!</string>
-  <string name="rate_dialog_negative">Nem, köszönöm</string>
+  <string name="no_thanks">Nem, köszönöm</string>
   <string name="rate_dialog_neutral">Később</string>
   <string name="open">Megnyitás</string>
   <string name="bookmark_removed">Könyvjelző eltávolítva</string>
@@ -90,15 +83,8 @@
   <string name="speech_not_supported">Sajnálom, az eszközöd nem támogatja a beszédbevitelt</string>
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
-  <string name="zim_downloads">A letöltés folyamatban</string>
-  <string name="zim_manager">Könyvtár</string>
+  <string name="library">Könyvtár</string>
   <string name="delete_specific_zim_toast">Fájl törölve</string>
-  <string name="zim_file_downloading">A letöltés folyamatban</string>
-  <string name="zim_file_downloaded">Letöltve</string>
-  <string name="download_pause">Szünet</string>
-  <string name="download_stop">Stop</string>
-  <string name="download_paused">szüneteltetve</string>
-  <string name="no_downloads_here">Nincsenek letöltések</string>
   <string name="no_files_here">Nincsenek fájlok</string>
   <string name="download_no_space">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
   <string name="space_available">Szabad tárhely:</string>
@@ -118,11 +104,10 @@
   <string name="help_11">Az alkalmazáson belül letöltött ZIM fájlok a külső tároló könyvtár Kiwix nevű mappájában vannak elhelyezve.</string>
   <string name="pref_storage">Tárhely</string>
   <string name="pref_current_folder">Aktuális folder</string>
-  <string name="path_not_writable">Nem érhető el a kívánt könyvtár, ehelyett az alapértelmezett lesz használva. Ahhoz, hogy ezt helyrehozd, válaszd ki újra a kívánt könyvtárat az alkalmazás beállításainál.</string>
   <string name="delete_zim_failed">Sajnos nem tudjuk ezt a fájlt törölni. Próbáld meg egy fájlkezelőn keresztül törölni.</string>
   <string name="tts_pause">szünet</string>
   <string name="tts_resume">folytat</string>
-  <string name="tts_stop">leállítás</string>
+  <string name="stop">leállítás</string>
   <string name="internal_storage">Belső</string>
   <string name="external_storage">Külső</string>
   <string name="yes">Igen</string>
@@ -141,8 +126,6 @@
   <string name="time_minute">perc</string>
   <string name="time_second">másodperc</string>
   <string name="time_left">maradt</string>
-  <string name="pref_auto_night_mode_summary">Automatikusan vált nappali és éjszakai mód között.</string>
-  <string name="pref_auto_night_mode">Automatikus éjszakai mód</string>
   <string name="pref_external_link_popup_title">Figyelmeztess külső hivatkozások indítása esetén</string>
   <string name="pref_external_link_popup_summary">Felugró ablakkal való figyelmeztetés többletköltségek esetén vagy ne működjön offline hivatkozásokkal.</string>
   <string name="external_link_popup_dialog_title">Külső hivatkozás megadása</string>
@@ -152,7 +135,6 @@
   <string name="other_languages">További nyelvek:</string>
   <string name="crash_checkbox_device">Az eszköz részletei</string>
   <string name="crash_button_confirm">RÉSZLETEK KÜLDÉSE</string>
-  <string name="crash_button_decline">KÖSZÖNÖM NEM</string>
   <string name="download_books">Könyvek letöltése</string>
   <string name="close_all_tabs">Az összes lap bezárása</string>
   <string name="delete_notes_confirmation_msg">Törölsz minden jegyzetet?</string>

@@ -8,7 +8,6 @@
   tools:ignore="Overdraw">
 
   <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/get_content_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,7 +26,6 @@
         android:layout_height="wrap_content">
 
         <ImageView
-          android:id="@+id/content_main_card_image"
           android:layout_width="0dp"
           android:layout_height="144dp"
           android:contentDescription="@string/kiwi"

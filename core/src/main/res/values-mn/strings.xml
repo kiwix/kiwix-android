@@ -3,9 +3,8 @@
   <string name="menu_help">Тусламж</string>
   <string name="menu_home">Нүүр</string>
   <string name="menu_settings">Тохиргоо</string>
-  <string name="menu_search">Хайлт</string>
   <string name="menu_search_in_text">Бичвэрээс хайх</string>
-  <string name="menu_bookmarks">Тэмдэглэсэн хуудсууд</string>
+  <string name="bookmarks">Тэмдэглэсэн хуудсууд</string>
   <string name="menu_random_article">Санаандгүй сонгосон нийлэл</string>
   <string name="menu_full_screen">Дэлгэц дүүргэн харах</string>
   <string name="menu_exit_full_screen">Бүтэн дэлгэцээр үзүүлэхийг болиулах</string>
@@ -27,8 +26,7 @@
   <string name="pref_back_to_top_summary">Товчийг хуудасны сүүлд байршуулж дээш оч</string>
   <string name="pref_language_title">Хэл</string>
   <string name="pref_language_chooser">Хэлээ сонгоно уу</string>
-  <string name="menu_bookmarks_list">Тэмдэглэсэн хуудсууд</string>
-  <string name="zim_manager">Сан</string>
+  <string name="library">Сан</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

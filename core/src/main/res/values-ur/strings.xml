@@ -3,9 +3,8 @@
   <string name="menu_help">معاونت</string>
   <string name="menu_home">صفحہ اول</string>
   <string name="menu_settings">ترجیحات</string>
-  <string name="menu_search">تلاش</string>
   <string name="menu_search_in_text">متن میں تلاش کریں</string>
-  <string name="menu_bookmarks">نشانزدہ</string>
+  <string name="bookmarks">نشانزدہ</string>
   <string name="menu_random_article">تصادفی مقالہ</string>
   <string name="menu_full_screen">مکمل تظاہرہ</string>
   <string name="menu_exit_full_screen">مکمل اسکرین ختم کریں</string>
@@ -15,8 +14,7 @@
   <string name="pref_info_version">ورژن</string>
   <string name="pref_language_title">زبان</string>
   <string name="pref_language_chooser">ایک زبان کا انتخاب کریں</string>
-  <string name="menu_bookmarks_list">نشانزدہ</string>
-  <string name="zim_manager">مکتبہ</string>
+  <string name="library">مکتبہ</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

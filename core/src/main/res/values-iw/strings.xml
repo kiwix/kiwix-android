@@ -10,13 +10,11 @@
 -->
 <resources>
   <string name="kiwi">קיווי</string>
-  <string name="menu_zim_manager">ספרייה</string>
   <string name="menu_help">עזרה</string>
   <string name="menu_home">בית</string>
   <string name="menu_settings">הגדרות</string>
-  <string name="menu_search">חיפוש ערך</string>
   <string name="menu_search_in_text">למצוא בדף</string>
-  <string name="menu_bookmarks">סימניות</string>
+  <string name="bookmarks">סימניות</string>
   <string name="menu_random_article">ערך אקראי</string>
   <string name="menu_full_screen">מסך מלא</string>
   <string name="menu_exit_full_screen">יציאה ממסך מלא</string>
@@ -35,9 +33,7 @@
   <string name="hotspot_failed_title">הפעלת נקודת חיבור לא עבדה</string>
   <string name="hotspot_failed_message">נראה שנקודת החיבור כבר מופעלת אצלך. נא לכבות את נקודת החיבור שלך כדי להמשיך.</string>
   <string name="go_to_wifi_settings_label">לעבור להגדרות וייפיי</string>
-  <string name="go_to_settings_label">לעבור להגדרות</string>
   <string name="hotspot_running">נקודת החיבור פועלת</string>
-  <string name="stop_hotspot_button">לעצור</string>
   <string name="no_books_selected_toast_message">נא לבחור ספרים קודם</string>
   <string name="server_failed_message">לא היה אפשר להתחיל את השרת. נא להפעיל את נקודת החיבור שלך</string>
   <string name="server_failed_toast_message">לא היה אפשר להריץ את השרת.</string>
@@ -75,12 +71,8 @@
   <string name="pref_credits_title">תודות</string>
   <string name="tts_lang_not_supported">השפה של הדף הזה אינה נתמכת, או שלא הותקנו נתוני שפה מתאימים. ייתכן שהערך לא יהיה קריא.</string>
   <string name="no_reader_application_installed">לא נמצאה אפליקציה מותקנת עבור סוג הקובץ הזה</string>
-  <string name="custom_app_missing_content">האפליקציה שלך פגומה.\nייתכן שהוסרו קבצים מכרטיס ה־SD.\nיש להסיר ולהתקין מחדש את האפליקציה מחנות Play.</string>
-  <string name="go_to_play_store">כניסה לחנות Play</string>
-  <string name="menu_bookmarks_list">סימניות</string>
   <string name="no_section_info">לא נמצאו כותרות תוכן</string>
   <string name="request_storage">על מנת לגשת לתכנים לא-מקוונים אנחנו צריכים לגשת לאחסון שלך</string>
-  <string name="request_storage_custom">אם אתה רואה אזהרה על גבי המסך, פשוט הפעל מחדש את המכשיר לתיקון הבעיה.</string>
   <string name="clear_recent_and_tabs_history_dialog">למחוק את היסטוריית החיפוש ולאפס את כל הלשוניות הפעילות?</string>
   <string name="delete_recent_search_item">למחוק את הפריט הזה?</string>
   <string name="pref_clear_all_history_title">ניקוי ההיסטוריה</string>
@@ -101,7 +93,7 @@
   <string name="rate_dialog_msg_1">אם אתם נהנים להשתמש</string>
   <string name="rate_dialog_msg_2">, אנא הקדישו רגע ודרגו את התכונה הזאת. תודה על התמיכה!</string>
   <string name="rate_dialog_positive">דירוג!</string>
-  <string name="rate_dialog_negative">לא, תודה</string>
+  <string name="no_thanks">לא, תודה</string>
   <string name="rate_dialog_neutral">פעם אחרת</string>
   <string name="open">פתיחה</string>
   <string name="bookmark_removed">הסימנייה הוסרה</string>
@@ -114,16 +106,9 @@
   <string name="speech_not_supported">המכשיר שלך אינו תומך בקלט דיבור, עמך הסליחה</string>
   <string name="local_zims">מכשיר</string>
   <string name="remote_zims">מקוון</string>
-  <string name="zim_downloads">מוריד</string>
-  <string name="zim_manager">ספרייה</string>
+  <string name="library">ספרייה</string>
   <string name="delete_zim_body">למחוק את %s?</string>
   <string name="delete_specific_zim_toast">הקובץ נמחק</string>
-  <string name="zim_file_downloading">מוריד</string>
-  <string name="zim_file_downloaded">הורד</string>
-  <string name="download_pause">השהיה</string>
-  <string name="download_stop">עצירה</string>
-  <string name="download_paused">מושהה</string>
-  <string name="no_downloads_here">אין כאן הורדות</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום כדי להוריד את הקובץ הזה.</string>
   <string name="space_available">נפח זמין:</string>
@@ -143,11 +128,10 @@
   <string name="help_11">קבצי ה-ZIM המורדים דרך האפליקציה נמצאים בספריית האחסון החיצוני בתוך תיקייה בשם Kiwix.</string>
   <string name="pref_storage">אחסון</string>
   <string name="pref_current_folder">תיקייה נוכחית</string>
-  <string name="path_not_writable">אין באפשרותך לגשת לספרייה זו כהגדרת ברירת מחדל. על מנת לתקן זאת יש לבחור מחדש את הספרייה הרצויה דרך הגדרות האפליקציה.</string>
   <string name="delete_zim_failed">לא הצלחנו למחוק את הקובץ הזה. עליך לנסות להשתמש במנהל קבצים במקום זאת, עמך הסליחה.</string>
   <string name="tts_pause">השהיה</string>
   <string name="tts_resume">המשך</string>
-  <string name="tts_stop">עצירה</string>
+  <string name="stop">עצירה</string>
   <string name="internal_storage">פנימי</string>
   <string name="external_storage">חיצוני</string>
   <string name="yes">כן</string>
@@ -168,8 +152,6 @@
   <string name="time_left">נותרו</string>
   <string name="time_today">היום</string>
   <string name="time_yesterday">אתמול</string>
-  <string name="pref_auto_night_mode_summary">לעבור אוטומטית בין מצב יום ללילה.</string>
-  <string name="pref_auto_night_mode">מצב לילה אוטומטי</string>
   <string name="pref_external_link_popup_title">תן אזהרה בעת כניסה לקישורים חיצוניים</string>
   <string name="pref_external_link_popup_summary">הצגת בועת אזהרה על תשלומים נוספים או כאשר אין אפשרות עבודה עם קישורים לא-מקוונים.</string>
   <string name="external_link_popup_dialog_title">העברה לקישור חיצוני</string>
@@ -178,8 +160,6 @@
   <string name="your_languages">שפות נבחרות:</string>
   <string name="other_languages">שפות אחרות:</string>
   <string name="no_items_msg">אין פריטים זמינים</string>
-  <string name="ongoing_download_channel_name">הורדות נוכחיות</string>
-  <string name="ongoing_download_channel_desc">קטגוריה להורדות קובצי zim נוכחיות.</string>
   <string name="crash_title">טוב… זה מביך</string>
   <string name="crash_description">נראה שקרסנו.\n\nהאם ברצונך לעזור לנו לתקן את הבעיה הזאת באמצעות שליחת המידע הבא?</string>
   <string name="crash_checkbox_language">הגדרות השפה שלך</string>
@@ -188,13 +168,10 @@
   <string name="crash_checkbox_logs">יומני היישום</string>
   <string name="crash_checkbox_device">פרטי המכשיר</string>
   <string name="crash_button_confirm">שליחת הפרטים</string>
-  <string name="crash_button_decline">לא תודה</string>
   <string name="shortcut_disabled_message">קיצור הדרך לא זמין</string>
   <string name="new_tab_shortcut_label">לשונית חדשה</string>
   <string name="get_content_shortcut_label">קבלת תוכן</string>
   <string name="fav_icon">סמל לסימנייה</string>
-  <string name="pic">תמונה</string>
-  <string name="vid">סרטון</string>
   <string name="articleCount">%s ערכים</string>
   <string name="get_started">איך מתחילים</string>
   <string name="download_books">הורדת ספרים</string>
@@ -217,27 +194,12 @@
   <string name="bookmarks_from_current_book" fuzzy="true">סימניות מהספר הנוכחי</string>
   <string name="search_bookmarks">חיפוש סימניות</string>
   <string name="switch_tabs">החלפת כרטיסיות</string>
-  <string name="smiling_face">&lt;bdi direction=“ltr”&gt;:D&lt;/bdi&gt;</string>
   <string name="close_all_tabs">סגירת כל הכרטיסיות</string>
   <string name="pending_state">ממתין</string>
   <string name="running_state">בעבודה</string>
-  <string name="successful_state">הושלם</string>
+  <string name="complete">הושלם</string>
   <string name="paused_state">מושהה</string>
   <string name="failed_state">נכשל: %s</string>
-  <string name="paused_wifi">ממתין לווייפיי</string>
-  <string name="paused_connectivity">ממתין להתחבר לרשת</string>
-  <string name="paused_retry">ממתין לניסיון חוזר</string>
-  <string name="paused_unknown">אינו ידוע</string>
-  <string name="failed_cannot_resume">לא ניתן להמשיך בשל סיבה לא ידועה</string>
-  <string name="failed_storage_not_found">לא ניתן למצוא אחסון</string>
-  <string name="failed_file_already_exists">הקובץ כבר קיים</string>
-  <string name="failed_unknown_file_error">שגיאת מערכת קבצים לא ידועה</string>
-  <string name="failed_http_error">שגיאת נתוני HTTP</string>
-  <string name="failed_insufficient_space">אין מספיק נפח לאכסון</string>
-  <string name="failed_too_many_redirects">יותר מדי הפניות</string>
-  <string name="failed_unhandled_http_code">התקבל קוד HTTP לא ידוע</string>
-  <string name="failed_unknown">לא ידוע</string>
-  <string name="failed_http_code">קוד HTTP מס\' %s</string>
   <string name="save">שמירה</string>
   <string name="note">הערה</string>
   <string name="wiki_article_title">כותרת ערך בוויקי</string>
@@ -278,7 +240,6 @@
   <string name="files_for_transfer">קבצים להעברה</string>
   <string name="preparing_files">הכנת קבצים להעברה…</string>
   <string name="performing_handshake">ביצוע לחיצת־יד…</string>
-  <string name="local_zim_sharing">שיתוף ZIM מקומי</string>
   <string name="status">מצב</string>
   <string name="pref_clear_all_notes_summary">ניקוי כל ההערות בכל הערכים</string>
   <string name="pref_clear_all_notes_title">ניקוי כל ההערות</string>
@@ -288,7 +249,7 @@
   <string name="tag_short_text">טקסט קצר</string>
   <string name="storage_permission_denied">אישור האחסון נדחה</string>
   <string name="grant_read_storage_permission">אפליקציה זו דורשת את אפשרות לקרוא את האחסון שלך כדי לתפקד. אנא הענק את ההרשאה בהגדרות שלך</string>
-  <string name="go_to_permissions">לך להגדרות</string>
+  <string name="go_to_settings">לך להגדרות</string>
   <string name="no_results">אין תוצאות</string>
   <string name="no_bookmarks">אין סימניות</string>
 </resources>

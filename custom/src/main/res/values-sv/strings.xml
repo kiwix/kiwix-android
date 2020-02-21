@@ -5,5 +5,4 @@
 <resources>
   <string name="retry">Försök igen</string>
   <string name="download">Ladda ned</string>
-  <string name="complete">Färdig</string>
 </resources>

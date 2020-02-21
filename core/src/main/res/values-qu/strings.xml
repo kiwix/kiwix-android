@@ -3,9 +3,8 @@
   <string name="menu_help">Yanapa</string>
   <string name="menu_home">Qallarina</string>
   <string name="menu_settings">Allinkachinakuna</string>
-  <string name="menu_search">Maskay</string>
   <string name="menu_search_in_text">Qillqapi maskay</string>
-  <string name="menu_bookmarks">Yuyana unanchakuna</string>
+  <string name="bookmarks">Yuyana unanchakuna</string>
   <string name="menu_random_article">Mayninpi p\'anqa</string>
   <string name="menu_full_screen">Hunt\'a qhawana pampa</string>
   <string name="menu_exit_full_screen">Hunt\'a qhawana pampamanta lluqsiy</string>
@@ -15,8 +14,7 @@
   <string name="pref_info_version">Musuqchasqa</string>
   <string name="pref_night_mode">Tuta laya</string>
   <string name="pref_language_title">Rimay</string>
-  <string name="menu_bookmarks_list">Yuyana unanchakuna</string>
-  <string name="zim_manager">Qillqakunantin</string>
+  <string name="library">Qillqakunantin</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
