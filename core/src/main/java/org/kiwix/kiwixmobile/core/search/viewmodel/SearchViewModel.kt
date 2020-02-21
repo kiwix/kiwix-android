@@ -42,8 +42,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.Empty
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.Initialising
+import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
@@ -64,7 +63,7 @@ class SearchViewModel @Inject constructor(
   private val searchResultGenerator: SearchResultGenerator
 ) : ViewModel() {
 
-  val state = MutableLiveData<State>().apply { value = Initialising }
+  val state = MutableLiveData<State>().apply { value = NoResults("") }
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
@@ -108,10 +107,7 @@ class SearchViewModel @Inject constructor(
   }
 
   private fun searchPreviousScreenWhenStateIsValid(): Any =
-    when (val currentState = state.value) {
-      is Results -> effects.offer(SearchInPreviousScreen(currentState.searchString))
-      else -> Unit
-    }
+    effects.offer(SearchInPreviousScreen(state.value!!.searchString))
 
   private fun showDeleteDialog(longClick: OnItemLongClick) {
     effects.offer(ShowDeleteSearchDialog(longClick.searchListItem, actions))
@@ -144,7 +140,7 @@ class SearchViewModel @Inject constructor(
       Results(searchString, zimSearchResults)
     searchString.isEmpty() && recentSearchResults.isNotEmpty() ->
       Results(searchString, recentSearchResults)
-    else -> Empty
+    else -> NoResults(searchString)
   }
 
   private fun searchResultsFromZimReader() = filter

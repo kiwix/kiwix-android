@@ -1,6 +1,9 @@
 {
   "app_name": "Test Custom App",
   "zim_url": "http://download.kiwix.org/zim/wikipedia_fr_test.zim",
-  "enforced_lang": "en"
+  "enforced_lang": "en",
+  "disable_sidebar": false,
+  "disable_tabs": false,
+  "disable_read_aloud": false
 }
 

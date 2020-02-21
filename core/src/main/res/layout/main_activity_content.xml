@@ -27,7 +27,7 @@
         app:backgroundColor="?colorOnSurface"
         app:bidirectionalAnimate="false"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:progressColor="@color/accent" />
+        app:progressColor="@color/blue400" />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </com.google.android.material.appbar.AppBarLayout>
 

@@ -52,8 +52,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.State
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.Empty
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.Initialising
+import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
@@ -136,13 +135,17 @@ class SearchActivity : BaseActivity() {
     is Results -> {
       searchViewAnimator.setDistinctDisplayedChild(0)
       searchAdapter.items = state.values
-      searchView.setQuery(state.searchString, false)
-      searchInTextMenuItem.isVisible = state.searchString.isNotBlank()
+      render(state.searchString)
     }
-    Empty -> searchViewAnimator.setDistinctDisplayedChild(1)
-    Initialising -> {
-      // do nothing
+    is NoResults -> {
+      searchViewAnimator.setDistinctDisplayedChild(1)
+      render(state.searchString)
     }
+  }
+
+  private fun render(searchString: String) {
+    searchView.setQuery(searchString, false)
+    searchInTextMenuItem.isEnabled = searchString.isNotBlank()
   }
 
   private fun onItemClick(it: SearchListItem) {

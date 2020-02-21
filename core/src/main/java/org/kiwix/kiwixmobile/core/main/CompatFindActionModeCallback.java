@@ -132,12 +132,12 @@ public class CompatFindActionModeCallback
       throw new AssertionError("No WebView for CompatFindActionModeCallback::findAll");
     }
     CharSequence find = editText.getText();
-    if (find.length() == 0) {
+    if (find == null || find.length() == 0) {
       webView.clearMatches();
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        webView.findAllAsync(null);
+        webView.findAllAsync("");
       } else {
-        webView.findAll(null);
+        webView.findAll("");
       }
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

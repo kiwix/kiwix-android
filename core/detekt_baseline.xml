@@ -4,6 +4,7 @@
   <Whitelist>
     <ID>EmptyFunctionBlock:BooksOnDiskViewHolder.kt$BookOnDiskViewHolder.BookViewHolder${ }</ID>
     <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided&gt;${}</ID>
+    <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
     <ID>MagicNumber:CoreSplashActivity.kt$CoreSplashActivity$10</ID>
