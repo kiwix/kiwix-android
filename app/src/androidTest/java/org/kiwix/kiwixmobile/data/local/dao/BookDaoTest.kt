@@ -20,9 +20,8 @@ package org.kiwix.kiwixmobile.data.local.dao
 import android.content.Context
 import androidx.test.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.mockk.MockKAnnotations
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.verify
 import org.junit.After
 import org.junit.Before
@@ -39,26 +38,20 @@ import java.util.ArrayList
 
 @RunWith(AndroidJUnit4::class)
 class BookDaoTest {
-  private lateinit var context: Context
-  @MockK
-  private lateinit var kiwixDatabase: KiwixDatabase
-  private lateinit var bookDao: BookDao
-  private lateinit var testDir: File
+  private var testDir: File? = null
 
   @Before
   fun executeBefore() {
-    MockKAnnotations.init(this)
-    context = InstrumentationRegistry.getTargetContext()
-    bookDao = BookDao(kiwixDatabase)
-    // Create a temporary directory where all the test files will be saved
-    testDir = context.getDir("testDir", Context.MODE_PRIVATE)
+    testDir = InstrumentationRegistry.getTargetContext().getDir("testDir", Context.MODE_PRIVATE)
   }
 
   // TODO : test books are saved after downloading the list of available zim files
   @Test @Throws(IOException::class)
   fun testGetBooks() { // Save the fake data to test
+    val kiwixDatabase = mockk<KiwixDatabase>()
+    val bookDao = BookDao(kiwixDatabase)
     val testId = "6qq5301d-2cr0-ebg5-474h-6db70j52864p"
-    val fileName = testDir.path + "/" + testId + "testFile"
+    val fileName = testDir?.path + "/" + testId + "testFile"
     val booksToAdd = getFakeData(fileName)
     every { kiwixDatabase.deleteWhere(any(), any()) } returns 0
     val booksRetrieved =
@@ -226,9 +219,9 @@ class BookDaoTest {
   }
 
   @After fun removeTestDirectory() {
-    for (child in testDir.listFiles()) {
+    for (child in testDir?.listFiles() ?: emptyArray()) {
       child.delete()
     }
-    testDir.delete()
+    testDir?.delete()
   }
 }
