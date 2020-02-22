@@ -87,6 +87,7 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
@@ -109,7 +110,9 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
+import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.DimenUtils;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
@@ -213,6 +216,8 @@ public abstract class CoreMainActivity extends BaseActivity
   protected NewBookmarksDao newBookmarksDao;
   @Inject
   protected NewBookDao newBookDao;
+  @Inject
+  private AlertDialogShower alertDialogShower;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -1688,25 +1693,21 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   protected void showOpenInNewTabDialog(String url) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-    builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
-      if (isOpenNewTabInBackground) {
-        newTabInBackground(url);
-        Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
-          .setAction(getString(R.string.open), v -> {
-            if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
-          })
-          .setActionTextColor(getResources().getColor(R.color.white))
-          .show();
-      } else {
-        newTab(url);
-      }
-    });
-    builder.setNegativeButton(android.R.string.no, null);
-    builder.setMessage(getString(R.string.open_in_new_tab));
-    AlertDialog dialog = builder.create();
-    dialog.show();
+    alertDialogShower.show(KiwixDialog.YesNoDialog.OpenInNewTab.INSTANCE,
+      (Function0<Unit>) () -> {
+        if (isOpenNewTabInBackground) {
+          newTabInBackground(url);
+          Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
+            .setAction(getString(R.string.open), v -> {
+              if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
+            })
+            .setActionTextColor(getResources().getColor(R.color.white))
+            .show();
+        } else {
+          newTab(url);
+        }
+        return Unit.INSTANCE;
+      });
   }
 
   @Override

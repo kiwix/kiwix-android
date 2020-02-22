@@ -28,6 +28,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
     AlertDialog.Builder(activity)
       .apply {
         dialog.title?.let(this::setTitle)
+        dialog.icon?.let { setIcon(dialog.icon) }
         setMessage(activity.getString(dialog.message, *bodyArguments(dialog)))
         setPositiveButton(dialog.positiveMessage) { _, _ ->
           clickListeners.getOrNull(0)
