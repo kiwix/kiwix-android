@@ -27,7 +27,8 @@ sealed class KiwixDialog(
   val message: Int,
   val positiveMessage: Int,
   val negativeMessage: Int?,
-  val cancelable: Boolean = true
+  val cancelable: Boolean = true,
+  val icon: Int? = null
 ) {
 
   data class DeleteZim(override val args: List<Any>) : KiwixDialog(
@@ -113,6 +114,10 @@ sealed class KiwixDialog(
 
     object WifiOnly : YesNoDialog(
       R.string.wifi_only_title, R.string.wifi_only_msg
+    )
+
+    object OpenInNewTab : YesNoDialog(
+      R.string.open_in_new_tab, R.string.open_in_new_tab
     )
   }
 }
