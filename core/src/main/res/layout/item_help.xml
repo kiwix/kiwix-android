@@ -10,7 +10,7 @@
     android:id="@+id/item_help_title"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textAppearance="@style/TextAppearance.KiwixTheme.Headline6"
     app:layout_constraintEnd_toStartOf="@id/item_help_toggle_expand"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
