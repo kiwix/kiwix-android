@@ -21,11 +21,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yahoo.squidb.data.AbstractModel
 import com.yahoo.squidb.data.SquidCursor
 import com.yahoo.squidb.sql.Query
-import io.mockk.MockKAnnotations
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase
@@ -33,20 +31,13 @@ import org.kiwix.kiwixmobile.core.data.local.dao.RecentSearchDao
 
 @RunWith(AndroidJUnit4::class)
 class RecentSearchDaoTest {
-  @MockK
-  private lateinit var kiwixDatabase: KiwixDatabase
-  private lateinit var recentSearchDao: RecentSearchDao
-  @MockK(relaxed = true)
-  private lateinit var mockedCursor: SquidCursor<AbstractModel>
-
-  @Before fun executeBefore() {
-    MockKAnnotations.init(this)
-    every { kiwixDatabase.query(any<Class<AbstractModel>>(), any()) } returns mockedCursor
-    recentSearchDao = RecentSearchDao(kiwixDatabase)
-  }
 
   @Test fun testGetRecentSearches() {
-    recentSearchDao.recentSearches
+    val kiwixDatabase = mockk<KiwixDatabase>()
+    every {
+      kiwixDatabase.query(any<Class<AbstractModel>>(), any())
+    } returns mockk<SquidCursor<AbstractModel>>(relaxed = true)
+    RecentSearchDao(kiwixDatabase).recentSearches
     verify { kiwixDatabase.query(any<Class<AbstractModel>>(), Query.select()) }
   }
 }
