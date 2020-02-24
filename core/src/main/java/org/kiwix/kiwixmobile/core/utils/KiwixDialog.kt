@@ -43,6 +43,13 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object DeleteHistoryDialog : KiwixDialog(
+    null,
+    R.string.delete_history,
+    android.R.string.yes,
+    android.R.string.cancel
+  )
+
   object StoragePermissionRationale : KiwixDialog(
     null,
     R.string.request_storage,
