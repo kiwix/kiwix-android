@@ -91,7 +91,7 @@ object Versions {
 
   const val core_ktx: String = "1.2.0"
 
-  const val kiwixlib: String = "8.2.1" // available: "8.2.2"
+  const val kiwixlib: String = "9.0.1"
 
   const val material: String = "1.1.0-beta02" // available: "1.1.0"
 
