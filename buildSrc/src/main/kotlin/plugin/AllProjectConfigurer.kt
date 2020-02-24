@@ -98,7 +98,6 @@ class AllProjectConfigurer {
         ignore(
           "SyntheticAccessor",
           //TODO stop ignoring below this
-          "MissingTranslation",
           "CheckResult",
           "LabelFor",
           "LogConditional"
@@ -107,6 +106,7 @@ class AllProjectConfigurer {
         warning(
           "UnknownNullness",
           "SelectableText",
+          "MissingTranslation",
           "IconDensities",
           "ContentDescription",
           "IconDipSize"
