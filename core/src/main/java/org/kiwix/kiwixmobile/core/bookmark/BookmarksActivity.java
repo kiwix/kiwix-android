@@ -28,6 +28,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -195,11 +196,21 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       onBackPressed();
       return true;
     } else if (itemId == R.id.menu_bookmarks_clear) {
-      presenter.deleteBookmarks(new ArrayList<>(allBookmarks));
-      allBookmarks.clear();
-      bookmarksList.clear();
-      bookmarksAdapter.notifyDataSetChanged();
-      Toast.makeText(this, R.string.all_bookmarks_cleared_toast, Toast.LENGTH_SHORT).show();
+      new AlertDialog.Builder(this)
+              .setTitle(getResources().getString(R.string.clear_all_bookmark_dialog_title))
+              .setMessage(getResources().getString(R.string.clear_bookmarks_dailog))
+              .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                presenter.deleteBookmarks(new ArrayList<>(allBookmarks));
+                allBookmarks.clear();
+                bookmarksList.clear();
+                bookmarksAdapter.notifyDataSetChanged();
+                Toast.makeText(this, R.string.all_bookmarks_cleared_toast, Toast.LENGTH_SHORT).show();
+              })
+              .setNegativeButton(android.R.string.no, (dialog, which) -> {
+                // do nothing
+              })
+              .setIcon(R.drawable.ic_warning)
+              .show();
       return true;
     }
     return super.onOptionsItemSelected(item);
