@@ -140,5 +140,4 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
     handler.removeCallbacksAndMessages(null);
     timer.cancel();
   }
-
 }

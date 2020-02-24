@@ -15,25 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.language.viewmodel
+package org.kiwix.kiwixmobile.core.di.modules
 
-import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.zim_manager.Language
+import dagger.Module
+import dagger.Provides
+import io.mockk.mockk
+import org.kiwix.kiwixlib.JNIKiwix
+import javax.inject.Singleton
 
-data class SaveLanguagesAndFinish(
-  val languages: List<Language>,
-  val languageDao: NewLanguagesDao
-) : SideEffect<Unit> {
-
-  override fun invokeWith(activity: AppCompatActivity) {
-    Flowable.fromCallable { languageDao.insert(languages) }
-      .subscribeOn(Schedulers.io())
-      .subscribe({
-        activity.finish()
-      }, Throwable::printStackTrace)
-  }
+/**
+ * Created by mhutti1 on 13/04/17.
+ */
+@Module
+class TestJNIModule {
+  @Provides @Singleton fun providesJNIKiwix(): JNIKiwix = mockk()
 }

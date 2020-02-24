@@ -23,9 +23,9 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.custom.CustomViewModelFactory
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadViewModel
-import org.kiwix.kiwixmobile.core.di.ViewModelKey
 
 @Module
 abstract class CustomViewModelModule {

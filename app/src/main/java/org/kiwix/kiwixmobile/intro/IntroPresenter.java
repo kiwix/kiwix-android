@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.intro;
 
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.base.BasePresenter;
-import org.kiwix.kiwixmobile.core.di.ActivityScope;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 public class IntroPresenter extends BasePresenter<IntroContract.View>

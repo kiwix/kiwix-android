@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent;
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor;
 
-public abstract class CoreApp extends MultiDexApplication  {
+public abstract class CoreApp extends MultiDexApplication {
 
   private static CoreApp app;
   private static CoreComponent coreComponent;
@@ -152,5 +152,4 @@ public abstract class CoreApp extends MultiDexApplication  {
     String state = Environment.getExternalStorageState();
     return Environment.MEDIA_MOUNTED.equals(state);
   }
-
 }
