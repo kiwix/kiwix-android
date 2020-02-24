@@ -39,9 +39,9 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import org.kiwix.sharedFunctions.InstantExecutorExtension
+import org.kiwix.sharedFunctions.language
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
-import org.kiwix.sharedFunctions.language
 
 fun languageItem(language: Language = language()) =
   LanguageListItem.LanguageItem(language)

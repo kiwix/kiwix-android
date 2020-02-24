@@ -105,9 +105,9 @@ class ZimFileSelectFragment : BaseFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    zimManageViewModel.fileSelectListStates.observe(this, Observer(::render))
+    zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
     disposable.add(sideEffects())
-    zimManageViewModel.deviceListIsRefreshing.observe(this, Observer {
+    zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner, Observer {
       zim_swiperefresh.isRefreshing = it!!
     })
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {

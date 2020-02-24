@@ -74,7 +74,8 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
            InputStream fileInputStream = contentResolver.openInputStream(fileItem.getFileUri())) {
 
         socket.bind(null);
-        socket.connect((new InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT)), 15000);
+        socket.connect((new InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT)),
+          15000);
 
         Log.d(TAG, "Sender socket connected to server - " + socket.isConnected());
 
