@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Saraiki
+-->
+<resources>
+  <string name="retry">ولدا کوشش کرو</string>
+  <string name="download">ڈاؤن لوڈ</string>
+</resources>

@@ -28,7 +28,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import org.kiwix.kiwixmobile.core.Intents
+import org.kiwix.kiwixmobile.core.CoreApp
 
 object ActivityExtensions {
 
@@ -38,28 +38,19 @@ object ActivityExtensions {
     onDestroyAction: () -> Unit
   ): ActionMode? {
     return startSupportActionMode(object : ActionMode.Callback {
-      override fun onActionItemClicked(
-        mode: ActionMode,
-        item: MenuItem
-      ) = idsToClickActions[item.itemId]?.let {
-        it()
-        mode.finish()
-        true
-      } ?: false
+      override fun onActionItemClicked(mode: ActionMode, item: MenuItem) =
+        idsToClickActions[item.itemId]?.let {
+          it()
+          mode.finish()
+          true
+        } ?: false
 
-      override fun onCreateActionMode(
-        mode: ActionMode,
-        menu: Menu?
-      ): Boolean {
-        mode.menuInflater
-          .inflate(menuId, menu)
+      override fun onCreateActionMode(mode: ActionMode, menu: Menu?): Boolean {
+        mode.menuInflater.inflate(menuId, menu)
         return true
       }
 
-      override fun onPrepareActionMode(
-        mode: ActionMode?,
-        menu: Menu?
-      ) = false
+      override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?) = false
 
       override fun onDestroyActionMode(mode: ActionMode?) {
         onDestroyAction()
@@ -78,13 +69,12 @@ object ActivityExtensions {
   ) =
     Intent(this, T::class.java).apply { intentFunc?.invoke(this) }
 
-  inline fun <reified T : Activity> Activity.startWithActionFrom() {
-    startActivity(Intents.internal(T::class.java))
-  }
-
   inline fun <reified T : ViewModel> FragmentActivity.viewModel(
     viewModelFactory: ViewModelProvider.Factory
   ) =
     ViewModelProviders.of(this, viewModelFactory)
       .get(T::class.java)
+
+  val Activity.coreActivityComponent
+    get() = CoreApp.getCoreComponent().activityComponentBuilder().activity(this).build()
 }

@@ -34,7 +34,6 @@ import kotlinx.android.synthetic.main.activity_library.libraryErrorText
 import kotlinx.android.synthetic.main.activity_library.libraryList
 import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.downloader.Downloader
@@ -45,10 +44,10 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TestingUtils
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
@@ -57,6 +56,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.BookDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.DividerDelegate
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.DownloadDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import java.io.File
@@ -78,7 +78,11 @@ class LibraryFragment : BaseFragment() {
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-      BookDelegate(bookUtils, ::onBookItemClick), DividerDelegate
+      BookDelegate(bookUtils, ::onBookItemClick),
+      DownloadDelegate {
+        dialogShower.show(StopDownload, { downloader.cancelDownload(it.downloadId) })
+      },
+      DividerDelegate
     )
   }
 
@@ -98,10 +102,7 @@ class LibraryFragment : BaseFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    TestingUtils.bindResource(LibraryFragment::class.java)
-    return inflater.inflate(R.layout.activity_library, container, false)
-  }
+  ): View = inflater.inflate(R.layout.activity_library, container, false)
 
   override fun onViewCreated(
     view: View,
@@ -114,11 +115,11 @@ class LibraryFragment : BaseFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    zimManageViewModel.libraryItems.observe(this, Observer(::onLibraryItemsChange))
+    zimManageViewModel.libraryItems.observe(viewLifecycleOwner, Observer(::onLibraryItemsChange))
     zimManageViewModel.libraryListIsRefreshing.observe(
-      this, Observer(::onRefreshStateChange)
+      viewLifecycleOwner, Observer(::onRefreshStateChange)
     )
-    zimManageViewModel.networkStates.observe(this, Observer(::onNetworkStateChange))
+    zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
@@ -131,9 +132,9 @@ class LibraryFragment : BaseFragment() {
       }
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
-          context.toast(string.no_network_connection)
+          context.toast(R.string.no_network_connection)
         } else {
-          libraryErrorText.setText(string.no_network_connection)
+          libraryErrorText.setText(R.string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
         }
       }
@@ -144,11 +145,10 @@ class LibraryFragment : BaseFragment() {
     libraryAdapter.items = it!!
     if (it.isEmpty()) {
       libraryErrorText.setText(
-        if (isNotConnected) string.no_network_connection
-        else string.no_items_msg
+        if (isNotConnected) R.string.no_network_connection
+        else R.string.no_items_msg
       )
       libraryErrorText.visibility = VISIBLE
-      TestingUtils.unbindResource(LibraryFragment::class.java)
     } else {
       libraryErrorText.visibility = GONE
     }
@@ -156,7 +156,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun refreshFragment() {
     if (isNotConnected) {
-      context.toast(string.no_network_connection)
+      context.toast(R.string.no_network_connection)
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
@@ -170,8 +170,8 @@ class LibraryFragment : BaseFragment() {
     sharedPreferenceUtil.putPrefStorage(storageDevice.name)
     sharedPreferenceUtil.putPrefStorageTitle(
       getString(
-        if (storageDevice.isInternal) string.internal_storage
-        else string.external_storage
+        if (storageDevice.isInternal) R.string.internal_storage
+        else R.string.external_storage
       )
     )
   }
@@ -180,19 +180,19 @@ class LibraryFragment : BaseFragment() {
     when {
       notEnoughSpaceAvailable(item) -> {
         context.toast(
-          getString(string.download_no_space) +
-            "\n" + getString(string.space_available) + " " +
+          getString(R.string.download_no_space) +
+            "\n" + getString(R.string.space_available) + " " +
             storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage))
         )
         libraryList.snack(
-          string.download_change_storage,
-          string.open,
+          R.string.download_change_storage,
+          R.string.open,
           ::showStorageSelectDialog
         )
         return
       }
       isNotConnected -> {
-        context.toast(string.no_network_connection)
+        context.toast(R.string.no_network_connection)
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {
@@ -211,7 +211,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun showStorageSelectDialog() = StorageSelectDialog()
     .apply {
-      setOnSelectListener(::storeDeviceInPreferences)
+      onSelectAction = ::storeDeviceInPreferences
     }
-    .show(fragmentManager!!, getString(string.pref_storage))
+    .show(fragmentManager!!, getString(R.string.pref_storage))
 }

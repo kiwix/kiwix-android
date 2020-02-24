@@ -1,12 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Gromper
+* Les Meloures
+* Robby
+-->
 <resources>
-  <string name="menu_zim_manager">Inhalt ofruffen</string>
+  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Hëllef</string>
   <string name="menu_home">Haaptsäit</string>
   <string name="menu_settings">Astellungen</string>
-  <string name="menu_search">Artikel sichen</string>
   <string name="menu_search_in_text">Op der Säit sichen</string>
-  <string name="menu_bookmarks">Lieszeechen</string>
+  <string name="bookmarks">Lieszeechen</string>
   <string name="menu_random_article">Zoufällegen Artikel</string>
   <string name="menu_full_screen">Ganzen Ecran</string>
   <string name="menu_exit_full_screen">Aus dem ganzen Ecran erausgoen</string>
@@ -15,7 +19,7 @@
   <string name="save_media">Medium späicheren</string>
   <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d\'Medium ze späicheren!</string>
   <string name="save_media_saved">Medium als %1$s op Android/media/org.kiwix…/ gespäichert</string>
-  <string name="rescan_fs_warning">Sichen no Inhalt deen erofgeluede gi kann, waart w.e.g. …</string>
+  <string name="rescan_fs_warning">Sichen no Inhalt deen erofgeluede ka ginn, waart w.e.g. …</string>
   <string name="search_label">Sichen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
@@ -23,6 +27,7 @@
   <string name="error_file_invalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>
   <string name="error_article_url_not_found">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
   <string name="pref_display_title">Weisen</string>
+  <string name="pref_zoom_sub_title">Zoom</string>
   <string name="pref_zoom_dialog">Niveau vum Zoom</string>
   <string name="pref_info_title">Informatioun</string>
   <string name="pref_info_version">Versioun</string>
@@ -34,16 +39,15 @@
   <string name="pref_language_title">Sprooch</string>
   <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
   <string name="pref_credits">Auteuren a Lizenzen</string>
-  <string name="go_to_play_store">An de Play Store goen</string>
-  <string name="menu_bookmarks_list">Lieszeechen</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
+  <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
   <string name="delete">Läschen</string>
   <string name="got_it">Verstan</string>
   <string name="did_you_know">Wousst Dir?</string>
   <string name="undo">Réckgängeg maachen</string>
   <string name="bookmark_added">Lieszeechen derbäigesat</string>
   <string name="rate_dialog_positive">Bewäerten!</string>
-  <string name="rate_dialog_negative">Nee, merci</string>
+  <string name="no_thanks">Nee, merci</string>
   <string name="rate_dialog_neutral">Méi spéit</string>
   <string name="open">Opmaachen</string>
   <string name="bookmark_removed">Lieszeechen ewechgeholl</string>
@@ -51,13 +55,10 @@
   <string name="new_tab_snack_bar">Artikel an engem neien Tab opgemaacht</string>
   <string name="search_widget_text">Op Kiwix sichen</string>
   <string name="local_zims">Apparat</string>
-  <string name="zim_downloads">Eroflueden</string>
-  <string name="zim_manager">Bibliothéik</string>
+  <string name="remote_zims">Online</string>
+  <string name="library">Bibliothéik</string>
+  <string name="delete_zim_body">%s läschen?</string>
   <string name="delete_specific_zim_toast">Fichier geläscht</string>
-  <string name="zim_file_downloading">Eroflueden</string>
-  <string name="zim_file_downloaded">Erofgelueden</string>
-  <string name="download_pause">Paus</string>
-  <string name="download_stop">Stopp</string>
   <string name="no_files_here">Keng Fichieren hei?</string>
   <string name="download_no_space">Net genuch Plaz fir dëse Fichier erofzelueden.</string>
   <string name="space_available">Plaz disponibel:</string>
@@ -70,7 +71,7 @@
   <string name="help_6">Eisen Inhalt ass um Kiwix Internetsite gehost.</string>
   <string name="pref_current_folder">Aktuelle Repertoire</string>
   <string name="tts_resume">virufueren</string>
-  <string name="tts_stop">stopp</string>
+  <string name="stop">stopp</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Jo</string>
@@ -80,23 +81,34 @@
   <string name="previous">Vireg</string>
   <string name="pref_wifi_only">Inhalt just iwwer WIFI eroflueden</string>
   <string name="time_day">Dag</string>
+  <string name="time_hour">h</string>
   <string name="time_minute">Minutten</string>
   <string name="time_left">lenks</string>
+  <string name="time_today">Haut</string>
+  <string name="time_yesterday">Gëschter</string>
   <string name="pref_external_link_popup_title">Warne wann en externe Link agi gëtt</string>
   <string name="external_link_popup_dialog_title">Externe Link aginn</string>
   <string name="do_not_ask_anymore">Net méi froen</string>
   <string name="your_languages">Erausgesicht Sproochen:</string>
   <string name="other_languages">Aner Sproochen:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="crash_checkbox_device">Detailer vum Apparat</string>
+  <string name="articleCount">%s Artikelen</string>
+  <string name="get_started">Fir unzefänken</string>
+  <string name="download_books">Bicher eroflueden</string>
+  <string name="welcome_to_the_family">Wëllkomm an der Famill</string>
+  <string name="go_to_previous_page">Op déi vireg Säit goen</string>
+  <string name="select_languages">Sproochen eraussichen</string>
+  <string name="save_languages">Sprooche späicheren</string>
+  <string name="save">Späicheren</string>
+  <string name="note_share_error_file_missing">De Fichier mat den Notizze gëtt et net</string>
+  <string name="your_device">Ären Apparat:</string>
+  <string name="status">Status</string>
+  <string name="tag_pic">Bild</string>
+  <string name="tag_vid">Video</string>
+  <string name="tag_text_only">Nëmmen Text</string>
+  <string name="tag_short_text">Kuerzen Text</string>
+  <string name="go_to_settings">Op d\'Astellunge goen</string>
+  <string name="no_results">Keng Resultater</string>
+  <string name="no_bookmarks">Keng Lieszeechen!</string>
+  <string name="no_history">Keen Historique</string>
 </resources>

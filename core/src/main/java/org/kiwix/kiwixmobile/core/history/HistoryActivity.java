@@ -19,13 +19,14 @@
 package org.kiwix.kiwixmobile.core.history;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
@@ -35,7 +36,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -43,10 +43,12 @@ import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View,
@@ -66,6 +68,10 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   ZimReaderContainer zimReaderContainer;
   @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
+  @BindView(R2.id.no_history)
+  TextView noHistory;
+  @BindView(R2.id.history_switch)
+  Switch historySwitch;
   private boolean refreshAdapter = true;
   private HistoryAdapter historyAdapter;
   private LinearLayoutManager layoutManager;
@@ -137,10 +143,27 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       actionBar.setTitle(R.string.history);
     }
 
-    historyAdapter = new HistoryAdapter(historyList, deleteList, this);
+    setupHistoryAdapter();
     recyclerView.setAdapter(historyAdapter);
     layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
     recyclerView.setLayoutManager(layoutManager);
+
+    historySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+      sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked);
+      presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
+    });
+
+    historySwitch.setChecked(!sharedPreferenceUtil.getShowHistoryCurrentBook());
+  }
+
+  private void setupHistoryAdapter() {
+    historyAdapter = new HistoryAdapter(historyList, deleteList, this);
+    historyAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+      @Override public void onChanged() {
+        super.onChanged();
+        noHistory.setVisibility(historyList.size() == 0 ? View.VISIBLE : View.GONE);
+      }
+    });
   }
 
   @Override
@@ -169,9 +192,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
+
     getMenuInflater().inflate(R.menu.menu_history, menu);
-    MenuItem toggle = menu.findItem(R.id.menu_history_toggle);
-    toggle.setChecked(sharedPreferenceUtil.getShowHistoryCurrentBook());
 
     SearchView search = (SearchView) menu.findItem(R.id.menu_history_search).getActionView();
     search.setQueryHint(getString(R.string.search_history));
@@ -193,6 +215,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
         return true;
       }
     });
+
     return true;
   }
 
@@ -201,11 +224,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     int itemId = item.getItemId();
     if (itemId == android.R.id.home) {
       onBackPressed();
-      return true;
-    } else if (itemId == R.id.menu_history_toggle) {
-      item.setChecked(!item.isChecked());
-      sharedPreferenceUtil.setShowHistoryCurrentBook(item.isChecked());
-      presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
       return true;
     } else if (itemId == R.id.menu_history_clear) {
       presenter.deleteHistory(new ArrayList<>(fullHistory));
@@ -245,16 +263,10 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       Intent intent = Intents.internal(CoreMainActivity.class);
       intent.putExtra(EXTRA_CHOSE_X_URL, history.getHistoryUrl());
       if (!history.getZimFilePath().equals(zimReaderContainer.getZimCanonicalPath())) {
-        intent.setData(Uri.fromFile(new File(history.getZimFilePath())));
+        intent.putExtra(EXTRA_CHOSE_X_FILE, history.getZimFilePath());
       }
-      if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0)
-        == 1) {
-        startActivity(intent);
-        finish();
-      } else {
-        setResult(RESULT_OK, intent);
-        finish();
-      }
+      setResult(RESULT_OK, intent);
+      finish();
     } else {
       toggleSelection(favicon, history);
     }
@@ -284,5 +296,9 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     if (deleteList.size() == 0) {
       actionMode.finish();
     }
+  }
+
+  @Override protected void injection(CoreComponent coreComponent) {
+    coreComponent.inject(this);
   }
 }

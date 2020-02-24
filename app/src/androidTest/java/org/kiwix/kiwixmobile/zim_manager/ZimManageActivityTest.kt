@@ -22,6 +22,7 @@ import android.os.Build
 import androidx.test.filters.SdkSuppress
 import attempt
 import okhttp3.mockwebserver.MockResponse
+import org.junit.Ignore
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.KiwixMockServer
@@ -50,6 +51,7 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
   }
 
   @Test
+  @Ignore("Ignored due to flakiness on nightly build")
   fun testZimManageDataFlow() {
     SharedPreferenceUtil(activityRule.activity).putPrefWifiOnly(false)
     zimManage {
@@ -63,20 +65,13 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         forceResponse("012345678901234567890123456789012345678901234567890123456789012345678")
         attempt(10) {
           clickOn(book)
-          waitForEmptyView()
+          clickStop()
+          clickNegativeDialogButton()
+          clickStop()
+          clickPositiveDialogButton()
         }
-      }
-      clickOnDownloading {
-        clickStop()
-        clickNegativeDialogButton()
-        clickStop()
-        clickPositiveDialogButton()
-      }
-      clickOnOnline {
         forceResponse("01234")
         clickOn(book)
-      }
-      clickOnDownloading {
         waitForEmptyView()
       }
       clickOnDevice {
@@ -90,8 +85,9 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         clickPositiveDialogButton()
         waitForEmptyView()
       }
-      clickOnOnline { }
-    } clickOnLanguageIcon { }
+      clickOnOnline {
+      } clickOnLanguageIcon { }
+    }
   }
 
   private fun forceResponse(body: String) {

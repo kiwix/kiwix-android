@@ -43,15 +43,20 @@ class TagsView(context: Context, attrs: AttributeSet) : ChipGroup(context, attrs
   fun render(tags: List<KiwixTag>) {
     tag_picture.selectBy(tags.isYesOrNotDefined<PicturesTag>())
     tag_video.selectBy(tags.isYesOrNotDefined<VideoTag>())
-    tag_text_only.selectBy(tags.isDefinedAndNo<PicturesTag>() && tags.isDefinedAndNo<VideoTag>())
-    tag_short_text.selectBy(tags.isDefinedAndNo<DetailsTag>())
+    val shortTextIsSelected = tags.isDefinedAndNo<DetailsTag>()
+    tag_text_only.selectBy(
+      tags.isDefinedAndNo<PicturesTag>() &&
+        tags.isDefinedAndNo<VideoTag>() &&
+        !shortTextIsSelected
+    )
+    tag_short_text.selectBy(shortTextIsSelected)
   }
 
   private inline fun <reified T : YesNoValueTag> List<KiwixTag>.isYesOrNotDefined() =
     isYes<T>() || !isDefined<T>()
 
   private inline fun <reified T : YesNoValueTag> List<KiwixTag>.isDefinedAndNo() =
-    !isDefined<T>() && !isYes<T>()
+    isDefined<T>() && !isYes<T>()
 
   private inline fun <reified T : YesNoValueTag> List<KiwixTag>.isYes() =
     filterIsInstance<T>().getOrNull(0)?.value == YES
@@ -62,5 +67,6 @@ class TagsView(context: Context, attrs: AttributeSet) : ChipGroup(context, attrs
   private fun Chip.selectBy(criteria: Boolean) {
     isChecked = criteria
     isEnabled = criteria
+    visibility = if (criteria) VISIBLE else GONE
   }
 }

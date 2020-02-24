@@ -19,12 +19,14 @@
 package org.kiwix.kiwixmobile.core.bookmark;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
@@ -32,7 +34,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -40,10 +41,12 @@ import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
+import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
 
@@ -58,6 +61,10 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   Toolbar toolbar;
   @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
+  @BindView(R2.id.no_bookmarks)
+  TextView noBookmarks;
+  @BindView(R2.id.bookmarks_switch)
+  Switch bookmarksSwitch;
   @Inject
   BookmarksContract.Presenter presenter;
   @Inject
@@ -109,6 +116,10 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     }
   };
 
+  @Override protected void injection(CoreComponent coreComponent) {
+    coreComponent.inject(this);
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -119,11 +130,27 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     ActionBar actionBar = getSupportActionBar();
     if (actionBar != null) {
       actionBar.setDisplayHomeAsUpEnabled(true);
-      actionBar.setTitle(R.string.menu_bookmarks);
+      actionBar.setTitle(R.string.bookmarks);
     }
 
-    bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
+    setupBookmarksAdapter();
     recyclerView.setAdapter(bookmarksAdapter);
+
+    bookmarksSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+      sharedPreferenceUtil.setShowBookmarksCurrentBook(!isChecked);
+      presenter.loadBookmarks(sharedPreferenceUtil.getShowBookmarksCurrentBook());
+    });
+    bookmarksSwitch.setChecked(!sharedPreferenceUtil.getShowBookmarksCurrentBook());
+  }
+
+  private void setupBookmarksAdapter() {
+    bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
+    bookmarksAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+      @Override public void onChanged() {
+        super.onChanged();
+        noBookmarks.setVisibility(bookmarksList.size() == 0 ? View.VISIBLE : View.GONE);
+      }
+    });
   }
 
   @Override
@@ -134,9 +161,8 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
+
     getMenuInflater().inflate(R.menu.menu_bookmarks, menu);
-    MenuItem toggle = menu.findItem(R.id.menu_bookmarks_toggle);
-    toggle.setChecked(sharedPreferenceUtil.getShowBookmarksCurrentBook());
 
     SearchView search = (SearchView) menu.findItem(R.id.menu_bookmarks_search).getActionView();
     search.setQueryHint(getString(R.string.search_bookmarks));
@@ -158,6 +184,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
         return true;
       }
     });
+
     return true;
   }
 
@@ -167,10 +194,12 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     if (itemId == android.R.id.home) {
       onBackPressed();
       return true;
-    } else if (itemId == R.id.menu_bookmarks_toggle) {
-      item.setChecked(!item.isChecked());
-      sharedPreferenceUtil.setShowBookmarksCurrentBook(item.isChecked());
-      presenter.loadBookmarks(sharedPreferenceUtil.getShowBookmarksCurrentBook());
+    } else if (itemId == R.id.menu_bookmarks_clear) {
+      presenter.deleteBookmarks(new ArrayList<>(allBookmarks));
+      allBookmarks.clear();
+      bookmarksList.clear();
+      bookmarksAdapter.notifyDataSetChanged();
+      Toast.makeText(this, R.string.all_bookmarks_cleared_toast, Toast.LENGTH_SHORT).show();
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -207,14 +236,9 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       }
       if (bookmark.getZimFilePath() != null && !bookmark.getZimFilePath()
         .equals(zimReaderContainer.getZimCanonicalPath())) {
-        intent.setData(Uri.fromFile(new File(bookmark.getZimFilePath())));
+        intent.putExtra(EXTRA_CHOSE_X_FILE, bookmark.getZimFilePath());
       }
-      if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0)
-        == 1) {
-        startActivity(intent);
-      } else {
-        setResult(RESULT_OK, intent);
-      }
+      setResult(RESULT_OK, intent);
       finish();
     } else {
       toggleSelection(favicon, bookmark);

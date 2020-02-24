@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.language.viewmodel
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.core.base.SideEffect
 
 data class SaveLanguagesAndFinish(
   val languages: List<Language>,

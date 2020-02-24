@@ -20,31 +20,30 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.zim_manager.download_view.DownloadFragment
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
+import kotlin.reflect.KFunction0
 
 class SectionsPagerAdapter(
   private val context: Context,
+  private val pagerData: Array<PagerData> =
+    arrayOf(
+      PagerData(::ZimFileSelectFragment, R.string.local_zims),
+      PagerData(::LibraryFragment, R.string.remote_zims)
+    ),
   fm: FragmentManager
 ) : FragmentPagerAdapter(fm) {
 
-  override fun getItem(position: Int) = when (position) {
-    0 -> ZimFileSelectFragment()
-    1 -> LibraryFragment()
-    2 -> DownloadFragment()
-    else -> throw RuntimeException("No matching fragment for position: $position")
-  }
+  override fun getItem(position: Int) = pagerData[position].fragmentConstructor.invoke()
 
-  override fun getCount() = 3
+  override fun getCount() = pagerData.size
 
-  override fun getPageTitle(position: Int): String = context.getString(
-    when (position) {
-      0 -> R.string.local_zims
-      1 -> R.string.remote_zims
-      2 -> R.string.zim_downloads
-      else -> throw RuntimeException("No matching title for position: $position")
-    }
-  )
+  override fun getPageTitle(position: Int): String = context.getString(pagerData[position].title)
 }
+
+data class PagerData(
+  val fragmentConstructor: KFunction0<BaseFragment>,
+  val title: Int
+)

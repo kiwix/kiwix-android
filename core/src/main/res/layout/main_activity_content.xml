@@ -5,6 +5,7 @@
   android:id="@+id/activity_main_root"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:animateLayoutChanges="true"
   tools:showIn="@layout/activity_main">
 
   <com.google.android.material.appbar.AppBarLayout
@@ -26,7 +27,7 @@
         app:backgroundColor="?colorOnSurface"
         app:bidirectionalAnimate="false"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:progressColor="@color/accent" />
+        app:progressColor="@color/blue400" />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </com.google.android.material.appbar.AppBarLayout>
 
@@ -80,7 +81,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:alpha="0.6"
-    android:text="@string/tts_stop"
+    android:text="@string/stop"
     android:textStyle="bold"
     android:visibility="gone"
     app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"

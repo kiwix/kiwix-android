@@ -22,6 +22,7 @@ import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.core.view.isVisible
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
@@ -42,6 +43,8 @@ class MainMenu(
   menu: Menu,
   webViews: MutableList<KiwixWebView>,
   urlIsValid: Boolean,
+  disableReadAloud: Boolean = false,
+  disableTabs: Boolean = false,
   private val menuClickListener: MenuClickListener
 ) {
 
@@ -50,7 +53,9 @@ class MainMenu(
       menu: Menu,
       webViews: MutableList<KiwixWebView>,
       urlIsValid: Boolean,
-      menuClickListener: MenuClickListener
+      menuClickListener: MenuClickListener,
+      disableReadAloud: Boolean,
+      disableTabs: Boolean
     ): MainMenu
   }
 
@@ -72,29 +77,39 @@ class MainMenu(
   }
 
   private val search = menu.findItem(R.id.menu_search)
-  private val tabSwitcher = menu.findItem(R.id.menu_tab_switcher)
-  private val tabSwitcherTextView =
-    tabSwitcher.actionView.findViewById<TextView>(R.id.ic_tab_switcher_text)
+  private var tabSwitcher: MenuItem? = menu.findItem(R.id.menu_tab_switcher)
+  private var tabSwitcherTextView: TextView? =
+    tabSwitcher?.actionView?.findViewById(R.id.ic_tab_switcher_text)
   private val bookmarks = menu.findItem(R.id.menu_bookmarks_list)
   private val history = menu.findItem(R.id.menu_history)
   private val library = menu.findItem(R.id.menu_openfile)
   private val addNote = menu.findItem(R.id.menu_add_note)
   private val randomArticle = menu.findItem(R.id.menu_random_article)
   private val fullscreen = menu.findItem(R.id.menu_fullscreen)
-  private val readAloud = menu.findItem(R.id.menu_read_aloud)
+  private var readAloud: MenuItem? = menu.findItem(R.id.menu_read_aloud)
   private val hostBooks = menu.findItem(R.id.menu_host_books)
   private val help = menu.findItem(R.id.menu_help)
   private val settings = menu.findItem(R.id.menu_settings)
   private val supportKiwix = menu.findItem(R.id.menu_support_kiwix)
 
   init {
+    if (disableReadAloud) {
+      readAloud?.isVisible = false
+      readAloud = null
+    }
+    if (disableTabs) {
+      tabSwitcher?.isVisible = false
+      tabSwitcherTextView?.isVisible = false
+      tabSwitcher = null
+      tabSwitcherTextView = null
+    }
     randomArticle.setShowAsAction(
       if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
         MenuItem.SHOW_AS_ACTION_IF_ROOM
       else
         MenuItem.SHOW_AS_ACTION_NEVER
     )
-    tabSwitcher.actionView.setOnClickListener { menuClickListener.onTabMenuClicked() }
+    tabSwitcher?.actionView?.setOnClickListener { menuClickListener.onTabMenuClicked() }
     help.menuItemClickListener { activity.start<HelpActivity>() }
     settings.menuItemClickListener {
       activity.startActivityForResult(
@@ -119,7 +134,9 @@ class MainMenu(
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
 
     showWebViewOptions(urlIsValid)
-    zimFileReader?.let(::onFileOpened)
+    zimFileReader?.let {
+      onFileOpened(it, urlIsValid)
+    }
     updateTabIcon(webViews.size)
   }
 
@@ -132,13 +149,22 @@ class MainMenu(
       else -> false
     }
 
-  fun onFileOpened(zimFileReader: ZimFileReader) {
-    setVisibility(true, randomArticle, fullscreen, search, readAloud, addNote)
+  fun onFileOpened(zimFileReader: ZimFileReader, urlIsValid: Boolean) {
+    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen)
     search.setOnMenuItemClickListener { navigateToSearch(zimFileReader) }
   }
 
+  fun showTabSwitcherOptions() {
+    setVisibility(false, randomArticle, search, readAloud, addNote, fullscreen)
+  }
+
+  fun showWebViewOptions(urlIsValid: Boolean) {
+    fullscreen.isVisible = true
+    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote)
+  }
+
   fun updateTabIcon(tabs: Int) {
-    tabSwitcherTextView.text = if (tabs > 99) ":D" else "$tabs"
+    tabSwitcherTextView?.text = if (tabs > 99) ":D" else "$tabs"
   }
 
   private fun navigateToSearch(zimFileReader: ZimFileReader): Boolean {
@@ -153,29 +179,26 @@ class MainMenu(
   }
 
   fun onTextToSpeechStartedTalking() {
-    readAloud.setTitle(R.string.menu_read_aloud_stop)
+    readAloud?.setTitle(R.string.menu_read_aloud_stop)
   }
 
   fun onTextToSpeechStoppedTalking() {
-    readAloud.setTitle(R.string.menu_read_aloud)
+    readAloud?.setTitle(R.string.menu_read_aloud)
   }
 
-  fun showTabSwitcherOptions() {
-    setVisibility(false, search, fullscreen, randomArticle, readAloud)
+  private fun setVisibility(visibility: Boolean, vararg menuItems: MenuItem?) {
+    menuItems.forEach { it?.isVisible = visibility }
   }
 
-  fun showWebViewOptions(urlIsValid: Boolean) {
-    fullscreen.isVisible = true
-    setVisibility(urlIsValid, search, readAloud, randomArticle, addNote)
-  }
-
-  private fun setVisibility(visibility: Boolean, vararg menuItems: MenuItem) {
-    menuItems.forEach { it.isVisible = visibility }
+  fun tryExpandSearch(zimFileReader: ZimFileReader?) {
+    if (search.isVisible) {
+      zimFileReader?.let(::navigateToSearch)
+    }
   }
 }
 
-private fun MenuItem.menuItemClickListener(function: (MenuItem) -> Unit) {
-  setOnMenuItemClickListener {
+private fun MenuItem?.menuItemClickListener(function: (MenuItem) -> Unit) {
+  this?.setOnMenuItemClickListener {
     function.invoke(it)
     true
   }

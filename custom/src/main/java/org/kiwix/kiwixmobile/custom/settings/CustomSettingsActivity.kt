@@ -18,12 +18,13 @@
 
 package org.kiwix.kiwixmobile.custom.settings
 
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 
 class CustomSettingsActivity : CoreSettingsActivity() {
 
-  override fun injection() {
+  override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
   }
 

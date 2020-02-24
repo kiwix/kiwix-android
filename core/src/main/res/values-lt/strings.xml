@@ -3,9 +3,8 @@
   <string name="menu_help">Pagalba</string>
   <string name="menu_home">Pradžia</string>
   <string name="menu_settings">Nustatymai</string>
-  <string name="menu_search">Paieška</string>
   <string name="menu_search_in_text">Rasti tekste</string>
-  <string name="menu_bookmarks">Žymės</string>
+  <string name="bookmarks">Žymės</string>
   <string name="menu_random_article">Atsitiktinis straipsnis</string>
   <string name="menu_full_screen">Visas ekranas</string>
   <string name="menu_exit_full_screen">Išeiti iš viso ekrano režimo</string>
@@ -32,17 +31,15 @@
   <string name="pref_back_to_top_summary">Rodyti  puslapio pabaigoje mygtuką sugrįžti į viršų</string>
   <string name="pref_language_title">Kalba</string>
   <string name="pref_language_chooser">Pasirinkite kalbą</string>
-  <string name="go_to_play_store">Eiti į „Play Store“</string>
-  <string name="menu_bookmarks_list">Žymės</string>
   <string name="no_section_info">Nerasta jokių turinio puslapių.</string>
   <string name="bookmark_added">Pridėtos žymos</string>
   <string name="rate_dialog_title">Įvertinkite mus</string>
   <string name="rate_dialog_msg_1">Jei jums patinka</string>
   <string name="rate_dialog_positive">Vertinti!</string>
-  <string name="rate_dialog_negative">Ne, ačiū</string>
+  <string name="no_thanks">Ne, ačiū</string>
   <string name="rate_dialog_neutral">Vėliau</string>
   <string name="pref_newtab_background_title">Atidaryti naujame skirtuke</string>
-  <string name="zim_manager">Biblioteka</string>
+  <string name="library">Biblioteka</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

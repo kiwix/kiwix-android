@@ -3,9 +3,8 @@
   <string name="menu_help">Ìrànwọ́</string>
   <string name="menu_home">Ibùdó</string>
   <string name="menu_settings">Àwọn ìfẹ́ràn</string>
-  <string name="menu_search">Àwárí</string>
   <string name="menu_search_in_text">Ìwárí nínú ìkọ</string>
-  <string name="menu_bookmarks">Àwọn ojúewé àdápamọ́</string>
+  <string name="bookmarks">Àwọn ojúewé àdápamọ́</string>
   <string name="menu_random_article">Àyọkà àrìnnàkò</string>
   <string name="menu_full_screen">Ojúìran kíkúnrẹ́rẹ́</string>
   <string name="menu_exit_full_screen">Ìjáde kúrò ní ojúìran kíkúnrẹ́rẹ́</string>
@@ -14,8 +13,7 @@
   <string name="pref_info_title">Ìfitọ́nilétí</string>
   <string name="pref_info_version">Àtẹ̀jáde</string>
   <string name="pref_language_title">Èdè</string>
-  <string name="menu_bookmarks_list">Àwọn ojúewé àdápamọ́</string>
-  <string name="zim_manager">Ibiàmúlò</string>
+  <string name="library">Ibiàmúlò</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

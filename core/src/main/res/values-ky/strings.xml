@@ -3,9 +3,8 @@
   <string name="menu_help">Жардам</string>
   <string name="menu_home">Башкы</string>
   <string name="menu_settings">Параметрлер</string>
-  <string name="menu_search">Издөө</string>
   <string name="menu_search_in_text">Тексттен табуу</string>
-  <string name="menu_bookmarks">Чөп каттар</string>
+  <string name="bookmarks">Чөп каттар</string>
   <string name="menu_random_article">Тушкелди макала</string>
   <string name="menu_full_screen">Толук көрүнүшү</string>
   <string name="menu_exit_full_screen">Толук көрүнүштөн чыгуу</string>
@@ -21,8 +20,7 @@
   <string name="pref_back_to_top">Жогоруга кайтуу</string>
   <string name="pref_language_title">Тил</string>
   <string name="pref_language_chooser">Тилин тандаңыз</string>
-  <string name="menu_bookmarks_list">Чөп каттар</string>
-  <string name="zim_manager">Китепкана</string>
+  <string name="library">Китепкана</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

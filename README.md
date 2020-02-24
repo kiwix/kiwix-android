@@ -16,7 +16,7 @@ with additional meta-data. This is the version for Android.
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
 pieces in Java).
 
-[![Build Status](https://travis-ci.com/kiwix/kiwix-android.svg?branch=develop)](https://travis-ci.com/kiwix/kiwix-android)
+[![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Adevelop+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ANightly+branch%3Adevelop)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -44,7 +44,7 @@ If you are interested in our custom apps they have their own repo [kiwix-android
 - [Butterknife](https://jakewharton.github.io/butterknife/) - View "injection" library for Android
 - [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java
 - [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
-- [ObjectBox](https://github.com/objectbox/objectbox-java) - Reactive NoSQL Databse to replace SquiDb
+- [ObjectBox](https://github.com/objectbox/objectbox-java) - Reactive NoSQL Databse
 - [MockK](https://github.com/mockk/mockk) - Kotlin mocking library that allows mocking of final classes by default.
 - [JUnit5](https://github.com/junit-team/junit5/) - The next generation of JUnit
 - [AssertJ](https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code

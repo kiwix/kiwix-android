@@ -3,9 +3,8 @@
   <string name="menu_help">උදව්</string>
   <string name="menu_home">මුල් පිටුව</string>
   <string name="menu_settings">අභිරුචි</string>
-  <string name="menu_search">ගවේෂණය</string>
   <string name="menu_search_in_text">පෙළෙහි සොයන්න</string>
-  <string name="menu_bookmarks">පොත්යොමු</string>
+  <string name="bookmarks">පොත්යොමු</string>
   <string name="menu_random_article">අහඹු ලිපිය</string>
   <string name="menu_full_screen">පූර්ණ තිරය</string>
   <string name="menu_exit_full_screen">සම්පූර්ණ තිරයෙන් ඉවත් වන්න</string>
@@ -32,8 +31,7 @@
   <string name="pref_back_to_top_summary">ඉහළට උඩු අනුචලනය කිරීමට පිටුවේ අග බොත්තමක් පෙන්වන්න</string>
   <string name="pref_language_title">භාෂාව</string>
   <string name="pref_language_chooser">භාෂාවක් තෝරාගන්න</string>
-  <string name="menu_bookmarks_list">පොත්යොමු</string>
-  <string name="zim_manager">පුස්තකාලය</string>
+  <string name="library">පුස්තකාලය</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

@@ -3,9 +3,8 @@
   <string name="menu_help">Caawinaad</string>
   <string name="menu_home">Bogga Hore</string>
   <string name="menu_settings">Dooqyada</string>
-  <string name="menu_search">Raadi</string>
   <string name="menu_search_in_text">Ka dhex baar qoraalka</string>
-  <string name="menu_bookmarks">Calaamadaha aqriska</string>
+  <string name="bookmarks">Calaamadaha aqriska</string>
   <string name="menu_random_article">Bogag iskuraran ah</string>
   <string name="menu_full_screen">Dhammaan Shaashadda</string>
   <string name="menu_exit_full_screen">Ka bax shaashadda weyn</string>
@@ -32,8 +31,7 @@
   <string name="pref_back_to_top_summary">Itus batoonka dhammaadka bogga si kor loogu laabto</string>
   <string name="pref_language_title">Luqad</string>
   <string name="pref_language_chooser">Dooro luqad</string>
-  <string name="menu_bookmarks_list">Calaamadaha aqriska</string>
-  <string name="zim_manager">Maktabad</string>
+  <string name="library">Maktabad</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

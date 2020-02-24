@@ -45,7 +45,7 @@ sealed class KiwixTag {
     data class ArbitraryTag(val tag: String, val value: String) : KiwixTag()
     data class TagOnly(val tag: String) : KiwixTag()
 
-    sealed class YesNoValueTag() : KiwixTag() {
+    sealed class YesNoValueTag : KiwixTag() {
       abstract val inputValue: String?
       val value: TagValue by lazy { if (inputValue == "no") NO else YES }
 

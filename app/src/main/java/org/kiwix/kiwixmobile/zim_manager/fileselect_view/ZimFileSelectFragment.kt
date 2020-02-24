@@ -23,11 +23,11 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -55,6 +55,8 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import javax.inject.Inject
+
+private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 
 class ZimFileSelectFragment : BaseFragment() {
 
@@ -103,11 +105,14 @@ class ZimFileSelectFragment : BaseFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    zimManageViewModel.fileSelectListStates.observe(this, Observer(::render))
+    zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
     disposable.add(sideEffects())
-    zimManageViewModel.deviceListIsRefreshing.observe(this, Observer {
+    zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner, Observer {
       zim_swiperefresh.isRefreshing = it!!
     })
+    if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
+      zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
+    }
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
@@ -130,6 +135,11 @@ class ZimFileSelectFragment : BaseFragment() {
   override fun onResume() {
     super.onResume()
     checkPermissions()
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putBoolean(WAS_IN_ACTION_MODE, actionMode != null)
   }
 
   override fun onDestroy() {

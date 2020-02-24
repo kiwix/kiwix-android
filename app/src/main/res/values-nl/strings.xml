@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Elroy
+-->
+<resources>
+  <string name="cannot_open_file">Kan het bestand niet openen\nProbeer naar dit bestand te zoeken in het tabblad Apparaat van de bibliotheek</string>
+</resources>

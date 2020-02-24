@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
+import io.objectbox.query.Query
 import io.objectbox.rx.RxQuery
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
@@ -40,5 +41,8 @@ class NewLanguagesDao @Inject constructor(private val box: Box<LanguageEntity>) 
   }
 }
 
-internal fun <T> Box<T>.asFlowable(backpressureStrategy: BackpressureStrategy = LATEST) =
-  RxQuery.observable(query {}).toFlowable(backpressureStrategy)
+internal fun <T> Box<T>.asFlowable(
+  query: Query<T> = query {},
+  backpressureStrategy: BackpressureStrategy = LATEST
+) =
+  RxQuery.observable(query).toFlowable(backpressureStrategy)

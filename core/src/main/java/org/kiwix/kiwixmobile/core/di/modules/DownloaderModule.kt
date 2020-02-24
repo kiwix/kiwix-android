@@ -27,13 +27,13 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadRequester
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Singleton
 
@@ -46,21 +46,13 @@ object DownloaderModule {
     downloadRequester: DownloadRequester,
     downloadDao: FetchDownloadDao,
     kiwixService: KiwixService
-  ): Downloader =
-    DownloaderImpl(
-      downloadRequester,
-      downloadDao,
-      kiwixService
-    )
+  ): Downloader = DownloaderImpl(downloadRequester, downloadDao, kiwixService)
 
   @JvmStatic
   @Provides
   @Singleton
-  fun providesDownloadRequester(
-    fetch: Fetch,
-    sharedPreferenceUtil: SharedPreferenceUtil
-  ): DownloadRequester =
-    FetchDownloadRequester(fetch, sharedPreferenceUtil)
+  fun providesDownloadRequester(fetch: Fetch, sharedPreferenceUtil: SharedPreferenceUtil):
+    DownloadRequester = FetchDownloadRequester(fetch, sharedPreferenceUtil)
 
   @JvmStatic
   @Provides
@@ -92,6 +84,6 @@ object DownloaderModule {
   @JvmStatic
   @Provides
   @Singleton
-  fun provideFetchDownloadNotificationManager(context: Context): FetchNotificationManager =
-    FetchDownloadNotificationManager(context)
+  fun provideFetchDownloadNotificationManager(context: Context):
+    FetchNotificationManager = FetchDownloadNotificationManager(context)
 }

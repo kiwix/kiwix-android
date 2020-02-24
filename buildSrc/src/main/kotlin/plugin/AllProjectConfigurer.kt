@@ -21,6 +21,7 @@ package plugin
 import Config
 import Libs
 import com.android.build.gradle.BaseExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.KotlinClosure1
@@ -29,6 +30,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 class AllProjectConfigurer {
@@ -39,6 +41,7 @@ class AllProjectConfigurer {
     target.plugins.apply("kotlin-kapt")
     target.plugins.apply("jacoco-android")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
+    target.plugins.apply("io.gitlab.arturbosch.detekt")
   }
 
   fun configureBaseExtension(target: Project, path: String) {
@@ -62,6 +65,9 @@ class AllProjectConfigurer {
         encoding = "UTF-8"
         sourceCompatibility = Config.javaVersion
         targetCompatibility = Config.javaVersion
+      }
+      target.tasks.withType(KotlinCompile::class.java) {
+        kotlinOptions.jvmTarget = "1.8"
       }
 
       testOptions {
@@ -92,21 +98,21 @@ class AllProjectConfigurer {
         ignore(
           "SyntheticAccessor",
           //TODO stop ignoring below this
-          "MissingTranslation",
           "CheckResult",
           "LabelFor",
-          "DuplicateStrings",
           "LogConditional"
         )
 
         warning(
           "UnknownNullness",
           "SelectableText",
+          "MissingTranslation",
           "IconDensities",
           "ContentDescription",
           "IconDipSize"
         )
         baseline("${path}/lint-baseline.xml")
+        lintConfig = target.rootProject.file("lintConfig.xml")
       }
       packagingOptions {
         exclude("META-INF/DEPENDENCIES")
@@ -134,6 +140,10 @@ class AllProjectConfigurer {
       configureExtension<AndroidExtensionsExtension> { isExperimental = true }
       configureExtension<JacocoPluginExtension> { toolVersion = "0.8.3" }
       configureExtension<KtlintExtension> { android.set(true) }
+      configureExtension<DetektExtension> {
+        baseline = project.file("detekt_baseline.xml")
+      }
+
     }
   }
 

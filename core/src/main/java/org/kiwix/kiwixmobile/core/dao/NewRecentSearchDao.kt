@@ -22,28 +22,25 @@ import io.objectbox.kotlin.query
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
 import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
+import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import javax.inject.Inject
 
 class NewRecentSearchDao @Inject constructor(
   val box: Box<RecentSearchEntity>
 ) {
-  fun getRecentSearches(zimId: String?) = box
-    .query {
+  fun recentSearches(zimId: String?) = box.asFlowable(
+    box.query {
       equal(RecentSearchEntity_.zimId, zimId ?: "")
       orderDesc(RecentSearchEntity_.id)
     }
-    .find()
-    .distinctBy(RecentSearchEntity::searchTerm)
-    .take(NUM_RECENT_RESULTS)
-    .map(RecentSearchEntity::searchTerm)
+  ).map { searchEntities ->
+    searchEntities.distinct()
+      .take(NUM_RECENT_RESULTS)
+      .map { searchEntity -> RecentSearchListItem(searchEntity.searchTerm) }
+  }
 
   fun saveSearch(title: String, id: String) {
-    box.put(
-      RecentSearchEntity(
-        searchTerm = title,
-        zimId = id
-      )
-    )
+    box.put(RecentSearchEntity(searchTerm = title, zimId = id))
   }
 
   fun deleteSearchString(searchTerm: String) {

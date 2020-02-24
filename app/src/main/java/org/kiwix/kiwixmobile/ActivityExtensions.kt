@@ -22,7 +22,14 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.di.components.KiwixComponent
 
 private val BaseActivity.kiwixComponent: KiwixComponent
-  get() = (applicationContext as KiwixApp).kiwixComponent
+  get() = kiwixApp()?.kiwixComponent ?: throw RuntimeException(
+    """
+        applicationContext is ${applicationContext::class.java.simpleName}
+        application is ${application::class.java.simpleName} 
+    """.trimIndent()
+  )
+
+private fun BaseActivity.kiwixApp() = applicationContext as? KiwixApp ?: application as? KiwixApp
 
 internal inline val BaseActivity.kiwixActivityComponent
   get() = kiwixComponent

@@ -10,8 +10,8 @@ apply(from = rootProject.file("jacoco.gradle"))
 
 ext {
   set("versionMajor", 3)
-  set("versionMinor", 1)
-  set("versionPatch", 3)
+  set("versionMinor", 2)
+  set("versionPatch", 0)
 }
 
 fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext["versionPatch"]}"
@@ -44,6 +44,10 @@ android {
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = generateVersionCode()
     versionName = generateVersionName()
+  }
+
+  lintOptions {
+    isCheckDependencies = true
   }
 
   buildTypes {
