@@ -87,7 +87,8 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
           boolean fileCreated = clientNoteFileLocation.createNewFile();
           if (BuildConfig.DEBUG) Log.d(TAG, "File creation: " + fileCreated);
 
-          WifiDirectManager.copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
+          WifiDirectManager.copyToOutputStream(client.getInputStream(),
+            new FileOutputStream(clientNoteFileLocation));
           publishProgress(fileItemIndex, SENT);
         } catch (IOException e) {
           Log.e(TAG, e.getMessage());

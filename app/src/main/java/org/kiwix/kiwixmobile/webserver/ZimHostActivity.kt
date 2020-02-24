@@ -84,7 +84,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
             }
           }
         }
-          as ArrayList<String>
+        as ArrayList<String>
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
