@@ -10,7 +10,6 @@
     android:layout_height="wrap_content"
     android:text="@string/tag_pic" />
 
-
   <com.google.android.material.chip.Chip
     android:id="@+id/tag_video"
     style="@style/Widget.KiwixTheme.Chip.Choice.Static"
