@@ -8,26 +8,31 @@
     style="@style/Widget.KiwixTheme.Chip.Choice.Static"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/tag_pic" />
+    android:text="@string/tag_pic"
+    android:textAlignment="center" />
+
 
   <com.google.android.material.chip.Chip
     android:id="@+id/tag_video"
     style="@style/Widget.KiwixTheme.Chip.Choice.Static"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/tag_vid" />
+    android:text="@string/tag_vid"
+    android:textAlignment="center" />
 
   <com.google.android.material.chip.Chip
     android:id="@+id/tag_short_text"
     style="@style/Widget.KiwixTheme.Chip.Choice.Static"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/tag_short_text" />
+    android:text="@string/tag_short_text"
+    android:textAlignment="center" />
 
   <com.google.android.material.chip.Chip
     android:id="@+id/tag_text_only"
     style="@style/Widget.KiwixTheme.Chip.Choice.Static"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/tag_text_only" />
+    android:text="@string/tag_text_only"
+    android:textAlignment="center" />
 </merge>
