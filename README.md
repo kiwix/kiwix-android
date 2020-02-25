@@ -21,14 +21,15 @@ pieces in Java).
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
+[![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://kiwixoffline.slack.com)
 
 ## Build Instructions
 
 Production releases of the app are built on travis and released automatically
 
 To build this repository alone for development purposes you can simply
-import the project into Android Studio and the hard work will be done
-for you. If you prefer to build without Android Studio you must first
+**import** the project into Android Studio and the hard work will be done
+for you. Note here that instead of *opening* the project, you have to *import* it. If you prefer to build without Android Studio you must first
 set up the Android SDK and then run the command: `./gradlew build `
 from the root directory of the project.
 
@@ -77,7 +78,7 @@ Available communication channels:
 * [Web Public Chat channel](https://chat.kiwix.org)
 * [Email](mailto:contact+android@kiwix.org)
 * [Mailing list](mailto:kiwix-developer@lists.sourceforge.net)
-* [Slack](https://kiwixoffline.slack.com): #android channel
+* [Slack](https://kiwixoffline.slack.com): #android channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/enQtOTUyMTg4NzMxMTM4LTU0MzYyZDliYjdmMDYzYWMzNDA0MDc4MWE5OGM0ODFhYjAxNWIxMjVjZTU4MTkyODJlZWFkMmQ2YTZkYTUzZDY)
 * IRC: #kiwix on irc.freenode.net
 
 For more information, please refer to

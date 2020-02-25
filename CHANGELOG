@@ -1,3 +1,21 @@
+3.2.0
+NEW: Downloads tab merged with Library
+NEW: Improved translations
+NEW: Swipe down to show tabs
+NEW: Swipe left/right on top bar to switch tabs
+NEW: Improved UI for Bookmarks & History
+NEW: Open book from click on Download notification
+BUGFIX: Improved the speed of file system detection for SD cards
+BUGFIX: Improved speed of Article Search
+BUGFIX: Night mode crash on Amazon devices
+BUGFIX: Adding/Removing bookmarks stabilised
+BUGFIX: Language changes in Settings better supported
+BUGFIX: Crash on opening bookmark/history of not currently open book
+BUGFIX: Tags select properly and hide if not active
+BUGFIX: Read Aloud shows warning for unsupported languages
+BUGFIX: Find In Page crash when searching for empty
++ Lots More
+
 3.1.3
 BUGFIX: Correct logic for selected book tags
 BUGFIX: Crash when searching content via selected text in browser

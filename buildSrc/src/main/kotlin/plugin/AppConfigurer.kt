@@ -101,7 +101,6 @@ class AppConfigurer {
         exclude(module = "xpp3")
       }
       androidTestUtil(Libs.orchestrator)
-      androidTestImplementation(Libs.mockito_android)
       androidTestCompileOnly(Libs.javax_annotation_api)
       kaptAndroidTest(Libs.dagger_compiler)
       androidTestImplementation(Libs.mockk_android)
