@@ -25,12 +25,14 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
+import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 
 @ActivityScope
 @Subcomponent(modules = [ActivityModule::class])
 interface CoreActivityComponent {
   fun inject(searchActivity: SearchActivity)
   fun inject(showDeleteSearchDialog: ShowDeleteSearchDialog)
+  fun inject(corePrefsFragment: CorePrefsFragment)
 
   @Subcomponent.Builder
   interface Builder {

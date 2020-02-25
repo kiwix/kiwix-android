@@ -28,7 +28,8 @@ sealed class KiwixDialog(
   val positiveMessage: Int,
   val negativeMessage: Int?,
   val cancelable: Boolean = true,
-  val icon: Int? = null
+  val icon: Int? = null,
+  val neutralMessage: Int? = null
 ) {
 
   data class DeleteZim(override val args: List<Any>) : KiwixDialog(
@@ -85,13 +86,12 @@ sealed class KiwixDialog(
     )
   }
 
-  data class StartHotspotManually(
-    val neutralMessage: Int = R.string.hotspot_dialog_neutral_button
-  ) : KiwixDialog(
+  object StartHotspotManually : KiwixDialog(
     R.string.hotspot_dialog_title,
     R.string.hotspot_dialog_message,
     R.string.go_to_settings,
-    null
+    null,
+    neutralMessage = R.string.hotspot_dialog_neutral_button
   )
 
   data class FileTransferConfirmation(override val args: List<Any>) : KiwixDialog(
@@ -102,6 +102,46 @@ sealed class KiwixDialog(
 
   object DeleteSearch : KiwixDialog(
     null, R.string.delete_recent_search_item, R.string.delete, R.string.no
+  )
+
+  object ContentsDrawerHint : KiwixDialog(
+    R.string.did_you_know,
+    R.string.hint_contents_drawer_message,
+    R.string.got_it,
+    null,
+    icon = R.drawable.icon_question
+  )
+
+  object ExternalLinkPopup : KiwixDialog(
+    R.string.external_link_popup_dialog_title,
+    R.string.external_link_popup_dialog_message,
+    android.R.string.yes,
+    android.R.string.no,
+    icon = R.drawable.ic_warning,
+    neutralMessage = R.string.do_not_ask_anymore
+  )
+
+  data class ShowRate(override val args: List<Any>, val custom_icon: Int?) : KiwixDialog(
+    R.string.rate_dialog_title,
+    R.string.triple_arg_format_string,
+    R.string.rate_dialog_positive,
+    R.string.no_thanks,
+    icon = custom_icon,
+    neutralMessage = R.string.rate_dialog_neutral
+  ),
+    HasBodyFormatArgs {
+    constructor(icon: Int?) : this(
+      listOf(R.string.rate_dialog_msg_1, R.string.app_name, R.string.rate_dialog_msg_2),
+      icon
+    )
+  }
+
+  object ClearAllHistory : KiwixDialog(
+    R.string.clear_all_history_dialog_title,
+    R.string.clear_recent_and_tabs_history_dialog,
+    R.string.yes,
+    R.string.no,
+    icon = R.drawable.ic_warning
   )
 
   open class YesNoDialog(

@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.StartHotspotManually
 import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
@@ -28,7 +27,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
     AlertDialog.Builder(activity)
       .apply {
         dialog.title?.let(this::setTitle)
-        dialog.icon?.let { setIcon(dialog.icon) }
+        dialog.icon?.let(this::setIcon)
         setMessage(activity.getString(dialog.message, *bodyArguments(dialog)))
         setPositiveButton(dialog.positiveMessage) { _, _ ->
           clickListeners.getOrNull(0)
@@ -40,8 +39,8 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
               ?.invoke()
           }
         }
-        if (dialog is StartHotspotManually) {
-          setNeutralButton(dialog.neutralMessage) { _, _ ->
+        dialog.neutralMessage?.let {
+          setNeutralButton(it) { _, _ ->
             clickListeners.getOrNull(2)
               ?.invoke()
           }
