@@ -17,7 +17,6 @@ plugins.apply(KiwixConfigurationPlugin::class)
 android {
   defaultConfig {
     applicationId = "org.kiwix"
-    ndkVersion  = "21.0.6113669"
   }
 
   flavorDimensions("default")

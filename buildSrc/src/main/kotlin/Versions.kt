@@ -55,7 +55,7 @@ object Versions {
 
   const val collection_ktx: String = "1.1.0"
 
-  const val jacoco_android: String = "0.1.4"
+  const val jacoco_android: String = "0.2"
 
   const val junit_jupiter: String = "5.4.2" // available: "5.6.0"
 
