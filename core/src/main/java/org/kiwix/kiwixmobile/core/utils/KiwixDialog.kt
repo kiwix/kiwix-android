@@ -19,17 +19,19 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.net.wifi.WifiConfiguration
+import android.view.View
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 sealed class KiwixDialog(
   val title: Int?,
-  val message: Int,
+  val message: Int?,
   val positiveMessage: Int,
   val negativeMessage: Int?,
   val cancelable: Boolean = true,
   val icon: Int? = null,
-  val neutralMessage: Int? = null
+  val neutralMessage: Int? = null,
+  val getView: (() -> View)? = null
 ) {
 
   data class DeleteZim(override val args: List<Any>) : KiwixDialog(
@@ -142,6 +144,21 @@ sealed class KiwixDialog(
     R.string.yes,
     R.string.no,
     icon = R.drawable.ic_warning
+  )
+
+  object ClearAllNotes : KiwixDialog(
+    null,
+    R.string.delete_notes_confirmation_msg,
+    R.string.yes,
+    android.R.string.cancel
+  )
+
+  data class OpenCredits(val customGetView: (() -> View)?) : KiwixDialog(
+    null,
+    null,
+    android.R.string.ok,
+    null,
+    getView = customGetView
   )
 
   open class YesNoDialog(
