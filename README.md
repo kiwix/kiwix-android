@@ -28,8 +28,8 @@ pieces in Java).
 Production releases of the app are built on travis and released automatically
 
 To build this repository alone for development purposes you can simply
-import the project into Android Studio and the hard work will be done
-for you. If you prefer to build without Android Studio you must first
+**import** the project into Android Studio and the hard work will be done
+for you. Note here that instead of *opening* the project, you have to *import* it. If you prefer to build without Android Studio you must first
 set up the Android SDK and then run the command: `./gradlew build `
 from the root directory of the project.
 
