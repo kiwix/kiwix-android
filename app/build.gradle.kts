@@ -44,6 +44,7 @@ android {
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = generateVersionCode()
     versionName = generateVersionName()
+    ndkVersion  = "21.0.6113669"
   }
 
   lintOptions {
