@@ -54,7 +54,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimContentProvider
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.SearchActivity
-import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -107,7 +106,6 @@ interface CoreComponent {
   fun inject(application: CoreApp)
   fun inject(zimContentProvider: ZimContentProvider)
   fun inject(kiwixWebView: KiwixWebView)
-  fun inject(prefsFragment: CorePrefsFragment)
   fun inject(storageSelectDialog: StorageSelectDialog)
   fun inject(addNoteDialog: AddNoteDialog)
 

@@ -28,7 +28,14 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
       .apply {
         dialog.title?.let(this::setTitle)
         dialog.icon?.let(this::setIcon)
-        setMessage(activity.getString(dialog.message, *bodyArguments(dialog)))
+        dialog.message?.let {
+          setMessage(
+            activity.getString(
+              it,
+              *bodyArguments(dialog)
+            )
+          )
+        }
         setPositiveButton(dialog.positiveMessage) { _, _ ->
           clickListeners.getOrNull(0)
             ?.invoke()
@@ -45,6 +52,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
               ?.invoke()
           }
         }
+        dialog.getView?.let { setView(it()) }
         setCancelable(dialog.cancelable)
       }
       .show()
