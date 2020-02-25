@@ -29,6 +29,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -52,7 +53,7 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View,
-  HistoryAdapter.OnItemClickListener {
+        HistoryAdapter.OnItemClickListener {
 
   private final List<HistoryListItem> historyList = new ArrayList<>();
   private final List<HistoryListItem> fullHistory = new ArrayList<>();
@@ -101,8 +102,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
               if the item being removed is between two category headers.
                */
           if (position - 1 >= 0 && historyList.get(position - 1) == null &&
-            (position + 1 >= historyList.size() ||
-              (position + 1 < historyList.size() && historyList.get(position + 1) == null))) {
+                  (position + 1 >= historyList.size() ||
+                          (position + 1 < historyList.size() && historyList.get(position + 1) == null))) {
             historyList.remove(position - 1);
             historyAdapter.notifyItemRemoved(position - 1);
           }
@@ -226,12 +227,24 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       onBackPressed();
       return true;
     } else if (itemId == R.id.menu_history_clear) {
-      presenter.deleteHistory(new ArrayList<>(fullHistory));
-      fullHistory.clear();
-      historyList.clear();
-      historyAdapter.notifyDataSetChanged();
-      setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
-      Toast.makeText(this, R.string.all_history_cleared_toast, Toast.LENGTH_SHORT).show();
+      if(fullHistory.size() > 0) {
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
+                .setMessage(getResources().getString(R.string.clear_history_dailog))
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                  presenter.deleteHistory(new ArrayList<>(fullHistory));
+                  fullHistory.clear();
+                  historyList.clear();
+                  historyAdapter.notifyDataSetChanged();
+                  setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
+                  Toast.makeText(this, R.string.all_history_cleared_toast, Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(android.R.string.no, (dialog, which) -> {
+                  // do nothing
+                })
+                .setIcon(R.drawable.ic_warning)
+                .show();
+      }
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -288,7 +301,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       ImageViewExtensionsKt.setBitmapFromString(favicon, history.getFavicon());
     } else {
       favicon.setImageDrawable(
-        ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
+              ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
       deleteList.add(history);
     }
     actionMode.setTitle(getString(R.string.selected_items, deleteList.size()));
