@@ -47,7 +47,7 @@ class AllProjectConfigurer {
   fun configureBaseExtension(target: Project, path: String) {
     target.configureExtension<BaseExtension> {
       setCompileSdkVersion(Config.compileSdk)
-      ndkVersion = "18.1.5063045"
+      ndkVersion = null
 
       defaultConfig {
         setMinSdkVersion(Config.minSdk)
