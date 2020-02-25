@@ -19,12 +19,17 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
+import android.app.Dialog
 import androidx.appcompat.app.AlertDialog
 import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
   override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit) {
-    AlertDialog.Builder(activity)
+    create(dialog, *clickListeners)
+  }
+
+  override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit): Dialog {
+    return AlertDialog.Builder(activity)
       .apply {
         dialog.title?.let(this::setTitle)
         dialog.icon?.let(this::setIcon)
@@ -55,7 +60,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
         dialog.getView?.let { setView(it()) }
         setCancelable(dialog.cancelable)
       }
-      .show()
+      .create()
   }
 
   private fun bodyArguments(dialog: KiwixDialog) =

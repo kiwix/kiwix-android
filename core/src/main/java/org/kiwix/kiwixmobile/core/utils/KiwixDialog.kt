@@ -161,6 +161,13 @@ sealed class KiwixDialog(
     getView = customGetView
   )
 
+  data class ConfirmationAlertDialogFragment(val CustomMessage: Int) : KiwixDialog(
+    null,
+    CustomMessage,
+    R.string.yes,
+    android.R.string.cancel
+  )
+
   open class YesNoDialog(
     title: Int,
     message: Int
