@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-  implementation("com.android.tools.build:gradle:3.5.3")
+  implementation("com.android.tools.build:gradle:3.6.0")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61")
   implementation("com.dicedmelon.gradle:jacoco-android:0.1.4")
   implementation("org.jlleitschuh.gradle:ktlint-gradle:9.2.1")
