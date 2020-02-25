@@ -19,12 +19,13 @@
 package org.kiwix.kiwixmobile.core.main;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import org.kiwix.kiwixmobile.core.R;
+import javax.inject.Inject;
+import kotlin.Unit;
+import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 /**
@@ -48,6 +49,8 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
   private SharedPreferenceUtil sharedPreferenceUtil;
   private int stringResourceId;
   private String parentDialogFragmentTAG;
+  @Inject
+  protected AlertDialogShower alertDialogShower;
 
   public ConfirmationAlertDialogFragment(SharedPreferenceUtil sharedPreferenceUtil,
     String parentDialogFragmentTAG, int stringResourceId) {
@@ -59,27 +62,20 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     Fragment parentDialogFragment = getFragmentManager().findFragmentByTag(parentDialogFragmentTAG);
-
-    return new AlertDialog.Builder(getActivity()).setMessage(stringResourceId)
-      .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-
-          if (parentDialogFragment != null) {
-            ((UserClickListener) parentDialogFragment).onPositiveClick();
-          }
+    return alertDialogShower.create(new KiwixDialog.ConfirmationAlertDialogFragment(stringResourceId),
+      () -> {
+        if (parentDialogFragment != null) {
+          ((UserClickListener) parentDialogFragment).onPositiveClick();
         }
-      })
-      .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-
-          if (parentDialogFragment != null) {
-            ((UserClickListener) parentDialogFragment).onNegativeClick();
-          }
+        return Unit.INSTANCE;
+      },
+      () -> {
+        if (parentDialogFragment != null) {
+          ((UserClickListener) parentDialogFragment).onNegativeClick();
         }
-      })
-      .create();
+        return Unit.INSTANCE;
+      }
+    );
   }
 
   /**
