@@ -221,7 +221,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   // Advice user to turn on hotspot manually for API<26
   private fun startHotspotManuallyDialog() {
 
-    alertDialogShower.show(KiwixDialog.StartHotspotManually(),
+    alertDialogShower.show(KiwixDialog.StartHotspotManually,
       ::launchTetheringSettingsScreen,
       {},
       {
