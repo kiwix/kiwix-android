@@ -31,6 +31,7 @@
  *
  */
 import java.io.File
+import java.lang.StringBuilder
 import kotlin.system.exitProcess
 
 
@@ -42,7 +43,6 @@ val pathToValues = "/src/main/res/"
 val source = args[0]
 val destination = args[1]
 
-/// name=key
 val key = """name="${args[2]}""""
 
 val sourceDir = File(source + pathToValues)
@@ -50,34 +50,31 @@ if (!sourceDir.exists()) {
   printModuleIsNotValidDir(source, pathToValues)
 }
 
-println("Running transfer of string resources...")
-val numberOfFilesPastedTo = sourceDir.cutStringResourcesAndPasteToDestination(key, source, destination)
-println("Transfer of string resources complete. Moved $numberOfFilesPastedTo strings.")
+println("\nRunning transfer of string resources...\n")
+val numberOfCutLines = sourceDir.cutStringResourcesAndPasteToDestination(key, source, destination)
+println("\nTransfer of string resources complete. Moved $numberOfCutLines strings.")
+
+
 
 fun File.cutStringResourcesAndPasteToDestination(key: String, source: String, destination: String) : Int {
-  var numberOfFilesPastedTo = 0
+  var numberOfCutLines = 0
   this.walk().filter { it.name.equals("strings.xml") }.forEach { resourceFile ->
-    var cutLine: String = cutLineFromResourceFile(resourceFile, key)
-    if (cutLine.equals("")) {
-      // continue for each loop
-      return@forEach
+    cutLineFromResourceFile(resourceFile, key).takeIf{ it.isNotEmpty() }?.let{ cutLine ->
+      pasteLineToDestination(
+        openOrCreateDestinationResourceFile(resourceFile, source, destination),
+        cutLine
+      )
+      numberOfCutLines++
     }
-    val destinationFile = openOrCreateDestinationResourceFile(resourceFile, source, destination)
-    pasteLineToDestination(destinationFile, cutLine)
-    numberOfFilesPastedTo++
   }
-  return numberOfFilesPastedTo
+  return numberOfCutLines
 }
 
 fun openOrCreateDestinationResourceFile(resourceFile: File, source: String, destination: String): File {
 
   val destinationFilePath = resourceFile.path.replaceRange(0..source.length, destination + "/")
   val destinationFile = File(destinationFilePath)
-  val destinationDirectoryPath = destinationFilePath
-    .removeRange(
-      (destinationFilePath.length - "strings.xml".length - 1)..destinationFilePath.length - 1
-    )
-  val destinationDirectory = File(destinationDirectoryPath)
+  val destinationDirectory = destinationFile.parentFile
 
   if (!destinationDirectory.exists()) {
     createDestinationDirectoryAndFile(destinationDirectory, destinationFile)
@@ -86,49 +83,48 @@ fun openOrCreateDestinationResourceFile(resourceFile: File, source: String, dest
 }
 
 fun createDestinationDirectoryAndFile(destinationDirectory: File, destinationFile: File) {
-  destinationDirectory.mkdir()
+  destinationDirectory.mkdirs()
   val isNewFileCreated: Boolean = destinationFile.createNewFile()
   if (!isNewFileCreated) {
     System.err.println("Could not create resource file ${destinationFile.path}")
     System.exit(-1)
   }
-  val initialXMLResourceFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-    "<resources xmlns:tools=\"http://schemas.android.com/tools\" tools:ignore=\"DuplicateStrings\">\n" +
-    "</resources>"
+  val initialXMLResourceFileContent = """
+    <?xml version=\"1.0\" encoding=\"UTF-8\"?>
+    <resources>
+    </resources>
+  """.trimIndent()
+
   destinationFile.writeText(initialXMLResourceFileContent)
   println("Created directory ${destinationDirectory.path} and resource file ${destinationFile.path}")
 }
 
 fun pasteLineToDestination(destinationFile: File, cutLine: String) {
-  var resourceDataWithPastedLine = ""
-  var firstLineRead = false
+  var resourceDataWithPastedLine = StringBuilder()
   destinationFile.forEachLine { line ->
-    resourceDataWithPastedLine = addNewLine(firstLineRead, resourceDataWithPastedLine, line)
-    firstLineRead = true
+    resourceDataWithPastedLine.appendln(line)
     if (line.contains("<resources")) {
       printPastedValue(cutLine, destinationFile)
-      resourceDataWithPastedLine = resourceDataWithPastedLine + "\n" + cutLine
+      resourceDataWithPastedLine.appendln(cutLine)
     }
   }
-  destinationFile.writeText(resourceDataWithPastedLine)
+  destinationFile.writeText(resourceDataWithPastedLine.toString())
 }
 
 fun cutLineFromResourceFile(resourceFile: File, key: String): String {
-  var resourceDataWithoutCutLine = ""
+  var resourceDataWithoutCutLine = StringBuilder()
   var cutLine: String = ""
-  var firstLineRead = false
 
   resourceFile.forEachLine { line ->
     if (line.contains(key)) {
       cutLine = line
       printCutValueAndPath(cutLine, resourceFile)
     } else {
-      resourceDataWithoutCutLine = addNewLine(firstLineRead, resourceDataWithoutCutLine, line)
-      firstLineRead = true
+      resourceDataWithoutCutLine.appendln(line)
     }
   }
 
-  resourceFile.writeText(resourceDataWithoutCutLine)
+  resourceFile.writeText(resourceDataWithoutCutLine.toString())
   return cutLine
 }
 
