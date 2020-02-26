@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import eu.mhutti1.utils.storage.StorageDevice;
@@ -50,7 +49,7 @@ import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
@@ -78,7 +77,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   @Inject
   protected NightModeConfig nightModeConfig;
   @Inject
-  protected AlertDialogShower alertDialogShower;
+  protected DialogShower alertDialogShower;
   private SliderPreference mSlider;
 
   @Override

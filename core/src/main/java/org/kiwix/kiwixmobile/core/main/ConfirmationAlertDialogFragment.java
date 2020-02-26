@@ -24,7 +24,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import javax.inject.Inject;
 import kotlin.Unit;
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
@@ -50,7 +50,7 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
   private int stringResourceId;
   private String parentDialogFragmentTAG;
   @Inject
-  protected AlertDialogShower alertDialogShower;
+  protected DialogShower alertDialogShower;
 
   public ConfirmationAlertDialogFragment(SharedPreferenceUtil sharedPreferenceUtil,
     String parentDialogFragmentTAG, int stringResourceId) {

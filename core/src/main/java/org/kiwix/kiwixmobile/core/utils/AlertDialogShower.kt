@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
   override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit) {
-    create(dialog, *clickListeners)
+    create(dialog, *clickListeners).show()
   }
 
   override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit): Dialog {
@@ -33,14 +33,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
       .apply {
         dialog.title?.let(this::setTitle)
         dialog.icon?.let(this::setIcon)
-        dialog.message?.let {
-          setMessage(
-            activity.getString(
-              it,
-              *bodyArguments(dialog)
-            )
-          )
-        }
+        dialog.message?.let { setMessage(activity.getString(it, *bodyArguments(dialog))) }
         setPositiveButton(dialog.positiveMessage) { _, _ ->
           clickListeners.getOrNull(0)
             ?.invoke()
