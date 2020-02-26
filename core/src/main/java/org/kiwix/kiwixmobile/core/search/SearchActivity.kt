@@ -144,7 +144,6 @@ class SearchActivity : BaseActivity() {
   }
 
   private fun render(searchString: String) {
-    searchView.setQuery(searchString, false)
     searchInTextMenuItem.isEnabled = searchString.isNotBlank()
   }
 
