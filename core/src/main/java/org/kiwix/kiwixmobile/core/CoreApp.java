@@ -17,13 +17,14 @@
  */
 package org.kiwix.kiwixmobile.core;
 
+import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.multidex.MultiDexApplication;
+import androidx.multidex.MultiDex;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,7 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent;
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor;
 
-public abstract class CoreApp extends MultiDexApplication {
+public abstract class CoreApp extends Application {
 
   private static CoreApp app;
   private static CoreComponent coreComponent;
@@ -64,6 +65,9 @@ public abstract class CoreApp extends MultiDexApplication {
   @Override
   protected void attachBaseContext(Context base) {
     super.attachBaseContext(base);
+    if (BuildConfig.DEBUG) {
+      MultiDex.install(this);
+    }
     app = this;
     setCoreComponent(DaggerCoreComponent.builder()
       .context(this)
