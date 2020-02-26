@@ -108,7 +108,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
@@ -215,7 +215,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @Inject
   protected NewBookDao newBookDao;
   @Inject
-  protected AlertDialogShower alertDialogShower;
+  protected DialogShower alertDialogShower;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -1076,7 +1076,7 @@ public abstract class CoreMainActivity extends BaseActivity
         startActivity(intent);
         return Unit.INSTANCE;
       },
-      () -> Unit.INSTANCE,
+      null,
       () -> {
         sharedPreferenceUtil.putPrefExternalLinkPopup(false);
         isExternalLinkPopup = false;

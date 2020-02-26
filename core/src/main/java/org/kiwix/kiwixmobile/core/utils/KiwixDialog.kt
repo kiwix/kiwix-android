@@ -123,12 +123,12 @@ sealed class KiwixDialog(
     neutralMessage = R.string.do_not_ask_anymore
   )
 
-  data class ShowRate(override val args: List<Any>, val custom_icon: Int?) : KiwixDialog(
+  data class ShowRate(override val args: List<Any>, val customIcon: Int?) : KiwixDialog(
     R.string.rate_dialog_title,
     R.string.triple_arg_format_string,
     R.string.rate_dialog_positive,
     R.string.no_thanks,
-    icon = custom_icon,
+    icon = customIcon,
     neutralMessage = R.string.rate_dialog_neutral
   ),
     HasBodyFormatArgs {
@@ -161,9 +161,9 @@ sealed class KiwixDialog(
     getView = customGetView
   )
 
-  data class ConfirmationAlertDialogFragment(val CustomMessage: Int) : KiwixDialog(
+  data class ConfirmationAlertDialogFragment(val customMessage: Int) : KiwixDialog(
     null,
-    CustomMessage,
+    customMessage,
     R.string.yes,
     android.R.string.cancel
   )
