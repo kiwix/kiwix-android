@@ -53,7 +53,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessin
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
-import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
@@ -127,8 +126,7 @@ class SearchViewModel @Inject constructor(
       searchResultsFromZimReader(),
       filter,
       Function3(this::reduce)
-    ).debounce(100, MILLISECONDS)
-      .subscribe(state::postValue, Throwable::printStackTrace)
+    ).subscribe(state::postValue, Throwable::printStackTrace)
 
   private fun reduce(
     recentSearchResults: List<SearchListItem>,
