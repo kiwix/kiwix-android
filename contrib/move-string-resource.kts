@@ -30,6 +30,13 @@
  * their corresponding files within ../core/src/main/res/values*.
  *
  */
+
+ /**
+ * To recompile script to binary use kscript:
+ * https://github.com/holgerbrandl/kscript
+ * https://github.com/holgerbrandl/kscript#deploy-scripts-as-standalone-binaries
+ */
+ 
 import java.io.File
 import java.lang.StringBuilder
 import kotlin.system.exitProcess
