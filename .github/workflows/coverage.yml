@@ -29,7 +29,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
-          script: bash instrumentation.sh
+          script: bash contrib/instrumentation.sh
 
       - name: create unit coverage
         run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
