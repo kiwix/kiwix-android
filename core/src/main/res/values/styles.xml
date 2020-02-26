@@ -39,6 +39,7 @@
 
   <style name="Widget.KiwixTheme.Chip.Choice.Static" parent="Widget.MaterialComponents.Chip.Choice">
     <item name="android:clickable">false</item>
+    <item name="android:textAlignment" tools:ignore="NewApi">center</item>
   </style>
 
   <style name="list_item_title" parent="TextAppearance.KiwixTheme.Subtitle1" />
