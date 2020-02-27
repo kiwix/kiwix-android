@@ -23,7 +23,7 @@
     android:id="@+id/edit"
     android:layout_width="0dip"
     android:layout_height="wrap_content"
-    android:layout_marginRight="@dimen/webview_search_edit_text_margin_right"
+    android:layout_marginEnd="@dimen/webview_search_edit_text_margin_right"
     android:layout_weight="1"
     android:focusableInTouchMode="true"
     android:hint="@string/search_label"

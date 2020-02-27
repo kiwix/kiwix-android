@@ -17,16 +17,16 @@
     android:layout_marginStart="15dp"
     android:layout_marginLeft="15dp"
     android:background="@android:color/transparent"
-    android:paddingLeft="5dp"
+    android:paddingStart="5dp"
     android:paddingTop="5dp"
-    android:paddingRight="5dp"
+    android:paddingEnd="5dp"
     android:paddingBottom="1dp"
     android:text="@string/your_device"
     android:textSize="13sp"
     android:textStyle="italic"
     app:layout_constraintHorizontal_bias="0.0"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/app_bar" />
 
   <TextView
@@ -36,15 +36,15 @@
     android:layout_marginStart="15dp"
     android:layout_marginLeft="15dp"
     android:background="@android:color/transparent"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
     android:paddingBottom="5dp"
     android:textIsSelectable="true"
     android:textSize="17sp"
     android:textStyle="bold"
     app:layout_constraintHorizontal_bias="0.0"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_your_device"
     tools:hint="Device Name" />
 
@@ -52,11 +52,11 @@
     android:id="@+id/view_device_list_boundary"
     android:layout_width="match_parent"
     android:layout_height="2dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
     android:background="@color/accent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_device_name" />
 
   <TextView
@@ -69,8 +69,8 @@
     android:text="@string/nearby_devices"
     android:textSize="16sp"
     app:fontFamily="monospace"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/view_device_list_boundary" />
 
   <androidx.recyclerview.widget.RecyclerView
@@ -79,8 +79,8 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:visibility="invisible"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device"
     app:layout_constraintVertical_bias="0.0" />
 
@@ -92,8 +92,8 @@
     android:background="@android:color/transparent"
     android:gravity="center"
     android:text="@string/no_devices_found"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
 
   <ProgressBar
@@ -104,21 +104,21 @@
     android:background="@android:color/transparent"
     android:indeterminate="true"
     android:visibility="gone"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
 
   <View
     android:id="@+id/view_file_list_boundary"
     android:layout_width="match_parent"
     android:layout_height="1dp"
-    android:layout_marginLeft="5dp"
+    android:layout_marginStart="5dp"
     android:layout_marginTop="200dp"
-    android:layout_marginRight="5dp"
+    android:layout_marginEnd="5dp"
     android:background="@color/accent"
     app:layout_constraintBottom_toTopOf="@+id/text_view_files_for_transfer"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
 
   <TextView
@@ -132,8 +132,8 @@
     android:textSize="16sp"
     app:fontFamily="monospace"
     app:layout_constraintBottom_toTopOf="@id/recycler_view_transfer_files"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/view_file_list_boundary" />
 
   <androidx.recyclerview.widget.RecyclerView
@@ -142,8 +142,8 @@
     android:layout_height="0dp"
     android:background="@android:color/transparent"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
