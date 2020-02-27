@@ -72,6 +72,7 @@
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
   <string name="all_bookmarks_cleared_toast">All Bookmarks Cleared</string>
   <string name="clear_all_history_dialog_title">Clear All History</string>
+  <string name="clear_all_bookmarks_dialog_title">Clear All Bookmarks</string>
   <string name="share">Share</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>
   <string name="delete">Delete</string>
@@ -259,6 +260,8 @@
   <string name="no_bookmarks">No Bookmarks</string>
   <string name="no_history">No History</string>
   <string name="device_default">Device Default</string>
+  <string name="delete_history">Are you sure you want to delete history?</string>
+  <string name="delete_bookmarks">Are you sure you want to delete all bookmarks?</string>
   <string-array name="pref_night_modes_entries">
     <item>On</item>
     <item>Off</item>

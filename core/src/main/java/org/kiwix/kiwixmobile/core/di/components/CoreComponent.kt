@@ -26,7 +26,6 @@ import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -46,7 +45,6 @@ import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.history.HistoryModule
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -112,7 +110,5 @@ interface CoreComponent {
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchActivity: SearchActivity)
   fun inject(helpActivity: HelpActivity)
-  fun inject(historyActivity: HistoryActivity)
-  fun inject(bookmarksActivity: BookmarksActivity)
   fun inject(settingsActivity: CoreSettingsActivity)
 }

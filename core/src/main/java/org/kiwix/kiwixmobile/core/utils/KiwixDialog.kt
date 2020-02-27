@@ -184,6 +184,20 @@ sealed class KiwixDialog(
       R.string.open_in_new_tab, R.string.open_in_new_tab
     )
   }
+
+  object DeleteHistory : KiwixDialog(
+    R.string.clear_all_history_dialog_title,
+    R.string.delete_history,
+    R.string.yes,
+    R.string.no
+  )
+
+  object DeleteBookmarks : KiwixDialog(
+    R.string.clear_all_bookmarks_dialog_title,
+    R.string.delete_bookmarks,
+    R.string.yes,
+    R.string.no
+  )
 }
 
 interface HasBodyFormatArgs {
