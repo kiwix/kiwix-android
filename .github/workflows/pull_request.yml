@@ -25,8 +25,5 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install ndk
-        run: sdkmanager 'ndk;20.0.5594570'
-
       - name: Build all configurations
         run: ./gradlew assemble
