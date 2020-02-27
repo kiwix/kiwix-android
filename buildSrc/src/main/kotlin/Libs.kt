@@ -263,7 +263,7 @@ object Libs {
    */
   const val collection_ktx: String = "androidx.collection:collection-ktx:" + Versions.collection_ktx
 
-  const val jacoco_android: String = "com.dicedmelon.gradle:jacoco-android:" +
+  const val jacoco_android: String = "com.hiya:jacoco-android:" +
       Versions.jacoco_android
 
   /**

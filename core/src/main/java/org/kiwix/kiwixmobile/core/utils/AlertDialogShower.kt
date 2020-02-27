@@ -19,16 +19,21 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
+import android.app.Dialog
 import androidx.appcompat.app.AlertDialog
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.StartHotspotManually
 import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
   override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit) {
-    AlertDialog.Builder(activity)
+    create(dialog, *clickListeners).show()
+  }
+
+  override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit): Dialog {
+    return AlertDialog.Builder(activity)
       .apply {
         dialog.title?.let(this::setTitle)
-        setMessage(activity.getString(dialog.message, *bodyArguments(dialog)))
+        dialog.icon?.let(this::setIcon)
+        dialog.message?.let { setMessage(activity.getString(it, *bodyArguments(dialog))) }
         setPositiveButton(dialog.positiveMessage) { _, _ ->
           clickListeners.getOrNull(0)
             ?.invoke()
@@ -39,15 +44,16 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) : Di
               ?.invoke()
           }
         }
-        if (dialog is StartHotspotManually) {
-          setNeutralButton(dialog.neutralMessage) { _, _ ->
+        dialog.neutralMessage?.let {
+          setNeutralButton(it) { _, _ ->
             clickListeners.getOrNull(2)
               ?.invoke()
           }
         }
+        dialog.getView?.let { setView(it()) }
         setCancelable(dialog.cancelable)
       }
-      .show()
+      .create()
   }
 
   private fun bodyArguments(dialog: KiwixDialog) =

@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import eu.mhutti1.utils.storage.StorageDevice;
@@ -50,6 +49,8 @@ import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
+import org.kiwix.kiwixmobile.core.utils.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
@@ -75,12 +76,17 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   protected StorageCalculator storageCalculator;
   @Inject
   protected NightModeConfig nightModeConfig;
-
+  @Inject
+  protected DialogShower alertDialogShower;
   private SliderPreference mSlider;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    CoreApp.getCoreComponent().inject(this);
+    CoreApp.getCoreComponent()
+      .activityComponentBuilder()
+      .activity(getActivity())
+      .build()
+      .inject(this);
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.preferences);
 
@@ -199,28 +205,20 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   }
 
   private void clearAllHistoryDialog() {
-    new AlertDialog.Builder(getActivity())
-      .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
-      .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
-      .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-        presenter.clearHistory();
-        CoreSettingsActivity.allHistoryCleared = true;
-        Toast.makeText(getActivity(),
-          getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT)
-          .show();
-      })
-      .setNegativeButton(android.R.string.no, (dialog, which) -> {
-        // do nothing
-      })
-      .setIcon(R.drawable.ic_warning)
-      .show();
+    alertDialogShower.show(KiwixDialog.ClearAllHistory.INSTANCE, () -> {
+      presenter.clearHistory();
+      CoreSettingsActivity.allHistoryCleared = true;
+      ContextExtensionsKt.toast(getActivity(), R.string.all_history_cleared_toast,
+        Toast.LENGTH_SHORT);
+      return Unit.INSTANCE;
+    });
   }
 
   private void showClearAllNotesDialog() {
-    new AlertDialog.Builder(getActivity()).setMessage(R.string.delete_notes_confirmation_msg)
-      .setNegativeButton(android.R.string.cancel, null) // Do nothing for 'Cancel' button
-      .setPositiveButton(R.string.yes, (dialog, which) -> clearAllNotes())
-      .show();
+    alertDialogShower.show(KiwixDialog.ClearAllNotes.INSTANCE, () -> {
+      clearAllNotes();
+      return Unit.INSTANCE;
+    });
   }
 
   private void clearAllNotes() {
@@ -252,10 +250,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
       view.getSettings().setJavaScriptEnabled(true);
       view.setBackgroundColor(0);
     }
-    new AlertDialog.Builder(getActivity())
-      .setView(view)
-      .setPositiveButton(android.R.string.ok, null)
-      .show();
+    alertDialogShower.show(new KiwixDialog.OpenCredits(() -> view));
   }
 
   @Override

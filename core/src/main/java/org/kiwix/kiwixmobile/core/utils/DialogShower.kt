@@ -17,9 +17,16 @@
  */
 package org.kiwix.kiwixmobile.core.utils
 
+import android.app.Dialog
+
 interface DialogShower {
   fun show(
     dialog: KiwixDialog,
     vararg clickListeners: (() -> Unit)
   )
+
+  fun create(
+    dialog: KiwixDialog,
+    vararg clickListeners: (() -> Unit)
+  ): Dialog
 }

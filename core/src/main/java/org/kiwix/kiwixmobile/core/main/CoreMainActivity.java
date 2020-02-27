@@ -53,7 +53,6 @@ import android.widget.Toast;
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -109,7 +108,9 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
+import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.DimenUtils;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
@@ -213,6 +214,8 @@ public abstract class CoreMainActivity extends BaseActivity
   protected NewBookmarksDao newBookmarksDao;
   @Inject
   protected NewBookDao newBookDao;
+  @Inject
+  protected DialogShower alertDialogShower;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -637,28 +640,22 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void showRateDialog() {
-    String title = getString(R.string.rate_dialog_title);
-    String message = getString(R.string.rate_dialog_msg_1) + " "
-      + getString(R.string.app_name)
-      + getString(R.string.rate_dialog_msg_2);
-    String positive = getString(R.string.rate_dialog_positive);
-    String negative = getString(R.string.no_thanks);
-    String neutral = getString(R.string.rate_dialog_neutral);
-
-    new AlertDialog.Builder(this)
-      .setTitle(title)
-      .setMessage(message)
-      .setPositiveButton(positive, (dialog, id) -> {
+    alertDialogShower.show(new KiwixDialog.ShowRate(getIconResId()),
+      () -> {
         visitCounterPref.setNoThanksState(true);
         goToRateApp();
-      })
-      .setNegativeButton(negative, (dialog, id) -> visitCounterPref.setNoThanksState(true))
-      .setNeutralButton(neutral, (dialog, id) -> {
+        return Unit.INSTANCE;
+      },
+      () -> {
+        visitCounterPref.setNoThanksState(true);
+        return Unit.INSTANCE;
+      },
+      () ->{
         tempVisitCount = 0;
         visitCounterPref.setCount(tempVisitCount);
-      })
-      .setIcon(ContextCompat.getDrawable(this, getIconResId()))
-      .show();
+        return Unit.INSTANCE;
+      }
+    );
   }
 
   protected abstract int getIconResId();
@@ -1074,21 +1071,20 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void externalLinkPopup(Intent intent) {
-    new AlertDialog.Builder(this)
-      .setTitle(R.string.external_link_popup_dialog_title)
-      .setMessage(R.string.external_link_popup_dialog_message)
-      .setNegativeButton(android.R.string.no, (dialogInterface, i) -> {
-        // do nothing
-      })
-      .setNeutralButton(R.string.do_not_ask_anymore, (dialogInterface, i) -> {
+    alertDialogShower.show(KiwixDialog.ExternalLinkPopup.INSTANCE,
+      () -> {
+        startActivity(intent);
+        return Unit.INSTANCE;
+      },
+      null,
+      () -> {
         sharedPreferenceUtil.putPrefExternalLinkPopup(false);
         isExternalLinkPopup = false;
 
         startActivity(intent);
-      })
-      .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
-      .setIcon(R.drawable.ic_warning)
-      .show();
+        return Unit.INSTANCE;
+      }
+      );
   }
 
   protected void openZimFile(@NonNull File file) {
@@ -1364,14 +1360,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void contentsDrawerHint() {
     drawerLayout.postDelayed(() -> drawerLayout.openDrawer(GravityCompat.END), 500);
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage(getString(R.string.hint_contents_drawer_message))
-      .setPositiveButton(getString(R.string.got_it), (dialog, id) -> {
-      })
-      .setTitle(R.string.did_you_know)
-      .setIcon(R.drawable.icon_question);
-    AlertDialog alert = builder.create();
-    alert.show();
+    alertDialogShower.show(KiwixDialog.ContentsDrawerHint.INSTANCE);
   }
 
   private void openArticle(String articleUrl) {
@@ -1688,25 +1677,21 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   protected void showOpenInNewTabDialog(String url) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-    builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
-      if (isOpenNewTabInBackground) {
-        newTabInBackground(url);
-        Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
-          .setAction(getString(R.string.open), v -> {
-            if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
-          })
-          .setActionTextColor(getResources().getColor(R.color.white))
-          .show();
-      } else {
-        newTab(url);
-      }
-    });
-    builder.setNegativeButton(android.R.string.no, null);
-    builder.setMessage(getString(R.string.open_in_new_tab));
-    AlertDialog dialog = builder.create();
-    dialog.show();
+    alertDialogShower.show(KiwixDialog.YesNoDialog.OpenInNewTab.INSTANCE,
+      () -> {
+        if (isOpenNewTabInBackground) {
+          newTabInBackground(url);
+          Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
+            .setAction(getString(R.string.open), v -> {
+              if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
+            })
+            .setActionTextColor(getResources().getColor(R.color.white))
+            .show();
+        } else {
+          newTab(url);
+        }
+        return Unit.INSTANCE;
+      });
   }
 
   @Override
