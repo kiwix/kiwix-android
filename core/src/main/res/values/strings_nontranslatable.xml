@@ -5,5 +5,5 @@
     <item>medium</item>
     <item>large</item>
   </string-array>
-
+  <string name="triple_arg_format_string" translatable="false">%s %s %s</string>
 </resources>
