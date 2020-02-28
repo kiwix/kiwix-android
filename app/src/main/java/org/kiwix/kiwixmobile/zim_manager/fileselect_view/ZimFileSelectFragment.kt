@@ -157,8 +157,7 @@ class ZimFileSelectFragment : BaseFragment() {
     if (ContextCompat.checkSelfPermission(
         activity!!,
         Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED &&
-      VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1
+      ) != PackageManager.PERMISSION_GRANTED
     ) {
       context.toast(R.string.request_storage)
       requestPermissions(

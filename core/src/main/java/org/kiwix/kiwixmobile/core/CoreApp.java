@@ -138,9 +138,7 @@ public abstract class CoreApp extends Application {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
       builder.detectFileUriExposure();
     }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      builder.detectLeakedRegistrationObjects();
-    }
+    builder.detectLeakedRegistrationObjects();
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       builder.detectNonSdkApiUsage();
     }

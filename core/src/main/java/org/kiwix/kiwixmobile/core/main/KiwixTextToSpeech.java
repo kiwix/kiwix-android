@@ -108,9 +108,7 @@ public class KiwixTextToSpeech {
       currentTTSTask = null;
     } else if (tts.isSpeaking()) {
       if (tts.stop() == TextToSpeech.SUCCESS) {
-        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-          tts.setOnUtteranceProgressListener(null);
-        }
+        tts.setOnUtteranceProgressListener(null);
         onSpeakingListener.onSpeakingEnded();
       }
     } else {
@@ -172,9 +170,7 @@ public class KiwixTextToSpeech {
   public void stop() {
     if (tts.stop() == TextToSpeech.SUCCESS) {
       currentTTSTask = null;
-      if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-        tts.setOnUtteranceProgressListener(null);
-      }
+      tts.setOnUtteranceProgressListener(null);
       onSpeakingListener.onSpeakingEnded();
     }
   }
@@ -260,9 +256,7 @@ public class KiwixTextToSpeech {
     void pause() {
       paused = true;
       currentPiece.decrementAndGet();
-      if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-        tts.setOnUtteranceProgressListener(null);
-      }
+      tts.setOnUtteranceProgressListener(null);
       tts.stop();
     }
 
@@ -285,33 +279,31 @@ public class KiwixTextToSpeech {
         stop();
       }
 
-      if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-          @Override
-          public void onStart(String s) {
+      tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+        @Override
+        public void onStart(String s) {
 
+        }
+
+        @Override
+        public void onDone(String s) {
+          int line = currentPiece.intValue();
+
+          if (line >= pieces.size() && !paused) {
+            stop();
+            return;
           }
 
-          @Override
-          public void onDone(String s) {
-            int line = currentPiece.intValue();
+          tts.speak(pieces.get(line), TextToSpeech.QUEUE_ADD, params);
+          currentPiece.getAndIncrement();
+        }
 
-            if (line >= pieces.size() && !paused) {
-              stop();
-              return;
-            }
-
-            tts.speak(pieces.get(line), TextToSpeech.QUEUE_ADD, params);
-            currentPiece.getAndIncrement();
-          }
-
-          @Override
-          public void onError(String s) {
-            Log.e(TAG_KIWIX, "TextToSpeech Error: " + s);
-            //TODO: Surface to user
-          }
-        });
-      }
+        @Override
+        public void onError(String s) {
+          Log.e(TAG_KIWIX, "TextToSpeech Error: " + s);
+          //TODO: Surface to user
+        }
+      });
     }
 
     void stop() {

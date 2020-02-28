@@ -97,22 +97,18 @@ public class CompatFindActionModeCallback
         "WebView supplied to CompatFindActionModeCallback cannot be null");
     }
     this.webView = webView;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      findResultsTextView.setVisibility(View.VISIBLE);
-      this.webView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
-        String result;
-        if (editText.getText().toString().isEmpty()) {
-          result = "";
-        } else if (numberOfMatches == 0) {
-          result = "0/0";
-        } else {
-          result = (activeMatchOrdinal + 1) + "/" + numberOfMatches;
-        }
-        findResultsTextView.setText(result);
-      });
-    } else {
-      findResultsTextView.setVisibility(View.GONE);
-    }
+    findResultsTextView.setVisibility(View.VISIBLE);
+    this.webView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
+      String result;
+      if (editText.getText().toString().isEmpty()) {
+        result = "";
+      } else if (numberOfMatches == 0) {
+        result = "0/0";
+      } else {
+        result = (activeMatchOrdinal + 1) + "/" + numberOfMatches;
+      }
+      findResultsTextView.setText(result);
+    });
   }
 
   // Move the highlight to the next match.
@@ -135,17 +131,9 @@ public class CompatFindActionModeCallback
     CharSequence find = editText.getText();
     if (find == null || find.length() == 0) {
       webView.clearMatches();
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        webView.findAllAsync("");
-      } else {
-        webView.findAll("");
-      }
+      webView.findAllAsync("");
     } else {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        webView.findAllAsync(find.toString());
-      } else {
-        webView.findAll(find.toString());
-      }
+      webView.findAllAsync(find.toString());
 
       // Enable word highlighting with reflection
       try {

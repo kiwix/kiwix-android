@@ -84,9 +84,7 @@ public class KiwixWebView extends VideoEnabledWebView {
     settings.setDomStorageEnabled(true);
     settings.setJavaScriptEnabled(true);
     clearCache(true);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      settings.setAllowUniversalAccessFromFileURLs(true);
-    }
+    settings.setAllowUniversalAccessFromFileURLs(true);
     setWebViewClient(webViewClient);
     final KiwixWebChromeClient client =
       new KiwixWebChromeClient(callback, nonVideoView, videoView, this);
