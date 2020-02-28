@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.text.Editable;
@@ -53,7 +54,7 @@ public class CompatFindActionModeCallback
 
   private ActionMode actionMode;
 
-  CompatFindActionModeCallback(Context context) {
+  @SuppressLint("InflateParams") CompatFindActionModeCallback(Context context) {
     customView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
     editText = customView.findViewById(R.id.edit);
     editText.setOnClickListener(this);
@@ -96,7 +97,7 @@ public class CompatFindActionModeCallback
         "WebView supplied to CompatFindActionModeCallback cannot be null");
     }
     this.webView = webView;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       findResultsTextView.setVisibility(View.VISIBLE);
       this.webView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
         String result;
@@ -134,13 +135,13 @@ public class CompatFindActionModeCallback
     CharSequence find = editText.getText();
     if (find == null || find.length() == 0) {
       webView.clearMatches();
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
         webView.findAllAsync("");
       } else {
         webView.findAll("");
       }
     } else {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
         webView.findAllAsync(find.toString());
       } else {
         webView.findAll(find.toString());

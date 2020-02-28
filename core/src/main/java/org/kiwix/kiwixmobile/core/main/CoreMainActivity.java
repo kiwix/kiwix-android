@@ -1107,7 +1107,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void requestExternalStoragePermission() {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
       ActivityCompat.requestPermissions(
         this,
         new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },

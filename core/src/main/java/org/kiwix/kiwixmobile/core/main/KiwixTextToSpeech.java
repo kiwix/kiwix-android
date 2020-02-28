@@ -108,7 +108,7 @@ public class KiwixTextToSpeech {
       currentTTSTask = null;
     } else if (tts.isSpeaking()) {
       if (tts.stop() == TextToSpeech.SUCCESS) {
-        if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
           tts.setOnUtteranceProgressListener(null);
         }
         onSpeakingListener.onSpeakingEnded();
@@ -172,7 +172,7 @@ public class KiwixTextToSpeech {
   public void stop() {
     if (tts.stop() == TextToSpeech.SUCCESS) {
       currentTTSTask = null;
-      if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+      if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
         tts.setOnUtteranceProgressListener(null);
       }
       onSpeakingListener.onSpeakingEnded();
@@ -260,7 +260,7 @@ public class KiwixTextToSpeech {
     void pause() {
       paused = true;
       currentPiece.decrementAndGet();
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+      if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
         tts.setOnUtteranceProgressListener(null);
       }
       tts.stop();
@@ -285,7 +285,7 @@ public class KiwixTextToSpeech {
         stop();
       }
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+      if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
         tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
           @Override
           public void onStart(String s) {
