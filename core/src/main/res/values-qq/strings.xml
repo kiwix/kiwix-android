@@ -42,4 +42,7 @@
   <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
   <string name="save">{{Identical|Save}}</string>
   <string name="no_bookmarks">This means \"there are no bookmarks\"</string>
+  <string name="on">{{Identical|Turn On}}</string>
+  <string name="off">{{Identical|Turn Off}}</string>
+  <string name="auto">{{Identical|Automatic}}</string>
 </resources>

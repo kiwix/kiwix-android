@@ -251,4 +251,7 @@
   <string name="go_to_settings">اذهب للإعدادات</string>
   <string name="no_results">لا نتائج</string>
   <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
+  <string name="on">شغله</string>
+  <string name="off">أطفأ</string>
+  <string name="auto">تلقائيا</string>
 </resources>
