@@ -40,6 +40,7 @@ class NewRecentSearchDao @Inject constructor(
   }
 
   fun saveSearch(title: String, id: String) {
+    deleteSearchString(title)
     box.put(RecentSearchEntity(searchTerm = title, zimId = id))
   }
 
