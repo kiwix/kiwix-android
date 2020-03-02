@@ -15,18 +15,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.intro
 
-package org.kiwix.kiwixmobile.intro;
+import android.view.View
+import android.view.ViewGroup
+import androidx.viewpager.widget.PagerAdapter
 
-import org.kiwix.kiwixmobile.core.base.BaseContract;
+internal class IntroPagerAdapter(private val views: Array<View>) :
+  PagerAdapter() {
+  override fun getCount(): Int = views.size
 
-public interface IntroContract {
-
-  interface View extends BaseContract.View<Presenter> {
-
+  override fun instantiateItem(
+    container: ViewGroup,
+    position: Int
+  ): Any {
+    container.addView(views[position])
+    return views[position]
   }
 
-  interface Presenter extends BaseContract.Presenter<View> {
-    void setIntroShown();
+  override fun destroyItem(
+    container: ViewGroup,
+    position: Int,
+    `object`: Any
+  ) {
+    container.removeView(`object` as View)
   }
+
+  override fun isViewFromObject(
+    view: View,
+    `object`: Any
+  ): Boolean = view === `object`
 }
