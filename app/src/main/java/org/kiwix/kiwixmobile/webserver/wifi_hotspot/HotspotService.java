@@ -81,7 +81,7 @@ public class HotspotService extends Service
           intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
           zimHostCallbacks.onServerStarted(ServerUtils.getSocketAddress());
           startForegroundNotificationHelper();
-          Toast.makeText(this, R.string.server_started__successfully_toast_message,
+          Toast.makeText(this, R.string.server_started_successfully_toast_message,
             Toast.LENGTH_SHORT).show();
         } else {
           zimHostCallbacks.onServerFailedToStart();
@@ -90,6 +90,8 @@ public class HotspotService extends Service
         break;
 
       case ACTION_STOP_SERVER:
+        Toast.makeText(this, R.string.server_stopped_successfully_toast_message,
+          Toast.LENGTH_SHORT).show();
         stopHotspotAndDismissNotification();
         break;
 

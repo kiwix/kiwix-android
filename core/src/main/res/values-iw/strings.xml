@@ -37,7 +37,7 @@
   <string name="no_books_selected_toast_message">נא לבחור ספרים קודם</string>
   <string name="server_failed_message">לא היה אפשר להתחיל את השרת. נא להפעיל את נקודת החיבור שלך</string>
   <string name="server_failed_toast_message">לא היה אפשר להריץ את השרת.</string>
-  <string name="server_started__successfully_toast_message">השרת הופעל בהצלחה.</string>
+  <string name="server_started_successfully_toast_message">השרת הופעל בהצלחה.</string>
   <string name="hotspot_turned_on">נקודת החיבור הופעלה</string>
   <string name="hotspot_details_message">להלן הפרטים של נקודת החיבור המקומית שלך.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">נא לבחור את הקבצים שברצונך לארח בשרת</string>
