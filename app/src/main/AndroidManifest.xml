@@ -25,7 +25,9 @@
         android:name="android.app.shortcuts"
         android:resource="@xml/shortcuts" />
     </activity>
-    <activity android:name=".intro.IntroActivity" />
+    <activity
+      android:name=".intro.IntroActivity"
+      android:screenOrientation="portrait" />
     <activity
       android:name=".main.KiwixMainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize"
