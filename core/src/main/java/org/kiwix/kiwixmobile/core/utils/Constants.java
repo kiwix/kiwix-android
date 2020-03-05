@@ -53,6 +53,8 @@ public final class Constants {
 
   public static final String TAG_CURRENT_TAB = "currenttab";
 
+  public static final String TAG_FROM_TAB_SWITCHER = "fromtabswitcher";
+
   // Extras
   public static final String EXTRA_ZIM_FILE = "zimFile";
 

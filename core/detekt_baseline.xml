@@ -15,7 +15,6 @@
     <ID>MagicNumber:KiloByte.kt$KiloByte$1024.0</ID>
     <ID>MagicNumber:MainMenu.kt$MainMenu$99</ID>
     <ID>MagicNumber:SearchResultGenerator.kt$ZimSearchResultGenerator$200</ID>
-    <ID>MagicNumber:SearchViewModel.kt$SearchViewModel$100</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
@@ -37,10 +36,6 @@
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun hasPart(file: File): Boolean</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
     <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
-    <ID>SpreadOperator:AlertDialogShower.kt$AlertDialogShower$(dialog.message, *bodyArguments(dialog))</ID>
-    <ID>SpreadOperator:BooksOnDiskAdapter.kt$BooksOnDiskAdapter$( *delegates )</ID>
-    <ID>SpreadOperator:FileSearch.kt$FileSearch$(*zimFileExtensions)</ID>
-    <ID>SpreadOperator:SearchAdapter.kt$SearchAdapter$(*delegates)</ID>
     <ID>TooGenericExceptionThrown:AbstractContentProvider.kt$AbstractContentProvider$throw RuntimeException("Operation not supported")</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
     <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
@@ -52,8 +47,10 @@
     <ID>TooManyFunctions:CoreComponent.kt$CoreComponent$CoreComponent</ID>
     <ID>TooManyFunctions:FetchDownloadMonitor.kt$FetchDownloadMonitor$&lt;no name provided&gt; : FetchListener</ID>
     <ID>TooManyFunctions:FileUtils.kt$FileUtils$FileUtils</ID>
+    <ID>TooManyFunctions:MainMenu.kt$MainMenu.MenuClickListener$MenuClickListener</ID>
     <ID>TooManyFunctions:NewBookDao.kt$NewBookDao$NewBookDao</ID>
     <ID>TooManyFunctions:Repository.kt$Repository$Repository</ID>
+    <ID>TooManyFunctions:SearchActivity.kt$SearchActivity$SearchActivity</ID>
     <ID>TooManyFunctions:ZimFileReader.kt$ZimFileReader$ZimFileReader</ID>
     <ID>TooManyFunctions:ZimReaderContainer.kt$ZimReaderContainer$ZimReaderContainer</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Eb = Pb * 1024</ID>

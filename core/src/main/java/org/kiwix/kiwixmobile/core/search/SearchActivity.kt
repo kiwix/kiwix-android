@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.State
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
+import org.kiwix.kiwixmobile.core.utils.Constants.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -102,6 +103,11 @@ class SearchActivity : BaseActivity() {
   override fun finish() {
     super.finish()
     overridePendingTransition(anim.fade_in, anim.fade_out)
+  }
+
+  override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+    menu?.findItem(R.id.menu_searchintext)?.isVisible = !isFromTabSwitcher()
+    return super.onPrepareOptionsMenu(menu)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -155,4 +161,6 @@ class SearchActivity : BaseActivity() {
     super.onActivityResult(requestCode, resultCode, data)
     searchViewModel.actions.offer(ActivityResultReceived(requestCode, resultCode, data))
   }
+
+  private fun isFromTabSwitcher() = intent.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false)
 }

@@ -30,10 +30,8 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.Constants
-import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE
 
 const val REQUEST_FILE_SEARCH = 1236
 
@@ -70,6 +68,7 @@ class MainMenu(
     fun onFullscreenMenuClicked()
     fun onSupportKiwixMenuClicked()
     fun onHostBooksMenuClicked()
+    fun navigateToSearch(zimFileReader: ZimFileReader): Boolean
   }
 
   init {
@@ -151,11 +150,11 @@ class MainMenu(
 
   fun onFileOpened(zimFileReader: ZimFileReader, urlIsValid: Boolean) {
     setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen)
-    search.setOnMenuItemClickListener { navigateToSearch(zimFileReader) }
+    search.setOnMenuItemClickListener { menuClickListener.navigateToSearch(zimFileReader) }
   }
 
   fun showTabSwitcherOptions() {
-    setVisibility(false, randomArticle, search, readAloud, addNote, fullscreen)
+    setVisibility(false, randomArticle, readAloud, addNote, fullscreen)
   }
 
   fun showWebViewOptions(urlIsValid: Boolean) {
@@ -165,17 +164,6 @@ class MainMenu(
 
   fun updateTabIcon(tabs: Int) {
     tabSwitcherTextView?.text = if (tabs > 99) ":D" else "$tabs"
-  }
-
-  private fun navigateToSearch(zimFileReader: ZimFileReader): Boolean {
-    activity.startActivityForResult(
-      activity.intent<SearchActivity> {
-        putExtra(EXTRA_ZIM_FILE, zimFileReader.zimFile.absolutePath)
-      },
-      REQUEST_FILE_SEARCH
-    )
-    activity.overridePendingTransition(0, 0)
-    return true
   }
 
   fun onTextToSpeechStartedTalking() {
@@ -192,7 +180,7 @@ class MainMenu(
 
   fun tryExpandSearch(zimFileReader: ZimFileReader?) {
     if (search.isVisible) {
-      zimFileReader?.let(::navigateToSearch)
+      zimFileReader?.let(menuClickListener::navigateToSearch)
     }
   }
 }
