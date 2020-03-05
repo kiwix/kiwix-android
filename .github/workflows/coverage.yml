@@ -35,7 +35,5 @@ jobs:
         run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+        run: |
+          bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
