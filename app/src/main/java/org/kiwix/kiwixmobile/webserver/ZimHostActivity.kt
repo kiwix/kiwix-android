@@ -177,6 +177,8 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.getSocketAddress()
       layoutServerStarted()
+    } else {
+      layoutServerStopped()
     }
   }
 
