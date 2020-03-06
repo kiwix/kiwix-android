@@ -4,7 +4,6 @@ import io.mockk.every
 import io.mockk.mockk
 import org.kiwix.kiwixmobile.core.history.HistoryListItem
 
-
 fun mockkHistoryItemWithTitle(historyTitle: String): HistoryListItem.HistoryItem {
   val historyItem = mockk<HistoryListItem.HistoryItem>()
   every { historyItem.historyUrl } returns "url$historyTitle"
