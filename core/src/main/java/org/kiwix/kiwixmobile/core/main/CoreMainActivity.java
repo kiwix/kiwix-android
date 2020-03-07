@@ -533,8 +533,8 @@ public abstract class CoreMainActivity extends BaseActivity
     contentFrame.setVisibility(View.GONE);
     progressBar.setVisibility(View.GONE);
     backToTopButton.hide();
-    tabSwitcherRoot.setVisibility(View.VISIBLE);
-    startAnimation(tabSwitcherRoot, R.anim.slide_down);
+      tabSwitcherRoot.setVisibility(View.VISIBLE);
+      startAnimation(tabSwitcherRoot, R.anim.slide_down);
     if (tabsAdapter.getSelected() < webViewList.size() &&
       tabRecyclerView.getLayoutManager() != null) {
       tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
@@ -556,10 +556,13 @@ public abstract class CoreMainActivity extends BaseActivity
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
       closeAllTabsButton.setImageDrawable(
         ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
-      startAnimation(tabSwitcherRoot, R.anim.slide_up);
-      tabSwitcherRoot.setVisibility(View.GONE);
-      progressBar.setVisibility(View.VISIBLE);
-      contentFrame.setVisibility(View.VISIBLE);
+      if(tabSwitcherRoot.getVisibility()==View.VISIBLE){
+          tabSwitcherRoot.setVisibility(View.GONE);
+          startAnimation(tabSwitcherRoot, R.anim.slide_up);
+          progressBar.setVisibility(View.VISIBLE);
+          contentFrame.setVisibility(View.VISIBLE);
+        }
+      selectTab(currentWebViewIndex);
       if (mainMenu != null) {
         mainMenu.showWebViewOptions(!urlIsInvalid());
       }
@@ -611,7 +614,7 @@ public abstract class CoreMainActivity extends BaseActivity
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
-      hideTabSwitcher();
+        hideTabSwitcher();
     } else if (isInFullScreenMode()) {
       closeFullScreen();
     } else if (compatCallback.isActive) {
