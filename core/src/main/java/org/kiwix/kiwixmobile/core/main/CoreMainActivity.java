@@ -533,8 +533,8 @@ public abstract class CoreMainActivity extends BaseActivity
     contentFrame.setVisibility(View.GONE);
     progressBar.setVisibility(View.GONE);
     backToTopButton.hide();
-      tabSwitcherRoot.setVisibility(View.VISIBLE);
-      startAnimation(tabSwitcherRoot, R.anim.slide_down);
+    tabSwitcherRoot.setVisibility(View.VISIBLE);
+    startAnimation(tabSwitcherRoot, R.anim.slide_down);
     if (tabsAdapter.getSelected() < webViewList.size() &&
       tabRecyclerView.getLayoutManager() != null) {
       tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
@@ -614,7 +614,7 @@ public abstract class CoreMainActivity extends BaseActivity
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
-        hideTabSwitcher();
+      hideTabSwitcher();
     } else if (isInFullScreenMode()) {
       closeFullScreen();
     } else if (compatCallback.isActive) {
