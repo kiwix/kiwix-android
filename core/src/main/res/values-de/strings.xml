@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* 1233qwer1234qwer4
 * Killarnee
 * Metalhead64
 -->
@@ -125,5 +126,6 @@
   <string name="do_not_ask_anymore">Nicht mehr fragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="other_languages">Weitere Sprachen:</string>
+  <string name="no_results">Keine Ergebnisse</string>
   <string name="no_bookmarks">Keine Lesezeichen</string>
 </resources>

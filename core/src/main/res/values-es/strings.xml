@@ -206,4 +206,5 @@
   <string name="go_to_settings">Ir a Configuración</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
+  <string name="device_default">Valor predet. del dispositivo</string>
 </resources>

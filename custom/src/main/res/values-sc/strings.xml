@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* L2212
+-->
+<resources>
+  <string name="retry">Torra a proare</string>
+  <string name="download">Iscàrriga</string>
+  <string name="invalid_installation">Installatzione non vàlida. Pro praghere iscàrriga unu Zim.\n Assegura·ti chi su WiFi siat allutu e de tènnere memòria bastante</string>
+</resources>

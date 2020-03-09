@@ -2,8 +2,10 @@
 <!-- Authors:
 * Ganesh Paudel
 * Macofe
+* पर्वत सुबेदी
 * राम प्रसाद जोशी
 * सरोज कुमार ढकाल
+* हिमाल सुबेदी
 -->
 <resources>
   <string name="menu_help">सहायता</string>
@@ -42,6 +44,7 @@
   <string name="delete_recent_search_item">यस वस्तुलाई मेट्ने हो?</string>
   <string name="pref_clear_all_history_title">इतिहास खाली गर्नुहोस्</string>
   <string name="all_history_cleared_toast">सबै इतिहास खाली गरियो</string>
+  <string name="pref_clear_all_bookmarks_title">पुस्तक चिनाेहरू हटाउनुहाेस्</string>
   <string name="clear_all_history_dialog_title">सबै इतिहास हटाउनुहोस्</string>
   <string name="delete">हटाउने</string>
   <string name="delete_specific_search_toast">हालको खोज हटाइयो</string>
@@ -89,10 +92,16 @@
   <string name="time_minute">मिनेट</string>
   <string name="time_second">s</string>
   <string name="time_left">बाँकी</string>
+  <string name="time_today">आज</string>
   <string name="external_link_popup_dialog_title">वाह्य लिङ्कमा जाँदै</string>
   <string name="external_link_popup_dialog_message">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline. जारी राख्न चाहनुहुन्छ?</string>
   <string name="do_not_ask_anymore">फेरि नसोध्नुहोस्</string>
   <string name="your_languages">छानिएको भाष:</string>
   <string name="other_languages">अन्य भाषाहरू:</string>
+  <string name="history_from_current_book">सबै किताबहरूबाट इतिहास हेर्नुहोस्</string>
+  <string name="complete">पूर्ण भयो</string>
+  <string name="status">स्थिति</string>
   <string name="no_bookmarks">कुनै पनि पुस्तक चिनोहरू छैनन्</string>
+  <string name="no_history">कुनैपनि इतिहास छैन</string>
+  <string name="device_default">पुनर्निधारित उपकरण</string>
 </resources>

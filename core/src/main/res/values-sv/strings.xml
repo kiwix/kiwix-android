@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Jopparn
 * Skalman
 * WikiPhoenix
@@ -179,7 +180,7 @@
   <string name="close_all_tabs">Stäng alla flikar</string>
   <string name="pending_state">Väntande</string>
   <string name="running_state">Pågående</string>
-  <string name="complete">Slutförd</string>
+  <string name="complete">Färdig</string>
   <string name="paused_state">Pausad</string>
   <string name="failed_state">Misslyckades: %s</string>
   <string name="save">Spara</string>

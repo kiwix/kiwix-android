@@ -4,6 +4,7 @@
 * DeRudySoulStorm
 * InternerowyGołąb
 * Kelson
+* Krzyz23
 * Macofe
 * Rail
 * Rzuwig
@@ -36,6 +37,7 @@
   <string name="hotspot_failed_message">Wygląda na to, że Twój punkt dostępu jest już włączony. Wyłącz hotspot Wi-Fi, aby kontynuować.</string>
   <string name="go_to_wifi_settings_label">Przejdź do ustawień WIFI</string>
   <string name="hotspot_running">Uruchamianie Hotspot</string>
+  <string name="no_books_selected_toast_message">Proszę wybrać najpierw książki</string>
   <string name="server_failed_toast_message">Nie można uruchomić serwera.</string>
   <string name="server_started__successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
   <string name="hotspot_turned_on">Hotspot włączony</string>
@@ -238,4 +240,5 @@
   <string name="go_to_settings">Przejdź do ustawień</string>
   <string name="no_results">Brak wyników</string>
   <string name="no_bookmarks">Brak zakładek</string>
+  <string name="no_history">Nie ma Historii</string>
 </resources>

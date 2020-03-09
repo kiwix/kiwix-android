@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Arya sarhan
+-->
+<resources>
+  <string name="retry">ھەوڵداناوە</string>
+  <string name="download">داگرتن</string>
+</resources>

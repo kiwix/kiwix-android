@@ -29,6 +29,14 @@
   <string name="choose_file">Yew dosyay zerreki weçine (*.zim)</string>
   <string name="open_in_new_tab">Gıre xıldayışo newe de abo?</string>
   <string name="hotspot_service_channel_name">Kanalê xızmeti Hotspot</string>
+  <string name="hotspot_failed_title">Serkewtışê hotspoti nêbiyo</string>
+  <string name="go_to_wifi_settings_label">Ravêrê eyaranê Wi-Fi</string>
+  <string name="hotspot_running">Hotspoto gureyneyino</string>
+  <string name="no_books_selected_toast_message">Veror kıtaba weçinê</string>
+  <string name="progress_dialog_starting_server">Server gureyneyino</string>
+  <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
+  <string name="start_server_label">Serveri serkewtış</string>
+  <string name="stop_server_label">Serveri vındardış</string>
   <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye.</string>
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>
   <string name="error_article_url_not_found">Xeta: Barkerdışê meqaleyê (Url: %1$s) nêbi.</string>
@@ -114,6 +122,15 @@
   <string name="time_yesterday">Vızêr</string>
   <string name="external_link_popup_dialog_title">Şono gıreyê beberi</string>
   <string name="do_not_ask_anymore">Endi meperse</string>
+  <string name="pending_state">Vındarde</string>
+  <string name="running_state">Rameno</string>
+  <string name="complete">Temam</string>
+  <string name="paused_state">Vındarneya</string>
   <string name="status">Weziyet</string>
+  <string name="tag_pic">Resım</string>
+  <string name="tag_vid">Video</string>
+  <string name="tag_text_only">Teyna metin</string>
+  <string name="tag_short_text">Metino kılm</string>
+  <string name="storage_permission_denied">İcazetê depoy red biyo</string>
   <string name="no_bookmarks">Nişani çıniyê</string>
 </resources>
