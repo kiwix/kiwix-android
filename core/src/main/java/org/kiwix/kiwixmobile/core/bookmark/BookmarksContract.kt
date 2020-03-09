@@ -18,24 +18,16 @@
 package org.kiwix.kiwixmobile.core.bookmark
 
 import org.kiwix.kiwixmobile.core.base.BaseContract
-import org.kiwix.kiwixmobile.core.base.BaseContract.Presenter
-import org.kiwix.kiwixmobile.core.base.BaseContract.View
 
 internal interface BookmarksContract {
-  interface View :
-    BaseContract.View<Presenter?> {
-    fun updateBookmarksList(bookmarks: List<BookmarkItem?>?)
-    fun notifyBookmarksListFiltered(bookmarks: List<BookmarkItem?>?)
+  interface View : BaseContract.View<Presenter> {
+    fun updateBookmarksList(bookmarks: List<BookmarkItem>)
+    fun notifyBookmarksListFiltered(bookmarks: List<BookmarkItem>)
   }
 
-  interface Presenter :
-    BaseContract.Presenter<View?> {
+  interface Presenter : BaseContract.Presenter<View> {
     fun loadBookmarks(showBookmarksCurrentBook: Boolean)
-    fun filterBookmarks(
-      bookmarksList: List<BookmarkItem?>?,
-      newText: String?
-    )
-
-    fun deleteBookmarks(deleteList: List<BookmarkItem?>?)
+    fun filterBookmarks(bookmarksList: List<BookmarkItem>, newText: String)
+    fun deleteBookmarks(deleteList: List<BookmarkItem>)
   }
 }
