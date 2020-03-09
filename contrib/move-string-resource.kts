@@ -96,13 +96,14 @@ fun createDestinationDirectoryAndFile(destinationDirectory: File, destinationFil
     System.err.println("Could not create resource file ${destinationFile.path}")
     System.exit(-1)
   }
-  val initialXMLResourceFileContent = """
+
+  destinationFile.writeText(
+  """
     <?xml version=\"1.0\" encoding=\"UTF-8\"?>
     <resources>
     </resources>
   """.trimIndent()
-
-  destinationFile.writeText(initialXMLResourceFileContent)
+  )
   println("Created directory ${destinationDirectory.path} and resource file ${destinationFile.path}")
 }
 
