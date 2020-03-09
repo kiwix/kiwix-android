@@ -147,10 +147,11 @@ sealed class KiwixDialog(
   )
 
   object ClearAllNotes : KiwixDialog(
-    null,
     R.string.delete_notes_confirmation_msg,
-    R.string.yes,
-    android.R.string.cancel
+    message = null,
+    positiveMessage = R.string.yes,
+    negativeMessage = R.string.no,
+    icon = R.drawable.ic_warning
   )
 
   data class OpenCredits(val customGetView: (() -> View)?) : KiwixDialog(

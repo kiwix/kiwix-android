@@ -191,7 +191,7 @@ public class KiwixWebView extends VideoEnabledWebView {
       return fileName.substring(fileName.indexOf("%3A") + 1);
     }
 
-    @Override
+    @SuppressLint("StringFormatInvalid") @Override
     public void handleMessage(Message msg) {
       String url = (String) msg.getData().get("url");
       String src = (String) msg.getData().get("src");

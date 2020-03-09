@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.text.Editable;
@@ -53,7 +54,7 @@ public class CompatFindActionModeCallback
 
   private ActionMode actionMode;
 
-  CompatFindActionModeCallback(Context context) {
+  @SuppressLint("InflateParams") CompatFindActionModeCallback(Context context) {
     customView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
     editText = customView.findViewById(R.id.edit);
     editText.setOnClickListener(this);
