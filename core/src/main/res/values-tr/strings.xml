@@ -42,7 +42,7 @@
   <string name="no_books_selected_toast_message">Lütfen önce kitapları seçin</string>
   <string name="server_failed_message">Sunucu başlatılamadı. Lütfen etkin noktanızı açın</string>
   <string name="server_failed_toast_message">Sunucu başlatılamadı.</string>
-  <string name="server_started__successfully_toast_message">Sunucu başarıyla başladı.</string>
+  <string name="server_started_successfully_toast_message">Sunucu başarıyla başladı.</string>
   <string name="hotspot_turned_on">Hotspot açık</string>
   <string name="hotspot_details_message">Aşağıda yerel etkin noktanızın ayrıntıları verilmiştir.\nSSID: %1$s\nGeçiş: %2$s</string>
   <string name="server_textview_default_message">Sunucuda barındırmak istediğiniz dosyaları seçin</string>
