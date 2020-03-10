@@ -852,10 +852,12 @@ public abstract class CoreMainActivity extends BaseActivity
     webViewList.remove(index);
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
-    Snackbar.make(snackbarRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
+    Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo, v -> {
         webViewList.add(index, tempForUndo);
         tabsAdapter.notifyItemInserted(index);
+        tabsAdapter.notifyDataSetChanged();
+        Snackbar.make(snackbarRoot,"Tab restored",Snackbar.LENGTH_SHORT).show();
         setUpWebViewWithTextToSpeech();
       })
       .show();
