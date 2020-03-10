@@ -557,10 +557,10 @@ public abstract class CoreMainActivity extends BaseActivity
       closeAllTabsButton.setImageDrawable(
         ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
       if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
-          tabSwitcherRoot.setVisibility(View.GONE);
-          startAnimation(tabSwitcherRoot, R.anim.slide_up);
-          progressBar.setVisibility(View.VISIBLE);
-          contentFrame.setVisibility(View.VISIBLE);
+        tabSwitcherRoot.setVisibility(View.GONE);
+        startAnimation(tabSwitcherRoot, R.anim.slide_up);
+        progressBar.setVisibility(View.VISIBLE);
+        contentFrame.setVisibility(View.VISIBLE);
       }
       selectTab(currentWebViewIndex);
       if (mainMenu != null) {
