@@ -137,6 +137,7 @@ class LibraryFragment : BaseFragment() {
           libraryErrorText.setText(R.string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
         }
+        librarySwipeRefresh.isRefreshing = false
       }
     }
   }
