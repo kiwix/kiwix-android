@@ -31,7 +31,7 @@
   <string name="no_books_selected_toast_message">Најпрвин одберете книги</string>
   <string name="server_failed_message">Не можев да го покренам опслужувачот. Вклучете ја пристапната точка</string>
   <string name="server_failed_toast_message">Не можев да го покренам опслужувачот.</string>
-  <string name="server_started__successfully_toast_message">Опслужувачот е успешно покренат.</string>
+  <string name="server_started_successfully_toast_message">Опслужувачот е успешно покренат.</string>
   <string name="hotspot_turned_on">Пристапната точка е вклучена</string>
   <string name="hotspot_details_message">Следат поединости за вашата месна точка на пристап. \nSSID : %1$s \nЈавка : %2$s</string>
   <string name="server_textview_default_message">Изберете ги податотеките што сакате да ги вдомите на опслужувачот</string>

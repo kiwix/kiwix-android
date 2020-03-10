@@ -37,7 +37,7 @@
   <string name="no_books_selected_toast_message">Vyberte nejprve knihy</string>
   <string name="server_failed_message">Nemohu spustit server. Zapněte prosím svůj hotspot</string>
   <string name="server_failed_toast_message">Nelze spustit server.</string>
-  <string name="server_started__successfully_toast_message">Server úspěšně spuštěn.</string>
+  <string name="server_started_successfully_toast_message">Server úspěšně spuštěn.</string>
   <string name="hotspot_turned_on">Hotspot spuštěn</string>
   <string name="hotspot_details_message">Následují podrobnosti vašeho hotspotu.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Vyberte soubory, které si přejete hostovat na svém serveru</string>

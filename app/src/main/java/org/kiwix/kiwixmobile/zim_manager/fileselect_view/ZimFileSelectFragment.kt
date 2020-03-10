@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -157,8 +155,7 @@ class ZimFileSelectFragment : BaseFragment() {
     if (ContextCompat.checkSelfPermission(
         activity!!,
         Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED &&
-      VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN
+      ) != PackageManager.PERMISSION_GRANTED
     ) {
       context.toast(R.string.request_storage)
       requestPermissions(
