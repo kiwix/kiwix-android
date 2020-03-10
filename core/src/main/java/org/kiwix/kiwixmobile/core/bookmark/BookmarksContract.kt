@@ -15,24 +15,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.bookmark
 
-package org.kiwix.kiwixmobile.core.bookmark;
+import org.kiwix.kiwixmobile.core.base.BaseContract
 
-import java.util.List;
-import org.kiwix.kiwixmobile.core.base.BaseContract;
-
-interface BookmarksContract {
-  interface View extends BaseContract.View<Presenter> {
-    void updateBookmarksList(List<BookmarkItem> bookmarks);
-
-    void notifyBookmarksListFiltered(List<BookmarkItem> bookmarks);
+internal interface BookmarksContract {
+  interface View : BaseContract.View<Presenter> {
+    fun updateBookmarksList(bookmarks: List<BookmarkItem>)
+    fun notifyBookmarksListFiltered(bookmarks: List<BookmarkItem>)
   }
 
-  interface Presenter extends BaseContract.Presenter<View> {
-    void loadBookmarks(boolean showBookmarksCurrentBook);
-
-    void filterBookmarks(List<BookmarkItem> bookmarksList, String newText);
-
-    void deleteBookmarks(List<BookmarkItem> deleteList);
+  interface Presenter : BaseContract.Presenter<View> {
+    fun loadBookmarks(showBookmarksCurrentBook: Boolean)
+    fun filterBookmarks(bookmarksList: List<BookmarkItem>, newText: String)
+    fun deleteBookmarks(deleteList: List<BookmarkItem>)
   }
 }
