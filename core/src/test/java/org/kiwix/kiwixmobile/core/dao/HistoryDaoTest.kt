@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.dao
 
-import io.mockk.every
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.junit.jupiter.api.AfterEach
@@ -187,8 +186,3 @@ private fun createSameHistoryItemWithModifiedDatabaseId(
     historyItem.historyTitle,
     historyItem.timeStamp
   )
-
-
-
-
-
