@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import io.mockk.every
-import io.mockk.mockk
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.junit.jupiter.api.AfterEach
@@ -12,8 +11,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.MyObjectBox
-import org.kiwix.kiwixmobile.core.history.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import org.kiwix.sharedFunctions.historyItem
 import java.io.File
 
 internal class HistoryDaoTest {
@@ -36,59 +35,60 @@ internal class HistoryDaoTest {
 
   @Test
   fun `saveHistory should save single history item`() {
-    val historyItem = mockkHistoryItemWithTitle("testHistoryTitle")
+    var historyItem = historyItemWithTitle("1")
     historyDao.saveHistory(historyItem)
 
     val historyList: List<HistoryItem> = historyDao
       .getHistoryList(false, "")
 
-    assertEquals(historyItem.historyTitle, historyList[0].historyTitle)
+    historyItem = createSameHistoryItemWithModifiedDatabaseId(historyItem, 1)
+    assertEquals(historyList[0], historyItem)
   }
 
   @Nested
   inner class GetHistoryListDesigns {
     @Test
     fun `getHistoryList should return item with path if only showing current book history`() {
-      val historyItem1 = mockkHistoryItemWithTitle("1")
-      every { historyItem1.zimFilePath } returns "path"
+      var historyItem1 = historyItemWithTitle("1")
       historyDao.saveHistory(historyItem1)
 
-      val historyTitleList: List<String> = historyDao
-        .getHistoryList(true, "path")
-        .map(HistoryItem::historyTitle)
+      val historyTitleList: List<HistoryItem> = historyDao
+        .getHistoryList(true, "zimPath1")
 
-      assertTrue(historyTitleList.contains(historyItem1.historyTitle))
+      historyItem1 = createSameHistoryItemWithModifiedDatabaseId(historyItem1, 1)
+      assertEquals(historyTitleList[0], historyItem1)
     }
 
     @Test
     fun `getHistoryList should not return item with invalid path if only showing book history`() {
-      val historyItem1 = mockkHistoryItemWithTitle("1")
-      every { historyItem1.zimFilePath } returns "path"
+      val historyItem1 = historyItemWithTitle("1")
       historyDao.saveHistory(historyItem1)
 
-      val historyTitleList: List<String> = historyDao
+      val historyTitleList: List<HistoryItem> = historyDao
         .getHistoryList(true, "not/path")
-        .map(HistoryItem::historyTitle)
 
-      assertFalse(historyTitleList.contains(historyItem1.historyTitle))
+      assertTrue(historyTitleList.isEmpty())
     }
 
     @Test
     fun `getHistoryList should return multiple inserted history items`() {
-      val historyItem1 = mockkHistoryItemWithTitle("1")
-      val historyItem2 = mockkHistoryItemWithTitle("2")
-      val historyItem3 = mockkHistoryItemWithTitle("3")
+      var historyItem1 = historyItemWithTitle("1")
+      var historyItem2 = historyItemWithTitle("2")
+      var historyItem3 = historyItemWithTitle("3")
       historyDao.saveHistory(historyItem1)
       historyDao.saveHistory(historyItem2)
       historyDao.saveHistory(historyItem3)
 
-      val historyTitleList: List<String> = historyDao
+      val historyTitleList: List<HistoryItem> = historyDao
         .getHistoryList(false, "")
-        .map(HistoryItem::historyTitle)
 
-      assertTrue(historyTitleList.contains(historyItem1.historyTitle))
-      assertTrue(historyTitleList.contains(historyItem2.historyTitle))
-      assertTrue(historyTitleList.contains(historyItem3.historyTitle))
+      historyItem1 = createSameHistoryItemWithModifiedDatabaseId(historyItem1, 1)
+      historyItem2 = createSameHistoryItemWithModifiedDatabaseId(historyItem2, 2)
+      historyItem3 = createSameHistoryItemWithModifiedDatabaseId(historyItem3, 3)
+
+      assertTrue(historyTitleList.contains(historyItem1))
+      assertTrue(historyTitleList.contains(historyItem2))
+      assertTrue(historyTitleList.contains(historyItem3))
     }
   }
 
@@ -96,76 +96,99 @@ internal class HistoryDaoTest {
   inner class DeleteHistoryDesigns {
     @Test
     fun `deleteHistory should delete selected item`() {
-      val historyItem1 = mockkHistoryItemWithTitle("1")
-      val historyItem2 = mockkHistoryItemWithTitle("2")
-      val historyItem3 = mockkHistoryItemWithTitle("3")
+      var historyItem1 = historyItemWithTitle("1")
+      var historyItem2 = historyItemWithTitle("2")
+      var historyItem3 = historyItemWithTitle("3")
       historyDao.saveHistory(historyItem1)
       historyDao.saveHistory(historyItem2)
       historyDao.saveHistory(historyItem3)
-      every { historyItem1.databaseId } returns 1
+      historyItem1 = createSameHistoryItemWithModifiedDatabaseId(historyItem1, 1)
       historyDao.deleteHistory(listOf(historyItem1))
 
-      val historyTitleList: List<String> = historyDao
+      val historyTitleList: List<HistoryItem> = historyDao
         .getHistoryList(false, "")
-        .map(HistoryItem::historyTitle)
 
-      assertFalse(historyTitleList.contains(historyItem1.historyTitle))
-      assertTrue(historyTitleList.contains(historyItem2.historyTitle))
-      assertTrue(historyTitleList.contains(historyItem3.historyTitle))
+      historyItem2 = createSameHistoryItemWithModifiedDatabaseId(historyItem2, 2)
+      historyItem3 = createSameHistoryItemWithModifiedDatabaseId(historyItem3, 3)
+      assertFalse(historyTitleList.contains(historyItem1))
+      assertTrue(historyTitleList.contains(historyItem2))
+      assertTrue(historyTitleList.contains(historyItem3))
     }
 
     @Test
     fun `deleteHistory should delete multiple selected items`() {
-      val historyItem1 = mockkHistoryItemWithTitle("1")
-      val historyItem2 = mockkHistoryItemWithTitle("2")
-      val historyItem3 = mockkHistoryItemWithTitle("3")
+      var historyItem1 = historyItemWithTitle("1")
+      var historyItem2 = historyItemWithTitle("2")
+      var historyItem3 = historyItemWithTitle("3")
       historyDao.saveHistory(historyItem1)
       historyDao.saveHistory(historyItem2)
       historyDao.saveHistory(historyItem3)
-      every { historyItem1.databaseId } returns 1
-      every { historyItem2.databaseId } returns 2
+      historyItem1 = createSameHistoryItemWithModifiedDatabaseId(historyItem1, 1)
+      historyItem2 = createSameHistoryItemWithModifiedDatabaseId(historyItem2, 2)
       historyDao.deleteHistory(listOf(historyItem1, historyItem2))
 
-      val historyTitleList: List<String> = historyDao
+      val historyTitleList: List<HistoryItem> = historyDao
         .getHistoryList(false, "")
-        .map(HistoryItem::historyTitle)
 
-      assertFalse(historyTitleList.contains(historyItem1.historyTitle))
-      assertFalse(historyTitleList.contains(historyItem2.historyTitle))
-      assertTrue(historyTitleList.contains(historyItem3.historyTitle))
+      historyItem3 = createSameHistoryItemWithModifiedDatabaseId(historyItem3, 3)
+      assertFalse(historyTitleList.contains(historyItem1))
+      assertFalse(historyTitleList.contains(historyItem2))
+      assertTrue(historyTitleList.contains(historyItem3))
     }
   }
 
   @Test
   fun `deleteAllHistory should delete all history`() {
-    val historyItem1 = mockkHistoryItemWithTitle("1")
-    val historyItem2 = mockkHistoryItemWithTitle("2")
-    val historyItem3 = mockkHistoryItemWithTitle("3")
+    var historyItem1 = historyItemWithTitle("1")
+    var historyItem2 = historyItemWithTitle("2")
+    var historyItem3 = historyItemWithTitle("3")
     historyDao.saveHistory(historyItem1)
     historyDao.saveHistory(historyItem2)
     historyDao.saveHistory(historyItem3)
     historyDao.deleteAllHistory()
 
-    val historyTitleList: List<String> = historyDao
+    val historyTitleList: List<HistoryItem> = historyDao
       .getHistoryList(false, "")
-      .map(HistoryItem::historyTitle)
 
-    assertFalse(historyTitleList.contains(historyItem1.historyTitle))
-    assertFalse(historyTitleList.contains(historyItem2.historyTitle))
-    assertFalse(historyTitleList.contains(historyItem3.historyTitle))
+    historyItem1 = createSameHistoryItemWithModifiedDatabaseId(historyItem1, 1)
+    historyItem2 = createSameHistoryItemWithModifiedDatabaseId(historyItem2, 2)
+    historyItem3 = createSameHistoryItemWithModifiedDatabaseId(historyItem3, 3)
+    assertFalse(historyTitleList.contains(historyItem1))
+    assertFalse(historyTitleList.contains(historyItem2))
+    assertFalse(historyTitleList.contains(historyItem3))
   }
 }
 
-fun mockkHistoryItemWithTitle(historyTitle: String): HistoryListItem.HistoryItem {
-  val historyItem = mockk<HistoryItem>()
-  every { historyItem.historyUrl } returns "url$historyTitle"
-  every { historyItem.dateString } returns "2012-01-01"
-  every { historyItem.databaseId } returns 0
-  every { historyItem.zimId } returns "zimId"
-  every { historyItem.zimName } returns "zimName$historyTitle"
-  every { historyItem.zimFilePath } returns "zimPath$historyTitle"
-  every { historyItem.favicon } returns "favicon"
-  every { historyItem.historyTitle } returns historyTitle
-  every { historyItem.timeStamp } returns 0
-  return historyItem
-}
+fun historyItemWithTitle(historyTitle: String): HistoryItem =
+  historyItem(
+    "url$historyTitle",
+    "2012-01-01",
+    0,
+    "zimId",
+    "zimName$historyTitle",
+    "zimPath$historyTitle",
+    "favicon",
+    historyTitle,
+    0
+  )
+
+private fun createSameHistoryItemWithModifiedDatabaseId(
+  historyItem: HistoryItem,
+  databaseId: Long
+): HistoryItem =
+  historyItem(
+    historyItem.historyUrl,
+    historyItem.dateString,
+    databaseId,
+    historyItem.zimId,
+    historyItem.zimName,
+    historyItem.zimFilePath,
+    historyItem.favicon,
+    historyItem.historyTitle,
+    historyItem.timeStamp
+  )
+
+
+
+
+
