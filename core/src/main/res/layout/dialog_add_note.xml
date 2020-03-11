@@ -11,8 +11,8 @@
     android:layout_width="0dp"
     android:layout_height="0dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
     <LinearLayout
@@ -27,17 +27,17 @@
         android:background="@android:color/transparent"
         android:hint="@string/wiki_article_title"
         android:maxLines="1"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="20dp"
+        android:paddingEnd="20dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
       <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="5dp"
         android:background="#000000" />
 
@@ -46,13 +46,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:gravity="top|left"
+        android:gravity="top|start"
         android:hint="@string/note"
         android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
         android:minLines="6"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="5dp"
-        android:paddingRight="20dp"
+        android:paddingEnd="20dp"
         android:paddingBottom="10dp"
         android:scrollbars="vertical"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />

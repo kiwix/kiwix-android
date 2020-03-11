@@ -27,7 +27,7 @@
   <string name="go_to_wifi_settings_label">Gå till WiFi-inställningar</string>
   <string name="no_books_selected_toast_message">Välj böcker först</string>
   <string name="server_failed_toast_message">Kunde inte starta server.</string>
-  <string name="server_started__successfully_toast_message">Servern startades.</string>
+  <string name="server_started_successfully_toast_message">Servern startades.</string>
   <string name="progress_dialog_starting_server">Startar server</string>
   <string name="hotspot_dialog_neutral_button">JA, JAG HAR AKTIVERAT DET</string>
   <string name="start_server_label">Starta server</string>

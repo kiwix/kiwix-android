@@ -3,9 +3,9 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  android:paddingLeft="@dimen/slider_dialog_horizontal_padding"
+  android:paddingStart="@dimen/slider_dialog_horizontal_padding"
   android:paddingTop="@dimen/dimen_medium_padding"
-  android:paddingRight="@dimen/slider_dialog_horizontal_padding"
+  android:paddingEnd="@dimen/slider_dialog_horizontal_padding"
   android:paddingBottom="@dimen/dimen_medium_padding">
 
   <TextView
