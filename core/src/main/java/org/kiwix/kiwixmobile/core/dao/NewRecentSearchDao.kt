@@ -60,6 +60,6 @@ class NewRecentSearchDao @Inject constructor(
   }
 
   companion object {
-    const val NUM_RECENT_RESULTS = 5
+    const val NUM_RECENT_RESULTS = 100
   }
 }
