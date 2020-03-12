@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Kurd
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">پەڕگەی سیستمەکەت پشتگیری پەڕگەی سەروو 4GB ناکات</string>
+</resources>

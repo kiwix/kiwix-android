@@ -41,6 +41,8 @@
   <string name="clear_recent_and_tabs_history_dialog">Желите ли заиста да избришете своју историју претраге и ресетујете све активне картице?</string>
   <string name="delete_recent_search_item">Избрисати ову ставку?</string>
   <string name="all_history_cleared_toast">Цела историја је обрисана</string>
+  <string name="pref_clear_all_bookmarks_title">Обриши обележиваче</string>
+  <string name="all_bookmarks_cleared_toast">Сви обележивачи су обрисани</string>
   <string name="clear_all_history_dialog_title">Брисање целе историје</string>
   <string name="delete">Избриши</string>
   <string name="delete_specific_search_toast">Недавне претраге су уклоњене</string>
@@ -71,10 +73,16 @@
   <string name="confirm_stop_download_msg">Желите ли заиста да зауставите ово преузимање?</string>
   <string name="download_change_storage">Бирач уређаја за складиштење</string>
   <string name="next">Следеће</string>
+  <string name="wifi_only_msg">Ако одаберете „Да”, нећемо да вас упозоравамо у будућности. Свеједно, увек можете да промените ову опцију у подешавањима.</string>
   <string name="external_link_popup_dialog_title">Уношење спољашње везе</string>
   <string name="external_link_popup_dialog_message">Уносите спољашњу везу. То може довести до додатних трошкова за пренос података или неће радити када сте офлајн. Желите ли да наставите?</string>
   <string name="do_not_ask_anymore">Не питај више</string>
   <string name="other_languages">Други језици:</string>
+  <string name="history_from_current_book">Прикажи историју свих књига</string>
+  <string name="bookmarks_from_current_book">Прикажи обележиваче свих књига</string>
   <string name="tag_short_text">Кратак текст</string>
+  <string name="no_results">Нема резултата</string>
   <string name="no_bookmarks">Нема обележивача</string>
+  <string name="no_history">Нема историјата</string>
+  <string name="device_default">Подразумеване вредности уређаја</string>
 </resources>

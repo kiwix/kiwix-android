@@ -181,7 +181,7 @@
   <string name="switch_tabs">Přepnout panely</string>
   <string name="close_all_tabs">Zavřít všechny záložky</string>
   <string name="running_state">Probíhá</string>
-  <string name="complete">Hotovo!</string>
+  <string name="complete">Hotovo</string>
   <string name="paused_state">Pozastaveno</string>
   <string name="failed_state">Selhalo: %s</string>
   <string name="save">Uložit</string>

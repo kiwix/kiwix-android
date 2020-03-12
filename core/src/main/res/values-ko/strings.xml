@@ -189,10 +189,10 @@
   <string name="send_feedback">피드백 보내기</string>
   <string name="expand">펼치기</string>
   <string name="history">역사</string>
-  <string name="history_from_current_book" fuzzy="true">현재 책의 역사</string>
+  <string name="history_from_current_book">모든 책의 역사 보기</string>
   <string name="search_history">기록 검색하기</string>
   <string name="selected_items">%1$d개 선택됨</string>
-  <string name="bookmarks_from_current_book" fuzzy="true">현재 책의 책갈피</string>
+  <string name="bookmarks_from_current_book">모든 책의 책갈피 보기</string>
   <string name="search_bookmarks">북마크 검색</string>
   <string name="switch_tabs">탭 전환</string>
   <string name="close_all_tabs">모든 탭 닫기</string>
@@ -247,6 +247,11 @@
   <string name="tag_vid">비디오</string>
   <string name="tag_text_only">텍스트만</string>
   <string name="tag_short_text">짧은 텍스트</string>
+  <string name="storage_permission_denied">스토리지 접근이 거부됨</string>
+  <string name="grant_read_storage_permission">이 앱은 동작을 위해 스토리지 읽기 권한을 요구합니다. 설정에서 권한을 부여해 주십시오</string>
   <string name="go_to_settings">설정으로 이동</string>
+  <string name="no_results">결과 없음</string>
   <string name="no_bookmarks">북마크가 없습니다!</string>
+  <string name="no_history">역사 없음</string>
+  <string name="device_default">장치 기본값</string>
 </resources>

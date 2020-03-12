@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* हिमाल सुबेदी
+-->
+<resources>
+  <string name="retry">पुनः प्रयास गर्नुहोस्</string>
+  <string name="download">डाउनलोड गरिएकाे</string>
+</resources>

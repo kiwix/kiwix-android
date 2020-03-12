@@ -138,7 +138,7 @@
   <string name="delete_zim_failed">Üzgünüz, bu dosyayı silemedik. Bir dosya yöneticisi kullanmayı denemelisiniz.</string>
   <string name="tts_pause">duraklat</string>
   <string name="tts_resume">devam et</string>
-  <string name="stop">dur</string>
+  <string name="stop">durdur</string>
   <string name="internal_storage">Dahili</string>
   <string name="external_storage">Harici</string>
   <string name="yes">Evet</string>

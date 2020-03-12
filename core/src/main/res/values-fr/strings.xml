@@ -82,8 +82,8 @@
   <string name="pref_clear_all_history_title">Effacer l’historique</string>
   <string name="pref_clear_all_history_summary">Effacer les recherches récentes et l’historique des onglets</string>
   <string name="all_history_cleared_toast">Tout l’historique est effacé</string>
-  <string name="pref_clear_all_bookmarks_title">Retirer les marque-pages</string>
-  <string name="all_bookmarks_cleared_toast">Marque-pages retirés</string>
+  <string name="pref_clear_all_bookmarks_title">Supprimer les marque-pages</string>
+  <string name="all_bookmarks_cleared_toast">Tous les marque-pages ont été supprimés</string>
   <string name="clear_all_history_dialog_title">Effacer tout l’historique</string>
   <string name="share">Partager</string>
   <string name="selected_file_cab_app_chooser_title">Partager des fichiers ZIM avec :</string>

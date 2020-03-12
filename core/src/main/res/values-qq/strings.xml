@@ -31,7 +31,7 @@
   <string name="no_thanks">{{Identical|No thanks}}</string>
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>
   <string name="open">{{Identical|Open}}</string>
-  <string name="library">{{Identical|Library}}</string>
+  <string name="library">Displayed in application menu</string>
   <string name="stop">{{Identical|Stop}}</string>
   <string name="external_storage">{{Identical|External}}</string>
   <string name="yes">{{Identical|Yes}}</string>

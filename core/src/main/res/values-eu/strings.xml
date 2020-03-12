@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * EukeneFL
 * Fitoschido
 * Macofe
@@ -38,7 +39,7 @@
   <string name="pref_back_to_top">Gora itzuli</string>
   <string name="pref_back_to_top_summary">Bistaratu botoi bat orrialdearen amaieran goiko aldera mugitzeko</string>
   <string name="pref_hide_toolbar">Tresna-barra ezkutatu desplazatzean</string>
-  <string name="pref_hide_toolbar_summary">u2022 On GNU/Linux and with the console: split —bytes=4000M my_big_file.zim</string>
+  <string name="pref_hide_toolbar_summary">\u2022 On GNU/Linux and with the console: split —bytes=4000M my_big_file.zim</string>
   <string name="pref_language_title">Hizkuntza</string>
   <string name="pref_language_chooser">Hizkuntza aukeratu</string>
   <string name="pref_credits">Ekarpen eta lizentziak</string>
