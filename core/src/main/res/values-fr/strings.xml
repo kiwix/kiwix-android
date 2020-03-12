@@ -41,7 +41,7 @@
   <string name="no_books_selected_toast_message">Veuillez d’abord choisir les livres</string>
   <string name="server_failed_message">Impossible de démarrer le serveur. Veuillez activer votre point d’accès WiFi</string>
   <string name="server_failed_toast_message">Impossible de démarrer le serveur.</string>
-  <string name="server_started__successfully_toast_message">Serveur démarré avec succès.</string>
+  <string name="server_started_successfully_toast_message">Serveur démarré avec succès.</string>
   <string name="hotspot_turned_on">Point d’accès activé</string>
   <string name="hotspot_details_message">Voici les détails de votre point d’accès local.\nSSID : %1$s\nPasse : %2$s</string>
   <string name="server_textview_default_message">Sélectionnez les fichiers que vous voulez héberger sur le serveur</string>

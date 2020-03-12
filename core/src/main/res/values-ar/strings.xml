@@ -37,7 +37,7 @@
   <string name="no_books_selected_toast_message">يُرجى اختيار الكتب أولًا</string>
   <string name="server_failed_message">لا يمكن بدء الخادم. يُرجى تشغيل الهوت-سبوت الخاص بك</string>
   <string name="server_failed_toast_message">لا يمكن بدء الخادم.</string>
-  <string name="server_started__successfully_toast_message">بدأ الخادم بنجاح.</string>
+  <string name="server_started_successfully_toast_message">بدأ الخادم بنجاح.</string>
   <string name="hotspot_turned_on">الهوت-سبوت قيد التشغيل</string>
   <string name="hotspot_details_message">فيما يلي تفاصيل الهوت-سبوت الخاص بك.\nSSID: %1$s \nPass: %2$s</string>
   <string name="server_textview_default_message">حدد الملفات التي ترغب في استضافتها على الخادم</string>
@@ -145,7 +145,7 @@
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
-  <string name="wifi_only_msg">إذا اخترت \"نعم\"، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
+  <string name="wifi_only_msg">إذا اخترت \“نعم\”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
   <string name="pref_wifi_only">تنزيل المحتوى عبر واي فاي فقط</string>
   <string name="time_day">يوم</string>
   <string name="time_hour">ساعة</string>

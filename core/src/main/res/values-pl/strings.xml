@@ -39,7 +39,7 @@
   <string name="hotspot_running">Uruchamianie Hotspot</string>
   <string name="no_books_selected_toast_message">Proszę wybrać najpierw książki</string>
   <string name="server_failed_toast_message">Nie można uruchomić serwera.</string>
-  <string name="server_started__successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
+  <string name="server_started_successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
   <string name="hotspot_turned_on">Hotspot włączony</string>
   <string name="hotspot_details_message">Poniżej znajdują się szczegółowe informacje o lokalnym hotspocie.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Wybierz pliki, które chcesz hostować na serwerze</string>

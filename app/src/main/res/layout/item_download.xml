@@ -6,16 +6,16 @@
   android:layout_height="wrap_content"
   android:minHeight="?android:attr/listPreferredItemHeight"
   android:orientation="horizontal"
-  android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingStart="@dimen/activity_horizontal_margin"
   android:paddingTop="@dimen/activity_vertical_margin"
-  android:paddingRight="@dimen/activity_horizontal_margin">
+  android:paddingEnd="@dimen/activity_horizontal_margin">
 
   <ImageView
     android:id="@+id/libraryDownloadFavicon"
     android:layout_width="@dimen/favicon_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginRight="@dimen/favicon_margin_right"
+    android:layout_marginEnd="@dimen/favicon_margin_right"
     android:adjustViewBounds="true"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:scaleType="fitCenter"
@@ -85,8 +85,8 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
-      android:layout_marginLeft="@dimen/stop_horizontal_margin"
-      android:layout_marginRight="@dimen/stop_horizontal_margin"
+      android:layout_marginStart="@dimen/stop_horizontal_margin"
+      android:layout_marginEnd="@dimen/stop_horizontal_margin"
       android:layout_weight="0.5"
       android:minWidth="@dimen/stop_min_width"
       android:minHeight="@dimen/stop_min_height"

@@ -32,7 +32,7 @@
   <string name="no_books_selected_toast_message">In antis ischerta libros</string>
   <string name="server_failed_message">Aviamentu de su servidore fallidu. Pro praghere allughe s\'hotspot tuo</string>
   <string name="server_failed_toast_message">Aviamentu de su servidore fallidu.</string>
-  <string name="server_started__successfully_toast_message">Servidore aviadu chene problemas.</string>
+  <string name="server_started_successfully_toast_message">Servidore aviadu chene problemas.</string>
   <string name="hotspot_turned_on">Hotspot allutu</string>
   <string name="hotspot_details_message">Sos chi sighint sunt sos detàllios de s\'hotspot locale tuo. \nSSID : %1$s \nCrae : %2$s</string>
   <string name="server_textview_default_message">Ischerta sos documentos chi cheres istrangiare in su servidore</string>
