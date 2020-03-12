@@ -243,7 +243,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   @SuppressLint("SetJavaScriptEnabled")
   public void openCredits() {
-    @SuppressLint("InflateParams") WebView view =
+    WebView view =
       (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
     view.loadUrl("file:///android_asset/credits.html");
     if (nightModeConfig.isNightModeActive()) {
