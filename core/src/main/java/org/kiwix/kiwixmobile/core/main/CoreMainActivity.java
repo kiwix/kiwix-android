@@ -50,6 +50,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -67,25 +68,32 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.processors.BehaviorProcessor;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import kotlin.Unit;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
@@ -255,21 +263,21 @@ public abstract class CoreMainActivity extends BaseActivity
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder) {
+                                @NonNull RecyclerView.ViewHolder viewHolder) {
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-      boolean isCurrentlyActive) {
+                            @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+                            boolean isCurrentlyActive) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
       viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                          @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
       return false;
     }
 
@@ -349,7 +357,8 @@ public abstract class CoreMainActivity extends BaseActivity
         }
       }
 
-      @Override public void onTap(MotionEvent e) {
+      @Override
+      public void onTap(MotionEvent e) {
         final View titleTextView = ViewGroupExtensions.findFirstTextView(toolbar);
         if (titleTextView == null) return;
         final Rect hitRect = new Rect();
@@ -400,7 +409,10 @@ public abstract class CoreMainActivity extends BaseActivity
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+
+    handleIntentActions(getIntent());
   }
+
 
   //End of onCreate
   private void handleIntentExtras(Intent intent) {
@@ -610,7 +622,8 @@ public abstract class CoreMainActivity extends BaseActivity
     drawerLayout.openDrawer(GravityCompat.END);
   }
 
-  @Override public void onBackPressed() {
+  @Override
+  public void onBackPressed() {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
@@ -653,7 +666,7 @@ public abstract class CoreMainActivity extends BaseActivity
         visitCounterPref.setNoThanksState(true);
         return Unit.INSTANCE;
       },
-      () ->{
+      () -> {
         tempVisitCount = 0;
         visitCounterPref.setCount(tempVisitCount);
         return Unit.INSTANCE;
@@ -663,16 +676,6 @@ public abstract class CoreMainActivity extends BaseActivity
 
   protected abstract int getIconResId();
 
-  private void goToSearch(boolean isVoice) {
-    final String zimFile = zimReaderContainer.getZimCanonicalPath();
-    saveTabStates();
-    Intent i = new Intent(this, SearchActivity.class);
-    i.putExtra(EXTRA_ZIM_FILE, zimFile);
-    if (isVoice) {
-      i.putExtra(EXTRA_IS_WIDGET_VOICE, true);
-    }
-    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-  }
 
   private void goToRateApp() {
     Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getPackageName());
@@ -857,7 +860,7 @@ public abstract class CoreMainActivity extends BaseActivity
         webViewList.add(index, tempForUndo);
         tabsAdapter.notifyItemInserted(index);
         tabsAdapter.notifyDataSetChanged();
-        Snackbar.make(snackbarRoot,"Tab restored",Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
         setUpWebViewWithTextToSpeech();
       })
       .show();
@@ -899,7 +902,8 @@ public abstract class CoreMainActivity extends BaseActivity
     return mainMenu.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
   }
 
-  @Override public void onSupportKiwixMenuClicked() {
+  @Override
+  public void onSupportKiwixMenuClicked() {
     openExternalUrl(
       new Intent(
         Intent.ACTION_VIEW,
@@ -908,7 +912,8 @@ public abstract class CoreMainActivity extends BaseActivity
     );
   }
 
-  @Override public void onFullscreenMenuClicked() {
+  @Override
+  public void onFullscreenMenuClicked() {
     if (isInFullScreenMode()) {
       closeFullScreen();
     } else {
@@ -916,7 +921,8 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @Override public void onReadAloudMenuClicked() {
+  @Override
+  public void onReadAloudMenuClicked() {
     if (TTSControls.getVisibility() == View.GONE) {
       if (isBackToTopEnabled) {
         backToTopButton.hide();
@@ -930,32 +936,38 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @Override public void onLibraryMenuClicked() {
+  @Override
+  public void onLibraryMenuClicked() {
     manageZimFiles(hasLocalBooks ? 0 : 1);
   }
 
-  @Override public void onRandomArticleMenuClicked() {
+  @Override
+  public void onRandomArticleMenuClicked() {
     openRandomArticle();
   }
 
-  @Override public void onBookmarksMenuClicked() {
+  @Override
+  public void onBookmarksMenuClicked() {
     goToBookmarks();
   }
 
-  @Override public void onAddNoteMenuClicked() {
+  @Override
+  public void onAddNoteMenuClicked() {
     if (requestExternalStorageWritePermissionForNotes()) {
       showAddNoteDialog();
     }
   }
 
-  @Override public void onHomeMenuClicked() {
+  @Override
+  public void onHomeMenuClicked() {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       hideTabSwitcher();
     }
     createNewTab();
   }
 
-  @Override public void onTabMenuClicked() {
+  @Override
+  public void onTabMenuClicked() {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       hideTabSwitcher();
       selectTab(currentWebViewIndex);
@@ -964,13 +976,16 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @Override public void onHostBooksMenuClicked() {
+  @Override
+  public void onHostBooksMenuClicked() {
     // to be implemented in subclasses
   }
 
   protected abstract void createNewTab();
 
-  /** Creates the full screen AddNoteDialog, which is a DialogFragment */
+  /**
+   * Creates the full screen AddNoteDialog, which is a DialogFragment
+   */
   private void showAddNoteDialog() {
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
     Fragment previousInstance = getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
@@ -1002,7 +1017,7 @@ public abstract class CoreMainActivity extends BaseActivity
             Toast.LENGTH_LONG);
         }
 
-        requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
           REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
       }
     } else { // For Android versions below Marshmallow 6.0 (API 23)
@@ -1089,7 +1104,7 @@ public abstract class CoreMainActivity extends BaseActivity
         startActivity(intent);
         return Unit.INSTANCE;
       }
-      );
+    );
   }
 
   protected void openZimFile(@NonNull File file) {
@@ -1114,7 +1129,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void requestExternalStoragePermission() {
     ActivityCompat.requestPermissions(
       this,
-      new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+      new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
       REQUEST_STORAGE_PERMISSION
     );
   }
@@ -1166,7 +1181,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-    @NonNull String[] permissions, @NonNull int[] grantResults) {
+                                         @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -1275,42 +1290,6 @@ public abstract class CoreMainActivity extends BaseActivity
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
-
-    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
-    Intent intent = getIntent();
-    if (intent.getAction() != null) {
-
-      switch (intent.getAction()) {
-        case Intent.ACTION_PROCESS_TEXT: {
-          saveTabStates();
-          Intent i = new Intent(this, SearchActivity.class);
-          if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-            i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
-          }
-          startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-          break;
-        }
-        case CoreSearchWidget.TEXT_CLICKED:
-          goToSearch(false);
-          break;
-        case CoreSearchWidget.STAR_CLICKED:
-          goToBookmarks();
-          break;
-        case CoreSearchWidget.MIC_CLICKED:
-          goToSearch(true);
-          break;
-        case Intent.ACTION_VIEW:
-          if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
-            saveTabStates();
-            Intent i = new Intent(this, SearchActivity.class);
-            if (intent.getData() != null) {
-              i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
-            }
-            startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-          }
-          break;
-      }
-    }
     updateNightMode();
   }
 
@@ -1332,32 +1311,62 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @Override
-  protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
-    handleNotificationIntent(intent);
+  private void goToSearch(boolean isVoice) {
+    final String zimFile = zimReaderContainer.getZimCanonicalPath();
+    saveTabStates();
+    Intent i = new Intent(this, SearchActivity.class);
+    i.putExtra(EXTRA_ZIM_FILE, zimFile);
+    i.putExtra(EXTRA_IS_WIDGET_VOICE, isVoice);
+    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+  }
+
+  private void handleIntentActions(Intent intent) {
+    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
     if (intent.getAction() != null) {
       if (zimReaderContainer.getId() != null) {
         switch (intent.getAction()) {
-          case CoreSearchWidget.STAR_CLICKED:
-            goToBookmarks();
+          case Intent.ACTION_PROCESS_TEXT: {
+            saveTabStates();
+            Intent i = new Intent(this, SearchActivity.class);
+            if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+              i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+            }
+            startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
             break;
+          }
           case CoreSearchWidget.TEXT_CLICKED:
             goToSearch(false);
+            break;
+          case CoreSearchWidget.STAR_CLICKED:
+            goToBookmarks();
             break;
           case CoreSearchWidget.MIC_CLICKED:
             goToSearch(true);
             break;
+          case Intent.ACTION_VIEW:
+            if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
+              saveTabStates();
+              Intent i = new Intent(this, SearchActivity.class);
+              if (intent.getData() != null) {
+                i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+              }
+              startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+            }
+            break;
         }
       } else {
-        switch (intent.getAction()) {
-          case CoreSearchWidget.STAR_CLICKED:
-          case CoreSearchWidget.TEXT_CLICKED:
-          case CoreSearchWidget.MIC_CLICKED:
-            manageZimFiles(0);
+        if (CoreSearchWidget.MIC_CLICKED.equals(intent.getAction())) {
+          manageZimFiles(0);
         }
       }
     }
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    handleNotificationIntent(intent);
+    handleIntentActions(intent);
   }
 
   private void contentsDrawerHint() {
@@ -1506,7 +1515,8 @@ public abstract class CoreMainActivity extends BaseActivity
     return true;
   }
 
-  @NotNull protected MainMenu createMainMenu(Menu menu) {
+  @NotNull
+  protected MainMenu createMainMenu(Menu menu) {
     return menuFactory.create(menu, webViewList, !urlIsInvalid(), this, false, false);
   }
 
