@@ -1328,36 +1328,7 @@ public abstract class CoreMainActivity extends BaseActivity
     Log.d(TAG_KIWIX, "action" + getIntent().getAction());
     if (intent.getAction() != null) {
       if (zimReaderContainer.getId() != null) {
-        switch (intent.getAction()) {
-          case Intent.ACTION_PROCESS_TEXT: {
-            saveTabStates();
-            Intent i = new Intent(this, SearchActivity.class);
-            if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-              i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
-            }
-            startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-            break;
-          }
-          case CoreSearchWidget.TEXT_CLICKED:
-            goToSearch(false);
-            break;
-          case CoreSearchWidget.STAR_CLICKED:
-            goToBookmarks();
-            break;
-          case CoreSearchWidget.MIC_CLICKED:
-            goToSearch(true);
-            break;
-          case Intent.ACTION_VIEW:
-            if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
-              saveTabStates();
-              Intent i = new Intent(this, SearchActivity.class);
-              if (intent.getData() != null) {
-                i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
-              }
-              startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-            }
-            break;
-        }
+        startIntentBasedOnAction(intent);
       } else {
         if (CoreSearchWidget.MIC_CLICKED.equals(intent.getAction())) {
           manageZimFiles(0);
@@ -1365,6 +1336,44 @@ public abstract class CoreMainActivity extends BaseActivity
       }
     }
   }
+
+  private void startIntentBasedOnAction(Intent intent) {
+    switch (intent.getAction()) {
+      case Intent.ACTION_PROCESS_TEXT: {
+        goToSearchWithText(intent);
+        break;
+      }
+      case CoreSearchWidget.TEXT_CLICKED:
+        goToSearch(false);
+        break;
+      case CoreSearchWidget.STAR_CLICKED:
+        goToBookmarks();
+        break;
+      case CoreSearchWidget.MIC_CLICKED:
+        goToSearch(true);
+        break;
+      case Intent.ACTION_VIEW:
+        if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
+          saveTabStates();
+          Intent i = new Intent(this, SearchActivity.class);
+          if (intent.getData() != null) {
+            i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+          }
+          startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+        }
+        break;
+    }
+  }
+
+  private void goToSearchWithText(Intent intent) {
+    saveTabStates();
+    Intent i = new Intent(this, SearchActivity.class);
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+      i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+    }
+    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+  }
+
 
   @Override
   protected void onNewIntent(Intent intent) {
