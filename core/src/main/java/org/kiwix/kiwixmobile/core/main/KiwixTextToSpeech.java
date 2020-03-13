@@ -87,7 +87,9 @@ public class KiwixTextToSpeech {
         onInitSucceedListener.onInitSucceed();
       } else {
         Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!");
-        //TODO: Surface to user
+        Toast.makeText(context,
+          context.getResources().getString(R.string.texttospeech_initialization_failed),
+          Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -301,7 +303,9 @@ public class KiwixTextToSpeech {
         @Override
         public void onError(String s) {
           Log.e(TAG_KIWIX, "TextToSpeech Error: " + s);
-          //TODO: Surface to user
+          Toast.makeText(context,
+            context.getResources().getString(R.string.texttospeech_error),
+            Toast.LENGTH_SHORT).show();
         }
       });
     }
