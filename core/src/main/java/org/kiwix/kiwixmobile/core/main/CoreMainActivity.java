@@ -410,7 +410,11 @@ public abstract class CoreMainActivity extends BaseActivity
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
 
-    handleIntentActions(getIntent());
+    // Only check intent on first start of activity. Otherwise the intents will enter infinite loops
+    // when "Don't keep activities" is on.
+    if (savedInstanceState == null) {
+      handleIntentActions(getIntent());
+    }
   }
 
 
