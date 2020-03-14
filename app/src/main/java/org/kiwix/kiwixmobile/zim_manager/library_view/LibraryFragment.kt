@@ -147,8 +147,8 @@ class LibraryFragment : BaseFragment() {
 
   private fun noInternetSnackbar() {
     val snackbar =
-      Snackbar.make(view!!.rootView, "No network connection", Snackbar.LENGTH_LONG)
-    snackbar.setAction("Settings", View.OnClickListener {
+      Snackbar.make(view!!.rootView, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+    snackbar.setAction(R.string.settings, View.OnClickListener {
       openNetworkSettings()
     })
     snackbar.show()
