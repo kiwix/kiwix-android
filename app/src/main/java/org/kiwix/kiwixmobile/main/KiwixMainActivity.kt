@@ -24,6 +24,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -73,7 +74,7 @@ class KiwixMainActivity : CoreMainActivity() {
       val filePath = FileUtils.getLocalFilePathByUri(applicationContext, data)
 
       if (filePath == null || !File(filePath).exists()) {
-        toast(R.string.error_file_not_found)
+        Snackbar.make(currentWebView, R.string.error_file_not_found, Snackbar.LENGTH_SHORT).show()
         return
       }
 
@@ -141,7 +142,7 @@ class KiwixMainActivity : CoreMainActivity() {
     if (zimFile != null) {
       openZimFile(File(zimFile))
     } else {
-      Toast.makeText(this, "Unable to open zim file", Toast.LENGTH_SHORT).show()
+      Snackbar.make(currentWebView, "Unable to open zim file", Snackbar.LENGTH_SHORT).show()
     }
     try {
       val urls = JSONArray(zimArticles)

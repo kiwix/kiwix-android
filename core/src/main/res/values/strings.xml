@@ -69,9 +69,9 @@
   <string name="delete_recent_search_item">Delete this item?</string>
   <string name="pref_clear_all_history_title">Clear history</string>
   <string name="pref_clear_all_history_summary">Clear recent searches and tabs history</string>
-  <string name="all_history_cleared_toast">All History Cleared</string>
+  <string name="all_history_cleared">All History Cleared</string>
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
-  <string name="all_bookmarks_cleared_toast">All Bookmarks Cleared</string>
+  <string name="all_bookmarks_cleared">All Bookmarks Cleared</string>
   <string name="clear_all_history_dialog_title">Clear All History</string>
   <string name="share">Share</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>

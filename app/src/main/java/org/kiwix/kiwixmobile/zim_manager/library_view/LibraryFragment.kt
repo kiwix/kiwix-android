@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view
 
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,6 +29,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.activity_library.libraryErrorText
@@ -132,6 +134,7 @@ class LibraryFragment : BaseFragment() {
       }
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
+          noInternetSnackbar()
           context.toast(R.string.no_network_connection)
         } else {
           libraryErrorText.setText(R.string.no_network_connection)
@@ -140,6 +143,21 @@ class LibraryFragment : BaseFragment() {
         librarySwipeRefresh.isRefreshing = false
       }
     }
+  }
+
+  private fun noInternetSnackbar() {
+    val snackbar =
+      Snackbar.make(view!!.rootView, "Replace with your own action", Snackbar.LENGTH_LONG)
+    snackbar.setAction("Settings", View.OnClickListener {
+      openNetworkSettings()
+    })
+    snackbar.show()
+  }
+
+  private fun openNetworkSettings() {
+    val intent = Intent(Intent.ACTION_MAIN)
+    intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting")
+    startActivity(intent)
   }
 
   private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
@@ -157,6 +175,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun refreshFragment() {
     if (isNotConnected) {
+      noInternetSnackbar()
       context.toast(R.string.no_network_connection)
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
@@ -193,6 +212,7 @@ class LibraryFragment : BaseFragment() {
         return
       }
       isNotConnected -> {
+        noInternetSnackbar()
         context.toast(R.string.no_network_connection)
         return
       }

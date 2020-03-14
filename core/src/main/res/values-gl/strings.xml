@@ -50,7 +50,7 @@
   <string name="delete_recent_search_item">Borrar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpar o historial</string>
   <string name="pref_clear_all_history_summary">Borrar as procuras recentes e o historial de lapelas</string>
-  <string name="all_history_cleared_toast">Borrado todo o historial</string>
+  <string name="all_history_cleared">Borrado todo o historial</string>
   <string name="clear_all_history_dialog_title">Borrar todo o historial</string>
   <string name="delete">Borrar</string>
   <string name="delete_specific_search_toast">Procuras recentes eliminadas</string>

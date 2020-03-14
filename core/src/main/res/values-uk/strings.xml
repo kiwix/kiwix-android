@@ -53,7 +53,7 @@
   <string name="delete_recent_search_item">Вилучити цей елемент?</string>
   <string name="pref_clear_all_history_title">Очистити історію</string>
   <string name="pref_clear_all_history_summary">Очистити останню історію пошуку й відкритих вкладок</string>
-  <string name="all_history_cleared_toast">Всю історію очищено</string>
+  <string name="all_history_cleared">Всю історію очищено</string>
   <string name="clear_all_history_dialog_title">Очистити всю історію</string>
   <string name="delete">Вилучити</string>
   <string name="delete_specific_search_toast">Нещодавній пошук вилучено</string>

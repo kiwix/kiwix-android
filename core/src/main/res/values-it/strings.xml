@@ -47,7 +47,7 @@
   <string name="clear_recent_and_tabs_history_dialog">Sei sicuro di voler cancellare la tua cronologia di ricerca e resettare tutte le tab attive?</string>
   <string name="delete_recent_search_item">Elimina questo elemento?</string>
   <string name="pref_clear_all_history_title">Cancella la cronologia</string>
-  <string name="all_history_cleared_toast">Tutta la cronologia è stata cancellata</string>
+  <string name="all_history_cleared">Tutta la cronologia è stata cancellata</string>
   <string name="clear_all_history_dialog_title">Cancella tutta la cronologia</string>
   <string name="delete">Cancella</string>
   <string name="delete_specific_search_toast">Ricerca recente rimossa</string>

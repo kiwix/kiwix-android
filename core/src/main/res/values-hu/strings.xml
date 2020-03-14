@@ -56,7 +56,7 @@
   <string name="delete_recent_search_item">Törli ezt az elemet?</string>
   <string name="pref_clear_all_history_title">Előzmények törlése</string>
   <string name="pref_clear_all_history_summary">Töröld a mostani kereséseket és lapelőzményeket</string>
-  <string name="all_history_cleared_toast">Az összes előzmény törölve</string>
+  <string name="all_history_cleared">Az összes előzmény törölve</string>
   <string name="clear_all_history_dialog_title">Az összes előzmény törlése</string>
   <string name="delete">Törlés</string>
   <string name="delete_specific_search_toast">Legutóbbi keresés eltávolítva</string>

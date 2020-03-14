@@ -61,7 +61,7 @@
   <string name="clear_recent_and_tabs_history_dialog">Şıma qayılê tabanê aktivan reset kerê u cıgeyrayışê xo yê verêni pak kerê?</string>
   <string name="delete_recent_search_item">No item wa esterıyo?</string>
   <string name="pref_clear_all_history_title">verore cı besterne</string>
-  <string name="all_history_cleared_toast">Tarix pêro biyo pak</string>
+  <string name="all_history_cleared">Tarix pêro biyo pak</string>
   <string name="clear_all_history_dialog_title">Verori pêro pak kerê</string>
   <string name="share">Vıla ke</string>
   <string name="delete">Bestere</string>

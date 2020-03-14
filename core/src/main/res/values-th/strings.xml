@@ -19,7 +19,7 @@
   <string name="pref_language_title">ภาษา</string>
   <string name="clear_recent_and_tabs_history_dialog">คุณแน่ใจหรือไม่ว่าต้องการที่จะลบประวัติการค้นหาทั้งหมดและรีเซ็ตแท็บที่ใช้งานอยู่ทั้งหมด?</string>
   <string name="delete_recent_search_item">ลบสิ่งนี้เลยหรือไม่?</string>
-  <string name="all_history_cleared_toast">ลบประวัติทั้งหมดแล้ว</string>
+  <string name="all_history_cleared">ลบประวัติทั้งหมดแล้ว</string>
   <string name="clear_all_history_dialog_title">ลบประวัติทั้งหมด</string>
   <string name="delete">ลบ</string>
   <string name="delete_specific_search_toast">ลบการค้นหาล่าสุดแล้ว</string>
