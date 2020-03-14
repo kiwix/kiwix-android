@@ -90,6 +90,7 @@ class SearchActivity : BaseActivity() {
       adapter = searchAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
+      itemAnimator = null
     }
     compositeDisposable.add(searchViewModel.effects.subscribe { it.invokeWith(this) })
   }
