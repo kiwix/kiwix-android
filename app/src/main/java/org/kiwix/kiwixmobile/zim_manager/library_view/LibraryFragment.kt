@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.zim_manager.library_view
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -135,7 +136,6 @@ class LibraryFragment : BaseFragment() {
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
           noInternetSnackbar()
-          context.toast(R.string.no_network_connection)
         } else {
           libraryErrorText.setText(R.string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
@@ -147,7 +147,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun noInternetSnackbar() {
     val snackbar =
-      Snackbar.make(view!!.rootView, "Replace with your own action", Snackbar.LENGTH_LONG)
+      Snackbar.make(view!!.rootView, "No network connection", Snackbar.LENGTH_LONG)
     snackbar.setAction("Settings", View.OnClickListener {
       openNetworkSettings()
     })
@@ -155,8 +155,7 @@ class LibraryFragment : BaseFragment() {
   }
 
   private fun openNetworkSettings() {
-    val intent = Intent(Intent.ACTION_MAIN)
-    intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting")
+    val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
     startActivity(intent)
   }
 
@@ -176,7 +175,6 @@ class LibraryFragment : BaseFragment() {
   private fun refreshFragment() {
     if (isNotConnected) {
       noInternetSnackbar()
-      context.toast(R.string.no_network_connection)
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
@@ -213,7 +211,6 @@ class LibraryFragment : BaseFragment() {
       }
       isNotConnected -> {
         noInternetSnackbar()
-        context.toast(R.string.no_network_connection)
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {

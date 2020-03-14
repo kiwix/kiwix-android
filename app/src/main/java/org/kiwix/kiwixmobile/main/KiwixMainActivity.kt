@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.google.android.material.snackbar.Snackbar
