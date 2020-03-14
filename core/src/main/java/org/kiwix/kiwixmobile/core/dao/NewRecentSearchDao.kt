@@ -34,13 +34,12 @@ class NewRecentSearchDao @Inject constructor(
       orderDesc(RecentSearchEntity_.id)
     }
   ).map { searchEntities ->
-    searchEntities.distinct()
+    searchEntities.distinctBy(RecentSearchEntity::searchTerm)
       .take(NUM_RECENT_RESULTS)
       .map { searchEntity -> RecentSearchListItem(searchEntity.searchTerm) }
   }
 
   fun saveSearch(title: String, id: String) {
-    deleteSearchString(title)
     box.put(RecentSearchEntity(searchTerm = title, zimId = id))
   }
 
