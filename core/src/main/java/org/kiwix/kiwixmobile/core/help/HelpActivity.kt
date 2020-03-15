@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.core.help
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -31,12 +29,15 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.utils.Constants
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import java.util.HashMap
+import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_image_view
+import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_text_view
+import kotlinx.android.synthetic.main.activity_help.activity_help_recycler_view
+import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 
 class HelpActivity : BaseActivity() {
-  private val titleDescriptionMap =
-    HashMap<String, String>()
+  private val titleDescriptionMap = HashMap<String, String>()
 
-  private lateinit var toolbar: Toolbar
+  private lateinit var mToolbar: Toolbar
 
   private lateinit var recyclerView: RecyclerView
 
@@ -44,22 +45,18 @@ class HelpActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_help)
 
-    findViewById<TextView>(R.id.activity_help_feedback_text_view)
-      .setOnClickListener { sendFeedback() }
-    findViewById<ImageView>(R.id.activity_help_feedback_image_view)
-      .setOnClickListener { sendFeedback() }
-    recyclerView = findViewById(R.id.activity_help_recycler_view)
-    toolbar = findViewById(R.id.toolbar)
+    activity_help_feedback_text_view.setOnClickListener { sendFeedback() }
+    activity_help_feedback_image_view.setOnClickListener { sendFeedback() }
+    recyclerView = activity_help_recycler_view
+    mToolbar = toolbar
     setSupportActionBar(toolbar)
-    toolbar.setNavigationOnClickListener { onBackPressed() }
+    mToolbar.setNavigationOnClickListener { onBackPressed() }
     if (supportActionBar != null) {
       supportActionBar!!.setDisplayHomeAsUpEnabled(true)
       supportActionBar!!.setTitle(R.string.menu_help)
     }
-
     populateMap(R.string.help_2, R.array.description_help_2)
     populateMap(R.string.help_5, R.array.description_help_5)
-
     recyclerView.addItemDecoration(
       DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
     )
