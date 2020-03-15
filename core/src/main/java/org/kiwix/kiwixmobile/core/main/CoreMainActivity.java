@@ -50,7 +50,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -68,32 +67,25 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
-
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.processors.BehaviorProcessor;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import kotlin.Unit;
-
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
@@ -263,21 +255,21 @@ public abstract class CoreMainActivity extends BaseActivity
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
-                                @NonNull RecyclerView.ViewHolder viewHolder) {
+      @NonNull RecyclerView.ViewHolder viewHolder) {
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-                            @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-                            boolean isCurrentlyActive) {
+      @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+      boolean isCurrentlyActive) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
       viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView,
-                          @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+      @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
       return false;
     }
 
@@ -357,8 +349,7 @@ public abstract class CoreMainActivity extends BaseActivity
         }
       }
 
-      @Override
-      public void onTap(MotionEvent e) {
+      @Override public void onTap(MotionEvent e) {
         final View titleTextView = ViewGroupExtensions.findFirstTextView(toolbar);
         if (titleTextView == null) return;
         final Rect hitRect = new Rect();
@@ -626,8 +617,7 @@ public abstract class CoreMainActivity extends BaseActivity
     drawerLayout.openDrawer(GravityCompat.END);
   }
 
-  @Override
-  public void onBackPressed() {
+  @Override public void onBackPressed() {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
@@ -906,8 +896,7 @@ public abstract class CoreMainActivity extends BaseActivity
     return mainMenu.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
   }
 
-  @Override
-  public void onSupportKiwixMenuClicked() {
+  @Override public void onSupportKiwixMenuClicked() {
     openExternalUrl(
       new Intent(
         Intent.ACTION_VIEW,
@@ -916,8 +905,7 @@ public abstract class CoreMainActivity extends BaseActivity
     );
   }
 
-  @Override
-  public void onFullscreenMenuClicked() {
+  @Override public void onFullscreenMenuClicked() {
     if (isInFullScreenMode()) {
       closeFullScreen();
     } else {
@@ -925,8 +913,7 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @Override
-  public void onReadAloudMenuClicked() {
+  @Override public void onReadAloudMenuClicked() {
     if (TTSControls.getVisibility() == View.GONE) {
       if (isBackToTopEnabled) {
         backToTopButton.hide();
@@ -940,38 +927,32 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @Override
-  public void onLibraryMenuClicked() {
+  @Override public void onLibraryMenuClicked() {
     manageZimFiles(hasLocalBooks ? 0 : 1);
   }
 
-  @Override
-  public void onRandomArticleMenuClicked() {
+  @Override public void onRandomArticleMenuClicked() {
     openRandomArticle();
   }
 
-  @Override
-  public void onBookmarksMenuClicked() {
+  @Override public void onBookmarksMenuClicked() {
     goToBookmarks();
   }
 
-  @Override
-  public void onAddNoteMenuClicked() {
+  @Override public void onAddNoteMenuClicked() {
     if (requestExternalStorageWritePermissionForNotes()) {
       showAddNoteDialog();
     }
   }
 
-  @Override
-  public void onHomeMenuClicked() {
+  @Override public void onHomeMenuClicked() {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       hideTabSwitcher();
     }
     createNewTab();
   }
 
-  @Override
-  public void onTabMenuClicked() {
+  @Override public void onTabMenuClicked() {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       hideTabSwitcher();
       selectTab(currentWebViewIndex);
@@ -980,16 +961,13 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @Override
-  public void onHostBooksMenuClicked() {
+  @Override public void onHostBooksMenuClicked() {
     // to be implemented in subclasses
   }
 
   protected abstract void createNewTab();
 
-  /**
-   * Creates the full screen AddNoteDialog, which is a DialogFragment
-   */
+  /** Creates the full screen AddNoteDialog, which is a DialogFragment */
   private void showAddNoteDialog() {
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
     Fragment previousInstance = getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
@@ -1185,7 +1163,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-                                         @NonNull String[] permissions, @NonNull int[] grantResults) {
+    @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -1528,8 +1506,7 @@ public abstract class CoreMainActivity extends BaseActivity
     return true;
   }
 
-  @NotNull
-  protected MainMenu createMainMenu(Menu menu) {
+  @NotNull protected MainMenu createMainMenu(Menu menu) {
     return menuFactory.create(menu, webViewList, !urlIsInvalid(), this, false, false);
   }
 
