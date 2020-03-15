@@ -113,6 +113,15 @@ class ZimFileSelectFragment : BaseFragment() {
     }
   }
 
+  override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+    super.setUserVisibleHint(isVisibleToUser)
+    if (this.isVisible) {
+      if (!isVisibleToUser) {
+        actionMode?.finish()
+      }
+    }
+  }
+
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
     {
       val effectResult = it.invokeWith(activity!! as AppCompatActivity)
