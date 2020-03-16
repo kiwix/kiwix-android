@@ -28,6 +28,7 @@ import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
@@ -73,7 +74,7 @@ class KiwixMainActivity : CoreMainActivity() {
       val filePath = FileUtils.getLocalFilePathByUri(applicationContext, data)
 
       if (filePath == null || !File(filePath).exists()) {
-        Snackbar.make(currentWebView, R.string.error_file_not_found, Snackbar.LENGTH_SHORT).show()
+        currentWebView.snack(R.string.error_file_not_found)
         return
       }
 
