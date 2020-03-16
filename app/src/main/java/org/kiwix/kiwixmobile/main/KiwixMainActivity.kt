@@ -142,7 +142,7 @@ class KiwixMainActivity : CoreMainActivity() {
     if (zimFile != null) {
       openZimFile(File(zimFile))
     } else {
-      Snackbar.make(currentWebView, "Unable to open zim file", Snackbar.LENGTH_SHORT).show()
+      currentWebView.snack(R.string.error_file_not_opened)
     }
     try {
       val urls = JSONArray(zimArticles)
