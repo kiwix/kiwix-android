@@ -87,7 +87,7 @@ public class KiwixTextToSpeech {
         onInitSucceedListener.onInitSucceed();
       } else {
         Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!");
-        //TODO: Surface to user
+        Toast.makeText(context, R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -117,9 +117,7 @@ public class KiwixTextToSpeech {
       if ("mul".equals(zimReaderContainer.getLanguage())) {
         Log.d(TAG_KIWIX, "TextToSpeech: disabled " +
           zimReaderContainer.getLanguage());
-        Toast.makeText(context,
-          context.getResources().getString(R.string.tts_not_enabled),
-          Toast.LENGTH_LONG).show();
+        Toast.makeText(context, R.string.tts_not_enabled, Toast.LENGTH_LONG).show();
         return;
       }
       if (locale == null
@@ -127,9 +125,7 @@ public class KiwixTextToSpeech {
         || result == TextToSpeech.LANG_NOT_SUPPORTED) {
         Log.d(TAG_KIWIX, "TextToSpeech: language not supported: " +
           zimReaderContainer.getLanguage());
-        Toast.makeText(context,
-          context.getResources().getString(R.string.tts_lang_not_supported),
-          Toast.LENGTH_LONG).show();
+        Toast.makeText(context, R.string.tts_lang_not_supported, Toast.LENGTH_LONG).show();
       } else {
         tts.setLanguage(locale);
 
@@ -301,7 +297,7 @@ public class KiwixTextToSpeech {
         @Override
         public void onError(String s) {
           Log.e(TAG_KIWIX, "TextToSpeech Error: " + s);
-          //TODO: Surface to user
+          Toast.makeText(context, R.string.texttospeech_error, Toast.LENGTH_SHORT).show();
         }
       });
     }

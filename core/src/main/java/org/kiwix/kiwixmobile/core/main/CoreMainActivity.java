@@ -1447,8 +1447,9 @@ public abstract class CoreMainActivity extends BaseActivity
           } else {
             searchForTitle(title);
           }
-        } else { //TODO: Inform the User
+        } else {
           Log.w(TAG_KIWIX, "Unhandled search failure");
+          Toast.makeText(this, R.string.search_error, Toast.LENGTH_SHORT).show();
         }
         break;
       case REQUEST_PREFERENCES:
