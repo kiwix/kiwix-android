@@ -621,8 +621,11 @@ public abstract class CoreMainActivity extends BaseActivity
       compatCallback.finish();
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
-    } else if (getCurrentWebView().canGoBack()) {
+    } else if (getCurrentWebView().canGoBack()
+      && !HOME_URL.equals(getCurrentWebView().getUrl())) {
       getCurrentWebView().goBack();
+    } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
+      showHomePage();
     } else {
       super.onBackPressed();
     }
