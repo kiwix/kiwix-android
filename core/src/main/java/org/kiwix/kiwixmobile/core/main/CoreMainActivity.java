@@ -145,7 +145,6 @@ import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_POSITIONS;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FROM_TAB_SWITCHER;
 import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
@@ -407,7 +406,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), isInTabSwitcher());
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -964,16 +963,6 @@ public abstract class CoreMainActivity extends BaseActivity
     // to be implemented in subclasses
   }
 
-  @Override
-  public boolean navigateToSearch(ZimFileReader zimFileReader) {
-    Intent i = new Intent(this, SearchActivity.class);
-    i.putExtra(EXTRA_ZIM_FILE, zimFileReader.getZimFile().getAbsolutePath());
-    i.putExtra(TAG_FROM_TAB_SWITCHER, isInTabSwitcher());
-    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-    overridePendingTransition(0, 0);
-    return true;
-  }
-
   protected abstract void createNewTab();
 
   /** Creates the full screen AddNoteDialog, which is a DialogFragment */
@@ -1444,12 +1433,11 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    boolean openSearchInANewTab = isInTabSwitcher(); // check if in tab mode
-    hideTabSwitcher();
     Log.i(TAG_KIWIX, "Intent data: " + data);
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
+          hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           boolean isSearchInText =
@@ -1464,13 +1452,14 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            searchForTitle(title, openSearchInANewTab);
+            searchForTitle(title, mainMenu.isInTabSwitcher());
           }
         } else { //TODO: Inform the User
           Log.w(TAG_KIWIX, "Unhandled search failure");
         }
         break;
       case REQUEST_PREFERENCES:
+        hideTabSwitcher();
         if (resultCode == RESULT_RESTART) {
           recreate();
         }
@@ -1485,6 +1474,7 @@ public abstract class CoreMainActivity extends BaseActivity
       case BOOKMARK_CHOSEN_REQUEST:
       case REQUEST_FILE_SELECT:
       case REQUEST_HISTORY_ITEM_CHOSEN:
+        hideTabSwitcher();
         if (resultCode == RESULT_OK) {
           if (data.getBooleanExtra(HistoryActivity.USER_CLEARED_HISTORY, false)) {
             for (KiwixWebView kiwixWebView : webViewList) {
@@ -1745,9 +1735,5 @@ public abstract class CoreMainActivity extends BaseActivity
 
   private boolean checkNull(View view) {
     return view != null;
-  }
-
-  public boolean isInTabSwitcher() {
-    return tabSwitcherRoot != null && tabSwitcherRoot.getVisibility() == View.VISIBLE;
   }
 }

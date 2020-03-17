@@ -30,8 +30,11 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE
+import org.kiwix.kiwixmobile.core.utils.Constants.TAG_FROM_TAB_SWITCHER
 
 const val REQUEST_FILE_SEARCH = 1236
 
@@ -68,7 +71,6 @@ class MainMenu(
     fun onFullscreenMenuClicked()
     fun onSupportKiwixMenuClicked()
     fun onHostBooksMenuClicked()
-    fun navigateToSearch(zimFileReader: ZimFileReader): Boolean
   }
 
   init {
@@ -90,6 +92,7 @@ class MainMenu(
   private val help = menu.findItem(R.id.menu_help)
   private val settings = menu.findItem(R.id.menu_settings)
   private val supportKiwix = menu.findItem(R.id.menu_support_kiwix)
+  private var isInTabSwitcher: Boolean = false
 
   init {
     if (disableReadAloud) {
@@ -150,20 +153,34 @@ class MainMenu(
 
   fun onFileOpened(zimFileReader: ZimFileReader, urlIsValid: Boolean) {
     setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen)
-    search.setOnMenuItemClickListener { menuClickListener.navigateToSearch(zimFileReader) }
+    search.setOnMenuItemClickListener { navigateToSearch(zimFileReader) }
   }
 
   fun showTabSwitcherOptions() {
+    isInTabSwitcher = true
     setVisibility(false, randomArticle, readAloud, addNote, fullscreen)
   }
 
   fun showWebViewOptions(urlIsValid: Boolean) {
+    isInTabSwitcher = false
     fullscreen.isVisible = true
     setVisibility(urlIsValid, randomArticle, search, readAloud, addNote)
   }
 
   fun updateTabIcon(tabs: Int) {
     tabSwitcherTextView?.text = if (tabs > 99) ":D" else "$tabs"
+  }
+
+  private fun navigateToSearch(zimFileReader: ZimFileReader): Boolean {
+    activity.startActivityForResult(
+      activity.intent<SearchActivity> {
+        putExtra(EXTRA_ZIM_FILE, zimFileReader.zimFile.absolutePath)
+        putExtra(TAG_FROM_TAB_SWITCHER, isInTabSwitcher)
+      },
+      REQUEST_FILE_SEARCH
+    )
+    activity.overridePendingTransition(0, 0)
+    return true
   }
 
   fun onTextToSpeechStartedTalking() {
@@ -180,9 +197,11 @@ class MainMenu(
 
   fun tryExpandSearch(zimFileReader: ZimFileReader?) {
     if (search.isVisible) {
-      zimFileReader?.let(menuClickListener::navigateToSearch)
+      zimFileReader?.let(::navigateToSearch)
     }
   }
+
+  fun isInTabSwitcher(): Boolean = isInTabSwitcher
 }
 
 private fun MenuItem?.menuItemClickListener(function: (MenuItem) -> Unit) {

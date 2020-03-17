@@ -22,7 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Function3
+import io.reactivex.functions.Function4
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
@@ -40,7 +40,9 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenOrigin
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
@@ -61,10 +63,11 @@ class SearchViewModel @Inject constructor(
   private val searchResultGenerator: SearchResultGenerator
 ) : ViewModel() {
 
-  val state = MutableLiveData<State>().apply { value = NoResults("") }
+  val state = MutableLiveData<State>().apply { value = NoResults("", FromWebView) }
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
+  private val searchOrigin = BehaviorProcessor.createDefault(FromWebView)
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -93,6 +96,7 @@ class SearchViewModel @Inject constructor(
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
       is ActivityResultReceived ->
         effects.offer(ProcessActivityResult(it.requestCode, it.resultCode, it.data, actions))
+      is ScreenOrigin -> searchOrigin.offer(it.searchOrigin)
     }
   }.subscribe(
     {},
@@ -125,19 +129,21 @@ class SearchViewModel @Inject constructor(
       recentSearchDao.recentSearches(zimReaderContainer.id),
       searchResultsFromZimReader(),
       filter,
-      Function3(this::reduce)
+      searchOrigin,
+      Function4(this::reduce)
     ).subscribe(state::postValue, Throwable::printStackTrace)
 
   private fun reduce(
     recentSearchResults: List<SearchListItem>,
     zimSearchResults: List<SearchListItem>,
-    searchString: String
+    searchString: String,
+    searchOrigin: SearchOrigin
   ) = when {
     searchString.isNotEmpty() && zimSearchResults.isNotEmpty() ->
-      Results(searchString, zimSearchResults)
+      Results(searchString, zimSearchResults, searchOrigin)
     searchString.isEmpty() && recentSearchResults.isNotEmpty() ->
-      Results(searchString, recentSearchResults)
-    else -> NoResults(searchString)
+      Results(searchString, recentSearchResults, searchOrigin)
+    else -> NoResults(searchString, searchOrigin)
   }
 
   private fun searchResultsFromZimReader() = filter

@@ -47,10 +47,9 @@
     <ID>TooManyFunctions:CoreComponent.kt$CoreComponent$CoreComponent</ID>
     <ID>TooManyFunctions:FetchDownloadMonitor.kt$FetchDownloadMonitor$&lt;no name provided&gt; : FetchListener</ID>
     <ID>TooManyFunctions:FileUtils.kt$FileUtils$FileUtils</ID>
-    <ID>TooManyFunctions:MainMenu.kt$MainMenu.MenuClickListener$MenuClickListener</ID>
+    <ID>TooManyFunctions:MainMenu.kt$MainMenu$MainMenu</ID>
     <ID>TooManyFunctions:NewBookDao.kt$NewBookDao$NewBookDao</ID>
     <ID>TooManyFunctions:Repository.kt$Repository$Repository</ID>
-    <ID>TooManyFunctions:SearchActivity.kt$SearchActivity$SearchActivity</ID>
     <ID>TooManyFunctions:ZimFileReader.kt$ZimFileReader$ZimFileReader</ID>
     <ID>TooManyFunctions:ZimReaderContainer.kt$ZimReaderContainer$ZimReaderContainer</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Eb = Pb * 1024</ID>

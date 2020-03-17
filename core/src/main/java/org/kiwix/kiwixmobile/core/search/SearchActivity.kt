@@ -50,11 +50,11 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.State
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -105,11 +105,6 @@ class SearchActivity : BaseActivity() {
     overridePendingTransition(anim.fade_in, anim.fade_out)
   }
 
-  override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-    menu?.findItem(R.id.menu_searchintext)?.isVisible = !isFromTabSwitcher()
-    return super.onPrepareOptionsMenu(menu)
-  }
-
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.menu_search, menu)
     val searchMenuItem = menu.findItem(id.menu_search)
@@ -137,15 +132,18 @@ class SearchActivity : BaseActivity() {
     return true
   }
 
-  private fun render(state: State) = when (state) {
-    is Results -> {
-      searchViewAnimator.setDistinctDisplayedChild(0)
-      searchAdapter.items = state.values
-      render(state.searchString)
-    }
-    is NoResults -> {
-      searchViewAnimator.setDistinctDisplayedChild(1)
-      render(state.searchString)
+  private fun render(state: State) {
+    searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
+    when (state) {
+      is Results -> {
+        searchViewAnimator.setDistinctDisplayedChild(0)
+        searchAdapter.items = state.values
+        render(state.searchString)
+      }
+      is NoResults -> {
+        searchViewAnimator.setDistinctDisplayedChild(1)
+        render(state.searchString)
+      }
     }
   }
 
@@ -161,6 +159,4 @@ class SearchActivity : BaseActivity() {
     super.onActivityResult(requestCode, resultCode, data)
     searchViewModel.actions.offer(ActivityResultReceived(requestCode, resultCode, data))
   }
-
-  private fun isFromTabSwitcher() = intent.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false)
 }
