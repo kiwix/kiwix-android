@@ -29,7 +29,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -156,7 +155,6 @@ public class AddNoteDialog extends DialogFragment
     disableMenuItems();
 
     addNoteTextView.setText(articleTitle);
-    addNoteTextView.setMovementMethod(new ScrollingMovementMethod());
 
     // Show the previously saved note if it exists
     displayNote();

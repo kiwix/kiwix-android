@@ -20,18 +20,25 @@
       android:layout_height="match_parent"
       android:orientation="vertical">
 
+      <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
       <TextView
         android:id="@+id/add_note_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:hint="@string/wiki_article_title"
-        android:maxLines="1"
+        android:singleLine="true"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:scrollbars = "vertical"
+        android:scrollHorizontally="true"
         android:paddingEnd="20dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
+      </HorizontalScrollView>
 
       <View
         android:layout_width="match_parent"
