@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 /**
@@ -238,9 +239,10 @@ public class AddNoteDialog extends DialogFragment
         .findFragmentByTag(ConfirmationAlertDialogFragment.TAG);
 
       if (previousInstance == null) {
+        AlertDialogShower alertDialogShower = new AlertDialogShower(getActivity());
         // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
         DialogFragment newFragment = new ConfirmationAlertDialogFragment(sharedPreferenceUtil, TAG,
-          R.string.confirmation_alert_dialog_message);
+          R.string.confirmation_alert_dialog_message, alertDialogShower);
         newFragment.show(getActivity().getSupportFragmentManager(),
           ConfirmationAlertDialogFragment.TAG);
       }

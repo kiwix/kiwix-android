@@ -20,11 +20,11 @@ package org.kiwix.kiwixmobile.core.main;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import javax.inject.Inject;
 import kotlin.Unit;
-import org.kiwix.kiwixmobile.core.utils.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
@@ -49,14 +49,15 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
   private SharedPreferenceUtil sharedPreferenceUtil;
   private int stringResourceId;
   private String parentDialogFragmentTAG;
-  @Inject
-  protected DialogShower alertDialogShower;
+  private AlertDialogShower alertDialogShower;
 
   public ConfirmationAlertDialogFragment(SharedPreferenceUtil sharedPreferenceUtil,
-    String parentDialogFragmentTAG, int stringResourceId) {
+    String parentDialogFragmentTAG, int stringResourceId,
+    @NonNull AlertDialogShower alertDialogShower) {
     this.sharedPreferenceUtil = sharedPreferenceUtil;
     this.parentDialogFragmentTAG = parentDialogFragmentTAG;
     this.stringResourceId = stringResourceId;
+    this.alertDialogShower = alertDialogShower;
   }
 
   @Override
