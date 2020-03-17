@@ -23,7 +23,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import com.google.android.material.snackbar.Snackbar
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -142,7 +141,7 @@ class KiwixMainActivity : CoreMainActivity() {
     if (zimFile != null) {
       openZimFile(File(zimFile))
     } else {
-      currentWebView.snack(R.string.error_file_not_opened)
+      currentWebView.snack(R.string.zim_not_opened)
     }
     try {
       val urls = JSONArray(zimArticles)
