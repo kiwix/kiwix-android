@@ -408,7 +408,6 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-
   //End of onCreate
   private void handleIntentExtras(Intent intent) {
 
@@ -669,7 +668,6 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   protected abstract int getIconResId();
-
 
   private void goToRateApp() {
     Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getPackageName());
@@ -999,7 +997,7 @@ public abstract class CoreMainActivity extends BaseActivity
             Toast.LENGTH_LONG);
         }
 
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+        requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
           REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
       }
     } else { // For Android versions below Marshmallow 6.0 (API 23)
@@ -1111,7 +1109,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void requestExternalStoragePermission() {
     ActivityCompat.requestPermissions(
       this,
-      new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+      new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
       REQUEST_STORAGE_PERMISSION
     );
   }
@@ -1351,7 +1349,6 @@ public abstract class CoreMainActivity extends BaseActivity
     }
     startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
   }
-
 
   @Override
   protected void onNewIntent(Intent intent) {
