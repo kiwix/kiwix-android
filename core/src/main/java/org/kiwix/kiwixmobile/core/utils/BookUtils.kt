@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,46 +15,44 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.utils;
+package org.kiwix.kiwixmobile.core.utils
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.HashMap
+import java.util.Locale
 
 /**
  * Created by mhutti1 on 19/04/17.
  */
-
-public class BookUtils {
-
-  public final Map<String, Locale> localeMap;
+class BookUtils {
+  val localeMap: Map<String, Locale>
 
   // Create a map of ISO 369-2 language codes
-  public BookUtils() {
-    String[] languages = Locale.getISOLanguages();
-    localeMap = new HashMap<>(languages.length);
-    for (String language : languages) {
-      Locale locale = new Locale(language);
-      localeMap.put(locale.getISO3Language(), locale);
-    }
+  init {
+    val languages = Locale.getISOLanguages()
+    localeMap = HashMap(languages.size)
+    languages
+      .asSequence()
+      .map(::Locale)
+      .forEach { localeMap.put(it.isO3Language, it) }
   }
 
   // Get the language from the language codes of the parsed xml stream
-  public String getLanguage(String languageCode) {
-
+  fun getLanguage(languageCode: String?): String {
+    var language = ""
     if (languageCode == null) {
-      return "";
-    }
-
-    if (languageCode.length() == 2) {
-      return new LanguageContainer(languageCode).getLanguageName();
-    } else if (languageCode.length() == 3) {
-      try {
-        return localeMap.get(languageCode).getDisplayLanguage();
-      } catch (Exception e) {
-        return "";
+      language = ""
+    } else {
+      if (languageCode.length == 2)
+        language = LanguageContainer(languageCode).languageName
+      else if (languageCode.length == LANGUAGE_CODE_LENGTH_THREE) {
+        val locale = localeMap[languageCode]
+        language = locale?.displayLanguage.toString()
       }
     }
-    return "";
+    return language
+  }
+
+  companion object {
+    const val LANGUAGE_CODE_LENGTH_THREE = 3
   }
 }
