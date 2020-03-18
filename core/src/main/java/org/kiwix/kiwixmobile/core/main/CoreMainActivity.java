@@ -1450,6 +1450,8 @@ public abstract class CoreMainActivity extends BaseActivity
           } else {
             searchForTitle(title);
           }
+        } else if (resultCode == RESULT_CANCELED) {
+          Log.w(TAG_KIWIX, "Search cancelled or exited");
         } else {
           Log.w(TAG_KIWIX, "Unhandled search failure");
           Toast.makeText(this, R.string.search_error, Toast.LENGTH_SHORT).show();
