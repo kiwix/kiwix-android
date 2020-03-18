@@ -376,7 +376,7 @@ public class AddNoteDialog extends DialogFragment
       }
 
       addNoteEditText.setText(contents.toString()); // Display the note content
-
+      addNoteEditText.setSelection(addNoteEditText.getText().length() - 1);
       enableShareNoteMenuItem(); // As note content exists which can be shared
     }
 
