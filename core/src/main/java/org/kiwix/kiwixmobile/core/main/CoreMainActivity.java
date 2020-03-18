@@ -389,7 +389,6 @@ public abstract class CoreMainActivity extends BaseActivity
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         bookOnDiskItem -> {
           open(bookOnDiskItem);
-          updateNightMode();
           return Unit.INSTANCE;
         },
         null,
@@ -1619,6 +1618,7 @@ public abstract class CoreMainActivity extends BaseActivity
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
+    updateNightMode();
   }
 
   protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {
