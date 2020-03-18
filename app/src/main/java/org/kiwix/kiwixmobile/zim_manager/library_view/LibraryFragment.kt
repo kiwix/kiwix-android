@@ -148,12 +148,12 @@ class LibraryFragment : BaseFragment() {
     view?.snack(
       R.string.no_network_connection,
       R.string.settings,
-      { (::openNetworkSettings)(Intent(Settings.ACTION_WIFI_SETTINGS)) }
+      ::openNetworkSettings
     )
   }
 
-  private fun openNetworkSettings(intent: Intent) {
-    startActivity(intent)
+  private fun openNetworkSettings() {
+    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
   }
 
   private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
