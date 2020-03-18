@@ -207,7 +207,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
         allBookmarks.clear();
         bookmarksList.clear();
         bookmarksAdapter.notifyDataSetChanged();
-        Snackbar.make(getWindow().getDecorView().getRootView(), R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(noBookmarks, R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT).show();
         return Unit.INSTANCE;
       });
       return true;

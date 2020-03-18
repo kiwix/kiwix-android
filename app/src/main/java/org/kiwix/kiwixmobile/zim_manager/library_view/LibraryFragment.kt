@@ -30,7 +30,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.activity_library.libraryErrorText
@@ -146,16 +145,14 @@ class LibraryFragment : BaseFragment() {
   }
 
   private fun noInternetSnackbar() {
-    val snackbar =
-      Snackbar.make(view!!.rootView, R.string.no_network_connection, Snackbar.LENGTH_LONG)
-    snackbar.setAction(R.string.settings, View.OnClickListener {
-      openNetworkSettings()
-    })
-    snackbar.show()
+    view?.snack(
+      R.string.no_network_connection,
+      R.string.settings,
+      { (::openNetworkSettings)(Intent(Settings.ACTION_WIFI_SETTINGS)) }
+    )
   }
 
-  private fun openNetworkSettings() {
-    val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+  private fun openNetworkSettings(intent: Intent) {
     startActivity(intent)
   }
 

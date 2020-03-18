@@ -244,7 +244,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
           historyList.clear();
           historyAdapter.notifyDataSetChanged();
           setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
-          Snackbar.make(getWindow().getDecorView().getRootView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
+          Snackbar.make(noHistory, R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
           return Unit.INSTANCE;
         });
       }
