@@ -400,6 +400,12 @@ public abstract class CoreMainActivity extends BaseActivity
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+
+    // Only check intent on first start of activity. Otherwise the intents will enter infinite loops
+    // when "Don't keep activities" is on.
+    if (savedInstanceState == null) {
+      handleIntentActions(getIntent());
+    }
   }
 
   //End of onCreate
@@ -656,7 +662,7 @@ public abstract class CoreMainActivity extends BaseActivity
         visitCounterPref.setNoThanksState(true);
         return Unit.INSTANCE;
       },
-      () ->{
+      () -> {
         tempVisitCount = 0;
         visitCounterPref.setCount(tempVisitCount);
         return Unit.INSTANCE;
@@ -665,17 +671,6 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   protected abstract int getIconResId();
-
-  private void goToSearch(boolean isVoice) {
-    final String zimFile = zimReaderContainer.getZimCanonicalPath();
-    saveTabStates();
-    Intent i = new Intent(this, SearchActivity.class);
-    i.putExtra(EXTRA_ZIM_FILE, zimFile);
-    if (isVoice) {
-      i.putExtra(EXTRA_IS_WIDGET_VOICE, true);
-    }
-    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-  }
 
   private void goToRateApp() {
     Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getPackageName());
@@ -860,7 +855,7 @@ public abstract class CoreMainActivity extends BaseActivity
         webViewList.add(index, tempForUndo);
         tabsAdapter.notifyItemInserted(index);
         tabsAdapter.notifyDataSetChanged();
-        Snackbar.make(snackbarRoot,"Tab restored",Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
         setUpWebViewWithTextToSpeech();
       })
       .show();
@@ -1092,7 +1087,7 @@ public abstract class CoreMainActivity extends BaseActivity
         startActivity(intent);
         return Unit.INSTANCE;
       }
-      );
+    );
   }
 
   protected void openZimFile(@NonNull File file) {
@@ -1278,42 +1273,6 @@ public abstract class CoreMainActivity extends BaseActivity
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
-
-    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
-    Intent intent = getIntent();
-    if (intent.getAction() != null) {
-
-      switch (intent.getAction()) {
-        case Intent.ACTION_PROCESS_TEXT: {
-          saveTabStates();
-          Intent i = new Intent(this, SearchActivity.class);
-          if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-            i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
-          }
-          startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-          break;
-        }
-        case CoreSearchWidget.TEXT_CLICKED:
-          goToSearch(false);
-          break;
-        case CoreSearchWidget.STAR_CLICKED:
-          goToBookmarks();
-          break;
-        case CoreSearchWidget.MIC_CLICKED:
-          goToSearch(true);
-          break;
-        case Intent.ACTION_VIEW:
-          if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
-            saveTabStates();
-            Intent i = new Intent(this, SearchActivity.class);
-            if (intent.getData() != null) {
-              i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
-            }
-            startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-          }
-          break;
-      }
-    }
     updateNightMode();
   }
 
@@ -1335,32 +1294,70 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
+  private void goToSearch(boolean isVoice) {
+    final String zimFile = zimReaderContainer.getZimCanonicalPath();
+    saveTabStates();
+    Intent i = new Intent(this, SearchActivity.class);
+    i.putExtra(EXTRA_ZIM_FILE, zimFile);
+    i.putExtra(EXTRA_IS_WIDGET_VOICE, isVoice);
+    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+  }
+
+  private void handleIntentActions(Intent intent) {
+    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
+    if (intent.getAction() != null) {
+      if (zimReaderContainer.getId() != null) {
+        startIntentBasedOnAction(intent);
+      } else {
+        if (CoreSearchWidget.MIC_CLICKED.equals(intent.getAction())) {
+          manageZimFiles(0);
+        }
+      }
+    }
+  }
+
+  private void startIntentBasedOnAction(Intent intent) {
+    switch (intent.getAction()) {
+      case Intent.ACTION_PROCESS_TEXT: {
+        goToSearchWithText(intent);
+        break;
+      }
+      case CoreSearchWidget.TEXT_CLICKED:
+        goToSearch(false);
+        break;
+      case CoreSearchWidget.STAR_CLICKED:
+        goToBookmarks();
+        break;
+      case CoreSearchWidget.MIC_CLICKED:
+        goToSearch(true);
+        break;
+      case Intent.ACTION_VIEW:
+        if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
+          saveTabStates();
+          Intent i = new Intent(this, SearchActivity.class);
+          if (intent.getData() != null) {
+            i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+          }
+          startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+        }
+        break;
+    }
+  }
+
+  private void goToSearchWithText(Intent intent) {
+    saveTabStates();
+    Intent i = new Intent(this, SearchActivity.class);
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+      i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+    }
+    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+  }
+
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
     handleNotificationIntent(intent);
-    if (intent.getAction() != null) {
-      if (zimReaderContainer.getId() != null) {
-        switch (intent.getAction()) {
-          case CoreSearchWidget.STAR_CLICKED:
-            goToBookmarks();
-            break;
-          case CoreSearchWidget.TEXT_CLICKED:
-            goToSearch(false);
-            break;
-          case CoreSearchWidget.MIC_CLICKED:
-            goToSearch(true);
-            break;
-        }
-      } else {
-        switch (intent.getAction()) {
-          case CoreSearchWidget.STAR_CLICKED:
-          case CoreSearchWidget.TEXT_CLICKED:
-          case CoreSearchWidget.MIC_CLICKED:
-            manageZimFiles(0);
-        }
-      }
-    }
+    handleIntentActions(intent);
   }
 
   private void contentsDrawerHint() {
