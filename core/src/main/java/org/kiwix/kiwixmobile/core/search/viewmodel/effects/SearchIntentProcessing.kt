@@ -37,19 +37,23 @@ data class SearchIntentProcessing(
 ) : SideEffect<Unit> {
   @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {
-    if (intent != null) {
-      if (intent.getBooleanExtra(Constants.TAG_FROM_TAB_SWITCHER, false)) {
-        actions.offer(ScreenOrigin(SearchOrigin.FromTabView))
-      } else {
-        actions.offer(ScreenOrigin(SearchOrigin.FromWebView))
+    intent?.let {
+      actions.offer(
+        ScreenOrigin(
+          if (it.getBooleanExtra(
+              Constants.TAG_FROM_TAB_SWITCHER,
+              false
+            )
+          ) SearchOrigin.FromTabView else SearchOrigin.FromWebView
+        )
+      )
+      if (it.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
+        actions.offer(Filter(it.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
       }
-      if (intent.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
-        actions.offer(Filter(intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
-      }
-      if (intent.hasExtra(Constants.EXTRA_SEARCH)) {
+      if (it.hasExtra(Constants.EXTRA_SEARCH)) {
         actions.offer(Filter(intent.getStringExtra(Constants.EXTRA_SEARCH)))
       }
-      if (intent.getBooleanExtra(Constants.EXTRA_IS_WIDGET_VOICE, false)) {
+      if (it.getBooleanExtra(Constants.EXTRA_IS_WIDGET_VOICE, false)) {
         actions.offer(ReceivedPromptForSpeechInput)
       }
     }
