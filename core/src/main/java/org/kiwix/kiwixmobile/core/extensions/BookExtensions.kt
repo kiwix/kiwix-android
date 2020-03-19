@@ -45,7 +45,7 @@ fun Book.buildSearchableText(bookUtils: BookUtils): String =
     append(NetworkUtils.parseURL(CoreApp.getInstance(), url))
     append("|")
     if (bookUtils.localeMap.containsKey(language)) {
-      append(bookUtils.localeMap[language]!!.displayLanguage)
+      append(bookUtils.localeMap[language]?.displayLanguage)
       append("|")
     }
   }.toString()

@@ -17,25 +17,24 @@
  */
 package org.kiwix.kiwixmobile.core.utils
 
-import java.util.HashMap
 import java.util.Locale
 
 /**
  * Created by mhutti1 on 19/04/17.
  */
 class BookUtils {
-  val localeMap = Locale.getISOLanguages().associateBy { Locale(it).isO3Language; Locale(it) }
+  val localeMap = Locale.getISOLanguages().associateBy({ Locale(it).isO3Language }, ::Locale)
 
   // Get the language from the language codes of the parsed xml stream
   @Suppress("MagicNumber")
-  fun getLanguage(languageCode: String?): String {
+  fun getLanguage(languageCode: String): String? {
     return when {
       languageCode == null -> ""
       languageCode.length == 2 -> {
         LanguageContainer(languageCode).languageName
       }
       languageCode.length == 3 -> {
-        localeMap.filter { it.value == languageCode }.keys.first().displayLanguage
+        localeMap[languageCode]?.displayLanguage
       }
       else -> {
         ""
@@ -43,4 +42,4 @@ class BookUtils {
     }
   }
 }
-}
+
