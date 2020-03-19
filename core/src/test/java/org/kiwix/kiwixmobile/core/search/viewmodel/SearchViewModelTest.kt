@@ -63,6 +63,7 @@ import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
 import java.util.concurrent.TimeUnit.MILLISECONDS
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class SearchViewModelTest {
@@ -98,7 +99,7 @@ internal class SearchViewModelTest {
   inner class StateTests {
     @Test
     fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(NoResults(""))
+      viewModel.state.test().assertValue(NoResults("", FromWebView))
     }
 
     @Test
@@ -110,7 +111,7 @@ internal class SearchViewModelTest {
         searchResults = listOf(item),
         databaseResults = listOf(RecentSearchListItem(""))
       )
-      resultsIn(Results(searchTerm, listOf(item)))
+      resultsIn(Results(searchTerm, listOf(item), FromWebView))
     }
 
     @Test
@@ -120,7 +121,7 @@ internal class SearchViewModelTest {
         searchResults = emptyList(),
         databaseResults = listOf(RecentSearchListItem(""))
       )
-      resultsIn(NoResults("a"))
+      resultsIn(NoResults("a", FromWebView))
     }
 
     @Test
@@ -131,7 +132,7 @@ internal class SearchViewModelTest {
         searchResults = listOf(ZimSearchResultListItem("")),
         databaseResults = listOf(item)
       )
-      resultsIn(Results("", listOf(item)))
+      resultsIn(Results("", listOf(item), FromWebView))
     }
 
     @Test
@@ -141,7 +142,7 @@ internal class SearchViewModelTest {
         searchResults = listOf(ZimSearchResultListItem("")),
         databaseResults = emptyList()
       )
-      resultsIn(NoResults(""))
+      resultsIn(NoResults("", FromWebView))
     }
 
     @Test
@@ -156,7 +157,10 @@ internal class SearchViewModelTest {
       viewModel.actions.offer(Filter(searchString))
       viewModel.state.test()
         .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(NoResults(""), Results(searchString, listOf(item)))
+        .assertValueHistory(
+          NoResults("", FromWebView),
+          Results(searchString, listOf(item), FromWebView)
+        )
     }
 
     @Test
@@ -174,7 +178,7 @@ internal class SearchViewModelTest {
       )
       viewModel.state.test()
         .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(NoResults(""), Results("b", listOf(item)))
+        .assertValueHistory(NoResults("", FromWebView), Results("b", listOf(item), FromWebView))
     }
   }
 
