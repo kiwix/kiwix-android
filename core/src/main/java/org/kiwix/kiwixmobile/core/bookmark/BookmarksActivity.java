@@ -34,6 +34,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -206,7 +207,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
         allBookmarks.clear();
         bookmarksList.clear();
         bookmarksAdapter.notifyDataSetChanged();
-        Toast.makeText(this, R.string.all_bookmarks_cleared_toast, Toast.LENGTH_SHORT).show();
+        Snackbar.make(noBookmarks, R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT).show();
         return Unit.INSTANCE;
       });
       return true;

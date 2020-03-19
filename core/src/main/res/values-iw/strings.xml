@@ -77,7 +77,7 @@
   <string name="delete_recent_search_item">למחוק את הפריט הזה?</string>
   <string name="pref_clear_all_history_title">ניקוי ההיסטוריה</string>
   <string name="pref_clear_all_history_summary">ניקוי מילות חיפוש קודמות והיסטוריית כרטיסיות</string>
-  <string name="all_history_cleared_toast">כל ההיסטוריה נמחקה</string>
+  <string name="all_history_cleared">כל ההיסטוריה נמחקה</string>
   <string name="clear_all_history_dialog_title">מחיקת כל ההיסטוריה</string>
   <string name="share">שיתוף</string>
   <string name="selected_file_cab_app_chooser_title">שיתוף קובצי ZIM עם:</string>

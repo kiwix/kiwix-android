@@ -50,7 +50,7 @@
   <string name="delete_recent_search_item">Șterge acest item?</string>
   <string name="pref_clear_all_history_title">Curăță istoricul</string>
   <string name="pref_clear_all_history_summary">Curăță căutările recente și istoricul filelor</string>
-  <string name="all_history_cleared_toast">Tot istoricul curățat</string>
+  <string name="all_history_cleared">Tot istoricul curățat</string>
   <string name="clear_all_history_dialog_title">Curăță tot istoricul</string>
   <string name="delete">Șterge</string>
   <string name="delete_specific_search_toast">Căutare recentă scoasă</string>

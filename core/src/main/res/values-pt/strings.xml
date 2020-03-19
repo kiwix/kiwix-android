@@ -58,7 +58,7 @@
   <string name="delete_recent_search_item">Apagar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpar o histórico</string>
   <string name="pref_clear_all_history_summary">Limpar as pesquisas recentes e o histórico de separadores</string>
-  <string name="all_history_cleared_toast">Todo o historial foi apagado</string>
+  <string name="all_history_cleared">Todo o historial foi apagado</string>
   <string name="clear_all_history_dialog_title">Apagar todo o historial</string>
   <string name="delete">Apagar</string>
   <string name="delete_specific_search_toast">Pesquisa recente removida</string>

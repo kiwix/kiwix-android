@@ -63,7 +63,7 @@
   <string name="delete_recent_search_item">¿Borrar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpiar el historial</string>
   <string name="pref_clear_all_history_summary">Borrar las búsquedas recientes y el historial de pestañas</string>
-  <string name="all_history_cleared_toast">Borrado todo el historial</string>
+  <string name="all_history_cleared">Borrado todo el historial</string>
   <string name="clear_all_history_dialog_title">Borrar todo el historial</string>
   <string name="share">Compartir</string>
   <string name="delete">Borrar</string>

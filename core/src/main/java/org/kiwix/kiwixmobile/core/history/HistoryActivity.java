@@ -36,6 +36,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -243,7 +244,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
           historyList.clear();
           historyAdapter.notifyDataSetChanged();
           setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
-          Toast.makeText(this, R.string.all_history_cleared_toast, Toast.LENGTH_SHORT).show();
+          Snackbar.make(noHistory, R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
           return Unit.INSTANCE;
         });
       }

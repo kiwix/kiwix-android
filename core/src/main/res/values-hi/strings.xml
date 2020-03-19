@@ -55,7 +55,7 @@
   <string name="delete_recent_search_item">इस फ़ाइल को हटाएँ?</string>
   <string name="pref_clear_all_history_title">इतिहास साफ़ करें</string>
   <string name="pref_clear_all_history_summary">हाल की खोजों और टैब इतिहास को साफ़ करें</string>
-  <string name="all_history_cleared_toast">सभी इतिहास मिट गया</string>
+  <string name="all_history_cleared">सभी इतिहास मिट गया</string>
   <string name="clear_all_history_dialog_title">पूरा इतिहास मिटायें</string>
   <string name="delete">हटायें</string>
   <string name="delete_specific_search_toast">हाल की खोजें हटा दी गयीं</string>

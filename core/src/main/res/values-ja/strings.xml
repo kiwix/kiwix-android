@@ -26,7 +26,7 @@
   <string name="pref_back_to_top">トップに戻る</string>
   <string name="pref_language_title">言語</string>
   <string name="pref_language_chooser">言語を選択</string>
-  <string name="all_history_cleared_toast">全履歴を削除しました</string>
+  <string name="all_history_cleared">全履歴を削除しました</string>
   <string name="library">ライブラリ</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
   <string name="other_languages">その他の言語:</string>

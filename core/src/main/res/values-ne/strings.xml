@@ -43,7 +43,7 @@
   <string name="clear_recent_and_tabs_history_dialog">के तपाईं साँच्चिकै आफ्नो खोज इतिहास खाली गर्न चाहनुहुन्छ र सबै सक्रिय ट्याबहरू पूर्ववत् गर्न चाहनुहुन्छ?</string>
   <string name="delete_recent_search_item">यस वस्तुलाई मेट्ने हो?</string>
   <string name="pref_clear_all_history_title">इतिहास खाली गर्नुहोस्</string>
-  <string name="all_history_cleared_toast">सबै इतिहास खाली गरियो</string>
+  <string name="all_history_cleared">सबै इतिहास खाली गरियो</string>
   <string name="pref_clear_all_bookmarks_title">पुस्तक चिनाेहरू हटाउनुहाेस्</string>
   <string name="clear_all_history_dialog_title">सबै इतिहास हटाउनुहोस्</string>
   <string name="delete">हटाउने</string>
