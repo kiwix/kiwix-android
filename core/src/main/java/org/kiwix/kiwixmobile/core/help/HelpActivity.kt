@@ -20,26 +20,25 @@ package org.kiwix.kiwixmobile.core.help
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.utils.Constants
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
-import java.util.HashMap
 import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_image_view
 import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_text_view
 import kotlinx.android.synthetic.main.activity_help.activity_help_recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 
 class HelpActivity : BaseActivity() {
-  private val titleDescriptionMap = HashMap<String, String>()
-
-  private lateinit var mToolbar: Toolbar
-
-  private lateinit var recyclerView: RecyclerView
+  private val titleDescriptionMap by lazy {
+    hashMapOf(R.string.help_2 to R.array.description_help_2,
+              R.string.help_5 to R.array.description_help_5
+    ).entries.associateTo(hashMapOf<String, String>(),
+      { getString(it.key) to resources.getStringArray(it.value)
+        .joinToString(separator = System.getProperty("line.separator")!!) })
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -47,35 +46,25 @@ class HelpActivity : BaseActivity() {
 
     activity_help_feedback_text_view.setOnClickListener { sendFeedback() }
     activity_help_feedback_image_view.setOnClickListener { sendFeedback() }
-    recyclerView = activity_help_recycler_view
-    mToolbar = toolbar
     setSupportActionBar(toolbar)
-    mToolbar.setNavigationOnClickListener { onBackPressed() }
+    toolbar.setNavigationOnClickListener { onBackPressed() }
     if (supportActionBar != null) {
       supportActionBar!!.setDisplayHomeAsUpEnabled(true)
       supportActionBar!!.setTitle(R.string.menu_help)
     }
-    populateMap(R.string.help_2, R.array.description_help_2)
-    populateMap(R.string.help_5, R.array.description_help_5)
-    recyclerView.addItemDecoration(
+
+    activity_help_recycler_view.addItemDecoration(
       DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
     )
-    recyclerView.adapter = HelpAdapter(titleDescriptionMap)
+    activity_help_recycler_view.adapter = HelpAdapter(titleDescriptionMap)
   }
 
   private fun sendFeedback() {
     val intent = Intent(Intent.ACTION_SENDTO)
-    val uriText =
-      "mailto:${Uri.encode(Constants.CONTACT_EMAIL_ADDRESS)}" +
+    val uriText = "mailto:${Uri.encode(Constants.CONTACT_EMAIL_ADDRESS)}" +
         "?subject=${Uri.encode("Feedback in ${getCurrentLocale(this).displayLanguage}")}"
-    val uri = Uri.parse(uriText)
-    intent.data = uri
+    intent.data = Uri.parse(uriText)
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"))
-  }
-
-  private fun populateMap(title: Int, descriptionArray: Int) {
-    titleDescriptionMap[getString(title)] = resources.getStringArray(descriptionArray)
-      .joinToString(separator = System.getProperty("line.separator")!!)
   }
 
   override fun injection(coreComponent: CoreComponent) {
