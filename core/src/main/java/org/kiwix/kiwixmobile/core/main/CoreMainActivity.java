@@ -845,9 +845,11 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void closeTab(int index) {
-    currentWebViewIndex = 0;
     tempForUndo = webViewList.get(index);
     webViewList.remove(index);
+    if(currentWebViewIndex >= webViewList.size()){
+      currentWebViewIndex = webViewList.size() - 1;
+    }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
     Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
