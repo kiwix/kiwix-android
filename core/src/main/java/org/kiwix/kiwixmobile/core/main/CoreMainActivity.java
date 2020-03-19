@@ -1437,7 +1437,7 @@ public abstract class CoreMainActivity extends BaseActivity
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
-          boolean isFromTabSwitcher = mainMenu.isInTabSwitcher();
+          boolean wasFromTabSwitcher = mainMenu.isInTabSwitcher();
           hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
@@ -1453,7 +1453,7 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            searchForTitle(title, isFromTabSwitcher);
+            searchForTitle(title, wasFromTabSwitcher);
           }
         } else { //TODO: Inform the User
           Log.w(TAG_KIWIX, "Unhandled search failure");

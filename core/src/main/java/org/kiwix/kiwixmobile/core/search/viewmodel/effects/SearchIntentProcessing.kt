@@ -28,7 +28,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenOrigin
-import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.utils.Constants
 
 data class SearchIntentProcessing(
@@ -44,7 +45,7 @@ data class SearchIntentProcessing(
               Constants.TAG_FROM_TAB_SWITCHER,
               false
             )
-          ) SearchOrigin.FromTabView else SearchOrigin.FromWebView
+          ) FromTabView else FromWebView
         )
       )
       if (it.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
