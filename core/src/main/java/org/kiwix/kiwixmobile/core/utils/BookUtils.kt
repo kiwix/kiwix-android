@@ -24,35 +24,23 @@ import java.util.Locale
  * Created by mhutti1 on 19/04/17.
  */
 class BookUtils {
-  val localeMap: Map<String, Locale>
-
-  // Create a map of ISO 369-2 language codes
-  init {
-    val languages = Locale.getISOLanguages()
-    localeMap = HashMap(languages.size)
-    languages
-      .asSequence()
-      .map(::Locale)
-      .forEach { localeMap.put(it.isO3Language, it) }
-  }
+  val localeMap = Locale.getISOLanguages().associateBy { Locale(it).isO3Language; Locale(it) }
 
   // Get the language from the language codes of the parsed xml stream
+  @Suppress("MagicNumber")
   fun getLanguage(languageCode: String?): String {
-    var language = ""
-    if (languageCode == null) {
-      language = ""
-    } else {
-      if (languageCode.length == 2)
-        language = LanguageContainer(languageCode).languageName
-      else if (languageCode.length == LANGUAGE_CODE_LENGTH_THREE) {
-        val locale = localeMap[languageCode]
-        language = locale?.displayLanguage.toString()
+    return when {
+      languageCode == null -> ""
+      languageCode.length == 2 -> {
+        LanguageContainer(languageCode).languageName
+      }
+      languageCode.length == 3 -> {
+        localeMap.filter { it.value == languageCode }.keys.first().displayLanguage
+      }
+      else -> {
+        ""
       }
     }
-    return language
   }
-
-  companion object {
-    const val LANGUAGE_CODE_LENGTH_THREE = 3
-  }
+}
 }
