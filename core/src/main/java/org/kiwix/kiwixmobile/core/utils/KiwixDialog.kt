@@ -187,17 +187,19 @@ sealed class KiwixDialog(
   }
 
   object DeleteHistory : KiwixDialog(
-    null,
     R.string.delete_history,
-    R.string.yes,
-    R.string.no
+    null,
+    positiveMessage = R.string.yes,
+    negativeMessage = R.string.no,
+    icon = R.drawable.ic_warning
   )
 
   object DeleteBookmarks : KiwixDialog(
-    null,
     R.string.delete_bookmarks,
-    R.string.yes,
-    R.string.no
+    null,
+    positiveMessage = R.string.yes,
+    negativeMessage = R.string.no,
+    icon = R.drawable.ic_warning
   )
 }
 

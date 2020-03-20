@@ -265,8 +265,8 @@
   <string name="no_bookmarks">No Bookmarks</string>
   <string name="no_history">No History</string>
   <string name="device_default">Device Default</string>
-  <string name="delete_history">Delete History?</string>
-  <string name="delete_bookmarks">Delete Bookmarks?</string>
+  <string name="delete_history">Are you sure you want to delete history?</string>
+  <string name="delete_bookmarks">Are you sure you want to delete bookmark?</string>
   <string-array name="pref_night_modes_entries">
     <item>On</item>
     <item>Off</item>
