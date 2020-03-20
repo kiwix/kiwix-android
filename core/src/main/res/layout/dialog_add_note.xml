@@ -30,7 +30,7 @@
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="20dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
+        android:textAppearance="?textAppearanceSubtitle1" />
 
       <View
         android:layout_width="match_parent"
