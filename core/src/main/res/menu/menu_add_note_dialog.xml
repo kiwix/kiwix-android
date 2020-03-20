@@ -3,6 +3,12 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
+    android:id="@+id/delete_note"
+    android:icon="@drawable/ic_delete_white_24dp"
+    android:title="@string/delete"
+    app:showAsAction="always" />
+
+  <item
     android:id="@+id/share_note"
     android:icon="@drawable/baseline_share_24"
     android:title="@string/share"
