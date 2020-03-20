@@ -847,7 +847,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void closeTab(int index) {
     tempForUndo = webViewList.get(index);
     webViewList.remove(index);
-    if(index <= currentWebViewIndex){
+    if(index <= currentWebViewIndex && currentWebViewIndex > 0){
       currentWebViewIndex--;
     }
     tabsAdapter.notifyItemRemoved(index);
