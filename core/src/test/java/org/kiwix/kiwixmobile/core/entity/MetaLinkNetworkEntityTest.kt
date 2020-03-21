@@ -122,7 +122,7 @@ class MetaLinkNetworkEntityTest {
 
     fun hasItems(items: List<DummyUrl>): Boolean {
       return intersectionWith(actual, items) { a, b ->
-        (a.location == b.location && a.priority == b.priority && a.value == b.value)
+        a.location == b.location && a.priority == b.priority && a.value == b.value
       }
     }
   }
