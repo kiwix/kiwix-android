@@ -57,12 +57,12 @@ class HistoryPresenter extends BasePresenter<HistoryContract.View>
             disposable.dispose();
           }
           disposable = d;
-          compositeDisposable.add(d);
+          getCompositeDisposable().add(d);
         }
 
         @Override
         public void onSuccess(List<HistoryListItem> histories) {
-          view.updateHistoryList(histories);
+          getView().updateHistoryList(histories);
         }
 
         @Override
@@ -95,12 +95,12 @@ class HistoryPresenter extends BasePresenter<HistoryContract.View>
       .subscribe(new SingleObserver<List<HistoryListItem>>() {
         @Override
         public void onSubscribe(Disposable d) {
-          compositeDisposable.add(d);
+          getCompositeDisposable().add(d);
         }
 
         @Override
         public void onSuccess(List<HistoryListItem> historyList1) {
-          view.notifyHistoryListFiltered(historyList1);
+          getView().notifyHistoryListFiltered(historyList1);
         }
 
         @Override

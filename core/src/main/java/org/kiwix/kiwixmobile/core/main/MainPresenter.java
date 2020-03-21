@@ -52,12 +52,12 @@ public class MainPresenter extends BasePresenter<MainContract.View>
       .subscribe(new SingleObserver<List<BooksOnDiskListItem>>() {
         @Override
         public void onSubscribe(Disposable d) {
-          compositeDisposable.add(d);
+          getCompositeDisposable().add(d);
         }
 
         @Override
         public void onSuccess(List<BooksOnDiskListItem> books) {
-          view.addBooks(books);
+          getView().addBooks(books);
         }
 
         @Override

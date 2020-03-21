@@ -25,6 +25,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import java.util.List;
+import java.util.Queue;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.base.BasePresenter;
 import org.kiwix.kiwixmobile.core.data.DataSource;
@@ -56,12 +57,12 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
             disposable.dispose();
           }
           disposable = d;
-          compositeDisposable.add(d);
+          getCompositeDisposable().add(d);
         }
 
         @Override
         public void onSuccess(List<BookmarkItem> bookmarks) {
-          view.updateBookmarksList(bookmarks);
+          getView().updateBookmarksList(bookmarks);
         }
 
         @Override
@@ -82,12 +83,12 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
       .subscribe(new SingleObserver<List<BookmarkItem>>() {
         @Override
         public void onSubscribe(Disposable d) {
-          compositeDisposable.add(d);
+          getCompositeDisposable().add(d);
         }
 
         @Override
         public void onSuccess(List<BookmarkItem> bookmarkList) {
-          view.notifyBookmarksListFiltered(bookmarkList);
+          getView().notifyBookmarksListFiltered(bookmarkList);
         }
 
         @Override
