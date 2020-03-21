@@ -32,7 +32,8 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
-import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH
+import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE
 
 internal class SearchIntentProcessingTest {
 
@@ -65,15 +66,15 @@ internal class SearchIntentProcessingTest {
   @Test
   fun `invoke with offers action when EXTRA_SEARCH present`() {
     val extra = ""
-    every { intent.hasExtra(Constants.EXTRA_SEARCH) } returns true
-    every { intent.getStringExtra(Constants.EXTRA_SEARCH) } returns extra
+    every { intent.hasExtra(EXTRA_SEARCH) } returns true
+    every { intent.getStringExtra(EXTRA_SEARCH) } returns extra
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence { actions.offer(Filter(extra)) }
   }
 
   @Test
   fun `invoke with offers action when EXTRA_IS_WIDGET_VOICE present`() {
-    every { intent.getBooleanExtra(Constants.EXTRA_IS_WIDGET_VOICE, false) } returns true
+    every { intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false) } returns true
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence { actions.offer(ReceivedPromptForSpeechInput) }
   }

@@ -25,6 +25,8 @@ import android.util.Log;
 import java.util.UUID;
 import org.kiwix.kiwixmobile.core.R;
 
+import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
+
 public class NetworkUtils {
   /**
    * check availability of any network
@@ -115,7 +117,7 @@ public class NetworkUtils {
       details = details.trim().replaceAll(" +", " ");
       return details;
     } catch (Exception e) {
-      Log.d(Constants.TAG_KIWIX, "Context invalid url: " + url, e);
+      Log.d(TAG_KIWIX, "Context invalid url: " + url, e);
       return "";
     }
   }

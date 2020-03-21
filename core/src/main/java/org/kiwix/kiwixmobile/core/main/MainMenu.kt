@@ -32,8 +32,9 @@ import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
-import org.kiwix.kiwixmobile.core.utils.Constants
 import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE
+import org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_PREFERENCES
+import org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_HISTORY_ITEM_CHOSEN
 
 const val REQUEST_FILE_SEARCH = 1236
 
@@ -114,13 +115,13 @@ class MainMenu(
     settings.menuItemClickListener {
       activity.startActivityForResult(
         internal(CoreSettingsActivity::class.java),
-        Constants.REQUEST_PREFERENCES
+        REQUEST_PREFERENCES
       )
     }
     history.menuItemClickListener {
       activity.startActivityForResult(
         activity.intent<HistoryActivity>(),
-        Constants.REQUEST_HISTORY_ITEM_CHOSEN
+        REQUEST_HISTORY_ITEM_CHOSEN
       )
     }
     hostBooks.menuItemClickListener { menuClickListener.onHostBooksMenuClicked() }
