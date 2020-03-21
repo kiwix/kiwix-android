@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenOrigin
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.utils.Constants
@@ -63,7 +63,7 @@ internal class SearchIntentProcessingTest {
     every { intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT) } returns extra
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
-      actions.offer(any<ScreenOrigin>())
+      actions.offer(any<ScreenWasStartedFrom>())
       actions.offer(Filter(extra))
     }
   }
@@ -75,7 +75,7 @@ internal class SearchIntentProcessingTest {
     every { intent.getStringExtra(Constants.EXTRA_SEARCH) } returns extra
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
-      actions.offer(any<ScreenOrigin>())
+      actions.offer(any<ScreenWasStartedFrom>())
       actions.offer(Filter(extra))
     }
   }
@@ -85,7 +85,7 @@ internal class SearchIntentProcessingTest {
     every { intent.getBooleanExtra(Constants.EXTRA_IS_WIDGET_VOICE, false) } returns true
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
-      actions.offer(any<ScreenOrigin>())
+      actions.offer(any<ScreenWasStartedFrom>())
       actions.offer(ReceivedPromptForSpeechInput)
     }
   }
@@ -95,7 +95,7 @@ internal class SearchIntentProcessingTest {
     every { intent.getBooleanExtra(Constants.TAG_FROM_TAB_SWITCHER, false) } returns true
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
-      actions.offer(ScreenOrigin(FromTabView))
+      actions.offer(ScreenWasStartedFrom(FromTabView))
     }
   }
 
@@ -104,7 +104,7 @@ internal class SearchIntentProcessingTest {
     every { intent.getBooleanExtra(Constants.TAG_FROM_TAB_SWITCHER, false) } returns false
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
-      actions.offer(ScreenOrigin(FromWebView))
+      actions.offer(ScreenWasStartedFrom(FromWebView))
     }
   }
 }

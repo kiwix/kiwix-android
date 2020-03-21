@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenOrigin
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
@@ -96,7 +96,7 @@ class SearchViewModel @Inject constructor(
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
       is ActivityResultReceived ->
         effects.offer(ProcessActivityResult(it.requestCode, it.resultCode, it.data, actions))
-      is ScreenOrigin -> searchOrigin.offer(it.searchOrigin)
+      is ScreenWasStartedFrom -> searchOrigin.offer(it.searchOrigin)
     }
   }.subscribe(
     {},

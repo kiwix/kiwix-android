@@ -27,9 +27,9 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenOrigin
-import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.utils.Constants
 
 data class SearchIntentProcessing(
@@ -40,7 +40,7 @@ data class SearchIntentProcessing(
   override fun invokeWith(activity: AppCompatActivity) {
     intent?.let {
       actions.offer(
-        ScreenOrigin(
+        ScreenWasStartedFrom(
           if (it.getBooleanExtra(
               Constants.TAG_FROM_TAB_SWITCHER,
               false

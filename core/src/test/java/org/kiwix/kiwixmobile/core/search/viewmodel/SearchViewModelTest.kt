@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenOrigin
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
@@ -314,6 +314,6 @@ internal class SearchViewModelTest {
     every { searchResultGenerator.generateSearchResults(searchTerm) } returns searchResults
     viewModel.actions.offer(Filter(searchTerm))
     recentsFromDb.offer(databaseResults)
-    viewModel.actions.offer(ScreenOrigin(searchOrigin))
+    viewModel.actions.offer(ScreenWasStartedFrom(searchOrigin))
   }
 }

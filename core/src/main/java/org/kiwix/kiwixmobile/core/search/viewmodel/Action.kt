@@ -30,7 +30,7 @@ sealed class Action {
   data class OnItemClick(val searchListItem: SearchListItem) : Action()
   data class OnItemLongClick(val searchListItem: SearchListItem) : Action()
   data class Filter(val term: String) : Action()
-  data class ScreenOrigin(val searchOrigin: SearchOrigin) : Action()
+  data class ScreenWasStartedFrom(val searchOrigin: SearchOrigin) : Action()
   data class ConfirmedDelete(val searchListItem: SearchListItem) : Action()
   data class CreatedWithIntent(val intent: Intent?) : Action()
   data class ActivityResultReceived(val requestCode: Int, val resultCode: Int, val data: Intent?) :
