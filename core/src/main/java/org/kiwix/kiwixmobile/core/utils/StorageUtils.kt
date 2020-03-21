@@ -15,11 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.utils;
+package org.kiwix.kiwixmobile.core.utils
 
-public class StorageUtils {
-
-  public static String getFileNameFromUrl(String url) {
-    return NetworkUtils.getFileNameFromUrl(url).replace(".meta4", "");
+class StorageUtils {
+  companion object {
+    @JvmStatic
+    fun getFileNameFromUrl(url: String?): String =
+      NetworkUtils.getFileNameFromUrl(url).replace(".meta4", "")
   }
 }
