@@ -87,6 +87,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
       mode.getMenuInflater().inflate(R.menu.menu_context_delete, menu);
+      historySwitch.setVisibility(View.INVISIBLE);
       return true;
     }
 
@@ -136,6 +137,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       if (refreshAdapter) {
         historyAdapter.notifyDataSetChanged();
       }
+      historySwitch.setVisibility(View.VISIBLE);
     }
   };
 
