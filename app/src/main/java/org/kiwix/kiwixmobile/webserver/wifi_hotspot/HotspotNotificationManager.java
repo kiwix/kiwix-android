@@ -81,7 +81,7 @@ public class HotspotNotificationManager {
       .addAction(R.drawable.ic_close_white_24dp,
         context.getString(R.string.stop),
         stopHotspot)
-      .setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID)
+      .setChannelId(HOTSPOT_SERVICE_CHANNEL_ID)
       .build();
   }
 
