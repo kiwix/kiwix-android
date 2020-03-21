@@ -113,13 +113,17 @@ class ZimFileSelectFragment : BaseFragment() {
     }
   }
 
-  override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+  /*override fun setUserVisibleHint(isVisibleToUser: Boolean) {
     super.setUserVisibleHint(isVisibleToUser)
     if (this.isVisible) {
       if (!isVisibleToUser) {
         actionMode?.finish()
       }
     }
+  }*/
+
+  fun finishActionMode() {
+    actionMode?.finish()
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(

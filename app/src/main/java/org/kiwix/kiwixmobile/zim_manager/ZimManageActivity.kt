@@ -23,6 +23,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
@@ -37,6 +38,7 @@ import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import javax.inject.Inject
 
 class ZimManageActivity : BaseActivity() {
@@ -88,6 +90,11 @@ class ZimManageActivity : BaseActivity() {
     searchItem?.isVisible = position == 1
     languageItem?.isVisible = position == 1
     getZimItem?.isVisible = position == 0
+    if (position == 1) {
+      val fragment: Fragment?
+      fragment = ZimFileSelectFragment()
+      fragment.finishActionMode()
+    }
   }
 
   private fun setUpToolbar() {
