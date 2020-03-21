@@ -41,11 +41,8 @@ data class SearchIntentProcessing(
     intent?.let {
       actions.offer(
         ScreenWasStartedFrom(
-          if (it.getBooleanExtra(
-              Constants.TAG_FROM_TAB_SWITCHER,
-              false
-            )
-          ) FromTabView else FromWebView
+          if (it.getBooleanExtra(Constants.TAG_FROM_TAB_SWITCHER, false)) FromTabView
+          else FromWebView
         )
       )
       if (it.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
