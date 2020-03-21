@@ -96,17 +96,17 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
       refreshAdapter = false;
       if (item.getItemId() == R.id.menu_context_delete) {
-        dialogShower.show(KiwixDialog.DeleteBookmarks.INSTANCE,(Function0<Unit>)() ->{
-        allBookmarks.removeAll(deleteList);
-        for (BookmarkItem bookmark : deleteList) {
-          int position = bookmarksList.indexOf(bookmark);
-          bookmarksList.remove(bookmark);
-          bookmarksAdapter.notifyItemRemoved(position);
-          bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.getItemCount());
-        }
-        presenter.deleteBookmarks(new ArrayList<>(deleteList));
-        mode.finish();
-        return Unit.INSTANCE;
+        dialogShower.show(KiwixDialog.DeleteBookmarks.INSTANCE,(Function0<Unit>)() ->{ 
+          allBookmarks.removeAll(deleteList);
+          for (BookmarkItem bookmark : deleteList) {
+            int position = bookmarksList.indexOf(bookmark);
+            bookmarksList.remove(bookmark);
+            bookmarksAdapter.notifyItemRemoved(position);
+            bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.getItemCount());
+          }
+          presenter.deleteBookmarks(new ArrayList<>(deleteList));
+          mode.finish();
+          return Unit.INSTANCE;
         });
         return true;
       }
