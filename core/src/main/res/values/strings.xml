@@ -73,10 +73,11 @@
   <string name="all_history_cleared">All History Cleared</string>
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
   <string name="all_bookmarks_cleared">All Bookmarks Cleared</string>
-  <string name="clear_all_history_dialog_title">Clear All History</string>
+  <string name="clear_all_history_dialog_title">Clear All History?</string>
   <string name="share">Share</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>
   <string name="delete">Delete</string>
+  <string name="cancel">Cancel</string>
   <string name="delete_specific_search_toast">Recent search removed</string>
   <string name="hint_contents_drawer_message">You can swipe left to view the contents of this article</string>
   <string name="got_it">Got it</string>
@@ -153,7 +154,7 @@
   <string name="time_yesterday">Yesterday</string>
   <string name="pref_external_link_popup_title">Warn when entering external links</string>
   <string name="pref_external_link_popup_summary">Display popup to warn about additional costs or not working in offline links.</string>
-  <string name="external_link_popup_dialog_title">Entering External Link</string>
+  <string name="external_link_popup_dialog_title">Entering External Link!</string>
   <string name="external_link_popup_dialog_message">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline. Do you want to continue?</string>
   <string name="do_not_ask_anymore">Do not ask anymore</string>
   <string name="your_languages" tools:keep="@string/your_languages">Selected languages:</string>
@@ -265,8 +266,8 @@
   <string name="no_bookmarks">No Bookmarks</string>
   <string name="no_history">No History</string>
   <string name="device_default">Device Default</string>
-  <string name="delete_history">Are you sure you want to delete history?</string>
-  <string name="delete_bookmarks">Are you sure you want to delete bookmark?</string>
+  <string name="delete_history">Delete History?</string>
+  <string name="delete_bookmarks">Delete Bookmarks?</string>
   <string-array name="pref_night_modes_entries">
     <item>On</item>
     <item>Off</item>
