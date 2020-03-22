@@ -19,6 +19,8 @@ package org.kiwix.kiwixmobile.core.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +33,16 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
+import static android.view.View.LAYER_TYPE_HARDWARE;
+import static android.view.View.LAYER_TYPE_NONE;
+import static org.kiwix.kiwixmobile.core.main.KiwixWebView.NIGHT_MODE_COLORS;
 import static org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight;
 import static org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowHeight;
 import static org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth;
@@ -119,7 +127,7 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     constraintSet.connect(textView.getId(), ConstraintSet.END, close.getId(), ConstraintSet.START);
 
     constraintSet.applyTo(constraintLayout);
-    return new ViewHolder(constraintLayout, contentImage, textView, close);
+    return new ViewHolder(constraintLayout, contentImage, textView, close, activity.getApplicationContext());
   }
 
   @Override
@@ -178,12 +186,42 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     final ImageView content;
     final TextView title;
     final ImageView close;
+    private NightModeConfig nightModeConfig;
+    private final Paint invertedPaint = createInvertedPaint();
 
-    ViewHolder(View v, ImageView content, TextView title, ImageView close) {
+    ViewHolder(View v, ImageView content, TextView title, ImageView close, Context context) {
       super(v);
       this.content = content;
       this.title = title;
       this.close = close;
+
+      SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(context);
+      nightModeConfig = new NightModeConfig(sharedPreferenceUtil, context);
+
+      updateNightMode();
+    }
+
+    @NotNull private Paint createInvertedPaint() {
+      Paint paint = new Paint();
+      ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
+      paint.setColorFilter(filterInvert);
+      return paint;
+    }
+
+    private void updateNightMode() {
+      if(nightModeConfig.isNightModeActive()) {
+        activateNightMode();
+      } else {
+        deactivateNightMode();
+      }
+    }
+
+    private void activateNightMode() {
+      content.setLayerType(LAYER_TYPE_HARDWARE, invertedPaint);
+    }
+
+    private void deactivateNightMode() {
+      content.setLayerType(LAYER_TYPE_NONE, null);
     }
   }
 }
