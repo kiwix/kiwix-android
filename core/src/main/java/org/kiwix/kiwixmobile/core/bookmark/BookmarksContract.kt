@@ -15,32 +15,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.bookmark
 
-package org.kiwix.kiwixmobile.core.base;
+import org.kiwix.kiwixmobile.core.base.BaseContract
 
-public class BaseContract {
-
-  /**
-   * The contract for a view must extend this interface.
-   *
-   * @param <T> the type of presenter associated with the view
-   */
-  public interface View<T> {
-
+internal interface BookmarksContract {
+  interface View : BaseContract.View<Presenter> {
+    fun updateBookmarksList(bookmarks: List<BookmarkItem>)
+    fun notifyBookmarksListFiltered(bookmarks: List<BookmarkItem>)
   }
 
-  public interface Presenter<T> {
-
-    /**
-     * Binds presenter with a view when resumed. The Presenter will perform initialization here.
-     *
-     * @param view the view associated with this presenter
-     */
-    void attachView(T view);
-
-    /**
-     * Drops the reference to the view when destroyed
-     */
-    void detachView();
+  interface Presenter : BaseContract.Presenter<View> {
+    fun loadBookmarks(showBookmarksCurrentBook: Boolean)
+    fun filterBookmarks(bookmarksList: List<BookmarkItem>, newText: String)
+    fun deleteBookmarks(deleteList: List<BookmarkItem>)
   }
 }

@@ -4,6 +4,7 @@
 * DeRudySoulStorm
 * InternerowyGołąb
 * Kelson
+* Krzyz23
 * Macofe
 * Rail
 * Rzuwig
@@ -36,8 +37,9 @@
   <string name="hotspot_failed_message">Wygląda na to, że Twój punkt dostępu jest już włączony. Wyłącz hotspot Wi-Fi, aby kontynuować.</string>
   <string name="go_to_wifi_settings_label">Przejdź do ustawień WIFI</string>
   <string name="hotspot_running">Uruchamianie Hotspot</string>
+  <string name="no_books_selected_toast_message">Proszę wybrać najpierw książki</string>
   <string name="server_failed_toast_message">Nie można uruchomić serwera.</string>
-  <string name="server_started__successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
+  <string name="server_started_successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
   <string name="hotspot_turned_on">Hotspot włączony</string>
   <string name="hotspot_details_message">Poniżej znajdują się szczegółowe informacje o lokalnym hotspocie.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Wybierz pliki, które chcesz hostować na serwerze</string>
@@ -75,7 +77,7 @@
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
   <string name="pref_clear_all_history_title">Wyczyść historię</string>
   <string name="pref_clear_all_history_summary">Wyczyść historię ostatnich wyszukiwań i kart</string>
-  <string name="all_history_cleared_toast">Usunięto całą historię</string>
+  <string name="all_history_cleared">Usunięto całą historię</string>
   <string name="clear_all_history_dialog_title">Wyczyść całą historię</string>
   <string name="share">Udostępnij</string>
   <string name="selected_file_cab_app_chooser_title">Udostępnij pliki ZIM:</string>
@@ -238,4 +240,5 @@
   <string name="go_to_settings">Przejdź do ustawień</string>
   <string name="no_results">Brak wyników</string>
   <string name="no_bookmarks">Brak zakładek</string>
+  <string name="no_history">Nie ma Historii</string>
 </resources>

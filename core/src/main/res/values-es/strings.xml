@@ -31,7 +31,7 @@
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
   <string name="go_to_wifi_settings_label">Ir a config. de wifi</string>
   <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
-  <string name="server_started__successfully_toast_message">Se inició el servidor correctamente.</string>
+  <string name="server_started_successfully_toast_message">Se inició el servidor correctamente.</string>
   <string name="progress_dialog_starting_server">Iniciando el servidor</string>
   <string name="hotspot_dialog_neutral_button">SÍ, LO HE INICIADO</string>
   <string name="start_server_label">Iniciar servidor</string>
@@ -63,7 +63,7 @@
   <string name="delete_recent_search_item">¿Borrar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpiar el historial</string>
   <string name="pref_clear_all_history_summary">Borrar las búsquedas recientes y el historial de pestañas</string>
-  <string name="all_history_cleared_toast">Borrado todo el historial</string>
+  <string name="all_history_cleared">Borrado todo el historial</string>
   <string name="clear_all_history_dialog_title">Borrar todo el historial</string>
   <string name="share">Compartir</string>
   <string name="delete">Borrar</string>
@@ -206,4 +206,5 @@
   <string name="go_to_settings">Ir a Configuración</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
+  <string name="device_default">Valor predet. del dispositivo</string>
 </resources>

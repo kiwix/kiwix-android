@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.text.Editable;
@@ -53,7 +54,7 @@ public class CompatFindActionModeCallback
 
   private ActionMode actionMode;
 
-  CompatFindActionModeCallback(Context context) {
+  @SuppressLint("InflateParams") CompatFindActionModeCallback(Context context) {
     customView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
     editText = customView.findViewById(R.id.edit);
     editText.setOnClickListener(this);
@@ -96,22 +97,18 @@ public class CompatFindActionModeCallback
         "WebView supplied to CompatFindActionModeCallback cannot be null");
     }
     this.webView = webView;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      findResultsTextView.setVisibility(View.VISIBLE);
-      this.webView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
-        String result;
-        if (editText.getText().toString().isEmpty()) {
-          result = "";
-        } else if (numberOfMatches == 0) {
-          result = "0/0";
-        } else {
-          result = (activeMatchOrdinal + 1) + "/" + numberOfMatches;
-        }
-        findResultsTextView.setText(result);
-      });
-    } else {
-      findResultsTextView.setVisibility(View.GONE);
-    }
+    findResultsTextView.setVisibility(View.VISIBLE);
+    this.webView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
+      String result;
+      if (editText.getText().toString().isEmpty()) {
+        result = "";
+      } else if (numberOfMatches == 0) {
+        result = "0/0";
+      } else {
+        result = (activeMatchOrdinal + 1) + "/" + numberOfMatches;
+      }
+      findResultsTextView.setText(result);
+    });
   }
 
   // Move the highlight to the next match.
@@ -134,17 +131,9 @@ public class CompatFindActionModeCallback
     CharSequence find = editText.getText();
     if (find == null || find.length() == 0) {
       webView.clearMatches();
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        webView.findAllAsync("");
-      } else {
-        webView.findAll("");
-      }
+      webView.findAllAsync("");
     } else {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        webView.findAllAsync(find.toString());
-      } else {
-        webView.findAll(find.toString());
-      }
+      webView.findAllAsync(find.toString());
 
       // Enable word highlighting with reflection
       try {

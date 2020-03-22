@@ -35,6 +35,7 @@ import android.widget.BaseAdapter;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import com.google.android.material.snackbar.Snackbar;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageSelectDialog;
 import java.io.File;
@@ -208,8 +209,7 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
     alertDialogShower.show(KiwixDialog.ClearAllHistory.INSTANCE, () -> {
       presenter.clearHistory();
       CoreSettingsActivity.allHistoryCleared = true;
-      ContextExtensionsKt.toast(getActivity(), R.string.all_history_cleared_toast,
-        Toast.LENGTH_SHORT);
+      Snackbar.make(getView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
       return Unit.INSTANCE;
     });
   }
@@ -226,24 +226,21 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
       if (ContextCompat.checkSelfPermission(getActivity(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED) {
-        ContextExtensionsKt.toast(getActivity(), R.string.ext_storage_permission_not_granted,
-          Toast.LENGTH_LONG);
+        Snackbar.make(getView(), R.string.ext_storage_permission_not_granted, Snackbar.LENGTH_SHORT).show();
         return;
       }
 
       if (FilesKt.deleteRecursively(new File(AddNoteDialog.NOTES_DIRECTORY))) {
-        ContextExtensionsKt.toast(getActivity(), R.string.notes_deletion_successful,
-          Toast.LENGTH_SHORT);
+        Snackbar.make(getView(), R.string.notes_deletion_successful, Snackbar.LENGTH_SHORT).show();
         return;
       }
     }
-    ContextExtensionsKt.toast(getActivity(), R.string.notes_deletion_unsuccessful,
-      Toast.LENGTH_SHORT);
+    Snackbar.make(getView(), R.string.notes_deletion_unsuccessful, Snackbar.LENGTH_SHORT).show();
   }
 
   @SuppressLint("SetJavaScriptEnabled")
   public void openCredits() {
-    WebView view =
+    @SuppressLint("InflateParams") WebView view =
       (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
     view.loadUrl("file:///android_asset/credits.html");
     if (nightModeConfig.isNightModeActive()) {

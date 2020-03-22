@@ -34,9 +34,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
@@ -45,6 +48,8 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
@@ -69,6 +74,8 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   BookmarksContract.Presenter presenter;
   @Inject
   ZimReaderContainer zimReaderContainer;
+  @Inject
+  DialogShower dialogShower;
 
   private boolean refreshAdapter = true;
   private BookmarksAdapter bookmarksAdapter;
@@ -117,7 +124,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   };
 
   @Override protected void injection(CoreComponent coreComponent) {
-    coreComponent.inject(this);
+    coreComponent.activityComponentBuilder().activity(this).build().inject(this);
   }
 
   @Override
@@ -195,11 +202,14 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       onBackPressed();
       return true;
     } else if (itemId == R.id.menu_bookmarks_clear) {
-      presenter.deleteBookmarks(new ArrayList<>(allBookmarks));
-      allBookmarks.clear();
-      bookmarksList.clear();
-      bookmarksAdapter.notifyDataSetChanged();
-      Toast.makeText(this, R.string.all_bookmarks_cleared_toast, Toast.LENGTH_SHORT).show();
+      dialogShower.show(KiwixDialog.DeleteBookmarks.INSTANCE, (Function0<Unit>) () -> {
+        presenter.deleteBookmarks(new ArrayList<>(allBookmarks));
+        allBookmarks.clear();
+        bookmarksList.clear();
+        bookmarksAdapter.notifyDataSetChanged();
+        Snackbar.make(noBookmarks, R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT).show();
+        return Unit.INSTANCE;
+      });
       return true;
     }
     return super.onOptionsItemSelected(item);

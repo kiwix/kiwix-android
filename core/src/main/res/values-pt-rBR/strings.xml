@@ -37,7 +37,7 @@
   <string name="no_books_selected_toast_message">Selecione primeiro os livros</string>
   <string name="server_failed_message">Não foi possível iniciar o servidor. Por favor, ligue seu ponto de acesso</string>
   <string name="server_failed_toast_message">Não foi possível iniciar o servidor.</string>
-  <string name="server_started__successfully_toast_message">Servidor iniciado com sucesso.</string>
+  <string name="server_started_successfully_toast_message">Servidor iniciado com sucesso.</string>
   <string name="hotspot_turned_on">Ponto de acesso  ativado</string>
   <string name="hotspot_details_message">A seguir estão os detalhes do seu ponto de acesso local.\nSSID : %1$s \nPasse : %2$s</string>
   <string name="server_textview_default_message">Selecione os arquivos que você deseja hospedar no servidor</string>
@@ -77,9 +77,9 @@
   <string name="delete_recent_search_item">Eliminar este item?</string>
   <string name="pref_clear_all_history_title">Apagar histórico</string>
   <string name="pref_clear_all_history_summary">Limpar pesquisas recentes e histórico de guias</string>
-  <string name="all_history_cleared_toast">Eliminando todo o histórico</string>
+  <string name="all_history_cleared">Eliminando todo o histórico</string>
   <string name="pref_clear_all_bookmarks_title">Limpar marcadores</string>
-  <string name="all_bookmarks_cleared_toast">Todos os marcadores limpos</string>
+  <string name="all_bookmarks_cleared">Todos os marcadores limpos</string>
   <string name="clear_all_history_dialog_title">Limpar todo o histórico</string>
   <string name="share">Compartilhar</string>
   <string name="selected_file_cab_app_chooser_title">Compartilhe arquivos ZIM com:</string>

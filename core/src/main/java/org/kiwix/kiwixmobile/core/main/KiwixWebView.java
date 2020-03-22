@@ -84,9 +84,7 @@ public class KiwixWebView extends VideoEnabledWebView {
     settings.setDomStorageEnabled(true);
     settings.setJavaScriptEnabled(true);
     clearCache(true);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      settings.setAllowUniversalAccessFromFileURLs(true);
-    }
+    settings.setAllowUniversalAccessFromFileURLs(true);
     setWebViewClient(webViewClient);
     final KiwixWebChromeClient client =
       new KiwixWebChromeClient(callback, nonVideoView, videoView, this);
@@ -191,7 +189,7 @@ public class KiwixWebView extends VideoEnabledWebView {
       return fileName.substring(fileName.indexOf("%3A") + 1);
     }
 
-    @Override
+    @SuppressLint("StringFormatInvalid") @Override
     public void handleMessage(Message msg) {
       String url = (String) msg.getData().get("url");
       String src = (String) msg.getData().get("src");

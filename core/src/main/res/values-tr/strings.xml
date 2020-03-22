@@ -42,7 +42,7 @@
   <string name="no_books_selected_toast_message">Lütfen önce kitapları seçin</string>
   <string name="server_failed_message">Sunucu başlatılamadı. Lütfen etkin noktanızı açın</string>
   <string name="server_failed_toast_message">Sunucu başlatılamadı.</string>
-  <string name="server_started__successfully_toast_message">Sunucu başarıyla başladı.</string>
+  <string name="server_started_successfully_toast_message">Sunucu başarıyla başladı.</string>
   <string name="hotspot_turned_on">Hotspot açık</string>
   <string name="hotspot_details_message">Aşağıda yerel etkin noktanızın ayrıntıları verilmiştir.\nSSID: %1$s\nGeçiş: %2$s</string>
   <string name="server_textview_default_message">Sunucuda barındırmak istediğiniz dosyaları seçin</string>
@@ -82,9 +82,9 @@
   <string name="delete_recent_search_item">Bu öğe silinsin mi?</string>
   <string name="pref_clear_all_history_title">Geçmişi temizle</string>
   <string name="pref_clear_all_history_summary">Son aramalar ve sekmeler geçmişini temizle</string>
-  <string name="all_history_cleared_toast">Tüm geçmiş temizlendi</string>
+  <string name="all_history_cleared">Tüm geçmiş temizlendi</string>
   <string name="pref_clear_all_bookmarks_title">Yer imlerini temizle</string>
-  <string name="all_bookmarks_cleared_toast">Tüm Yer İmleri Temizlendi</string>
+  <string name="all_bookmarks_cleared">Tüm Yer İmleri Temizlendi</string>
   <string name="clear_all_history_dialog_title">Tüm geçmişi temizle</string>
   <string name="share">Paylaş</string>
   <string name="selected_file_cab_app_chooser_title">ZIM dosyalarını şu kişilerle paylaş:</string>
@@ -138,7 +138,7 @@
   <string name="delete_zim_failed">Üzgünüz, bu dosyayı silemedik. Bir dosya yöneticisi kullanmayı denemelisiniz.</string>
   <string name="tts_pause">duraklat</string>
   <string name="tts_resume">devam et</string>
-  <string name="stop">dur</string>
+  <string name="stop">durdur</string>
   <string name="internal_storage">Dahili</string>
   <string name="external_storage">Harici</string>
   <string name="yes">Evet</string>

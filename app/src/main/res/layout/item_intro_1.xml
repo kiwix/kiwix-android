@@ -7,8 +7,11 @@
   android:padding="24dp">
 
   <ImageView
-    android:layout_width="160dp"
-    android:layout_height="160dp"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintHeight_max="160dp"
+    app:layout_constraintWidth_max="160dp"
+    android:scaleType="fitCenter"
     android:contentDescription="@string/kiwi"
     android:src="@drawable/kiwix_icon_with_title"
     app:layout_constraintBottom_toTopOf="@id/heading"

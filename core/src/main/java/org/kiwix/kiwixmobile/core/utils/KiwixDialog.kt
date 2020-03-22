@@ -147,10 +147,11 @@ sealed class KiwixDialog(
   )
 
   object ClearAllNotes : KiwixDialog(
-    null,
     R.string.delete_notes_confirmation_msg,
-    R.string.yes,
-    android.R.string.cancel
+    message = null,
+    positiveMessage = R.string.yes,
+    negativeMessage = R.string.no,
+    icon = R.drawable.ic_warning
   )
 
   data class OpenCredits(val customGetView: (() -> View)?) : KiwixDialog(
@@ -184,6 +185,20 @@ sealed class KiwixDialog(
       R.string.open_in_new_tab, R.string.open_in_new_tab
     )
   }
+
+  object DeleteHistory : KiwixDialog(
+    null,
+    R.string.delete_history,
+    R.string.yes,
+    R.string.no
+  )
+
+  object DeleteBookmarks : KiwixDialog(
+    null,
+    R.string.delete_bookmarks,
+    R.string.yes,
+    R.string.no
+  )
 }
 
 interface HasBodyFormatArgs {

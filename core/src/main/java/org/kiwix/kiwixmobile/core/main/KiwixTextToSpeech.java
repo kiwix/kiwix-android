@@ -87,7 +87,7 @@ public class KiwixTextToSpeech {
         onInitSucceedListener.onInitSucceed();
       } else {
         Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!");
-        //TODO: Surface to user
+        Toast.makeText(context, R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -108,9 +108,7 @@ public class KiwixTextToSpeech {
       currentTTSTask = null;
     } else if (tts.isSpeaking()) {
       if (tts.stop() == TextToSpeech.SUCCESS) {
-        if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-          tts.setOnUtteranceProgressListener(null);
-        }
+        tts.setOnUtteranceProgressListener(null);
         onSpeakingListener.onSpeakingEnded();
       }
     } else {
@@ -119,9 +117,7 @@ public class KiwixTextToSpeech {
       if ("mul".equals(zimReaderContainer.getLanguage())) {
         Log.d(TAG_KIWIX, "TextToSpeech: disabled " +
           zimReaderContainer.getLanguage());
-        Toast.makeText(context,
-          context.getResources().getString(R.string.tts_not_enabled),
-          Toast.LENGTH_LONG).show();
+        Toast.makeText(context, R.string.tts_not_enabled, Toast.LENGTH_LONG).show();
         return;
       }
       if (locale == null
@@ -129,9 +125,7 @@ public class KiwixTextToSpeech {
         || result == TextToSpeech.LANG_NOT_SUPPORTED) {
         Log.d(TAG_KIWIX, "TextToSpeech: language not supported: " +
           zimReaderContainer.getLanguage());
-        Toast.makeText(context,
-          context.getResources().getString(R.string.tts_lang_not_supported),
-          Toast.LENGTH_LONG).show();
+        Toast.makeText(context, R.string.tts_lang_not_supported, Toast.LENGTH_LONG).show();
       } else {
         tts.setLanguage(locale);
 
@@ -172,9 +166,7 @@ public class KiwixTextToSpeech {
   public void stop() {
     if (tts.stop() == TextToSpeech.SUCCESS) {
       currentTTSTask = null;
-      if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-        tts.setOnUtteranceProgressListener(null);
-      }
+      tts.setOnUtteranceProgressListener(null);
       onSpeakingListener.onSpeakingEnded();
     }
   }
@@ -260,9 +252,7 @@ public class KiwixTextToSpeech {
     void pause() {
       paused = true;
       currentPiece.decrementAndGet();
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-        tts.setOnUtteranceProgressListener(null);
-      }
+      tts.setOnUtteranceProgressListener(null);
       tts.stop();
     }
 
@@ -285,33 +275,31 @@ public class KiwixTextToSpeech {
         stop();
       }
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-          @Override
-          public void onStart(String s) {
+      tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+        @Override
+        public void onStart(String s) {
 
+        }
+
+        @Override
+        public void onDone(String s) {
+          int line = currentPiece.intValue();
+
+          if (line >= pieces.size() && !paused) {
+            stop();
+            return;
           }
 
-          @Override
-          public void onDone(String s) {
-            int line = currentPiece.intValue();
+          tts.speak(pieces.get(line), TextToSpeech.QUEUE_ADD, params);
+          currentPiece.getAndIncrement();
+        }
 
-            if (line >= pieces.size() && !paused) {
-              stop();
-              return;
-            }
-
-            tts.speak(pieces.get(line), TextToSpeech.QUEUE_ADD, params);
-            currentPiece.getAndIncrement();
-          }
-
-          @Override
-          public void onError(String s) {
-            Log.e(TAG_KIWIX, "TextToSpeech Error: " + s);
-            //TODO: Surface to user
-          }
-        });
-      }
+        @Override
+        public void onError(String s) {
+          Log.e(TAG_KIWIX, "TextToSpeech Error: " + s);
+          Toast.makeText(context, R.string.texttospeech_error, Toast.LENGTH_SHORT).show();
+        }
+      });
     }
 
     void stop() {

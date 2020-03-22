@@ -36,7 +36,7 @@
   <string name="no_books_selected_toast_message">請先選擇書籍</string>
   <string name="server_failed_message">無法開啟伺服器，請啟動您的熱點</string>
   <string name="server_failed_toast_message">無法開啟伺服器。</string>
-  <string name="server_started__successfully_toast_message">伺服器開啟成功。</string>
+  <string name="server_started_successfully_toast_message">伺服器開啟成功。</string>
   <string name="hotspot_turned_on">熱點已啟動</string>
   <string name="hotspot_details_message">以下為您的本地熱點詳細內容。\nSSID：%1$s \n密碼：%2$s</string>
   <string name="server_textview_default_message">選擇您想要在伺服器上託管的檔案</string>
@@ -76,9 +76,9 @@
   <string name="delete_recent_search_item">刪除此項目？</string>
   <string name="pref_clear_all_history_title">清除歷史記錄</string>
   <string name="pref_clear_all_history_summary">清除近期搜尋和分頁歷史記錄</string>
-  <string name="all_history_cleared_toast">所有歷史記錄已清除</string>
+  <string name="all_history_cleared">所有歷史記錄已清除</string>
   <string name="pref_clear_all_bookmarks_title">清除書籤</string>
-  <string name="all_bookmarks_cleared_toast">已清除所有書籤</string>
+  <string name="all_bookmarks_cleared">已清除所有書籤</string>
   <string name="clear_all_history_dialog_title">清除所有歷史記錄</string>
   <string name="share">分享</string>
   <string name="selected_file_cab_app_chooser_title">分享 ZIM 檔案以：</string>

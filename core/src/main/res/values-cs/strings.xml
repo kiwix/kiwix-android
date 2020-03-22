@@ -37,7 +37,7 @@
   <string name="no_books_selected_toast_message">Vyberte nejprve knihy</string>
   <string name="server_failed_message">Nemohu spustit server. Zapněte prosím svůj hotspot</string>
   <string name="server_failed_toast_message">Nelze spustit server.</string>
-  <string name="server_started__successfully_toast_message">Server úspěšně spuštěn.</string>
+  <string name="server_started_successfully_toast_message">Server úspěšně spuštěn.</string>
   <string name="hotspot_turned_on">Hotspot spuštěn</string>
   <string name="hotspot_details_message">Následují podrobnosti vašeho hotspotu.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Vyberte soubory, které si přejete hostovat na svém serveru</string>
@@ -76,7 +76,7 @@
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
   <string name="pref_clear_all_history_title">Vyčistit historii</string>
   <string name="pref_clear_all_history_summary">Vyčistit poslední hledání a tabulky historie</string>
-  <string name="all_history_cleared_toast">Všechna historie odstraněna</string>
+  <string name="all_history_cleared">Všechna historie odstraněna</string>
   <string name="clear_all_history_dialog_title">Vyčistit celou historii</string>
   <string name="share">Sdílet</string>
   <string name="selected_file_cab_app_chooser_title">Sdílet soubory ZIM s:</string>
@@ -181,7 +181,7 @@
   <string name="switch_tabs">Přepnout panely</string>
   <string name="close_all_tabs">Zavřít všechny záložky</string>
   <string name="running_state">Probíhá</string>
-  <string name="complete">Hotovo!</string>
+  <string name="complete">Hotovo</string>
   <string name="paused_state">Pozastaveno</string>
   <string name="failed_state">Selhalo: %s</string>
   <string name="save">Uložit</string>

@@ -54,7 +54,7 @@
   <string name="delete_recent_search_item">Изтриване на този елемент?</string>
   <string name="pref_clear_all_history_title">Изтрий история</string>
   <string name="pref_clear_all_history_summary">Изтрийте последните търсения и история на табовете</string>
-  <string name="all_history_cleared_toast">Историята е изтрита</string>
+  <string name="all_history_cleared">Историята е изтрита</string>
   <string name="clear_all_history_dialog_title">Изтрий историята</string>
   <string name="delete">Изтриване</string>
   <string name="delete_specific_search_toast">Последните търсения са изтрити</string>
