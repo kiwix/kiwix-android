@@ -23,22 +23,16 @@ import java.util.Locale
  * Created by mhutti1 on 19/04/17.
  */
 class BookUtils {
-  val localeMap = Locale.getISOLanguages().associateBy({ Locale(it).isO3Language }, ::Locale)
+  val localeMap = Locale.getISOLanguages().map(::Locale).associateBy { it.isO3Language }
 
   // Get the language from the language codes of the parsed xml stream
   @Suppress("MagicNumber")
-  fun getLanguage(languageCode: String): String? {
+  fun getLanguage(languageCode: String): String {
     return when {
       languageCode == null -> ""
-      languageCode.length == 2 -> {
-        LanguageContainer(languageCode).languageName
-      }
-      languageCode.length == 3 -> {
-        localeMap[languageCode]?.displayLanguage
-      }
-      else -> {
-        ""
-      }
+      languageCode.length == 2 -> LanguageContainer(languageCode).languageName
+      languageCode.length == 3 -> localeMap[languageCode]?.displayLanguage.orEmpty()
+      else -> ""
     }
   }
 }
