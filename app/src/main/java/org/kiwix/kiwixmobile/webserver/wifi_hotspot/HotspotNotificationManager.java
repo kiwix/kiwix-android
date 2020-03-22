@@ -29,7 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
-import static org.kiwix.kiwixmobile.core.utils.Constants.HOTSPOT_SERVICE_CHANNEL_ID;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.HOTSPOT_SERVICE_CHANNEL_ID;
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
 public class HotspotNotificationManager {

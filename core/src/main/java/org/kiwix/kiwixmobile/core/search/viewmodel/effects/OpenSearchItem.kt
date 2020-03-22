@@ -23,7 +23,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED
+import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 
 data class OpenSearchItem(private val searchListItem: SearchListItem) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {

@@ -25,7 +25,7 @@ import android.util.Log;
 import java.util.UUID;
 import org.kiwix.kiwixmobile.core.R;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 
 public class NetworkUtils {
   /**
