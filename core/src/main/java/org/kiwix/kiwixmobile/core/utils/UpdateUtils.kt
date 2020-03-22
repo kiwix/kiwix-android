@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.utils.OLD_PROVIDER_DOMAIN
 
 object UpdateUtils {
   @JvmStatic
