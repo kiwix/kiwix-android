@@ -32,8 +32,8 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
-import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH
-import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE
+import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 
 internal class SearchIntentProcessingTest {
 
