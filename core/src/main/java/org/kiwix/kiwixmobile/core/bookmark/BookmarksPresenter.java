@@ -25,7 +25,6 @@ import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import java.util.List;
-import java.util.Queue;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.base.BasePresenter;
 import org.kiwix.kiwixmobile.core.data.DataSource;
