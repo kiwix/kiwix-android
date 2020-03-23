@@ -17,10 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.utils
 
-class StorageUtils {
-  companion object {
-    @JvmStatic
-    fun getFileNameFromUrl(url: String?): String =
-      NetworkUtils.getFileNameFromUrl(url).replace(".meta4", "")
-  }
+object StorageUtils {
+  fun getFileNameFromUrl(url: String?): String =
+    NetworkUtils.getFileNameFromUrl(url).replace(".meta4", "")
 }
