@@ -85,6 +85,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
       mode.getMenuInflater().inflate(R.menu.menu_context_delete, menu);
+      bookmarksSwitch.setEnabled(false);
       return true;
     }
 
@@ -123,6 +124,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       if (refreshAdapter) {
         bookmarksAdapter.notifyDataSetChanged();
       }
+      bookmarksSwitch.setEnabled(true);
     }
   };
 
