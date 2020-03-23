@@ -15,28 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.utils
 
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects
+import java.util.Locale
 
-import android.app.Activity
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
+/**
+ * Created by mhutti1 on 19/04/17.
+ */
+class BookUtils {
+  val localeMap = Locale.getISOLanguages().map(::Locale).associateBy { it.isO3Language }
 
-data class SearchInPreviousScreen(private val searchString: String) : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    activity.setResult(
-      Activity.RESULT_OK,
-      Intent().apply {
-        putExtra(EXTRA_SEARCH_IN_TEXT, true)
-        putExtra(TAG_FILE_SEARCHED, searchString)
-      }
-    )
-    activity.finish()
-  }
-
-  companion object {
-    const val EXTRA_SEARCH_IN_TEXT = "bool_searchintext"
+  // Get the language from the language codes of the parsed xml stream
+  @Suppress("MagicNumber")
+  fun getLanguage(languageCode: String?): String {
+    return when {
+      languageCode == null -> ""
+      languageCode.length == 2 -> LanguageContainer(languageCode).languageName
+      languageCode.length == 3 -> localeMap[languageCode]?.displayLanguage.orEmpty()
+      else -> ""
+    }
   }
 }

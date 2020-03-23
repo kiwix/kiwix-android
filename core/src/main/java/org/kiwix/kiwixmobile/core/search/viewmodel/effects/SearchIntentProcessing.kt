@@ -30,7 +30,9 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeec
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
-import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 data class SearchIntentProcessing(
   private val intent: Intent?,
@@ -41,17 +43,17 @@ data class SearchIntentProcessing(
     intent?.let {
       actions.offer(
         ScreenWasStartedFrom(
-          if (it.getBooleanExtra(Constants.TAG_FROM_TAB_SWITCHER, false)) FromTabView
+          if (it.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false)) FromTabView
           else FromWebView
         )
       )
       if (it.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
         actions.offer(Filter(it.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
       }
-      if (it.hasExtra(Constants.EXTRA_SEARCH)) {
-        actions.offer(Filter(intent.getStringExtra(Constants.EXTRA_SEARCH)))
+      if (intent.hasExtra(EXTRA_SEARCH)) {
+        actions.offer(Filter(intent.getStringExtra(EXTRA_SEARCH)))
       }
-      if (it.getBooleanExtra(Constants.EXTRA_IS_WIDGET_VOICE, false)) {
+      if (intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false)) {
         actions.offer(ReceivedPromptForSpeechInput)
       }
     }

@@ -35,7 +35,9 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeec
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
-import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
+import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 
 internal class SearchIntentProcessingTest {
 
@@ -71,8 +73,8 @@ internal class SearchIntentProcessingTest {
   @Test
   fun `invoke with offers action when EXTRA_SEARCH present`() {
     val extra = ""
-    every { intent.hasExtra(Constants.EXTRA_SEARCH) } returns true
-    every { intent.getStringExtra(Constants.EXTRA_SEARCH) } returns extra
+    every { intent.hasExtra(EXTRA_SEARCH) } returns true
+    every { intent.getStringExtra(EXTRA_SEARCH) } returns extra
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(any<ScreenWasStartedFrom>())
@@ -82,7 +84,7 @@ internal class SearchIntentProcessingTest {
 
   @Test
   fun `invoke with offers action when EXTRA_IS_WIDGET_VOICE present`() {
-    every { intent.getBooleanExtra(Constants.EXTRA_IS_WIDGET_VOICE, false) } returns true
+    every { intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false) } returns true
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(any<ScreenWasStartedFrom>())
@@ -92,7 +94,7 @@ internal class SearchIntentProcessingTest {
 
   @Test
   fun `invoke with offers action when TAG_FROM_TAB_SWITCHER present`() {
-    every { intent.getBooleanExtra(Constants.TAG_FROM_TAB_SWITCHER, false) } returns true
+    every { intent.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false) } returns true
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(ScreenWasStartedFrom(FromTabView))
@@ -101,7 +103,7 @@ internal class SearchIntentProcessingTest {
 
   @Test
   fun `invoke with offers action when TAG_FROM_TAB_SWITCHER not present`() {
-    every { intent.getBooleanExtra(Constants.TAG_FROM_TAB_SWITCHER, false) } returns false
+    every { intent.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false) } returns false
     SearchIntentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(ScreenWasStartedFrom(FromWebView))

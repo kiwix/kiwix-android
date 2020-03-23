@@ -34,8 +34,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 
 public abstract class CoreWebViewClient extends WebViewClient {
   private static final HashMap<String, String> DOCUMENT_TYPES = new HashMap<String, String>() {{
