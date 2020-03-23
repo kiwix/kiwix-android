@@ -20,10 +20,8 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.graphics.Color
 import android.view.View
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import com.google.android.material.snackbar.Snackbar
-import org.kiwix.kiwixmobile.core.R
 
 fun View.snack(
   stringId: Int,
@@ -45,15 +43,12 @@ fun View.snack(
   actionClick: (() -> Unit)? = null,
   @ColorInt actionTextColor: Int = Color.WHITE
 ) {
-  val snackbar: Snackbar = Snackbar.make(this, string, Snackbar.LENGTH_LONG)
-  val snackbarView = snackbar.view
-  val tv = snackbarView.findViewById<TextView>(R.id.snackbar_text)
-  tv.setSingleLine(false)
-  snackbar.apply {
+  Snackbar.make(
+    this, string, Snackbar.LENGTH_LONG
+  ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
     setActionTextColor(actionTextColor)
-  }
-  snackbar.show()
+  }.show()
 }
 
 fun View.snack(stringId: Int) {
