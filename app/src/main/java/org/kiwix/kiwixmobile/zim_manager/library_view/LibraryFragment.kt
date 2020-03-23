@@ -42,7 +42,6 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.snack
-import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.DialogShower
@@ -194,14 +193,11 @@ class LibraryFragment : BaseFragment() {
   private fun onBookItemClick(item: BookItem) {
     when {
       notEnoughSpaceAvailable(item) -> {
-        context.toast(
+        libraryList.snack(
           getString(R.string.download_no_space) +
             "\n" + getString(R.string.space_available) + " " +
-            storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage))
-        )
-        libraryList.snack(
+            storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage)),
           R.string.download_change_storage,
-          R.string.open,
           ::showStorageSelectDialog
         )
         return
