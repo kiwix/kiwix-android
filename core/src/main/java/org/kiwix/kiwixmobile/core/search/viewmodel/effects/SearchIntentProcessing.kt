@@ -27,7 +27,8 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
-import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 
 data class SearchIntentProcessing(
   private val intent: Intent?,
@@ -39,10 +40,10 @@ data class SearchIntentProcessing(
       if (intent.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
         actions.offer(Filter(intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
       }
-      if (intent.hasExtra(Constants.EXTRA_SEARCH)) {
-        actions.offer(Filter(intent.getStringExtra(Constants.EXTRA_SEARCH)))
+      if (intent.hasExtra(EXTRA_SEARCH)) {
+        actions.offer(Filter(intent.getStringExtra(EXTRA_SEARCH)))
       }
-      if (intent.getBooleanExtra(Constants.EXTRA_IS_WIDGET_VOICE, false)) {
+      if (intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false)) {
         actions.offer(ReceivedPromptForSpeechInput)
       }
     }

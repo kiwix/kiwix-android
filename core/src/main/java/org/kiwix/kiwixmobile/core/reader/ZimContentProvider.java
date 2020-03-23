@@ -31,7 +31,7 @@ import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.data.AbstractContentProvider;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 
 public class ZimContentProvider extends AbstractContentProvider {
 

@@ -55,7 +55,7 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_RESTART;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM;
