@@ -38,7 +38,6 @@ const val TAG_CURRENT_FILE = "currentzimfile"
 const val TAG_CURRENT_ARTICLES = "currentarticles"
 const val TAG_CURRENT_POSITIONS = "currentpositions"
 const val TAG_CURRENT_TAB = "currenttab"
-const val TAG_FROM_TAB_SWITCHER = "fromtabswitcher"
 
 // Extras
 const val EXTRA_ZIM_FILE = "zimFile"
