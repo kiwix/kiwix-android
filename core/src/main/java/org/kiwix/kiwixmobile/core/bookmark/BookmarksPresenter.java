@@ -57,12 +57,12 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
             disposable.dispose();
           }
           disposable = d;
-          getCompositeDisposable().add(d);
+          compositeDisposable.add(d);
         }
 
         @Override
         public void onSuccess(List<BookmarkItem> bookmarks) {
-          getView().updateBookmarksList(bookmarks);
+          view.updateBookmarksList(bookmarks);
         }
 
         @Override
@@ -83,12 +83,12 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
       .subscribe(new SingleObserver<List<BookmarkItem>>() {
         @Override
         public void onSubscribe(Disposable d) {
-          getCompositeDisposable().add(d);
+          compositeDisposable.add(d);
         }
 
         @Override
         public void onSuccess(List<BookmarkItem> bookmarkList) {
-          getView().notifyBookmarksListFiltered(bookmarkList);
+          view.notifyBookmarksListFiltered(bookmarkList);
         }
 
         @Override

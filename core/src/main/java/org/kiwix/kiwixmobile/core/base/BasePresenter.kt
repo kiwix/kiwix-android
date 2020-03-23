@@ -25,8 +25,8 @@ import org.kiwix.kiwixmobile.core.base.BaseContract.View
  * All presenters should inherit from this presenter.
  */
 abstract class BasePresenter<T : View<*>?> : Presenter<T> {
-  val compositeDisposable = CompositeDisposable()
-  var view: T? = null
+  @JvmField val compositeDisposable = CompositeDisposable()
+  @JvmField var view: T? = null
   override fun attachView(view: T) {
     this.view = view
   }
