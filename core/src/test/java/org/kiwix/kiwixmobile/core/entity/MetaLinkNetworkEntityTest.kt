@@ -34,7 +34,6 @@ class MetaLinkNetworkEntityTest {
       )
     )
 
-
     MetaLinkNetworkEntityUrlAssert(result.urls).hasItems(
       listOf(
         DummyUrl(
@@ -45,7 +44,7 @@ class MetaLinkNetworkEntityTest {
         DummyUrl(
           "gb",
           2,
-          "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
+          "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim" // ktlint-disable
         ),
         DummyUrl(
           "us",
