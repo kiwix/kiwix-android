@@ -27,7 +27,7 @@ class BookUtils {
 
   // Get the language from the language codes of the parsed xml stream
   @Suppress("MagicNumber")
-  fun getLanguage(languageCode: String): String {
+  fun getLanguage(languageCode: String?): String {
     return when {
       languageCode == null -> ""
       languageCode.length == 2 -> LanguageContainer(languageCode).languageName
