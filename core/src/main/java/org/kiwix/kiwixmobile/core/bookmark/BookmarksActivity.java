@@ -51,9 +51,9 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
 
 public class BookmarksActivity extends BaseActivity implements BookmarksContract.View,
   BookmarksAdapter.OnItemClickListener {
@@ -85,6 +85,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
       mode.getMenuInflater().inflate(R.menu.menu_context_delete, menu);
+      bookmarksSwitch.setEnabled(false);
       return true;
     }
 
@@ -97,15 +98,18 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
       refreshAdapter = false;
       if (item.getItemId() == R.id.menu_context_delete) {
-        allBookmarks.removeAll(deleteList);
-        for (BookmarkItem bookmark : deleteList) {
-          int position = bookmarksList.indexOf(bookmark);
-          bookmarksList.remove(bookmark);
-          bookmarksAdapter.notifyItemRemoved(position);
-          bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.getItemCount());
-        }
-        presenter.deleteBookmarks(new ArrayList<>(deleteList));
-        mode.finish();
+        dialogShower.show(KiwixDialog.DeleteBookmarks.INSTANCE,(Function0<Unit>)() ->{ 
+          allBookmarks.removeAll(deleteList);
+          for (BookmarkItem bookmark : deleteList) {
+            int position = bookmarksList.indexOf(bookmark);
+            bookmarksList.remove(bookmark);
+            bookmarksAdapter.notifyItemRemoved(position);
+            bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.getItemCount());
+          }
+          presenter.deleteBookmarks(new ArrayList<>(deleteList));
+          mode.finish();
+          return Unit.INSTANCE;
+        });
         return true;
       }
       return false;
@@ -120,6 +124,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       if (refreshAdapter) {
         bookmarksAdapter.notifyDataSetChanged();
       }
+      bookmarksSwitch.setEnabled(true);
     }
   };
 

@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.data.local.entity.NetworkLanguageDatabaseEntit
 import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch;
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 
 @Singleton
 @Deprecated //delete once migrations are no longer needed

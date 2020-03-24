@@ -110,16 +110,14 @@ sealed class KiwixDialog(
     R.string.did_you_know,
     R.string.hint_contents_drawer_message,
     R.string.got_it,
-    null,
-    icon = R.drawable.icon_question
+    null
   )
 
   object ExternalLinkPopup : KiwixDialog(
     R.string.external_link_popup_dialog_title,
     R.string.external_link_popup_dialog_message,
-    android.R.string.yes,
-    android.R.string.no,
-    icon = R.drawable.ic_warning,
+    R.string.yes,
+    R.string.no,
     neutralMessage = R.string.do_not_ask_anymore
   )
 
@@ -141,17 +139,15 @@ sealed class KiwixDialog(
   object ClearAllHistory : KiwixDialog(
     R.string.clear_all_history_dialog_title,
     R.string.clear_recent_and_tabs_history_dialog,
-    R.string.yes,
-    R.string.no,
-    icon = R.drawable.ic_warning
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
   )
 
   object ClearAllNotes : KiwixDialog(
     R.string.delete_notes_confirmation_msg,
     message = null,
-    positiveMessage = R.string.yes,
-    negativeMessage = R.string.no,
-    icon = R.drawable.ic_warning
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
   )
 
   data class OpenCredits(val customGetView: (() -> View)?) : KiwixDialog(
@@ -187,17 +183,17 @@ sealed class KiwixDialog(
   }
 
   object DeleteHistory : KiwixDialog(
-    null,
     R.string.delete_history,
-    R.string.yes,
-    R.string.no
+    null,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
   )
 
   object DeleteBookmarks : KiwixDialog(
-    null,
     R.string.delete_bookmarks,
-    R.string.yes,
-    R.string.no
+    null,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
   )
 }
 

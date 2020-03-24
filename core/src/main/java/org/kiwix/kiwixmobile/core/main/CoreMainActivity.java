@@ -125,27 +125,27 @@ import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificat
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
-import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_FILE_SELECT;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_HISTORY_ITEM_CHOSEN;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_PREFERENCES;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_STORAGE_PERMISSION;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_HISTORY_CLEARED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_RESTART;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_ARTICLES;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_POSITIONS;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_TAB;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUEST;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_IS_WIDGET_VOICE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_SEARCH;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_ZIM_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_FILE_SELECT;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_HISTORY_ITEM_CHOSEN;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_PREFERENCES;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_STORAGE_PERMISSION;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_HISTORY_CLEARED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_ARTICLES;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_POSITIONS;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_TAB;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
@@ -847,6 +847,9 @@ public abstract class CoreMainActivity extends BaseActivity
   private void closeTab(int index) {
     tempForUndo = webViewList.get(index);
     webViewList.remove(index);
+    if(index <= currentWebViewIndex && currentWebViewIndex > 0){
+      currentWebViewIndex--;
+    }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
     Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
