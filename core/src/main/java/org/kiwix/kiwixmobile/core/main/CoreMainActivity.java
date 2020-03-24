@@ -847,7 +847,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void closeTab(int index) {
     tempForUndo = webViewList.get(index);
     webViewList.remove(index);
-    if(index <= currentWebViewIndex && currentWebViewIndex > 0){
+    if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
       currentWebViewIndex--;
     }
     tabsAdapter.notifyItemRemoved(index);
@@ -1278,6 +1278,12 @@ public abstract class CoreMainActivity extends BaseActivity
     updateNightMode();
   }
 
+  private void openFullScreenIfEnabled() {
+    if (isInFullScreenMode()) {
+      openFullScreen();
+    }
+  }
+
   private void updateBottomToolbarVisibility() {
     if (checkNull(bottomToolbar)) {
       if (!urlIsInvalid()
@@ -1556,9 +1562,7 @@ public abstract class CoreMainActivity extends BaseActivity
       backToTopButton.hide();
     }
 
-    if (isInFullScreenMode()) {
-      openFullScreen();
-    }
+    openFullScreenIfEnabled();
     updateNightMode();
   }
 
@@ -1633,6 +1637,7 @@ public abstract class CoreMainActivity extends BaseActivity
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
+    openFullScreenIfEnabled();
     updateNightMode();
   }
 
