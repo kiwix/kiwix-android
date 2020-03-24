@@ -38,13 +38,13 @@ fun View.snack(
 }
 
 fun View.snack(
-  string: String,
+  message: String,
   actionStringId: Int? = null,
   actionClick: (() -> Unit)? = null,
   @ColorInt actionTextColor: Int = Color.WHITE
 ) {
   Snackbar.make(
-    this, string, Snackbar.LENGTH_LONG
+    this, message, Snackbar.LENGTH_LONG
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
     setActionTextColor(actionTextColor)
