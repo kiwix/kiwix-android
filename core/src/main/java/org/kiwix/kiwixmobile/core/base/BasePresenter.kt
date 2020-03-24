@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.core.base.BaseContract.View
 abstract class BasePresenter<T : View<*>?> : Presenter<T> {
   @JvmField val compositeDisposable = CompositeDisposable()
   @JvmField var view: T? = null
+
   override fun attachView(view: T) {
     this.view = view
   }
