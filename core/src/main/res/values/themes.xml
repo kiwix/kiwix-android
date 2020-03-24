@@ -17,7 +17,7 @@
     <item name="colorSecondaryVariant">?colorPrimary</item>
 
     <!--Material snackbar attributes-->
-    <item name="maxActionInlineWidth" tools:ignore="PrivateResource">@dimen/design_snackbar_action_inline_max_width</item>
+    <item name="maxActionInlineWidth">@dimen/snackbar_action_inline_max_width</item>
 
     <!--colorBackground appears behind scrollable content and is used for the default window-->
     <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
