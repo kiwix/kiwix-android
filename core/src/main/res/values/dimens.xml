@@ -12,7 +12,6 @@
   <dimen name="webview_search_edit_text_margin_right">10dip</dimen>
   <dimen name="progressbar_layout_margin_top">300dp</dimen>
   <dimen name="fullscreen_control_button_margin">7dp</dimen>
-  <dimen name="snackbar_action_inline_max_width">128dp</dimen>
 
   <dimen name="kiwix_search_widget_margin">1dp</dimen>
   <dimen name="progress_view_height">3dp</dimen>
