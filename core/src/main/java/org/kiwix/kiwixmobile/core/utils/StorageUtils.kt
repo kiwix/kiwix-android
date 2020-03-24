@@ -18,6 +18,6 @@
 package org.kiwix.kiwixmobile.core.utils
 
 object StorageUtils {
-  fun getFileNameFromUrl(url: String?): String =
+  @JvmStatic fun getFileNameFromUrl(url: String?): String =
     NetworkUtils.getFileNameFromUrl(url).replace(".meta4", "")
 }

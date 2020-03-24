@@ -32,7 +32,7 @@ public class ChunkUtils {
 
   public static List<Chunk> getChunks(String url, long contentLength, int notificationID) {
     int fileCount = getZimChunkFileCount(contentLength);
-    String filename = StorageUtils.INSTANCE.getFileNameFromUrl(url);
+    String filename = StorageUtils.getFileNameFromUrl(url);
     String[] fileNames = getZimChunkFileNames(filename, fileCount);
     return generateChunks(contentLength, url, fileNames, notificationID);
   }
