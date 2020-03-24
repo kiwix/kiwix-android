@@ -411,7 +411,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED));
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -1368,6 +1368,13 @@ public abstract class CoreMainActivity extends BaseActivity
     alertDialogShower.show(KiwixDialog.ContentsDrawerHint.INSTANCE);
   }
 
+  private void openArticleInNewTab(String articleUrl) {
+    if (articleUrl != null) {
+      createNewTab();
+      loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
+    }
+  }
+
   private void openArticle(String articleUrl) {
     if (articleUrl != null) {
       loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
@@ -1414,7 +1421,7 @@ public abstract class CoreMainActivity extends BaseActivity
     tabRecyclerView.setAdapter(tabsAdapter);
   }
 
-  private void searchForTitle(String title) {
+  private void searchForTitle(String title, boolean openInNewTab) {
     String articleUrl;
 
     if (title.startsWith("A/")) {
@@ -1422,17 +1429,21 @@ public abstract class CoreMainActivity extends BaseActivity
     } else {
       articleUrl = zimReaderContainer.getPageUrlFromTitle(title);
     }
-    openArticle(articleUrl);
+    if (openInNewTab) {
+      openArticleInNewTab(articleUrl);
+    } else {
+      openArticle(articleUrl);
+    }
   }
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    hideTabSwitcher();
     Log.i(TAG_KIWIX, "Intent data: " + data);
-
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
+          boolean wasFromTabSwitcher = mainMenu.isInTabSwitcher();
+          hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           boolean isSearchInText =
@@ -1447,7 +1458,7 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            searchForTitle(title);
+            searchForTitle(title, wasFromTabSwitcher);
           }
         } else if (resultCode == RESULT_CANCELED) {
           Log.w(TAG_KIWIX, "Search cancelled or exited");
@@ -1457,6 +1468,7 @@ public abstract class CoreMainActivity extends BaseActivity
         }
         break;
       case REQUEST_PREFERENCES:
+        hideTabSwitcher();
         if (resultCode == RESULT_RESTART) {
           recreate();
         }
@@ -1471,6 +1483,7 @@ public abstract class CoreMainActivity extends BaseActivity
       case BOOKMARK_CHOSEN_REQUEST:
       case REQUEST_FILE_SELECT:
       case REQUEST_HISTORY_ITEM_CHOSEN:
+        hideTabSwitcher();
         if (resultCode == RESULT_OK) {
           if (data.getBooleanExtra(HistoryActivity.USER_CLEARED_HISTORY, false)) {
             for (KiwixWebView kiwixWebView : webViewList) {

@@ -43,9 +43,6 @@
     <ID>ReturnCount:Fat32Checker.kt$Fat32Checker$private fun canCreate4GbFile(storage: String): Boolean</ID>
     <ID>ReturnCount:LanguageActivity.kt$LanguageActivity$override fun onOptionsItemSelected(item: MenuItem): Boolean</ID>
     <ID>ReturnCount:LibraryFragment.kt$LibraryFragment$private fun onBookItemClick(item: BookItem)</ID>
-    <ID>SpreadOperator:LanguageAdapter.kt$LanguageAdapter$(*delegates)</ID>
-    <ID>SpreadOperator:LibraryAdapter.kt$LibraryAdapter$( *delegates )</ID>
-    <ID>SpreadOperator:ZimManageViewModel.kt$ZimManageViewModel$(*disposables())</ID>
     <ID>TooGenericExceptionCaught:FileWritingFileSystemChecker.kt$FileWritingFileSystemChecker$e: Exception</ID>
     <ID>TooGenericExceptionCaught:KiwixMainActivity.kt$KiwixMainActivity$e: Exception</ID>
     <ID>TooGenericExceptionThrown:ActivityExtensions.kt$throw RuntimeException( """ applicationContext is ${applicationContext::class.java.simpleName} application is ${application::class.java.simpleName} """.trimIndent() )</ID>

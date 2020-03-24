@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 
@@ -92,6 +93,7 @@ class MainMenu(
   private val help = menu.findItem(R.id.menu_help)
   private val settings = menu.findItem(R.id.menu_settings)
   private val supportKiwix = menu.findItem(R.id.menu_support_kiwix)
+  private var isInTabSwitcher: Boolean = false
 
   init {
     if (disableReadAloud) {
@@ -156,10 +158,12 @@ class MainMenu(
   }
 
   fun showTabSwitcherOptions() {
-    setVisibility(false, randomArticle, search, readAloud, addNote, fullscreen)
+    isInTabSwitcher = true
+    setVisibility(false, randomArticle, readAloud, addNote, fullscreen)
   }
 
   fun showWebViewOptions(urlIsValid: Boolean) {
+    isInTabSwitcher = false
     fullscreen.isVisible = true
     setVisibility(urlIsValid, randomArticle, search, readAloud, addNote)
   }
@@ -172,6 +176,7 @@ class MainMenu(
     activity.startActivityForResult(
       activity.intent<SearchActivity> {
         putExtra(EXTRA_ZIM_FILE, zimFileReader.zimFile.absolutePath)
+        putExtra(TAG_FROM_TAB_SWITCHER, isInTabSwitcher)
       },
       REQUEST_FILE_SEARCH
     )
@@ -196,6 +201,8 @@ class MainMenu(
       zimFileReader?.let(::navigateToSearch)
     }
   }
+
+  fun isInTabSwitcher(): Boolean = isInTabSwitcher
 }
 
 private fun MenuItem?.menuItemClickListener(function: (MenuItem) -> Unit) {

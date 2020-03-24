@@ -27,8 +27,12 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 data class SearchIntentProcessing(
   private val intent: Intent?,
@@ -36,9 +40,15 @@ data class SearchIntentProcessing(
 ) : SideEffect<Unit> {
   @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {
-    if (intent != null) {
-      if (intent.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
-        actions.offer(Filter(intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
+    intent?.let {
+      actions.offer(
+        ScreenWasStartedFrom(
+          if (it.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false)) FromTabView
+          else FromWebView
+        )
+      )
+      if (it.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
+        actions.offer(Filter(it.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
       }
       if (intent.hasExtra(EXTRA_SEARCH)) {
         actions.offer(Filter(intent.getStringExtra(EXTRA_SEARCH)))
