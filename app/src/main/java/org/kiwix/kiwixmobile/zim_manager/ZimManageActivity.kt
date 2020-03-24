@@ -23,8 +23,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
 import org.kiwix.kiwixmobile.R
@@ -71,6 +71,34 @@ class ZimManageActivity : BaseActivity() {
       offscreenPageLimit = sectionsPagerAdapter.count - 1
       tabs.setupWithViewPager(this)
       addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
+      addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+        override fun onPageScrollStateChanged(state: Int) {
+          // empty method
+        }
+
+        override fun onPageScrolled(
+          position: Int,
+          positionOffset: Float,
+          positionOffsetPixels: Int
+        ) {
+          if (position == 1) {
+            val page =
+              supportFragmentManager.findFragmentByTag(
+                "android:switcher:" +
+                  R.id.manageViewPager + ":" +
+                  0
+              )
+            if (page != null) {
+              (page as ZimFileSelectFragment).finishActionMode()
+            }
+          }
+        }
+
+        override fun onPageSelected(position: Int) {
+          // empty method
+        }
+      })
     }
     setViewPagerPositionFromIntent(intent)
   }
@@ -90,11 +118,6 @@ class ZimManageActivity : BaseActivity() {
     searchItem?.isVisible = position == 1
     languageItem?.isVisible = position == 1
     getZimItem?.isVisible = position == 0
-    if (position == 1) {
-      val fragment: Fragment?
-      fragment = ZimFileSelectFragment()
-      fragment.finishActionMode()
-    }
   }
 
   private fun setUpToolbar() {
