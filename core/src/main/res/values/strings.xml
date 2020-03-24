@@ -132,6 +132,7 @@
   <string name="external_storage">External</string>
   <string name="yes">Yes</string>
   <string name="no">No</string>
+  <string name="confirm_open_in_new_tab">Are you sure you want to open link in new tab?</string>
   <string name="confirm_stop_download_title">Stop download?</string>
   <string name="confirm_stop_download_msg">Are you sure you want to stop this download?</string>
   <string name="download_change_storage" tools:keep="@string/download_change_storage">Storage device selector</string>
