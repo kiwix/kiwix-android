@@ -157,7 +157,6 @@ public abstract class CoreMainActivity extends BaseActivity
   public static final String HOME_URL = "file:///android_asset/home.html";
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
-  private final NightModeViewPainter painter = new NightModeViewPainter();
   @BindView(R2.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R2.id.toolbar)
@@ -217,6 +216,8 @@ public abstract class CoreMainActivity extends BaseActivity
   protected NewBookDao newBookDao;
   @Inject
   protected DialogShower alertDialogShower;
+  @Inject
+  protected NightModeViewPainter painter;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -1273,7 +1274,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
-    painter.update(getCurrentWebView(), videoView, getApplicationContext());
+    painter.update(getCurrentWebView(), videoView);
   }
 
   private void updateBottomToolbarVisibility() {
@@ -1544,7 +1545,7 @@ public abstract class CoreMainActivity extends BaseActivity
     if (isInFullScreenMode()) {
       openFullScreen();
     }
-    painter.update(getCurrentWebView(), videoView, getApplicationContext());
+    painter.update(getCurrentWebView(), videoView);
   }
 
   private boolean isInFullScreenMode() {
@@ -1610,7 +1611,7 @@ public abstract class CoreMainActivity extends BaseActivity
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
-    painter.update(getCurrentWebView(), videoView, getApplicationContext());
+    painter.update(getCurrentWebView(), videoView);
   }
 
   protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {

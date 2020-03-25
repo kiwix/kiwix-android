@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -153,6 +154,10 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
       listener.onSelectTab(v, selectedPosition);
       notifyDataSetChanged();
     });
+    if (!webViewTitle.equals(activity.getString(R.string.menu_home))) {
+      NightModeViewPainter painter = new NightModeViewPainter(holder.content.getContext());
+      painter.update(holder.content);
+    }
   }
 
   @Override
@@ -192,9 +197,6 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
       this.content = content;
       this.title = title;
       this.close = close;
-
-      NightModeViewPainter painter = new NightModeViewPainter();
-      painter.update(content, close.getContext());
     }
   }
 }

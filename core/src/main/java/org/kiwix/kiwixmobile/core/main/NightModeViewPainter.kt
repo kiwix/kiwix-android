@@ -25,13 +25,22 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import javax.inject.Inject
 
-class NightModeViewPainter {
+/**
+ * NightModeViewPainter class is used to apply respective filters to the views
+ * depending whether the app is in dark mode or not
+ * Created by yashk2000 on 24/03/2020.
+ */
+
+class NightModeViewPainter @Inject constructor(
+  val context: Context?
+) {
 
   private var nightModeConfig: NightModeConfig? = null
   private val invertedPaint = createInvertedPaint()
 
-  fun update(view: View, context: Context?) {
+  fun update(view: View) {
     val sharedPreferenceUtil = SharedPreferenceUtil(context)
     nightModeConfig = context?.let { NightModeConfig(sharedPreferenceUtil, it) }
 
@@ -44,8 +53,7 @@ class NightModeViewPainter {
 
   fun update(
     webview: KiwixWebView,
-    videoView: ViewGroup,
-    context: Context?
+    videoView: ViewGroup
   ) {
     val sharedPreferenceUtil = SharedPreferenceUtil(context)
     nightModeConfig = context?.let { NightModeConfig(sharedPreferenceUtil, it) }
