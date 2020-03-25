@@ -15,30 +15,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.base;
+package org.kiwix.kiwixmobile.core.base
 
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.CompositeDisposable
+import org.kiwix.kiwixmobile.core.base.BaseContract.Presenter
+import org.kiwix.kiwixmobile.core.base.BaseContract.View
 
 /**
  * All presenters should inherit from this presenter.
  */
+abstract class BasePresenter<T : View<*>?> : Presenter<T> {
+  @JvmField val compositeDisposable = CompositeDisposable()
+  @JvmField var view: T? = null
 
-public abstract class BasePresenter<T extends BaseContract.View>
-  implements BaseContract.Presenter<T> {
-
-  protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
-  protected T view;
-
-  @Override
-  public void attachView(T view) {
-    this.view = view;
+  override fun attachView(view: T) {
+    this.view = view
   }
 
-  @Override
-  public void detachView() {
-    view = null;
-    if (!compositeDisposable.isDisposed()) {
-      compositeDisposable.dispose();
+  override fun detachView() {
+    view = null
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
     }
   }
 }
