@@ -70,15 +70,9 @@ object ServerUtils {
     return result
   }
 
-  @JvmStatic fun getSocketAddress(): String {
-    var address = "http://${getIpAddress()}:$port"
-    address = address.replace("\n".toRegex(), "")
-    return address
-  }
+  @JvmStatic fun getSocketAddress(): String =
+    "http://${getIpAddress()}:$port".replace("\n".toRegex(), "")
 
-  @JvmStatic fun getIp(): String? {
-    var ip = getIpAddress()
-    ip = ip!!.replace("\n".toRegex(), "")
-    return if (ip.isEmpty()) INVALID_IP else ip
-  }
+  @JvmStatic fun getIp(): String? =
+    getIpAddress()?.replace("\n".toRegex(), "")?.takeIf(String::isNotEmpty) ?: INVALID_IP
 }
