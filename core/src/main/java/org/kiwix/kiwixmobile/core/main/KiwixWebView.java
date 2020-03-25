@@ -66,7 +66,6 @@ public class KiwixWebView extends VideoEnabledWebView {
   @Inject
   ZimReaderContainer zimReaderContainer;
   private final WebViewCallback callback;
-  private final Paint invertedPaint = createInvertedPaint();
 
   @SuppressLint("SetJavaScriptEnabled")
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
@@ -107,26 +106,6 @@ public class KiwixWebView extends VideoEnabledWebView {
     } else {
       setInitialScale(0);
     }
-  }
-
-  public void deactivateNightMode() {
-    setLayerType(LAYER_TYPE_NONE, null);
-    videoView.setLayerType(LAYER_TYPE_NONE, null);
-  }
-
-  public void activateNightMode() {
-    if (getUrl() != null && getUrl().equals(HOME_URL)) {
-      return;
-    }
-    setLayerType(LAYER_TYPE_HARDWARE, invertedPaint);
-    videoView.setLayerType(LAYER_TYPE_HARDWARE, invertedPaint);
-  }
-
-  @NotNull private Paint createInvertedPaint() {
-    Paint paint = new Paint();
-    ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
-    paint.setColorFilter(filterInvert);
-    return paint;
   }
 
   @Override

@@ -157,6 +157,7 @@ public abstract class CoreMainActivity extends BaseActivity
   public static final String HOME_URL = "file:///android_asset/home.html";
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
+  private final NightModeViewPainter painter = new NightModeViewPainter();
   @BindView(R2.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R2.id.toolbar)
@@ -1272,7 +1273,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
-    updateNightMode();
+    painter.update(getCurrentWebView(), videoView, getApplicationContext());
   }
 
   private void updateBottomToolbarVisibility() {
@@ -1543,15 +1544,7 @@ public abstract class CoreMainActivity extends BaseActivity
     if (isInFullScreenMode()) {
       openFullScreen();
     }
-    updateNightMode();
-  }
-
-  private void updateNightMode() {
-    if (nightModeConfig.isNightModeActive()) {
-      getCurrentWebView().activateNightMode();
-    } else {
-      getCurrentWebView().deactivateNightMode();
-    }
+    painter.update(getCurrentWebView(), videoView, getApplicationContext());
   }
 
   private boolean isInFullScreenMode() {
@@ -1617,7 +1610,7 @@ public abstract class CoreMainActivity extends BaseActivity
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
-    updateNightMode();
+    painter.update(getCurrentWebView(), videoView, getApplicationContext());
   }
 
   protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {
@@ -1702,7 +1695,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void setHomePage(View view) {
-    getCurrentWebView().deactivateNightMode();
+    painter.deactivateNightMode(getCurrentWebView(), videoView);
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);

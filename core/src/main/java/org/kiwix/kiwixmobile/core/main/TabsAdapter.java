@@ -127,7 +127,7 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     constraintSet.connect(textView.getId(), ConstraintSet.END, close.getId(), ConstraintSet.START);
 
     constraintSet.applyTo(constraintLayout);
-    return new ViewHolder(constraintLayout, contentImage, textView, close, activity.getApplicationContext());
+    return new ViewHolder(constraintLayout, contentImage, textView, close);
   }
 
   @Override
@@ -186,42 +186,15 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     final ImageView content;
     final TextView title;
     final ImageView close;
-    private NightModeConfig nightModeConfig;
-    private final Paint invertedPaint = createInvertedPaint();
 
-    ViewHolder(View v, ImageView content, TextView title, ImageView close, Context context) {
+    ViewHolder(View v, ImageView content, TextView title, ImageView close) {
       super(v);
       this.content = content;
       this.title = title;
       this.close = close;
 
-      SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(context);
-      nightModeConfig = new NightModeConfig(sharedPreferenceUtil, context);
-
-      updateNightMode();
-    }
-
-    @NotNull private Paint createInvertedPaint() {
-      Paint paint = new Paint();
-      ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
-      paint.setColorFilter(filterInvert);
-      return paint;
-    }
-
-    private void updateNightMode() {
-      if(nightModeConfig.isNightModeActive()) {
-        activateNightMode();
-      } else {
-        deactivateNightMode();
-      }
-    }
-
-    private void activateNightMode() {
-      content.setLayerType(LAYER_TYPE_HARDWARE, invertedPaint);
-    }
-
-    private void deactivateNightMode() {
-      content.setLayerType(LAYER_TYPE_NONE, null);
+      NightModeViewPainter painter = new NightModeViewPainter();
+      painter.update(content, close.getContext());
     }
   }
 }
