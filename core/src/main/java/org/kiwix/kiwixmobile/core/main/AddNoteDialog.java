@@ -136,8 +136,8 @@ public class AddNoteDialog extends DialogFragment
     toolbar.setTitle(R.string.note);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     toolbar.setNavigationOnClickListener(v -> {
-      closeKeyboard();
       exitAddNoteDialog();
+      closeKeyboard();
     });
 
     toolbar.setOnMenuItemClickListener(item -> {

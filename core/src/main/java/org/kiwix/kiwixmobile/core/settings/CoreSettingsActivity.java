@@ -25,8 +25,8 @@ import androidx.appcompat.widget.Toolbar;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_WEBVIEWS_LIST;
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_HISTORY_CLEARED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_WEBVIEWS_LIST;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_HISTORY_CLEARED;
 
 public abstract class CoreSettingsActivity extends BaseActivity {
 

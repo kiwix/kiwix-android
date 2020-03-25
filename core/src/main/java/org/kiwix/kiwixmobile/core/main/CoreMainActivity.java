@@ -125,27 +125,27 @@ import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificat
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
-import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_FILE_SELECT;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_HISTORY_ITEM_CHOSEN;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_PREFERENCES;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_STORAGE_PERMISSION;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_HISTORY_CLEARED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_RESTART;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_ARTICLES;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_POSITIONS;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_TAB;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUEST;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_IS_WIDGET_VOICE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_SEARCH;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_ZIM_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_FILE_SELECT;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_HISTORY_ITEM_CHOSEN;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_PREFERENCES;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_STORAGE_PERMISSION;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_HISTORY_CLEARED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_ARTICLES;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_POSITIONS;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_TAB;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
@@ -413,7 +413,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED));
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -849,6 +849,9 @@ public abstract class CoreMainActivity extends BaseActivity
   private void closeTab(int index) {
     tempForUndo = webViewList.get(index);
     webViewList.remove(index);
+    if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
+      currentWebViewIndex--;
+    }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
     Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
@@ -1277,6 +1280,12 @@ public abstract class CoreMainActivity extends BaseActivity
     painter.update(getCurrentWebView(), videoView);
   }
 
+  private void openFullScreenIfEnabled() {
+    if (isInFullScreenMode()) {
+      openFullScreen();
+    }
+  }
+
   private void updateBottomToolbarVisibility() {
     if (checkNull(bottomToolbar)) {
       if (!urlIsInvalid()
@@ -1367,6 +1376,13 @@ public abstract class CoreMainActivity extends BaseActivity
     alertDialogShower.show(KiwixDialog.ContentsDrawerHint.INSTANCE);
   }
 
+  private void openArticleInNewTab(String articleUrl) {
+    if (articleUrl != null) {
+      createNewTab();
+      loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
+    }
+  }
+
   private void openArticle(String articleUrl) {
     if (articleUrl != null) {
       loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
@@ -1413,7 +1429,7 @@ public abstract class CoreMainActivity extends BaseActivity
     tabRecyclerView.setAdapter(tabsAdapter);
   }
 
-  private void searchForTitle(String title) {
+  private void searchForTitle(String title, boolean openInNewTab) {
     String articleUrl;
 
     if (title.startsWith("A/")) {
@@ -1421,17 +1437,21 @@ public abstract class CoreMainActivity extends BaseActivity
     } else {
       articleUrl = zimReaderContainer.getPageUrlFromTitle(title);
     }
-    openArticle(articleUrl);
+    if (openInNewTab) {
+      openArticleInNewTab(articleUrl);
+    } else {
+      openArticle(articleUrl);
+    }
   }
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    hideTabSwitcher();
     Log.i(TAG_KIWIX, "Intent data: " + data);
-
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
+          boolean wasFromTabSwitcher = mainMenu.isInTabSwitcher();
+          hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           boolean isSearchInText =
@@ -1446,7 +1466,7 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            searchForTitle(title);
+            searchForTitle(title, wasFromTabSwitcher);
           }
         } else if (resultCode == RESULT_CANCELED) {
           Log.w(TAG_KIWIX, "Search cancelled or exited");
@@ -1456,6 +1476,7 @@ public abstract class CoreMainActivity extends BaseActivity
         }
         break;
       case REQUEST_PREFERENCES:
+        hideTabSwitcher();
         if (resultCode == RESULT_RESTART) {
           recreate();
         }
@@ -1470,6 +1491,7 @@ public abstract class CoreMainActivity extends BaseActivity
       case BOOKMARK_CHOSEN_REQUEST:
       case REQUEST_FILE_SELECT:
       case REQUEST_HISTORY_ITEM_CHOSEN:
+        hideTabSwitcher();
         if (resultCode == RESULT_OK) {
           if (data.getBooleanExtra(HistoryActivity.USER_CLEARED_HISTORY, false)) {
             for (KiwixWebView kiwixWebView : webViewList) {
@@ -1542,9 +1564,7 @@ public abstract class CoreMainActivity extends BaseActivity
       backToTopButton.hide();
     }
 
-    if (isInFullScreenMode()) {
-      openFullScreen();
-    }
+    openFullScreenIfEnabled();
     painter.update(getCurrentWebView(), videoView);
   }
 
@@ -1611,6 +1631,7 @@ public abstract class CoreMainActivity extends BaseActivity
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
+    openFullScreenIfEnabled();
     painter.update(getCurrentWebView(), videoView);
   }
 

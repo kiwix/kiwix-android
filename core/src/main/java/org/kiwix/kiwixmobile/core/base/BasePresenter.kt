@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,22 +15,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.base
 
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects
+import io.reactivex.disposables.CompositeDisposable
+import org.kiwix.kiwixmobile.core.base.BaseContract.Presenter
+import org.kiwix.kiwixmobile.core.base.BaseContract.View
 
-import android.app.Activity
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
+/**
+ * All presenters should inherit from this presenter.
+ */
+abstract class BasePresenter<T : View<*>?> : Presenter<T> {
+  @JvmField val compositeDisposable = CompositeDisposable()
+  @JvmField var view: T? = null
 
-data class OpenSearchItem(private val searchListItem: SearchListItem) : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    activity.setResult(
-      Activity.RESULT_OK,
-      Intent().putExtra(TAG_FILE_SEARCHED, searchListItem.value)
-    )
-    activity.finish()
+  override fun attachView(view: T) {
+    this.view = view
+  }
+
+  override fun detachView() {
+    view = null
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
   }
 }

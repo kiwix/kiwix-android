@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,30 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.base;
+package org.kiwix.kiwixmobile.core.utils
 
-import io.reactivex.disposables.CompositeDisposable;
+import java.util.Locale
 
 /**
- * All presenters should inherit from this presenter.
+ * Created by mhutti1 on 19/04/17.
  */
+class BookUtils {
+  val localeMap = Locale.getISOLanguages().map(::Locale).associateBy { it.isO3Language }
 
-public abstract class BasePresenter<T extends BaseContract.View>
-  implements BaseContract.Presenter<T> {
-
-  protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
-  protected T view;
-
-  @Override
-  public void attachView(T view) {
-    this.view = view;
-  }
-
-  @Override
-  public void detachView() {
-    view = null;
-    if (!compositeDisposable.isDisposed()) {
-      compositeDisposable.dispose();
+  // Get the language from the language codes of the parsed xml stream
+  @Suppress("MagicNumber")
+  fun getLanguage(languageCode: String?): String {
+    return when {
+      languageCode == null -> ""
+      languageCode.length == 2 -> LanguageContainer(languageCode).languageName
+      languageCode.length == 3 -> localeMap[languageCode]?.displayLanguage.orEmpty()
+      else -> ""
     }
   }
 }

@@ -53,8 +53,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View,
   HistoryAdapter.OnItemClickListener {
@@ -88,6 +88,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
       mode.getMenuInflater().inflate(R.menu.menu_context_delete, menu);
+      historySwitch.setEnabled(false);
       return true;
     }
 
@@ -137,6 +138,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       if (refreshAdapter) {
         historyAdapter.notifyDataSetChanged();
       }
+      historySwitch.setEnabled(true);
     }
   };
 
