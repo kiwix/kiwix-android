@@ -178,7 +178,7 @@ sealed class KiwixDialog(
     )
 
     object OpenInNewTab : YesNoDialog(
-      null, R.string.open_in_new_tab
+      R.string.open_in_new_tab, R.string.open_in_new_tab
     )
   }
 
