@@ -63,6 +63,8 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     Fragment parentDialogFragment = getFragmentManager().findFragmentByTag(parentDialogFragmentTAG);
+    Bundle bundle = getArguments();
+    alertDialogShower = (AlertDialogShower) bundle.getSerializable("alertDialogShower");
     return alertDialogShower.create(new KiwixDialog.ConfirmationAlertDialogFragment(stringResourceId),
       () -> {
         if (parentDialogFragment != null) {

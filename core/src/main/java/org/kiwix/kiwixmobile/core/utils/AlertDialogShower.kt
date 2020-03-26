@@ -21,9 +21,11 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.Activity
 import android.app.Dialog
 import androidx.appcompat.app.AlertDialog
+import java.io.Serializable
 import javax.inject.Inject
 
-class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
+class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower,
+  Serializable {
   override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit) {
     create(dialog, *clickListeners).show()
   }
