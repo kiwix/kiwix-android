@@ -71,8 +71,8 @@ object ServerUtils {
   }
 
   @JvmStatic fun getSocketAddress(): String =
-    "http://${getIpAddress()}:$port".replace("\n".toRegex(), "")
+    "http://${getIpAddress()}:$port".replace("\n", "")
 
   @JvmStatic fun getIp(): String? =
-    getIpAddress()?.replace("\n".toRegex(), "")?.takeIf(String::isNotEmpty) ?: INVALID_IP
+    getIpAddress()?.replace("\n", "")?.takeIf(String::isNotEmpty) ?: INVALID_IP
 }
