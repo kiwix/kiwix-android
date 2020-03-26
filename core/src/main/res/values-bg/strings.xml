@@ -55,7 +55,7 @@
   <string name="pref_clear_all_history_title">Изтрий история</string>
   <string name="pref_clear_all_history_summary">Изтрийте последните търсения и история на табовете</string>
   <string name="all_history_cleared">Историята е изтрита</string>
-  <string name="clear_all_history_dialog_title">Изтрий историята</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Изтрий историята</string>
   <string name="delete">Изтриване</string>
   <string name="delete_specific_search_toast">Последните търсения са изтрити</string>
   <string name="hint_contents_drawer_message">Може да плъзнете наляво, за да прегледате съдържанието на статията</string>
@@ -126,7 +126,7 @@
   <string name="time_left">остават</string>
   <string name="pref_external_link_popup_title">При зареждане на външни препратки</string>
   <string name="pref_external_link_popup_summary">Показва попъп, за да предупреди за допълнителни разходи или неработещи в офлайн режим препратки.</string>
-  <string name="external_link_popup_dialog_title">Зареждане на външна препратка</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Зареждане на външна препратка</string>
   <string name="external_link_popup_dialog_message">Предстои Ви, да заредите външна препратка. Това може да доведе до допълнителни разходи за трансфер на данни или просто няма да работи, когато сте офлайн. Желаете ли да продължите?</string>
   <string name="do_not_ask_anymore">Не питайте отново за това</string>
   <string name="your_languages">Избрани езици:</string>

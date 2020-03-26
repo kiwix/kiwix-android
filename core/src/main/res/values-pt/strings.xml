@@ -59,7 +59,7 @@
   <string name="pref_clear_all_history_title">Limpar o histórico</string>
   <string name="pref_clear_all_history_summary">Limpar as pesquisas recentes e o histórico de separadores</string>
   <string name="all_history_cleared">Todo o historial foi apagado</string>
-  <string name="clear_all_history_dialog_title">Apagar todo o historial</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Apagar todo o historial</string>
   <string name="delete">Apagar</string>
   <string name="delete_specific_search_toast">Pesquisa recente removida</string>
   <string name="hint_contents_drawer_message">Pode passar o dedo para a esquerda para ver o conteúdo deste artigo</string>
@@ -130,7 +130,7 @@
   <string name="time_left">esquerda</string>
   <string name="pref_external_link_popup_title">Avisar quando introduzir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
-  <string name="external_link_popup_dialog_title">Hiperligação externa de entrada</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Hiperligação externa de entrada</string>
   <string name="external_link_popup_dialog_message">Está a introduzir uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>

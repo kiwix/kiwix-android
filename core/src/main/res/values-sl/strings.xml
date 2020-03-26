@@ -56,7 +56,7 @@
   <string name="pref_clear_all_history_title">Izbriši zgodovino</string>
   <string name="pref_clear_all_history_summary">Počisti zgodovino nedavnih iskanj in zavihkov</string>
   <string name="all_history_cleared">Vsa zgodovina izbrisana</string>
-  <string name="clear_all_history_dialog_title">Počisti vso zgodovino</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Počisti vso zgodovino</string>
   <string name="share">Deli</string>
   <string name="selected_file_cab_app_chooser_title">Deli ZIM datoteke z:</string>
   <string name="delete">Odstrani</string>
@@ -131,7 +131,7 @@
   <string name="time_yesterday">Včeraj</string>
   <string name="pref_external_link_popup_title">Opozori pri vnosu zunanjih povezav</string>
   <string name="pref_external_link_popup_summary">Prikaže pojavno okno, da opozori na dodatne stroške ali da ne delujejo povezave v načinu brez povezave.</string>
-  <string name="external_link_popup_dialog_title">Vnesi zunanjo povezavo</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Vnesi zunanjo povezavo</string>
   <string name="external_link_popup_dialog_message">Vnašate zunanjo povezavo. To bi lahko povzročilo dodatne stroške za prenos podatkov ali preprosto ne bo delovalo, ko ste brez povezave. Ali želite nadaljevati?</string>
   <string name="do_not_ask_anymore">Ne sprašuj več</string>
   <string name="your_languages">Izbrani jeziki:</string>

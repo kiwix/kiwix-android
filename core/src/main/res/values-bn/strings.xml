@@ -53,7 +53,7 @@
   <string name="pref_clear_all_history_title">ইতিহাস মুছুন</string>
   <string name="pref_clear_all_history_summary">সাম্প্রতিক অনুসন্ধান ও ট্যাবের ইতিহাস পরিষ্কার করুন</string>
   <string name="all_history_cleared">সমস্ত ইতিহাস সাফ করা হয়ছে</string>
-  <string name="clear_all_history_dialog_title">সমস্ত ইতিহাস মুছে ফেলুন</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">সমস্ত ইতিহাস মুছে ফেলুন</string>
   <string name="delete">অপসারণ</string>
   <string name="delete_specific_search_toast">সাম্প্রতিক অনুসন্ধান অপসারণ করা হয়েছে</string>
   <string name="hint_contents_drawer_message">এই নিবন্ধটির সূচী দেখতে বামদিক থেকে টেনে আনুন</string>

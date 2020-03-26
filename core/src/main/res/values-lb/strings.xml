@@ -24,6 +24,7 @@
   <string name="search_label">Sichen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
+  <string name="server_stopped_successfully_toast_message">De Serveur gouf gestoppt.</string>
   <string name="error_file_not_found">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
   <string name="error_file_invalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>
   <string name="error_article_url_not_found">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
@@ -67,6 +68,7 @@
   <string name="zim_no_pic">Keng Biller</string>
   <string name="zim_no_vid">Keng Videoen</string>
   <string name="no_network_connection">Keng Verbindung mam Reseau</string>
+  <string name="settings">Astellungen</string>
   <string name="help_2">Wat mécht Kiwix?</string>
   <string name="help_5">Wou ass den Inhalt\'</string>
   <string name="help_6">Eisen Inhalt ass um Kiwix Internetsite gehost.</string>
@@ -88,7 +90,7 @@
   <string name="time_today">Haut</string>
   <string name="time_yesterday">Gëschter</string>
   <string name="pref_external_link_popup_title">Warne wann en externe Link agi gëtt</string>
-  <string name="external_link_popup_dialog_title">Externe Link aginn</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Externe Link aginn</string>
   <string name="do_not_ask_anymore">Net méi froen</string>
   <string name="your_languages">Erausgesicht Sproochen:</string>
   <string name="other_languages">Aner Sproochen:</string>
@@ -102,6 +104,8 @@
   <string name="save_languages">Sprooche späicheren</string>
   <string name="complete">Komplettéieren</string>
   <string name="save">Späicheren</string>
+  <string name="note_delete_successful">D\'Notiz gouf geläscht</string>
+  <string name="note_delete_unsuccessful">D\'Notiz gouf net geläscht</string>
   <string name="note_share_error_file_missing">De Fichier mat den Notizze gëtt et net</string>
   <string name="your_device">Ären Apparat:</string>
   <string name="status">Status</string>
@@ -113,4 +117,6 @@
   <string name="no_results">Keng Resultater</string>
   <string name="no_bookmarks">Keng Lieszeechen!</string>
   <string name="no_history">Keen Historique</string>
+  <string name="delete_history">Versioune läschen?</string>
+  <string name="delete_bookmarks">Lieszeeche läschen?</string>
 </resources>

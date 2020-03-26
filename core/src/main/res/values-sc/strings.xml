@@ -75,7 +75,7 @@
   <string name="all_history_cleared">Cronologia iscantzellada de su totu</string>
   <string name="pref_clear_all_bookmarks_title">Isbòida sos sinnalibros</string>
   <string name="all_bookmarks_cleared">As iscantzelladu totu sos sinnalibros</string>
-  <string name="clear_all_history_dialog_title">Iscantzella totu sa cronologia</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Iscantzella totu sa cronologia</string>
   <string name="share">Cumpartzi</string>
   <string name="selected_file_cab_app_chooser_title">Cumpartzi documentos ZIM cun:</string>
   <string name="delete">Iscantzella</string>
@@ -151,7 +151,7 @@
   <string name="time_yesterday">Eris</string>
   <string name="pref_external_link_popup_title">Avisa cando ses aberende unu ligàmene esternu</string>
   <string name="pref_external_link_popup_summary">Ammustra ventaneddas pro t\'avisare de costos agiuntivos o ligàmenes chi non funtzionant chene una connessione a ìnternet.</string>
-  <string name="external_link_popup_dialog_title">Aberende unu ligàmene esternu</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Aberende unu ligàmene esternu</string>
   <string name="external_link_popup_dialog_message">Ses aberende unu ligàmene esternu. Custu diat pòdere causare costos in prus pro s\'impreu de trasferimentu de datos o diant pòdere non funtzionare cando non ses connessu a ìnternet. Cheres sighire?</string>
   <string name="do_not_ask_anymore">Non mi lu preguntes prus</string>
   <string name="your_languages">Limbas ischertadas:</string>

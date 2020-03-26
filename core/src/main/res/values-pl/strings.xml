@@ -38,19 +38,24 @@
   <string name="go_to_wifi_settings_label">Przejdź do ustawień WIFI</string>
   <string name="hotspot_running">Uruchamianie Hotspot</string>
   <string name="no_books_selected_toast_message">Proszę wybrać najpierw książki</string>
+  <string name="server_failed_message">Nie można uruchomić serwera. Włącz hotspot</string>
   <string name="server_failed_toast_message">Nie można uruchomić serwera.</string>
   <string name="server_started_successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
+  <string name="server_stopped_successfully_toast_message">Serwer został pomyślnie zatrzymany.</string>
   <string name="hotspot_turned_on">Hotspot włączony</string>
   <string name="hotspot_details_message">Poniżej znajdują się szczegółowe informacje o lokalnym hotspocie.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Wybierz pliki, które chcesz hostować na serwerze</string>
   <string name="progress_dialog_starting_server">Uruchamianie serwera</string>
+  <string name="hotspot_dialog_title">Włącz hotspot WIFI</string>
   <string name="hotspot_dialog_message">Aby ta funkcja działała, musisz najpierw ręcznie włączyć WIFI hotspot.</string>
   <string name="hotspot_dialog_neutral_button">TAK, WŁĄCZYŁEM GO</string>
+  <string name="hotspot_channel_description">Aktualizacje o stanie hotspot/server.</string>
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Uruchom serwer</string>
   <string name="stop_server_label">Zatrzymaj serwer</string>
   <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
   <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
+  <string name="zim_not_opened">Nie można otworzyć pliku zim</string>
   <string name="error_file_invalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>
   <string name="error_article_url_not_found">Błąd: Ładowanie artykułu (Url:  %1$s ) się nie powiodło.</string>
   <string name="pref_display_title">Wyświetl</string>
@@ -78,7 +83,9 @@
   <string name="pref_clear_all_history_title">Wyczyść historię</string>
   <string name="pref_clear_all_history_summary">Wyczyść historię ostatnich wyszukiwań i kart</string>
   <string name="all_history_cleared">Usunięto całą historię</string>
-  <string name="clear_all_history_dialog_title">Wyczyść całą historię</string>
+  <string name="pref_clear_all_bookmarks_title">Wyczyść zakładki</string>
+  <string name="all_bookmarks_cleared">Wszystkie zakładki zostały wyczyszczone</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Wyczyść całą historię</string>
   <string name="share">Udostępnij</string>
   <string name="selected_file_cab_app_chooser_title">Udostępnij pliki ZIM:</string>
   <string name="delete">Usuń</string>
@@ -116,6 +123,7 @@
   <string name="zim_no_pic">Brak obrazka</string>
   <string name="zim_no_vid">Brak wideo</string>
   <string name="no_network_connection">Brak połączenia z siecią</string>
+  <string name="settings">Ustawienia</string>
   <string name="help_2">Co robi Kiwix?</string>
   <string name="help_3">Kiwix to czytnik zawartości offline. Zachowuje się jak przeglądarka, jednak zamiast stron internetowych, czyta zawartość z pliku w formacie ZIM.</string>
   <string name="help_4">Chociaż Kiwix został pierwotnie zaprojektowany do udostępniania Wikipedii offline, czyta także inne treści.</string>
@@ -140,6 +148,9 @@
   <string name="confirm_stop_download_msg">Czy na pewno chcesz zatrzymać pobieranie?</string>
   <string name="download_change_storage">Wybór urządzenia pamięci</string>
   <string name="tts_not_enabled">Tekst na mowę nie jest włączony dla tego pliku ZIM</string>
+  <string name="texttospeech_initialization_failed">Inicjalizacja zamiany tekstu na mowę nie powiodła się. Spróbuj ponownie</string>
+  <string name="texttospeech_error">Nieoczekiwany błąd w zamianie tekstu na mowę. Spróbuj ponownie</string>
+  <string name="search_error">Nieoczekiwany błąd podczas wyszukiwania. Spróbuj ponownie</string>
   <string name="next">Następny</string>
   <string name="previous">Poprzednia</string>
   <string name="wifi_only_title">Zezwolić na pobieranie zawartości przez sieć komórkową?</string>
@@ -154,7 +165,7 @@
   <string name="time_yesterday">Wczoraj</string>
   <string name="pref_external_link_popup_title">Ostrzegaj podczas wchodzenia w linki zewnętrzne</string>
   <string name="pref_external_link_popup_summary">Wyświetl wyskakujące okienko, aby ostrzec o dodatkowych kosztach lub braku działania w linkach offline.</string>
-  <string name="external_link_popup_dialog_title">Wprowadzanie linku zewnętrznego</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Wprowadzanie linku zewnętrznego</string>
   <string name="external_link_popup_dialog_message">Wprowadzasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, gdy będziesz offline. Czy chcesz kontynuować?</string>
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>
   <string name="your_languages">Wybierz język</string>
@@ -188,10 +199,10 @@
   <string name="send_feedback">Prześlij opinię</string>
   <string name="expand">Rozwiń</string>
   <string name="history">Historia</string>
-  <string name="history_from_current_book" fuzzy="true">Historia z bieżącej książki</string>
+  <string name="history_from_current_book">Wyświetl historię ze wszystkich książek</string>
   <string name="search_history">Historia wyszukiwania</string>
   <string name="selected_items">%1$d wybrane</string>
-  <string name="bookmarks_from_current_book" fuzzy="true">Zakładki z bieżącej książki</string>
+  <string name="bookmarks_from_current_book">Wyświetl zakładki ze wszystkich książek</string>
   <string name="search_bookmarks">Szukaj zakładek</string>
   <string name="switch_tabs">Przełącz zakładki</string>
   <string name="close_all_tabs">Zamknij wszystkie zakładki</string>
@@ -206,6 +217,8 @@
   <string name="ext_storage_permission_rationale_add_note">Notatki wymagają dostępu do pamięci</string>
   <string name="ext_storage_write_permission_denied_add_note">Notatek nie można używać bez dostępu do pamięci</string>
   <string name="note_save_unsuccessful">Zapisywanie nie powiodło się</string>
+  <string name="note_delete_successful">Notatka została pomyślnie usunięta</string>
+  <string name="note_delete_unsuccessful">Notatka nie została usunięta</string>
   <string name="note_save_successful">Notatka zapisana</string>
   <string name="note_save_error_storage_not_writable">Błąd zapisywania notatki: Nie można zapisać w pamięci</string>
   <string name="note_share_error_file_missing">Plik notatek nie istnieje</string>
@@ -216,14 +229,18 @@
   <string name="notes_deletion_successful">Usunięto cały folder notatek</string>
   <string name="notes_deletion_unsuccessful">Niektóre pliki nie zostały usunięte</string>
   <string name="books_count">%d książka(książek)</string>
+  <string name="severe_loss_error">Poważny błąd! Spróbuj wyłączyć/ponownie włączyć WiFi P2P</string>
   <string name="connection_failed">Połączenie nie powiodło się</string>
   <string name="permission_rationale_location">Uprawnienie lokalizacja jest wymagane przez system Android, aby umożliwić aplikacji do wykrywania urządzeń</string>
   <string name="permission_refused_location">Nie można zlokalizować urządzeń bez uprawnień do lokalizacji</string>
+  <string name="permission_refused_storage">Nie można uzyskać dostępu do plików zim bez uprawnień do przechowywania</string>
   <string name="request_enable_wifi">Włącz WiFi P2P w ustawieniach systemu</string>
   <string name="transfer_to">Przesłać pliki do %s?</string>
+  <string name="device_not_cooperating">Wybrane urządzenie nie współpracuje przy przesyłaniu</string>
   <string name="file_transfer_complete">Przesyłanie pliku zakończone</string>
   <string name="error_during_transfer">Wystąpił błąd podczas przesyłania</string>
   <string name="error_transferring">Błąd podczas przesyłania pliku %s</string>
+  <string name="get_content_from_nearby_device">Pobierz zawartość z sąsiedniego urządzenia</string>
   <string name="your_device">Twoje urządzenie:</string>
   <string name="nearby_devices">URZĄDZENIA W POBLIŻU</string>
   <string name="no_devices_found">Nie wykryto urządzeń. Naciśnij przycisk wyszukiwania, aby spróbować ponownie.</string>
@@ -234,11 +251,14 @@
   <string name="pref_clear_all_notes_summary">Usuwa wszystkie notatki ze wszystkich artykułów</string>
   <string name="pref_clear_all_notes_title">Wyczyść wszystkie notatki</string>
   <string name="tag_text_only">Tylko tekst</string>
-  <string name="tag_short_text" fuzzy="true">Tylko krótki tekst</string>
+  <string name="tag_short_text">Krótki tekst</string>
   <string name="storage_permission_denied">Odrzucono dostęp do pamięci</string>
   <string name="grant_read_storage_permission">Ta aplikacja aby funkcjonować wymaga uprawnień do odczytywania zawartości pamięci. Nadaj jej te uprawnienia w ustawieniach.</string>
   <string name="go_to_settings">Przejdź do ustawień</string>
   <string name="no_results">Brak wyników</string>
   <string name="no_bookmarks">Brak zakładek</string>
   <string name="no_history">Nie ma Historii</string>
+  <string name="device_default">Domyślne urządzenie</string>
+  <string name="delete_history">Usunąć historię?</string>
+  <string name="delete_bookmarks">Usunąć zakładki?</string>
 </resources>

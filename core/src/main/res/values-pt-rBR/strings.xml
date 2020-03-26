@@ -38,6 +38,7 @@
   <string name="server_failed_message">Não foi possível iniciar o servidor. Por favor, ligue seu ponto de acesso</string>
   <string name="server_failed_toast_message">Não foi possível iniciar o servidor.</string>
   <string name="server_started_successfully_toast_message">Servidor iniciado com sucesso.</string>
+  <string name="server_stopped_successfully_toast_message">Servidor parado com sucesso.</string>
   <string name="hotspot_turned_on">Ponto de acesso  ativado</string>
   <string name="hotspot_details_message">A seguir estão os detalhes do seu ponto de acesso local.\nSSID : %1$s \nPasse : %2$s</string>
   <string name="server_textview_default_message">Selecione os arquivos que você deseja hospedar no servidor</string>
@@ -51,6 +52,7 @@
   <string name="stop_server_label">Parar servidor</string>
   <string name="server_started_message">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado.</string>
+  <string name="zim_not_opened">Não foi possível abrir o arquivo zim</string>
   <string name="error_file_invalid">Erro: O arquivo selecionado não é um arquivo ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: Falha no carregamento do artigo (Url: %1$s).</string>
   <string name="pref_display_title">Exibição</string>
@@ -80,10 +82,11 @@
   <string name="all_history_cleared">Eliminando todo o histórico</string>
   <string name="pref_clear_all_bookmarks_title">Limpar marcadores</string>
   <string name="all_bookmarks_cleared">Todos os marcadores limpos</string>
-  <string name="clear_all_history_dialog_title">Limpar todo o histórico</string>
+  <string name="clear_all_history_dialog_title">Limpar todo o histórico?</string>
   <string name="share">Compartilhar</string>
   <string name="selected_file_cab_app_chooser_title">Compartilhe arquivos ZIM com:</string>
   <string name="delete">Excluir</string>
+  <string name="cancel">Cancelar</string>
   <string name="delete_specific_search_toast">Pesquisa recente removida</string>
   <string name="hint_contents_drawer_message">Você pode deslizar para a esquerda para ver o conteúdo deste artigo</string>
   <string name="got_it">Entendi</string>
@@ -118,6 +121,7 @@
   <string name="zim_no_pic">Sem Imagens</string>
   <string name="zim_no_vid">Sem Vídeos</string>
   <string name="no_network_connection">Nenhuma conexão de rede</string>
+  <string name="settings">Configurações</string>
   <string name="help_2">O que Kiwix faz?</string>
   <string name="help_3">Kiwix é um leitor de conteúdo off-line. Ele funciona muito como um navegador, mas em vez de acessar páginas da web on-line, ele lê o conteúdo de um arquivo no formato ZIM.</string>
   <string name="help_4">Embora o Kiwix tenha sido originalmente projetado para fornecer a Wikipedia offline, ele também lê outros conteúdos.</string>
@@ -142,6 +146,9 @@
   <string name="confirm_stop_download_msg">Tem certeza de que deseja parar esse download?</string>
   <string name="download_change_storage">Seletor do dispositivo de armazenamento</string>
   <string name="tts_not_enabled">Texto para fala não está habilitado para este arquivo ZIM</string>
+  <string name="texttospeech_initialization_failed">Falha na inicialização da leitura de texto. Por favor, tente novamente</string>
+  <string name="texttospeech_error">Erro inesperado na leitura de texto. Por favor, tente novamente</string>
+  <string name="search_error">Erro inesperado durante a pesquisa. Por favor, tente novamente</string>
   <string name="next">Próximo</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir o download de conteúdo via rede móvel?</string>
@@ -156,7 +163,7 @@
   <string name="time_yesterday">Ontem</string>
   <string name="pref_external_link_popup_title">Avisar ao inserir links externos</string>
   <string name="pref_external_link_popup_summary">Exibir pop-up para avisar sobre custos adicionais ou não trabalhar em links off-line.</string>
-  <string name="external_link_popup_dialog_title">Entrar no link externo</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Entrar no link externo</string>
   <string name="external_link_popup_dialog_message">Você está inserindo um link externo. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Você quer continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Idiomas selecionados:</string>
@@ -208,6 +215,8 @@
   <string name="ext_storage_permission_rationale_add_note">O acesso ao armazenamento é necessário para o Notes</string>
   <string name="ext_storage_write_permission_denied_add_note">Notas não podem ser usadas sem acesso ao armazenamento</string>
   <string name="note_save_unsuccessful">Nota salva sem sucesso</string>
+  <string name="note_delete_successful">Nota excluída com sucesso</string>
+  <string name="note_delete_unsuccessful">A nota não foi excluída</string>
   <string name="note_save_successful">Nota salva</string>
   <string name="note_save_error_storage_not_writable">Erro ao salvar nota: armazenamento não gravável</string>
   <string name="note_share_error_file_missing">Arquivo de notas não existe</string>
@@ -256,4 +265,6 @@
   <string name="no_bookmarks">Sem Favoritos</string>
   <string name="no_history">Sem histórico</string>
   <string name="device_default">Padrão do dispositivo</string>
+  <string name="delete_history">Apagar histórico?</string>
+  <string name="delete_bookmarks">Excluir marcadores?</string>
 </resources>

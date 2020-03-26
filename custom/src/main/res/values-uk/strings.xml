@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Movses
+-->
+<resources>
+  <string name="retry">Повторити</string>
+  <string name="download">Завантажити</string>
+  <string name="invalid_installation">Невдале встановлення. Будь ласка завантажте Zim.\nТакож впевніться, що WiFi підключений і ви маєте достатньо місця на пристрої</string>
+</resources>

@@ -47,7 +47,7 @@
   <string name="delete_recent_search_item">این مورد حذف شود؟</string>
   <string name="pref_clear_all_history_title">پاک کردن تاریخچه</string>
   <string name="all_history_cleared">تمامی تاریخچه پاک شد</string>
-  <string name="clear_all_history_dialog_title">پاک کردن تمامی تاریخچه</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">پاک کردن تمامی تاریخچه</string>
   <string name="share">اشتراک‌گذاری</string>
   <string name="selected_file_cab_app_chooser_title">اشتراک‌گذاری پرونده‌های ZIM با:</string>
   <string name="delete">حذف</string>

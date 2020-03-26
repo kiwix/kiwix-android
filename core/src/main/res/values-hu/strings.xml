@@ -57,7 +57,7 @@
   <string name="pref_clear_all_history_title">Előzmények törlése</string>
   <string name="pref_clear_all_history_summary">Töröld a mostani kereséseket és lapelőzményeket</string>
   <string name="all_history_cleared">Az összes előzmény törölve</string>
-  <string name="clear_all_history_dialog_title">Az összes előzmény törlése</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Az összes előzmény törlése</string>
   <string name="delete">Törlés</string>
   <string name="delete_specific_search_toast">Legutóbbi keresés eltávolítva</string>
   <string name="hint_contents_drawer_message">Balra húzással láthatod ennek a cikknek a tartalmát</string>
@@ -128,7 +128,7 @@
   <string name="time_left">maradt</string>
   <string name="pref_external_link_popup_title">Figyelmeztess külső hivatkozások indítása esetén</string>
   <string name="pref_external_link_popup_summary">Felugró ablakkal való figyelmeztetés többletköltségek esetén vagy ne működjön offline hivatkozásokkal.</string>
-  <string name="external_link_popup_dialog_title">Külső hivatkozás megadása</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Külső hivatkozás megadása</string>
   <string name="external_link_popup_dialog_message">Egy külső hivatkozásra mentél. Ez további adatátviteli költségekhez vezethet, vagy csak egyszerűen nem fog működni, ha offline vagy. Folytatni szeretnéd?</string>
   <string name="do_not_ask_anymore">Ne kérdezz többször</string>
   <string name="your_languages">Nyelvek kiválasztása:</string>

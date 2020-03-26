@@ -24,6 +24,7 @@
   <string name="choose_file">Επιλογή ZIM Content File (*.zim)</string>
   <string name="open_in_new_tab">Άνοιγμα συνδέσμου σε νέα καρτέλα;</string>
   <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί.</string>
+  <string name="zim_not_opened">Δεν μπόρεσε να ανοιχθεί το αρχείο zim</string>
   <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
   <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
   <string name="pref_display_title">Εμφάνιση</string>
@@ -47,7 +48,7 @@
   <string name="pref_clear_all_history_title">Εκκαθάριση ιστορικού</string>
   <string name="pref_clear_all_history_summary">Εκκαθάριση ιστορικού πρόσφατων αναζητήσεων και ετικετών</string>
   <string name="all_history_cleared">Όλο το ιστορικό καθαρίστηκε</string>
-  <string name="clear_all_history_dialog_title">Εκκαθάριση όλου του ιστορικού</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Εκκαθάριση όλου του ιστορικού</string>
   <string name="delete">Διαγραφή</string>
   <string name="delete_specific_search_toast">Η πρόσφατη αναζήτηση αφαιρέθηκε</string>
   <string name="got_it">Κατάλαβα</string>
@@ -79,6 +80,7 @@
   <string name="zim_no_pic">Χωρίς εικόνες</string>
   <string name="zim_no_vid">Χωρίς βίντεο</string>
   <string name="no_network_connection">Δεν υπάρχει σύνδεση στο δίκτυο</string>
+  <string name="settings">Ρυθμίσεις</string>
   <string name="help_2">Τι κάνει το Kiwix;</string>
   <string name="help_3">Το Kiwix είναι ένας αναγνώστης περιεχομένου εκτός σύνδεσης. Φέρεται πολύ σαν περιηγητής αλλά αντί να έχει πρόσβαση σε διαδικτυακές σελίδες, διαβάζει περιεχόμενο από ένα αρχείο σε μορφοποίηση ZIM.</string>
   <string name="help_5">Που είναι το περιεχόμενο;</string>
@@ -111,7 +113,7 @@
   <string name="time_second">δ</string>
   <string name="time_left">έμεινε</string>
   <string name="pref_external_link_popup_title">Προειδοποίησέ με όταν μπαίνω σε εξωτερικούς συνδέσμους</string>
-  <string name="external_link_popup_dialog_title">Είσοδος σε εξωτερικό σύνδεσμο</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Είσοδος σε εξωτερικό σύνδεσμο</string>
   <string name="external_link_popup_dialog_message">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>
   <string name="do_not_ask_anymore">Μη με ρωτήσεις άλλο</string>
   <string name="your_languages">Επιλεγμένες γλώσσες:</string>
