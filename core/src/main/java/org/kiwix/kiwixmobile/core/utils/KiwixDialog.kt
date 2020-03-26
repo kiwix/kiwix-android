@@ -166,7 +166,7 @@ sealed class KiwixDialog(
   )
 
   open class YesNoDialog(
-    title: Int,
+    title: Int?,
     message: Int
   ) : KiwixDialog(title, message, R.string.yes, R.string.no) {
     object StopDownload : YesNoDialog(
@@ -178,7 +178,7 @@ sealed class KiwixDialog(
     )
 
     object OpenInNewTab : YesNoDialog(
-      R.string.open_in_new_tab, R.string.open_in_new_tab
+      null, R.string.open_in_new_tab
     )
   }
 
