@@ -31,13 +31,9 @@ object ServerUtils {
   @JvmStatic fun getIpAddress(): String? {
     var ip = ""
     try {
-      val enumNetworkInterfaces = NetworkInterface.getNetworkInterfaces()
-      while (enumNetworkInterfaces.hasMoreElements()) {
-        val networkInterface = enumNetworkInterfaces.nextElement()
-        val enumInetAddress = networkInterface.inetAddresses
-        while (enumInetAddress.hasMoreElements()) {
-          ip += formatLocalAddress(enumInetAddress.nextElement())
-        }
+      for (networkInterface in NetworkInterface.getNetworkInterfaces()) {
+        for (inetAddress in networkInterface.inetAddresses)
+          ip += formatLocalAddress(inetAddress)
       }
       // To remove extra characters from IP for Android Pie
       if (ip.length > 14) {
