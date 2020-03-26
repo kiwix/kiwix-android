@@ -50,13 +50,8 @@ object ServerUtils {
     return ip
   }
 
-  private fun formatLocalAddress(inetAddress: InetAddress): String {
-    var result = ""
-    if (inetAddress.isSiteLocalAddress) {
-      result += inetAddress.hostAddress + "\n"
-    }
-    return result
-  }
+  private fun formatLocalAddress(inetAddress: InetAddress): String =
+    (inetAddress.hostAddress + "\n").takeIf { inetAddress.isSiteLocalAddress } ?: ""
 
   @Suppress("MagicNumber")
   private fun formatIpForAndroidPie(ip: String): String {
