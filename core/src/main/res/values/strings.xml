@@ -106,7 +106,7 @@
   <string name="delete_zim_body">Delete %s?</string>
   <string name="delete_specific_zim_toast" tools:keep="@string/delete_specific_zim_toast">File deleted</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
-  <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download this file.</string>
+  <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
   <string name="space_available" tools:keep="@string/space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">No Pictures</string>

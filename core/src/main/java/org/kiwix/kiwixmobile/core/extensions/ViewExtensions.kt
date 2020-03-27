@@ -37,6 +37,20 @@ fun View.snack(
   }.show()
 }
 
+fun View.snack(
+  message: String,
+  actionStringId: Int? = null,
+  actionClick: (() -> Unit)? = null,
+  @ColorInt actionTextColor: Int = Color.WHITE
+) {
+  Snackbar.make(
+    this, message, Snackbar.LENGTH_LONG
+  ).apply {
+    actionStringId?.let { setAction(it) { actionClick?.invoke() } }
+    setActionTextColor(actionTextColor)
+  }.show()
+}
+
 fun View.snack(stringId: Int) {
   snack(stringId, null, null)
 }
