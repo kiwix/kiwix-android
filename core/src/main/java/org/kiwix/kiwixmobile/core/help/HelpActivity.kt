@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.help
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DividerItemDecoration
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -30,14 +31,14 @@ import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_image
 import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_text_view
 import kotlinx.android.synthetic.main.activity_help.activity_help_recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
+import java.util.HashMap
 
 class HelpActivity : BaseActivity() {
   private val titleDescriptionMap by lazy {
-    hashMapOf(R.string.help_2 to R.array.description_help_2,
-              R.string.help_5 to R.array.description_help_5
-    ).entries.associateTo(hashMapOf<String, String>(),
-      { getString(it.key) to resources.getStringArray(it.value)
-        .joinToString(separator = System.getProperty("line.separator")!!) })
+    listOf(
+      R.string.help_2 to R.array.description_help_2,
+      R.string.help_5 to R.array.description_help_5
+    )
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,22 +49,26 @@ class HelpActivity : BaseActivity() {
     activity_help_feedback_image_view.setOnClickListener { sendFeedback() }
     setSupportActionBar(toolbar)
     toolbar.setNavigationOnClickListener { onBackPressed() }
-    if (supportActionBar != null) {
-      supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-      supportActionBar!!.setTitle(R.string.menu_help)
+    supportActionBar?.let {
+      it.setDisplayHomeAsUpEnabled(true)
+      it.setTitle(R.string.menu_help)
     }
-
     activity_help_recycler_view.addItemDecoration(
       DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
     )
-    activity_help_recycler_view.adapter = HelpAdapter(titleDescriptionMap)
+    activity_help_recycler_view.adapter = HelpAdapter(
+      titleDescriptionMap.associate {
+        getString(it.first) to resources.getStringArray(it.second)
+          .joinToString(separator = System.getProperty("line.separator")!!)
+      } as HashMap<String, String>?
+    )
   }
 
   private fun sendFeedback() {
     val intent = Intent(Intent.ACTION_SENDTO)
-    val uriText = "mailto:${Uri.encode(Constants.CONTACT_EMAIL_ADDRESS)}" +
-        "?subject=${Uri.encode("Feedback in ${getCurrentLocale(this).displayLanguage}")}"
-    intent.data = Uri.parse(uriText)
+    intent.data = ("mailto:${Uri.encode(Constants.CONTACT_EMAIL_ADDRESS)}" +
+      "?subject=${Uri.encode("Feedback in ${getCurrentLocale(this).displayLanguage}")}")
+      .toUri()
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"))
   }
 
