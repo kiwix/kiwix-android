@@ -37,8 +37,8 @@ class HelpActivity : BaseActivity() {
     listOf(
       R.string.help_2 to R.array.description_help_2,
       R.string.help_5 to R.array.description_help_5
-    ).associate { (first, second) ->
-      getString(first) to resources.getStringArray(second)
+    ).associate { (title, description) ->
+      getString(title) to resources.getStringArray(description)
         .joinToString(separator = System.getProperty("line.separator")!!)
     }
   }
