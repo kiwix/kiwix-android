@@ -17,14 +17,11 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import android.content.Context
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
 import org.kiwix.kiwixmobile.core.NightModeConfig
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 /**
@@ -34,17 +31,14 @@ import javax.inject.Inject
  */
 
 class NightModeViewPainter @Inject constructor(
-  val context: Context?
+  val nightModeConfig: NightModeConfig
 ) {
 
-  private var nightModeConfig: NightModeConfig? = null
-  private val invertedPaint = createInvertedPaint()
+  private val invertedPaint =
+    Paint().apply { colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS) }
 
   fun update(view: View) {
-    val sharedPreferenceUtil = SharedPreferenceUtil(context)
-    nightModeConfig = context?.let { NightModeConfig(sharedPreferenceUtil, it) }
-
-    if (nightModeConfig?.isNightModeActive()!!) {
+    if (nightModeConfig.isNightModeActive()) {
       activateNightMode(view)
     } else {
       deactivateNightMode(view)
@@ -55,10 +49,7 @@ class NightModeViewPainter @Inject constructor(
     webview: KiwixWebView,
     videoView: ViewGroup
   ) {
-    val sharedPreferenceUtil = SharedPreferenceUtil(context)
-    nightModeConfig = context?.let { NightModeConfig(sharedPreferenceUtil, it) }
-
-    if (nightModeConfig?.isNightModeActive()!!) {
+    if (nightModeConfig.isNightModeActive()) {
       activateNightMode(webview, videoView)
     } else {
       deactivateNightMode(webview, videoView)
@@ -78,19 +69,11 @@ class NightModeViewPainter @Inject constructor(
     view.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
   }
 
-  private fun activateNightMode(webview: WebView, videoView: ViewGroup) {
+  private fun activateNightMode(webview: KiwixWebView, videoView: ViewGroup) {
     if (webview.url != null && webview.url == CoreMainActivity.HOME_URL) {
       return
     }
     webview.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
     videoView.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
-  }
-
-  private fun createInvertedPaint(): Paint {
-    val paint = Paint()
-    val filterInvert =
-      ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
-    paint.colorFilter = filterInvert
-    return paint
   }
 }

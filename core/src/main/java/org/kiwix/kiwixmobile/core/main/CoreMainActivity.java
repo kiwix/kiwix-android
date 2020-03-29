@@ -493,7 +493,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void setupTabsAdapter() {
-    tabsAdapter = new TabsAdapter(this, webViewList);
+    tabsAdapter = new TabsAdapter(this, webViewList, painter);
     tabsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
       @Override
       public void onChanged() {
@@ -1277,7 +1277,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
-    painter.update(getCurrentWebView(), videoView);
+    updateNightMode();
   }
 
   private void openFullScreenIfEnabled() {
@@ -1547,6 +1547,10 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
+  private void updateNightMode() {
+    painter.update(getCurrentWebView(), videoView);
+  }
+
   private void loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
@@ -1565,7 +1569,7 @@ public abstract class CoreMainActivity extends BaseActivity
     }
 
     openFullScreenIfEnabled();
-    painter.update(getCurrentWebView(), videoView);
+    updateNightMode();
   }
 
   private boolean isInFullScreenMode() {
@@ -1632,7 +1636,7 @@ public abstract class CoreMainActivity extends BaseActivity
     }
     updateBottomToolbarVisibility();
     openFullScreenIfEnabled();
-    painter.update(getCurrentWebView(), videoView);
+    updateNightMode();
   }
 
   protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {
