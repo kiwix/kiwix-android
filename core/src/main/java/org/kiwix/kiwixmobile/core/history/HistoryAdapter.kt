@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import butterknife.BindView
 import butterknife.ButterKnife
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.layout
 import org.kiwix.kiwixmobile.core.R.string
@@ -72,11 +73,11 @@ internal class HistoryAdapter(
 
     if (todaysDate != null && todaysDate.contentEquals(date)) {
       holder.date.setText(
-        string.time_today
+        R.string.time_today
       )
     } else if (yesterdayDate != null && yesterdayDate.contentEquals(date)) {
       holder.date.setText(
-        string.time_yesterday
+        R.string.time_yesterday
       )
     } else {
       holder.date.text = date
