@@ -518,9 +518,13 @@ public abstract class CoreMainActivity extends BaseActivity
 
       @Override
       public void onSectionClick(View view, int position) {
-        loadUrlWithCurrentWebview("javascript:document.getElementById('"
-          + documentSections.get(position).id
-          + "').scrollIntoView();");
+        loadUrlWithCurrentWebview("javascript:"
+          + "var v= document.getElementById('"+ documentSections.get(position).id+"')"
+          + ".parentElement.parentElement;"
+          + " while(parseInt(v.getAttribute('data-level'))>=2)"
+          + "{v.open=true;v=v.parentElement;} "
+          + "document.getElementById('"+documentSections.get(position).id+"')"
+          + ".scrollIntoView();");
         drawerLayout.closeDrawers();
       }
     });
