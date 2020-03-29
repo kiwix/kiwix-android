@@ -103,6 +103,7 @@ class ZimManageViewModel @Inject constructor(
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
+  val currentPage = MutableLiveData<Int>()
 
   val requestFileSystemCheck = PublishProcessor.create<Unit>()
   val fileSelectActions = PublishProcessor.create<FileSelectActions>()
@@ -156,6 +157,10 @@ class ZimManageViewModel @Inject constructor(
       }
     )
   }, Throwable::printStackTrace)
+
+  fun currentTabIndex(position: Int) {
+    currentPage.value = position
+  }
 
   private fun startMultiSelectionAndSelectBook(
     bookOnDisk: BookOnDisk

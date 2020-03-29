@@ -24,7 +24,6 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
 import org.kiwix.kiwixmobile.R
@@ -38,7 +37,6 @@ import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import javax.inject.Inject
 
 class ZimManageActivity : BaseActivity() {
@@ -71,36 +69,13 @@ class ZimManageActivity : BaseActivity() {
       offscreenPageLimit = sectionsPagerAdapter.count - 1
       tabs.setupWithViewPager(this)
       addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
-      addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-
-        override fun onPageScrollStateChanged(state: Int) {
-          // empty method
-        }
-
-        override fun onPageScrolled(
-          position: Int,
-          positionOffset: Float,
-          positionOffsetPixels: Int
-        ) {
-          if (position == 1) {
-            val page =
-              supportFragmentManager.findFragmentByTag(
-                "android:switcher:" +
-                  R.id.manageViewPager + ":" +
-                  0
-              )
-            if (page != null) {
-              (page as ZimFileSelectFragment).finishActionMode()
-            }
-          }
-        }
-
-        override fun onPageSelected(position: Int) {
-          // empty method
-        }
-      })
+      addOnPageChangeListener(SimplePageChangeListener(::updatePage))
     }
     setViewPagerPositionFromIntent(intent)
+  }
+
+  private fun updatePage(position: Int) {
+    zimManageViewModel.currentTabIndex(position)
   }
 
   override fun onNewIntent(intent: Intent?) {
