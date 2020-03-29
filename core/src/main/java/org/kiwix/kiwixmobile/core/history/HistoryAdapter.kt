@@ -118,12 +118,12 @@ internal class HistoryAdapter(
   internal interface OnItemClickListener {
     fun onItemClick(
       favicon: ImageView,
-      history: HistoryItem?
+      history: HistoryItem
     )
 
     fun onItemLongClick(
       favicon: ImageView,
-      history: HistoryItem?
+      history: HistoryItem
     ): Boolean
   }
 
