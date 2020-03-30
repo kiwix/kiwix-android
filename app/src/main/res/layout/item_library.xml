@@ -4,6 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:theme="@style/Widget.KiwixTheme.CardView"
   android:layout_margin="@dimen/card_margin"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -136,7 +137,7 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:alpha=".5"
-      android:background="@color/pure_grey"
+      android:background="@color/pure_gray"
       app:layout_constraintBottom_toBottomOf="@id/constraint_layout"
       app:layout_constraintEnd_toEndOf="@id/constraint_layout"
       app:layout_constraintStart_toStartOf="@id/constraint_layout"

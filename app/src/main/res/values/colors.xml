@@ -18,7 +18,7 @@
   -->
 
 <resources>
-  <color name="pure_grey">#808080</color>
+  <color name="pure_gray">#808080</color>
   <color name="blueTransparent">#962e7ac4</color>
   <color name="greenTick">#4CAF50</color>
   <color name="stopServer">#E53935</color>
