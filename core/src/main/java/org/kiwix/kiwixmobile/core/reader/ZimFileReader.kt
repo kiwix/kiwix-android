@@ -33,7 +33,7 @@ import org.kiwix.kiwixlib.Pair
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_URI
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
@@ -135,10 +135,10 @@ class ZimFileReader constructor(
   fun getRedirect(url: String) = "${toRedirect(url)}"
 
   fun isRedirect(url: String) =
-    url.startsWith("$CONTENT_URI") && url != getRedirect(url)
+    url.startsWith(CONTENT_PREFIX) && url != getRedirect(url)
 
   private fun toRedirect(url: String) =
-    "$CONTENT_URI${jniKiwixReader.checkUrl(url.toUri().filePath)}".toUri()
+    "$CONTENT_PREFIX${jniKiwixReader.checkUrl(url.toUri().filePath)}".toUri()
 
   private fun loadContent(uri: String) =
     try {
@@ -234,9 +234,7 @@ class ZimFileReader constructor(
     @JvmField
     val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
 
-    @JvmField
-    val CONTENT_URI: Uri? =
-      Uri.parse("content://${CoreApp.getInstance().packageName}.zim.base/")
+    const val CONTENT_PREFIX: String = "zim://content/"
     private val INVERT_IMAGES_VIDEO =
       """
         img, video, div[poster], div#header { 
@@ -260,7 +258,7 @@ private fun String.removeArguments() = substringBefore("?")
 private val Uri.filePath: String
   get() = toString().filePath
 private val String.filePath: String
-  get() = substringAfter("$CONTENT_URI").substringBefore("#")
+  get() = substringAfter(CONTENT_PREFIX).substringBefore("#")
 private val String.mimeType: String?
   get() = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
     MimeTypeMap.getFileExtensionFromUrl(this)
