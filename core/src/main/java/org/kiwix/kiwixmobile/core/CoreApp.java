@@ -49,7 +49,6 @@ public abstract class CoreApp extends Application {
   NightModeConfig nightModeConfig;
   @Inject
   KiwixDatabase kiwixDatabase;
-
   /**
    * The init of this class does the work of initializing,
    * simply injecting it is all that there is to be done
