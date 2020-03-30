@@ -15,23 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.intro
 
-package org.kiwix.kiwixmobile.intro;
+import org.kiwix.kiwixmobile.core.base.BasePresenter
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.intro.IntroContract.Presenter
+import org.kiwix.kiwixmobile.intro.IntroContract.View
+import javax.inject.Inject
 
-import javax.inject.Inject;
-import org.kiwix.kiwixmobile.core.base.BasePresenter;
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-
-public class IntroPresenter extends BasePresenter<IntroContract.View>
-  implements IntroContract.Presenter {
-  private final SharedPreferenceUtil preferences;
-
-  @Inject IntroPresenter(SharedPreferenceUtil preferences) {
-    this.preferences = preferences;
-  }
-
-  @Override
-  public void setIntroShown() {
-    preferences.setIntroShown();
+class IntroPresenter @Inject internal constructor(private val preferences: SharedPreferenceUtil) :
+  BasePresenter<View?>(), Presenter {
+  override fun setIntroShown() {
+    preferences.setIntroShown()
   }
 }
