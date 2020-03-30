@@ -31,14 +31,16 @@ import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_image
 import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_text_view
 import kotlinx.android.synthetic.main.activity_help.activity_help_recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
-import java.util.HashMap
 
 class HelpActivity : BaseActivity() {
   private val titleDescriptionMap by lazy {
     listOf(
       R.string.help_2 to R.array.description_help_2,
       R.string.help_5 to R.array.description_help_5
-    )
+    ).associate {
+      getString(it.first) to resources.getStringArray(it.second)
+        .joinToString(separator = System.getProperty("line.separator")!!)
+    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,12 +58,7 @@ class HelpActivity : BaseActivity() {
     activity_help_recycler_view.addItemDecoration(
       DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
     )
-    activity_help_recycler_view.adapter = HelpAdapter(
-      titleDescriptionMap.associate {
-        getString(it.first) to resources.getStringArray(it.second)
-          .joinToString(separator = System.getProperty("line.separator")!!)
-      } as HashMap<String, String>?
-    )
+    activity_help_recycler_view.adapter = HelpAdapter(titleDescriptionMap)
   }
 
   private fun sendFeedback() {
