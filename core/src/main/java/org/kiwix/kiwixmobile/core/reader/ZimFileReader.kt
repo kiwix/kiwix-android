@@ -81,7 +81,7 @@ class ZimFileReader constructor(
   val description: String get() = jniKiwixReader.description
   val favicon: String? get() = jniKiwixReader.favicon
   val language: String get() = jniKiwixReader.language
-  val tags: String get() = "${getContentAndMimeType("M/Tags")}"
+  val tags: String get() = "${getContent("M/Tags")}"
   private val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
