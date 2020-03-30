@@ -41,7 +41,7 @@ data class FetchDownloadEntity(
   val progress: Int = -1,
   val bookId: String,
   val title: String,
-  val description: String,
+  val description: String?,
   val language: String,
   val creator: String,
   val publisher: String,

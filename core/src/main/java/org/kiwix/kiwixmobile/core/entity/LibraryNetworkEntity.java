@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.entity;
 
+import androidx.annotation.Nullable;
 import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -51,7 +52,7 @@ public class LibraryNetworkEntity {
     public String title;
 
     @Attribute(name = "description", required = false)
-    public String description;
+    @Nullable public String description;
 
     @Attribute(name = "language", required = false)
     public String language;
@@ -103,6 +104,7 @@ public class LibraryNetworkEntity {
       return this.title;
     }
 
+    @Nullable
     public String getDescription() {
       return this.description;
     }

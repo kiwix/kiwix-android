@@ -62,7 +62,7 @@ sealed class LibraryListItem {
     val downloadId: Long,
     val favIcon: Base64String,
     val title: String,
-    val description: String,
+    val description: String?,
     val bytesDownloaded: Long,
     val totalSizeBytes: Long,
     val progress: Int,
