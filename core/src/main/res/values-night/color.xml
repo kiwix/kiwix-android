@@ -14,6 +14,7 @@
   <color name="color_on_surface">@color/white</color>
   <color name="color_on_error">@color/white</color>
 
-  <color name="text_secondary">@color/gray500</color>
-  <color name="text_tertiary">@color/gray700</color>
+  <color name="text_secondary">@color/gray350</color>
+  <color name="text_tertiary">@color/gray500</color>
+  <color name="card_view_background">@color/gray850</color>
 </resources>

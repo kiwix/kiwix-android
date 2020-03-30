@@ -52,6 +52,7 @@
       android:id="@+id/recycler_view"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/home_list_margin"
       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="@id/content_main_card"
