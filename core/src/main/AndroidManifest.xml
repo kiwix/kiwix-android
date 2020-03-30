@@ -29,11 +29,6 @@
 
     <activity android:name=".bookmark.BookmarksActivity" />
 
-    <provider
-      android:name=".reader.ZimContentProvider"
-      android:authorities="${applicationId}.zim.base"
-      android:exported="true" />
-
     <activity
       android:name=".error.ErrorActivity"
       android:process=":error_activity" />

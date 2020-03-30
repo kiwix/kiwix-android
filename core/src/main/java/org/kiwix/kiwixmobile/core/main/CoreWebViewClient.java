@@ -24,8 +24,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import androidx.annotation.Nullable;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
@@ -136,5 +138,15 @@ public abstract class CoreWebViewClient extends WebViewClient {
     callback.setHomePage(home);
     view.removeAllViews();
     view.addView(home);
+  }
+
+  @Nullable
+  @Override
+  public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+    if (url.startsWith("content")) {
+      return zimReaderContainer.load(url);
+    } else {
+      return super.shouldInterceptRequest(view, url);
+    }
   }
 }
