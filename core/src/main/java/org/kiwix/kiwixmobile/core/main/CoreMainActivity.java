@@ -1096,6 +1096,7 @@ public abstract class CoreMainActivity extends BaseActivity
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (file.exists()) {
         openAndSetInContainer(file);
+        updateTitle();
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
         ContextExtensionsKt.toast(this, R.string.error_file_not_found, Toast.LENGTH_LONG);
@@ -1729,6 +1730,7 @@ public abstract class CoreMainActivity extends BaseActivity
     homeRecyclerView.setAdapter(booksAdapter);
     downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
     downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
+    updateTitle();
   }
 
   private void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
