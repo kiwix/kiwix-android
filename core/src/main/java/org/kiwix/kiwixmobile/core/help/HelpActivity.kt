@@ -25,12 +25,12 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.utils.Constants
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_image_view
 import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_text_view
 import kotlinx.android.synthetic.main.activity_help.activity_help_recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
+import org.kiwix.kiwixmobile.core.utils.CONTACT_EMAIL_ADDRESS
 
 class HelpActivity : BaseActivity() {
   private val titleDescriptionMap by lazy {
@@ -63,7 +63,7 @@ class HelpActivity : BaseActivity() {
 
   private fun sendFeedback() {
     val intent = Intent(Intent.ACTION_SENDTO)
-    intent.data = ("mailto:${Uri.encode(Constants.CONTACT_EMAIL_ADDRESS)}" +
+    intent.data = ("mailto:${Uri.encode(CONTACT_EMAIL_ADDRESS)}" +
       "?subject=${Uri.encode("Feedback in ${getCurrentLocale(this).displayLanguage}")}")
       .toUri()
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"))
