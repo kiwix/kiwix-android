@@ -11,7 +11,7 @@
     android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/card_view_background"
+    android:background="?selectableItemBackground"
     android:minHeight="?listPreferredItemHeight"
     android:orientation="horizontal"
     tools:ignore="Overdraw, RTLHardcoded">
