@@ -17,22 +17,23 @@
  */
 package org.kiwix.kiwixmobile.core.history
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.header_date.header_date
+import kotlinx.android.synthetic.main.header_date.view.header_date
+import kotlinx.android.synthetic.main.item_bookmark_history.favicon
+import kotlinx.android.synthetic.main.item_bookmark_history.title
+import kotlinx.android.synthetic.main.item_bookmark_history.view.favicon
+import kotlinx.android.synthetic.main.item_bookmark_history.view.title
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.layout
-import org.kiwix.kiwixmobile.core.R2.id
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
+import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 import org.threeten.bp.LocalDate
@@ -46,9 +47,9 @@ internal class HistoryAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     return if (viewType == TYPE_ITEM) {
-      Item(parent.inflate(layout.item_bookmark_history, false))
+      Item(parent.inflate(R.layout.item_bookmark_history, false))
     } else {
-      Category(parent.inflate(layout.header_date, false))
+      Category(parent.inflate(R.layout.header_date, false))
     }
   }
 
@@ -68,28 +69,27 @@ internal class HistoryAdapter(
     val formatter = DateTimeFormatter.ofPattern("d MMM yyyy")
     val givenDate = LocalDate.parse(date, formatter)
 
-    if (todaysDate?.equals(givenDate) == true) {
-      holder.date.setText(
-        R.string.time_today
-      )
-    } else if (yesterdayDate?.equals(givenDate) == true) {
-      holder.date.setText(
-        R.string.time_yesterday
-      )
-    } else {
-      holder.date.text = date
+    when {
+      todaysDate == givenDate -> {
+        holder.header_date.setText(
+          R.string.time_today
+        )
+      }
+      yesterdayDate == givenDate -> {
+        holder.header_date.setText(
+          R.string.time_yesterday
+        )
+      }
+      else -> {
+        holder.header_date.text = date
+      }
     }
-  }
-
-  fun ImageView.setImageDrawableCompat(context: Context, id: Int) {
-    setImageDrawable(ContextCompat.getDrawable(context, id))
   }
 
   private fun setItemDataWithHelpOfHistoryItem(holder: Item, history: HistoryItem) {
     holder.title.text = history.historyTitle
     if (deleteList.contains(history)) {
       holder.favicon.setImageDrawableCompat(
-          holder.favicon.context,
           R.drawable.ic_check_circle_blue_24dp
       )
     } else {
@@ -124,18 +124,16 @@ internal class HistoryAdapter(
     ): Boolean
   }
 
-  internal inner class Item(itemView: View) : ViewHolder(itemView) {
-    @BindView(id.favicon) lateinit var favicon: ImageView
-    @BindView(id.title) lateinit var title: TextView
-    init {
-      ButterKnife.bind(this, itemView)
+  class Item(itemView: View) : BaseViewHolder<View>(itemView) {
+    override fun bind(item: View) {
+      favicon.setImageDrawable(item.favicon.drawable)
+      title.text = item.title.text
     }
   }
 
-  internal inner class Category(itemView: View) : ViewHolder(itemView) {
-    @BindView(id.header_date) lateinit var date: TextView
-    init {
-      ButterKnife.bind(this, itemView)
+  class Category(itemView: View) : BaseViewHolder<View>(itemView) {
+    override fun bind(item: View) {
+      header_date.text = item.header_date.text
     }
   }
 
