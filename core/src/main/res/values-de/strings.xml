@@ -49,7 +49,7 @@
   <string name="delete_recent_search_item">Dieses Element löschen?</string>
   <string name="pref_clear_all_history_title">Verlauf löschen</string>
   <string name="pref_clear_all_history_summary">Letzte Suchanfragen und Reiterverlauf löschen</string>
-  <string name="all_history_cleared_toast">Gesamter Verlauf gelöscht</string>
+  <string name="all_history_cleared">Gesamter Verlauf gelöscht</string>
   <string name="clear_all_history_dialog_title">Gesamten Verlauf löschen</string>
   <string name="delete">Löschen</string>
   <string name="delete_specific_search_toast">Letzte Suche entfernt</string>

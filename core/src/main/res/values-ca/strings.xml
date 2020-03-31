@@ -48,7 +48,7 @@
   <string name="no_section_info">No es van trobar capçaleres de contingut</string>
   <string name="clear_recent_and_tabs_history_dialog">Segur que vols esborrar l\'historial de cerques i restablir totes les pestanyes actives?</string>
   <string name="delete_recent_search_item">Esborrar aquest element?</string>
-  <string name="all_history_cleared_toast">Esborrat tot l\'historial</string>
+  <string name="all_history_cleared">Esborrat tot l\'historial</string>
   <string name="clear_all_history_dialog_title">Esborra tot l\'historial</string>
   <string name="delete">Esborrar</string>
   <string name="delete_specific_search_toast">Les darreres cerques han estat suprimides</string>

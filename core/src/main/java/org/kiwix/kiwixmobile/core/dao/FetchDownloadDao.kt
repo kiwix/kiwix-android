@@ -85,7 +85,7 @@ class FetchDownloadDao @Inject constructor(
     box.store.callInTx {
       if (doesNotAlreadyExist(book)) {
         insert(
-          downloadRequester.enqueue(DownloadRequest(url, book)),
+          downloadRequester.enqueue(DownloadRequest(url)),
           book = book
         )
       }

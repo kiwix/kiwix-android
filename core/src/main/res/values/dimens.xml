@@ -27,4 +27,6 @@
   <!-- Workaround to store floats in dimen -->
   <item format="float" name="material_light_hint_alpha" type="dimen">0.38</item>
   <item format="float" name="material_dark_hint_pressed_alpha" type="dimen">0.70</item>
+
+  <dimen name="card_margin">5dp</dimen>
 </resources>

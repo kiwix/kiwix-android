@@ -82,8 +82,8 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 0, 180).start();
         expand(description);
       } else {
-        collapse(description);
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 180, 360).start();
+        collapse(description);
       }
     }
   }

@@ -56,7 +56,7 @@
   <string name="delete_recent_search_item">Slet dette element?</string>
   <string name="pref_clear_all_history_title">Ryd historik</string>
   <string name="pref_clear_all_history_summary">Ryd seneste søgninger og fanebladshistorik</string>
-  <string name="all_history_cleared_toast">Al historik fjernet</string>
+  <string name="all_history_cleared">Al historik fjernet</string>
   <string name="clear_all_history_dialog_title">Ryd al historik</string>
   <string name="share">Del</string>
   <string name="delete">Slet</string>

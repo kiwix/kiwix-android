@@ -50,7 +50,7 @@
   <string name="delete_recent_search_item">Dilemel an elfenn-mañ ?</string>
   <string name="pref_clear_all_history_title">Diverkañ ar roll-istor</string>
   <string name="pref_clear_all_history_summary">Diverkañ an enklaskoù nevez ha roll-isor an ivinelloù</string>
-  <string name="all_history_cleared_toast">Diverket eo ar roll-istor a-bezh</string>
+  <string name="all_history_cleared">Diverket eo ar roll-istor a-bezh</string>
   <string name="clear_all_history_dialog_title">Dilemel ar roll-istor a-bezh</string>
   <string name="share">Rannañ</string>
   <string name="selected_file_cab_app_chooser_title">Rannañ ar restroù ZIM gant :</string>

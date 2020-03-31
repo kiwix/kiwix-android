@@ -15,11 +15,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.utils;
+package org.kiwix.kiwixmobile.core.base
 
-public class StorageUtils {
+import io.reactivex.disposables.CompositeDisposable
+import org.kiwix.kiwixmobile.core.base.BaseContract.Presenter
+import org.kiwix.kiwixmobile.core.base.BaseContract.View
 
-  public static String getFileNameFromUrl(String url) {
-    return NetworkUtils.getFileNameFromUrl(url).replace(".meta4", "");
+/**
+ * All presenters should inherit from this presenter.
+ */
+abstract class BasePresenter<T : View<*>?> : Presenter<T> {
+  @JvmField val compositeDisposable = CompositeDisposable()
+  @JvmField var view: T? = null
+
+  override fun attachView(view: T) {
+    this.view = view
+  }
+
+  override fun detachView() {
+    view = null
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
   }
 }

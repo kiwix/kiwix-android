@@ -15,30 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.base;
+package org.kiwix.kiwixmobile.intro
 
-import io.reactivex.disposables.CompositeDisposable;
+import org.kiwix.kiwixmobile.core.base.BasePresenter
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.intro.IntroContract.Presenter
+import org.kiwix.kiwixmobile.intro.IntroContract.View
+import javax.inject.Inject
 
-/**
- * All presenters should inherit from this presenter.
- */
-
-public abstract class BasePresenter<T extends BaseContract.View>
-  implements BaseContract.Presenter<T> {
-
-  protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
-  protected T view;
-
-  @Override
-  public void attachView(T view) {
-    this.view = view;
-  }
-
-  @Override
-  public void detachView() {
-    view = null;
-    if (!compositeDisposable.isDisposed()) {
-      compositeDisposable.dispose();
-    }
+class IntroPresenter @Inject internal constructor(private val preferences: SharedPreferenceUtil) :
+  BasePresenter<View?>(), Presenter {
+  override fun setIntroShown() {
+    preferences.setIntroShown()
   }
 }

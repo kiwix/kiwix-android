@@ -76,7 +76,7 @@
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
   <string name="pref_clear_all_history_title">Vyčistit historii</string>
   <string name="pref_clear_all_history_summary">Vyčistit poslední hledání a tabulky historie</string>
-  <string name="all_history_cleared_toast">Všechna historie odstraněna</string>
+  <string name="all_history_cleared">Všechna historie odstraněna</string>
   <string name="clear_all_history_dialog_title">Vyčistit celou historii</string>
   <string name="share">Sdílet</string>
   <string name="selected_file_cab_app_chooser_title">Sdílet soubory ZIM s:</string>

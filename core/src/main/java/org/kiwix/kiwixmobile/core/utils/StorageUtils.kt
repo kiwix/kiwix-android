@@ -15,32 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.utils
 
-package org.kiwix.kiwixmobile.core.base;
-
-public class BaseContract {
-
-  /**
-   * The contract for a view must extend this interface.
-   *
-   * @param <T> the type of presenter associated with the view
-   */
-  public interface View<T> {
-
-  }
-
-  public interface Presenter<T> {
-
-    /**
-     * Binds presenter with a view when resumed. The Presenter will perform initialization here.
-     *
-     * @param view the view associated with this presenter
-     */
-    void attachView(T view);
-
-    /**
-     * Drops the reference to the view when destroyed
-     */
-    void detachView();
-  }
+object StorageUtils {
+  @JvmStatic fun getFileNameFromUrl(url: String?): String =
+    NetworkUtils.getFileNameFromUrl(url).replace(".meta4", "")
 }

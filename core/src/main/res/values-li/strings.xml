@@ -38,7 +38,7 @@
   <string name="delete_recent_search_item">Sjaf dit deil eweg?</string>
   <string name="pref_clear_all_history_title">Maak gesjiedenis laeg</string>
   <string name="pref_clear_all_history_summary">Haol recènte zeukopdrachte en tabblajer eweg oete gesjiechte</string>
-  <string name="all_history_cleared_toast">Ganse gesjiechte eweggehaold</string>
+  <string name="all_history_cleared">Ganse gesjiechte eweggehaold</string>
   <string name="clear_all_history_dialog_title">Maak ganse gesjiechte laeg</string>
   <string name="delete">Sjaf eweg</string>
   <string name="delete_specific_search_toast">Recènte zeukopdrach eweggesjaf</string>

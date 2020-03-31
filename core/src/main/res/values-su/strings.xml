@@ -16,7 +16,7 @@
   <string name="pref_info_title">Émbaran</string>
   <string name="pref_info_version">Vérsi</string>
   <string name="pref_language_title">Basa</string>
-  <string name="all_history_cleared_toast">Sakum Jujutan Dibersihkeun</string>
+  <string name="all_history_cleared">Sakum Jujutan Dibersihkeun</string>
   <string name="clear_all_history_dialog_title">Bersihkeun Sakum Markah</string>
   <string name="delete">Pupus</string>
   <string name="did_you_know">Nyaho teu anjeun?</string>

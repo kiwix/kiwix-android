@@ -125,27 +125,27 @@ import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificat
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
-import static org.kiwix.kiwixmobile.core.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_TITLE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_EXTERNAL_LINK;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_IS_WIDGET_VOICE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_SEARCH;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_FILE_SELECT;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_HISTORY_ITEM_CHOSEN;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_PREFERENCES;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_STORAGE_PERMISSION;
-import static org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_HISTORY_CLEARED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_RESTART;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_ARTICLES;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_POSITIONS;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_TAB;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_FILE_SEARCHED;
-import static org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUEST;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_IS_WIDGET_VOICE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_SEARCH;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_ZIM_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_FILE_SELECT;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_HISTORY_ITEM_CHOSEN;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_PREFERENCES;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_STORAGE_PERMISSION;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_HISTORY_CLEARED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_ARTICLES;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_POSITIONS;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_TAB;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
@@ -389,7 +389,6 @@ public abstract class CoreMainActivity extends BaseActivity
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         bookOnDiskItem -> {
           open(bookOnDiskItem);
-          updateNightMode();
           return Unit.INSTANCE;
         },
         null,
@@ -400,13 +399,19 @@ public abstract class CoreMainActivity extends BaseActivity
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+
+    // Only check intent on first start of activity. Otherwise the intents will enter infinite loops
+    // when "Don't keep activities" is on.
+    if (savedInstanceState == null) {
+      handleIntentActions(getIntent());
+    }
   }
 
   //End of onCreate
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED));
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -621,8 +626,11 @@ public abstract class CoreMainActivity extends BaseActivity
       compatCallback.finish();
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
-    } else if (getCurrentWebView().canGoBack()) {
+    } else if (getCurrentWebView().canGoBack()
+      && !HOME_URL.equals(getCurrentWebView().getUrl())) {
       getCurrentWebView().goBack();
+    } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
+      showHomePage();
     } else {
       super.onBackPressed();
     }
@@ -653,7 +661,7 @@ public abstract class CoreMainActivity extends BaseActivity
         visitCounterPref.setNoThanksState(true);
         return Unit.INSTANCE;
       },
-      () ->{
+      () -> {
         tempVisitCount = 0;
         visitCounterPref.setCount(tempVisitCount);
         return Unit.INSTANCE;
@@ -662,17 +670,6 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   protected abstract int getIconResId();
-
-  private void goToSearch(boolean isVoice) {
-    final String zimFile = zimReaderContainer.getZimCanonicalPath();
-    saveTabStates();
-    Intent i = new Intent(this, SearchActivity.class);
-    i.putExtra(EXTRA_ZIM_FILE, zimFile);
-    if (isVoice) {
-      i.putExtra(EXTRA_IS_WIDGET_VOICE, true);
-    }
-    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-  }
 
   private void goToRateApp() {
     Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getPackageName());
@@ -850,6 +847,9 @@ public abstract class CoreMainActivity extends BaseActivity
   private void closeTab(int index) {
     tempForUndo = webViewList.get(index);
     webViewList.remove(index);
+    if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
+      currentWebViewIndex--;
+    }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
     Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
@@ -857,7 +857,7 @@ public abstract class CoreMainActivity extends BaseActivity
         webViewList.add(index, tempForUndo);
         tabsAdapter.notifyItemInserted(index);
         tabsAdapter.notifyDataSetChanged();
-        Snackbar.make(snackbarRoot,"Tab restored",Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
         setUpWebViewWithTextToSpeech();
       })
       .show();
@@ -1089,13 +1089,14 @@ public abstract class CoreMainActivity extends BaseActivity
         startActivity(intent);
         return Unit.INSTANCE;
       }
-      );
+    );
   }
 
   protected void openZimFile(@NonNull File file) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
       if (file.exists()) {
         openAndSetInContainer(file);
+        updateTitle();
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
         ContextExtensionsKt.toast(this, R.string.error_file_not_found, Toast.LENGTH_LONG);
@@ -1275,43 +1276,13 @@ public abstract class CoreMainActivity extends BaseActivity
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
-
-    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
-    Intent intent = getIntent();
-    if (intent.getAction() != null) {
-
-      switch (intent.getAction()) {
-        case Intent.ACTION_PROCESS_TEXT: {
-          saveTabStates();
-          Intent i = new Intent(this, SearchActivity.class);
-          if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-            i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
-          }
-          startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-          break;
-        }
-        case CoreSearchWidget.TEXT_CLICKED:
-          goToSearch(false);
-          break;
-        case CoreSearchWidget.STAR_CLICKED:
-          goToBookmarks();
-          break;
-        case CoreSearchWidget.MIC_CLICKED:
-          goToSearch(true);
-          break;
-        case Intent.ACTION_VIEW:
-          if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
-            saveTabStates();
-            Intent i = new Intent(this, SearchActivity.class);
-            if (intent.getData() != null) {
-              i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
-            }
-            startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
-          }
-          break;
-      }
-    }
     updateNightMode();
+  }
+
+  private void openFullScreenIfEnabled() {
+    if (isInFullScreenMode()) {
+      openFullScreen();
+    }
   }
 
   private void updateBottomToolbarVisibility() {
@@ -1332,38 +1303,83 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
+  private void goToSearch(boolean isVoice) {
+    final String zimFile = zimReaderContainer.getZimCanonicalPath();
+    saveTabStates();
+    Intent i = new Intent(this, SearchActivity.class);
+    i.putExtra(EXTRA_ZIM_FILE, zimFile);
+    i.putExtra(EXTRA_IS_WIDGET_VOICE, isVoice);
+    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+  }
+
+  private void handleIntentActions(Intent intent) {
+    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
+    if (intent.getAction() != null) {
+      if (zimReaderContainer.getId() != null) {
+        startIntentBasedOnAction(intent);
+      } else {
+        if (CoreSearchWidget.MIC_CLICKED.equals(intent.getAction())) {
+          manageZimFiles(0);
+        }
+      }
+    }
+  }
+
+  private void startIntentBasedOnAction(Intent intent) {
+    switch (intent.getAction()) {
+      case Intent.ACTION_PROCESS_TEXT: {
+        goToSearchWithText(intent);
+        break;
+      }
+      case CoreSearchWidget.TEXT_CLICKED:
+        goToSearch(false);
+        break;
+      case CoreSearchWidget.STAR_CLICKED:
+        goToBookmarks();
+        break;
+      case CoreSearchWidget.MIC_CLICKED:
+        goToSearch(true);
+        break;
+      case Intent.ACTION_VIEW:
+        if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
+          saveTabStates();
+          Intent i = new Intent(this, SearchActivity.class);
+          if (intent.getData() != null) {
+            i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+          }
+          startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+        }
+        break;
+    }
+  }
+
+  private void goToSearchWithText(Intent intent) {
+    saveTabStates();
+    Intent i = new Intent(this, SearchActivity.class);
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+      i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+    }
+    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+  }
+
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
     handleNotificationIntent(intent);
-    if (intent.getAction() != null) {
-      if (zimReaderContainer.getId() != null) {
-        switch (intent.getAction()) {
-          case CoreSearchWidget.STAR_CLICKED:
-            goToBookmarks();
-            break;
-          case CoreSearchWidget.TEXT_CLICKED:
-            goToSearch(false);
-            break;
-          case CoreSearchWidget.MIC_CLICKED:
-            goToSearch(true);
-            break;
-        }
-      } else {
-        switch (intent.getAction()) {
-          case CoreSearchWidget.STAR_CLICKED:
-          case CoreSearchWidget.TEXT_CLICKED:
-          case CoreSearchWidget.MIC_CLICKED:
-            manageZimFiles(0);
-        }
-      }
-    }
+    handleIntentActions(intent);
   }
 
   private void contentsDrawerHint() {
     drawerLayout.postDelayed(() -> drawerLayout.openDrawer(GravityCompat.END), 500);
 
     alertDialogShower.show(KiwixDialog.ContentsDrawerHint.INSTANCE);
+  }
+
+  private void openArticleInNewTab(String articleUrl) {
+    if (articleUrl != null) {
+      createNewTab();
+      loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
+    }
   }
 
   private void openArticle(String articleUrl) {
@@ -1412,7 +1428,7 @@ public abstract class CoreMainActivity extends BaseActivity
     tabRecyclerView.setAdapter(tabsAdapter);
   }
 
-  private void searchForTitle(String title) {
+  private void searchForTitle(String title, boolean openInNewTab) {
     String articleUrl;
 
     if (title.startsWith("A/")) {
@@ -1420,17 +1436,21 @@ public abstract class CoreMainActivity extends BaseActivity
     } else {
       articleUrl = zimReaderContainer.getPageUrlFromTitle(title);
     }
-    openArticle(articleUrl);
+    if (openInNewTab) {
+      openArticleInNewTab(articleUrl);
+    } else {
+      openArticle(articleUrl);
+    }
   }
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    hideTabSwitcher();
     Log.i(TAG_KIWIX, "Intent data: " + data);
-
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
+          boolean wasFromTabSwitcher = mainMenu.isInTabSwitcher();
+          hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           boolean isSearchInText =
@@ -1445,13 +1465,17 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            searchForTitle(title);
+            searchForTitle(title, wasFromTabSwitcher);
           }
-        } else { //TODO: Inform the User
+        } else if (resultCode == RESULT_CANCELED) {
+          Log.w(TAG_KIWIX, "Search cancelled or exited");
+        } else {
           Log.w(TAG_KIWIX, "Unhandled search failure");
+          Toast.makeText(this, R.string.search_error, Toast.LENGTH_SHORT).show();
         }
         break;
       case REQUEST_PREFERENCES:
+        hideTabSwitcher();
         if (resultCode == RESULT_RESTART) {
           recreate();
         }
@@ -1466,6 +1490,7 @@ public abstract class CoreMainActivity extends BaseActivity
       case BOOKMARK_CHOSEN_REQUEST:
       case REQUEST_FILE_SELECT:
       case REQUEST_HISTORY_ITEM_CHOSEN:
+        hideTabSwitcher();
         if (resultCode == RESULT_OK) {
           if (data.getBooleanExtra(HistoryActivity.USER_CLEARED_HISTORY, false)) {
             for (KiwixWebView kiwixWebView : webViewList) {
@@ -1538,9 +1563,7 @@ public abstract class CoreMainActivity extends BaseActivity
       backToTopButton.hide();
     }
 
-    if (isInFullScreenMode()) {
-      openFullScreen();
-    }
+    openFullScreenIfEnabled();
     updateNightMode();
   }
 
@@ -1615,6 +1638,8 @@ public abstract class CoreMainActivity extends BaseActivity
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
+    openFullScreenIfEnabled();
+    updateNightMode();
   }
 
   protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {
@@ -1705,6 +1730,7 @@ public abstract class CoreMainActivity extends BaseActivity
     homeRecyclerView.setAdapter(booksAdapter);
     downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
     downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
+    updateTitle();
   }
 
   private void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {

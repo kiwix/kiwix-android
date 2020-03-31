@@ -136,8 +136,8 @@ public class AddNoteDialog extends DialogFragment
     toolbar.setTitle(R.string.note);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     toolbar.setNavigationOnClickListener(v -> {
-      closeKeyboard();
       exitAddNoteDialog();
+      closeKeyboard();
     });
 
     toolbar.setOnMenuItemClickListener(item -> {
@@ -146,6 +146,8 @@ public class AddNoteDialog extends DialogFragment
         shareNote();
       } else if (itemId == R.id.save_note) {  // Saves the note as a text file
         saveNote(addNoteEditText.getText().toString());
+      } else if (itemId == R.id.delete_note) {
+        deleteNote();
       }
       return true;
     });
@@ -252,10 +254,13 @@ public class AddNoteDialog extends DialogFragment
     if (toolbar.getMenu() != null) {
       MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
       MenuItem shareItem = toolbar.getMenu().findItem(R.id.share_note);
+      MenuItem deleteItem = toolbar.getMenu().findItem(R.id.delete_note);
       saveItem.setEnabled(false);
       shareItem.setEnabled(false);
+      deleteItem.setEnabled(false);
       saveItem.getIcon().setAlpha(130);
       shareItem.getIcon().setAlpha(130);
+      deleteItem.getIcon().setAlpha(130);
     } else {
       Log.d(TAG, "Toolbar without inflated menu");
     }
@@ -266,6 +271,16 @@ public class AddNoteDialog extends DialogFragment
       MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
       saveItem.setEnabled(true);
       saveItem.getIcon().setAlpha(255);
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu");
+    }
+  }
+
+  private void enableDeleteNoteMenuItem() {
+    if (toolbar.getMenu() != null) {
+      MenuItem deleteItem = toolbar.getMenu().findItem(R.id.delete_note);
+      deleteItem.setEnabled(true);
+      deleteItem.getIcon().setAlpha(255);
     } else {
       Log.d(TAG, "Toolbar without inflated menu");
     }
@@ -337,6 +352,7 @@ public class AddNoteDialog extends DialogFragment
           fileOutputStream.close();
           showToast(R.string.note_save_successful, Toast.LENGTH_SHORT);
           noteEdited = false; // As no unsaved changes remain
+          enableDeleteNoteMenuItem();
         } catch (IOException e) {
           e.printStackTrace();
           showToast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG);
@@ -347,6 +363,19 @@ public class AddNoteDialog extends DialogFragment
       }
     } else {
       showToast(R.string.note_save_error_storage_not_writable, Toast.LENGTH_LONG);
+    }
+  }
+
+  private void deleteNote() {
+    File notesFolder = new File(zimNotesDirectory);
+    File noteFile = new File(notesFolder.getAbsolutePath(), articleNotefileName + ".txt");
+    boolean noteDeleted = noteFile.delete();
+    if (noteDeleted) {
+      addNoteEditText.getText().clear();
+      disableMenuItems();
+      showToast(R.string.note_delete_successful, Toast.LENGTH_LONG);
+    } else {
+      showToast(R.string.note_delete_unsuccessful, Toast.LENGTH_LONG);
     }
   }
 
@@ -376,8 +405,9 @@ public class AddNoteDialog extends DialogFragment
       }
 
       addNoteEditText.setText(contents.toString()); // Display the note content
-
+      addNoteEditText.setSelection(addNoteEditText.getText().length() - 1);
       enableShareNoteMenuItem(); // As note content exists which can be shared
+      enableDeleteNoteMenuItem();
     }
 
     // No action in case the note file for the currently open article doesn't exist
@@ -445,6 +475,7 @@ public class AddNoteDialog extends DialogFragment
   private void dismissAddNoteDialog() {
     Dialog dialog = getDialog();
     dialog.dismiss();
+    closeKeyboard();
   }
 
   @Override
