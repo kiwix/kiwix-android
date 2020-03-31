@@ -30,7 +30,7 @@ import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Transformation
 import android.widget.LinearLayout
-import org.kiwix.kiwixmobile.core.R.layout
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.styleable
 
 class AnimatedProgressBar : LinearLayout {
@@ -87,7 +87,7 @@ class AnimatedProgressBar : LinearLayout {
       array.recycle()
     }
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    inflater.inflate(layout.progress_bar, this, true)
+    inflater.inflate(R.layout.progress_bar, this, true)
     setBackgroundColor(backgroundColor)
   }
 
@@ -147,7 +147,7 @@ class AnimatedProgressBar : LinearLayout {
     // save the progress
     mProgress = progress
     // calculate amount the width has to change
-    val deltaWidth = mWidth * mProgress / 100 - mDrawWidth
+    val deltaWidth = (mWidth * mProgress / 100 - mDrawWidth)
     // animate the width change
     animateView(mDrawWidth, mWidth, deltaWidth)
   }
