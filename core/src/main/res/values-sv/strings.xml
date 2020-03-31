@@ -3,6 +3,7 @@
 * Abijeet Patro
 * Jopparn
 * Skalman
+* Technic2
 * WikiPhoenix
 -->
 <resources>
@@ -29,6 +30,7 @@
   <string name="no_books_selected_toast_message">Välj böcker först</string>
   <string name="server_failed_toast_message">Kunde inte starta server.</string>
   <string name="server_started_successfully_toast_message">Servern startades.</string>
+  <string name="server_stopped_successfully_toast_message">Servern stoppades.</string>
   <string name="progress_dialog_starting_server">Startar server</string>
   <string name="hotspot_dialog_neutral_button">JA, JAG HAR AKTIVERAT DET</string>
   <string name="start_server_label">Starta server</string>
@@ -61,10 +63,11 @@
   <string name="pref_clear_all_history_title">Rensa historik</string>
   <string name="pref_clear_all_history_summary">Rensa senaste sökningar och flikhistorik</string>
   <string name="all_history_cleared">All historik rensades</string>
-  <string name="clear_all_history_dialog_title">Rensa all historik</string>
+  <string name="clear_all_history_dialog_title">Rensa all historik?</string>
   <string name="share">Dela</string>
   <string name="selected_file_cab_app_chooser_title">Dela ZIM-filer med:</string>
   <string name="delete">Radera</string>
+  <string name="cancel">\nAvbryt</string>
   <string name="delete_specific_search_toast">Senaste sökning togs bort</string>
   <string name="hint_contents_drawer_message">Du kan svepa åt vänster för att se innehållet i denna artikel</string>
   <string name="got_it">Jag förstår</string>
@@ -137,7 +140,7 @@
   <string name="time_yesterday">Igår</string>
   <string name="pref_external_link_popup_title">Varna vid externa länkar</string>
   <string name="pref_external_link_popup_summary">Visar popup för att varna om ytterligare kostnader eller att det inte fungerar i offlinelänkar.</string>
-  <string name="external_link_popup_dialog_title">Går till extern länk</string>
+  <string name="external_link_popup_dialog_title">Går till extern länk!</string>
   <string name="external_link_popup_dialog_message">Du går till en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer helt enkelt inte fungera när du är offline. Vill du fortsätta?</string>
   <string name="do_not_ask_anymore">Fråga inte igen</string>
   <string name="your_languages">Valda språk:</string>
@@ -219,4 +222,6 @@
   <string name="no_results">Inga resultat</string>
   <string name="no_bookmarks">Inga bokmärken</string>
   <string name="no_history">Ingen historik</string>
+  <string name="delete_history">Radera historik?</string>
+  <string name="delete_bookmarks">Radera bokmärken?</string>
 </resources>

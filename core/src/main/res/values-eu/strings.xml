@@ -53,7 +53,7 @@
   <string name="pref_clear_all_history_title">Historia garbitu</string>
   <string name="pref_clear_all_history_summary">Azkeneko bilaketak garbitu eta historialeko erlaitzak</string>
   <string name="all_history_cleared">Historial osoa garbitu da.</string>
-  <string name="clear_all_history_dialog_title">Historial osoa garbitu?</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Historial osoa garbitu?</string>
   <string name="delete">Ezabatu</string>
   <string name="delete_specific_search_toast">Azkeneko bilaketa ezabatuta</string>
   <string name="hint_contents_drawer_message">Ezkerrerantz eginez artikulu honen edukia ikusi dezakezu.</string>
@@ -124,7 +124,7 @@
   <string name="time_left">joanda</string>
   <string name="pref_external_link_popup_title">Kanpo esteketara sartzerakoan ohartarazi</string>
   <string name="pref_external_link_popup_summary">Gaitu popup-a gastu gehigarriez edo konexiorik gabe funtzionatzen ez duten estekez abisatzeko</string>
-  <string name="external_link_popup_dialog_title">Kanpo estekara sartzen</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Kanpo estekara sartzen</string>
   <string name="external_link_popup_dialog_message">Kanpo-esteka batera sartzen ari zara. Honek datu transferentziarako gastu gehigarrietara eraman dezake edo besterik gabe, ez du funtzionatuko konexiorik ez dagoenean. Jarraitu nahi duzu?</string>
   <string name="do_not_ask_anymore">Ez galdetu berriz</string>
   <string name="your_languages">Hautatutako hizkuntzak:</string>

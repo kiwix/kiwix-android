@@ -53,7 +53,7 @@
   <string name="pref_clear_all_history_title">Hapus riwayat</string>
   <string name="pref_clear_all_history_summary">Hapus riwayat penelusuran dan tab terakhir</string>
   <string name="all_history_cleared">Semua Markah Telah Dibersihkan</string>
-  <string name="clear_all_history_dialog_title">Bersihkan Semua Markah</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Bersihkan Semua Markah</string>
   <string name="delete">Hapus</string>
   <string name="delete_specific_search_toast">Penelusuran terakhir telah dihapus</string>
   <string name="hint_contents_drawer_message">Anda bisa menggulir ke kiri untuk melihat isi artikel ini</string>
@@ -124,7 +124,7 @@
   <string name="time_left">kiri</string>
   <string name="pref_external_link_popup_title">Peringatkan saat mengunjungi pranala luar</string>
   <string name="pref_external_link_popup_summary">Tampilkan popup untuk memperingatkan tentang biaya tambahan atau tidak bekerja dalam pranala luring.</string>
-  <string name="external_link_popup_dialog_title">Mengunjungi Pranala Luar</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Mengunjungi Pranala Luar</string>
   <string name="external_link_popup_dialog_message">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring. Apakah Anda ingin melanjutkan?</string>
   <string name="do_not_ask_anymore">Jangan tanya lagi</string>
   <string name="your_languages">Bahasa terpilih:</string>

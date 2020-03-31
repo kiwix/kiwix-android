@@ -48,8 +48,9 @@
   <string name="delete_recent_search_item">Elimina questo elemento?</string>
   <string name="pref_clear_all_history_title">Cancella la cronologia</string>
   <string name="all_history_cleared">Tutta la cronologia è stata cancellata</string>
-  <string name="clear_all_history_dialog_title">Cancella tutta la cronologia</string>
+  <string name="clear_all_history_dialog_title">Cancellare tutta la cronologia?</string>
   <string name="delete">Cancella</string>
+  <string name="cancel">Annulla</string>
   <string name="delete_specific_search_toast">Ricerca recente rimossa</string>
   <string name="got_it">Capito</string>
   <string name="did_you_know">Lo sapevi?</string>
@@ -99,4 +100,6 @@
   <string name="go_to_settings">Vai alle impostazioni</string>
   <string name="no_results">Nessun risultato</string>
   <string name="no_bookmarks">Nessun segnalibro</string>
+  <string name="delete_history">Cancellare la cronologia?</string>
+  <string name="delete_bookmarks">Cancellare i segnalibri?</string>
 </resources>

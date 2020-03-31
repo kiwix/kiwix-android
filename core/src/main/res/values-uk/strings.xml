@@ -54,7 +54,7 @@
   <string name="pref_clear_all_history_title">Очистити історію</string>
   <string name="pref_clear_all_history_summary">Очистити останню історію пошуку й відкритих вкладок</string>
   <string name="all_history_cleared">Всю історію очищено</string>
-  <string name="clear_all_history_dialog_title">Очистити всю історію</string>
+  <string name="clear_all_history_dialog_title">Очистити всю історію?</string>
   <string name="delete">Вилучити</string>
   <string name="delete_specific_search_toast">Нещодавній пошук вилучено</string>
   <string name="hint_contents_drawer_message">Ви можете провести пальцем зліва, щоб переглянути вміст цієї статті</string>
@@ -125,7 +125,7 @@
   <string name="time_left">залишилось</string>
   <string name="pref_external_link_popup_title">Попереджувати, коли введено зовнішнє посилання</string>
   <string name="pref_external_link_popup_summary">Відображати попередження щодо проблем із зовнішніми посиланнями, як от зняття додаткових грошей або неспрацювання посилань в офлайні.</string>
-  <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання</string>
+  <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання!</string>
   <string name="external_link_popup_dialog_message">Ви вказали зовнішнє посилання. Будь ласка пам\'ятайте, що якщо ви офлайн, то воно не буде відкрито. Також зауважте, що відкриття цього посилання може призвести до зняття грошей мобільним оператором. Дійсно бажаєте відкрити зовнішнє посилання?</string>
   <string name="do_not_ask_anymore">Більш не питати</string>
   <string name="your_languages">Вибір мови:</string>

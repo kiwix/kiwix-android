@@ -57,7 +57,7 @@
   <string name="pref_clear_all_history_title">ისტორიაშ ლასუა</string>
   <string name="pref_clear_all_history_summary">ასერდეიანი გორუაშ მოთხირეფიშ დო აშნაკიდეფიშ ისტორიაშ ლასუა</string>
   <string name="all_history_cleared">არძა ისტორიაქ დილასუ</string>
-  <string name="clear_all_history_dialog_title">არძა ისტორიაშ ლასუა</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">არძა ისტორიაშ ლასუა</string>
   <string name="share">გობჟინაფა</string>
   <string name="delete">ლასუა</string>
   <string name="delete_specific_search_toast">ასერდეიანი გორუაქ დილასუ</string>
@@ -119,7 +119,7 @@
   <string name="time_left">დოსქიდუ</string>
   <string name="time_today">ამდღა</string>
   <string name="time_yesterday">გოღა</string>
-  <string name="external_link_popup_dialog_title">გალენური რცხუშ მიშაჸონაფა</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">გალენური რცხუშ მიშაჸონაფა</string>
   <string name="do_not_ask_anymore">ანწი ვაბკითხა</string>
   <string name="your_languages">გიშაგორილი ნინეფი:</string>
   <string name="other_languages">შხვა ნინეფი:</string>

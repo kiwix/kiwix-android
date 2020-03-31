@@ -49,7 +49,7 @@
   <string name="clear_recent_and_tabs_history_dialog">Segur que vols esborrar l\'historial de cerques i restablir totes les pestanyes actives?</string>
   <string name="delete_recent_search_item">Esborrar aquest element?</string>
   <string name="all_history_cleared">Esborrat tot l\'historial</string>
-  <string name="clear_all_history_dialog_title">Esborra tot l\'historial</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Esborra tot l\'historial</string>
   <string name="delete">Esborrar</string>
   <string name="delete_specific_search_toast">Les darreres cerques han estat suprimides</string>
   <string name="hint_contents_drawer_message">Podeu lliscar el dit cap a l\'esquerra per veure el contingut d\'aquest article</string>
@@ -86,7 +86,7 @@
   <string name="confirm_stop_download_msg">Segur que vols aturar aquesta descàrrega?</string>
   <string name="download_change_storage">Selector de dispositiu d\'emmagatzematge</string>
   <string name="next">Següent</string>
-  <string name="external_link_popup_dialog_title">Accés a enllaç extern</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Accés a enllaç extern</string>
   <string name="external_link_popup_dialog_message">Estàs entrant a un enllaç extern. Això podria ocasionar-te costos addicionals per transferència de dades o, senzillament, no funcionarà si no tens connexió. Vols continuar?</string>
   <string name="do_not_ask_anymore">No tornar a preguntar</string>
   <string name="your_languages">Idiomes seleccionats:</string>

@@ -39,6 +39,7 @@
   <string name="server_failed_message">서버를 시작하지 못했습니다. 핫스팟을 켜 주십시오</string>
   <string name="server_failed_toast_message">서버를 시작하지 못했습니다.</string>
   <string name="server_started_successfully_toast_message">서버가 성공적으로 시작되었습니다.</string>
+  <string name="server_stopped_successfully_toast_message">서버가 성공적으로 중단되었습니다.</string>
   <string name="hotspot_turned_on">핫스팟이 켜져있습니다</string>
   <string name="hotspot_details_message">다음은 로컬 핫스팟의 상세 정보입니다.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">서버에 호스팅할 파일을 선택하십시오</string>
@@ -52,6 +53,7 @@
   <string name="stop_server_label">서버 정지</string>
   <string name="server_started_message">%s 서버에 접속하려면 브라우저에 이 IP 주소를 입력하십시오</string>
   <string name="error_file_not_found">오류: 선택된 ZIM 파일을 찾을 수 없습니다.</string>
+  <string name="zim_not_opened">zim 파일을 열 수 없음</string>
   <string name="error_file_invalid">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다.</string>
   <string name="error_article_url_not_found">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
   <string name="pref_display_title">표시</string>
@@ -79,7 +81,7 @@
   <string name="pref_clear_all_history_title">역사 지우기</string>
   <string name="pref_clear_all_history_summary">최근 검색 및 탭 역사 지우기</string>
   <string name="all_history_cleared">모든 역사를 삭제했습니다</string>
-  <string name="clear_all_history_dialog_title">모든 역사 지우기</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">모든 역사 지우기</string>
   <string name="share">공유</string>
   <string name="selected_file_cab_app_chooser_title">ZIM 파일을 다음과 공유:</string>
   <string name="delete">삭제</string>
@@ -155,7 +157,7 @@
   <string name="time_yesterday">어제</string>
   <string name="pref_external_link_popup_title">외부 링크에 진입할 때 경고합니다</string>
   <string name="pref_external_link_popup_summary">추가 비용 또는 오프라인 링크로 동작하지 않음에 대한 경고에 대한 팝업을 표시합니다.</string>
-  <string name="external_link_popup_dialog_title">외부 링크에 진입합니다</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">외부 링크에 진입합니다</string>
   <string name="external_link_popup_dialog_message">외부 링크를 입력하고 있습니다. 추가적인 데이터 전송 비용이 들거나 오프라인일 때 동작하지 않을 수 있습니다. 계속하시겠습니까?</string>
   <string name="do_not_ask_anymore">더 이상 묻지 않습니다</string>
   <string name="your_languages">선택한 언어:</string>
