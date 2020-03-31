@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.extensions
 import android.content.res.ColorStateList
 import android.widget.ImageView
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 
@@ -33,6 +34,10 @@ fun ImageView.setBitmap(base64String: Base64String) {
 // hence this facade
 fun ImageView.setBitmapFromString(string: String?) {
   setBitmap(Base64String(string))
+}
+
+fun ImageView.setImageDrawableCompat(id: Int) {
+  setImageDrawable(ContextCompat.getDrawable(context, id))
 }
 
 fun ImageView.tint(@ColorInt colorId: Int) {
