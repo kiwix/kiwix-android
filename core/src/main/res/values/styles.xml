@@ -56,4 +56,8 @@
     <item name="theme">@style/ThemeOverlay.MaterialComponents.Dark</item>
   </style>
 
+  <style name="Widget.KiwixTheme.CardView" parent="Widget.MaterialComponents.CardView">
+    <item name="cardBackgroundColor">@color/card_view_background</item>
+  </style>
+
 </resources>

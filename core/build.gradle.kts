@@ -42,9 +42,6 @@ dependencies {
     api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
   }
 
-  // Android Support
-  implementation(Libs.cardview)
-
   // SquiDB
   implementation(Libs.squidb)
   implementation(Libs.squidb_annotations)
