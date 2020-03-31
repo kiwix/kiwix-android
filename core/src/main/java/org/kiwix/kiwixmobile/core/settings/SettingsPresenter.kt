@@ -18,8 +18,6 @@
 package org.kiwix.kiwixmobile.core.settings
 
 import android.util.Log
-import io.reactivex.CompletableObserver
-import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.settings.SettingsContract.Presenter
@@ -30,18 +28,10 @@ internal class SettingsPresenter @Inject constructor(private val dataSource: Dat
   BasePresenter<View?>(), Presenter {
   override fun clearHistory() {
     dataSource.clearHistory()
-      .subscribe(object : CompletableObserver {
-        override fun onSubscribe(d: Disposable) {
-          // TODO
-        }
-
-        override fun onComplete() {
-          // TODO
-        }
-
-        override fun onError(e: Throwable) {
-          Log.e("SettingsPresenter", "$e")
-        }
+      .subscribe({
+        // TODO
+      }, { e ->
+        Log.e("SettingsPresenter", e.message, e)
       })
   }
 }
