@@ -96,7 +96,6 @@
   <string name="zim_no_pic">Resımi çıniyê</string>
   <string name="zim_no_vid">Videoyi çıniyê</string>
   <string name="no_network_connection">Gıreyê torre çıniyo</string>
-  <string name="settings">Eyari</string>
   <string name="help_2">Kiwix se keno ?</string>
   <string name="help_5">Zerrek kam ca de yo?</string>
   <string name="help_6">Zerrekê ma pela websita Kiwixi de yo.</string>
@@ -128,7 +127,7 @@
   <string name="your_languages">Weçinaye zıwan :</string>
   <string name="other_languages">Zıwano bin:</string>
   <string name="no_items_msg">Karneyaye obce çıniyo</string>
-  <string name="crash_title">Ey... No teneyê ariyeya</string>
+  <string name="crash_title">Ey… No teneyê ariyeya</string>
   <string name="crash_checkbox_language">Eyarê zıwanê şıma</string>
   <string name="crash_checkbox_zimfiles">Lista Dosyayanê Zıme Şıma</string>
   <string name="pending_state">Vındarde</string>

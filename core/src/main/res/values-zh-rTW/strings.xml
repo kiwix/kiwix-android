@@ -120,7 +120,6 @@
   <string name="zim_no_pic">沒有圖片</string>
   <string name="zim_no_vid">無視訊</string>
   <string name="no_network_connection">沒有連接網路</string>
-  <string name="settings">設定</string>
   <string name="help_2">Kiwix 是在做什麼？</string>
   <string name="help_3">Kiwix 是個離線用內容閱讀器。它的行為很像瀏覽器；但不是存取網路上的網頁，它所讀取內容是包含在以 ZIM 為格式的檔案。</string>
   <string name="help_4">雖然 Kiwix 最初設計目標是提供在離線狀態下瀏覽維基百科，它也可以讀取其它的內容。</string>

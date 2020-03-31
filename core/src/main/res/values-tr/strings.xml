@@ -126,7 +126,6 @@
   <string name="zim_no_pic">Resim Yok</string>
   <string name="zim_no_vid">Video Yok</string>
   <string name="no_network_connection">Ağ bağlantısı yok</string>
-  <string name="settings">Ayarlar</string>
   <string name="help_2">Kiwix ne yapar?</string>
   <string name="help_3">Kiwix bir çevrimdışı içerik okuyucusudur. Aynı bir ağ tarayıcısı gibi çalışır ama web sayfalarına çevrimiçi erişmek yerine içeriği ZIM formatındaki bir dosyadan okur.</string>
   <string name="help_4">Kiwix orijinalde Vikipedi\'yi çevrimdışı olarak okuması için tasarlanmış olsa da diğer içerikleri de okuyabilir.</string>

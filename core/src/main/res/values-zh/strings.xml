@@ -95,7 +95,6 @@
   <string name="zim_no_pic">没有图片</string>
   <string name="zim_no_vid">没有视频</string>
   <string name="no_network_connection">没有网络连接</string>
-  <string name="settings">设置</string>
   <string name="help_2">Kiwix可以做什么？</string>
   <string name="help_3">Kiwix是一个离线内容阅读器。它的功能就好像一个浏览器，但它不需要访问在线网页，而是从ZIM格式文件中读取内容。</string>
   <string name="help_4" fuzzy="true">尽管Kiwix原本设计用于提供维基百科离线内容，但它也可以阅读其他内容。</string>

@@ -147,7 +147,7 @@ class LibraryFragment : BaseFragment() {
   private fun noInternetSnackbar() {
     view?.snack(
       R.string.no_network_connection,
-      R.string.settings,
+      R.string.menu_settings,
       ::openNetworkSettings
     )
   }

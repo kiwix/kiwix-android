@@ -123,7 +123,6 @@
   <string name="zim_no_pic">Brak obrazka</string>
   <string name="zim_no_vid">Brak wideo</string>
   <string name="no_network_connection">Brak połączenia z siecią</string>
-  <string name="settings">Ustawienia</string>
   <string name="help_2">Co robi Kiwix?</string>
   <string name="help_3">Kiwix to czytnik zawartości offline. Zachowuje się jak przeglądarka, jednak zamiast stron internetowych, czyta zawartość z pliku w formacie ZIM.</string>
   <string name="help_4">Chociaż Kiwix został pierwotnie zaprojektowany do udostępniania Wikipedii offline, czyta także inne treści.</string>

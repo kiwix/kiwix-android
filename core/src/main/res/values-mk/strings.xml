@@ -115,7 +115,6 @@
   <string name="zim_no_pic">Без слики</string>
   <string name="zim_no_vid">Нема видеа</string>
   <string name="no_network_connection">Немате мрежна врска</string>
-  <string name="settings">Нагодувања</string>
   <string name="help_2">Што прави Кивикс?</string>
   <string name="help_3">Кивикс е вонмрежен читач на содржини. Работи како прелистувач но чита содржини од податотека во ZIM-формат место од семрежјето.</string>
   <string name="help_4">Иако Кивикс е првично предвиден како вонмрежен читач на Википедија, но сега чита и други содржини.</string>

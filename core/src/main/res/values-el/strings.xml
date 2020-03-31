@@ -80,7 +80,6 @@
   <string name="zim_no_pic">Χωρίς εικόνες</string>
   <string name="zim_no_vid">Χωρίς βίντεο</string>
   <string name="no_network_connection">Δεν υπάρχει σύνδεση στο δίκτυο</string>
-  <string name="settings">Ρυθμίσεις</string>
   <string name="help_2">Τι κάνει το Kiwix;</string>
   <string name="help_3">Το Kiwix είναι ένας αναγνώστης περιεχομένου εκτός σύνδεσης. Φέρεται πολύ σαν περιηγητής αλλά αντί να έχει πρόσβαση σε διαδικτυακές σελίδες, διαβάζει περιεχόμενο από ένα αρχείο σε μορφοποίηση ZIM.</string>
   <string name="help_5">Που είναι το περιεχόμενο;</string>

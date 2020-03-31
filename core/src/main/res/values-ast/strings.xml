@@ -115,7 +115,6 @@
   <string name="zim_no_pic">Nun hai imáxenes</string>
   <string name="zim_no_vid">Nun hai videos</string>
   <string name="no_network_connection">Nun hai conexón a la rede</string>
-  <string name="settings">Configuración</string>
   <string name="help_2">¿Qué fai Kiwix?</string>
   <string name="help_3">Kiwix ye un llector de conteníu ensin conexón. Actúa de mou asemeyáu a un navegador pero en cuenta d\'aportar a páxines web en llinia, llee\'l conteníu d\'un ficheru en formatu ZIM.</string>
   <string name="help_4">Magar Kiwix diseñóse orixinalmente p\'apurrir Wikipedia ensin conexón, tamién puede lleer otros conteníos.</string>
