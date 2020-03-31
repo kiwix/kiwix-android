@@ -23,25 +23,18 @@ import android.util.DisplayMetrics
 import android.util.TypedValue
 import androidx.appcompat.R.attr
 
-/**
- * Created by hritik on 03/23/20.
- */
 object DimenUtils {
   @JvmStatic fun getToolbarHeight(context: Context): Int {
-    val t = TypedValue()
-    context.theme.resolveAttribute(attr.actionBarSize, t, true)
-    return context.resources.getDimensionPixelSize(t.resourceId)
+    return TypedValue().let {
+      context.theme.resolveAttribute(attr.actionBarSize, it, true)
+      context.resources.getDimensionPixelSize(it.resourceId)
+    }
   }
 
-  @JvmStatic fun getWindowHeight(activity: Activity): Int {
-    val displayMetrics = DisplayMetrics()
-    activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
-    return displayMetrics.heightPixels
-  }
+  @JvmStatic fun getWindowHeight(activity: Activity): Int = getDisplayMetric(activity).heightPixels
 
-  @JvmStatic fun getWindowWidth(activity: Activity): Int {
-    val displayMetrics = DisplayMetrics()
-    activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
-    return displayMetrics.widthPixels
-  }
+  @JvmStatic fun getWindowWidth(activity: Activity): Int = getDisplayMetric(activity).widthPixels
+
+  private fun getDisplayMetric(activity: Activity): DisplayMetrics =
+    DisplayMetrics().apply { activity.windowManager.defaultDisplay.getMetrics(this) }
 }
