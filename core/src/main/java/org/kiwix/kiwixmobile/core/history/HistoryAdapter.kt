@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.history
 
-import android.view.LayoutInflater
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -28,15 +28,14 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import butterknife.BindView
 import butterknife.ButterKnife
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.layout
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.R2.id
-import org.kiwix.kiwixmobile.core.extensions.setBitmapFromString
+import org.kiwix.kiwixmobile.core.downloader.model.Base64String
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
 
 internal class HistoryAdapter(
   val historyList: List<HistoryListItem>,
@@ -46,15 +45,11 @@ internal class HistoryAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     return if (viewType == TYPE_ITEM) {
-      Item(inflateLayoutFromParent(parent, layout.item_bookmark_history))
+      Item(parent.inflate(layout.item_bookmark_history, false))
     } else {
-      Category(inflateLayoutFromParent(parent, layout.header_date))
+      Category(parent.inflate(layout.header_date, false))
     }
   }
-
-  private fun inflateLayoutFromParent(parent: ViewGroup, layoutId: Int) =
-    LayoutInflater.from(parent.context)
-      .inflate(layoutId, parent, false)
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     if (holder is Item) {
@@ -67,15 +62,15 @@ internal class HistoryAdapter(
   }
 
   private fun setCategoryDataWithHelpOfDate(date: String, holder: Category) {
-    val formatter = DateTimeFormatter.ofPattern("d MMM yyyy")
-    val todaysDate = LocalDate.now().format(formatter)
-    val yesterdayDate = LocalDate.now().minusDays(1).format(formatter)
+    val todaysDate = LocalDate.now()
+    val yesterdayDate = LocalDate.now().minusDays(1)
+    val givenDate = LocalDate.parse(date)
 
-    if (todaysDate != null && todaysDate.contentEquals(date)) {
+    if (todaysDate?.equals(givenDate) == true) {
       holder.date.setText(
         R.string.time_today
       )
-    } else if (yesterdayDate != null && yesterdayDate.contentEquals(date)) {
+    } else if (yesterdayDate?.equals(givenDate) == true) {
       holder.date.setText(
         R.string.time_yesterday
       )
@@ -84,17 +79,19 @@ internal class HistoryAdapter(
     }
   }
 
+  fun ImageView.setImageDrawableCompat(context: Context, id: Int) {
+    setImageDrawable(ContextCompat.getDrawable(context, id))
+  }
+
   private fun setItemDataWithHelpOfHistoryItem(holder: Item, history: HistoryItem) {
     holder.title.text = history.historyTitle
     if (deleteList.contains(history)) {
-      holder.favicon.setImageDrawable(
-        ContextCompat.getDrawable(
+      holder.favicon.setImageDrawableCompat(
           holder.favicon.context,
-          drawable.ic_check_circle_blue_24dp
-        )
+          R.drawable.ic_check_circle_blue_24dp
       )
     } else {
-      holder.favicon.setBitmapFromString(history.favicon)
+      holder.favicon.setBitmap(Base64String(history.favicon))
     }
     holder.itemView.setOnClickListener {
       itemClickListener.onItemClick(
@@ -108,13 +105,10 @@ internal class HistoryAdapter(
     }
   }
 
-  override fun getItemViewType(position: Int): Int {
-    return if (historyList[position] is DateItem) 0 else TYPE_ITEM
-  }
+  override fun getItemViewType(position: Int): Int =
+    if (historyList[position] is DateItem) 0 else TYPE_ITEM
 
-  override fun getItemCount(): Int {
-    return historyList.size
-  }
+  override fun getItemCount(): Int = historyList.size
 
   internal interface OnItemClickListener {
     fun onItemClick(
