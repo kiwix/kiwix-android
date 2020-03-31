@@ -30,6 +30,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.Transformation
 import android.widget.LinearLayout
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 
 class AnimatedProgressBar @JvmOverloads constructor(
   context: Context,
@@ -74,7 +75,7 @@ class AnimatedProgressBar @JvmOverloads constructor(
     } finally {
       array.recycle()
     }
-    inflate(context, R.layout.progress_bar, this)
+    inflate(R.layout.progress_bar)
     setBackgroundColor(backgroundColor)
   }
 
