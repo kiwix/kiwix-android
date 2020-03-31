@@ -147,7 +147,7 @@ class AnimatedProgressBar : LinearLayout {
     // save the progress
     mProgress = progress
     // calculate amount the width has to change
-    val deltaWidth = (mWidth * mProgress / 100 - mDrawWidth)
+    val deltaWidth = mWidth * mProgress / 100 - mDrawWidth
     // animate the width change
     animateView(mDrawWidth, mWidth, deltaWidth)
   }
