@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 internal class HistoryAdapter(
   val historyList: List<HistoryListItem>,
@@ -64,7 +65,8 @@ internal class HistoryAdapter(
   private fun setCategoryDataWithHelpOfDate(date: String, holder: Category) {
     val todaysDate = LocalDate.now()
     val yesterdayDate = LocalDate.now().minusDays(1)
-    val givenDate = LocalDate.parse(date)
+    val formatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+    val givenDate = LocalDate.parse(date, formatter)
 
     if (todaysDate?.equals(givenDate) == true) {
       holder.date.setText(
