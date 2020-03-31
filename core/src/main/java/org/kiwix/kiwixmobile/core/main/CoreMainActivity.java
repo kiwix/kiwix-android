@@ -1548,7 +1548,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void updateNightMode() {
-    painter.update(getCurrentWebView(), videoView);
+    painter.update(getCurrentWebView(), { getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl() != HOME_URL}, videoView);
   }
 
   private void loadPrefs() {
@@ -1721,7 +1721,8 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void setHomePage(View view) {
-    painter.deactivateNightMode(getCurrentWebView(), videoView);
+    painter.deactivateNightMode(getCurrentWebView());
+    painter.deactivateNightMode(videoView);
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);

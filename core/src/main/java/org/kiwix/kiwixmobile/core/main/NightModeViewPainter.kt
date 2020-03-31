@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.main
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.view.View
-import android.view.ViewGroup
+import android.widget.VideoView
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import javax.inject.Inject
 
@@ -31,49 +31,42 @@ import javax.inject.Inject
  */
 
 class NightModeViewPainter @Inject constructor(
-  val nightModeConfig: NightModeConfig
+  private val nightModeConfig: NightModeConfig
 ) {
 
   private val invertedPaint =
     Paint().apply { colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS) }
 
-  fun update(view: View) {
-    if (nightModeConfig.isNightModeActive()) {
-      activateNightMode(view)
-    } else {
-      deactivateNightMode(view)
-    }
-  }
-
-  fun update(
-    webview: KiwixWebView,
-    videoView: ViewGroup
+  fun <T : View> update(
+    view: T,
+    shouldActivateCriteria: ((T) -> Boolean) = { true },
+    vararg additionalViews: View
   ) {
-    if (nightModeConfig.isNightModeActive()) {
-      activateNightMode(webview, videoView)
-    } else {
-      deactivateNightMode(webview, videoView)
-    }
   }
 
-  private fun deactivateNightMode(view: View) {
+  fun deactivateNightMode(view: View) {
     view.setLayerType(View.LAYER_TYPE_NONE, null)
-  }
-
-  fun deactivateNightMode(webview: KiwixWebView, videoView: ViewGroup) {
-    webview.setLayerType(View.LAYER_TYPE_NONE, null)
-    videoView.setLayerType(View.LAYER_TYPE_NONE, null)
   }
 
   private fun activateNightMode(view: View) {
     view.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
   }
 
-  private fun activateNightMode(webview: KiwixWebView, videoView: ViewGroup) {
-    if (webview.url != null && webview.url == CoreMainActivity.HOME_URL) {
+  private fun activateNightMode(webView: KiwixWebView, videoView: VideoView) {
+    if (webView.url != null && webView.url == CoreMainActivity.HOME_URL) {
       return
     }
-    webview.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
+    webView.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
     videoView.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
   }
 }
+
+/*if (nightModeConfig.isNightModeActive()) {
+      for (view in additionalViews) {
+        activateNightMode(view)
+      }
+    } else {
+      for (view in additionalViews) {
+        deactivateNightMode(view)
+      }
+    }*/
