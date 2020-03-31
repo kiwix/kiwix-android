@@ -25,34 +25,25 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Transformation
 import android.widget.LinearLayout
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.styleable
 
-class AnimatedProgressBar : LinearLayout {
-  private val mPaint = Paint()
-  private val mRect = Rect()
-  private var mProgress = 0
-  private var mBidirectionalAnimate = true
-  private var mDrawWidth = 0
-  private var mProgressColor = 0
+class AnimatedProgressBar @JvmOverloads constructor(
+  context: Context,
+  attrs: AttributeSet,
+  defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr) {
+  private val paint = Paint()
+  private val rect = Rect()
+  private var progress = 0
+  private var bidirectionalAnimate = true
+  private var drawWidth = 0
+  private var progressColor = 0
 
-  constructor(context: Context, attrs: AttributeSet) : super(
-    context,
-    attrs
-  ) {
-    init(context, attrs)
-  }
-
-  constructor(
-    context: Context,
-    attrs: AttributeSet,
-    defStyleAttr: Int
-  ) : super(context, attrs, defStyleAttr) {
+  init {
     init(context, attrs)
   }
 
@@ -63,31 +54,27 @@ class AnimatedProgressBar : LinearLayout {
    * @param attrs is the attribute set passed by the constructor
    */
   @Suppress("MagicNumber")
-  private fun init(
-    context: Context,
-    attrs: AttributeSet
-  ) {
+  private fun init(context: Context, attrs: AttributeSet) {
     val array = context.theme
-      .obtainStyledAttributes(attrs, styleable.AnimatedProgressBar, 0, 0)
+      .obtainStyledAttributes(attrs, R.styleable.AnimatedProgressBar, 0, 0)
     val backgroundColor: Int
     try {
       // Retrieve the style of the progress bar that the user hopefully set
       val defaultBackgroundColor = 0x424242
       val defaultProgressColor = 0x2196f3
       backgroundColor = array.getColor(
-        styleable.AnimatedProgressBar_backgroundColor, defaultBackgroundColor
+        R.styleable.AnimatedProgressBar_backgroundColor, defaultBackgroundColor
       )
-      mProgressColor = array.getColor(
-        styleable.AnimatedProgressBar_progressColor,
+      progressColor = array.getColor(
+        R.styleable.AnimatedProgressBar_progressColor,
         defaultProgressColor
       )
-      mBidirectionalAnimate =
-        array.getBoolean(styleable.AnimatedProgressBar_bidirectionalAnimate, false)
+      bidirectionalAnimate =
+        array.getBoolean(R.styleable.AnimatedProgressBar_bidirectionalAnimate, false)
     } finally {
       array.recycle()
     }
-    val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    inflater.inflate(R.layout.progress_bar, this, true)
+    inflate(context, R.layout.progress_bar, this)
     setBackgroundColor(backgroundColor)
   }
 
@@ -96,7 +83,7 @@ class AnimatedProgressBar : LinearLayout {
    *
    * @return progress of the view
    */
-  fun getProgress() = mProgress
+  fun getProgress() = progress
 
   // calculate amount the width has to change
   // animate the width change
@@ -129,15 +116,15 @@ class AnimatedProgressBar : LinearLayout {
     }
     val mWidth = this.measuredWidth
     // Set the drawing bounds for the ProgressBar
-    mRect.left = 0
-    mRect.top = 0
-    mRect.bottom = this.bottom - this.top
-    if (progress < mProgress && !mBidirectionalAnimate) {
+    rect.left = 0
+    rect.top = 0
+    rect.bottom = this.bottom - this.top
+    if (progress < this.progress && !bidirectionalAnimate) {
       // if the we only animate the view in one direction
       // then reset the view width if it is less than the
       // previous progress
-      mDrawWidth = 0
-    } else if (progress == mProgress) {
+      drawWidth = 0
+    } else if (progress == this.progress) {
       // we don't need to go any farther if the progress is unchanged
       if (progress == 100) {
         fadeOut()
@@ -145,19 +132,19 @@ class AnimatedProgressBar : LinearLayout {
       return
     }
     // save the progress
-    mProgress = progress
+    this.progress = progress
     // calculate amount the width has to change
-    val deltaWidth = mWidth * mProgress / 100 - mDrawWidth
+    val deltaWidth = mWidth * this.progress / 100 - drawWidth
     // animate the width change
-    animateView(mDrawWidth, mWidth, deltaWidth)
+    animateView(drawWidth, mWidth, deltaWidth)
   }
 
   @Suppress("MagicNumber")
   override fun onDraw(canvas: Canvas) {
-    mPaint.color = mProgressColor
-    mPaint.strokeWidth = 10f
-    mRect.right = mRect.left + mDrawWidth
-    canvas.drawRect(mRect, mPaint)
+    paint.color = progressColor
+    paint.strokeWidth = 10f
+    rect.right = rect.left + drawWidth
+    canvas.drawRect(rect, paint)
   }
 
   /**
@@ -168,11 +155,7 @@ class AnimatedProgressBar : LinearLayout {
    * @param deltaWidth is the amount by which the width of the progress view will change
    */
   @Suppress("MagicNumber")
-  private fun animateView(
-    initialWidth: Int,
-    maxWidth: Int,
-    deltaWidth: Int
-  ) {
+  private fun animateView(initialWidth: Int, maxWidth: Int, deltaWidth: Int) {
     val fill: Animation = object : Animation() {
       override fun applyTransformation(
         interpolatedTime: Float,
@@ -180,11 +163,11 @@ class AnimatedProgressBar : LinearLayout {
       ) {
         val width = initialWidth + (deltaWidth * interpolatedTime).toInt()
         if (width <= maxWidth) {
-          mDrawWidth = width
+          drawWidth = width
           invalidate()
         }
         if (1.0f - interpolatedTime < 0.0005) {
-          if (mProgress >= 100) {
+          if (progress >= 100) {
             fadeOut()
           }
         }
@@ -223,7 +206,7 @@ class AnimatedProgressBar : LinearLayout {
     var state: Parcelable? = state
     if (state is Bundle) {
       val bundle = state
-      mProgress = bundle.getInt("progressState")
+      progress = bundle.getInt("progressState")
       state = bundle.getParcelable("instanceState")
     }
     super.onRestoreInstanceState(state)
@@ -232,7 +215,7 @@ class AnimatedProgressBar : LinearLayout {
   override fun onSaveInstanceState(): Parcelable {
     val bundle = Bundle()
     bundle.putParcelable("instanceState", super.onSaveInstanceState())
-    bundle.putInt("progressState", mProgress)
+    bundle.putInt("progressState", progress)
     return bundle
   }
 }
