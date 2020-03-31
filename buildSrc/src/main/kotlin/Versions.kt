@@ -87,8 +87,6 @@ object Versions {
 
   const val rxandroid: String = "2.1.0" // available: "2.1.1"
 
-  const val cardview: String = "1.0.0"
-
   const val core_ktx: String = "1.2.0"
 
   const val kiwixlib: String = "9.0.1-1"

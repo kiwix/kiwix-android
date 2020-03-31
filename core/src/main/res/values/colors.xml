@@ -16,7 +16,7 @@
   <color name="gray500">#9E9E9E</color>
   <color name="gray700">#616161</color>
   <color name="gray850">#303030</color>
-  <color name="card_view_background">#FFFFFF</color>
+  <color name="card_view_background">@color/white</color>
   <color name="text_secondary">@color/gray700</color>
   <color name="text_tertiary">@color/gray500</color>
 
