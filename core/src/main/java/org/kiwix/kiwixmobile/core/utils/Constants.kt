@@ -40,6 +40,10 @@ const val TAG_CURRENT_POSITIONS = "currentpositions"
 const val TAG_CURRENT_TAB = "currenttab"
 const val TAG_FROM_TAB_SWITCHER = "fromtabswitcher"
 
+// Http Client
+const val CONNECTION_TIMEOUT: Long = 10
+const val READ_TIMEOUT: Long = 60
+
 // Extras
 const val EXTRA_ZIM_FILE = "zimFile"
 const val EXTRA_CHOSE_X_URL = "choseXURL"

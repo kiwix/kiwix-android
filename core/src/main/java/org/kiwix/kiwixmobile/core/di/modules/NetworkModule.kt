@@ -29,19 +29,20 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.ServiceCreator
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.utils.CONNECTION_TIMEOUT
+import org.kiwix.kiwixmobile.core.utils.READ_TIMEOUT
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
 @Module
 open class NetworkModule {
-  @Suppress("MagicNumber")
   @Provides @Singleton fun provideOkHttpClient(): OkHttpClient {
-    val logging = HttpLoggingInterceptor()
-    logging.level = if (BuildConfig.DEBUG) BASIC else NONE
     return OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
-      .connectTimeout(10, SECONDS)
-      .readTimeout(60, SECONDS)
-      .addNetworkInterceptor(logging)
+      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+      .readTimeout(READ_TIMEOUT, SECONDS)
+      .addNetworkInterceptor(HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) BASIC else NONE
+      })
       .addNetworkInterceptor(UserAgentInterceptor(userAgent))
       .build()
   }
@@ -55,8 +56,7 @@ open class NetworkModule {
     context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
   companion object {
-    private const val userAgent =
-      "kiwix-android-version:" + BuildConfig.VERSION_CODE
+    private const val userAgent = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
     private const val KIWIX_DOWNLOAD_URL = "http://mirror.download.kiwix.org/"
   }
 }
