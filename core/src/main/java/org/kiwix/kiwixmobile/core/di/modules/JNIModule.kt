@@ -15,30 +15,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.base;
+package org.kiwix.kiwixmobile.core.di.modules
 
-import io.reactivex.disposables.CompositeDisposable;
+import android.content.Context
+import dagger.Module
+import dagger.Provides
+import org.kiwix.kiwixlib.JNIKiwix
+import org.kiwix.kiwixlib.JNIKiwixSearcher
+import javax.inject.Singleton
 
-/**
- * All presenters should inherit from this presenter.
- */
+@Module
+class JNIModule {
+  @Provides @Singleton
+  fun providesJNIKiwix(context: Context): JNIKiwix = JNIKiwix(context)
 
-public abstract class BasePresenter<T extends BaseContract.View>
-  implements BaseContract.Presenter<T> {
-
-  protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
-  protected T view;
-
-  @Override
-  public void attachView(T view) {
-    this.view = view;
-  }
-
-  @Override
-  public void detachView() {
-    view = null;
-    if (!compositeDisposable.isDisposed()) {
-      compositeDisposable.dispose();
+  @Provides @Singleton fun providesJNIKiwixSearcher(): JNIKiwixSearcher? {
+    return try {
+      JNIKiwixSearcher()
+    } catch (ignore: UnsatisfiedLinkError) {
+      null
     }
   }
 }

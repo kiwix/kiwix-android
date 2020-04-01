@@ -18,22 +18,13 @@
 package org.kiwix.kiwixmobile.core.downloader.model
 
 import android.net.Uri
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 
-data class DownloadRequest(
-  val urlString: String,
-  val title: String,
-  val description: String
-) {
+data class DownloadRequest(val urlString: String) {
 
   val uri: Uri get() = Uri.parse(urlString)
 
-  constructor(url: String, book: Book) : this(url, book.title, book.description)
-
   fun getDestination(sharedPreferenceUtil: SharedPreferenceUtil): String =
-    "${sharedPreferenceUtil.prefStorage}/Kiwix/${
-    StorageUtils.getFileNameFromUrl(urlString)
-    }"
+    "${sharedPreferenceUtil.prefStorage}/Kiwix/${StorageUtils.getFileNameFromUrl(urlString)}"
 }

@@ -27,7 +27,7 @@ import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
-import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 
 internal class OpenSearchItemTest {
 
@@ -38,7 +38,7 @@ internal class OpenSearchItemTest {
     mockkConstructor(Intent::class)
     val intent = mockk<Intent>()
     every {
-      anyConstructed<Intent>().putExtra(Constants.TAG_FILE_SEARCHED, searchListItem.value)
+      anyConstructed<Intent>().putExtra(TAG_FILE_SEARCHED, searchListItem.value)
     } returns intent
     OpenSearchItem(searchListItem).invokeWith(activity)
     verify {

@@ -15,36 +15,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.di.modules;
+package org.kiwix.kiwixmobile.core.settings
 
-import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import dagger.Module;
-import dagger.Provides;
-import javax.inject.Singleton;
-import org.kiwix.kiwixlib.JNIKiwix;
-import org.kiwix.kiwixlib.JNIKiwixSearcher;
+import android.util.Log
+import org.kiwix.kiwixmobile.core.base.BasePresenter
+import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.settings.SettingsContract.Presenter
+import org.kiwix.kiwixmobile.core.settings.SettingsContract.View
+import javax.inject.Inject
 
-/**
- * Created by mhutti1 on 14/04/17.
- */
-
-@Module public class JNIModule {
-  @Provides
-  @Singleton
-  public JNIKiwix providesJNIKiwix(@NonNull Context context) {
-    return new JNIKiwix(context);
-  }
-
-  @Provides
-  @Singleton
-  @Nullable
-  public JNIKiwixSearcher providesJNIKiwixSearcher() {
-    try {
-      return new JNIKiwixSearcher();
-    } catch (UnsatisfiedLinkError ignore) {
-      return null;
-    }
+internal class SettingsPresenter @Inject constructor(private val dataSource: DataSource) :
+  BasePresenter<View?>(), Presenter {
+  override fun clearHistory() {
+    dataSource.clearHistory()
+      .subscribe({
+        // TODO
+      }, { e ->
+        Log.e("SettingsPresenter", e.message, e)
+      })
   }
 }

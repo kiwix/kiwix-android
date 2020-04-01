@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.State
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
@@ -131,15 +132,18 @@ class SearchActivity : BaseActivity() {
     return true
   }
 
-  private fun render(state: State) = when (state) {
-    is Results -> {
-      searchViewAnimator.setDistinctDisplayedChild(0)
-      searchAdapter.items = state.values
-      render(state.searchString)
-    }
-    is NoResults -> {
-      searchViewAnimator.setDistinctDisplayedChild(1)
-      render(state.searchString)
+  private fun render(state: State) {
+    searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
+    when (state) {
+      is Results -> {
+        searchViewAnimator.setDistinctDisplayedChild(0)
+        searchAdapter.items = state.values
+        render(state.searchString)
+      }
+      is NoResults -> {
+        searchViewAnimator.setDistinctDisplayedChild(1)
+        render(state.searchString)
+      }
     }
   }
 

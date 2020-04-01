@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateStrings">
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="kiwi">Kiwi</string>
   <string name="menu_help">Help</string>
   <string name="menu_home">Home</string>
@@ -73,10 +73,11 @@
   <string name="all_history_cleared">All History Cleared</string>
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
   <string name="all_bookmarks_cleared">All Bookmarks Cleared</string>
-  <string name="clear_all_history_dialog_title">Clear All History</string>
+  <string name="clear_all_history_dialog_title">Clear All History?</string>
   <string name="share">Share</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>
   <string name="delete">Delete</string>
+  <string name="cancel">Cancel</string>
   <string name="delete_specific_search_toast">Recent search removed</string>
   <string name="hint_contents_drawer_message">You can swipe left to view the contents of this article</string>
   <string name="got_it">Got it</string>
@@ -105,13 +106,12 @@
   <string name="delete_zim_body">Delete %s?</string>
   <string name="delete_specific_zim_toast" tools:keep="@string/delete_specific_zim_toast">File deleted</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
-  <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download this file.</string>
+  <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
   <string name="space_available" tools:keep="@string/space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">No Pictures</string>
   <string name="zim_no_vid">No Videos</string>
   <string name="no_network_connection" tools:keep="@string/no_network_connection">No network connection</string>
-  <string name="settings">Settings</string>
   <string name="help_2">What does Kiwix do?</string>
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
   <string name="help_4">While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.</string>
@@ -153,7 +153,7 @@
   <string name="time_yesterday">Yesterday</string>
   <string name="pref_external_link_popup_title">Warn when entering external links</string>
   <string name="pref_external_link_popup_summary">Display popup to warn about additional costs or not working in offline links.</string>
-  <string name="external_link_popup_dialog_title">Entering External Link</string>
+  <string name="external_link_popup_dialog_title">Entering External Link!</string>
   <string name="external_link_popup_dialog_message">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline. Do you want to continue?</string>
   <string name="do_not_ask_anymore">Do not ask anymore</string>
   <string name="your_languages" tools:keep="@string/your_languages">Selected languages:</string>

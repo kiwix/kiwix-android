@@ -4,6 +4,7 @@
 * Fitoschido
 * MSClaudiu
 * Minisarm
+* Turbojet
 -->
 <resources>
   <string name="menu_help">Ajutor</string>
@@ -23,6 +24,7 @@
   <string name="search_label">Caută</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
+  <string name="server_stopped_successfully_toast_message">Oprire reușită a serverului.</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
@@ -51,7 +53,7 @@
   <string name="pref_clear_all_history_title">Curăță istoricul</string>
   <string name="pref_clear_all_history_summary">Curăță căutările recente și istoricul filelor</string>
   <string name="all_history_cleared">Tot istoricul curățat</string>
-  <string name="clear_all_history_dialog_title">Curăță tot istoricul</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Curăță tot istoricul</string>
   <string name="delete">Șterge</string>
   <string name="delete_specific_search_toast">Căutare recentă scoasă</string>
   <string name="hint_contents_drawer_message">Poți glisa spre stânga pentru a vedea acest articol</string>
@@ -122,10 +124,11 @@
   <string name="time_left">stânga</string>
   <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
   <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
-  <string name="external_link_popup_dialog_title">Introdu legătură externă</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Introdu legătură externă</string>
   <string name="external_link_popup_dialog_message">Introduci o legătură externă. Acesta ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când ești off-line. Vrei să continui?</string>
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
   <string name="your_languages">Limbi selectate:</string>
   <string name="other_languages">Alte limbi:</string>
   <string name="no_bookmarks">Nici un semn de carte</string>
+  <string name="delete_history">Șterge istoricul?</string>
 </resources>

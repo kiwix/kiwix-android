@@ -47,6 +47,9 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
@@ -98,19 +101,21 @@ internal class SearchViewModelTest {
   inner class StateTests {
     @Test
     fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(NoResults(""))
+      viewModel.state.test().assertValue(NoResults("", FromWebView))
     }
 
     @Test
     fun `non empty search term with search results shows Results`() {
       val item = ZimSearchResultListItem("")
       val searchTerm = "searchTerm"
+      val searchOrigin = FromWebView
       emissionOf(
         searchTerm = searchTerm,
         searchResults = listOf(item),
-        databaseResults = listOf(RecentSearchListItem(""))
+        databaseResults = listOf(RecentSearchListItem("")),
+        searchOrigin = searchOrigin
       )
-      resultsIn(Results(searchTerm, listOf(item)))
+      resultsIn(Results(searchTerm, listOf(item), searchOrigin))
     }
 
     @Test
@@ -118,9 +123,10 @@ internal class SearchViewModelTest {
       emissionOf(
         searchTerm = "a",
         searchResults = emptyList(),
-        databaseResults = listOf(RecentSearchListItem(""))
+        databaseResults = listOf(RecentSearchListItem("")),
+        searchOrigin = FromWebView
       )
-      resultsIn(NoResults("a"))
+      resultsIn(NoResults("a", FromWebView))
     }
 
     @Test
@@ -129,9 +135,10 @@ internal class SearchViewModelTest {
       emissionOf(
         searchTerm = "",
         searchResults = listOf(ZimSearchResultListItem("")),
-        databaseResults = listOf(item)
+        databaseResults = listOf(item),
+        searchOrigin = FromWebView
       )
-      resultsIn(Results("", listOf(item)))
+      resultsIn(Results("", listOf(item), FromWebView))
     }
 
     @Test
@@ -139,9 +146,10 @@ internal class SearchViewModelTest {
       emissionOf(
         searchTerm = "",
         searchResults = listOf(ZimSearchResultListItem("")),
-        databaseResults = emptyList()
+        databaseResults = emptyList(),
+        searchOrigin = FromWebView
       )
-      resultsIn(NoResults(""))
+      resultsIn(NoResults("", FromWebView))
     }
 
     @Test
@@ -151,12 +159,16 @@ internal class SearchViewModelTest {
       emissionOf(
         searchTerm = searchString,
         searchResults = listOf(item),
-        databaseResults = emptyList()
+        databaseResults = emptyList(),
+        searchOrigin = FromWebView
       )
       viewModel.actions.offer(Filter(searchString))
       viewModel.state.test()
         .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(NoResults(""), Results(searchString, listOf(item)))
+        .assertValueHistory(
+          NoResults("", FromWebView),
+          Results(searchString, listOf(item), FromWebView)
+        )
     }
 
     @Test
@@ -165,16 +177,40 @@ internal class SearchViewModelTest {
       emissionOf(
         searchTerm = "a",
         searchResults = listOf(item),
-        databaseResults = emptyList()
+        databaseResults = emptyList(),
+        searchOrigin = FromWebView
       )
       emissionOf(
         searchTerm = "b",
         searchResults = listOf(item),
-        databaseResults = emptyList()
+        databaseResults = emptyList(),
+        searchOrigin = FromWebView
       )
       viewModel.state.test()
         .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(NoResults(""), Results("b", listOf(item)))
+        .assertValueHistory(NoResults("", FromWebView), Results("b", listOf(item), FromWebView))
+    }
+
+    @Test
+    fun `webView search origin leads to webView in NoResults`() {
+      emissionOf(
+        searchTerm = "",
+        searchResults = listOf(ZimSearchResultListItem("")),
+        databaseResults = emptyList(),
+        searchOrigin = FromWebView
+      )
+      resultsIn(NoResults("", FromWebView))
+    }
+
+    @Test
+    fun `tabView search origin leads to tabView in Results`() {
+      emissionOf(
+        searchTerm = "",
+        searchResults = listOf(ZimSearchResultListItem("")),
+        databaseResults = emptyList(),
+        searchOrigin = FromTabView
+      )
+      resultsIn(NoResults("", FromTabView))
     }
   }
 
@@ -272,10 +308,12 @@ internal class SearchViewModelTest {
   private fun emissionOf(
     searchTerm: String,
     searchResults: List<ZimSearchResultListItem>,
-    databaseResults: List<RecentSearchListItem>
+    databaseResults: List<RecentSearchListItem>,
+    searchOrigin: SearchOrigin
   ) {
     every { searchResultGenerator.generateSearchResults(searchTerm) } returns searchResults
     viewModel.actions.offer(Filter(searchTerm))
     recentsFromDb.offer(databaseResults)
+    viewModel.actions.offer(ScreenWasStartedFrom(searchOrigin))
   }
 }

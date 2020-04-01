@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.CONTACT_EMAIL_ADDRESS;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.CONTACT_EMAIL_ADDRESS;
 
 public class HelpActivity extends BaseActivity {
 

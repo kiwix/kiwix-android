@@ -22,7 +22,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 
 data class SearchInPreviousScreen(private val searchString: String) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
@@ -30,7 +30,7 @@ data class SearchInPreviousScreen(private val searchString: String) : SideEffect
       Activity.RESULT_OK,
       Intent().apply {
         putExtra(EXTRA_SEARCH_IN_TEXT, true)
-        putExtra(Constants.TAG_FILE_SEARCHED, searchString)
+        putExtra(TAG_FILE_SEARCHED, searchString)
       }
     )
     activity.finish()

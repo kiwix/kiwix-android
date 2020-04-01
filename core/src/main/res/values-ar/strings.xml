@@ -38,6 +38,7 @@
   <string name="server_failed_message">لا يمكن بدء الخادم. يُرجى تشغيل الهوت-سبوت الخاص بك</string>
   <string name="server_failed_toast_message">لا يمكن بدء الخادم.</string>
   <string name="server_started_successfully_toast_message">بدأ الخادم بنجاح.</string>
+  <string name="server_stopped_successfully_toast_message">أوقف الخادم بنجاح.</string>
   <string name="hotspot_turned_on">الهوت-سبوت قيد التشغيل</string>
   <string name="hotspot_details_message">فيما يلي تفاصيل الهوت-سبوت الخاص بك.\nSSID: %1$s \nPass: %2$s</string>
   <string name="server_textview_default_message">حدد الملفات التي ترغب في استضافتها على الخادم</string>
@@ -80,7 +81,7 @@
   <string name="all_history_cleared">تم إفراغ سجل التاريخ</string>
   <string name="pref_clear_all_bookmarks_title">حذف الإشارات المرجعية</string>
   <string name="all_bookmarks_cleared">حُذفت جميع الإشارات المرجعية</string>
-  <string name="clear_all_history_dialog_title">مسح كل التاريخ</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">مسح كل التاريخ</string>
   <string name="share">مشاركة</string>
   <string name="selected_file_cab_app_chooser_title">مشاركة ملفات زيم (ZIM) مع:</string>
   <string name="delete">حذف</string>
@@ -145,7 +146,7 @@
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
-  <string name="wifi_only_msg">إذا اخترت \“نعم\”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
+  <string name="wifi_only_msg">إذا اخترت “نعم”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
   <string name="pref_wifi_only">تنزيل المحتوى عبر واي فاي فقط</string>
   <string name="time_day">يوم</string>
   <string name="time_hour">ساعة</string>
@@ -156,7 +157,7 @@
   <string name="time_yesterday">أمس</string>
   <string name="pref_external_link_popup_title">التحذير عند الدخول إلى وصلاتٍ خارجية</string>
   <string name="pref_external_link_popup_summary">عرض المنبثق للتحذير من التكاليف الإضافية أو عدم عمل الروابط دون اتصالٍ بالإنترنت.</string>
-  <string name="external_link_popup_dialog_title">الدخول إلى الوصلة الخارجية</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">الدخول إلى الوصلة الخارجية</string>
   <string name="external_link_popup_dialog_message">قد دخلت إلى وصلةٍ خارجية، قد يؤدي ذلك إلى فرض تكاليفٍ إضافيةٍ لنقل البيانات أو فقط لن يعمل إذا لم تكن متصلًا بالإنترنت، هل تريد الاستمرار؟</string>
   <string name="do_not_ask_anymore">لا تسأل بعد الآن</string>
   <string name="your_languages">اللغات المختارة:</string>
@@ -256,4 +257,6 @@
   <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
   <string name="no_history">لا تاريخ</string>
   <string name="device_default">الجهاز الافتراضي</string>
+  <string name="delete_history">حذف التاريخ؟</string>
+  <string name="delete_bookmarks">أزل العلامات المرجعية؟</string>
 </resources>

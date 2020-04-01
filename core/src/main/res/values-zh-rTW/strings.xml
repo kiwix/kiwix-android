@@ -37,6 +37,7 @@
   <string name="server_failed_message">無法開啟伺服器，請啟動您的熱點</string>
   <string name="server_failed_toast_message">無法開啟伺服器。</string>
   <string name="server_started_successfully_toast_message">伺服器開啟成功。</string>
+  <string name="server_stopped_successfully_toast_message">成功停止伺服器。</string>
   <string name="hotspot_turned_on">熱點已啟動</string>
   <string name="hotspot_details_message">以下為您的本地熱點詳細內容。\nSSID：%1$s \n密碼：%2$s</string>
   <string name="server_textview_default_message">選擇您想要在伺服器上託管的檔案</string>
@@ -50,6 +51,7 @@
   <string name="stop_server_label">停止伺服器</string>
   <string name="server_started_message">在您的瀏覽器輸入 IP 位址來存取伺服器%s</string>
   <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。</string>
+  <string name="zim_not_opened">無法打開 zim 檔案</string>
   <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。</string>
   <string name="error_article_url_not_found">錯誤：載入條目(網址：%1$s)失敗。</string>
   <string name="pref_display_title">顯示</string>
@@ -79,10 +81,11 @@
   <string name="all_history_cleared">所有歷史記錄已清除</string>
   <string name="pref_clear_all_bookmarks_title">清除書籤</string>
   <string name="all_bookmarks_cleared">已清除所有書籤</string>
-  <string name="clear_all_history_dialog_title">清除所有歷史記錄</string>
+  <string name="clear_all_history_dialog_title">清除所有歷史記錄？</string>
   <string name="share">分享</string>
   <string name="selected_file_cab_app_chooser_title">分享 ZIM 檔案以：</string>
   <string name="delete">刪除</string>
+  <string name="cancel">取消</string>
   <string name="delete_specific_search_toast">近期搜尋已移除</string>
   <string name="hint_contents_drawer_message">您可以向左滑動來檢視此條目內容</string>
   <string name="got_it">了解</string>
@@ -141,6 +144,9 @@
   <string name="confirm_stop_download_msg">您確定要取消此次下載？</string>
   <string name="download_change_storage">儲存裝置設備選取器</string>
   <string name="tts_not_enabled">轉換為語音的文字無法用在 ZIM 檔案上</string>
+  <string name="texttospeech_initialization_failed">文字轉語音的初始化失敗，請重試</string>
+  <string name="texttospeech_error">文字轉語音出現意外錯誤，請重試</string>
+  <string name="search_error">搜尋時出現意外錯誤，請重試</string>
   <string name="next">下一個</string>
   <string name="previous">上一個</string>
   <string name="wifi_only_title">允許透過移動網路來下載內容？</string>
@@ -155,7 +161,7 @@
   <string name="time_yesterday">昨日</string>
   <string name="pref_external_link_popup_title">當輸入外部連結時警告</string>
   <string name="pref_external_link_popup_summary">顯示彈跳項目來警告有關額外的耗費或不運作在離線連結上。</string>
-  <string name="external_link_popup_dialog_title">輸入外部連結</string>
+  <string name="external_link_popup_dialog_title">輸入外部連結！</string>
   <string name="external_link_popup_dialog_message">您正輸入一個外部連結。這可能會導致出額外耗費的資料傳遞，否則當您離線時不要運作。您要繼續嗎？</string>
   <string name="do_not_ask_anymore">不再詢問</string>
   <string name="your_languages">所選語言：</string>
@@ -207,6 +213,8 @@
   <string name="ext_storage_permission_rationale_add_note">註釋需要儲存裝置存取權限</string>
   <string name="ext_storage_write_permission_denied_add_note">沒有儲存裝置存取權限註釋會無法使用</string>
   <string name="note_save_unsuccessful">註釋儲存失敗</string>
+  <string name="note_delete_successful">註釋刪除成功</string>
+  <string name="note_delete_unsuccessful">註釋未刪除</string>
   <string name="note_save_successful">註釋已儲存</string>
   <string name="note_save_error_storage_not_writable">錯誤儲存註釋：儲存裝置不可寫入</string>
   <string name="note_share_error_file_missing">註記檔案不存在</string>
@@ -255,4 +263,6 @@
   <string name="no_bookmarks">沒有書籤！</string>
   <string name="no_history">沒有歷史</string>
   <string name="device_default">設備預設</string>
+  <string name="delete_history">刪除歷史？</string>
+  <string name="delete_bookmarks">刪除書籤？</string>
 </resources>

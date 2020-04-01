@@ -25,7 +25,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.Constants
+import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 
 internal class SearchInPreviousScreenTest {
 
@@ -37,7 +37,7 @@ internal class SearchInPreviousScreenTest {
     SearchInPreviousScreen(searchString).invokeWith(activity)
     verify {
       anyConstructed<Intent>().putExtra(SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT, true)
-      anyConstructed<Intent>().putExtra(Constants.TAG_FILE_SEARCHED, searchString)
+      anyConstructed<Intent>().putExtra(TAG_FILE_SEARCHED, searchString)
       activity.setResult(Activity.RESULT_OK, any())
       activity.finish()
     }

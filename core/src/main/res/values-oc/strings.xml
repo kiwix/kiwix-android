@@ -46,7 +46,7 @@
   <string name="delete_recent_search_item">Suprimir aqueste element ?</string>
   <string name="pref_clear_all_history_title">Escafar l\'istoric</string>
   <string name="all_history_cleared">Tot l’istoric es escafat</string>
-  <string name="clear_all_history_dialog_title">Escafar tot l’istoric</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Escafar tot l’istoric</string>
   <string name="delete">Suprimir</string>
   <string name="delete_specific_search_toast">Recèrca recenta suprimida</string>
   <string name="got_it">Es bon</string>

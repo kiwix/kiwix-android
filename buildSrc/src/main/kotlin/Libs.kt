@@ -337,11 +337,6 @@ object Libs {
   const val rxandroid: String = "io.reactivex.rxjava2:rxandroid:" + Versions.rxandroid
 
   /**
-   * http://developer.android.com/tools/extras/support-library.html
-   */
-  const val cardview: String = "androidx.cardview:cardview:" + Versions.cardview
-
-  /**
    * https://developer.android.com/jetpack/androidx
    */
   const val core_ktx: String = "androidx.core:core-ktx:" + Versions.core_ktx

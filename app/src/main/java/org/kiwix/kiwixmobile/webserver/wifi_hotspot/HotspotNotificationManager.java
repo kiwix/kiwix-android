@@ -29,7 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.core.utils.Constants;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.HOTSPOT_SERVICE_CHANNEL_ID;
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
 public class HotspotNotificationManager {
@@ -50,7 +50,7 @@ public class HotspotNotificationManager {
   private void hotspotNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationChannel hotspotServiceChannel = new NotificationChannel(
-        Constants.HOTSPOT_SERVICE_CHANNEL_ID,
+        HOTSPOT_SERVICE_CHANNEL_ID,
         context.getString(R.string.hotspot_service_channel_name),
         NotificationManager.IMPORTANCE_DEFAULT);
       hotspotServiceChannel.setDescription(context.getString(R.string.hotspot_channel_description));
@@ -81,7 +81,7 @@ public class HotspotNotificationManager {
       .addAction(R.drawable.ic_close_white_24dp,
         context.getString(R.string.stop),
         stopHotspot)
-      .setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID)
+      .setChannelId(HOTSPOT_SERVICE_CHANNEL_ID)
       .build();
   }
 

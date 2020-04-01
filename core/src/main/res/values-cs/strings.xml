@@ -5,6 +5,7 @@
 * Dvorapa
 * Juandev
 * Meliganai
+* Mininis11
 * Tchoř
 * Walter Klosse
 -->
@@ -77,10 +78,11 @@
   <string name="pref_clear_all_history_title">Vyčistit historii</string>
   <string name="pref_clear_all_history_summary">Vyčistit poslední hledání a tabulky historie</string>
   <string name="all_history_cleared">Všechna historie odstraněna</string>
-  <string name="clear_all_history_dialog_title">Vyčistit celou historii</string>
+  <string name="clear_all_history_dialog_title">Vyčistit celou historii?</string>
   <string name="share">Sdílet</string>
   <string name="selected_file_cab_app_chooser_title">Sdílet soubory ZIM s:</string>
   <string name="delete">Smazat</string>
+  <string name="cancel">Storno</string>
   <string name="delete_specific_search_toast">Nedávné hledání smazáno</string>
   <string name="got_it">Rozumím!</string>
   <string name="did_you_know">Věděli jste, že…?</string>
@@ -144,7 +146,7 @@
   <string name="time_left">Vlevo</string>
   <string name="time_today">Dnes</string>
   <string name="time_yesterday">Včera</string>
-  <string name="external_link_popup_dialog_title">Vkládám externí odkaz</string>
+  <string name="external_link_popup_dialog_title">Vkládám externí odkaz!</string>
   <string name="external_link_popup_dialog_message">Když vkládáte externí odkaz. Může to vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
   <string name="your_languages">Vybrané jazyky:</string>

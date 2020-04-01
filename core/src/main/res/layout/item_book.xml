@@ -1,125 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:animateLayoutChanges="true"
-  tools:ignore="Overdraw">
+  android:layout_margin="@dimen/card_margin">
 
-  <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/horizontal_padding"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    app:layout_constraintGuide_begin="@dimen/activity_horizontal_margin" />
+  <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-  <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/vertical_padding"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_begin="@dimen/activity_vertical_margin" />
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/horizontal_padding"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_begin="@dimen/activity_horizontal_margin" />
 
-  <CheckBox
-    android:id="@+id/itemBookCheckbox"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingEnd="10dp"
-    android:visibility="gone"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="@+id/horizontal_padding"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:ignore="RtlSymmetry" />
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/vertical_padding"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_begin="@dimen/activity_vertical_margin" />
 
-  <ImageView
-    android:id="@+id/item_book_icon"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:contentDescription="@string/fav_icon"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toEndOf="@id/itemBookCheckbox"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:src="@mipmap/ic_launcher_round" />
+    <CheckBox
+      android:id="@+id/itemBookCheckbox"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingEnd="10dp"
+      android:visibility="gone"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/horizontal_padding"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:ignore="RtlSymmetry" />
 
-  <TextView
-    android:id="@+id/item_book_title"
-    style="@style/list_item_title"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@id/item_book_icon"
-    app:layout_constraintTop_toBottomOf="@+id/vertical_padding"
-    tools:text="Wikipedia" />
+    <ImageView
+      android:id="@+id/item_book_icon"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:contentDescription="@string/fav_icon"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toEndOf="@id/itemBookCheckbox"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:src="@mipmap/ic_launcher_round" />
 
-  <TextView
-    android:id="@+id/item_book_date"
-    style="@style/list_item_body"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_title"
-    tools:text="1 Jan 2018" />
+    <TextView
+      android:id="@+id/item_book_title"
+      style="@style/list_item_title"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/activity_horizontal_margin"
+      android:layout_marginEnd="@dimen/activity_horizontal_margin"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/item_book_icon"
+      app:layout_constraintTop_toBottomOf="@+id/vertical_padding"
+      tools:text="Wikipedia" />
 
-  <TextView
-    android:id="@+id/item_book_size"
-    style="@style/list_item_body"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    app:layout_constraintStart_toEndOf="@id/item_book_date"
-    app:layout_constraintTop_toTopOf="@id/item_book_date"
-    tools:text="20 GB" />
+    <TextView
+      android:id="@+id/item_book_description"
+      style="@style/list_item_body"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
+      android:ellipsize="end"
+      android:maxLines="2"
+      android:textColor="@color/text_secondary"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="@id/item_book_title"
+      app:layout_constraintTop_toBottomOf="@id/item_book_title"
+      tools:text="All wikipedia articles" />
 
-  <TextView
-    android:id="@+id/item_book_article_count"
-    style="@style/list_item_body"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    app:layout_constraintStart_toEndOf="@id/item_book_size"
-    app:layout_constraintTop_toTopOf="@id/item_book_size"
-    tools:text="10.1 K articles" />
+    <TextView
+      android:id="@+id/item_book_date"
+      style="@style/list_item_body"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/text_tertiary"
+      app:layout_constraintStart_toStartOf="@id/item_book_title"
+      app:layout_constraintTop_toBottomOf="@id/item_book_description"
+      tools:text="1 Jan 2018" />
 
-  <TextView
-    android:id="@+id/item_book_description"
-    style="@style/list_item_body"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_date"
-    tools:text="All wikipedia articles" />
+    <TextView
+      android:id="@+id/item_book_size"
+      style="@style/list_item_body"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/activity_horizontal_margin"
+      android:layout_marginEnd="@dimen/activity_horizontal_margin"
+      android:textColor="@color/text_tertiary"
+      app:layout_constraintStart_toEndOf="@id/item_book_date"
+      app:layout_constraintTop_toTopOf="@id/item_book_date"
+      tools:text="20 GB" />
 
-  <org.kiwix.kiwixmobile.core.zim_manager.TagsView
-    android:id="@+id/tags"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="@+id/item_book_description"
-    app:layout_constraintTop_toBottomOf="@id/item_book_description" />
+    <TextView
+      android:id="@+id/item_book_article_count"
+      style="@style/list_item_body"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/activity_horizontal_margin"
+      android:layout_marginEnd="@dimen/activity_horizontal_margin"
+      android:textColor="@color/text_tertiary"
+      app:layout_constraintStart_toEndOf="@id/item_book_size"
+      app:layout_constraintTop_toTopOf="@id/item_book_size"
+      tools:text="10.1 K articles" />
 
-  <View
-    android:layout_width="0dp"
-    android:layout_height="1dp"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:background="?android:attr/dividerVertical"
-    app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/tags" />
+    <org.kiwix.kiwixmobile.core.zim_manager.TagsView
+      android:id="@+id/tags"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/item_book_description"
+      app:layout_constraintTop_toBottomOf="@id/item_book_date" />
 
-  <View
-    android:id="@+id/item_book_clickable_area"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:background="?android:attr/selectableItemBackground"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:visibility="gone" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+      android:id="@+id/item_book_clickable_area"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:background="?android:attr/selectableItemBackground"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:visibility="gone" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

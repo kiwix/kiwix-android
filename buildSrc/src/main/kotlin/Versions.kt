@@ -15,7 +15,7 @@ object Versions {
 
   const val com_squareup_retrofit2: String = "2.5.0" // available: "2.7.1"
 
-  const val org_jetbrains_kotlin: String = "1.3.61"
+  const val org_jetbrains_kotlin: String = "1.3.70"
 
   const val com_google_dagger: String = "2.26"
 
@@ -86,8 +86,6 @@ object Versions {
   const val appcompat: String = "1.1.0"
 
   const val rxandroid: String = "2.1.0" // available: "2.1.1"
-
-  const val cardview: String = "1.0.0"
 
   const val core_ktx: String = "1.2.0"
 

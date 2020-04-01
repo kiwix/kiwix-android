@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
+import com.google.android.material.card.MaterialCardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
@@ -72,11 +72,11 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     ImageViewExtensionsKt.tint(close,
       ContextExtensionsKt.getColorAttribute(context, R.attr.colorOnSurface));
 
-    CardView cardView = new CardView(context);
+    MaterialCardView cardView = new MaterialCardView(context);
     cardView.setId(3);
     cardView.setUseCompatPadding(true);
-    cardView.addView(contentImage, new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
-      CardView.LayoutParams.MATCH_PARENT));
+    cardView.addView(contentImage, new MaterialCardView.LayoutParams(MaterialCardView.LayoutParams.MATCH_PARENT,
+      MaterialCardView.LayoutParams.MATCH_PARENT));
 
     ConstraintLayout constraintLayout = new ConstraintLayout(context);
     constraintLayout.setFocusableInTouchMode(true);
