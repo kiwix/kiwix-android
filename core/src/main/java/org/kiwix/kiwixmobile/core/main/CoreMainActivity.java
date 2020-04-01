@@ -1549,7 +1549,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void updateNightMode() {
-    painter.update(getCurrentWebView(), kiwixWebView -> !(kiwixWebView.getUrl() != null && kiwixWebView.getUrl().equals(HOME_URL)), videoView, getCurrentWebView());
+    painter.update(getCurrentWebView(), kiwixWebView -> !(kiwixWebView.getUrl() != null && kiwixWebView.getUrl().equals(HOME_URL)), videoView);
   }
 
   private void loadPrefs() {
@@ -1722,8 +1722,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void setHomePage(View view) {
-    painter.deactivateNightMode(getCurrentWebView());
-    painter.deactivateNightMode(videoView);
+    painter.deactivateNightMode(getCurrentWebView(), videoView);
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);

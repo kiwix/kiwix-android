@@ -36,29 +36,32 @@ class NightModeViewPainter @Inject constructor(
   private val invertedPaint =
     Paint().apply { colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS) }
 
+  @JvmOverloads
   fun <T : View> update(
     view: T,
     shouldActivateCriteria: ((T) -> Boolean) = { true },
-    vararg additionalViews: View
+    vararg additionalViews: View = emptyArray()
   ) {
     if (nightModeConfig.isNightModeActive()) {
       if (shouldActivateCriteria(view)) {
-        for (view in additionalViews) {
-          activateNightMode(view)
-        }
+        activateNightMode(view, *additionalViews)
       }
     } else {
-      for (view in additionalViews) {
-        deactivateNightMode(view)
-      }
+      deactivateNightMode(view, *additionalViews)
     }
   }
 
-  fun deactivateNightMode(view: View) {
+  fun deactivateNightMode(view: View, vararg additionalViews: View) {
     view.setLayerType(View.LAYER_TYPE_NONE, null)
+    for (v in additionalViews) {
+      v.setLayerType(View.LAYER_TYPE_NONE, null)
+    }
   }
 
-  private fun activateNightMode(view: View) {
+  private fun activateNightMode(view: View, vararg additionalViews: View) {
     view.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
+    for (v in additionalViews) {
+      v.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
+    }
   }
 }

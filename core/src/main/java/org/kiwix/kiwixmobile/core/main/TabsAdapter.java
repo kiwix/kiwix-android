@@ -148,7 +148,7 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
       notifyDataSetChanged();
     });
     if (!webViewTitle.equals(activity.getString(R.string.menu_home))) {
-      painter.update(holder.content, imageView -> true, holder.content);
+      painter.update(holder.content);//, imageView -> true, holder.content);
     }
   }
 
