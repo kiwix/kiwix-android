@@ -23,11 +23,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlinx.android.synthetic.main.header_date.header_date
-import kotlinx.android.synthetic.main.header_date.view.header_date
 import kotlinx.android.synthetic.main.item_bookmark_history.favicon
 import kotlinx.android.synthetic.main.item_bookmark_history.title
-import kotlinx.android.synthetic.main.item_bookmark_history.view.favicon
-import kotlinx.android.synthetic.main.item_bookmark_history.view.title
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
@@ -45,65 +42,19 @@ internal class HistoryAdapter(
   val itemClickListener: OnItemClickListener
 ) : Adapter<ViewHolder>() {
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return if (viewType == TYPE_ITEM) {
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+    if (viewType == TYPE_ITEM)
       Item(parent.inflate(R.layout.item_bookmark_history, false))
-    } else {
+    else
       Category(parent.inflate(R.layout.header_date, false))
-    }
-  }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     if (holder is Item) {
-      val history = historyList[position] as HistoryItem
-      setItemDataWithHelpOfHistoryItem(holder, history)
+      val historyItem = historyList[position] as HistoryItem
+      holder.bind(historyItem)
     } else if (holder is Category) {
       val date = (historyList[position] as DateItem).dateString
-      setCategoryDataWithHelpOfDate(date, holder)
-    }
-  }
-
-  private fun setCategoryDataWithHelpOfDate(date: String, holder: Category) {
-    val todaysDate = LocalDate.now()
-    val yesterdayDate = LocalDate.now().minusDays(1)
-    val formatter = DateTimeFormatter.ofPattern("d MMM yyyy")
-    val givenDate = LocalDate.parse(date, formatter)
-
-    when {
-      todaysDate == givenDate -> {
-        holder.header_date.setText(
-          R.string.time_today
-        )
-      }
-      yesterdayDate == givenDate -> {
-        holder.header_date.setText(
-          R.string.time_yesterday
-        )
-      }
-      else -> {
-        holder.header_date.text = date
-      }
-    }
-  }
-
-  private fun setItemDataWithHelpOfHistoryItem(holder: Item, history: HistoryItem) {
-    holder.title.text = history.historyTitle
-    if (deleteList.contains(history)) {
-      holder.favicon.setImageDrawableCompat(
-          R.drawable.ic_check_circle_blue_24dp
-      )
-    } else {
-      holder.favicon.setBitmap(Base64String(history.favicon))
-    }
-    holder.itemView.setOnClickListener {
-      itemClickListener.onItemClick(
-        holder.favicon, history
-      )
-    }
-    holder.itemView.setOnLongClickListener {
-      itemClickListener.onItemLongClick(
-        holder.favicon, history
-      )
+      holder.bind(date)
     }
   }
 
@@ -124,16 +75,51 @@ internal class HistoryAdapter(
     ): Boolean
   }
 
-  class Item(itemView: View) : BaseViewHolder<View>(itemView) {
-    override fun bind(item: View) {
-      favicon.setImageDrawable(item.favicon.drawable)
-      title.text = item.title.text
+  inner class Item(itemView: View) : BaseViewHolder<HistoryItem>(itemView) {
+    override fun bind(item: HistoryItem) {
+      title.text = item.historyTitle
+      if (deleteList.contains(item)) {
+        favicon.setImageDrawableCompat(
+          R.drawable.ic_check_circle_blue_24dp
+        )
+      } else {
+        favicon.setBitmap(Base64String(item.favicon))
+      }
+      itemView.setOnClickListener {
+        itemClickListener.onItemClick(
+          favicon, item
+        )
+      }
+      itemView.setOnLongClickListener {
+        itemClickListener.onItemLongClick(
+          favicon, item
+        )
+      }
     }
   }
 
-  class Category(itemView: View) : BaseViewHolder<View>(itemView) {
-    override fun bind(item: View) {
-      header_date.text = item.header_date.text
+  inner class Category(itemView: View) : BaseViewHolder<String>(itemView) {
+    override fun bind(item: String) {
+      val todaysDate = LocalDate.now()
+      val yesterdayDate = LocalDate.now().minusDays(1)
+      val formatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+      val givenDate = LocalDate.parse(item, formatter)
+
+      when {
+        todaysDate == givenDate -> {
+          header_date.setText(
+            R.string.time_today
+          )
+        }
+        yesterdayDate == givenDate -> {
+          header_date.setText(
+            R.string.time_yesterday
+          )
+        }
+        else -> {
+          header_date.text = item
+        }
+      }
     }
   }
 
