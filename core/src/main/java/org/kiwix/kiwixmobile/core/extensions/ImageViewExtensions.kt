@@ -37,7 +37,6 @@ fun ImageView.setBitmapFromString(string: String?) {
   setBitmap(Base64String(string))
 }
 
-
 fun ImageView.setImageDrawableCompat(@DrawableRes id: Int) {
   setImageDrawable(ContextCompat.getDrawable(context, id))
 }

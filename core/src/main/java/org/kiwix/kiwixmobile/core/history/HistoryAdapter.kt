@@ -17,26 +17,16 @@
  */
 package org.kiwix.kiwixmobile.core.history
 
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import kotlinx.android.synthetic.main.header_date.header_date
-import kotlinx.android.synthetic.main.item_bookmark_history.favicon
-import kotlinx.android.synthetic.main.item_bookmark_history.title
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
-import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
-import org.kiwix.kiwixmobile.core.extensions.setBitmap
-import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
 
-internal class HistoryAdapter(
+class HistoryAdapter(
   val historyList: List<HistoryListItem>,
   val deleteList: List<HistoryListItem>,
   val itemClickListener: OnItemClickListener
@@ -44,15 +34,19 @@ internal class HistoryAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
     if (viewType == TYPE_ITEM)
-      Item(parent.inflate(R.layout.item_bookmark_history, false))
+      HistoryItemViewHolder(
+        parent.inflate(R.layout.item_bookmark_history, false),
+        deleteList,
+        itemClickListener
+      )
     else
-      Category(parent.inflate(R.layout.header_date, false))
+      HistoryCategoryItemViewHolder(parent.inflate(R.layout.header_date, false))
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    if (holder is Item) {
+    if (holder is HistoryItemViewHolder) {
       val historyItem = historyList[position] as HistoryItem
       holder.bind(historyItem)
-    } else if (holder is Category) {
+    } else if (holder is HistoryCategoryItemViewHolder) {
       val date = (historyList[position] as DateItem).dateString
       holder.bind(date)
     }
@@ -63,64 +57,10 @@ internal class HistoryAdapter(
 
   override fun getItemCount(): Int = historyList.size
 
-  internal interface OnItemClickListener {
-    fun onItemClick(
-      favicon: ImageView,
-      history: HistoryItem
-    )
+  interface OnItemClickListener {
+    fun onItemClick(favicon: ImageView, history: HistoryItem)
 
-    fun onItemLongClick(
-      favicon: ImageView,
-      history: HistoryItem
-    ): Boolean
-  }
-
-  inner class Item(itemView: View) : BaseViewHolder<HistoryItem>(itemView) {
-    override fun bind(item: HistoryItem) {
-      title.text = item.historyTitle
-      if (deleteList.contains(item)) {
-        favicon.setImageDrawableCompat(
-          R.drawable.ic_check_circle_blue_24dp
-        )
-      } else {
-        favicon.setBitmap(Base64String(item.favicon))
-      }
-      itemView.setOnClickListener {
-        itemClickListener.onItemClick(
-          favicon, item
-        )
-      }
-      itemView.setOnLongClickListener {
-        itemClickListener.onItemLongClick(
-          favicon, item
-        )
-      }
-    }
-  }
-
-  inner class Category(itemView: View) : BaseViewHolder<String>(itemView) {
-    override fun bind(item: String) {
-      val todaysDate = LocalDate.now()
-      val yesterdayDate = LocalDate.now().minusDays(1)
-      val formatter = DateTimeFormatter.ofPattern("d MMM yyyy")
-      val givenDate = LocalDate.parse(item, formatter)
-
-      when {
-        todaysDate == givenDate -> {
-          header_date.setText(
-            R.string.time_today
-          )
-        }
-        yesterdayDate == givenDate -> {
-          header_date.setText(
-            R.string.time_yesterday
-          )
-        }
-        else -> {
-          header_date.text = item
-        }
-      }
-    }
+    fun onItemLongClick(favicon: ImageView, history: HistoryItem): Boolean
   }
 
   companion object {
