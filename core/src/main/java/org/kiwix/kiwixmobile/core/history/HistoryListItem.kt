@@ -20,6 +20,9 @@ package org.kiwix.kiwixmobile.core.history
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
+const val HISTORY_ITEM_VIEW_TYPE = 1
+const val DATE_ITEM_VIEW_TYPE = 0
+
 sealed class HistoryListItem {
   abstract val id: Long
 
@@ -68,11 +71,7 @@ sealed class HistoryListItem {
 
   data class DateItem(
     val dateString: String,
-    override val id: Long = dateString.hashCode().toLong()
-  ) : HistoryListItem(){
-    companion object {
-      const val TYPE_ITEM = 1
-      const val TYPE_CATEGORY = 0
-    }
-  }
+    override val id: Long = dateString.hashCode()
+      .toLong()
+  ) : HistoryListItem()
 }
