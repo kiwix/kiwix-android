@@ -15,36 +15,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.di.modules;
+package org.kiwix.kiwixmobile.core.di.modules
 
-import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import dagger.Module;
-import dagger.Provides;
-import javax.inject.Singleton;
-import org.kiwix.kiwixlib.JNIKiwix;
-import org.kiwix.kiwixlib.JNIKiwixSearcher;
+import android.content.Context
+import dagger.Module
+import dagger.Provides
+import org.kiwix.kiwixlib.JNIKiwix
+import org.kiwix.kiwixlib.JNIKiwixSearcher
+import javax.inject.Singleton
 
-/**
- * Created by mhutti1 on 14/04/17.
- */
+@Module
+class JNIModule {
+  @Provides @Singleton
+  fun providesJNIKiwix(context: Context): JNIKiwix = JNIKiwix(context)
 
-@Module public class JNIModule {
-  @Provides
-  @Singleton
-  public JNIKiwix providesJNIKiwix(@NonNull Context context) {
-    return new JNIKiwix(context);
-  }
-
-  @Provides
-  @Singleton
-  @Nullable
-  public JNIKiwixSearcher providesJNIKiwixSearcher() {
-    try {
-      return new JNIKiwixSearcher();
-    } catch (UnsatisfiedLinkError ignore) {
-      return null;
+  @Provides @Singleton fun providesJNIKiwixSearcher(): JNIKiwixSearcher? {
+    return try {
+      JNIKiwixSearcher()
+    } catch (ignore: UnsatisfiedLinkError) {
+      null
     }
   }
 }
