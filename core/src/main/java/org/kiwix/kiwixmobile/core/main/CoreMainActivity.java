@@ -86,6 +86,7 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
@@ -1548,7 +1549,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void updateNightMode() {
-    painter.update(getCurrentWebView(), { getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl() != HOME_URL}, videoView);
+    painter.update(getCurrentWebView(), kiwixWebView -> !(kiwixWebView.getUrl() != null && kiwixWebView.getUrl().equals(HOME_URL)), videoView, getCurrentWebView());
   }
 
   private void loadPrefs() {

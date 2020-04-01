@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.main
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.view.View
-import android.widget.VideoView
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import javax.inject.Inject
 
@@ -42,6 +41,17 @@ class NightModeViewPainter @Inject constructor(
     shouldActivateCriteria: ((T) -> Boolean) = { true },
     vararg additionalViews: View
   ) {
+    if (nightModeConfig.isNightModeActive()) {
+      if (shouldActivateCriteria(view)) {
+        for (view in additionalViews) {
+          activateNightMode(view)
+        }
+      }
+    } else {
+      for (view in additionalViews) {
+        deactivateNightMode(view)
+      }
+    }
   }
 
   fun deactivateNightMode(view: View) {
@@ -51,22 +61,4 @@ class NightModeViewPainter @Inject constructor(
   private fun activateNightMode(view: View) {
     view.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
   }
-
-  private fun activateNightMode(webView: KiwixWebView, videoView: VideoView) {
-    if (webView.url != null && webView.url == CoreMainActivity.HOME_URL) {
-      return
-    }
-    webView.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
-    videoView.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
-  }
 }
-
-/*if (nightModeConfig.isNightModeActive()) {
-      for (view in additionalViews) {
-        activateNightMode(view)
-      }
-    } else {
-      for (view in additionalViews) {
-        deactivateNightMode(view)
-      }
-    }*/
