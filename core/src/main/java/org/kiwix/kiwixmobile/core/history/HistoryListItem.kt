@@ -69,5 +69,10 @@ sealed class HistoryListItem {
   data class DateItem(
     val dateString: String,
     override val id: Long = dateString.hashCode().toLong()
-  ) : HistoryListItem()
+  ) : HistoryListItem(){
+    companion object {
+      const val TYPE_ITEM = 1
+      const val TYPE_CATEGORY = 0
+    }
+  }
 }

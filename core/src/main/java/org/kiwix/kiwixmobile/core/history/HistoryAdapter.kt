@@ -33,7 +33,7 @@ class HistoryAdapter(
 ) : Adapter<ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-    if (viewType == TYPE_ITEM)
+    if (viewType == DateItem.TYPE_ITEM)
       HistoryItemViewHolder(
         parent.inflate(R.layout.item_bookmark_history, false),
         deleteList,
@@ -44,16 +44,14 @@ class HistoryAdapter(
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     if (holder is HistoryItemViewHolder) {
-      val historyItem = historyList[position] as HistoryItem
-      holder.bind(historyItem)
+      holder.bind(historyList[position] as HistoryItem)
     } else if (holder is HistoryCategoryItemViewHolder) {
-      val date = (historyList[position] as DateItem).dateString
-      holder.bind(date)
+      holder.bind(historyList[position] as DateItem)
     }
   }
 
   override fun getItemViewType(position: Int): Int =
-    if (historyList[position] is DateItem) 0 else TYPE_ITEM
+    if (historyList[position] is DateItem) DateItem.TYPE_CATEGORY else DateItem.TYPE_ITEM
 
   override fun getItemCount(): Int = historyList.size
 
@@ -63,7 +61,4 @@ class HistoryAdapter(
     fun onItemLongClick(favicon: ImageView, history: HistoryItem): Boolean
   }
 
-  companion object {
-    private const val TYPE_ITEM = 1
-  }
 }
