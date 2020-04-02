@@ -1549,7 +1549,12 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void updateNightMode() {
-    painter.update(getCurrentWebView(), kiwixWebView -> !(kiwixWebView.getUrl() != null && kiwixWebView.getUrl().equals(HOME_URL)), videoView);
+    painter.update(getCurrentWebView(), kiwixWebView -> {
+      if (kiwixWebView.getUrl() != null) {
+        return !kiwixWebView.getUrl().equals(HOME_URL);
+      }
+      return true;
+    }, videoView);
   }
 
   private void loadPrefs() {
