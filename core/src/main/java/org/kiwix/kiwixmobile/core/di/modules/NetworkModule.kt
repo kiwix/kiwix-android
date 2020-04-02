@@ -32,6 +32,11 @@ import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
+private const val CONNECTION_TIMEOUT = 10L
+private const val READ_TIMEOUT = 60L
+private const val USER_AGENT = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
+private const val KIWIX_DOWNLOAD_URL = "http://mirror.download.kiwix.org/"
+
 @Module
 class NetworkModule {
   @Provides @Singleton fun provideOkHttpClient(): OkHttpClient {
@@ -41,20 +46,13 @@ class NetworkModule {
       .addNetworkInterceptor(HttpLoggingInterceptor().apply {
         level = if (BuildConfig.DEBUG) BASIC else NONE
       })
-      .addNetworkInterceptor(UserAgentInterceptor(userAgent))
+      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
       .build()
   }
 
-  @Provides @Singleton fun provideKiwixService(okHttpClient: OkHttpClient?): KiwixService =
+  @Provides @Singleton fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
     ServiceCreator.newHacklistService(okHttpClient, KIWIX_DOWNLOAD_URL)
 
   @Provides @Singleton fun provideConnectivityManager(context: Context): ConnectivityManager =
     context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-  companion object {
-    private const val CONNECTION_TIMEOUT = 10L
-    private const val READ_TIMEOUT = 60L
-    private const val userAgent = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
-    private const val KIWIX_DOWNLOAD_URL = "http://mirror.download.kiwix.org/"
-  }
 }
