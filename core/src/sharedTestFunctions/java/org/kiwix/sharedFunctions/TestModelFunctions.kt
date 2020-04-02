@@ -160,3 +160,6 @@ fun book(
 fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity().apply {
   book = LinkedList(books)
 }
+
+fun recentSearchEntity(id: Long = 0L, searchTerm: String = "", zimId: String = "") =
+  RecentSearchEntity(id, searchTerm, zimId)
