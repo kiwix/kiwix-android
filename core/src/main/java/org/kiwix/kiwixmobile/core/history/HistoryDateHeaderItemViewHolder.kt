@@ -14,10 +14,10 @@ class HistoryDateHeaderItemViewHolder(itemView: View) : BaseViewHolder<DateItem>
     val yesterdayDate = todaysDate.minusDays(1)
     val givenDate = LocalDate.parse(item.dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
 
-    when {
-      todaysDate == givenDate -> header_date.setText(R.string.time_today)
-      yesterdayDate == givenDate -> header_date.setText(R.string.time_yesterday)
-      else -> header_date.text = item.dateString
+    when (givenDate) {
+      todaysDate -> header_date.setText(R.string.time_today)
+      yesterdayDate -> header_date.setText(R.string.time_yesterday)
+      else -> header_date.setText(item.dateString)
     }
   }
 }
