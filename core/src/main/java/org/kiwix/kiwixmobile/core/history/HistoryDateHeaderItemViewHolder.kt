@@ -17,7 +17,7 @@ class HistoryDateHeaderItemViewHolder(itemView: View) : BaseViewHolder<DateItem>
     when (givenDate) {
       todaysDate -> header_date.setText(R.string.time_today)
       yesterdayDate -> header_date.setText(R.string.time_yesterday)
-      else -> header_date.setText(item.dateString)
+      else -> header_date.text = item.dateString
     }
   }
 }
