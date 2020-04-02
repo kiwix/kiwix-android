@@ -51,17 +51,15 @@ class NightModeViewPainter @Inject constructor(
     }
   }
 
-  fun deactivateNightMode(view: View, vararg additionalViews: View) {
-    view.setLayerType(View.LAYER_TYPE_NONE, null)
-    for (v in additionalViews) {
-      v.setLayerType(View.LAYER_TYPE_NONE, null)
+  fun deactivateNightMode(vararg additionalViews: View) {
+    for (view in additionalViews) {
+      view.setLayerType(View.LAYER_TYPE_NONE, null)
     }
   }
 
-  private fun activateNightMode(view: View, vararg additionalViews: View) {
-    view.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
-    for (v in additionalViews) {
-      v.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
+  private fun activateNightMode(vararg additionalViews: View) {
+    for (view in additionalViews) {
+      view.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint)
     }
   }
 }
