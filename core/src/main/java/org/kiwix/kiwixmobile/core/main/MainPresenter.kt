@@ -18,9 +18,6 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.util.Log
-import io.reactivex.CompletableObserver
-import io.reactivex.SingleObserver
-import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -28,115 +25,38 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.main.MainContract.Presenter
 import org.kiwix.kiwixmobile.core.main.MainContract.View
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
+
+private const val TAG = "MainPresenter"
 
 @ActivityScope
 internal class MainPresenter @Inject constructor(private val dataSource: DataSource) :
   BasePresenter<View?>(), Presenter {
   override fun loadBooks() {
-    dataSource.languageCategorizedBooks
-      .subscribe(object : SingleObserver<List<BooksOnDiskListItem?>?> {
-        override fun onSubscribe(d: Disposable) {
-          compositeDisposable.add(d)
-        }
-
-        override fun onSuccess(books: List<BooksOnDiskListItem?>) {
-          view!!.addBooks(books)
-        }
-
-        override fun onError(e: Throwable) {
-          Log.e(
-            TAG,
-            "Unable to load books",
-            e
-          )
-        }
-      })
+    compositeDisposable.add(
+      dataSource.languageCategorizedBooks.subscribe(
+        view!!::addBooks
+      ) { e -> Log.e(TAG, "Unable to load books", e) })
   }
 
   override fun saveBooks(book: List<BookOnDisk>) {
     dataSource.saveBooks(book)
-      .subscribe(object : CompletableObserver {
-        override fun onSubscribe(d: Disposable) {
-          // TODO
-        }
-
-        override fun onComplete() {
-          loadBooks()
-        }
-
-        override fun onError(e: Throwable) {
-          Log.e(
-            TAG,
-            "Unable to save books",
-            e
-          )
-        }
-      })
+      .subscribe(::loadBooks) { e -> Log.e(TAG, "Unable to save books", e) }
   }
 
   override fun saveHistory(history: HistoryItem) {
     dataSource.saveHistory(history)
-      .subscribe(object : CompletableObserver {
-        override fun onSubscribe(d: Disposable) {
-          // TODO
-        }
-
-        override fun onComplete() {
-          // TODO
-        }
-
-        override fun onError(e: Throwable) {
-          Log.e(TAG, "Unable to save history", e)
-        }
-      })
+      .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
   }
 
   override fun saveBookmark(bookmark: BookmarkItem) {
     dataSource.saveBookmark(bookmark)
-      .subscribe(object : CompletableObserver {
-        override fun onSubscribe(d: Disposable) {
-          // TODO
-        }
-
-        override fun onComplete() {
-          // TODO
-        }
-
-        override fun onError(e: Throwable) {
-          Log.e(
-            TAG,
-            "Unable to save bookmark",
-            e
-          )
-        }
-      })
+      .subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
   }
 
   override fun deleteBookmark(bookmarkUrl: String) {
     dataSource.deleteBookmark(bookmarkUrl)
-      .subscribe(object : CompletableObserver {
-        override fun onSubscribe(d: Disposable) {
-          // TODO
-        }
-
-        override fun onComplete() {
-          // TODO
-        }
-
-        override fun onError(e: Throwable) {
-          Log.e(
-            TAG,
-            "Unable to delete bookmark",
-            e
-          )
-        }
-      })
-  }
-
-  companion object {
-    private const val TAG = "MainPresenter"
+      .subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
   }
 }
