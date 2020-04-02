@@ -52,6 +52,7 @@ class AllProjectConfigurer {
         setMinSdkVersion(Config.minSdk)
         setTargetSdkVersion(Config.targetSdk)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
       }
 
       buildTypes {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_margin="@dimen/card_margin"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+  android:layout_margin="@dimen/card_margin">
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/constraint_layout"
@@ -47,9 +47,9 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/activity_horizontal_margin"
-      android:textColor="@color/text_secondary"
-      android:maxLines="2"
       android:ellipsize="end"
+      android:maxLines="2"
+      android:textColor="@color/text_secondary"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="@+id/libraryBookTitle"
       app:layout_constraintTop_toBottomOf="@+id/libraryBookTitle"
@@ -70,13 +70,13 @@
       style="@style/list_item_body"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:textColor="@color/text_tertiary"
-      android:gravity="start"
-      android:layout_marginRight="10dp"
       android:layout_marginEnd="10dp"
+      android:layout_marginRight="10dp"
+      android:gravity="start"
+      android:textColor="@color/text_tertiary"
+      app:layout_constraintEnd_toStartOf="@id/libraryBookDate"
       app:layout_constraintStart_toStartOf="@+id/libraryBookSize"
       app:layout_constraintTop_toBottomOf="@+id/libraryBookSize"
-      app:layout_constraintEnd_toStartOf="@id/libraryBookDate"
       tools:text="Author" />
 
     <TextView
@@ -95,8 +95,8 @@
       style="@style/list_item_body"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="@color/text_tertiary"
       android:layout_marginEnd="@dimen/activity_horizontal_margin"
+      android:textColor="@color/text_tertiary"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/libraryBookSize"
       tools:text="Date" />
@@ -106,8 +106,8 @@
       style="@style/list_item_body"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="@color/text_tertiary"
       android:layout_marginStart="50dp"
+      android:textColor="@color/text_tertiary"
       app:layout_constraintEnd_toEndOf="@+id/libraryBookDate"
       app:layout_constraintTop_toBottomOf="@+id/libraryBookDate"
       tools:text="Language" />

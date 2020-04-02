@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShowInfo
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
@@ -71,6 +72,7 @@ class ZimFileSelectFragment : BaseFragment() {
     BookDelegate(sharedPreferenceUtil,
       { offerAction(RequestOpen(it)) },
       { offerAction(RequestMultiSelection(it)) },
+      { offerAction(RequestShowInfo(it)) },
       { offerAction(RequestSelect(it)) })
   }
 

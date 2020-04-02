@@ -392,6 +392,7 @@ public abstract class CoreMainActivity extends BaseActivity
           return Unit.INSTANCE;
         },
         null,
+        null,
         null),
       BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );

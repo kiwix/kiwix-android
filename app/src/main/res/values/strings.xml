@@ -4,4 +4,17 @@
   <string name="file_system_does_not_support_4gb">Your file system doesn’t support files over 4GB</string>
   <string name="detecting_file_system">Detecting if file system can create 4GB files</string>
   <string name="cannot_open_file">Failed to open file\nPlease try looking for this file in the Device Tab of your Library</string>
+  <string name="detail_label_format">%s:&#160;</string>
+  <string name="creator">Creator</string>
+  <string name="publisher">Publisher</string>
+  <string name="date">Date</string>
+  <string name="url">Url</string>
+  <string name="article_count">Article Count</string>
+  <string name="media_count">Media Count</string>
+  <string name="size">Size</string>
+  <string name="name">Name</string>
+  <string name="tags">Tags</string>
+  <string name="path">Path</string>
+
+
 </resources>

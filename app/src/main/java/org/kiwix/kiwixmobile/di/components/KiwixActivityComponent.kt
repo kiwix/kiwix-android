@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.BookInfoBottomSheetDialog
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
@@ -56,6 +57,7 @@ interface KiwixActivityComponent {
   fun inject(zimHostActivity: ZimHostActivity)
   fun inject(introActivity: IntroActivity)
   fun inject(kiwixSplashActivity: KiwixSplashActivity)
+  fun inject(bookInfoBottomSheetDialog: BookInfoBottomSheetDialog)
 
   @Subcomponent.Builder
   interface Builder {

@@ -113,6 +113,7 @@
       app:layout_constraintStart_toStartOf="@+id/item_book_description"
       app:layout_constraintTop_toBottomOf="@id/item_book_date" />
 
+
     <View
       android:id="@+id/item_book_clickable_area"
       android:layout_width="0dp"
@@ -123,6 +124,15 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       tools:visibility="gone" />
+
+    <ImageView
+      android:id="@+id/item_book_info"
+      android:layout_width="40dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_info_24px" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

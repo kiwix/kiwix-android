@@ -13,9 +13,11 @@
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$60</ID>
+    <ID>PackageNaming:BookInfoBottomSheetDialog.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:DefaultLanguageProvider.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:DeleteFiles.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
+    <ID>PackageNaming:DetailChip.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:Fat32Checker.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:FileSelectListState.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:FileSystemChecker.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
@@ -32,6 +34,7 @@
     <ID>PackageNaming:OpenFile.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:SectionsPagerAdapter.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:ShareFiles.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
+    <ID>PackageNaming:ShowInfo.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:SimplePageChangeListener.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:StartMultiSelection.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:WifiP2pDelegate.kt$package org.kiwix.kiwixmobile.local_file_transfer.adapter</ID>

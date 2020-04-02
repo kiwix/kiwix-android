@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.item_book.item_book_clickable_area
 import kotlinx.android.synthetic.main.item_book.item_book_date
 import kotlinx.android.synthetic.main.item_book.item_book_description
 import kotlinx.android.synthetic.main.item_book.item_book_icon
+import kotlinx.android.synthetic.main.item_book.item_book_info
 import kotlinx.android.synthetic.main.item_book.item_book_size
 import kotlinx.android.synthetic.main.item_book.item_book_title
 import kotlinx.android.synthetic.main.item_book.tags
@@ -47,6 +48,7 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
     containerView: View,
     private val clickAction: ((BookOnDisk) -> Unit)?,
     private val longClickAction: ((BookOnDisk) -> Unit)?,
+    private val infoClickAction: ((BookOnDisk) -> Unit)?,
     private val multiSelectAction: ((BookOnDisk) -> Unit)?
   ) : BookOnDiskViewHolder<BookOnDisk>(containerView) {
 
@@ -71,7 +73,9 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
 
       tags.visibility = if (item.tags.isEmpty()) View.GONE else View.VISIBLE
       tags.render(item.tags)
-
+      item_book_info.setOnClickListener {
+        infoClickAction?.invoke(item)
+      }
       itemBookCheckbox.isChecked = item.isSelected
       when (selectionMode) {
         MULTI -> {

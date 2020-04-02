@@ -57,12 +57,14 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShowInfo
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFile
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.ShareFiles
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.ShowInfo
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
@@ -89,6 +91,7 @@ class ZimManageViewModel @Inject constructor(
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestOpen(val bookOnDisk: BookOnDisk) : FileSelectActions()
+    data class RequestShowInfo(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
     object RequestDeleteMultiSelection : FileSelectActions()
@@ -99,6 +102,7 @@ class ZimManageViewModel @Inject constructor(
 
   val sideEffects = PublishProcessor.create<SideEffect<out Any?>>()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
+  val selectedInfoItem: MutableLiveData<BookOnDisk?> = MutableLiveData()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
@@ -153,6 +157,10 @@ class ZimManageViewModel @Inject constructor(
         MultiModeFinished -> noSideEffectAndClearSelectionState()
         is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
         RestartActionMode -> StartMultiSelection(fileSelectActions)
+        is RequestShowInfo -> {
+          selectedInfoItem.postValue(it.bookOnDisk)
+          ShowInfo()
+        }
       }
     )
   }, Throwable::printStackTrace)

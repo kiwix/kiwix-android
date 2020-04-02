@@ -1,0 +1,128 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="@dimen/activity_horizontal_margin">
+
+  <TextView
+    android:id="@+id/info_sheet_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?textAppearanceHeadline5"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="Title" />
+
+  <ImageView
+    android:id="@+id/info_sheet_favicon"
+    android:layout_width="@dimen/favicon_width"
+    android:layout_height="@dimen/favicon_width"
+    android:layout_marginTop="10dp"
+    android:scaleType="fitCenter"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/info_sheet_title"
+    tools:src="@mipmap/ic_launcher_round" />
+
+  <TextView
+    android:id="@+id/info_sheet_description"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:textAppearance="?textAppearanceBody1"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/info_sheet_favicon"
+    tools:text="Description placeholder, I imagine this could be quite long so blah blah blah" />
+
+  <androidx.constraintlayout.helper.widget.Flow
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:constraint_referenced_ids="detail_language,detail_creator,detail_publisher,detail_date,detail_article_count,detail_media_count,detail_size,detail_name,detail_url,detail_tags,detail_file"
+    app:flow_wrapMode="aligned"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/info_sheet_description" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_creator"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/creator"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_language"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/pref_language_title"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_publisher"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/publisher"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_date"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/date"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_article_count"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/article_count"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_media_count"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/media_count"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_size"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/size"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/name"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_url"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/url"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_tags"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/tags"
+    tools:ignore="MissingConstraints" />
+
+  <org.kiwix.kiwixmobile.zim_manager.fileselect_view.DetailChip
+    android:id="@+id/detail_file"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:label="@string/path"
+    tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

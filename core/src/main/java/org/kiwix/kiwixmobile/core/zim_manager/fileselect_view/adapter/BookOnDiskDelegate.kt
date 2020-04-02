@@ -36,6 +36,7 @@ sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskView
     val sharedPreferenceUtil: SharedPreferenceUtil,
     private val clickAction: ((BookOnDisk) -> Unit)? = null,
     private val longClickAction: ((BookOnDisk) -> Unit)? = null,
+    private val infoClickAction: ((BookOnDisk) -> Unit)? = null,
     private val multiSelectAction: ((BookOnDisk) -> Unit)? = null
   ) : BookOnDiskDelegate<BookOnDisk, BookViewHolder>() {
 
@@ -55,6 +56,7 @@ sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskView
         parent.inflate(R.layout.item_book, false),
         clickAction,
         longClickAction,
+        infoClickAction,
         multiSelectAction
       )
   }
