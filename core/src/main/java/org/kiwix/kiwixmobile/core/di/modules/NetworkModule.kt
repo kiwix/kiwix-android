@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
 @Module
-open class NetworkModule {
+class NetworkModule {
   @Provides @Singleton fun provideOkHttpClient(): OkHttpClient {
     return OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
       .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
@@ -45,15 +45,15 @@ open class NetworkModule {
       .build()
   }
 
-  @Provides @Singleton open fun provideKiwixService(okHttpClient: OkHttpClient?): KiwixService =
+  @Provides @Singleton fun provideKiwixService(okHttpClient: OkHttpClient?): KiwixService =
     ServiceCreator.newHacklistService(okHttpClient, KIWIX_DOWNLOAD_URL)
 
   @Provides @Singleton fun provideConnectivityManager(context: Context): ConnectivityManager =
     context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
   companion object {
-    private const val CONNECTION_TIMEOUT: Long = 10
-    private const val READ_TIMEOUT: Long = 60
+    private const val CONNECTION_TIMEOUT = 10L
+    private const val READ_TIMEOUT = 60L
     private const val userAgent = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
     private const val KIWIX_DOWNLOAD_URL = "http://mirror.download.kiwix.org/"
   }
