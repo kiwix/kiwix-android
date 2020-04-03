@@ -34,5 +34,5 @@ abstract class DialogModule {
   abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
 
   @Binds
-  abstract fun bindMainPresenter(mainPresenter: MainPresenter): MainContract.Presenter
+  internal abstract fun bindMainPresenter(mainPresenter: MainPresenter): MainContract.Presenter
 }
