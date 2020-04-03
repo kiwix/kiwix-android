@@ -39,7 +39,7 @@ class HelpActivity : BaseActivity() {
       R.string.help_5 to R.array.description_help_5
     ).associate { (title, description) ->
       getString(title) to resources.getStringArray(description)
-        .joinToString(separator = "\n", postfix = "\n")
+        .joinToString(separator = "\n")
     }
   }
 
