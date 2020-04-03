@@ -23,6 +23,7 @@ import io.objectbox.Box
 import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.query
 import io.reactivex.Flowable
+import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity_
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
@@ -42,6 +43,8 @@ class FetchDownloadDao @Inject constructor(
       .distinctUntilChanged()
       .doOnNext(::moveCompletedToBooksOnDiskDao)
       .map { it.map(::DownloadModel) }
+
+  fun allDownloads() = Single.fromCallable { box.all.map(::DownloadModel) }
 
   private fun moveCompletedToBooksOnDiskDao(downloadEntities: List<FetchDownloadEntity>) {
     downloadEntities.filter { it.status == COMPLETED }.takeIf { it.isNotEmpty() }?.let {

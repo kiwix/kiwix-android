@@ -110,15 +110,22 @@ public class SharedPreferenceUtil {
   }
 
   public String getPrefStorage() {
-    String storage = sharedPreferences.getString(PREF_STORAGE, null);
+    final String storage = sharedPreferences.getString(PREF_STORAGE, null);
     if (storage == null) {
-      final File externalFilesDir =
-        ContextCompat.getExternalFilesDirs(CoreApp.getInstance(), null)[0];
-      storage = externalFilesDir != null ? externalFilesDir.getPath()
-        : CoreApp.getInstance().getFilesDir().getPath(); // workaround for emulators
-      putPrefStorage(storage);
+      final String defaultStorage = defaultStorage();
+      putPrefStorage(defaultStorage);
+      return defaultStorage;
+    } else if (!new File(storage).exists()) {
+      return defaultStorage();
     }
     return storage;
+  }
+
+  private String defaultStorage() {
+    final File externalFilesDir =
+      ContextCompat.getExternalFilesDirs(CoreApp.getInstance(), null)[0];
+    return externalFilesDir != null ? externalFilesDir.getPath()
+      : CoreApp.getInstance().getFilesDir().getPath(); // workaround for emulators
   }
 
   public String getPrefStorageTitle(String defaultTitle) {
