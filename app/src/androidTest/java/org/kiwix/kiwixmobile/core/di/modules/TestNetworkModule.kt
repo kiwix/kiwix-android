@@ -25,11 +25,10 @@ import org.kiwix.sharedFunctions.MOCK_BASE_URL
 /**
  * Created by mhutti1 on 14/04/17.
  */
+@Module(includes = [NetworkModule::class])
+class TestNetworkModule {
 
-@Module
-class TestNetworkModule : NetworkModule() {
-
-  internal override fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
+  fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
     KiwixService.ServiceCreator.newHacklistService(
       okHttpClient,
       MOCK_BASE_URL
