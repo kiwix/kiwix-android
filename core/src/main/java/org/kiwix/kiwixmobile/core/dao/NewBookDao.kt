@@ -56,10 +56,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   }
 
   private fun removeEntriesWithMatchingIds(newBooks: List<BookOnDisk>) {
-    box
-      .query {
-        inValues(BookOnDiskEntity_.bookId, newBooks.map { it.book.id }.toTypedArray())
-      }
+    box.query { inValues(BookOnDiskEntity_.bookId, newBooks.map { it.book.id }.toTypedArray()) }
       .remove()
   }
 
