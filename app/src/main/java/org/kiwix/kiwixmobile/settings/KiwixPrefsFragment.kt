@@ -23,7 +23,6 @@ import android.os.Environment
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_LANG
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE
-import java.io.File
 
 class KiwixPrefsFragment : CorePrefsFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +36,6 @@ class KiwixPrefsFragment : CorePrefsFragment() {
     } else {
       findPreference(PREF_STORAGE).title = sharedPreferenceUtil.getPrefStorageTitle("External")
     }
-    findPreference(PREF_STORAGE).summary =
-      storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage))
+    findPreference(PREF_STORAGE).summary = storageCalculator.calculateAvailableSpace()
   }
 }
