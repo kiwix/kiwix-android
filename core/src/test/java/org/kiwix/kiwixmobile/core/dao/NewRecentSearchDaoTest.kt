@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.dao
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.verify
 import io.objectbox.Box
 import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
@@ -30,12 +31,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
+import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.sharedFunctions.recentSearchEntity
 
 internal class NewRecentSearchDaoTest {
 
-  private val box: Box<RecentSearchEntity> = mockk()
+  private val box: Box<RecentSearchEntity> = mockk(relaxed = true)
   private val newRecentSearchDao = NewRecentSearchDao(box)
 
   @Nested
@@ -61,17 +63,17 @@ internal class NewRecentSearchDaoTest {
     fun `recentSearches searches returns distinct entities by searchTerm`() {
       val queryResult = listOf<RecentSearchEntity>(recentSearchEntity(), recentSearchEntity())
       expectFromRecentSearches(queryResult, "")
-      newRecentSearchDao.recentSearches(null).test()
+      newRecentSearchDao.recentSearches("").test()
         .assertValues(queryResult.take(1).map { RecentSearchListItem(it.searchTerm) })
     }
 
     @Test
     fun `recentSearches searches returns a limitedNumber of entities`() {
       val searchResults: List<RecentSearchEntity> =
-        (0..101).map { recentSearchEntity(searchTerm = "$it") }
+        (0..200).map { recentSearchEntity(searchTerm = "$it") }
       expectFromRecentSearches(searchResults, "")
-      newRecentSearchDao.recentSearches(null).test()
-        .assertValues(searchResults.take(100).map { RecentSearchListItem(it.searchTerm) })
+      newRecentSearchDao.recentSearches("").test()
+        .assertValue { it.size == 100 }
     }
 
     private fun expectFromRecentSearches(queryResult: List<RecentSearchEntity>, zimId: String) {
@@ -87,18 +89,37 @@ internal class NewRecentSearchDaoTest {
   }
 
   @Test
-  fun saveSearch() {
+  fun `saveSearch puts RecentSearchEntity into box`() {
+    newRecentSearchDao.saveSearch("title", "id")
+    verify { box.put(recentSearchEntity(searchTerm = "title", zimId = "id")) }
   }
 
   @Test
-  fun deleteSearchString() {
+  fun `deleteSearchString removes query results for the term`() {
+    val searchTerm = "searchTerm"
+    val queryBuilder: QueryBuilder<RecentSearchEntity> = mockk()
+    every { box.query() } returns queryBuilder
+    every { queryBuilder.equal(RecentSearchEntity_.searchTerm, searchTerm) } returns queryBuilder
+    val query: Query<RecentSearchEntity> = mockk(relaxed = true)
+    every { queryBuilder.build() } returns query
+    newRecentSearchDao.deleteSearchString(searchTerm)
+    verify { query.remove() }
   }
 
   @Test
-  fun deleteSearchHistory() {
+  fun `deleteSearchHistory deletes everything`() {
+    newRecentSearchDao.deleteSearchHistory()
+    verify { box.removeAll() }
   }
 
   @Test
-  fun migrationInsert() {
+  fun `migrationInsert adds old items to box`() {
+    val id = "zimId"
+    val term = "searchString"
+    val recentSearch: RecentSearch = mockk()
+    every { recentSearch.searchString } returns term
+    every { recentSearch.zimID } returns id
+    newRecentSearchDao.migrationInsert(mutableListOf(recentSearch))
+    verify { box.put(listOf(recentSearchEntity(searchTerm = term, zimId = id))) }
   }
 }
