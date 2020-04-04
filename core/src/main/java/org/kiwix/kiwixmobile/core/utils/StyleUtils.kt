@@ -30,12 +30,8 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
 object StyleUtils {
-  @JvmStatic
-  fun getAttributes(
-    context: Context,
-    @XmlRes xml: Int
-  ): AttributeSet {
-    val parser: XmlPullParser = context.resources.getXml(xml)
+  @JvmStatic fun Context.getAttributes(@XmlRes xml: Int): AttributeSet {
+    val parser: XmlPullParser = resources.getXml(xml)
     try {
       parser.next()
       parser.nextTag()
@@ -47,24 +43,13 @@ object StyleUtils {
     return Xml.asAttributeSet(parser)
   }
 
-  fun highlightUrl(text: String, url: String): Spanned {
-    return fromHtml(
-      text.replace(
-        url.toRegex(),
-        "<u><font color='blue'>$url</font></u>"
-      )
-    )
-  }
+  fun highlightUrl(text: String, url: String): Spanned =
+    text.replace(url.toRegex(), "<u><font color='blue'>$url</font></u>").fromHtml()
 
-  @JvmStatic
   @Suppress("DEPRECATION")
-  fun fromHtml(source: String?): Spanned {
-    var toParse = ""
-    toParse = source ?: ""
-    return if (VERSION.SDK_INT >= VERSION_CODES.N) {
-      Html.fromHtml(toParse, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-      Html.fromHtml(toParse)
-    }
-  }
+  @JvmStatic fun String.fromHtml(): Spanned =
+    if (VERSION.SDK_INT >= VERSION_CODES.N) Html.fromHtml(
+      this,
+      Html.FROM_HTML_MODE_LEGACY
+    ) else Html.fromHtml(this)
 }
