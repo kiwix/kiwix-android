@@ -21,12 +21,12 @@ import android.app.Activity
 import android.content.Context
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import androidx.appcompat.R.attr
+import androidx.appcompat.R
 
 object DimenUtils {
   @JvmStatic fun Context.getToolbarHeight(): Int {
     return resources.getDimensionPixelSize(TypedValue().apply {
-      theme.resolveAttribute(attr.actionBarSize, this, true)
+      theme.resolveAttribute(R.attr.actionBarSize, this, true)
     }.resourceId)
   }
 
