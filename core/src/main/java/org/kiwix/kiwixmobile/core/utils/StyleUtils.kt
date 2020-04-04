@@ -43,9 +43,6 @@ object StyleUtils {
     return Xml.asAttributeSet(parser)
   }
 
-  fun highlightUrl(text: String, url: String): Spanned =
-    text.replace(url.toRegex(), "<u><font color='blue'>$url</font></u>").fromHtml()
-
   @Suppress("DEPRECATION")
   @JvmStatic fun String.fromHtml(): Spanned =
     if (VERSION.SDK_INT >= VERSION_CODES.N) Html.fromHtml(
