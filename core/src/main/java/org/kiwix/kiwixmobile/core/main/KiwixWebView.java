@@ -21,8 +21,6 @@ package org.kiwix.kiwixmobile.core.main;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -42,15 +40,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.inject.Inject;
-import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-
-import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
 
 @SuppressLint("ViewConstructor")
 public class KiwixWebView extends VideoEnabledWebView {
@@ -104,7 +99,7 @@ public class KiwixWebView extends VideoEnabledWebView {
       int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
       setInitialScale(zoomScale);
     } else {
-      setInitialScale(0);
+      setInitialScale(100);
     }
   }
 

@@ -86,7 +86,6 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
@@ -1564,7 +1563,7 @@ public abstract class CoreMainActivity extends BaseActivity
       int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
       getCurrentWebView().setInitialScale(zoomScale);
     } else {
-      getCurrentWebView().setInitialScale(0);
+      getCurrentWebView().setInitialScale(100);
     }
 
     if (!isBackToTopEnabled) {
