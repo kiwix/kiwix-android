@@ -24,17 +24,17 @@ import android.util.TypedValue
 import androidx.appcompat.R.attr
 
 object DimenUtils {
-  @JvmStatic fun DisplayMetrics.getToolbarHeight(context: Context): Int {
-    return context.resources.getDimensionPixelSize(TypedValue().apply {
-      context.theme.resolveAttribute(attr.actionBarSize, this, true)
+  @JvmStatic fun Context.getToolbarHeight(): Int {
+    return resources.getDimensionPixelSize(TypedValue().apply {
+      theme.resolveAttribute(attr.actionBarSize, this, true)
     }.resourceId)
   }
 
-  @JvmStatic fun DisplayMetrics.getWindowHeight(activity: Activity): Int =
-    computeDisplayMetric(activity).heightPixels
+  @JvmStatic fun Activity.getWindowHeight(): Int =
+    computeDisplayMetric(this).heightPixels
 
-  @JvmStatic fun DisplayMetrics.getWindowWidth(activity: Activity): Int =
-    computeDisplayMetric(activity).widthPixels
+  @JvmStatic fun Activity.getWindowWidth(): Int =
+    computeDisplayMetric(this).widthPixels
 
   private fun computeDisplayMetric(activity: Activity): DisplayMetrics =
     DisplayMetrics().apply { activity.windowManager.defaultDisplay.getMetrics(this) }
