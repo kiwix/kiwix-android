@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import kotlin.Unit;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
@@ -44,27 +45,25 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 public class ConfirmationAlertDialogFragment extends DialogFragment {
 
-  public static String TAG = "ConfirmationAlertDialog";
+  @NonNull public static String TAG = "ConfirmationAlertDialog";
 
   private SharedPreferenceUtil sharedPreferenceUtil;
   private int stringResourceId;
   private String parentDialogFragmentTAG;
   private AlertDialogShower alertDialogShower;
 
-  public ConfirmationAlertDialogFragment(SharedPreferenceUtil sharedPreferenceUtil,
-    String parentDialogFragmentTAG, int stringResourceId,
-    @NonNull AlertDialogShower alertDialogShower) {
-    this.sharedPreferenceUtil = sharedPreferenceUtil;
-    this.parentDialogFragmentTAG = parentDialogFragmentTAG;
-    this.stringResourceId = stringResourceId;
-    this.alertDialogShower = alertDialogShower;
-  }
-
-  @Override
+  @NotNull @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
-    Fragment parentDialogFragment = getFragmentManager().findFragmentByTag(parentDialogFragmentTAG);
     Bundle bundle = getArguments();
-    alertDialogShower = (AlertDialogShower) bundle.getSerializable("alertDialogShower");
+    if (bundle != null) {
+      alertDialogShower = (AlertDialogShower) bundle.get("alertDialogShower");
+      parentDialogFragmentTAG = bundle.getString("tag");
+      stringResourceId = bundle.getInt("confirmMessage");
+      sharedPreferenceUtil = (SharedPreferenceUtil) bundle.getSerializable("sharedPreferenceUtil");
+    }
+    Fragment parentDialogFragment =
+      getParentFragmentManager().findFragmentByTag(parentDialogFragmentTAG);
+
     return alertDialogShower.create(new KiwixDialog.ConfirmationAlertDialogFragment(stringResourceId),
       () -> {
         if (parentDialogFragment != null) {
@@ -79,6 +78,25 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
         return Unit.INSTANCE;
       }
     );
+  }
+
+  /**
+   * Create a new instance of DetailsFragment, initialized to
+   * show the text at 'index'.
+   */
+  @NonNull public static ConfirmationAlertDialogFragment newInstance(
+    SharedPreferenceUtil sharedPreferenceUtil, String tag, int alertMessage,
+    AlertDialogShower alertDialogShower) {
+    ConfirmationAlertDialogFragment f = new ConfirmationAlertDialogFragment();
+
+    Bundle bundle = new Bundle();
+    bundle.putSerializable("sharedPreferenceUtil", sharedPreferenceUtil);
+    bundle.putString("tag", tag);
+    bundle.putInt("confirmMessage", alertMessage);
+    bundle.putSerializable("alertDialogShower", alertDialogShower);
+    f.setArguments(bundle);
+
+    return f;
   }
 
   /**

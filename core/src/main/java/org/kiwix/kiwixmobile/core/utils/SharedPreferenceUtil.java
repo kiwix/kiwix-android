@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import io.reactivex.Flowable;
 import io.reactivex.processors.PublishProcessor;
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -40,7 +41,7 @@ import org.kiwix.kiwixmobile.core.NightModeConfig;
  */
 
 @Singleton
-public class SharedPreferenceUtil {
+public class SharedPreferenceUtil implements Serializable {
   // Prefs
   public static final String PREF_LANG = "pref_language_chooser";
   public static final String PREF_STORAGE = "pref_select_folder";

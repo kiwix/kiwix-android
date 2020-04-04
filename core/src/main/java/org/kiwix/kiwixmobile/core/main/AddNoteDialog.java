@@ -241,11 +241,9 @@ public class AddNoteDialog extends DialogFragment
       if (previousInstance == null) {
         AlertDialogShower alertDialogShower = new AlertDialogShower(getActivity());
         // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
-        DialogFragment newFragment = new ConfirmationAlertDialogFragment(sharedPreferenceUtil, TAG,
+        DialogFragment newFragment =
+          ConfirmationAlertDialogFragment.newInstance(sharedPreferenceUtil, TAG,
           R.string.confirmation_alert_dialog_message, alertDialogShower);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("alertDialogShower", alertDialogShower);
-        newFragment.setArguments(bundle);
         newFragment.show(getActivity().getSupportFragmentManager(),
           ConfirmationAlertDialogFragment.TAG);
       }
