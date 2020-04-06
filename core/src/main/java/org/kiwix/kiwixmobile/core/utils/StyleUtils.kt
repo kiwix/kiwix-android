@@ -44,9 +44,8 @@ object StyleUtils {
   }
 
   @Suppress("DEPRECATION")
-  @JvmStatic fun String.fromHtml(): Spanned =
-    if (VERSION.SDK_INT >= VERSION_CODES.N) Html.fromHtml(
-      this,
-      Html.FROM_HTML_MODE_LEGACY
-    ) else Html.fromHtml(this)
+  @JvmStatic fun String.fromHtml(): Spanned {
+    return if (VERSION.SDK_INT >= VERSION_CODES.N) Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+    else Html.fromHtml(this)
+  }
 }
