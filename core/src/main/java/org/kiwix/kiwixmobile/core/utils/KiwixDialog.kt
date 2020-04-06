@@ -158,9 +158,9 @@ sealed class KiwixDialog(
     getView = customGetView
   )
 
-  data class ConfirmationAlertDialogFragment(val customMessage: Int) : KiwixDialog(
+  object NotesDiscardConfirmation : KiwixDialog(
     null,
-    customMessage,
+    R.string.confirmation_alert_dialog_message,
     R.string.yes,
     android.R.string.cancel
   )

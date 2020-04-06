@@ -44,7 +44,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -53,11 +52,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.inject.Inject;
+import kotlin.Unit;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 /**
@@ -69,8 +70,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
  * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
  */
 
-public class AddNoteDialog extends DialogFragment
-  implements ConfirmationAlertDialogFragment.UserClickListener {
+public class AddNoteDialog extends DialogFragment {
 
   public static final String NOTES_DIRECTORY =
     Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
@@ -84,7 +84,6 @@ public class AddNoteDialog extends DialogFragment
   EditText addNoteEditText; // Displays the note text
 
   private Unbinder unbinder;
-
   private String zimFileName;
   private String zimFileTitle;
   private String articleTitle;
@@ -98,6 +97,7 @@ public class AddNoteDialog extends DialogFragment
 
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject ZimReaderContainer zimReaderContainer;
+  @Inject protected AlertDialogShower alertDialogShower;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -235,18 +235,10 @@ public class AddNoteDialog extends DialogFragment
 
   private void exitAddNoteDialog() {
     if (noteEdited) {
-      Fragment previousInstance = getActivity().getSupportFragmentManager()
-        .findFragmentByTag(ConfirmationAlertDialogFragment.TAG);
-
-      if (previousInstance == null) {
-        AlertDialogShower alertDialogShower = new AlertDialogShower(getActivity());
-        // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
-        DialogFragment newFragment =
-          ConfirmationAlertDialogFragment.newInstance(sharedPreferenceUtil, TAG,
-          R.string.confirmation_alert_dialog_message, alertDialogShower);
-        newFragment.show(getActivity().getSupportFragmentManager(),
-          ConfirmationAlertDialogFragment.TAG);
-      }
+      alertDialogShower.show(KiwixDialog.NotesDiscardConfirmation.INSTANCE, () -> {
+        dismissAddNoteDialog();
+        return Unit.INSTANCE;
+      });
     } else {
       // Closing unedited note dialog straightaway
       dismissAddNoteDialog();
@@ -464,20 +456,11 @@ public class AddNoteDialog extends DialogFragment
     Toast.makeText(getActivity(), stringResource, duration).show();
   }
 
-  // Methods from ConfirmationAlertDialogFragment.UserClickListener interface
-  @Override
-  public void onPositiveClick() {
-    dismissAddNoteDialog();
-  }
-
-  @Override
-  public void onNegativeClick() {
-    // Do nothing
-  }
-
   private void dismissAddNoteDialog() {
     Dialog dialog = getDialog();
-    dialog.dismiss();
+    if (dialog != null) {
+      dialog.dismiss();
+    }
     closeKeyboard();
   }
 
