@@ -31,11 +31,11 @@ object DimenUtils {
   }
 
   @JvmStatic fun Activity.getWindowHeight(): Int =
-    computeDisplayMetric(this).heightPixels
+    computedDisplayMetric.heightPixels
 
   @JvmStatic fun Activity.getWindowWidth(): Int =
-    computeDisplayMetric(this).widthPixels
+    computedDisplayMetric.widthPixels
 
-  private fun computeDisplayMetric(activity: Activity): DisplayMetrics =
-    DisplayMetrics().apply { activity.windowManager.defaultDisplay.getMetrics(this) }
+  private val Activity.computedDisplayMetric
+    get() = DisplayMetrics().apply { windowManager.defaultDisplay.getMetrics(this) }
 }
