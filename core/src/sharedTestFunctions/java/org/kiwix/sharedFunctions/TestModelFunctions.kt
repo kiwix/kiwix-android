@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Pending
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.FileElement
@@ -160,3 +161,6 @@ fun book(
 fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity().apply {
   book = LinkedList(books)
 }
+
+fun recentSearchEntity(id: Long = 0L, searchTerm: String = "", zimId: String = "") =
+  RecentSearchEntity(id, searchTerm, zimId)
