@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.core.data.local.dao.BookmarksDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
-import org.kiwix.kiwixmobile.core.di.modules.DialogModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
@@ -47,7 +46,6 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.history.HistoryModule
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimContentProvider
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -68,8 +66,7 @@ import javax.inject.Singleton
     JNIModule::class,
     DataModule::class,
     CoreViewModelModule::class,
-    SearchModule::class,
-    DialogModule::class
+    SearchModule::class
   ]
 )
 interface CoreComponent {
@@ -107,7 +104,6 @@ interface CoreComponent {
   fun inject(zimContentProvider: ZimContentProvider)
   fun inject(kiwixWebView: KiwixWebView)
   fun inject(storageSelectDialog: StorageSelectDialog)
-  fun inject(addNoteDialog: AddNoteDialog)
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchActivity: SearchActivity)
