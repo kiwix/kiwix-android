@@ -56,7 +56,6 @@ import kotlin.Unit;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
@@ -103,7 +102,11 @@ public class AddNoteDialog extends DialogFragment {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    injection(CoreApp.getCoreComponent());
+    CoreApp.getCoreComponent()
+      .activityComponentBuilder()
+      .activity(getActivity())
+      .build()
+      .inject(this);
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
     zimFileName = zimReaderContainer.getZimCanonicalPath();
@@ -244,10 +247,6 @@ public class AddNoteDialog extends DialogFragment {
       // Closing unedited note dialog straightaway
       dismissAddNoteDialog();
     }
-  }
-
-  protected void injection(@NonNull CoreComponent coreComponent) {
-    coreComponent.activityComponentBuilder().activity(getActivity()).build().inject(this);
   }
 
   private void disableMenuItems() {
