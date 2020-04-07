@@ -46,30 +46,27 @@ object ChunkUtils {
   ): List<Chunk> {
     val chunks: MutableList<Chunk> = ArrayList()
     var currentRange: Long = 0
+    var minLen: Long
     for (zim in fileNames) {
-      var range: String
-      if (currentRange + CHUNK_SIZE >= contentLength) {
-        range = String.format(Locale.US, "%d-", currentRange)
-        chunks.add(
-          Chunk(
-            range, zim, url, contentLength, notificationID, currentRange, contentLength
-          )
-        )
-        currentRange += CHUNK_SIZE + 1
+      minLen = minOf(
+        contentLength, (currentRange + CHUNK_SIZE)
+      )
+      val range: String = if (currentRange + CHUNK_SIZE >= contentLength) {
+        String.format(Locale.US, "%d-", currentRange)
       } else {
-        range = String.format(
+        String.format(
           Locale.US,
           "%d-%d",
           currentRange,
           currentRange + CHUNK_SIZE
         )
-        chunks.add(
-          Chunk(
-            range, zim, url, contentLength, notificationID, currentRange, currentRange + CHUNK_SIZE
-          )
-        )
-        currentRange += CHUNK_SIZE + 1
       }
+      chunks.add(
+        Chunk(
+          range, zim, url, contentLength, notificationID, currentRange, minLen
+        )
+      )
+      currentRange += CHUNK_SIZE + 1
     }
     return chunks
   }
