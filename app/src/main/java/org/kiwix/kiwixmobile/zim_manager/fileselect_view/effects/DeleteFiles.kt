@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteZim
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteZims
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
@@ -40,18 +40,31 @@ data class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
 
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as ZimManageActivity).cachedComponent.inject(this)
+
+    var name = "\n"
     booksOnDiskListItem.forEach {
-      dialogShower.show(DeleteZim(it), {
+      name += "\n" + it.book.title
+    }
+
+    dialogShower.show(DeleteZims(name), {
+      var allDeleted = true
+
+      booksOnDiskListItem.forEach {
         if (deleteSpecificZimFile(it)) {
           if (it.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
             zimReaderContainer.setZimFile(null)
           }
-          activity.toast(R.string.delete_specific_zim_toast)
         } else {
-          activity.toast(R.string.delete_zim_failed)
+          allDeleted = false
         }
-      })
-    }
+      }
+
+      if (allDeleted) {
+        activity.toast(R.string.delete_zims_toast)
+      } else {
+        activity.toast(R.string.delete_zim_failed)
+      }
+    })
   }
 
   private fun deleteSpecificZimFile(book: BookOnDisk): Boolean {

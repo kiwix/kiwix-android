@@ -62,7 +62,7 @@
   <string name="pref_newtab_background_summary">Када отвараш нову картицу она ће бити отворена у позадини</string>
   <string name="new_tab_snack_bar">Чланак је отворен у новој картици</string>
   <string name="local_zims">Уређај</string>
-  <string name="delete_specific_zim_toast">Датотека је избрисана</string>
+  <string name="delete_zims_toast">Датотека је избрисана</string>
   <string name="no_files_here">Овде нема датотека</string>
   <string name="download_no_space">Недовољно простора за преузимање ове датотеке.</string>
   <string name="no_network_connection">Нема мрежне везе</string>

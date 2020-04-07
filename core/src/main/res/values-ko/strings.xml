@@ -111,7 +111,7 @@
   <string name="remote_zims">온라인</string>
   <string name="library">라이브러리</string>
   <string name="delete_zim_body">%s을(를) 삭제하시겠습니까?</string>
-  <string name="delete_specific_zim_toast">파일이 삭제되었습니다</string>
+  <string name="delete_zims_toast">파일이 삭제되었습니다</string>
   <string name="no_files_here">여기에 파일이 없습니다</string>
   <string name="download_no_space">이 파일을 다운로드할 공간이 충분하지 않습니다.</string>
   <string name="space_available">사용 가능한 공간:</string>

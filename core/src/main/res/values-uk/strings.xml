@@ -81,7 +81,7 @@
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Бібліотека</string>
-  <string name="delete_specific_zim_toast">Файл вилучено</string>
+  <string name="delete_zims_toast">Файл вилучено</string>
   <string name="no_files_here">Тут немає файлів</string>
   <string name="download_no_space">Недостатньо простору для завантаження цього файлу.</string>
   <string name="space_available">Доступний простір:</string>

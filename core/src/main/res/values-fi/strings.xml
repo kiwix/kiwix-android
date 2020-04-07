@@ -91,7 +91,7 @@
   <string name="remote_zims">Online</string>
   <string name="library">Kirjasto</string>
   <string name="delete_zim_body">Poista %s?</string>
-  <string name="delete_specific_zim_toast">Tiedosto poistettu</string>
+  <string name="delete_zims_toast">Tiedosto poistettu</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
   <string name="space_available">Tilaa käytettävissä:</string>
   <string name="zim_simple">Yksinkertainen</string>

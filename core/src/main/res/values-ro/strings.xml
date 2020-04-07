@@ -80,7 +80,7 @@
   <string name="local_zims">Dispozitiv</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliotecă</string>
-  <string name="delete_specific_zim_toast">Filă ștearsă</string>
+  <string name="delete_zims_toast">Filă ștearsă</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
   <string name="download_no_space">Spațiu insuficient pentru a descarca această filă.</string>
   <string name="space_available">Spațiu disponibil:</string>

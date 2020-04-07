@@ -84,7 +84,7 @@
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
   <string name="library">Könyvtár</string>
-  <string name="delete_specific_zim_toast">Fájl törölve</string>
+  <string name="delete_zims_toast">Fájl törölve</string>
   <string name="no_files_here">Nincsenek fájlok</string>
   <string name="download_no_space">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
   <string name="space_available">Szabad tárhely:</string>

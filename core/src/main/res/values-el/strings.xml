@@ -72,7 +72,7 @@
   <string name="local_zims">Συσκευή</string>
   <string name="remote_zims">Συνδεδεμένος</string>
   <string name="library">Βιβλιοθήκη</string>
-  <string name="delete_specific_zim_toast">Το αρχείο διαγράφηκε</string>
+  <string name="delete_zims_toast">Το αρχείο διαγράφηκε</string>
   <string name="no_files_here">Δεν υπάρχουν αρχεία εδώ</string>
   <string name="download_no_space">Μη επαρκής αποθηκευτικός χώρος για την λήψη του αρχείου.</string>
   <string name="space_available">Διαθέσιμος αποθηκευτικός χώρος:</string>

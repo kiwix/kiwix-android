@@ -64,7 +64,7 @@
   <string name="new_tab_snack_bar">लेख नयाँ ट्याबमा खोल्नुहोस्</string>
   <string name="local_zims">उपकरण</string>
   <string name="library">पुस्तकालय</string>
-  <string name="delete_specific_zim_toast">फाइल मेटियो</string>
+  <string name="delete_zims_toast">फाइल मेटियो</string>
   <string name="no_files_here">यहाँ कुनै फाइलहरू छैनन्</string>
   <string name="download_no_space">यो फाइल डाउनलोड गर्न पर्याप्त स्थान छैन।</string>
   <string name="zim_simple">साधारण</string>

@@ -107,7 +107,7 @@
   <string name="remote_zims">En llinia</string>
   <string name="library">Biblioteca</string>
   <string name="delete_zim_body">¿Desaniciar %s?</string>
-  <string name="delete_specific_zim_toast">Ficheru desaniciáu</string>
+  <string name="delete_zims_toast">Ficheru desaniciáu</string>
   <string name="no_files_here">Nun hai nengún ficheru equí</string>
   <string name="download_no_space">Nun hai espaciu abondo pa descargar esti ficheru.</string>
   <string name="space_available">Espaciu disponible:</string>

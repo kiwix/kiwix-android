@@ -111,7 +111,7 @@
   <string name="remote_zims">متصل</string>
   <string name="library">المكتبة</string>
   <string name="delete_zim_body">حذف %s؟</string>
-  <string name="delete_specific_zim_toast">حُذف الملف</string>
+  <string name="delete_zims_toast">حُذف الملف</string>
   <string name="no_files_here">لا توجد ملفات هنا</string>
   <string name="download_no_space">لا توجد مساحة كافية لتنزيل هذا الملف.</string>
   <string name="space_available">المساحة المتاحة:</string>

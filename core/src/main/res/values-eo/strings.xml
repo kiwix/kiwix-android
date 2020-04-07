@@ -84,7 +84,7 @@
   <string name="local_zims">Aparato</string>
   <string name="remote_zims">Konektita</string>
   <string name="library">Biblioteko</string>
-  <string name="delete_specific_zim_toast">Forigis dosieron</string>
+  <string name="delete_zims_toast">Forigis dosieron</string>
   <string name="no_files_here">Neniu dosiero ĉi tie</string>
   <string name="download_no_space">Ne estas sufiĉa spaco por elŝuti ĉi tiun dosieron.</string>
   <string name="space_available">Havebla Spaco:</string>

@@ -107,7 +107,7 @@
   <string name="remote_zims">Online</string>
   <string name="library">Knihovna</string>
   <string name="delete_zim_body">Vymazat %s?</string>
-  <string name="delete_specific_zim_toast">Soubor byl smazán</string>
+  <string name="delete_zims_toast">Soubor byl smazán</string>
   <string name="no_files_here">Zde nejsou žádné soubory</string>
   <string name="download_no_space">Nedostatečný prostor ke stažení tohoto souboru.</string>
   <string name="space_available">Dostupné místo:</string>

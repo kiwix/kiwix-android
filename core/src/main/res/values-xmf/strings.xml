@@ -84,7 +84,7 @@
   <string name="remote_zims">ონლაინ</string>
   <string name="library">ბიბლიოთეკა</string>
   <string name="delete_zim_body">დობლასათო %s?</string>
-  <string name="delete_specific_zim_toast">ფაილქ დილასუ</string>
+  <string name="delete_zims_toast">ფაილქ დილასუ</string>
   <string name="no_files_here">ფაილეფი ვა რე</string>
   <string name="download_no_space">თე ფაილიშ გიმახარგალო შვენა ვაბაღუ.</string>
   <string name="space_available">ხემიოჭირინაფუ შვენა:</string>

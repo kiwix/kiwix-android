@@ -115,7 +115,7 @@
   <string name="remote_zims">Dostępny</string>
   <string name="library">Biblioteka</string>
   <string name="delete_zim_body">Usunąć %s?</string>
-  <string name="delete_specific_zim_toast">Plik został usunięty</string>
+  <string name="delete_zims_toast">Plik został usunięty</string>
   <string name="no_files_here">Tu nie ma plików</string>
   <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
   <string name="space_available">Dostępne miejsce:</string>

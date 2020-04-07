@@ -118,7 +118,7 @@
   <string name="remote_zims">Çevrimiçi</string>
   <string name="library">Kütüphane</string>
   <string name="delete_zim_body">%s silinsin mi?</string>
-  <string name="delete_specific_zim_toast">Dosya silindi</string>
+  <string name="delete_zims_toast">Dosya silindi</string>
   <string name="no_files_here">Dosya yok</string>
   <string name="download_no_space">Bu dosyanın indirilebilmesi için yeterli alan yok.</string>
   <string name="space_available">Kullanılabilir Alan:</string>

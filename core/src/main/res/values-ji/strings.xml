@@ -30,7 +30,7 @@
   <string name="did_you_know">צי האט איר געוואוסט?</string>
   <string name="undo">אַנולירן</string>
   <string name="library">ביבליאטעק</string>
-  <string name="delete_specific_zim_toast">טעקע אויסגעמעקט</string>
+  <string name="delete_zims_toast">טעקע אויסגעמעקט</string>
   <string name="no_files_here">קיין טעקעס דא</string>
   <string name="yes">יא</string>
   <string-array name="description_help_2">

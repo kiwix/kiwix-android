@@ -85,7 +85,7 @@
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
   <string name="library">Bibliotek</string>
-  <string name="delete_specific_zim_toast">Fil slettet</string>
+  <string name="delete_zims_toast">Fil slettet</string>
   <string name="no_files_here">Ingen filer her</string>
   <string name="download_no_space">Utilstrækkelig med plads til at hente denne fil.</string>
   <string name="space_available">Ledig plads:</string>
