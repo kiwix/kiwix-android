@@ -46,7 +46,6 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.history.HistoryModule
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimContentProvider
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -105,7 +104,6 @@ interface CoreComponent {
   fun inject(zimContentProvider: ZimContentProvider)
   fun inject(kiwixWebView: KiwixWebView)
   fun inject(storageSelectDialog: StorageSelectDialog)
-  fun inject(addNoteDialog: AddNoteDialog)
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchActivity: SearchActivity)
