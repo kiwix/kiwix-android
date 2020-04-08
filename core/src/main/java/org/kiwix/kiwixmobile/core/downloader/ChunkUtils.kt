@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.core.downloader
 
 import org.kiwix.kiwixmobile.core.utils.StorageUtils.getFileNameFromUrl
 import java.util.ArrayList
-import java.util.Locale
 
 object ChunkUtils {
   private const val ALPHABET = "abcdefghijklmnopqrstuvwxyz"
@@ -46,20 +45,12 @@ object ChunkUtils {
   ): List<Chunk> {
     val chunks: MutableList<Chunk> = ArrayList()
     var currentRange: Long = 0
-    var minLen: Long
     for (zim in fileNames) {
-      minLen = minOf(
-        contentLength, (currentRange + CHUNK_SIZE)
-      )
+      val minLen: Long = minOf(contentLength, (currentRange + CHUNK_SIZE))
       val range: String = if (currentRange + CHUNK_SIZE >= contentLength) {
-        String.format(Locale.US, "%d-", currentRange)
+        "$currentRange-"
       } else {
-        String.format(
-          Locale.US,
-          "%d-%d",
-          currentRange,
-          currentRange + CHUNK_SIZE
-        )
+        "$currentRange-${currentRange + CHUNK_SIZE}"
       }
       chunks.add(
         Chunk(
