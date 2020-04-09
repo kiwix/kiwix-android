@@ -74,7 +74,7 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
            InputStream fileInputStream = contentResolver.openInputStream(fileItem.getFileUri())) {
 
         socket.bind(null);
-        socket.connect((new InetSocketAddress(hostAddress, WifiDirectManager.Companion.getFILE_TRANSFER_PORT())),
+        socket.connect((new InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT)),
           15000);
 
         Log.d(TAG, "Sender socket connected to server - " + socket.isConnected());
@@ -82,7 +82,7 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
         publishProgress(fileIndex, SENDING);
         OutputStream socketOutputStream = socket.getOutputStream();
 
-        WifiDirectManager.Companion.copyToOutputStream(fileInputStream, socketOutputStream);
+        WifiDirectManager.copyToOutputStream(fileInputStream, socketOutputStream);
         if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
         publishProgress(fileIndex, SENT);
       } catch (IOException e) {

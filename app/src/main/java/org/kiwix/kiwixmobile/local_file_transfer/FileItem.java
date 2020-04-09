@@ -50,7 +50,7 @@ public class FileItem {
   private int fileStatus;
 
   public FileItem(@NonNull Uri fileUri) { // For sender devices
-    this(fileUri, WifiDirectManager.Companion.getFileName(fileUri));
+    this(fileUri, WifiDirectManager.getFileName(fileUri));
   }
 
   public FileItem(@NonNull String fileName) { // For receiver devices

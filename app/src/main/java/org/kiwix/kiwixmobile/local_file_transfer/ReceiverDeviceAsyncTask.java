@@ -57,8 +57,8 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   @Override
   protected Boolean doInBackground(Void... voids) {
-    try (ServerSocket serverSocket = new ServerSocket(WifiDirectManager.Companion.getFILE_TRANSFER_PORT())) {
-      Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.Companion.getFILE_TRANSFER_PORT());
+    try (ServerSocket serverSocket = new ServerSocket(WifiDirectManager.FILE_TRANSFER_PORT)) {
+      Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.FILE_TRANSFER_PORT);
 
       final String zimStorageRootPath = wifiDirectManager.getZimStorageRootPath();
       ArrayList<FileItem> fileItems = wifiDirectManager.getFilesForTransfer();
@@ -87,7 +87,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
           boolean fileCreated = clientNoteFileLocation.createNewFile();
           if (BuildConfig.DEBUG) Log.d(TAG, "File creation: " + fileCreated);
 
-          WifiDirectManager.Companion.copyToOutputStream(client.getInputStream(),
+          WifiDirectManager.copyToOutputStream(client.getInputStream(),
             new FileOutputStream(clientNoteFileLocation));
           publishProgress(fileItemIndex, SENT);
         } catch (IOException e) {

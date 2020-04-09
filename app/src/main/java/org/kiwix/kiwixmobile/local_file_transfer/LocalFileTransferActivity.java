@@ -194,7 +194,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
     // Update UI with user device's details
     if (userDevice != null) {
       deviceName.setText(userDevice.deviceName);
-      Log.d(TAG, WifiDirectManager.Companion.getDeviceStatus(userDevice.status));
+      Log.d(TAG, WifiDirectManager.getDeviceStatus(userDevice.status));
     }
   }
 

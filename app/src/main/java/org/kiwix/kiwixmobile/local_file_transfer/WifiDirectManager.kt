@@ -57,6 +57,7 @@ import javax.inject.Inject
 /**
  * Manager for the Wifi-P2p API, used in the local file transfer module
  */
+@SuppressWarnings("MissingPermission")
 class WifiDirectManager @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
@@ -127,7 +128,7 @@ class WifiDirectManager @Inject constructor(
   fun discoverPeerDevices() {
     manager.discoverPeers(channel, object : ActionListener {
       override fun onSuccess() {
-        displayToast(R.string.discovery_initiated, Toast.LENGTH_SHORT)
+        activity.toast(R.string.discovery_initiated, Toast.LENGTH_SHORT)
       }
 
       override fun onFailure(reason: Int) {
@@ -135,7 +136,7 @@ class WifiDirectManager @Inject constructor(
           TAG, "${activity.getString(R.string.discovery_failed)}: " +
             getErrorMessage(reason)
         )
-        displayToast(R.string.discovery_failed, Toast.LENGTH_SHORT)
+        activity.toast(R.string.discovery_failed, Toast.LENGTH_SHORT)
       }
     })
   }
@@ -144,7 +145,7 @@ class WifiDirectManager @Inject constructor(
   override fun onWifiP2pStateChanged(isEnabled: Boolean) {
     isWifiP2pEnabled = isEnabled
     if (!isWifiP2pEnabled) {
-      displayToast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT)
+      activity.toast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT)
       callbacks.onConnectionToPeersLost()
     }
     Log.d(TAG, "WiFi P2P state changed - $isWifiP2pEnabled")
@@ -180,7 +181,7 @@ class WifiDirectManager @Inject constructor(
       shouldRetry = false
       manager.initialize(activity, Looper.getMainLooper(), this)
     } else {
-      displayToast(R.string.severe_loss_error, Toast.LENGTH_LONG)
+      activity.toast(R.string.severe_loss_error, Toast.LENGTH_LONG)
     }
   }
 
@@ -212,7 +213,7 @@ class WifiDirectManager @Inject constructor(
         FileTransferConfirmation(senderSelectedPeerDevice.deviceName), {
           hasSenderStartedConnection = true
           connect()
-          displayToast(R.string.performing_handshake, Toast.LENGTH_LONG)
+          activity.toast(R.string.performing_handshake, Toast.LENGTH_LONG)
         })
     }
   }
@@ -230,7 +231,7 @@ class WifiDirectManager @Inject constructor(
       override fun onFailure(reason: Int) {
         val errorMessage = getErrorMessage(reason)
         Log.d(TAG, activity.getString(R.string.connection_failed) + ": " + errorMessage)
-        displayToast(R.string.connection_failed, Toast.LENGTH_LONG)
+        activity.toast(R.string.connection_failed, Toast.LENGTH_LONG)
       }
     })
   }
@@ -270,7 +271,7 @@ class WifiDirectManager @Inject constructor(
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer")
         fileReceiverDeviceAddress =
           if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
-        displayToast(R.string.preparing_files, Toast.LENGTH_LONG)
+        activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
         senderDeviceAsyncTask = SenderDeviceAsyncTask(this, activity).also {
           it.execute()
         }
@@ -295,8 +296,8 @@ class WifiDirectManager @Inject constructor(
   }
 
   private fun cancelAsyncTasks(vararg tasks: AsyncTask<*, *, *>?) =
-    tasks.all {
-      it?.cancel(true) ?: false
+    tasks.forEach {
+      it?.cancel(true)
     }
 
   fun stopWifiDirectManager() {
@@ -338,20 +339,14 @@ class WifiDirectManager @Inject constructor(
     }
   }
 
-  fun displayToast(
-    stringResourceId: Int,
-    templateValue: String,
-    duration: Int
-  ) = activity.toast(activity.getString(stringResourceId, templateValue), duration)
-
-  fun displayToast(stringResourceId: Int, duration: Int) =
-    activity.toast(stringResourceId, duration)
+  fun displayToast(stringResourceId: Int, templateValue: String, duration: Int) =
+    activity.toast(activity.getString(stringResourceId, templateValue), duration)
 
   fun onFileTransferAsyncTaskComplete(wereAllFilesTransferred: Boolean) {
     if (wereAllFilesTransferred) {
-      displayToast(R.string.file_transfer_complete, Toast.LENGTH_LONG)
+      activity.toast(R.string.file_transfer_complete, Toast.LENGTH_LONG)
     } else {
-      displayToast(R.string.error_during_transfer, Toast.LENGTH_LONG)
+      activity.toast(R.string.error_during_transfer, Toast.LENGTH_LONG)
     }
     callbacks.onFileTransferComplete()
   }
@@ -367,17 +362,16 @@ class WifiDirectManager @Inject constructor(
 
   companion object {
     private const val TAG = "WifiDirectManager"
-    var FILE_TRANSFER_PORT = 8008
-    @Throws(IOException::class) fun copyToOutputStream(
+    @JvmField var FILE_TRANSFER_PORT = 8008
+    @JvmStatic @Throws(IOException::class) fun copyToOutputStream(
       inputStream: InputStream,
       outputStream: OutputStream
     ) {
-      inputStream.use { it.copyTo(outputStream, DEFAULT_BUFFER_SIZE) }
-      outputStream.close()
+      inputStream.use { input -> outputStream.use { output -> input.copyTo(output) } }
       Log.d(LocalFileTransferActivity.TAG, "Both streams closed")
     }
 
-    fun getDeviceStatus(status: Int): String {
+    @JvmStatic fun getDeviceStatus(status: Int): String {
       if (BuildConfig.DEBUG) Log.d(TAG, "Peer Status: $status")
       return when (status) {
         WifiP2pDevice.AVAILABLE -> "Available"
@@ -390,6 +384,6 @@ class WifiDirectManager @Inject constructor(
     }
 
     // Returns text after location of last slash in the file path
-    fun getFileName(fileUri: Uri) = "$fileUri".substringAfterLast('/')
+    @JvmStatic fun getFileName(fileUri: Uri) = "$fileUri".substringAfterLast('/')
   }
 }
