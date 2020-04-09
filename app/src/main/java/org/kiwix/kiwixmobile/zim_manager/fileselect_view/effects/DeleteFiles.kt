@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import javax.inject.Inject
 
-data class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
+data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
   SideEffect<Unit> {
 
   @Inject lateinit var dialogShower: DialogShower
@@ -41,18 +41,19 @@ data class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as ZimManageActivity).cachedComponent.inject(this)
 
-    val name = booksOnDiskListItem.joinToString(separator = "\n") { it.book.title }
+    val name = booksOnDiskListItems.joinToString(separator = "\n") { it.book.title }
 
     dialogShower.show(DeleteZims(name), {
-      val booksDeleted = booksOnDiskListItem.fold(true) { _, book ->
-        if (deleteSpecificZimFile(book)) {
-          if (book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
-            zimReaderContainer.setZimFile(null)
-          }
-          true
-        } else {
-          false
-        }
+      val booksDeleted = booksOnDiskListItems.fold(true) { acc, book ->
+        acc &&
+          (if (deleteSpecificZimFile(book)) {
+            if (book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
+              zimReaderContainer.setZimFile(null)
+            }
+            true
+          } else {
+            false
+          })
       }
 
       activity.toast(if (booksDeleted) R.string.delete_zims_toast else R.string.delete_zim_failed)
