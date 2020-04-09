@@ -41,29 +41,21 @@ data class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as ZimManageActivity).cachedComponent.inject(this)
 
-    var name = "\n"
-    booksOnDiskListItem.forEach {
-      name += "\n" + it.book.title
-    }
+    val name = booksOnDiskListItem.joinToString(separator = "\n") { it.book.title }
 
     dialogShower.show(DeleteZims(name), {
-      var allDeleted = true
-
-      booksOnDiskListItem.forEach {
-        if (deleteSpecificZimFile(it)) {
-          if (it.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
+      val booksDeleted = booksOnDiskListItem.fold(true) { _, book ->
+        if (deleteSpecificZimFile(book)) {
+          if (book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
             zimReaderContainer.setZimFile(null)
           }
+          true
         } else {
-          allDeleted = false
+          false
         }
       }
 
-      if (allDeleted) {
-        activity.toast(R.string.delete_zims_toast)
-      } else {
-        activity.toast(R.string.delete_zim_failed)
-      }
+      activity.toast(if (booksDeleted) R.string.delete_zims_toast else R.string.delete_zim_failed)
     })
   }
 
