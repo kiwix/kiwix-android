@@ -57,13 +57,13 @@ internal class HistoryPresenter @Inject constructor(
       .observeOn(mainThread)
       .subscribe(
         { hList: List<HistoryListItem> -> view?.notifyHistoryListFiltered(hList) },
-        { e: Throwable -> Log.e("HistoryPresenter", "Failed to filter history", e) }
+        { e: Throwable -> Log.e("HistoryPresenter", "Failed to filter history.", e) }
       ))
   }
 
   override fun deleteHistory(deleteList: List<HistoryListItem>) {
     dataSource.deleteHistory(deleteList).subscribe({}, { e: Throwable ->
-        Log.e("HistoryPresenter", "Failed to delete history", e)
+        Log.e("HistoryPresenter", "Failed to delete history.", e)
       })
   }
 }
