@@ -40,25 +40,20 @@ internal class HistoryPresenter @Inject constructor(
   private var disposable: Disposable? = null
 
   override fun loadHistory(showHistoryCurrentBook: Boolean) {
-    val d = dataSource.getDateCategorizedHistory(showHistoryCurrentBook).subscribe(
+    val immutableDisposable = dataSource.getDateCategorizedHistory(showHistoryCurrentBook).subscribe(
         { histories: List<HistoryListItem> -> view?.updateHistoryList(histories) },
         { e: Throwable -> Log.e("HistoryPresenter", "Failed to load history.", e) }
     )
     disposable?.takeIf { !it.isDisposed }?.dispose()
-    disposable = d
-    compositeDisposable.add(d)
+    compositeDisposable.add(immutableDisposable)
   }
 
   override fun filterHistory(historyList: List<HistoryListItem>, newText: String) {
-    compositeDisposable.add(Observable.just(historyList)
-      .flatMapIterable { flatHistoryList: List<HistoryListItem> ->
-        flatHistoryList.filter { item ->
-          item is HistoryItem &&
-            item.historyTitle.toLowerCase(Locale.getDefault())
-              .contains(newText.toLowerCase(Locale.getDefault()))
-        }
-      }
-      .toList()
+    compositeDisposable.add(Observable.fromCallable{ historyList.filter { item ->
+      item is HistoryItem &&
+        item.historyTitle.toLowerCase(Locale.getDefault())
+          .contains(newText.toLowerCase(Locale.getDefault()))
+      }}
       .subscribeOn(computation)
       .observeOn(mainThread)
       .subscribe(
