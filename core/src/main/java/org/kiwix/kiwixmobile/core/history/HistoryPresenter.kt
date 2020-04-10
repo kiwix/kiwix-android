@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.history
 import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
@@ -37,23 +36,23 @@ internal class HistoryPresenter @Inject constructor(
   @param:Computation private val computation: Scheduler
 ) : BasePresenter<View>(), Presenter {
 
-  private var disposable: Disposable? = null
-
   override fun loadHistory(showHistoryCurrentBook: Boolean) {
-    val immutableDisposable = dataSource.getDateCategorizedHistory(showHistoryCurrentBook).subscribe(
+    dataSource.getDateCategorizedHistory(showHistoryCurrentBook)
+      .subscribe(
         { histories: List<HistoryListItem> -> view?.updateHistoryList(histories) },
         { e: Throwable -> Log.e("HistoryPresenter", "Failed to load history.", e) }
-    )
-    disposable?.takeIf { !it.isDisposed }?.dispose()
-    compositeDisposable.add(immutableDisposable)
+    ).let {
+        it.takeIf { !it.isDisposed }?.dispose()
+        compositeDisposable.add(it)
+      }
   }
 
   override fun filterHistory(historyList: List<HistoryListItem>, newText: String) {
-    compositeDisposable.add(Observable.fromCallable{ historyList.filter { item ->
-      item is HistoryItem &&
-        item.historyTitle.toLowerCase(Locale.getDefault())
-          .contains(newText.toLowerCase(Locale.getDefault()))
-      }}
+    compositeDisposable.add(Observable.fromCallable {
+        historyList.filterIsInstance<HistoryItem>().filter { item ->
+          item.historyTitle.toLowerCase(Locale.getDefault())
+            .contains(newText.toLowerCase(Locale.getDefault()))
+        } }
       .subscribeOn(computation)
       .observeOn(mainThread)
       .subscribe(
