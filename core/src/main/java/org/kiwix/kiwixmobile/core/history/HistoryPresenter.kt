@@ -44,7 +44,7 @@ internal class HistoryPresenter @Inject constructor(
         { histories: List<HistoryListItem> -> view?.updateHistoryList(histories) },
         { e: Throwable -> Log.e("HistoryPresenter", "Failed to load history.", e) }
     )
-    disposable?.takeIf { !it.isDisposed }?.let { it.dispose() }
+    disposable?.takeIf { !it.isDisposed }?.dispose()
     disposable = d
     compositeDisposable.add(d)
   }
