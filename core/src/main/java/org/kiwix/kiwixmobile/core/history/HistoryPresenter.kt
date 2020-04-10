@@ -18,10 +18,8 @@
 package org.kiwix.kiwixmobile.core.history
 
 import android.util.Log
-import io.reactivex.CompletableObserver
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -30,6 +28,7 @@ import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.history.HistoryContract.Presenter
 import org.kiwix.kiwixmobile.core.history.HistoryContract.View
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import java.util.Locale
 import javax.inject.Inject
 
 internal class HistoryPresenter @Inject constructor(
@@ -37,64 +36,40 @@ internal class HistoryPresenter @Inject constructor(
   @param:MainThread private val mainThread: Scheduler,
   @param:Computation private val computation: Scheduler
 ) : BasePresenter<View>(), Presenter {
+
   private var disposable: Disposable? = null
 
   override fun loadHistory(showHistoryCurrentBook: Boolean) {
-    dataSource.getDateCategorizedHistory(showHistoryCurrentBook)
-      .subscribe(object : SingleObserver<List<HistoryListItem>> {
-        override fun onSubscribe(d: Disposable) {
-          if (disposable != null && !disposable!!.isDisposed) {
-            disposable!!.dispose()
-          }
-          disposable = d
-          compositeDisposable.add(d)
-        }
-
-        override fun onSuccess(histories: List<HistoryListItem>) {
-          view?.updateHistoryList(histories)
-        }
-
-        override fun onError(e: Throwable) {
-          Log.e("HistoryPresenter", e.toString())
-        }
-      })
+    val d = dataSource.getDateCategorizedHistory(showHistoryCurrentBook).subscribe(
+        { histories: List<HistoryListItem> -> view?.updateHistoryList(histories) },
+        { e: Throwable -> Log.e("HistoryPresenter", "Failed to load history.", e) }
+    )
+    disposable?.takeIf { !it.isDisposed }?.let { it.dispose() }
+    disposable = d
+    compositeDisposable.add(d)
   }
 
-  override fun filterHistory(
-    historyList: List<HistoryListItem>,
-    newText: String
-  ) = Observable.just(historyList)
-    .flatMapIterable { flatHistoryList: List<HistoryListItem> ->
-      flatHistoryList.filter { item ->
-        item is HistoryItem
-          && item.historyTitle.toLowerCase()
-          .contains(newText.toLowerCase())
-      }
-    }
-    .toList()
-    .subscribeOn(computation)
-    .observeOn(mainThread)
-    .subscribe(object : SingleObserver<List<HistoryListItem>> {
-      override fun onSubscribe(d: Disposable) {
-        compositeDisposable.add(d)
-      }
-
-      override fun onError(e: Throwable) {
-        Log.e("HistoryPresenter", e.toString())
-      }
-
-      override fun onSuccess(historyList: List<HistoryListItem>) {
-        view?.notifyHistoryListFiltered(historyList)
-      }
-    })
-
-  override fun deleteHistory(deleteList: List<HistoryListItem>) =
-    dataSource.deleteHistory(deleteList)
-      .subscribe(object : CompletableObserver {
-        override fun onSubscribe(d: Disposable) {}
-        override fun onComplete() {}
-        override fun onError(e: Throwable) {
-          Log.e("HistoryPresenter", e.toString())
+  override fun filterHistory(historyList: List<HistoryListItem>, newText: String) {
+    compositeDisposable.add(Observable.just(historyList)
+      .flatMapIterable { flatHistoryList: List<HistoryListItem> ->
+        flatHistoryList.filter { item ->
+          item is HistoryItem &&
+            item.historyTitle.toLowerCase(Locale.getDefault())
+              .contains(newText.toLowerCase(Locale.getDefault()))
         }
+      }
+      .toList()
+      .subscribeOn(computation)
+      .observeOn(mainThread)
+      .subscribe(
+        { hList: List<HistoryListItem> -> view?.notifyHistoryListFiltered(hList) },
+        { e: Throwable -> Log.e("HistoryPresenter", "Failed to filter history", e) }
+      ))
+  }
+
+  override fun deleteHistory(deleteList: List<HistoryListItem>) {
+    dataSource.deleteHistory(deleteList).subscribe({}, { e: Throwable ->
+        Log.e("HistoryPresenter", "Failed to delete history", e)
       })
+  }
 }
