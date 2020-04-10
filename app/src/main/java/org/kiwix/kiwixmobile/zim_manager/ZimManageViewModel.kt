@@ -103,12 +103,12 @@ class ZimManageViewModel @Inject constructor(
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
-  val currentPage = MutableLiveData<Int>()
 
   val requestFileSystemCheck = PublishProcessor.create<Unit>()
   val fileSelectActions = PublishProcessor.create<FileSelectActions>()
   val requestDownloadLibrary = BehaviorProcessor.createDefault<Unit>(Unit)
   val requestFiltering = BehaviorProcessor.createDefault<String>("")
+  val currentPage = PublishProcessor.create<Int>()
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -157,10 +157,6 @@ class ZimManageViewModel @Inject constructor(
       }
     )
   }, Throwable::printStackTrace)
-
-  fun currentTabIndex(position: Int) {
-    currentPage.value = position
-  }
 
   private fun startMultiSelectionAndSelectBook(
     bookOnDisk: BookOnDisk

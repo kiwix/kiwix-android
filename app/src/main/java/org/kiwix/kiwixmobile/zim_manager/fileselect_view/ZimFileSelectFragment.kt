@@ -112,11 +112,7 @@ class ZimFileSelectFragment : BaseFragment() {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
 
-    zimManageViewModel.currentPage.observe(viewLifecycleOwner, Observer<Int> { currentPage ->
-      if (currentPage == 1) {
-        finishActionMode()
-      }
-    })
+    zimManageViewModel.currentPage.map { it == 1 }.subscribe { if (it) finishActionMode() }
   }
 
   private fun finishActionMode() {

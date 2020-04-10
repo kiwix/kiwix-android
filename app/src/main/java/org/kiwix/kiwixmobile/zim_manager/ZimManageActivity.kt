@@ -75,7 +75,7 @@ class ZimManageActivity : BaseActivity() {
   }
 
   private fun updatePage(position: Int) {
-    zimManageViewModel.currentTabIndex(position)
+    zimManageViewModel.currentPage.offer(position)
   }
 
   override fun onNewIntent(intent: Intent?) {
