@@ -20,6 +20,9 @@ package org.kiwix.sharedFunctions
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.NONE
+import org.kiwix.kiwixlib.JNIKiwixReader
+import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -33,6 +36,7 @@ import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.FileElement
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Pieces
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Url
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
@@ -164,3 +168,21 @@ fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity
 
 fun recentSearchEntity(id: Long = 0L, searchTerm: String = "", zimId: String = "") =
   RecentSearchEntity(id, searchTerm, zimId)
+
+fun bookmarkItem(
+  databaseId: Long = 0L,
+  zimId: String = "",
+  zimName: String = "",
+  zimFilePath: String?,
+  bookmarkUrl: String,
+  bookmarkTitle: String,
+  favicon: String?
+) =
+  BookmarkItem(databaseId, zimId, zimName, zimFilePath, bookmarkUrl, bookmarkTitle, favicon)
+
+fun zimFileReader(
+  zimFile: File,
+  jniKiwixReader: JNIKiwixReader,
+  nightModeConfig: NightModeConfig
+) =
+  ZimFileReader(zimFile, jniKiwixReader, nightModeConfig)
