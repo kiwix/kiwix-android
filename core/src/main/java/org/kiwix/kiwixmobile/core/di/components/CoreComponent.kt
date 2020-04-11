@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.core.data.local.dao.BookmarksDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
-import org.kiwix.kiwixmobile.core.di.modules.DialogModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
@@ -67,8 +66,7 @@ import javax.inject.Singleton
     JNIModule::class,
     DataModule::class,
     CoreViewModelModule::class,
-    SearchModule::class,
-    DialogModule::class
+    SearchModule::class
   ]
 )
 interface CoreComponent {

@@ -191,21 +191,22 @@ class BookmarksActivity : BaseActivity(),
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    val itemId = item.itemId
-    if (itemId == android.R.id.home) {
-      onBackPressed()
-      return true
-    } else if (itemId == R.id.menu_bookmarks_clear) {
-      dialogShower!!.show(KiwixDialog.DeleteBookmarks, {
-        presenter!!.deleteBookmarks(ArrayList(allBookmarks))
-        allBookmarks.clear()
-        bookmarksList.clear()
-        bookmarksAdapter!!.notifyDataSetChanged()
-        Snackbar.make(noBookmarks!!, R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT).show()
-      })
-      return true
+    when (item.itemId) {
+      android.R.id.home -> {
+        onBackPressed()
+      }
+      R.id.menu_bookmarks_clear -> {
+        dialogShower!!.show(KiwixDialog.DeleteBookmarks, {
+          presenter!!.deleteBookmarks(ArrayList(allBookmarks))
+          allBookmarks.clear()
+          bookmarksList.clear()
+          bookmarksAdapter!!.notifyDataSetChanged()
+          Snackbar.make(noBookmarks!!, R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT).show()
+        })
+      }
+      else -> return super.onOptionsItemSelected(item)
     }
-    return super.onOptionsItemSelected(item)
+    return true
   }
 
   override fun onDestroy() {
