@@ -69,7 +69,7 @@ class BookmarksActivity : BaseActivity(),
   var bookmarksSwitch: Switch? = null
 
   @Inject
-  private var presenter: BookmarksContract.Presenter? = null
+  var presenter: BookmarksContract.Presenter? = null
 
   @Inject
   var zimReaderContainer: ZimReaderContainer? = null
@@ -79,48 +79,55 @@ class BookmarksActivity : BaseActivity(),
   private var refreshAdapter = true
   private var bookmarksAdapter: BookmarksAdapter? = null
   private var actionMode: ActionMode? = null
-  private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
-    override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-      mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
-      bookmarksSwitch!!.isEnabled = false
-      return true
-    }
-
-    override fun onPrepareActionMode(
-      mode: ActionMode,
-      menu: Menu
-    ): Boolean = false
-
-    override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-      refreshAdapter = false
-      if (item.itemId == R.id.menu_context_delete) {
-        dialogShower!!.show(KiwixDialog.DeleteBookmarks, {
-          allBookmarks.removeAll(deleteList)
-          for (bookmark in deleteList) {
-            val position = bookmarksList.indexOf(bookmark)
-            bookmarksList.remove(bookmark)
-            bookmarksAdapter!!.notifyItemRemoved(position)
-            bookmarksAdapter!!.notifyItemRangeChanged(position, bookmarksAdapter!!.itemCount)
-          }
-          presenter!!.deleteBookmarks(ArrayList(deleteList))
-          mode.finish()
-        })
+  private val actionModeCallback: ActionMode.Callback =
+    object : ActionMode.Callback {
+      override fun onCreateActionMode(
+        mode: ActionMode,
+        menu: Menu
+      ): Boolean {
+        mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
+        bookmarksSwitch!!.isEnabled = false
         return true
       }
-      return false
-    }
 
-    override fun onDestroyActionMode(mode: ActionMode) {
-      if (deleteList.size != 0) {
-        deleteList.clear()
+      override fun onPrepareActionMode(
+        mode: ActionMode,
+        menu: Menu
+      ): Boolean = false
+
+      override fun onActionItemClicked(
+        mode: ActionMode,
+        item: MenuItem
+      ): Boolean {
+        refreshAdapter = false
+        if (item.itemId == R.id.menu_context_delete) {
+          dialogShower!!.show(KiwixDialog.DeleteBookmarks, {
+            allBookmarks.removeAll(deleteList)
+            for (bookmark in deleteList) {
+              val position = bookmarksList.indexOf(bookmark)
+              bookmarksList.remove(bookmark)
+              bookmarksAdapter!!.notifyItemRemoved(position)
+              bookmarksAdapter!!.notifyItemRangeChanged(position, bookmarksAdapter!!.itemCount)
+            }
+            presenter!!.deleteBookmarks(ArrayList(deleteList))
+            mode.finish()
+          })
+          return true
+        }
+        return false
       }
-      actionMode = null
-      if (refreshAdapter) {
-        bookmarksAdapter!!.notifyDataSetChanged()
+
+      override fun onDestroyActionMode(mode: ActionMode) {
+        if (deleteList.size != 0) {
+          deleteList.clear()
+        }
+        actionMode = null
+        if (refreshAdapter) {
+          bookmarksAdapter!!.notifyDataSetChanged()
+        }
+        bookmarksSwitch!!.isEnabled = true
       }
-      bookmarksSwitch!!.isEnabled = true
     }
-  }
 
   override fun injection(coreComponent: CoreComponent) {
     coreComponent.activityComponentBuilder().activity(this).build().inject(this)
@@ -138,7 +145,7 @@ class BookmarksActivity : BaseActivity(),
     }
     setupBookmarksAdapter()
     recyclerView!!.adapter = bookmarksAdapter
-    bookmarksSwitch!!.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+    bookmarksSwitch!!.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
       sharedPreferenceUtil.showBookmarksCurrentBook = !isChecked
       presenter!!.loadBookmarks(sharedPreferenceUtil.showBookmarksCurrentBook)
     }
@@ -231,7 +238,8 @@ class BookmarksActivity : BaseActivity(),
       } else {
         intent.putExtra(EXTRA_CHOSE_X_URL, bookmark.bookmarkUrl)
       }
-      if (bookmark.zimFilePath != null && bookmark.zimFilePath != zimReaderContainer!!.zimCanonicalPath
+      if (bookmark.zimFilePath != null &&
+        bookmark.zimFilePath != zimReaderContainer!!.zimCanonicalPath
       ) {
         intent.putExtra(EXTRA_CHOSE_X_FILE, bookmark.zimFilePath)
       }
