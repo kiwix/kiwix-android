@@ -23,15 +23,11 @@ import android.os.Build.VERSION_CODES
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
-import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
-import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
+import org.kiwix.kiwixmobile.core.history.ViewModel.Action
+import org.kiwix.kiwixmobile.core.history.ViewModel.Action.Filter
+import org.kiwix.kiwixmobile.core.history.ViewModel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
-import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 data class SearchIntentProcessing(
   private val intent: Intent?,
@@ -40,12 +36,6 @@ data class SearchIntentProcessing(
   @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {
     intent?.let {
-      actions.offer(
-        ScreenWasStartedFrom(
-          if (it.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false)) FromTabView
-          else FromWebView
-        )
-      )
       if (it.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
         actions.offer(Filter(it.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
       }

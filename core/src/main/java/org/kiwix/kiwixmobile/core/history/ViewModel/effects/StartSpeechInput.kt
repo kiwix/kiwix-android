@@ -24,8 +24,8 @@ import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
+import org.kiwix.kiwixmobile.core.history.ViewModel.Action
+import org.kiwix.kiwixmobile.core.history.ViewModel.Action.StartSpeechInputFailed
 import java.util.Locale
 
 data class StartSpeechInput(private val actions: PublishProcessor<Action>) : SideEffect<Unit> {

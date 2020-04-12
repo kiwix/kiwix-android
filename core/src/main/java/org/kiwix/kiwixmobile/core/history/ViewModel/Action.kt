@@ -31,7 +31,7 @@ sealed class Action {
   data class OnItemClick(val historyListItem: HistoryListItem) : Action()
   data class OnItemLongClick(val historyListItem: HistoryListItem) : Action()
   data class Filter(val term: String) : Action()
-  data class ConfirmedDelete(val historyListItem: HistoryListItem) : Action()
+  data class ConfirmedDelete(val historyListItems: List<HistoryListItem.HistoryItem>) : Action()
   data class CreatedWithIntent(val intent: Intent?) : Action()
   data class ActivityResultReceived(val requestCode: Int, val resultCode: Int, val data: Intent?) :
     Action()

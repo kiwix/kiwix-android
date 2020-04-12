@@ -1,6 +1,8 @@
 package org.kiwix.kiwixmobile.core.history
 
 import android.view.View
+import android.view.View.OnClickListener
+import android.view.View.OnLongClickListener
 import kotlinx.android.synthetic.main.item_bookmark_history.favicon
 import kotlinx.android.synthetic.main.item_bookmark_history.title
 import org.kiwix.kiwixmobile.core.R
@@ -18,7 +20,8 @@ sealed class HistoryItemViewHolder2 <in T : HistoryListItem>(containerView: View
   class HistoryItemViewHolder(
     override val containerView: View,
     private val deleteList: List<HistoryListItem>,
-    private val itemClickListener: OnItemClickListener
+    private val onClickListener: OnClickListener,
+    private val onLongClickListener: OnLongClickListener
   ) : HistoryItemViewHolder2<HistoryItem>(containerView){
     override fun bind(item: HistoryItem) {
       title.text = item.historyTitle
@@ -27,8 +30,8 @@ sealed class HistoryItemViewHolder2 <in T : HistoryListItem>(containerView: View
       } else {
         favicon.setBitmap(Base64String(item.favicon))
       }
-      itemView.setOnClickListener { itemClickListener.onItemClick(favicon, item) }
-      itemView.setOnLongClickListener { itemClickListener.onItemLongClick(favicon, item) }
+      itemView.setOnClickListener(onClickListener)
+      itemView.setOnLongClickListener(onLongClickListener)
     }
 
   }

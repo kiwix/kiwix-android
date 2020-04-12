@@ -19,14 +19,14 @@
 
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.history.HistoryListItem
 
 data class DeleteRecentSearch(
-  private val searchListItem: SearchListItem,
-  private val recentSearchDao: NewRecentSearchDao
+  private val historyListItems: List<HistoryListItem.HistoryItem>,
+  private val historyDao: HistoryDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    recentSearchDao.deleteSearchString(searchListItem.value)
+    historyDao.deleteHistory(historyListItems)
   }
 }

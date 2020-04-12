@@ -23,8 +23,8 @@ import android.speech.RecognizerIntent
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.history.ViewModel.Action
+import org.kiwix.kiwixmobile.core.history.ViewModel.Action.Filter
 
 data class ProcessActivityResult(
   private val requestCode: Int,

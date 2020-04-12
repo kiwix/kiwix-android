@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_history.recycler_view
+import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
@@ -38,9 +39,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity(){
   private val compositeDisposable = CompositeDisposable()
   private val historyAdapter: HistoryAdapter2 by lazy {
     HistoryAdapter2(
-      HistoryItemDelegate(deleteList,this){
-        historyViewModel.actions.offer(OnItemLongClick(it))
-      }
+      HistoryItemDelegate(deleteList, ::onItemClick, ::onItemLongClick)
     )
   }
 
