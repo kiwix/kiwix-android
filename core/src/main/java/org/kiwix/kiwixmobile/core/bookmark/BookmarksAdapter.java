@@ -80,7 +80,7 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
     boolean onItemLongClick(ImageView favicon, BookmarkItem bookmark);
   }
 
-  class Item extends RecyclerView.ViewHolder {
+  static class Item extends RecyclerView.ViewHolder {
     @BindView(R2.id.favicon)
     ImageView favicon;
     @BindView(R2.id.title)
