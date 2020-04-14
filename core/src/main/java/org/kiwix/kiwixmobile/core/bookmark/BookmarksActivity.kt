@@ -24,21 +24,20 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
-import android.widget.Switch
-import android.widget.TextView
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import butterknife.BindView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_bookmarks.bookmarks_switch
+import kotlinx.android.synthetic.main.activity_bookmarks.no_bookmarks
+import kotlinx.android.synthetic.main.activity_bookmarks.recycler_view
+import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R2
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.setBitmapFromString
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -55,27 +54,16 @@ class BookmarksActivity : BaseActivity(),
   private val bookmarksList: MutableList<BookmarkItem> = ArrayList()
   private val allBookmarks: MutableList<BookmarkItem> = ArrayList()
   private val deleteList: MutableList<BookmarkItem> = ArrayList()
-
-  @JvmField @BindView(R2.id.toolbar)
-  var toolbar: Toolbar? = null
-
-  @JvmField @BindView(R2.id.recycler_view)
-  var recyclerView: RecyclerView? = null
-
-  @JvmField @BindView(R2.id.no_bookmarks)
-  var noBookmarks: TextView? = null
-
-  @JvmField @BindView(R2.id.bookmarks_switch)
-  var bookmarksSwitch: Switch? = null
+  private val activityComponent by lazy { coreActivityComponent }
 
   @Inject
-  var presenter: BookmarksContract.Presenter? = null
+  lateinit var presenter: BookmarksContract.Presenter
 
   @Inject
-  var zimReaderContainer: ZimReaderContainer? = null
+  lateinit var zimReaderContainer: ZimReaderContainer
 
   @Inject
-  var dialogShower: DialogShower? = null
+  lateinit var dialogShower: DialogShower
   private var refreshAdapter = true
   private var bookmarksAdapter: BookmarksAdapter? = null
   private var actionMode: ActionMode? = null
@@ -86,7 +74,7 @@ class BookmarksActivity : BaseActivity(),
         menu: Menu
       ): Boolean {
         mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
-        bookmarksSwitch!!.isEnabled = false
+        bookmarks_switch!!.isEnabled = false
         return true
       }
 
@@ -101,7 +89,7 @@ class BookmarksActivity : BaseActivity(),
       ): Boolean {
         refreshAdapter = false
         if (item.itemId == R.id.menu_context_delete) {
-          dialogShower!!.show(KiwixDialog.DeleteBookmarks, {
+          dialogShower.show(KiwixDialog.DeleteBookmarks, {
             allBookmarks.removeAll(deleteList)
             for (bookmark in deleteList) {
               val position = bookmarksList.indexOf(bookmark)
@@ -109,7 +97,7 @@ class BookmarksActivity : BaseActivity(),
               bookmarksAdapter!!.notifyItemRemoved(position)
               bookmarksAdapter!!.notifyItemRangeChanged(position, bookmarksAdapter!!.itemCount)
             }
-            presenter!!.deleteBookmarks(ArrayList(deleteList))
+            presenter.deleteBookmarks(ArrayList(deleteList))
             mode.finish()
           })
           return true
@@ -125,17 +113,17 @@ class BookmarksActivity : BaseActivity(),
         if (refreshAdapter) {
           bookmarksAdapter!!.notifyDataSetChanged()
         }
-        bookmarksSwitch!!.isEnabled = true
+        bookmarks_switch!!.isEnabled = true
       }
     }
 
   override fun injection(coreComponent: CoreComponent) {
-    coreComponent.activityComponentBuilder().activity(this).build().inject(this)
+    activityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    presenter!!.attachView(this)
+    presenter.attachView(this)
     setContentView(R.layout.activity_bookmarks)
     setSupportActionBar(toolbar)
     val actionBar = supportActionBar
@@ -144,12 +132,12 @@ class BookmarksActivity : BaseActivity(),
       actionBar.setTitle(R.string.bookmarks)
     }
     setupBookmarksAdapter()
-    recyclerView!!.adapter = bookmarksAdapter
-    bookmarksSwitch!!.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+    recycler_view!!.adapter = bookmarksAdapter
+    bookmarks_switch!!.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
       sharedPreferenceUtil.showBookmarksCurrentBook = !isChecked
-      presenter!!.loadBookmarks(sharedPreferenceUtil.showBookmarksCurrentBook)
+      presenter.loadBookmarks(sharedPreferenceUtil.showBookmarksCurrentBook)
     }
-    bookmarksSwitch!!.isChecked = !sharedPreferenceUtil.showBookmarksCurrentBook
+    bookmarks_switch!!.isChecked = !sharedPreferenceUtil.showBookmarksCurrentBook
   }
 
   private fun setupBookmarksAdapter() {
@@ -157,14 +145,14 @@ class BookmarksActivity : BaseActivity(),
     bookmarksAdapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
       override fun onChanged() {
         super.onChanged()
-        noBookmarks!!.visibility = if (bookmarksList.size == 0) View.VISIBLE else View.GONE
+        no_bookmarks!!.visibility = if (bookmarksList.size == 0) View.VISIBLE else View.GONE
       }
     })
   }
 
   override fun onResume() {
     super.onResume()
-    presenter!!.loadBookmarks(sharedPreferenceUtil.showBookmarksCurrentBook)
+    presenter.loadBookmarks(sharedPreferenceUtil.showBookmarksCurrentBook)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -183,7 +171,7 @@ class BookmarksActivity : BaseActivity(),
           bookmarksAdapter!!.notifyDataSetChanged()
           return true
         }
-        presenter!!.filterBookmarks(bookmarksList, newText)
+        presenter.filterBookmarks(bookmarksList, newText)
         return true
       }
     })
@@ -196,12 +184,13 @@ class BookmarksActivity : BaseActivity(),
         onBackPressed()
       }
       R.id.menu_bookmarks_clear -> {
-        dialogShower!!.show(KiwixDialog.DeleteBookmarks, {
-          presenter!!.deleteBookmarks(ArrayList(allBookmarks))
+        dialogShower.show(KiwixDialog.DeleteBookmarks, {
+          presenter.deleteBookmarks(ArrayList(allBookmarks))
           allBookmarks.clear()
           bookmarksList.clear()
           bookmarksAdapter!!.notifyDataSetChanged()
-          Snackbar.make(noBookmarks!!, R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT).show()
+          Snackbar.make(no_bookmarks!!, R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT)
+            .show()
         })
       }
       else -> return super.onOptionsItemSelected(item)
@@ -210,7 +199,7 @@ class BookmarksActivity : BaseActivity(),
   }
 
   override fun onDestroy() {
-    presenter!!.detachView()
+    presenter.detachView()
     super.onDestroy()
   }
 
@@ -240,7 +229,7 @@ class BookmarksActivity : BaseActivity(),
         intent.putExtra(EXTRA_CHOSE_X_URL, bookmark.bookmarkUrl)
       }
       if (bookmark.zimFilePath != null &&
-        bookmark.zimFilePath != zimReaderContainer!!.zimCanonicalPath
+        bookmark.zimFilePath != zimReaderContainer.zimCanonicalPath
       ) {
         intent.putExtra(EXTRA_CHOSE_X_FILE, bookmark.zimFilePath)
       }

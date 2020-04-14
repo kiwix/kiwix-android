@@ -60,8 +60,8 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
         }
 
         @Override
-        public void onSuccess(List<BookmarkItem> bookmarks) {
-          view.updateBookmarksList(bookmarks);
+        public void onSuccess(List<BookmarkItem> bookmarksList) {
+          view.updateBookmarksList(bookmarksList);
         }
 
         @Override
