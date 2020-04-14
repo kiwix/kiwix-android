@@ -112,11 +112,9 @@ class ZimFileSelectFragment : BaseFragment() {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
 
-    zimManageViewModel.currentPage.map { it == 1 }.subscribe { if (it) finishActionMode() }
-  }
-
-  private fun finishActionMode() {
-    actionMode?.finish()
+    zimManageViewModel.currentPage.subscribe {
+      zimManageViewModel.actionMode(actionMode)
+    }
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(

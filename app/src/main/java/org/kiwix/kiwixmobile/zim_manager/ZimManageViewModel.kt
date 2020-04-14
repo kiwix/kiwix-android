@@ -19,7 +19,9 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.app.Application
+import android.content.Context
 import androidx.annotation.VisibleForTesting
+import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
@@ -142,6 +144,12 @@ class ZimManageViewModel @Inject constructor(
       requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
       fileSelectActions()
     )
+  }
+
+  fun actionMode(actionMode: ActionMode?) {
+    currentPage.filter { it == 1 }.subscribe {
+      actionMode?.finish()
+    }
   }
 
   private fun fileSelectActions() = fileSelectActions.subscribe({
