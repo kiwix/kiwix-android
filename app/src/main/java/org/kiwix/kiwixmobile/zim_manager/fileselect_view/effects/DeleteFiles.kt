@@ -45,15 +45,11 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
 
     dialogShower.show(DeleteZims(name), {
       val booksDeleted = booksOnDiskListItems.fold(true) { acc, book ->
-        acc &&
-          (if (deleteSpecificZimFile(book)) {
-            if (book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
-              zimReaderContainer.setZimFile(null)
-            }
-            true
-          } else {
-            false
-          })
+        acc && deleteSpecificZimFile(book).also {
+          if (it && book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
+            zimReaderContainer.setZimFile(null)
+          }
+        }
       }
 
       activity.toast(if (booksDeleted) R.string.delete_zims_toast else R.string.delete_zim_failed)
