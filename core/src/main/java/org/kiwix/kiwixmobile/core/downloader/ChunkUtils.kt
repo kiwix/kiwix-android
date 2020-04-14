@@ -22,6 +22,7 @@ import java.util.ArrayList
 
 object ChunkUtils {
   private const val ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+  private const val ALPHABET_SIZE = 26
   private const val ZIM_EXTENSION = ".zim"
   const val PART = ".part.part"
   const val CHUNK_SIZE = 1024L * 1024L * 1024L * 2L
@@ -46,7 +47,7 @@ object ChunkUtils {
     val chunks: MutableList<Chunk> = ArrayList()
     var currentRange: Long = 0
     for (zim in fileNames) {
-      val minLen: Long = minOf(contentLength, (currentRange + CHUNK_SIZE))
+      val minLen: Long = minOf(contentLength, currentRange + CHUNK_SIZE)
       val range: String = if (currentRange + CHUNK_SIZE >= contentLength) {
         "$currentRange-"
       } else {
@@ -79,8 +80,8 @@ object ChunkUtils {
     val baseName = if (position > 0) fileName.substring(0, position) else fileName
     val fileNames = arrayOfNulls<String>(count)
     for (i in 0 until count) {
-      val first = ALPHABET[i / 26]
-      val second = ALPHABET[i % 26]
+      val first = ALPHABET[i / ALPHABET_SIZE]
+      val second = ALPHABET[i % ALPHABET_SIZE]
       val chunkExtension = "$first" + second
       fileNames[i] = baseName + ZIM_EXTENSION + chunkExtension + PART
     }
