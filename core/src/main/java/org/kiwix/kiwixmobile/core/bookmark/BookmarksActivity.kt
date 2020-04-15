@@ -26,9 +26,7 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_bookmarks.bookmarks_switch
 import kotlinx.android.synthetic.main.activity_bookmarks.no_bookmarks
 import kotlinx.android.synthetic.main.activity_bookmarks.recycler_view
@@ -37,8 +35,11 @@ import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
-import org.kiwix.kiwixmobile.core.extensions.setBitmapFromString
+import org.kiwix.kiwixmobile.core.extensions.setBitmap
+import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
+import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
@@ -74,7 +75,7 @@ class BookmarksActivity : BaseActivity(),
         menu: Menu
       ): Boolean {
         mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
-        bookmarks_switch!!.isEnabled = false
+        bookmarks_switch.isEnabled = false
         return true
       }
 
@@ -132,12 +133,12 @@ class BookmarksActivity : BaseActivity(),
       actionBar.setTitle(R.string.bookmarks)
     }
     setupBookmarksAdapter()
-    recycler_view!!.adapter = bookmarksAdapter
-    bookmarks_switch!!.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+    recycler_view.adapter = bookmarksAdapter
+    bookmarks_switch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
       sharedPreferenceUtil.showBookmarksCurrentBook = !isChecked
       presenter.loadBookmarks(sharedPreferenceUtil.showBookmarksCurrentBook)
     }
-    bookmarks_switch!!.isChecked = !sharedPreferenceUtil.showBookmarksCurrentBook
+    bookmarks_switch.isChecked = !sharedPreferenceUtil.showBookmarksCurrentBook
   }
 
   private fun setupBookmarksAdapter() {
@@ -145,7 +146,7 @@ class BookmarksActivity : BaseActivity(),
     bookmarksAdapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
       override fun onChanged() {
         super.onChanged()
-        no_bookmarks!!.visibility = if (bookmarksList.size == 0) View.VISIBLE else View.GONE
+        no_bookmarks.visibility = if (bookmarksList.size == 0) View.VISIBLE else View.GONE
       }
     })
   }
@@ -189,8 +190,7 @@ class BookmarksActivity : BaseActivity(),
           allBookmarks.clear()
           bookmarksList.clear()
           bookmarksAdapter!!.notifyDataSetChanged()
-          Snackbar.make(no_bookmarks!!, R.string.all_bookmarks_cleared, Snackbar.LENGTH_SHORT)
-            .show()
+          no_bookmarks.snack(R.string.all_bookmarks_cleared)
         })
       }
       else -> return super.onOptionsItemSelected(item)
@@ -258,11 +258,9 @@ class BookmarksActivity : BaseActivity(),
     bookmark: BookmarkItem
   ) {
     if (deleteList.remove(bookmark)) {
-      favicon.setBitmapFromString(bookmark.favicon)
+      favicon.setBitmap(Base64String(bookmark.favicon))
     } else {
-      favicon.setImageDrawable(
-        ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp)
-      )
+      favicon.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
       deleteList.add(bookmark)
     }
     actionMode!!.title = getString(R.string.selected_items, deleteList.size)
