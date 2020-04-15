@@ -20,15 +20,11 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.verify
 import io.objectbox.Box
 import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
-import io.objectbox.rx.RxQuery
-import io.reactivex.Observable
 import org.junit.Test
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
