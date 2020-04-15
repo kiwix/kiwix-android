@@ -23,6 +23,7 @@ import com.tonyodev.fetch2.Status.NONE
 import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
+import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -180,9 +181,13 @@ fun bookmarkItem(
 ) =
   BookmarkItem(databaseId, zimId, zimName, zimFilePath, bookmarkUrl, bookmarkTitle, favicon)
 
-fun zimFileReader(
-  zimFile: File,
-  jniKiwixReader: JNIKiwixReader,
-  nightModeConfig: NightModeConfig
+fun bookmarkEntity(
+  id: Long = 0,
+  zimId: String = "zimId",
+  zimName: String = "zimName",
+  zimFilePath: String? = null,
+  bookmarkUrl: String = "bookmarkUrl",
+  bookmarkTitle: String = "bookmarkTitle",
+  favicon: String? = null
 ) =
-  ZimFileReader(zimFile, jniKiwixReader, nightModeConfig)
+  BookmarkEntity(id, zimId, zimName, zimFilePath, bookmarkUrl, bookmarkTitle, favicon)

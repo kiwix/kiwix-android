@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.sharedFunctions.bookmarkItem
-import org.kiwix.sharedFunctions.zimFileReader
+import org.kiwix.sharedFunctions.bookmarkEntity
 
 internal class NewBookmarksDaoTest {
 
@@ -43,22 +43,20 @@ internal class NewBookmarksDaoTest {
 
   @Test
   fun `get bookmarks without current book`() {
-    mockkStatic(CoreApp::class)
-    every { CoreApp.getInstance().packageName } returns "pkg"
     val zimFileReader: ZimFileReader = mockk()
     val queryBuilder: QueryBuilder<BookmarkEntity> = mockk()
     every { box.query() } returns queryBuilder
     every { queryBuilder.order(BookmarkEntity_.bookmarkTitle) } returns queryBuilder
     val query: Query<BookmarkEntity> = mockk(relaxed = true)
     every { queryBuilder.build() } returns query
+    val bookmarkEntities: List<BookmarkEntity> = mockk(relaxed = true)
+    every { query.find() } returns bookmarkEntities
     newBookmarksDao.getBookmarks(false, zimFileReader)
     verify { queryBuilder.build() }
   }
 
   @Test
   fun `get bookmarks from current book`() {
-    mockkStatic(CoreApp::class)
-    every { CoreApp.getInstance().packageName } returns "pkg"
     val zimFileReader: ZimFileReader = mockk()
     val queryBuilder: QueryBuilder<BookmarkEntity> = mockk()
     every { box.query() } returns queryBuilder
@@ -74,38 +72,28 @@ internal class NewBookmarksDaoTest {
     every { queryBuilder.build() } returns query
     newBookmarksDao.getBookmarks(true, zimFileReader)
     verify { queryBuilder.equal(BookmarkEntity_.zimName, zimFileReader.name) }
-    verify { queryBuilder.build() }
+  }
+
+  @Test
+  fun `get bookmarks from current book when zimFileReader is null`() {
+    val zimFileReader: ZimFileReader? = null
+    val queryBuilder: QueryBuilder<BookmarkEntity> = mockk()
+    every { box.query() } returns queryBuilder
+    every {
+      queryBuilder.equal(
+        BookmarkEntity_.zimName,
+        zimFileReader?.name ?: ""
+      )
+    } returns queryBuilder
+    every { queryBuilder.order(BookmarkEntity_.bookmarkTitle) } returns queryBuilder
+    val query: Query<BookmarkEntity> = mockk(relaxed = true)
+    every { queryBuilder.build() } returns query
+    newBookmarksDao.getBookmarks(true, zimFileReader)
+    verify { queryBuilder.equal(BookmarkEntity_.zimName, "") }
   }
 
   @Test
   fun `get current zim bookmarks url`() {
-    mockkStatic(CoreApp::class)
-    every { CoreApp.getInstance().packageName } returns "pkg"
-    val zimFileReader: ZimFileReader = mockk()
-    val queryBuilder: QueryBuilder<BookmarkEntity> = mockk()
-    every { box.query() } returns queryBuilder
-    every { zimFileReader.name } returns ""
-    every {
-      queryBuilder.equal(
-        BookmarkEntity_.zimName,
-        zimFileReader.name
-      )
-    } returns queryBuilder
-    every { queryBuilder.or() } returns queryBuilder
-    every { zimFileReader.id } returns ""
-    every {
-      queryBuilder.equal(
-        BookmarkEntity_.zimId,
-        zimFileReader.id
-      )
-    } returns queryBuilder
-    every { queryBuilder.order(BookmarkEntity_.bookmarkTitle) } returns queryBuilder
-  }
-
-  @Test
-  fun `bookmark urls for current workbook`() {
-    mockkStatic(CoreApp::class)
-    every { CoreApp.getInstance().packageName } returns "pkg"
     val zimFileReader: ZimFileReader = mockk()
     val queryBuilder: QueryBuilder<BookmarkEntity> = mockk()
     every { box.query() } returns queryBuilder
@@ -127,10 +115,34 @@ internal class NewBookmarksDaoTest {
     every { queryBuilder.order(BookmarkEntity_.bookmarkTitle) } returns queryBuilder
     val query: Query<BookmarkEntity> = mockk(relaxed = true)
     every { queryBuilder.build() } returns query
-    val queryResult: List<BookmarkEntity> = mockk()
-    mockkStatic(RxQuery::class)
-    every { RxQuery.observable(query) } returns Observable.just(queryResult)
-    newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader)
+    newBookmarksDao.getCurrentZimBookmarksUrl(zimFileReader)
+  }
+
+  @Test
+  fun `bookmark urls for current workbook`() {
+    val zimFileReader: ZimFileReader = mockk()
+    val queryBuilder: QueryBuilder<BookmarkEntity> = mockk()
+    every { box.query() } returns queryBuilder
+    every { zimFileReader.name } returns ""
+    every {
+      queryBuilder.equal(
+        BookmarkEntity_.zimName,
+        zimFileReader.name
+      )
+    } returns queryBuilder
+    every { queryBuilder.or() } returns queryBuilder
+    every { zimFileReader.id } returns ""
+    every {
+      queryBuilder.equal(
+        BookmarkEntity_.zimId,
+        zimFileReader.id
+      )
+    } returns queryBuilder
+    every { queryBuilder.order(BookmarkEntity_.bookmarkTitle) } returns queryBuilder
+    val query: Query<BookmarkEntity> = mockk(relaxed = true)
+    every { queryBuilder.build() } returns query
+    newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader).test()
+      .assertEmpty()
   }
 
   @Test
