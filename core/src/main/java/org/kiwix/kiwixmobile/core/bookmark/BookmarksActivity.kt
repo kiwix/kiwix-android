@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_TITLE
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -66,28 +67,19 @@ class BookmarksActivity : BaseActivity(),
   @Inject
   lateinit var dialogShower: DialogShower
   private var refreshAdapter = true
-  private var bookmarksAdapter: BookmarksAdapter? = null
+  private lateinit var bookmarksAdapter: BookmarksAdapter
   private var actionMode: ActionMode? = null
   private val actionModeCallback: ActionMode.Callback =
     object : ActionMode.Callback {
-      override fun onCreateActionMode(
-        mode: ActionMode,
-        menu: Menu
-      ): Boolean {
+      override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
         bookmarks_switch.isEnabled = false
         return true
       }
 
-      override fun onPrepareActionMode(
-        mode: ActionMode,
-        menu: Menu
-      ): Boolean = false
+      override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
 
-      override fun onActionItemClicked(
-        mode: ActionMode,
-        item: MenuItem
-      ): Boolean {
+      override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         refreshAdapter = false
         if (item.itemId == R.id.menu_context_delete) {
           dialogShower.show(KiwixDialog.DeleteBookmarks, {
@@ -95,8 +87,8 @@ class BookmarksActivity : BaseActivity(),
             for (bookmark in deleteList) {
               val position = bookmarksList.indexOf(bookmark)
               bookmarksList.remove(bookmark)
-              bookmarksAdapter!!.notifyItemRemoved(position)
-              bookmarksAdapter!!.notifyItemRangeChanged(position, bookmarksAdapter!!.itemCount)
+              bookmarksAdapter.notifyItemRemoved(position)
+              bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.itemCount)
             }
             presenter.deleteBookmarks(ArrayList(deleteList))
             mode.finish()
@@ -112,7 +104,7 @@ class BookmarksActivity : BaseActivity(),
         }
         actionMode = null
         if (refreshAdapter) {
-          bookmarksAdapter!!.notifyDataSetChanged()
+          bookmarksAdapter.notifyDataSetChanged()
         }
         bookmarks_switch!!.isEnabled = true
       }
@@ -143,7 +135,7 @@ class BookmarksActivity : BaseActivity(),
 
   private fun setupBookmarksAdapter() {
     bookmarksAdapter = BookmarksAdapter(bookmarksList, deleteList, this)
-    bookmarksAdapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
+    bookmarksAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
       override fun onChanged() {
         super.onChanged()
         no_bookmarks.visibility = if (bookmarksList.size == 0) View.VISIBLE else View.GONE
@@ -161,20 +153,13 @@ class BookmarksActivity : BaseActivity(),
     val search = menu.findItem(R.id.menu_bookmarks_search)
       .actionView as SearchView
     search.queryHint = getString(R.string.search_bookmarks)
-    search.setOnQueryTextListener(object :
-      SearchView.OnQueryTextListener {
-      override fun onQueryTextSubmit(query: String): Boolean = false
-
-      override fun onQueryTextChange(newText: String): Boolean {
-        bookmarksList.clear()
-        bookmarksList.addAll(allBookmarks)
-        if ("" == newText) {
-          bookmarksAdapter!!.notifyDataSetChanged()
-          return true
-        }
-        presenter.filterBookmarks(bookmarksList, newText)
-        return true
+    search.setOnQueryTextListener(SimpleTextListener {
+      bookmarksList.clear()
+      bookmarksList.addAll(allBookmarks)
+      if ("" == it) {
+        bookmarksAdapter.notifyDataSetChanged()
       }
+      presenter.filterBookmarks(bookmarksList, it)
     })
     return true
   }
@@ -189,7 +174,7 @@ class BookmarksActivity : BaseActivity(),
           presenter.deleteBookmarks(ArrayList(allBookmarks))
           allBookmarks.clear()
           bookmarksList.clear()
-          bookmarksAdapter!!.notifyDataSetChanged()
+          bookmarksAdapter.notifyDataSetChanged()
           no_bookmarks.snack(R.string.all_bookmarks_cleared)
         })
       }
@@ -212,13 +197,10 @@ class BookmarksActivity : BaseActivity(),
   override fun notifyBookmarksListFiltered(bookmarksList: List<BookmarkItem>) {
     this.bookmarksList.clear()
     this.bookmarksList.addAll(bookmarksList)
-    bookmarksAdapter!!.notifyDataSetChanged()
+    bookmarksAdapter.notifyDataSetChanged()
   }
 
-  override fun onItemClick(
-    favicon: ImageView,
-    bookmark: BookmarkItem
-  ) {
+  override fun onItemClick(favicon: ImageView, bookmark: BookmarkItem) {
     if (actionMode == null) {
       val intent = internal(
         CoreMainActivity::class.java
@@ -240,10 +222,7 @@ class BookmarksActivity : BaseActivity(),
     }
   }
 
-  override fun onItemLongClick(
-    favicon: ImageView,
-    bookmark: BookmarkItem
-  ): Boolean {
+  override fun onItemLongClick(favicon: ImageView, bookmark: BookmarkItem): Boolean {
     if (actionMode != null) {
       return false
     }
@@ -253,10 +232,7 @@ class BookmarksActivity : BaseActivity(),
     return true
   }
 
-  private fun toggleSelection(
-    favicon: ImageView,
-    bookmark: BookmarkItem
-  ) {
+  private fun toggleSelection(favicon: ImageView, bookmark: BookmarkItem) {
     if (deleteList.remove(bookmark)) {
       favicon.setBitmap(Base64String(bookmark.favicon))
     } else {

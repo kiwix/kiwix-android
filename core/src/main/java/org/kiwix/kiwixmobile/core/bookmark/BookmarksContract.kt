@@ -21,8 +21,8 @@ import org.kiwix.kiwixmobile.core.base.BaseContract
 
 interface BookmarksContract {
   interface View : BaseContract.View<Presenter> {
-    fun updateBookmarksList(bookmarksList: List<BookmarkItem>)
-    fun notifyBookmarksListFiltered(bookmarksList: List<BookmarkItem>)
+    fun updateBookmarksList(bookmarks: List<BookmarkItem>)
+    fun notifyBookmarksListFiltered(bookmarks: List<BookmarkItem>)
   }
 
   interface Presenter : BaseContract.Presenter<View> {
