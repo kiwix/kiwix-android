@@ -20,8 +20,6 @@ package org.kiwix.sharedFunctions
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.NONE
-import org.kiwix.kiwixlib.JNIKiwixReader
-import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
@@ -37,7 +35,6 @@ import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.FileElement
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Pieces
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Url
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
