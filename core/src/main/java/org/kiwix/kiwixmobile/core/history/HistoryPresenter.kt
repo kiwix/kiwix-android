@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.history
 import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
@@ -27,7 +28,6 @@ import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.history.HistoryContract.Presenter
 import org.kiwix.kiwixmobile.core.history.HistoryContract.View
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
-import java.util.Locale
 import javax.inject.Inject
 
 internal class HistoryPresenter @Inject constructor(
@@ -35,24 +35,27 @@ internal class HistoryPresenter @Inject constructor(
   @param:MainThread private val mainThread: Scheduler,
   @param:Computation private val computation: Scheduler
 ) : BasePresenter<View>(), Presenter {
+  private var disposable: Disposable? = null
 
   override fun loadHistory(showHistoryCurrentBook: Boolean) {
+    disposable?.takeIf { !it.isDisposed }?.dispose()
     dataSource.getDateCategorizedHistory(showHistoryCurrentBook)
       .subscribe(
         { histories: List<HistoryListItem> -> view?.updateHistoryList(histories) },
         { e: Throwable -> Log.e("HistoryPresenter", "Failed to load history.", e) }
     ).let {
-        it.takeIf { !it.isDisposed }?.dispose()
         compositeDisposable.add(it)
+        disposable = it
       }
   }
 
   override fun filterHistory(historyList: List<HistoryListItem>, newText: String) {
     compositeDisposable.add(Observable.fromCallable {
-        historyList.filterIsInstance<HistoryItem>().filter { item ->
-          item.historyTitle.toLowerCase(Locale.getDefault())
-            .contains(newText.toLowerCase(Locale.getDefault()))
-        } }
+        historyList
+          .filterIsInstance<HistoryItem>().filter { item ->
+            item.historyTitle.contains(newText, true)
+          }
+      }
       .subscribeOn(computation)
       .observeOn(mainThread)
       .subscribe(
