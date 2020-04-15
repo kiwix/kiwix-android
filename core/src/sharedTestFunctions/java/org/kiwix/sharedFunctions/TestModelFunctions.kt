@@ -177,14 +177,3 @@ fun bookmarkItem(
   favicon: String?
 ) =
   BookmarkItem(databaseId, zimId, zimName, zimFilePath, bookmarkUrl, bookmarkTitle, favicon)
-
-fun bookmarkEntity(
-  id: Long = 0,
-  zimId: String = "zimId",
-  zimName: String = "zimName",
-  zimFilePath: String? = null,
-  bookmarkUrl: String = "bookmarkUrl",
-  bookmarkTitle: String = "bookmarkTitle",
-  favicon: String? = null
-) =
-  BookmarkEntity(id, zimId, zimName, zimFilePath, bookmarkUrl, bookmarkTitle, favicon)

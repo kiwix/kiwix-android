@@ -30,7 +30,6 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.sharedFunctions.bookmarkItem
-import org.kiwix.sharedFunctions.bookmarkEntity
 
 internal class NewBookmarksDaoTest {
 
