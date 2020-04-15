@@ -81,22 +81,6 @@ public class KiwixSettingsActivityTest {
   }
 
   @Test
-  public void testZoomDialog() {
-    enterSettings();
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_zoom_enabled")))
-      .perform(click());
-
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_zoom_slider")))
-      .perform(click());
-
-    assertDisplayed(R.string.pref_zoom_dialog);
-  }
-
-  @Test
   public void testLanguageDialog() {
     enterSettings();
     onData(allOf(

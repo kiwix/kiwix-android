@@ -33,11 +33,8 @@
   <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
   <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
   <string name="pref_display_title">Megjelenítés</string>
-  <string name="pref_zoom_sub_title">Kicsinyítés/nagyítás</string>
-  <string name="pref_zoom_dialog">Nagyítási szint</string>
   <string name="pref_info_title">Információ</string>
   <string name="pref_info_version">Verzió</string>
-  <string name="pref_zoom_enable">Nagyítási vezérlők</string>
   <string name="pref_night_mode">Éjszakai mód</string>
   <string name="pref_night_mode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
   <string name="pref_back_to_top">Vissza a lap tetejére</string>

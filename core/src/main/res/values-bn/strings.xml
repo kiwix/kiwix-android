@@ -29,11 +29,8 @@
   <string name="error_file_invalid">ত্রুটি: নির্বাচিত ফাইলটি বৈধ ZIM ফাইল নয়।</string>
   <string name="error_article_url_not_found">ত্রুটি: নিবন্ধ লোডে (Url: %1$s) ব্যর্থ।</string>
   <string name="pref_display_title">প্রদর্শন</string>
-  <string name="pref_zoom_sub_title">বড় করুন</string>
-  <string name="pref_zoom_dialog">জুমের পর্যায়</string>
   <string name="pref_info_title">তথ্য</string>
   <string name="pref_info_version">সংস্করণ</string>
-  <string name="pref_zoom_enable">জুম নিয়ন্ত্রণ</string>
   <string name="pref_night_mode">রাত্রি মোড</string>
   <string name="pref_night_mode_summary">উল্টানো রঙসহ নিবন্ধ দেখান</string>
   <string name="pref_back_to_top">উপরে ফিরুন</string>

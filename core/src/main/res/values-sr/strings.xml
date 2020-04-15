@@ -26,10 +26,8 @@
   <string name="error_file_not_found">Грешка: изабрана ZIM датотека се не може наћи.</string>
   <string name="error_file_invalid">Грешка: изабрана датотека није важећа ZIM датотека.</string>
   <string name="error_article_url_not_found">Грешка: учитавање чланка (Url: %1$s) није успело.</string>
-  <string name="pref_zoom_dialog">Ниво зума</string>
   <string name="pref_info_title">Информације</string>
   <string name="pref_info_version">Верзија</string>
-  <string name="pref_zoom_enable">Контроле зума</string>
   <string name="pref_night_mode">Ноћни режим</string>
   <string name="pref_night_mode_summary">Прикажи чланке с обрнутим бојама</string>
   <string name="pref_back_to_top">Назад на врх</string>

@@ -55,11 +55,8 @@
   <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。</string>
   <string name="error_article_url_not_found">錯誤：載入條目(網址：%1$s)失敗。</string>
   <string name="pref_display_title">顯示</string>
-  <string name="pref_zoom_sub_title">縮放</string>
-  <string name="pref_zoom_dialog">縮放層級</string>
   <string name="pref_info_title">資訊</string>
   <string name="pref_info_version">版本</string>
-  <string name="pref_zoom_enable">縮放控制</string>
   <string name="pref_night_mode">夜間模式</string>
   <string name="pref_night_mode_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>

@@ -77,6 +77,10 @@ public class KiwixWebView extends VideoEnabledWebView {
     settings.setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
     settings.setDomStorageEnabled(true);
     settings.setJavaScriptEnabled(true);
+    settings.setLoadWithOverviewMode(true);
+    settings.setUseWideViewPort(true);
+    setInitialScale(100);
+    settings.setBuiltInZoomControls(true);
     clearCache(true);
     settings.setAllowUniversalAccessFromFileURLs(true);
     setWebViewClient(webViewClient);
@@ -89,18 +93,6 @@ public class KiwixWebView extends VideoEnabledWebView {
 
   private void setWindowVisibility(int systemUiVisibility) {
     ((Activity) getContext()).getWindow().getDecorView().setSystemUiVisibility(systemUiVisibility);
-  }
-
-  public void loadPrefs() {
-    disableZoomControls();
-    boolean zoomEnabled = sharedPreferenceUtil.getPrefZoomEnabled();
-
-    if (zoomEnabled) {
-      int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
-      setInitialScale(zoomScale);
-    } else {
-      setInitialScale(100);
-    }
   }
 
   @Override
@@ -143,11 +135,6 @@ public class KiwixWebView extends VideoEnabledWebView {
     int page = t / windowHeight;
 
     callback.webViewPageChanged(page, pages);
-  }
-
-  public void disableZoomControls() {
-    getSettings().setBuiltInZoomControls(true);
-    getSettings().setDisplayZoomControls(false);
   }
 
   static class SaveHandler extends Handler {

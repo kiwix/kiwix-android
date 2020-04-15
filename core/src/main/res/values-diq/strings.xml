@@ -41,11 +41,8 @@
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>
   <string name="error_article_url_not_found">Xeta: Barkerdışê meqaleyê (Url: %1$s) nêbi.</string>
   <string name="pref_display_title">Bımocne</string>
-  <string name="pref_zoom_sub_title">Nêzdikerdış</string>
-  <string name="pref_zoom_dialog">Sewiyay nêzdikerdışi</string>
   <string name="pref_info_title">Melumat</string>
   <string name="pref_info_version">Versiyon</string>
-  <string name="pref_zoom_enable">Kontrola zumer</string>
   <string name="pref_night_mode">Moda şewer</string>
   <string name="pref_night_mode_summary">Meqaleya dimlaşt bıyaye rengana bımocne</string>
   <string name="pref_back_to_top">Şo Serni</string>

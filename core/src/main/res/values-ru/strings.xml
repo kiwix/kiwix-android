@@ -37,11 +37,8 @@
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
   <string name="pref_display_title">Экран</string>
-  <string name="pref_zoom_sub_title">Масштаб</string>
-  <string name="pref_zoom_dialog">Уровень масштабирования</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
-  <string name="pref_zoom_enable">Управления масштабированием</string>
   <string name="pref_night_mode">Ночной режим</string>
   <string name="pref_night_mode_summary">Показать статьи инвертированными цветами</string>
   <string name="pref_back_to_top">Вернуться наверх</string>

@@ -57,11 +57,8 @@
   <string name="error_file_invalid">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다.</string>
   <string name="error_article_url_not_found">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
   <string name="pref_display_title">표시</string>
-  <string name="pref_zoom_sub_title">확대/축소</string>
-  <string name="pref_zoom_dialog">확대/축소 수준</string>
   <string name="pref_info_title">정보</string>
   <string name="pref_info_version">버전</string>
-  <string name="pref_zoom_enable">확대/축소 컨트롤</string>
   <string name="pref_night_mode">야간 모드</string>
   <string name="pref_night_mode_summary">반전된 색으로 문서를 보여줍니다</string>
   <string name="pref_back_to_top">맨 위로 돌아가기</string>

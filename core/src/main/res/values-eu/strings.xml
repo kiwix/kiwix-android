@@ -29,11 +29,8 @@
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
   <string name="pref_display_title">Erakutsi</string>
-  <string name="pref_zoom_sub_title">Zooma</string>
-  <string name="pref_zoom_dialog">Zoom maila</string>
   <string name="pref_info_title">Informazioa</string>
   <string name="pref_info_version">Bertsioa</string>
-  <string name="pref_zoom_enable">Zoom kontrola</string>
   <string name="pref_night_mode">Gau modua</string>
   <string name="pref_night_mode_summary">Artikuluak alderantzizko koloreekin erakutsi</string>
   <string name="pref_back_to_top">Gora itzuli</string>

@@ -59,11 +59,8 @@
   <string name="error_file_invalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>
   <string name="error_article_url_not_found">Błąd: Ładowanie artykułu (Url:  %1$s ) się nie powiodło.</string>
   <string name="pref_display_title">Wyświetl</string>
-  <string name="pref_zoom_sub_title">Powiększenie</string>
-  <string name="pref_zoom_dialog">Poziom powiększenia</string>
   <string name="pref_info_title">Informacje</string>
   <string name="pref_info_version">Wersja</string>
-  <string name="pref_zoom_enable">Sterowanie powiększeniem</string>
   <string name="pref_night_mode">Tryb nocny</string>
   <string name="pref_night_mode_summary">Pokaż artykuły w trybie nocnym</string>
   <string name="pref_back_to_top">Powrót do góry</string>

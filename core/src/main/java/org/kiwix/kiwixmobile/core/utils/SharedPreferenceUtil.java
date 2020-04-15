@@ -46,8 +46,6 @@ public class SharedPreferenceUtil {
   public static final String PREF_STORAGE = "pref_select_folder";
   public static final String PREF_WIFI_ONLY = "pref_wifi_only";
   public static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
-  public static final String PREF_ZOOM = "pref_zoom_slider";
-  public static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
   public static final String PREF_SHOW_INTRO = "showIntro";
   private static final String PREF_BACK_TO_TOP = "pref_backtotop";
   private static final String PREF_HIDE_TOOLBAR = "pref_hidetoolbar";
@@ -89,20 +87,12 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
   }
 
-  public boolean getPrefZoomEnabled() {
-    return sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
-  }
-
   public boolean getPrefNewTabBackground() {
     return sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false);
   }
 
   public boolean getPrefExternalLinkPopup() {
     return sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true);
-  }
-
-  public float getPrefZoom() {
-    return sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
   }
 
   public String getPrefLanguage() {

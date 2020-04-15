@@ -61,11 +61,8 @@
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
   <string name="error_article_url_not_found">Erreur : le chargement de l’article (URL : %1$s) a échoué.</string>
   <string name="pref_display_title">Affichage</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Niveau de zoom</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Contrôles du zoom</string>
   <string name="pref_night_mode">Mode nocturne</string>
   <string name="pref_night_mode_summary">Afficher les articles en couleurs inversées</string>
   <string name="pref_back_to_top">Retourner au début</string>

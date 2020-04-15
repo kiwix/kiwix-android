@@ -41,11 +41,8 @@
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
   <string name="pref_display_title">Näytä</string>
-  <string name="pref_zoom_sub_title">Zoomaa</string>
-  <string name="pref_zoom_dialog">Zoomaustaso</string>
   <string name="pref_info_title">Tiedot</string>
   <string name="pref_info_version">Versio</string>
-  <string name="pref_zoom_enable">Zoomaussäätimet</string>
   <string name="pref_night_mode">Yötila</string>
   <string name="pref_night_mode_summary">Näytä artikkelit käänteisillä väreillä</string>
   <string name="pref_back_to_top">Takaisin alkuun</string>

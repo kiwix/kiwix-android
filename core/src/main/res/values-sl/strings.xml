@@ -32,11 +32,8 @@
   <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
   <string name="error_article_url_not_found">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
   <string name="pref_display_title">Prikaz</string>
-  <string name="pref_zoom_sub_title">Povečava</string>
-  <string name="pref_zoom_dialog">Raven povečave</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Različica</string>
-  <string name="pref_zoom_enable">Kontrolniki zumiranja</string>
   <string name="pref_night_mode">Nočni način</string>
   <string name="pref_night_mode_summary">Prikaz člankov z obrnjenimi barvami</string>
   <string name="pref_back_to_top">Nazaj na vrh</string>

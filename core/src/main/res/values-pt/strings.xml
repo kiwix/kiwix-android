@@ -35,11 +35,8 @@
   <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: o carregamento do artigo falhou (URL: %1$s).</string>
   <string name="pref_display_title">Mostrar</string>
-  <string name="pref_zoom_sub_title">Aproximação</string>
-  <string name="pref_zoom_dialog">Nível de aproximação</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
-  <string name="pref_zoom_enable">Controlos de Zoom</string>
   <string name="pref_night_mode">Modo nocturno</string>
   <string name="pref_night_mode_summary">Mostrar artigos com as cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>

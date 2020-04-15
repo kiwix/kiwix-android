@@ -50,11 +50,8 @@
   <string name="error_file_invalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
   <string name="error_article_url_not_found">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
   <string name="pref_display_title">Приказник</string>
-  <string name="pref_zoom_sub_title">Размер</string>
-  <string name="pref_zoom_dialog">Приближеност</string>
   <string name="pref_info_title">Информации</string>
   <string name="pref_info_version">Верзија</string>
-  <string name="pref_zoom_enable">Контроли за размер</string>
   <string name="pref_night_mode">Ноќен режим</string>
   <string name="pref_night_mode_summary">Прикажувај ги статиите во обратни бои</string>
   <string name="pref_back_to_top">Најгоре</string>

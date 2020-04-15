@@ -61,11 +61,8 @@
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
   <string name="error_article_url_not_found">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
   <string name="pref_display_title">Görüntüle</string>
-  <string name="pref_zoom_sub_title">Yakınlaştır</string>
-  <string name="pref_zoom_dialog">Yakınlaştırma düzeyi</string>
   <string name="pref_info_title">Bilgi</string>
   <string name="pref_info_version">Sürüm</string>
-  <string name="pref_zoom_enable">Yakınlaştırma denetimi</string>
   <string name="pref_night_mode">Gece modu</string>
   <string name="pref_night_mode_summary">Makaleleri ters çevrilmiş renklerle göster</string>
   <string name="pref_back_to_top">Başa Dön</string>

@@ -27,11 +27,8 @@
   <string name="error_file_invalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन।</string>
   <string name="error_article_url_not_found">त्रुटी: लेख खोल्न असफल । (Url: %1$s)</string>
   <string name="pref_display_title">देखाउनुहोस्</string>
-  <string name="pref_zoom_sub_title">जुम</string>
-  <string name="pref_zoom_dialog" fuzzy="true">जुम स्तर</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
-  <string name="pref_zoom_enable">जुम नियन्त्रणहरू</string>
   <string name="pref_night_mode">रात्री मूड</string>
   <string name="pref_night_mode_summary">उल्ट्याइएको रङका लेखहरू देखाउनुहोस्</string>
   <string name="pref_back_to_top">सुरुमा जानुहोस्</string>

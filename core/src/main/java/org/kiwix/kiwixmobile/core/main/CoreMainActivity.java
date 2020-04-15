@@ -816,7 +816,6 @@ public abstract class CoreMainActivity extends BaseActivity
         sharedPreferenceUtil);
     }
     loadUrl(url, webView);
-    webView.loadPrefs();
     return webView;
   }
 
@@ -1558,13 +1557,6 @@ public abstract class CoreMainActivity extends BaseActivity
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
     isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
-
-    if (sharedPreferenceUtil.getPrefZoomEnabled()) {
-      int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
-      getCurrentWebView().setInitialScale(zoomScale);
-    } else {
-      getCurrentWebView().setInitialScale(100);
-    }
 
     if (!isBackToTopEnabled) {
       backToTopButton.hide();

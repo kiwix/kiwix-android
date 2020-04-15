@@ -27,11 +27,8 @@
   <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
   <string name="error_article_url_not_found">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
   <string name="pref_display_title">မြင်ကွင်း</string>
-  <string name="pref_zoom_sub_title">ချုံ့/ချဲ့ကြည့်ရန်</string>
-  <string name="pref_zoom_dialog">ချဲ့ကြည့်သည့်အဆင့်</string>
   <string name="pref_info_title">သတင်းအချက်အလက်</string>
   <string name="pref_info_version">မူ</string>
-  <string name="pref_zoom_enable">ချဲ့ကြည့်ရာတွင် ထိန်းချုပ်မှုများ</string>
   <string name="pref_night_mode">ညကြည့်ပုံစံ</string>
   <string name="pref_night_mode_summary">ဆောင်းပါးများကို အရောင်ပြောင်းပြန်သုံး၍ ပြရန်</string>
   <string name="pref_back_to_top">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>

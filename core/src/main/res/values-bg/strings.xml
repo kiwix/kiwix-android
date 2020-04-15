@@ -31,11 +31,8 @@
   <string name="error_file_invalid">Грешка: Избраният файл не е валиден ZIM файл.</string>
   <string name="error_article_url_not_found">Грешка: Зареждането на статия (Url: %1$s) е неуспешно.</string>
   <string name="pref_display_title">Покажете</string>
-  <string name="pref_zoom_sub_title">Увеличение</string>
-  <string name="pref_zoom_dialog">Ниво на мащабиране</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
-  <string name="pref_zoom_enable">Управление на мащаба</string>
   <string name="pref_night_mode">Нощен режим</string>
   <string name="pref_night_mode_summary">Показване на статии в „нощен режим“</string>
   <string name="pref_back_to_top">Връщане в началото</string>

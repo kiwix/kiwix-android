@@ -27,11 +27,8 @@
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
   <string name="error_article_url_not_found">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
   <string name="pref_display_title">Anzeige</string>
-  <string name="pref_zoom_sub_title">Vergrößerung</string>
-  <string name="pref_zoom_dialog">Vergrößerungsstufe</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Zoom-Steuerung</string>
   <string name="pref_night_mode">Nachtmodus</string>
   <string name="pref_night_mode_summary">Artikel mit umgekehrten Farben ansehen</string>
   <string name="pref_back_to_top">Zurück nach oben</string>

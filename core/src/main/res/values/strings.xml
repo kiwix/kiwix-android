@@ -47,11 +47,8 @@
   <string name="error_file_invalid">Error: The selected file is not a valid ZIM file.</string>
   <string name="error_article_url_not_found">Error: Loading article (Url: %1$s) failed.</string>
   <string name="pref_display_title">Display</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Zoom level</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Zoom controls</string>
   <string name="pref_night_mode">Night mode</string>
   <string name="pref_night_mode_summary">Show articles with inverted colors</string>
   <string name="pref_back_to_top">Back to Top</string>

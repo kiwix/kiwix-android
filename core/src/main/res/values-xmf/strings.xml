@@ -33,11 +33,8 @@
   <string name="error_file_invalid">ჩილათა: გიშაგორილი ფაილი ვა რე თინი ZIM-ფაილი.</string>
   <string name="error_article_url_not_found">ჩილათა: სტატიაშ (Url: %1$s) გიმოხარგუაქ ვემიხუჯინუ.</string>
   <string name="pref_display_title">ეკრანი</string>
-  <string name="pref_zoom_sub_title">მასშტაბი</string>
-  <string name="pref_zoom_dialog">მასშტაბირაფაშ დონე</string>
   <string name="pref_info_title">ინფორმაცია</string>
   <string name="pref_info_version">ვერსია</string>
-  <string name="pref_zoom_enable">მასშტაბირაფაშ კონტროლი</string>
   <string name="pref_night_mode">სერიშ რეჟიმი</string>
   <string name="pref_night_mode_summary">სტატიაშ კინნარაგადა ფერეფით ძირაფა</string>
   <string name="pref_back_to_top">ჟილე დორთა</string>

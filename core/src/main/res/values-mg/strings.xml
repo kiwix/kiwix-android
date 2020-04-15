@@ -21,10 +21,8 @@
   <string name="error_file_invalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao.</string>
   <string name="error_article_url_not_found">Hadisoana: tsy nahafahana ilay lahatsoratra (Url: %1$s).</string>
   <string name="pref_display_title">Fiseho</string>
-  <string name="pref_zoom_dialog">Lentan\'ny zoom</string>
   <string name="pref_info_title">Fampahalalana</string>
   <string name="pref_info_version">Versiona</string>
-  <string name="pref_zoom_enable">Famehezana zoom</string>
   <string name="pref_night_mode">Fiseho amin\'ny alina</string>
   <string name="pref_night_mode_summary">Haneho lahatsoratra amin\'ny loko mivadika</string>
   <string name="pref_back_to_top">Hiverina any an-tampony</string>

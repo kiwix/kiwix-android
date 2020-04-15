@@ -29,11 +29,8 @@
   <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>
   <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
   <string name="pref_display_title">Tampilan</string>
-  <string name="pref_zoom_sub_title">Pembesaran</string>
-  <string name="pref_zoom_dialog">Tingkat perbesaran</string>
   <string name="pref_info_title">Informasi</string>
   <string name="pref_info_version">Versi</string>
-  <string name="pref_zoom_enable">Kontrol perbesaran</string>
   <string name="pref_night_mode">Modus malam</string>
   <string name="pref_night_mode_summary">Tampilkan artikel dengan warna terbalik</string>
   <string name="pref_back_to_top">Kembali ke Atas</string>
