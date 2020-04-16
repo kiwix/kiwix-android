@@ -68,7 +68,7 @@
   <string name="pref_newtab_background_summary">Quando si apre una nuova scheda verrà aperta in background</string>
   <string name="local_zims">Dispositivo</string>
   <string name="library">Libreria</string>
-  <string name="delete_specific_zim_toast">File cancellato</string>
+  <string name="delete_zims_toast">File cancellato</string>
   <string name="no_files_here">Nessun file qui</string>
   <string name="download_no_space">Lo spazio è insufficiente per scaricare questo file.</string>
   <string name="space_available">Spazio disponibile:</string>

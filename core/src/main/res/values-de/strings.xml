@@ -78,7 +78,7 @@
   <string name="local_zims">Gerät</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliothek</string>
-  <string name="delete_specific_zim_toast">Datei gelöscht</string>
+  <string name="delete_zims_toast">Datei gelöscht</string>
   <string name="no_files_here">Hier gibt es keine Dateien</string>
   <string name="download_no_space">Nicht ausreichender Speicher, um diese Datei herunterzuladen.</string>
   <string name="space_available">Verfügbarer Speicher:</string>

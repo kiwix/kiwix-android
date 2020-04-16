@@ -60,7 +60,7 @@
   <string name="local_zims">စက်ပစ္စည်း</string>
   <string name="remote_zims">အွန်လိုင်း</string>
   <string name="library">မှတ်ထားမှုများ</string>
-  <string name="delete_specific_zim_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
+  <string name="delete_zims_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
   <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
   <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
   <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>

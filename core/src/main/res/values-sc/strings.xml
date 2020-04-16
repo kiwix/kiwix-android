@@ -105,7 +105,7 @@
   <string name="remote_zims">In lìnia</string>
   <string name="library">Biblioteca</string>
   <string name="delete_zim_body">Iscantzellare %s?</string>
-  <string name="delete_specific_zim_toast">Documentu iscantzelladu</string>
+  <string name="delete_zims_toast">Documentu iscantzelladu</string>
   <string name="no_files_here">Perunu documentu inoghe</string>
   <string name="download_no_space">Sa memòria non bastat pro iscarrigare custu documentu.</string>
   <string name="space_available">Ispàtziu disponìbile:</string>

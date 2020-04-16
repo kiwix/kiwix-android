@@ -85,7 +85,7 @@
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
   <string name="library">Knjižnica</string>
-  <string name="delete_specific_zim_toast">Datoteka je izbrisana</string>
+  <string name="delete_zims_toast">Datoteka je izbrisana</string>
   <string name="no_files_here">Ni datotek tukaj</string>
   <string name="download_no_space">Premalo prostora za prenos te datoteke.</string>
   <string name="space_available">Prostor na voljo:</string>

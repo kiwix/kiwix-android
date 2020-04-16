@@ -103,8 +103,8 @@
   <string name="local_zims" tools:keep="@string/local_zims">Device</string>
   <string name="remote_zims" tools:keep="@string/remote_zims">Online</string>
   <string name="library">Library</string>
-  <string name="delete_zim_body">Delete %s?</string>
-  <string name="delete_specific_zim_toast" tools:keep="@string/delete_specific_zim_toast">File deleted</string>
+  <string name="delete_zim_body">The following zim file(s) will be deleted:\n\n%s</string>
+  <string name="delete_zims_toast" tools:keep="@string/delete_zims_toast">Files deleted successfully</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
   <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
   <string name="space_available" tools:keep="@string/space_available">Space Available:</string>
@@ -124,7 +124,7 @@
   <string name="help_11">ZIM files download in-app are located in the external storage directory in a folder entitled Kiwix.</string>
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
-  <string name="delete_zim_failed" tools:keep="@string/delete_zim_failed">Sorry we were unable to delete this file. You should try using a file manager instead.</string>
+  <string name="delete_zim_failed" tools:keep="@string/delete_zim_failed">Sorry we were unable to delete some files. You should try using a file manager instead.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">resume</string>
   <string name="stop">stop</string>

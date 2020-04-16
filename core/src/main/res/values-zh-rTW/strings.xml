@@ -112,7 +112,7 @@
   <string name="remote_zims">線上</string>
   <string name="library">圖書館</string>
   <string name="delete_zim_body">刪除%s？</string>
-  <string name="delete_specific_zim_toast">檔案已刪除</string>
+  <string name="delete_zims_toast">檔案已刪除</string>
   <string name="no_files_here">沒有檔案在此</string>
   <string name="download_no_space">沒有足夠的空間來下載此檔案。</string>
   <string name="space_available">可用空間：</string>

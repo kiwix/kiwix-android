@@ -80,7 +80,7 @@
   <string name="local_zims">ডিভাইস</string>
   <string name="remote_zims">অনলাইন</string>
   <string name="library">পাঠাগার</string>
-  <string name="delete_specific_zim_toast">ফাইল অপসারণ করা হয়েছে</string>
+  <string name="delete_zims_toast">ফাইল অপসারণ করা হয়েছে</string>
   <string name="no_files_here">এখানে কোন ফাইল নেই</string>
   <string name="download_no_space">এই ফাইল ডাউনলোড করার মত যথেষ্ট স্থান নেই</string>
   <string name="space_available">উপলব্ধ খালিস্থান:</string>

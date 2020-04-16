@@ -80,7 +80,7 @@
   <string name="local_zims">Perangkat</string>
   <string name="remote_zims">Daring</string>
   <string name="library">Perpustakaan</string>
-  <string name="delete_specific_zim_toast">Berkas telah dihapus</string>
+  <string name="delete_zims_toast">Berkas telah dihapus</string>
   <string name="no_files_here">Tidak ada berkas disini</string>
   <string name="download_no_space">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
   <string name="space_available">Ruang yang Tersedia:</string>

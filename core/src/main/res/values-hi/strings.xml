@@ -83,7 +83,7 @@
   <string name="local_zims">डिवाइस</string>
   <string name="remote_zims">ऑनलाइन</string>
   <string name="library">पुस्तकालय</string>
-  <string name="delete_specific_zim_toast">फाइल हटा दी गई</string>
+  <string name="delete_zims_toast">फाइल हटा दी गई</string>
   <string name="no_files_here">यहां कोई फ़ाइल नहीं</string>
   <string name="download_no_space">इस फ़ाइल को डाउनलोड करने के लिए अपर्याप्त जगह।</string>
   <string name="space_available">उपलब्ध जगह:</string>

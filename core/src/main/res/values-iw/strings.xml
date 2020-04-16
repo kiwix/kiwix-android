@@ -110,7 +110,7 @@
   <string name="remote_zims">מקוון</string>
   <string name="library">ספרייה</string>
   <string name="delete_zim_body">למחוק את %s?</string>
-  <string name="delete_specific_zim_toast">הקובץ נמחק</string>
+  <string name="delete_zims_toast">הקובץ נמחק</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום כדי להוריד את הקובץ הזה.</string>
   <string name="space_available">נפח זמין:</string>

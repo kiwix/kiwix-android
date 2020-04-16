@@ -78,7 +78,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En liña</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_specific_zim_toast">Ficheiro eliminado</string>
+  <string name="delete_zims_toast">Ficheiro eliminado</string>
   <string name="no_files_here">Ningún ficheiro aquí</string>
   <string name="download_no_space">Espacio insuficiente para descargar este ficheiro.</string>
   <string name="space_available">Espazo dispoñible:</string>

@@ -24,7 +24,7 @@
   <string name="open">Buka</string>
   <string name="bookmark_removed">Markah dipupus</string>
   <string name="library">Pabukon</string>
-  <string name="delete_specific_zim_toast">Berkas geus dipupus</string>
+  <string name="delete_zims_toast">Berkas geus dipupus</string>
   <string name="no_files_here">Euweuh berkas di dieu</string>
   <string name="download_no_space">Rohang teu nyukupan pikeun ngundeur ieu berkas.</string>
   <string name="no_network_connection">Euweuh sambungan jaringan</string>

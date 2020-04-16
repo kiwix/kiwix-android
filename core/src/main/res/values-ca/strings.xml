@@ -63,7 +63,7 @@
   <string name="local_zims">Dispositiu</string>
   <string name="library">Biblioteca</string>
   <string name="delete_zim_body">Voleu suprimir %s?</string>
-  <string name="delete_specific_zim_toast">Fitxer esborrat</string>
+  <string name="delete_zims_toast">Fitxer esborrat</string>
   <string name="no_files_here">Cap fitxer aquí</string>
   <string name="download_no_space">Espai insuficient per descarregar aquest fitxer.</string>
   <string name="no_network_connection">Cap connexió de xarxa</string>

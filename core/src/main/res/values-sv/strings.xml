@@ -94,7 +94,7 @@
   <string name="remote_zims">Ansluten</string>
   <string name="library">Bibliotek</string>
   <string name="delete_zim_body">Radera %s?</string>
-  <string name="delete_specific_zim_toast">Fil raderades</string>
+  <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned denna fil.</string>
   <string name="space_available">Tillgängligt utrymme:</string>

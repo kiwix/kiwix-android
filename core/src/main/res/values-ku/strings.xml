@@ -78,7 +78,7 @@
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
-  <string name="delete_specific_zim_toast">Pel hat jêbirin</string>
+  <string name="delete_zims_toast">Pel hat jêbirin</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
   <string name="download_no_space">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
   <string name="space_available">Cihê berdestː</string>

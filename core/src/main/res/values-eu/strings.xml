@@ -80,7 +80,7 @@
   <string name="local_zims">Gailua</string>
   <string name="remote_zims">Konektatuta</string>
   <string name="library">Liburutegia</string>
-  <string name="delete_specific_zim_toast">Fitxategi ezabatua</string>
+  <string name="delete_zims_toast">Fitxategi ezabatua</string>
   <string name="no_files_here">Artxiborik ez hemen</string>
   <string name="download_no_space">Ez dago espaziorik artxibo hau jaisteko.</string>
   <string name="space_available">Libre dagoen espazioa:</string>

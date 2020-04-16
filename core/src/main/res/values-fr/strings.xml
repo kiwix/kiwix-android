@@ -118,7 +118,7 @@
   <string name="remote_zims">En ligne</string>
   <string name="library">Bibliothèque</string>
   <string name="delete_zim_body">Supprimer %s ?</string>
-  <string name="delete_specific_zim_toast">Fichier supprimé</string>
+  <string name="delete_zims_toast">Fichier supprimé</string>
   <string name="no_files_here">Aucun fichier ici</string>
   <string name="download_no_space">Espace insuffisant pour télécharger ce fichier.</string>
   <string name="space_available">Espace disponible :</string>

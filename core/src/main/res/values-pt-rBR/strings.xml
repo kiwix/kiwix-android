@@ -113,7 +113,7 @@
   <string name="remote_zims">Online</string>
   <string name="library">Biblioteca</string>
   <string name="delete_zim_body">Excluir %s?</string>
-  <string name="delete_specific_zim_toast">Arquivo apagado</string>
+  <string name="delete_zims_toast">Arquivo apagado</string>
   <string name="no_files_here">Nenhum arquivo aqui</string>
   <string name="download_no_space">Espaço insuficiente para baixar este arquivo.</string>
   <string name="space_available">Espaço disponível:</string>

@@ -80,7 +80,7 @@
   <string name="local_zims">Trobarzhell</string>
   <string name="remote_zims">Enlinenn</string>
   <string name="library">Levraoueg</string>
-  <string name="delete_specific_zim_toast">Restr dilamet</string>
+  <string name="delete_zims_toast">Restr dilamet</string>
   <string name="no_files_here">N\'eus restr ebet amañ</string>
   <string name="download_no_space">N\'eus ket plas a-walc\'h evit pellgargañ ar restr-mañ.</string>
   <string name="space_available">Egorenn a c\'haller kaout :</string>

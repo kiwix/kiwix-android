@@ -67,7 +67,7 @@
   <string name="local_zims">دستگاه</string>
   <string name="remote_zims">برخط</string>
   <string name="library">کتابخانه</string>
-  <string name="delete_specific_zim_toast">پرونده حذف شد</string>
+  <string name="delete_zims_toast">پرونده حذف شد</string>
   <string name="no_files_here">هیچ پرونده‌ای در این‌جا نیست</string>
   <string name="download_no_space">فضای ناکافی برای بارگیری پرونده</string>
   <string name="space_available">فضای موجود:</string>

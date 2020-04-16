@@ -88,7 +88,7 @@
   <string name="remote_zims">Online</string>
   <string name="library">Kıtıbxane</string>
   <string name="delete_zim_body">Wa %s esteriyo ?</string>
-  <string name="delete_specific_zim_toast">Dosya esteriye</string>
+  <string name="delete_zims_toast">Dosya esteriye</string>
   <string name="no_files_here">Tiya dosyeyi çıniyê</string>
   <string name="download_no_space">Seba barkerdışê na dosya rê ca bes niyo.</string>
   <string name="space_available">Karnıyayiye erd:</string>
