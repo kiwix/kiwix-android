@@ -73,11 +73,6 @@ public class KiwixSettingsActivityTest {
       is(instanceOf(Preference.class)),
       withKey("pref_wifi_only")))
       .perform(click());
-
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_zoom_enabled")))
-      .perform(click());
   }
 
   @Test
