@@ -18,16 +18,21 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.verify
 import io.objectbox.Box
 import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
+import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.sharedFunctions.bookmarkItem
 
@@ -35,6 +40,13 @@ internal class NewBookmarksDaoTest {
 
   private val box: Box<BookmarkEntity> = mockk(relaxed = true)
   private val newBookmarksDao = NewBookmarksDao(box)
+
+  @BeforeEach
+  fun init() {
+    clearAllMocks()
+    mockkStatic(CoreApp::class)
+    every { CoreApp.getInstance().packageName } returns "pkg"
+  }
 
   @Test
   fun `get bookmarks without current book`() {
@@ -166,4 +178,17 @@ internal class NewBookmarksDaoTest {
     newBookmarksDao.deleteBookmarks(bookmarksList)
     verify { box.remove(bookmarksList.map(::BookmarkEntity)) }
   }
+
+  @Test
+  fun `migrate insert`() {
+    val bookmarks: MutableList<Bookmark> = mockk(relaxed = true)
+    val bookDao: NewBookDao = mockk()
+    newBookmarksDao.migrationInsert(bookmarks, bookDao)
+    verify {
+      box.put(
+        bookmarks.zip(bookmarks.map(bookDao::getFavIconAndZimFile)).map(::BookmarkEntity)
+      )
+    }
+  }
 }
+

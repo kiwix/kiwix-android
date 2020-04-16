@@ -168,11 +168,11 @@ fun recentSearchEntity(id: Long = 0L, searchTerm: String = "", zimId: String = "
 
 fun bookmarkItem(
   databaseId: Long = 0L,
-  zimId: String = "",
-  zimName: String = "",
-  zimFilePath: String?,
-  bookmarkUrl: String,
-  bookmarkTitle: String,
-  favicon: String?
+  zimId: String = "zimId",
+  zimName: String = "zimName",
+  zimFilePath: String? = "zimFilePath",
+  bookmarkUrl: String = "bookmarkUrl",
+  bookmarkTitle: String = "bookmarkTitle",
+  favicon: String? = "favicon"
 ) =
   BookmarkItem(databaseId, zimId, zimName, zimFilePath, bookmarkUrl, bookmarkTitle, favicon)
