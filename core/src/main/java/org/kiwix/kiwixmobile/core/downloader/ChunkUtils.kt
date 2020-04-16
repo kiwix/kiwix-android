@@ -48,7 +48,7 @@ object ChunkUtils {
     var currentRange: Long = 0
     for (zim in fileNames) {
       val minLen: Long = minOf(contentLength, currentRange + CHUNK_SIZE)
-      val range: String = if (currentRange + CHUNK_SIZE >= contentLength) {
+      val range: String = if (contentLength in 0..currentRange + CHUNK_SIZE) {
         "$currentRange-"
       } else {
         "$currentRange-${currentRange + CHUNK_SIZE}"
