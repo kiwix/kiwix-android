@@ -191,4 +191,3 @@ internal class NewBookmarksDaoTest {
     }
   }
 }
-
