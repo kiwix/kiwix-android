@@ -81,6 +81,7 @@ public class KiwixWebView extends VideoEnabledWebView {
     settings.setUseWideViewPort(true);
     setInitialScale(100);
     settings.setBuiltInZoomControls(true);
+    settings.setDisplayZoomControls(false);
     clearCache(true);
     settings.setAllowUniversalAccessFromFileURLs(true);
     setWebViewClient(webViewClient);
