@@ -29,11 +29,8 @@
   <string name="error_file_invalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>
   <string name="error_article_url_not_found">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
   <string name="pref_display_title">Weisen</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Niveau vum Zoom</string>
   <string name="pref_info_title">Informatioun</string>
   <string name="pref_info_version">Versioun</string>
-  <string name="pref_zoom_enable">Zoom-Steierung</string>
   <string name="pref_night_mode">Nuetsmodus</string>
   <string name="pref_night_mode_summary">Artikele mat ëmgedréite Faarwe weisen</string>
   <string name="pref_back_to_top">Zréck no uewen</string>

@@ -50,11 +50,8 @@
   <string name="error_file_invalid">Error: El ficheru seleicionáu nun ye un ficheru ZIM válidu.</string>
   <string name="error_article_url_not_found">Error: Falló la carga del artículu (Url: %1$s).</string>
   <string name="pref_display_title">Amosar</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Nivel d\'ampliación</string>
   <string name="pref_info_title">Información</string>
   <string name="pref_info_version">Versión</string>
-  <string name="pref_zoom_enable">Controles de zoom</string>
   <string name="pref_night_mode">Mou nocherniegu</string>
   <string name="pref_night_mode_summary">Ver los artículos colos colores invertíos</string>
   <string name="pref_back_to_top">Volver arriba</string>

@@ -27,11 +27,8 @@
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
   <string name="pref_display_title">Nîşan bide</string>
-  <string name="pref_zoom_sub_title">Nêzîk bike</string>
-  <string name="pref_zoom_dialog">Asta zûmê</string>
   <string name="pref_info_title">Agahî</string>
   <string name="pref_info_version">Guherto</string>
-  <string name="pref_zoom_enable">Kontrolên zûmê</string>
   <string name="pref_night_mode">Moda êvarê</string>
   <string name="pref_night_mode_summary">Gotaran bi rengên vajîkirî nîşan bide</string>
   <string name="pref_back_to_top">Vegere Jor</string>

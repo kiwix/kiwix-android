@@ -60,25 +60,6 @@
   </PreferenceCategory>
 
   <PreferenceCategory
-    android:key="pref_zoom_sub"
-    android:title="@string/pref_zoom_sub_title">
-
-    <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
-      android:defaultValue="false"
-      android:key="pref_zoom_enabled"
-
-      android:title="@string/pref_zoom_enable" />
-
-    <org.kiwix.kiwixmobile.core.settings.SliderPreference
-      android:defaultValue="250.0"
-      android:dialogMessage="0"
-      android:enabled="false"
-      android:key="pref_zoom_slider"
-      android:summary="@array/pref_zoom_entryvalues"
-      android:title="@string/pref_zoom_dialog" />
-  </PreferenceCategory>
-
-  <PreferenceCategory
     android:key="pref_history"
     android:title="History">
 

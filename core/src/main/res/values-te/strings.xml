@@ -21,10 +21,8 @@
   <string name="error_file_invalid">దోషం : మీరు ఎంపిక చేసిన దస్త్రం సరియైన ZIM దస్త్రం కాదు.</string>
   <string name="error_article_url_not_found">దోషం : వ్యాసం (Url: %1$s) ను లోడ్ చెయ్యడం విఫలమయింది.</string>
   <string name="pref_display_title">వీక్షణం</string>
-  <string name="pref_zoom_dialog">అతిరూపణ స్థాయి</string>
   <string name="pref_info_title">సమాచారం</string>
   <string name="pref_info_version">సంచిక</string>
-  <string name="pref_zoom_enable">అతిరూపణ నియంత్రణలు</string>
   <string name="pref_night_mode">చీకటి రీతి</string>
   <string name="pref_night_mode_summary">వ్యాసాలను వ్యతిరేక రంగులలో చూపించు</string>
   <string name="pref_back_to_top">తిరిగి పైకి</string>

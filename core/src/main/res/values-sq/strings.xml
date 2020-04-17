@@ -26,11 +26,8 @@
   <string name="error_file_invalid">Gabim: Kartela e përzgjedhur s’është kartelë ZIM e vlefshme.</string>
   <string name="error_article_url_not_found">Gabim: Dështoi ngarkimi i artikullit (Url: %1$s).</string>
   <string name="pref_display_title">Ekran</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Shkallë zmadhimi/zvogëlimi</string>
   <string name="pref_info_title">Informacione</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Kontrolle zmadhimi/zvogëlimi</string>
   <string name="pref_night_mode">Mënyra mbrëmje</string>
   <string name="pref_night_mode_summary">Shfaqi artikujt me ngjyra së prapthi</string>
   <string name="pref_back_to_top">Mbrapsht te Kreu</string>

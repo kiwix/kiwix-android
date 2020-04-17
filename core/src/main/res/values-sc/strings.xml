@@ -49,11 +49,8 @@
   <string name="error_file_invalid">Errore: su documentu ischertadu no est unu documentu ZIM vàlidu.</string>
   <string name="error_article_url_not_found">Errore: carrigamentu de s\'artìculu (Url: %1$s) non resèssidu.</string>
   <string name="pref_display_title">Ischermu</string>
-  <string name="pref_zoom_sub_title">Ismanniamentu</string>
-  <string name="pref_zoom_dialog">Livellu de ismanniamentu</string>
   <string name="pref_info_title">Informatziones</string>
   <string name="pref_info_version">Versione</string>
-  <string name="pref_zoom_enable">Gestione de s\'ismanniamentu</string>
   <string name="pref_night_mode">Modalidade pro sa note</string>
   <string name="pref_night_mode_summary">Ammustra sos artìculos cun colores furriados</string>
   <string name="pref_back_to_top">Torra a su cumintzu</string>

@@ -73,27 +73,6 @@ public class KiwixSettingsActivityTest {
       is(instanceOf(Preference.class)),
       withKey("pref_wifi_only")))
       .perform(click());
-
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_zoom_enabled")))
-      .perform(click());
-  }
-
-  @Test
-  public void testZoomDialog() {
-    enterSettings();
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_zoom_enabled")))
-      .perform(click());
-
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_zoom_slider")))
-      .perform(click());
-
-    assertDisplayed(R.string.pref_zoom_dialog);
   }
 
   @Test

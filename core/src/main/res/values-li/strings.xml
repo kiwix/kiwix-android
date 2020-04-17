@@ -20,11 +20,8 @@
   <string name="error_file_invalid">Fout: \'t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
   <string name="error_article_url_not_found">Fout: \'t laje van de pagina (URL: %1$s) is mislök.</string>
   <string name="pref_display_title">Waergaaf</string>
-  <string name="pref_zoom_sub_title">Zoom in</string>
-  <string name="pref_zoom_dialog">Inzoomniveau</string>
   <string name="pref_info_title">Infermasie</string>
   <string name="pref_info_version">Versie</string>
-  <string name="pref_zoom_enable">Inzoompaneel</string>
   <string name="pref_night_mode">Nachmodus</string>
   <string name="pref_night_mode_summary">Tuin artikele mit ómgedrejde kluuere</string>
   <string name="pref_back_to_top">Trök nao baove</string>

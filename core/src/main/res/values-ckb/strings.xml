@@ -38,11 +38,8 @@
   <string name="stop_server_label">ڕاژە بوەستێنە</string>
   <string name="error_article_url_not_found">ھەڵە: بارکردنی وتار (Url: %1$s) شکستی ھێنا.</string>
   <string name="pref_display_title">پیشاندان</string>
-  <string name="pref_zoom_sub_title">گەورەکردن</string>
-  <string name="pref_zoom_dialog">ئاستی گەورەکردن</string>
   <string name="pref_info_title">زانیاری</string>
   <string name="pref_info_version">وەشان</string>
-  <string name="pref_zoom_enable">جڵەوەکانی گەورەکردن</string>
   <string name="pref_night_mode">بەکەرهێنانی شەو</string>
   <string name="pref_night_mode_summary">وتارەکان بیشان بدە بە ڕەنگی پێچەوانە</string>
   <string name="pref_back_to_top">گەڕانەوە بۆ سەرەوە</string>

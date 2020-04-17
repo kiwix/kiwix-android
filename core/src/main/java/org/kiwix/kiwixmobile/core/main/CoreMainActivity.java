@@ -86,7 +86,6 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.core.BuildConfig;
@@ -817,7 +816,6 @@ public abstract class CoreMainActivity extends BaseActivity
         sharedPreferenceUtil);
     }
     loadUrl(url, webView);
-    webView.loadPrefs();
     return webView;
   }
 
@@ -1559,13 +1557,6 @@ public abstract class CoreMainActivity extends BaseActivity
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
     isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
-
-    if (sharedPreferenceUtil.getPrefZoomEnabled()) {
-      int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
-      getCurrentWebView().setInitialScale(zoomScale);
-    } else {
-      getCurrentWebView().setInitialScale(0);
-    }
 
     if (!isBackToTopEnabled) {
       backToTopButton.hide();

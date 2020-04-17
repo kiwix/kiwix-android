@@ -55,11 +55,8 @@
   <string name="error_file_invalid">خطأ: ملف زيم (ZIM) المحدد ليس صالحًا.</string>
   <string name="error_article_url_not_found">خطأ: لم ينجح تحميل المقالة (Url: %1$s).</string>
   <string name="pref_display_title">العرض</string>
-  <string name="pref_zoom_sub_title">تكبير/تصغير</string>
-  <string name="pref_zoom_dialog">مستوى التكبير</string>
   <string name="pref_info_title">معلومات</string>
   <string name="pref_info_version">الإصدار</string>
-  <string name="pref_zoom_enable">تحكم التكبير/التصغير</string>
   <string name="pref_night_mode">الوضع الليلي</string>
   <string name="pref_night_mode_summary">عرض المقالات بألوانٍ معكوسة</string>
   <string name="pref_back_to_top">ارجع إلى الأعلى</string>

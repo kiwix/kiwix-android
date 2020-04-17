@@ -29,11 +29,8 @@
   <string name="error_file_invalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
   <string name="error_article_url_not_found">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>
   <string name="pref_display_title">Hiển thị</string>
-  <string name="pref_zoom_sub_title">Thu phóng</string>
-  <string name="pref_zoom_dialog">Mức thu phóng</string>
   <string name="pref_info_title">Thông tin</string>
   <string name="pref_info_version">Phiên bản</string>
-  <string name="pref_zoom_enable">Điều khiển thu phóng</string>
   <string name="pref_night_mode">Chế độ ban đêm</string>
   <string name="pref_night_mode_summary">Đảo ngược màu sắc trong bài</string>
   <string name="pref_back_to_top">Trở lên Đầu trang</string>

@@ -29,11 +29,8 @@
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
   <string name="pref_display_title">Ecran</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Nivel de zoom</string>
   <string name="pref_info_title">Informații</string>
   <string name="pref_info_version">Versiune</string>
-  <string name="pref_zoom_enable">Controlul zoomului</string>
   <string name="pref_night_mode">Mod de noapte</string>
   <string name="pref_night_mode_summary">Afișează articolele în culori inversate</string>
   <string name="pref_back_to_top">Începutul paginii</string>
