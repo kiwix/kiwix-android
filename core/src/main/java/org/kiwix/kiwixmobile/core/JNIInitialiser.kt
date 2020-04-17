@@ -54,8 +54,4 @@ internal class JNIInitialiser @Inject constructor(context: Context, jniKiwix: JN
       null
     }
   }
-
-  fun init() {
-    //  empty method so class is not reported as unused
-  }
 }
