@@ -115,7 +115,7 @@ class ZimFileSelectFragment : BaseFragment() {
     disposable.add(zimManageViewModel.libraryTabIsVisible.subscribe { finishActionMode() })
   }
 
-  fun finishActionMode() {
+  private fun finishActionMode() {
     actionMode?.finish()
   }
 

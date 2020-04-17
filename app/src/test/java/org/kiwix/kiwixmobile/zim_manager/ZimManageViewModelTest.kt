@@ -519,14 +519,14 @@ class ZimManageViewModelTest {
   }
 
   @Test
-  fun `finish actionMode on tab change to online section`() {
+  fun `libraryTabIsVisible emits when currentPage is 1`() {
     viewModel.libraryTabIsVisible.test()
       .also { viewModel.currentPage.offer(1) }
-      .assertValue(1)
+      .assertValue(true)
   }
 
   @Test
-  fun `no change in actionMode`() {
+  fun `libraryTabIsVisible does not emit when currentPage is 0`() {
     viewModel.libraryTabIsVisible.test()
       .also { viewModel.currentPage.offer(0) }
       .assertEmpty()
