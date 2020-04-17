@@ -517,4 +517,18 @@ class ZimManageViewModelTest {
         .assertValues(StartMultiSelection(viewModel.fileSelectActions))
     }
   }
+
+  @Test
+  fun `finish actionMode on tab change to online section`() {
+    viewModel.libraryTabIsVisible.test()
+      .also { viewModel.currentPage.offer(1) }
+      .assertValue(1)
+  }
+
+  @Test
+  fun `no change in actionMode`() {
+    viewModel.libraryTabIsVisible.test()
+      .also { viewModel.currentPage.offer(0) }
+      .assertEmpty()
+  }
 }

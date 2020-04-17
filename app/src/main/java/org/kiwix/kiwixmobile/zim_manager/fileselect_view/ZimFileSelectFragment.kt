@@ -112,7 +112,11 @@ class ZimFileSelectFragment : BaseFragment() {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
 
-    disposable.add(zimManageViewModel.libraryFragmentIsVisible.subscribe { actionMode?.finish() })
+    disposable.add(zimManageViewModel.libraryTabIsVisible.subscribe { finishActionMode() })
+  }
+
+  fun finishActionMode() {
+    actionMode?.finish()
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
