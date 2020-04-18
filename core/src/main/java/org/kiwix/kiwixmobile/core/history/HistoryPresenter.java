@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.base.BasePresenter;
 import org.kiwix.kiwixmobile.core.data.DataSource;
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread;
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem;
 
 class HistoryPresenter extends BasePresenter<HistoryContract.View>
   implements HistoryContract.Presenter {

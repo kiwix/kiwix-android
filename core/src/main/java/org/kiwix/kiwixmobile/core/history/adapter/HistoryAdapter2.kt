@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.core.history
+package org.kiwix.kiwixmobile.core.history.adapter
 
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
 import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter

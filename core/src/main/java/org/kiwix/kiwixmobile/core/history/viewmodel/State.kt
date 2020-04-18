@@ -16,22 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.history.ViewModel
+package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import org.kiwix.kiwixmobile.core.history.HistoryListItem
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
-
-
+import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 
 sealed class State {
-  abstract val searchString: String
 
-  data class Results(
-    override val searchString: String,
-    val selectedItems: List<HistoryListItem>,
+  data class SearchResults(
+    val searchString: String,
+    val historyItems: List<HistoryListItem>,
     val viewAllHistoryToggle: Boolean
   ) : State()
 
-  data class NoResults(override val searchString: String) :
-    State()
+  data class NoSearchResults(val searchString: String) : State()
+  data class CurrentHistory(val historyDao: HistoryDao) : State()
+  data class AllHistory(val historyItems: List<HistoryListItem>) : State()
+  data class SelectedHistoryItems(val historyItems: List<HistoryListItem>) : State()
 }
