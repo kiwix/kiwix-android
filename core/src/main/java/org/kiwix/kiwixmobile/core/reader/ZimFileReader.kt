@@ -114,7 +114,8 @@ class ZimFileReader constructor(
     valueOfJniStringAfter(jniKiwixReader::getRandomPage)
 
   fun load(uri: String): InputStream? {
-    if (uri.matches(VIDEO_REGEX)) {
+    val extension = uri.substringAfterLast(".")
+    if (videoExtensions.any { it == extension }) {
       try {
         return loadVideo(uri)
       } catch (ioException: IOException) {
@@ -155,7 +156,7 @@ class ZimFileReader constructor(
     return AssetFileDescriptor(
       infoPair.parcelFileDescriptor,
       infoPair.offset,
-      jniKiwixReader.getArticleSize(uri)
+      jniKiwixReader.getArticleSize(uri.filePath)
     ).createInputStream()
   }
 
@@ -171,7 +172,7 @@ class ZimFileReader constructor(
   private fun getContent(url: String) = getContentAndMimeType(url).let { (content, _) -> content }
 
   private fun streamZimContentToPipe(uri: String, outputStream: OutputStream) {
-    Completable.fromCallable {
+    Completable.fromAction {
       try {
         outputStream.use {
           getContentAndMimeType(uri).let { (content: ByteArray, mimeType: String) ->
@@ -245,7 +246,7 @@ class ZimFileReader constructor(
           filter: invert(0); 
         }
       """.trimIndent()
-    private val VIDEO_REGEX = Regex("([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))\$)")
+    private val videoExtensions = listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv")
   }
 }
 
