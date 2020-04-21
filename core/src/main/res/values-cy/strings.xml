@@ -21,10 +21,8 @@
   <string name="error_file_invalid">Gwall: Dydy\'r ffeil dan sylw ddim yn ffeil ZIM dilys.</string>
   <string name="error_article_url_not_found">Gwall: Methwyd a llwytho\'r erthygl: (Url: %1$s).</string>
   <string name="pref_display_title">Golwg</string>
-  <string name="pref_zoom_dialog">Lefel pellhau</string>
   <string name="pref_info_title">Gwybodaeth</string>
   <string name="pref_info_version">Fersiwn</string>
-  <string name="pref_zoom_enable">Rheolaeth pellter</string>
   <string name="pref_night_mode">Modd nos</string>
   <string name="pref_night_mode_summary">Dangos erthyglau gyda lliwiau croes</string>
   <string name="pref_back_to_top">Nôl i\'r brig</string>

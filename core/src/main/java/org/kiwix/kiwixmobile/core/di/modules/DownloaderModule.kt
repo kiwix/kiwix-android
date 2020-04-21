@@ -73,13 +73,19 @@ object DownloaderModule {
       enableLogging(BuildConfig.DEBUG)
       enableRetryOnNetworkGain(true)
       setHttpDownloader(okHttpDownloader)
+      preAllocateFileOnCreation(false)
       setNotificationManager(fetchNotificationManager)
     }.build().also(Impl::setDefaultInstanceConfiguration)
 
   @JvmStatic
   @Provides
   @Singleton
-  fun provideOkHttpDownloader() = OkHttpDownloader(OkHttpClient.Builder().build())
+  fun provideOkHttpDownloader() = OkHttpDownloader(
+    OkHttpClient.Builder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .build()
+  )
 
   @JvmStatic
   @Provides

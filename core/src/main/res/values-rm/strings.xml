@@ -16,10 +16,8 @@
   <string name="error_file_invalid">Errur: la datoteca selecziunada è betg ina datoteca ZIM valida.</string>
   <string name="error_article_url_not_found">Errur: chargiar il artitgel (Url: %1$s) n\'a betg funcziunà.</string>
   <string name="pref_display_title">Vista</string>
-  <string name="pref_zoom_dialog">Nivel da zoom</string>
   <string name="pref_info_title">Infurmaziun</string>
   <string name="pref_info_version">Versiun</string>
-  <string name="pref_zoom_enable">Controlla d\'il zoom</string>
   <string name="pref_night_mode">Modus da notg</string>
   <string name="pref_night_mode_summary">Mussar artitgels cun colurs invertidas</string>
   <string name="pref_back_to_top">Enavos a l\'entschatta</string>

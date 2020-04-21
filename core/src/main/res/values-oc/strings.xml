@@ -26,11 +26,8 @@
   <string name="error_file_invalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid.</string>
   <string name="error_article_url_not_found">Error : Lo cargament de l’article (Url: %1$s) a fracassat.</string>
   <string name="pref_display_title">Afichatge</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Nivèl de zoom</string>
   <string name="pref_info_title">Informacion</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Contraròtles del zoom</string>
   <string name="pref_night_mode">Mòde nocturne</string>
   <string name="pref_night_mode_summary">Afichar los articles en colors inversadas</string>
   <string name="pref_back_to_top">Retorn al començament</string>
@@ -46,7 +43,7 @@
   <string name="delete_recent_search_item">Suprimir aqueste element ?</string>
   <string name="pref_clear_all_history_title">Escafar l\'istoric</string>
   <string name="all_history_cleared">Tot l’istoric es escafat</string>
-  <string name="clear_all_history_dialog_title">Escafar tot l’istoric</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Escafar tot l’istoric</string>
   <string name="delete">Suprimir</string>
   <string name="delete_specific_search_toast">Recèrca recenta suprimida</string>
   <string name="got_it">Es bon</string>
@@ -70,7 +67,7 @@
   <string name="local_zims">Aparelh</string>
   <string name="remote_zims">En linha</string>
   <string name="library">Bibliotèca</string>
-  <string name="delete_specific_zim_toast">Fichièr suprimit</string>
+  <string name="delete_zims_toast">Fichièr suprimit</string>
   <string name="no_files_here">Pas cap de fichièr aicí</string>
   <string name="space_available">Espaci disponible :</string>
   <string name="zim_simple">Simple</string>

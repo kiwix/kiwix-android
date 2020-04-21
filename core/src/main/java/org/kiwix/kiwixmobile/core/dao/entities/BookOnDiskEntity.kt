@@ -33,7 +33,7 @@ data class BookOnDiskEntity(
   val file: File = File(""),
   val bookId: String,
   val title: String,
-  val description: String,
+  val description: String?,
   val language: String,
   val creator: String,
   val publisher: String,

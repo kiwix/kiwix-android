@@ -21,10 +21,8 @@
   <string name="error_file_invalid">Chyba: Vybraný súbor nie je platný ZIM súbor.</string>
   <string name="error_article_url_not_found">Chyba: Načítavanie článku (Url: %1$s) sa nepodarilo.</string>
   <string name="pref_display_title">Zobrazenie</string>
-  <string name="pref_zoom_dialog">Úroveň lupy</string>
   <string name="pref_info_title">Informácie</string>
   <string name="pref_info_version">Verzia</string>
-  <string name="pref_zoom_enable">Ovládanie prvky lupy</string>
   <string name="pref_night_mode">Nočný režim</string>
   <string name="pref_night_mode_summary">Zobraziť články s otočenými farbami</string>
   <string name="pref_back_to_top">Späť na začiatok</string>

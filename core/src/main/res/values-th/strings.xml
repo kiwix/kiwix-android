@@ -31,7 +31,7 @@
   <string name="rate_dialog_neutral">ทีหลัง</string>
   <string name="bookmark_removed">ลบบุ๊คมาร์คแล้ว</string>
   <string name="library">รายการ</string>
-  <string name="delete_specific_zim_toast">ไฟล์ถูกลบ</string>
+  <string name="delete_zims_toast">ไฟล์ถูกลบ</string>
   <string name="download_no_space">พื้นที่ไม่เพียงพอในการดาวน์โหลดไฟล์นี้</string>
   <string name="help_10">คุณสามารถดาวน์โหลดไฟล์ ZIM ที่คุณเลือกในแอพหรือเลือกไฟล์ที่คุณต้องการและดาวน์โหลดจากคอมพิวเตอร์เดสก์ท็อปอย่างระมัดระวังก่อนที่จะถ่ายโอนไฟล์ ZIM ไปยังเอสดีการ์ดของคุณ</string>
   <string name="help_11">การดาวน์โหลดไฟล์ ZIM ในแอพจะอยู่ในไดเรกทอรีจัดเก็บข้อมูลภายนอกในโฟลเดอร์ชื่อ Kiwix</string>

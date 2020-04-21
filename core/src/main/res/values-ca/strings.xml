@@ -34,10 +34,8 @@
   <string name="error_file_invalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>
   <string name="error_article_url_not_found">Error: no s\'ha pogut carregar l\'article (Url: %1$s).</string>
   <string name="pref_display_title">Visualitzar</string>
-  <string name="pref_zoom_dialog" fuzzy="true">Nivell de zoom</string>
   <string name="pref_info_title">Informació</string>
   <string name="pref_info_version">Versió</string>
-  <string name="pref_zoom_enable">Controls de zoom</string>
   <string name="pref_night_mode">Mode nocturn</string>
   <string name="pref_night_mode_summary">Mostrar els articles amb colors invertits</string>
   <string name="pref_back_to_top">Tornar a dalt</string>
@@ -49,7 +47,7 @@
   <string name="clear_recent_and_tabs_history_dialog">Segur que vols esborrar l\'historial de cerques i restablir totes les pestanyes actives?</string>
   <string name="delete_recent_search_item">Esborrar aquest element?</string>
   <string name="all_history_cleared">Esborrat tot l\'historial</string>
-  <string name="clear_all_history_dialog_title">Esborra tot l\'historial</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Esborra tot l\'historial</string>
   <string name="delete">Esborrar</string>
   <string name="delete_specific_search_toast">Les darreres cerques han estat suprimides</string>
   <string name="hint_contents_drawer_message">Podeu lliscar el dit cap a l\'esquerra per veure el contingut d\'aquest article</string>
@@ -63,7 +61,7 @@
   <string name="local_zims">Dispositiu</string>
   <string name="library">Biblioteca</string>
   <string name="delete_zim_body">Voleu suprimir %s?</string>
-  <string name="delete_specific_zim_toast">Fitxer esborrat</string>
+  <string name="delete_zims_toast">Fitxer esborrat</string>
   <string name="no_files_here">Cap fitxer aquí</string>
   <string name="download_no_space">Espai insuficient per descarregar aquest fitxer.</string>
   <string name="no_network_connection">Cap connexió de xarxa</string>
@@ -86,7 +84,7 @@
   <string name="confirm_stop_download_msg">Segur que vols aturar aquesta descàrrega?</string>
   <string name="download_change_storage">Selector de dispositiu d\'emmagatzematge</string>
   <string name="next">Següent</string>
-  <string name="external_link_popup_dialog_title">Accés a enllaç extern</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Accés a enllaç extern</string>
   <string name="external_link_popup_dialog_message">Estàs entrant a un enllaç extern. Això podria ocasionar-te costos addicionals per transferència de dades o, senzillament, no funcionarà si no tens connexió. Vols continuar?</string>
   <string name="do_not_ask_anymore">No tornar a preguntar</string>
   <string name="your_languages">Idiomes seleccionats:</string>

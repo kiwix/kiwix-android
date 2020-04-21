@@ -216,6 +216,8 @@ public abstract class CoreMainActivity extends BaseActivity
   protected NewBookDao newBookDao;
   @Inject
   protected DialogShower alertDialogShower;
+  @Inject
+  protected NightModeViewPainter painter;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -491,7 +493,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void setupTabsAdapter() {
-    tabsAdapter = new TabsAdapter(this, webViewList);
+    tabsAdapter = new TabsAdapter(this, webViewList, painter);
     tabsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
       @Override
       public void onChanged() {
@@ -814,7 +816,6 @@ public abstract class CoreMainActivity extends BaseActivity
         sharedPreferenceUtil);
     }
     loadUrl(url, webView);
-    webView.loadPrefs();
     return webView;
   }
 
@@ -1546,18 +1547,16 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
+  private void updateNightMode() {
+    painter.update(getCurrentWebView(), kiwixWebView -> kiwixWebView.getUrl() == null
+      || !kiwixWebView.getUrl().equals(HOME_URL), videoView);
+  }
+
   private void loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
     isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
-
-    if (sharedPreferenceUtil.getPrefZoomEnabled()) {
-      int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
-      getCurrentWebView().setInitialScale(zoomScale);
-    } else {
-      getCurrentWebView().setInitialScale(0);
-    }
 
     if (!isBackToTopEnabled) {
       backToTopButton.hide();
@@ -1565,14 +1564,6 @@ public abstract class CoreMainActivity extends BaseActivity
 
     openFullScreenIfEnabled();
     updateNightMode();
-  }
-
-  private void updateNightMode() {
-    if (nightModeConfig.isNightModeActive()) {
-      getCurrentWebView().activateNightMode();
-    } else {
-      getCurrentWebView().deactivateNightMode();
-    }
   }
 
   private boolean isInFullScreenMode() {
@@ -1724,7 +1715,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @Override
   public void setHomePage(View view) {
-    getCurrentWebView().deactivateNightMode();
+    painter.deactivateNightMode(getCurrentWebView(), videoView);
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);

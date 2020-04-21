@@ -32,11 +32,8 @@
   <string name="error_file_invalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>
   <string name="error_article_url_not_found">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
   <string name="pref_display_title">نمایش</string>
-  <string name="pref_zoom_sub_title">بزرگ‌نمایی</string>
-  <string name="pref_zoom_dialog">سطح بزرگ/کوچک‌نمایی</string>
   <string name="pref_info_title">اطلاعات</string>
   <string name="pref_info_version">نسخه</string>
-  <string name="pref_zoom_enable">کنترل‌های بزرگ/کوچک‌نمایی</string>
   <string name="pref_night_mode">حالت شبانه</string>
   <string name="pref_night_mode_summary">نمایش مقاله‌ها با رنگ‌های معکوس‌شده</string>
   <string name="pref_back_to_top">بازگشت به بالای صفحه</string>
@@ -47,7 +44,7 @@
   <string name="delete_recent_search_item">این مورد حذف شود؟</string>
   <string name="pref_clear_all_history_title">پاک کردن تاریخچه</string>
   <string name="all_history_cleared">تمامی تاریخچه پاک شد</string>
-  <string name="clear_all_history_dialog_title">پاک کردن تمامی تاریخچه</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">پاک کردن تمامی تاریخچه</string>
   <string name="share">اشتراک‌گذاری</string>
   <string name="selected_file_cab_app_chooser_title">اشتراک‌گذاری پرونده‌های ZIM با:</string>
   <string name="delete">حذف</string>
@@ -67,7 +64,7 @@
   <string name="local_zims">دستگاه</string>
   <string name="remote_zims">برخط</string>
   <string name="library">کتابخانه</string>
-  <string name="delete_specific_zim_toast">پرونده حذف شد</string>
+  <string name="delete_zims_toast">پرونده حذف شد</string>
   <string name="no_files_here">هیچ پرونده‌ای در این‌جا نیست</string>
   <string name="download_no_space">فضای ناکافی برای بارگیری پرونده</string>
   <string name="space_available">فضای موجود:</string>

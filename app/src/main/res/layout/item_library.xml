@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:layout_margin="@dimen/card_margin"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
   <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -37,7 +36,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/favicon_margin_right"
-      android:layout_marginTop="@dimen/activity_horizontal_margin"
+      android:layout_marginTop="@dimen/item_library_margin_top"
       app:layout_constraintStart_toEndOf="@+id/libraryBookFavicon"
       app:layout_constraintTop_toTopOf="parent"
       tools:text="Title" />
@@ -86,7 +85,6 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textColor="@color/text_tertiary"
-      android:paddingBottom="@dimen/activity_horizontal_margin"
       app:layout_constraintStart_toStartOf="@+id/libraryBookCreator"
       app:layout_constraintTop_toBottomOf="@+id/libraryBookCreator"
       tools:text="Publisher" />
@@ -138,7 +136,7 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:alpha=".5"
-      android:background="@color/pure_grey"
+      android:background="@color/pure_gray"
       app:layout_constraintBottom_toBottomOf="@id/constraint_layout"
       app:layout_constraintEnd_toEndOf="@id/constraint_layout"
       app:layout_constraintStart_toStartOf="@id/constraint_layout"
@@ -147,4 +145,4 @@
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

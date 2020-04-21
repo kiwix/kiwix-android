@@ -41,11 +41,8 @@
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
   <string name="pref_display_title">Näytä</string>
-  <string name="pref_zoom_sub_title">Zoomaa</string>
-  <string name="pref_zoom_dialog">Zoomaustaso</string>
   <string name="pref_info_title">Tiedot</string>
   <string name="pref_info_version">Versio</string>
-  <string name="pref_zoom_enable">Zoomaussäätimet</string>
   <string name="pref_night_mode">Yötila</string>
   <string name="pref_night_mode_summary">Näytä artikkelit käänteisillä väreillä</string>
   <string name="pref_back_to_top">Takaisin alkuun</string>
@@ -63,7 +60,7 @@
   <string name="delete_recent_search_item">Poista tämä kohde?</string>
   <string name="pref_clear_all_history_title">Tyhjennä historia</string>
   <string name="all_history_cleared">Kaikki historia tyhjennetty</string>
-  <string name="clear_all_history_dialog_title">Tyhjennä kaikki historia</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Tyhjennä kaikki historia</string>
   <string name="share">Jaa</string>
   <string name="delete">Poista</string>
   <string name="hint_contents_drawer_message">Voit tarkastella tämän artikkelin sisältöä pyyhkäisemällä vasemmalle</string>
@@ -91,7 +88,7 @@
   <string name="remote_zims">Online</string>
   <string name="library">Kirjasto</string>
   <string name="delete_zim_body">Poista %s?</string>
-  <string name="delete_specific_zim_toast">Tiedosto poistettu</string>
+  <string name="delete_zims_toast">Tiedosto poistettu</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
   <string name="space_available">Tilaa käytettävissä:</string>
   <string name="zim_simple">Yksinkertainen</string>
@@ -128,7 +125,7 @@
   <string name="time_left">jäljellä</string>
   <string name="time_today">Tänään</string>
   <string name="time_yesterday">Eilen</string>
-  <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Ulkoisen linkin syöttäminen</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
   <string name="your_languages">Valitut kielet:</string>
   <string name="other_languages">Muut kielet:</string>

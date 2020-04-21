@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Abijeet Patro
+* Alexander Yukal
 * Avd2ev
 * DevilishSkull
 * Facenapalm
@@ -31,15 +32,13 @@
   <string name="search_label">Поиск</string>
   <string name="choose_file">Выберите файл содержимого (*.zim)</string>
   <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
+  <string name="server_stopped_successfully_toast_message">Сервер успешно остановлен.</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
   <string name="pref_display_title">Экран</string>
-  <string name="pref_zoom_sub_title">Масштаб</string>
-  <string name="pref_zoom_dialog">Уровень масштабирования</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
-  <string name="pref_zoom_enable">Управления масштабированием</string>
   <string name="pref_night_mode">Ночной режим</string>
   <string name="pref_night_mode_summary">Показать статьи инвертированными цветами</string>
   <string name="pref_back_to_top">Вернуться наверх</string>
@@ -59,7 +58,7 @@
   <string name="pref_clear_all_history_title">Очистить историю</string>
   <string name="pref_clear_all_history_summary">Очистить недавние поисковые запросы и историю вкладок</string>
   <string name="all_history_cleared">Вся история очищена</string>
-  <string name="clear_all_history_dialog_title">Очистить всю историю</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Очистить всю историю</string>
   <string name="delete">Удалить</string>
   <string name="delete_specific_search_toast">Последний поиск удалён</string>
   <string name="hint_contents_drawer_message">Вы можете пролистнуть влево, чтобы увидеть содержание статьи</string>
@@ -86,7 +85,7 @@
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_specific_zim_toast">Файл удалён</string>
+  <string name="delete_zims_toast">Файл удалён</string>
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space">Недостаточно места для загрузки этого файла.</string>
   <string name="space_available">Доступно Места:</string>
@@ -118,6 +117,8 @@
   <string name="confirm_stop_download_msg">Вы уверены, что хотите остановить эту загрузку?</string>
   <string name="download_change_storage">Выбор носителя информации</string>
   <string name="tts_not_enabled">Перевод текста в речь не доступен для этого ZIM файла</string>
+  <string name="texttospeech_initialization_failed">Не удалось инициализировать текст в речь. Пожалуйста, попробуйте еще раз</string>
+  <string name="search_error">Неожиданная ошибка при поиске. Пожалуйста, попробуйте еще раз</string>
   <string name="next">Далее</string>
   <string name="previous">Предыдущий</string>
   <string name="wifi_only_title">Разрешить загрузку контента через мобильную сеть?</string>
@@ -130,7 +131,7 @@
   <string name="time_left">осталось</string>
   <string name="pref_external_link_popup_title">Предупреждать когда происходит ввод внешних ссылок</string>
   <string name="pref_external_link_popup_summary">Показать всплывающее сообщение про снятие дополнительных средств мобильным оператором или невозможности работы ссылок в офлайне.</string>
-  <string name="external_link_popup_dialog_title">Ввод внешней ссылки</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Ввод внешней ссылки</string>
   <string name="external_link_popup_dialog_message">Вы указали внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн. Хотите продолжить?</string>
   <string name="do_not_ask_anymore">Больше не спрашивай</string>
   <string name="your_languages">Выбранные языки:</string>
@@ -154,4 +155,6 @@
   <string name="ext_storage_permission_not_granted">Ошибка: Отсутствует разрешение на хранение</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Очистить Все Заметки</string>
   <string name="no_bookmarks">Нет Закладок</string>
+  <string name="delete_history">Удалить историю?</string>
+  <string name="delete_bookmarks">Удалить закладки?</string>
 </resources>

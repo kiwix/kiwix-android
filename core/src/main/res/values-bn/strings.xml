@@ -29,11 +29,8 @@
   <string name="error_file_invalid">ত্রুটি: নির্বাচিত ফাইলটি বৈধ ZIM ফাইল নয়।</string>
   <string name="error_article_url_not_found">ত্রুটি: নিবন্ধ লোডে (Url: %1$s) ব্যর্থ।</string>
   <string name="pref_display_title">প্রদর্শন</string>
-  <string name="pref_zoom_sub_title">বড় করুন</string>
-  <string name="pref_zoom_dialog">জুমের পর্যায়</string>
   <string name="pref_info_title">তথ্য</string>
   <string name="pref_info_version">সংস্করণ</string>
-  <string name="pref_zoom_enable">জুম নিয়ন্ত্রণ</string>
   <string name="pref_night_mode">রাত্রি মোড</string>
   <string name="pref_night_mode_summary">উল্টানো রঙসহ নিবন্ধ দেখান</string>
   <string name="pref_back_to_top">উপরে ফিরুন</string>
@@ -53,7 +50,7 @@
   <string name="pref_clear_all_history_title">ইতিহাস মুছুন</string>
   <string name="pref_clear_all_history_summary">সাম্প্রতিক অনুসন্ধান ও ট্যাবের ইতিহাস পরিষ্কার করুন</string>
   <string name="all_history_cleared">সমস্ত ইতিহাস সাফ করা হয়ছে</string>
-  <string name="clear_all_history_dialog_title">সমস্ত ইতিহাস মুছে ফেলুন</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">সমস্ত ইতিহাস মুছে ফেলুন</string>
   <string name="delete">অপসারণ</string>
   <string name="delete_specific_search_toast">সাম্প্রতিক অনুসন্ধান অপসারণ করা হয়েছে</string>
   <string name="hint_contents_drawer_message">এই নিবন্ধটির সূচী দেখতে বামদিক থেকে টেনে আনুন</string>
@@ -80,7 +77,7 @@
   <string name="local_zims">ডিভাইস</string>
   <string name="remote_zims">অনলাইন</string>
   <string name="library">পাঠাগার</string>
-  <string name="delete_specific_zim_toast">ফাইল অপসারণ করা হয়েছে</string>
+  <string name="delete_zims_toast">ফাইল অপসারণ করা হয়েছে</string>
   <string name="no_files_here">এখানে কোন ফাইল নেই</string>
   <string name="download_no_space">এই ফাইল ডাউনলোড করার মত যথেষ্ট স্থান নেই</string>
   <string name="space_available">উপলব্ধ খালিস্থান:</string>

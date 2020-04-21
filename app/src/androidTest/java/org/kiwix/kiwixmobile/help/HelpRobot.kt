@@ -71,5 +71,5 @@ class HelpRobot : BaseRobot() {
   }
 
   private fun helpTextFormat(vararg stringIds: Int) =
-    stringIds.fold("", { acc, i -> "$acc${context.getString(i)}\n" })
+    stringIds.joinToString(separator = "\n", transform = context::getString)
 }

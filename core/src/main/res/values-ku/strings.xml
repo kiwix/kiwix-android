@@ -27,11 +27,8 @@
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
   <string name="pref_display_title">Nîşan bide</string>
-  <string name="pref_zoom_sub_title">Nêzîk bike</string>
-  <string name="pref_zoom_dialog">Asta zûmê</string>
   <string name="pref_info_title">Agahî</string>
   <string name="pref_info_version">Guherto</string>
-  <string name="pref_zoom_enable">Kontrolên zûmê</string>
   <string name="pref_night_mode">Moda êvarê</string>
   <string name="pref_night_mode_summary">Gotaran bi rengên vajîkirî nîşan bide</string>
   <string name="pref_back_to_top">Vegere Jor</string>
@@ -51,7 +48,7 @@
   <string name="pref_clear_all_history_title">Raboriyê paqij bike</string>
   <string name="pref_clear_all_history_summary">Lêgerînên dawî û raboriya hilpekînan paqij bike</string>
   <string name="all_history_cleared">Hemû Raborî Hat Paqijkirin</string>
-  <string name="clear_all_history_dialog_title">Hemû Raboriyê Paqij Bike</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Hemû Raboriyê Paqij Bike</string>
   <string name="delete">Jê bibe</string>
   <string name="delete_specific_search_toast">Lêgerîna dawî hat rakirin</string>
   <string name="hint_contents_drawer_message">Tu dikarî çepê veguherîne ku ji bo naveroka vê gotarê binêre</string>
@@ -78,7 +75,7 @@
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
-  <string name="delete_specific_zim_toast">Pel hat jêbirin</string>
+  <string name="delete_zims_toast">Pel hat jêbirin</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
   <string name="download_no_space">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
   <string name="space_available">Cihê berdestː</string>
@@ -122,7 +119,7 @@
   <string name="time_left">çep</string>
   <string name="pref_external_link_popup_title">Dema ku têketina girêdanên derveyî hişyariyê bide</string>
   <string name="pref_external_link_popup_summary">Bi popup-ê hişyarî bide gava ku bi girêdanên online û di bihayên zêde de nexebite.</string>
-  <string name="external_link_popup_dialog_title">Tevlîkirina Girêdana Derveyî</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Tevlîkirina Girêdana Derveyî</string>
   <string name="external_link_popup_dialog_message">Tu girêdanekî derveyî tevlî dikî. Ev tişt dibe ku ji ber neqla daneyê bibe sedema mesrefan an jî dema ku tu derhêl (offline) bî, nexebite. Gelo tu dixwazî dewam bikî?</string>
   <string name="do_not_ask_anymore">Zêdetir nepirse</string>
   <string name="your_languages">Zimanên bijartîː</string>

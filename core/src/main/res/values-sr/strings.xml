@@ -22,13 +22,12 @@
   <string name="rescan_fs_warning">Тражење садржаја који се може преузети, сачекајте…</string>
   <string name="choose_file">Изаберите датотеку са садржајем (*.zim)</string>
   <string name="open_in_new_tab">Отворити везу у новој картици?</string>
+  <string name="server_stopped_successfully_toast_message">Сервер је успешно заустављен.</string>
   <string name="error_file_not_found">Грешка: изабрана ZIM датотека се не може наћи.</string>
   <string name="error_file_invalid">Грешка: изабрана датотека није важећа ZIM датотека.</string>
   <string name="error_article_url_not_found">Грешка: учитавање чланка (Url: %1$s) није успело.</string>
-  <string name="pref_zoom_dialog">Ниво зума</string>
   <string name="pref_info_title">Информације</string>
   <string name="pref_info_version">Верзија</string>
-  <string name="pref_zoom_enable">Контроле зума</string>
   <string name="pref_night_mode">Ноћни режим</string>
   <string name="pref_night_mode_summary">Прикажи чланке с обрнутим бојама</string>
   <string name="pref_back_to_top">Назад на врх</string>
@@ -43,7 +42,7 @@
   <string name="all_history_cleared">Цела историја је обрисана</string>
   <string name="pref_clear_all_bookmarks_title">Обриши обележиваче</string>
   <string name="all_bookmarks_cleared">Сви обележивачи су обрисани</string>
-  <string name="clear_all_history_dialog_title">Брисање целе историје</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Брисање целе историје</string>
   <string name="delete">Избриши</string>
   <string name="delete_specific_search_toast">Недавне претраге су уклоњене</string>
   <string name="got_it">Разумем</string>
@@ -61,7 +60,7 @@
   <string name="pref_newtab_background_summary">Када отвараш нову картицу она ће бити отворена у позадини</string>
   <string name="new_tab_snack_bar">Чланак је отворен у новој картици</string>
   <string name="local_zims">Уређај</string>
-  <string name="delete_specific_zim_toast">Датотека је избрисана</string>
+  <string name="delete_zims_toast">Датотека је избрисана</string>
   <string name="no_files_here">Овде нема датотека</string>
   <string name="download_no_space">Недовољно простора за преузимање ове датотеке.</string>
   <string name="no_network_connection">Нема мрежне везе</string>
@@ -74,7 +73,7 @@
   <string name="download_change_storage">Бирач уређаја за складиштење</string>
   <string name="next">Следеће</string>
   <string name="wifi_only_msg">Ако одаберете „Да”, нећемо да вас упозоравамо у будућности. Свеједно, увек можете да промените ову опцију у подешавањима.</string>
-  <string name="external_link_popup_dialog_title">Уношење спољашње везе</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Уношење спољашње везе</string>
   <string name="external_link_popup_dialog_message">Уносите спољашњу везу. То може довести до додатних трошкова за пренос података или неће радити када сте офлајн. Желите ли да наставите?</string>
   <string name="do_not_ask_anymore">Не питај више</string>
   <string name="other_languages">Други језици:</string>
@@ -85,4 +84,6 @@
   <string name="no_bookmarks">Нема обележивача</string>
   <string name="no_history">Нема историјата</string>
   <string name="device_default">Подразумеване вредности уређаја</string>
+  <string name="delete_history">Избрисати историјат?</string>
+  <string name="delete_bookmarks">Избрисати обележиваче?</string>
 </resources>

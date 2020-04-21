@@ -15,24 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.intro
 
-package org.kiwix.kiwixmobile.core.di.modules
+import org.kiwix.kiwixmobile.core.base.BasePresenter
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.intro.IntroContract.Presenter
+import org.kiwix.kiwixmobile.intro.IntroContract.View
+import javax.inject.Inject
 
-import dagger.Binds
-import dagger.Module
-import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.main.MainContract
-import org.kiwix.kiwixmobile.core.main.MainPresenter
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.DialogShower
-
-@Module
-abstract class DialogModule {
-
-  @Binds
-  @ActivityScope
-  abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
-
-  @Binds
-  abstract fun bindMainPresenter(mainPresenter: MainPresenter): MainContract.Presenter
+class IntroPresenter @Inject internal constructor(private val preferences: SharedPreferenceUtil) :
+  BasePresenter<View?>(), Presenter {
+  override fun setIntroShown() {
+    preferences.setIntroShown()
+  }
 }

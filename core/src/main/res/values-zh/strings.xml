@@ -10,6 +10,7 @@
 * Ywang
 * Zjzengdongyang
 * 沈澄心
+* 铁桶
 -->
 <resources>
   <string name="menu_help">帮助</string>
@@ -34,11 +35,8 @@
   <string name="error_file_invalid">错误：选定的文件不是有效ZIM文件。</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
   <string name="pref_display_title">显示</string>
-  <string name="pref_zoom_sub_title">缩放</string>
-  <string name="pref_zoom_dialog">缩放级别</string>
   <string name="pref_info_title">信息</string>
   <string name="pref_info_version">版本</string>
-  <string name="pref_zoom_enable">缩放控制</string>
   <string name="pref_night_mode">夜间模式</string>
   <string name="pref_night_mode_summary">以反色调显示文章</string>
   <string name="pref_back_to_top">返回顶端</string>
@@ -58,7 +56,7 @@
   <string name="pref_clear_all_history_title">清空历史</string>
   <string name="pref_clear_all_history_summary">清空最近搜索及标签历史</string>
   <string name="all_history_cleared">已清空所有历史</string>
-  <string name="clear_all_history_dialog_title">清空所有历史</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">清空所有历史</string>
   <string name="share">分享</string>
   <string name="delete">删除</string>
   <string name="delete_specific_search_toast">已移除最近搜索</string>
@@ -86,7 +84,7 @@
   <string name="local_zims">设备</string>
   <string name="remote_zims">在线</string>
   <string name="library">图书馆</string>
-  <string name="delete_specific_zim_toast">文件已删除</string>
+  <string name="delete_zims_toast">文件已删除</string>
   <string name="no_files_here">没有文件</string>
   <string name="download_no_space">缺少下载此文件所需的空间。</string>
   <string name="space_available">可用空间：</string>
@@ -132,7 +130,7 @@
   <string name="time_yesterday">昨天</string>
   <string name="pref_external_link_popup_title">访问外部链接时警告</string>
   <string name="pref_external_link_popup_summary">对额外费用或离线时链接不可用弹出警告</string>
-  <string name="external_link_popup_dialog_title">正在进入外部链接</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">正在进入外部链接</string>
   <string name="external_link_popup_dialog_message">您正在输入外部链接。这可能导致额外数据转移费用，或当您离线时不能工作。您是否要继续？</string>
   <string name="do_not_ask_anymore">不要再次询问</string>
   <string name="your_languages">选择的语言：</string>

@@ -19,18 +19,21 @@
 package org.kiwix.kiwixmobile.core.settings
 
 import eu.mhutti1.utils.storage.Bytes
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.File
 import javax.inject.Inject
 
-class StorageCalculator @Inject constructor() {
+class StorageCalculator @Inject constructor(
+  private val sharedPreferenceUtil: SharedPreferenceUtil
+) {
 
-  fun calculateAvailableSpace(file: File): String =
+  fun calculateAvailableSpace(file: File = File(sharedPreferenceUtil.prefStorage)): String =
     Bytes(availableBytes(file)).humanReadable
 
-  fun calculateTotalSpace(file: File): String =
+  fun calculateTotalSpace(file: File = File(sharedPreferenceUtil.prefStorage)): String =
     Bytes(totalBytes(file)).humanReadable
 
-  fun availableBytes(file: File) =
+  fun availableBytes(file: File = File(sharedPreferenceUtil.prefStorage)) =
     if (file.exists()) file.freeSpace
     else 0L
 

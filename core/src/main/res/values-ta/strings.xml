@@ -19,10 +19,8 @@
   <string name="error_file_invalid">பிழை: தேர்வு செய்யப்பட்ட கோப்பு, ஏற்புடைய ZIM கோப்பு அல்ல</string>
   <string name="error_article_url_not_found">பிழை: (Url: %1$s) கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
   <string name="pref_display_title">காண்பி</string>
-  <string name="pref_zoom_dialog">உரு அளவு நிலை</string>
   <string name="pref_info_title">தகவல்</string>
   <string name="pref_info_version">பதிப்பு</string>
-  <string name="pref_zoom_enable">உரு அளவு கட்டுப்படுத்திகள்</string>
   <string name="pref_night_mode">இரவுத்தோற்றம்</string>
   <string name="pref_night_mode_summary">கட்டுரைகளை தலைகீழ் நிறங்களில் காண்பி</string>
   <string name="pref_back_to_top">மேலே செல்லவும்</string>
