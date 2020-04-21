@@ -31,7 +31,6 @@ import androidx.annotation.Nullable;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
@@ -145,17 +144,10 @@ public abstract class CoreWebViewClient extends WebViewClient {
   @Nullable
   @Override
   public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-    final String migratedUrl = migrate(url);
-    if (migratedUrl.startsWith(CONTENT_PREFIX)) {
-      return zimReaderContainer.load(migratedUrl);
+    if (url.startsWith(CONTENT_PREFIX)) {
+      return zimReaderContainer.load(url);
     } else {
-      return super.shouldInterceptRequest(view, migratedUrl);
+      return super.shouldInterceptRequest(view, url);
     }
-  }
-
-  private String migrate(String url) {
-    return url.startsWith(ZimFileReader.LEGACY_PREFIX)
-      ? url.replace(ZimFileReader.LEGACY_PREFIX, CONTENT_PREFIX)
-      : url;
   }
 }

@@ -143,7 +143,8 @@ class ZimFileReader constructor(
 
   private fun loadContent(uri: String) =
     try {
-      PipedInputStream(PipedOutputStream().also { streamZimContentToPipe(uri, it) })
+      val outputStream = PipedOutputStream()
+      PipedInputStream(outputStream).also { streamZimContentToPipe(uri, outputStream) }
     } catch (ioException: IOException) {
       throw IOException("Could not open pipe for $uri", ioException)
     }
@@ -231,10 +232,9 @@ class ZimFileReader constructor(
     val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
 
     @JvmField
-    val LEGACY_PREFIX =
+    val CONTENT_PREFIX =
       Uri.parse("content://${CoreApp.getInstance().packageName}.zim.base/").toString()
 
-    const val CONTENT_PREFIX: String = "zim://content/"
     private val INVERT_IMAGES_VIDEO =
       """
         img, video, div[poster], div#header { 
