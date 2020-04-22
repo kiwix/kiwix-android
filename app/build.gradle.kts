@@ -10,8 +10,8 @@ apply(from = rootProject.file("jacoco.gradle"))
 
 ext {
   set("versionMajor", 3)
-  set("versionMinor", 2)
-  set("versionPatch", 1)
+  set("versionMinor", 3)
+  set("versionPatch", 0)
 }
 
 fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext["versionPatch"]}"
