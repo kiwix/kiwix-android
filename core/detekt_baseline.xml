@@ -4,6 +4,7 @@
   <Whitelist>
     <ID>EmptyFunctionBlock:BooksOnDiskViewHolder.kt$BookOnDiskViewHolder.BookViewHolder${ }</ID>
     <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided&gt;${}</ID>
+    <ID>ForbiddenComment:JNIInitialiser.kt$JNIInitialiser$// TODO: Consider surfacing to user</ID>
     <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
@@ -12,6 +13,7 @@
     <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
     <ID>MagicNumber:FetchDownloadRequester.kt$10</ID>
     <ID>MagicNumber:FileUtils.kt$FileUtils$3</ID>
+    <ID>MagicNumber:JNIInitialiser.kt$JNIInitialiser$1024</ID>
     <ID>MagicNumber:KiloByte.kt$KiloByte$1024.0</ID>
     <ID>MagicNumber:MainMenu.kt$MainMenu$99</ID>
     <ID>MagicNumber:SearchResultGenerator.kt$ZimSearchResultGenerator$200</ID>
@@ -20,6 +22,7 @@
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
     <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
     <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
+    <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$loadICUData</ID>
     <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$canWrite</ID>
     <ID>PackageNaming:ArticleCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:BookOnDiskDelegate.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
@@ -36,6 +39,7 @@
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun hasPart(file: File): Boolean</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
     <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
+    <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
     <ID>TooGenericExceptionThrown:AbstractContentProvider.kt$AbstractContentProvider$throw RuntimeException("Operation not supported")</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
     <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
@@ -51,7 +55,6 @@
     <ID>TooManyFunctions:NewBookDao.kt$NewBookDao$NewBookDao</ID>
     <ID>TooManyFunctions:Repository.kt$Repository$Repository</ID>
     <ID>TooManyFunctions:ZimFileReader.kt$ZimFileReader$ZimFileReader</ID>
-    <ID>TooManyFunctions:ZimReaderContainer.kt$ZimReaderContainer$ZimReaderContainer</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Eb = Pb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Gb = Mb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Kb = 1 * 1024L</ID>

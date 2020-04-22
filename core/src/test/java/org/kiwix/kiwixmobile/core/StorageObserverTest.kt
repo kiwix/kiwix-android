@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core
 
+import android.net.Uri
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -58,6 +59,8 @@ class StorageObserverTest {
     setScheduler(Schedulers.trampoline())
     mockkStatic(CoreApp::class)
     every { CoreApp.getInstance().packageName } returns "pkg"
+    mockkStatic(Uri::class)
+    every { Uri.parse(any()).toString() } returns "pkg"
     zimFileReader = mockk()
   }
 

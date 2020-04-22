@@ -39,7 +39,6 @@ import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.core.di.components.TestComponent;
-import org.kiwix.kiwixmobile.core.reader.ZimContentProvider;
 import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
@@ -92,8 +91,6 @@ public class NetworkTest {
 
     CoreApp.setCoreComponent(component);
 
-    ZimContentProvider zimContentProvider = new ZimContentProvider();
-    CoreApp.getCoreComponent().inject(zimContentProvider);
     component.inject(this);
     InputStream library = NetworkTest.class.getClassLoader().getResourceAsStream("library.xml");
     InputStream metalinks =

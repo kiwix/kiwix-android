@@ -1391,7 +1391,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @NotNull
   private String contentUrl(String articleUrl) {
-    return Uri.parse(ZimFileReader.CONTENT_URI + articleUrl).toString();
+    return Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString();
   }
 
   @NotNull
@@ -1680,7 +1680,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @Override
   public void webViewLongClick(final String url) {
     boolean handleEvent = false;
-    if (url.startsWith(ZimFileReader.CONTENT_URI.toString())) {
+    if (url.startsWith(ZimFileReader.CONTENT_PREFIX)) {
       // This is my web site, so do not override; let my WebView load the page
       handleEvent = true;
     } else if (url.startsWith("file://")) {
