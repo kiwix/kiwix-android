@@ -25,16 +25,14 @@ import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import javax.inject.Inject
 
-class NewRecentSearchDao @Inject constructor(
-  val box: Box<RecentSearchEntity>
-) {
+class NewRecentSearchDao @Inject constructor(private val box: Box<RecentSearchEntity>) {
   fun recentSearches(zimId: String?) = box.asFlowable(
     box.query {
       equal(RecentSearchEntity_.zimId, zimId ?: "")
       orderDesc(RecentSearchEntity_.id)
     }
   ).map { searchEntities ->
-    searchEntities.distinct()
+    searchEntities.distinctBy(RecentSearchEntity::searchTerm)
       .take(NUM_RECENT_RESULTS)
       .map { searchEntity -> RecentSearchListItem(searchEntity.searchTerm) }
   }
@@ -60,6 +58,6 @@ class NewRecentSearchDao @Inject constructor(
   }
 
   companion object {
-    const val NUM_RECENT_RESULTS = 5
+    private const val NUM_RECENT_RESULTS = 100
   }
 }

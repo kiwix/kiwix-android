@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateStrings">
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="kiwi">Kiwi</string>
   <string name="menu_help">Help</string>
   <string name="menu_home">Home</string>
@@ -28,7 +28,8 @@
   <string name="no_books_selected_toast_message" tools:keep="@string/no_books_selected_toast_message">Please select books first</string>
   <string name="server_failed_message" tools:keep="@string/server_failed_message">Couldn’t start server. Please turn on your hotspot</string>
   <string name="server_failed_toast_message" tools:keep="@string/server_failed_toast_message">Couldn’t start server.</string>
-  <string name="server_started__successfully_toast_message" tools:keep="@string/server_started__successfully_toast_message">Server started successfully.</string>
+  <string name="server_started_successfully_toast_message" tools:keep="@string/server_started_successfully_toast_message">Server started successfully.</string>
+  <string name="server_stopped_successfully_toast_message" tools:keep="@string/server_stopped_successfully_toast_message">Server stopped successfully.</string>
   <string name="hotspot_turned_on">Hotspot turned on</string>
   <string name="hotspot_details_message">Following are the details of your local hotspot. \nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message" tools:keep="@string/server_textview_default_message">Select the files you wish to host on the server</string>
@@ -42,14 +43,12 @@
   <string name="stop_server_label" tools:keep="@string/stop_server_label">Stop server</string>
   <string name="server_started_message" tools:keep="@string/server_started_message">Enter this ip address into your browser to access the server %s</string>
   <string name="error_file_not_found">Error: The selected ZIM file could not be found.</string>
+  <string name="zim_not_opened">Unable to open zim file</string>
   <string name="error_file_invalid">Error: The selected file is not a valid ZIM file.</string>
   <string name="error_article_url_not_found">Error: Loading article (Url: %1$s) failed.</string>
   <string name="pref_display_title">Display</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Zoom level</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Zoom controls</string>
   <string name="pref_night_mode">Night mode</string>
   <string name="pref_night_mode_summary">Show articles with inverted colors</string>
   <string name="pref_back_to_top">Back to Top</string>
@@ -68,13 +67,14 @@
   <string name="delete_recent_search_item">Delete this item?</string>
   <string name="pref_clear_all_history_title">Clear history</string>
   <string name="pref_clear_all_history_summary">Clear recent searches and tabs history</string>
-  <string name="all_history_cleared_toast">All History Cleared</string>
+  <string name="all_history_cleared">All History Cleared</string>
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
-  <string name="all_bookmarks_cleared_toast">All Bookmarks Cleared</string>
-  <string name="clear_all_history_dialog_title">Clear All History</string>
+  <string name="all_bookmarks_cleared">All Bookmarks Cleared</string>
+  <string name="clear_all_history_dialog_title">Clear All History?</string>
   <string name="share">Share</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>
   <string name="delete">Delete</string>
+  <string name="cancel">Cancel</string>
   <string name="delete_specific_search_toast">Recent search removed</string>
   <string name="hint_contents_drawer_message">You can swipe left to view the contents of this article</string>
   <string name="got_it">Got it</string>
@@ -100,10 +100,10 @@
   <string name="local_zims" tools:keep="@string/local_zims">Device</string>
   <string name="remote_zims" tools:keep="@string/remote_zims">Online</string>
   <string name="library">Library</string>
-  <string name="delete_zim_body">Delete %s?</string>
-  <string name="delete_specific_zim_toast" tools:keep="@string/delete_specific_zim_toast">File deleted</string>
+  <string name="delete_zim_body">The following zim file(s) will be deleted:\n\n%s</string>
+  <string name="delete_zims_toast" tools:keep="@string/delete_zims_toast">Files deleted successfully</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
-  <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download this file.</string>
+  <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
   <string name="space_available" tools:keep="@string/space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">No Pictures</string>
@@ -121,7 +121,7 @@
   <string name="help_11">ZIM files download in-app are located in the external storage directory in a folder entitled Kiwix.</string>
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
-  <string name="delete_zim_failed" tools:keep="@string/delete_zim_failed">Sorry we were unable to delete this file. You should try using a file manager instead.</string>
+  <string name="delete_zim_failed" tools:keep="@string/delete_zim_failed">Sorry we were unable to delete some files. You should try using a file manager instead.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">resume</string>
   <string name="stop">stop</string>
@@ -133,6 +133,9 @@
   <string name="confirm_stop_download_msg">Are you sure you want to stop this download?</string>
   <string name="download_change_storage" tools:keep="@string/download_change_storage">Storage device selector</string>
   <string name="tts_not_enabled">Text to speech is not enabled for this ZIM file</string>
+  <string name="texttospeech_initialization_failed">Initialization of Text to Speech failed. Please try again</string>
+  <string name="texttospeech_error">Unexpected error in Text to Speech. Please try again</string>
+  <string name="search_error">Unexpected error while searching. Please try again</string>
   <string name="next">Next</string>
   <string name="previous">Previous</string>
   <string name="wifi_only_title">Allow downloading content via mobile network?</string>
@@ -147,7 +150,7 @@
   <string name="time_yesterday">Yesterday</string>
   <string name="pref_external_link_popup_title">Warn when entering external links</string>
   <string name="pref_external_link_popup_summary">Display popup to warn about additional costs or not working in offline links.</string>
-  <string name="external_link_popup_dialog_title">Entering External Link</string>
+  <string name="external_link_popup_dialog_title">Entering External Link!</string>
   <string name="external_link_popup_dialog_message">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline. Do you want to continue?</string>
   <string name="do_not_ask_anymore">Do not ask anymore</string>
   <string name="your_languages" tools:keep="@string/your_languages">Selected languages:</string>
@@ -211,6 +214,8 @@
   <string name="ext_storage_permission_rationale_add_note">Storage access is required for Notes</string>
   <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
   <string name="note_save_unsuccessful">Note save unsuccessful</string>
+  <string name="note_delete_successful">Note deleted successfully</string>
+  <string name="note_delete_unsuccessful">Note was not deleted</string>
   <string name="note_save_successful">Note saved</string>
   <string name="note_save_error_storage_not_writable">Error saving note: Storage not writable</string>
   <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
@@ -259,10 +264,15 @@
   <string name="no_bookmarks">No Bookmarks</string>
   <string name="no_history">No History</string>
   <string name="device_default">Device Default</string>
+  <string name="delete_history">Delete History?</string>
+  <string name="delete_bookmarks">Delete Bookmarks?</string>
+  <string name="on">On</string>
+  <string name="off">Off</string>
+  <string name="auto">Auto</string>
   <string-array name="pref_night_modes_entries">
-    <item>On</item>
-    <item>Off</item>
-    <item>Auto</item>
+    <item>@string/on</item>
+    <item>@string/off</item>
+    <item>@string/auto</item>
   </string-array>
   <string-array name="pref_night_modes_values">
     <item>2</item>

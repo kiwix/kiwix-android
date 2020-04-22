@@ -27,11 +27,8 @@
   <string name="error_file_invalid">Fazi : Ar restr diuzet n\'eo ket ur restr ZIM reizh.</string>
   <string name="error_article_url_not_found">Fazi : N\'eus ket bet gallet kargañ ar pennad “%1$s”</string>
   <string name="pref_display_title">Diskwel</string>
-  <string name="pref_zoom_sub_title">Zoum</string>
-  <string name="pref_zoom_dialog">Live zoumañ</string>
   <string name="pref_info_title">Titouroù</string>
   <string name="pref_info_version">Stumm</string>
-  <string name="pref_zoom_enable">Kontrolloù ar zoum</string>
   <string name="pref_night_mode">Mod noz</string>
   <string name="pref_night_mode_summary">Diskouez ar pennadoù gant livioù eilpennet</string>
   <string name="pref_back_to_top">Distreiñ da grec\'h ar bajenn</string>
@@ -50,8 +47,8 @@
   <string name="delete_recent_search_item">Dilemel an elfenn-mañ ?</string>
   <string name="pref_clear_all_history_title">Diverkañ ar roll-istor</string>
   <string name="pref_clear_all_history_summary">Diverkañ an enklaskoù nevez ha roll-isor an ivinelloù</string>
-  <string name="all_history_cleared_toast">Diverket eo ar roll-istor a-bezh</string>
-  <string name="clear_all_history_dialog_title">Dilemel ar roll-istor a-bezh</string>
+  <string name="all_history_cleared">Diverket eo ar roll-istor a-bezh</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Dilemel ar roll-istor a-bezh</string>
   <string name="share">Rannañ</string>
   <string name="selected_file_cab_app_chooser_title">Rannañ ar restroù ZIM gant :</string>
   <string name="delete">Dilemel</string>
@@ -80,7 +77,7 @@
   <string name="local_zims">Trobarzhell</string>
   <string name="remote_zims">Enlinenn</string>
   <string name="library">Levraoueg</string>
-  <string name="delete_specific_zim_toast">Restr dilamet</string>
+  <string name="delete_zims_toast">Restr dilamet</string>
   <string name="no_files_here">N\'eus restr ebet amañ</string>
   <string name="download_no_space">N\'eus ket plas a-walc\'h evit pellgargañ ar restr-mañ.</string>
   <string name="space_available">Egorenn a c\'haller kaout :</string>
@@ -126,7 +123,7 @@
   <string name="time_yesterday">Dec\'h</string>
   <string name="pref_external_link_popup_title">Kemenn pa\'z eer liammoù diavaez</string>
   <string name="pref_external_link_popup_summary">Diskwel ur popup evit reiñ da c\'houzout e vo koustoù ouzhpenn pe e vo liammoù ha ned aint ket en-dro ezlinenn.</string>
-  <string name="external_link_popup_dialog_title">Diraez al liamm diavaez</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Diraez al liamm diavaez</string>
   <string name="external_link_popup_dialog_message">Emaoc\'h o tiraez ul liamm diavaez. Gallout a ra degas frejoù ouzhpenn deoc\'h evit treuzkas roadennoù pe ne yelo ket en-dro pa viot enlinenn, tra ken. Ha c\'hoant ho peus da genderc\'hel ?</string>
   <string name="do_not_ask_anymore">Chom hep goulenn ken</string>
   <string name="your_languages">Yezhoù diuzet</string>

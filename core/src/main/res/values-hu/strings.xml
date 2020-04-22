@@ -33,11 +33,8 @@
   <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
   <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
   <string name="pref_display_title">Megjelenítés</string>
-  <string name="pref_zoom_sub_title">Kicsinyítés/nagyítás</string>
-  <string name="pref_zoom_dialog">Nagyítási szint</string>
   <string name="pref_info_title">Információ</string>
   <string name="pref_info_version">Verzió</string>
-  <string name="pref_zoom_enable">Nagyítási vezérlők</string>
   <string name="pref_night_mode">Éjszakai mód</string>
   <string name="pref_night_mode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
   <string name="pref_back_to_top">Vissza a lap tetejére</string>
@@ -56,8 +53,8 @@
   <string name="delete_recent_search_item">Törli ezt az elemet?</string>
   <string name="pref_clear_all_history_title">Előzmények törlése</string>
   <string name="pref_clear_all_history_summary">Töröld a mostani kereséseket és lapelőzményeket</string>
-  <string name="all_history_cleared_toast">Az összes előzmény törölve</string>
-  <string name="clear_all_history_dialog_title">Az összes előzmény törlése</string>
+  <string name="all_history_cleared">Az összes előzmény törölve</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Az összes előzmény törlése</string>
   <string name="delete">Törlés</string>
   <string name="delete_specific_search_toast">Legutóbbi keresés eltávolítva</string>
   <string name="hint_contents_drawer_message">Balra húzással láthatod ennek a cikknek a tartalmát</string>
@@ -84,7 +81,7 @@
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
   <string name="library">Könyvtár</string>
-  <string name="delete_specific_zim_toast">Fájl törölve</string>
+  <string name="delete_zims_toast">Fájl törölve</string>
   <string name="no_files_here">Nincsenek fájlok</string>
   <string name="download_no_space">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
   <string name="space_available">Szabad tárhely:</string>
@@ -128,7 +125,7 @@
   <string name="time_left">maradt</string>
   <string name="pref_external_link_popup_title">Figyelmeztess külső hivatkozások indítása esetén</string>
   <string name="pref_external_link_popup_summary">Felugró ablakkal való figyelmeztetés többletköltségek esetén vagy ne működjön offline hivatkozásokkal.</string>
-  <string name="external_link_popup_dialog_title">Külső hivatkozás megadása</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Külső hivatkozás megadása</string>
   <string name="external_link_popup_dialog_message">Egy külső hivatkozásra mentél. Ez további adatátviteli költségekhez vezethet, vagy csak egyszerűen nem fog működni, ha offline vagy. Folytatni szeretnéd?</string>
   <string name="do_not_ask_anymore">Ne kérdezz többször</string>
   <string name="your_languages">Nyelvek kiválasztása:</string>

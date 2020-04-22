@@ -37,7 +37,7 @@ sealed class SearchDelegate<I : SearchListItem, out VH : SearchViewHolder<I>> :
 
     override fun createViewHolder(parent: ViewGroup) =
       RecentSearchViewHolder(
-        parent.inflate(android.R.layout.simple_list_item_1, false),
+        parent.inflate(android.R.layout.simple_selectable_list_item, false),
         onClickListener,
         onLongClickListener
       )
@@ -50,7 +50,7 @@ sealed class SearchDelegate<I : SearchListItem, out VH : SearchViewHolder<I>> :
 
     override fun createViewHolder(parent: ViewGroup) =
       ZimSearchResultViewHolder(
-        parent.inflate(android.R.layout.simple_list_item_1, false),
+        parent.inflate(android.R.layout.simple_selectable_list_item, false),
         onClickListener
       )
   }

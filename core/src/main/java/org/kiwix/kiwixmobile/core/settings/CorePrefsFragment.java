@@ -31,11 +31,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
-import android.widget.BaseAdapter;
-import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import com.google.android.material.snackbar.Snackbar;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageSelectDialog;
 import java.io.File;
@@ -48,16 +46,15 @@ import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
+import org.kiwix.kiwixmobile.core.utils.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.RESULT_RESTART;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
-import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM;
-import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM_ENABLED;
 
 public abstract class CorePrefsFragment extends PreferenceFragment implements
   SettingsContract.View,
@@ -75,17 +72,19 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   protected StorageCalculator storageCalculator;
   @Inject
   protected NightModeConfig nightModeConfig;
-
-  private SliderPreference mSlider;
+  @Inject
+  protected DialogShower alertDialogShower;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    CoreApp.getCoreComponent().inject(this);
+    CoreApp.getCoreComponent()
+      .activityComponentBuilder()
+      .activity(getActivity())
+      .build()
+      .inject(this);
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.preferences);
 
-    mSlider = (SliderPreference) findPreference(PREF_ZOOM);
-    setSliderState();
     setStorage();
     setUpSettings();
     new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater(),
@@ -93,12 +92,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   }
 
   protected abstract void setStorage();
-
-  private void setSliderState() {
-    boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(
-      PREF_ZOOM_ENABLED, false);
-    mSlider.setEnabled(enabled);
-  }
 
   @Override
   public void onResume() {
@@ -185,13 +178,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    if (key.equals(PREF_ZOOM_ENABLED)) {
-      setSliderState();
-    }
-    if (key.equals(PREF_ZOOM)) {
-      mSlider.setSummary(mSlider.getSummary());
-      ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
-    }
     if (key.equals(PREF_NIGHT_MODE)) {
       sharedPreferenceUtil.updateNightMode();
       restartActivity();
@@ -199,28 +185,19 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   }
 
   private void clearAllHistoryDialog() {
-    new AlertDialog.Builder(getActivity())
-      .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
-      .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
-      .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-        presenter.clearHistory();
-        CoreSettingsActivity.allHistoryCleared = true;
-        Toast.makeText(getActivity(),
-          getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT)
-          .show();
-      })
-      .setNegativeButton(android.R.string.no, (dialog, which) -> {
-        // do nothing
-      })
-      .setIcon(R.drawable.ic_warning)
-      .show();
+    alertDialogShower.show(KiwixDialog.ClearAllHistory.INSTANCE, () -> {
+      presenter.clearHistory();
+      CoreSettingsActivity.allHistoryCleared = true;
+      Snackbar.make(getView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
+      return Unit.INSTANCE;
+    });
   }
 
   private void showClearAllNotesDialog() {
-    new AlertDialog.Builder(getActivity()).setMessage(R.string.delete_notes_confirmation_msg)
-      .setNegativeButton(android.R.string.cancel, null) // Do nothing for 'Cancel' button
-      .setPositiveButton(R.string.yes, (dialog, which) -> clearAllNotes())
-      .show();
+    alertDialogShower.show(KiwixDialog.ClearAllNotes.INSTANCE, () -> {
+      clearAllNotes();
+      return Unit.INSTANCE;
+    });
   }
 
   private void clearAllNotes() {
@@ -228,34 +205,28 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
       if (ContextCompat.checkSelfPermission(getActivity(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED) {
-        ContextExtensionsKt.toast(getActivity(), R.string.ext_storage_permission_not_granted,
-          Toast.LENGTH_LONG);
+        Snackbar.make(getView(), R.string.ext_storage_permission_not_granted, Snackbar.LENGTH_SHORT).show();
         return;
       }
 
       if (FilesKt.deleteRecursively(new File(AddNoteDialog.NOTES_DIRECTORY))) {
-        ContextExtensionsKt.toast(getActivity(), R.string.notes_deletion_successful,
-          Toast.LENGTH_SHORT);
+        Snackbar.make(getView(), R.string.notes_deletion_successful, Snackbar.LENGTH_SHORT).show();
         return;
       }
     }
-    ContextExtensionsKt.toast(getActivity(), R.string.notes_deletion_unsuccessful,
-      Toast.LENGTH_SHORT);
+    Snackbar.make(getView(), R.string.notes_deletion_unsuccessful, Snackbar.LENGTH_SHORT).show();
   }
 
   @SuppressLint("SetJavaScriptEnabled")
   public void openCredits() {
-    WebView view =
+    @SuppressLint("InflateParams") WebView view =
       (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
     view.loadUrl("file:///android_asset/credits.html");
     if (nightModeConfig.isNightModeActive()) {
       view.getSettings().setJavaScriptEnabled(true);
       view.setBackgroundColor(0);
     }
-    new AlertDialog.Builder(getActivity())
-      .setView(view)
-      .setPositiveButton(android.R.string.ok, null)
-      .show();
+    alertDialogShower.show(new KiwixDialog.OpenCredits(() -> view));
   }
 
   @Override

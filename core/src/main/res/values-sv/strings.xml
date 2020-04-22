@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Jopparn
 * Skalman
+* Technic2
 * WikiPhoenix
 -->
 <resources>
@@ -27,7 +29,8 @@
   <string name="go_to_wifi_settings_label">Gå till WiFi-inställningar</string>
   <string name="no_books_selected_toast_message">Välj böcker först</string>
   <string name="server_failed_toast_message">Kunde inte starta server.</string>
-  <string name="server_started__successfully_toast_message">Servern startades.</string>
+  <string name="server_started_successfully_toast_message">Servern startades.</string>
+  <string name="server_stopped_successfully_toast_message">Servern stoppades.</string>
   <string name="progress_dialog_starting_server">Startar server</string>
   <string name="hotspot_dialog_neutral_button">JA, JAG HAR AKTIVERAT DET</string>
   <string name="start_server_label">Starta server</string>
@@ -36,11 +39,8 @@
   <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
   <string name="error_article_url_not_found">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
   <string name="pref_display_title">Visning</string>
-  <string name="pref_zoom_sub_title">Zooma</string>
-  <string name="pref_zoom_dialog">Zoomnivå</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Zoomkontrollerna</string>
   <string name="pref_night_mode">Nattläge</string>
   <string name="pref_night_mode_summary">Visa artiklar med inverterade färger</string>
   <string name="pref_back_to_top">Tillbaka till toppen</string>
@@ -59,11 +59,12 @@
   <string name="delete_recent_search_item">Radera detta objekt?</string>
   <string name="pref_clear_all_history_title">Rensa historik</string>
   <string name="pref_clear_all_history_summary">Rensa senaste sökningar och flikhistorik</string>
-  <string name="all_history_cleared_toast">All historik rensades</string>
-  <string name="clear_all_history_dialog_title">Rensa all historik</string>
+  <string name="all_history_cleared">All historik rensades</string>
+  <string name="clear_all_history_dialog_title">Rensa all historik?</string>
   <string name="share">Dela</string>
   <string name="selected_file_cab_app_chooser_title">Dela ZIM-filer med:</string>
   <string name="delete">Radera</string>
+  <string name="cancel">\nAvbryt</string>
   <string name="delete_specific_search_toast">Senaste sökning togs bort</string>
   <string name="hint_contents_drawer_message">Du kan svepa åt vänster för att se innehållet i denna artikel</string>
   <string name="got_it">Jag förstår</string>
@@ -90,7 +91,7 @@
   <string name="remote_zims">Ansluten</string>
   <string name="library">Bibliotek</string>
   <string name="delete_zim_body">Radera %s?</string>
-  <string name="delete_specific_zim_toast">Fil raderades</string>
+  <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned denna fil.</string>
   <string name="space_available">Tillgängligt utrymme:</string>
@@ -136,7 +137,7 @@
   <string name="time_yesterday">Igår</string>
   <string name="pref_external_link_popup_title">Varna vid externa länkar</string>
   <string name="pref_external_link_popup_summary">Visar popup för att varna om ytterligare kostnader eller att det inte fungerar i offlinelänkar.</string>
-  <string name="external_link_popup_dialog_title">Går till extern länk</string>
+  <string name="external_link_popup_dialog_title">Går till extern länk!</string>
   <string name="external_link_popup_dialog_message">Du går till en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer helt enkelt inte fungera när du är offline. Vill du fortsätta?</string>
   <string name="do_not_ask_anymore">Fråga inte igen</string>
   <string name="your_languages">Valda språk:</string>
@@ -179,7 +180,7 @@
   <string name="close_all_tabs">Stäng alla flikar</string>
   <string name="pending_state">Väntande</string>
   <string name="running_state">Pågående</string>
-  <string name="complete">Slutförd</string>
+  <string name="complete">Färdig</string>
   <string name="paused_state">Pausad</string>
   <string name="failed_state">Misslyckades: %s</string>
   <string name="save">Spara</string>
@@ -218,4 +219,6 @@
   <string name="no_results">Inga resultat</string>
   <string name="no_bookmarks">Inga bokmärken</string>
   <string name="no_history">Ingen historik</string>
+  <string name="delete_history">Radera historik?</string>
+  <string name="delete_bookmarks">Radera bokmärken?</string>
 </resources>

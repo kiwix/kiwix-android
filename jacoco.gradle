@@ -51,10 +51,10 @@ task jacocoInstrumentationTestReport(type: JacocoReport, dependsOn: ['createDebu
       includes: ['jacoco/testDebugUnitTest.exec',
         'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'])
   }
-  sourceDirectories = files([javaSrc, kotlinSrc])
-  classDirectories = files([javaClasses, kotlinClasses])
+  sourceDirectories.from = files(javaSrc, kotlinSrc)
+  classDirectories.from = files(javaClasses, kotlinClasses)
   print execution
-  executionData = files(execution)
+  executionData.from = files(execution)
   doLast() {
     print "file://${reports.html.destination}/index.html"
   }

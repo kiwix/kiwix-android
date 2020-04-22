@@ -21,16 +21,24 @@ package org.kiwix.kiwixmobile.core.di.components
 import android.app.Activity
 import dagger.BindsInstance
 import dagger.Subcomponent
+import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
+import org.kiwix.kiwixmobile.core.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
+import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 
 @ActivityScope
 @Subcomponent(modules = [ActivityModule::class])
 interface CoreActivityComponent {
   fun inject(searchActivity: SearchActivity)
   fun inject(showDeleteSearchDialog: ShowDeleteSearchDialog)
+  fun inject(corePrefsFragment: CorePrefsFragment)
+  fun inject(historyActivity: HistoryActivity)
+  fun inject(bookmarksActivity: BookmarksActivity)
+  fun inject(addNoteDialog: AddNoteDialog)
 
   @Subcomponent.Builder
   interface Builder {

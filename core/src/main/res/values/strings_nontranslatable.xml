@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string-array name="pref_zoom_entryvalues" translatable="false">
-    <item>small</item>
-    <item>medium</item>
-    <item>large</item>
-  </string-array>
-
+  <string name="triple_arg_format_string" translatable="false">%s %s %s</string>
 </resources>

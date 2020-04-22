@@ -20,9 +20,21 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
+enum class SearchOrigin {
+  FromWebView,
+  FromTabView
+}
+
 sealed class State {
   abstract val searchString: String
+  abstract val searchOrigin: SearchOrigin
 
-  data class Results(override val searchString: String, val values: List<SearchListItem>) : State()
-  data class NoResults(override val searchString: String) : State()
+  data class Results(
+    override val searchString: String,
+    val values: List<SearchListItem>,
+    override val searchOrigin: SearchOrigin
+  ) : State()
+
+  data class NoResults(override val searchString: String, override val searchOrigin: SearchOrigin) :
+    State()
 }

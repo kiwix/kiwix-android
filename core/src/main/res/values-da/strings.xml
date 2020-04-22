@@ -33,11 +33,8 @@
   <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil.</string>
   <string name="error_article_url_not_found">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
   <string name="pref_display_title">Visning</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Zoomniveau</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Zoom kontrol</string>
   <string name="pref_night_mode">Nat-tilstand</string>
   <string name="pref_night_mode_summary">Vis artikler med farverne vendt om</string>
   <string name="pref_back_to_top">Tilbage til toppen</string>
@@ -56,8 +53,8 @@
   <string name="delete_recent_search_item">Slet dette element?</string>
   <string name="pref_clear_all_history_title">Ryd historik</string>
   <string name="pref_clear_all_history_summary">Ryd seneste søgninger og fanebladshistorik</string>
-  <string name="all_history_cleared_toast">Al historik fjernet</string>
-  <string name="clear_all_history_dialog_title">Ryd al historik</string>
+  <string name="all_history_cleared">Al historik fjernet</string>
+  <string name="clear_all_history_dialog_title">Ryd al historik?</string>
   <string name="share">Del</string>
   <string name="delete">Slet</string>
   <string name="delete_specific_search_toast">Tidligere søgning fjernet</string>
@@ -85,7 +82,7 @@
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
   <string name="library">Bibliotek</string>
-  <string name="delete_specific_zim_toast">Fil slettet</string>
+  <string name="delete_zims_toast">Fil slettet</string>
   <string name="no_files_here">Ingen filer her</string>
   <string name="download_no_space">Utilstrækkelig med plads til at hente denne fil.</string>
   <string name="space_available">Ledig plads:</string>
@@ -131,7 +128,7 @@
   <string name="time_yesterday">I går</string>
   <string name="pref_external_link_popup_title">Advar når man bruger eksterne henvisninger</string>
   <string name="pref_external_link_popup_summary">Vis pop op for at advare om yderligere omkostninger eller manglende funktion uden internet i henvisninger.</string>
-  <string name="external_link_popup_dialog_title">Gå til ekstern henvisning</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Gå til ekstern henvisning</string>
   <string name="external_link_popup_dialog_message">Du er på vej mod en ekstern henvisning. Det kan medføre ekstra omkostninger til dataoverførsel eller vil bare ikke fungere når du ikke er på nettet. Ønsker du at fortsætte?</string>
   <string name="do_not_ask_anymore">Spørg ikke igen</string>
   <string name="your_languages">Valgte sprog:</string>

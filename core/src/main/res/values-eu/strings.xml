@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * EukeneFL
 * Fitoschido
 * Macofe
@@ -28,17 +29,14 @@
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
   <string name="pref_display_title">Erakutsi</string>
-  <string name="pref_zoom_sub_title">Zooma</string>
-  <string name="pref_zoom_dialog">Zoom maila</string>
   <string name="pref_info_title">Informazioa</string>
   <string name="pref_info_version">Bertsioa</string>
-  <string name="pref_zoom_enable">Zoom kontrola</string>
   <string name="pref_night_mode">Gau modua</string>
   <string name="pref_night_mode_summary">Artikuluak alderantzizko koloreekin erakutsi</string>
   <string name="pref_back_to_top">Gora itzuli</string>
   <string name="pref_back_to_top_summary">Bistaratu botoi bat orrialdearen amaieran goiko aldera mugitzeko</string>
   <string name="pref_hide_toolbar">Tresna-barra ezkutatu desplazatzean</string>
-  <string name="pref_hide_toolbar_summary">u2022 On GNU/Linux and with the console: split —bytes=4000M my_big_file.zim</string>
+  <string name="pref_hide_toolbar_summary">\u2022 On GNU/Linux and with the console: split —bytes=4000M my_big_file.zim</string>
   <string name="pref_language_title">Hizkuntza</string>
   <string name="pref_language_chooser">Hizkuntza aukeratu</string>
   <string name="pref_credits">Ekarpen eta lizentziak</string>
@@ -51,8 +49,8 @@
   <string name="delete_recent_search_item">Elementu hau ezabatu?</string>
   <string name="pref_clear_all_history_title">Historia garbitu</string>
   <string name="pref_clear_all_history_summary">Azkeneko bilaketak garbitu eta historialeko erlaitzak</string>
-  <string name="all_history_cleared_toast">Historial osoa garbitu da.</string>
-  <string name="clear_all_history_dialog_title">Historial osoa garbitu?</string>
+  <string name="all_history_cleared">Historial osoa garbitu da.</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Historial osoa garbitu?</string>
   <string name="delete">Ezabatu</string>
   <string name="delete_specific_search_toast">Azkeneko bilaketa ezabatuta</string>
   <string name="hint_contents_drawer_message">Ezkerrerantz eginez artikulu honen edukia ikusi dezakezu.</string>
@@ -79,7 +77,7 @@
   <string name="local_zims">Gailua</string>
   <string name="remote_zims">Konektatuta</string>
   <string name="library">Liburutegia</string>
-  <string name="delete_specific_zim_toast">Fitxategi ezabatua</string>
+  <string name="delete_zims_toast">Fitxategi ezabatua</string>
   <string name="no_files_here">Artxiborik ez hemen</string>
   <string name="download_no_space">Ez dago espaziorik artxibo hau jaisteko.</string>
   <string name="space_available">Libre dagoen espazioa:</string>
@@ -123,7 +121,7 @@
   <string name="time_left">joanda</string>
   <string name="pref_external_link_popup_title">Kanpo esteketara sartzerakoan ohartarazi</string>
   <string name="pref_external_link_popup_summary">Gaitu popup-a gastu gehigarriez edo konexiorik gabe funtzionatzen ez duten estekez abisatzeko</string>
-  <string name="external_link_popup_dialog_title">Kanpo estekara sartzen</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Kanpo estekara sartzen</string>
   <string name="external_link_popup_dialog_message">Kanpo-esteka batera sartzen ari zara. Honek datu transferentziarako gastu gehigarrietara eraman dezake edo besterik gabe, ez du funtzionatuko konexiorik ez dagoenean. Jarraitu nahi duzu?</string>
   <string name="do_not_ask_anymore">Ez galdetu berriz</string>
   <string name="your_languages">Hautatutako hizkuntzak:</string>

@@ -26,7 +26,7 @@ import java.io.File
 
 internal class StorageCalculatorTest {
 
-  private val storageCalculator = StorageCalculator()
+  private val storageCalculator = StorageCalculator(mockk())
   private val file: File = mockk()
 
   @Test

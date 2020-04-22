@@ -17,8 +17,10 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view
 
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -40,8 +42,6 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.snack
-import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
@@ -59,7 +59,6 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.Di
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.DownloadDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
-import java.io.File
 import javax.inject.Inject
 
 class LibraryFragment : BaseFragment() {
@@ -70,7 +69,7 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
-  @Inject lateinit var storageCalculator: StorageCalculator
+  @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
 
   private val zimManageViewModel by lazy {
     activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
@@ -85,9 +84,6 @@ class LibraryFragment : BaseFragment() {
       DividerDelegate
     )
   }
-
-  private val spaceAvailable: Long
-    get() = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
 
   private val noWifiWithWifiOnlyPreferenceSet
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(context!!)
@@ -132,13 +128,26 @@ class LibraryFragment : BaseFragment() {
       }
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
-          context.toast(R.string.no_network_connection)
+          noInternetSnackbar()
         } else {
           libraryErrorText.setText(R.string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
         }
+        librarySwipeRefresh.isRefreshing = false
       }
     }
+  }
+
+  private fun noInternetSnackbar() {
+    view?.snack(
+      R.string.no_network_connection,
+      R.string.menu_settings,
+      ::openNetworkSettings
+    )
+  }
+
+  private fun openNetworkSettings() {
+    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
   }
 
   private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
@@ -156,7 +165,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun refreshFragment() {
     if (isNotConnected) {
-      context.toast(R.string.no_network_connection)
+      noInternetSnackbar()
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
@@ -178,21 +187,8 @@ class LibraryFragment : BaseFragment() {
 
   private fun onBookItemClick(item: BookItem) {
     when {
-      notEnoughSpaceAvailable(item) -> {
-        context.toast(
-          getString(R.string.download_no_space) +
-            "\n" + getString(R.string.space_available) + " " +
-            storageCalculator.calculateAvailableSpace(File(sharedPreferenceUtil.prefStorage))
-        )
-        libraryList.snack(
-          R.string.download_change_storage,
-          R.string.open,
-          ::showStorageSelectDialog
-        )
-        return
-      }
       isNotConnected -> {
-        context.toast(R.string.no_network_connection)
+        noInternetSnackbar()
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {
@@ -202,12 +198,19 @@ class LibraryFragment : BaseFragment() {
         })
         return
       }
-      else -> downloadFile(item.book)
+      else -> availableSpaceCalculator.hasAvailableSpaceFor(item,
+        { downloadFile(item.book) },
+        {
+          libraryList.snack(
+            getString(R.string.download_no_space) +
+              "\n" + getString(R.string.space_available) + " " +
+              it,
+            R.string.download_change_storage,
+            ::showStorageSelectDialog
+          )
+        })
     }
   }
-
-  private fun notEnoughSpaceAvailable(item: BookItem) =
-    spaceAvailable < item.book.size.toLong() * 1024f
 
   private fun showStorageSelectDialog() = StorageSelectDialog()
     .apply {

@@ -29,15 +29,20 @@
   <string name="choose_file">Yew dosyay zerreki weçine (*.zim)</string>
   <string name="open_in_new_tab">Gıre xıldayışo newe de abo?</string>
   <string name="hotspot_service_channel_name">Kanalê xızmeti Hotspot</string>
+  <string name="hotspot_failed_title">Serkewtışê hotspoti nêbiyo</string>
+  <string name="go_to_wifi_settings_label">Ravêrê eyaranê Wi-Fi</string>
+  <string name="hotspot_running">Hotspoto gureyneyino</string>
+  <string name="no_books_selected_toast_message">Veror kıtaba weçinê</string>
+  <string name="progress_dialog_starting_server">Server gureyneyino</string>
+  <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
+  <string name="start_server_label">Serveri serkewtış</string>
+  <string name="stop_server_label">Serveri vındardış</string>
   <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye.</string>
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>
   <string name="error_article_url_not_found">Xeta: Barkerdışê meqaleyê (Url: %1$s) nêbi.</string>
   <string name="pref_display_title">Bımocne</string>
-  <string name="pref_zoom_sub_title">Nêzdikerdış</string>
-  <string name="pref_zoom_dialog">Sewiyay nêzdikerdışi</string>
   <string name="pref_info_title">Melumat</string>
   <string name="pref_info_version">Versiyon</string>
-  <string name="pref_zoom_enable">Kontrola zumer</string>
   <string name="pref_night_mode">Moda şewer</string>
   <string name="pref_night_mode_summary">Meqaleya dimlaşt bıyaye rengana bımocne</string>
   <string name="pref_back_to_top">Şo Serni</string>
@@ -53,8 +58,8 @@
   <string name="clear_recent_and_tabs_history_dialog">Şıma qayılê tabanê aktivan reset kerê u cıgeyrayışê xo yê verêni pak kerê?</string>
   <string name="delete_recent_search_item">No item wa esterıyo?</string>
   <string name="pref_clear_all_history_title">verore cı besterne</string>
-  <string name="all_history_cleared_toast">Tarix pêro biyo pak</string>
-  <string name="clear_all_history_dialog_title">Verori pêro pak kerê</string>
+  <string name="all_history_cleared">Tarix pêro biyo pak</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Verori pêro pak kerê</string>
   <string name="share">Vıla ke</string>
   <string name="delete">Bestere</string>
   <string name="delete_specific_search_toast">Cıgeyrayışo peyên wedariya</string>
@@ -79,7 +84,8 @@
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Online</string>
   <string name="library">Kıtıbxane</string>
-  <string name="delete_specific_zim_toast">Dosya esteriye</string>
+  <string name="delete_zim_body">Wa %s esteriyo ?</string>
+  <string name="delete_zims_toast">Dosya esteriye</string>
   <string name="no_files_here">Tiya dosyeyi çıniyê</string>
   <string name="download_no_space">Seba barkerdışê na dosya rê ca bes niyo.</string>
   <string name="space_available">Karnıyayiye erd:</string>
@@ -112,8 +118,24 @@
   <string name="time_left">çep</string>
   <string name="time_today">Ewro</string>
   <string name="time_yesterday">Vızêr</string>
-  <string name="external_link_popup_dialog_title">Şono gıreyê beberi</string>
+  <string name="pref_external_link_popup_title">Gırey teberi cıkerdış de iqaz bıde</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Şono gıreyê beberi</string>
   <string name="do_not_ask_anymore">Endi meperse</string>
+  <string name="your_languages">Weçinaye zıwan :</string>
+  <string name="other_languages">Zıwano bin:</string>
+  <string name="no_items_msg">Karneyaye obce çıniyo</string>
+  <string name="crash_title">Ey… No teneyê ariyeya</string>
+  <string name="crash_checkbox_language">Eyarê zıwanê şıma</string>
+  <string name="crash_checkbox_zimfiles">Lista Dosyayanê Zıme Şıma</string>
+  <string name="pending_state">Vındarde</string>
+  <string name="running_state">Rameno</string>
+  <string name="complete">Temam</string>
+  <string name="paused_state">Vındarneya</string>
   <string name="status">Weziyet</string>
+  <string name="tag_pic">Resım</string>
+  <string name="tag_vid">Video</string>
+  <string name="tag_text_only">Teyna metin</string>
+  <string name="tag_short_text">Metino kılm</string>
+  <string name="storage_permission_denied">İcazetê depoy red biyo</string>
   <string name="no_bookmarks">Nişani çıniyê</string>
 </resources>

@@ -27,11 +27,8 @@
   <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
   <string name="error_article_url_not_found">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
   <string name="pref_display_title">မြင်ကွင်း</string>
-  <string name="pref_zoom_sub_title">ချုံ့/ချဲ့ကြည့်ရန်</string>
-  <string name="pref_zoom_dialog">ချဲ့ကြည့်သည့်အဆင့်</string>
   <string name="pref_info_title">သတင်းအချက်အလက်</string>
   <string name="pref_info_version">မူ</string>
-  <string name="pref_zoom_enable">ချဲ့ကြည့်ရာတွင် ထိန်းချုပ်မှုများ</string>
   <string name="pref_night_mode">ညကြည့်ပုံစံ</string>
   <string name="pref_night_mode_summary">ဆောင်းပါးများကို အရောင်ပြောင်းပြန်သုံး၍ ပြရန်</string>
   <string name="pref_back_to_top">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
@@ -42,10 +39,10 @@
   <string name="tts_lang_not_supported">ဤစာမျက်နှာ၏ ဘာသာစကားကို မထောက်ပံ့ထားပါ၊ သို့မဟုတ် သင့်လျော်သော ဘာသာစကားဒေတာကို သွင်းမထားပါ။ ဆောင်းပါးကို မှန်ကန်စွာ ဖတ်နိုင်မည်မဟုတ်ပါ။</string>
   <string name="delete_recent_search_item">ဤဟာကို ဖျက်မည်လား</string>
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
-  <string name="all_history_cleared_toast">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>
+  <string name="all_history_cleared">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>
   <string name="pref_clear_all_bookmarks_title">မှတ်သားထားသော စာအုပ်များကိုဖျက်ပါ</string>
-  <string name="all_bookmarks_cleared_toast">မှတ်သားထားသော စာအုပ်များအားလုံး ရှင်းပြီး</string>
-  <string name="clear_all_history_dialog_title">မှတ်တမ်းများအားလုံး ရှင်းလင်းရန်</string>
+  <string name="all_bookmarks_cleared">မှတ်သားထားသော စာအုပ်များအားလုံး ရှင်းပြီး</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">မှတ်တမ်းများအားလုံး ရှင်းလင်းရန်</string>
   <string name="share">မျှဝေ</string>
   <string name="delete">ဖျက်</string>
   <string name="delete_specific_search_toast">မကြာမီက ရှာဖွေမှုကို ဖယ်ရှားပြီးပြီ</string>
@@ -60,7 +57,7 @@
   <string name="local_zims">စက်ပစ္စည်း</string>
   <string name="remote_zims">အွန်လိုင်း</string>
   <string name="library">မှတ်ထားမှုများ</string>
-  <string name="delete_specific_zim_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
+  <string name="delete_zims_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
   <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
   <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
   <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>

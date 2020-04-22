@@ -31,20 +31,18 @@
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
   <string name="go_to_wifi_settings_label">Ir a config. de wifi</string>
   <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
-  <string name="server_started__successfully_toast_message">Se inició el servidor correctamente.</string>
+  <string name="server_started_successfully_toast_message">Se inició el servidor correctamente.</string>
   <string name="progress_dialog_starting_server">Iniciando el servidor</string>
   <string name="hotspot_dialog_neutral_button">SÍ, LO HE INICIADO</string>
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Detener servidor</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
+  <string name="zim_not_opened">No se pudo abrir el archivo .zim</string>
   <string name="error_file_invalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>
   <string name="error_article_url_not_found">Error: falló la carga del artículo (URL: %1$s).</string>
   <string name="pref_display_title">Mostrar</string>
-  <string name="pref_zoom_sub_title">Ampliación</string>
-  <string name="pref_zoom_dialog">Nivel de ampliación</string>
   <string name="pref_info_title">Información</string>
   <string name="pref_info_version">Versión</string>
-  <string name="pref_zoom_enable">Controles de ampliación</string>
   <string name="pref_night_mode">Modo nocturno</string>
   <string name="pref_night_mode_summary">Mostrar artículos con colores invertidos</string>
   <string name="pref_back_to_top">Volver al principio</string>
@@ -63,8 +61,8 @@
   <string name="delete_recent_search_item">¿Borrar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpiar el historial</string>
   <string name="pref_clear_all_history_summary">Borrar las búsquedas recientes y el historial de pestañas</string>
-  <string name="all_history_cleared_toast">Borrado todo el historial</string>
-  <string name="clear_all_history_dialog_title">Borrar todo el historial</string>
+  <string name="all_history_cleared">Borrado todo el historial</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Borrar todo el historial</string>
   <string name="share">Compartir</string>
   <string name="delete">Borrar</string>
   <string name="delete_specific_search_toast">Búsquedas recientes eliminadas</string>
@@ -92,7 +90,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En línea</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_specific_zim_toast">Archivo eliminado</string>
+  <string name="delete_zims_toast">Archivo eliminado</string>
   <string name="no_files_here">Ningún archivo aquí</string>
   <string name="download_no_space">Espacio insuficiente para descargar este archivo.</string>
   <string name="space_available">Espacio disponible:</string>
@@ -138,7 +136,7 @@
   <string name="time_yesterday">Ayer</string>
   <string name="pref_external_link_popup_title">Advertir al seguir enlaces externos</string>
   <string name="pref_external_link_popup_summary">Mostrar advertencia sobre costos adicionales o no funcionamiento en enlaces sin conexión.</string>
-  <string name="external_link_popup_dialog_title">Acceso a enlace externo</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Acceso a enlace externo</string>
   <string name="external_link_popup_dialog_message">Estás a punto de seguir un enlace externo. Ello podría generarte gastos por transferencia de datos o sencillamente no funcionará si no tienes conexión. ¿Quieres continuar?</string>
   <string name="do_not_ask_anymore">No preguntar de nuevo</string>
   <string name="your_languages">Idiomas seleccionados:</string>
@@ -206,4 +204,5 @@
   <string name="go_to_settings">Ir a Configuración</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
+  <string name="device_default">Valor predet. del dispositivo</string>
 </resources>

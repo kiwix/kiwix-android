@@ -36,9 +36,12 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.core.Intents;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
@@ -47,9 +50,11 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_FILE;
-import static org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View,
   HistoryAdapter.OnItemClickListener {
@@ -66,6 +71,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   HistoryContract.Presenter presenter;
   @Inject
   ZimReaderContainer zimReaderContainer;
+  @Inject
+  DialogShower dialogShower;
   @BindView(R2.id.recycler_view)
   RecyclerView recyclerView;
   @BindView(R2.id.no_history)
@@ -81,6 +88,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
       mode.getMenuInflater().inflate(R.menu.menu_context_delete, menu);
+      historySwitch.setEnabled(false);
       return true;
     }
 
@@ -93,26 +101,29 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
       refreshAdapter = false;
       if (item.getItemId() == R.id.menu_context_delete) {
-        fullHistory.removeAll(deleteList);
-        for (HistoryListItem history : deleteList) {
-          int position = historyList.indexOf(history);
+        dialogShower.show(KiwixDialog.DeleteHistory.INSTANCE, (Function0<Unit>) () -> {
+          fullHistory.removeAll(deleteList);
+          for (HistoryListItem history : deleteList) {
+            int position = historyList.indexOf(history);
               /*
               Delete the current category header if there are no items after the current one or
               if the item being removed is between two category headers.
                */
-          if (position - 1 >= 0 && historyList.get(position - 1) == null &&
-            (position + 1 >= historyList.size() ||
-              (position + 1 < historyList.size() && historyList.get(position + 1) == null))) {
-            historyList.remove(position - 1);
-            historyAdapter.notifyItemRemoved(position - 1);
+            if (position - 1 >= 0 && historyList.get(position - 1) == null &&
+              (position + 1 >= historyList.size() ||
+                (position + 1 < historyList.size() && historyList.get(position + 1) == null))) {
+              historyList.remove(position - 1);
+              historyAdapter.notifyItemRemoved(position - 1);
+            }
+            position = historyList.indexOf(history);
+            historyList.remove(history);
+            historyAdapter.notifyItemRemoved(position);
+            historyAdapter.notifyItemRangeChanged(position, historyAdapter.getItemCount());
           }
-          position = historyList.indexOf(history);
-          historyList.remove(history);
-          historyAdapter.notifyItemRemoved(position);
-          historyAdapter.notifyItemRangeChanged(position, historyAdapter.getItemCount());
-        }
-        presenter.deleteHistory(new ArrayList<>(deleteList));
-        mode.finish();
+          presenter.deleteHistory(new ArrayList<>(deleteList));
+          mode.finish();
+          return Unit.INSTANCE;
+        });
         return true;
       }
       return false;
@@ -127,6 +138,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       if (refreshAdapter) {
         historyAdapter.notifyDataSetChanged();
       }
+      historySwitch.setEnabled(true);
     }
   };
 
@@ -159,7 +171,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   private void setupHistoryAdapter() {
     historyAdapter = new HistoryAdapter(historyList, deleteList, this);
     historyAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-      @Override public void onChanged() {
+      @Override
+      public void onChanged() {
         super.onChanged();
         noHistory.setVisibility(historyList.size() == 0 ? View.VISIBLE : View.GONE);
       }
@@ -226,12 +239,17 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       onBackPressed();
       return true;
     } else if (itemId == R.id.menu_history_clear) {
-      presenter.deleteHistory(new ArrayList<>(fullHistory));
-      fullHistory.clear();
-      historyList.clear();
-      historyAdapter.notifyDataSetChanged();
-      setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
-      Toast.makeText(this, R.string.all_history_cleared_toast, Toast.LENGTH_SHORT).show();
+      if (fullHistory.size() > 0) {
+        dialogShower.show(KiwixDialog.DeleteHistory.INSTANCE, (Function0<Unit>) () -> {
+          presenter.deleteHistory(new ArrayList<>(fullHistory));
+          fullHistory.clear();
+          historyList.clear();
+          historyAdapter.notifyDataSetChanged();
+          setResult(RESULT_OK, new Intent().putExtra(USER_CLEARED_HISTORY, true));
+          Snackbar.make(noHistory, R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
+          return Unit.INSTANCE;
+        });
+      }
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -298,7 +316,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     }
   }
 
-  @Override protected void injection(CoreComponent coreComponent) {
-    coreComponent.inject(this);
+  @Override
+  protected void injection(CoreComponent coreComponent) {
+    coreComponent.activityComponentBuilder().activity(this).build().inject(this);
   }
 }

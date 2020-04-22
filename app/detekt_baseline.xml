@@ -7,12 +7,12 @@
     <ID>EmptyFunctionBlock:ZimHostActivity.kt$ZimHostActivity.&lt;no name provided&gt;${}</ID>
     <ID>ForbiddenComment:KiwixMainActivity.kt$KiwixMainActivity$// TODO: Show to user</ID>
     <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( booksOnFileSystem: List&lt;BookOnDisk&gt;, activeDownloads: List&lt;DownloadModel&gt;, allLanguages: List&lt;Language&gt;, libraryNetworkEntity: LibraryNetworkEntity, filter: String, fileSystemState: FileSystemState )</ID>
-    <ID>MagicNumber:LibraryFragment.kt$LibraryFragment$1024f</ID>
     <ID>MagicNumber:LibraryListItem.kt$LibraryListItem.LibraryDownloadItem$1000L</ID>
     <ID>MagicNumber:ShareFiles.kt$ShareFiles$24</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$60</ID>
+    <ID>PackageNaming:AvailableSpaceCalculator.kt$package org.kiwix.kiwixmobile.zim_manager.library_view</ID>
     <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:DefaultLanguageProvider.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:DeleteFiles.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
@@ -34,6 +34,7 @@
     <ID>PackageNaming:ShareFiles.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:SimplePageChangeListener.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:StartMultiSelection.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
+    <ID>PackageNaming:WifiDirectManager.kt$package org.kiwix.kiwixmobile.local_file_transfer</ID>
     <ID>PackageNaming:WifiP2pDelegate.kt$package org.kiwix.kiwixmobile.local_file_transfer.adapter</ID>
     <ID>PackageNaming:WifiP2pViewHolder.kt$package org.kiwix.kiwixmobile.local_file_transfer.adapter</ID>
     <ID>PackageNaming:WifiPeerListAdapter.kt$package org.kiwix.kiwixmobile.local_file_transfer.adapter</ID>
@@ -42,10 +43,6 @@
     <ID>PackageNaming:ZimManageViewModel.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>ReturnCount:Fat32Checker.kt$Fat32Checker$private fun canCreate4GbFile(storage: String): Boolean</ID>
     <ID>ReturnCount:LanguageActivity.kt$LanguageActivity$override fun onOptionsItemSelected(item: MenuItem): Boolean</ID>
-    <ID>ReturnCount:LibraryFragment.kt$LibraryFragment$private fun onBookItemClick(item: BookItem)</ID>
-    <ID>SpreadOperator:LanguageAdapter.kt$LanguageAdapter$(*delegates)</ID>
-    <ID>SpreadOperator:LibraryAdapter.kt$LibraryAdapter$( *delegates )</ID>
-    <ID>SpreadOperator:ZimManageViewModel.kt$ZimManageViewModel$(*disposables())</ID>
     <ID>TooGenericExceptionCaught:FileWritingFileSystemChecker.kt$FileWritingFileSystemChecker$e: Exception</ID>
     <ID>TooGenericExceptionCaught:KiwixMainActivity.kt$KiwixMainActivity$e: Exception</ID>
     <ID>TooGenericExceptionThrown:ActivityExtensions.kt$throw RuntimeException( """ applicationContext is ${applicationContext::class.java.simpleName} application is ${application::class.java.simpleName} """.trimIndent() )</ID>
@@ -54,6 +51,7 @@
     <ID>TooManyFunctions:KiwixActivityComponent.kt$KiwixActivityComponent$KiwixActivityComponent</ID>
     <ID>TooManyFunctions:KiwixMainActivity.kt$KiwixMainActivity$KiwixMainActivity</ID>
     <ID>TooManyFunctions:LibraryFragment.kt$LibraryFragment$LibraryFragment</ID>
+    <ID>TooManyFunctions:WifiDirectManager.kt$WifiDirectManager$WifiDirectManager</ID>
     <ID>TooManyFunctions:ZimFileSelectFragment.kt$ZimFileSelectFragment$ZimFileSelectFragment</ID>
     <ID>TooManyFunctions:ZimHostActivity.kt$ZimHostActivity$ZimHostActivity</ID>
     <ID>TooManyFunctions:ZimManageViewModel.kt$ZimManageViewModel$ZimManageViewModel</ID>

@@ -10,9 +10,6 @@
       </value>
     </option>
     <option name="LINE_SEPARATOR" value="&#10;" />
-    <AndroidXmlCodeStyleSettings>
-      <option name="ARRANGEMENT_SETTINGS_MIGRATED_TO_191" value="true" />
-    </AndroidXmlCodeStyleSettings>
     <GroovyCodeStyleSettings>
       <option name="ALIGN_MULTILINE_LIST_OR_MAP" value="false" />
       <option name="ALIGN_NAMED_ARGS_IN_MAP" value="false" />
@@ -42,12 +39,8 @@
       </option>
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
-      <option name="IMPORT_NESTED_CLASSES" value="true" />
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
-    <MarkdownNavigatorCodeStyleSettings>
-      <option name="RIGHT_MARGIN" value="72" />
-    </MarkdownNavigatorCodeStyleSettings>
     <XML>
       <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
     </XML>

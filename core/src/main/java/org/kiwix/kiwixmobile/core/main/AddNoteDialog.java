@@ -44,7 +44,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -53,10 +52,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.inject.Inject;
+import kotlin.Unit;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 /**
@@ -68,8 +70,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
  * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
  */
 
-public class AddNoteDialog extends DialogFragment
-  implements ConfirmationAlertDialogFragment.UserClickListener {
+public class AddNoteDialog extends DialogFragment {
 
   public static final String NOTES_DIRECTORY =
     Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
@@ -83,7 +84,6 @@ public class AddNoteDialog extends DialogFragment
   EditText addNoteEditText; // Displays the note text
 
   private Unbinder unbinder;
-
   private String zimFileName;
   private String zimFileTitle;
   private String articleTitle;
@@ -97,11 +97,16 @@ public class AddNoteDialog extends DialogFragment
 
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject ZimReaderContainer zimReaderContainer;
+  @Inject protected AlertDialogShower alertDialogShower;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    CoreApp.getCoreComponent().inject(this);
+    CoreApp.getCoreComponent()
+      .activityComponentBuilder()
+      .activity(getActivity())
+      .build()
+      .inject(this);
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
     zimFileName = zimReaderContainer.getZimCanonicalPath();
@@ -136,8 +141,8 @@ public class AddNoteDialog extends DialogFragment
     toolbar.setTitle(R.string.note);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     toolbar.setNavigationOnClickListener(v -> {
-      closeKeyboard();
       exitAddNoteDialog();
+      closeKeyboard();
     });
 
     toolbar.setOnMenuItemClickListener(item -> {
@@ -146,6 +151,8 @@ public class AddNoteDialog extends DialogFragment
         shareNote();
       } else if (itemId == R.id.save_note) {  // Saves the note as a text file
         saveNote(addNoteEditText.getText().toString());
+      } else if (itemId == R.id.delete_note) {
+        deleteNote();
       }
       return true;
     });
@@ -232,16 +239,10 @@ public class AddNoteDialog extends DialogFragment
 
   private void exitAddNoteDialog() {
     if (noteEdited) {
-      Fragment previousInstance = getActivity().getSupportFragmentManager()
-        .findFragmentByTag(ConfirmationAlertDialogFragment.TAG);
-
-      if (previousInstance == null) {
-        // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
-        DialogFragment newFragment = new ConfirmationAlertDialogFragment(sharedPreferenceUtil, TAG,
-          R.string.confirmation_alert_dialog_message);
-        newFragment.show(getActivity().getSupportFragmentManager(),
-          ConfirmationAlertDialogFragment.TAG);
-      }
+      alertDialogShower.show(KiwixDialog.NotesDiscardConfirmation.INSTANCE, () -> {
+        dismissAddNoteDialog();
+        return Unit.INSTANCE;
+      });
     } else {
       // Closing unedited note dialog straightaway
       dismissAddNoteDialog();
@@ -252,10 +253,13 @@ public class AddNoteDialog extends DialogFragment
     if (toolbar.getMenu() != null) {
       MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
       MenuItem shareItem = toolbar.getMenu().findItem(R.id.share_note);
+      MenuItem deleteItem = toolbar.getMenu().findItem(R.id.delete_note);
       saveItem.setEnabled(false);
       shareItem.setEnabled(false);
+      deleteItem.setEnabled(false);
       saveItem.getIcon().setAlpha(130);
       shareItem.getIcon().setAlpha(130);
+      deleteItem.getIcon().setAlpha(130);
     } else {
       Log.d(TAG, "Toolbar without inflated menu");
     }
@@ -266,6 +270,16 @@ public class AddNoteDialog extends DialogFragment
       MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
       saveItem.setEnabled(true);
       saveItem.getIcon().setAlpha(255);
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu");
+    }
+  }
+
+  private void enableDeleteNoteMenuItem() {
+    if (toolbar.getMenu() != null) {
+      MenuItem deleteItem = toolbar.getMenu().findItem(R.id.delete_note);
+      deleteItem.setEnabled(true);
+      deleteItem.getIcon().setAlpha(255);
     } else {
       Log.d(TAG, "Toolbar without inflated menu");
     }
@@ -337,6 +351,7 @@ public class AddNoteDialog extends DialogFragment
           fileOutputStream.close();
           showToast(R.string.note_save_successful, Toast.LENGTH_SHORT);
           noteEdited = false; // As no unsaved changes remain
+          enableDeleteNoteMenuItem();
         } catch (IOException e) {
           e.printStackTrace();
           showToast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG);
@@ -347,6 +362,19 @@ public class AddNoteDialog extends DialogFragment
       }
     } else {
       showToast(R.string.note_save_error_storage_not_writable, Toast.LENGTH_LONG);
+    }
+  }
+
+  private void deleteNote() {
+    File notesFolder = new File(zimNotesDirectory);
+    File noteFile = new File(notesFolder.getAbsolutePath(), articleNotefileName + ".txt");
+    boolean noteDeleted = noteFile.delete();
+    if (noteDeleted) {
+      addNoteEditText.getText().clear();
+      disableMenuItems();
+      showToast(R.string.note_delete_successful, Toast.LENGTH_LONG);
+    } else {
+      showToast(R.string.note_delete_unsuccessful, Toast.LENGTH_LONG);
     }
   }
 
@@ -376,8 +404,9 @@ public class AddNoteDialog extends DialogFragment
       }
 
       addNoteEditText.setText(contents.toString()); // Display the note content
-
+      addNoteEditText.setSelection(addNoteEditText.getText().length() - 1);
       enableShareNoteMenuItem(); // As note content exists which can be shared
+      enableDeleteNoteMenuItem();
     }
 
     // No action in case the note file for the currently open article doesn't exist
@@ -431,20 +460,12 @@ public class AddNoteDialog extends DialogFragment
     Toast.makeText(getActivity(), stringResource, duration).show();
   }
 
-  // Methods from ConfirmationAlertDialogFragment.UserClickListener interface
-  @Override
-  public void onPositiveClick() {
-    dismissAddNoteDialog();
-  }
-
-  @Override
-  public void onNegativeClick() {
-    // Do nothing
-  }
-
   private void dismissAddNoteDialog() {
     Dialog dialog = getDialog();
-    dialog.dismiss();
+    if (dialog != null) {
+      dialog.dismiss();
+    }
+    closeKeyboard();
   }
 
   @Override

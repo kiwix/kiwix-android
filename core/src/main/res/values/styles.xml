@@ -39,6 +39,7 @@
 
   <style name="Widget.KiwixTheme.Chip.Choice.Static" parent="Widget.MaterialComponents.Chip.Choice">
     <item name="android:clickable">false</item>
+    <item name="android:textAlignment" tools:ignore="NewApi">center</item>
   </style>
 
   <style name="list_item_title" parent="TextAppearance.KiwixTheme.Subtitle1" />
@@ -53,6 +54,10 @@
     <item name="android:switchPadding">@dimen/switch_padding</item>
     <item name="android:textAppearance">@style/TextAppearance.KiwixTheme.Body2</item>
     <item name="theme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+  </style>
+
+  <style name="Widget.KiwixTheme.CardView" parent="Widget.MaterialComponents.CardView">
+    <item name="cardBackgroundColor">@color/card_view_background</item>
   </style>
 
 </resources>

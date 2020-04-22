@@ -32,7 +32,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.os.ConfigurationCompat
 import org.kiwix.kiwixmobile.core.extensions.locale
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.text.Collator
 import java.util.Locale

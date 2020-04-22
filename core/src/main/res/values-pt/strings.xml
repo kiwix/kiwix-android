@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Athena in Wonderland
 * Fitoschido
 * Freeedusoft
@@ -34,11 +35,8 @@
   <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: o carregamento do artigo falhou (URL: %1$s).</string>
   <string name="pref_display_title">Mostrar</string>
-  <string name="pref_zoom_sub_title">Aproximação</string>
-  <string name="pref_zoom_dialog">Nível de aproximação</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
-  <string name="pref_zoom_enable">Controlos de Zoom</string>
   <string name="pref_night_mode">Modo nocturno</string>
   <string name="pref_night_mode_summary">Mostrar artigos com as cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
@@ -57,8 +55,8 @@
   <string name="delete_recent_search_item">Apagar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpar o histórico</string>
   <string name="pref_clear_all_history_summary">Limpar as pesquisas recentes e o histórico de separadores</string>
-  <string name="all_history_cleared_toast">Todo o historial foi apagado</string>
-  <string name="clear_all_history_dialog_title">Apagar todo o historial</string>
+  <string name="all_history_cleared">Todo o historial foi apagado</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Apagar todo o historial</string>
   <string name="delete">Apagar</string>
   <string name="delete_specific_search_toast">Pesquisa recente removida</string>
   <string name="hint_contents_drawer_message">Pode passar o dedo para a esquerda para ver o conteúdo deste artigo</string>
@@ -85,7 +83,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_specific_zim_toast">Ficheiro apagado</string>
+  <string name="delete_zims_toast">Ficheiro apagado</string>
   <string name="no_files_here">Não há ficheiros aqui</string>
   <string name="download_no_space">Espaço insuficiente para o download deste ficheiro.</string>
   <string name="space_available">Espaço disponível:</string>
@@ -129,7 +127,7 @@
   <string name="time_left">esquerda</string>
   <string name="pref_external_link_popup_title">Avisar quando introduzir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
-  <string name="external_link_popup_dialog_title">Hiperligação externa de entrada</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Hiperligação externa de entrada</string>
   <string name="external_link_popup_dialog_message">Está a introduzir uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>

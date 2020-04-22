@@ -25,7 +25,7 @@
   <string name="go_to_wifi_settings_label">WIFI პარამეტრეფშა გინულა</string>
   <string name="server_failed_message">სერვერქ ვაჩქართინესო. ქორთხინთ, ჩართით ინტერნეტი</string>
   <string name="server_failed_toast_message">სერვერქ ვეჩირთინუ.</string>
-  <string name="server_started__successfully_toast_message">ჩერვერქ ჩერთუ.</string>
+  <string name="server_started_successfully_toast_message">ჩერვერქ ჩერთუ.</string>
   <string name="hotspot_details_message">გიმე მოჩამილი რე თქვანი აბანური ინტერნეტ-მეჭირინაფაშ ჭურჭულიშ გეშა ინფორმაცია. \nSSID : %1$s \nPass : %2$s</string>
   <string name="hotspot_dialog_title">ჩართით თქვანი WIFI მეჭირინაფაშ ჭურჭული</string>
   <string name="hotspot_dialog_neutral_button">ქო, ჩართული მაფუ</string>
@@ -33,11 +33,8 @@
   <string name="error_file_invalid">ჩილათა: გიშაგორილი ფაილი ვა რე თინი ZIM-ფაილი.</string>
   <string name="error_article_url_not_found">ჩილათა: სტატიაშ (Url: %1$s) გიმოხარგუაქ ვემიხუჯინუ.</string>
   <string name="pref_display_title">ეკრანი</string>
-  <string name="pref_zoom_sub_title">მასშტაბი</string>
-  <string name="pref_zoom_dialog">მასშტაბირაფაშ დონე</string>
   <string name="pref_info_title">ინფორმაცია</string>
   <string name="pref_info_version">ვერსია</string>
-  <string name="pref_zoom_enable">მასშტაბირაფაშ კონტროლი</string>
   <string name="pref_night_mode">სერიშ რეჟიმი</string>
   <string name="pref_night_mode_summary">სტატიაშ კინნარაგადა ფერეფით ძირაფა</string>
   <string name="pref_back_to_top">ჟილე დორთა</string>
@@ -56,8 +53,8 @@
   <string name="delete_recent_search_item">ლასუნთო თე ელემენტის?</string>
   <string name="pref_clear_all_history_title">ისტორიაშ ლასუა</string>
   <string name="pref_clear_all_history_summary">ასერდეიანი გორუაშ მოთხირეფიშ დო აშნაკიდეფიშ ისტორიაშ ლასუა</string>
-  <string name="all_history_cleared_toast">არძა ისტორიაქ დილასუ</string>
-  <string name="clear_all_history_dialog_title">არძა ისტორიაშ ლასუა</string>
+  <string name="all_history_cleared">არძა ისტორიაქ დილასუ</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">არძა ისტორიაშ ლასუა</string>
   <string name="share">გობჟინაფა</string>
   <string name="delete">ლასუა</string>
   <string name="delete_specific_search_toast">ასერდეიანი გორუაქ დილასუ</string>
@@ -84,7 +81,7 @@
   <string name="remote_zims">ონლაინ</string>
   <string name="library">ბიბლიოთეკა</string>
   <string name="delete_zim_body">დობლასათო %s?</string>
-  <string name="delete_specific_zim_toast">ფაილქ დილასუ</string>
+  <string name="delete_zims_toast">ფაილქ დილასუ</string>
   <string name="no_files_here">ფაილეფი ვა რე</string>
   <string name="download_no_space">თე ფაილიშ გიმახარგალო შვენა ვაბაღუ.</string>
   <string name="space_available">ხემიოჭირინაფუ შვენა:</string>
@@ -119,7 +116,7 @@
   <string name="time_left">დოსქიდუ</string>
   <string name="time_today">ამდღა</string>
   <string name="time_yesterday">გოღა</string>
-  <string name="external_link_popup_dialog_title">გალენური რცხუშ მიშაჸონაფა</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">გალენური რცხუშ მიშაჸონაფა</string>
   <string name="do_not_ask_anymore">ანწი ვაბკითხა</string>
   <string name="your_languages">გიშაგორილი ნინეფი:</string>
   <string name="other_languages">შხვა ნინეფი:</string>

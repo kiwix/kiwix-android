@@ -8,8 +8,10 @@
 
   <ImageView
     android:id="@+id/airplane"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="0dp"
+    app:layout_constraintHeight_max="121dp"
+    android:scaleType="fitCenter"
     android:alpha="1.0"
     android:contentDescription="@string/save_books_offline"
     android:visibility="invisible"

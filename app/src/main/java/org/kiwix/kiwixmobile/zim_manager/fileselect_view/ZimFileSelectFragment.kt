@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +40,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.utils.Constants.REQUEST_STORAGE_PERMISSION
+import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
@@ -113,6 +111,12 @@ class ZimFileSelectFragment : BaseFragment() {
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
+
+    disposable.add(zimManageViewModel.libraryTabIsVisible.subscribe { finishActionMode() })
+  }
+
+  private fun finishActionMode() {
+    actionMode?.finish()
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
@@ -157,8 +161,7 @@ class ZimFileSelectFragment : BaseFragment() {
     if (ContextCompat.checkSelfPermission(
         activity!!,
         Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED &&
-      VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN
+      ) != PackageManager.PERMISSION_GRANTED
     ) {
       context.toast(R.string.request_storage)
       requestPermissions(

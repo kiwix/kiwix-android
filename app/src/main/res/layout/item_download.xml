@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="@dimen/card_margin"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+<LinearLayout
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:minHeight="?android:attr/listPreferredItemHeight"
   android:orientation="horizontal"
-  android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingStart="@dimen/activity_horizontal_margin"
   android:paddingTop="@dimen/activity_vertical_margin"
-  android:paddingRight="@dimen/activity_horizontal_margin">
+  android:paddingEnd="@dimen/activity_horizontal_margin">
 
   <ImageView
     android:id="@+id/libraryDownloadFavicon"
     android:layout_width="@dimen/favicon_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginRight="@dimen/favicon_margin_right"
+    android:layout_marginEnd="@dimen/favicon_margin_right"
     android:adjustViewBounds="true"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:scaleType="fitCenter"
@@ -42,6 +48,7 @@
       style="@style/list_item_body"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:textColor="@color/text_secondary"
       android:layout_gravity="start"
       tools:text="Description" />
 
@@ -56,13 +63,15 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="horizontal">
+      android:orientation="horizontal"
+      android:layout_marginBottom="10dp">
 
       <TextView
         android:id="@+id/downloadState"
         style="@style/list_item_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/text_tertiary"
         android:layout_weight="1"
         tools:text="In Progress" />
 
@@ -71,6 +80,7 @@
         style="@style/list_item_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/text_tertiary"
         tools:text="1min 10secs" />
     </LinearLayout>
   </LinearLayout>
@@ -85,11 +95,12 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
-      android:layout_marginLeft="@dimen/stop_horizontal_margin"
-      android:layout_marginRight="@dimen/stop_horizontal_margin"
+      android:layout_marginStart="@dimen/stop_horizontal_margin"
+      android:layout_marginEnd="@dimen/stop_horizontal_margin"
       android:layout_weight="0.5"
       android:minWidth="@dimen/stop_min_width"
       android:minHeight="@dimen/stop_min_height"
       app:srcCompat="@drawable/ic_stop_24dp" />
   </LinearLayout>
 </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

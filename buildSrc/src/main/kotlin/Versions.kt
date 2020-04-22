@@ -15,7 +15,7 @@ object Versions {
 
   const val com_squareup_retrofit2: String = "2.5.0" // available: "2.7.1"
 
-  const val org_jetbrains_kotlin: String = "1.3.61"
+  const val org_jetbrains_kotlin: String = "1.3.70"
 
   const val com_google_dagger: String = "2.26"
 
@@ -55,7 +55,7 @@ object Versions {
 
   const val collection_ktx: String = "1.1.0"
 
-  const val jacoco_android: String = "0.1.4"
+  const val jacoco_android: String = "0.2"
 
   const val junit_jupiter: String = "5.4.2" // available: "5.6.0"
 
@@ -87,11 +87,9 @@ object Versions {
 
   const val rxandroid: String = "2.1.0" // available: "2.1.1"
 
-  const val cardview: String = "1.0.0"
-
   const val core_ktx: String = "1.2.0"
 
-  const val kiwixlib: String = "9.0.1-1"
+  const val kiwixlib: String = "9.1.2"
 
   const val material: String = "1.1.0-beta02" // available: "1.1.0"
 

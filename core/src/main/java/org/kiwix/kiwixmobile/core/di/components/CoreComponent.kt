@@ -26,7 +26,6 @@ import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -46,15 +45,11 @@ import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.history.HistoryModule
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.reader.ZimContentProvider
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.SearchActivity
-import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -105,16 +100,11 @@ interface CoreComponent {
   fun notificationManager(): NotificationManager
 
   fun inject(application: CoreApp)
-  fun inject(zimContentProvider: ZimContentProvider)
   fun inject(kiwixWebView: KiwixWebView)
-  fun inject(prefsFragment: CorePrefsFragment)
   fun inject(storageSelectDialog: StorageSelectDialog)
-  fun inject(addNoteDialog: AddNoteDialog)
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchActivity: SearchActivity)
   fun inject(helpActivity: HelpActivity)
-  fun inject(historyActivity: HistoryActivity)
-  fun inject(bookmarksActivity: BookmarksActivity)
   fun inject(settingsActivity: CoreSettingsActivity)
 }

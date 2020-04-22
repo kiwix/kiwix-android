@@ -16,7 +16,7 @@
   <string name="menu_read_aloud">Leghe a boghe arta</string>
   <string name="menu_read_aloud_stop">Firma sa leghidura a boghe arta</string>
   <string name="menu_support_kiwix">Suporta Kiwix</string>
-  <string name="menu_host_books">Acasàgia libros</string>
+  <string name="menu_host_books">Istràngia libros</string>
   <string name="save_media">Sarba su mèdia</string>
   <string name="save_media_error">B\'est istadu un\'errore durante su tentativu de sarvamentu de su mèdia!</string>
   <string name="save_media_saved">Mèdia sarvadu comente %s in Android/media/org.kiwix…/</string>
@@ -32,10 +32,10 @@
   <string name="no_books_selected_toast_message">In antis ischerta libros</string>
   <string name="server_failed_message">Aviamentu de su servidore fallidu. Pro praghere allughe s\'hotspot tuo</string>
   <string name="server_failed_toast_message">Aviamentu de su servidore fallidu.</string>
-  <string name="server_started__successfully_toast_message">Servidore aviadu chene problemas.</string>
+  <string name="server_started_successfully_toast_message">Servidore aviadu chene problemas.</string>
   <string name="hotspot_turned_on">Hotspot allutu</string>
   <string name="hotspot_details_message">Sos chi sighint sunt sos detàllios de s\'hotspot locale tuo. \nSSID : %1$s \nCrae : %2$s</string>
-  <string name="server_textview_default_message">Ischerta sos documentos chi cheres acasagiare in su servidore</string>
+  <string name="server_textview_default_message">Ischerta sos documentos chi cheres istrangiare in su servidore</string>
   <string name="progress_dialog_starting_server">Aviende su servidore</string>
   <string name="hotspot_dialog_title">Allughe s\'hotspot WIFI tuo</string>
   <string name="hotspot_dialog_message">Pro permìtere a custa funtzionalidade de funtzionare depes, in antis, allùghere manualmente s\'hotspot WIFI tuo.</string>
@@ -49,11 +49,8 @@
   <string name="error_file_invalid">Errore: su documentu ischertadu no est unu documentu ZIM vàlidu.</string>
   <string name="error_article_url_not_found">Errore: carrigamentu de s\'artìculu (Url: %1$s) non resèssidu.</string>
   <string name="pref_display_title">Ischermu</string>
-  <string name="pref_zoom_sub_title">Ismanniamentu</string>
-  <string name="pref_zoom_dialog">Livellu de ismanniamentu</string>
   <string name="pref_info_title">Informatziones</string>
   <string name="pref_info_version">Versione</string>
-  <string name="pref_zoom_enable">Gestione de s\'ismanniamentu</string>
   <string name="pref_night_mode">Modalidade pro sa note</string>
   <string name="pref_night_mode_summary">Ammustra sos artìculos cun colores furriados</string>
   <string name="pref_back_to_top">Torra a su cumintzu</string>
@@ -72,8 +69,10 @@
   <string name="delete_recent_search_item">Iscantzellare custu elementu?</string>
   <string name="pref_clear_all_history_title">Iscantzella sa cronologia</string>
   <string name="pref_clear_all_history_summary">Iscantzella sa cronologia de sas chircas e de sas ischedas reghentes</string>
-  <string name="all_history_cleared_toast">Cronologia iscantzellada de su totu</string>
-  <string name="clear_all_history_dialog_title">Iscantzella totu sa cronologia</string>
+  <string name="all_history_cleared">Cronologia iscantzellada de su totu</string>
+  <string name="pref_clear_all_bookmarks_title">Isbòida sos sinnalibros</string>
+  <string name="all_bookmarks_cleared">As iscantzelladu totu sos sinnalibros</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Iscantzella totu sa cronologia</string>
   <string name="share">Cumpartzi</string>
   <string name="selected_file_cab_app_chooser_title">Cumpartzi documentos ZIM cun:</string>
   <string name="delete">Iscantzella</string>
@@ -101,9 +100,9 @@
   <string name="speech_not_supported">Làstima! Su dispositivu tuo non suportat sa sintetizatzione vocale</string>
   <string name="local_zims">Dispositivu</string>
   <string name="remote_zims">In lìnia</string>
-  <string name="library">Libreria</string>
+  <string name="library">Biblioteca</string>
   <string name="delete_zim_body">Iscantzellare %s?</string>
-  <string name="delete_specific_zim_toast">Documentu iscantzelladu</string>
+  <string name="delete_zims_toast">Documentu iscantzelladu</string>
   <string name="no_files_here">Perunu documentu inoghe</string>
   <string name="download_no_space">Sa memòria non bastat pro iscarrigare custu documentu.</string>
   <string name="space_available">Ispàtziu disponìbile:</string>
@@ -149,7 +148,7 @@
   <string name="time_yesterday">Eris</string>
   <string name="pref_external_link_popup_title">Avisa cando ses aberende unu ligàmene esternu</string>
   <string name="pref_external_link_popup_summary">Ammustra ventaneddas pro t\'avisare de costos agiuntivos o ligàmenes chi non funtzionant chene una connessione a ìnternet.</string>
-  <string name="external_link_popup_dialog_title">Aberende unu ligàmene esternu</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Aberende unu ligàmene esternu</string>
   <string name="external_link_popup_dialog_message">Ses aberende unu ligàmene esternu. Custu diat pòdere causare costos in prus pro s\'impreu de trasferimentu de datos o diant pòdere non funtzionare cando non ses connessu a ìnternet. Cheres sighire?</string>
   <string name="do_not_ask_anymore">Non mi lu preguntes prus</string>
   <string name="your_languages">Limbas ischertadas:</string>
@@ -186,7 +185,7 @@
   <string name="history_from_current_book">Pòmpia sa cronologia de totu sos libros</string>
   <string name="search_history">Chirca in sa cronologia</string>
   <string name="selected_items">%1$d ischertadu(os)</string>
-  <string name="bookmarks_from_current_book" fuzzy="true">Sinnalibros dae su libru atuale</string>
+  <string name="bookmarks_from_current_book">Pòmpia sos sinnalibros dae totu sos libros</string>
   <string name="search_bookmarks">Chirca sinnalibros</string>
   <string name="switch_tabs">Muda ischedas</string>
   <string name="close_all_tabs">Serra totu sas ischedas</string>
@@ -248,4 +247,5 @@
   <string name="no_results">Perunu resurtadu</string>
   <string name="no_bookmarks">Perunu sinnalibru!</string>
   <string name="no_history">Peruna cronologia</string>
+  <string name="device_default">Valore predefinidu de su dispositivu</string>
 </resources>

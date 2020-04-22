@@ -5,6 +5,7 @@
 * Guycn2
 * IKhitron
 * Steeve815
+* Tuvalevsku
 * YaronSh
 * יאיר מן
 -->
@@ -37,7 +38,8 @@
   <string name="no_books_selected_toast_message">נא לבחור ספרים קודם</string>
   <string name="server_failed_message">לא היה אפשר להתחיל את השרת. נא להפעיל את נקודת החיבור שלך</string>
   <string name="server_failed_toast_message">לא היה אפשר להריץ את השרת.</string>
-  <string name="server_started__successfully_toast_message">השרת הופעל בהצלחה.</string>
+  <string name="server_started_successfully_toast_message">השרת הופעל בהצלחה.</string>
+  <string name="server_stopped_successfully_toast_message">השרת נעצר בהצלחה.</string>
   <string name="hotspot_turned_on">נקודת החיבור הופעלה</string>
   <string name="hotspot_details_message">להלן הפרטים של נקודת החיבור המקומית שלך.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">נא לבחור את הקבצים שברצונך לארח בשרת</string>
@@ -54,11 +56,8 @@
   <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין.</string>
   <string name="error_article_url_not_found">שגיאה: טעינת הערך נכשלה (כתובת: %1$s).</string>
   <string name="pref_display_title">תצוגה</string>
-  <string name="pref_zoom_sub_title">תקריב</string>
-  <string name="pref_zoom_dialog">רמת תקריב</string>
   <string name="pref_info_title">מידע</string>
   <string name="pref_info_version">גרסה</string>
-  <string name="pref_zoom_enable">בקרת תקריב</string>
   <string name="pref_night_mode">מצב לילה</string>
   <string name="pref_night_mode_summary">הצגת ערכים עם צבעים הפוכים</string>
   <string name="pref_back_to_top">חזרה למעלה</string>
@@ -77,8 +76,8 @@
   <string name="delete_recent_search_item">למחוק את הפריט הזה?</string>
   <string name="pref_clear_all_history_title">ניקוי ההיסטוריה</string>
   <string name="pref_clear_all_history_summary">ניקוי מילות חיפוש קודמות והיסטוריית כרטיסיות</string>
-  <string name="all_history_cleared_toast">כל ההיסטוריה נמחקה</string>
-  <string name="clear_all_history_dialog_title">מחיקת כל ההיסטוריה</string>
+  <string name="all_history_cleared">כל ההיסטוריה נמחקה</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">מחיקת כל ההיסטוריה</string>
   <string name="share">שיתוף</string>
   <string name="selected_file_cab_app_chooser_title">שיתוף קובצי ZIM עם:</string>
   <string name="delete">מחיקה</string>
@@ -108,7 +107,7 @@
   <string name="remote_zims">מקוון</string>
   <string name="library">ספרייה</string>
   <string name="delete_zim_body">למחוק את %s?</string>
-  <string name="delete_specific_zim_toast">הקובץ נמחק</string>
+  <string name="delete_zims_toast">הקובץ נמחק</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום כדי להוריד את הקובץ הזה.</string>
   <string name="space_available">נפח זמין:</string>
@@ -154,7 +153,7 @@
   <string name="time_yesterday">אתמול</string>
   <string name="pref_external_link_popup_title">תן אזהרה בעת כניסה לקישורים חיצוניים</string>
   <string name="pref_external_link_popup_summary">הצגת בועת אזהרה על תשלומים נוספים או כאשר אין אפשרות עבודה עם קישורים לא-מקוונים.</string>
-  <string name="external_link_popup_dialog_title">העברה לקישור חיצוני</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">העברה לקישור חיצוני</string>
   <string name="external_link_popup_dialog_message">פעולה זו מובילה לקישור חיצוני. כתוצאה מכך עשויות לחול עליך עלויות בגין העברת נתונים או שהקישור לא יעבוד עקב העדר חיבור. להמשיך?</string>
   <string name="do_not_ask_anymore">לא לשאול שוב</string>
   <string name="your_languages">שפות נבחרות:</string>
@@ -252,4 +251,6 @@
   <string name="go_to_settings">לך להגדרות</string>
   <string name="no_results">אין תוצאות</string>
   <string name="no_bookmarks">אין סימניות</string>
+  <string name="delete_history">למחוק היסטוריה?</string>
+  <string name="delete_bookmarks">למחוק מועדפים?</string>
 </resources>

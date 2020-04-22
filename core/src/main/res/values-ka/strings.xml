@@ -21,10 +21,8 @@
   <string name="error_file_invalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი.</string>
   <string name="error_article_url_not_found">შეცდომა: სტატია (Url: %1$s) ვერ ჩაიტვირთა.</string>
   <string name="pref_display_title">ჩვენება</string>
-  <string name="pref_zoom_dialog">მასშტაბირების დონე</string>
   <string name="pref_info_title">ინფორმაცია</string>
   <string name="pref_info_version">ვერსია</string>
-  <string name="pref_zoom_enable">მასშტაბირების კონტროლი</string>
   <string name="pref_night_mode">ღამის რეჟიმი</string>
   <string name="pref_night_mode_summary">სტატიის შებრუნებული ფერებით ჩვენება</string>
   <string name="pref_back_to_top">თავში დაბრუნება</string>

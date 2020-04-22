@@ -16,6 +16,9 @@
     <item name="colorSecondary">?colorPrimary</item>
     <item name="colorSecondaryVariant">?colorPrimary</item>
 
+    <!--Material snackbar attributes-->
+    <item name="maxActionInlineWidth">128dp</item>
+
     <!--colorBackground appears behind scrollable content and is used for the default window-->
     <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
     <!--and menus. colorError is used to indicate an error state for components such as-->
@@ -59,6 +62,7 @@
     <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
     <item name="bottomSheetDialogTheme">@style/ThemeOverlay.KiwixTheme.BottomSheetDialog</item>
     <item name="navigationViewStyle">@style/Widget.KiwixTheme.NavigationView</item>
+    <item name="materialCardViewStyle">@style/Widget.KiwixTheme.CardView</item>
     <item name="toolbarStyle">@style/Widget.KiwixTheme.Toolbar</item>
     <item name="tabStyle">@style/Widget.KiwixTheme.TabLayout</item>
     <item name="appBarLayoutStyle">@style/Widget.KiwixTheme.AppBar</item>

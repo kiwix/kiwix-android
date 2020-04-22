@@ -21,10 +21,8 @@
   <string name="error_file_invalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>
   <string name="error_article_url_not_found">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
   <string name="pref_display_title">Paparan</string>
-  <string name="pref_zoom_dialog">Takat zum</string>
   <string name="pref_info_title">Maklumat</string>
   <string name="pref_info_version">Versi</string>
-  <string name="pref_zoom_enable">Kawalan zum</string>
   <string name="pref_night_mode">Mod malam</string>
   <string name="pref_night_mode_summary">Paparkan rencana yang diterbalikkan warnanya</string>
   <string name="pref_back_to_top">Kembali ke Atas</string>

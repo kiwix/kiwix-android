@@ -263,7 +263,7 @@ object Libs {
    */
   const val collection_ktx: String = "androidx.collection:collection-ktx:" + Versions.collection_ktx
 
-  const val jacoco_android: String = "com.dicedmelon.gradle:jacoco-android:" +
+  const val jacoco_android: String = "com.hiya:jacoco-android:" +
       Versions.jacoco_android
 
   /**
@@ -335,11 +335,6 @@ object Libs {
    * https://github.com/ReactiveX/RxAndroid
    */
   const val rxandroid: String = "io.reactivex.rxjava2:rxandroid:" + Versions.rxandroid
-
-  /**
-   * http://developer.android.com/tools/extras/support-library.html
-   */
-  const val cardview: String = "androidx.cardview:cardview:" + Versions.cardview
 
   /**
    * https://developer.android.com/jetpack/androidx

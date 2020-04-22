@@ -21,25 +21,25 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.Constants.EXTRA_ZIM_FILE
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_ARTICLES
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_FILE
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_POSITIONS
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_CURRENT_TAB
-import org.kiwix.kiwixmobile.core.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE
+import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -73,7 +73,7 @@ class KiwixMainActivity : CoreMainActivity() {
       val filePath = FileUtils.getLocalFilePathByUri(applicationContext, data)
 
       if (filePath == null || !File(filePath).exists()) {
-        toast(R.string.error_file_not_found)
+        currentWebView.snack(R.string.error_file_not_found)
         return
       }
 
@@ -141,7 +141,7 @@ class KiwixMainActivity : CoreMainActivity() {
     if (zimFile != null) {
       openZimFile(File(zimFile))
     } else {
-      Toast.makeText(this, "Unable to open zim file", Toast.LENGTH_SHORT).show()
+      currentWebView.snack(R.string.zim_not_opened)
     }
     try {
       val urls = JSONArray(zimArticles)

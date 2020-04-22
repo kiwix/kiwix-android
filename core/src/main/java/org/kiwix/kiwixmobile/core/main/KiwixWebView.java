@@ -21,8 +21,6 @@ package org.kiwix.kiwixmobile.core.main;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -42,15 +40,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.inject.Inject;
-import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-
-import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
 
 @SuppressLint("ViewConstructor")
 public class KiwixWebView extends VideoEnabledWebView {
@@ -66,7 +61,6 @@ public class KiwixWebView extends VideoEnabledWebView {
   @Inject
   ZimReaderContainer zimReaderContainer;
   private final WebViewCallback callback;
-  private final Paint invertedPaint = createInvertedPaint();
 
   @SuppressLint("SetJavaScriptEnabled")
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
@@ -83,10 +77,13 @@ public class KiwixWebView extends VideoEnabledWebView {
     settings.setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
     settings.setDomStorageEnabled(true);
     settings.setJavaScriptEnabled(true);
+    settings.setLoadWithOverviewMode(true);
+    settings.setUseWideViewPort(true);
+    setInitialScale(100);
+    settings.setBuiltInZoomControls(true);
+    settings.setDisplayZoomControls(false);
     clearCache(true);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      settings.setAllowUniversalAccessFromFileURLs(true);
-    }
+    settings.setAllowUniversalAccessFromFileURLs(true);
     setWebViewClient(webViewClient);
     final KiwixWebChromeClient client =
       new KiwixWebChromeClient(callback, nonVideoView, videoView, this);
@@ -97,38 +94,6 @@ public class KiwixWebView extends VideoEnabledWebView {
 
   private void setWindowVisibility(int systemUiVisibility) {
     ((Activity) getContext()).getWindow().getDecorView().setSystemUiVisibility(systemUiVisibility);
-  }
-
-  public void loadPrefs() {
-    disableZoomControls();
-    boolean zoomEnabled = sharedPreferenceUtil.getPrefZoomEnabled();
-
-    if (zoomEnabled) {
-      int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
-      setInitialScale(zoomScale);
-    } else {
-      setInitialScale(0);
-    }
-  }
-
-  public void deactivateNightMode() {
-    setLayerType(LAYER_TYPE_NONE, null);
-    videoView.setLayerType(LAYER_TYPE_NONE, null);
-  }
-
-  public void activateNightMode() {
-    if (getUrl() != null && getUrl().equals(HOME_URL)) {
-      return;
-    }
-    setLayerType(LAYER_TYPE_HARDWARE, invertedPaint);
-    videoView.setLayerType(LAYER_TYPE_HARDWARE, invertedPaint);
-  }
-
-  @NotNull private Paint createInvertedPaint() {
-    Paint paint = new Paint();
-    ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
-    paint.setColorFilter(filterInvert);
-    return paint;
   }
 
   @Override
@@ -173,11 +138,6 @@ public class KiwixWebView extends VideoEnabledWebView {
     callback.webViewPageChanged(page, pages);
   }
 
-  public void disableZoomControls() {
-    getSettings().setBuiltInZoomControls(true);
-    getSettings().setDisplayZoomControls(false);
-  }
-
   static class SaveHandler extends Handler {
     private String getDecodedFileName(String url, String src) {
       String fileName = "";
@@ -191,7 +151,7 @@ public class KiwixWebView extends VideoEnabledWebView {
       return fileName.substring(fileName.indexOf("%3A") + 1);
     }
 
-    @Override
+    @SuppressLint("StringFormatInvalid") @Override
     public void handleMessage(Message msg) {
       String url = (String) msg.getData().get("url");
       String src = (String) msg.getData().get("src");

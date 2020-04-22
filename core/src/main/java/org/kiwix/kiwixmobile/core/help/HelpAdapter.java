@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import java.util.HashMap;
+import java.util.Map;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 
@@ -40,7 +40,7 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   private final String[] titles;
   private final String[] descriptions;
 
-  HelpAdapter(HashMap<String, String> titleDescriptionMap) {
+  HelpAdapter(Map<String, String> titleDescriptionMap) {
     this.titles = titleDescriptionMap.keySet().toArray(new String[0]);
     this.descriptions = titleDescriptionMap.values().toArray(new String[0]);
   }
@@ -82,8 +82,8 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 0, 180).start();
         expand(description);
       } else {
-        collapse(description);
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 180, 360).start();
+        collapse(description);
       }
     }
   }
