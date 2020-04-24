@@ -165,7 +165,6 @@ internal class NewBookmarksDaoTest {
 
   @Test
   fun `get current zim bookmarks url without zimFileReader`() {
-    val zimFileReader: ZimFileReader = mockk()
     val queryBuilder: QueryBuilder<BookmarkEntity> = mockk()
     every { box.query() } returns queryBuilder
     every {
@@ -216,7 +215,6 @@ internal class NewBookmarksDaoTest {
 
   @Test
   fun `bookmark urls for current workbook without zimFileReader`() {
-    val zimFileReader: ZimFileReader = mockk()
     val queryBuilder: QueryBuilder<BookmarkEntity> = mockk()
     every { box.query() } returns queryBuilder
     every {
