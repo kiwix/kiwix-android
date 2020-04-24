@@ -27,3 +27,7 @@ jobs:
 
       - name: Build all configurations
         run: ./gradlew assemble
+
+      - name: Upload screenshot when build fails
+        if: failure()
+        run: adb shell screencap -p /sdcard/screencap.png && adb pull /sdcard/screencap.png && find screencap.png
