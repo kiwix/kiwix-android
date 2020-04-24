@@ -31,7 +31,7 @@ jobs:
           arch: x86_64
           script: bash contrib/instrumentation.sh
           if: failure()
-            run: adb shell screencap -p /sdcard/screencap.png && adb pull /sdcard/screencap.png && find screencap.png
+          run: adb shell screencap -p /sdcard/screencap.png && adb pull /sdcard/screencap.png && find screencap.png
 
       - name: create unit coverage
         run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
