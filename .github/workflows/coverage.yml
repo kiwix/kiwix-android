@@ -30,8 +30,13 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           script: bash contrib/instrumentation.sh
-          if: failure()
           run: adb shell screencap -p /sdcard/screencap.png && adb pull /sdcard/screencap.png && find screencap.png
+
+      - name: Upload screenshot result
+        uses: actions/upload-artifact@v1
+        with:
+          name: screencap
+          path: screencap.png
 
       - name: create unit coverage
         run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
