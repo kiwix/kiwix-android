@@ -21,6 +21,7 @@ import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.NONE
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
+import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
@@ -188,3 +189,39 @@ fun bookmarkEntity(
   favicon: String? = null
 ) =
   BookmarkEntity(id, zimId, zimName, zimFilePath, bookmarkUrl, bookmarkTitle, favicon)
+
+fun bookOnDiskEntity(
+  id: Long = 0,
+  file: File = File(""),
+  bookId: String = "bookId",
+  title: String = "title",
+  description: String? = "description",
+  language: String = "language",
+  creator: String = "creator",
+  publisher: String = "publisher",
+  date: String = "date",
+  url: String? = "url",
+  articleCount: String? = "articleCount",
+  mediaCount: String? = "mediaCount",
+  size: String = "size",
+  name: String? = "name",
+  favIcon: String = "favicon",
+  tags: String? = "tags"
+) = BookOnDiskEntity(
+  id,
+  file,
+  bookId,
+  title,
+  description,
+  language,
+  creator,
+  publisher,
+  date,
+  url,
+  articleCount,
+  mediaCount,
+  size,
+  name,
+  favIcon,
+  tags
+)
