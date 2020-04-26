@@ -86,4 +86,44 @@ internal class ZimSearchResultGeneratorTest {
       .isEqualTo(listOf(ZimSearchResultListItem(validTitle)))
     verify { zimReaderContainer.searchSuggestions(searchTerm, 200) }
   }
+
+  @Test
+  internal fun `search term is moved to top of search results`() {
+    val searchTerm = "a"
+    every { sharedPreferenceUtil.prefFullTextSearch } returns false
+    every { zimReaderContainer.getNextSuggestion() } returnsMany listOf(
+      mockk<SearchSuggestion>().also { every { it.title } returns "android" },
+      mockk<SearchSuggestion>().also { every { it.title } returns "a" },
+      mockk<SearchSuggestion>().also { every { it.title } returns "abc" },
+      null
+    )
+    assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm))
+      .isEqualTo(
+        listOf(
+          ZimSearchResultListItem("a"),
+          ZimSearchResultListItem("android"),
+          ZimSearchResultListItem("abc")
+        )
+      )
+    verify { zimReaderContainer.searchSuggestions(searchTerm, 200) }
+  }
+
+  @Test
+  internal fun `invalid search term does not appear in results`() {
+    val searchTerm = "invalid"
+    every { sharedPreferenceUtil.prefFullTextSearch } returns false
+    every { zimReaderContainer.getNextSuggestion() } returnsMany listOf(
+      mockk<SearchSuggestion>().also { every { it.title } returns "invalid phrase" },
+      mockk<SearchSuggestion>().also { every { it.title } returns "invalid proverb" },
+      null
+    )
+    assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm))
+      .isEqualTo(
+        listOf(
+          ZimSearchResultListItem("invalid phrase"),
+          ZimSearchResultListItem("invalid proverb")
+        )
+      )
+    verify { zimReaderContainer.searchSuggestions(searchTerm, 200) }
+  }
 }

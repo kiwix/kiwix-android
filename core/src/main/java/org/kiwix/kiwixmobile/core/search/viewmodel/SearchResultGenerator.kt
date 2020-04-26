@@ -40,15 +40,16 @@ class ZimSearchResultGenerator @Inject constructor(
     if (sharedPreferenceUtil.prefFullTextSearch)
       zimReaderContainer.search(it, 200).run { fullTextResults() }
     else
-      zimReaderContainer.searchSuggestions(it, 200).run { suggestionResults() }
+      zimReaderContainer.searchSuggestions(it, 200).run { suggestionResults(it) }
 
   private fun fullTextResults() = generateSequence {
     zimReaderContainer.getNextResult()?.title?.let(::ZimSearchResultListItem)
   }.filter { it.value.isNotBlank() }
     .toList()
 
-  private fun suggestionResults() = generateSequence {
+  private fun suggestionResults(searchTerm: String) = generateSequence {
     zimReaderContainer.getNextSuggestion()?.let { ZimSearchResultListItem(it.title) }
   }.distinct()
+    .sortedByDescending { it.value == searchTerm }
     .toList()
 }
