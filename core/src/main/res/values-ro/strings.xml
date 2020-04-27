@@ -79,7 +79,7 @@
   <string name="library">Bibliotecă</string>
   <string name="delete_zims_toast">Filă ștearsă</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
-  <string name="download_no_space">Spațiu insuficient pentru a descarca această filă.</string>
+  <string name="download_no_space" fuzzy="true">Spațiu insuficient pentru a descarca această filă.</string>
   <string name="space_available">Spațiu disponibil:</string>
   <string name="zim_simple">Simplu</string>
   <string name="zim_no_pic">Fără imagini</string>
@@ -97,7 +97,7 @@
   <string name="help_11">Fișierele ZIM descărcate în aplicație sunt localizate în directorul extern de stocare într-un folder denumit Kiwix.</string>
   <string name="pref_storage">Stocare</string>
   <string name="pref_current_folder">Folder curent</string>
-  <string name="delete_zim_failed">Ne pare rău că nu am reușit să ștergem această filă. Ar trebui să folosiți un manager de fișier în loc.</string>
+  <string name="delete_zim_failed" fuzzy="true">Ne pare rău că nu am reușit să ștergem această filă. Ar trebui să folosiți un manager de fișier în loc.</string>
   <string name="tts_pause">pauză</string>
   <string name="tts_resume">rezumat</string>
   <string name="stop">stop</string>

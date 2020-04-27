@@ -111,10 +111,10 @@
   <string name="local_zims">Urządzenie</string>
   <string name="remote_zims">Dostępny</string>
   <string name="library">Biblioteka</string>
-  <string name="delete_zim_body">Usunąć %s?</string>
+  <string name="delete_zim_body" fuzzy="true">Usunąć %s?</string>
   <string name="delete_zims_toast">Plik został usunięty</string>
   <string name="no_files_here">Tu nie ma plików</string>
-  <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
+  <string name="download_no_space" fuzzy="true">Za mało miejsca, aby pobrać ten plik.</string>
   <string name="space_available">Dostępne miejsce:</string>
   <string name="zim_simple">Prosty</string>
   <string name="zim_no_pic">Brak obrazka</string>
@@ -132,7 +132,7 @@
   <string name="help_11">Pliki ZIM pobrane rzez aplikacje znajdują się w zewnętrznym katalogu dysku w folderze o nazwie Kiwix.</string>
   <string name="pref_storage">Magazyn</string>
   <string name="pref_current_folder">Bieżący folder</string>
-  <string name="delete_zim_failed">Niestety nie udało się usunąć tego pliku. Zamiast tego powinieneś spróbować użyć menedżera plików.</string>
+  <string name="delete_zim_failed" fuzzy="true">Niestety nie udało się usunąć tego pliku. Zamiast tego powinieneś spróbować użyć menedżera plików.</string>
   <string name="tts_pause">pauza</string>
   <string name="tts_resume">Podsumuj</string>
   <string name="stop">stop</string>

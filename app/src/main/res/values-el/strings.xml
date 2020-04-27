@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Geraki
+-->
+<resources>
+  <string name="cannot_open_file">Αποτυχία ανοίγματος αρχείου\nΠαρακαλούμε προσπαθήστε να βρείτε το αρχείο στην Ετικέτα Συσκευή της Βιβλιοθήκης σας</string>
+</resources>

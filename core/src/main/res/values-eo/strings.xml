@@ -83,7 +83,7 @@
   <string name="library">Biblioteko</string>
   <string name="delete_zims_toast">Forigis dosieron</string>
   <string name="no_files_here">Neniu dosiero ĉi tie</string>
-  <string name="download_no_space">Ne estas sufiĉa spaco por elŝuti ĉi tiun dosieron.</string>
+  <string name="download_no_space" fuzzy="true">Ne estas sufiĉa spaco por elŝuti ĉi tiun dosieron.</string>
   <string name="space_available">Havebla Spaco:</string>
   <string name="zim_simple">Simpla</string>
   <string name="zim_no_pic">Neniu Bildo</string>
@@ -101,7 +101,7 @@
   <string name="help_11">ZIM-dosieroj elŝutitaj per ĉi tiu aplikaĵo estas en la dosierujo nomita Kiwix en ekstera konservejo.</string>
   <string name="pref_storage">Konservejo</string>
   <string name="pref_current_folder">Aktuala Dosierujo</string>
-  <string name="delete_zim_failed">Domaĝe, ni ne povis forigi ĉi tiun dosieron. Vi reprovu per dosiermastrumilo.</string>
+  <string name="delete_zim_failed" fuzzy="true">Domaĝe, ni ne povis forigi ĉi tiun dosieron. Vi reprovu per dosiermastrumilo.</string>
   <string name="tts_pause">paŭzigi</string>
   <string name="tts_resume">daŭrigi</string>
   <string name="stop">haltigi</string>

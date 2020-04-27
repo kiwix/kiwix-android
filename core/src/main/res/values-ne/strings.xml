@@ -63,14 +63,14 @@
   <string name="library">पुस्तकालय</string>
   <string name="delete_zims_toast">फाइल मेटियो</string>
   <string name="no_files_here">यहाँ कुनै फाइलहरू छैनन्</string>
-  <string name="download_no_space">यो फाइल डाउनलोड गर्न पर्याप्त स्थान छैन।</string>
+  <string name="download_no_space" fuzzy="true">यो फाइल डाउनलोड गर्न पर्याप्त स्थान छैन।</string>
   <string name="zim_simple">साधारण</string>
   <string name="zim_no_pic">तस्विर छैन</string>
   <string name="zim_no_vid">भिडियो छैन</string>
   <string name="no_network_connection">नेटवर्क जडान छैन</string>
   <string name="pref_storage">भण्डारण</string>
   <string name="pref_current_folder">हालको फोल्डर</string>
-  <string name="delete_zim_failed">माफ गर्नुहोस् हामीले यो फाइल मेट्न सकेनौं। तपाईंले यसको सट्टामा फाइल व्यवस्थापक प्रयोगको प्रयास गर्नुपर्छ ।</string>
+  <string name="delete_zim_failed" fuzzy="true">माफ गर्नुहोस् हामीले यो फाइल मेट्न सकेनौं। तपाईंले यसको सट्टामा फाइल व्यवस्थापक प्रयोगको प्रयास गर्नुपर्छ ।</string>
   <string name="tts_pause">रोक्नुहोस्</string>
   <string name="tts_resume">पुनः निरन्तरता दिनुहोस्</string>
   <string name="stop">रोक्नुहोस्</string>
