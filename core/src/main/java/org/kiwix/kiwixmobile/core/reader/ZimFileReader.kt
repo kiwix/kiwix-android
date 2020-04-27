@@ -129,9 +129,16 @@ class ZimFileReader constructor(
     it.mimeType?.takeIf(String::isNotEmpty) ?: mimeTypeFromReader(it)
   }.also { Log.d(TAG, "getting mimetype for $uri = $it") }
 
-  private fun mimeTypeFromReader(it: String) = jniKiwixReader.getMimeType(it.filePath)
-    // Truncate mime-type (everything after the first space
-    .replace("^([^ ]+).*$", "$1")
+  private fun mimeTypeFromReader(it: String) =
+    try {
+      jniKiwixReader.getMimeType(it.filePath)
+    } catch (illegalStateException: IllegalStateException) {
+      DEFAULT_MIME_TYPE.also {
+        Log.e(TAG, "error reading mime type", illegalStateException)
+      }
+    }
+      // Truncate mime-type (everything after the first space
+      .replace("^([^ ]+).*$", "$1")
 
   fun getRedirect(url: String) = "${toRedirect(url)}"
 
@@ -251,6 +258,7 @@ class ZimFileReader constructor(
         }
       """.trimIndent()
     private val videoExtensions = listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv")
+    private const val DEFAULT_MIME_TYPE = "application/octet-stream"
   }
 }
 
