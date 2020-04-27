@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.downloader
 
 import org.kiwix.kiwixmobile.core.utils.StorageUtils.getFileNameFromUrl
-import java.util.ArrayList
 
 object ChunkUtils {
   private const val ALPHABET = "abcdefghijklmnopqrstuvwxyz"
@@ -44,22 +43,25 @@ object ChunkUtils {
     fileNames: Array<String?>,
     notificationID: Int
   ): List<Chunk> {
+    val ranges = fileNames.indices.map { it * (CHUNK_SIZE + 1) }.map { it..it + CHUNK_SIZE }
+    val filenamesAndRanges: List<Pair<String?, LongRange>> = fileNames.zip(ranges)
     val chunks: MutableList<Chunk> = ArrayList()
-    var currentRange: Long = 0
-    for (zim in fileNames) {
-      val minLen: Long = minOf(contentLength, currentRange + CHUNK_SIZE)
-      val range: String = if (contentLength in 0..currentRange + CHUNK_SIZE) {
-        "$currentRange-"
+    filenamesAndRanges.mapTo(chunks, { (filename, currentRange) ->
+      val range: String = if (contentLength in currentRange) {
+        "${currentRange.first}-"
       } else {
-        "$currentRange-${currentRange + CHUNK_SIZE}"
+        "${currentRange.first}-${currentRange.last}"
       }
-      chunks.add(
-        Chunk(
-          range, zim, url, contentLength, notificationID, currentRange, minLen
-        )
+      Chunk(
+        range,
+        filename,
+        url,
+        contentLength,
+        notificationID,
+        currentRange.first,
+        minOf(contentLength, currentRange.last)
       )
-      currentRange += CHUNK_SIZE + 1
-    }
+    })
     return chunks
   }
 
