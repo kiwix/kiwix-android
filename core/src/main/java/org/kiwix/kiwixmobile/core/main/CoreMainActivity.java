@@ -1552,7 +1552,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private boolean shouldActivateNightMode(KiwixWebView kiwixWebView) {
-    return kiwixWebView!=null && !HOME_URL.equals(kiwixWebView.getUrl());
+    return kiwixWebView != null && !HOME_URL.equals(kiwixWebView.getUrl());
   }
 
   private void loadPrefs() {
