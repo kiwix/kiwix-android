@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import io.mockk.CapturingSlot
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -30,10 +31,13 @@ import io.objectbox.query.QueryBuilder
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
+import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
@@ -45,6 +49,11 @@ internal class NewBookDaoTest {
 
   private val box: Box<BookOnDiskEntity> = mockk(relaxed = true)
   private val newBookDao = NewBookDao(box)
+
+  @BeforeEach
+  internal fun setUp() {
+    clearAllMocks()
+  }
 
   @Nested
   inner class BooksTests {
@@ -86,49 +95,117 @@ internal class NewBookDaoTest {
     assertThat(newBookDao.getBooks()).isEqualTo(listOf(BookOnDisk(entity)))
   }
 
-  @Test
-  fun `insert transaction adds books to the box that have distinct ids`() {
-    val slot: CapturingSlot<Callable<Unit>> = slot()
-    every { box.store.callInTx(capture(slot)) } returns Unit
-    val distinctBook: BookOnDisk = bookOnDisk(databaseId = 0, book = book(id = "same"))
-    newBookDao.insert(
-      listOf(distinctBook, bookOnDisk(databaseId = 1, book = book(id = "same")))
-    )
-    slot.captured.call()
-    verify { box.put(listOf(BookOnDiskEntity(distinctBook))) }
-  }
+  @Nested
+  inner class Insertion {
+    @Test
+    fun `insert transaction adds books to the box that have distinct ids`() {
+      val slot: CapturingSlot<Callable<Unit>> = slot()
+      every { box.store.callInTx(capture(slot)) } returns Unit
+      val distinctBook: BookOnDisk = bookOnDisk(databaseId = 0, book = book(id = "same"))
+      newBookDao.insert(
+        listOf(distinctBook, bookOnDisk(databaseId = 1, book = book(id = "same")))
+      )
+      slot.captured.call()
+      verify { box.put(listOf(BookOnDiskEntity(distinctBook))) }
+    }
 
-  @Test
-  fun `insert transaction does not add books if a book with the same path exists in the box`() {
-    val slot: CapturingSlot<Callable<Unit>> = slot()
-    every { box.store.callInTx(capture(slot)) } returns Unit
-    val distinctBook: BookOnDisk = bookOnDisk()
-    newBookDao.insert(listOf(distinctBook))
-    val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
-    every { box.query() } returns queryBuilder
-    every {
-      queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
-    } returns queryBuilder
-    val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
-    every { queryBuilder.build() } returns query
-    every { query.find() } returns listOf(bookOnDiskEntity(file = distinctBook.file))
-    slot.captured.call()
-    verify { box.put(listOf()) }
+    @Test
+    fun `insert transaction does not add books if a book with the same path exists in the box`() {
+      val slot: CapturingSlot<Callable<Unit>> = slot()
+      every { box.store.callInTx(capture(slot)) } returns Unit
+      val distinctBook: BookOnDisk = bookOnDisk()
+      newBookDao.insert(listOf(distinctBook))
+      val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
+      every { box.query() } returns queryBuilder
+      every {
+        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+      } returns queryBuilder
+      val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
+      every { queryBuilder.build() } returns query
+      every { query.find() } returns listOf(bookOnDiskEntity(file = distinctBook.file))
+      slot.captured.call()
+      verify { box.put(listOf()) }
+    }
+
+    @Test
+    fun `insert transaction removes books with duplicate ids`() {
+      val slot: CapturingSlot<Callable<Unit>> = slot()
+      every { box.store.callInTx(capture(slot)) } returns Unit
+      val distinctBook: BookOnDisk = bookOnDisk()
+      newBookDao.insert(listOf(distinctBook))
+      val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
+      every { box.query() } returns queryBuilder
+      every {
+        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+      } returns queryBuilder
+      val query: Query<BookOnDiskEntity> = mockk()
+      every { queryBuilder.build() } returns query
+      every { query.find() } returns listOf()
+      every {
+        queryBuilder.`in`(BookOnDiskEntity_.bookId, arrayOf(distinctBook.book.id))
+      } returns queryBuilder
+      every { query.remove() } returns 0L
+      slot.captured.call()
+      verify { box.put(listOf(BookOnDiskEntity(distinctBook))) }
+    }
   }
 
   @Test
   fun delete() {
+    newBookDao.delete(0L)
+    verify { box.remove(0L) }
   }
 
   @Test
   fun migrationInsert() {
+    val book: LibraryNetworkEntity.Book = book(file = mockk<File>(relaxed = true))
+    val slot: CapturingSlot<Callable<Unit>> = slot()
+    every { box.store.callInTx(capture(slot)) } returns Unit
+    newBookDao.migrationInsert(listOf(book))
+    slot.captured.call()
+    verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, file = book.file)))) }
   }
 
   @Test
-  fun getFavIconAndZimFile() {
+  fun `getFavIconAndZimFile with no result returns pair with null values`() {
+    val bookmark: Bookmark = mockk()
+    expectGetFavIconAndZimFileWith(bookmark, listOf())
+    assertThat(newBookDao.getFavIconAndZimFile(bookmark)).isEqualTo(Pair(null, null))
   }
 
   @Test
-  fun bookMatching() {
+  fun `getFavIconAndZimFile with result returns valid pair`() {
+    val bookmark: Bookmark = mockk()
+    val bookOnDiskEntity: BookOnDiskEntity = bookOnDiskEntity()
+    expectGetFavIconAndZimFileWith(bookmark, listOf(bookOnDiskEntity))
+    assertThat(newBookDao.getFavIconAndZimFile(bookmark))
+      .isEqualTo(Pair(bookOnDiskEntity.favIcon, bookOnDiskEntity.file.path))
+  }
+
+  private fun expectGetFavIconAndZimFileWith(
+    bookmark: Bookmark,
+    queryResult: List<BookOnDiskEntity>
+  ) {
+    val expectedZimId = "zimId"
+    every { bookmark.zimId } returns expectedZimId
+    val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
+    every { box.query() } returns queryBuilder
+    every { queryBuilder.equal(BookOnDiskEntity_.bookId, expectedZimId) } returns queryBuilder
+    val query: Query<BookOnDiskEntity> = mockk()
+    every { queryBuilder.build() } returns query
+    every { query.find() } returns queryResult
+  }
+
+  @Test
+  fun `bookMatching queries file by title`() {
+    val downloadTitle = "title"
+    val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
+    every { box.query() } returns queryBuilder
+    every { queryBuilder.endsWith(BookOnDiskEntity_.file, downloadTitle) } returns queryBuilder
+    val query: Query<BookOnDiskEntity> = mockk()
+    every { queryBuilder.build() } returns query
+    val bookOnDiskEntity: BookOnDiskEntity = bookOnDiskEntity()
+    every { query.findFirst() } returns bookOnDiskEntity
+    assertThat(newBookDao.bookMatching(downloadTitle)).isEqualTo(bookOnDiskEntity)
   }
 }

@@ -137,11 +137,12 @@ fun book(
   publisher: String = "publisher",
   date: String = "date",
   url: String = "${MOCK_BASE_URL}url.meta4",
-  articleCount: String = "mediaCount",
+  articleCount: String = "articleCount",
   mediaCount: String = "mediaCount",
   size: String = "1024",
   name: String = "name",
-  favIcon: String = "favIcon"
+  favIcon: String = "favIcon",
+  file: File = File("")
 ) =
   Book().apply {
     this.id = id
@@ -155,6 +156,7 @@ fun book(
     this.articleCount = articleCount
     this.mediaCount = mediaCount
     this.size = size
+    this.file = file
     bookName = name
     favicon = favIcon
   }
