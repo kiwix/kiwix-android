@@ -34,7 +34,7 @@ jobs:
       - name: Upload screenshot result
         uses: actions/upload-artifact@v1
         with:
-          name: screencap
+          name: ${{ matrix.api-level }}
           path: screencap.png
 
       - name: create unit coverage
