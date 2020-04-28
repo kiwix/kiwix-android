@@ -20,20 +20,28 @@ package org.kiwix.kiwixmobile.core.data.remote;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
+import java.util.List;
 import okhttp3.OkHttpClient;
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface KiwixService {
 
-  String LIBRARY_NETWORK_PATH = "/library/library_zim.xml";
+  String LIBRARY_NETWORK_PATH = "/catalog/search";
 
-  @GET(LIBRARY_NETWORK_PATH) Single<LibraryNetworkEntity> getLibrary();
+  @GET(LIBRARY_NETWORK_PATH) Single<String> getOpdsLibrary(
+    @Query("q") String searchTerm,
+    @Query("lang") String language,
+    @Query("tag") List<String> tags,
+    @Query("count") String count,
+    @Query("start") String start
+  );
 
   @GET Observable<MetaLinkNetworkEntity> getMetaLinks(@Url String url);
 
@@ -44,6 +52,7 @@ public interface KiwixService {
       Retrofit retrofit = new Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)
+        .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(SimpleXmlConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
         .build();

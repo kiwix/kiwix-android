@@ -219,7 +219,8 @@ class ZimFileReader constructor(
     language = this@ZimFileReader.language
     articleCount = this@ZimFileReader.articleCount.toString()
     mediaCount = this@ZimFileReader.mediaCount.toString()
-    bookName = name
+    @Suppress("ExplicitThis")
+    bookName = this@ZimFileReader.name
     tags = this@ZimFileReader.tags
   }
 

@@ -30,6 +30,8 @@ import io.reactivex.functions.Function6
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.NetworkBook
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -39,9 +41,9 @@ import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
+import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -68,11 +70,18 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.LibraryDownloadItem
-import java.util.LinkedList
 import java.util.Locale
+import java.util.MissingResourceException
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
+
+private val Locale.safeIsO3Language: String
+  get() = try {
+    isO3Language
+  } catch (_: MissingResourceException) {
+    language
+  }
 
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: FetchDownloadDao,
@@ -85,7 +94,8 @@ class ZimManageViewModel @Inject constructor(
   private val bookUtils: BookUtils,
   private val fat32Checker: Fat32Checker,
   private val defaultLanguageProvider: DefaultLanguageProvider,
-  private val dataSource: DataSource
+  private val dataSource: DataSource,
+  private val networkResponseMapper: NetworkResponseMapper
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestOpen(val bookOnDisk: BookOnDisk) : FileSelectActions()
@@ -97,7 +107,7 @@ class ZimManageViewModel @Inject constructor(
     object RestartActionMode : FileSelectActions()
   }
 
-  val sideEffects = PublishProcessor.create<SideEffect<out Any?>>()
+  val sideEffects = PublishProcessor.create<SideEffect<Any?>>()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
@@ -133,7 +143,7 @@ class ZimManageViewModel @Inject constructor(
   private fun disposables(): Array<Disposable> {
     val downloads = downloadDao.downloads()
     val booksFromDao = books()
-    val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
+    val networkLibrary = PublishProcessor.create<List<NetworkBook>>()
     val languages = languageDao.languages()
     return arrayOf(
       updateBookItems(),
@@ -210,7 +220,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun requestsAndConnectivtyChangesToLibraryRequests(
-    library: PublishProcessor<LibraryNetworkEntity>
+    library: PublishProcessor<List<NetworkBook>>
   ) =
     Flowable.combineLatest(
       requestDownloadLibrary,
@@ -223,14 +233,19 @@ class ZimManageViewModel @Inject constructor(
       .observeOn(Schedulers.io())
       .subscribe(
         {
-          kiwixService.library
+          kiwixService.getOpdsLibrary(
+            null,
+            CoreApp.getInstance().locale.safeIsO3Language,
+            null,
+            "1000",
+            null
+          )
             .timeout(60, SECONDS)
             .retry(5)
-            .subscribe(
-              library::onNext
-            ) {
+            .map(networkResponseMapper::map)
+            .subscribe(library::onNext) {
               it.printStackTrace()
-              library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
+              library.onNext(emptyList())
             }
         },
         Throwable::printStackTrace
@@ -244,7 +259,7 @@ class ZimManageViewModel @Inject constructor(
   private fun updateLibraryItems(
     booksFromDao: Flowable<List<BookOnDisk>>,
     downloads: Flowable<List<DownloadModel>>,
-    library: Flowable<LibraryNetworkEntity>,
+    library: Flowable<List<NetworkBook>>,
     languages: Flowable<List<Language>>
   ) = Flowable.combineLatest(
     booksFromDao,
@@ -269,11 +284,10 @@ class ZimManageViewModel @Inject constructor(
     )
 
   private fun updateLanguagesInDao(
-    library: Flowable<LibraryNetworkEntity>,
+    library: Flowable<List<NetworkBook>>,
     languages: Flowable<List<Language>>
   ) = library
     .subscribeOn(Schedulers.io())
-    .map { it.books }
     .withLatestFrom(
       languages,
       BiFunction(::combineToLanguageList)
@@ -340,7 +354,7 @@ class ZimManageViewModel @Inject constructor(
     booksOnFileSystem: List<BookOnDisk>,
     activeDownloads: List<DownloadModel>,
     allLanguages: List<Language>,
-    libraryNetworkEntity: LibraryNetworkEntity,
+    networkBooks: List<NetworkBook>,
     filter: String,
     fileSystemState: FileSystemState
   ): List<LibraryListItem> {
@@ -348,7 +362,7 @@ class ZimManageViewModel @Inject constructor(
       .map(Language::languageCode)
     val booksUnfilteredByLanguage =
       applySearchFilter(
-        libraryNetworkEntity.books - booksOnFileSystem.map(BookOnDisk::book),
+        networkBooks - booksOnFileSystem.map(BookOnDisk::book),
         filter
       )
 

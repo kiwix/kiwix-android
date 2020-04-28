@@ -84,4 +84,10 @@ dependencies {
   implementation(Libs.squidb_annotations)
   implementation(Libs.ink_page_indicator)
   add("kapt", Libs.squidb_processor)
+  val pagingVersion = "2.1.1"
+
+  implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
+  testImplementation("androidx.paging:paging-common-ktx:$pagingVersion")
+  implementation("androidx.paging:paging-rxjava2-ktx:$pagingVersion")
+  implementation ("com.hannesdorfmann:adapterdelegates4-pagination:4.2.0")
 }

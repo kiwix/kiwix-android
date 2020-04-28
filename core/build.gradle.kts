@@ -60,4 +60,5 @@ dependencies {
   implementation(Libs.android_arch_lifecycle_extensions)
   implementation(Libs.objectbox_kotlin)
   implementation(Libs.objectbox_rxjava)
+  implementation("com.squareup.retrofit2:converter-scalars:2.1.0")
 }

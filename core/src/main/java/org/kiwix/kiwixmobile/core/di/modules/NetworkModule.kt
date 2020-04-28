@@ -23,7 +23,7 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -44,7 +44,7 @@ class NetworkModule {
       .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
       .readTimeout(READ_TIMEOUT, SECONDS)
       .addNetworkInterceptor(HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) BASIC else NONE
+        level = if (BuildConfig.DEBUG) BODY else NONE
       })
       .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
       .build()

@@ -21,11 +21,10 @@ package org.kiwix.kiwixmobile.core.extensions
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.AttrRes
+import androidx.core.os.ConfigurationCompat
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import java.util.Locale
 
@@ -53,9 +52,7 @@ fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver): Inte
   registerReceiver(baseBroadcastReceiver, IntentFilter(baseBroadcastReceiver.action))
 
 val Context.locale: Locale
-  get() =
-    if (VERSION.SDK_INT >= VERSION_CODES.N) resources.configuration.locales.get(0)
-    else resources.configuration.locale
+  get() = ConfigurationCompat.getLocales(resources.configuration).get(0)
 
 fun Context.getColorAttribute(@AttrRes attributeRes: Int) = with(TypedValue()) {
   if (theme.resolveAttribute(attributeRes, this, true))

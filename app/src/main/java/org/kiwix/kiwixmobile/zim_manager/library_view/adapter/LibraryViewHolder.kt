@@ -23,6 +23,7 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.widget.Toast
 import androidx.annotation.StringRes
+import eu.mhutti1.utils.storage.Bytes
 import kotlinx.android.synthetic.main.item_download.downloadProgress
 import kotlinx.android.synthetic.main.item_download.downloadState
 import kotlinx.android.synthetic.main.item_download.eta
@@ -50,7 +51,6 @@ import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
-import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
@@ -71,7 +71,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       libraryBookCreator.setTextAndVisibility(item.book.creator)
       libraryBookPublisher.setTextAndVisibility(item.book.publisher)
       libraryBookDate.setTextAndVisibility(item.book.date)
-      libraryBookSize.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
+      libraryBookSize.setTextAndVisibility(Bytes(item.book.size.toLong()).humanReadable)
       libraryBookLanguage.text = bookUtils.getLanguage(item.book.getLanguage())
       libraryBookFileName.text = NetworkUtils.parseURL(CoreApp.getInstance(), item.book.url)
       libraryBookFavicon.setBitmap(Base64String(item.book.favicon))

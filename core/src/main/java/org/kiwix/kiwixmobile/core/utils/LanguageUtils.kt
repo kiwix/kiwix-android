@@ -30,7 +30,6 @@ import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.core.os.ConfigurationCompat
 import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.text.Collator
@@ -191,10 +190,8 @@ class LanguageUtils(private val context: Context) {
     @JvmStatic
     fun handleLocaleChange(context: Context, language: String) {
       val locale =
-        if (language == Locale.ROOT.toString())
-          ConfigurationCompat.getLocales(context.applicationContext.resources.configuration)[0]
-        else
-          Locale(language)
+        if (language == Locale.ROOT.toString()) context.applicationContext.locale
+        else Locale(language)
       Locale.setDefault(locale)
       val config = Configuration()
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
