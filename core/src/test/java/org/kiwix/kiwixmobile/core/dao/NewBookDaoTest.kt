@@ -105,6 +105,14 @@ internal class NewBookDaoTest {
       newBookDao.insert(
         listOf(distinctBook, bookOnDisk(databaseId = 1, book = book(id = "same")))
       )
+      val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
+      every { box.query() } returns queryBuilder
+      every {
+        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+      } returns queryBuilder
+      val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
+      every { queryBuilder.build() } returns query
+      every { query.find() } returns listOf(bookOnDiskEntity(file = File("matches_nothing")))
       slot.captured.call()
       verify { box.put(listOf(BookOnDiskEntity(distinctBook))) }
     }
