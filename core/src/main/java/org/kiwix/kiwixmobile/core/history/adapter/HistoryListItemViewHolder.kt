@@ -1,8 +1,6 @@
 package org.kiwix.kiwixmobile.core.history.adapter
 
 import android.view.View
-import android.view.View.OnClickListener
-import android.view.View.OnLongClickListener
 import kotlinx.android.synthetic.main.header_date.header_date
 import kotlinx.android.synthetic.main.item_bookmark_history.favicon
 import kotlinx.android.synthetic.main.item_bookmark_history.title
@@ -17,14 +15,14 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
-sealed class HistoryListItemViewHolder <in T : HistoryListItem>(containerView: View):
-  BaseViewHolder<T>(containerView){
+sealed class HistoryListItemViewHolder <in T : HistoryListItem>(containerView: View) :
+  BaseViewHolder<T>(containerView) {
 
   class HistoryItemViewHolder(
     override val containerView: View,
     private val deleteList: List<HistoryListItem>,
     private val itemClickListener: OnItemClickListener
-  ) : HistoryListItemViewHolder<HistoryItem>(containerView){
+  ) : HistoryListItemViewHolder<HistoryItem>(containerView) {
     override fun bind(item: HistoryItem) {
       title.text = item.historyTitle
       if (deleteList.contains(item)) {
@@ -32,13 +30,13 @@ sealed class HistoryListItemViewHolder <in T : HistoryListItem>(containerView: V
       } else {
         favicon.setBitmap(Base64String(item.favicon))
       }
-      itemView.setOnClickListener {itemClickListener.onItemClick(favicon, item)}
-      itemView.setOnLongClickListener {itemClickListener.onItemLongClick(favicon, item)}
+      itemView.setOnClickListener { itemClickListener.onItemClick(favicon, item) }
+      itemView.setOnLongClickListener { itemClickListener.onItemLongClick(favicon, item) }
     }
   }
 
   class DateItemViewHolder(override val containerView: View) :
-    HistoryListItemViewHolder<DateItem>(containerView){
+    HistoryListItemViewHolder<DateItem>(containerView) {
 
     override fun bind(item: DateItem) {
       val todaysDate = LocalDate.now()
@@ -51,8 +49,5 @@ sealed class HistoryListItemViewHolder <in T : HistoryListItem>(containerView: V
         else -> header_date.text = item.dateString
       }
     }
-
   }
-
-
 }

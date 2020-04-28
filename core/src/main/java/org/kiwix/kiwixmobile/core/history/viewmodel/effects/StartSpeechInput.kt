@@ -16,7 +16,6 @@
  *
  */
 
-
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.speech.RecognizerIntent

@@ -23,7 +23,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.List;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
-import org.kiwix.kiwixmobile.core.history.HistoryListItem;
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem;
 import org.kiwix.kiwixmobile.core.zim_manager.Language;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 

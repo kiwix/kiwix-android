@@ -1,7 +1,5 @@
 package org.kiwix.kiwixmobile.core.history.adapter
 
-import android.view.View.OnClickListener
-import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
@@ -33,7 +31,5 @@ sealed class HistoryDelegate<I : HistoryListItem, out VH : HistoryListItemViewHo
 
     override fun createViewHolder(parent: ViewGroup): DateItemViewHolder =
       DateItemViewHolder(parent.inflate(R.layout.header_date, false))
-
   }
-
 }

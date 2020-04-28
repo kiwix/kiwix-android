@@ -13,30 +13,31 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ConfirmedDelete
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Created
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.CreatedWithIntent
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitedSearch
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ReceivedPromptForSpeechInput
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ShowAllSwitchToggled
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.StartSpeechInputFailed
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.CurrentHistory
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
   private val historyDao: HistoryDao
-) : ViewModel(){
-  val state = MutableLiveData<State>().apply{ value = CurrentHistory(historyDao)}
+) : ViewModel() {
+  val state = MutableLiveData<State>().apply { value = CurrentHistory(historyDao) }
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
   private val compositeDisposable = CompositeDisposable()
 
   init {
-    compositeDisposable.addAll(actionMapper())
+    compositeDisposable.addAll(viewStateReducer(), actionMapper())
   }
 
-//  private fun viewStateReducer()= Flowable.combineLatest(historyDao.history())
+  private fun viewStateReducer() = Flowable.combineLatest(historyDao, filter, ShowAllSwitchToggled(), UserClickedItem())
 //
 //  private fun history() = filter.distinctUntilChanged().switchMap(::)
 
@@ -47,14 +48,14 @@ class HistoryViewModel @Inject constructor(
 
   private fun actionMapper() = actions.map {
     when (it) {
-      ExitedSearch -> effects.offer(Finish)
+      ExitHistory -> effects.offer(Finish)
       is Filter -> filter.offer(it.searchTerm)
-      is CreatedWithIntent -> Filter(it.searchTerm)
+      is CreatedWithIntent -> filter.offer(it.searchTerm)
       is ConfirmedDelete -> deleteItemAndShowToast(it)
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it)
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
-      else ->  {}
+      else -> {}
     }
   }.subscribe(
     {},
@@ -62,7 +63,6 @@ class HistoryViewModel @Inject constructor(
   )
 
   private fun selectItemAndOpenSelectionMode(onItemLongClick: Action.OnItemLongClick) {
-
   }
 
   private fun deleteItemsAndShowToast(it: ConfirmedDelete) {

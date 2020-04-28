@@ -30,9 +30,9 @@ import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
-import org.kiwix.kiwixmobile.core.history.HistoryListItem
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
