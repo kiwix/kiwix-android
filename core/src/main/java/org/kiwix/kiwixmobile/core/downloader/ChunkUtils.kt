@@ -44,16 +44,13 @@ object ChunkUtils {
     notificationID: Int
   ): List<Chunk> {
     val ranges = fileNames.indices.map { it * (CHUNK_SIZE + 1) }.map { it..it + CHUNK_SIZE }
-    val filenamesAndRanges: List<Pair<String?, LongRange>> = fileNames.zip(ranges)
-    val chunks: MutableList<Chunk> = ArrayList()
-    filenamesAndRanges.mapTo(chunks, { (filename, currentRange) ->
-      val range: String = if (contentLength in currentRange) {
-        "${currentRange.first}-"
-      } else {
-        "${currentRange.first}-${currentRange.last}"
-      }
+    return fileNames.zip(ranges).map { (filename, currentRange) ->
       Chunk(
-        range,
+        "${currentRange.first}-${if (contentLength in currentRange)
+          ""
+        else
+          "${currentRange.last}"
+        }",
         filename,
         url,
         contentLength,
@@ -61,8 +58,7 @@ object ChunkUtils {
         currentRange.first,
         minOf(contentLength, currentRange.last)
       )
-    })
-    return chunks
+    }
   }
 
   private fun getZimChunkFileCount(contentLength: Long): Int {
