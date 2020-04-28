@@ -334,8 +334,6 @@ class ZimManageViewModelTest {
 
   @Test
   fun `library update removes from sources and maps to list items`() {
-    every { application.getString(R.string.your_languages) } returns "1"
-    every { application.getString(R.string.other_languages) } returns "2"
     val bookAlreadyOnDisk = book(
       id = "0",
       url = "",
@@ -380,9 +378,9 @@ class ZimManageViewModelTest {
     viewModel.libraryItems.test()
       .assertValue(
         listOf(
-          LibraryListItem.DividerItem(Long.MAX_VALUE, "1"),
+          LibraryListItem.DividerItem(Long.MAX_VALUE, R.string.your_languages),
           LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
-          LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
+          LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
           LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading))
         )
       )
@@ -390,7 +388,6 @@ class ZimManageViewModelTest {
 
   @Test
   fun `library marks files over 4GB as can't download if file system state says to`() {
-    every { application.getString(R.string.other_languages) } returns "2"
     val bookOver4Gb = book(
       id = "0",
       url = "",
@@ -415,7 +412,7 @@ class ZimManageViewModelTest {
     viewModel.libraryItems.test()
       .assertValue(
         listOf(
-          LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
+          LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
           LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
         )
       )
