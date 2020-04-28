@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
+import androidx.annotation.StringRes
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
@@ -36,7 +37,7 @@ sealed class LibraryListItem {
 
   data class DividerItem constructor(
     override val id: Long,
-    val text: String
+    @StringRes val stringId: Int
   ) : LibraryListItem()
 
   data class BookItem constructor(
