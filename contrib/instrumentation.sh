@@ -4,5 +4,6 @@ adb logcat -c
 adb logcat *:E -v color &
 ./gradlew jacocoInstrumentationTestReport
 adb shell screencap -p /sdcard/screencap.png
-adb pull /sdcard/screencap.png
+cp /sdcard/screencap.png /mnt/sdcard/
+adb pull /mnt/sdcard/screencap.png
 find screencap.png
