@@ -6,8 +6,6 @@
   <dimen name="dimen_medium_padding">8dp</dimen>
   <dimen name="switch_padding_bottom">6dp</dimen>
   <dimen name="switch_padding">15dp</dimen>
-  <dimen name="abc_dropdownitem_text_padding_left">8dip</dimen>
-  <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
   <dimen name="kiwix_search_widget_layout_id_height">50dp</dimen>
   <dimen name="webview_search_edit_text_margin_right">10dip</dimen>
   <dimen name="progressbar_layout_margin_top">300dp</dimen>
@@ -23,9 +21,5 @@
   <dimen name="progressbar_padding">20dp</dimen>
   <dimen name="progressbar_textview_vertical_padding">10dp</dimen>
   <dimen name="bottom_toolbar_height">48dp</dimen>
-  <!-- Workaround to store floats in dimen -->
-  <item format="float" name="material_light_hint_alpha" type="dimen">0.38</item>
-  <item format="float" name="material_dark_hint_pressed_alpha" type="dimen">0.70</item>
-
   <dimen name="card_margin">5dp</dimen>
 </resources>

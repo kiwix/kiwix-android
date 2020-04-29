@@ -13,7 +13,7 @@
 * Sayginer
 * Trockya
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="kiwi">Kiwi</string>
   <string name="menu_help">Yardım</string>
   <string name="menu_home">Anasayfa</string>
@@ -129,7 +129,7 @@
   <string name="help_5">İçerik nerededir?</string>
   <string name="help_6">İçeriğimiz Kiwix web sayfasındadır.</string>
   <string name="help_7">ZIM dosyaları olarak kullanılabilir durumdadırlar. Onlardan çok sayıda vardır:</string>
-  <string name="help_8">• Vikipedi her dil için ayrı ayrı kullanılabilir durumdadır.</string>
+  <string name="help_8" tools:ignore="Typos">• Vikipedi her dil için ayrı ayrı kullanılabilir durumdadır.</string>
   <string name="help_9">• Wikileaks veya Vikikaynak gibi diğer kaynaklarımız da kullanılabilir durumdadır</string>
   <string name="help_10">Seçtiğiniz ZIM dosyalarını uygulama içerisinden indirebilir veya istediklerinizi seçerek SD kartınıza aktarmadan önce bir Masaüstü bilgisayarından indirebilirsiniz.</string>
   <string name="help_11">Uygulama içinden indirilen ZIM dosyaları harici depolama aygıtındaki Kiwix başlıklı bir klasördedir.</string>
