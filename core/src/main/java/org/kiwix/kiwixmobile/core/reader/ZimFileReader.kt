@@ -115,9 +115,9 @@ class ZimFileReader constructor(
 
   fun load(uri: String): InputStream? {
     val extension = uri.substringAfterLast(".")
-    if (videoExtensions.any { it == extension }) {
+    if (assetExtensions.any { it == extension }) {
       try {
-        return loadVideo(uri)
+        return loadAsset(uri)
       } catch (ioException: IOException) {
         Log.e(TAG, "failed to write video for $uri", ioException)
       }
@@ -149,10 +149,10 @@ class ZimFileReader constructor(
       throw IOException("Could not open pipe for $uri", ioException)
     }
 
-  private fun loadVideo(uri: String): InputStream? {
+  private fun loadAsset(uri: String): InputStream? {
     val infoPair = jniKiwixReader.getDirectAccessInformation(uri.filePath)
     if (infoPair == null || !File(infoPair.filename).exists()) {
-      return loadVideoFromCache(uri)
+      return loadAssetFromCache(uri)
     }
     return AssetFileDescriptor(
       infoPair.parcelFileDescriptor,
@@ -162,7 +162,7 @@ class ZimFileReader constructor(
   }
 
   @Throws(IOException::class)
-  private fun loadVideoFromCache(uri: String): FileInputStream {
+  private fun loadAssetFromCache(uri: String): FileInputStream {
     return File(
       FileUtils.getFileCacheDir(CoreApp.getInstance()),
       uri.substringAfterLast("/")
@@ -250,7 +250,7 @@ class ZimFileReader constructor(
           filter: invert(0); 
         }
       """.trimIndent()
-    private val videoExtensions = listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv")
+    private val assetExtensions = listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv", "svg")
     private const val DEFAULT_MIME_TYPE = "application/octet-stream"
   }
 }
