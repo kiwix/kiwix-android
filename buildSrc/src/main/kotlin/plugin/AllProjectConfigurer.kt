@@ -97,6 +97,7 @@ class AllProjectConfigurer {
 
         ignore(
           "SyntheticAccessor",
+          "GoogleAppIndexingApiWarning",
           //TODO stop ignoring below this
           "CheckResult",
           "LabelFor",

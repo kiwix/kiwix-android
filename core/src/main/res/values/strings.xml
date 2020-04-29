@@ -186,7 +186,7 @@
   <string name="history">History</string>
   <string name="history_from_current_book">View History From All Books</string>
   <string name="search_history">Search history</string>
-  <string name="selected_items">%1$d selected</string>
+  <string name="selected_items" tools:ignore="PluralsCandidate">%1$d selected</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

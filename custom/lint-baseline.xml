@@ -3,7 +3,7 @@
 
     <issue
         id="MissingTranslation"
-        message="&quot;retry&quot; is not translated in &quot;ml&quot; (Malayalam), &quot;qq&quot;, &quot;cs&quot; (Czech), &quot;tg&quot; (Tajik)"
+        message="&quot;retry&quot; is not translated in &quot;qq&quot;, &quot;cs&quot; (Czech), &quot;tg&quot; (Tajik)"
         errorLine1="  &lt;string name=&quot;retry&quot;>Retry&lt;/string>"
         errorLine2="          ~~~~~~~~~~~~">
         <location
@@ -76,17 +76,6 @@
             file="src\main\res\layout\layout_custom_download_in_progress.xml"
             line="28"
             column="4"/>
-    </issue>
-
-    <issue
-        id="GoogleAppIndexingApiWarning"
-        message="Missing support for Firebase App Indexing API"
-        errorLine1="class CustomMainActivity : CoreMainActivity() {"
-        errorLine2="      ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src\main\java\org\kiwix\kiwixmobile\custom\main\CustomMainActivity.kt"
-            line="55"
-            column="7"/>
     </issue>
 
     <issue

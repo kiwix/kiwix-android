@@ -5,7 +5,8 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@android:color/holo_blue_dark"
-  tools:context=".error.ErrorActivity">
+  tools:context=".error.ErrorActivity"
+  tools:ignore="Overdraw">
 
   <TextView
     android:id="@+id/messageText"

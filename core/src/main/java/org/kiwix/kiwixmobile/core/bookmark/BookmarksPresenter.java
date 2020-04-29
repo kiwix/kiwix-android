@@ -25,6 +25,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.base.BasePresenter;
@@ -78,7 +79,9 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
   public void filterBookmarks(@NotNull List<BookmarkItem> bookmarks, @NotNull String newText) {
     Observable.fromIterable(bookmarks)
       .filter(
-        bookmark -> bookmark.getBookmarkTitle().toLowerCase().contains(newText.toLowerCase()))
+        bookmark -> bookmark.getBookmarkTitle()
+          .toLowerCase(Locale.ROOT)
+          .contains(newText.toLowerCase(Locale.ROOT)))
       .toList()
       .subscribeOn(computation)
       .observeOn(mainThread)
