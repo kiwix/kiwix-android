@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker
 import org.kiwix.kiwixmobile.zim_manager.FileWritingFileSystemChecker
 import org.kiwix.kiwixmobile.zim_manager.MountFileSystemChecker
+import org.kiwix.kiwixmobile.zim_manager.MountPointProducer
 
 @Module
 object KiwixModule {
@@ -39,9 +40,12 @@ object KiwixModule {
   @Provides
   @KiwixScope
   @JvmStatic
-  internal fun provideFat32Checker(sharedPreferenceUtil: SharedPreferenceUtil): Fat32Checker =
+  internal fun provideFat32Checker(
+    sharedPreferenceUtil: SharedPreferenceUtil,
+    mountPointProducer: MountPointProducer
+  ): Fat32Checker =
     Fat32Checker(
       sharedPreferenceUtil,
-      listOf(MountFileSystemChecker(), FileWritingFileSystemChecker())
+      listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker())
     )
 }
