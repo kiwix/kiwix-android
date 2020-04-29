@@ -60,6 +60,8 @@
   <string name="pref_clear_all_history_title">Rensa historik</string>
   <string name="pref_clear_all_history_summary">Rensa senaste sökningar och flikhistorik</string>
   <string name="all_history_cleared">All historik rensades</string>
+  <string name="pref_clear_all_bookmarks_title">Rensa bokmärken</string>
+  <string name="all_bookmarks_cleared">Alla bokmärken rensade</string>
   <string name="clear_all_history_dialog_title">Rensa all historik?</string>
   <string name="share">Dela</string>
   <string name="selected_file_cab_app_chooser_title">Dela ZIM-filer med:</string>
@@ -90,10 +92,10 @@
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
   <string name="library">Bibliotek</string>
-  <string name="delete_zim_body">Radera %s?</string>
+  <string name="delete_zim_body" fuzzy="true">Radera %s?</string>
   <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
-  <string name="download_no_space">Otillräckligt utrymme för att ladda ned denna fil.</string>
+  <string name="download_no_space">Otillräckligt utrymme för att ladda ned.</string>
   <string name="space_available">Tillgängligt utrymme:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Inga bilder</string>
@@ -101,7 +103,7 @@
   <string name="no_network_connection">Ingen nätverksanslutning</string>
   <string name="help_2">Vad gör Kiwix?</string>
   <string name="help_3">Kiwix är en innehållsläsare för offlineanvändning. Den fungerar som en webbläsare, men istället för att komma åt webbsidor online läser den innehåll från en fil i ZIM-format.</string>
-  <string name="help_4" fuzzy="true">Även om Kiwix ursprungligen skapades för att tillhandahålla Wikipedia offline läser den även annat innehåll.</string>
+  <string name="help_4">Även om Kiwix ursprungligen skapades för att tillhandahålla Wikipedia offline läser den även annat innehåll.</string>
   <string name="help_5">Var finns innehållet?</string>
   <string name="help_6">Vårt innehåll lagras på Kiwix webbplats.</string>
   <string name="help_7">De finns tillgängliga som ZIM-filer. Det är många:</string>
@@ -111,7 +113,7 @@
   <string name="help_11">ZIM-filer som laddas ned i appen placeras i den externa lagringskatalogen i en mapp som heter Kiwix.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuvarande mapp</string>
-  <string name="delete_zim_failed">Tyvärr kunde vi inte radera denna fil. Du kan försöka använda en filhanterare istället.</string>
+  <string name="delete_zim_failed" fuzzy="true">Tyvärr kunde vi inte radera denna fil. Du kan försöka använda en filhanterare istället.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>
   <string name="stop">stoppa</string>
@@ -219,6 +221,10 @@
   <string name="no_results">Inga resultat</string>
   <string name="no_bookmarks">Inga bokmärken</string>
   <string name="no_history">Ingen historik</string>
+  <string name="device_default">Enhetsstandard</string>
   <string name="delete_history">Radera historik?</string>
   <string name="delete_bookmarks">Radera bokmärken?</string>
+  <string name="on">På</string>
+  <string name="off">Av</string>
+  <string name="auto">Auto</string>
 </resources>

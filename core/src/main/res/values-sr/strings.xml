@@ -62,9 +62,9 @@
   <string name="local_zims">Уређај</string>
   <string name="delete_zims_toast">Датотека је избрисана</string>
   <string name="no_files_here">Овде нема датотека</string>
-  <string name="download_no_space">Недовољно простора за преузимање ове датотеке.</string>
+  <string name="download_no_space" fuzzy="true">Недовољно простора за преузимање ове датотеке.</string>
   <string name="no_network_connection">Нема мрежне везе</string>
-  <string name="delete_zim_failed">Није могуће избрисати ову датотеку. Требали бисте покушати да користите управљач датотека.</string>
+  <string name="delete_zim_failed" fuzzy="true">Није могуће избрисати ову датотеку. Требали бисте покушати да користите управљач датотека.</string>
   <string name="internal_storage">Унутрашњи</string>
   <string name="external_storage">Спољашњи</string>
   <string name="no">Не</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Bl707
 * Innocentbunny
 * Nikhilsheth
@@ -8,6 +9,7 @@
 * Sfic
 * Siddhartha Ghai
 * Suyash.dwivedi
+* गोपाल
 * संजीव कुमार
 -->
 <resources>
@@ -80,9 +82,10 @@
   <string name="local_zims">डिवाइस</string>
   <string name="remote_zims">ऑनलाइन</string>
   <string name="library">पुस्तकालय</string>
+  <string name="delete_zim_body">निम्न ज़िम फ़ाइल (ओं) को हटा दिया जाएगा:\n\n%s</string>
   <string name="delete_zims_toast">फाइल हटा दी गई</string>
   <string name="no_files_here">यहां कोई फ़ाइल नहीं</string>
-  <string name="download_no_space">इस फ़ाइल को डाउनलोड करने के लिए अपर्याप्त जगह।</string>
+  <string name="download_no_space" fuzzy="true">इस फ़ाइल को डाउनलोड करने के लिए अपर्याप्त जगह।</string>
   <string name="space_available">उपलब्ध जगह:</string>
   <string name="zim_simple">साधारण</string>
   <string name="zim_no_pic">चित्र नहीं</string>
@@ -100,7 +103,7 @@
   <string name="help_11">ZIM फाइलें जो इन-ऐप में डाउनलोड हैं, एक बाहरी फ़ोल्डर में स्थित हैं, जिसमें किवीक्स नामक एक फ़ोल्डर है।</string>
   <string name="pref_storage">संचयन</string>
   <string name="pref_current_folder">वर्तमान फोल्डर</string>
-  <string name="delete_zim_failed">क्षमा करें, हम इस फ़ाइल को हटाने में असमर्थ थे। आपको इसके बजाय एक फ़ाइल प्रबंधक का उपयोग करने का प्रयास करना चाहिए।</string>
+  <string name="delete_zim_failed">क्षमा करें हम कुछ फ़ाइलों को हटाने में असमर्थ थे।  आपको इसके बजाय फ़ाइल प्रबंधक का उपयोग करने का प्रयास करना चाहिए।</string>
   <string name="tts_pause">रुका</string>
   <string name="tts_resume">फिर से शुरू करना</string>
   <string name="stop">रोकें</string>
@@ -130,4 +133,6 @@
   <string name="your_languages">चयनित भाषाएं</string>
   <string name="other_languages">अन्य भाषाएँ</string>
   <string name="no_bookmarks">बुकमार्क्स नहीं</string>
+  <string name="on">चालू</string>
+  <string name="off">बंद</string>
 </resources>

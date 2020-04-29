@@ -79,7 +79,7 @@
   <string name="library">Thư viện</string>
   <string name="delete_zims_toast">Đã xóa tập tin</string>
   <string name="no_files_here">Không có tập tin nào ở đây</string>
-  <string name="download_no_space">Không đủ dung lượng trống để tải về tập tin này.</string>
+  <string name="download_no_space" fuzzy="true">Không đủ dung lượng trống để tải về tập tin này.</string>
   <string name="space_available">Dung lượng trống còn lại:</string>
   <string name="zim_simple">Đơn giản</string>
   <string name="zim_no_pic">Không có hình</string>
@@ -97,7 +97,7 @@
   <string name="help_11">Các tập tin ZIM được tải về bằng ứng dụng sẽ được lưu trữ ở bộ nhớ ngoài, trong thư mục có tên Kiwix.</string>
   <string name="pref_storage">Lưu trữ</string>
   <string name="pref_current_folder">Thư mục Hiện tại</string>
-  <string name="delete_zim_failed">Rất tiếc, chúng tôi không thể xoá tập tin này. Bạn hãy dùng một trình duyệt tập tin để làm việc đó.</string>
+  <string name="delete_zim_failed" fuzzy="true">Rất tiếc, chúng tôi không thể xoá tập tin này. Bạn hãy dùng một trình duyệt tập tin để làm việc đó.</string>
   <string name="tts_pause">tạm ngừng</string>
   <string name="tts_resume">tiếp tục</string>
   <string name="stop">dừng</string>

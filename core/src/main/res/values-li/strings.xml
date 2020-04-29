@@ -60,7 +60,7 @@
   <string name="library">Haol inhawd op</string>
   <string name="delete_zims_toast">Bestandj eweggesjaf</string>
   <string name="no_files_here">Gein bestenj hie</string>
-  <string name="download_no_space">Neet zat ruumdje veur dit bestandj te downloade.</string>
+  <string name="download_no_space" fuzzy="true">Neet zat ruumdje veur dit bestandj te downloade.</string>
   <string name="no_network_connection">Gein netwerkverbinjing</string>
   <string name="help_2">Waat doon v\'r bie Kiwix?</string>
   <string name="help_5">Wo is d\'n inhawd?</string>
@@ -70,7 +70,7 @@
   <string name="help_9">• Angeren inhawd wie Wikileaks or Wikisource is ouch besjikbaar</string>
   <string name="pref_storage">Opslaag</string>
   <string name="pref_current_folder">Hujige Map</string>
-  <string name="delete_zim_failed">V\'r kóste dit bestandj neet ewegsjaffe. Doe mós dit noe perbere mit \'ne bestandjsbehieërder.</string>
+  <string name="delete_zim_failed" fuzzy="true">V\'r kóste dit bestandj neet ewegsjaffe. Doe mós dit noe perbere mit \'ne bestandjsbehieërder.</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Exterm</string>
   <string name="no">Nein</string>

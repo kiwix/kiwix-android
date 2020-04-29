@@ -84,7 +84,7 @@
   <string name="library">Bibliotek</string>
   <string name="delete_zims_toast">Fil slettet</string>
   <string name="no_files_here">Ingen filer her</string>
-  <string name="download_no_space">Utilstrækkelig med plads til at hente denne fil.</string>
+  <string name="download_no_space" fuzzy="true">Utilstrækkelig med plads til at hente denne fil.</string>
   <string name="space_available">Ledig plads:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Ingen billeder</string>
@@ -102,7 +102,7 @@
   <string name="help_11">ZIM-filer hentet inden i programmet placeres i det ekstern lager i mappen Kiwix.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuværende mappe</string>
-  <string name="delete_zim_failed">Beklager vi kunne ikke slette denne fil. Du bør prøve at bruge en filhåndtering i stedet for.</string>
+  <string name="delete_zim_failed" fuzzy="true">Beklager vi kunne ikke slette denne fil. Du bør prøve at bruge en filhåndtering i stedet for.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">genoptag</string>
   <string name="stop">stop</string>
