@@ -86,7 +86,7 @@
   <string name="library">图书馆</string>
   <string name="delete_zims_toast">文件已删除</string>
   <string name="no_files_here">没有文件</string>
-  <string name="download_no_space">缺少下载此文件所需的空间。</string>
+  <string name="download_no_space" fuzzy="true">缺少下载此文件所需的空间。</string>
   <string name="space_available">可用空间：</string>
   <string name="zim_simple">简单</string>
   <string name="zim_no_pic">没有图片</string>
@@ -104,7 +104,7 @@
   <string name="help_11">在应用中下载的ZIM文件被存放于外部存储中一个名为Kiwix的文件夹内。</string>
   <string name="pref_storage">存储</string>
   <string name="pref_current_folder">当前文件夹</string>
-  <string name="delete_zim_failed">对不起，我们无法删除此文件。您应尝试改用文件管理器。</string>
+  <string name="delete_zim_failed" fuzzy="true">对不起，我们无法删除此文件。您应尝试改用文件管理器。</string>
   <string name="tts_pause">暂停</string>
   <string name="tts_resume">恢复</string>
   <string name="stop">停止</string>

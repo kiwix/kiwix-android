@@ -59,7 +59,7 @@
   <string name="library">မှတ်ထားမှုများ</string>
   <string name="delete_zims_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
   <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
-  <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
+  <string name="download_no_space" fuzzy="true">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
   <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>
   <string name="zim_simple">ရိုးရိုး</string>
   <string name="zim_no_pic">ပုံများ မရှိပါ</string>

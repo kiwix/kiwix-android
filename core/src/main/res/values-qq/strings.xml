@@ -25,6 +25,7 @@
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
   <string name="delete">{{Identical|Delete}}</string>
+  <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>
   <string name="rate_dialog_positive">{{Identical|Rate}}</string>
   <string name="no_thanks">{{Identical|No thanks}}</string>

@@ -81,7 +81,7 @@
   <string name="library">Библиотека</string>
   <string name="delete_zims_toast">Файлът е изтрит</string>
   <string name="no_files_here">Тук няма файлове</string>
-  <string name="download_no_space">Няма достатъчно място за даунлоуд на този файл.</string>
+  <string name="download_no_space" fuzzy="true">Няма достатъчно място за даунлоуд на този файл.</string>
   <string name="space_available">Налично пространство:</string>
   <string name="zim_simple">Просто</string>
   <string name="zim_no_pic">Без картинки</string>
@@ -99,7 +99,7 @@
   <string name="help_11">ZIM файловете, които са смъкнати в мобилното приложение, се намират във външната памет, в папка с име Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текуща папка</string>
-  <string name="delete_zim_failed">За съжаление не успяхме да изтрием този файл. Необходимо е да използвате файлов мениджър за тази цел.</string>
+  <string name="delete_zim_failed" fuzzy="true">За съжаление не успяхме да изтрием този файл. Необходимо е да използвате файлов мениджър за тази цел.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продължете</string>
   <string name="stop">стоп</string>

@@ -52,6 +52,7 @@
   <string name="all_history_cleared">সমস্ত ইতিহাস সাফ করা হয়ছে</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">সমস্ত ইতিহাস মুছে ফেলুন</string>
   <string name="delete">অপসারণ</string>
+  <string name="cancel">বাতিল</string>
   <string name="delete_specific_search_toast">সাম্প্রতিক অনুসন্ধান অপসারণ করা হয়েছে</string>
   <string name="hint_contents_drawer_message">এই নিবন্ধটির সূচী দেখতে বামদিক থেকে টেনে আনুন</string>
   <string name="got_it">বুঝেছি</string>
@@ -79,7 +80,7 @@
   <string name="library">পাঠাগার</string>
   <string name="delete_zims_toast">ফাইল অপসারণ করা হয়েছে</string>
   <string name="no_files_here">এখানে কোন ফাইল নেই</string>
-  <string name="download_no_space">এই ফাইল ডাউনলোড করার মত যথেষ্ট স্থান নেই</string>
+  <string name="download_no_space" fuzzy="true">এই ফাইল ডাউনলোড করার মত যথেষ্ট স্থান নেই</string>
   <string name="space_available">উপলব্ধ খালিস্থান:</string>
   <string name="zim_simple">সরল</string>
   <string name="zim_no_pic">ছবি নেই</string>
@@ -97,7 +98,7 @@
   <string name="help_11">অ্যাপ্লিকেশনের মাধ্যমে ডাউনলোড করা ZIM ফাইলগুলি বাহ্যিক সঞ্চয়স্থানে Kiwix নামক ফোল্ডারে অবস্থিত।</string>
   <string name="pref_storage">সংগ্রহস্থল</string>
   <string name="pref_current_folder">বর্তমান ফোল্ডার</string>
-  <string name="delete_zim_failed">দুঃখিত আমরা এই ফাইলটি মুছে দিতে সমর্থ নই। এর পরিবর্তে আপনি একটি ফাইল ব্যবস্থাপক ব্যবহার করে চেষ্টা করতে পারেন।</string>
+  <string name="delete_zim_failed">দুঃখিত আমরা কিছু ফাইল অপসারণ করতে সমর্থ নই। এর পরিবর্তে আপনি একটি ফাইল ব্যবস্থাপক ব্যবহার করে চেষ্টা করতে পারেন।</string>
   <string name="tts_pause">বিরতি</string>
   <string name="tts_resume">পুনরায় শুরু করুন</string>
   <string name="stop">বন্ধ</string>

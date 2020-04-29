@@ -108,10 +108,10 @@
   <string name="local_zims">設備</string>
   <string name="remote_zims">線上</string>
   <string name="library">圖書館</string>
-  <string name="delete_zim_body">刪除%s？</string>
-  <string name="delete_zims_toast">檔案已刪除</string>
+  <string name="delete_zim_body">以下 zim 檔案將會被刪除：\n\n%s</string>
+  <string name="delete_zims_toast">檔案刪除成功</string>
   <string name="no_files_here">沒有檔案在此</string>
-  <string name="download_no_space">沒有足夠的空間來下載此檔案。</string>
+  <string name="download_no_space">沒有足夠的空間來下載。</string>
   <string name="space_available">可用空間：</string>
   <string name="zim_simple">簡易</string>
   <string name="zim_no_pic">沒有圖片</string>
@@ -129,7 +129,7 @@
   <string name="help_11">在應用程式下載的 ZIM 檔案會存放在名為「Kiwix」的外部儲存裝置目錄。</string>
   <string name="pref_storage">儲存裝置</string>
   <string name="pref_current_folder">目前資料夾</string>
-  <string name="delete_zim_failed">很抱歉我們無法刪除此檔案。您應該嘗試改用檔案管理器。</string>
+  <string name="delete_zim_failed">很抱歉我們無法刪除一些檔案。您應該嘗試改用檔案管理器。</string>
   <string name="tts_pause">暫停</string>
   <string name="tts_resume">繼續</string>
   <string name="stop">停止</string>
@@ -262,4 +262,7 @@
   <string name="device_default">設備預設</string>
   <string name="delete_history">刪除歷史？</string>
   <string name="delete_bookmarks">刪除書籤？</string>
+  <string name="on">開啟</string>
+  <string name="off">關閉</string>
+  <string name="auto">自動</string>
 </resources>

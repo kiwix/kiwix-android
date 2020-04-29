@@ -87,7 +87,7 @@
   <string name="local_zims">Laite</string>
   <string name="remote_zims">Online</string>
   <string name="library">Kirjasto</string>
-  <string name="delete_zim_body">Poista %s?</string>
+  <string name="delete_zim_body" fuzzy="true">Poista %s?</string>
   <string name="delete_zims_toast">Tiedosto poistettu</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
   <string name="space_available">Tilaa käytettävissä:</string>
@@ -102,7 +102,7 @@
   <string name="help_9">• Muut sisällöt kuten Wikileaks tai Wikiaineisto ovat myös käytettävissä</string>
   <string name="pref_storage">Tallennuslaite</string>
   <string name="pref_current_folder">Nykyinen kansio</string>
-  <string name="delete_zim_failed">Emme pystyneet poistamaan tätä tiedostoa. Sinun pitäisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
+  <string name="delete_zim_failed" fuzzy="true">Emme pystyneet poistamaan tätä tiedostoa. Sinun pitäisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
   <string name="tts_pause">keskeytä</string>
   <string name="tts_resume">jatka</string>
   <string name="stop">pysäytä</string>

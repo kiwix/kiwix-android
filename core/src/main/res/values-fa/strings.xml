@@ -66,7 +66,7 @@
   <string name="library">کتابخانه</string>
   <string name="delete_zims_toast">پرونده حذف شد</string>
   <string name="no_files_here">هیچ پرونده‌ای در این‌جا نیست</string>
-  <string name="download_no_space">فضای ناکافی برای بارگیری پرونده</string>
+  <string name="download_no_space" fuzzy="true">فضای ناکافی برای بارگیری پرونده</string>
   <string name="space_available">فضای موجود:</string>
   <string name="zim_simple">ساده</string>
   <string name="zim_no_pic">هیچ تصویری نیست</string>
@@ -76,7 +76,7 @@
   <string name="help_5">محتوا کجاست؟</string>
   <string name="help_6">محتوای ما در وبگاه Kiwix میزبانی می‌شود.</string>
   <string name="pref_storage">ذخیره‌سازی</string>
-  <string name="delete_zim_failed">متأسفانه امکان حذف پرونده وجود ندارد. بهتر است از یک نرم‌افزار مدیریت پرونده‌ها استفاده کنید.</string>
+  <string name="delete_zim_failed" fuzzy="true">متأسفانه امکان حذف پرونده وجود ندارد. بهتر است از یک نرم‌افزار مدیریت پرونده‌ها استفاده کنید.</string>
   <string name="tts_pause">مکث</string>
   <string name="tts_resume">ادامه</string>
   <string name="stop">توقف</string>
@@ -97,4 +97,7 @@
   <string name="do_not_ask_anymore">لطفاً دیگر درخواست نکنید</string>
   <string name="your_languages">زبان‌های انتخاب‌شده:</string>
   <string name="other_languages">زبان‌های دیگر:</string>
+  <string name="on">روشن</string>
+  <string name="off">خاموش</string>
+  <string name="auto">خودکار</string>
 </resources>

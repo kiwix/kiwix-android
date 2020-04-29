@@ -83,7 +83,7 @@
   <string name="library">Könyvtár</string>
   <string name="delete_zims_toast">Fájl törölve</string>
   <string name="no_files_here">Nincsenek fájlok</string>
-  <string name="download_no_space">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
+  <string name="download_no_space" fuzzy="true">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
   <string name="space_available">Szabad tárhely:</string>
   <string name="zim_simple">Egyszerű</string>
   <string name="zim_no_pic">Nincsenek képek</string>
@@ -101,7 +101,7 @@
   <string name="help_11">Az alkalmazáson belül letöltött ZIM fájlok a külső tároló könyvtár Kiwix nevű mappájában vannak elhelyezve.</string>
   <string name="pref_storage">Tárhely</string>
   <string name="pref_current_folder">Aktuális folder</string>
-  <string name="delete_zim_failed">Sajnos nem tudjuk ezt a fájlt törölni. Próbáld meg egy fájlkezelőn keresztül törölni.</string>
+  <string name="delete_zim_failed" fuzzy="true">Sajnos nem tudjuk ezt a fájlt törölni. Próbáld meg egy fájlkezelőn keresztül törölni.</string>
   <string name="tts_pause">szünet</string>
   <string name="tts_resume">folytat</string>
   <string name="stop">leállítás</string>
