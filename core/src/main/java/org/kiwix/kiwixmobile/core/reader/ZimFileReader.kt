@@ -126,19 +126,12 @@ class ZimFileReader constructor(
   }
 
   fun readMimeType(uri: String) = uri.removeArguments().let {
-    it.mimeType?.takeIf(String::isNotEmpty) ?: mimeTypeFromReader(it)
+    it.mimeType?.takeIf(String::isNotEmpty) ?: mimeTypeFromReader(it) ?: DEFAULT_MIME_TYPE
   }.also { Log.d(TAG, "getting mimetype for $uri = $it") }
 
   private fun mimeTypeFromReader(it: String) =
-    try {
-      jniKiwixReader.getMimeType(it.filePath)
-    } catch (illegalStateException: IllegalStateException) {
-      DEFAULT_MIME_TYPE.also {
-        Log.e(TAG, "error reading mime type", illegalStateException)
-      }
-    }
-      // Truncate mime-type (everything after the first space
-      .replace("^([^ ]+).*$", "$1")
+    // Truncate mime-type (everything after the first space
+    jniKiwixReader.getMimeType(it.filePath)?.replace("^([^ ]+).*$", "$1")
 
   fun getRedirect(url: String) = "${toRedirect(url)}"
 
