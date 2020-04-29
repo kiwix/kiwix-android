@@ -112,7 +112,6 @@ class AllProjectConfigurer {
           "ContentDescription",
           "IconDipSize"
         )
-        baseline("${path}/lint-baseline.xml")
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
       packagingOptions {
