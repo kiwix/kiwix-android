@@ -48,12 +48,5 @@
     <ID>TooGenericExceptionThrown:ActivityExtensions.kt$throw RuntimeException( """ applicationContext is ${applicationContext::class.java.simpleName} application is ${application::class.java.simpleName} """.trimIndent() )</ID>
     <ID>TooGenericExceptionThrown:LibraryViewHolder.kt$LibraryViewHolder.LibraryBookViewHolder$throw RuntimeException("impossible invalid state: ${item.fileSystemState}")</ID>
     <ID>TooGenericExceptionThrown:ZimManageViewModel.kt$ZimManageViewModel$throw RuntimeException("Impossible state")</ID>
-    <ID>TooManyFunctions:KiwixActivityComponent.kt$KiwixActivityComponent$KiwixActivityComponent</ID>
-    <ID>TooManyFunctions:KiwixMainActivity.kt$KiwixMainActivity$KiwixMainActivity</ID>
-    <ID>TooManyFunctions:LibraryFragment.kt$LibraryFragment$LibraryFragment</ID>
-    <ID>TooManyFunctions:WifiDirectManager.kt$WifiDirectManager$WifiDirectManager</ID>
-    <ID>TooManyFunctions:ZimFileSelectFragment.kt$ZimFileSelectFragment$ZimFileSelectFragment</ID>
-    <ID>TooManyFunctions:ZimHostActivity.kt$ZimHostActivity$ZimHostActivity</ID>
-    <ID>TooManyFunctions:ZimManageViewModel.kt$ZimManageViewModel$ZimManageViewModel</ID>
   </Whitelist>
 </SmellBaseline>
