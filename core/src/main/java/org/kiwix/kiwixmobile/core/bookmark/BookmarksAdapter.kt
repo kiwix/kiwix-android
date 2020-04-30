@@ -17,16 +17,15 @@
  */
 package org.kiwix.kiwixmobile.core.bookmark
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.item_bookmark_history.view.favicon
+import kotlinx.android.synthetic.main.item_bookmark_history.view.title
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R2
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.core.extensions.setBitmapFromString
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 
@@ -34,13 +33,11 @@ internal class BookmarksAdapter(
   private val bookmarkList: List<BookmarkItem>,
   private val deleteList: List<BookmarkItem>,
   private val itemClickListener: OnItemClickListener
-) : RecyclerView.Adapter<BookmarksAdapter.Item>() {
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Item = Item(
-    LayoutInflater.from(parent.context)
-      .inflate(R.layout.item_bookmark_history, parent, false)
-  )
+) : RecyclerView.Adapter<BookmarksAdapter.BookmarkItemViewHolder>() {
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkItemViewHolder =
+    BookmarkItemViewHolder(parent.inflate(R.layout.item_bookmark_history, false))
 
-  override fun onBindViewHolder(holder: Item, position: Int) {
+  override fun onBindViewHolder(holder: BookmarkItemViewHolder, position: Int) {
     val bookmark = bookmarkList[position]
     holder.title!!.text = bookmark.bookmarkTitle
     if (deleteList.contains(bookmark)) {
@@ -50,13 +47,13 @@ internal class BookmarksAdapter(
     }
     holder.itemView.setOnClickListener {
       itemClickListener.onItemClick(
-        holder.favicon!!,
+        holder.favicon,
         bookmark
       )
     }
     holder.itemView.setOnLongClickListener {
       itemClickListener.onItemLongClick(
-        holder.favicon!!,
+        holder.favicon,
         bookmark
       )
     }
@@ -69,16 +66,9 @@ internal class BookmarksAdapter(
     fun onItemLongClick(favicon: ImageView, bookmark: BookmarkItem): Boolean
   }
 
-  internal class Item(itemView: View?) :
-    RecyclerView.ViewHolder(itemView!!) {
-    @JvmField @BindView(R2.id.favicon)
-    var favicon: ImageView? = null
-
-    @JvmField @BindView(R2.id.title)
-    var title: TextView? = null
-
-    init {
-      ButterKnife.bind(this, itemView!!)
-    }
+  internal class BookmarkItemViewHolder(itemView: View) :
+    RecyclerView.ViewHolder(itemView) {
+    val favicon: ImageView? = itemView.favicon
+    val title: TextView? = itemView.title
   }
 }
