@@ -35,11 +35,8 @@
   <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: o carregamento do artigo falhou (URL: %1$s).</string>
   <string name="pref_display_title">Mostrar</string>
-  <string name="pref_zoom_sub_title">Aproximação</string>
-  <string name="pref_zoom_dialog">Nível de aproximação</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
-  <string name="pref_zoom_enable">Controlos de Zoom</string>
   <string name="pref_night_mode">Modo nocturno</string>
   <string name="pref_night_mode_summary">Mostrar artigos com as cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
@@ -86,9 +83,9 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_specific_zim_toast">Ficheiro apagado</string>
+  <string name="delete_zims_toast">Ficheiro apagado</string>
   <string name="no_files_here">Não há ficheiros aqui</string>
-  <string name="download_no_space">Espaço insuficiente para o download deste ficheiro.</string>
+  <string name="download_no_space" fuzzy="true">Espaço insuficiente para o download deste ficheiro.</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="zim_simple">Simples</string>
   <string name="zim_no_pic">Sem imagens</string>
@@ -106,7 +103,7 @@
   <string name="help_11">Os ficheiros ZIM descarregados dentro da aplicação estão localizados no diretório de armazenamento externo numa pasta intitulada Kiwix.</string>
   <string name="pref_storage">Armazenamento</string>
   <string name="pref_current_folder">Pasta atual</string>
-  <string name="delete_zim_failed">Desculpe, não foi possível apagar este ficheiro. Devia tentar usar um administrador de ficheiros.</string>
+  <string name="delete_zim_failed" fuzzy="true">Desculpe, não foi possível apagar este ficheiro. Devia tentar usar um administrador de ficheiros.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">parar</string>

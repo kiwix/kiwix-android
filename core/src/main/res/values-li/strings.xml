@@ -20,11 +20,8 @@
   <string name="error_file_invalid">Fout: \'t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
   <string name="error_article_url_not_found">Fout: \'t laje van de pagina (URL: %1$s) is mislök.</string>
   <string name="pref_display_title">Waergaaf</string>
-  <string name="pref_zoom_sub_title">Zoom in</string>
-  <string name="pref_zoom_dialog">Inzoomniveau</string>
   <string name="pref_info_title">Infermasie</string>
   <string name="pref_info_version">Versie</string>
-  <string name="pref_zoom_enable">Inzoompaneel</string>
   <string name="pref_night_mode">Nachmodus</string>
   <string name="pref_night_mode_summary">Tuin artikele mit ómgedrejde kluuere</string>
   <string name="pref_back_to_top">Trök nao baove</string>
@@ -61,9 +58,9 @@
   <string name="local_zims">Toustèl</string>
   <string name="remote_zims">Online</string>
   <string name="library">Haol inhawd op</string>
-  <string name="delete_specific_zim_toast">Bestandj eweggesjaf</string>
+  <string name="delete_zims_toast">Bestandj eweggesjaf</string>
   <string name="no_files_here">Gein bestenj hie</string>
-  <string name="download_no_space">Neet zat ruumdje veur dit bestandj te downloade.</string>
+  <string name="download_no_space" fuzzy="true">Neet zat ruumdje veur dit bestandj te downloade.</string>
   <string name="no_network_connection">Gein netwerkverbinjing</string>
   <string name="help_2">Waat doon v\'r bie Kiwix?</string>
   <string name="help_5">Wo is d\'n inhawd?</string>
@@ -73,7 +70,7 @@
   <string name="help_9">• Angeren inhawd wie Wikileaks or Wikisource is ouch besjikbaar</string>
   <string name="pref_storage">Opslaag</string>
   <string name="pref_current_folder">Hujige Map</string>
-  <string name="delete_zim_failed">V\'r kóste dit bestandj neet ewegsjaffe. Doe mós dit noe perbere mit \'ne bestandjsbehieërder.</string>
+  <string name="delete_zim_failed" fuzzy="true">V\'r kóste dit bestandj neet ewegsjaffe. Doe mós dit noe perbere mit \'ne bestandjsbehieërder.</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Exterm</string>
   <string name="no">Nein</string>

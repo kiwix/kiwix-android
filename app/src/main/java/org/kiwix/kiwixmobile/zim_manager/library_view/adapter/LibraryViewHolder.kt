@@ -111,7 +111,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
 
   class LibraryDividerViewHolder(view: View) : LibraryViewHolder<DividerItem>(view) {
     override fun bind(item: DividerItem) {
-      divider_text.text = item.text
+      divider_text.setText(item.stringId)
     }
   }
 }

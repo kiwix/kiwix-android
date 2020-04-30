@@ -3,6 +3,7 @@
 * Abijeet Patro
 * EukeneFL
 * Fitoschido
+* Joseba
 * Macofe
 * Mikel Ibaiba
 * Subi
@@ -29,11 +30,8 @@
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
   <string name="pref_display_title">Erakutsi</string>
-  <string name="pref_zoom_sub_title">Zooma</string>
-  <string name="pref_zoom_dialog">Zoom maila</string>
   <string name="pref_info_title">Informazioa</string>
   <string name="pref_info_version">Bertsioa</string>
-  <string name="pref_zoom_enable">Zoom kontrola</string>
   <string name="pref_night_mode">Gau modua</string>
   <string name="pref_night_mode_summary">Artikuluak alderantzizko koloreekin erakutsi</string>
   <string name="pref_back_to_top">Gora itzuli</string>
@@ -53,7 +51,7 @@
   <string name="pref_clear_all_history_title">Historia garbitu</string>
   <string name="pref_clear_all_history_summary">Azkeneko bilaketak garbitu eta historialeko erlaitzak</string>
   <string name="all_history_cleared">Historial osoa garbitu da.</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Historial osoa garbitu?</string>
+  <string name="clear_all_history_dialog_title">Historial osoa ezabatu?</string>
   <string name="delete">Ezabatu</string>
   <string name="delete_specific_search_toast">Azkeneko bilaketa ezabatuta</string>
   <string name="hint_contents_drawer_message">Ezkerrerantz eginez artikulu honen edukia ikusi dezakezu.</string>
@@ -80,9 +78,9 @@
   <string name="local_zims">Gailua</string>
   <string name="remote_zims">Konektatuta</string>
   <string name="library">Liburutegia</string>
-  <string name="delete_specific_zim_toast">Fitxategi ezabatua</string>
+  <string name="delete_zims_toast">Fitxategi ezabatua</string>
   <string name="no_files_here">Artxiborik ez hemen</string>
-  <string name="download_no_space">Ez dago espaziorik artxibo hau jaisteko.</string>
+  <string name="download_no_space" fuzzy="true">Ez dago espaziorik artxibo hau jaisteko.</string>
   <string name="space_available">Libre dagoen espazioa:</string>
   <string name="zim_simple">Arrunta</string>
   <string name="zim_no_pic">Ez dago argazkirik</string>
@@ -100,7 +98,7 @@
   <string name="help_11">In-app-eko jaitsitako ZIM artxiboak kanpoko memorian daude, Kiwix deritzon karpeta batean.</string>
   <string name="pref_storage">Biltegia</string>
   <string name="pref_current_folder">Oraingo Artxiboa</string>
-  <string name="delete_zim_failed">Barkatu, ezin izan dugu artxibo hau ezabatu. Artxibo kudeatzailea erabiltzen saiatu dezakezu.</string>
+  <string name="delete_zim_failed" fuzzy="true">Barkatu, ezin izan dugu artxibo hau ezabatu. Artxibo kudeatzailea erabiltzen saiatu dezakezu.</string>
   <string name="tts_pause">pausatua</string>
   <string name="tts_resume">jarraitu</string>
   <string name="stop">Gelditu</string>

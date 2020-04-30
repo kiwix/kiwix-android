@@ -27,11 +27,8 @@
   <string name="error_file_invalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन।</string>
   <string name="error_article_url_not_found">त्रुटी: लेख खोल्न असफल । (Url: %1$s)</string>
   <string name="pref_display_title">देखाउनुहोस्</string>
-  <string name="pref_zoom_sub_title">जुम</string>
-  <string name="pref_zoom_dialog" fuzzy="true">जुम स्तर</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
-  <string name="pref_zoom_enable">जुम नियन्त्रणहरू</string>
   <string name="pref_night_mode">रात्री मूड</string>
   <string name="pref_night_mode_summary">उल्ट्याइएको रङका लेखहरू देखाउनुहोस्</string>
   <string name="pref_back_to_top">सुरुमा जानुहोस्</string>
@@ -64,16 +61,16 @@
   <string name="new_tab_snack_bar">लेख नयाँ ट्याबमा खोल्नुहोस्</string>
   <string name="local_zims">उपकरण</string>
   <string name="library">पुस्तकालय</string>
-  <string name="delete_specific_zim_toast">फाइल मेटियो</string>
+  <string name="delete_zims_toast">फाइल मेटियो</string>
   <string name="no_files_here">यहाँ कुनै फाइलहरू छैनन्</string>
-  <string name="download_no_space">यो फाइल डाउनलोड गर्न पर्याप्त स्थान छैन।</string>
+  <string name="download_no_space" fuzzy="true">यो फाइल डाउनलोड गर्न पर्याप्त स्थान छैन।</string>
   <string name="zim_simple">साधारण</string>
   <string name="zim_no_pic">तस्विर छैन</string>
   <string name="zim_no_vid">भिडियो छैन</string>
   <string name="no_network_connection">नेटवर्क जडान छैन</string>
   <string name="pref_storage">भण्डारण</string>
   <string name="pref_current_folder">हालको फोल्डर</string>
-  <string name="delete_zim_failed">माफ गर्नुहोस् हामीले यो फाइल मेट्न सकेनौं। तपाईंले यसको सट्टामा फाइल व्यवस्थापक प्रयोगको प्रयास गर्नुपर्छ ।</string>
+  <string name="delete_zim_failed" fuzzy="true">माफ गर्नुहोस् हामीले यो फाइल मेट्न सकेनौं। तपाईंले यसको सट्टामा फाइल व्यवस्थापक प्रयोगको प्रयास गर्नुपर्छ ।</string>
   <string name="tts_pause">रोक्नुहोस्</string>
   <string name="tts_resume">पुनः निरन्तरता दिनुहोस्</string>
   <string name="stop">रोक्नुहोस्</string>

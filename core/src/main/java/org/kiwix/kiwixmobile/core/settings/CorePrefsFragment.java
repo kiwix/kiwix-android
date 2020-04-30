@@ -31,8 +31,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
-import android.widget.BaseAdapter;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,7 +46,6 @@ import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
@@ -58,8 +55,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
-import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM;
-import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_ZOOM_ENABLED;
 
 public abstract class CorePrefsFragment extends PreferenceFragment implements
   SettingsContract.View,
@@ -79,7 +74,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   protected NightModeConfig nightModeConfig;
   @Inject
   protected DialogShower alertDialogShower;
-  private SliderPreference mSlider;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -91,8 +85,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.preferences);
 
-    mSlider = (SliderPreference) findPreference(PREF_ZOOM);
-    setSliderState();
     setStorage();
     setUpSettings();
     new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater(),
@@ -100,12 +92,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
   }
 
   protected abstract void setStorage();
-
-  private void setSliderState() {
-    boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(
-      PREF_ZOOM_ENABLED, false);
-    mSlider.setEnabled(enabled);
-  }
 
   @Override
   public void onResume() {
@@ -192,13 +178,6 @@ public abstract class CorePrefsFragment extends PreferenceFragment implements
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    if (key.equals(PREF_ZOOM_ENABLED)) {
-      setSliderState();
-    }
-    if (key.equals(PREF_ZOOM)) {
-      mSlider.setSummary(mSlider.getSummary());
-      ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
-    }
     if (key.equals(PREF_NIGHT_MODE)) {
       sharedPreferenceUtil.updateNightMode();
       restartActivity();

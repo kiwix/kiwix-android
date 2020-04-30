@@ -59,11 +59,10 @@ captures/
 
 # IDEA/Android Studio Ignore exceptions
 !/.idea/vcs.xml
-!/.idea/fileTemplates/
 !/.idea/inspectionProfiles/
 !/.idea/scopes/
 !/.idea/codeStyles/
 !/.idea/encodings.xml
 !/.idea/copyright/
-!/.idea/compiler.xml
+!/.idea/kotlinCodeInsightSettings.xml
 app/jacoco.exec

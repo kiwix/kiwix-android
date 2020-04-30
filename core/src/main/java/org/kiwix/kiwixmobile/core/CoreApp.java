@@ -50,6 +50,14 @@ public abstract class CoreApp extends Application {
   @Inject
   KiwixDatabase kiwixDatabase;
 
+  /**
+   * The init of this class does the work of initializing,
+   * simply injecting it is all that there is to be done
+   */
+  @SuppressWarnings("unused")
+  @Inject
+  JNIInitialiser jniInitialiser;
+
   public static CoreApp getInstance() {
     return app;
   }

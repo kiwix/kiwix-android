@@ -21,11 +21,13 @@ package org.kiwix.kiwixmobile.zim_manager
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.INCONCLUSIVE
-import java.io.File
+import javax.inject.Inject
 
-class MountFileSystemChecker : FileSystemChecker {
+class MountFileSystemChecker @Inject constructor(
+  private val mountPointProducer: MountPointProducer
+) : FileSystemChecker {
   override fun checkFilesystemSupports4GbFiles(path: String) =
-    recursivelyDetermineFilesystem(mountPoints(), path)
+    recursivelyDetermineFilesystem(mountPointProducer.produce(), path)
 
   private fun recursivelyDetermineFilesystem(mountPoints: List<MountInfo>, path: String):
     FileSystemCapability =
@@ -39,32 +41,4 @@ class MountFileSystemChecker : FileSystemChecker {
           else -> INCONCLUSIVE
         }
       } ?: INCONCLUSIVE
-
-  private fun mountPoints() =
-    File("proc/mounts")
-      .takeIf(File::exists)
-      ?.readLines()
-      ?.map { MountInfo(it.split(" ")) }
-      ?: emptyList()
-}
-
-data class MountInfo(val device: String, val mountPoint: String, val fileSystem: String) {
-  constructor(split: List<String>) : this(split[0], split[1], split[2])
-
-  fun matchCount(storage: String) = storage.split("/")
-    .zip(mountPoint.split("/"))
-    .fold(0, { acc, pair ->
-      if (pair.first == pair.second) acc + 1
-      else acc
-    })
-
-  val isVirtual = VIRTUAL_FILE_SYSTEMS.contains(fileSystem)
-  val supports4GBFiles = SUPPORTS_4GB_FILE_SYSTEMS.contains(fileSystem)
-  val doesNotSupport4GBFiles = DOES_NOT_SUPPORT_4GB_FILE_SYSTEMS.contains(fileSystem)
-
-  companion object {
-    private val VIRTUAL_FILE_SYSTEMS = listOf("fuse", "sdcardfs")
-    private val SUPPORTS_4GB_FILE_SYSTEMS = listOf("ext4", "exfat")
-    private val DOES_NOT_SUPPORT_4GB_FILE_SYSTEMS = listOf("fat32", "vfat")
-  }
 }

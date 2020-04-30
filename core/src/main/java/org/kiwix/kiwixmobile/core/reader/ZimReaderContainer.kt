@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
-import android.net.Uri
+import android.webkit.WebResourceResponse
 import org.kiwix.kiwixlib.JNIKiwixSearcher
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.io.File
@@ -48,10 +48,6 @@ class ZimReaderContainer @Inject constructor(
       else null
   }
 
-  fun readMimeType(uri: Uri) = zimFileReader?.readMimeType(uri)
-
-  fun load(uri: Uri) = zimFileReader?.load(uri)
-
   fun searchSuggestions(prefix: String, count: Int) =
     zimFileReader?.searchSuggestions(prefix, count) ?: false
 
@@ -67,8 +63,15 @@ class ZimReaderContainer @Inject constructor(
   fun getNextResult() = jniKiwixSearcher?.nextResult?.let { SearchResult(it.title) }
   fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
   fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
+  fun load(url: String) =
+    WebResourceResponse(
+      zimFileReader?.readMimeType(url),
+      Charsets.UTF_8.name(),
+      zimFileReader?.load(url)
+    )
 
   val zimFile get() = zimFileReader?.zimFile
+
   val zimCanonicalPath get() = zimFileReader?.zimFile?.canonicalPath
   val zimFileTitle get() = zimFileReader?.title
   val mainPage get() = zimFileReader?.mainPage

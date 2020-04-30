@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import java.util.ArrayList
 import javax.inject.Inject
 
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
@@ -46,20 +45,20 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   }
 
   private fun uniqueBooksByFile(booksOnDisk: List<BookOnDisk>): List<BookOnDisk> {
-    val booksThatPointToSameLocation = box
-      .query {
-        inValues(BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray())
-      }.find().map(::BookOnDisk)
+    val booksWithSameFilePath = booksWithSameFilePath(booksOnDisk)
     return booksOnDisk.filter { bookOnDisk: BookOnDisk ->
-      booksThatPointToSameLocation.find { it.file.path == bookOnDisk.file.path } == null
+      booksWithSameFilePath.find { it.file.path == bookOnDisk.file.path } == null
     }
   }
 
-  private fun removeEntriesWithMatchingIds(newBooks: List<BookOnDisk>) {
-    box
-      .query {
-        inValues(BookOnDiskEntity_.bookId, newBooks.map { it.book.id }.toTypedArray())
-      }
+  private fun booksWithSameFilePath(booksOnDisk: List<BookOnDisk>) =
+    box.query {
+      inValues(BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray())
+    }.find()
+      .map(::BookOnDisk)
+
+  private fun removeEntriesWithMatchingIds(uniqueBooks: List<BookOnDisk>) {
+    box.query { inValues(BookOnDiskEntity_.bookId, uniqueBooks.map { it.book.id }.toTypedArray()) }
       .remove()
   }
 
@@ -67,7 +66,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     box.remove(databaseId)
   }
 
-  fun migrationInsert(books: ArrayList<Book>) {
+  fun migrationInsert(books: List<Book>) {
     insert(books.map { BookOnDisk(book = it, file = it.file) })
   }
 

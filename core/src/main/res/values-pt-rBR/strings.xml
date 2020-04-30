@@ -56,11 +56,8 @@
   <string name="error_file_invalid">Erro: O arquivo selecionado não é um arquivo ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: Falha no carregamento do artigo (Url: %1$s).</string>
   <string name="pref_display_title">Exibição</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Nível de Zoom</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
-  <string name="pref_zoom_enable">Controles de Zoom</string>
   <string name="pref_night_mode">Modo noturno</string>
   <string name="pref_night_mode_summary">Mostrar artigos com cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
@@ -112,10 +109,10 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Online</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Excluir %s?</string>
-  <string name="delete_specific_zim_toast">Arquivo apagado</string>
+  <string name="delete_zim_body">Os seguintes arquivos zim serão excluídos:\n\n%s</string>
+  <string name="delete_zims_toast">Arquivo apagado</string>
   <string name="no_files_here">Nenhum arquivo aqui</string>
-  <string name="download_no_space">Espaço insuficiente para baixar este arquivo.</string>
+  <string name="download_no_space">Espaço insuficiente para baixar o download.</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sem Imagens</string>
@@ -133,7 +130,7 @@
   <string name="help_11">O download de arquivos do ZIM no aplicativo está localizado no diretório de armazenamento externo em uma pasta intitulada Kiwix.</string>
   <string name="pref_storage">Armazenamento</string>
   <string name="pref_current_folder">Pasta atual</string>
-  <string name="delete_zim_failed">Desculpe, não foi possível excluir este arquivo. Você deve tentar usar um gerenciador de arquivos em vez disso.</string>
+  <string name="delete_zim_failed">Desculpe, não foi possível excluir alguns arquivos. Você deve tentar usar um gerenciador de arquivos.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">parar</string>
@@ -162,7 +159,7 @@
   <string name="time_yesterday">Ontem</string>
   <string name="pref_external_link_popup_title">Avisar ao inserir links externos</string>
   <string name="pref_external_link_popup_summary">Exibir pop-up para avisar sobre custos adicionais ou não trabalhar em links off-line.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Entrar no link externo</string>
+  <string name="external_link_popup_dialog_title">Entrar no link externo!</string>
   <string name="external_link_popup_dialog_message">Você está inserindo um link externo. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Você quer continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Idiomas selecionados:</string>
@@ -266,4 +263,7 @@
   <string name="device_default">Padrão do dispositivo</string>
   <string name="delete_history">Apagar histórico?</string>
   <string name="delete_bookmarks">Excluir marcadores?</string>
+  <string name="on">Lig</string>
+  <string name="off">Des</string>
+  <string name="auto">Auto</string>
 </resources>

@@ -3,6 +3,7 @@
 * Dyolf77
 * Eyas
 * Meno25
+* Tala Ali
 * بدارين
 * ديفيد
 * علاء
@@ -38,7 +39,7 @@
   <string name="server_failed_message">لا يمكن بدء الخادم. يُرجى تشغيل الهوت-سبوت الخاص بك</string>
   <string name="server_failed_toast_message">لا يمكن بدء الخادم.</string>
   <string name="server_started_successfully_toast_message">بدأ الخادم بنجاح.</string>
-  <string name="server_stopped_successfully_toast_message">أوقف الخادم بنجاح.</string>
+  <string name="server_stopped_successfully_toast_message">توقف الخادم بنجاح.</string>
   <string name="hotspot_turned_on">الهوت-سبوت قيد التشغيل</string>
   <string name="hotspot_details_message">فيما يلي تفاصيل الهوت-سبوت الخاص بك.\nSSID: %1$s \nPass: %2$s</string>
   <string name="server_textview_default_message">حدد الملفات التي ترغب في استضافتها على الخادم</string>
@@ -52,14 +53,12 @@
   <string name="stop_server_label">إيقاف الخادم</string>
   <string name="server_started_message">أدخل عنوان الآيبي هذا في متصفحك للوصول إلى الخادم %s</string>
   <string name="error_file_not_found">خطأ: تعذر العثور على الملف زيم (ZIM) المحدد</string>
+  <string name="zim_not_opened">غير قادرٍ على فتح ملف zim</string>
   <string name="error_file_invalid">خطأ: ملف زيم (ZIM) المحدد ليس صالحًا.</string>
   <string name="error_article_url_not_found">خطأ: لم ينجح تحميل المقالة (Url: %1$s).</string>
   <string name="pref_display_title">العرض</string>
-  <string name="pref_zoom_sub_title">تكبير/تصغير</string>
-  <string name="pref_zoom_dialog">مستوى التكبير</string>
   <string name="pref_info_title">معلومات</string>
   <string name="pref_info_version">الإصدار</string>
-  <string name="pref_zoom_enable">تحكم التكبير/التصغير</string>
   <string name="pref_night_mode">الوضع الليلي</string>
   <string name="pref_night_mode_summary">عرض المقالات بألوانٍ معكوسة</string>
   <string name="pref_back_to_top">ارجع إلى الأعلى</string>
@@ -78,13 +77,14 @@
   <string name="delete_recent_search_item">حذف هذا العنصر؟</string>
   <string name="pref_clear_all_history_title">إفراغ التاريخ</string>
   <string name="pref_clear_all_history_summary">إفراغ عمليات البحث الحديثة وعلامات التبويب</string>
-  <string name="all_history_cleared">تم إفراغ سجل التاريخ</string>
+  <string name="all_history_cleared">أُفرغ سجل التاريخ</string>
   <string name="pref_clear_all_bookmarks_title">حذف الإشارات المرجعية</string>
   <string name="all_bookmarks_cleared">حُذفت جميع الإشارات المرجعية</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">مسح كل التاريخ</string>
+  <string name="clear_all_history_dialog_title">مسح كل التاريخ</string>
   <string name="share">مشاركة</string>
   <string name="selected_file_cab_app_chooser_title">مشاركة ملفات زيم (ZIM) مع:</string>
   <string name="delete">حذف</string>
+  <string name="cancel">إلغاء</string>
   <string name="delete_specific_search_toast">تمت إزالة عمليات البحث الأخيرة</string>
   <string name="hint_contents_drawer_message">يمكنك التمرير لليسار لعرض محتويات هذه المقالة</string>
   <string name="got_it">فهمت!</string>
@@ -110,10 +110,10 @@
   <string name="local_zims">جهاز</string>
   <string name="remote_zims">متصل</string>
   <string name="library">المكتبة</string>
-  <string name="delete_zim_body">حذف %s؟</string>
-  <string name="delete_specific_zim_toast">حُذف الملف</string>
+  <string name="delete_zim_body" fuzzy="true">حذف %s؟</string>
+  <string name="delete_zims_toast">حُذف الملف</string>
   <string name="no_files_here">لا توجد ملفات هنا</string>
-  <string name="download_no_space">لا توجد مساحة كافية لتنزيل هذا الملف.</string>
+  <string name="download_no_space">لا توجد مساحة كافية للتنزيل.</string>
   <string name="space_available">المساحة المتاحة:</string>
   <string name="zim_simple">بسيط</string>
   <string name="zim_no_pic">لا توجد صور</string>
@@ -131,7 +131,7 @@
   <string name="help_11">توجد ملفات زيم (ZIM) قابلة للتنزيل داخل التطبيق في دليل التخزين الخارجي في مجلد بعنوان كيويكس (Kiwix).</string>
   <string name="pref_storage">التخزين</string>
   <string name="pref_current_folder">المجلد الحالي</string>
-  <string name="delete_zim_failed">نعتذر لم نتمكن من حذف هذا الملف. يجب أن تحاول استخدام مدير ملفات بدلًا من ذلك.</string>
+  <string name="delete_zim_failed">.نعتذر لم نتمكن من حذف بعض الملفات. يجب أن تحاول استخدام مدير ملفات بدل ذلك.</string>
   <string name="tts_pause">إيقاف مؤقت</string>
   <string name="tts_resume">استئناف</string>
   <string name="stop">إيقاف</string>
@@ -143,10 +143,13 @@
   <string name="confirm_stop_download_msg">هل أنت متأكد من أنك تريد إيقاف هذا التنزيل؟</string>
   <string name="download_change_storage">محدد جهاز التخزين</string>
   <string name="tts_not_enabled">لم يتم تمكين النص إلى الكلام لملف زيم (ZIM) هذا</string>
+  <string name="texttospeech_initialization_failed">فشل تهيئة النص إلى كلام. حاول مرةً أخرى</string>
+  <string name="texttospeech_error">خطأٌ غير متوقع في تحويل النص إلى كلام. حاول مرةً أخرى</string>
+  <string name="search_error">خطأٌ غير متوقع أثناء البحث. حاول مرةً أخرى</string>
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
-  <string name="wifi_only_msg">إذا اخترت “نعم”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
+  <string name="wifi_only_msg">إذا اخترت \“نعم\”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
   <string name="pref_wifi_only">تنزيل المحتوى عبر واي فاي فقط</string>
   <string name="time_day">يوم</string>
   <string name="time_hour">ساعة</string>
@@ -157,7 +160,7 @@
   <string name="time_yesterday">أمس</string>
   <string name="pref_external_link_popup_title">التحذير عند الدخول إلى وصلاتٍ خارجية</string>
   <string name="pref_external_link_popup_summary">عرض المنبثق للتحذير من التكاليف الإضافية أو عدم عمل الروابط دون اتصالٍ بالإنترنت.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">الدخول إلى الوصلة الخارجية</string>
+  <string name="external_link_popup_dialog_title">الدخول إلى وصلةٍ خارجية!</string>
   <string name="external_link_popup_dialog_message">قد دخلت إلى وصلةٍ خارجية، قد يؤدي ذلك إلى فرض تكاليفٍ إضافيةٍ لنقل البيانات أو فقط لن يعمل إذا لم تكن متصلًا بالإنترنت، هل تريد الاستمرار؟</string>
   <string name="do_not_ask_anymore">لا تسأل بعد الآن</string>
   <string name="your_languages">اللغات المختارة:</string>
@@ -209,6 +212,8 @@
   <string name="ext_storage_permission_rationale_add_note">الوصول إلى التخزين مطلوب للملاحظات</string>
   <string name="ext_storage_write_permission_denied_add_note">لا يمكن استخدام الملاحظات دون الوصول إلى وحدة التخزين</string>
   <string name="note_save_unsuccessful">لم ينجح حفظ الملاحظة</string>
+  <string name="note_delete_successful">حُذفت الملاحظة بنجاح</string>
+  <string name="note_delete_unsuccessful">لم تُحذف الملاحظة</string>
   <string name="note_save_successful">حُفظت الملاحظة</string>
   <string name="note_save_error_storage_not_writable">خطأ في حفظ الملاحظة: وحدة التخزين غير قابلة للكتابة</string>
   <string name="note_share_error_file_missing">ملف الملاحظة غير موجود</string>
@@ -259,4 +264,7 @@
   <string name="device_default">الجهاز الافتراضي</string>
   <string name="delete_history">حذف التاريخ؟</string>
   <string name="delete_bookmarks">أزل العلامات المرجعية؟</string>
+  <string name="on">تشغيل</string>
+  <string name="off">تعطيل</string>
+  <string name="auto">تلقائي</string>
 </resources>

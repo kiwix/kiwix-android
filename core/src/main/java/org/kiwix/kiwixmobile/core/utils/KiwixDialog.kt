@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.utils
 import android.net.wifi.WifiConfiguration
 import android.view.View
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 sealed class KiwixDialog(
   val title: Int?,
@@ -34,10 +33,10 @@ sealed class KiwixDialog(
   val getView: (() -> View)? = null
 ) {
 
-  data class DeleteZim(override val args: List<Any>) : KiwixDialog(
+  data class DeleteZims(override val args: List<Any>) : KiwixDialog(
     null, R.string.delete_zim_body, R.string.delete, R.string.no
   ), HasBodyFormatArgs {
-    constructor(bookOnDisk: BookOnDisk) : this(listOf(bookOnDisk.book.title))
+    constructor(zimNameList: String) : this(listOf(zimNameList))
   }
 
   object LocationPermissionRationale : KiwixDialog(
@@ -158,9 +157,9 @@ sealed class KiwixDialog(
     getView = customGetView
   )
 
-  data class ConfirmationAlertDialogFragment(val customMessage: Int) : KiwixDialog(
+  object NotesDiscardConfirmation : KiwixDialog(
     null,
-    customMessage,
+    R.string.confirmation_alert_dialog_message,
     R.string.yes,
     android.R.string.cancel
   )

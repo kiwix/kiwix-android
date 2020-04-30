@@ -6,18 +6,18 @@
     android:id="@+id/delete_note"
     android:icon="@drawable/ic_delete_white_24dp"
     android:title="@string/delete"
-    app:showAsAction="always" />
+    app:showAsAction="ifRoom" />
 
   <item
     android:id="@+id/share_note"
     android:icon="@drawable/baseline_share_24"
     android:title="@string/share"
-    app:showAsAction="always" />
+    app:showAsAction="ifRoom" />
 
   <item
     android:id="@+id/save_note"
     android:icon="@drawable/ic_save"
     android:title="@string/save"
-    app:showAsAction="always" />
+    app:showAsAction="ifRoom" />
 
 </menu>

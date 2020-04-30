@@ -33,11 +33,8 @@
   <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil.</string>
   <string name="error_article_url_not_found">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
   <string name="pref_display_title">Visning</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Zoomniveau</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Zoom kontrol</string>
   <string name="pref_night_mode">Nat-tilstand</string>
   <string name="pref_night_mode_summary">Vis artikler med farverne vendt om</string>
   <string name="pref_back_to_top">Tilbage til toppen</string>
@@ -85,9 +82,9 @@
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
   <string name="library">Bibliotek</string>
-  <string name="delete_specific_zim_toast">Fil slettet</string>
+  <string name="delete_zims_toast">Fil slettet</string>
   <string name="no_files_here">Ingen filer her</string>
-  <string name="download_no_space">Utilstrækkelig med plads til at hente denne fil.</string>
+  <string name="download_no_space" fuzzy="true">Utilstrækkelig med plads til at hente denne fil.</string>
   <string name="space_available">Ledig plads:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Ingen billeder</string>
@@ -105,7 +102,7 @@
   <string name="help_11">ZIM-filer hentet inden i programmet placeres i det ekstern lager i mappen Kiwix.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuværende mappe</string>
-  <string name="delete_zim_failed">Beklager vi kunne ikke slette denne fil. Du bør prøve at bruge en filhåndtering i stedet for.</string>
+  <string name="delete_zim_failed" fuzzy="true">Beklager vi kunne ikke slette denne fil. Du bør prøve at bruge en filhåndtering i stedet for.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">genoptag</string>
   <string name="stop">stop</string>

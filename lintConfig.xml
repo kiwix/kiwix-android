@@ -13,4 +13,12 @@
     <ignore path="**/values-**/**.xml" />
   </issue>
 
+  <issue id="InvalidPackage">
+    <ignore path="**simple-xml-2.7.1.jar" />
+  </issue>
+  <issue id="IconLocation">
+    <ignore path="src/main/res/drawable/kiwix_icon_with_title.png" />
+    <ignore path="src/main/res/drawable/search_widget_preview.png" />
+  </issue>
+
 </lint>

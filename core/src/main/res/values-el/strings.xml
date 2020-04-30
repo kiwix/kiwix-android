@@ -28,11 +28,8 @@
   <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
   <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
   <string name="pref_display_title">Εμφάνιση</string>
-  <string name="pref_zoom_sub_title">Εστίαση</string>
-  <string name="pref_zoom_dialog">Επίπεδο ζουμ</string>
   <string name="pref_info_title">Πληροφορίες</string>
   <string name="pref_info_version">Έκδοση</string>
-  <string name="pref_zoom_enable">Στοιχεία ελέγχου ζουμ</string>
   <string name="pref_night_mode">Νυχτερινή λειτουργία</string>
   <string name="pref_night_mode_summary">Προβολή λημμάτων με ανεστραμμένα χρώματα</string>
   <string name="pref_back_to_top">Επιστροφή στην κορυφή</string>
@@ -72,9 +69,9 @@
   <string name="local_zims">Συσκευή</string>
   <string name="remote_zims">Συνδεδεμένος</string>
   <string name="library">Βιβλιοθήκη</string>
-  <string name="delete_specific_zim_toast">Το αρχείο διαγράφηκε</string>
+  <string name="delete_zims_toast">Το αρχείο διαγράφηκε</string>
   <string name="no_files_here">Δεν υπάρχουν αρχεία εδώ</string>
-  <string name="download_no_space">Μη επαρκής αποθηκευτικός χώρος για την λήψη του αρχείου.</string>
+  <string name="download_no_space" fuzzy="true">Μη επαρκής αποθηκευτικός χώρος για την λήψη του αρχείου.</string>
   <string name="space_available">Διαθέσιμος αποθηκευτικός χώρος:</string>
   <string name="zim_simple">Απλό</string>
   <string name="zim_no_pic">Χωρίς εικόνες</string>
@@ -89,7 +86,7 @@
   <string name="help_9">• Άλλα περιεχόμενα όπως το Wikileaks ή η Βικιθήκη είναι επίσης διαθέσιμα</string>
   <string name="pref_storage">Αποθηκευτικός χώρος</string>
   <string name="pref_current_folder">Τρέχων φάκελος</string>
-  <string name="delete_zim_failed">Λυπούμαστε, δεν μπορέσαμε να διαγράψουμε αυτό το αρχείο. Αντί γι\'αυτού θα έπρεπε να χρησιμοποιήσετε ένα διαχειριστή αρχείων.</string>
+  <string name="delete_zim_failed" fuzzy="true">Λυπούμαστε, δεν μπορέσαμε να διαγράψουμε αυτό το αρχείο. Αντί γι\'αυτού θα έπρεπε να χρησιμοποιήσετε ένα διαχειριστή αρχείων.</string>
   <string name="tts_pause">παύση</string>
   <string name="tts_resume">συνέχεια</string>
   <string name="stop">Διακοπή</string>

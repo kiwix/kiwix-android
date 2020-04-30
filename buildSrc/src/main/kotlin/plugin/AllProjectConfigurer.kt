@@ -98,6 +98,7 @@ class AllProjectConfigurer {
 
         ignore(
           "SyntheticAccessor",
+          "GoogleAppIndexingApiWarning",
           //TODO stop ignoring below this
           "CheckResult",
           "LabelFor",
@@ -112,7 +113,6 @@ class AllProjectConfigurer {
           "ContentDescription",
           "IconDipSize"
         )
-        baseline("${path}/lint-baseline.xml")
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
       packagingOptions {

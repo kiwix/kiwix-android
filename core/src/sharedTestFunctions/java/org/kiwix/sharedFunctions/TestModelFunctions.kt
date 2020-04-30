@@ -20,6 +20,8 @@ package org.kiwix.sharedFunctions
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.NONE
+import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
+import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -135,11 +137,12 @@ fun book(
   publisher: String = "publisher",
   date: String = "date",
   url: String = "${MOCK_BASE_URL}url.meta4",
-  articleCount: String = "mediaCount",
+  articleCount: String = "articleCount",
   mediaCount: String = "mediaCount",
   size: String = "1024",
   name: String = "name",
-  favIcon: String = "favIcon"
+  favIcon: String = "favIcon",
+  file: File = File("")
 ) =
   Book().apply {
     this.id = id
@@ -153,6 +156,7 @@ fun book(
     this.articleCount = articleCount
     this.mediaCount = mediaCount
     this.size = size
+    this.file = file
     bookName = name
     favicon = favIcon
   }
@@ -160,3 +164,43 @@ fun book(
 fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity().apply {
   book = LinkedList(books)
 }
+
+fun recentSearchEntity(id: Long = 0L, searchTerm: String = "", zimId: String = "") =
+  RecentSearchEntity(id, searchTerm, zimId)
+
+fun bookOnDiskEntity(
+  id: Long = 0,
+  file: File = File(""),
+  bookId: String = "",
+  title: String = "",
+  description: String = "",
+  language: String = "",
+  creator: String = "",
+  publisher: String = "",
+  date: String = "",
+  url: String? = "",
+  articleCount: String = "",
+  mediaCount: String = "",
+  size: String = "",
+  name: String? = "",
+  favIcon: String = "",
+  tags: String? = ""
+) =
+  BookOnDiskEntity(
+    id,
+    file,
+    bookId,
+    title,
+    description,
+    language,
+    creator,
+    publisher,
+    date,
+    url,
+    articleCount,
+    mediaCount,
+    size,
+    name,
+    favIcon,
+    tags
+  )

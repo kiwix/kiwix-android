@@ -21,10 +21,8 @@
   <string name="error_file_invalid">Fout: het geselecteerde bestand is geen geldig ZIM-bestand.</string>
   <string name="error_article_url_not_found">Fout: Het laden van de pagina (URL: %1$s) is mislukt.</string>
   <string name="pref_display_title">Beeld</string>
-  <string name="pref_zoom_dialog">Zoomniveau</string>
   <string name="pref_info_title">Informatie</string>
   <string name="pref_info_version">Versie</string>
-  <string name="pref_zoom_enable">Besturingselementen voor zoomen</string>
   <string name="pref_night_mode">Nachtmodus</string>
   <string name="pref_night_mode_summary">Pagina\'s weergeven met omgekeerde kleuren</string>
   <string name="pref_back_to_top">Terug naar boven</string>

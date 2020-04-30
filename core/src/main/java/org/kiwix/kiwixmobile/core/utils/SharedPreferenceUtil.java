@@ -46,8 +46,6 @@ public class SharedPreferenceUtil {
   public static final String PREF_STORAGE = "pref_select_folder";
   public static final String PREF_WIFI_ONLY = "pref_wifi_only";
   public static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
-  public static final String PREF_ZOOM = "pref_zoom_slider";
-  public static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
   public static final String PREF_SHOW_INTRO = "showIntro";
   private static final String PREF_BACK_TO_TOP = "pref_backtotop";
   private static final String PREF_HIDE_TOOLBAR = "pref_hidetoolbar";
@@ -89,10 +87,6 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
   }
 
-  public boolean getPrefZoomEnabled() {
-    return sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
-  }
-
   public boolean getPrefNewTabBackground() {
     return sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false);
   }
@@ -101,24 +95,27 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true);
   }
 
-  public float getPrefZoom() {
-    return sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
-  }
-
   public String getPrefLanguage() {
     return sharedPreferences.getString(PREF_LANG, Locale.ROOT.toString());
   }
 
   public String getPrefStorage() {
-    String storage = sharedPreferences.getString(PREF_STORAGE, null);
+    final String storage = sharedPreferences.getString(PREF_STORAGE, null);
     if (storage == null) {
-      final File externalFilesDir =
-        ContextCompat.getExternalFilesDirs(CoreApp.getInstance(), null)[0];
-      storage = externalFilesDir != null ? externalFilesDir.getPath()
-        : CoreApp.getInstance().getFilesDir().getPath(); // workaround for emulators
-      putPrefStorage(storage);
+      final String defaultStorage = defaultStorage();
+      putPrefStorage(defaultStorage);
+      return defaultStorage;
+    } else if (!new File(storage).exists()) {
+      return defaultStorage();
     }
     return storage;
+  }
+
+  private String defaultStorage() {
+    final File externalFilesDir =
+      ContextCompat.getExternalFilesDirs(CoreApp.getInstance(), null)[0];
+    return externalFilesDir != null ? externalFilesDir.getPath()
+      : CoreApp.getInstance().getFilesDir().getPath(); // workaround for emulators
   }
 
   public String getPrefStorageTitle(String defaultTitle) {

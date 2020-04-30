@@ -33,11 +33,8 @@
   <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
   <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
   <string name="pref_display_title">Megjelenítés</string>
-  <string name="pref_zoom_sub_title">Kicsinyítés/nagyítás</string>
-  <string name="pref_zoom_dialog">Nagyítási szint</string>
   <string name="pref_info_title">Információ</string>
   <string name="pref_info_version">Verzió</string>
-  <string name="pref_zoom_enable">Nagyítási vezérlők</string>
   <string name="pref_night_mode">Éjszakai mód</string>
   <string name="pref_night_mode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
   <string name="pref_back_to_top">Vissza a lap tetejére</string>
@@ -84,9 +81,9 @@
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
   <string name="library">Könyvtár</string>
-  <string name="delete_specific_zim_toast">Fájl törölve</string>
+  <string name="delete_zims_toast">Fájl törölve</string>
   <string name="no_files_here">Nincsenek fájlok</string>
-  <string name="download_no_space">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
+  <string name="download_no_space" fuzzy="true">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
   <string name="space_available">Szabad tárhely:</string>
   <string name="zim_simple">Egyszerű</string>
   <string name="zim_no_pic">Nincsenek képek</string>
@@ -104,7 +101,7 @@
   <string name="help_11">Az alkalmazáson belül letöltött ZIM fájlok a külső tároló könyvtár Kiwix nevű mappájában vannak elhelyezve.</string>
   <string name="pref_storage">Tárhely</string>
   <string name="pref_current_folder">Aktuális folder</string>
-  <string name="delete_zim_failed">Sajnos nem tudjuk ezt a fájlt törölni. Próbáld meg egy fájlkezelőn keresztül törölni.</string>
+  <string name="delete_zim_failed" fuzzy="true">Sajnos nem tudjuk ezt a fájlt törölni. Próbáld meg egy fájlkezelőn keresztül törölni.</string>
   <string name="tts_pause">szünet</string>
   <string name="tts_resume">folytat</string>
   <string name="stop">leállítás</string>

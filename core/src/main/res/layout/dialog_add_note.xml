@@ -17,7 +17,7 @@
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:orientation="vertical">
 
       <TextView
@@ -53,7 +53,8 @@
         android:paddingEnd="20dp"
         android:paddingBottom="10dp"
         android:scrollbars="vertical"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:importantForAutofill="no" />
 
     </LinearLayout>
   </ScrollView>

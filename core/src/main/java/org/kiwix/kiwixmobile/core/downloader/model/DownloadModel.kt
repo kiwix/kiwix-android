@@ -35,6 +35,7 @@ data class DownloadModel(
   val progress: Int,
   val book: Book
 ) {
+  val bytesRemaining: Long by lazy { totalSizeOfDownload - bytesDownloaded }
   val fileNameFromUrl: String by lazy { StorageUtils.getFileNameFromUrl(book.url) }
 
   constructor(downloadEntity: FetchDownloadEntity) : this(

@@ -25,7 +25,9 @@ import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.base.BasePresenter;
 import org.kiwix.kiwixmobile.core.data.DataSource;
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation;
@@ -61,7 +63,9 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
 
         @Override
         public void onSuccess(List<BookmarkItem> bookmarks) {
-          view.updateBookmarksList(bookmarks);
+          if (view != null) {
+            view.updateBookmarksList(bookmarks);
+          }
         }
 
         @Override
@@ -72,10 +76,12 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
   }
 
   @Override
-  public void filterBookmarks(List<BookmarkItem> bookmarks, String newText) {
+  public void filterBookmarks(@NotNull List<BookmarkItem> bookmarks, @NotNull String newText) {
     Observable.fromIterable(bookmarks)
       .filter(
-        bookmark -> bookmark.getBookmarkTitle().toLowerCase().contains(newText.toLowerCase()))
+        bookmark -> bookmark.getBookmarkTitle()
+          .toLowerCase(Locale.ROOT)
+          .contains(newText.toLowerCase(Locale.ROOT)))
       .toList()
       .subscribeOn(computation)
       .observeOn(mainThread)
@@ -87,7 +93,9 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
 
         @Override
         public void onSuccess(List<BookmarkItem> bookmarkList) {
-          view.notifyBookmarksListFiltered(bookmarkList);
+          if (view != null) {
+            view.notifyBookmarksListFiltered(bookmarkList);
+          }
         }
 
         @Override
@@ -98,7 +106,7 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
   }
 
   @Override
-  public void deleteBookmarks(List<BookmarkItem> deleteList) {
+  public void deleteBookmarks(@NotNull List<BookmarkItem> deleteList) {
     dataSource.deleteBookmarks(deleteList)
       .subscribe(new CompletableObserver() {
         @Override
