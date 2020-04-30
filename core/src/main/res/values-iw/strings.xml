@@ -197,7 +197,7 @@
   <string name="history_from_current_book">צפייה בהיסטוריה מכל הספרים</string>
   <string name="search_history">חיפוש בהיסטוריה</string>
   <string name="selected_items">נבחרו %1$d</string>
-  <string name="bookmarks_from_current_book" fuzzy="true">סימניות מהספר הנוכחי</string>
+  <string name="bookmarks_from_current_book">הצגת סימניות מכל הספרים</string>
   <string name="search_bookmarks">חיפוש סימניות</string>
   <string name="switch_tabs">החלפת כרטיסיות</string>
   <string name="close_all_tabs">סגירת כל הכרטיסיות</string>

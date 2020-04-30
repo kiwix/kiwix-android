@@ -265,4 +265,8 @@
   <string name="on">開啟</string>
   <string name="off">關閉</string>
   <string name="auto">自動</string>
+  <string name="send_report">傳送診斷報告</string>
+  <string name="crash_checkbox_file_system">檔案系統詳細資訊</string>
+  <string name="diagnostic_report">診斷報告</string>
+  <string name="diagnostic_report_message">請傳送所有以下詳細資訊，以讓我們可以方便診斷問題</string>
 </resources>

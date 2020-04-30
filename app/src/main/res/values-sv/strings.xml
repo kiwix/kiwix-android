@@ -5,4 +5,5 @@
 <resources>
   <string name="file_system_does_not_support_4gb">Ditt filsystem har inte stöd för filer över 4GB</string>
   <string name="detecting_file_system">Upptäcker om filsystemet kan skapa filer på 4GB</string>
+  <string name="cannot_open_file">Misslyckades att öppna fil\nVar god försök leta efter denna fil i enhetsfliken i ditt bibliotek</string>
 </resources>
