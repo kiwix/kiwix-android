@@ -49,8 +49,6 @@ public abstract class CoreApp extends Application {
   NightModeConfig nightModeConfig;
   @Inject
   KiwixDatabase kiwixDatabase;
-  @Inject
-  JNIInitialiser jniInitialiser;
 
   /**
    * The init of this class does the work of initializing,
@@ -90,7 +88,6 @@ public abstract class CoreApp extends Application {
     AndroidThreeTen.init(this);
     writeLogFile();
     coreComponent.inject(this);
-    jniInitialiser.init();
     kiwixDatabase.forceMigration();
     downloadMonitor.init();
     nightModeConfig.init();

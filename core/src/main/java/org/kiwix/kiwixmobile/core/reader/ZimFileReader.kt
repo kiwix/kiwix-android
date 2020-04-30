@@ -157,7 +157,7 @@ class ZimFileReader constructor(
     return AssetFileDescriptor(
       infoPair.parcelFileDescriptor,
       infoPair.offset,
-      jniKiwixReader.getArticleSize(uri)
+      jniKiwixReader.getArticleSize(uri.filePath)
     ).createInputStream()
   }
 
