@@ -194,13 +194,13 @@ class BookmarksActivity : BaseActivity(),
     notifyBookmarksListFiltered(bookmarksList)
   }
 
-  override fun notifyBookmarksListFiltered(bookmarksList: List<BookmarkItem>) {
-    this.bookmarksList.clear()
-    this.bookmarksList.addAll(bookmarksList)
+  override fun notifyBookmarksListFiltered(bookmarks: List<BookmarkItem>) {
+    bookmarksList.clear()
+    bookmarksList.addAll(bookmarks)
     bookmarksAdapter.notifyDataSetChanged()
   }
 
-  override fun onItemClick(favicon: ImageView, bookmark: BookmarkItem) {
+  override fun onItemClick(favicon: ImageView?, bookmark: BookmarkItem) {
     if (actionMode == null) {
       val intent = internal(
         CoreMainActivity::class.java
@@ -218,17 +218,17 @@ class BookmarksActivity : BaseActivity(),
       setResult(Activity.RESULT_OK, intent)
       finish()
     } else {
-      toggleSelection(favicon, bookmark)
+      toggleSelection(favicon!!, bookmark)
     }
   }
 
-  override fun onItemLongClick(favicon: ImageView, bookmark: BookmarkItem): Boolean {
+  override fun onItemLongClick(favicon: ImageView?, bookmark: BookmarkItem): Boolean {
     if (actionMode != null) {
       return false
     }
     actionMode = startSupportActionMode(actionModeCallback)
     refreshAdapter = true
-    toggleSelection(favicon, bookmark)
+    toggleSelection(favicon!!, bookmark)
     return true
   }
 
@@ -239,7 +239,7 @@ class BookmarksActivity : BaseActivity(),
       favicon.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
       deleteList.add(bookmark)
     }
-    actionMode!!.title = getString(R.string.selected_items, deleteList.size)
+    actionMode!!.title = getString(R.string.selected_items)
     if (deleteList.size == 0) {
       actionMode!!.finish()
     }

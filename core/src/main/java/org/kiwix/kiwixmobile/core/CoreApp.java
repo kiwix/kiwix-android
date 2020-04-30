@@ -49,8 +49,6 @@ public abstract class CoreApp extends Application {
   NightModeConfig nightModeConfig;
   @Inject
   KiwixDatabase kiwixDatabase;
-  @Inject
-  JNIInitialiser jniInitialiser;
 
   /**
    * The init of this class does the work of initializing,
@@ -90,7 +88,6 @@ public abstract class CoreApp extends Application {
     AndroidThreeTen.init(this);
     writeLogFile();
     coreComponent.inject(this);
-    jniInitialiser.init();
     kiwixDatabase.forceMigration();
     downloadMonitor.init();
     nightModeConfig.init();
@@ -107,14 +104,23 @@ public abstract class CoreApp extends Application {
       Log.d("KIWIX", "Writing all logs into [" + logFile.getPath() + "]");
       // create app folder
       if (!appDirectory.exists()) {
-        appDirectory.mkdir();
+        if (!appDirectory.mkdir()) {
+          Log.d("KIWIX", "Creation of folder failed");
+          return;
+        }
       }
       if (logFile.exists() && logFile.isFile()) {
-        logFile.delete();
+        if (!logFile.delete()) {
+          Log.d("KIWIX", "Deletion of logFile failed");
+          return;
+        }
       }
       // clear the previous logcat and then write the new one to the file
       try {
-        logFile.createNewFile();
+        if (!logFile.createNewFile()) {
+          Log.d("KIWIX", "Create new File");
+          return;
+        }
         Runtime.getRuntime().exec("logcat -c");
         Runtime.getRuntime().exec("logcat -f " + logFile.getPath() + " -s kiwix");
       } catch (IOException e) {

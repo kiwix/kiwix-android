@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.history
+package org.kiwix.kiwixmobile.core.bookmark
 
 import android.util.Log
 import io.reactivex.Observable
@@ -25,48 +25,49 @@ import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
-import org.kiwix.kiwixmobile.core.history.HistoryContract.Presenter
-import org.kiwix.kiwixmobile.core.history.HistoryContract.View
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 import javax.inject.Inject
 
-internal class HistoryPresenter @Inject constructor(
+class BookmarksPresenter @Inject constructor(
   private val dataSource: DataSource,
   @param:MainThread private val mainThread: Scheduler,
   @param:Computation private val computation: Scheduler
-) : BasePresenter<View>(), Presenter {
+) : BasePresenter<BookmarksContract.View>(),
+  BookmarksContract.Presenter {
   private var disposable: Disposable? = null
-
-  override fun loadHistory(showHistoryCurrentBook: Boolean) {
+  override fun loadBookmarks(showBookmarksCurrentBook: Boolean) {
     disposable?.takeIf { !it.isDisposed }?.dispose()
-    dataSource.getDateCategorizedHistory(showHistoryCurrentBook)
-      .subscribe(
-        { histories: List<HistoryListItem> -> view?.updateHistoryList(histories) },
-        { e: Throwable -> Log.e("HistoryPresenter", "Failed to load history.", e) }
+    dataSource.getBookmarks(showBookmarksCurrentBook)
+      .subscribe({ histories: List<BookmarkItem> -> view?.updateBookmarksList(histories) },
+        { e: Throwable -> Log.e("BookmarkPresenter", "Failed to load bookmarks", e) }
       ).let {
         compositeDisposable.add(it)
         disposable = it
       }
   }
 
-  override fun filterHistory(historyList: List<HistoryListItem>, newText: String) {
+  override fun filterBookmarks(
+    bookmarksList: List<BookmarkItem>,
+    newText: String
+  ) {
     compositeDisposable.add(Observable.fromCallable {
-      historyList
-        .filterIsInstance<HistoryItem>().filter { item ->
-          item.historyTitle.contains(newText, true)
-        }
+      bookmarksList.filter { item ->
+        item.bookmarkTitle.contains(newText, true)
+      }
     }
       .subscribeOn(computation)
       .observeOn(mainThread)
       .subscribe(
-        { hList: List<HistoryListItem> -> view?.notifyHistoryListFiltered(hList) },
-        { e: Throwable -> Log.e("HistoryPresenter", "Failed to filter history.", e) }
-      ))
+        { bookmarkList: List<BookmarkItem> -> view?.notifyBookmarksListFiltered(bookmarkList) },
+        { e: Throwable ->
+          Log.e("BookmarkPresenter", "Failed to filter bookmark.", e)
+        })
+    )
   }
 
-  override fun deleteHistory(deleteList: List<HistoryListItem>) {
-    dataSource.deleteHistory(deleteList).subscribe({}, { e: Throwable ->
-      Log.e("HistoryPresenter", "Failed to delete history.", e)
-    })
+  override fun deleteBookmarks(deleteList: List<BookmarkItem>) {
+    dataSource.deleteBookmarks(deleteList)
+      .subscribe({}, { e: Throwable ->
+        Log.e("BookmarkPresenter", "Failed to delete bookmark", e)
+      })
   }
 }
