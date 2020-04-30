@@ -48,11 +48,8 @@ class BookmarksPresenter @Inject constructor(
 
   override fun filterBookmarks(bookmarksList: List<BookmarkItem>, newText: String) {
     compositeDisposable.add(Observable.fromCallable {
-      bookmarksList.filter {
-        it.bookmarkTitle.contains(newText, true)
-      }
-    }
-      .subscribeOn(computation)
+      bookmarksList.filter { it.bookmarkTitle.contains(newText, true) }
+    }.subscribeOn(computation)
       .observeOn(mainThread)
       .subscribe(
         { view?.notifyBookmarksListFiltered(it) },
@@ -63,7 +60,6 @@ class BookmarksPresenter @Inject constructor(
 
   override fun deleteBookmarks(deleteList: List<BookmarkItem>) {
     dataSource.deleteBookmarks(deleteList)
-      .subscribe({}, { Log.e("BookmarkPresenter", "Failed to delete bookmark", it) }
-      )
+      .subscribe({}, { Log.e("BookmarkPresenter", "Failed to delete bookmark", it) })
   }
 }
