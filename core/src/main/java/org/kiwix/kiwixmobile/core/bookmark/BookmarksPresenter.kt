@@ -37,37 +37,33 @@ class BookmarksPresenter @Inject constructor(
   override fun loadBookmarks(showBookmarksCurrentBook: Boolean) {
     disposable?.takeIf { !it.isDisposed }?.dispose()
     dataSource.getBookmarks(showBookmarksCurrentBook)
-      .subscribe({ histories: List<BookmarkItem> -> view?.updateBookmarksList(histories) },
-        { e: Throwable -> Log.e("BookmarkPresenter", "Failed to load bookmarks", e) }
+      .subscribe(
+        { view?.updateBookmarksList(it) },
+        { Log.e("BookmarkPresenter", "Failed to load bookmarks", it) }
       ).let {
         compositeDisposable.add(it)
         disposable = it
       }
   }
 
-  override fun filterBookmarks(
-    bookmarksList: List<BookmarkItem>,
-    newText: String
-  ) {
+  override fun filterBookmarks(bookmarksList: List<BookmarkItem>, newText: String) {
     compositeDisposable.add(Observable.fromCallable {
-      bookmarksList.filter { item ->
-        item.bookmarkTitle.contains(newText, true)
+      bookmarksList.filter {
+        it.bookmarkTitle.contains(newText, true)
       }
     }
       .subscribeOn(computation)
       .observeOn(mainThread)
       .subscribe(
-        { bookmarkList: List<BookmarkItem> -> view?.notifyBookmarksListFiltered(bookmarkList) },
-        { e: Throwable ->
-          Log.e("BookmarkPresenter", "Failed to filter bookmark.", e)
-        })
+        { view?.notifyBookmarksListFiltered(it) },
+        { Log.e("BookmarkPresenter", "Failed to filter bookmark.", it) }
+      )
     )
   }
 
   override fun deleteBookmarks(deleteList: List<BookmarkItem>) {
     dataSource.deleteBookmarks(deleteList)
-      .subscribe({}, { e: Throwable ->
-        Log.e("BookmarkPresenter", "Failed to delete bookmark", e)
-      })
+      .subscribe({}, { Log.e("BookmarkPresenter", "Failed to delete bookmark", it) }
+      )
   }
 }
