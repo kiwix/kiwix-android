@@ -15,16 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.bookmark
 
-package org.kiwix.kiwixmobile.core.bookmark;
-
-import dagger.Module;
-import dagger.Provides;
+import dagger.Module
+import dagger.Provides
 
 @Module
-public class BookmarksModule {
+class BookmarksModule {
   @Provides
-  BookmarksContract.Presenter provideBookmarksPresenter(BookmarksPresenter presenter) {
-    return presenter;
-  }
+  fun provideBookmarksPresenter(presenter: BookmarksPresenter): BookmarksContract.Presenter =
+    presenter
 }
