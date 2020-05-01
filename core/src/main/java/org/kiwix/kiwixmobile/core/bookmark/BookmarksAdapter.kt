@@ -20,11 +20,11 @@ package org.kiwix.kiwixmobile.core.bookmark
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_bookmark_history.view.favicon
-import kotlinx.android.synthetic.main.item_bookmark_history.view.title
+import kotlinx.android.synthetic.main.item_bookmark_history.favicon
+import kotlinx.android.synthetic.main.item_bookmark_history.title
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.core.extensions.setBitmapFromString
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
@@ -35,28 +35,14 @@ internal class BookmarksAdapter(
   private val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<BookmarksAdapter.BookmarkItemViewHolder>() {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkItemViewHolder =
-    BookmarkItemViewHolder(parent.inflate(R.layout.item_bookmark_history, false))
+    BookmarkItemViewHolder(
+      parent.inflate(R.layout.item_bookmark_history, false),
+      deleteList,
+      itemClickListener
+    )
 
   override fun onBindViewHolder(holder: BookmarkItemViewHolder, position: Int) {
-    val bookmark = bookmarkList[position]
-    holder.title!!.text = bookmark.bookmarkTitle
-    if (deleteList.contains(bookmark)) {
-      holder.favicon!!.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
-    } else {
-      holder.favicon!!.setBitmapFromString(bookmark.favicon)
-    }
-    holder.itemView.setOnClickListener {
-      itemClickListener.onItemClick(
-        holder.favicon,
-        bookmark
-      )
-    }
-    holder.itemView.setOnLongClickListener {
-      itemClickListener.onItemLongClick(
-        holder.favicon,
-        bookmark
-      )
-    }
+    holder.bind(bookmarkList[position])
   }
 
   override fun getItemCount(): Int = bookmarkList.size
@@ -66,9 +52,20 @@ internal class BookmarksAdapter(
     fun onItemLongClick(favicon: ImageView, bookmark: BookmarkItem): Boolean
   }
 
-  internal class BookmarkItemViewHolder(itemView: View) :
-    RecyclerView.ViewHolder(itemView) {
-    val favicon: ImageView? = itemView.favicon
-    val title: TextView? = itemView.title
+  internal class BookmarkItemViewHolder(
+    itemView: View,
+    private val deleteList: List<BookmarkItem>,
+    private val itemClickListener: OnItemClickListener
+  ) : BaseViewHolder<BookmarkItem>(itemView) {
+    override fun bind(item: BookmarkItem) {
+      title.text = item.bookmarkTitle
+      if (deleteList.contains(item)) {
+        favicon.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
+      } else {
+        favicon.setBitmapFromString(item.favicon)
+      }
+      itemView.setOnClickListener { itemClickListener.onItemClick(favicon, item) }
+      itemView.setOnLongClickListener { itemClickListener.onItemLongClick(favicon, item) }
+    }
   }
 }
