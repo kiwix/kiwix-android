@@ -101,3 +101,4 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
   private val LibraryNetworkEntity.Book.networkPath
     get() = "/${url.substringAfterLast("/")}"
 }
+

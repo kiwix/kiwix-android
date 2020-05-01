@@ -33,6 +33,7 @@ jobs:
 
       - name: Upload screenshot result
         uses: actions/upload-artifact@v2
+        if: failure()
         with:
           name: ${{ matrix.api-level }}
           path: screencap.png
