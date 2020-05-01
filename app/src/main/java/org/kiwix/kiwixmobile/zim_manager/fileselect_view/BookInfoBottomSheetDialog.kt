@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.sheet_book_info.detail_article_count
 import kotlinx.android.synthetic.main.sheet_book_info.detail_creator
@@ -36,8 +37,11 @@ import kotlinx.android.synthetic.main.sheet_book_info.detail_publisher
 import kotlinx.android.synthetic.main.sheet_book_info.detail_size
 import kotlinx.android.synthetic.main.sheet_book_info.detail_tags
 import kotlinx.android.synthetic.main.sheet_book_info.detail_url
+import kotlinx.android.synthetic.main.sheet_book_info.info_sheet_delete
 import kotlinx.android.synthetic.main.sheet_book_info.info_sheet_description
 import kotlinx.android.synthetic.main.sheet_book_info.info_sheet_favicon
+import kotlinx.android.synthetic.main.sheet_book_info.info_sheet_open
+import kotlinx.android.synthetic.main.sheet_book_info.info_sheet_share
 import kotlinx.android.synthetic.main.sheet_book_info.info_sheet_title
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
@@ -47,6 +51,9 @@ import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestDelete
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestOpen
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestShare
 import javax.inject.Inject
 
 class BookInfoBottomSheetDialog : BottomSheetDialogFragment() {
@@ -60,7 +67,9 @@ class BookInfoBottomSheetDialog : BottomSheetDialogFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View = inflater.inflate(R.layout.sheet_book_info, container, false)
+  ): View = inflater.inflate(R.layout.sheet_book_info, container, false).also {
+    (dialog as BottomSheetDialog).dismissWithAnimation = true
+  }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -72,7 +81,16 @@ class BookInfoBottomSheetDialog : BottomSheetDialogFragment() {
     bookOnDisk?.let {
       render(it.book)
       detail_file.setDetail(it.file.absolutePath)
-    }
+      info_sheet_open.setOnClickListener {
+        zimManageViewModel.deviceTabActions.offer(RequestOpen(bookOnDisk))
+      }
+      info_sheet_share.setOnClickListener {
+        zimManageViewModel.deviceTabActions.offer(RequestShare(bookOnDisk))
+      }
+      info_sheet_delete.setOnClickListener {
+        zimManageViewModel.deviceTabActions.offer(RequestDelete(bookOnDisk))
+      }
+    } ?: dismiss()
   }
 
   private fun render(book: Book) {

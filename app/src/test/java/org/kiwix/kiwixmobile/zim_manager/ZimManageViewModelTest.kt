@@ -53,13 +53,13 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4G
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestOpen
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestSelect
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RestartActionMode
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
@@ -424,7 +424,7 @@ class ZimManageViewModelTest {
     fun `RequestOpen offers OpenFile`() {
       val bookOnDisk = bookOnDisk()
       viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(RequestOpen(bookOnDisk)) }
+        .also { viewModel.deviceTabActions.offer(RequestOpen(bookOnDisk)) }
         .assertValues(OpenFile(bookOnDisk))
     }
 
@@ -440,8 +440,8 @@ class ZimManageViewModelTest {
         NORMAL
       )
       viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(RequestMultiSelection(bookToSelect)) }
-        .assertValues(StartMultiSelection(viewModel.fileSelectActions))
+        .also { viewModel.deviceTabActions.offer(RequestMultiSelection(bookToSelect)) }
+        .assertValues(StartMultiSelection(viewModel.deviceTabActions))
       viewModel.fileSelectListStates.test()
         .assertValue(
           FileSelectListState(
@@ -457,7 +457,7 @@ class ZimManageViewModelTest {
       viewModel.fileSelectListStates.value =
         FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
       viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(RequestDeleteMultiSelection) }
+        .also { viewModel.deviceTabActions.offer(RequestDeleteMultiSelection) }
         .assertValues(DeleteFiles(listOf(selectedBook)))
     }
 
@@ -467,7 +467,7 @@ class ZimManageViewModelTest {
       viewModel.fileSelectListStates.value =
         FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
       viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(RequestShareMultiSelection) }
+        .also { viewModel.deviceTabActions.offer(RequestShareMultiSelection) }
         .assertValues(ShareFiles(listOf(selectedBook)))
     }
 
@@ -477,7 +477,7 @@ class ZimManageViewModelTest {
       viewModel.fileSelectListStates.value =
         FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
       viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(MultiModeFinished) }
+        .also { viewModel.deviceTabActions.offer(MultiModeFinished) }
         .assertValues(None)
       viewModel.fileSelectListStates.test().assertValue(
         FileSelectListState(
@@ -495,7 +495,7 @@ class ZimManageViewModelTest {
       viewModel.fileSelectListStates.value =
         FileSelectListState(listOf(selectedBook, bookOnDisk(1L)), NORMAL)
       viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(RequestSelect(selectedBook)) }
+        .also { viewModel.deviceTabActions.offer(RequestSelect(selectedBook)) }
         .assertValues(None)
       viewModel.fileSelectListStates.test().assertValue(
         FileSelectListState(
@@ -510,8 +510,8 @@ class ZimManageViewModelTest {
     @Test
     fun `RestartActionMode offers StartMultiSelection`() {
       viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(RestartActionMode) }
-        .assertValues(StartMultiSelection(viewModel.fileSelectActions))
+        .also { viewModel.deviceTabActions.offer(RestartActionMode) }
+        .assertValues(StartMultiSelection(viewModel.deviceTabActions))
     }
   }
 

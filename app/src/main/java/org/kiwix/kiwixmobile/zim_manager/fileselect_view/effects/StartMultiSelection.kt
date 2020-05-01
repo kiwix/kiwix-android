@@ -24,20 +24,20 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.startActionMode
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestShareMultiSelection
 
 data class StartMultiSelection(
-  val fileSelectActions: PublishProcessor<FileSelectActions>
+  val deviceTabActions: PublishProcessor<DeviceTabActions>
 ) : SideEffect<ActionMode?> {
   override fun invokeWith(activity: AppCompatActivity): ActionMode? =
     activity.startActionMode(
       R.menu.menu_zim_files_contextual,
       mapOf(
-        R.id.zim_file_delete_item to { fileSelectActions.offer(RequestDeleteMultiSelection) },
-        R.id.zim_file_share_item to { fileSelectActions.offer(RequestShareMultiSelection) }
+        R.id.zim_file_delete_item to { deviceTabActions.offer(RequestDeleteMultiSelection) },
+        R.id.zim_file_share_item to { deviceTabActions.offer(RequestShareMultiSelection) }
       )
-    ) { fileSelectActions.offer(MultiModeFinished) }
+    ) { deviceTabActions.offer(MultiModeFinished) }
 }

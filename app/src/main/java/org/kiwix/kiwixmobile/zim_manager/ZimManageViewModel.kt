@@ -51,14 +51,16 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShowInfo
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestDelete
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestOpen
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestSelect
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestShare
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RequestShowInfo
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.DeviceTabActions.RestartActionMode
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
@@ -89,15 +91,17 @@ class ZimManageViewModel @Inject constructor(
   private val defaultLanguageProvider: DefaultLanguageProvider,
   private val dataSource: DataSource
 ) : ViewModel() {
-  sealed class FileSelectActions {
-    data class RequestOpen(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestShowInfo(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
-    object RequestDeleteMultiSelection : FileSelectActions()
-    object RequestShareMultiSelection : FileSelectActions()
-    object MultiModeFinished : FileSelectActions()
-    object RestartActionMode : FileSelectActions()
+  sealed class DeviceTabActions {
+    data class RequestOpen(val bookOnDisk: BookOnDisk) : DeviceTabActions()
+    data class RequestShare(val bookOnDisk: BookOnDisk) : DeviceTabActions()
+    data class RequestDelete(val bookOnDisk: BookOnDisk) : DeviceTabActions()
+    data class RequestShowInfo(val bookOnDisk: BookOnDisk) : DeviceTabActions()
+    data class RequestSelect(val bookOnDisk: BookOnDisk) : DeviceTabActions()
+    data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : DeviceTabActions()
+    object RequestDeleteMultiSelection : DeviceTabActions()
+    object RequestShareMultiSelection : DeviceTabActions()
+    object MultiModeFinished : DeviceTabActions()
+    object RestartActionMode : DeviceTabActions()
   }
 
   val sideEffects = PublishProcessor.create<SideEffect<Any?>>()
@@ -109,7 +113,7 @@ class ZimManageViewModel @Inject constructor(
   val networkStates = MutableLiveData<NetworkState>()
 
   val requestFileSystemCheck = PublishProcessor.create<Unit>()
-  val fileSelectActions = PublishProcessor.create<FileSelectActions>()
+  val deviceTabActions = PublishProcessor.create<DeviceTabActions>()
   val requestDownloadLibrary = BehaviorProcessor.createDefault(Unit)
   val requestFiltering = BehaviorProcessor.createDefault("")
   val currentPage = PublishProcessor.create<Int>()
@@ -150,7 +154,7 @@ class ZimManageViewModel @Inject constructor(
     )
   }
 
-  private fun fileSelectActions() = fileSelectActions.subscribe({
+  private fun fileSelectActions() = deviceTabActions.subscribe({
     sideEffects.offer(
       when (it) {
         is RequestOpen -> OpenFile(it.bookOnDisk)
@@ -159,10 +163,18 @@ class ZimManageViewModel @Inject constructor(
         RequestShareMultiSelection -> ShareFiles(selectionsFromState())
         MultiModeFinished -> noSideEffectAndClearSelectionState()
         is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
-        RestartActionMode -> StartMultiSelection(fileSelectActions)
+        RestartActionMode -> StartMultiSelection(deviceTabActions)
         is RequestShowInfo -> {
           selectedInfoItem.postValue(it.bookOnDisk)
           ShowInfo()
+        }
+        is RequestShare -> {
+          selectedInfoItem.postValue(null)
+          ShareFiles(listOf(it.bookOnDisk))
+        }
+        is RequestDelete -> {
+          selectedInfoItem.postValue(null)
+          DeleteFiles(listOf(it.bookOnDisk))
         }
       }
     )
@@ -179,7 +191,7 @@ class ZimManageViewModel @Inject constructor(
         )
       )
     }
-    return StartMultiSelection(fileSelectActions)
+    return StartMultiSelection(deviceTabActions)
   }
 
   private fun selectBook(

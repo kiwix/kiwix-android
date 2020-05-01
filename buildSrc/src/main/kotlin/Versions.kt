@@ -91,7 +91,7 @@ object Versions {
 
   const val kiwixlib: String = "9.1.2"
 
-  const val material: String = "1.1.0-beta02" // available: "1.1.0"
+  const val material: String = "1.1.0"
 
   const val multidex: String = "2.0.1"
 
