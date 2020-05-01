@@ -1,3 +1,9 @@
+3.3.1
+NEW: Send Diagnostic Reports
+BUGFIX: Loading older zim files could fail
+BUGFIX: Some svgs were not loading
++ Lots More
+
 3.3.0
 NEW: Improved loading of audio/video content
 NEW: Card based views for lists
