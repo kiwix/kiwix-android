@@ -186,7 +186,7 @@
   <string name="history">History</string>
   <string name="history_from_current_book">View History From All Books</string>
   <string name="search_history">Search history</string>
-  <string name="selected_items">%1$d selected</string>
+  <string name="selected_items" tools:ignore="PluralsCandidate">%1$d selected</string>
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
@@ -269,6 +269,10 @@
   <string name="on">On</string>
   <string name="off">Off</string>
   <string name="auto">Auto</string>
+  <string name="send_report">Send diagnostic report</string>
+  <string name="crash_checkbox_file_system">File System Details</string>
+  <string name="diagnostic_report">Diagnostic Report</string>
+  <string name="diagnostic_report_message">Please send all the following details so we can diagnose the problem</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>

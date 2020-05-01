@@ -12,7 +12,7 @@
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
   <string name="save_media">მედიის შენახვა როგორც…</string>
   <string name="save_media_error">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
-  <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
+  <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$s</string>
   <string name="rescan_fs_warning">ZIM-ფაილების ძიება, გთხოვთ, მოიცადოთ…</string>
   <string name="search_label">ძიება</string>
   <string name="choose_file">აირჩიეთ ZIM-ფაილი (*.zim)</string>

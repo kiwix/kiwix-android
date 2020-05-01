@@ -68,12 +68,12 @@
   <string name="library">Libreria</string>
   <string name="delete_zims_toast">File cancellato</string>
   <string name="no_files_here">Nessun file qui</string>
-  <string name="download_no_space">Lo spazio è insufficiente per scaricare questo file.</string>
+  <string name="download_no_space">Lo spazio è insufficiente per scaricare.</string>
   <string name="space_available">Spazio disponibile:</string>
   <string name="help_10">Puoi sia scaricare i tuoi file ZIM in-app selezionati o selezionare attentamente quello/i che desideri e scaricarli attraverso il Desktop di un computer prima di trasferire i file ZIM sulla tua memoria SD.</string>
   <string name="help_11">I file ZIM scaricati nell\'applicazione sono localizzati nella directory di archiviazione esterna in una cartella chiamata Kiwix.</string>
   <string name="pref_current_folder">Cartella attuale</string>
-  <string name="delete_zim_failed">Non siamo stati in grado di eliminare questo file. Dovresti provare ad usare un file amministratore.</string>
+  <string name="delete_zim_failed">Non siamo stati in grado di eliminare alcuni file. Dovresti provare ad usare un gestore di file.</string>
   <string name="tts_pause">pausa</string>
   <string name="external_storage">Esterno</string>
   <string name="yes">Sì</string>

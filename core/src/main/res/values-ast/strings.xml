@@ -103,10 +103,10 @@
   <string name="local_zims">Preséu</string>
   <string name="remote_zims">En llinia</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">¿Desaniciar %s?</string>
-  <string name="delete_zims_toast">Ficheru desaniciáu</string>
+  <string name="delete_zim_body">Van desaniciase los  ficheros zim siguientes:\n\n%s</string>
+  <string name="delete_zims_toast">Los ficheros desaniciáronse correutamente</string>
   <string name="no_files_here">Nun hai nengún ficheru equí</string>
-  <string name="download_no_space">Nun hai espaciu abondo pa descargar esti ficheru.</string>
+  <string name="download_no_space">Nun hai espaciu abondo pa descargar.</string>
   <string name="space_available">Espaciu disponible:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Nun hai imáxenes</string>
@@ -124,7 +124,7 @@
   <string name="help_11">Los ficheros ZIM descargaos na aplicación alcuéntrense nel direutoriu d\'almacenamientu esternu, nuna carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamientu</string>
   <string name="pref_current_folder">Carpeta actual</string>
-  <string name="delete_zim_failed">Nun pudimos desaniciar esti ficheru. Tendríes de tentar usando un alministrador de ficheros.</string>
+  <string name="delete_zim_failed">Nun pudimos desaniciar dellos ficheros. Tendríes de tentalo usando un alministrador de ficheros.</string>
   <string name="tts_pause">posar</string>
   <string name="tts_resume">siguir</string>
   <string name="stop">aparar</string>
@@ -257,4 +257,7 @@
   <string name="device_default">Predeterminao del preséu</string>
   <string name="delete_history">¿Desaniciar l\'Historial?</string>
   <string name="delete_bookmarks">¿Desaniciar los Marcadores?</string>
+  <string name="on">Activáu</string>
+  <string name="off">Desactiváu</string>
+  <string name="auto">Auto</string>
 </resources>

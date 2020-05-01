@@ -103,10 +103,10 @@
   <string name="local_zims">Zařízení</string>
   <string name="remote_zims">Online</string>
   <string name="library">Knihovna</string>
-  <string name="delete_zim_body">Vymazat %s?</string>
+  <string name="delete_zim_body" fuzzy="true">Vymazat %s?</string>
   <string name="delete_zims_toast">Soubor byl smazán</string>
   <string name="no_files_here">Zde nejsou žádné soubory</string>
-  <string name="download_no_space">Nedostatečný prostor ke stažení tohoto souboru.</string>
+  <string name="download_no_space">Nedostatečný prostor ke stažení.</string>
   <string name="space_available">Dostupné místo:</string>
   <string name="zim_simple">Jednoduché</string>
   <string name="zim_no_pic">Žádné Obrázky</string>
@@ -120,7 +120,7 @@
   <string name="help_9">• Další obsahy jako Wikileaks nebo Wikizdroje jsou také dostupné</string>
   <string name="pref_storage">Úložiště</string>
   <string name="pref_current_folder">Stávající Adresář</string>
-  <string name="delete_zim_failed">Omlouváme se, ale nebyli jsme schopni smazat tento soubor. Měli by jste na místo toho zkustit správce souborů.</string>
+  <string name="delete_zim_failed" fuzzy="true">Omlouváme se, ale nebyli jsme schopni smazat tento soubor. Měli by jste na místo toho zkustit správce souborů.</string>
   <string name="tts_pause">Pozastavit</string>
   <string name="tts_resume">Obnovit</string>
   <string name="stop">stop</string>

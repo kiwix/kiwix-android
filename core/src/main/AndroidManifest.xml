@@ -15,6 +15,7 @@
 
   <application
     android:allowBackup="true"
+    android:extractNativeLibs="false"
     android:fullBackupContent="@xml/backup_rules"
     android:hardwareAccelerated="true"
     android:label="@string/app_name"
@@ -49,6 +50,7 @@
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".main.CoreMainActivity" />
     </activity>
+    <activity android:name=".error.DiagnosticReportActivity" />
 
   </application>
 </manifest>

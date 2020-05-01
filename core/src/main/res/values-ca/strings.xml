@@ -47,8 +47,9 @@
   <string name="clear_recent_and_tabs_history_dialog">Segur que vols esborrar l\'historial de cerques i restablir totes les pestanyes actives?</string>
   <string name="delete_recent_search_item">Esborrar aquest element?</string>
   <string name="all_history_cleared">Esborrat tot l\'historial</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Esborra tot l\'historial</string>
+  <string name="clear_all_history_dialog_title">Voleu netejar tot l’historial?</string>
   <string name="delete">Esborrar</string>
+  <string name="cancel">Cancel·la</string>
   <string name="delete_specific_search_toast">Les darreres cerques han estat suprimides</string>
   <string name="hint_contents_drawer_message">Podeu lliscar el dit cap a l\'esquerra per veure el contingut d\'aquest article</string>
   <string name="got_it">Entesos</string>
@@ -60,10 +61,10 @@
   <string name="new_tab_snack_bar">Article obert en una pestanya nova</string>
   <string name="local_zims">Dispositiu</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Voleu suprimir %s?</string>
+  <string name="delete_zim_body" fuzzy="true">Voleu suprimir %s?</string>
   <string name="delete_zims_toast">Fitxer esborrat</string>
   <string name="no_files_here">Cap fitxer aquí</string>
-  <string name="download_no_space">Espai insuficient per descarregar aquest fitxer.</string>
+  <string name="download_no_space">L’espai és insuficient per a la baixada.</string>
   <string name="no_network_connection">Cap connexió de xarxa</string>
   <string name="help_2">Què fa Kiwix?</string>
   <string name="help_3">Kiwix és un lector de contingut sense connexió. Actua molt semblant a un navegador però en comptes d\'accedir a pàgines web en línia, llegeix el contingut d\'un fitxer en format ZIM.</string>
@@ -75,7 +76,7 @@
   <string name="help_9">• Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
   <string name="help_10" fuzzy="true">Pots descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulguis, descarregar-los des d\'un ordinador i transferir-los a la targeta SD.</string>
   <string name="help_11">Els fitxers ZIM descarregats en l\'aplicació es troben al directori d\'emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
-  <string name="delete_zim_failed">No podem eliminar aquest fitxer. Hauries de provar amb un administrador de fitxers.</string>
+  <string name="delete_zim_failed" fuzzy="true">No podem eliminar aquest fitxer. Hauries de provar amb un administrador de fitxers.</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Sí</string>

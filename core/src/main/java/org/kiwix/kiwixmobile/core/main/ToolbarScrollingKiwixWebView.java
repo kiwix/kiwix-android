@@ -62,6 +62,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
     return toolbarHeight + newTranslation != 0 && newTranslation != 0;
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   @Override
   public boolean onTouchEvent(MotionEvent event) {
     int transY = (int) toolbarView.getTranslationY();

@@ -77,7 +77,7 @@
   <string name="library">Biblioteca</string>
   <string name="delete_zims_toast">Ficheiro eliminado</string>
   <string name="no_files_here">Ningún ficheiro aquí</string>
-  <string name="download_no_space">Espacio insuficiente para descargar este ficheiro.</string>
+  <string name="download_no_space" fuzzy="true">Espacio insuficiente para descargar este ficheiro.</string>
   <string name="space_available">Espazo dispoñible:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sen imaxes</string>
@@ -95,7 +95,7 @@
   <string name="help_11">Os ficheiros ZIM descargados na aplicación atópanse no directorio de almacenamento externo, nunha carpeta chamada Kiwix.</string>
   <string name="pref_storage">Almacenamento</string>
   <string name="pref_current_folder">Carpeta actual</string>
-  <string name="delete_zim_failed">Non podemos eliminar este ficheiro. Debería probar cun administrador de ficheiros.</string>
+  <string name="delete_zim_failed" fuzzy="true">Non podemos eliminar este ficheiro. Debería probar cun administrador de ficheiros.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">deter</string>

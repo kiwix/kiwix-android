@@ -34,7 +34,7 @@ abstract class CoreSplashActivity : BaseActivity() {
         paramThrowable: Throwable? ->
         val intent = Intent(appContext, ErrorActivity::class.java)
         val extras = Bundle()
-        extras.putSerializable("exception", paramThrowable)
+        extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)
         intent.putExtras(extras)
         appContext.startActivity(intent)
         finish()

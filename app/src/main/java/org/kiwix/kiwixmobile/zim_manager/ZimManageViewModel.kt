@@ -97,7 +97,7 @@ class ZimManageViewModel @Inject constructor(
     object RestartActionMode : FileSelectActions()
   }
 
-  val sideEffects = PublishProcessor.create<SideEffect<out Any?>>()
+  val sideEffects = PublishProcessor.create<SideEffect<Any?>>()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
@@ -106,8 +106,8 @@ class ZimManageViewModel @Inject constructor(
 
   val requestFileSystemCheck = PublishProcessor.create<Unit>()
   val fileSelectActions = PublishProcessor.create<FileSelectActions>()
-  val requestDownloadLibrary = BehaviorProcessor.createDefault<Unit>(Unit)
-  val requestFiltering = BehaviorProcessor.createDefault<String>("")
+  val requestDownloadLibrary = BehaviorProcessor.createDefault(Unit)
+  val requestFiltering = BehaviorProcessor.createDefault("")
   val currentPage = PublishProcessor.create<Int>()
 
   val libraryTabIsVisible = currentPage.map { it == 1 }.filter { it }
@@ -378,7 +378,7 @@ class ZimManageViewModel @Inject constructor(
     sectionId: Long
   ) =
     if (books.isNotEmpty())
-      listOf(DividerItem(sectionId, context.getString(sectionStringId))) +
+      listOf(DividerItem(sectionId, sectionStringId)) +
         books.asLibraryItems(activeDownloads, fileSystemState)
     else emptyList()
 

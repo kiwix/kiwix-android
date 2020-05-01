@@ -41,6 +41,7 @@
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
   <string name="delete">Läschen</string>
+  <string name="cancel">Ofbriechen</string>
   <string name="got_it">Verstan</string>
   <string name="did_you_know">Wousst Dir?</string>
   <string name="undo">Réckgängeg maachen</string>
@@ -56,10 +57,10 @@
   <string name="local_zims">Apparat</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliothéik</string>
-  <string name="delete_zim_body">%s läschen?</string>
+  <string name="delete_zim_body" fuzzy="true">%s läschen?</string>
   <string name="delete_zims_toast">Fichier geläscht</string>
   <string name="no_files_here">Keng Fichieren hei?</string>
-  <string name="download_no_space">Net genuch Plaz fir dëse Fichier erofzelueden.</string>
+  <string name="download_no_space">Net genuch Plaz fir erofzelueden.</string>
   <string name="space_available">Plaz disponibel:</string>
   <string name="zim_simple">Einfach</string>
   <string name="zim_no_pic">Keng Biller</string>
@@ -86,7 +87,7 @@
   <string name="time_today">Haut</string>
   <string name="time_yesterday">Gëschter</string>
   <string name="pref_external_link_popup_title">Warne wann en externe Link agi gëtt</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Externe Link aginn</string>
+  <string name="external_link_popup_dialog_title">Externe Link aginn!</string>
   <string name="do_not_ask_anymore">Net méi froen</string>
   <string name="your_languages">Erausgesicht Sproochen:</string>
   <string name="other_languages">Aner Sproochen:</string>
@@ -115,4 +116,7 @@
   <string name="no_history">Keen Historique</string>
   <string name="delete_history">Versioune läschen?</string>
   <string name="delete_bookmarks">Lieszeeche läschen?</string>
+  <string name="on">Un</string>
+  <string name="off">Aus</string>
+  <string name="auto">Automatesch</string>
 </resources>

@@ -32,6 +32,7 @@
     <ID>PackageNaming:KiloByte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:KiwixTag.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:Language.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:SelectionMode.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File&gt;</ID>
@@ -40,7 +41,6 @@
     <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
     <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
     <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
-    <ID>TooGenericExceptionThrown:AbstractContentProvider.kt$AbstractContentProvider$throw RuntimeException("Operation not supported")</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
     <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
     <ID>TooGenericExceptionThrown:ContextExtensions.kt$throw RuntimeException("invalid attribute $attributeRes")</ID>
@@ -48,13 +48,6 @@
     <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("Unexpected return type ${T::class.java.simpleName}")</ID>
     <ID>TooGenericExceptionThrown:NightModeConfig.kt$NightModeConfig.Mode.Companion$throw RuntimeException("Invalid night mode $nightMode")</ID>
     <ID>TooGenericExceptionThrown:NightModeConfig.kt$NightModeConfig.UiMode.Companion$throw RuntimeException("Invalid night mode $uiMode")</ID>
-    <ID>TooManyFunctions:CoreComponent.kt$CoreComponent$CoreComponent</ID>
-    <ID>TooManyFunctions:FetchDownloadMonitor.kt$FetchDownloadMonitor$&lt;no name provided&gt; : FetchListener</ID>
-    <ID>TooManyFunctions:FileUtils.kt$FileUtils$FileUtils</ID>
-    <ID>TooManyFunctions:MainMenu.kt$MainMenu$MainMenu</ID>
-    <ID>TooManyFunctions:NewBookDao.kt$NewBookDao$NewBookDao</ID>
-    <ID>TooManyFunctions:Repository.kt$Repository$Repository</ID>
-    <ID>TooManyFunctions:ZimFileReader.kt$ZimFileReader$ZimFileReader</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Eb = Pb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Gb = Mb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Kb = 1 * 1024L</ID>

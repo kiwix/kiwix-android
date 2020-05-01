@@ -79,7 +79,7 @@
   <string name="library">Perpustakaan</string>
   <string name="delete_zims_toast">Berkas telah dihapus</string>
   <string name="no_files_here">Tidak ada berkas disini</string>
-  <string name="download_no_space">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
+  <string name="download_no_space" fuzzy="true">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
   <string name="space_available">Ruang yang Tersedia:</string>
   <string name="zim_simple">Sederhana</string>
   <string name="zim_no_pic">Tanpa Gambar</string>
@@ -97,7 +97,7 @@
   <string name="help_11">Berkas ZIM yang diunduh dari dalam apl terletak di direktori penyimpanan eksternal didalam folder Kiwix.</string>
   <string name="pref_storage">Penyimpanan</string>
   <string name="pref_current_folder">Folder Saat Ini</string>
-  <string name="delete_zim_failed">Maaf kami tidak dapat menghapus berkas ini. Anda sebaiknya mencoba menggunakan manajer berkas.</string>
+  <string name="delete_zim_failed" fuzzy="true">Maaf kami tidak dapat menghapus berkas ini. Anda sebaiknya mencoba menggunakan manajer berkas.</string>
   <string name="tts_pause">jeda</string>
   <string name="tts_resume">lanjut</string>
   <string name="stop">berhenti</string>

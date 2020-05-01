@@ -103,10 +103,10 @@
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
   <string name="library">Библиотека</string>
-  <string name="delete_zim_body">Да го избришам %s?</string>
-  <string name="delete_zims_toast">Податотеката е избришана</string>
+  <string name="delete_zim_body">Ќе бидат избришани следниве ZIM-податотеки:\n\n%s</string>
+  <string name="delete_zims_toast">Податотеката е успешно избришана</string>
   <string name="no_files_here">Нема податотеки</string>
-  <string name="download_no_space">Немате доволно место за преземање на податотекава.</string>
+  <string name="download_no_space">Нема доволно место за преземање.</string>
   <string name="space_available">Достапен простор:</string>
   <string name="zim_simple">Просто</string>
   <string name="zim_no_pic">Без слики</string>
@@ -124,7 +124,7 @@
   <string name="help_11">Преземањето на ZIM-податотеките во прилогот се сместени во надворешниот склад во папка наречена Kiwix.</string>
   <string name="pref_storage">Склад</string>
   <string name="pref_current_folder">Тековна папка</string>
-  <string name="delete_zim_failed">За жал, не можев да ја избришам податотеката. Пробајте со Управувачот со податотеки.</string>
+  <string name="delete_zim_failed">За жал, не можев да избришам извесни податотеки. Пробајте со Управувачот со податотеки.</string>
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>
   <string name="stop">запри</string>
@@ -257,4 +257,11 @@
   <string name="device_default">Основно на уредот</string>
   <string name="delete_history">Да ја избришам историјата?</string>
   <string name="delete_bookmarks">Да ги избришам обележувачите?</string>
+  <string name="on">Вкл.</string>
+  <string name="off">Искл.</string>
+  <string name="auto">Авто</string>
+  <string name="send_report">Испрати дијагностички извештај</string>
+  <string name="crash_checkbox_file_system">Поединости за податотечниот систем</string>
+  <string name="diagnostic_report">Дијагностички извештај</string>
+  <string name="diagnostic_report_message">Испратете ги сите следни поединости за да можеме да го дијагностицираме проблемот</string>
 </resources>

@@ -84,7 +84,7 @@
   <string name="library">Knjižnica</string>
   <string name="delete_zims_toast">Datoteka je izbrisana</string>
   <string name="no_files_here">Ni datotek tukaj</string>
-  <string name="download_no_space">Premalo prostora za prenos te datoteke.</string>
+  <string name="download_no_space" fuzzy="true">Premalo prostora za prenos te datoteke.</string>
   <string name="space_available">Prostor na voljo:</string>
   <string name="zim_simple">Enostavno</string>
   <string name="zim_no_pic">Ni slik</string>
@@ -102,7 +102,7 @@
   <string name="help_11">ZIM datoteke za prenos v aplikaciji se nahajajo v imeniku zunanjih pomnilnikov v mapi z imenom Kiwix</string>
   <string name="pref_storage">Shranjevanje</string>
   <string name="pref_current_folder">Trenutna mapa</string>
-  <string name="delete_zim_failed">Žal te datoteke ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
+  <string name="delete_zim_failed" fuzzy="true">Žal te datoteke ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
   <string name="tts_pause">premor</string>
   <string name="tts_resume">nadaljuj</string>
   <string name="stop">ustavi</string>
