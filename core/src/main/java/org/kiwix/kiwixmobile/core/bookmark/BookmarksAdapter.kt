@@ -25,8 +25,9 @@ import kotlinx.android.synthetic.main.item_bookmark_history.favicon
 import kotlinx.android.synthetic.main.item_bookmark_history.title
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
-import org.kiwix.kiwixmobile.core.extensions.setBitmapFromString
+import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 
 internal class BookmarksAdapter(
@@ -62,7 +63,7 @@ internal class BookmarksAdapter(
       if (deleteList.contains(item)) {
         favicon.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
       } else {
-        favicon.setBitmapFromString(item.favicon)
+        favicon.setBitmap(Base64String(item.favicon))
       }
       itemView.setOnClickListener { itemClickListener.onItemClick(favicon, item) }
       itemView.setOnLongClickListener { itemClickListener.onItemLongClick(favicon, item) }
