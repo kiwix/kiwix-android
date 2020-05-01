@@ -233,7 +233,7 @@
   <string name="no_devices_found">Inga enheter hittades. Tryck på sökknappen för att söka igen.</string>
   <string name="files_for_transfer">FILER ATT ÖVERFÖRA</string>
   <string name="preparing_files">Förbereder filer för överföring…</string>
-  <string name="performing_handshake">Utför handskakning...</string>
+  <string name="performing_handshake">Utför handskakning…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Rensar alla anteckningar på alla artiklar</string>
   <string name="pref_clear_all_notes_title">Rensa alla anteckningar</string>
