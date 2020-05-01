@@ -12,6 +12,9 @@
     <ignore path="**/.gradle/caches/**" />
     <ignore path="**/values-**/**.xml" />
   </issue>
+  <issue id="Typos">
+    <ignore path="**/values-tr/**.xml" />
+  </issue>
 
   <issue id="InvalidPackage">
     <ignore path="**simple-xml-2.7.1.jar" />

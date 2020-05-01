@@ -9,6 +9,7 @@
 * Imperadeiro98
 * Kelson
 * Macofe
+* Mansil alfalb
 * Rukasuoribera
 * Vitorvicentevalente
 * Waldyrious
@@ -135,4 +136,7 @@
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Permissão de armazenamento negada</string>
   <string name="no_bookmarks">Não há marcadores</string>
+  <string name="send_report">Enviar relatório de diagnóstico</string>
+  <string name="crash_checkbox_file_system">Detalhes Do Sistema de Ficheiros</string>
+  <string name="diagnostic_report">Relatório de Diagnóstico</string>
 </resources>

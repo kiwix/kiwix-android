@@ -19,6 +19,7 @@
   <string name="menu_read_aloud">Läs upp</string>
   <string name="menu_read_aloud_stop">Sluta läsa upp</string>
   <string name="menu_support_kiwix">Stöd Kiwix</string>
+  <string name="menu_host_books">Värdböcker</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
   <string name="save_media_saved">Sparade media som %s i Android/media/org.kiwix…/</string>
@@ -26,16 +27,30 @@
   <string name="search_label">Sök</string>
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
+  <string name="hotspot_service_channel_name">Surfpunktstjänstkanal</string>
+  <string name="hotspot_failed_title">Misslyckades att starta surfpunkt</string>
+  <string name="hotspot_failed_message">Det verkar som att din surfpunkt är redan aktiverad. Var god inaktivera din WiFi-surfpunkt för att fortsätta.</string>
   <string name="go_to_wifi_settings_label">Gå till WiFi-inställningar</string>
+  <string name="hotspot_running">Aktiv surfpunkt</string>
   <string name="no_books_selected_toast_message">Välj böcker först</string>
+  <string name="server_failed_message">Kunde inte starta server. Var god aktivera din surfpunkt</string>
   <string name="server_failed_toast_message">Kunde inte starta server.</string>
   <string name="server_started_successfully_toast_message">Servern startades.</string>
   <string name="server_stopped_successfully_toast_message">Servern stoppades.</string>
+  <string name="hotspot_turned_on">Surfpunkt aktiverades</string>
+  <string name="hotspot_details_message">Information om din lokala surfpunkt. \nSSID : %1$s \nLösen : %2$s</string>
+  <string name="server_textview_default_message">Välj filerna du vill vara värd för på servern</string>
   <string name="progress_dialog_starting_server">Startar server</string>
+  <string name="hotspot_dialog_title">Aktivera din WiFi-surfpunkt</string>
+  <string name="hotspot_dialog_message">För att denna funktion ska fungera måste du först aktivera din WiFi-surfpunkt manuellt.</string>
   <string name="hotspot_dialog_neutral_button">JA, JAG HAR AKTIVERAT DET</string>
+  <string name="hotspot_channel_description">Uppdateringar om tillståndet för din surfpunkt/server.</string>
+  <string name="hotspot_notification_content_title">Kiwix-surfpunkt</string>
   <string name="start_server_label">Starta server</string>
   <string name="stop_server_label">Stoppa server</string>
+  <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas.</string>
+  <string name="zim_not_opened">Kunde inte öppna zip-fil</string>
   <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
   <string name="error_article_url_not_found">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
   <string name="pref_display_title">Visning</string>
@@ -92,7 +107,7 @@
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
   <string name="library">Bibliotek</string>
-  <string name="delete_zim_body" fuzzy="true">Radera %s?</string>
+  <string name="delete_zim_body">Följande zim-fil(er) kommer att raderas:\n\n%s</string>
   <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned.</string>
@@ -109,11 +124,11 @@
   <string name="help_7">De finns tillgängliga som ZIM-filer. Det är många:</string>
   <string name="help_8">• Wikipedia är tillgänglig separat för varje språk</string>
   <string name="help_9">• Annat innehåll som Wikileaks eller Wikisource finns också tillgängligt</string>
-  <string name="help_10" fuzzy="true">Du kan antingen ladda ned dina valda ZIM-filer i appen eller försiktigt välja ut de som du vill ladda ned från en dator innan du överför ZIM-filerna till ditt SD-kort.</string>
+  <string name="help_10">Du kan antingen ladda ned dina valda ZIM-filer i appen eller försiktigt välja ut de som du vill ladda ned från en dator innan du överför ZIM-filerna till ditt SD-kort.</string>
   <string name="help_11">ZIM-filer som laddas ned i appen placeras i den externa lagringskatalogen i en mapp som heter Kiwix.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuvarande mapp</string>
-  <string name="delete_zim_failed" fuzzy="true">Tyvärr kunde vi inte radera denna fil. Du kan försöka använda en filhanterare istället.</string>
+  <string name="delete_zim_failed">Tyvärr kunde vi inte radera några filer. Du kan försöka använda en filhanterare istället.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>
   <string name="stop">stoppa</string>
@@ -125,6 +140,9 @@
   <string name="confirm_stop_download_msg">Är du säker på att du vill stoppa denna nedladdning?</string>
   <string name="download_change_storage">Val av enhetslagring</string>
   <string name="tts_not_enabled">Text till tal är inte aktiverat för denna ZIM-fil</string>
+  <string name="texttospeech_initialization_failed">Misslyckades att initialisera text-till-tal. Var god försök igen</string>
+  <string name="texttospeech_error">Oväntat fel uppstod för text-till-tal. Var god försök igen</string>
+  <string name="search_error">Oväntat fel uppstod under sökning. Var god försök igen</string>
   <string name="next">Nästa</string>
   <string name="previous">Föregående</string>
   <string name="wifi_only_title">Tillåt att ladda ned innehåll med mobildata?</string>
@@ -176,7 +194,7 @@
   <string name="history_from_current_book">Visa historik från alla böcker</string>
   <string name="search_history">Sökhistorik</string>
   <string name="selected_items">%1$d markerade</string>
-  <string name="bookmarks_from_current_book" fuzzy="true">Bokmärken från nuvarande bok</string>
+  <string name="bookmarks_from_current_book">Visa bokmärken från alla böcker</string>
   <string name="search_bookmarks">Sök bokmärken</string>
   <string name="switch_tabs">Byt flikar</string>
   <string name="close_all_tabs">Stäng alla flikar</string>
@@ -191,6 +209,8 @@
   <string name="ext_storage_permission_rationale_add_note">Lagringsåtkomst krävs för anteckningar</string>
   <string name="ext_storage_write_permission_denied_add_note">Anteckningar kan inte användas utan lagringsåtkomst</string>
   <string name="note_save_unsuccessful">Anteckning sparades</string>
+  <string name="note_delete_successful">Anteckningen raderades</string>
+  <string name="note_delete_unsuccessful">Anteckningen raderades inte</string>
   <string name="note_save_successful">Sparade anteckning</string>
   <string name="note_save_error_storage_not_writable">Fel när anteckning sparades: Lagring kan inte skrivas</string>
   <string name="note_share_error_file_missing">Anteckningsfil finns inte</string>
@@ -202,8 +222,10 @@
   <string name="notes_deletion_unsuccessful">Vissa filer raderades inte</string>
   <string name="books_count">%d bok/böcker</string>
   <string name="connection_failed">Anslutning misslyckades</string>
+  <string name="permission_refused_storage">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
   <string name="transfer_to">Överför filer till %s?</string>
   <string name="file_transfer_complete">Filöverföring slutfördes</string>
+  <string name="error_during_transfer">Ett fel uppstod under överförning</string>
   <string name="error_transferring">Fel uppstod när filen %s överfördes</string>
   <string name="get_content_from_nearby_device">Hämta innehåll från enheter i närheten</string>
   <string name="your_device">Din enhet:</string>
@@ -211,12 +233,16 @@
   <string name="no_devices_found">Inga enheter hittades. Tryck på sökknappen för att söka igen.</string>
   <string name="files_for_transfer">FILER ATT ÖVERFÖRA</string>
   <string name="preparing_files">Förbereder filer för överföring…</string>
+  <string name="performing_handshake">Utför handskakning…</string>
   <string name="status">Status</string>
+  <string name="pref_clear_all_notes_summary">Rensar alla anteckningar på alla artiklar</string>
   <string name="pref_clear_all_notes_title">Rensa alla anteckningar</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Endast text</string>
   <string name="tag_short_text">Kort text</string>
+  <string name="storage_permission_denied">Lagringsbehörighet nekades</string>
+  <string name="grant_read_storage_permission">Denna app behöver kunna läsa från lagringsutrymmet för att fungera. Var god bevilja behörigheten i dina inställningar.</string>
   <string name="go_to_settings">Gå till inställningar</string>
   <string name="no_results">Inga resultat</string>
   <string name="no_bookmarks">Inga bokmärken</string>

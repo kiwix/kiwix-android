@@ -101,6 +101,7 @@
     <inspection_tool class="AndroidLintLambdaLast" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintLintBaseline" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintLocaleFolder" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintLockedOrientationActivity" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintLogConditional" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintMangledCRLF" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintManifestOrder" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -125,7 +126,6 @@
     <inspection_tool class="AndroidLintOverdraw" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintPackageManagerGetSignatures" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintParcelClassLoader" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintPermissionImpliesUnsupportedChromeOsHardware" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintPermissionImpliesUnsupportedHardware" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintPinSetExpiry" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintPluralsCandidate" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -162,6 +162,7 @@
     <inspection_tool class="AndroidLintSimpleDateFormat" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintSlices" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintSmallSp" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintSourceLockedOrientationActivity" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintSpUsage" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintStateListReachable" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintStaticFieldLeak" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -190,7 +191,7 @@
     <inspection_tool class="AndroidLintUnsafeDynamicallyLoadedCode" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnsafeNativeCodeLocation" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnsafeProtectedBroadcastReceiver" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintUnsupportedChromeOsHardware" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUnsupportedChromeOsCameraSystemFeature" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintUntranslatable" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnusedAttribute" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnusedIds" enabled="true" level="ERROR" enabled_by_default="true" />
