@@ -23,7 +23,6 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 
 sealed class State {
 
-
   data class Results(
     val searchString: String,
     val historyItems: List<HistoryListItem>,

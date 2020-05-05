@@ -49,7 +49,7 @@ class HistoryViewModel @Inject constructor(
     filter,
     showAllSwitchToggle,
     Function5(::reduce)).subscribe(state::postValue, Throwable::printStackTrace)
-  
+
   private fun reduce(
     currentBook: String,
     historyBookResults: List<HistoryListItem>,
@@ -69,7 +69,7 @@ class HistoryViewModel @Inject constructor(
     else ->
       NoResults(searchString)
   }
-  
+
 //  private fun ShowAllSwitchToggled()= filter.distinctUntilChanged().switchMap {  }
 //  private fun UserClickedItem() = effects.offer(UserClickedItem())
 //
