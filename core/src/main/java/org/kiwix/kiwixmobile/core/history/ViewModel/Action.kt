@@ -16,23 +16,26 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.history.ViewModel
+package org.kiwix.kiwixmobile.core.history.viewmodel
 
 import android.content.Intent
-import org.kiwix.kiwixmobile.core.history.HistoryListItem
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
 sealed class Action {
-  object ExitedSearch : Action()
+  object ExitHistory : Action()
   object ClickedSearchInText : Action()
   object ReceivedPromptForSpeechInput : Action()
   object StartSpeechInputFailed : Action()
 
   data class OnItemClick(val historyListItem: HistoryListItem) : Action()
   data class OnItemLongClick(val historyListItem: HistoryListItem) : Action()
-  data class Filter(val term: String) : Action()
+  data class OnSwitch(val isChecked: Boolean) : Action()
+  data class Filter(val searchTerm: String) : Action()
+  data class UserClickedItem(val historyItem: HistoryItem) : Action()
+  data class ShowAllSwitchToggled(val isToggled: Boolean) : Action()
   data class ConfirmedDelete(val historyListItems: List<HistoryListItem.HistoryItem>) : Action()
-  data class CreatedWithIntent(val intent: Intent?) : Action()
+  data class CreatedWithIntent(val searchTerm: String) : Action()
   data class ActivityResultReceived(val requestCode: Int, val resultCode: Int, val data: Intent?) :
     Action()
 }

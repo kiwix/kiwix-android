@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.main;
 import java.util.List;
 import org.kiwix.kiwixmobile.core.base.BaseContract;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
-import org.kiwix.kiwixmobile.core.history.HistoryListItem;
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 /**

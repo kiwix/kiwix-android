@@ -16,7 +16,6 @@
  *
  */
 
-
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.speech.RecognizerIntent
@@ -24,8 +23,8 @@ import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.history.ViewModel.Action
-import org.kiwix.kiwixmobile.core.history.ViewModel.Action.StartSpeechInputFailed
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
 
 data class StartSpeechInput(private val actions: PublishProcessor<Action>) : SideEffect<Unit> {

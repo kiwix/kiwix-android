@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.history;
 
 import java.util.List;
 import org.kiwix.kiwixmobile.core.base.BaseContract;
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem;
 
 interface HistoryContract {
   interface View extends BaseContract.View<Presenter> {

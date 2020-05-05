@@ -9,7 +9,8 @@ import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.history.HistoryAdapter.OnItemClickListener
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
 class HistoryItemViewHolder(
   itemView: View,

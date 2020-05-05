@@ -16,7 +16,6 @@
  *
  */
 
-
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity

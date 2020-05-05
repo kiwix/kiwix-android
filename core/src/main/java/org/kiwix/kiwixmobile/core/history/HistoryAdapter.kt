@@ -23,8 +23,11 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.history.adapter.DATE_ITEM_VIEW_TYPE
+import org.kiwix.kiwixmobile.core.history.adapter.HISTORY_ITEM_VIEW_TYPE
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
 class HistoryAdapter(
   val historyList: List<HistoryListItem>,

@@ -16,26 +16,27 @@
  *
  */
 
-
 import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
+import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
 
-data class SearchInPreviousScreen(private val searchString: String) : SideEffect<Unit> {
+data class OpenHistoryItem(
+  private val historyItem: HistoryItem,
+  private val zimReaderContainer: ZimReaderContainer
+) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.setResult(
-      Activity.RESULT_OK,
-      Intent().apply {
-        putExtra(EXTRA_SEARCH_IN_TEXT, true)
-        putExtra(TAG_FILE_SEARCHED, searchString)
-      }
-    )
+    val intent = internal(CoreMainActivity::class.java)
+    intent.putExtra(EXTRA_CHOSE_X_URL, historyItem.historyUrl)
+    if (historyItem.zimFilePath != zimReaderContainer.zimCanonicalPath) {
+      intent.putExtra(EXTRA_CHOSE_X_FILE, historyItem.zimFilePath)
+    }
+    activity.setResult(Activity.RESULT_OK, intent)
     activity.finish()
-  }
-
-  companion object {
-    const val EXTRA_SEARCH_IN_TEXT = "bool_searchintext"
   }
 }

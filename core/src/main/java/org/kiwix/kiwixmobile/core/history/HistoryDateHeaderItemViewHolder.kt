@@ -4,7 +4,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.header_date.header_date
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.LocalDate
 
