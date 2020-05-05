@@ -24,16 +24,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import androidx.annotation.Nullable;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
+import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.CONTENT_PREFIX;
+import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.UI_URI;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 
@@ -65,7 +68,7 @@ public abstract class CoreWebViewClient extends WebViewClient {
       view.loadUrl(zimReaderContainer.getRedirect(url));
       return true;
     }
-    if (url.startsWith(ZimFileReader.CONTENT_URI.toString())) {
+    if (url.startsWith(CONTENT_PREFIX)) {
       return handleEpubAndPdf(url);
     }
     if (url.startsWith("file://")) {
@@ -76,7 +79,7 @@ public abstract class CoreWebViewClient extends WebViewClient {
       // Allow javascript for HTML functions and code execution (EX: night mode)
       return true;
     }
-    if (url.startsWith(ZimFileReader.UI_URI.toString())) {
+    if (url.startsWith(UI_URI.toString())) {
       Log.e("KiwixWebViewClient", "UI Url " + url + " not supported.");
       //TODO: Document this code - what's a UI_URL?
       return true;
@@ -136,5 +139,15 @@ public abstract class CoreWebViewClient extends WebViewClient {
     callback.setHomePage(home);
     view.removeAllViews();
     view.addView(home);
+  }
+
+  @Nullable
+  @Override
+  public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+    if (url.startsWith(CONTENT_PREFIX)) {
+      return zimReaderContainer.load(url);
+    } else {
+      return super.shouldInterceptRequest(view, url);
+    }
   }
 }

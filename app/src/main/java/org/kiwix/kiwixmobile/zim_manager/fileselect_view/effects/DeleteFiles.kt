@@ -25,13 +25,13 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteZim
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteZims
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import javax.inject.Inject
 
-data class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
+data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
   SideEffect<Unit> {
 
   @Inject lateinit var dialogShower: DialogShower
@@ -40,17 +40,27 @@ data class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
 
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as ZimManageActivity).cachedComponent.inject(this)
-    booksOnDiskListItem.forEach {
-      dialogShower.show(DeleteZim(it), {
-        if (deleteSpecificZimFile(it)) {
-          if (it.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
-            zimReaderContainer.setZimFile(null)
-          }
-          activity.toast(R.string.delete_specific_zim_toast)
+
+    val name = booksOnDiskListItems.joinToString(separator = "\n") { it.book.title }
+
+    dialogShower.show(DeleteZims(name), {
+      activity.toast(
+        if (booksOnDiskListItems.deleteAll()) {
+          R.string.delete_zims_toast
         } else {
-          activity.toast(R.string.delete_zim_failed)
+          R.string.delete_zim_failed
         }
-      })
+      )
+    })
+  }
+
+  private fun List<BookOnDisk>.deleteAll(): Boolean {
+    return fold(true) { acc, book ->
+      acc && deleteSpecificZimFile(book).also {
+        if (it && book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
+          zimReaderContainer.setZimFile(null)
+        }
+      }
     }
   }
 

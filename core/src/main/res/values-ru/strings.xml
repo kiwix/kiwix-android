@@ -37,11 +37,8 @@
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
   <string name="pref_display_title">Экран</string>
-  <string name="pref_zoom_sub_title">Масштаб</string>
-  <string name="pref_zoom_dialog">Уровень масштабирования</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
-  <string name="pref_zoom_enable">Управления масштабированием</string>
   <string name="pref_night_mode">Ночной режим</string>
   <string name="pref_night_mode_summary">Показать статьи инвертированными цветами</string>
   <string name="pref_back_to_top">Вернуться наверх</string>
@@ -88,9 +85,9 @@
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_specific_zim_toast">Файл удалён</string>
+  <string name="delete_zims_toast">Файл удалён</string>
   <string name="no_files_here">Файлы отсутствуют</string>
-  <string name="download_no_space">Недостаточно места для загрузки этого файла.</string>
+  <string name="download_no_space" fuzzy="true">Недостаточно места для загрузки этого файла.</string>
   <string name="space_available">Доступно Места:</string>
   <string name="zim_simple">Простой</string>
   <string name="zim_no_pic">Без картинок</string>
@@ -108,7 +105,7 @@
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
-  <string name="delete_zim_failed">Извините, мы не смогли удалить этот файл. Вместо этого вам стоит попробовать использовать файловый менеджер.</string>
+  <string name="delete_zim_failed" fuzzy="true">Извините, мы не смогли удалить этот файл. Вместо этого вам стоит попробовать использовать файловый менеджер.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
   <string name="stop">остановить</string>

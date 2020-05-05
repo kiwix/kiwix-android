@@ -21,10 +21,8 @@
   <string name="error_file_invalid">Klaida: pasirinktas failas nėra galiojantis ZIM failas.</string>
   <string name="error_article_url_not_found">Klaida: nepavyko įkelti straipsnio (Url: %1$s).</string>
   <string name="pref_display_title">Rodyti</string>
-  <string name="pref_zoom_dialog">Mastelio keitimo lygis</string>
   <string name="pref_info_title">Informacija</string>
   <string name="pref_info_version">Versija</string>
-  <string name="pref_zoom_enable">Mastelio keitimo kontrolė</string>
   <string name="pref_night_mode">Naktinis režimas</string>
   <string name="pref_night_mode_summary">Rodyti straipsnius su ankstesnėmis spalvomis</string>
   <string name="pref_back_to_top">Atgal į viršų</string>

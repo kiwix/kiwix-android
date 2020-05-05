@@ -21,7 +21,7 @@
   <string name="menu_read_aloud_stop">Зупинити читання вголос</string>
   <string name="save_media">Зберегти медіафайл</string>
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
-  <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Медіафайл збережено як %1$s до Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте…</string>
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
@@ -30,11 +30,8 @@
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
   <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
   <string name="pref_display_title">Дисплей</string>
-  <string name="pref_zoom_sub_title">Масштаб</string>
-  <string name="pref_zoom_dialog">Рівень масштабування</string>
   <string name="pref_info_title">Інформація</string>
   <string name="pref_info_version">Версія</string>
-  <string name="pref_zoom_enable">Управління масштабом</string>
   <string name="pref_night_mode">Нічний режим</string>
   <string name="pref_night_mode_summary">Показати статті з інвертованими кольорами</string>
   <string name="pref_back_to_top">Повернутись угору</string>
@@ -81,9 +78,9 @@
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Бібліотека</string>
-  <string name="delete_specific_zim_toast">Файл вилучено</string>
+  <string name="delete_zims_toast">Файл вилучено</string>
   <string name="no_files_here">Тут немає файлів</string>
-  <string name="download_no_space">Недостатньо простору для завантаження цього файлу.</string>
+  <string name="download_no_space">Недостатньо простору для завантаження.</string>
   <string name="space_available">Доступний простір:</string>
   <string name="zim_simple">Простий</string>
   <string name="zim_no_pic">Без зображень</string>
@@ -101,7 +98,7 @@
   <string name="help_11">ZIM-файли, завантажені із застосунка, розташовані в каталозі зовнішнього зберігання даних у папці під назвою Kiwix.</string>
   <string name="pref_storage">Зберігання даних</string>
   <string name="pref_current_folder">Поточна папка</string>
-  <string name="delete_zim_failed">Вибачте, нам не вдалося вилучити цей файл. Вам треба спробувати скористатися натомість менеджером файлів.</string>
+  <string name="delete_zim_failed">Вибачте, але нам не вдалося вилучити файли. Вам треба спробувати скористатися натомість менеджером файлів.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продовжити</string>
   <string name="stop">зупинити</string>

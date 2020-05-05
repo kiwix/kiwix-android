@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Alno
 * Derugon
 * Djiboun
 * Eneelk
@@ -61,11 +62,8 @@
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
   <string name="error_article_url_not_found">Erreur : le chargement de l’article (URL : %1$s) a échoué.</string>
   <string name="pref_display_title">Affichage</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
-  <string name="pref_zoom_dialog">Niveau de zoom</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_zoom_enable">Contrôles du zoom</string>
   <string name="pref_night_mode">Mode nocturne</string>
   <string name="pref_night_mode_summary">Afficher les articles en couleurs inversées</string>
   <string name="pref_back_to_top">Retourner au début</string>
@@ -117,10 +115,10 @@
   <string name="local_zims">Appareil</string>
   <string name="remote_zims">En ligne</string>
   <string name="library">Bibliothèque</string>
-  <string name="delete_zim_body">Supprimer %s ?</string>
-  <string name="delete_specific_zim_toast">Fichier supprimé</string>
+  <string name="delete_zim_body">Les fichiers zim suivants seront supprimés :\n\n%s</string>
+  <string name="delete_zims_toast">Les fichiers ont bien été supprimés</string>
   <string name="no_files_here">Aucun fichier ici</string>
-  <string name="download_no_space">Espace insuffisant pour télécharger ce fichier.</string>
+  <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
   <string name="space_available">Espace disponible :</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Aucune image</string>
@@ -138,7 +136,7 @@
   <string name="help_11">Les fichiers ZIM téléchargés dans l’application sont situés dans le répertoire de stockage externe dans un répertoire appelé Kiwix.</string>
   <string name="pref_storage">Stockage</string>
   <string name="pref_current_folder">Dossier actuel</string>
-  <string name="delete_zim_failed">Désolé, nous sommes incapables de supprimer ce fichier. Vous devriez essayer d’utiliser plutôt un gestionnaire de fichiers.</string>
+  <string name="delete_zim_failed">Désolé, nous n\'avons pas pu supprimer certains fichiers. Vous devriez essayer d’utiliser un gestionnaire de fichiers à la place.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">reprendre</string>
   <string name="stop">arrêter</string>
@@ -271,4 +269,11 @@
   <string name="device_default">Appareil par défaut</string>
   <string name="delete_history">Supprimer l’historique ?</string>
   <string name="delete_bookmarks">Supprimer les marque-pages ?</string>
+  <string name="on">Activé</string>
+  <string name="off">Désactivé</string>
+  <string name="auto">Automatique</string>
+  <string name="send_report">Envoyer le rapport de diagnostic</string>
+  <string name="crash_checkbox_file_system">Détails du système de fichiers</string>
+  <string name="diagnostic_report">Rapport de diagnostic</string>
+  <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivant afin que nous puissions diagnostiquer le problème</string>
 </resources>

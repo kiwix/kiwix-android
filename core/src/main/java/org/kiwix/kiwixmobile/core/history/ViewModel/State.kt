@@ -23,14 +23,20 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 
 sealed class State {
 
-  data class SearchResults(
+
+  data class Results(
     val searchString: String,
     val historyItems: List<HistoryListItem>,
-    val viewAllHistoryToggle: Boolean
-  ) : State()
+    val currentHistoryToggled: Boolean,
+    val currentBookId: String) : State()
 
-  data class NoSearchResults(val searchString: String) : State()
-  data class CurrentHistory(val historyDao: HistoryDao) : State()
-  data class AllHistory(val historyItems: List<HistoryListItem>) : State()
-  data class SelectedHistoryItems(val historyItems: List<HistoryListItem>) : State()
+  data class NoResults(val searchString: String) : State()
+
+  data class SelectionResults(
+    val searchString: String,
+    val historyItems: List<HistoryListItem>,
+    val selectedHistoryItems: List<HistoryListItem>,
+    val currentHistoryToggled: Boolean,
+    val currentBookId: String) : State()
+
 }

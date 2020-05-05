@@ -38,11 +38,8 @@
   <string name="stop_server_label">ڕاژە بوەستێنە</string>
   <string name="error_article_url_not_found">ھەڵە: بارکردنی وتار (Url: %1$s) شکستی ھێنا.</string>
   <string name="pref_display_title">پیشاندان</string>
-  <string name="pref_zoom_sub_title">گەورەکردن</string>
-  <string name="pref_zoom_dialog">ئاستی گەورەکردن</string>
   <string name="pref_info_title">زانیاری</string>
   <string name="pref_info_version">وەشان</string>
-  <string name="pref_zoom_enable">جڵەوەکانی گەورەکردن</string>
   <string name="pref_night_mode">بەکەرهێنانی شەو</string>
   <string name="pref_night_mode_summary">وتارەکان بیشان بدە بە ڕەنگی پێچەوانە</string>
   <string name="pref_back_to_top">گەڕانەوە بۆ سەرەوە</string>
@@ -78,8 +75,8 @@
   <string name="local_zims">ئامێر</string>
   <string name="remote_zims">سەرھێڵ</string>
   <string name="library">کتێبخانە</string>
-  <string name="delete_zim_body">لابردنی %s</string>
-  <string name="delete_specific_zim_toast">پەڕگە سڕدرایەوە</string>
+  <string name="delete_zim_body" fuzzy="true">لابردنی %s</string>
+  <string name="delete_zims_toast">پەڕگە سڕدرایەوە</string>
   <string name="no_files_here">ھیچ پەڕگەیەک لێرە نییە</string>
   <string name="space_available">بۆشایی بەردەستە:</string>
   <string name="zim_simple">سادە</string>

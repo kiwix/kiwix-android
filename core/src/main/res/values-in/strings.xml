@@ -29,11 +29,8 @@
   <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>
   <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
   <string name="pref_display_title">Tampilan</string>
-  <string name="pref_zoom_sub_title">Pembesaran</string>
-  <string name="pref_zoom_dialog">Tingkat perbesaran</string>
   <string name="pref_info_title">Informasi</string>
   <string name="pref_info_version">Versi</string>
-  <string name="pref_zoom_enable">Kontrol perbesaran</string>
   <string name="pref_night_mode">Modus malam</string>
   <string name="pref_night_mode_summary">Tampilkan artikel dengan warna terbalik</string>
   <string name="pref_back_to_top">Kembali ke Atas</string>
@@ -80,9 +77,9 @@
   <string name="local_zims">Perangkat</string>
   <string name="remote_zims">Daring</string>
   <string name="library">Perpustakaan</string>
-  <string name="delete_specific_zim_toast">Berkas telah dihapus</string>
+  <string name="delete_zims_toast">Berkas telah dihapus</string>
   <string name="no_files_here">Tidak ada berkas disini</string>
-  <string name="download_no_space">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
+  <string name="download_no_space" fuzzy="true">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
   <string name="space_available">Ruang yang Tersedia:</string>
   <string name="zim_simple">Sederhana</string>
   <string name="zim_no_pic">Tanpa Gambar</string>
@@ -100,7 +97,7 @@
   <string name="help_11">Berkas ZIM yang diunduh dari dalam apl terletak di direktori penyimpanan eksternal didalam folder Kiwix.</string>
   <string name="pref_storage">Penyimpanan</string>
   <string name="pref_current_folder">Folder Saat Ini</string>
-  <string name="delete_zim_failed">Maaf kami tidak dapat menghapus berkas ini. Anda sebaiknya mencoba menggunakan manajer berkas.</string>
+  <string name="delete_zim_failed" fuzzy="true">Maaf kami tidak dapat menghapus berkas ini. Anda sebaiknya mencoba menggunakan manajer berkas.</string>
   <string name="tts_pause">jeda</string>
   <string name="tts_resume">lanjut</string>
   <string name="stop">berhenti</string>

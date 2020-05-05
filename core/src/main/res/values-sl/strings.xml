@@ -32,11 +32,8 @@
   <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
   <string name="error_article_url_not_found">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
   <string name="pref_display_title">Prikaz</string>
-  <string name="pref_zoom_sub_title">Povečava</string>
-  <string name="pref_zoom_dialog">Raven povečave</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Različica</string>
-  <string name="pref_zoom_enable">Kontrolniki zumiranja</string>
   <string name="pref_night_mode">Nočni način</string>
   <string name="pref_night_mode_summary">Prikaz člankov z obrnjenimi barvami</string>
   <string name="pref_back_to_top">Nazaj na vrh</string>
@@ -85,9 +82,9 @@
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
   <string name="library">Knjižnica</string>
-  <string name="delete_specific_zim_toast">Datoteka je izbrisana</string>
+  <string name="delete_zims_toast">Datoteka je izbrisana</string>
   <string name="no_files_here">Ni datotek tukaj</string>
-  <string name="download_no_space">Premalo prostora za prenos te datoteke.</string>
+  <string name="download_no_space" fuzzy="true">Premalo prostora za prenos te datoteke.</string>
   <string name="space_available">Prostor na voljo:</string>
   <string name="zim_simple">Enostavno</string>
   <string name="zim_no_pic">Ni slik</string>
@@ -105,7 +102,7 @@
   <string name="help_11">ZIM datoteke za prenos v aplikaciji se nahajajo v imeniku zunanjih pomnilnikov v mapi z imenom Kiwix</string>
   <string name="pref_storage">Shranjevanje</string>
   <string name="pref_current_folder">Trenutna mapa</string>
-  <string name="delete_zim_failed">Žal te datoteke ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
+  <string name="delete_zim_failed" fuzzy="true">Žal te datoteke ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
   <string name="tts_pause">premor</string>
   <string name="tts_resume">nadaljuj</string>
   <string name="stop">ustavi</string>

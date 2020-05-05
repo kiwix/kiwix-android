@@ -1,3 +1,19 @@
+3.3.1
+NEW: Send Diagnostic Reports
+BUGFIX: Loading older zim files could fail
+BUGFIX: Some svgs were not loading
++ Lots More
+
+3.3.0
+NEW: Improved loading of audio/video content
+NEW: Card based views for lists
+NEW: Improved translations
+NEW: Delete notes
+BUGFIX: Sensible zoom defaults for oversized content
+BUGFIX: Large downloads should start immediately
+BUGFIX: Searching with kiwix via highlighting prompt
++ Lots More
+
 3.2.0
 NEW: Downloads tab merged with Library
 NEW: Improved translations

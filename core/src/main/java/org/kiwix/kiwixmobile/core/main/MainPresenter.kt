@@ -36,7 +36,7 @@ internal class MainPresenter @Inject constructor(private val dataSource: DataSou
   override fun loadBooks() {
     compositeDisposable.add(
       dataSource.languageCategorizedBooks.subscribe(
-        view!!::addBooks
+        { view?.addBooks(it) }
       ) { e -> Log.e(TAG, "Unable to load books", e) })
   }
 

@@ -12,7 +12,7 @@
   <string name="menu_read_aloud_stop">ପଢିବା ବନ୍ଦ କରିବେ</string>
   <string name="save_media">ମେଡ଼ିଅକୁ ସାଇତିବେ</string>
   <string name="save_media_error">ମିଡ଼ିଆ ସାଇତିଲା ବେଳେ ଅସୁବିଧା ହେଲା!</string>
-  <string name="save_media_saved">ମେଡ଼ିଆକୁ %1$ ଭାବେ ଆପଣଙ୍କ ଛବି ଫୋଲ୍ଡରରେ ରଖାଗଲା</string>
+  <string name="save_media_saved">ମେଡ଼ିଆକୁ %1$s ଭାବେ ଆପଣଙ୍କ ଛବି ଫୋଲ୍ଡରରେ ରଖାଗଲା</string>
   <string name="rescan_fs_warning">ଜିମ ଫାଇଲ ସ୍କାନ କରୁଛୁ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ…</string>
   <string name="search_label">ଖୋଜିବେ</string>
   <string name="choose_file">ଜିମ ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>
@@ -21,10 +21,8 @@
   <string name="error_file_invalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ ।</string>
   <string name="error_article_url_not_found">ଅସୁବିଧା: (Url: %1$s) ପ୍ରସଙ୍ଗ ଖୋଲିବାରେ ବିଫଳ ହେଲୁ ।</string>
   <string name="pref_display_title">ଦେଖଣା</string>
-  <string name="pref_zoom_dialog">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
   <string name="pref_info_title">ସୂଚନା</string>
   <string name="pref_info_version">ସଂସ୍କରଣ</string>
-  <string name="pref_zoom_enable">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
   <string name="pref_night_mode">ରାତି ମୋଡ଼</string>
   <string name="pref_night_mode_summary">ରଙ୍ଗର ଓଲଟା କ୍ରମରେ ପ୍ରସଙ୍ଗମାନ ଦେଖାଇବେ</string>
   <string name="pref_back_to_top">ଉପରକୁ ଫେରିବେ</string>

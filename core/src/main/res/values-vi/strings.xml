@@ -29,11 +29,8 @@
   <string name="error_file_invalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
   <string name="error_article_url_not_found">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>
   <string name="pref_display_title">Hiển thị</string>
-  <string name="pref_zoom_sub_title">Thu phóng</string>
-  <string name="pref_zoom_dialog">Mức thu phóng</string>
   <string name="pref_info_title">Thông tin</string>
   <string name="pref_info_version">Phiên bản</string>
-  <string name="pref_zoom_enable">Điều khiển thu phóng</string>
   <string name="pref_night_mode">Chế độ ban đêm</string>
   <string name="pref_night_mode_summary">Đảo ngược màu sắc trong bài</string>
   <string name="pref_back_to_top">Trở lên Đầu trang</string>
@@ -80,9 +77,9 @@
   <string name="local_zims">Thiết bị</string>
   <string name="remote_zims">Trực tuyến</string>
   <string name="library">Thư viện</string>
-  <string name="delete_specific_zim_toast">Đã xóa tập tin</string>
+  <string name="delete_zims_toast">Đã xóa tập tin</string>
   <string name="no_files_here">Không có tập tin nào ở đây</string>
-  <string name="download_no_space">Không đủ dung lượng trống để tải về tập tin này.</string>
+  <string name="download_no_space" fuzzy="true">Không đủ dung lượng trống để tải về tập tin này.</string>
   <string name="space_available">Dung lượng trống còn lại:</string>
   <string name="zim_simple">Đơn giản</string>
   <string name="zim_no_pic">Không có hình</string>
@@ -100,7 +97,7 @@
   <string name="help_11">Các tập tin ZIM được tải về bằng ứng dụng sẽ được lưu trữ ở bộ nhớ ngoài, trong thư mục có tên Kiwix.</string>
   <string name="pref_storage">Lưu trữ</string>
   <string name="pref_current_folder">Thư mục Hiện tại</string>
-  <string name="delete_zim_failed">Rất tiếc, chúng tôi không thể xoá tập tin này. Bạn hãy dùng một trình duyệt tập tin để làm việc đó.</string>
+  <string name="delete_zim_failed" fuzzy="true">Rất tiếc, chúng tôi không thể xoá tập tin này. Bạn hãy dùng một trình duyệt tập tin để làm việc đó.</string>
   <string name="tts_pause">tạm ngừng</string>
   <string name="tts_resume">tiếp tục</string>
   <string name="stop">dừng</string>

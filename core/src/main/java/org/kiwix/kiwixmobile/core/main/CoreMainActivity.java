@@ -816,7 +816,6 @@ public abstract class CoreMainActivity extends BaseActivity
         sharedPreferenceUtil);
     }
     loadUrl(url, webView);
-    webView.loadPrefs();
     return webView;
   }
 
@@ -1392,7 +1391,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   @NotNull
   private String contentUrl(String articleUrl) {
-    return Uri.parse(ZimFileReader.CONTENT_URI + articleUrl).toString();
+    return Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString();
   }
 
   @NotNull
@@ -1549,8 +1548,11 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void updateNightMode() {
-    painter.update(getCurrentWebView(), kiwixWebView -> kiwixWebView.getUrl() == null
-      || !kiwixWebView.getUrl().equals(HOME_URL), videoView);
+    painter.update(getCurrentWebView(), this::shouldActivateNightMode, videoView);
+  }
+
+  private boolean shouldActivateNightMode(KiwixWebView kiwixWebView) {
+    return kiwixWebView != null && !HOME_URL.equals(kiwixWebView.getUrl());
   }
 
   private void loadPrefs() {
@@ -1558,13 +1560,6 @@ public abstract class CoreMainActivity extends BaseActivity
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
     isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
-
-    if (sharedPreferenceUtil.getPrefZoomEnabled()) {
-      int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
-      getCurrentWebView().setInitialScale(zoomScale);
-    } else {
-      getCurrentWebView().setInitialScale(0);
-    }
 
     if (!isBackToTopEnabled) {
       backToTopButton.hide();
@@ -1688,7 +1683,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @Override
   public void webViewLongClick(final String url) {
     boolean handleEvent = false;
-    if (url.startsWith(ZimFileReader.CONTENT_URI.toString())) {
+    if (url.startsWith(ZimFileReader.CONTENT_PREFIX)) {
       // This is my web site, so do not override; let my WebView load the page
       handleEvent = true;
     } else if (url.startsWith("file://")) {

@@ -12,7 +12,7 @@
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
   <string name="save_media">მედიის შენახვა როგორც…</string>
   <string name="save_media_error">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
-  <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
+  <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$s</string>
   <string name="rescan_fs_warning">ZIM-ფაილების ძიება, გთხოვთ, მოიცადოთ…</string>
   <string name="search_label">ძიება</string>
   <string name="choose_file">აირჩიეთ ZIM-ფაილი (*.zim)</string>
@@ -21,10 +21,8 @@
   <string name="error_file_invalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი.</string>
   <string name="error_article_url_not_found">შეცდომა: სტატია (Url: %1$s) ვერ ჩაიტვირთა.</string>
   <string name="pref_display_title">ჩვენება</string>
-  <string name="pref_zoom_dialog">მასშტაბირების დონე</string>
   <string name="pref_info_title">ინფორმაცია</string>
   <string name="pref_info_version">ვერსია</string>
-  <string name="pref_zoom_enable">მასშტაბირების კონტროლი</string>
   <string name="pref_night_mode">ღამის რეჟიმი</string>
   <string name="pref_night_mode_summary">სტატიის შებრუნებული ფერებით ჩვენება</string>
   <string name="pref_back_to_top">თავში დაბრუნება</string>

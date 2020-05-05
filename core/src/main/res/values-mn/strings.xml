@@ -17,10 +17,8 @@
   <string name="error_file_invalid">Алдаа: Сонгосон ZIM файл алдаатай байна.</string>
   <string name="error_article_url_not_found">Алдаа: (Url: %1$s) нийтлэлийг уншихад алдаа.</string>
   <string name="pref_display_title">Үзүүлэх</string>
-  <string name="pref_zoom_dialog">Татах ойр хол</string>
   <string name="pref_info_title">Мэдээлэл</string>
   <string name="pref_info_version">Хувилбар</string>
-  <string name="pref_zoom_enable">Ойртуулах, холдуулах тохиргоо</string>
   <string name="pref_night_mode_summary">Нийтлэлийн үсгийн өнгийг эсрэгээр харуулах</string>
   <string name="pref_back_to_top">Хамгийн дээр оч</string>
   <string name="pref_back_to_top_summary">Товчийг хуудасны сүүлд байршуулж дээш оч</string>

@@ -17,10 +17,8 @@
   <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
   <string name="error_article_url_not_found">טעות: לאדן ארטיקל (Url: %1$s) דורכגעפאלן.</string>
   <string name="pref_display_title">אויסשטעלונג</string>
-  <string name="pref_zoom_dialog">פארגרעסערונג־טיף</string>
   <string name="pref_info_title">אינפֿארמאציע</string>
   <string name="pref_info_version">ווערסיע</string>
-  <string name="pref_zoom_enable">זום־קאנטראלן</string>
   <string name="pref_night_mode">נאכטמאדע</string>
   <string name="pref_back_to_top">צוריק אויבן</string>
   <string name="pref_language_title">שפראַך</string>
@@ -30,7 +28,7 @@
   <string name="did_you_know">צי האט איר געוואוסט?</string>
   <string name="undo">אַנולירן</string>
   <string name="library">ביבליאטעק</string>
-  <string name="delete_specific_zim_toast">טעקע אויסגעמעקט</string>
+  <string name="delete_zims_toast">טעקע אויסגעמעקט</string>
   <string name="no_files_here">קיין טעקעס דא</string>
   <string name="yes">יא</string>
   <string-array name="description_help_2">

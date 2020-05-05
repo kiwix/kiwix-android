@@ -1,5 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Adithyak1997
+* Akhilan
+* Jameela P.
+* Macofe
+* Praveenp
+-->
 <resources>
+  <string name="kiwi">കിവി</string>
   <string name="menu_help">സഹായം</string>
   <string name="menu_home">പ്രധാനം</string>
   <string name="menu_settings">ഐച്ഛികങ്ങള്‍</string>
@@ -9,38 +17,120 @@
   <string name="menu_full_screen">മുഴുവന്‍ സ്ക്രീനില്‍</string>
   <string name="menu_exit_full_screen">പൂർണ സ്ക്രീനിൽ നിന്ന് പുറത്തു കടക്കുക</string>
   <string name="menu_read_aloud">ഉച്ചത്തിൽ വായിക്കുക</string>
+  <string name="menu_read_aloud_stop">ഉച്ചത്തിൽ വായിക്കുന്നത് നിർത്തുക</string>
+  <string name="save_media">മീഡിയ സേവ് ചെയ്യുക</string>
   <string name="save_media_error">മീഡിയ സേവ് ചെയ്യാൻ ശ്രമിക്കുമ്പോൾ ഒരു പിഴവുണ്ടായി!</string>
-  <string name="rescan_fs_warning">സിം ഫയലുകൾക്കായി തിരയുന്നു. ദയവായി കാത്തിരിക്കൂ..</string>
+  <string name="rescan_fs_warning" fuzzy="true">സിം ഫയലുകൾക്കായി തിരയുന്നു. ദയവായി കാത്തിരിക്കൂ..</string>
   <string name="search_label">തിരയുക</string>
-  <string name="choose_file">ഒരു സിം കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കൂ</string>
+  <string name="choose_file">ഒരു കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കുക</string>
   <string name="open_in_new_tab">കണ്ണി പുതിയ ടാബിൽ തുറക്കണോ?</string>
+  <string name="hotspot_service_channel_name">ഹോട്ട്സ്പോട്ട് സേവന ചാനൽ</string>
+  <string name="hotspot_failed_title">ഹോട്ട്സ്പോട്ട് തുടങ്ങുന്നത് പരാജയപ്പെട്ടു</string>
+  <string name="go_to_wifi_settings_label">വൈഫൈ സജ്ജീകരണങ്ങളിലേക്ക് പോവുക</string>
+  <string name="hotspot_running">ഹോട്ട്സ്പോട്ട് ഓടുന്നു</string>
+  <string name="no_books_selected_toast_message">പുസ്തകങ്ങൾ ആദ്യം തിരഞ്ഞെടുക്കുക</string>
+  <string name="server_failed_message">സെർവർ തുടങ്ങാൻ സാധിച്ചില്ല. ദയവായി ഹോട്ട്സ്പോട്ട് ഓൺ ചെയ്യുക</string>
+  <string name="server_failed_toast_message">സെർവർ തുടങ്ങുവാൻ സാധിച്ചില്ല.</string>
+  <string name="server_started_successfully_toast_message">സെർവർ വിജയകരമായി തുടങ്ങി.</string>
+  <string name="server_stopped_successfully_toast_message">സെർവർ വിജയകരമായി നിർത്തി.</string>
+  <string name="hotspot_turned_on">ഹോട്ട്സ്പോട്ട് ഓൺ ആക്കിയിരിക്കുന്നു</string>
+  <string name="progress_dialog_starting_server">സെർവർ തുടങ്ങുന്നു</string>
+  <string name="hotspot_dialog_title">താങ്കളുടെ വൈഫൈ ഹോട്ട്സ്പോട്ട് ഓൺ ആക്കുക</string>
+  <string name="hotspot_notification_content_title">കിവിക്സ് ഹോട്ട്സ്പോട്ട്</string>
+  <string name="start_server_label">സെർവർ തുടങ്ങുക</string>
+  <string name="stop_server_label">സെർവർ നിർത്തുക</string>
   <string name="error_file_not_found">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ കണ്ടെത്താനായില്ല</string>
+  <string name="zim_not_opened">zim ഫയൽ തുറക്കുവാൻ സാധിച്ചില്ല</string>
   <string name="error_file_invalid">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ സാധുവല്ല.</string>
   <string name="error_article_url_not_found">പിഴവ്: (Url: %1$s) എന്ന ലേഖനം ലോഡ് ചെയ്യുന്നത് പരാജയപ്പെട്ടു.</string>
   <string name="pref_display_title">കാഴ്ച</string>
-  <string name="pref_zoom_dialog">സൂം നിലവാരം</string>
   <string name="pref_info_title">വിവരം</string>
   <string name="pref_info_version">പതിപ്പ്</string>
-  <string name="pref_zoom_enable">സൂം നിയന്ത്രണങ്ങൾ</string>
   <string name="pref_night_mode">രാത്രികാല മോഡ്</string>
   <string name="pref_night_mode_summary">ലേഖനങ്ങളുടെ നിറം നേർവിപരീതമാക്കുക</string>
   <string name="pref_back_to_top">തിരികെ മുകളിലേക്ക്</string>
   <string name="pref_back_to_top_summary">താളിനു താഴെയായി മുകളിലേക്ക് തിരികെ പോകാനുള്ള ബട്ടൺ കാണിക്കുക.</string>
   <string name="pref_language_title">ഭാഷ</string>
   <string name="pref_language_chooser">ഭാഷ തിരഞ്ഞെടുക്കുക</string>
+  <string name="pref_credits_title">കടപ്പാടുകൾ</string>
+  <string name="delete_recent_search_item">ഈ ഐറ്റം ഒഴിവാക്കട്ടെ?</string>
+  <string name="pref_clear_all_history_title">നാൾവഴി ശൂന്യമാക്കുക</string>
+  <string name="pref_clear_all_history_summary">സമീപകാല തിരച്ചിലുകളും ടാബ് നാൾവഴികളും ശൂന്യമാക്കുക</string>
+  <string name="all_history_cleared">എല്ലാ നാൾവഴികളും ശൂന്യമാക്കി</string>
+  <string name="share">പങ്കുവയ്ക്കുക</string>
+  <string name="delete">മായ്ക്കുക</string>
+  <string name="cancel">റദ്ദാക്കുക</string>
+  <string name="delete_specific_search_toast">സമീപകാല തിരച്ചിൽ ശൂന്യമാക്കി</string>
+  <string name="got_it">മനസ്സിലായി</string>
+  <string name="did_you_know">താങ്കൾക്കറിയാമോ?</string>
+  <string name="undo">തിരസ്ക്കരിക്കുക</string>
+  <string name="tab_closed">ടാബ് അടച്ചു</string>
   <string name="no_thanks">വേണ്ട, നന്ദി</string>
   <string name="rate_dialog_neutral">പിന്നീട്</string>
+  <string name="open">തുറക്കുക</string>
+  <string name="search_widget_text">കിവിക്സിൽ തിരയുക</string>
+  <string name="remote_zims">ഓൺലൈൻ</string>
   <string name="library">ഗ്രന്ഥപ്പുര</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="delete_zim_body" fuzzy="true">%s മായ്ക്കണോ?</string>
+  <string name="no_files_here">ഇവിടെ പ്രമാണങ്ങളൊന്നുമില്ല</string>
+  <string name="zim_no_pic">ചിത്രങ്ങളില്ല</string>
+  <string name="help_2">കിവിക്സ് എന്താണ് ചെയ്യുന്നത്?</string>
+  <string name="tts_pause">താത്കാലികമായി നിർത്തുക</string>
+  <string name="tts_resume">തുടരുക</string>
+  <string name="stop">നിർത്തുക</string>
+  <string name="internal_storage">ആന്തരികം</string>
+  <string name="yes">അതെ</string>
+  <string name="no">അല്ല</string>
+  <string name="confirm_stop_download_title">ഡൗൺലോഡ് നിർത്തണോ?</string>
+  <string name="next">അടുത്തത്</string>
+  <string name="previous">മുൻപത്തേത്</string>
+  <string name="time_day">ദിവസം</string>
+  <string name="time_hour">മണിക്കൂർ</string>
+  <string name="time_minute">മിനിട്ട്</string>
+  <string name="time_second">സെക്കന്റ്</string>
+  <string name="time_left">ഇടത്</string>
+  <string name="time_today">ഇന്ന്</string>
+  <string name="time_yesterday">ഇന്നലെ</string>
+  <string name="do_not_ask_anymore">ഇനി ഒരിക്കലും ചോദിക്കരുത്</string>
+  <string name="your_languages">തിരഞ്ഞെടുത്ത ഭാഷകൾ:</string>
+  <string name="other_languages">മറ്റ് ഭാഷകൾ:</string>
+  <string name="crash_checkbox_language">താങ്കളുടെ ഭാഷ സജ്ജീകരണങ്ങൾ</string>
+  <string name="crash_checkbox_zimfiles">Zim പ്രമാണങ്ങളുടെ പട്ടിക</string>
+  <string name="crash_button_confirm">വിവരങ്ങൾ അയക്കുക</string>
+  <string name="articleCount">%s ലേഖനങ്ങൾ</string>
+  <string name="get_started">തുടക്കം കുറിക്കുക</string>
+  <string name="download_books">പുസ്തകങ്ങൾ ഡൗൺലോഡ് ചെയ്യുക</string>
+  <string name="welcome_to_the_family">കുടുംബത്തിലേക്ക് സ്വാഗതം</string>
+  <string name="save_books_offline">പുസ്തകങ്ങൾ ഓഫ്‌ലൈനായി സേവ് ചെയ്യുക</string>
+  <string name="go_to_previous_page">മുൻപത്തെ താളിലേക്ക് പോവുക</string>
+  <string name="go_to_next_page">അടുത്ത താളിലേക്ക് പോവുക</string>
+  <string name="table_of_contents">ഉള്ളടക്കപ്പട്ടിക</string>
+  <string name="select_languages">ഭാഷകൾ തിരഞ്ഞെടുക്കുക</string>
+  <string name="save_languages">ഭാഷകൾ സേവ് ചെയ്യുക</string>
+  <string name="send_feedback">അഭിപ്രായം അറിയിക്കുക</string>
+  <string name="expand">വികസിപ്പിക്കുക</string>
+  <string name="history">നാൾവഴി</string>
+  <string name="history_from_current_book">എല്ലാ പുസ്തകങ്ങളുടെയും നാൾവഴി കാണിക്കുക</string>
+  <string name="search_history">നാൾവഴി തിരയുക</string>
+  <string name="selected_items">%1$d തിരഞ്ഞെടുത്തു</string>
+  <string name="close_all_tabs">എല്ലാ ടാബുകളും അടയ്ക്കുക</string>
+  <string name="pending_state">അവശേഷിക്കുന്നു</string>
+  <string name="running_state">പുരോഗമിക്കുന്നു</string>
+  <string name="complete">സമ്പൂർണ്ണം</string>
+  <string name="paused_state">തത്കാലം നിർത്തിവെച്ചിരിക്കുന്നു</string>
+  <string name="failed_state">പരാജയപ്പെട്ടു:%s</string>
+  <string name="save">സേവ് ചെയ്യുക</string>
+  <string name="note">കുറിപ്പ്</string>
+  <string name="wiki_article_title">വിക്കി ലേഖനത്തിന്റെ തലക്കെട്ട്</string>
+  <string name="note_delete_successful">കുറിപ്പ് വിജയകരമായി ഒഴിവാക്കി</string>
+  <string name="note_delete_unsuccessful">കുറിപ്പ് ഒഴിവാക്കാൻ സാധിച്ചില്ല</string>
+  <string name="note_save_successful">കുറിപ്പ് സേവ് ചെയ്തു</string>
+  <string name="status">സ്ഥിതി</string>
+  <string name="pref_clear_all_notes_summary">എല്ലാ ലേഖനങ്ങളിൽ നിന്നും കുറിപ്പുകൾ ഒഴിവാക്കുക</string>
+  <string name="pref_clear_all_notes_title">എല്ലാ കുറിപ്പുകളും ഒഴിവാക്കുക</string>
+  <string name="tag_pic">ചിത്രം</string>
+  <string name="go_to_settings">സജ്ജീകരണങ്ങളിലേക്ക് പോവുക</string>
+  <string name="no_results">ഫലങ്ങൾ ഒന്നുമില്ല</string>
+  <string name="no_history">നാൾവഴിയില്ല</string>
+  <string name="delete_history">നാൾവഴി ഒഴിവാക്കട്ടെ?</string>
 </resources>

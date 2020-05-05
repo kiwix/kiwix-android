@@ -35,11 +35,8 @@
   <string name="error_file_invalid">错误：选定的文件不是有效ZIM文件。</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
   <string name="pref_display_title">显示</string>
-  <string name="pref_zoom_sub_title">缩放</string>
-  <string name="pref_zoom_dialog">缩放级别</string>
   <string name="pref_info_title">信息</string>
   <string name="pref_info_version">版本</string>
-  <string name="pref_zoom_enable">缩放控制</string>
   <string name="pref_night_mode">夜间模式</string>
   <string name="pref_night_mode_summary">以反色调显示文章</string>
   <string name="pref_back_to_top">返回顶端</string>
@@ -87,9 +84,9 @@
   <string name="local_zims">设备</string>
   <string name="remote_zims">在线</string>
   <string name="library">图书馆</string>
-  <string name="delete_specific_zim_toast">文件已删除</string>
+  <string name="delete_zims_toast">文件已删除</string>
   <string name="no_files_here">没有文件</string>
-  <string name="download_no_space">缺少下载此文件所需的空间。</string>
+  <string name="download_no_space" fuzzy="true">缺少下载此文件所需的空间。</string>
   <string name="space_available">可用空间：</string>
   <string name="zim_simple">简单</string>
   <string name="zim_no_pic">没有图片</string>
@@ -107,7 +104,7 @@
   <string name="help_11">在应用中下载的ZIM文件被存放于外部存储中一个名为Kiwix的文件夹内。</string>
   <string name="pref_storage">存储</string>
   <string name="pref_current_folder">当前文件夹</string>
-  <string name="delete_zim_failed">对不起，我们无法删除此文件。您应尝试改用文件管理器。</string>
+  <string name="delete_zim_failed" fuzzy="true">对不起，我们无法删除此文件。您应尝试改用文件管理器。</string>
   <string name="tts_pause">暂停</string>
   <string name="tts_resume">恢复</string>
   <string name="stop">停止</string>

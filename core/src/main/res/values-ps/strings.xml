@@ -21,10 +21,8 @@
   <string name="error_file_invalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده.</string>
   <string name="error_article_url_not_found">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
   <string name="pref_display_title">ښکارېدنه</string>
-  <string name="pref_zoom_dialog">لوډېرولو کچه</string>
   <string name="pref_info_title">مالومات</string>
   <string name="pref_info_version">بڼه</string>
-  <string name="pref_zoom_enable">لوډېرولو مهارونې</string>
   <string name="pref_night_mode">د شپې بڼه</string>
   <string name="pref_night_mode_summary">رنگ اړول شوې ليکنې ښکاره کول</string>
   <string name="pref_back_to_top">بېرته سر ته</string>

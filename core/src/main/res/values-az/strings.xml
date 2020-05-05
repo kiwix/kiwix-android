@@ -16,10 +16,8 @@
   <string name="error_file_invalid">Xəta: Seçilmiş ZIM faylı yararlı deyil.</string>
   <string name="error_article_url_not_found">Xəta: Məqalənin (Url: %1$s) yüklənməsi alınmadı.</string>
   <string name="pref_display_title">Ekran</string>
-  <string name="pref_zoom_dialog">Miqyas səviyyəsi</string>
   <string name="pref_info_title">Məlumat</string>
   <string name="pref_info_version">Versiya</string>
-  <string name="pref_zoom_enable">Miqyas quraşdırılmaları</string>
   <string name="pref_night_mode">Gecə rejimi</string>
   <string name="pref_night_mode_summary">Məqalələri “gecə rejimində” göstər</string>
   <string name="pref_back_to_top">Əvvələ qayıt</string>

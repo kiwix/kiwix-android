@@ -31,7 +31,7 @@
     android:inputType="text"
     android:scrollHorizontally="true"
     android:textColor="@android:color/white"
-    android:textColorHint="@color/material_dark_foreground_hint">
+    android:importantForAutofill="no">
 
     <requestFocus />
   </EditText>

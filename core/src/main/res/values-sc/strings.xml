@@ -33,6 +33,7 @@
   <string name="server_failed_message">Aviamentu de su servidore fallidu. Pro praghere allughe s\'hotspot tuo</string>
   <string name="server_failed_toast_message">Aviamentu de su servidore fallidu.</string>
   <string name="server_started_successfully_toast_message">Servidore aviadu chene problemas.</string>
+  <string name="server_stopped_successfully_toast_message">Servidore firmadu chene problemas.</string>
   <string name="hotspot_turned_on">Hotspot allutu</string>
   <string name="hotspot_details_message">Sos chi sighint sunt sos detàllios de s\'hotspot locale tuo. \nSSID : %1$s \nCrae : %2$s</string>
   <string name="server_textview_default_message">Ischerta sos documentos chi cheres istrangiare in su servidore</string>
@@ -46,14 +47,12 @@
   <string name="stop_server_label">Firma su servidore</string>
   <string name="server_started_message">Inserta custu indiritzu ip in su navigadore tuo pro intrare in su servidore %s</string>
   <string name="error_file_not_found">Errore: su documentu ZIM ischertadu no est istadu agatadu.</string>
+  <string name="zim_not_opened">Impossìbile abèrrere su documentu zim</string>
   <string name="error_file_invalid">Errore: su documentu ischertadu no est unu documentu ZIM vàlidu.</string>
   <string name="error_article_url_not_found">Errore: carrigamentu de s\'artìculu (Url: %1$s) non resèssidu.</string>
   <string name="pref_display_title">Ischermu</string>
-  <string name="pref_zoom_sub_title">Ismanniamentu</string>
-  <string name="pref_zoom_dialog">Livellu de ismanniamentu</string>
   <string name="pref_info_title">Informatziones</string>
   <string name="pref_info_version">Versione</string>
-  <string name="pref_zoom_enable">Gestione de s\'ismanniamentu</string>
   <string name="pref_night_mode">Modalidade pro sa note</string>
   <string name="pref_night_mode_summary">Ammustra sos artìculos cun colores furriados</string>
   <string name="pref_back_to_top">Torra a su cumintzu</string>
@@ -75,10 +74,11 @@
   <string name="all_history_cleared">Cronologia iscantzellada de su totu</string>
   <string name="pref_clear_all_bookmarks_title">Isbòida sos sinnalibros</string>
   <string name="all_bookmarks_cleared">As iscantzelladu totu sos sinnalibros</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Iscantzella totu sa cronologia</string>
+  <string name="clear_all_history_dialog_title">Iscantzellare totu sa cronologia?</string>
   <string name="share">Cumpartzi</string>
   <string name="selected_file_cab_app_chooser_title">Cumpartzi documentos ZIM cun:</string>
   <string name="delete">Iscantzella</string>
+  <string name="cancel">Annulla</string>
   <string name="delete_specific_search_toast">Chirca reghente bogada</string>
   <string name="hint_contents_drawer_message">Podes trisinare a manca pro abbistare sos cuntenutos de custu artìculu</string>
   <string name="got_it">Cumpresu</string>
@@ -104,10 +104,10 @@
   <string name="local_zims">Dispositivu</string>
   <string name="remote_zims">In lìnia</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Iscantzellare %s?</string>
-  <string name="delete_specific_zim_toast">Documentu iscantzelladu</string>
+  <string name="delete_zim_body">Custos documentos zim ant a èssere iscantzellados:\n\n%s</string>
+  <string name="delete_zims_toast">Documentu iscantzelladu chene problemas</string>
   <string name="no_files_here">Perunu documentu inoghe</string>
-  <string name="download_no_space">Sa memòria non bastat pro iscarrigare custu documentu.</string>
+  <string name="download_no_space">Sa memòria non bastat pro l\'iscarrigare.</string>
   <string name="space_available">Ispàtziu disponìbile:</string>
   <string name="zim_simple">Sèmplitze</string>
   <string name="zim_no_pic">Peruna immàgine</string>
@@ -125,7 +125,7 @@
   <string name="help_11">Sos documentos ZIM iscarrigados dae intro de s\'aplicatzione sunt sarvados in sa memòria esterna in una cartella mutida “Kiwix”.</string>
   <string name="pref_storage">Memòria</string>
   <string name="pref_current_folder">Cartella atuale</string>
-  <string name="delete_zim_failed">Non est istadu possìbile iscantzellare custu documentu. Dias pòdere proare a impreare unu gestore de documentos.</string>
+  <string name="delete_zim_failed">Non est istadu possìbile iscantzellare unos cantos documentos. Dias pòdere proare a impreare unu gestore de documentos.</string>
   <string name="tts_pause">pàusa</string>
   <string name="tts_resume">sighi</string>
   <string name="stop">firma</string>
@@ -137,6 +137,9 @@
   <string name="confirm_stop_download_msg">Seguru ses de bòlere firmare custu iscarrigamentu?</string>
   <string name="download_change_storage">Isseberadore de dispositivu de memòria</string>
   <string name="tts_not_enabled">Sa sintetizatzione vocale no est abilitada pro custu documentu ZIM</string>
+  <string name="texttospeech_initialization_failed">Initzializatzione de sa sintetizatzione de sa boghe fallida. Pro praghere torra a proare.</string>
+  <string name="texttospeech_error">B\'at àpidu un\'errore ispensadu cun sa sintetizatzione de sa boghe. Pro praghere torra a proare.</string>
+  <string name="search_error">B\'at àpidu un\'errore ispensadu cun sa chirca. Pro praghere torra a proare.</string>
   <string name="next">Imbeniente</string>
   <string name="previous">Antepostu</string>
   <string name="wifi_only_title">Permìtere s\'iscarrigamentu de cuntenutu pro mèdiu de retza mòbile?</string>
@@ -151,7 +154,7 @@
   <string name="time_yesterday">Eris</string>
   <string name="pref_external_link_popup_title">Avisa cando ses aberende unu ligàmene esternu</string>
   <string name="pref_external_link_popup_summary">Ammustra ventaneddas pro t\'avisare de costos agiuntivos o ligàmenes chi non funtzionant chene una connessione a ìnternet.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Aberende unu ligàmene esternu</string>
+  <string name="external_link_popup_dialog_title">Aberende unu ligàmene esternu!</string>
   <string name="external_link_popup_dialog_message">Ses aberende unu ligàmene esternu. Custu diat pòdere causare costos in prus pro s\'impreu de trasferimentu de datos o diant pòdere non funtzionare cando non ses connessu a ìnternet. Cheres sighire?</string>
   <string name="do_not_ask_anymore">Non mi lu preguntes prus</string>
   <string name="your_languages">Limbas ischertadas:</string>
@@ -203,6 +206,8 @@
   <string name="ext_storage_permission_rationale_add_note">Pro sas notas est netzessàriu s\'atzessu a sa memòria</string>
   <string name="ext_storage_write_permission_denied_add_note">Sas notas non podent èssere impreadas chene atzessu a sa memòria</string>
   <string name="note_save_unsuccessful">Sarvatàgiu de sa nota fallidu</string>
+  <string name="note_delete_successful">Nota iscantzellada chene problemas</string>
+  <string name="note_delete_unsuccessful">Sa nota no est istada iscantzellada</string>
   <string name="note_save_successful">Nota sarvada</string>
   <string name="note_save_error_storage_not_writable">Errore in su sarvamentu de sa nota: non si podet iscrìere in sa memòria</string>
   <string name="note_share_error_file_missing">Su documentu de sa nota no esistit</string>
@@ -251,4 +256,9 @@
   <string name="no_bookmarks">Perunu sinnalibru!</string>
   <string name="no_history">Peruna cronologia</string>
   <string name="device_default">Valore predefinidu de su dispositivu</string>
+  <string name="delete_history">Iscantzellare sa cronologia?</string>
+  <string name="delete_bookmarks">Iscantzellare sos sinnalibros?</string>
+  <string name="on">Alluta</string>
+  <string name="off">Istudada</string>
+  <string name="auto">Automàtica</string>
 </resources>

@@ -27,11 +27,8 @@
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
   <string name="pref_display_title">Nîşan bide</string>
-  <string name="pref_zoom_sub_title">Nêzîk bike</string>
-  <string name="pref_zoom_dialog">Asta zûmê</string>
   <string name="pref_info_title">Agahî</string>
   <string name="pref_info_version">Guherto</string>
-  <string name="pref_zoom_enable">Kontrolên zûmê</string>
   <string name="pref_night_mode">Moda êvarê</string>
   <string name="pref_night_mode_summary">Gotaran bi rengên vajîkirî nîşan bide</string>
   <string name="pref_back_to_top">Vegere Jor</string>
@@ -78,9 +75,9 @@
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
-  <string name="delete_specific_zim_toast">Pel hat jêbirin</string>
+  <string name="delete_zims_toast">Pel hat jêbirin</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
-  <string name="download_no_space">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
+  <string name="download_no_space" fuzzy="true">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
   <string name="space_available">Cihê berdestː</string>
   <string name="zim_simple">Basît</string>
   <string name="zim_no_pic">Wêne Tune ye</string>
@@ -98,7 +95,7 @@
   <string name="help_11">Peldankên ZIMê yên ku yên ji nava sepanê hatine daxistin, di nav pelbendekî bi navê Kiwix-ê de ne ya ku li nav cîhaza depokirinê ya derveyî ye.</string>
   <string name="pref_storage">Depokirin</string>
   <string name="pref_current_folder">Peldanka niha</string>
-  <string name="delete_zim_failed">Mixabin nebû ku em vê peldankê jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
+  <string name="delete_zim_failed" fuzzy="true">Mixabin nebû ku em vê peldankê jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
   <string name="tts_pause">rawestîne</string>
   <string name="tts_resume">dewam bike</string>
   <string name="stop">rawestîne</string>

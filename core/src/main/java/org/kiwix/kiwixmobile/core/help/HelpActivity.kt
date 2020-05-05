@@ -22,15 +22,18 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DividerItemDecoration
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_image_view
 import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_text_view
 import kotlinx.android.synthetic.main.activity_help.activity_help_recycler_view
+import kotlinx.android.synthetic.main.activity_help.diagnostic_clickable_area
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.utils.CONTACT_EMAIL_ADDRESS
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 
 class HelpActivity : BaseActivity() {
   private val titleDescriptionMap by lazy {
@@ -49,6 +52,7 @@ class HelpActivity : BaseActivity() {
 
     activity_help_feedback_text_view.setOnClickListener { sendFeedback() }
     activity_help_feedback_image_view.setOnClickListener { sendFeedback() }
+    diagnostic_clickable_area.setOnClickListener { sendDiagnosticReport() }
     setSupportActionBar(toolbar)
     toolbar.setNavigationOnClickListener { onBackPressed() }
     supportActionBar?.let {
@@ -59,6 +63,10 @@ class HelpActivity : BaseActivity() {
       DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
     )
     activity_help_recycler_view.adapter = HelpAdapter(titleDescriptionMap)
+  }
+
+  private fun sendDiagnosticReport() {
+    start<DiagnosticReportActivity>()
   }
 
   private fun sendFeedback() {

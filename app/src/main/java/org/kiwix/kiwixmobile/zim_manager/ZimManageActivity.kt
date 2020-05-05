@@ -69,8 +69,13 @@ class ZimManageActivity : BaseActivity() {
       offscreenPageLimit = sectionsPagerAdapter.count - 1
       tabs.setupWithViewPager(this)
       addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
+      addOnPageChangeListener(SimplePageChangeListener(::updatePage))
     }
     setViewPagerPositionFromIntent(intent)
+  }
+
+  private fun updatePage(position: Int) {
+    zimManageViewModel.currentPage.offer(position)
   }
 
   override fun onNewIntent(intent: Intent?) {

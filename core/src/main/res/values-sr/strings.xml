@@ -26,10 +26,8 @@
   <string name="error_file_not_found">Грешка: изабрана ZIM датотека се не може наћи.</string>
   <string name="error_file_invalid">Грешка: изабрана датотека није важећа ZIM датотека.</string>
   <string name="error_article_url_not_found">Грешка: учитавање чланка (Url: %1$s) није успело.</string>
-  <string name="pref_zoom_dialog">Ниво зума</string>
   <string name="pref_info_title">Информације</string>
   <string name="pref_info_version">Верзија</string>
-  <string name="pref_zoom_enable">Контроле зума</string>
   <string name="pref_night_mode">Ноћни режим</string>
   <string name="pref_night_mode_summary">Прикажи чланке с обрнутим бојама</string>
   <string name="pref_back_to_top">Назад на врх</string>
@@ -62,11 +60,11 @@
   <string name="pref_newtab_background_summary">Када отвараш нову картицу она ће бити отворена у позадини</string>
   <string name="new_tab_snack_bar">Чланак је отворен у новој картици</string>
   <string name="local_zims">Уређај</string>
-  <string name="delete_specific_zim_toast">Датотека је избрисана</string>
+  <string name="delete_zims_toast">Датотека је избрисана</string>
   <string name="no_files_here">Овде нема датотека</string>
-  <string name="download_no_space">Недовољно простора за преузимање ове датотеке.</string>
+  <string name="download_no_space" fuzzy="true">Недовољно простора за преузимање ове датотеке.</string>
   <string name="no_network_connection">Нема мрежне везе</string>
-  <string name="delete_zim_failed">Није могуће избрисати ову датотеку. Требали бисте покушати да користите управљач датотека.</string>
+  <string name="delete_zim_failed" fuzzy="true">Није могуће избрисати ову датотеку. Требали бисте покушати да користите управљач датотека.</string>
   <string name="internal_storage">Унутрашњи</string>
   <string name="external_storage">Спољашњи</string>
   <string name="no">Не</string>

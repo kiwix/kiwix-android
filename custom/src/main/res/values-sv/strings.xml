@@ -5,4 +5,5 @@
 <resources>
   <string name="retry">Försök igen</string>
   <string name="download">Ladda ned</string>
+  <string name="invalid_installation">Ogiltig installation. Var god ladda ned Zim.\n Se till att WiFi är aktiverat och att du har tillräckligt mycket lagringsutrymme</string>
 </resources>
