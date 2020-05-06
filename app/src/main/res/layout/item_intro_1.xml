@@ -43,7 +43,7 @@
     android:id="@+id/subheading"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/human_kind_knowledge"
+    android:text="@string/humankind_knowledge"
     android:textAlignment="center"
     android:textSize="15sp"
     app:layout_constraintEnd_toEndOf="parent"

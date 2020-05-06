@@ -140,7 +140,7 @@
   <string name="articleCount">%s artikkelia</string>
   <string name="get_started">Aloittaminen</string>
   <string name="download_books">Lataa kirjoja</string>
-  <string name="human_kind_knowledge">Ihmiskunnan tieto puhelimessasi.</string>
+  <string name="humankind_knowledge">Ihmiskunnan tieto puhelimessasi.</string>
   <string name="welcome_to_the_family">Tervetuloa perheeseen</string>
   <string name="save_books_offline">Tallenna kirjoja offline-tilassa</string>
   <string name="unable_to_add_to_bookmarks">Ei voitu lisätä kirjanmerkkeihin</string>

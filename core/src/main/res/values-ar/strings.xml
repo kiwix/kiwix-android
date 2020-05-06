@@ -181,7 +181,7 @@
   <string name="articleCount">%s مقالات</string>
   <string name="get_started">فلنبدأ</string>
   <string name="download_books">تنزيل الكتب</string>
-  <string name="human_kind_knowledge">أنواع المعرفة الإنسانية على هاتفك.</string>
+  <string name="humankind_knowledge">أنواع المعرفة الإنسانية على هاتفك.</string>
   <string name="welcome_to_the_family">مرحبًا بك في العائلة</string>
   <string name="save_books_offline">حفظ الكتب دون اتصال بالإنترنت</string>
   <string name="download_books_message">قم بتنزيل الكتب واقرأ أينما كنت.</string>
