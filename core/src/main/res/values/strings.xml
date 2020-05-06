@@ -171,7 +171,7 @@
   <string name="articleCount" tools:keep="@string/articleCount">%s articles</string>
   <string name="get_started" tools:keep="@string/get_started">Get started</string>
   <string name="download_books">Download books</string>
-  <string name="human_kind_knowledge" tools:keep="@string/human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
+  <string name="humankind_knowledge" tools:keep="@string/humankind_knowledge">Humankind\'s knowledge, on your phone.</string>
   <string name="welcome_to_the_family" tools:keep="@string/welcome_to_the_family">Welcome to the family</string>
   <string name="save_books_offline" tools:keep="@string/save_books_offline">Save books offline</string>
   <string name="download_books_message" tools:keep="@string/download_books_message">Download books and read wherever you are.</string>
