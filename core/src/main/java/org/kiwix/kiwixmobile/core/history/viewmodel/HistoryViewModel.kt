@@ -18,6 +18,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ConfirmedDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.StartSpeechInputFailed
@@ -37,6 +38,7 @@ class HistoryViewModel @Inject constructor(
   private val currentBook = BehaviorProcessor.createDefault("")
   private val showAllSwitchToggle = BehaviorProcessor.createDefault(false)
   private val currentlySelectedHistoryItems = BehaviorProcessor.createDefault(ArrayList<HistoryListItem>())
+  private val selectedHistoryItems = ArrayList<HistoryListItem>()
 
   init {
     compositeDisposable.addAll(viewStateReducer(), actionMapper())
@@ -87,6 +89,7 @@ class HistoryViewModel @Inject constructor(
       is CreatedWithIntent -> filter.offer(it.searchTerm)
       is ConfirmedDelete -> deleteItemAndShowToast(it)
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it)
+      is OnItemClick -> appendItemToSelectionOrOpenIt(it)
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
       else -> {}
@@ -97,6 +100,10 @@ class HistoryViewModel @Inject constructor(
   )
 
   private fun selectItemAndOpenSelectionMode(onItemLongClick: Action.OnItemLongClick) {
+  }
+
+  private fun appendItemToSelectionOrOpenIt(onItemClick: Action.OnItemClick){
+
   }
 
   private fun deleteItemsAndShowToast(it: ConfirmedDelete) {
