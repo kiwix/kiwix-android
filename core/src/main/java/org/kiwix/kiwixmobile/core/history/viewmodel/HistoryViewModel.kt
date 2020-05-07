@@ -1,8 +1,11 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
 import Finish
+import OpenHistoryItem
 import ShowToast
 import StartSpeechInput
+import android.app.Activity
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
@@ -10,10 +13,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function5
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
+import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ConfirmedDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
@@ -25,10 +30,15 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.StartSpeechInputFaile
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
+import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
-  private val historyDao: HistoryDao
+  private val historyDao: HistoryDao,
+  private val zimReaderContainer: ZimReaderContainer
 ) : ViewModel() {
   val state = MutableLiveData<State>().apply { value = NoResults("") }
   val effects = PublishProcessor.create<SideEffect<*>>()
@@ -37,6 +47,7 @@ class HistoryViewModel @Inject constructor(
   private val compositeDisposable = CompositeDisposable()
   private val currentBook = BehaviorProcessor.createDefault("")
   private val showAllSwitchToggle = BehaviorProcessor.createDefault(false)
+  private val inSelectionMode = BehaviorProcessor.createDefault(false)
   private val currentlySelectedHistoryItems = BehaviorProcessor.createDefault(ArrayList<HistoryListItem>())
   private val selectedHistoryItems = ArrayList<HistoryListItem>()
 
@@ -103,6 +114,14 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun appendItemToSelectionOrOpenIt(onItemClick: Action.OnItemClick){
+    Log.d("HistoryViewModel", "appendItemToSelectionOrOpenIt")
+    when(inSelectionMode.value){
+      true -> Log.d("HistoryViewModel", "appendToSelection")
+      false -> effects.offer(
+        OpenHistoryItem(onItemClick.historyListItem as HistoryItem, zimReaderContainer)
+      )
+    }
+
 
   }
 
