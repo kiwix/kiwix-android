@@ -226,9 +226,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
     alertDialogShower.show(KiwixDialog.StartHotspotManually,
       ::launchTetheringSettingsScreen,
-      {
-        startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-      },
+      { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) },
       {
         progressDialog = ProgressDialog.show(
           this,
