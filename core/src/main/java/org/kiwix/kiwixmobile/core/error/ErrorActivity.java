@@ -179,7 +179,7 @@ public class ErrorActivity extends BaseActivity {
 
         body += "\nExternal Directories\n";
         for (File externalFilesDir : ContextCompat.getExternalFilesDirs(this, null)) {
-          body += externalFilesDir != null ? externalFilesDir.getPath() : "null";
+          body += (externalFilesDir != null ? externalFilesDir.getPath() : "null") + "\n";
         }
       }
 
