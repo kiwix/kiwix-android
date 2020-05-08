@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 
 sealed class State {
@@ -27,7 +26,8 @@ sealed class State {
     val searchString: String,
     val historyItems: List<HistoryListItem>,
     val currentHistoryToggled: Boolean,
-    val currentBookId: String) : State()
+    val currentBookId: String
+  ) : State()
 
   data class NoResults(val searchString: String) : State()
 
@@ -36,6 +36,6 @@ sealed class State {
     val historyItems: List<HistoryListItem>,
     val selectedHistoryItems: List<HistoryListItem>,
     val currentHistoryToggled: Boolean,
-    val currentBookId: String) : State()
-
+    val currentBookId: String
+  ) : State()
 }

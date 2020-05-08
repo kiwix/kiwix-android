@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.history
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.widget.ImageView
@@ -40,16 +39,16 @@ import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import java.util.ArrayList
 import javax.inject.Inject
 
-class HistoryActivity : OnItemClickListener, BaseActivity() {
+const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 
-  val activityComponent by lazy { coreActivityComponent }
+class HistoryActivity : OnItemClickListener, BaseActivity() {
+  private val activityComponent by lazy { coreActivityComponent }
   private val historyList: List<HistoryListItem> = ArrayList()
   private val fullHistory: List<HistoryListItem> = ArrayList()
-  val search = menu_history_search
+  private val search = menu_history_search
   private val deleteList: List<HistoryListItem> = ArrayList()
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private lateinit var recyclerView: RecyclerView
-  private lateinit var historySwitch: Switch
   private val historyViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
   private val compositeDisposable = CompositeDisposable()
 
@@ -60,29 +59,26 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   }
 
   override fun injection(coreComponent: CoreComponent) {
-    coreComponent.activityComponentBuilder()
-      .activity(this)
-      .build()
-      .inject(this)
-    activityComponent.inject(this);
+    activityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_history)
     setSupportActionBar(toolbar)
-    val actionBar = supportActionBar
-    actionBar?.setDisplayHomeAsUpEnabled(true)
-    actionBar?.setTitle(string.history)
-    recyclerView = recycler_view
-    recyclerView.adapter = historyAdapter
-    recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
-    historySwitch = history_switch
-    historySwitch.setOnCheckedChangeListener { button, isChecked ->
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    supportActionBar?.setTitle(string.history)
+
+    recycler_view.adapter = historyAdapter
+    recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
+    history_switch.setOnCheckedChangeListener { button, isChecked ->
       historyViewModel.actions.offer(OnSwitch(isChecked))
     }
-    historySwitch.isChecked = !sharedPreferenceUtil.showHistoryCurrentBook
+    history_switch.isChecked = !sharedPreferenceUtil.showHistoryCurrentBook
+
+    compositeDisposable.add(historyViewModel.effects.subscribe{it.invokeWith(this)})
   }
 
   override fun onDestroy() {
@@ -118,7 +114,6 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   }
 
   private fun render(searchString: String) {
-
   }
 
   override fun onItemClick(
@@ -133,9 +128,5 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     history: HistoryItem
   ): Boolean =
     historyViewModel.actions.offer(OnItemLongClick(history))
-
-  companion object {
-    @kotlin.jvm.JvmField var USER_CLEARED_HISTORY: String = "user_cleared_history"
-  }
 
 }

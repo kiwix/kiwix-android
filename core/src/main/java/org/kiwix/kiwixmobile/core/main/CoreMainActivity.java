@@ -1627,7 +1627,8 @@ public abstract class CoreMainActivity extends BaseActivity
         getCurrentWebView().getTitle(),
         sdf.format(new Date(timeStamp)),
         timeStamp,
-        zimFileReader
+        zimFileReader,
+        false
       );
       presenter.saveHistory(history);
     }
