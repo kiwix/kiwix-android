@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,24 +15,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.history
 
-package org.kiwix.kiwixmobile.core.history;
-
-import java.util.List;
-import org.kiwix.kiwixmobile.core.base.BaseContract;
+import org.kiwix.kiwixmobile.core.base.BaseContract
 
 interface HistoryContract {
-  interface View extends BaseContract.View<Presenter> {
-    void updateHistoryList(List<HistoryListItem> historyList);
-
-    void notifyHistoryListFiltered(List<HistoryListItem> historyList);
+  interface View : BaseContract.View<Presenter> {
+    fun updateHistoryList(historyList: List<HistoryListItem>)
+    fun notifyHistoryListFiltered(historyList: List<HistoryListItem>)
   }
 
-  interface Presenter extends BaseContract.Presenter<View> {
-    void loadHistory(boolean showHistoryCurrentBook);
-
-    void filterHistory(List<HistoryListItem> historyList, String newText);
-
-    void deleteHistory(List<HistoryListItem> deleteList);
+  interface Presenter : BaseContract.Presenter<View> {
+    fun loadHistory(showHistoryCurrentBook: Boolean)
+    fun filterHistory(historyList: List<HistoryListItem>, newText: String)
+    fun deleteHistory(deleteList: List<HistoryListItem>)
   }
 }

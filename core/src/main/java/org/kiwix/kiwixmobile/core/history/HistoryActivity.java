@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
@@ -262,14 +261,14 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   }
 
   @Override
-  public void updateHistoryList(List<HistoryListItem> historyList) {
+  public void updateHistoryList(List<? extends HistoryListItem> historyList) {
     fullHistory.clear();
     fullHistory.addAll(historyList);
     notifyHistoryListFiltered(historyList);
   }
 
   @Override
-  public void notifyHistoryListFiltered(List<HistoryListItem> historyList) {
+  public void notifyHistoryListFiltered(List<? extends HistoryListItem> historyList) {
     this.historyList.clear();
     this.historyList.addAll(historyList);
     historyAdapter.notifyDataSetChanged();
