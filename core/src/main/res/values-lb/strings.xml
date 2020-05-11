@@ -6,7 +6,6 @@
 * Soued031
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Hëllef</string>
   <string name="menu_home">Haaptsäit</string>
   <string name="menu_settings">Astellungen</string>

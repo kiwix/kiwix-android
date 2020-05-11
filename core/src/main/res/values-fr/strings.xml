@@ -15,7 +15,6 @@
 * Yasten
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Aide</string>
   <string name="menu_home">Accueil</string>
   <string name="menu_settings">Options</string>

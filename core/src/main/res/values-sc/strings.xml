@@ -4,7 +4,6 @@
 * L2212
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Agiudu</string>
   <string name="menu_home">Pàgina printzipale</string>
   <string name="menu_settings">Impostatziones</string>

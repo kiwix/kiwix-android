@@ -9,7 +9,6 @@
 * Webysther
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Início</string>
   <string name="menu_settings">Configurações</string>

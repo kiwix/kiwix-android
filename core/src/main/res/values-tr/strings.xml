@@ -14,7 +14,6 @@
 * Trockya
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Yardım</string>
   <string name="menu_home">Anasayfa</string>
   <string name="menu_settings">Ayarlar</string>

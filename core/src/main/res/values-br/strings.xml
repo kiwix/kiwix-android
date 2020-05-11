@@ -6,7 +6,6 @@
 * Y-M D
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Skoazell</string>
   <string name="menu_home">Degemer</string>
   <string name="menu_settings">Arventennoù</string>

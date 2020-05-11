@@ -10,7 +10,6 @@
 * محمد أحمد عبد الفتاح
 -->
 <resources>
-  <string name="kiwi">كيوي</string>
   <string name="menu_help">المساعدة</string>
   <string name="menu_home">الصفحة الرئيسية</string>
   <string name="menu_settings">الإعدادات</string>

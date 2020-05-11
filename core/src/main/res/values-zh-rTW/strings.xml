@@ -8,7 +8,6 @@
 * Wehwei
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">說明</string>
   <string name="menu_home">首頁</string>
   <string name="menu_settings">設定</string>

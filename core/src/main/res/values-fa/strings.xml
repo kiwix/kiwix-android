@@ -7,7 +7,6 @@
 * Reza1615
 -->
 <resources>
-  <string name="kiwi">کیوی</string>
   <string name="menu_help">راهنما</string>
   <string name="menu_home">خانه</string>
   <string name="menu_settings">تنظیمات</string>
