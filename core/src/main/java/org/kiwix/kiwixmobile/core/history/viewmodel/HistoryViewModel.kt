@@ -14,6 +14,7 @@ import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function4
+import io.reactivex.functions.Function3
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
@@ -48,8 +49,8 @@ class HistoryViewModel @Inject constructor(
   private val currentBook = BehaviorProcessor.createDefault("")
   private val showAllSwitchToggle = BehaviorProcessor.createDefault(false)
   private val inSelectionMode = BehaviorProcessor.createDefault(false)
-  private val currentlySelectedHistoryItems =
-    BehaviorProcessor.createDefault(ArrayList<HistoryListItem>())
+  private val searchResults: BehaviorProcessor<List<HistoryListItem>> =
+    BehaviorProcessor.createDefault(listOf())
   private val selectedHistoryItems = ArrayList<HistoryListItem>()
 
   init {
@@ -57,26 +58,29 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun viewStateReducer() = Flowable.combineLatest(
-    currentBook,
-    searchResults(),
-    filter,
-    showAllSwitchToggle,
-    Function4(::reduce)
-  )
+      currentBook,
+      searchResults(),
+      filter,
+      showAllSwitchToggle,
+      Function4(::reduce)
+    )
     .subscribe(state::postValue, Throwable::printStackTrace)
 
-  private fun searchResults() =
+  private fun searchResults(): Flowable<List<HistoryListItem>> =
     Flowable.combineLatest(
       filter,
       showAllSwitchToggle,
-      BiFunction {
-        searchString:String, showAllToggle:Boolean -> searchResults(searchString, showAllToggle)
-      }
+      historyDao.history(),
+      Function3(::searchResults)
     )
+
   private fun searchResults(
     searchString: String,
-    showAllToggle: Boolean
-  ) = historyDao.getHistoryList(showAllToggle, "")
+    showAllToggle: Boolean,
+    historyList: List<HistoryListItem>
+  ): List<HistoryListItem> =
+    historyList.filterIsInstance<HistoryItem>()
+      .filter { h -> h.historyTitle.contains(searchString, true) }
 
   private fun reduce(
     currentBook: String,
@@ -109,19 +113,19 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun actionMapper() = actions.map {
-    when (it) {
-      ExitHistory -> effects.offer(Finish)
-      is Filter -> filter.offer(it.searchTerm)
-      is CreatedWithIntent -> filter.offer(it.searchTerm)
-      is ConfirmedDelete -> deleteItemAndShowToast(it)
-      is OnItemLongClick -> selectItemAndOpenSelectionMode(it)
-      is OnItemClick -> appendItemToSelectionOrOpenIt(it)
-      ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
-      StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
-      else -> {
+      when (it) {
+        ExitHistory -> effects.offer(Finish)
+        is Filter -> filter.offer(it.searchTerm)
+        is CreatedWithIntent -> filter.offer(it.searchTerm)
+        is ConfirmedDelete -> deleteItemAndShowToast(it)
+        is OnItemLongClick -> selectItemAndOpenSelectionMode(it)
+        is OnItemClick -> appendItemToSelectionOrOpenIt(it)
+        ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
+        StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
+        else -> {
+        }
       }
     }
-  }
     .subscribe(
       {},
       Throwable::printStackTrace

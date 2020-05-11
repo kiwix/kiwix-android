@@ -104,6 +104,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         render(state.searchString)
       }
       is NoResults -> {
+        historyAdapter.items = listOf()
         render(state.searchString)
       }
       is SelectionResults -> {
