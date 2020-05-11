@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* FarsiNevis
+-->
+<resources>
+  <string name="retry">تلاش دوباره</string>
+  <string name="download">بارگیری</string>
+</resources>

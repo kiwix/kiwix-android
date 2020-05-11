@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Alex00728
 * CYAN
 * Gongsoonyee
@@ -257,4 +258,7 @@
   <string name="on">켜기</string>
   <string name="off">끄기</string>
   <string name="auto">자동</string>
+  <string name="send_report">진단 보고서 보내기</string>
+  <string name="crash_checkbox_file_system">파일 시스템 세부 정보</string>
+  <string name="diagnostic_report">진단 보고서</string>
 </resources>

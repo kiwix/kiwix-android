@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Alan ffm
 * DeRudySoulStorm
 * InternerowyGołąb
@@ -25,6 +26,7 @@
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
   <string name="menu_support_kiwix">Wspieraj Kiwix</string>
+  <string name="menu_host_books">Host Książek</string>
   <string name="save_media">Zapisz plik multimedialny jako…</string>
   <string name="save_media_error">Wystąpił błąd podczas próby zapisania multimediów!</string>
   <string name="save_media_saved">Zapisano plik multimedialny jako %s w folderze Android/media/org.kiwix…/</string>
@@ -82,10 +84,11 @@
   <string name="all_history_cleared">Usunięto całą historię</string>
   <string name="pref_clear_all_bookmarks_title">Wyczyść zakładki</string>
   <string name="all_bookmarks_cleared">Wszystkie zakładki zostały wyczyszczone</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Wyczyść całą historię</string>
+  <string name="clear_all_history_dialog_title">Wyczyść całą historię?</string>
   <string name="share">Udostępnij</string>
   <string name="selected_file_cab_app_chooser_title">Udostępnij pliki ZIM:</string>
   <string name="delete">Usuń</string>
+  <string name="cancel">Anuluj</string>
   <string name="delete_specific_search_toast">Ostatnie wyszukiwanie zostało usunięte</string>
   <string name="hint_contents_drawer_message">Możesz przesunąć w lewo, aby wyświetlić zawartość tego artykułu</string>
   <string name="got_it">Wszystko jasne</string>
@@ -111,10 +114,10 @@
   <string name="local_zims">Urządzenie</string>
   <string name="remote_zims">Dostępny</string>
   <string name="library">Biblioteka</string>
-  <string name="delete_zim_body" fuzzy="true">Usunąć %s?</string>
+  <string name="delete_zim_body">Następujące pliki zim zostaną usunięte:\n\n%s</string>
   <string name="delete_zims_toast">Plik został usunięty</string>
   <string name="no_files_here">Tu nie ma plików</string>
-  <string name="download_no_space" fuzzy="true">Za mało miejsca, aby pobrać ten plik.</string>
+  <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
   <string name="space_available">Dostępne miejsce:</string>
   <string name="zim_simple">Prosty</string>
   <string name="zim_no_pic">Brak obrazka</string>
@@ -132,7 +135,7 @@
   <string name="help_11">Pliki ZIM pobrane rzez aplikacje znajdują się w zewnętrznym katalogu dysku w folderze o nazwie Kiwix.</string>
   <string name="pref_storage">Magazyn</string>
   <string name="pref_current_folder">Bieżący folder</string>
-  <string name="delete_zim_failed" fuzzy="true">Niestety nie udało się usunąć tego pliku. Zamiast tego powinieneś spróbować użyć menedżera plików.</string>
+  <string name="delete_zim_failed">Niestety nie udało się usunąć niektórych plików. Zamiast tego powinieneś spróbować użyć menedżera plików.</string>
   <string name="tts_pause">pauza</string>
   <string name="tts_resume">Podsumuj</string>
   <string name="stop">stop</string>
@@ -161,7 +164,7 @@
   <string name="time_yesterday">Wczoraj</string>
   <string name="pref_external_link_popup_title">Ostrzegaj podczas wchodzenia w linki zewnętrzne</string>
   <string name="pref_external_link_popup_summary">Wyświetl wyskakujące okienko, aby ostrzec o dodatkowych kosztach lub braku działania w linkach offline.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Wprowadzanie linku zewnętrznego</string>
+  <string name="external_link_popup_dialog_title">Wprowadzanie linku zewnętrznego!</string>
   <string name="external_link_popup_dialog_message">Wprowadzasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, gdy będziesz offline. Czy chcesz kontynuować?</string>
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>
   <string name="your_languages">Wybierz język</string>
@@ -225,12 +228,17 @@
   <string name="notes_deletion_successful">Usunięto cały folder notatek</string>
   <string name="notes_deletion_unsuccessful">Niektóre pliki nie zostały usunięte</string>
   <string name="books_count">%d książka(książek)</string>
+  <string name="discovery_initiated">Rozpoczęto odnajdowanie</string>
+  <string name="discovery_failed">Odnajdowanie nie powiodło się</string>
   <string name="severe_loss_error">Poważny błąd! Spróbuj wyłączyć/ponownie włączyć WiFi P2P</string>
   <string name="connection_failed">Połączenie nie powiodło się</string>
   <string name="permission_rationale_location">Uprawnienie lokalizacja jest wymagane przez system Android, aby umożliwić aplikacji do wykrywania urządzeń</string>
   <string name="permission_refused_location">Nie można zlokalizować urządzeń bez uprawnień do lokalizacji</string>
   <string name="permission_refused_storage">Nie można uzyskać dostępu do plików zim bez uprawnień do przechowywania</string>
+  <string name="request_enable_location">Włączyć lokalizację, aby umożliwić wykrywanie równorzędnych elementów</string>
+  <string name="discovery_needs_location">Nie można wykryć elementów równorzędnych bez usług lokalizacji</string>
   <string name="request_enable_wifi">Włącz WiFi P2P w ustawieniach systemu</string>
+  <string name="discovery_needs_wifi">Nie można wykryć urządzeń równorzędnych bez włączonego WiFi</string>
   <string name="transfer_to">Przesłać pliki do %s?</string>
   <string name="device_not_cooperating">Wybrane urządzenie nie współpracuje przy przesyłaniu</string>
   <string name="file_transfer_complete">Przesyłanie pliku zakończone</string>
@@ -246,6 +254,8 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Usuwa wszystkie notatki ze wszystkich artykułów</string>
   <string name="pref_clear_all_notes_title">Wyczyść wszystkie notatki</string>
+  <string name="tag_pic">Fotka</string>
+  <string name="tag_vid">Wideo</string>
   <string name="tag_text_only">Tylko tekst</string>
   <string name="tag_short_text">Krótki tekst</string>
   <string name="storage_permission_denied">Odrzucono dostęp do pamięci</string>
@@ -257,4 +267,11 @@
   <string name="device_default">Domyślne urządzenie</string>
   <string name="delete_history">Usunąć historię?</string>
   <string name="delete_bookmarks">Usunąć zakładki?</string>
+  <string name="on">Włącz</string>
+  <string name="off">Wyłącz</string>
+  <string name="auto">Automatycznie</string>
+  <string name="send_report">Wyślij raport diagnostyczny</string>
+  <string name="crash_checkbox_file_system">Szczegóły systemu plików</string>
+  <string name="diagnostic_report">Raport diagnostyczny</string>
+  <string name="diagnostic_report_message">Prześlij wszystkie poniższe informacje, abyśmy mogli zdiagnozować problem</string>
 </resources>

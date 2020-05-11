@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Fitoschido
 * L2212
 -->
@@ -261,4 +262,8 @@
   <string name="on">Alluta</string>
   <string name="off">Istudada</string>
   <string name="auto">Automàtica</string>
+  <string name="send_report">Imbia su raportu de diagnòstica</string>
+  <string name="crash_checkbox_file_system">Detàllios de su sistema de documentos</string>
+  <string name="diagnostic_report">Raportu de diagnòstica</string>
+  <string name="diagnostic_report_message">Pro praghere imbia totu sos detàllios chi sighent, in manera chi amus a pòdere diagnosticare su problema</string>
 </resources>

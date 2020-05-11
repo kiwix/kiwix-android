@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 1917 Ekim Devrimi
+* Abijeet Patro
 * Alidemirtas
 * BaRaN6161 TURK
 * Captantrips
@@ -73,7 +74,7 @@
   <string name="pref_language_chooser">Bir dil seçin</string>
   <string name="pref_credits">Katkıda bulunanlar ve lisanslar</string>
   <string name="pref_credits_title">Katkıda bulunanlar</string>
-  <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor veya uygun dil verileri yüklenmemiş. Makale düzgün okunmamış olabilir.</string>
+  <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor veya uygun dil verileri yüklenmemiş. Madde düzgün okunmamış olabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
