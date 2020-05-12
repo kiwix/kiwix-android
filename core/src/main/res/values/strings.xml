@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Help</string>
   <string name="menu_home">Home</string>
   <string name="menu_settings">Settings</string>

@@ -13,7 +13,6 @@
 * Woytecr
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Pomoc</string>
   <string name="menu_home">Start</string>
   <string name="menu_settings">Ustawienia</string>

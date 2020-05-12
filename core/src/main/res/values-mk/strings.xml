@@ -3,7 +3,6 @@
 * Bjankuloski06
 -->
 <resources>
-  <string name="kiwi">Киви</string>
   <string name="menu_help">Помош</string>
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Поставки</string>

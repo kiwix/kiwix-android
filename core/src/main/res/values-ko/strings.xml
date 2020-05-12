@@ -10,7 +10,6 @@
 * 아라
 -->
 <resources>
-  <string name="kiwi">키위</string>
   <string name="menu_help">도움말</string>
   <string name="menu_home">홈</string>
   <string name="menu_settings">설정</string>

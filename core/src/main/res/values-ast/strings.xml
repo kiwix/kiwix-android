@@ -4,7 +4,6 @@
 * Xuacu
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Entamu</string>
   <string name="menu_settings">Configuración</string>

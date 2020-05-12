@@ -7,7 +7,6 @@
 * WikiPhoenix
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Hjälp</string>
   <string name="menu_home">Hem</string>
   <string name="menu_settings">Inställningar</string>

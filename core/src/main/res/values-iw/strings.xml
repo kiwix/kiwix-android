@@ -10,7 +10,6 @@
 * יאיר מן
 -->
 <resources>
-  <string name="kiwi">קיווי</string>
   <string name="menu_help">עזרה</string>
   <string name="menu_home">בית</string>
   <string name="menu_settings">הגדרות</string>

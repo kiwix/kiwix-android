@@ -28,7 +28,6 @@
         <ImageView
           android:layout_width="0dp"
           android:layout_height="144dp"
-          android:contentDescription="@string/kiwi"
           android:scaleType="fitXY"
           android:src="@drawable/ic_home_kiwix_banner"
           app:layout_constraintBottom_toBottomOf="parent"

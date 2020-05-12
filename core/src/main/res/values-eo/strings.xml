@@ -8,7 +8,6 @@
 * Robin van der Vliet
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Helpo</string>
   <string name="menu_home">Hejmo</string>
   <string name="menu_settings">Agordoj</string>
