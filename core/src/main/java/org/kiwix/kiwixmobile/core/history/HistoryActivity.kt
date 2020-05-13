@@ -3,7 +3,6 @@ package org.kiwix.kiwixmobile.core.history
 import android.os.Bundle
 import android.view.Menu
 import android.widget.ImageView
-import android.widget.Switch
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,10 +28,9 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnSwitch
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.history.viewmodel.State
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -73,8 +71,8 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     recycler_view.adapter = historyAdapter
     recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
-    history_switch.setOnCheckedChangeListener { button, isChecked ->
-      historyViewModel.actions.offer(OnSwitch(isChecked))
+    history_switch.setOnCheckedChangeListener { _, isChecked ->
+      historyViewModel.actions.offer(ToggleShowHistoryFromAllBooks(isChecked))
     }
     history_switch.isChecked = !sharedPreferenceUtil.showHistoryCurrentBook
 
@@ -101,10 +99,6 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     when (state) {
       is Results -> {
         historyAdapter.items = state.historyItems
-        render(state.searchString)
-      }
-      is NoResults -> {
-        historyAdapter.items = listOf()
         render(state.searchString)
       }
       is SelectionResults -> {

@@ -31,8 +31,9 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.StartSpeechInputFailed
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
+import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import javax.inject.Inject
@@ -80,7 +81,8 @@ class HistoryViewModel @Inject constructor(
     historyList: List<HistoryListItem>
   ): List<HistoryListItem> =
     historyList.filterIsInstance<HistoryItem>()
-      .filter { h -> h.historyTitle.contains(searchString, true) }
+      .filter { h -> h.historyTitle.contains(searchString, true) &&
+        (h.zimName == zimReaderContainer.name || showAllToggle)}
 
   private fun reduce(
     currentBook: String,
@@ -96,10 +98,7 @@ class HistoryViewModel @Inject constructor(
         showAllSwitchOn,
         currentBook
       )
-    historyBookResults.isNotEmpty() ->
-      Results(searchString, historyBookResults, showAllSwitchOn, currentBook)
-    else ->
-      NoResults(searchString)
+    else -> Results(searchString, historyBookResults, showAllSwitchOn, currentBook)
   }
 
 //  private fun ShowAllSwitchToggled()= filter.distinctUntilChanged().switchMap {  }
@@ -116,6 +115,7 @@ class HistoryViewModel @Inject constructor(
       when (it) {
         ExitHistory -> effects.offer(Finish)
         is Filter -> filter.offer(it.searchTerm)
+        is ToggleShowHistoryFromAllBooks -> showAllSwitchToggle.offer(it.isChecked)
         is CreatedWithIntent -> filter.offer(it.searchTerm)
         is ConfirmedDelete -> deleteItemAndShowToast(it)
         is OnItemLongClick -> selectItemAndOpenSelectionMode(it)
@@ -149,5 +149,8 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
+  }
+  private fun toggleShowHistoryFromAlBooks(toggle: Boolean){
+
   }
 }

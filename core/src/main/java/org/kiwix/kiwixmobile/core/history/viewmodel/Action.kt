@@ -30,7 +30,7 @@ sealed class Action {
 
   data class OnItemClick(val historyListItem: HistoryListItem) : Action()
   data class OnItemLongClick(val historyListItem: HistoryListItem) : Action()
-  data class OnSwitch(val isChecked: Boolean) : Action()
+  data class ToggleShowHistoryFromAllBooks(val isChecked: Boolean) : Action()
   data class Filter(val searchTerm: String) : Action()
   data class UserClickedItem(val historyItem: HistoryItem) : Action()
   data class ShowAllSwitchToggled(val isToggled: Boolean) : Action()
