@@ -15,18 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.intro
 
-package org.kiwix.kiwixmobile.intro;
+import org.kiwix.kiwixmobile.core.base.BaseContract
 
-import org.kiwix.kiwixmobile.core.base.BaseContract;
+interface IntroContract {
+  interface View : BaseContract.View<Presenter?>
 
-public interface IntroContract {
-
-  interface View extends BaseContract.View<Presenter> {
-
-  }
-
-  interface Presenter extends BaseContract.Presenter<View> {
-    void setIntroShown();
+  interface Presenter : BaseContract.Presenter<View?> {
+    fun setIntroShown()
   }
 }
