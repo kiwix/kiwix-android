@@ -27,12 +27,12 @@ import androidx.viewpager.widget.ViewPager
  * A custom implementation of [ViewPager] to decrease the speed of auto-scroll animation
  * of [ViewPager].
  */
-class CustomViewPager : ViewPager {
-  constructor(context: Context?) : super(context!!) {
-    postInitViewPager()
-  }
+class CustomViewPager @JvmOverloads constructor(
+  context: Context?,
+  attrs: AttributeSet?
+) : ViewPager(context!!, attrs) {
 
-  constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {
+  init {
     postInitViewPager()
   }
 
