@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Alno
 * Derugon
 * Djiboun
@@ -7,6 +8,7 @@
 * Fitoschido
 * Gomoko
 * Kelson
+* Stephane
 * The RedBurn
 * Thibaut120094
 * Urhixidur
@@ -96,10 +98,10 @@
   <string name="undo">Annuler</string>
   <string name="tab_closed">Onglet fermé</string>
   <string name="bookmark_added">Marque-page ajouté</string>
-  <string name="rate_dialog_title">Veuillez nous noter</string>
+  <string name="rate_dialog_title">Merci de nous évaluer</string>
   <string name="rate_dialog_msg_1">Si vous aimez utiliser</string>
   <string name="rate_dialog_msg_2">, veuillez prendre un moment pour l’évaluer. Merci pour votre soutien !</string>
-  <string name="rate_dialog_positive">Notez !</string>
+  <string name="rate_dialog_positive">Donnez nous une note!</string>
   <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>
   <string name="open">Ouvrir</string>
@@ -274,5 +276,5 @@
   <string name="send_report">Envoyer le rapport de diagnostic</string>
   <string name="crash_checkbox_file_system">Détails du système de fichiers</string>
   <string name="diagnostic_report">Rapport de diagnostic</string>
-  <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivant afin que nous puissions diagnostiquer le problème</string>
+  <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivants afin que nous puissions diagnostiquer le problème</string>
 </resources>

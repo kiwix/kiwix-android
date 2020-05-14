@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Dyolf77
 * Eyas
 * Meno25
@@ -148,7 +149,7 @@
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
-  <string name="wifi_only_msg">إذا اخترت \“نعم\”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
+  <string name="wifi_only_msg">إذا اخترت “نعم”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
   <string name="pref_wifi_only">تنزيل المحتوى عبر واي فاي فقط</string>
   <string name="time_day">يوم</string>
   <string name="time_hour">ساعة</string>
@@ -266,4 +267,5 @@
   <string name="on">تشغيل</string>
   <string name="off">تعطيل</string>
   <string name="auto">تلقائي</string>
+  <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
 </resources>

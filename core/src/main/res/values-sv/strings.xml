@@ -252,4 +252,5 @@
   <string name="on">På</string>
   <string name="off">Av</string>
   <string name="auto">Auto</string>
+  <string name="crash_checkbox_file_system">Filsystemsdetaljer</string>
 </resources>

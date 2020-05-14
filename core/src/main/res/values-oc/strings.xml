@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Abijeet Patro
+* COMISSIONTOPOC
 * Cedric31
 * Fitoschido
 -->
@@ -67,7 +68,7 @@
   <string name="local_zims">Aparelh</string>
   <string name="remote_zims">En linha</string>
   <string name="library">Bibliotèca</string>
-  <string name="delete_zims_toast">Fichièr suprimit</string>
+  <string name="delete_zims_toast">Fichier suprimit</string>
   <string name="no_files_here">Pas cap de fichièr aicí</string>
   <string name="space_available">Espaci disponible :</string>
   <string name="zim_simple">Simple</string>

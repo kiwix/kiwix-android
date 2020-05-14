@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Ark74
 * Ejegg
 * Fitoschido
@@ -210,4 +211,7 @@
   <string name="on">Activado</string>
   <string name="off">Desactivado</string>
   <string name="auto">Automático</string>
+  <string name="send_report">Enviar informe de diagnóstico</string>
+  <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
+  <string name="diagnostic_report">Informe de diagnóstico</string>
 </resources>
