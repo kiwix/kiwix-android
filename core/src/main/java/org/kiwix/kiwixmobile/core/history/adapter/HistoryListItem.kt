@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.history.adapter
 
+import android.widget.ImageView
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
@@ -36,6 +37,7 @@ sealed class HistoryListItem {
     val historyTitle: String,
     val dateString: String,
     val timeStamp: Long,
+    var isSelected: Boolean,
     override val id: Long = databaseId
   ) : HistoryListItem() {
 
@@ -44,7 +46,8 @@ sealed class HistoryListItem {
       title: String,
       dateString: String,
       timeStamp: Long,
-      zimFileReader: ZimFileReader
+      zimFileReader: ZimFileReader,
+      isSelected: Boolean
     ) : this(
       zimId = zimFileReader.id,
       zimName = zimFileReader.name,
@@ -53,7 +56,8 @@ sealed class HistoryListItem {
       historyUrl = url,
       historyTitle = title,
       dateString = dateString,
-      timeStamp = timeStamp
+      timeStamp = timeStamp,
+      isSelected = isSelected
     )
 
     constructor(historyEntity: HistoryEntity) : this(
@@ -65,7 +69,8 @@ sealed class HistoryListItem {
       historyEntity.historyUrl,
       historyEntity.historyTitle,
       historyEntity.dateString,
-      historyEntity.timeStamp
+      historyEntity.timeStamp,
+      false
     )
   }
 

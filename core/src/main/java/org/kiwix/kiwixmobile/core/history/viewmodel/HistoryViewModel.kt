@@ -5,22 +5,21 @@ import OpenHistoryItem
 import ShowToast
 import StartSpeechInput
 import android.util.Log
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.tonyodev.fetch2core.Func2
 import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function4
+import io.reactivex.functions.Function5
 import io.reactivex.functions.Function3
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ConfirmedDelete
@@ -50,9 +49,11 @@ class HistoryViewModel @Inject constructor(
   private val currentBook = BehaviorProcessor.createDefault("")
   private val showAllSwitchToggle = BehaviorProcessor.createDefault(false)
   private val inSelectionMode = BehaviorProcessor.createDefault(false)
-  private val searchResults: BehaviorProcessor<List<HistoryListItem>> =
-    BehaviorProcessor.createDefault(listOf())
-  private val selectedHistoryItems = ArrayList<HistoryListItem>()
+  private val selectedHistoryEmitter: BehaviorProcessor<List<HistoryListItem>> =
+    BehaviorProcessor.createDefault(
+      listOf()
+    )
+  private val selectedHistoryItemsList = ArrayList<HistoryListItem>()
 
   init {
     compositeDisposable.addAll(viewStateReducer(), actionMapper())
@@ -61,9 +62,10 @@ class HistoryViewModel @Inject constructor(
   private fun viewStateReducer() = Flowable.combineLatest(
       currentBook,
       searchResults(),
+      selectedHistoryEmitter,
       filter,
       showAllSwitchToggle,
-      Function4(::reduce)
+      Function5(::reduce)
     )
     .subscribe(state::postValue, Throwable::printStackTrace)
 
@@ -81,24 +83,24 @@ class HistoryViewModel @Inject constructor(
     historyList: List<HistoryListItem>
   ): List<HistoryListItem> =
     historyList.filterIsInstance<HistoryItem>()
-      .filter { h -> h.historyTitle.contains(searchString, true) &&
-        (h.zimName == zimReaderContainer.name || showAllToggle)}
+      .filter { h ->
+        h.historyTitle.contains(searchString, true) &&
+          (h.zimName == zimReaderContainer.name || showAllToggle)
+      }
 
   private fun reduce(
     currentBook: String,
     historyBookResults: List<HistoryListItem>,
+    selectedHistoryItems: List<HistoryListItem>,
     searchString: String,
     showAllSwitchOn: Boolean
-  ): State = when {
-    selectedHistoryItems.isNotEmpty() ->
-      SelectionResults(
-        searchString,
-        historyBookResults,
-        selectedHistoryItems,
-        showAllSwitchOn,
-        currentBook
-      )
-    else -> Results(searchString, historyBookResults, showAllSwitchOn, currentBook)
+  ): State {
+//    historyBookResults.filterIsInstance<HistoryItem>().forEach {
+//      if(selectedHistoryItems.contains(it)){
+//        it.isSelected = true
+//      }
+//    }
+    return Results(searchString, historyBookResults, showAllSwitchOn, currentBook)
   }
 
 //  private fun ShowAllSwitchToggled()= filter.distinctUntilChanged().switchMap {  }
@@ -112,35 +114,39 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun actionMapper() = actions.map {
-      when (it) {
-        ExitHistory -> effects.offer(Finish)
-        is Filter -> filter.offer(it.searchTerm)
-        is ToggleShowHistoryFromAllBooks -> showAllSwitchToggle.offer(it.isChecked)
-        is CreatedWithIntent -> filter.offer(it.searchTerm)
-        is ConfirmedDelete -> deleteItemAndShowToast(it)
-        is OnItemLongClick -> selectItemAndOpenSelectionMode(it)
-        is OnItemClick -> appendItemToSelectionOrOpenIt(it)
-        ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
-        StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
-        else -> {
-        }
+    when (it) {
+      ExitHistory -> effects.offer(Finish)
+      is Filter -> filter.offer(it.searchTerm)
+      is ToggleShowHistoryFromAllBooks -> showAllSwitchToggle.offer(it.isChecked)
+      is CreatedWithIntent -> filter.offer(it.searchTerm)
+      is ConfirmedDelete -> deleteItemAndShowToast(it)
+      is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
+      is OnItemClick -> appendItemToSelectionOrOpenIt(it)
+      ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
+      StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
+      else -> {
       }
     }
-    .subscribe(
-      {},
-      Throwable::printStackTrace
-    )
+  }
+    .subscribe({}, Throwable::printStackTrace)
 
-  private fun selectItemAndOpenSelectionMode(onItemLongClick: Action.OnItemLongClick) {
+  private fun selectItemAndOpenSelectionMode(historyItem: HistoryItem) {
+    historyItem.isSelected = true
+    selectedHistoryItemsList.add(historyItem)
+    selectedHistoryEmitter.offer(selectedHistoryItemsList)
   }
 
   private fun appendItemToSelectionOrOpenIt(onItemClick: Action.OnItemClick) {
-    Log.d("HistoryViewModel", "appendItemToSelectionOrOpenIt")
-    when (inSelectionMode.value) {
-      true -> Log.d("HistoryViewModel", "appendToSelection")
-      false -> effects.offer(
-        OpenHistoryItem(onItemClick.historyListItem as HistoryItem, zimReaderContainer)
-      )
+    val historyItem = onItemClick.historyListItem as HistoryItem
+    if (selectedHistoryItemsList.remove(historyItem)) {
+      historyItem.isSelected = false
+      selectedHistoryEmitter.offer(selectedHistoryItemsList)
+    } else if (selectedHistoryItemsList.size > 0) {
+      historyItem.isSelected = true
+      selectedHistoryItemsList.add(historyItem)
+      selectedHistoryEmitter.offer(selectedHistoryItemsList)
+    } else {
+      OpenHistoryItem(historyItem, zimReaderContainer)
     }
   }
 
@@ -150,7 +156,8 @@ class HistoryViewModel @Inject constructor(
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
   }
-  private fun toggleShowHistoryFromAlBooks(toggle: Boolean){
+
+  private fun toggleShowHistoryFromAlBooks(toggle: Boolean) {
 
   }
 }

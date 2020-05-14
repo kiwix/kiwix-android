@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.core.history.adapter
 
+import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.header_date.header_date
 import kotlinx.android.synthetic.main.item_bookmark_history.favicon
@@ -20,12 +21,12 @@ sealed class HistoryListItemViewHolder <in T : HistoryListItem>(containerView: V
 
   class HistoryItemViewHolder(
     override val containerView: View,
-    private val deleteList: List<HistoryListItem>,
     private val itemClickListener: OnItemClickListener
   ) : HistoryListItemViewHolder<HistoryItem>(containerView) {
     override fun bind(item: HistoryItem) {
       title.text = item.historyTitle
-      if (deleteList.contains(item)) {
+      Log.d("HistoryListItemViewHold", "isSelected=${item.isSelected}")
+      if (item.isSelected) {
         favicon.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
       } else {
         favicon.setBitmap(Base64String(item.favicon))

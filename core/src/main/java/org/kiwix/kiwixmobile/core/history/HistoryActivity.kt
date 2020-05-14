@@ -1,9 +1,13 @@
 package org.kiwix.kiwixmobile.core.history
 
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_history.history_switch
 import kotlinx.android.synthetic.main.activity_history.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.R2.id.menu_history_search
@@ -41,8 +46,7 @@ const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 
 class HistoryActivity : OnItemClickListener, BaseActivity() {
   private val activityComponent by lazy { coreActivityComponent }
-  private val historyList: List<HistoryListItem> = ArrayList()
-  private val fullHistory: List<HistoryListItem> = ArrayList()
+  private var selectedHistoryItems: List<ImageView> = ArrayList()
   private val search = menu_history_search
   private val deleteList: List<HistoryListItem> = ArrayList()
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -52,7 +56,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
 
   private val historyAdapter: HistoryAdapter2 by lazy {
     HistoryAdapter2(
-      HistoryItemDelegate(deleteList, this)
+      HistoryItemDelegate(this)
     )
   }
 
@@ -101,14 +105,26 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         historyAdapter.items = state.historyItems
         render(state.searchString)
       }
-      is SelectionResults -> {
-        historyAdapter.items = state.historyItems
-        render(state.searchString)
-      }
     }
+  }
+  private fun renderSelectionMode(searchString: String) {
+
+//    if (deleteList.remove(history)) {
+//      favicon.setBitmapFromString(history.favicon)
+//    } else {
+//      favicon.setImageDrawable(
+//        ContextCompat.getDrawable(this, drawable.ic_check_circle_blue_24dp)
+//      )
+//      deleteList.add(history)
+//    }
+//  }
   }
 
   private fun render(searchString: String) {
+//    selectedHistoryItems.forEach {
+//      Log.d("SelectionResults", "" + selectedHistoryItems.size)
+//      it.setImageDrawable(ContextCompat.getDrawable(this, drawable.ic_check_circle_blue_24dp))
+//    }
   }
 
   override fun onItemClick(
@@ -121,7 +137,10 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   override fun onItemLongClick(
     favicon: ImageView,
     history: HistoryItem
-  ): Boolean =
-    historyViewModel.actions.offer(OnItemLongClick(history))
+  ): Boolean {
+    return historyViewModel.actions.offer(OnItemLongClick(history))
+  }
+
+
 
 }
