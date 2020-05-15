@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter2
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryDelegate.HistoryItemDelegate
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
@@ -78,15 +79,18 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         mode: ActionMode,
         item: MenuItem
       ): Boolean {
-        historyViewModel.actions.offer(Action.ExitActionModeMenu)
+
         if (item.itemId == id.menu_context_delete) {
           dialogShower.show(DeleteHistory, {
-            val deleteList = historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected }
-//            presenter.deleteHistory(deleteList)
+            historyViewModel.actions.offer(
+              DeleteHistoryItems(historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected })
+            )
+            historyViewModel.actions.offer(Action.ExitActionModeMenu)
             mode.finish()
           })
           return true
         }
+        historyViewModel.actions.offer(Action.ExitActionModeMenu)
         return false
       }
 

@@ -19,6 +19,7 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ConfirmedDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.CreatedWithIntent
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
@@ -122,6 +123,7 @@ class HistoryViewModel @Inject constructor(
       is ConfirmedDelete -> deleteItemAndShowToast(it)
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
+      is DeleteHistoryItems -> historyDao.deleteHistory(it.itemsToDelete)
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
       ExitActionModeMenu -> unselectAllItems.offer(true)
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
