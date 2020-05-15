@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.history.HistoryContract.View
 import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
 import javax.inject.Inject
 
-internal class HistoryPresenter @Inject constructor(
+class HistoryPresenter @Inject constructor(
   private val dataSource: DataSource,
   @param:MainThread private val mainThread: Scheduler,
   @param:Computation private val computation: Scheduler
