@@ -27,8 +27,9 @@ sealed class Action {
   object ExitHistory : Action()
   object ClickedSearchInText : Action()
   object ReceivedPromptForSpeechInput : Action()
-  object StartSpeechInputFailed : Action()
+  object ExitActionModeMenu : Action()
 
+  object StartSpeechInputFailed : Action()
   data class OnItemClick(val historyListItem: HistoryListItem) : Action()
   data class OnItemLongClick(val historyItem: HistoryItem) : Action()
   data class ToggleShowHistoryFromAllBooks(val isChecked: Boolean) : Action()

@@ -19,6 +19,7 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ConfirmedDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.CreatedWithIntent
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
@@ -42,7 +43,7 @@ class HistoryViewModel @Inject constructor(
   private val compositeDisposable = CompositeDisposable()
   private val currentBook = BehaviorProcessor.createDefault("")
   private val showAllSwitchToggle = BehaviorProcessor.createDefault(false)
-  private val updatedSelection = BehaviorProcessor.createDefault(false)
+  private val unselectAllItems = BehaviorProcessor.createDefault(false)
   private val selectedItems: BehaviorProcessor<List<HistoryListItem>> =
     BehaviorProcessor.createDefault(listOf())
   private val selectedHistoryItemsList = ArrayList<HistoryListItem>()
@@ -53,12 +54,12 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun updateSelectionMode() =
-    updatedSelection.subscribe({ isInSelectionMode = it }, Throwable::printStackTrace)
+    unselectAllItems.subscribe({ isInSelectionMode = it }, Throwable::printStackTrace)
 
   private fun viewStateReducer() = Flowable.combineLatest(
     currentBook,
     searchResults(),
-    updatedSelection,
+    unselectAllItems,
     filter,
     showAllSwitchToggle,
     Function5(::updateResultsState)
@@ -87,7 +88,7 @@ class HistoryViewModel @Inject constructor(
   private fun updateResultsState(
     currentBook: String,
     historyBookResults: List<HistoryListItem>,
-    inSelectionMode: Boolean,
+    unselectAllItems: Boolean,
     searchString: String,
     showAllSwitchOn: Boolean
   ): State {
@@ -96,6 +97,9 @@ class HistoryViewModel @Inject constructor(
 //        it.isSelected = true
 //      }
 //    }
+    if(unselectAllItems){
+      historyBookResults.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
+    }
     return Results(searchString, historyBookResults, showAllSwitchOn, currentBook)
   }
 
@@ -119,16 +123,17 @@ class HistoryViewModel @Inject constructor(
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
+      ExitActionModeMenu -> unselectAllItems.offer(true)
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
       else -> {
       }
     }
-  }
-    .subscribe({}, Throwable::printStackTrace)
+  }.subscribe({}, Throwable::printStackTrace)
+
 
   private fun selectItemAndOpenSelectionMode(historyItem: HistoryItem) {
     historyItem.isSelected = true
-    updatedSelection.offer(true)
+    unselectAllItems.offer(false)
   }
 
   private fun isInSelctionMode(): Boolean {
@@ -140,16 +145,22 @@ class HistoryViewModel @Inject constructor(
       ?.isNotEmpty() ?: false
   }
 
+
+  private fun deselectAllHistoryItems(){
+
+
+  }
+
   private fun appendItemToSelectionOrOpenIt(onItemClick: OnItemClick) {
     val historyItem = onItemClick.historyListItem as HistoryItem
     when {
       historyItem.isSelected -> {
         historyItem.isSelected = false
-        updatedSelection.offer(true)
+        unselectAllItems.offer(false)
       }
       isInSelctionMode() -> {
         historyItem.isSelected = true
-        updatedSelection.offer(true)
+        unselectAllItems.offer(false)
       }
       else -> {
         OpenHistoryItem(historyItem, zimReaderContainer)

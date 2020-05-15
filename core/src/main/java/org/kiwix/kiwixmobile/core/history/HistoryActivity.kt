@@ -1,13 +1,12 @@
 package org.kiwix.kiwixmobile.core.history
 
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
+import androidx.appcompat.view.ActionMode
+import androidx.appcompat.view.ActionMode.Callback
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +16,6 @@ import kotlinx.android.synthetic.main.activity_history.history_switch
 import kotlinx.android.synthetic.main.activity_history.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.R2.id.menu_history_search
@@ -28,7 +26,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.history.HistoryAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter2
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryDelegate.HistoryItemDelegate
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
@@ -39,6 +36,8 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.State
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
+import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteHistory
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import java.util.ArrayList
 import javax.inject.Inject
@@ -49,11 +48,54 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   private val activityComponent by lazy { coreActivityComponent }
   private var selectedHistoryItems: List<ImageView> = ArrayList()
   private val search = menu_history_search
-  private val deleteList: List<HistoryListItem> = ArrayList()
+  private var actionMode: ActionMode? = null
+  @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+//  @Inject private lateinit var presenter: Presenter
   private lateinit var recyclerView: RecyclerView
   private val historyViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
   private val compositeDisposable = CompositeDisposable()
+
+  private val actionModeCallback: Callback =
+    object : Callback {
+      override fun onCreateActionMode(
+        mode: ActionMode,
+        menu: Menu
+      ): Boolean {
+        mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
+        history_switch.isEnabled = false
+        return true
+      }
+
+      override fun onPrepareActionMode(
+        mode: ActionMode,
+        menu: Menu
+      ): Boolean {
+        return false
+      }
+
+      override fun onActionItemClicked(
+        mode: ActionMode,
+        item: MenuItem
+      ): Boolean {
+        historyViewModel.actions.offer(Action.ExitActionModeMenu)
+        if (item.itemId == id.menu_context_delete) {
+          dialogShower.show(DeleteHistory, {
+            val deleteList = historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected }
+//            presenter.deleteHistory(deleteList)
+            mode.finish()
+          })
+          return true
+        }
+        return false
+      }
+
+      override fun onDestroyActionMode(mode: ActionMode) {
+        historyViewModel.actions.offer(Action.ExitActionModeMenu)
+        history_switch.isEnabled = true
+        actionMode = null
+      }
+    }
 
   private val historyAdapter: HistoryAdapter2 by lazy {
     HistoryAdapter2(
@@ -81,7 +123,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     }
     history_switch.isChecked = !sharedPreferenceUtil.showHistoryCurrentBook
 
-    compositeDisposable.add(historyViewModel.effects.subscribe{it.invokeWith(this)})
+    compositeDisposable.add(historyViewModel.effects.subscribe { it.invokeWith(this) })
   }
 
   override fun onDestroy() {
@@ -103,11 +145,17 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   private fun render(state: State) =
     when (state) {
       is Results -> {
+        if (state.historyItems.filter { it is HistoryItem && it.isSelected }
+            .isNotEmpty() && actionMode == null) {
+          actionMode = startSupportActionMode(actionModeCallback)
+        }
         historyAdapter.items = state.historyItems
         render(state.searchString)
       }
-      is NoResults -> {}
-      is SelectionResults -> {}
+      is NoResults -> {
+      }
+      is SelectionResults -> {
+      }
     }
 
   private fun renderSelectionMode(searchString: String) {
@@ -143,7 +191,5 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   ): Boolean {
     return historyViewModel.actions.offer(OnItemLongClick(history))
   }
-
-
 
 }
