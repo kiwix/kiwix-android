@@ -37,7 +37,7 @@ sealed class HistoryListItem {
     val historyTitle: String,
     val dateString: String,
     val timeStamp: Long,
-    var isSelected: Boolean,
+    var isSelected: Boolean=false,
     override val id: Long = databaseId
   ) : HistoryListItem() {
 
@@ -46,8 +46,7 @@ sealed class HistoryListItem {
       title: String,
       dateString: String,
       timeStamp: Long,
-      zimFileReader: ZimFileReader,
-      isSelected: Boolean
+      zimFileReader: ZimFileReader
     ) : this(
       zimId = zimFileReader.id,
       zimName = zimFileReader.name,
@@ -56,8 +55,7 @@ sealed class HistoryListItem {
       historyUrl = url,
       historyTitle = title,
       dateString = dateString,
-      timeStamp = timeStamp,
-      isSelected = isSelected
+      timeStamp = timeStamp
     )
 
     constructor(historyEntity: HistoryEntity) : this(

@@ -20,22 +20,26 @@ package org.kiwix.kiwixmobile.core.history.viewmodel
 
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 
-sealed class State {
+sealed class State (
+  open val historyItems: List<HistoryListItem>){
 
   data class Results(
     val searchString: String,
-    val historyItems: List<HistoryListItem>,
+    override val historyItems: List<HistoryListItem>,
     val currentHistoryToggled: Boolean,
     val currentBookId: String
-  ) : State()
+  ) : State(historyItems)
 
-  data class NoResults(val searchString: String) : State()
+  data class NoResults(
+    val searchString: String,
+    override val historyItems: List<HistoryListItem>
+  ) : State(historyItems)
 
   data class SelectionResults(
     val searchString: String,
-    val historyItems: List<HistoryListItem>,
+    override val historyItems: List<HistoryListItem>,
     val selectedHistoryItems: List<HistoryListItem>,
     val currentHistoryToggled: Boolean,
     val currentBookId: String
-  ) : State()
+  ) : State(historyItems)
 }

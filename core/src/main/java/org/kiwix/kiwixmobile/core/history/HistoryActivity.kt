@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.history.viewmodel.State
+import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -99,14 +100,16 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return true
   }
 
-  private fun render(state: State) {
+  private fun render(state: State) =
     when (state) {
       is Results -> {
         historyAdapter.items = state.historyItems
         render(state.searchString)
       }
+      is NoResults -> {}
+      is SelectionResults -> {}
     }
-  }
+
   private fun renderSelectionMode(searchString: String) {
 
 //    if (deleteList.remove(history)) {
