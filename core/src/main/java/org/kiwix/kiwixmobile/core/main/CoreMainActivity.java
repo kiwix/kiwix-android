@@ -1450,7 +1450,7 @@ public abstract class CoreMainActivity extends BaseActivity
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
-          boolean wasFromTabSwitcher = mainMenu.isInTabSwitcher();
+          boolean wasFromTabSwitcher = mainMenu != null && mainMenu.isInTabSwitcher();
           hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
