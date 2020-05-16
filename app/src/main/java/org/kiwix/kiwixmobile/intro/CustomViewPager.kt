@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.intro
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.animation.Interpolator
 import android.widget.Scroller
 import androidx.viewpager.widget.ViewPager
@@ -45,12 +46,18 @@ class CustomViewPager @JvmOverloads constructor(
    * duration
    */
   private fun postInitViewPager() {
-    val scroller = ViewPager::class.java.getDeclaredField("mScroller")
-    scroller.isAccessible = true
-    val interpolator = ViewPager::class.java.getDeclaredField("sInterpolator")
-    interpolator.isAccessible = true
-    val customScroller = CustomScroller(context, interpolator[null] as Interpolator)
-    scroller[this] = customScroller
+    try {
+      val scroller = ViewPager::class.java.getDeclaredField("mScroller")
+      scroller.isAccessible = true
+      val interpolator = ViewPager::class.java.getDeclaredField("sInterpolator")
+      interpolator.isAccessible = true
+      val customScroller = CustomScroller(context, interpolator[null] as Interpolator)
+      scroller[this] = customScroller
+    } catch (noSuchFieldException: NoSuchFieldException) {
+      Log.e("CustomViewPager", "$noSuchFieldException")
+    } catch (securityException: SecurityException) {
+      Log.e("CustomViewPager", "$securityException")
+    }
   }
 
   internal inner class CustomScroller(context: Context?, interpolator: Interpolator?) :
