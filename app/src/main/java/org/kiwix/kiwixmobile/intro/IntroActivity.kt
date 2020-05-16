@@ -23,9 +23,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import butterknife.BindView
-import butterknife.OnClick
-import com.pixelcan.inkpageindicator.InkPageIndicator
+import kotlinx.android.synthetic.main.activity_intro.*
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -47,15 +45,9 @@ class IntroActivity : BaseActivity(), IntroContract.View {
   private val handler = Handler()
   private val timer = Timer()
 
-  @BindView(R.id.view_pager)
-  lateinit var viewPager: ViewPager
-
-  @BindView(R.id.tab_indicator)
-  lateinit var tabIndicator: InkPageIndicator
-
   @Inject
   internal lateinit var presenter: IntroContract.Presenter
-  private var airPlane: ImageView? = null
+  private lateinit var airPlane: ImageView
   private var currentPage = 0
   private lateinit var views: Array<View>
 
@@ -66,11 +58,11 @@ class IntroActivity : BaseActivity(), IntroContract.View {
 
     override fun onPageSelected(position: Int) {
       if (position == 1) {
-        airPlane!!.visibility = View.VISIBLE
-        airPlane!!.animate().translationX(airPlane!!.width.toFloat()).duration = animationDuration
+        airPlane.visibility = View.VISIBLE
+        airPlane.animate().translationX(airPlane.width.toFloat()).duration = animationDuration
       } else {
-        airPlane!!.visibility = View.INVISIBLE
-        airPlane!!.animate().translationX(-airPlane!!.width.toFloat())
+        airPlane.visibility = View.INVISIBLE
+        airPlane.animate().translationX(-airPlane.width.toFloat())
       }
       currentPage = position
     }
@@ -89,28 +81,29 @@ class IntroActivity : BaseActivity(), IntroContract.View {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_intro)
+    get_started.setOnClickListener { startMainActivity() }
     val layoutInflater = layoutInflater
     views = arrayOf(
-      layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
-      layoutInflater.inflate(R.layout.item_intro_2, viewPager, false)
+      layoutInflater.inflate(R.layout.item_intro_1, view_pager, false),
+      layoutInflater.inflate(R.layout.item_intro_2, view_pager, false)
     )
     val introPagerAdapter = IntroPagerAdapter(views)
-    viewPager.adapter = introPagerAdapter
-    tabIndicator.setViewPager(viewPager)
+    view_pager.adapter = introPagerAdapter
+    tab_indicator.setViewPager(view_pager)
     airPlane = views[1].findViewById(R.id.airplane)
-    viewPager.addOnPageChangeListener(pageChangeListener)
+    view_pager.addOnPageChangeListener(pageChangeListener)
     timer.schedule(object : TimerTask() {
       override fun run() {
         handler.post {
           if (currentPage == views.size) {
             currentPage = 0
           }
-          viewPager.setCurrentItem(currentPage++, true)
+          view_pager.setCurrentItem(currentPage++, true)
         }
       }
     }, timerDelay, timerPeriod)
-    for (view in views) {
-      view.findViewById<View>(R.id.root).setOnClickListener { dismissAutoRotate() }
+    views.forEach {
+      it.findViewById<View>(R.id.root).setOnClickListener { dismissAutoRotate() }
     }
   }
 
@@ -118,13 +111,12 @@ class IntroActivity : BaseActivity(), IntroContract.View {
     super.onDestroy()
     handler.removeCallbacksAndMessages(null)
     timer.cancel()
-    for (view in views) {
-      view.findViewById<View>(R.id.root).setOnClickListener(null)
+    views.forEach {
+      it.findViewById<View>(R.id.root).setOnClickListener(null)
     }
   }
 
-  @OnClick(R.id.get_started)
-  fun startMainActivity() {
+  private fun startMainActivity() {
     dismissAutoRotate()
     startActivity(internal(CoreMainActivity::class.java))
     presenter.setIntroShown()
