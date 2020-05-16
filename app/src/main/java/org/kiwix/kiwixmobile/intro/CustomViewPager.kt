@@ -28,9 +28,9 @@ import androidx.viewpager.widget.ViewPager
  * of [ViewPager].
  */
 class CustomViewPager @JvmOverloads constructor(
-  context: Context?,
+  context: Context,
   attrs: AttributeSet?
-) : ViewPager(context!!, attrs) {
+) : ViewPager(context, attrs) {
 
   init {
     postInitViewPager()
