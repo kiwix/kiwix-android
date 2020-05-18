@@ -265,6 +265,7 @@
   <string name="no_history">No History</string>
   <string name="device_default">Device Default</string>
   <string name="delete_history">Delete History?</string>
+  <string name="delete_selected_history">Delete Selected History?</string>
   <string name="delete_bookmarks">Delete Bookmarks?</string>
   <string name="on">On</string>
   <string name="off">Off</string>

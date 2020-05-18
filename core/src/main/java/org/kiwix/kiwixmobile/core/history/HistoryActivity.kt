@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.R2.id.menu_history_search
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
@@ -29,8 +28,10 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryDelegate.HistoryItemDel
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowAllHistoryAvailability
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.history.viewmodel.State
@@ -38,22 +39,18 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
-import java.util.ArrayList
 import javax.inject.Inject
 
 const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 
 class HistoryActivity : OnItemClickListener, BaseActivity() {
   private val activityComponent by lazy { coreActivityComponent }
-  private var selectedHistoryItems: List<ImageView> = ArrayList()
-  private val search = menu_history_search
   private var actionMode: ActionMode? = null
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-//  @Inject private lateinit var presenter: Presenter
-  private lateinit var recyclerView: RecyclerView
   private val historyViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
   private val compositeDisposable = CompositeDisposable()
 
@@ -64,7 +61,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         menu: Menu
       ): Boolean {
         mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
-        history_switch.isEnabled = false
+        historyViewModel.actions.offer(ToggleShowAllHistoryAvailability(history_switch))
         return true
       }
 
@@ -79,9 +76,8 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         mode: ActionMode,
         item: MenuItem
       ): Boolean {
-
         if (item.itemId == id.menu_context_delete) {
-          dialogShower.show(DeleteHistory, {
+          dialogShower.show(DeleteSelectedHistory, {
             historyViewModel.actions.offer(
               DeleteHistoryItems(historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected })
             )
@@ -96,7 +92,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
 
       override fun onDestroyActionMode(mode: ActionMode) {
         historyViewModel.actions.offer(Action.ExitActionModeMenu)
-        history_switch.isEnabled = true
+        historyViewModel.actions.offer(ToggleShowAllHistoryAvailability(history_switch))
         actionMode = null
       }
     }
@@ -146,12 +142,49 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return true
   }
 
+  private fun requestDeletionOfSelectedItems(){
+    dialogShower.show(DeleteSelectedHistory, {
+      historyViewModel.actions.offer(
+        DeleteHistoryItems(historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected })
+      )
+      historyViewModel.actions.offer(Action.ExitActionModeMenu)
+    })
+  }
+
+  override fun onOptionsItemSelected(item:MenuItem) : Boolean {
+    if (item.itemId == android.R.id.home) {
+      historyViewModel.actions.offer(ExitHistory)
+      return true
+    }
+    if(item.itemId == R.id.menu_history_clear){
+      dialogShower.show(DeleteAllHistory, {
+        historyViewModel.actions.offer(
+          DeleteHistoryItems(historyAdapter.items.filterIsInstance<HistoryItem>())
+        )
+      })
+      return true
+    }
+    return super.onOptionsItemSelected(item)
+  }
+  private fun exitSelectionActionMode(){
+    historyViewModel.actions.offer(Action.ExitActionModeMenu)
+    historyViewModel.actions.offer(ToggleShowAllHistoryAvailability(history_switch))
+  }
+
   private fun render(state: State) =
     when (state) {
       is Results -> {
-        if (state.historyItems.filter { it is HistoryItem && it.isSelected }
-            .isNotEmpty() && actionMode == null) {
-          actionMode = startSupportActionMode(actionModeCallback)
+        if (state.historyItems.filterIsInstance<HistoryItem>().any { it.isSelected }) {
+//          startActionMode(
+//            R.menu.menu_context_delete,
+//            mapOf(id.menu_context_delete to { requestDeletionOfSelectedItems() }),
+//            ::exitSelectionActionMode
+//          )
+          if( actionMode == null){
+            actionMode = startSupportActionMode(actionModeCallback)
+          }
+        } else{
+          actionMode?.finish()
         }
         historyAdapter.items = state.historyItems
         render(state.searchString)
@@ -162,24 +195,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
       }
     }
 
-  private fun renderSelectionMode(searchString: String) {
-
-//    if (deleteList.remove(history)) {
-//      favicon.setBitmapFromString(history.favicon)
-//    } else {
-//      favicon.setImageDrawable(
-//        ContextCompat.getDrawable(this, drawable.ic_check_circle_blue_24dp)
-//      )
-//      deleteList.add(history)
-//    }
-//  }
-  }
-
   private fun render(searchString: String) {
-//    selectedHistoryItems.forEach {
-//      Log.d("SelectionResults", "" + selectedHistoryItems.size)
-//      it.setImageDrawable(ContextCompat.getDrawable(this, drawable.ic_check_circle_blue_24dp))
-//    }
   }
 
   override fun onItemClick(

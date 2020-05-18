@@ -101,7 +101,7 @@
 //    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 //      refreshAdapter = false;
 //      if (item.getItemId() == R.id.menu_context_delete) {
-//        dialogShower.show(KiwixDialog.DeleteHistory.INSTANCE, (Function0<Unit>) () -> {
+//        dialogShower.show(KiwixDialog.DeleteAllHistory.INSTANCE, (Function0<Unit>) () -> {
 //          fullHistory.removeAll(deleteList);
 //          for (HistoryListItem history : deleteList) {
 //            int position = historyList.indexOf(history);
@@ -240,7 +240,7 @@
 //      return true;
 //    } else if (itemId == R.id.menu_history_clear) {
 //      if (fullHistory.size() > 0) {
-//        dialogShower.show(KiwixDialog.DeleteHistory.INSTANCE, (Function0<Unit>) () -> {
+//        dialogShower.show(KiwixDialog.DeleteAllHistory.INSTANCE, (Function0<Unit>) () -> {
 //          presenter.deleteHistory(new ArrayList<>(fullHistory));
 //          fullHistory.clear();
 //          historyList.clear();

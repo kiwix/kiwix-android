@@ -45,5 +45,4 @@ abstract class CoreViewModelModule {
   @IntoMap
   @ViewModelKey(HistoryViewModel::class)
   abstract fun bindHistoryViewModel(historyViewModel: HistoryViewModel): ViewModel
-
 }

@@ -27,9 +27,11 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.StartSpeechInputFailed
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowAllHistoryAvailability
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ToggleShowAllHistorySwitchAvailability
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import javax.inject.Inject
 
@@ -45,9 +47,6 @@ class HistoryViewModel @Inject constructor(
   private val currentBook = BehaviorProcessor.createDefault("")
   private val showAllSwitchToggle = BehaviorProcessor.createDefault(false)
   private val unselectAllItems = BehaviorProcessor.createDefault(false)
-  private val selectedItems: BehaviorProcessor<List<HistoryListItem>> =
-    BehaviorProcessor.createDefault(listOf())
-  private val selectedHistoryItemsList = ArrayList<HistoryListItem>()
   private var isInSelectionMode = false
 
   init {
@@ -93,21 +92,11 @@ class HistoryViewModel @Inject constructor(
     searchString: String,
     showAllSwitchOn: Boolean
   ): State {
-//    historyBookResults.filterIsInstance<HistoryItem>().forEach {
-//      if(selectedHistoryItems.contains(it)){
-//        it.isSelected = true
-//      }
-//    }
     if(unselectAllItems){
       historyBookResults.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
     }
     return Results(searchString, historyBookResults, showAllSwitchOn, currentBook)
   }
-
-//  private fun ShowAllSwitchToggled()= filter.distinctUntilChanged().switchMap {  }
-//  private fun UserClickedItem() = effects.offer(UserClickedItem())
-//
-//  private fun history() = filter.distinctUntilChanged().switchMap(::)
 
   override fun onCleared() {
     compositeDisposable.clear()
@@ -119,6 +108,8 @@ class HistoryViewModel @Inject constructor(
       ExitHistory -> effects.offer(Finish)
       is Filter -> filter.offer(it.searchTerm)
       is ToggleShowHistoryFromAllBooks -> showAllSwitchToggle.offer(it.isChecked)
+      is ToggleShowAllHistoryAvailability ->
+        effects.offer(ToggleShowAllHistorySwitchAvailability(it.showAllHistorySwitch))
       is CreatedWithIntent -> filter.offer(it.searchTerm)
       is ConfirmedDelete -> deleteItemAndShowToast(it)
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
@@ -127,8 +118,6 @@ class HistoryViewModel @Inject constructor(
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
       ExitActionModeMenu -> unselectAllItems.offer(true)
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
-      else -> {
-      }
     }
   }.subscribe({}, Throwable::printStackTrace)
 
@@ -165,19 +154,11 @@ class HistoryViewModel @Inject constructor(
         unselectAllItems.offer(false)
       }
       else -> {
-        OpenHistoryItem(historyItem, zimReaderContainer)
+        effects.offer(OpenHistoryItem(historyItem, zimReaderContainer))
       }
     }
   }
 
-  private fun deleteItemsAndShowToast(it: ConfirmedDelete) {
-    effects.offer(ShowToast(R.string.delete_specific_search_toast))
-  }
-
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
-  }
-
-  private fun toggleShowHistoryFromAlBooks(toggle: Boolean) {
-
   }
 }

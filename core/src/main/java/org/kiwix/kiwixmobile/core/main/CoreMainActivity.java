@@ -122,6 +122,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
+import static org.kiwix.kiwixmobile.core.history.HistoryActivityKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
@@ -1493,7 +1494,7 @@ public abstract class CoreMainActivity extends BaseActivity
       case REQUEST_HISTORY_ITEM_CHOSEN:
         hideTabSwitcher();
         if (resultCode == RESULT_OK) {
-          if (data.getBooleanExtra(HistoryActivity.USER_CLEARED_HISTORY, false)) {
+          if (data.getBooleanExtra(USER_CLEARED_HISTORY, false)) {
             for (KiwixWebView kiwixWebView : webViewList) {
               kiwixWebView.clearHistory();
             }
@@ -1627,8 +1628,7 @@ public abstract class CoreMainActivity extends BaseActivity
         getCurrentWebView().getTitle(),
         sdf.format(new Date(timeStamp)),
         timeStamp,
-        zimFileReader,
-        false
+        zimFileReader
       );
       presenter.saveHistory(history);
     }
