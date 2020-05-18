@@ -82,7 +82,6 @@ class IntroActivity : BaseActivity(), IntroContract.View {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_intro)
     get_started.setOnClickListener { startMainActivity() }
-    val layoutInflater = layoutInflater
     views = arrayOf(
       layoutInflater.inflate(R.layout.item_intro_1, view_pager, false),
       layoutInflater.inflate(R.layout.item_intro_2, view_pager, false)
