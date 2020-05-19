@@ -31,7 +31,6 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowAllHistoryAvailability
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.history.viewmodel.State
@@ -61,7 +60,6 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         menu: Menu
       ): Boolean {
         mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
-        historyViewModel.actions.offer(ToggleShowAllHistoryAvailability(history_switch))
         return true
       }
 
@@ -79,7 +77,9 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         if (item.itemId == id.menu_context_delete) {
           dialogShower.show(DeleteSelectedHistory, {
             historyViewModel.actions.offer(
-              DeleteHistoryItems(historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected })
+              DeleteHistoryItems(
+                historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected
+                })
             )
             historyViewModel.actions.offer(Action.ExitActionModeMenu)
             mode.finish()
@@ -92,7 +92,6 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
 
       override fun onDestroyActionMode(mode: ActionMode) {
         historyViewModel.actions.offer(Action.ExitActionModeMenu)
-        historyViewModel.actions.offer(ToggleShowAllHistoryAvailability(history_switch))
         actionMode = null
       }
     }
@@ -142,21 +141,23 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return true
   }
 
-  private fun requestDeletionOfSelectedItems(){
+  private fun requestDeletionOfSelectedItems() {
     dialogShower.show(DeleteSelectedHistory, {
       historyViewModel.actions.offer(
-        DeleteHistoryItems(historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected })
+        DeleteHistoryItems(
+          historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected }
+        )
       )
       historyViewModel.actions.offer(Action.ExitActionModeMenu)
     })
   }
 
-  override fun onOptionsItemSelected(item:MenuItem) : Boolean {
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == android.R.id.home) {
       historyViewModel.actions.offer(ExitHistory)
       return true
     }
-    if(item.itemId == R.id.menu_history_clear){
+    if (item.itemId == R.id.menu_history_clear) {
       dialogShower.show(DeleteAllHistory, {
         historyViewModel.actions.offer(
           DeleteHistoryItems(historyAdapter.items.filterIsInstance<HistoryItem>())
@@ -166,32 +167,26 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     }
     return super.onOptionsItemSelected(item)
   }
-  private fun exitSelectionActionMode(){
+  private fun exitSelectionActionMode() {
     historyViewModel.actions.offer(Action.ExitActionModeMenu)
-    historyViewModel.actions.offer(ToggleShowAllHistoryAvailability(history_switch))
   }
 
   private fun render(state: State) =
     when (state) {
       is Results -> {
-        if (state.historyItems.filterIsInstance<HistoryItem>().any { it.isSelected }) {
-//          startActionMode(
-//            R.menu.menu_context_delete,
-//            mapOf(id.menu_context_delete to { requestDeletionOfSelectedItems() }),
-//            ::exitSelectionActionMode
-//          )
-          if( actionMode == null){
-            actionMode = startSupportActionMode(actionModeCallback)
-          }
-        } else{
-          actionMode?.finish()
-        }
+        actionMode?.finish()
         historyAdapter.items = state.historyItems
+        history_switch.isEnabled = true
         render(state.searchString)
       }
-      is NoResults -> {
-      }
       is SelectionResults -> {
+        if(state.selectedHistoryItems.isNotEmpty() && actionMode == null){
+          actionMode = startSupportActionMode(actionModeCallback)
+        }
+        historyAdapter.items = state.historyItems
+        history_switch.isEnabled = false
+      }
+      is NoResults -> {
       }
     }
 
@@ -211,5 +206,4 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   ): Boolean {
     return historyViewModel.actions.offer(OnItemLongClick(history))
   }
-
 }

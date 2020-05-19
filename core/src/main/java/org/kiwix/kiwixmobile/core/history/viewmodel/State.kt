@@ -20,8 +20,9 @@ package org.kiwix.kiwixmobile.core.history.viewmodel
 
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 
-sealed class State (
-  open val historyItems: List<HistoryListItem>){
+sealed class State(
+  open val historyItems: List<HistoryListItem>
+) {
 
   data class Results(
     val searchString: String,

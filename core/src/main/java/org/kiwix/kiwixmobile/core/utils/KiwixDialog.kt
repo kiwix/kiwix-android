@@ -182,7 +182,7 @@ sealed class KiwixDialog(
   }
 
   object DeleteSelectedHistory : KiwixDialog(
-    R.string.delete_selected_history,
+    R.string.delete_history,
     null,
     positiveMessage = R.string.delete,
     negativeMessage = R.string.cancel

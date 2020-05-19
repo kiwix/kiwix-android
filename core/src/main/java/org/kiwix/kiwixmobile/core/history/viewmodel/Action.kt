@@ -18,22 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import android.widget.Switch
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
 sealed class Action {
   object ExitHistory : Action()
-  object ReceivedPromptForSpeechInput : Action()
   object ExitActionModeMenu : Action()
 
-  object StartSpeechInputFailed : Action()
   data class OnItemClick(val historyListItem: HistoryListItem) : Action()
   data class OnItemLongClick(val historyItem: HistoryItem) : Action()
   data class ToggleShowHistoryFromAllBooks(val isChecked: Boolean) : Action()
   data class Filter(val searchTerm: String) : Action()
-  data class ToggleShowAllHistoryAvailability(val showAllHistorySwitch : Switch) : Action()
   data class DeleteHistoryItems(val itemsToDelete: List<HistoryItem>) : Action()
-  data class ConfirmedDelete(val historyListItems: List<HistoryListItem.HistoryItem>) : Action()
   data class CreatedWithIntent(val searchTerm: String) : Action()
 }
