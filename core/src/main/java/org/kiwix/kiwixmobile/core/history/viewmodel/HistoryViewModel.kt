@@ -89,7 +89,7 @@ class HistoryViewModel @Inject constructor(
       historyItemSearchResults.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
     }
     val selectedItems = historyItemSearchResults.filterIsInstance<HistoryItem>().filter { it.isSelected }
-    if(selectedItems.isNotEmpty()){
+    if (selectedItems.isNotEmpty()) {
       return SelectionResults(
         searchString,
         historyItemSearchResults,
@@ -129,8 +129,7 @@ class HistoryViewModel @Inject constructor(
       .value
       ?.historyItems
       ?.filterIsInstance<HistoryItem>()
-      ?.filter { it.isSelected }
-      ?.isNotEmpty() ?: false
+      ?.any { it.isSelected } == true
   }
 
   private fun deselectAllHistoryItems() {

@@ -78,8 +78,8 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
           dialogShower.show(DeleteSelectedHistory, {
             historyViewModel.actions.offer(
               DeleteHistoryItems(
-                historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected
-                })
+                historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected }
+              )
             )
             historyViewModel.actions.offer(Action.ExitActionModeMenu)
             mode.finish()
@@ -180,7 +180,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         render(state.searchString)
       }
       is SelectionResults -> {
-        if(state.selectedHistoryItems.isNotEmpty() && actionMode == null){
+        if (state.selectedHistoryItems.isNotEmpty() && actionMode == null) {
           actionMode = startSupportActionMode(actionModeCallback)
         }
         historyAdapter.items = state.historyItems
