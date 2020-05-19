@@ -21,6 +21,7 @@ import android.app.Application
 import android.app.DownloadManager
 import android.app.NotificationManager
 import android.content.Context
+import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
@@ -90,4 +91,9 @@ class ApplicationModule {
   @Singleton
   internal fun providesZimFileReaderFactory(nightModeConfig: NightModeConfig):
     ZimFileReader.Factory = ZimFileReader.Factory.Impl(nightModeConfig)
+
+  @Provides
+  @Singleton
+  fun provideConnectivityManager(context: Context): ConnectivityManager =
+    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 }
