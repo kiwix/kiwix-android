@@ -27,10 +27,11 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter2
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryDelegate.HistoryItemDelegate
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteAllHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.history.viewmodel.State
@@ -38,8 +39,6 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -48,42 +47,26 @@ const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 class HistoryActivity : OnItemClickListener, BaseActivity() {
   private val activityComponent by lazy { coreActivityComponent }
   private var actionMode: ActionMode? = null
-  @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val historyViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
   private val compositeDisposable = CompositeDisposable()
 
+  @Inject lateinit var dialogShower: DialogShower
+
   private val actionModeCallback: Callback =
     object : Callback {
-      override fun onCreateActionMode(
-        mode: ActionMode,
-        menu: Menu
-      ): Boolean {
+      override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
         return true
       }
 
-      override fun onPrepareActionMode(
-        mode: ActionMode,
-        menu: Menu
-      ): Boolean {
+      override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
         return false
       }
 
-      override fun onActionItemClicked(
-        mode: ActionMode,
-        item: MenuItem
-      ): Boolean {
+      override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         if (item.itemId == id.menu_context_delete) {
-          dialogShower.show(DeleteSelectedHistory, {
-            historyViewModel.actions.offer(
-              DeleteHistoryItems(
-                historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected }
-              )
-            )
-            historyViewModel.actions.offer(Action.ExitActionModeMenu)
-            mode.finish()
-          })
+          historyViewModel.actions.offer(RequestDeleteSelectedHistoryItems(dialogShower))
           return true
         }
         historyViewModel.actions.offer(Action.ExitActionModeMenu)
@@ -97,9 +80,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     }
 
   private val historyAdapter: HistoryAdapter2 by lazy {
-    HistoryAdapter2(
-      HistoryItemDelegate(this)
-    )
+    HistoryAdapter2(HistoryItemDelegate(this))
   }
 
   override fun injection(coreComponent: CoreComponent) {
@@ -141,34 +122,16 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return true
   }
 
-  private fun requestDeletionOfSelectedItems() {
-    dialogShower.show(DeleteSelectedHistory, {
-      historyViewModel.actions.offer(
-        DeleteHistoryItems(
-          historyAdapter.items.filterIsInstance<HistoryItem>().filter { it.isSelected }
-        )
-      )
-      historyViewModel.actions.offer(Action.ExitActionModeMenu)
-    })
-  }
-
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == android.R.id.home) {
       historyViewModel.actions.offer(ExitHistory)
       return true
     }
     if (item.itemId == R.id.menu_history_clear) {
-      dialogShower.show(DeleteAllHistory, {
-        historyViewModel.actions.offer(
-          DeleteHistoryItems(historyAdapter.items.filterIsInstance<HistoryItem>())
-        )
-      })
+      historyViewModel.actions.offer(RequestDeleteAllHistoryItems(dialogShower))
       return true
     }
     return super.onOptionsItemSelected(item)
-  }
-  private fun exitSelectionActionMode() {
-    historyViewModel.actions.offer(Action.ExitActionModeMenu)
   }
 
   private fun render(state: State) =

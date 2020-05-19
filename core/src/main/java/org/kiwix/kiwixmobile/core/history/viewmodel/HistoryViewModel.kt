@@ -14,18 +14,25 @@ import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.CreatedWithIntent
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteAllHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteAllHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
+import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
@@ -115,13 +122,29 @@ class HistoryViewModel @Inject constructor(
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
       is DeleteHistoryItems -> historyDao.deleteHistory(it.itemsToDelete)
+      is RequestDeleteAllHistoryItems -> openDialogToRequestDeletionOfAllHistoryItems(it.dialogShower)
+      is RequestDeleteSelectedHistoryItems -> openDialogToRequestDeletionOfSelectedHistoryItems(it.dialogShower)
       ExitActionModeMenu -> unselectAllItems.offer(true)
+      DeleteAllHistoryItems -> historyDao.deleteAllHistory()
+      DeleteSelectedHistoryItems -> deleteSelectedHistoryItems()
     }
   }.subscribe({}, Throwable::printStackTrace)
 
   private fun selectItemAndOpenSelectionMode(historyItem: HistoryItem) {
     historyItem.isSelected = true
     unselectAllItems.offer(false)
+  }
+
+  private fun openDialogToRequestDeletionOfSelectedHistoryItems(dialogShower: DialogShower){
+    dialogShower.show(DeleteSelectedHistory, {
+      actions.offer(DeleteSelectedHistoryItems)
+    })
+  }
+
+  private fun openDialogToRequestDeletionOfAllHistoryItems(dialogShower: DialogShower){
+    dialogShower.show(DeleteAllHistory, {
+      actions.offer(DeleteAllHistoryItems)
+    })
   }
 
   private fun isInSelctionMode(): Boolean {
@@ -132,7 +155,12 @@ class HistoryViewModel @Inject constructor(
       ?.any { it.isSelected } == true
   }
 
-  private fun deselectAllHistoryItems() {
+  private fun deleteSelectedHistoryItems() {
+    val selectedHistoryItems =
+      state.value?.historyItems?.filterIsInstance<HistoryItem>()?.filter { it.isSelected }
+    if(selectedHistoryItems != null){
+      historyDao.deleteHistory(selectedHistoryItems)
+    }
   }
 
   private fun appendItemToSelectionOrOpenIt(onItemClick: OnItemClick) {

@@ -20,11 +20,16 @@ package org.kiwix.kiwixmobile.core.history.viewmodel
 
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.utils.DialogShower
 
 sealed class Action {
   object ExitHistory : Action()
   object ExitActionModeMenu : Action()
+  object DeleteAllHistoryItems : Action()
+  object DeleteSelectedHistoryItems : Action()
 
+  data class RequestDeleteAllHistoryItems(val dialogShower: DialogShower) : Action()
+  data class RequestDeleteSelectedHistoryItems(val dialogShower: DialogShower) : Action()
   data class OnItemClick(val historyListItem: HistoryListItem) : Action()
   data class OnItemLongClick(val historyItem: HistoryItem) : Action()
   data class ToggleShowHistoryFromAllBooks(val isChecked: Boolean) : Action()
