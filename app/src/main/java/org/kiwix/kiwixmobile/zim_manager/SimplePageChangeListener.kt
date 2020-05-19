@@ -20,8 +20,10 @@ package org.kiwix.kiwixmobile.zim_manager
 
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
-class SimplePageChangeListener(private val onPageSelectedAction: (Int) -> Unit) :
-  OnPageChangeListener {
+class SimplePageChangeListener @JvmOverloads constructor(
+  private val onPageSelectedAction: (Int) -> Unit,
+  private val onPageScrollStateChanged: ((Int) -> Unit)? = null
+) : OnPageChangeListener {
   override fun onPageScrolled(
     position: Int,
     positionOffset: Float,
@@ -34,5 +36,6 @@ class SimplePageChangeListener(private val onPageSelectedAction: (Int) -> Unit) 
   }
 
   override fun onPageScrollStateChanged(state: Int) {
+    onPageScrollStateChanged?.invoke(state)
   }
 }

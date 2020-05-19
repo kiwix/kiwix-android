@@ -20,16 +20,17 @@ package org.kiwix.kiwixmobile.intro
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import kotlinx.android.synthetic.main.activity_intro.*
+import kotlinx.android.synthetic.main.item_intro_2.airplane
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
@@ -47,32 +48,8 @@ class IntroActivity : BaseActivity(), IntroContract.View {
 
   @Inject
   internal lateinit var presenter: IntroContract.Presenter
-  private lateinit var airPlane: ImageView
   private var currentPage = 0
   private lateinit var views: Array<View>
-
-  @Suppress("EmptyFunctionBlock")
-  private val pageChangeListener: OnPageChangeListener = object : OnPageChangeListener {
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-    }
-
-    override fun onPageSelected(position: Int) {
-      if (position == 1) {
-        airPlane.visibility = View.VISIBLE
-        airPlane.animate().translationX(airPlane.width.toFloat()).duration = animationDuration
-      } else {
-        airPlane.visibility = View.INVISIBLE
-        airPlane.animate().translationX(-airPlane.width.toFloat())
-      }
-      currentPage = position
-    }
-
-    override fun onPageScrollStateChanged(state: Int) {
-      if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-        dismissAutoRotate()
-      }
-    }
-  }
 
   override fun injection(coreComponent: CoreComponent) {
     this.kiwixActivityComponent.inject(this)
@@ -86,23 +63,21 @@ class IntroActivity : BaseActivity(), IntroContract.View {
       layoutInflater.inflate(R.layout.item_intro_1, view_pager, false),
       layoutInflater.inflate(R.layout.item_intro_2, view_pager, false)
     )
-    val introPagerAdapter = IntroPagerAdapter(views)
-    view_pager.adapter = introPagerAdapter
+    view_pager.run {
+      adapter = IntroPagerAdapter(views)
+      addOnPageChangeListener(SimplePageChangeListener(::updateView, ::handleDraggingState))
+    }
     tab_indicator.setViewPager(view_pager)
-    airPlane = views[1].findViewById(R.id.airplane)
-    view_pager.addOnPageChangeListener(pageChangeListener)
     timer.schedule(object : TimerTask() {
       override fun run() {
         handler.post {
-          if (currentPage == views.size) {
-            currentPage = 0
-          }
+          if (currentPage == views.size) currentPage = 0
           view_pager.setCurrentItem(currentPage++, true)
         }
       }
     }, timerDelay, timerPeriod)
     views.forEach {
-      it.findViewById<View>(R.id.root).setOnClickListener { dismissAutoRotate() }
+      it.setOnClickListener { dismissAutoRotate() }
     }
   }
 
@@ -111,7 +86,7 @@ class IntroActivity : BaseActivity(), IntroContract.View {
     handler.removeCallbacksAndMessages(null)
     timer.cancel()
     views.forEach {
-      it.findViewById<View>(R.id.root).setOnClickListener(null)
+      it.setOnClickListener(null)
     }
   }
 
@@ -120,6 +95,19 @@ class IntroActivity : BaseActivity(), IntroContract.View {
     startActivity(internal(CoreMainActivity::class.java))
     presenter.setIntroShown()
     finish()
+  }
+
+  private fun updateView(position: Int) {
+    airplane.isVisible = position == 1
+    if (position == 1)
+      airplane.animate().translationX(airplane.width.toFloat()).duration = animationDuration
+    else
+      airplane.animate().translationX(-airplane.width.toFloat())
+    currentPage = position
+  }
+
+  private fun handleDraggingState(state: Int) {
+    if (state == ViewPager.SCROLL_STATE_DRAGGING) dismissAutoRotate()
   }
 
   private fun dismissAutoRotate() {
