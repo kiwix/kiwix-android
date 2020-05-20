@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Function5
 import io.reactivex.functions.Function3
+import io.reactivex.functions.Function5
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -25,19 +25,21 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteAllHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
+import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
   private val historyDao: HistoryDao,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
   val state = MutableLiveData<State>().apply { value = NoResults("", listOf()) }
   val effects = PublishProcessor.create<SideEffect<*>>()
@@ -121,7 +123,7 @@ class HistoryViewModel @Inject constructor(
     when (it) {
       ExitHistory -> effects.offer(Finish)
       is Filter -> filter.offer(it.searchTerm)
-      is ToggleShowHistoryFromAllBooks -> showAllSwitchToggle.offer(it.isChecked)
+      is ToggleShowHistoryFromAllBooks -> toggleShowAllHistorySwitchAndSaveItsStateToPrefs(it.isChecked)
       is CreatedWithIntent -> filter.offer(it.searchTerm)
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
@@ -131,6 +133,11 @@ class HistoryViewModel @Inject constructor(
       DeleteHistoryItems -> effects.offer(DeleteSelectedOrAllHistoryItems(state, historyDao))
     }
   }.subscribe({}, Throwable::printStackTrace)
+
+  private fun toggleShowAllHistorySwitchAndSaveItsStateToPrefs(isChecked: Boolean){
+    showAllSwitchToggle.offer(isChecked)
+    sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked)
+  }
 
   private fun selectItemAndOpenSelectionMode(historyItem: HistoryItem) {
     historyItem.isSelected = true
