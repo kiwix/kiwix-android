@@ -13,6 +13,7 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
@@ -62,8 +63,7 @@ class HistoryViewModel @Inject constructor(
     filter,
     showAllSwitchToggle,
     Function5(::updateResultsState)
-  )
-    .subscribe(state::postValue, Throwable::printStackTrace)
+  ).subscribe(state::postValue, Throwable::printStackTrace)
 
   private fun searchResults(): Flowable<List<HistoryListItem>> =
     Flowable.combineLatest(
@@ -91,6 +91,11 @@ class HistoryViewModel @Inject constructor(
     searchString: String,
     showAllSwitchOn: Boolean
   ): State {
+    val tmpList = ArrayList<HistoryListItem>()
+    for (historyItem in historyItemSearchResults.filterIsInstance<HistoryItem>()){
+      tmpList.add(DateItem(historyItem.dateString))
+      tmpList.add(historyItem)
+    }
     if (unselectAllItems) {
       historyItemSearchResults.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
     }
@@ -98,13 +103,13 @@ class HistoryViewModel @Inject constructor(
     if (selectedItems.isNotEmpty()) {
       return SelectionResults(
         searchString,
-        historyItemSearchResults,
+        tmpList,
         selectedItems,
         showAllSwitchOn,
         currentBook
       )
     }
-    return Results(searchString, historyItemSearchResults, showAllSwitchOn, currentBook)
+    return Results(searchString, tmpList, showAllSwitchOn, currentBook)
   }
 
   override fun onCleared() {

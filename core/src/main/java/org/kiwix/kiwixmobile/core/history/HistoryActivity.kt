@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComp
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.history.HistoryAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter2
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryDelegate.HistoryDateDelegate
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryDelegate.HistoryItemDelegate
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
@@ -80,7 +81,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     }
 
   private val historyAdapter: HistoryAdapter2 by lazy {
-    HistoryAdapter2(HistoryItemDelegate(this))
+    HistoryAdapter2(HistoryItemDelegate(this), HistoryDateDelegate())
   }
 
   override fun injection(coreComponent: CoreComponent) {
