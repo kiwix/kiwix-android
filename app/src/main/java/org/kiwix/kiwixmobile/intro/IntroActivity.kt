@@ -99,15 +99,18 @@ class IntroActivity : BaseActivity(), IntroContract.View {
 
   private fun updateView(position: Int) {
     airplane.isVisible = position == 1
-    if (position == 1)
+    if (position == 1) {
       airplane.animate().translationX(airplane.width.toFloat()).duration = animationDuration
-    else
+    } else {
       airplane.animate().translationX(-airplane.width.toFloat())
+    }
     currentPage = position
   }
 
   private fun handleDraggingState(state: Int) {
-    if (state == ViewPager.SCROLL_STATE_DRAGGING) dismissAutoRotate()
+    if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+      dismissAutoRotate()
+    }
   }
 
   private fun dismissAutoRotate() {
