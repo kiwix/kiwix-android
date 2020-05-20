@@ -25,8 +25,7 @@ import org.kiwix.kiwixmobile.core.utils.DialogShower
 sealed class Action {
   object ExitHistory : Action()
   object ExitActionModeMenu : Action()
-  object DeleteAllHistoryItems : Action()
-  object DeleteSelectedHistoryItems : Action()
+  object DeleteHistoryItems : Action()
 
   data class RequestDeleteAllHistoryItems(val dialogShower: DialogShower) : Action()
   data class RequestDeleteSelectedHistoryItems(val dialogShower: DialogShower) : Action()
@@ -34,6 +33,5 @@ sealed class Action {
   data class OnItemLongClick(val historyItem: HistoryItem) : Action()
   data class ToggleShowHistoryFromAllBooks(val isChecked: Boolean) : Action()
   data class Filter(val searchTerm: String) : Action()
-  data class DeleteHistoryItems(val itemsToDelete: List<HistoryItem>) : Action()
   data class CreatedWithIntent(val searchTerm: String) : Action()
 }
