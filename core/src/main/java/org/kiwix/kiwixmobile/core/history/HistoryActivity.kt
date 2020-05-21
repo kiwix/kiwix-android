@@ -141,7 +141,6 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         actionMode?.finish()
         historyAdapter.items = state.historyItems
         history_switch.isEnabled = true
-        render(state.searchString)
       }
       is SelectionResults -> {
         if (state.selectedHistoryItems.isNotEmpty() && actionMode == null) {
@@ -153,9 +152,6 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
       is NoResults -> {
       }
     }
-
-  private fun render(searchString: String) {
-  }
 
   override fun onItemClick(
     favicon: ImageView,

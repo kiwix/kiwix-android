@@ -86,6 +86,26 @@ class HistoryViewModel @Inject constructor(
           (h.zimName == zimReaderContainer.name || showAllToggle)
       }
 
+  private fun foldOverAddingHeaders(
+    it: List<HistoryItem>,
+    headerConstructor: (HistoryItem) -> DateItem,
+    criteriaToAddHeader: (HistoryItem, HistoryItem) -> Boolean
+  ): MutableList<HistoryListItem> = it.foldIndexed(mutableListOf(),
+    { index, acc, currentItem ->
+      if (index == 0) {
+        acc.add(headerConstructor.invoke(currentItem))
+      }
+      acc.add(currentItem)
+      if (index < it.size - 1) {
+        val nextItem = it[index + 1]
+        if (criteriaToAddHeader.invoke(currentItem, nextItem)) {
+          acc.add(headerConstructor.invoke(nextItem))
+        }
+      }
+      acc
+    }
+  )
+
   private fun updateResultsState(
     currentBook: String,
     historyItemSearchResults: List<HistoryListItem>,
@@ -93,25 +113,25 @@ class HistoryViewModel @Inject constructor(
     searchString: String,
     showAllSwitchOn: Boolean
   ): State {
-    val tmpList = ArrayList<HistoryListItem>()
-    for (historyItem in historyItemSearchResults.filterIsInstance<HistoryItem>()){
-      tmpList.add(DateItem(historyItem.dateString))
-      tmpList.add(historyItem)
-    }
     if (unselectAllItems) {
       historyItemSearchResults.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
     }
     val selectedItems = historyItemSearchResults.filterIsInstance<HistoryItem>().filter { it.isSelected }
+    val historyListWithDateItems = foldOverAddingHeaders(
+      historyItemSearchResults.reversed().filterIsInstance<HistoryItem>(),
+      { historyItem -> DateItem(historyItem.dateString) },
+      { current, next -> current.dateString != next.dateString }
+    )
     if (selectedItems.isNotEmpty()) {
       return SelectionResults(
         searchString,
-        tmpList,
+        historyListWithDateItems,
         selectedItems,
         showAllSwitchOn,
         currentBook
       )
     }
-    return Results(searchString, tmpList, showAllSwitchOn, currentBook)
+    return Results(searchString, historyListWithDateItems, showAllSwitchOn, currentBook)
   }
 
   override fun onCleared() {
