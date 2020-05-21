@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
-import org.kiwix.kiwixmobile.core.history.HistoryAdapter.OnItemClickListener
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItemViewHolder.HistoryItemViewHolder
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
@@ -23,7 +23,7 @@ sealed class HistoryDelegate<I : HistoryListItem, out VH : HistoryListItemViewHo
         parent.inflate(R.layout.item_bookmark_history, false), itemClickListener)
   }
 
-  class HistoryDateDelegate() : HistoryDelegate<DateItem, DateItemViewHolder>() {
+  class HistoryDateDelegate : HistoryDelegate<DateItem, DateItemViewHolder>() {
     override val itemClass = DateItem::class.java
 
     override fun createViewHolder(parent: ViewGroup): DateItemViewHolder =

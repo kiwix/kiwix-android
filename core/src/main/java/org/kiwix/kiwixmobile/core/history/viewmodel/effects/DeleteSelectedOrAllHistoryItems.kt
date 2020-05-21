@@ -16,7 +16,6 @@
  *
  */
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -30,9 +29,9 @@ data class DeleteSelectedOrAllHistoryItems(
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     val historyItems = state.value?.historyItems?.filterIsInstance<HistoryItem>()
-    if(historyItems?.any { it.isSelected } == true){
+    if (historyItems?.any { it.isSelected } == true) {
       historyDao.deleteHistory(historyItems.filter { it.isSelected })
-    } else if(historyItems != null){
+    } else if (historyItems != null) {
       historyDao.deleteHistory(historyItems)
     }
   }

@@ -3,16 +3,19 @@ package org.kiwix.kiwixmobile.core.history
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.ActionMode.Callback
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_history.history_switch
+import kotlinx.android.synthetic.main.activity_history.no_history
 import kotlinx.android.synthetic.main.activity_history.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
@@ -22,8 +25,8 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.history.HistoryAdapter.OnItemClickListener
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter2
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryDelegate.HistoryDateDelegate
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryDelegate.HistoryItemDelegate
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
@@ -80,8 +83,8 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
       }
     }
 
-  private val historyAdapter: HistoryAdapter2 by lazy {
-    HistoryAdapter2(HistoryItemDelegate(this), HistoryDateDelegate())
+  private val historyAdapter: HistoryAdapter by lazy {
+    HistoryAdapter(HistoryItemDelegate(this), HistoryDateDelegate())
   }
 
   override fun injection(coreComponent: CoreComponent) {
@@ -126,11 +129,9 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == android.R.id.home) {
       historyViewModel.actions.offer(ExitHistory)
-      return true
     }
     if (item.itemId == R.id.menu_history_clear) {
       historyViewModel.actions.offer(RequestDeleteAllHistoryItems(dialogShower))
-      return true
     }
     return super.onOptionsItemSelected(item)
   }
@@ -141,6 +142,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         actionMode?.finish()
         historyAdapter.items = state.historyItems
         history_switch.isEnabled = true
+        no_history.visibility = View.GONE
       }
       is SelectionResults -> {
         if (state.selectedHistoryItems.isNotEmpty() && actionMode == null) {
@@ -148,8 +150,11 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         }
         historyAdapter.items = state.historyItems
         history_switch.isEnabled = false
+        no_history.visibility = View.GONE
       }
       is NoResults -> {
+        historyAdapter.items = state.historyItems
+        no_history.visibility = View.VISIBLE
       }
     }
 

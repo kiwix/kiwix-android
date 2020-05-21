@@ -10,7 +10,7 @@ import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
-import org.kiwix.kiwixmobile.core.history.HistoryAdapter.OnItemClickListener
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.threeten.bp.LocalDate

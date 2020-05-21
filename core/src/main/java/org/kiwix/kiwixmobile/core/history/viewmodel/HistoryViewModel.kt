@@ -116,7 +116,9 @@ class HistoryViewModel @Inject constructor(
     if (unselectAllItems) {
       historyItemSearchResults.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
     }
-    val selectedItems = historyItemSearchResults.filterIsInstance<HistoryItem>().filter { it.isSelected }
+    val selectedItems = historyItemSearchResults
+      .filterIsInstance<HistoryItem>()
+      .filter { it.isSelected }
     val historyListWithDateItems = foldOverAddingHeaders(
       historyItemSearchResults.reversed().filterIsInstance<HistoryItem>(),
       { historyItem -> DateItem(historyItem.dateString) },
@@ -131,6 +133,9 @@ class HistoryViewModel @Inject constructor(
         currentBook
       )
     }
+    if(historyListWithDateItems.isEmpty()){
+      return NoResults(searchString, historyItemSearchResults)
+    }
     return Results(searchString, historyListWithDateItems, showAllSwitchOn, currentBook)
   }
 
@@ -143,18 +148,21 @@ class HistoryViewModel @Inject constructor(
     when (it) {
       ExitHistory -> effects.offer(Finish)
       is Filter -> filter.offer(it.searchTerm)
-      is ToggleShowHistoryFromAllBooks -> toggleShowAllHistorySwitchAndSaveItsStateToPrefs(it.isChecked)
+      is ToggleShowHistoryFromAllBooks ->
+        toggleShowAllHistorySwitchAndSaveItsStateToPrefs(it.isChecked)
       is CreatedWithIntent -> filter.offer(it.searchTerm)
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
-      is RequestDeleteAllHistoryItems -> openDialogToRequestDeletionOfAllHistoryItems(it.dialogShower)
-      is RequestDeleteSelectedHistoryItems -> openDialogToRequestDeletionOfSelectedHistoryItems(it.dialogShower)
+      is RequestDeleteAllHistoryItems ->
+        openDialogToRequestDeletionOfAllHistoryItems(it.dialogShower)
+      is RequestDeleteSelectedHistoryItems ->
+        openDialogToRequestDeletionOfSelectedHistoryItems(it.dialogShower)
       ExitActionModeMenu -> unselectAllItems.offer(true)
       DeleteHistoryItems -> effects.offer(DeleteSelectedOrAllHistoryItems(state, historyDao))
     }
   }.subscribe({}, Throwable::printStackTrace)
 
-  private fun toggleShowAllHistorySwitchAndSaveItsStateToPrefs(isChecked: Boolean){
+  private fun toggleShowAllHistorySwitchAndSaveItsStateToPrefs(isChecked: Boolean) {
     showAllSwitchToggle.offer(isChecked)
     sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked)
   }
@@ -164,13 +172,13 @@ class HistoryViewModel @Inject constructor(
     unselectAllItems.offer(false)
   }
 
-  private fun openDialogToRequestDeletionOfSelectedHistoryItems(dialogShower: DialogShower){
+  private fun openDialogToRequestDeletionOfSelectedHistoryItems(dialogShower: DialogShower) {
     dialogShower.show(DeleteSelectedHistory, {
       actions.offer(DeleteHistoryItems)
     })
   }
 
-  private fun openDialogToRequestDeletionOfAllHistoryItems(dialogShower: DialogShower){
+  private fun openDialogToRequestDeletionOfAllHistoryItems(dialogShower: DialogShower) {
     dialogShower.show(DeleteAllHistory, {
       actions.offer(DeleteHistoryItems)
     })
