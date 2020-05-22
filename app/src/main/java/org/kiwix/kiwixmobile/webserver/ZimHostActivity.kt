@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
-import org.kiwix.kiwixmobile.core.utils.WifiManagerUtils
+import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
@@ -59,7 +59,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   internal lateinit var presenter: ZimHostContract.Presenter
 
   @Inject
-  internal lateinit var wifiManagerUtils: WifiManagerUtils
+  internal lateinit var connectivityReporter: ConnectivityReporter
 
   @Inject
   internal lateinit var alertDialogShower: AlertDialogShower
@@ -134,34 +134,15 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     when {
       ServerUtils.isServerStarted -> stopServer()
       selectedBooksPath.size > 0 -> {
-        /*val wifiManager =
-          applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager*/
         when {
-          wifiManagerUtils.checkWifi() -> startWifiDialog()
-          wifiManagerUtils.checkTethering() -> startKiwixHotspot()
+          connectivityReporter.checkWifi() -> startWifiDialog()
+          connectivityReporter.checkTethering() -> startKiwixHotspot()
           else -> startHotspotManuallyDialog()
         }
       }
       else -> toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
     }
   }
-
-  /*private fun isHotspotOn(wifiManager: WifiManager): Boolean {
-    return try {
-      val method: Method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
-      method.isAccessible = true
-      method.invoke(wifiManager) as Boolean
-    } catch (exception: IllegalArgumentException) {
-      exception.printStackTrace()
-      false
-    } catch (exception: IllegalAccessException) {
-      exception.printStackTrace()
-      false
-    } catch (exception: InvocationTargetException) {
-      exception.printStackTrace()
-      false
-    }
-  }*/
 
   private fun startKiwixHotspot() {
     progressDialog = ProgressDialog.show(

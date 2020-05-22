@@ -23,9 +23,14 @@ import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import javax.inject.Inject
 
-class WifiManagerUtils @Inject constructor(private val wifiManager: WifiManager) {
+class ConnectivityReporter @Inject constructor(private val wifiManager: WifiManager) {
 
-  fun checkWifi(): Boolean = wifiManager.isWifiEnabled
+  fun checkWifi(): Boolean = if (wifiManager.isWifiEnabled) {
+    val wifiInfo = wifiManager.connectionInfo
+    wifiInfo.networkId != -1
+  } else {
+    false
+  }
 
   fun checkTethering(): Boolean = try {
     val method: Method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
