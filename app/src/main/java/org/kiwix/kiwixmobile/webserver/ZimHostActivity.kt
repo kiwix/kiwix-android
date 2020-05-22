@@ -23,6 +23,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
@@ -50,12 +51,15 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_SERVER
+import java.lang.Exception
+import java.lang.reflect.Method
 import java.util.ArrayList
 import javax.inject.Inject
 
 class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   @Inject
   internal lateinit var presenter: ZimHostContract.Presenter
+
   @Inject
   internal lateinit var alertDialogShower: AlertDialogShower
   private lateinit var recyclerViewZimHost: RecyclerView
@@ -128,9 +132,36 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private fun startStopServer() {
     when {
       ServerUtils.isServerStarted -> stopServer()
-      selectedBooksPath.size > 0 -> startHotspotManuallyDialog()
+      selectedBooksPath.size > 0 -> {
+        val wifiManager =
+          applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        when {
+          wifiManager.isWifiEnabled -> startWifiDialog()
+          isHotspotOn(wifiManager) -> startKiwixHotspot()
+          else -> startHotspotManuallyDialog()
+        }
+      }
       else -> toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
     }
+  }
+
+  private fun isHotspotOn(wifiManager: WifiManager): Boolean {
+    return try {
+      val method: Method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
+      method.isAccessible = true
+      method.invoke(wifiManager) as Boolean
+    } catch (exception: Exception) {
+      false
+    }
+  }
+
+  private fun startKiwixHotspot() {
+    progressDialog = ProgressDialog.show(
+      this,
+      getString(R.string.progress_dialog_starting_server), "",
+      true
+    )
+    startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
   }
 
   private fun stopServer() {
@@ -226,16 +257,22 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
     alertDialogShower.show(KiwixDialog.StartHotspotManually,
       ::launchTetheringSettingsScreen,
-      { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) },
-      {
-        progressDialog = ProgressDialog.show(
-          this,
-          getString(R.string.progress_dialog_starting_server), "",
-          true
-        )
-        startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
-      }
+      ::openWifiSettings,
+      {}
     )
+  }
+
+  private fun startWifiDialog() {
+    alertDialogShower.show(
+      KiwixDialog.WiFIOnWhenHostingBooks,
+      ::openWifiSettings,
+      {},
+      ::startKiwixHotspot
+    )
+  }
+
+  private fun openWifiSettings() {
+    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
   }
 
   private fun createHotspotIntent(action: String): Intent =
