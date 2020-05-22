@@ -23,7 +23,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
@@ -41,6 +40,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
+import org.kiwix.kiwixmobile.core.utils.WifiManagerUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
@@ -51,14 +51,15 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_SERVER
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
 import java.util.ArrayList
 import javax.inject.Inject
 
 class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   @Inject
   internal lateinit var presenter: ZimHostContract.Presenter
+
+  @Inject
+  internal lateinit var wifiManagerUtils: WifiManagerUtils
 
   @Inject
   internal lateinit var alertDialogShower: AlertDialogShower
@@ -133,11 +134,11 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     when {
       ServerUtils.isServerStarted -> stopServer()
       selectedBooksPath.size > 0 -> {
-        val wifiManager =
-          applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        /*val wifiManager =
+          applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager*/
         when {
-          wifiManager.isWifiEnabled -> startWifiDialog()
-          isHotspotOn(wifiManager) -> startKiwixHotspot()
+          wifiManagerUtils.checkWifi() -> startWifiDialog()
+          wifiManagerUtils.checkTethering() -> startKiwixHotspot()
           else -> startHotspotManuallyDialog()
         }
       }
@@ -145,7 +146,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
-  private fun isHotspotOn(wifiManager: WifiManager): Boolean {
+  /*private fun isHotspotOn(wifiManager: WifiManager): Boolean {
     return try {
       val method: Method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
       method.isAccessible = true
@@ -160,7 +161,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
       exception.printStackTrace()
       false
     }
-  }
+  }*/
 
   private fun startKiwixHotspot() {
     progressDialog = ProgressDialog.show(
