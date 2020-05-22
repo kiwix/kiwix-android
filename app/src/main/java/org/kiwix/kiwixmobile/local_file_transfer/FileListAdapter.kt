@@ -19,19 +19,19 @@
 
 package org.kiwix.kiwixmobile.local_file_transfer
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.item_transfer_list.image_view_file_transferred
+import kotlinx.android.synthetic.main.item_transfer_list.progress_bar_transferring_file
+import kotlinx.android.synthetic.main.item_transfer_list.text_view_file_item_name
+import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.SENDING
+import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.SENT
+import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.Companion.ERROR
-import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.Companion.SENDING
-import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.Companion.SENT
-import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.Companion.TO_BE_SENT
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.local_file_transfer.FileListAdapter.FileViewHolder
 import java.util.ArrayList
 
@@ -43,34 +43,35 @@ import java.util.ArrayList
 class FileListAdapter(private val fileItems: ArrayList<FileItem>) :
   RecyclerView.Adapter<FileViewHolder>() {
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
-    val itemView = LayoutInflater.from(parent.context)
-      .inflate(R.layout.item_transfer_list, parent, false)
-    return FileViewHolder(itemView, this)
-  }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder =
+    FileViewHolder(parent.inflate(R.layout.item_transfer_list, false), this)
 
+  @Suppress("EmptyFunctionBlock")
   override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
-    val fileItem = fileItems[position]
-    val name = fileItem.fileName
-    holder.fileName.text = name
-    holder.statusImage.isVisible = fileItem.fileStatus != SENDING
-    holder.progressBar.isVisible = fileItem.fileStatus == SENDING
-    if (fileItem.fileStatus != TO_BE_SENT) {
-      // Icon for TO_BE_SENT is assigned by default in the item layout
-      holder.progressBar.visibility = View.GONE
-      when (fileItem.fileStatus) {
-        SENT -> holder.statusImage.setImageResource(R.drawable.ic_baseline_check_24px)
-        ERROR -> holder.statusImage.setImageResource(R.drawable.ic_baseline_error_24px)
-      }
-    }
   }
 
   override fun getItemCount(): Int = fileItems.size
 
   inner class FileViewHolder(itemView: View, val fileListAdapter: FileListAdapter) :
-    RecyclerView.ViewHolder(itemView) {
-    var fileName: TextView = itemView.findViewById(R.id.text_view_file_item_name)
-    var statusImage: ImageView = itemView.findViewById(R.id.image_view_file_transferred)
-    var progressBar: ProgressBar = itemView.findViewById(R.id.progress_bar_transferring_file)
+    BaseViewHolder<View>(itemView) {
+    override fun bind(item: View) {
+      val fileItem = fileItems[position]
+      val name = fileItem.fileName
+      text_view_file_item_name.text = name
+      image_view_file_transferred.isVisible = fileItem.fileStatus != SENDING
+      progress_bar_transferring_file.isVisible = fileItem.fileStatus == SENDING
+      if (fileItem.fileStatus != FileItem.FileStatus.TO_BE_SENT) {
+        // Icon for TO_BE_SENT is assigned by default in the item layout
+        progress_bar_transferring_file.visibility = View.GONE
+        when (fileItem.fileStatus) {
+          SENT ->
+            image_view_file_transferred.setImageResource(R.drawable.ic_baseline_check_24px)
+          ERROR ->
+            image_view_file_transferred.setImageResource(R.drawable.ic_baseline_error_24px)
+          else -> {
+          }
+        }
+      }
+    }
   }
 }
