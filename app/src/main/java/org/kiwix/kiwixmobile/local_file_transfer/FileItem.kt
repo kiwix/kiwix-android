@@ -21,7 +21,6 @@
 package org.kiwix.kiwixmobile.local_file_transfer
 
 import android.net.Uri
-import androidx.annotation.IntDef
 import org.kiwix.kiwixmobile.local_file_transfer.WifiDirectManager.Companion.getFileName
 
 /**
@@ -33,20 +32,14 @@ class FileItem private constructor(val fileUri: Uri?, val fileName: String) {
 
   var fileStatus = FileStatus.TO_BE_SENT
 
-  @Retention(AnnotationRetention.SOURCE)
-  @IntDef(FileStatus.TO_BE_SENT, FileStatus.SENDING, FileStatus.SENT, FileStatus.ERROR)
-  annotation class FileStatus {
-    companion object {
-      const val TO_BE_SENT = -1 // File yet to be sent
-      const val SENDING = 0 // Being sent
-      const val SENT = +1 // Successfully sent
-      const val ERROR = +2 // Error encountered while transferring the file
-    }
+  enum class FileStatus {
+    TO_BE_SENT,
+    SENDING,
+    SENT,
+    ERROR
   }
 
-  constructor(fileUri: Uri) : this(fileUri, getFileName(fileUri)) { // For sender devices
-  }
+  constructor(fileUri: Uri) : this(fileUri, getFileName(fileUri)) // For sender devices
 
-  constructor(fileName: String) : this(null, fileName) { // For receiver devices
-  }
+  constructor(fileName: String) : this(null, fileName) // For receiver devices
 }
