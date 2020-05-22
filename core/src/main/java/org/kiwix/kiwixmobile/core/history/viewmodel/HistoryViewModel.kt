@@ -12,6 +12,7 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.extensions.foldOverAddingHeaders
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
@@ -48,7 +49,7 @@ class HistoryViewModel @Inject constructor(
   private val compositeDisposable = CompositeDisposable()
   private val currentBook = BehaviorProcessor.createDefault("")
   private val showAllSwitchToggle = BehaviorProcessor.createDefault(false)
-  private val unselectAllItems = BehaviorProcessor.createDefault(false)
+  private val deselectAllItems = BehaviorProcessor.createDefault(false)
   private var isInSelectionMode = false
 
   init {
@@ -56,12 +57,12 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun updateSelectionMode() =
-    unselectAllItems.subscribe({ isInSelectionMode = it }, Throwable::printStackTrace)
+    deselectAllItems.subscribe({ isInSelectionMode = it }, Throwable::printStackTrace)
 
   private fun viewStateReducer() = Flowable.combineLatest(
     currentBook,
     searchResults(),
-    unselectAllItems,
+    deselectAllItems,
     filter,
     showAllSwitchToggle,
     Function5(::updateResultsState)
@@ -79,64 +80,67 @@ class HistoryViewModel @Inject constructor(
     searchString: String,
     showAllToggle: Boolean,
     historyList: List<HistoryListItem>
-  ): List<HistoryListItem> =
-    historyList.filterIsInstance<HistoryItem>()
+  ): List<HistoryListItem> = historyList
+      .filterIsInstance<HistoryItem>()
       .filter { h ->
         h.historyTitle.contains(searchString, true) &&
           (h.zimName == zimReaderContainer.name || showAllToggle)
       }
 
-  private fun foldOverAddingHeaders(
-    it: List<HistoryItem>,
-    headerConstructor: (HistoryItem) -> DateItem,
-    criteriaToAddHeader: (HistoryItem, HistoryItem) -> Boolean
-  ): MutableList<HistoryListItem> = it.foldIndexed(mutableListOf(),
-    { index, acc, currentItem ->
-      if (index == 0) {
-        acc.add(headerConstructor.invoke(currentItem))
-      }
-      acc.add(currentItem)
-      if (index < it.size - 1) {
-        val nextItem = it[index + 1]
-        if (criteriaToAddHeader.invoke(currentItem, nextItem)) {
-          acc.add(headerConstructor.invoke(nextItem))
-        }
-      }
-      acc
-    }
-  )
-
   private fun updateResultsState(
     currentBook: String,
     historyItemSearchResults: List<HistoryListItem>,
-    unselectAllItems: Boolean,
+    shouldDeselectAllItems: Boolean,
     searchString: String,
     showAllSwitchOn: Boolean
   ): State {
-    if (unselectAllItems) {
-      historyItemSearchResults.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
+    if(shouldDeselectAllItems){
+      deselectAllHistoryItems(historyItemSearchResults)
     }
-    val selectedItems = historyItemSearchResults
-      .filterIsInstance<HistoryItem>()
-      .filter { it.isSelected }
-    val historyListWithDateItems = foldOverAddingHeaders(
-      historyItemSearchResults.reversed().filterIsInstance<HistoryItem>(),
-      { historyItem -> DateItem(historyItem.dateString) },
-      { current, next -> current.dateString != next.dateString }
+    val selectedItems = filterOutAllSelectedHistoryItems(historyItemSearchResults)
+    val historyListWithDateItems = addDateHeadersToHistoryItems(historyItemSearchResults)
+    return selectStateBasedOnInput(
+      currentBook,
+      historyListWithDateItems,
+      selectedItems,
+      searchString,
+      showAllSwitchOn
     )
-    if (selectedItems.isNotEmpty()) {
-      return SelectionResults(
-        searchString,
-        historyListWithDateItems,
-        selectedItems,
-        showAllSwitchOn,
-        currentBook
+  }
+
+  private fun selectStateBasedOnInput(
+    currentBook: String,
+    historyListWithDateItems: List<HistoryListItem>,
+    selectedItems: List<HistoryListItem>,
+    searchString: String,
+    showAllSwitchOn: Boolean
+  ) = when{
+    historyListWithDateItems.isEmpty() -> NoResults(searchString, historyListWithDateItems)
+    selectedItems.isNotEmpty() -> SelectionResults(
+      searchString,
+      historyListWithDateItems,
+      selectedItems,
+      showAllSwitchOn,
+      currentBook
+    )
+    else -> Results(searchString, historyListWithDateItems, showAllSwitchOn, currentBook)
+  }
+
+  private fun addDateHeadersToHistoryItems(historyItemSearchResults: List<HistoryListItem>): MutableList<HistoryListItem> {
+    return historyItemSearchResults.reversed().foldOverAddingHeaders(
+        { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
+        { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
       )
-    }
-    if(historyListWithDateItems.isEmpty()){
-      return NoResults(searchString, historyItemSearchResults)
-    }
-    return Results(searchString, historyListWithDateItems, showAllSwitchOn, currentBook)
+  }
+
+  private fun filterOutAllSelectedHistoryItems(historyItemSearchResults: List<HistoryListItem>): List<HistoryItem> {
+    return historyItemSearchResults.filterIsInstance<HistoryItem>().filter { it.isSelected }
+  }
+
+  private fun deselectAllHistoryItems(historyItemSearchResults: List<HistoryListItem>) {
+      historyItemSearchResults
+        .filterIsInstance<HistoryItem>()
+        .forEach { it.isSelected = false }
   }
 
   override fun onCleared() {
@@ -157,7 +161,7 @@ class HistoryViewModel @Inject constructor(
         openDialogToRequestDeletionOfAllHistoryItems(it.dialogShower)
       is RequestDeleteSelectedHistoryItems ->
         openDialogToRequestDeletionOfSelectedHistoryItems(it.dialogShower)
-      ExitActionModeMenu -> unselectAllItems.offer(true)
+      ExitActionModeMenu -> deselectAllItems.offer(true)
       DeleteHistoryItems -> effects.offer(DeleteSelectedOrAllHistoryItems(state, historyDao))
     }
   }.subscribe({}, Throwable::printStackTrace)
@@ -169,7 +173,7 @@ class HistoryViewModel @Inject constructor(
 
   private fun selectItemAndOpenSelectionMode(historyItem: HistoryItem) {
     historyItem.isSelected = true
-    unselectAllItems.offer(false)
+    deselectAllItems.offer(false)
   }
 
   private fun openDialogToRequestDeletionOfSelectedHistoryItems(dialogShower: DialogShower) {
@@ -197,11 +201,11 @@ class HistoryViewModel @Inject constructor(
     when {
       historyItem.isSelected -> {
         historyItem.isSelected = false
-        unselectAllItems.offer(false)
+        deselectAllItems.offer(false)
       }
       isInSelctionMode() -> {
         historyItem.isSelected = true
-        unselectAllItems.offer(false)
+        deselectAllItems.offer(false)
       }
       else -> {
         effects.offer(OpenHistoryItem(historyItem, zimReaderContainer))
