@@ -51,7 +51,7 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_SERVER
-import java.lang.Exception
+import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.ArrayList
 import javax.inject.Inject
@@ -150,7 +150,14 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
       val method: Method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
       method.isAccessible = true
       method.invoke(wifiManager) as Boolean
-    } catch (exception: Exception) {
+    } catch (exception: IllegalArgumentException) {
+      exception.printStackTrace()
+      false
+    } catch (exception: IllegalAccessException) {
+      exception.printStackTrace()
+      false
+    } catch (exception: InvocationTargetException) {
+      exception.printStackTrace()
       false
     }
   }
