@@ -19,7 +19,6 @@
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">Hebo un error al intentar guardar el mediu.</string>
   <string name="save_media_saved">Mediu guardáu como %s en Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Buscando conteníu descargable; espera, por favor…</string>
   <string name="search_label">Buscar</string>
   <string name="choose_file">Seleiciona un ficheru de conteníu (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir l\'enllaz nuna llingüeta nueva?</string>

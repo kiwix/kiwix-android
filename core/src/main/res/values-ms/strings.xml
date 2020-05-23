@@ -13,7 +13,6 @@
   <string name="save_media">Simpan media sebagai…</string>
   <string name="save_media_error">Ralat berlaku ketika cubaan menyimpan media!</string>
   <string name="save_media_saved">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
-  <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu…</string>
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
   <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>

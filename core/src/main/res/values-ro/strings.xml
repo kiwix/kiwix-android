@@ -20,7 +20,6 @@
   <string name="save_media">Salvează Media</string>
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
   <string name="save_media_saved">Media salvată %s în Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Scanează pentru conținut descărcabil, vă rugăm așteptați…</string>
   <string name="search_label">Caută</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>

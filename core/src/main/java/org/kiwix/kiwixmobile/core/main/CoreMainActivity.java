@@ -49,6 +49,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
@@ -172,7 +173,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @BindView(R2.id.activity_main_app_bar)
   AppBarLayout toolbarContainer;
   @BindView(R2.id.activity_main_progress_view)
-  AnimatedProgressBar progressBar;
+  ProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
   @BindView(R2.id.activity_main_drawer_layout)
@@ -867,6 +868,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
   protected void selectTab(int position) {
     currentWebViewIndex = position;
+    Log.d("CoreMainActivity", Integer.toString(position));
     contentFrame.removeAllViews();
 
     KiwixWebView webView = webViewList.get(position);

@@ -22,7 +22,6 @@
   <string name="save_media">Media gorde</string>
   <string name="save_media_error">Akats bat gertatu da media gordetzen zen bitartean!</string>
   <string name="save_media_saved">Media %s to Android/media/org.kiwix…/ bezala gordeta</string>
-  <string name="rescan_fs_warning">Deskargatu daiteken edukia eskaneatzen, itxaron mesedez…</string>
   <string name="search_label">Bilatu</string>
   <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>
   <string name="open_in_new_tab">Ireki lotura fitxa berri batean?</string>

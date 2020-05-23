@@ -25,7 +25,6 @@
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
   <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Buscando contenido descargable; espera…</string>
   <string name="search_label">Buscar</string>
   <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>

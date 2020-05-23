@@ -18,7 +18,6 @@
   <string name="save_media">Ruajë Median</string>
   <string name="save_media_error">Ndodhi një gabim teksa provohej të ruhej media!</string>
   <string name="save_media_saved" fuzzy="true">U ruajt media si %s te Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Po skanohet për lëndë të shkarkueshme, ju lutemi, prisni…</string>
   <string name="search_label">Kērko</string>
   <string name="choose_file">Përzgjidhni një Kartelë Lënde  (*.zim)</string>
   <string name="open_in_new_tab">Të hapet lidhja në skedë të re?</string>

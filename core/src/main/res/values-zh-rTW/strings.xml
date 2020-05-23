@@ -24,7 +24,6 @@
   <string name="save_media">儲存媒體</string>
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>
   <string name="save_media_saved">已將媒體以 %1$s 儲存到 Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">正在掃描可下載內容，請稍候…</string>
   <string name="search_label">搜尋</string>
   <string name="choose_file">請選擇一份內容檔案 (*.zim)</string>
   <string name="open_in_new_tab">在新分頁打開連結？</string>

@@ -29,7 +29,6 @@
   <string name="save_media">Zapisz plik multimedialny jako…</string>
   <string name="save_media_error">Wystąpił błąd podczas próby zapisania multimediów!</string>
   <string name="save_media_saved">Zapisano plik multimedialny jako %s w folderze Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Skanowanie plików ZIM, proszę czekać…</string>
   <string name="search_label">Szukaj</string>
   <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
   <string name="open_in_new_tab">Otwórz odnośnik na nowej karcie</string>

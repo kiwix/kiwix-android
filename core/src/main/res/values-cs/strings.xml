@@ -26,7 +26,6 @@
   <string name="save_media">Uložit médium jako…</string>
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
   <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Probíhá hledání obsahu ke stažení, prosím čekejte…</string>
   <string name="search_label">Vyhledávání</string>
   <string name="choose_file">Vyberte obsahový soubor (*.zim)</string>
   <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>

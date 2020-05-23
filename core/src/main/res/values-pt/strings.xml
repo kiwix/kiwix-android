@@ -28,7 +28,6 @@
   <string name="save_media">Guardar conteúdo</string>
   <string name="save_media_error">Ocorreu um erro ao tentar guardar o conteúdo!</string>
   <string name="save_media_saved">Conteúdo guardado como %s em Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">A procurar conteúdo descarregável; aguarde, por favor…</string>
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecionar um ficheiro de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir ligação num novo separador?</string>

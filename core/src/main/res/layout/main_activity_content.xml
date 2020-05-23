@@ -20,14 +20,15 @@
 
       <include layout="@layout/layout_toolbar" />
 
-      <org.kiwix.kiwixmobile.core.main.AnimatedProgressBar
+      <ProgressBar
         android:id="@+id/activity_main_progress_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/progress_view_height"
+        android:max="100"
+        android:progress="1"
+        android:indeterminate="false"
         app:backgroundColor="?colorOnSurface"
-        app:bidirectionalAnimate="false"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:progressColor="@color/blue400" />
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </com.google.android.material.appbar.AppBarLayout>
 

@@ -19,7 +19,6 @@
   <string name="save_media">Αποθήκευση μέσων</string>
   <string name="save_media_error">Προέκυψε σφάλμα κατά την προσπάθεια αποθήκευσης του αρχείου πολυμέσων!</string>
   <string name="save_media_saved">Αποθήκευση αρχείων πολυμέσων ως το %1$s  στο Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Σάρωση για εγκαταστάσιμο περιεχόμενο, παρακαλώ περιμένετε…</string>
   <string name="search_label">Αναζήτηση</string>
   <string name="choose_file">Επιλογή ZIM Content File (*.zim)</string>
   <string name="open_in_new_tab">Άνοιγμα συνδέσμου σε νέα καρτέλα;</string>

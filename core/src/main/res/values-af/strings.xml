@@ -8,7 +8,6 @@
   <string name="menu_random_article">Lukrake artikel</string>
   <string name="menu_full_screen">Volle skerm</string>
   <string name="menu_exit_full_screen">Verlaat volskerm-modus</string>
-  <string name="rescan_fs_warning">Soek ZIM-lêers. Wag asb…</string>
   <string name="search_label">Soek</string>
   <string name="choose_file">Kies \'n ZIM-inhoudslêer (*.zim)</string>
   <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
