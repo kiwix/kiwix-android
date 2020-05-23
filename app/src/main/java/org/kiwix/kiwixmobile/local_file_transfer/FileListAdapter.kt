@@ -46,28 +46,24 @@ class FileListAdapter(private val fileItems: ArrayList<FileItem>) :
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder =
     FileViewHolder(parent.inflate(R.layout.item_transfer_list, false), this)
 
-  @Suppress("EmptyFunctionBlock")
   override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
+    holder.bind(fileItems[position])
   }
 
   override fun getItemCount(): Int = fileItems.size
 
   inner class FileViewHolder(itemView: View, val fileListAdapter: FileListAdapter) :
-    BaseViewHolder<View>(itemView) {
-    override fun bind(item: View) {
-      val fileItem = fileItems[position]
-      val name = fileItem.fileName
-      text_view_file_item_name.text = name
-      image_view_file_transferred.isVisible = fileItem.fileStatus != SENDING
-      progress_bar_transferring_file.isVisible = fileItem.fileStatus == SENDING
-      if (fileItem.fileStatus != FileItem.FileStatus.TO_BE_SENT) {
+    BaseViewHolder<FileItem>(itemView) {
+    override fun bind(item: FileItem) {
+      text_view_file_item_name.text = item.fileName
+      image_view_file_transferred.isVisible = item.fileStatus != SENDING
+      progress_bar_transferring_file.isVisible = item.fileStatus == SENDING
+      if (item.fileStatus != FileItem.FileStatus.TO_BE_SENT) {
         // Icon for TO_BE_SENT is assigned by default in the item layout
         progress_bar_transferring_file.visibility = View.GONE
-        when (fileItem.fileStatus) {
-          SENT ->
-            image_view_file_transferred.setImageResource(R.drawable.ic_baseline_check_24px)
-          ERROR ->
-            image_view_file_transferred.setImageResource(R.drawable.ic_baseline_error_24px)
+        when (item.fileStatus) {
+          SENT -> image_view_file_transferred.setImageResource(R.drawable.ic_baseline_check_24px)
+          ERROR -> image_view_file_transferred.setImageResource(R.drawable.ic_baseline_error_24px)
           else -> {
           }
         }
