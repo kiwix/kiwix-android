@@ -25,12 +25,7 @@ import javax.inject.Inject
 
 class ConnectivityReporter @Inject constructor(private val wifiManager: WifiManager) {
 
-  fun checkWifi(): Boolean = if (wifiManager.isWifiEnabled) {
-    val wifiInfo = wifiManager.connectionInfo
-    wifiInfo.networkId != -1
-  } else {
-    false
-  }
+  fun checkWifi(): Boolean = wifiManager.isWifiEnabled && wifiManager.connectionInfo.networkId != -1
 
   fun checkTethering(): Boolean = try {
     val method: Method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
