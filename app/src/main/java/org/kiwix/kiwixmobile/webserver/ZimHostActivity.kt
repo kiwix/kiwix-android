@@ -253,7 +253,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   private fun startWifiDialog() {
     alertDialogShower.show(
-      KiwixDialog.WiFIOnWhenHostingBooks,
+      KiwixDialog.WiFiOnWhenHostingBooks,
       ::openWifiSettings,
       {},
       ::startKiwixHotspot

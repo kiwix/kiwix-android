@@ -94,7 +94,7 @@ sealed class KiwixDialog(
     R.string.go_to_wifi_settings_label
   )
 
-  object WiFIOnWhenHostingBooks : KiwixDialog(
+  object WiFiOnWhenHostingBooks : KiwixDialog(
     R.string.wifi_dialog_title,
     R.string.wifi_dialog_body,
     positiveMessage = R.string.go_to_wifi_settings_label,
