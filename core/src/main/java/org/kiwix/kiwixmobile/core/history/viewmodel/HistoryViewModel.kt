@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import io.reactivex.functions.Function3
 import io.reactivex.functions.Function5
 import io.reactivex.processors.BehaviorProcessor
@@ -68,6 +70,27 @@ class HistoryViewModel @Inject constructor(
     Function5(::updateResultsState)
   ).subscribe(state::postValue, Throwable::printStackTrace)
 
+  private fun selectedItems() : Flowable<List<HistoryListItem>> =
+    Flowable.combineLatest(
+      historyDao.history(),
+      deselectAllItems,
+      BiFunction{
+        historyItems, deselectAll -> selectItems(historyItems, deselectAll)
+      }
+    )
+
+  private fun selectItems(
+    historyListItems : List<HistoryListItem>,
+    shouldDeselectAllItems: Boolean
+  ) : List<HistoryListItem> {
+    if(shouldDeselectAllItems){
+      historyListItems.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
+    }
+    return historyListItems.filterIsInstance<HistoryItem>().filter {
+      it.isSelected
+    }
+  }
+
   private fun searchResults(): Flowable<List<HistoryListItem>> =
     Flowable.combineLatest(
       filter,
@@ -80,58 +103,38 @@ class HistoryViewModel @Inject constructor(
     searchString: String,
     showAllToggle: Boolean,
     historyList: List<HistoryListItem>
-  ): List<HistoryListItem> = historyList
+  ): List<HistoryListItem> = (historyList
       .filterIsInstance<HistoryItem>()
       .filter { h ->
         h.historyTitle.contains(searchString, true) &&
           (h.zimName == zimReaderContainer.name || showAllToggle)
-      }
-
-  private fun updateResultsState(
-    currentBook: String,
-    historyItemSearchResults: List<HistoryListItem>,
-    shouldDeselectAllItems: Boolean,
-    searchString: String,
-    showAllSwitchOn: Boolean
-  ): State {
-    if (shouldDeselectAllItems) {
-      deselectAllHistoryItems(historyItemSearchResults)
-    }
-    val selectedItems = filterOutAllSelectedHistoryItems(historyItemSearchResults)
-    val historyListWithDateItems = addDateHeadersToHistoryItems(historyItemSearchResults)
-    return selectStateBasedOnInput(
-      currentBook,
-      historyListWithDateItems,
-      selectedItems,
-      searchString,
-      showAllSwitchOn
-    )
-  }
-
-  private fun selectStateBasedOnInput(
-    currentBook: String,
-    historyListWithDateItems: List<HistoryListItem>,
-    selectedItems: List<HistoryListItem>,
-    searchString: String,
-    showAllSwitchOn: Boolean
-  ) = when {
-    historyListWithDateItems.isEmpty() -> NoResults(searchString, historyListWithDateItems)
-    selectedItems.isNotEmpty() -> SelectionResults(
-      searchString,
-      historyListWithDateItems,
-      selectedItems,
-      showAllSwitchOn,
-      currentBook
-    )
-    else -> Results(searchString, historyListWithDateItems, showAllSwitchOn, currentBook)
-  }
-
-  private fun addDateHeadersToHistoryItems(historyItemSearchResults: List<HistoryListItem>):
-    MutableList<HistoryListItem> {
-    return historyItemSearchResults.reversed().foldOverAddingHeaders(
+      } as List<HistoryListItem>).foldOverAddingHeaders(
         { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
         { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
       )
+
+  private fun updateResultsState(
+    currentBook: String,
+    historyListWithDateItems: List<HistoryListItem>,
+    deselectAllItems: Boolean,
+    searchString: String,
+    showAllSwitchOn: Boolean
+  ): State {
+    if (deselectAllItems) {
+      deselectAllHistoryItems(historyListWithDateItems)
+    }
+    val selectedItems = filterOutAllSelectedHistoryItems(historyListWithDateItems)
+    return when {
+      historyListWithDateItems.isEmpty() -> NoResults(searchString, historyListWithDateItems)
+      selectedItems.isNotEmpty() -> SelectionResults(
+        searchString,
+        historyListWithDateItems,
+        selectedItems,
+        showAllSwitchOn,
+        currentBook
+      )
+      else -> Results(searchString, historyListWithDateItems, showAllSwitchOn, currentBook)
+    }
   }
 
   private fun filterOutAllSelectedHistoryItems(historyItemSearchResults: List<HistoryListItem>):
