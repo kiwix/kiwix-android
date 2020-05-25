@@ -21,9 +21,12 @@ package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 data class ToggleShowAllHistorySwitchAvailability(
-  private val showAllHistorySwitch: Switch
+  private val showAllHistorySwitch: Switch,
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val isChecked: Boolean
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     showAllHistorySwitch.isEnabled = !showAllHistorySwitch.isEnabled

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Fitoschido
 * L2212
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Agiudu</string>
   <string name="menu_home">Pàgina printzipale</string>
   <string name="menu_settings">Impostatziones</string>
@@ -175,7 +175,7 @@
   <string name="articleCount">%s artìculos</string>
   <string name="get_started">Incumintza</string>
   <string name="download_books">Iscàrriga libros</string>
-  <string name="human_kind_knowledge">Sa connoschèntzia de s\'umanidade in su telèfonu tuo.</string>
+  <string name="humankind_knowledge">Sa connoschèntzia de s\'umanidade in su telèfonu tuo.</string>
   <string name="welcome_to_the_family">Bene bènnidu in sa famìlia</string>
   <string name="save_books_offline">Sarva libros non in lìnia</string>
   <string name="download_books_message">Iscàrriga libros e leghe·los in cale si siat logu.</string>
@@ -261,4 +261,8 @@
   <string name="on">Alluta</string>
   <string name="off">Istudada</string>
   <string name="auto">Automàtica</string>
+  <string name="send_report">Imbia su raportu de diagnòstica</string>
+  <string name="crash_checkbox_file_system">Detàllios de su sistema de documentos</string>
+  <string name="diagnostic_report">Raportu de diagnòstica</string>
+  <string name="diagnostic_report_message">Pro praghere imbia totu sos detàllios chi sighent, in manera chi amus a pòdere diagnosticare su problema</string>
 </resources>

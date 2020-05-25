@@ -6,7 +6,6 @@
 * Y-M D
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Skoazell</string>
   <string name="menu_home">Degemer</string>
   <string name="menu_settings">Arventennoù</string>
@@ -177,4 +176,8 @@
   <string name="on">Enaouet</string>
   <string name="off">Lazhet</string>
   <string name="auto">Emgefre</string>
+  <string name="send_report">Kas danevell an diagnostik</string>
+  <string name="crash_checkbox_file_system">Munudoù ar reizhiad restroù</string>
+  <string name="diagnostic_report">Danevell an diagnostik</string>
+  <string name="diagnostic_report_message">Kasit an holl vunudoù da heul evit ma c\'hallfemp diagnostikañ ar gudenn</string>
 </resources>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Bjankuloski06
 -->
 <resources>
-  <string name="kiwi">Киви</string>
   <string name="menu_help">Помош</string>
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Поставки</string>
@@ -174,7 +174,7 @@
   <string name="articleCount">%s статии</string>
   <string name="get_started">Започни</string>
   <string name="download_books">Преземи книги</string>
-  <string name="human_kind_knowledge">Севкупното знаење на човештвото, на вашиот телефон.</string>
+  <string name="humankind_knowledge">Севкупното знаење на човештвото, на вашиот телефон.</string>
   <string name="welcome_to_the_family">Добре дојдовте во семејството</string>
   <string name="save_books_offline">Зачувај книги вонмрежно</string>
   <string name="download_books_message">Преземајте книги и читајте ги каде и да сте.</string>

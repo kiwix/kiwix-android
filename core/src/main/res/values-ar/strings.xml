@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Dyolf77
 * Eyas
 * Meno25
@@ -10,7 +11,6 @@
 * محمد أحمد عبد الفتاح
 -->
 <resources>
-  <string name="kiwi">كيوي</string>
   <string name="menu_help">المساعدة</string>
   <string name="menu_home">الصفحة الرئيسية</string>
   <string name="menu_settings">الإعدادات</string>
@@ -149,7 +149,7 @@
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
-  <string name="wifi_only_msg">إذا اخترت \“نعم\”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
+  <string name="wifi_only_msg">إذا اخترت “نعم”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
   <string name="pref_wifi_only">تنزيل المحتوى عبر واي فاي فقط</string>
   <string name="time_day">يوم</string>
   <string name="time_hour">ساعة</string>
@@ -181,7 +181,7 @@
   <string name="articleCount">%s مقالات</string>
   <string name="get_started">فلنبدأ</string>
   <string name="download_books">تنزيل الكتب</string>
-  <string name="human_kind_knowledge">أنواع المعرفة الإنسانية على هاتفك.</string>
+  <string name="humankind_knowledge">أنواع المعرفة الإنسانية على هاتفك.</string>
   <string name="welcome_to_the_family">مرحبًا بك في العائلة</string>
   <string name="save_books_offline">حفظ الكتب دون اتصال بالإنترنت</string>
   <string name="download_books_message">قم بتنزيل الكتب واقرأ أينما كنت.</string>
@@ -267,4 +267,5 @@
   <string name="on">تشغيل</string>
   <string name="off">تعطيل</string>
   <string name="auto">تلقائي</string>
+  <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
 </resources>

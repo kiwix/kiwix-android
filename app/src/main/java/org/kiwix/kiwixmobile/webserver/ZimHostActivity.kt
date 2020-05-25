@@ -25,6 +25,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -225,7 +226,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
     alertDialogShower.show(KiwixDialog.StartHotspotManually,
       ::launchTetheringSettingsScreen,
-      {},
+      { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) },
       {
         progressDialog = ProgressDialog.show(
           this,

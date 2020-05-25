@@ -91,7 +91,7 @@ sealed class KiwixDialog(
     R.string.hotspot_dialog_title,
     R.string.hotspot_dialog_message,
     R.string.go_to_settings,
-    null,
+    R.string.go_to_wifi_settings_label,
     neutralMessage = R.string.hotspot_dialog_neutral_button
   )
 

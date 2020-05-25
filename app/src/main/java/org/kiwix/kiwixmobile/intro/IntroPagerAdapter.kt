@@ -15,16 +15,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.intro
 
-package org.kiwix.kiwixmobile.core.bookmark;
+import android.view.View
+import android.view.ViewGroup
+import androidx.viewpager.widget.PagerAdapter
 
-import dagger.Module;
-import dagger.Provides;
+internal class IntroPagerAdapter(private val views: Array<View>) : PagerAdapter() {
+  override fun getCount(): Int = views.size
 
-@Module
-public class BookmarksModule {
-  @Provides
-  BookmarksContract.Presenter provideBookmarksPresenter(BookmarksPresenter presenter) {
-    return presenter;
+  override fun instantiateItem(container: ViewGroup, position: Int): Any {
+    container.addView(views[position])
+    return views[position]
   }
+
+  override fun destroyItem(container: ViewGroup, position: Int, anObject: Any) =
+    container.removeView(anObject as View)
+
+  override fun isViewFromObject(view: View, anObject: Any): Boolean = view === anObject
 }

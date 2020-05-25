@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Amire80
 * Ghsuvr
 * Guycn2
@@ -10,7 +11,6 @@
 * יאיר מן
 -->
 <resources>
-  <string name="kiwi">קיווי</string>
   <string name="menu_help">עזרה</string>
   <string name="menu_home">בית</string>
   <string name="menu_settings">הגדרות</string>
@@ -110,7 +110,7 @@
   <string name="local_zims">מכשיר</string>
   <string name="remote_zims">מקוון</string>
   <string name="library">ספרייה</string>
-  <string name="delete_zim_body" fuzzy="true">למחוק את %s?</string>
+  <string name="delete_zim_body">קובצי ה־zim הבאים יימחקו:\n\n%s</string>
   <string name="delete_zims_toast">הקבצים נמחקו בהצלחה</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום להורדה.</string>
@@ -160,7 +160,7 @@
   <string name="time_yesterday">אתמול</string>
   <string name="pref_external_link_popup_title">תן אזהרה בעת כניסה לקישורים חיצוניים</string>
   <string name="pref_external_link_popup_summary">הצגת בועת אזהרה על תשלומים נוספים או כאשר אין אפשרות עבודה עם קישורים לא-מקוונים.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">העברה לקישור חיצוני</string>
+  <string name="external_link_popup_dialog_title">העברה לקישור חיצוני!</string>
   <string name="external_link_popup_dialog_message">פעולה זו מובילה לקישור חיצוני. כתוצאה מכך עשויות לחול עליך עלויות בגין העברת נתונים או שהקישור לא יעבוד עקב העדר חיבור. להמשיך?</string>
   <string name="do_not_ask_anymore">לא לשאול שוב</string>
   <string name="your_languages">שפות נבחרות:</string>
@@ -181,7 +181,7 @@
   <string name="articleCount">%s ערכים</string>
   <string name="get_started">איך מתחילים</string>
   <string name="download_books">הורדת ספרים</string>
-  <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
+  <string name="humankind_knowledge">Humankind\'s knowledge, on your phone.</string>
   <string name="welcome_to_the_family">ברוכים הבאים למשפחה!</string>
   <string name="save_books_offline">תשמרו ספרים לקריאה ללא חיבור לרשת</string>
   <string name="download_books_message">תורידו ספרים ותקראו אותם בכל מקום.</string>
@@ -267,4 +267,8 @@
   <string name="on">מופעל</string>
   <string name="off">כבוי</string>
   <string name="auto">אוטומטי</string>
+  <string name="send_report">שליחת דוח אבחון</string>
+  <string name="crash_checkbox_file_system">פרטי מערכת קבצים</string>
+  <string name="diagnostic_report">דוח אבחון</string>
+  <string name="diagnostic_report_message">נא לשלוח את כל הפרטים הבאים כדי שנוכל לאבחן את התקלה</string>
 </resources>

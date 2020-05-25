@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Alex00728
 * CYAN
 * Gongsoonyee
@@ -10,7 +11,6 @@
 * 아라
 -->
 <resources>
-  <string name="kiwi">키위</string>
   <string name="menu_help">도움말</string>
   <string name="menu_home">홈</string>
   <string name="menu_settings">설정</string>
@@ -176,7 +176,7 @@
   <string name="articleCount">문서 %s개</string>
   <string name="get_started">시작하기</string>
   <string name="download_books">책 다운로드</string>
-  <string name="human_kind_knowledge">인류의 지식을 내 핸드폰에.</string>
+  <string name="humankind_knowledge">인류의 지식을 내 핸드폰에.</string>
   <string name="welcome_to_the_family">포럼에 오신것을 환영합니다</string>
   <string name="save_books_offline">책을 오프라인으로 저장하기</string>
   <string name="download_books_message">책을 다운받고, 당신이 어디있든 읽으세요.</string>
@@ -257,4 +257,7 @@
   <string name="on">켜기</string>
   <string name="off">끄기</string>
   <string name="auto">자동</string>
+  <string name="send_report">진단 보고서 보내기</string>
+  <string name="crash_checkbox_file_system">파일 시스템 세부 정보</string>
+  <string name="diagnostic_report">진단 보고서</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Ark74
 * Ejegg
 * Fitoschido
@@ -10,7 +11,6 @@
 * VegaDark
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Inicio</string>
   <string name="menu_settings">Configuración</string>
@@ -156,7 +156,7 @@
   <string name="articleCount">%s artículos</string>
   <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar libros</string>
-  <string name="human_kind_knowledge">El conocimiento de la humanidad en tu teléfono.</string>
+  <string name="humankind_knowledge">El conocimiento de la humanidad en tu teléfono.</string>
   <string name="welcome_to_the_family">Te damos la bienvenida a la familia</string>
   <string name="download_books_message">Descarga libros y lee en cualquier lugar.</string>
   <string name="unable_to_add_to_bookmarks">No se puede añadir a los marcadores</string>
@@ -211,4 +211,7 @@
   <string name="on">Activado</string>
   <string name="off">Desactivado</string>
   <string name="auto">Automático</string>
+  <string name="send_report">Enviar informe de diagnóstico</string>
+  <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
+  <string name="diagnostic_report">Informe de diagnóstico</string>
 </resources>

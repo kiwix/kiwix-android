@@ -12,6 +12,7 @@
 * Link2xt
 * Movses
 * Okras
+* Pacha Tchernof
 * Putnik
 -->
 <resources>
@@ -105,7 +106,7 @@
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
-  <string name="delete_zim_failed" fuzzy="true">Извините, мы не смогли удалить этот файл. Вместо этого вам стоит попробовать использовать файловый менеджер.</string>
+  <string name="delete_zim_failed">Извините, мы не смогли удалить некоторые файлы. Вместо этого вам стоит попытаться использовать файловый менеджер.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
   <string name="stop">остановить</string>

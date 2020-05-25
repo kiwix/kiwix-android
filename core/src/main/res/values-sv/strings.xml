@@ -7,7 +7,6 @@
 * WikiPhoenix
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Hjälp</string>
   <string name="menu_home">Hem</string>
   <string name="menu_settings">Inställningar</string>
@@ -178,7 +177,7 @@
   <string name="articleCount">%s artiklar</string>
   <string name="get_started">Kom igång</string>
   <string name="download_books">Ladda ned böcker</string>
-  <string name="human_kind_knowledge">Mänsklighetens kunskap i din telefon</string>
+  <string name="humankind_knowledge">Mänsklighetens kunskap i din telefon</string>
   <string name="welcome_to_the_family">Välkommen till famlijen</string>
   <string name="save_books_offline">Spara böcker offline</string>
   <string name="download_books_message">Ladda ned böcker och läs var du än är.</string>
@@ -253,4 +252,5 @@
   <string name="on">På</string>
   <string name="off">Av</string>
   <string name="auto">Auto</string>
+  <string name="crash_checkbox_file_system">Filsystemsdetaljer</string>
 </resources>

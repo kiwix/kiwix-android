@@ -5,4 +5,5 @@
 <resources>
   <string name="file_system_does_not_support_4gb">Twój system plików nie obsługuje plików większych niż 4 GB</string>
   <string name="detecting_file_system">Wykrywanie, czy system plików może utworzyć pliki 4 GB</string>
+  <string name="cannot_open_file">Nie można otworzyć pliku\nSpróbuj wyszukać ten plik na karcie Urządzenia twojej biblioteki</string>
 </resources>

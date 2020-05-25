@@ -110,4 +110,6 @@
   <string name="tag_text_only">Només text</string>
   <string name="tag_short_text">Text breu</string>
   <string name="no_bookmarks">No hi ha marcadors</string>
+  <string name="send_report">Envia informe de diagnòstic</string>
+  <string name="diagnostic_report">Informe de diagnòstic</string>
 </resources>

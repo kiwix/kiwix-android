@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Alno
 * Derugon
 * Djiboun
@@ -7,6 +8,7 @@
 * Fitoschido
 * Gomoko
 * Kelson
+* Stephane
 * The RedBurn
 * Thibaut120094
 * Urhixidur
@@ -15,7 +17,6 @@
 * Yasten
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Aide</string>
   <string name="menu_home">Accueil</string>
   <string name="menu_settings">Options</string>
@@ -97,10 +98,10 @@
   <string name="undo">Annuler</string>
   <string name="tab_closed">Onglet fermé</string>
   <string name="bookmark_added">Marque-page ajouté</string>
-  <string name="rate_dialog_title">Veuillez nous noter</string>
+  <string name="rate_dialog_title">Merci de nous évaluer</string>
   <string name="rate_dialog_msg_1">Si vous aimez utiliser</string>
   <string name="rate_dialog_msg_2">, veuillez prendre un moment pour l’évaluer. Merci pour votre soutien !</string>
-  <string name="rate_dialog_positive">Notez !</string>
+  <string name="rate_dialog_positive">Donnez nous une note!</string>
   <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>
   <string name="open">Ouvrir</string>
@@ -186,7 +187,7 @@
   <string name="articleCount">%s articles</string>
   <string name="get_started">Commencer</string>
   <string name="download_books">Télécharger des livres</string>
-  <string name="human_kind_knowledge">Connaissances de l’espèce humaine, sur votre téléphone.</string>
+  <string name="humankind_knowledge">Connaissances de l’espèce humaine, sur votre téléphone.</string>
   <string name="welcome_to_the_family">Bienvenue dans la famille</string>
   <string name="save_books_offline">Enregistrer des livres hors connexion</string>
   <string name="download_books_message">Téléchargez et lisez des livres où que vous soyez.</string>
@@ -275,5 +276,5 @@
   <string name="send_report">Envoyer le rapport de diagnostic</string>
   <string name="crash_checkbox_file_system">Détails du système de fichiers</string>
   <string name="diagnostic_report">Rapport de diagnostic</string>
-  <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivant afin que nous puissions diagnostiquer le problème</string>
+  <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivants afin que nous puissions diagnostiquer le problème</string>
 </resources>

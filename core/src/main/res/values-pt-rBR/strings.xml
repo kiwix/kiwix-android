@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Eduardo Addad de Oliveira
 * Felipe L. Ewald
 * Freeedusoft
@@ -9,7 +10,6 @@
 * Webysther
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Início</string>
   <string name="menu_settings">Configurações</string>
@@ -180,7 +180,7 @@
   <string name="articleCount">%s artigos</string>
   <string name="get_started">Começar</string>
   <string name="download_books">Download de livros</string>
-  <string name="human_kind_knowledge">Conhecimento do tipo humano, no seu telefone.</string>
+  <string name="humankind_knowledge">Conhecimento do tipo humano, no seu telefone.</string>
   <string name="welcome_to_the_family">Bem-vindo à família</string>
   <string name="save_books_offline">Salvar livros off-line</string>
   <string name="download_books_message">Faça o download de livros e leia onde você estiver.</string>
@@ -266,4 +266,8 @@
   <string name="on">Lig</string>
   <string name="off">Des</string>
   <string name="auto">Auto</string>
+  <string name="send_report">Enviar relatório de diagnóstico</string>
+  <string name="crash_checkbox_file_system">Detalhes do sistema de arquivos</string>
+  <string name="diagnostic_report">Relatório de diagnóstico</string>
+  <string name="diagnostic_report_message">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
 </resources>
