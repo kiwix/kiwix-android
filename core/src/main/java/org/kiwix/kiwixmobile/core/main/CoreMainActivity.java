@@ -868,7 +868,6 @@ public abstract class CoreMainActivity extends BaseActivity
 
   protected void selectTab(int position) {
     currentWebViewIndex = position;
-    Log.d("CoreMainActivity", Integer.toString(position));
     contentFrame.removeAllViews();
 
     KiwixWebView webView = webViewList.get(position);
