@@ -116,8 +116,8 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.menu_history, menu)
-    val search = menu.findItem(id.menu_history_search).actionView as SearchView
-    search.queryHint = getString(string.search_history)
+    val search = menu.findItem(R.id.menu_history_search).actionView as SearchView
+    search.queryHint = getString(R.string.search_history)
     search.setOnQueryTextListener(SimpleTextListener {
       historyViewModel.actions.offer(Filter(it))
     })

@@ -94,7 +94,7 @@ class HistoryViewModel @Inject constructor(
     searchString: String,
     showAllSwitchOn: Boolean
   ): State {
-    if(shouldDeselectAllItems){
+    if (shouldDeselectAllItems) {
       deselectAllHistoryItems(historyItemSearchResults)
     }
     val selectedItems = filterOutAllSelectedHistoryItems(historyItemSearchResults)
@@ -114,7 +114,7 @@ class HistoryViewModel @Inject constructor(
     selectedItems: List<HistoryListItem>,
     searchString: String,
     showAllSwitchOn: Boolean
-  ) = when{
+  ) = when {
     historyListWithDateItems.isEmpty() -> NoResults(searchString, historyListWithDateItems)
     selectedItems.isNotEmpty() -> SelectionResults(
       searchString,
@@ -126,14 +126,16 @@ class HistoryViewModel @Inject constructor(
     else -> Results(searchString, historyListWithDateItems, showAllSwitchOn, currentBook)
   }
 
-  private fun addDateHeadersToHistoryItems(historyItemSearchResults: List<HistoryListItem>): MutableList<HistoryListItem> {
+  private fun addDateHeadersToHistoryItems(historyItemSearchResults: List<HistoryListItem>):
+    MutableList<HistoryListItem> {
     return historyItemSearchResults.reversed().foldOverAddingHeaders(
         { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
         { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
       )
   }
 
-  private fun filterOutAllSelectedHistoryItems(historyItemSearchResults: List<HistoryListItem>): List<HistoryItem> {
+  private fun filterOutAllSelectedHistoryItems(historyItemSearchResults: List<HistoryListItem>):
+    List<HistoryItem> {
     return historyItemSearchResults.filterIsInstance<HistoryItem>().filter { it.isSelected }
   }
 
