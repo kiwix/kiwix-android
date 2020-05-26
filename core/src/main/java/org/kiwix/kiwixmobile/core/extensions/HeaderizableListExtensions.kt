@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.extensions
 
-
 typealias HeaderizableList<T> = List<T>
 
 fun <SUPERTYPE, ITEM : SUPERTYPE, HEADER : SUPERTYPE> HeaderizableList<ITEM>.foldOverAddingHeaders(
@@ -20,4 +19,3 @@ fun <SUPERTYPE, ITEM : SUPERTYPE, HEADER : SUPERTYPE> HeaderizableList<ITEM>.fol
     }
     acc
   })
-

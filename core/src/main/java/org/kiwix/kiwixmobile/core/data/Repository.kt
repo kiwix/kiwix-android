@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
+import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.extensions.foldOverAddingHeaders
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
@@ -67,7 +68,7 @@ class Repository @Inject internal constructor(
   override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
     .map { it.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title } }
     .map {
-      it.foldOverAddingHeaders(
+      (it as HeaderizableList).foldOverAddingHeaders(
         { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
         { current, next -> current.locale.displayName != next.locale.displayName })
     }
@@ -93,7 +94,7 @@ class Repository @Inject internal constructor(
       )
     )
       .map {
-        it.foldOverAddingHeaders(
+        (it as HeaderizableList).foldOverAddingHeaders(
           { historyItem -> DateItem(historyItem.dateString) },
           { current, next -> current.dateString != next.dateString })
       }
