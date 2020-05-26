@@ -1,5 +1,3 @@
-package org.kiwix.kiwixmobile.core.history.viewmodel.effects
-
 /*
  * Kiwix Android
  * Copyright (c) 2020 Kiwix <android.kiwix.org>
@@ -18,17 +16,26 @@ package org.kiwix.kiwixmobile.core.history.viewmodel.effects
  *
  */
 
-import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.State
+import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 
-data class ToggleShowAllHistorySwitchAvailability(
-  private val showAllHistorySwitch: Switch,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val isChecked: Boolean
+data class OpenDialogToRequestDeletionOfAllHistoryItems(
+  private val dialogShower: DialogShower,
+  private val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    showAllHistorySwitch.isEnabled = !showAllHistorySwitch.isEnabled
+    dialogShower.show(DeleteAllHistory, {
+      actions.offer(DeleteHistoryItems)
+    })
   }
 }
