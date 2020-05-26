@@ -37,9 +37,9 @@
   <string name="hotspot_details_message">Los siguientes son los detalles del to puntu WiFi llocal. \nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Seleiciona los ficheros que quieras agospiar nel sirvidor</string>
   <string name="progress_dialog_starting_server">Aniciando\'l sirvidor</string>
-  <string name="hotspot_dialog_title">Activa\'l to puntu WiFi</string>
-  <string name="hotspot_dialog_message">Pa que funcione esta carauterística primero precises arrancar manualmente\'l to puntu WiFi.</string>
-  <string name="hotspot_dialog_neutral_button">SÍ, ACTIVÉLU</string>
+  <string name="hotspot_dialog_title" fuzzy="true">Activa\'l to puntu WiFi</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Pa que funcione esta carauterística primero precises arrancar manualmente\'l to puntu WiFi.</string>
+  <string name="hotspot_dialog_neutral_button" fuzzy="true">SÍ, ACTIVÉLU</string>
   <string name="hotspot_channel_description">Noticies sobro l\'estáu del to puntu WiFi/sirvidor.</string>
   <string name="hotspot_notification_content_title">Puntu WiFi de Kiwix</string>
   <string name="start_server_label">Aniciar el sirvidor</string>
@@ -250,7 +250,7 @@
   <string name="tag_short_text">Testu curtiu</string>
   <string name="storage_permission_denied">Refugóse\'l permisu d\'almacenamientu</string>
   <string name="grant_read_storage_permission">Esta app precisa ser capaz de lleer l\'almacenamientu pa funcionar. Concede\'l permisu na configuración</string>
-  <string name="go_to_settings">Dir a Configuración</string>
+  <string name="go_to_settings" fuzzy="true">Dir a Configuración</string>
   <string name="no_results">Nun hai resultaos</string>
   <string name="no_bookmarks">Nun hai marcadores</string>
   <string name="no_history">Nun hai Historial</string>

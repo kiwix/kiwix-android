@@ -43,9 +43,9 @@
   <string name="hotspot_details_message">A seguir estão os detalhes do seu ponto de acesso local.\nSSID : %1$s \nPasse : %2$s</string>
   <string name="server_textview_default_message">Selecione os arquivos que você deseja hospedar no servidor</string>
   <string name="progress_dialog_starting_server">Iniciando servidor</string>
-  <string name="hotspot_dialog_title">Ligue o seu ponto de acesso wi-fi</string>
-  <string name="hotspot_dialog_message">Para que esse recurso funcione, você precisa primeiro ativar o rede WIFI manualmente.</string>
-  <string name="hotspot_dialog_neutral_button">SIM, EU LIGUEI</string>
+  <string name="hotspot_dialog_title">Instruções para hospedagem de livros</string>
+  <string name="hotspot_dialog_message">Para que esse recurso funcione, você precisa primeiro ativar o hotspot WIFI manualmente ou garantir que o dispositivo host e o dispositivo receptor estejam na mesma rede Wi-Fi</string>
+  <string name="hotspot_dialog_neutral_button">CONTINUAR</string>
   <string name="hotspot_channel_description">Atualizações sobre o estado do seu ponto de acesso/servidor.</string>
   <string name="hotspot_notification_content_title">Wi-Fi Kiwix</string>
   <string name="start_server_label">Iniciar servidor</string>
@@ -256,7 +256,7 @@
   <string name="tag_short_text">Texto curto</string>
   <string name="storage_permission_denied">Permissão de armazenamento negada</string>
   <string name="grant_read_storage_permission">Este aplicativo requer a capacidade de ler o armazenamento para funcionar. Conceda a permissão nas suas configurações</string>
-  <string name="go_to_settings">Vá para as configurações</string>
+  <string name="go_to_settings">Vá para configurações do ponto de acesso</string>
   <string name="no_results">Sem resultados</string>
   <string name="no_bookmarks">Sem Favoritos</string>
   <string name="no_history">Sem histórico</string>

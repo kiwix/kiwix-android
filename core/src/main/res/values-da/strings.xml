@@ -155,6 +155,6 @@
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Kun tekst</string>
   <string name="tag_short_text">kort tekst</string>
-  <string name="go_to_settings">Gå til indstillinger</string>
+  <string name="go_to_settings" fuzzy="true">Gå til indstillinger</string>
   <string name="no_bookmarks">Ingen bogmærker</string>
 </resources>

@@ -4,10 +4,12 @@
 * Ark74
 * Ejegg
 * Fitoschido
+* Geryescalier
 * Johny Weissmuller Jr
 * Macofe
 * Macondo
 * MarcoAurelio
+* Ncr
 * VegaDark
 -->
 <resources>
@@ -33,7 +35,7 @@
   <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
   <string name="server_started_successfully_toast_message">Se inició el servidor correctamente.</string>
   <string name="progress_dialog_starting_server">Iniciando el servidor</string>
-  <string name="hotspot_dialog_neutral_button">SÍ, LO HE INICIADO</string>
+  <string name="hotspot_dialog_neutral_button">PROCEDER</string>
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Detener servidor</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
@@ -204,7 +206,7 @@
   <string name="tag_text_only">Solo texto</string>
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
-  <string name="go_to_settings">Ir a Configuración</string>
+  <string name="go_to_settings" fuzzy="true">Ir a Configuración</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
   <string name="device_default">Valor predet. del dispositivo</string>
@@ -214,4 +216,5 @@
   <string name="send_report">Enviar informe de diagnóstico</string>
   <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
   <string name="diagnostic_report">Informe de diagnóstico</string>
+  <string name="diagnostic_report_message">Envíe todos los detalles siguientes para que podamos diagnosticar el problema.</string>
 </resources>

@@ -47,9 +47,9 @@
   <string name="hotspot_details_message">Poniżej znajdują się szczegółowe informacje o lokalnym hotspocie.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Wybierz pliki, które chcesz hostować na serwerze</string>
   <string name="progress_dialog_starting_server">Uruchamianie serwera</string>
-  <string name="hotspot_dialog_title">Włącz hotspot WIFI</string>
-  <string name="hotspot_dialog_message">Aby ta funkcja działała, musisz najpierw ręcznie włączyć WIFI hotspot.</string>
-  <string name="hotspot_dialog_neutral_button">TAK, WŁĄCZYŁEM GO</string>
+  <string name="hotspot_dialog_title" fuzzy="true">Włącz hotspot WIFI</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Aby ta funkcja działała, musisz najpierw ręcznie włączyć WIFI hotspot.</string>
+  <string name="hotspot_dialog_neutral_button" fuzzy="true">TAK, WŁĄCZYŁEM GO</string>
   <string name="hotspot_channel_description">Aktualizacje o stanie hotspot/server.</string>
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Uruchom serwer</string>
@@ -259,7 +259,7 @@
   <string name="tag_short_text">Krótki tekst</string>
   <string name="storage_permission_denied">Odrzucono dostęp do pamięci</string>
   <string name="grant_read_storage_permission">Ta aplikacja aby funkcjonować wymaga uprawnień do odczytywania zawartości pamięci. Nadaj jej te uprawnienia w ustawieniach.</string>
-  <string name="go_to_settings">Przejdź do ustawień</string>
+  <string name="go_to_settings" fuzzy="true">Przejdź do ustawień</string>
   <string name="no_results">Brak wyników</string>
   <string name="no_bookmarks">Brak zakładek</string>
   <string name="no_history">Nie ma Historii</string>

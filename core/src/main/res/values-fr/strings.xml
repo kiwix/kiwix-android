@@ -50,9 +50,9 @@
   <string name="hotspot_details_message">Voici les détails de votre point d’accès local.\nSSID : %1$s\nPasse : %2$s</string>
   <string name="server_textview_default_message">Sélectionnez les fichiers que vous voulez héberger sur le serveur</string>
   <string name="progress_dialog_starting_server">Démarrage du serveur</string>
-  <string name="hotspot_dialog_title">Activez votre point d’accès WiFi</string>
-  <string name="hotspot_dialog_message">Pour que cette fonctionnalité fonctionne, vous devez d’abord activer votre point d’accès WiFi manuellement.</string>
-  <string name="hotspot_dialog_neutral_button">OUI, JE L’AI BIEN DÉMARRÉ</string>
+  <string name="hotspot_dialog_title">Instructions pour les livres hébergeurs</string>
+  <string name="hotspot_dialog_message">Pour que cette fonctionnalité fonctionne, vous devez d’abord activer manuellement votre point d’accès WiFi ou vous assurer que l\'appareil hôte et l\'appareil récepteur appartiennent au même réseau WiFi</string>
+  <string name="hotspot_dialog_neutral_button">PROCEDER</string>
   <string name="hotspot_channel_description">Mises à jour concernant l’état de votre point d’accès/serveur.</string>
   <string name="hotspot_notification_content_title">Point d’accès Kiwix</string>
   <string name="start_server_label">Démarrer le serveur</string>
@@ -263,7 +263,7 @@
   <string name="tag_short_text">Texte bref</string>
   <string name="storage_permission_denied">Autorisation de stockage refusée</string>
   <string name="grant_read_storage_permission">Cette application a besoin de la possibilité de lire le stockage pour pouvoir fonctionner. Veuillez accorder le droit dans vos paramètres.</string>
-  <string name="go_to_settings">Aller aux paramètres</string>
+  <string name="go_to_settings">Aller aux paramètres de Hotspot</string>
   <string name="no_results">Aucun résultat</string>
   <string name="no_bookmarks">Aucun marque-page</string>
   <string name="no_history">Aucun historique</string>

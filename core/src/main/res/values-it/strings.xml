@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Beta16
+* CloeRiva
 * Einreiher
 * G.garatti
 * Matteocng
@@ -25,6 +26,8 @@
   <string name="search_label">Ricerca</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
   <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
+  <string name="hotspot_dialog_title">Istruzioni per ospitare libri</string>
+  <string name="hotspot_dialog_neutral_button">PROCEDI</string>
   <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato.</string>
   <string name="error_file_invalid">Errore: il file selezionato non è un file ZIM valido.</string>
   <string name="error_article_url_not_found">Errore: caricamento della voce (url: %1$s) non riuscito.</string>
@@ -95,7 +98,7 @@
   <string name="nearby_devices">DISPOSITIVI VICINI</string>
   <string name="status">Stato</string>
   <string name="tag_short_text">Testo breve</string>
-  <string name="go_to_settings">Vai alle impostazioni</string>
+  <string name="go_to_settings">Vai alle impostazioni hotspot</string>
   <string name="no_results">Nessun risultato</string>
   <string name="no_bookmarks">Nessun segnalibro</string>
   <string name="delete_history">Cancellare la cronologia?</string>

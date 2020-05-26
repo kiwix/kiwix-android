@@ -27,7 +27,7 @@
   <string name="no_books_selected_toast_message">Seleccioneu llibres primer</string>
   <string name="server_failed_toast_message">No s’ha pogut iniciar el servidor.</string>
   <string name="progress_dialog_starting_server">S’està iniciant el servidor</string>
-  <string name="hotspot_dialog_neutral_button">SÍ, L’HE ACTIVAT</string>
+  <string name="hotspot_dialog_neutral_button">CONTINUA</string>
   <string name="start_server_label">Inicia el servidor</string>
   <string name="stop_server_label">Atura el servidor</string>
   <string name="error_file_not_found">Error: no s\'ha trobat el fitxer ZIM.</string>
