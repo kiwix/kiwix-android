@@ -79,18 +79,18 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
 
         Log.d(TAG, "Sender socket connected to server - " + socket.isConnected());
 
-        publishProgress(fileIndex, SENDING);
+        publishProgress(fileIndex, SENDING.ordinal());
         OutputStream socketOutputStream = socket.getOutputStream();
 
         WifiDirectManager.copyToOutputStream(fileInputStream, socketOutputStream);
         if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
-        publishProgress(fileIndex, SENT);
+        publishProgress(fileIndex, SENT.ordinal());
       } catch (IOException e) {
         Log.e(TAG, e.getMessage());
         e.printStackTrace();
 
         isTransferErrorFree = false;
-        publishProgress(fileIndex, ERROR);
+        publishProgress(fileIndex, ERROR.ordinal());
       }
     }
 
@@ -111,7 +111,7 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
   protected void onProgressUpdate(Integer... values) {
     int fileIndex = values[0];
     int fileStatus = values[1];
-    wifiDirectManager.changeStatus(fileIndex, fileStatus);
+    wifiDirectManager.changeStatus(fileIndex, FileItem.FileStatus.values()[fileStatus]);
   }
 
   @Override protected void onCancelled() {
