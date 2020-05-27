@@ -67,7 +67,7 @@ class Repository @Inject internal constructor(
   override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
     .map { it.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title } }
     .map {
-      (HeaderizableList(it as List<BooksOnDiskListItem>)).foldOverAddingHeaders(
+      HeaderizableList(it as List<BooksOnDiskListItem>).foldOverAddingHeaders(
         { bookOnDisk -> LanguageItem((bookOnDisk as BookOnDisk).locale) },
         { current, next ->
           (current as BookOnDisk).locale.displayName != (next as BookOnDisk).locale.displayName })
@@ -93,7 +93,7 @@ class Repository @Inject internal constructor(
         zimReaderContainer.zimCanonicalPath
       )
     ).map {
-        (HeaderizableList<HistoryListItem>(it)).foldOverAddingHeaders(
+        HeaderizableList<HistoryListItem>(it).foldOverAddingHeaders(
           { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
           { current, next ->
             (current as HistoryItem).dateString != (next as HistoryItem).dateString })
