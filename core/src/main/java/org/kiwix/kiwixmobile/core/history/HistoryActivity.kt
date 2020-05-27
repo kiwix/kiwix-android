@@ -48,13 +48,12 @@ import javax.inject.Inject
 const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 
 class HistoryActivity : OnItemClickListener, BaseActivity() {
-  private val activityComponent by lazy { coreActivityComponent }
+  val activityComponent by lazy { coreActivityComponent }
   private var actionMode: ActionMode? = null
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val historyViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
   private val compositeDisposable = CompositeDisposable()
 
-  @Inject lateinit var dialogShower: DialogShower
 
   private val actionModeCallback: Callback =
     object : Callback {
@@ -69,7 +68,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
 
       override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         if (item.itemId == id.menu_context_delete) {
-          historyViewModel.actions.offer(RequestDeleteSelectedHistoryItems(dialogShower))
+          historyViewModel.actions.offer(RequestDeleteSelectedHistoryItems)
           return true
         }
         historyViewModel.actions.offer(Action.ExitActionModeMenu)
@@ -130,7 +129,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
       historyViewModel.actions.offer(ExitHistory)
     }
     if (item.itemId == R.id.menu_history_clear) {
-      historyViewModel.actions.offer(RequestDeleteAllHistoryItems(dialogShower))
+      historyViewModel.actions.offer(RequestDeleteAllHistoryItems)
     }
     return super.onOptionsItemSelected(item)
   }

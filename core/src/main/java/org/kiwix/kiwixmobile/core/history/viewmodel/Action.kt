@@ -26,9 +26,9 @@ sealed class Action {
   object ExitHistory : Action()
   object ExitActionModeMenu : Action()
   object DeleteHistoryItems : Action()
+  object RequestDeleteAllHistoryItems : Action()
+  object RequestDeleteSelectedHistoryItems : Action()
 
-  data class RequestDeleteAllHistoryItems(val dialogShower: DialogShower) : Action()
-  data class RequestDeleteSelectedHistoryItems(val dialogShower: DialogShower) : Action()
   data class OnItemClick(val historyListItem: HistoryListItem) : Action()
   data class OnItemLongClick(val historyItem: HistoryItem) : Action()
   data class ToggleShowHistoryFromAllBooks(val isChecked: Boolean) : Action()

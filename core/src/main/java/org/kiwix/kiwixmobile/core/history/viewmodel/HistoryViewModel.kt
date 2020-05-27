@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
 import DeleteSelectedOrAllHistoryItems
-import OpenDialogToRequestDeletionOfAllHistoryItems
 import OpenHistoryItem
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,9 +31,12 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFrom
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.OpenDialogToRequestDeletionOfSelectedHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ToggleShowAllHistorySwitchAndSaveItsStateToPrefs
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
@@ -49,7 +51,8 @@ class HistoryViewModel @Inject constructor(
   private val filter = BehaviorProcessor.createDefault("")
   private val compositeDisposable = CompositeDisposable()
   private val currentBook = BehaviorProcessor.createDefault("")
-  private val showAllSwitchToggle = BehaviorProcessor.createDefault(false)
+  private val showAllSwitchToggle =
+    BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
   private val deselectAllItems = BehaviorProcessor.createDefault(false)
   private var isInSelectionMode = false
 
@@ -162,17 +165,22 @@ class HistoryViewModel @Inject constructor(
       is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
       is RequestDeleteAllHistoryItems ->
-        effects.offer(OpenDialogToRequestDeletionOfAllHistoryItems(it.dialogShower, actions))
+        effects.offer(ShowDeleteHistoryDialog(actions, DeleteAllHistory))
       is RequestDeleteSelectedHistoryItems ->
-        effects.offer(OpenDialogToRequestDeletionOfSelectedHistoryItems(it.dialogShower, actions))
+        effects.offer(ShowDeleteHistoryDialog(actions, DeleteSelectedHistory))
       ExitActionModeMenu -> deselectAllItems.offer(true)
       DeleteHistoryItems -> effects.offer(DeleteSelectedOrAllHistoryItems(state, historyDao))
     }
   }.subscribe({}, Throwable::printStackTrace)
 
   private fun toggleShowAllHistorySwitchAndSaveItsStateToPrefs(isChecked: Boolean) {
-    showAllSwitchToggle.offer(isChecked)
-    sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked)
+    effects.offer(
+      ToggleShowAllHistorySwitchAndSaveItsStateToPrefs(
+        showAllSwitchToggle,
+        sharedPreferenceUtil,
+        isChecked
+      )
+    )
   }
 
   private fun selectItemAndOpenSelectionMode(historyItem: HistoryItem) {
