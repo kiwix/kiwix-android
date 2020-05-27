@@ -24,6 +24,7 @@
         android:id="@+id/activity_main_progress_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/progress_view_height"
+        style="@style/progressbar_style"
         android:max="100"
         android:indeterminate="false"
         app:backgroundColor="?colorOnSurface"

@@ -60,4 +60,8 @@
     <item name="cardBackgroundColor">@color/card_view_background</item>
   </style>
 
+  <style name="progressbar_style" parent="ThemeOverlay.AppCompat">
+    <item name="colorAccent">@color/blue400</item>
+  </style>
+
 </resources>
