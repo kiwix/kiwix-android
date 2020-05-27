@@ -65,7 +65,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
       }
 
       override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-        if (item.itemId == id.menu_context_delete) {
+        if (item.itemId == R.id.menu_context_delete) {
           historyViewModel.actions.offer(RequestDeleteSelectedHistoryItems)
           return true
         }
@@ -154,17 +154,10 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
       }
     }
 
-  override fun onItemClick(
-    favicon: ImageView,
-    history: HistoryItem
-  ) {
+  override fun onItemClick(favicon: ImageView, history: HistoryItem) {
     historyViewModel.actions.offer(Action.OnItemClick(history))
   }
 
-  override fun onItemLongClick(
-    favicon: ImageView,
-    history: HistoryItem
-  ): Boolean {
-    return historyViewModel.actions.offer(OnItemLongClick(history))
-  }
+  override fun onItemLongClick(favicon: ImageView, history: HistoryItem): Boolean =
+    historyViewModel.actions.offer(OnItemLongClick(history))
 }
