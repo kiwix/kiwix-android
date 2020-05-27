@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.history.viewmodel
 
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.utils.DialogShower
 
 sealed class Action {
   object ExitHistory : Action()

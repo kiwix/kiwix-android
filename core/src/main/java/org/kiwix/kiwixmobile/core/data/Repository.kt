@@ -31,7 +31,6 @@ import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.extensions.foldOverAddingHeaders
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
@@ -68,9 +67,10 @@ class Repository @Inject internal constructor(
   override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
     .map { it.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title } }
     .map {
-      (it as HeaderizableList).foldOverAddingHeaders(
-        { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
-        { current, next -> current.locale.displayName != next.locale.displayName })
+      (HeaderizableList(it as List<BooksOnDiskListItem>)).foldOverAddingHeaders(
+        { bookOnDisk -> LanguageItem((bookOnDisk as BookOnDisk).locale) },
+        { current, next ->
+          (current as BookOnDisk).locale.displayName != (next as BookOnDisk).locale.displayName })
     }
     .map { it.toList() }
 
@@ -92,11 +92,11 @@ class Repository @Inject internal constructor(
         showHistoryCurrentBook,
         zimReaderContainer.zimCanonicalPath
       )
-    )
-      .map {
-        (it as HeaderizableList).foldOverAddingHeaders(
-          { historyItem -> DateItem(historyItem.dateString) },
-          { current, next -> current.dateString != next.dateString })
+    ).map {
+        (HeaderizableList<HistoryListItem>(it)).foldOverAddingHeaders(
+          { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
+          { current, next ->
+            (current as HistoryItem).dateString != (next as HistoryItem).dateString })
       }
       .subscribeOn(io)
       .observeOn(mainThread)

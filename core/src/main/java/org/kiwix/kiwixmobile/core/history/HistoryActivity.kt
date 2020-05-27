@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.State
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
-import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -53,7 +52,6 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val historyViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
   private val compositeDisposable = CompositeDisposable()
-
 
   private val actionModeCallback: Callback =
     object : Callback {

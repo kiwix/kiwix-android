@@ -14,7 +14,6 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.extensions.foldOverAddingHeaders
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
@@ -104,13 +103,13 @@ class HistoryViewModel @Inject constructor(
   private fun searchResults(
     searchString: String,
     showAllToggle: Boolean,
-    historyList: HeaderizableList<HistoryListItem>
-  ): List<HistoryListItem> = (historyList
+    historyList: List<HistoryListItem>
+  ): List<HistoryListItem> = HeaderizableList<HistoryListItem>(historyList
       .filterIsInstance<HistoryItem>()
       .filter { h ->
         h.historyTitle.contains(searchString, true) &&
           (h.zimName == zimReaderContainer.name || showAllToggle)
-      } as HeaderizableList<HistoryListItem>).foldOverAddingHeaders(
+      }).foldOverAddingHeaders(
         { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
         { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
       )

@@ -26,7 +26,6 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import javax.inject.Inject
 
 data class ShowDeleteHistoryDialog(
