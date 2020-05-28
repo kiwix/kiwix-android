@@ -1,10 +1,10 @@
 package org.kiwix.kiwixmobile.core.extensions
 
-inline class HeaderizableList<T>(val list: List<T>) {
-  fun <HEADER : T> foldOverAddingHeaders(
-    headerConstructor: (T) -> HEADER,
-    criteriaToAddHeader: (T, T) -> Boolean
-  ): MutableList<T> =
+inline class HeaderizableList<SUPERTYPE, ITEM:SUPERTYPE, HEADER:SUPERTYPE>(val list: List<ITEM>) {
+  fun foldOverAddingHeaders(
+    headerConstructor: (ITEM) -> HEADER,
+    criteriaToAddHeader: (ITEM, ITEM) -> Boolean
+  ): MutableList<SUPERTYPE> =
     list.foldIndexed(mutableListOf(), { index, acc, currentItem ->
       if (index == 0) {
         acc.add(headerConstructor.invoke(currentItem))

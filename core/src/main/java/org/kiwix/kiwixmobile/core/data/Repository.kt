@@ -93,7 +93,7 @@ class Repository @Inject internal constructor(
         zimReaderContainer.zimCanonicalPath
       )
     ).map {
-        HeaderizableList<HistoryListItem>(it).foldOverAddingHeaders(
+        HeaderizableList(it as List<HistoryListItem>).foldOverAddingHeaders(
           { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
           { current, next ->
             (current as HistoryItem).dateString != (next as HistoryItem).dateString })

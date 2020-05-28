@@ -104,12 +104,12 @@ class HistoryViewModel @Inject constructor(
     searchString: String,
     showAllToggle: Boolean,
     historyList: List<HistoryListItem>
-  ): List<HistoryListItem> = HeaderizableList<HistoryListItem>(historyList
+  ): List<HistoryListItem> = HeaderizableList(historyList
       .filterIsInstance<HistoryItem>()
       .filter { h ->
         h.historyTitle.contains(searchString, true) &&
           (h.zimName == zimReaderContainer.name || showAllToggle)
-      }).foldOverAddingHeaders(
+      } as List<HistoryListItem>).foldOverAddingHeaders(
         { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
         { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
       )
