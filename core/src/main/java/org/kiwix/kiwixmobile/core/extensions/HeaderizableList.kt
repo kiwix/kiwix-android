@@ -1,6 +1,8 @@
 package org.kiwix.kiwixmobile.core.extensions
 
-inline class HeaderizableList<SUPERTYPE, ITEM:SUPERTYPE, HEADER:SUPERTYPE>(val list: List<ITEM>) {
+inline class HeaderizableList<SUPERTYPE, ITEM : SUPERTYPE, HEADER : SUPERTYPE>(
+  val list: List<ITEM>
+) {
   fun foldOverAddingHeaders(
     headerConstructor: (ITEM) -> HEADER,
     criteriaToAddHeader: (ITEM, ITEM) -> Boolean

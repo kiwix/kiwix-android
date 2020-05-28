@@ -8,7 +8,7 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
-import io.reactivex.functions.Function5
+import io.reactivex.functions.Function4
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -30,6 +30,8 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFrom
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.DeselectHistoryItem
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.SelectHistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ToggleShowAllHistorySwitchAndSaveItsStateToPrefs
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -44,7 +46,7 @@ class HistoryViewModel @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
-  val state = MutableLiveData<State>().apply { value = NoResults("", listOf()) }
+  val state = MutableLiveData<State>().apply { value = NoResults(listOf()) }
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
@@ -66,9 +68,8 @@ class HistoryViewModel @Inject constructor(
     currentBook,
     searchResults(),
     deselectAllItems,
-    filter,
     showAllSwitchToggle,
-    Function5(::updateResultsState)
+    Function4(::updateResultsState)
   ).subscribe(state::postValue, Throwable::printStackTrace)
 
   private fun selectedItems(): Flowable<List<HistoryListItem>> =
@@ -118,7 +119,6 @@ class HistoryViewModel @Inject constructor(
     currentBook: String,
     historyListWithDateItems: List<HistoryListItem>,
     deselectAllItems: Boolean,
-    searchString: String,
     showAllSwitchOn: Boolean
   ): State {
     if (deselectAllItems) {
@@ -126,15 +126,14 @@ class HistoryViewModel @Inject constructor(
     }
     val selectedItems = getSelectedItems(historyListWithDateItems)
     return when {
-      historyListWithDateItems.isEmpty() -> NoResults(searchString, historyListWithDateItems)
+      historyListWithDateItems.isEmpty() -> NoResults(historyListWithDateItems)
       selectedItems.isNotEmpty() -> SelectionResults(
-        searchString,
         historyListWithDateItems,
         selectedItems,
         showAllSwitchOn,
         currentBook
       )
-      else -> Results(searchString, historyListWithDateItems, showAllSwitchOn, currentBook)
+      else -> Results(historyListWithDateItems, showAllSwitchOn, currentBook)
     }
   }
 
@@ -183,8 +182,7 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun selectItemAndOpenSelectionMode(historyItem: HistoryItem) {
-    historyItem.isSelected = true
-    deselectAllItems.offer(false)
+    effects.offer(SelectHistoryItem(historyItem, deselectAllItems))
   }
 
   private fun isInSelctionMode(): Boolean {
@@ -199,12 +197,10 @@ class HistoryViewModel @Inject constructor(
     val historyItem = onItemClick.historyListItem as HistoryItem
     when {
       historyItem.isSelected -> {
-        historyItem.isSelected = false
-        deselectAllItems.offer(false)
+        effects.offer(DeselectHistoryItem(historyItem, deselectAllItems))
       }
       isInSelctionMode() -> {
-        historyItem.isSelected = true
-        deselectAllItems.offer(false)
+        effects.offer(SelectHistoryItem(historyItem, deselectAllItems))
       }
       else -> {
         effects.offer(OpenHistoryItem(historyItem, zimReaderContainer))

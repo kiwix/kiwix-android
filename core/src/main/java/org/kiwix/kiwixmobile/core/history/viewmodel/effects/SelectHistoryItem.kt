@@ -1,3 +1,5 @@
+package org.kiwix.kiwixmobile.core.history.viewmodel.effects
+
 /*
  * Kiwix Android
  * Copyright (c) 2020 Kiwix <android.kiwix.org>
@@ -16,28 +18,17 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.history.viewmodel
+import androidx.appcompat.app.AppCompatActivity
+import io.reactivex.processors.BehaviorProcessor
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
-
-sealed class State(
-  open val historyItems: List<HistoryListItem>
-) {
-
-  data class Results(
-    override val historyItems: List<HistoryListItem>,
-    val currentHistoryToggled: Boolean,
-    val currentBookId: String
-  ) : State(historyItems)
-
-  data class NoResults(
-    override val historyItems: List<HistoryListItem>
-  ) : State(historyItems)
-
-  data class SelectionResults(
-    override val historyItems: List<HistoryListItem>,
-    val selectedHistoryItems: List<HistoryListItem>,
-    val currentHistoryToggled: Boolean,
-    val currentBookId: String
-  ) : State(historyItems)
+data class SelectHistoryItem(
+  private val historyItem: HistoryItem,
+  private val deselectAllHistoryItems: BehaviorProcessor<Boolean>
+) : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    historyItem.isSelected = true
+    deselectAllHistoryItems.offer(false)
+  }
 }
