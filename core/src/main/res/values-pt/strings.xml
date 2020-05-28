@@ -84,7 +84,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zims_toast">Ficheiro apagado</string>
+  <string name="delete_zims_toast">Ficheiros apagados</string>
   <string name="no_files_here">Não há ficheiros aqui</string>
   <string name="download_no_space" fuzzy="true">Espaço insuficiente para o download deste ficheiro.</string>
   <string name="space_available">Espaço disponível:</string>
@@ -137,6 +137,6 @@
   <string name="storage_permission_denied">Permissão de armazenamento negada</string>
   <string name="no_bookmarks">Não há marcadores</string>
   <string name="send_report">Enviar relatório de diagnóstico</string>
-  <string name="crash_checkbox_file_system">Detalhes Do Sistema de Ficheiros</string>
-  <string name="diagnostic_report">Relatório de Diagnóstico</string>
+  <string name="crash_checkbox_file_system">Detalhes do sistema de ficheiros</string>
+  <string name="diagnostic_report">Relatório de diagnóstico</string>
 </resources>

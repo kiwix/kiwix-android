@@ -3,11 +3,13 @@
 * Abijeet Patro
 * Alex00728
 * CYAN
+* Codenstory
 * Gongsoonyee
 * Jerrykim306
 * Macofe
 * Priviet
 * Ykhwong
+* 그냥기여자
 * 아라
 -->
 <resources>
@@ -15,7 +17,7 @@
   <string name="menu_home">홈</string>
   <string name="menu_settings">설정</string>
   <string name="menu_search_in_text">문서에서 찾기</string>
-  <string name="bookmarks">책갈피</string>
+  <string name="bookmarks">북마크</string>
   <string name="menu_random_article">임의 문서</string>
   <string name="menu_full_screen">전체 화면</string>
   <string name="menu_exit_full_screen">전체 화면에서 나가기</string>
@@ -44,11 +46,11 @@
   <string name="hotspot_details_message">다음은 로컬 핫스팟의 상세 정보입니다.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">서버에 호스팅할 파일을 선택하십시오</string>
   <string name="progress_dialog_starting_server">서버 시작 중</string>
-  <string name="hotspot_dialog_title">와이파이 핫스팟 켜기</string>
-  <string name="hotspot_dialog_message">이 기능을 위해 당신은 먼저 WIFI 핫스팟을 수동으로 켜야합니다.</string>
-  <string name="hotspot_dialog_neutral_button">네, 켰습니다</string>
+  <string name="hotspot_dialog_title">도서 호스팅 지침</string>
+  <string name="hotspot_dialog_message">이 기능이 동작하려면 WIFI 핫스팟을 수동으로 활성화하거나 호스트 장치와 수신 장치가 동일 WiFi 네트워크에 있어야 합니다</string>
+  <string name="hotspot_dialog_neutral_button">계속</string>
   <string name="hotspot_channel_description">당신의 핫스팟/서버 상태에 대한 업데이트</string>
-  <string name="hotspot_notification_content_title">키윅스 핫스팟</string>
+  <string name="hotspot_notification_content_title">Kiwix 핫스팟</string>
   <string name="start_server_label">서버 시작</string>
   <string name="stop_server_label">서버 정지</string>
   <string name="server_started_message">%s 서버에 접속하려면 브라우저에 이 IP 주소를 입력하십시오</string>
@@ -78,6 +80,8 @@
   <string name="pref_clear_all_history_title">역사 지우기</string>
   <string name="pref_clear_all_history_summary">최근 검색 및 탭 역사 지우기</string>
   <string name="all_history_cleared">모든 역사를 삭제했습니다</string>
+  <string name="pref_clear_all_bookmarks_title">북마크 삭제</string>
+  <string name="all_bookmarks_cleared">모든 북마크가 삭제되었습니다</string>
   <string name="clear_all_history_dialog_title">모든 역사를 지우시겠습니까?</string>
   <string name="share">공유</string>
   <string name="selected_file_cab_app_chooser_title">ZIM 파일을 다음과 공유:</string>
@@ -141,10 +145,13 @@
   <string name="confirm_stop_download_msg">이 다운로드를 중단하시겠습니까?</string>
   <string name="download_change_storage">기억 장치 선택기</string>
   <string name="tts_not_enabled">이 ZIM 파일에 대해 TTS가 활성화되어 있지 않습니다</string>
+  <string name="texttospeech_initialization_failed">텍스트–음성 초기화가 실패했습니다. 다시 시도해 주세요</string>
+  <string name="texttospeech_error">텍스트–음성 변환 과정 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요</string>
+  <string name="search_error">검색 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주십시오</string>
   <string name="next">다음</string>
   <string name="previous">이전</string>
   <string name="wifi_only_title">모바일 네트워크를 통해 내용을 다운로드할 수 있도록 하겠습니까?</string>
-  <string name="wifi_only_msg">“예”를 선택하면 미래에 경고를 받지 않습니다. 그러나 언제든지 설정에서 이것을 변경할 수 있습니다</string>
+  <string name="wifi_only_msg">“예”를 선택하면 경고를 받지 않습니다. 그러나 언제든지 설정에서 이것을 변경할 수 있습니다</string>
   <string name="pref_wifi_only">와이파이를 통해서만 내용 다운로드</string>
   <string name="time_day">일</string>
   <string name="time_hour">시간</string>
@@ -207,6 +214,8 @@
   <string name="ext_storage_permission_rationale_add_note">노트를 위해 스토리지 접근 권한이 필요합니다</string>
   <string name="ext_storage_write_permission_denied_add_note">노트는 스토리지 접근 권한 없이 사용할 수 없습니다</string>
   <string name="note_save_unsuccessful">노트 저장에 실패했습니다</string>
+  <string name="note_delete_successful">노트를 성공적으로 삭제했습니다</string>
+  <string name="note_delete_unsuccessful">노트가 삭제되지 않았습니다</string>
   <string name="note_save_successful">노트가 저장되었습니다</string>
   <string name="note_save_error_storage_not_writable">노드 저장 오류: 스토리지 쓰기 불가</string>
   <string name="note_share_error_file_missing">노트 파일이 존재하지 않습니다</string>
@@ -229,6 +238,7 @@
   <string name="request_enable_wifi">시스템 설정에서 와이파이 P2P 활성화</string>
   <string name="discovery_needs_wifi">와이파이가 켜져있지 않은 상태에서 피어를 찾을 수 없습니다</string>
   <string name="transfer_to">파일을 %s(으)로 전송하시겠습니까?</string>
+  <string name="device_not_cooperating">선택된 단말기가 이동을 위해 함께 작동할 수 없습니다</string>
   <string name="file_transfer_complete">파일 전송 완료</string>
   <string name="error_during_transfer">전송 도중에 오류가 발생했습니다</string>
   <string name="error_transferring">파일 %s 전송 오류</string>
@@ -249,15 +259,18 @@
   <string name="tag_short_text">짧은 텍스트</string>
   <string name="storage_permission_denied">스토리지 접근이 거부됨</string>
   <string name="grant_read_storage_permission">이 앱은 동작을 위해 스토리지 읽기 권한을 요구합니다. 설정에서 권한을 부여해 주십시오</string>
-  <string name="go_to_settings">설정으로 이동</string>
+  <string name="go_to_settings">핫스팟 설정으로 이동</string>
   <string name="no_results">결과 없음</string>
   <string name="no_bookmarks">북마크가 없습니다!</string>
   <string name="no_history">역사 없음</string>
   <string name="device_default">장치 기본값</string>
+  <string name="delete_history">역사를 삭제할까요?</string>
+  <string name="delete_bookmarks">북마크를 삭제할까요?</string>
   <string name="on">켜기</string>
   <string name="off">끄기</string>
   <string name="auto">자동</string>
   <string name="send_report">진단 보고서 보내기</string>
   <string name="crash_checkbox_file_system">파일 시스템 세부 정보</string>
   <string name="diagnostic_report">진단 보고서</string>
+  <string name="diagnostic_report_message">저희가 문제를 진단할 수 있도록 다음의 자세한 정보를 모두 보내 주세요</string>
 </resources>

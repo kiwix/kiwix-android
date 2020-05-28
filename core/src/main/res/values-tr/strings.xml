@@ -48,9 +48,9 @@
   <string name="hotspot_details_message">Aşağıda yerel etkin noktanızın ayrıntıları verilmiştir.\nSSID: %1$s\nGeçiş: %2$s</string>
   <string name="server_textview_default_message">Sunucuda barındırmak istediğiniz dosyaları seçin</string>
   <string name="progress_dialog_starting_server">Sunucu başlatılıyor</string>
-  <string name="hotspot_dialog_title">WIFI etkin noktanızı açın</string>
-  <string name="hotspot_dialog_message">Bu özelliğin çalışması için önce WIFI hotspot\'unuzu manüel olarak açmanız gerekir.</string>
-  <string name="hotspot_dialog_neutral_button">EVET, AÇTIM</string>
+  <string name="hotspot_dialog_title">Kitap barındırma talimatları</string>
+  <string name="hotspot_dialog_message">Bu özelliğin çalışması için önce WIFI etkin noktanızı manüel olarak açmanız veya ana cihaz ile alıcı cihazın aynı WiFi ağında olduğundan emin olmanız gerekir</string>
+  <string name="hotspot_dialog_neutral_button">İLERLENDİ</string>
   <string name="hotspot_channel_description">Hotspot/sunucunuzun durumu ile ilgili güncellemeler.</string>
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Sunucuyu Başlat</string>
@@ -261,7 +261,7 @@
   <string name="tag_short_text">Kısa Metin</string>
   <string name="storage_permission_denied">Depolama İzni Reddedildi</string>
   <string name="grant_read_storage_permission">Bu uygulama çalışması için depolama okuma yeteneği gerektirir. Lütfen ayarlarınızda izin verin</string>
-  <string name="go_to_settings">Ayarlara Gidin</string>
+  <string name="go_to_settings">Hotspot Ayarlarına Gidin</string>
   <string name="no_results">Bulunamadı</string>
   <string name="no_bookmarks">Yer İmi Yok</string>
   <string name="no_history">Geçmiş Yok</string>
