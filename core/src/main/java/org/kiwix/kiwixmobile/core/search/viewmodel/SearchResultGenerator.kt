@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
@@ -33,22 +34,26 @@ class ZimSearchResultGenerator @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer
 ) : SearchResultGenerator {
   override fun generateSearchResults(searchTerm: String) =
-    if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm)
+    if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm, zimReaderContainer.copyReader())
     else emptyList()
 
-  private fun readResultsFromZim(it: String) =
+  private fun readResultsFromZim(
+    it: String,
+    reader: ZimFileReader?
+  ) =
     if (sharedPreferenceUtil.prefFullTextSearch)
       zimReaderContainer.search(it, 200).run { fullTextResults() }
     else
-      zimReaderContainer.searchSuggestions(it, 200).run { suggestionResults() }
+      reader?.searchSuggestions(it, 200).run { suggestionResults(reader) }
 
   private fun fullTextResults() = generateSequence {
     zimReaderContainer.getNextResult()?.title?.let(::ZimSearchResultListItem)
   }.filter { it.value.isNotBlank() }
     .toList()
 
-  private fun suggestionResults() = generateSequence {
-    zimReaderContainer.getNextSuggestion()?.let { ZimSearchResultListItem(it.title) }
-  }.distinct()
+  private fun suggestionResults(reader: ZimFileReader?) = generateSequence {
+    reader?.getNextSuggestion()?.let { ZimSearchResultListItem(it.title) }
+  }
+    .distinct()
     .toList()
 }
