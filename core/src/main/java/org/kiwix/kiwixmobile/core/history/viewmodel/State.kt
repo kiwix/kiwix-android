@@ -19,25 +19,25 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
 sealed class State(
-  open val historyItems: List<HistoryListItem>
+  open val historyItems: List<HistoryListItem>?
 ) {
 
+  fun containsSelectedItems(): Boolean {
+    return historyItems?.filterIsInstance<HistoryItem>()?.any { it.isSelected } == true
+  }
+
   data class Results(
-    override val historyItems: List<HistoryListItem>,
-    val currentHistoryToggled: Boolean,
-    val currentBookId: String
+    override val historyItems: List<HistoryListItem>?
   ) : State(historyItems)
 
   data class NoResults(
-    override val historyItems: List<HistoryListItem>
+    override val historyItems: List<HistoryListItem>?
   ) : State(historyItems)
 
   data class SelectionResults(
-    override val historyItems: List<HistoryListItem>,
-    val selectedHistoryItems: List<HistoryListItem>,
-    val currentHistoryToggled: Boolean,
-    val currentBookId: String
+    override val historyItems: List<HistoryListItem>?
   ) : State(historyItems)
 }

@@ -136,20 +136,21 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     when (state) {
       is Results -> {
         actionMode?.finish()
-        historyAdapter.items = state.historyItems
+        state.historyItems?.let { historyAdapter.items = it }
         history_switch.isEnabled = true
         no_history.visibility = View.GONE
       }
       is SelectionResults -> {
-        if (state.selectedHistoryItems.isNotEmpty() && actionMode == null) {
+        if (state.historyItems?.filterIsInstance<HistoryItem>()?.any { it.isSelected } == true &&
+          actionMode == null) {
           actionMode = startSupportActionMode(actionModeCallback)
         }
-        historyAdapter.items = state.historyItems
+        state.historyItems?.let { historyAdapter.items = it }
         history_switch.isEnabled = false
         no_history.visibility = View.GONE
       }
       is NoResults -> {
-        historyAdapter.items = state.historyItems
+        state.historyItems?.let { historyAdapter.items = it }
         no_history.visibility = View.VISIBLE
       }
     }

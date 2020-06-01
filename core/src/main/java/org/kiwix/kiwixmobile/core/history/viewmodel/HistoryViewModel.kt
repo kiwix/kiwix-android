@@ -6,9 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
-import io.reactivex.functions.Function4
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -30,8 +28,6 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFrom
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.DeselectHistoryItem
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.SelectHistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ToggleShowAllHistorySwitchAndSaveItsStateToPrefs
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -55,41 +51,32 @@ class HistoryViewModel @Inject constructor(
   private val showAllSwitchToggle =
     BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
   private val deselectAllItems = BehaviorProcessor.createDefault(false)
-  private var isInSelectionMode = false
 
   init {
-    compositeDisposable.addAll(viewStateReducer(), actionMapper(), updateSelectionMode())
+    compositeDisposable.addAll(
+      viewStateReducer(),
+      actionMapper(),
+      deselectAllItems()
+    )
   }
 
-  private fun updateSelectionMode() =
-    deselectAllItems.subscribe({ isInSelectionMode = it }, Throwable::printStackTrace)
+  private fun deselectAllItems() = deselectAllItems.subscribe {
+    state.value?.historyItems?.filterIsInstance<HistoryItem>()?.forEach { it.isSelected = false }
+  }
 
-  private fun viewStateReducer() = Flowable.combineLatest(
-    currentBook,
-    searchResults(),
-    deselectAllItems,
-    showAllSwitchToggle,
-    Function4(::updateResultsState)
-  ).subscribe(state::postValue, Throwable::printStackTrace)
+  private fun viewStateReducer() =
+    searchResults().subscribe { state.postValue(updateResultsState(it)) }
 
-  private fun selectedItems(): Flowable<List<HistoryListItem>> =
-    Flowable.combineLatest(
-      historyDao.history(),
-      deselectAllItems,
-      BiFunction {
-        historyItems, deselectAll -> selectItems(historyItems, deselectAll)
-      }
-    )
-
-  private fun selectItems(
-    historyListItems: List<HistoryListItem>,
-    shouldDeselectAllItems: Boolean
-  ): List<HistoryListItem> {
-    if (shouldDeselectAllItems) {
-      historyListItems.filterIsInstance<HistoryItem>().forEach { it.isSelected = false }
-    }
-    return historyListItems.filterIsInstance<HistoryItem>().filter {
-      it.isSelected
+  private fun updateResultsState(
+    historyListWithDateItems: List<HistoryListItem>
+  ): State {
+    return when {
+      historyListWithDateItems.isEmpty() -> NoResults(historyListWithDateItems)
+      historyListWithDateItems.filterIsInstance<HistoryItem>()
+        .any { it.isSelected } -> SelectionResults(
+          historyListWithDateItems
+      )
+      else -> Results(historyListWithDateItems)
     }
   }
 
@@ -115,42 +102,34 @@ class HistoryViewModel @Inject constructor(
         { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
       )
 
-  private fun updateResultsState(
-    currentBook: String,
-    historyListWithDateItems: List<HistoryListItem>,
-    deselectAllItems: Boolean,
-    showAllSwitchOn: Boolean
-  ): State {
-    if (deselectAllItems) {
-      deselectAllHistoryItems(historyListWithDateItems)
-    }
-    val selectedItems = getSelectedItems(historyListWithDateItems)
-    return when {
-      historyListWithDateItems.isEmpty() -> NoResults(historyListWithDateItems)
-      selectedItems.isNotEmpty() -> SelectionResults(
-        historyListWithDateItems,
-        selectedItems,
-        showAllSwitchOn,
-        currentBook
-      )
-      else -> Results(historyListWithDateItems, showAllSwitchOn, currentBook)
-    }
-  }
-
-  private fun getSelectedItems(historyItemSearchResults: List<HistoryListItem>):
-    List<HistoryItem> {
-    return historyItemSearchResults.filterIsInstance<HistoryItem>().filter { it.isSelected }
-  }
-
-  private fun deselectAllHistoryItems(historyItemSearchResults: List<HistoryListItem>) {
-      historyItemSearchResults
-        .filterIsInstance<HistoryItem>()
-        .forEach { it.isSelected = false }
-  }
-
   override fun onCleared() {
     compositeDisposable.clear()
     super.onCleared()
+  }
+
+  private fun toggleSelectionOfItem(historyItem: HistoryItem): State =
+    when (state.value) {
+      is Results -> SelectionResults(toggleSelectionValue(historyItem))
+      is SelectionResults -> {
+        if (toggleSelectionValue(historyItem)
+            ?.filterIsInstance<HistoryItem>()
+            ?.any { it.isSelected } == true) {
+          SelectionResults(toggleSelectionValue(historyItem))
+        } else {
+          Results(toggleSelectionValue(historyItem))
+        }
+      }
+      is NoResults -> NoResults(listOf())
+      null -> NoResults(listOf())
+    }
+
+  private fun toggleSelectionValue(historyItem: HistoryItem): List<HistoryListItem>? {
+    return state.value
+      ?.historyItems
+      ?.map {
+        if (it.id == historyItem.id && it is HistoryItem)
+          it.copy(isSelected = !it.isSelected) else it
+      }
   }
 
   private fun actionMapper() = actions.map {
@@ -160,13 +139,17 @@ class HistoryViewModel @Inject constructor(
       is ToggleShowHistoryFromAllBooks ->
         toggleShowAllHistorySwitchAndSaveItsStateToPrefs(it.isChecked)
       is CreatedWithIntent -> filter.offer(it.searchTerm)
-      is OnItemLongClick -> selectItemAndOpenSelectionMode(it.historyItem)
+      is OnItemLongClick -> state.postValue(toggleSelectionOfItem(it.historyItem))
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
       is RequestDeleteAllHistoryItems ->
         effects.offer(ShowDeleteHistoryDialog(actions, DeleteAllHistory))
       is RequestDeleteSelectedHistoryItems ->
         effects.offer(ShowDeleteHistoryDialog(actions, DeleteSelectedHistory))
-      ExitActionModeMenu -> deselectAllItems.offer(true)
+      ExitActionModeMenu -> state.postValue(Results(
+        state.value
+          ?.historyItems
+          ?.map { if (it is HistoryItem) it.copy(isSelected = false) else it })
+      )
       DeleteHistoryItems -> effects.offer(DeleteSelectedOrAllHistoryItems(state, historyDao))
     }
   }.subscribe({}, Throwable::printStackTrace)
@@ -181,10 +164,6 @@ class HistoryViewModel @Inject constructor(
     )
   }
 
-  private fun selectItemAndOpenSelectionMode(historyItem: HistoryItem) {
-    effects.offer(SelectHistoryItem(historyItem, deselectAllItems))
-  }
-
   private fun isInSelctionMode(): Boolean {
     return state
       .value
@@ -195,16 +174,10 @@ class HistoryViewModel @Inject constructor(
 
   private fun appendItemToSelectionOrOpenIt(onItemClick: OnItemClick) {
     val historyItem = onItemClick.historyListItem as HistoryItem
-    when {
-      historyItem.isSelected -> {
-        effects.offer(DeselectHistoryItem(historyItem, deselectAllItems))
-      }
-      isInSelctionMode() -> {
-        effects.offer(SelectHistoryItem(historyItem, deselectAllItems))
-      }
-      else -> {
-        effects.offer(OpenHistoryItem(historyItem, zimReaderContainer))
-      }
+    if (state.value?.containsSelectedItems() == true) {
+      state.postValue(toggleSelectionOfItem(historyItem))
+    } else {
+      effects.offer(OpenHistoryItem(historyItem, zimReaderContainer))
     }
   }
 }
