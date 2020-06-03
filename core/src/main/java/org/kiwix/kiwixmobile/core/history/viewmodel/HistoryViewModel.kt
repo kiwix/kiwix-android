@@ -148,7 +148,7 @@ class HistoryViewModel @Inject constructor(
       ExitActionModeMenu -> state.postValue(Results(
         state.value
           ?.historyItems
-          ?.map {item -> if (item is HistoryItem) item.copy(isSelected = false) else item })
+          ?.map { item -> if (item is HistoryItem) item.copy(isSelected = false) else item })
       )
       DeleteHistoryItems -> effects.offer(DeleteSelectedOrAllHistoryItems(state, historyDao))
     }
