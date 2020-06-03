@@ -109,21 +109,21 @@ class HistoryViewModel @Inject constructor(
 
   private fun toggleSelectionOfItem(historyItem: HistoryItem): State =
     when (state.value) {
-      is Results -> SelectionResults(historyItemsWithToggledSelectedItem(historyItem))
+      is Results -> SelectionResults(toggleGivenItemAndReturnListOfResultingItems(historyItem))
       is SelectionResults -> {
-        if (historyItemsWithToggledSelectedItem(historyItem)
+        if (toggleGivenItemAndReturnListOfResultingItems(historyItem)
             ?.filterIsInstance<HistoryItem>()
             ?.any { it.isSelected } == true) {
-          SelectionResults(historyItemsWithToggledSelectedItem(historyItem))
+          SelectionResults(toggleGivenItemAndReturnListOfResultingItems(historyItem))
         } else {
-          Results(historyItemsWithToggledSelectedItem(historyItem))
+          Results(toggleGivenItemAndReturnListOfResultingItems(historyItem))
         }
       }
       is NoResults -> NoResults(emptyList())
       null -> NoResults(emptyList())
     }
 
-  private fun historyItemsWithToggledSelectedItem(historyItem: HistoryItem):
+  private fun toggleGivenItemAndReturnListOfResultingItems(historyItem: HistoryItem):
     List<HistoryListItem>? {
     return state.value
       ?.historyItems
@@ -148,7 +148,7 @@ class HistoryViewModel @Inject constructor(
       ExitActionModeMenu -> state.postValue(Results(
         state.value
           ?.historyItems
-          ?.map { if (it is HistoryItem) it.copy(isSelected = false) else it })
+          ?.map {item -> if (item is HistoryItem) item.copy(isSelected = false) else item })
       )
       DeleteHistoryItems -> effects.offer(DeleteSelectedOrAllHistoryItems(state, historyDao))
     }

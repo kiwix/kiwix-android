@@ -6,18 +6,27 @@ import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitActionModeMenu
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -143,6 +152,21 @@ internal class HistoryViewModelTest {
     }
 
     @Test
+    fun `enters selection state if item is selected`() {
+      val item = mockkedHistoryItem("b", isSelected = true)
+      val date = DateItem(item.dateString)
+      emissionOf(
+        searchTerm = "a",
+        databaseResults = emptyList()
+      )
+      emissionOf(
+        searchTerm = "b",
+        databaseResults = listOf(item)
+      )
+      resultsIn(SelectionResults(listOf(date, item)))
+    }
+
+    @Test
     fun `order of date headers and items are correct`() {
       val item1 = mockkedHistoryItem("a", "1 Aug 2020")
       val date1 = DateItem(item1.dateString)
@@ -172,22 +196,127 @@ internal class HistoryViewModelTest {
     }
   }
 
+  @Nested
+  inner class ActionMapping {
+    @Test
+    fun `ExitedSearch offers Finish`() {
+      actionResultsInEffects(ExitHistory, Finish)
+    }
+
+    @Test
+    fun `ExitActionModeMenu deselects all history items from state`() {
+      val item1 = mockkedHistoryItem("a", "1 Aug 2020", isSelected = true)
+      emissionOf(
+        searchTerm = "",
+        databaseResults = listOf(item1)
+      )
+      viewModel.actions.offer(ExitActionModeMenu)
+      assertItemIsDeselected(item1)
+    }
+
+    @Test
+    fun `OnItemLongClick selects history item from state`() {
+      val item1 = mockkedHistoryItem("a", "1 Aug 2020")
+      emissionOf(
+        searchTerm = "",
+        databaseResults = listOf(item1)
+      )
+      viewModel.actions.offer(OnItemLongClick(item1))
+      assertItemIsSelected(item1)
+    }
+
+    @Test
+    fun `OnItemLongClick enters selection state`() {
+      val item1 = mockkedHistoryItem("a", "1 Aug 2020")
+      val date = DateItem(item1.dateString)
+      emissionOf(
+        searchTerm = "",
+        databaseResults = listOf(item1)
+      )
+      viewModel.actions.offer(OnItemLongClick(item1))
+      item1.isSelected = true
+      resultsIn(SelectionResults(listOf(date, item1)))
+    }
+
+    @Test
+    fun `OnItemLongClick selects history item from state if in SelectionMode`() {
+      val item1 = mockkedHistoryItem("a", "1 Aug 2020", id = 2)
+      val item2 = mockkedHistoryItem("b", "1 Aug 2020", id = 3)
+      emissionOf(
+        searchTerm = "",
+        databaseResults = listOf(item1, item2)
+      )
+      viewModel.actions.offer(OnItemLongClick(item1))
+      viewModel.actions.offer(OnItemLongClick(item2))
+      assertItemIsSelected(item1)
+      assertItemIsSelected(item2)
+    }
+
+    private fun assertItemIsSelected(item: HistoryItem) {
+      assertTrue(
+        (viewModel.state.value?.historyItems?.find { it.id == item.id } as HistoryItem).isSelected
+      )
+    }
+    private fun assertItemIsDeselected(item: HistoryItem) {
+      assertFalse(
+        (viewModel.state.value?.historyItems?.find { it.id == item.id } as HistoryItem).isSelected
+      )
+    }
+
+    @Test
+    fun `OnItemLongClick deselects history item from state if in SelectionMode`() {
+      val item1 = mockkedHistoryItem("a", "1 Aug 2020", id = 2)
+      emissionOf(
+        searchTerm = "",
+        databaseResults = listOf(item1)
+      )
+      viewModel.actions.offer(OnItemLongClick(item1))
+      viewModel.actions.offer(OnItemLongClick(item1))
+      assertItemIsDeselected(item1)
+    }
+
+    @Test
+    fun `OnItemClick selects history item from state if in SelectionMode`() {
+      val item1 = mockkedHistoryItem("a", "1 Aug 2020", id = 2)
+      val item2 = mockkedHistoryItem("b", "1 Aug 2020", id = 3)
+      emissionOf(
+        searchTerm = "",
+        databaseResults = listOf(item1, item2)
+      )
+      viewModel.actions.offer(OnItemLongClick(item1))
+      viewModel.actions.offer(OnItemClick(item2))
+      assertItemIsSelected(item1)
+      assertItemIsSelected(item2)
+    }
+
+    private fun actionResultsInEffects(
+      action: Action,
+      vararg effects: SideEffect<*>
+    ) {
+      viewModel.effects
+        .test()
+        .also { viewModel.actions.offer(action) }
+        .assertValues(*effects)
+    }
+  }
+
   // dateFormat = d MMM yyyy
   //             5 Jul 2020
   private fun mockkedHistoryItem(
     historyTitle: String = "historyTitle",
-    dateString: String = "5 Jul 2020"
+    dateString: String = "5 Jul 2020",
+    isSelected: Boolean = false,
+    id: Long = 2
   ): HistoryItem {
-    val item = mockk<HistoryItem>()
-    every { item.historyTitle } returns historyTitle
-    every { item.zimName } returns "zimName"
-    every { item.zimId } returns "zimId"
-    every { item.zimFilePath } returns "zimFilePath"
-    every { item.historyUrl } returns "historyUrl"
-    every { item.dateString } returns dateString
-    every { item.id } returns 5
-    every { item.isSelected } returns false
-    return item
-//    every { item.zim } returns "zimName"
+    return HistoryItem(2, "zimId",
+      "zimName",
+      "zimFilePth",
+      "favicon",
+      "historyUrl",
+      historyTitle,
+      dateString,
+      100,
+      isSelected,
+      id)
   }
 }
