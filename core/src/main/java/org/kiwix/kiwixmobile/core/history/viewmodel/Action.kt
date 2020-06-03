@@ -32,5 +32,4 @@ sealed class Action {
   data class OnItemLongClick(val historyItem: HistoryItem) : Action()
   data class ToggleShowHistoryFromAllBooks(val isChecked: Boolean) : Action()
   data class Filter(val searchTerm: String) : Action()
-  data class CreatedWithIntent(val searchTerm: String) : Action()
 }

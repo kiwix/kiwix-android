@@ -15,7 +15,6 @@ import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
@@ -35,6 +34,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
@@ -42,13 +43,14 @@ class HistoryViewModel @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
-  val state = MutableLiveData<State>().apply { value = NoResults(listOf()) }
+  val state = MutableLiveData<State>().apply { value = NoResults(emptyList()) }
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
   private val compositeDisposable = CompositeDisposable()
   private val showAllSwitchToggle =
     BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
+  private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
   private val deselectAllItems = BehaviorProcessor.createDefault(false)
 
   init {
@@ -93,7 +95,9 @@ class HistoryViewModel @Inject constructor(
       .filter { h ->
         h.historyTitle.contains(searchString, true) &&
           (h.zimName == zimReaderContainer.name || showAllToggle)
-      }.reversed() as List<HistoryListItem>).foldOverAddingHeaders(
+      }
+      .sortedByDescending { dateFormatter.parse(it.dateString) } as List<HistoryListItem>)
+      .foldOverAddingHeaders(
         { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
         { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
       )
@@ -115,11 +119,12 @@ class HistoryViewModel @Inject constructor(
           Results(historyItemsWithToggledSelectedItem(historyItem))
         }
       }
-      is NoResults -> NoResults(listOf())
-      null -> NoResults(listOf())
+      is NoResults -> NoResults(emptyList())
+      null -> NoResults(emptyList())
     }
 
-  private fun historyItemsWithToggledSelectedItem(historyItem: HistoryItem): List<HistoryListItem>? {
+  private fun historyItemsWithToggledSelectedItem(historyItem: HistoryItem):
+    List<HistoryListItem>? {
     return state.value
       ?.historyItems
       ?.map {
@@ -134,7 +139,6 @@ class HistoryViewModel @Inject constructor(
       is Filter -> filter.offer(it.searchTerm)
       is ToggleShowHistoryFromAllBooks ->
         toggleShowAllHistorySwitchAndSaveItsStateToPrefs(it.isChecked)
-      is CreatedWithIntent -> filter.offer(it.searchTerm)
       is OnItemLongClick -> state.postValue(toggleSelectionOfItem(it.historyItem))
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
       is RequestDeleteAllHistoryItems ->
