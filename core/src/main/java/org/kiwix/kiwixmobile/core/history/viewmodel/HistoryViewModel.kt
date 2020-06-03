@@ -47,7 +47,6 @@ class HistoryViewModel @Inject constructor(
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
   private val compositeDisposable = CompositeDisposable()
-  private val currentBook = BehaviorProcessor.createDefault("")
   private val showAllSwitchToggle =
     BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
   private val deselectAllItems = BehaviorProcessor.createDefault(false)
@@ -65,7 +64,12 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun viewStateReducer() =
-    searchResults().subscribe { state.postValue(updateResultsState(it)) }
+    Flowable.combineLatest(
+      filter,
+      showAllSwitchToggle,
+      historyDao.history(),
+      Function3(::searchResults)
+    ).subscribe { state.postValue(updateResultsState(it)) }
 
   private fun updateResultsState(
     historyListWithDateItems: List<HistoryListItem>
@@ -80,14 +84,6 @@ class HistoryViewModel @Inject constructor(
     }
   }
 
-  private fun searchResults(): Flowable<List<HistoryListItem>> =
-    Flowable.combineLatest(
-      filter,
-      showAllSwitchToggle,
-      historyDao.history(),
-      Function3(::searchResults)
-    )
-
   private fun searchResults(
     searchString: String,
     showAllToggle: Boolean,
@@ -97,7 +93,7 @@ class HistoryViewModel @Inject constructor(
       .filter { h ->
         h.historyTitle.contains(searchString, true) &&
           (h.zimName == zimReaderContainer.name || showAllToggle)
-      } as List<HistoryListItem>).foldOverAddingHeaders(
+      }.reversed() as List<HistoryListItem>).foldOverAddingHeaders(
         { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
         { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
       )
@@ -109,21 +105,21 @@ class HistoryViewModel @Inject constructor(
 
   private fun toggleSelectionOfItem(historyItem: HistoryItem): State =
     when (state.value) {
-      is Results -> SelectionResults(toggleSelectionValue(historyItem))
+      is Results -> SelectionResults(historyItemsWithToggledSelectedItem(historyItem))
       is SelectionResults -> {
-        if (toggleSelectionValue(historyItem)
+        if (historyItemsWithToggledSelectedItem(historyItem)
             ?.filterIsInstance<HistoryItem>()
             ?.any { it.isSelected } == true) {
-          SelectionResults(toggleSelectionValue(historyItem))
+          SelectionResults(historyItemsWithToggledSelectedItem(historyItem))
         } else {
-          Results(toggleSelectionValue(historyItem))
+          Results(historyItemsWithToggledSelectedItem(historyItem))
         }
       }
       is NoResults -> NoResults(listOf())
       null -> NoResults(listOf())
     }
 
-  private fun toggleSelectionValue(historyItem: HistoryItem): List<HistoryListItem>? {
+  private fun historyItemsWithToggledSelectedItem(historyItem: HistoryItem): List<HistoryListItem>? {
     return state.value
       ?.historyItems
       ?.map {
@@ -162,14 +158,6 @@ class HistoryViewModel @Inject constructor(
         isChecked
       )
     )
-  }
-
-  private fun isInSelctionMode(): Boolean {
-    return state
-      .value
-      ?.historyItems
-      ?.filterIsInstance<HistoryItem>()
-      ?.any { it.isSelected } == true
   }
 
   private fun appendItemToSelectionOrOpenIt(onItemClick: OnItemClick) {
