@@ -58,6 +58,10 @@ If you wish to rebase you should be following the [Golden Rule](https://www.atla
 
 For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/edit/develop/DESIGN.md).
 
+### Adding new string resources
+
+To add a new string resource see [STRING_RESOURCES.md](https://github.com/kiwix/kiwix-android/edit/develop/STRING_RESOURCES.md).
+
 ### Building
 
 The Kiwix app is split into 3 modules
