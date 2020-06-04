@@ -12,6 +12,6 @@ data class ToggleShowAllHistorySwitchAndSaveItsStateToPrefs(
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     showAllSwitchToggle.offer(isChecked)
-    sharedPreferenceUtil.setShowHistoryCurrentBook(!isChecked)
+    sharedPreferenceUtil.showHistoryCurrentBook = !isChecked
   }
 }

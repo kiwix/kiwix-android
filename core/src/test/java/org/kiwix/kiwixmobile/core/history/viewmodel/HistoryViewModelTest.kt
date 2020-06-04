@@ -92,7 +92,10 @@ internal class HistoryViewModelTest {
     @Test
     fun `non empty search term with search results shows Results`() {
       val searchTerm = "searchTerm"
-      val item = mockkedHistoryItem(historyTitle = searchTerm)
+      val item =
+        createSimpleHistoryItem(
+          historyTitle = searchTerm
+        )
       val date = DateItem(item.dateString)
       emissionOf(
         searchTerm = searchTerm,
@@ -105,14 +108,19 @@ internal class HistoryViewModelTest {
     fun `non empty search string with no search results is NoResults`() {
       emissionOf(
         searchTerm = "a",
-        databaseResults = listOf(mockkedHistoryItem(""))
+        databaseResults = listOf(
+          createSimpleHistoryItem(
+            ""
+          )
+        )
       )
       resultsIn(NoResults(emptyList()))
     }
 
     @Test
     fun `empty search string with database results shows Results`() {
-      val item = mockkedHistoryItem("")
+      val item =
+        createSimpleHistoryItem("")
       val date = DateItem(item.dateString)
       emissionOf(
         searchTerm = "",
@@ -134,7 +142,8 @@ internal class HistoryViewModelTest {
     fun `duplicate search terms are ignored`() {
       val searchString1 = "a"
       val searchString2 = "b"
-      val item = mockkedHistoryItem("b")
+      val item =
+        createSimpleHistoryItem("b")
       val date = DateItem(item.dateString)
       emissionOf(
         searchTerm = searchString1,
@@ -146,7 +155,8 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `only latest search term is used`() {
-      val item = mockkedHistoryItem("b")
+      val item =
+        createSimpleHistoryItem("b")
       val date = DateItem(item.dateString)
       emissionOf(
         searchTerm = "a",
@@ -161,7 +171,10 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `enters selection state if item is selected`() {
-      val item = mockkedHistoryItem("b", isSelected = true)
+      val item =
+        createSimpleHistoryItem(
+          "b", isSelected = true
+        )
       val date = DateItem(item.dateString)
       emissionOf(
         searchTerm = "a",
@@ -176,11 +189,20 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `order of date headers and items are correct`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020")
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
       val date1 = DateItem(item1.dateString)
-      val item2 = mockkedHistoryItem("b", "2 Jun 1990")
+      val item2 =
+        createSimpleHistoryItem(
+          "b", "2 Jun 1990"
+        )
       val date2 = DateItem(item2.dateString)
-      val item3 = mockkedHistoryItem("c", "1 Aug 2021")
+      val item3 =
+        createSimpleHistoryItem(
+          "c", "1 Aug 2021"
+        )
       val date3 = DateItem(item3.dateString)
       emissionOf(
         searchTerm = "",
@@ -191,10 +213,19 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `date headers are merged if on same day`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020")
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
       val date1 = DateItem(item1.dateString)
-      val item2 = mockkedHistoryItem("b", "1 Aug 2020")
-      val item3 = mockkedHistoryItem("c", "1 Aug 2019")
+      val item2 =
+        createSimpleHistoryItem(
+          "b", "1 Aug 2020"
+        )
+      val item3 =
+        createSimpleHistoryItem(
+          "c", "1 Aug 2019"
+        )
       val date3 = DateItem(item3.dateString)
       emissionOf(
         searchTerm = "",
@@ -205,7 +236,10 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemLongClick enters selection state`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020")
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
       val date = DateItem(item1.dateString)
       emissionOf(
         searchTerm = "",
@@ -218,8 +252,14 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `Deselection via OnItemClick exits selection state if last item is deselected`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020")
-      val item2 = mockkedHistoryItem("a", "1 Aug 2020")
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
+      val item2 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
       val date = DateItem(item1.dateString)
       emissionOf(
         searchTerm = "",
@@ -231,8 +271,14 @@ internal class HistoryViewModelTest {
     }
     @Test
     fun `Deselection via OnItemLongClick exits selection state if last item is deselected`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020")
-      val item2 = mockkedHistoryItem("a", "1 Aug 2020")
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
+      val item2 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
       val date = DateItem(item1.dateString)
       emissionOf(
         searchTerm = "",
@@ -245,8 +291,14 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `ExitActionMode deselects all items`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020", isSelected = true)
-      val item2 = mockkedHistoryItem("a", "1 Aug 2020", isSelected = true)
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020", isSelected = true
+        )
+      val item2 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020", isSelected = true
+        )
       val date = DateItem(item1.dateString)
       emissionOf(
         searchTerm = "",
@@ -268,7 +320,10 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `ExitActionModeMenu deselects all history items from state`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020", isSelected = true)
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020", isSelected = true
+        )
       emissionOf(
         searchTerm = "",
         databaseResults = listOf(item1)
@@ -279,7 +334,10 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemLongClick selects history item from state`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020")
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
       emissionOf(
         searchTerm = "",
         databaseResults = listOf(item1)
@@ -290,8 +348,14 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemLongClick selects history item from state if in SelectionMode`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020", id = 2)
-      val item2 = mockkedHistoryItem("b", "1 Aug 2020", id = 3)
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020", id = 2
+        )
+      val item2 =
+        createSimpleHistoryItem(
+          "b", "1 Aug 2020", id = 3
+        )
       emissionOf(
         searchTerm = "",
         databaseResults = listOf(item1, item2)
@@ -315,7 +379,10 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemLongClick deselects history item from state if in SelectionMode`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020", id = 2)
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020", id = 2
+        )
       emissionOf(
         searchTerm = "",
         databaseResults = listOf(item1)
@@ -327,8 +394,14 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemClick selects history item from state if in SelectionMode`() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020", id = 2)
-      val item2 = mockkedHistoryItem("b", "1 Aug 2020", id = 3)
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020", id = 2
+        )
+      val item2 =
+        createSimpleHistoryItem(
+          "b", "1 Aug 2020", id = 3
+        )
       emissionOf(
         searchTerm = "",
         databaseResults = listOf(item1, item2)
@@ -341,7 +414,10 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemClick offers OpenHistoryItem if not in selection mode `() {
-      val item1 = mockkedHistoryItem("a", "1 Aug 2020", id = 2)
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020", id = 2
+        )
       emissionOf(
         searchTerm = "",
         databaseResults = listOf(item1)
@@ -389,25 +465,5 @@ internal class HistoryViewModelTest {
         .also { viewModel.actions.offer(action) }
         .assertValues(*effects)
     }
-  }
-
-  // dateFormat = d MMM yyyy
-  //             5 Jul 2020
-  private fun mockkedHistoryItem(
-    historyTitle: String = "historyTitle",
-    dateString: String = "5 Jul 2020",
-    isSelected: Boolean = false,
-    id: Long = 2
-  ): HistoryItem {
-    return HistoryItem(2, "zimId",
-      "zimName",
-      "zimFilePth",
-      "favicon",
-      "historyUrl",
-      historyTitle,
-      dateString,
-      100,
-      isSelected,
-      id)
   }
 }

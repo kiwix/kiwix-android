@@ -17,12 +17,10 @@
  */
 
 import android.app.Activity
-import android.util.Log
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
@@ -32,9 +30,7 @@ data class OpenHistoryItem(
   private val zimReaderContainer: ZimReaderContainer
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    Log.d("HistoryViewModel", "OpenHistoryItem")
-    val intent = internal(CoreMainActivity::class.java)
-    intent.putExtra(EXTRA_CHOSE_X_URL, historyItem.historyUrl)
+    val intent = Intent().putExtra(EXTRA_CHOSE_X_URL, historyItem.historyUrl)
     if (historyItem.zimFilePath != zimReaderContainer.zimCanonicalPath) {
       intent.putExtra(EXTRA_CHOSE_X_FILE, historyItem.zimFilePath)
     }
