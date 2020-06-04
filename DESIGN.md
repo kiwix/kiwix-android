@@ -1,30 +1,32 @@
 # Design
 
-This file intends to provide links to design resources, display kiwix colors and how to use them and present accessibility.
+This file intends to provide links to design resources, display the Kiwix colors, as well as presenting accessibility.
 
 ## Colors
 
 <img src="https://user-images.githubusercontent.com/22193232/83739760-4ef07080-a656-11ea-8f87-344f48e76324.png" alt="drawing" width="300"/>
 
-The Kiwix colors are black and white with different colored accents. For Kiwix Android, black is accented by different shades of blue: 
+The Kiwix colors are black and white with different colored accents. For Kiwix Android, black is accented by different shades of blue:
 
 - ![#000000](https://via.placeholder.com/15/000000/000000?text=+) `#000000`/`black`
-- ![#1565c0](https://via.placeholder.com/15/1565c0/000000?text=+) `#1565c0`/`color_primary` 
+- ![#1565c0](https://via.placeholder.com/15/1565c0/000000?text=+) `#1565c0`/`color_primary`
 - ![#2196F3](https://via.placeholder.com/15/2196F3/000000?text=+) `#2196F3`/`accent`
-- ![#42a5f5](https://via.placeholder.com/15/42a5f5/000000?text=+) `#42a5f5`/`blue400` 
+- ![#42a5f5](https://via.placeholder.com/15/42a5f5/000000?text=+) `#42a5f5`/`blue400`
 
 > Color indicates which elements are interactive, how they relate to other elements, and their level of prominence. Important elements should stand out the most [1].
 
 For a guide on how to apply colors to UI, see [Applying color to UI - Material Design](https://material.io/design/color/applying-color-to-ui.html#backdrop).
 
 ## Resources
-Following is a list of resources that can and should be used to support a design decsion.
+Following is a list of resources that can and should be used to support a design decision.
 
-1. [Material Design](https://material.io/) - Googles design guide that should be followed to keep Android applications consistent. 
-2. [Design for Android](https://developer.android.com/design) - Another design guide by Google, this one is specifically for Android while Material Design is more general. 
+1. [Material Design](https://material.io/) - Googles design guide that should be followed to keep Android applications consistent.
+2. [Design for Android](https://developer.android.com/design) - Another design guide by Google, this one is specifically for Android while Material Design is more general.
 3. [Figma](https://www.figma.com) - A tool that can be used to mock design ideas.
 
-## Accessibility 
+## Accessibility
 
 
 [1] https://material.io/design/color/the-color-system.html 2020-06-04
+
+
