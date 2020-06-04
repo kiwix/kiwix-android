@@ -38,9 +38,9 @@
   <string name="hotspot_details_message">Sos chi sighint sunt sos detàllios de s\'hotspot locale tuo. \nSSID : %1$s \nCrae : %2$s</string>
   <string name="server_textview_default_message">Ischerta sos documentos chi cheres istrangiare in su servidore</string>
   <string name="progress_dialog_starting_server">Aviende su servidore</string>
-  <string name="hotspot_dialog_title">Allughe s\'hotspot WIFI tuo</string>
-  <string name="hotspot_dialog_message">Pro permìtere a custa funtzionalidade de funtzionare depes, in antis, allùghere manualmente s\'hotspot WIFI tuo.</string>
-  <string name="hotspot_dialog_neutral_button">EJA, L\'APO ALLUTU</string>
+  <string name="hotspot_dialog_title">Istrutziones pro istrangiare libros</string>
+  <string name="hotspot_dialog_message">Pro permìtere a custa funtzionalidade de funtzionare depes, in antis, allùghere manualmente s\'hotspot WIFI tuo o t\'assegurare chi su dispositivu de istrangiamentu e su chi retzet siant in sa matessi retza WiFi</string>
+  <string name="hotspot_dialog_neutral_button">SIGHI</string>
   <string name="hotspot_channel_description">Agiornamentos a pitzu de s\'istadu de s\'hotspot/servidore tuo.</string>
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Avia su servidore</string>
@@ -251,7 +251,7 @@
   <string name="tag_short_text">Testu curtzu</string>
   <string name="storage_permission_denied">Permissu de archiviatzione negadu</string>
   <string name="grant_read_storage_permission">Cust\'aplicatzione tenet bisòngiu de sa possibilidade de pòdere lèghere sa memòria pro funtzionare. Pro praghere dae·li su permissu in sas impostatziones.</string>
-  <string name="go_to_settings">Bae a sas impostatziones</string>
+  <string name="go_to_settings">Bae a sas impostatziones de s\'Hotspot</string>
   <string name="no_results">Perunu resurtadu</string>
   <string name="no_bookmarks">Perunu sinnalibru!</string>
   <string name="no_history">Peruna cronologia</string>

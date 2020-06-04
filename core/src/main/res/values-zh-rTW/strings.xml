@@ -42,9 +42,9 @@
   <string name="hotspot_details_message">以下為您的本地熱點詳細內容。\nSSID：%1$s \n密碼：%2$s</string>
   <string name="server_textview_default_message">選擇您想要在伺服器上託管的檔案</string>
   <string name="progress_dialog_starting_server">開啟伺服器中</string>
-  <string name="hotspot_dialog_title">啟動您的 WIFI 熱點</string>
-  <string name="hotspot_dialog_message">要讓此功能運作的話，您需要先手動將您的 WIFI 熱點開啟。</string>
-  <string name="hotspot_dialog_neutral_button">是的，我已開啟</string>
+  <string name="hotspot_dialog_title">書籍託管說明</string>
+  <string name="hotspot_dialog_message">要讓此功能運作的話，您需要先手動將您的 WIFI 熱點開啟，或是確認主機設備與接收設備是在同一個 WiFi 網路上</string>
+  <string name="hotspot_dialog_neutral_button">前往</string>
   <string name="hotspot_channel_description">關於您的熱點/伺服器狀態的更新。</string>
   <string name="hotspot_notification_content_title">Kiwix 熱點</string>
   <string name="start_server_label">開啟伺服器</string>
@@ -255,7 +255,7 @@
   <string name="tag_short_text">簡短文字</string>
   <string name="storage_permission_denied">儲存裝置權限被拒絕</string>
   <string name="grant_read_storage_permission">此應用程式需要可讀取儲存裝置的功能。請在您的設定裡授予權限</string>
-  <string name="go_to_settings">前往設定</string>
+  <string name="go_to_settings">前往熱點設定</string>
   <string name="no_results">沒有結果</string>
   <string name="no_bookmarks">沒有書籤！</string>
   <string name="no_history">沒有歷史</string>

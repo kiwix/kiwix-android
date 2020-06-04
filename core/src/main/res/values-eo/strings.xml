@@ -27,6 +27,7 @@
   <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu Dosieron de Enhavo (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
+  <string name="hotspot_dialog_neutral_button">DAŬRIGI</string>
   <string name="error_file_not_found">Eraro: Ne eblis trovi la elektitan ZIM-dosieron.</string>
   <string name="error_file_invalid">Eraro: La elektita dosiero ne estas valida ZIM-dosiero.</string>
   <string name="error_article_url_not_found">Eraro: Ŝargado de la artikolo (Url: %1$s) fiaskis.</string>

@@ -166,6 +166,6 @@
   <string name="status">状态</string>
   <string name="pref_clear_all_notes_title">清空所有备注</string>
   <string name="storage_permission_denied">存储权限被拒绝</string>
-  <string name="go_to_settings">转到设置</string>
+  <string name="go_to_settings" fuzzy="true">转到设置</string>
   <string name="no_bookmarks">没有书签</string>
 </resources>

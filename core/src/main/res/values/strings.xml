@@ -34,6 +34,8 @@
   <string name="server_textview_default_message" tools:keep="@string/server_textview_default_message">Select the files you wish to host on the server</string>
   <string name="progress_dialog_starting_server" tools:keep="@string/progress_dialog_starting_server">Starting server</string>
   <string name="hotspot_dialog_title">Instructions for hosting books</string>
+  <string name="wifi_dialog_title">WiFi connection detected</string>
+  <string name="wifi_dialog_body">In order to view books on other devices, please ensure that all devices are connected to the same WiFi Network.</string>
   <string name="hotspot_dialog_message">In order for this feature to work you need to first turn on your WIFI hotspot manually or ensure that the host device and receiver device are on the same WiFi network</string>
   <string name="hotspot_dialog_neutral_button">PROCEED</string>
   <string name="hotspot_channel_description" tools:keep="@string/hotspot_channel_description">Updates about the state of your hotspot/server.</string>

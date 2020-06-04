@@ -32,8 +32,8 @@
   <string name="server_failed_toast_message">Ei voitu käynnistää palvelinta.</string>
   <string name="hotspot_turned_on">Hotspot kytketty päälle</string>
   <string name="progress_dialog_starting_server">Käynnistetään palvelinta</string>
-  <string name="hotspot_dialog_title">Kytke WiFi-hotspottisi päälle</string>
-  <string name="hotspot_dialog_neutral_button">KYLLÄ, OLEN KYTKENYT SEN PÄÄLLE</string>
+  <string name="hotspot_dialog_title" fuzzy="true">Kytke WiFi-hotspottisi päälle</string>
+  <string name="hotspot_dialog_neutral_button" fuzzy="true">KYLLÄ, OLEN KYTKENYT SEN PÄÄLLE</string>
   <string name="hotspot_notification_content_title">Kiwix-hotspot</string>
   <string name="start_server_label">Käynnistä palvelin</string>
   <string name="stop_server_label">Pysäytä palvelin</string>
