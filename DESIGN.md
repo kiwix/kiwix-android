@@ -15,7 +15,7 @@ The Kiwix colors are black and white with different colored accents. For Kiwix A
 
 > Color indicates which elements are interactive, how they relate to other elements, and their level of prominence. Important elements should stand out the most [1].
 
-For a guide on how to apply colors to UI, see [Applying color to UI - Material Design](https://material.io/design/color/applying-color-to-ui.html#backdrop).
+For a guide on how to apply colors to UI, see ["Applying color to UI - Material Design"](https://material.io/design/color/applying-color-to-ui.html#backdrop).
 
 ## Resources
 Following is a list of resources that can and should be used to support a design decision.
@@ -25,7 +25,15 @@ Following is a list of resources that can and should be used to support a design
 3. [Figma](https://www.figma.com) - A tool that can be used to mock design ideas.
 
 ## Accessibility
+Accessibility is an important part of Android applications. Especially applications that are as widely used as Kiwix. As such, accessibility should be a part of the argument for most if not all design decisions for Kiwix Android. This can include choices such as:
 
+- Having text with a large font and good contrast ratio.
+- Large simple controls.
+- Consistent controls and navigation. (consistent to Kiwix, and other Android applications.)
+
+Kiwix does not yet contain content descriptions for its UI elements. This can prohibit users with for example poor eyesight to use Kiwix successfully. Therefore, newly introduced interactive elements should contain content descriptions (boy scout rule applies here too!). 
+
+See ["Make apps more accessible"](https://developer.android.com/guide/topics/ui/accessibility/apps) for a more detailed guide on accessibility. [Firefox Fenix](https://github.com/mozilla-mobile/shared-docs/blob/master/android/accessibility_guide.md) also has a great concise description of accessibility. 
 
 [1] https://material.io/design/color/the-color-system.html 2020-06-04
 
