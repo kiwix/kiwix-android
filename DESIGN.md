@@ -25,7 +25,7 @@ Following is a list of resources that can and should be used to support a design
 3. [Figma](https://www.figma.com) - A tool that can be used to mock design ideas.
 
 ## Accessibility
-Accessibility is an important part of Android applications. Especially applications that are as widely used as Kiwix. As such, accessibility should be a part of the argument for most if not all design decisions for Kiwix Android. This can include choices such as:
+Accessibility is an important part of Android applications. Especially applications that are as widely used as Kiwix. As such, accessibility should be part of design decisions. This can include choices such as:
 
 - Having text with a large font and good contrast ratio.
 - Large simple controls.
