@@ -54,6 +54,10 @@ All branches should have distinct history and should be visually easy to follow,
 
 If you wish to rebase you should be following the [Golden Rule](https://www.atlassian.com/git/tutorials/merging-vs-rebasing#the-golden-rule-of-rebasing) and ahere to the advice in the heading [Aside: Rebase as cleanup is awesome in the coding lifecycle](https://www.atlassian.com/git/articles/git-team-workflows-merge-or-rebase).
 
+### Design and style
+
+For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/edit/develop/DESIGN.md).
+
 ### Building
 
 The Kiwix app is split into 3 modules
