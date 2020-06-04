@@ -48,7 +48,7 @@ class HistoryViewModel @Inject constructor(
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
   private val compositeDisposable = CompositeDisposable()
-  private val showAllSwitchToggle =
+  val showAllSwitchToggle =
     BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
   private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
   private val deselectAllItems = BehaviorProcessor.createDefault(false)
