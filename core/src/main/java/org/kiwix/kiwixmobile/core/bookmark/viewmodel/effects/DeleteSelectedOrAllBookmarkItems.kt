@@ -16,22 +16,30 @@
  *
  */
 
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import io.reactivex.processors.PublishProcessor
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UpdateBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
-import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.data.Repository
 
 data class DeleteSelectedOrAllBookmarkItems(
   private val state: MutableLiveData<State>,
-  private val dataSource: DataSource
+  private val repository: Repository,
+  private val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     val bookmarkItems = state.value?.bookmarkItems
     if (bookmarkItems?.any { it.isSelected } == true) {
-      dataSource.deleteBookmarks(bookmarkItems.filter { it.isSelected })
+      repository.deleteBookmarks(bookmarkItems.filter { it.isSelected })
     } else if (bookmarkItems != null) {
-      dataSource.deleteBookmarks(bookmarkItems)
+      repository.deleteBookmarks(bookmarkItems)
+      Toast.makeText(activity, R.string.all_bookmarks_cleared, Toast.LENGTH_SHORT).show()
     }
+    actions.offer(UpdateBookmarks)
   }
 }

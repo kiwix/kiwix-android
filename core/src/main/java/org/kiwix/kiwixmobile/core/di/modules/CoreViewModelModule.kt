@@ -24,7 +24,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.ViewModelFactory
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarksViewModel
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
@@ -49,6 +49,6 @@ abstract class CoreViewModelModule {
 
   @Binds
   @IntoMap
-  @ViewModelKey(BookmarksViewModel::class)
-  abstract fun bindBookmarksViewModel(bookmarksViewModel: BookmarksViewModel): ViewModel
+  @ViewModelKey(BookmarkViewModel::class)
+  abstract fun bindBookmarksViewModel(bookmarksViewModel: BookmarkViewModel): ViewModel
 }

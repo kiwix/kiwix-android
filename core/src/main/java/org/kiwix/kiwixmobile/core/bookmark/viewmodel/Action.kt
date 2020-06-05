@@ -26,6 +26,7 @@ sealed class Action {
   object DeleteBookmarks : Action()
   object RequestDeleteAllBookmarks : Action()
   object RequestDeleteSelectedBookmarks : Action()
+  object UpdateBookmarks : Action()
 
   data class OnItemClick(val bookmark: BookmarkItem) : Action()
   data class OnItemLongClick(val bookmark: BookmarkItem) : Action()

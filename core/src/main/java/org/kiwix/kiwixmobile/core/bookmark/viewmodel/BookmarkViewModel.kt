@@ -18,23 +18,23 @@ import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.RequestDeleteAllBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.RequestDeleteSelectedBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ToggleShowBookmarksFromAllBooks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UpdateBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.ToggleShowAllBookmarksSwitchAndSaveItsStateToPrefs
-import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.data.Repository
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteBookmarkDialog
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
-class BookmarksViewModel @Inject constructor(
-  private val bookmarksDataSource: DataSource,
+class BookmarkViewModel @Inject constructor(
+  private val bookmarksDataSource: Repository,
   private val zimReaderContainer: ZimReaderContainer,
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
@@ -42,51 +42,46 @@ class BookmarksViewModel @Inject constructor(
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
-  private val latestSearchString = ""
+  private var latestSearchString = ""
   private val compositeDisposable = CompositeDisposable()
   val showAllSwitchToggle =
-    BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
+    BehaviorProcessor.createDefault(sharedPreferenceUtil.showBookmarksAllBooks)
   private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
 
   init {
     compositeDisposable.addAll(
-      toggleShowAllBooks(),
+      updateBookmarksIfSwitchIsToggled(),
       actionMapper(),
-      getBooks(),
-      searchResults()
+      updateBookmarks(),
+      updateLatestSearchString()
     )
   }
 
-
-  private fun toggleShowAllBooks() =
+  private fun updateBookmarksIfSwitchIsToggled() =
     showAllSwitchToggle.subscribe {
-      bookmarksDataSource.getBookmarks(it).subscribe { bookmarks ->
-        state.postValue(updateResultsState(bookmarks))
-      }
+      actions.offer(UpdateBookmarks)
     }
 
-  private fun getBooks() =
-    bookmarksDataSource.getBookmarks(!sharedPreferenceUtil.showHistoryCurrentBook).subscribe{
-      bookmarks -> updateResultsState(bookmarks)
+  private fun updateBookmarks() =
+    bookmarksDataSource.getBookmarks(!sharedPreferenceUtil.showBookmarksAllBooks).subscribe {
+      bookmarks -> state.postValue(updateResultsState(bookmarks))
     }
-
 
   private fun updateResultsState(
     bookmarkList: List<BookmarkItem>?
   ): State {
     return when {
-      bookmarkList?.isEmpty() == true -> NoResults(bookmarkList)
-      bookmarkList?.any { it.isSelected } == true -> SelectionResults(bookmarkList)
-      else -> Results(bookmarkList)
+      bookmarkList?.isEmpty() == true -> NoResults(emptyList())
+      bookmarkList?.any { it.isSelected } == true -> SelectionResults(
+        bookmarkList.filter { it.bookmarkTitle.contains(latestSearchString, true) })
+      else -> Results(
+        bookmarkList?.filter { it.bookmarkTitle.contains(latestSearchString, true) })
     }
   }
 
-  private fun searchResults() = filter.subscribe{
-    searchString -> updateResultsState(
-      state.value?.bookmarkItems?.filter {
-        it.bookmarkTitle.contains(searchString, true)
-      }
-    )
+  private fun updateLatestSearchString() = filter.subscribe {
+    searchString -> latestSearchString = searchString
+    actions.offer(UpdateBookmarks)
   }
 
   override fun onCleared() {
@@ -119,24 +114,34 @@ class BookmarksViewModel @Inject constructor(
       }
   }
 
+  private fun updateFilter(searchTerm: String) {
+    filter.offer(searchTerm)
+  }
+
   private fun actionMapper() = actions.map {
     when (it) {
       ExitBookmarks -> effects.offer(Finish)
-      is Filter -> filter.offer(it.searchTerm)
+      is Filter -> updateFilter(it.searchTerm)
       is ToggleShowBookmarksFromAllBooks ->
         toggleShowAllHistorySwitchAndSaveItsStateToPrefs(it.isChecked)
       is OnItemLongClick -> state.postValue(toggleSelectionOfBookmark(it.bookmark))
       is OnItemClick -> appendItemToSelectionOrOpenIt(it)
       is RequestDeleteAllBookmarks ->
-        effects.offer(ShowDeleteBookmarkDialog(actions, DeleteAllHistory))
+        effects.offer(ShowDeleteBookmarkDialog(actions, KiwixDialog.DeleteBookmarks))
       is RequestDeleteSelectedBookmarks ->
-        effects.offer(ShowDeleteBookmarkDialog(actions, DeleteSelectedHistory))
-      ExitActionModeMenu -> state.postValue(Results(
-        state.value
-          ?.bookmarkItems
-          ?.map { item -> item.copy(isSelected = false) })
+        effects.offer(ShowDeleteBookmarkDialog(actions, KiwixDialog.DeleteBookmarks))
+      ExitActionModeMenu -> state.postValue(
+        Results(
+          state.value
+            ?.bookmarkItems
+            ?.map { item -> item.copy(isSelected = false) })
       )
-      DeleteBookmarks -> effects.offer(DeleteSelectedOrAllBookmarkItems(state, bookmarksDataSource))
+      DeleteBookmarks -> effects.offer(DeleteSelectedOrAllBookmarkItems(
+        state,
+        bookmarksDataSource,
+        actions
+      ))
+      UpdateBookmarks -> updateBookmarks()
     }
   }.subscribe({}, Throwable::printStackTrace)
 

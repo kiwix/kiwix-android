@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_bookmarks.bookmarks_switch
-import kotlinx.android.synthetic.main.activity_history.history_switch
-import kotlinx.android.synthetic.main.activity_history.no_history
+import kotlinx.android.synthetic.main.activity_bookmarks.no_bookmarks
 import kotlinx.android.synthetic.main.activity_history.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
@@ -31,7 +30,7 @@ import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.RequestDeleteAllBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.RequestDeleteSelectedBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ToggleShowBookmarksFromAllBooks
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarksViewModel
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.Results
@@ -46,7 +45,7 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
   val activityComponent by lazy { coreActivityComponent }
   private var actionMode: ActionMode? = null
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-  private val bookmarksViewModel by lazy { viewModel<BookmarksViewModel>(viewModelFactory) }
+  private val bookmarksViewModel by lazy { viewModel<BookmarkViewModel>(viewModelFactory) }
   private val compositeDisposable = CompositeDisposable()
 
   private val actionModeCallback: Callback =
@@ -97,7 +96,7 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     bookmarks_switch.setOnCheckedChangeListener { _, isChecked ->
       bookmarksViewModel.actions.offer(ToggleShowBookmarksFromAllBooks(isChecked))
     }
-    bookmarks_switch.isChecked = !sharedPreferenceUtil.showHistoryCurrentBook
+    bookmarks_switch.isChecked = sharedPreferenceUtil.showBookmarksAllBooks
 
     compositeDisposable.add(bookmarksViewModel.effects.subscribe { it.invokeWith(this) })
   }
@@ -122,7 +121,7 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     if (item.itemId == android.R.id.home) {
       bookmarksViewModel.actions.offer(ExitBookmarks)
     }
-    if (item.itemId == R.id.menu_history_clear) {
+    if (item.itemId == R.id.menu_bookmarks_clear) {
       bookmarksViewModel.actions.offer(RequestDeleteAllBookmarks)
     }
     return super.onOptionsItemSelected(item)
@@ -133,21 +132,23 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
       is Results -> {
         actionMode?.finish()
         state.bookmarkItems?.let { bookmarksAdapter.items = it }
-        history_switch.isEnabled = true
-        no_history.visibility = View.GONE
+        bookmarks_switch.isEnabled = true
+        no_bookmarks.visibility = View.GONE
       }
       is SelectionResults -> {
         if (state.bookmarkItems?.any { it.isSelected } == true &&
           actionMode == null) {
           actionMode = startSupportActionMode(actionModeCallback)
         }
+        val numberOfSelectedItems = state.bookmarkItems?.filter { it.isSelected }?.size
+        actionMode?.setTitle(getString(R.string.selected_items, numberOfSelectedItems))
         state.bookmarkItems?.let { bookmarksAdapter.items = it }
-        history_switch.isEnabled = false
-        no_history.visibility = View.GONE
+        bookmarks_switch.isEnabled = false
+        no_bookmarks.visibility = View.GONE
       }
       is NoResults -> {
         state.bookmarkItems?.let { bookmarksAdapter.items = it }
-        no_history.visibility = View.VISIBLE
+        no_bookmarks.visibility = View.VISIBLE
       }
     }
 

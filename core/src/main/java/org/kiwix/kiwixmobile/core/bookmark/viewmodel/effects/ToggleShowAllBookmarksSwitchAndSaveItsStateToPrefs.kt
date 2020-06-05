@@ -11,7 +11,7 @@ data class ToggleShowAllBookmarksSwitchAndSaveItsStateToPrefs(
   private val isChecked: Boolean
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    showAllSwitchToggle.offer(isChecked)
-    sharedPreferenceUtil.showHistoryCurrentBook = !isChecked
+    sharedPreferenceUtil.setShowBookmarksAllBooks(isChecked)
+    showAllSwitchToggle.offer(sharedPreferenceUtil.showBookmarksAllBooks)
   }
 }
