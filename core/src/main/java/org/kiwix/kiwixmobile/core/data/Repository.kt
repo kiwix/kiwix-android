@@ -22,7 +22,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
-import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
+import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao

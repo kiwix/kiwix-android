@@ -94,7 +94,7 @@ import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
+import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;

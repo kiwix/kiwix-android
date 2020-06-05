@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.bookmark
+package org.kiwix.kiwixmobile.core.bookmark.adapter
 
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -28,7 +28,8 @@ data class BookmarkItem(
   val zimFilePath: String?,
   val bookmarkUrl: String,
   val bookmarkTitle: String,
-  val favicon: String?
+  val favicon: String?,
+  var isSelected: Boolean = false
 ) {
   constructor(entity: BookmarkEntity) : this(
     entity.id,

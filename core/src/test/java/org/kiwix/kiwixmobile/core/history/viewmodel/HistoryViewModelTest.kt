@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteAllHisto
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteBookmarkDialog
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ToggleShowAllHistorySwitchAndSaveItsStateToPrefs
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
@@ -439,14 +439,14 @@ internal class HistoryViewModelTest {
     fun `RequestDeleteAllHistoryItems opens dialog to request deletion`() {
       actionResultsInEffects(
         RequestDeleteAllHistoryItems,
-        ShowDeleteHistoryDialog(viewModel.actions, DeleteAllHistory))
+        ShowDeleteBookmarkDialog(viewModel.actions, DeleteAllHistory))
     }
 
     @Test
     fun `RequestDeleteSelectedHistoryItems opens dialog to request deletion`() {
       actionResultsInEffects(
         RequestDeleteSelectedHistoryItems,
-        ShowDeleteHistoryDialog(viewModel.actions, DeleteSelectedHistory))
+        ShowDeleteBookmarkDialog(viewModel.actions, DeleteSelectedHistory))
     }
 
     @Test

@@ -1,0 +1,161 @@
+package org.kiwix.kiwixmobile.core.bookmark.viewmodel
+
+import DeleteSelectedOrAllBookmarkItems
+import OpenBookmark
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.processors.PublishProcessor
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.DeleteBookmarks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ExitActionModeMenu
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ExitBookmarks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.RequestDeleteAllBookmarks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.RequestDeleteSelectedBookmarks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ToggleShowBookmarksFromAllBooks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.NoResults
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.Results
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.SelectionResults
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.ToggleShowAllBookmarksSwitchAndSaveItsStateToPrefs
+import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteBookmarkDialog
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import java.text.SimpleDateFormat
+import java.util.Locale
+import javax.inject.Inject
+
+class BookmarksViewModel @Inject constructor(
+  private val bookmarksDataSource: DataSource,
+  private val zimReaderContainer: ZimReaderContainer,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
+) : ViewModel() {
+  val state = MutableLiveData<State>().apply { value = NoResults(emptyList()) }
+  val effects = PublishProcessor.create<SideEffect<*>>()
+  val actions = PublishProcessor.create<Action>()
+  private val filter = BehaviorProcessor.createDefault("")
+  private val latestSearchString = ""
+  private val compositeDisposable = CompositeDisposable()
+  val showAllSwitchToggle =
+    BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
+  private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
+
+  init {
+    compositeDisposable.addAll(
+      toggleShowAllBooks(),
+      actionMapper(),
+      getBooks(),
+      searchResults()
+    )
+  }
+
+
+  private fun toggleShowAllBooks() =
+    showAllSwitchToggle.subscribe {
+      bookmarksDataSource.getBookmarks(it).subscribe { bookmarks ->
+        state.postValue(updateResultsState(bookmarks))
+      }
+    }
+
+  private fun getBooks() =
+    bookmarksDataSource.getBookmarks(!sharedPreferenceUtil.showHistoryCurrentBook).subscribe{
+      bookmarks -> updateResultsState(bookmarks)
+    }
+
+
+  private fun updateResultsState(
+    bookmarkList: List<BookmarkItem>?
+  ): State {
+    return when {
+      bookmarkList?.isEmpty() == true -> NoResults(bookmarkList)
+      bookmarkList?.any { it.isSelected } == true -> SelectionResults(bookmarkList)
+      else -> Results(bookmarkList)
+    }
+  }
+
+  private fun searchResults() = filter.subscribe{
+    searchString -> updateResultsState(
+      state.value?.bookmarkItems?.filter {
+        it.bookmarkTitle.contains(searchString, true)
+      }
+    )
+  }
+
+  override fun onCleared() {
+    compositeDisposable.clear()
+    super.onCleared()
+  }
+
+  private fun toggleSelectionOfBookmark(bookmarkItem: BookmarkItem): State =
+    when (state.value) {
+      is Results -> SelectionResults(toggleGivenItemAndReturnListOfResultingItems(bookmarkItem))
+      is SelectionResults -> {
+        if (toggleGivenItemAndReturnListOfResultingItems(bookmarkItem)
+            ?.any { it.isSelected } == true) {
+          SelectionResults(toggleGivenItemAndReturnListOfResultingItems(bookmarkItem))
+        } else {
+          Results(toggleGivenItemAndReturnListOfResultingItems(bookmarkItem))
+        }
+      }
+      is NoResults -> NoResults(emptyList())
+      null -> NoResults(emptyList())
+    }
+
+  private fun toggleGivenItemAndReturnListOfResultingItems(bookmarkItem: BookmarkItem):
+    List<BookmarkItem>? {
+    return state.value
+      ?.bookmarkItems
+      ?.map {
+        if (it.databaseId == bookmarkItem.databaseId)
+          it.copy(isSelected = !it.isSelected) else it
+      }
+  }
+
+  private fun actionMapper() = actions.map {
+    when (it) {
+      ExitBookmarks -> effects.offer(Finish)
+      is Filter -> filter.offer(it.searchTerm)
+      is ToggleShowBookmarksFromAllBooks ->
+        toggleShowAllHistorySwitchAndSaveItsStateToPrefs(it.isChecked)
+      is OnItemLongClick -> state.postValue(toggleSelectionOfBookmark(it.bookmark))
+      is OnItemClick -> appendItemToSelectionOrOpenIt(it)
+      is RequestDeleteAllBookmarks ->
+        effects.offer(ShowDeleteBookmarkDialog(actions, DeleteAllHistory))
+      is RequestDeleteSelectedBookmarks ->
+        effects.offer(ShowDeleteBookmarkDialog(actions, DeleteSelectedHistory))
+      ExitActionModeMenu -> state.postValue(Results(
+        state.value
+          ?.bookmarkItems
+          ?.map { item -> item.copy(isSelected = false) })
+      )
+      DeleteBookmarks -> effects.offer(DeleteSelectedOrAllBookmarkItems(state, bookmarksDataSource))
+    }
+  }.subscribe({}, Throwable::printStackTrace)
+
+  private fun toggleShowAllHistorySwitchAndSaveItsStateToPrefs(isChecked: Boolean) {
+    effects.offer(
+      ToggleShowAllBookmarksSwitchAndSaveItsStateToPrefs(
+        showAllSwitchToggle,
+        sharedPreferenceUtil,
+        isChecked
+      )
+    )
+  }
+
+  private fun appendItemToSelectionOrOpenIt(onItemClick: OnItemClick) {
+    val bookmark = onItemClick.bookmark
+    if (state.value?.containsSelectedItems() == true) {
+      state.postValue(toggleSelectionOfBookmark(bookmark))
+    } else {
+      effects.offer(OpenBookmark(bookmark, zimReaderContainer))
+    }
+  }
+}

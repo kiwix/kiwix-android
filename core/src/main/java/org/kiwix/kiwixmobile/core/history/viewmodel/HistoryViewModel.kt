@@ -51,18 +51,12 @@ class HistoryViewModel @Inject constructor(
   val showAllSwitchToggle =
     BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
   private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
-  private val deselectAllItems = BehaviorProcessor.createDefault(false)
 
   init {
     compositeDisposable.addAll(
       viewStateReducer(),
-      actionMapper(),
-      deselectAllItems()
+      actionMapper()
     )
-  }
-
-  private fun deselectAllItems() = deselectAllItems.subscribe {
-    state.value?.historyItems?.filterIsInstance<HistoryItem>()?.forEach { it.isSelected = false }
   }
 
   private fun viewStateReducer() =

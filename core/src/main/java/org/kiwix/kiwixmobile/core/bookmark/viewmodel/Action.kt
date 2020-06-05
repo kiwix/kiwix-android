@@ -15,13 +15,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.bookmark
-import dagger.Module
-import dagger.Provides
 
-@Module
-class BookmarksModule {
-  @Provides
-  fun provideBookmarksPresenter(presenter: BookmarksPresenter): BookmarksContract.Presenter =
-    presenter
+package org.kiwix.kiwixmobile.core.bookmark.viewmodel
+
+import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
+
+sealed class Action {
+  object ExitBookmarks : Action()
+  object ExitActionModeMenu : Action()
+  object DeleteBookmarks : Action()
+  object RequestDeleteAllBookmarks : Action()
+  object RequestDeleteSelectedBookmarks : Action()
+
+  data class OnItemClick(val bookmark: BookmarkItem) : Action()
+  data class OnItemLongClick(val bookmark: BookmarkItem) : Action()
+  data class ToggleShowBookmarksFromAllBooks(val isChecked: Boolean) : Action()
+  data class Filter(val searchTerm: String) : Action()
 }

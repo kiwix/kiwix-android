@@ -25,6 +25,7 @@ import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteBookmarkDialog
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.search.SearchActivity
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 interface CoreActivityComponent {
   fun inject(searchActivity: SearchActivity)
   fun inject(showDeleteSearchDialog: ShowDeleteSearchDialog)
+  fun inject(showDeleteBookmarksDialog: ShowDeleteBookmarkDialog)
   fun inject(showDeleteHistoryDialog: ShowDeleteHistoryDialog)
   fun inject(corePrefsFragment: CorePrefsFragment)
   fun inject(historyActivity: HistoryActivity)

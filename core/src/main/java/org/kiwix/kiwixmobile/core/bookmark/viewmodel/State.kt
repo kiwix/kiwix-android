@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,19 +15,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.bookmark
 
-import org.kiwix.kiwixmobile.core.base.BaseContract
+package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 
-interface BookmarksContract {
-  interface View : BaseContract.View<Presenter> {
-    fun updateBookmarksList(bookmarks: List<BookmarkItem>)
-    fun notifyBookmarksListFiltered(bookmarks: List<BookmarkItem>)
+import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
+
+sealed class State(
+  open val bookmarkItems: List<BookmarkItem>?
+) {
+
+  fun containsSelectedItems(): Boolean {
+    return bookmarkItems?.any { it.isSelected } == true
   }
 
-  interface Presenter : BaseContract.Presenter<View> {
-    fun loadBookmarks(showBookmarksCurrentBook: Boolean)
-    fun filterBookmarks(bookmarksList: List<BookmarkItem>, newText: String)
-    fun deleteBookmarks(deleteList: List<BookmarkItem>)
-  }
+  data class Results(
+    override val bookmarkItems: List<BookmarkItem>?
+  ) : State(bookmarkItems)
+
+  data class NoResults(
+    override val bookmarkItems: List<BookmarkItem>?
+  ) : State(bookmarkItems)
+
+  data class SelectionResults(
+    override val bookmarkItems: List<BookmarkItem>?
+  ) : State(bookmarkItems)
 }
