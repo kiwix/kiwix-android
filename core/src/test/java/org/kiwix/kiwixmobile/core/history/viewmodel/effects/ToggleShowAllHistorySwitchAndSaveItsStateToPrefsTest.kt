@@ -15,14 +15,14 @@ internal class ToggleShowAllHistorySwitchAndSaveItsStateToPrefsTest {
     every { toggleSwitch.offer(true) } returns true
     val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
     val activity: AppCompatActivity = mockk()
-    ToggleShowAllHistorySwitchAndSaveItsStateToPrefs(
+    UpdateAllHistoryPreference(
       toggleSwitch,
       sharedPreferenceUtil,
       true
     ).invokeWith(activity)
     verify {
       toggleSwitch.offer(true)
-      sharedPreferenceUtil.showHistoryCurrentBook = false
+      sharedPreferenceUtil.showHistoryAllBooks = false
     }
   }
 }

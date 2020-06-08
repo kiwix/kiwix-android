@@ -23,20 +23,19 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDelete
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
 import javax.inject.Inject
 
 data class ShowDeleteHistoryDialog(
-  private val actions: PublishProcessor<Action>,
-  private val dialogType: KiwixDialog
+  private val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as HistoryActivity).activityComponent.inject(this)
-    dialogShower.show(dialogType, {
-      actions.offer(DeleteHistoryItems)
+    dialogShower.show(DeleteAllHistory, {
+      actions.offer(UserClickedDelete)
     })
   }
 }

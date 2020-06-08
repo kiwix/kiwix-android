@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import DeleteSelectedOrAllHistoryItems
 import OpenHistoryItem
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
@@ -18,24 +17,22 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteAllHistoryItems
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDelete
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ToggleShowAllHistorySwitchAndSaveItsStateToPrefs
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.UpdateAllHistoryPreference
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -62,7 +59,7 @@ internal class HistoryViewModelTest {
     clearAllMocks()
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
-    every { sharedPreferenceUtil.showHistoryCurrentBook } returns true
+    every { sharedPreferenceUtil.showHistoryAllBooks } returns true
     every { historyDao.history() } returns itemsFromDb.distinctUntilChanged()
     viewModel = HistoryViewModel(historyDao, zimReaderContainer, sharedPreferenceUtil)
   }
@@ -86,7 +83,7 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(NoResults(listOf()))
+      viewModel.state.test().assertValue(Results(listOf(), true))
     }
 
     @Test
@@ -101,7 +98,7 @@ internal class HistoryViewModelTest {
         searchTerm = searchTerm,
         databaseResults = listOf(item)
       )
-      resultsIn(Results((listOf(date, item))))
+      resultsIn(Results(listOf(item), true))
     }
 
     @Test
@@ -114,7 +111,7 @@ internal class HistoryViewModelTest {
           )
         )
       )
-      resultsIn(NoResults(emptyList()))
+      resultsIn(Results(emptyList(), true))
     }
 
     @Test
@@ -126,7 +123,7 @@ internal class HistoryViewModelTest {
         searchTerm = "",
         databaseResults = listOf(item)
       )
-      resultsIn(Results(listOf(date, item)))
+      resultsIn(Results(listOf(item), true))
     }
 
     @Test
@@ -135,7 +132,7 @@ internal class HistoryViewModelTest {
         searchTerm = "",
         databaseResults = emptyList()
       )
-      resultsIn(NoResults(emptyList()))
+      resultsIn(Results(emptyList(), true))
     }
 
     @Test
@@ -150,7 +147,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item)
       )
       viewModel.actions.offer(Filter(searchString2))
-      resultsIn(Results(listOf(date, item)))
+      resultsIn(Results(listOf(item), true))
     }
 
     @Test
@@ -166,7 +163,7 @@ internal class HistoryViewModelTest {
         searchTerm = "b",
         databaseResults = listOf(item)
       )
-      resultsIn(Results(listOf(date, item)))
+      resultsIn(Results(listOf(item), true))
     }
 
     @Test
@@ -184,7 +181,7 @@ internal class HistoryViewModelTest {
         searchTerm = "b",
         databaseResults = listOf(item)
       )
-      resultsIn(SelectionResults(listOf(date, item)))
+      resultsIn(SelectionResults(listOf(item), true))
     }
 
     @Test
@@ -208,7 +205,7 @@ internal class HistoryViewModelTest {
         searchTerm = "",
         databaseResults = listOf(item2, item3, item1)
       )
-      resultsIn(Results(listOf(date3, item3, date1, item1, date2, item2)))
+      resultsIn(Results(listOf(item3, item1, item2), true))
     }
 
     @Test
@@ -231,7 +228,7 @@ internal class HistoryViewModelTest {
         searchTerm = "",
         databaseResults = listOf(item2, item3, item1)
       )
-      resultsIn(Results(listOf(date1, item2, item1, date3, item3)))
+      resultsIn(Results(listOf(item2, item1, item3), true))
     }
 
     @Test
@@ -247,7 +244,7 @@ internal class HistoryViewModelTest {
       )
       viewModel.actions.offer(OnItemLongClick(item1))
       item1.isSelected = true
-      resultsIn(SelectionResults(listOf(date, item1)))
+      resultsIn(SelectionResults(listOf(item1), true))
     }
 
     @Test
@@ -267,8 +264,9 @@ internal class HistoryViewModelTest {
       )
       viewModel.actions.offer(OnItemLongClick(item1))
       viewModel.actions.offer(OnItemClick(item1))
-      resultsIn(Results(listOf(date, item1, item2)))
+      resultsIn(Results(listOf(item1, item2), true))
     }
+
     @Test
     fun `Deselection via OnItemLongClick exits selection state if last item is deselected`() {
       val item1 =
@@ -286,7 +284,7 @@ internal class HistoryViewModelTest {
       )
       viewModel.actions.offer(OnItemLongClick(item1))
       viewModel.actions.offer(OnItemLongClick(item1))
-      resultsIn(Results(listOf(date, item1, item2)))
+      resultsIn(Results(listOf(item1, item2), true))
     }
 
     @Test
@@ -307,7 +305,7 @@ internal class HistoryViewModelTest {
       viewModel.actions.offer(ExitActionModeMenu)
       item1.isSelected = false
       item2.isSelected = false
-      resultsIn(Results(listOf(date, item1, item2)))
+      resultsIn(Results(listOf(item1, item2), true))
     }
   }
 
@@ -368,12 +366,17 @@ internal class HistoryViewModelTest {
 
     private fun assertItemIsSelected(item: HistoryItem) {
       assertTrue(
-        (viewModel.state.value?.historyItems?.find { it.id == item.id } as HistoryItem).isSelected
+        (viewModel.state.value?.historyListItems?.find {
+          it.id == item.id
+        } as HistoryItem).isSelected
       )
     }
+
     private fun assertItemIsDeselected(item: HistoryItem) {
       assertFalse(
-        (viewModel.state.value?.historyItems?.find { it.id == item.id } as HistoryItem).isSelected
+        (viewModel.state.value?.historyListItems?.find {
+          it.id == item.id
+        } as HistoryItem).isSelected
       )
     }
 
@@ -429,31 +432,35 @@ internal class HistoryViewModelTest {
     fun `ToggleShowHistoryFromAllBooks switches show all books toggle`() {
       actionResultsInEffects(
         ToggleShowHistoryFromAllBooks(true),
-        ToggleShowAllHistorySwitchAndSaveItsStateToPrefs(
-          viewModel.showAllSwitchToggle,
+        UpdateAllHistoryPreference(
           sharedPreferenceUtil,
-          true))
+          true
+        )
+      )
     }
 
     @Test
     fun `RequestDeleteAllHistoryItems opens dialog to request deletion`() {
       actionResultsInEffects(
-        RequestDeleteAllHistoryItems,
-        ShowDeleteHistoryDialog(viewModel.actions, DeleteAllHistory))
+        UserClickedDeleteButton,
+        ShowDeleteHistoryDialog(viewModel.actions)
+      )
     }
 
     @Test
     fun `RequestDeleteSelectedHistoryItems opens dialog to request deletion`() {
       actionResultsInEffects(
-        RequestDeleteSelectedHistoryItems,
-        ShowDeleteHistoryDialog(viewModel.actions, DeleteSelectedHistory))
+        UserClickedDeleteSelectedHistoryItems,
+        ShowDeleteHistoryDialog(viewModel.actions)
+      )
     }
 
     @Test
     fun `DeleteHistoryItems calls DeleteSelectedOrAllHistoryItems side effect`() {
       actionResultsInEffects(
-        DeleteHistoryItems,
-        DeleteSelectedOrAllHistoryItems(viewModel.state, historyDao))
+        UserClickedDelete,
+        DeleteHistoryItems(viewModel.state.value!!.historyItems, historyDao)
+      )
     }
 
     private fun actionResultsInEffects(

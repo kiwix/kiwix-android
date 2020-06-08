@@ -1,3 +1,5 @@
+package org.kiwix.kiwixmobile.core.history.viewmodel.effects
+
 /*
  * Kiwix Android
  * Copyright (c) 2020 Kiwix <android.kiwix.org>
@@ -17,22 +19,15 @@
  */
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.history.viewmodel.State
 
-data class DeleteSelectedOrAllHistoryItems(
-  private val state: MutableLiveData<State>,
+data class DeleteHistoryItems(
+  private val itemsToDelete: List<HistoryItem>,
   private val historyDao: HistoryDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val historyItems = state.value?.historyItems?.filterIsInstance<HistoryItem>()
-    if (historyItems?.any { it.isSelected } == true) {
-      historyDao.deleteHistory(historyItems.filter { it.isSelected })
-    } else if (historyItems != null) {
-      historyDao.deleteHistory(historyItems)
-    }
+    historyDao.deleteHistory(itemsToDelete)
   }
 }

@@ -18,26 +18,64 @@
 
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
+import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 sealed class State(
-  open val historyItems: List<HistoryListItem>?
+  open val historyItems: List<HistoryItem>,
+  open val showAll: Boolean,
+  open val searchTerm: String = ""
 ) {
 
-  fun containsSelectedItems(): Boolean {
-    return historyItems?.filterIsInstance<HistoryItem>()?.any { it.isSelected } == true
+  private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
+
+  val historyListItems: List<HistoryListItem> by lazy {
+    HeaderizableList<HistoryListItem, HistoryItem, DateItem>(historyItems
+      .filter { it.historyTitle.contains(searchTerm, true) }
+      .sortedByDescending { dateFormatter.parse(it.dateString) })
+      .foldOverAddingHeaders(
+        { historyItem -> DateItem(historyItem.dateString) },
+        { current, next -> current.dateString != next.dateString }
+      )
   }
 
-  data class Results(
-    override val historyItems: List<HistoryListItem>?
-  ) : State(historyItems)
+  fun toggleSelectionOfItem(historyListItem: HistoryItem): State {
+    val newList = historyItems.map {
+      if (it.id == historyListItem.id) it.apply {
+        isSelected = !isSelected
+      } else it
+    }
+    if (newList.isEmpty()) {
+      return Results(newList, showAll)
+    }
+    return SelectionResults(newList, showAll, searchTerm)
+  }
 
-  data class NoResults(
-    override val historyItems: List<HistoryListItem>?
-  ) : State(historyItems)
+  // fun filterBasedOnSearchTerm(searchTerm: String): State =
+  //   copy(historyListItems = historyItems.filter {
+  //     it.historyTitle.contains(
+  //       searchTerm,
+  //       true
+  //     )
+  //   })
+
+  data class Results(
+    override val historyItems: List<HistoryItem>,
+    override val showAll: Boolean,
+    override val searchTerm: String = ""
+  ) : State(historyItems, showAll, searchTerm)
 
   data class SelectionResults(
-    override val historyItems: List<HistoryListItem>?
-  ) : State(historyItems)
+    override val historyItems: List<HistoryItem>,
+    override val showAll: Boolean,
+    override val searchTerm: String
+  ) : State(historyItems, showAll, searchTerm) {
+
+    val selectedItems: List<HistoryItem> =
+      historyListItems.filterIsInstance<HistoryItem>().filter(HistoryItem::isSelected)
+  }
 }

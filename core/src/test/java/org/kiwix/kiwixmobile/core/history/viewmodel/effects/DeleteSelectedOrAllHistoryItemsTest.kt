@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 
-import DeleteSelectedOrAllHistoryItems
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import io.mockk.every
@@ -22,7 +21,7 @@ internal class DeleteSelectedOrAllHistoryItemsTest {
     every { state.value } returns SelectionResults(listOf(item1, item2))
     val historyDao: HistoryDao = mockk()
     val activity: AppCompatActivity = mockk()
-    DeleteSelectedOrAllHistoryItems(state, historyDao).invokeWith(activity)
+    DeleteHistoryItems(state, historyDao).invokeWith(activity)
     verify { historyDao.deleteHistory(listOf(item1)) }
   }
 
@@ -34,7 +33,7 @@ internal class DeleteSelectedOrAllHistoryItemsTest {
     every { state.value } returns SelectionResults(listOf(item1, item2))
     val historyDao: HistoryDao = mockk()
     val activity: AppCompatActivity = mockk()
-    DeleteSelectedOrAllHistoryItems(state, historyDao).invokeWith(activity)
+    DeleteHistoryItems(state, historyDao).invokeWith(activity)
     verify { historyDao.deleteHistory(listOf(item1, item2)) }
   }
 }
