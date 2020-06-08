@@ -55,9 +55,7 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
         return true
       }
 
-      override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-        return false
-      }
+      override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
 
       override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_context_delete) {
@@ -136,12 +134,13 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
         no_bookmarks.visibility = View.GONE
       }
       is SelectionResults -> {
-        if (state.bookmarkItems?.any { it.isSelected } == true &&
-          actionMode == null) {
+        if (state.bookmarkItems?.any(BookmarkItem::isSelected) == true &&
+          actionMode == null
+        ) {
           actionMode = startSupportActionMode(actionModeCallback)
         }
-        val numberOfSelectedItems = state.bookmarkItems?.filter { it.isSelected }?.size
-        actionMode?.setTitle(getString(R.string.selected_items, numberOfSelectedItems))
+        val numberOfSelectedItems = state.bookmarkItems?.filter(BookmarkItem::isSelected)?.size
+        actionMode?.title = getString(R.string.selected_items, numberOfSelectedItems)
         state.bookmarkItems?.let { bookmarksAdapter.items = it }
         bookmarks_switch.isEnabled = false
         no_bookmarks.visibility = View.GONE

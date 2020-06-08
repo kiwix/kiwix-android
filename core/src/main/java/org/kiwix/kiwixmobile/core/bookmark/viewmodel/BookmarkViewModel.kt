@@ -29,8 +29,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import java.text.SimpleDateFormat
-import java.util.Locale
 import javax.inject.Inject
 
 class BookmarkViewModel @Inject constructor(
@@ -44,9 +42,8 @@ class BookmarkViewModel @Inject constructor(
   private val filter = BehaviorProcessor.createDefault("")
   private var latestSearchString = ""
   private val compositeDisposable = CompositeDisposable()
-  val showAllSwitchToggle =
+  private val showAllSwitchToggle =
     BehaviorProcessor.createDefault(sharedPreferenceUtil.showBookmarksAllBooks)
-  private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
 
   init {
     compositeDisposable.addAll(
@@ -63,24 +60,25 @@ class BookmarkViewModel @Inject constructor(
     }
 
   private fun updateBookmarks() =
-    bookmarksDataSource.getBookmarks(!sharedPreferenceUtil.showBookmarksAllBooks).subscribe {
-      bookmarks -> state.postValue(updateResultsState(bookmarks))
-    }
+    bookmarksDataSource.getBookmarks(!sharedPreferenceUtil.showBookmarksAllBooks)
+      .subscribe { bookmarks ->
+        state.postValue(updateResultsState(bookmarks))
+      }
 
   private fun updateResultsState(
     bookmarkList: List<BookmarkItem>?
   ): State {
     return when {
       bookmarkList?.isEmpty() == true -> NoResults(emptyList())
-      bookmarkList?.any { it.isSelected } == true -> SelectionResults(
+      bookmarkList?.any(BookmarkItem::isSelected) == true -> SelectionResults(
         bookmarkList.filter { it.bookmarkTitle.contains(latestSearchString, true) })
       else -> Results(
         bookmarkList?.filter { it.bookmarkTitle.contains(latestSearchString, true) })
     }
   }
 
-  private fun updateLatestSearchString() = filter.subscribe {
-    searchString -> latestSearchString = searchString
+  private fun updateLatestSearchString() = filter.subscribe { searchString ->
+    latestSearchString = searchString
     actions.offer(UpdateBookmarks)
   }
 
@@ -94,7 +92,8 @@ class BookmarkViewModel @Inject constructor(
       is Results -> SelectionResults(toggleGivenItemAndReturnListOfResultingItems(bookmarkItem))
       is SelectionResults -> {
         if (toggleGivenItemAndReturnListOfResultingItems(bookmarkItem)
-            ?.any { it.isSelected } == true) {
+            ?.any(BookmarkItem::isSelected) == true
+        ) {
           SelectionResults(toggleGivenItemAndReturnListOfResultingItems(bookmarkItem))
         } else {
           Results(toggleGivenItemAndReturnListOfResultingItems(bookmarkItem))
@@ -136,11 +135,13 @@ class BookmarkViewModel @Inject constructor(
             ?.bookmarkItems
             ?.map { item -> item.copy(isSelected = false) })
       )
-      DeleteBookmarks -> effects.offer(DeleteSelectedOrAllBookmarkItems(
-        state,
-        bookmarksDataSource,
-        actions
-      ))
+      DeleteBookmarks -> effects.offer(
+        DeleteSelectedOrAllBookmarkItems(
+          state,
+          bookmarksDataSource,
+          actions
+        )
+      )
       UpdateBookmarks -> updateBookmarks()
     }
   }.subscribe({}, Throwable::printStackTrace)
