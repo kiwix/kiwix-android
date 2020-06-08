@@ -23,7 +23,7 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDelete
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
 import javax.inject.Inject
@@ -35,7 +35,7 @@ data class ShowDeleteHistoryDialog(
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as HistoryActivity).activityComponent.inject(this)
     dialogShower.show(DeleteAllHistory, {
-      actions.offer(UserClickedDelete)
+      actions.offer(UserClickedConfirmDelete)
     })
   }
 }

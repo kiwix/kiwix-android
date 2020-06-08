@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 sealed class Action {
   object ExitHistory : Action()
   object ExitActionModeMenu : Action()
-  object UserClickedDelete : Action()
+  object UserClickedConfirmDelete : Action()
   object UserClickedDeleteButton : Action()
   object UserClickedDeleteSelectedHistoryItems : Action()
 

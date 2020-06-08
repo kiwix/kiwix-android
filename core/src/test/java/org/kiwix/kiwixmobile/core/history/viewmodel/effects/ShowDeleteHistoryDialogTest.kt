@@ -8,7 +8,7 @@ import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDelete
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 
@@ -30,6 +30,6 @@ internal class ShowDeleteHistoryDialogTest {
       dialogShower.show(DeleteSelectedHistory, capture(lambdaSlot))
     }
     lambdaSlot.captured.invoke()
-    verify { actions.offer(UserClickedDelete) }
+    verify { actions.offer(UserClickedConfirmDelete) }
   }
 }

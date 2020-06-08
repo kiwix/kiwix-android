@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDelete
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
@@ -458,7 +458,7 @@ internal class HistoryViewModelTest {
     @Test
     fun `DeleteHistoryItems calls DeleteSelectedOrAllHistoryItems side effect`() {
       actionResultsInEffects(
-        UserClickedDelete,
+        UserClickedConfirmDelete,
         DeleteHistoryItems(viewModel.state.value!!.historyItems, historyDao)
       )
     }

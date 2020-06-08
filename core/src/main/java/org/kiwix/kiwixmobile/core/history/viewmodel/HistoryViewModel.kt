@@ -15,7 +15,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UpdateHistory
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDelete
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
@@ -34,7 +34,7 @@ class HistoryViewModel @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
   val state = MutableLiveData<State>().apply {
-    value = Results(emptyList(), sharedPreferenceUtil.showHistoryAllBooks)
+    value = Results(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
   }
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
@@ -57,7 +57,7 @@ class HistoryViewModel @Inject constructor(
     when (action) {
       ExitHistory -> finishHistoryActivity(state)
       ExitActionModeMenu -> deselectAllHistoryItems(state)
-      UserClickedDelete -> offerDeletionOfItems(state)
+      UserClickedConfirmDelete -> offerDeletionOfItems(state)
       UserClickedDeleteButton -> offerShowDeleteDialog(state)
       is OnItemClick -> handleItemClick(state, action)
       is OnItemLongClick -> handleItemLongClick(state, action)
@@ -87,16 +87,9 @@ class HistoryViewModel @Inject constructor(
   private fun updateHistoryList(
     state: State,
     action: UpdateHistory
-  ): State {
-    return when (state) {
-      is Results -> state.copy(historyItems = action.history)
-      is SelectionResults -> {
-        val selectedItems = state.selectedItems
-        state.copy(historyItems = action.history.map {
-          if (selectedItems.contains(it)) it.copy(isSelected = true) else it
-        })
-      }
-    }
+  ): State = when (state) {
+    is Results -> state.copy(historyItems = action.history)
+    is SelectionResults -> Results(action.history, state.showAll, zimReaderContainer.id)
   }
 
   private fun offerUpdateToShowAllToggle(
@@ -156,7 +149,11 @@ class HistoryViewModel @Inject constructor(
   private fun deselectAllHistoryItems(state: State): State {
     return when (state) {
       is SelectionResults -> {
-        state.copy(historyItems = state.historyItems.map { it.copy(isSelected = false) })
+        Results(
+          state.historyItems.map { it.copy(isSelected = false) },
+          state.showAll,
+          state.searchTerm
+        )
       }
       else -> state
     }

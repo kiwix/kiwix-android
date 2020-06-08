@@ -28,6 +28,7 @@ import java.util.Locale
 sealed class State(
   open val historyItems: List<HistoryItem>,
   open val showAll: Boolean,
+  open val currentZimId: String?,
   open val searchTerm: String = ""
 ) {
 
@@ -35,7 +36,12 @@ sealed class State(
 
   val historyListItems: List<HistoryListItem> by lazy {
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(historyItems
-      .filter { it.historyTitle.contains(searchTerm, true) }
+      .filter {
+        it.historyTitle.contains(
+          searchTerm,
+          true
+        ) && (it.zimId == currentZimId || showAll)
+      }
       .sortedByDescending { dateFormatter.parse(it.dateString) })
       .foldOverAddingHeaders(
         { historyItem -> DateItem(historyItem.dateString) },
@@ -49,10 +55,10 @@ sealed class State(
         isSelected = !isSelected
       } else it
     }
-    if (newList.isEmpty()) {
-      return Results(newList, showAll)
+    if (newList.none(HistoryItem::isSelected)) {
+      return Results(newList, showAll, currentZimId)
     }
-    return SelectionResults(newList, showAll, searchTerm)
+    return SelectionResults(newList, showAll, currentZimId, searchTerm)
   }
 
   // fun filterBasedOnSearchTerm(searchTerm: String): State =
@@ -66,15 +72,16 @@ sealed class State(
   data class Results(
     override val historyItems: List<HistoryItem>,
     override val showAll: Boolean,
+    override val currentZimId: String?,
     override val searchTerm: String = ""
-  ) : State(historyItems, showAll, searchTerm)
+  ) : State(historyItems, showAll, currentZimId, searchTerm)
 
   data class SelectionResults(
     override val historyItems: List<HistoryItem>,
     override val showAll: Boolean,
+    override val currentZimId: String?,
     override val searchTerm: String
-  ) : State(historyItems, showAll, searchTerm) {
-
+  ) : State(historyItems, showAll, currentZimId, searchTerm) {
     val selectedItems: List<HistoryItem> =
       historyListItems.filterIsInstance<HistoryItem>().filter(HistoryItem::isSelected)
   }
