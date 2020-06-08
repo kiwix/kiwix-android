@@ -70,7 +70,8 @@ class Repository @Inject internal constructor(
       HeaderizableList(it as List<BooksOnDiskListItem>).foldOverAddingHeaders(
         { bookOnDisk -> LanguageItem((bookOnDisk as BookOnDisk).locale) },
         { current, next ->
-          (current as BookOnDisk).locale.displayName != (next as BookOnDisk).locale.displayName })
+          (current as BookOnDisk).locale.displayName != (next as BookOnDisk).locale.displayName
+        })
     }
     .map { it.toList() }
 
@@ -93,11 +94,12 @@ class Repository @Inject internal constructor(
         zimReaderContainer.zimCanonicalPath
       )
     ).map {
-        HeaderizableList(it as List<HistoryListItem>).foldOverAddingHeaders(
-          { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
-          { current, next ->
-            (current as HistoryItem).dateString != (next as HistoryItem).dateString })
-      }
+      HeaderizableList(it as List<HistoryListItem>).foldOverAddingHeaders(
+        { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
+        { current, next ->
+          (current as HistoryItem).dateString != (next as HistoryItem).dateString
+        })
+    }
       .subscribeOn(io)
       .observeOn(mainThread)
 

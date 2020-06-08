@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteAllHisto
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteBookmarkDialog
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ToggleShowAllHistorySwitchAndSaveItsStateToPrefs
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
@@ -269,6 +269,7 @@ internal class HistoryViewModelTest {
       viewModel.actions.offer(OnItemClick(item1))
       resultsIn(Results(listOf(date, item1, item2)))
     }
+
     @Test
     fun `Deselection via OnItemLongClick exits selection state if last item is deselected`() {
       val item1 =
@@ -320,46 +321,25 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `ExitActionModeMenu deselects all history items from state`() {
-      val item1 =
-        createSimpleHistoryItem(
-          "a", "1 Aug 2020", isSelected = true
-        )
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item1)
-      )
+      val item1 = createSimpleHistoryItem("a", "1 Aug 2020", isSelected = true)
+      emissionOf(searchTerm = "", databaseResults = listOf(item1))
       viewModel.actions.offer(ExitActionModeMenu)
       assertItemIsDeselected(item1)
     }
 
     @Test
     fun `OnItemLongClick selects history item from state`() {
-      val item1 =
-        createSimpleHistoryItem(
-          "a", "1 Aug 2020"
-        )
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item1)
-      )
+      val item1 = createSimpleHistoryItem("a", "1 Aug 2020")
+      emissionOf(searchTerm = "", databaseResults = listOf(item1))
       viewModel.actions.offer(OnItemLongClick(item1))
       assertItemIsSelected(item1)
     }
 
     @Test
     fun `OnItemLongClick selects history item from state if in SelectionMode`() {
-      val item1 =
-        createSimpleHistoryItem(
-          "a", "1 Aug 2020", id = 2
-        )
-      val item2 =
-        createSimpleHistoryItem(
-          "b", "1 Aug 2020", id = 3
-        )
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item1, item2)
-      )
+      val item1 = createSimpleHistoryItem("a", "1 Aug 2020", id = 2)
+      val item2 = createSimpleHistoryItem("a", "1 Aug 2020", id = 3)
+      emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
       viewModel.actions.offer(OnItemLongClick(item1))
       viewModel.actions.offer(OnItemLongClick(item2))
       assertItemIsSelected(item1)
@@ -371,6 +351,7 @@ internal class HistoryViewModelTest {
         (viewModel.state.value?.historyItems?.find { it.id == item.id } as HistoryItem).isSelected
       )
     }
+
     private fun assertItemIsDeselected(item: HistoryItem) {
       assertFalse(
         (viewModel.state.value?.historyItems?.find { it.id == item.id } as HistoryItem).isSelected
@@ -379,14 +360,8 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemLongClick deselects history item from state if in SelectionMode`() {
-      val item1 =
-        createSimpleHistoryItem(
-          "a", "1 Aug 2020", id = 2
-        )
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item1)
-      )
+      val item1 = createSimpleHistoryItem("a", "1 Aug 2020", id = 2)
+      emissionOf(searchTerm = "", databaseResults = listOf(item1))
       viewModel.actions.offer(OnItemLongClick(item1))
       viewModel.actions.offer(OnItemLongClick(item1))
       assertItemIsDeselected(item1)
@@ -394,18 +369,9 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemClick selects history item from state if in SelectionMode`() {
-      val item1 =
-        createSimpleHistoryItem(
-          "a", "1 Aug 2020", id = 2
-        )
-      val item2 =
-        createSimpleHistoryItem(
-          "b", "1 Aug 2020", id = 3
-        )
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item1, item2)
-      )
+      val item1 = createSimpleHistoryItem("a", "1 Aug 2020", id = 2)
+      val item2 = createSimpleHistoryItem("b", "1 Aug 2020", id = 3)
+      emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
       viewModel.actions.offer(OnItemLongClick(item1))
       viewModel.actions.offer(OnItemClick(item2))
       assertItemIsSelected(item1)
@@ -414,14 +380,8 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `OnItemClick offers OpenHistoryItem if not in selection mode `() {
-      val item1 =
-        createSimpleHistoryItem(
-          "a", "1 Aug 2020", id = 2
-        )
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item1)
-      )
+      val item1 = createSimpleHistoryItem("a", "1 Aug 2020", id = 2)
+      emissionOf(searchTerm = "", databaseResults = listOf(item1))
       actionResultsInEffects(OnItemClick(item1), OpenHistoryItem(item1, zimReaderContainer))
     }
 
@@ -432,28 +392,33 @@ internal class HistoryViewModelTest {
         ToggleShowAllHistorySwitchAndSaveItsStateToPrefs(
           viewModel.showAllSwitchToggle,
           sharedPreferenceUtil,
-          true))
+          true
+        )
+      )
     }
 
     @Test
     fun `RequestDeleteAllHistoryItems opens dialog to request deletion`() {
       actionResultsInEffects(
         RequestDeleteAllHistoryItems,
-        ShowDeleteBookmarkDialog(viewModel.actions, DeleteAllHistory))
+        ShowDeleteHistoryDialog(viewModel.actions, DeleteAllHistory)
+      )
     }
 
     @Test
     fun `RequestDeleteSelectedHistoryItems opens dialog to request deletion`() {
       actionResultsInEffects(
         RequestDeleteSelectedHistoryItems,
-        ShowDeleteBookmarkDialog(viewModel.actions, DeleteSelectedHistory))
+        ShowDeleteHistoryDialog(viewModel.actions, DeleteSelectedHistory)
+      )
     }
 
     @Test
     fun `DeleteHistoryItems calls DeleteSelectedOrAllHistoryItems side effect`() {
       actionResultsInEffects(
         DeleteHistoryItems,
-        DeleteSelectedOrAllHistoryItems(viewModel.state, historyDao))
+        DeleteSelectedOrAllHistoryItems(viewModel.state, historyDao)
+      )
     }
 
     private fun actionResultsInEffects(

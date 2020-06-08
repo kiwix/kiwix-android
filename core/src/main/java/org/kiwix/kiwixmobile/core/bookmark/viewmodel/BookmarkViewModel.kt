@@ -42,7 +42,7 @@ class BookmarkViewModel @Inject constructor(
   private val filter = BehaviorProcessor.createDefault("")
   private var latestSearchString = ""
   private val compositeDisposable = CompositeDisposable()
-  private val showAllSwitchToggle =
+  val showAllSwitchToggle =
     BehaviorProcessor.createDefault(sharedPreferenceUtil.showBookmarksAllBooks)
 
   init {
