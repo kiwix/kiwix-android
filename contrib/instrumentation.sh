@@ -2,6 +2,7 @@
 
 adb logcat -c
 adb logcat *:E -v color &
-./gradlew jacocoInstrumentationTestReport
+./gradlew jacocoInstrumentationTestReport; gradlew_return_code=$?
 adb exec-out screencap -p > screencap.png
 find screencap.png
+gradlew_return_code
