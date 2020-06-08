@@ -9,6 +9,6 @@ data class UpdateAllHistoryPreference(
   private val isChecked: Boolean
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    sharedPreferenceUtil.showHistoryAllBooks = !isChecked
+    sharedPreferenceUtil.showHistoryAllBooks = isChecked
   }
 }

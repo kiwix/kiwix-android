@@ -132,19 +132,27 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     when (state) {
       is Results -> {
         actionMode?.finish()
-        state.historyListItems.let { historyAdapter.items = it }
+        historyAdapter.items = state.historyListItems
         history_switch.isEnabled = true
-        no_history.visibility = View.GONE
+        toggleNoHistoryText(state)
       }
       is SelectionResults -> {
         if (state.historyItems.any(HistoryItem::isSelected) && actionMode == null) {
           actionMode = startSupportActionMode(actionModeCallback)
         }
-        state.historyListItems.let { historyAdapter.items = it }
+        historyAdapter.items = state.historyListItems
         history_switch.isEnabled = false
-        no_history.visibility = View.GONE
+        toggleNoHistoryText(state)
       }
     }
+
+  private fun toggleNoHistoryText(state: State) {
+    if (state.historyListItems.isEmpty()) {
+      no_history.visibility = View.VISIBLE
+    } else {
+      no_history.visibility = View.GONE
+    }
+  }
 
   override fun onItemClick(favicon: ImageView, history: HistoryItem) {
     historyViewModel.actions.offer(Action.OnItemClick(history))
