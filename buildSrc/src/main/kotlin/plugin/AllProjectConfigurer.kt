@@ -101,7 +101,8 @@ class AllProjectConfigurer {
           //TODO stop ignoring below this
           "CheckResult",
           "LabelFor",
-          "LogConditional"
+          "LogConditional",
+          "LockedOrientationActivity"
         )
 
         warning(

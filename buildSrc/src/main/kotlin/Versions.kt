@@ -15,7 +15,7 @@ object Versions {
 
   const val com_squareup_retrofit2: String = "2.5.0" // available: "2.7.1"
 
-  const val org_jetbrains_kotlin: String = "1.3.70"
+  const val org_jetbrains_kotlin: String = "1.3.72"
 
   const val com_google_dagger: String = "2.26"
 
@@ -33,7 +33,7 @@ object Versions {
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "3.5.3"
+  const val com_android_tools_build_gradle: String = "4.0.0"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
