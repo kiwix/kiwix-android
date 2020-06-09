@@ -23,7 +23,6 @@ import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 sealed class Action {
   object ExitBookmarks : Action()
   object ExitActionModeMenu : Action()
-  object UserClickedConfirmDelete : Action()
   object UserClickedDeleteButton : Action()
   object UserClickedDeleteSelectedBookmarks : Action()
 

@@ -15,11 +15,9 @@ import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UpdateBookmarks
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteSelectedBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedShowAllToggle
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.DeleteBookmarkItems
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.OpenBookmark
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
@@ -62,7 +60,6 @@ class BookmarkViewModel @Inject constructor(
     val newState = when (action) {
       ExitBookmarks -> finishBookmarksActivity(state)
       ExitActionModeMenu -> deselectAllBookmarkItems(state)
-      UserClickedConfirmDelete -> offerDeletionOfItems(state)
       UserClickedDeleteButton -> offerShowDeleteDialog(state)
       UserClickedDeleteSelectedBookmarks -> offerShowDeleteDialog(state)
       is OnItemClick -> handleItemClick(state, action)
@@ -124,12 +121,7 @@ class BookmarkViewModel @Inject constructor(
   }
 
   private fun offerShowDeleteDialog(state: State): State {
-    effects.offer(ShowDeleteBookmarksDialog(actions))
-    return state
-  }
-
-  private fun offerDeletionOfItems(state: State): State {
-    effects.offer(DeleteBookmarkItems(state, bookmarksDao))
+    effects.offer(ShowDeleteBookmarksDialog(effects, state, bookmarksDao))
     return state
   }
 
