@@ -15,7 +15,7 @@ object Versions {
 
   const val com_squareup_retrofit2: String = "2.5.0" // available: "2.7.1"
 
-  const val org_jetbrains_kotlin: String = "1.3.70"
+  const val org_jetbrains_kotlin: String = "1.3.72"
 
   const val com_google_dagger: String = "2.26"
 
