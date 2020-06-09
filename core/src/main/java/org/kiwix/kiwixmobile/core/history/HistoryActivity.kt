@@ -37,8 +37,6 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSele
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.history.viewmodel.State
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -128,25 +126,19 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  private fun render(state: State) =
-    when (state) {
-      is Results -> {
-        actionMode?.finish()
-        historyAdapter.items = state.getHistoryListItems()
-        history_switch.isChecked = state.showAll
-        history_switch.isEnabled = true
-        toggleNoHistoryText(state)
+  private fun render(state: State) {
+    historyAdapter.items = state.getHistoryListItems()
+    if (!state.isInSelectionState) {
+      actionMode?.finish()
+      history_switch.isEnabled = true
+    } else {
+      if (actionMode == null) {
+        actionMode = startSupportActionMode(actionModeCallback)
       }
-      is SelectionResults -> {
-        if (state.historyItems.any(HistoryItem::isSelected) && actionMode == null) {
-          actionMode = startSupportActionMode(actionModeCallback)
-        }
-        historyAdapter.items = state.getHistoryListItems()
-        history_switch.isChecked = state.showAll
-        history_switch.isEnabled = false
-        toggleNoHistoryText(state)
-      }
+      history_switch.isEnabled = false
     }
+    toggleNoHistoryText(state)
+  }
 
   private fun toggleNoHistoryText(state: State) {
     if (state.getHistoryListItems().isEmpty()) {

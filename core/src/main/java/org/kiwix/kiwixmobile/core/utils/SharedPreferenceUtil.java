@@ -61,11 +61,6 @@ public class SharedPreferenceUtil {
   private SharedPreferences sharedPreferences;
   private final PublishProcessor<String> prefStorages = PublishProcessor.create();
 
-  public PublishProcessor<Boolean> getShowAllHistoryToggleSwitch() {
-    return showAllHistoryToggleSwitch;
-  }
-
-  private final PublishProcessor<Boolean> showAllHistoryToggleSwitch = PublishProcessor.create();
   private final PublishProcessor<NightModeConfig.Mode> nightModes = PublishProcessor.create();
 
   @Inject
@@ -158,10 +153,6 @@ public class SharedPreferenceUtil {
     return prefStorages.startWith(getPrefStorage());
   }
 
-  public Flowable<Boolean> getShowAllHistoryToggleSwitches() {
-    return showAllHistoryToggleSwitch.startWith(getShowHistoryAllBooks());
-  }
-
   public void putPrefFullScreen(boolean fullScreen) {
     sharedPreferences.edit().putBoolean(PREF_FULLSCREEN, fullScreen).apply();
   }
@@ -186,7 +177,6 @@ public class SharedPreferenceUtil {
     sharedPreferences.edit()
       .putBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, prefShowHistoryAllBooks)
       .apply();
-    showAllHistoryToggleSwitch.offer(prefShowHistoryAllBooks);
   }
 
   public boolean getShowBookmarksCurrentBook() {
