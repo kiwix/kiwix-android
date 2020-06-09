@@ -40,6 +40,8 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
   }.find()
     .map(::BookmarkItem)
 
+  fun bookmarks() = box.asFlowable().map { it.map(::BookmarkItem) }
+
   fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {
     equal(BookmarkEntity_.zimId, zimFileReader?.id ?: "")
       .or()

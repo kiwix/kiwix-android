@@ -17,22 +17,21 @@ import kotlinx.android.synthetic.main.activity_bookmarks.no_bookmarks
 import kotlinx.android.synthetic.main.activity_history.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkDelegate.BookmarkItemDelegate
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarksAdapter
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarksAdapter.OnItemClickListener
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ExitBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.RequestDeleteAllBookmarks
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.RequestDeleteSelectedBookmarks
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ToggleShowBookmarksFromAllBooks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteSelectedBookmarks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -59,15 +58,15 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
 
       override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_context_delete) {
-          bookmarksViewModel.actions.offer(RequestDeleteSelectedBookmarks)
+          bookmarksViewModel.actions.offer(UserClickedDeleteSelectedBookmarks)
           return true
         }
-        bookmarksViewModel.actions.offer(Action.ExitActionModeMenu)
+        bookmarksViewModel.actions.offer(ExitActionModeMenu)
         return false
       }
 
       override fun onDestroyActionMode(mode: ActionMode) {
-        bookmarksViewModel.actions.offer(Action.ExitActionModeMenu)
+        bookmarksViewModel.actions.offer(ExitActionModeMenu)
         actionMode = null
       }
     }
@@ -86,13 +85,13 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     setSupportActionBar(toolbar)
 
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    supportActionBar?.setTitle(string.bookmarks)
+    supportActionBar?.setTitle(R.string.bookmarks)
 
     recycler_view.adapter = bookmarksAdapter
     recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
     bookmarks_switch.setOnCheckedChangeListener { _, isChecked ->
-      bookmarksViewModel.actions.offer(ToggleShowBookmarksFromAllBooks(isChecked))
+      bookmarksViewModel.actions.offer(UserClickedShowAllToggle(isChecked))
     }
     bookmarks_switch.isChecked = sharedPreferenceUtil.showBookmarksAllBooks
 
@@ -120,39 +119,50 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
       bookmarksViewModel.actions.offer(ExitBookmarks)
     }
     if (item.itemId == R.id.menu_bookmarks_clear) {
-      bookmarksViewModel.actions.offer(RequestDeleteAllBookmarks)
+      bookmarksViewModel.actions.offer(UserClickedDeleteButton)
     }
     return super.onOptionsItemSelected(item)
   }
 
   private fun render(state: State) =
     when (state) {
-      is Results -> {
-        actionMode?.finish()
-        state.bookmarkItems?.let { bookmarksAdapter.items = it }
-        bookmarks_switch.isEnabled = true
-        no_bookmarks.visibility = View.GONE
-      }
-      is SelectionResults -> {
-        if (state.bookmarkItems?.any(BookmarkItem::isSelected) == true &&
-          actionMode == null
-        ) {
-          actionMode = startSupportActionMode(actionModeCallback)
-        }
-        val numberOfSelectedItems = state.bookmarkItems?.filter(BookmarkItem::isSelected)?.size
-        actionMode?.title = getString(R.string.selected_items, numberOfSelectedItems)
-        state.bookmarkItems?.let { bookmarksAdapter.items = it }
-        bookmarks_switch.isEnabled = false
-        no_bookmarks.visibility = View.GONE
-      }
-      is NoResults -> {
-        state.bookmarkItems?.let { bookmarksAdapter.items = it }
-        no_bookmarks.visibility = View.VISIBLE
-      }
+      is Results -> handleResultsState(state)
+      is SelectionResults -> handleSelectionState(state)
     }
 
+  private fun handleResultsState(state: State) {
+    actionMode?.finish()
+    val filteredBookmarks = state.getFilteredBookmarks()
+    filteredBookmarks.let { bookmarksAdapter.items = it }
+    bookmarks_switch.isEnabled = true
+    toggleNoBookmarksText(filteredBookmarks)
+  }
+
+  private fun handleSelectionState(state: State) {
+    val filteredBookmarks = state.getFilteredBookmarks()
+    if (filteredBookmarks.any(BookmarkItem::isSelected) &&
+      actionMode == null
+    ) {
+      actionMode = startSupportActionMode(actionModeCallback)
+    }
+    val numberOfSelectedItems =
+      filteredBookmarks.filter(BookmarkItem::isSelected).size
+    actionMode?.title = getString(R.string.selected_items, numberOfSelectedItems)
+    filteredBookmarks.let { bookmarksAdapter.items = it }
+    bookmarks_switch.isEnabled = false
+    toggleNoBookmarksText(filteredBookmarks)
+  }
+
+  private fun toggleNoBookmarksText(items: List<BookmarkItem>) {
+    if (items.isEmpty()) {
+      no_bookmarks.visibility = View.VISIBLE
+    } else {
+      no_bookmarks.visibility = View.GONE
+    }
+  }
+
   override fun onItemClick(bookmark: BookmarkItem) {
-    bookmarksViewModel.actions.offer(Action.OnItemClick(bookmark))
+    bookmarksViewModel.actions.offer(OnItemClick(bookmark))
   }
 
   override fun onItemLongClick(bookmark: BookmarkItem): Boolean =

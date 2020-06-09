@@ -21,22 +21,47 @@ package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 
 sealed class State(
-  open val bookmarkItems: List<BookmarkItem>?
+  open val bookmarks: List<BookmarkItem>,
+  open val showAll: Boolean,
+  open val currentZimId: String?,
+  open val searchTerm: String = ""
 ) {
 
-  fun containsSelectedItems(): Boolean {
-    return bookmarkItems?.any { it.isSelected } == true
+  fun getFilteredBookmarks(): List<BookmarkItem> =
+    bookmarks
+      .filter {
+        it.bookmarkTitle.contains(
+          searchTerm,
+          true
+        ) && (it.zimId == currentZimId || showAll)
+      }
+
+  fun toggleSelectionOfItem(bookmark: BookmarkItem): State {
+    val newList = bookmarks.map {
+      if (it.databaseId == bookmark.databaseId) it.apply {
+        isSelected = !isSelected
+      } else it
+    }
+    if (newList.none(BookmarkItem::isSelected)) {
+      return Results(newList, showAll, currentZimId, searchTerm)
+    }
+    return SelectionResults(newList, showAll, currentZimId, searchTerm)
   }
 
   data class Results(
-    override val bookmarkItems: List<BookmarkItem>?
-  ) : State(bookmarkItems)
-
-  data class NoResults(
-    override val bookmarkItems: List<BookmarkItem>?
-  ) : State(bookmarkItems)
+    override val bookmarks: List<BookmarkItem>,
+    override val showAll: Boolean,
+    override val currentZimId: String?,
+    override val searchTerm: String = ""
+  ) : State(bookmarks, showAll, currentZimId, searchTerm)
 
   data class SelectionResults(
-    override val bookmarkItems: List<BookmarkItem>?
-  ) : State(bookmarkItems)
+    override val bookmarks: List<BookmarkItem>,
+    override val showAll: Boolean,
+    override val currentZimId: String?,
+    override val searchTerm: String
+  ) : State(bookmarks, showAll, currentZimId, searchTerm) {
+    val selectedItems: List<BookmarkItem> =
+      bookmarks.filter(BookmarkItem::isSelected)
+  }
 }

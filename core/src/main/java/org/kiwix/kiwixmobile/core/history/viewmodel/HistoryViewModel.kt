@@ -1,41 +1,31 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import DeleteSelectedOrAllHistoryItems
-import OpenHistoryItem
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.OpenHistoryItem
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Function3
-import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
-import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.AllHistoryPreferenceChanged
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteAllHistoryItems
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteSelectedHistoryItems
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UpdateHistory
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.DeleteHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ToggleShowAllHistorySwitchAndSaveItsStateToPrefs
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.UpdateAllHistoryPreference
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import java.text.SimpleDateFormat
-import java.util.Locale
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
@@ -43,127 +33,148 @@ class HistoryViewModel @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
-  val state = MutableLiveData<State>().apply { value = NoResults(emptyList()) }
+  val state = MutableLiveData<State>().apply {
+    value = Results(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
+  }
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
-  private val filter = BehaviorProcessor.createDefault("")
   private val compositeDisposable = CompositeDisposable()
-  val showAllSwitchToggle =
-    BehaviorProcessor.createDefault(!sharedPreferenceUtil.showHistoryCurrentBook)
-  private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
 
   init {
     compositeDisposable.addAll(
-      viewStateReducer(),
-      actionMapper()
+      historyDao.history().subscribe { actions.offer(UpdateHistory(it)) },
+      sharedPreferenceUtil.showAllHistoryToggleSwitch.subscribe {
+        actions.offer(AllHistoryPreferenceChanged(it))
+      },
+      viewStateReducer()
     )
   }
 
   private fun viewStateReducer() =
-    Flowable.combineLatest(
-      filter,
-      showAllSwitchToggle,
-      historyDao.history(),
-      Function3(::searchResults)
-    ).subscribe { state.postValue(updateResultsState(it)) }
+    actions.map { reduce(it, state.value!!) }.subscribe(state::postValue)
 
-  private fun updateResultsState(
-    historyListWithDateItems: List<HistoryListItem>
+  private fun reduce(action: Action, state: State): State =
+    when (action) {
+      ExitHistory -> finishHistoryActivity(state)
+      ExitActionModeMenu -> deselectAllHistoryItems(state)
+      UserClickedConfirmDelete -> offerDeletionOfItems(state)
+      UserClickedDeleteButton -> offerShowDeleteDialog(state)
+      UserClickedDeleteSelectedHistoryItems -> offerShowDeleteDialog(state)
+      is OnItemClick -> handleItemClick(state, action)
+      is OnItemLongClick -> handleItemLongClick(state, action)
+      is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
+      is Filter -> updateHistoryItemsBasedOnFilter(state, action)
+      is UpdateHistory -> updateHistoryList(state, action)
+      is AllHistoryPreferenceChanged -> changeShowHistoryToggle(state, action)
+    }
+
+  private fun updateHistoryItemsBasedOnFilter(state: State, action: Filter) =
+    when (state) {
+      is Results -> state.copy(searchTerm = action.searchTerm)
+      is SelectionResults -> state.copy(searchTerm = action.searchTerm)
+    }
+
+  private fun changeShowHistoryToggle(
+    state: State,
+    action: AllHistoryPreferenceChanged
   ): State {
-    return when {
-      historyListWithDateItems.isEmpty() -> NoResults(historyListWithDateItems)
-      historyListWithDateItems.filterIsInstance<HistoryItem>()
-        .any { it.isSelected } -> SelectionResults(
-          historyListWithDateItems
-      )
-      else -> Results(historyListWithDateItems)
+    return when (state) {
+      is SelectionResults -> state
+      is Results -> state.copy(showAll = action.showAll)
     }
   }
 
-  private fun searchResults(
-    searchString: String,
-    showAllToggle: Boolean,
-    historyList: List<HistoryListItem>
-  ): List<HistoryListItem> = HeaderizableList(historyList
-      .filterIsInstance<HistoryItem>()
-      .filter { h ->
-        h.historyTitle.contains(searchString, true) &&
-          (h.zimName == zimReaderContainer.name || showAllToggle)
-      }
-      .sortedByDescending { dateFormatter.parse(it.dateString) } as List<HistoryListItem>)
-      .foldOverAddingHeaders(
-        { historyItem -> DateItem((historyItem as HistoryItem).dateString) },
-        { current, next -> (current as HistoryItem).dateString != (next as HistoryItem).dateString }
+  private fun updateHistoryList(
+    state: State,
+    action: UpdateHistory
+  ): State = when (state) {
+    is Results -> state.copy(historyItems = action.history)
+    is SelectionResults -> Results(
+      action.history,
+      state.showAll,
+      zimReaderContainer.id,
+      state.searchTerm
+    )
+  }
+
+  private fun offerUpdateToShowAllToggle(
+    action: UserClickedShowAllToggle,
+    state: State
+  ): State {
+    effects.offer(
+      UpdateAllHistoryPreference(
+        sharedPreferenceUtil,
+        action.isChecked
       )
+    )
+    return when (state) {
+      is Results -> state.copy(showAll = action.isChecked)
+      else -> state
+    }
+  }
+
+  private fun handleItemLongClick(
+    state: State,
+    action: OnItemLongClick
+  ): State {
+    return when (state) {
+      is Results -> state.toggleSelectionOfItem(action.historyItem)
+      else -> state
+    }
+  }
+
+  private fun handleItemClick(
+    state: State,
+    action: OnItemClick
+  ): State {
+    return when (state) {
+      is Results -> {
+        effects.offer(OpenHistoryItem(action.historyItem, zimReaderContainer))
+        state
+      }
+      is SelectionResults -> state.toggleSelectionOfItem(action.historyItem)
+    }
+  }
+
+  private fun offerShowDeleteDialog(state: State): State {
+    effects.offer(ShowDeleteHistoryDialog(actions))
+    return state
+  }
+
+  private fun offerDeletionOfItems(state: State): State {
+    return when (state) {
+      is Results -> {
+        effects.offer(DeleteHistoryItems(state.historyItems, historyDao))
+        state
+      }
+      is SelectionResults -> {
+        effects.offer(DeleteHistoryItems(state.selectedItems, historyDao))
+        state
+      }
+    }
+  }
+
+  private fun deselectAllHistoryItems(state: State): State {
+    return when (state) {
+      is SelectionResults -> {
+        Results(
+          state.historyItems.map { it.copy(isSelected = false) },
+          state.showAll,
+          state.currentZimId,
+          state.searchTerm
+        )
+      }
+      else -> state
+    }
+  }
+
+  private fun finishHistoryActivity(state: State): State {
+    effects.offer(Finish)
+    return state
+  }
 
   override fun onCleared() {
     compositeDisposable.clear()
     super.onCleared()
-  }
-
-  private fun toggleSelectionOfItem(historyItem: HistoryItem): State =
-    when (state.value) {
-      is Results -> SelectionResults(toggleGivenItemAndReturnListOfResultingItems(historyItem))
-      is SelectionResults -> {
-        if (toggleGivenItemAndReturnListOfResultingItems(historyItem)
-            ?.filterIsInstance<HistoryItem>()
-            ?.any { it.isSelected } == true) {
-          SelectionResults(toggleGivenItemAndReturnListOfResultingItems(historyItem))
-        } else {
-          Results(toggleGivenItemAndReturnListOfResultingItems(historyItem))
-        }
-      }
-      is NoResults -> NoResults(emptyList())
-      null -> NoResults(emptyList())
-    }
-
-  private fun toggleGivenItemAndReturnListOfResultingItems(historyItem: HistoryItem):
-    List<HistoryListItem>? {
-    return state.value
-      ?.historyItems
-      ?.map {
-        if (it.id == historyItem.id && it is HistoryItem)
-          it.copy(isSelected = !it.isSelected) else it
-      }
-  }
-
-  private fun actionMapper() = actions.map {
-    when (it) {
-      ExitHistory -> effects.offer(Finish)
-      is Filter -> filter.offer(it.searchTerm)
-      is ToggleShowHistoryFromAllBooks ->
-        toggleShowAllHistorySwitchAndSaveItsStateToPrefs(it.isChecked)
-      is OnItemLongClick -> state.postValue(toggleSelectionOfItem(it.historyItem))
-      is OnItemClick -> appendItemToSelectionOrOpenIt(it)
-      is RequestDeleteAllHistoryItems ->
-        effects.offer(ShowDeleteHistoryDialog(actions, DeleteAllHistory))
-      is RequestDeleteSelectedHistoryItems ->
-        effects.offer(ShowDeleteHistoryDialog(actions, DeleteSelectedHistory))
-      ExitActionModeMenu -> state.postValue(Results(
-        state.value
-          ?.historyItems
-          ?.map { item -> if (item is HistoryItem) item.copy(isSelected = false) else item })
-      )
-      DeleteHistoryItems -> effects.offer(DeleteSelectedOrAllHistoryItems(state, historyDao))
-    }
-  }.subscribe({}, Throwable::printStackTrace)
-
-  private fun toggleShowAllHistorySwitchAndSaveItsStateToPrefs(isChecked: Boolean) {
-    effects.offer(
-      ToggleShowAllHistorySwitchAndSaveItsStateToPrefs(
-        showAllSwitchToggle,
-        sharedPreferenceUtil,
-        isChecked
-      )
-    )
-  }
-
-  private fun appendItemToSelectionOrOpenIt(onItemClick: OnItemClick) {
-    val historyItem = onItemClick.historyListItem as HistoryItem
-    if (state.value?.containsSelectedItems() == true) {
-      state.postValue(toggleSelectionOfItem(historyItem))
-    } else {
-      effects.offer(OpenHistoryItem(historyItem, zimReaderContainer))
-    }
   }
 }

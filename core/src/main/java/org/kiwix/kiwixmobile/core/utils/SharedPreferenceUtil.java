@@ -54,12 +54,18 @@ public class SharedPreferenceUtil {
   private static final String PREF_STORAGE_TITLE = "pref_selected_title";
   private static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
   private static final String PREF_IS_FIRST_RUN = "isFirstRun";
-  private static final String PREF_SHOW_BOOKMARKS_All_BOOKS = "show_bookmarks_current_book";
-  private static final String PREF_SHOW_HISTORY_CURRENT_BOOK = "show_history_current_book";
+  private static final String PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book";
+  private static final String PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book";
   private static final String PREF_HOSTED_BOOKS = "hosted_books";
   public static final String PREF_NIGHT_MODE = "pref_night_mode";
   private SharedPreferences sharedPreferences;
   private final PublishProcessor<String> prefStorages = PublishProcessor.create();
+
+  public PublishProcessor<Boolean> getShowAllHistoryToggleSwitch() {
+    return showAllHistoryToggleSwitch;
+  }
+
+  private final PublishProcessor<Boolean> showAllHistoryToggleSwitch = PublishProcessor.create();
   private final PublishProcessor<NightModeConfig.Mode> nightModes = PublishProcessor.create();
 
   @Inject
@@ -152,6 +158,10 @@ public class SharedPreferenceUtil {
     return prefStorages.startWith(getPrefStorage());
   }
 
+  public Flowable<Boolean> getShowAllHistoryToggleSwitches() {
+    return showAllHistoryToggleSwitch.startWith(getShowHistoryAllBooks());
+  }
+
   public void putPrefFullScreen(boolean fullScreen) {
     sharedPreferences.edit().putBoolean(PREF_FULLSCREEN, fullScreen).apply();
   }
@@ -168,23 +178,24 @@ public class SharedPreferenceUtil {
     sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false).apply();
   }
 
-  public boolean getShowHistoryCurrentBook() {
-    return sharedPreferences.getBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, true);
+  public boolean getShowHistoryAllBooks() {
+    return sharedPreferences.getBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, true);
   }
 
-  public void setShowHistoryCurrentBook(boolean prefShowHistoryCurrentBook) {
+  public void setShowHistoryAllBooks(boolean prefShowHistoryAllBooks) {
     sharedPreferences.edit()
-      .putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook)
+      .putBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, prefShowHistoryAllBooks)
       .apply();
+    showAllHistoryToggleSwitch.offer(prefShowHistoryAllBooks);
   }
 
   public boolean getShowBookmarksAllBooks() {
-    return sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_All_BOOKS, true);
+    return sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, true);
   }
 
   public void setShowBookmarksAllBooks(boolean prefShowBookmarksFromCurrentBook) {
     sharedPreferences.edit()
-      .putBoolean(PREF_SHOW_BOOKMARKS_All_BOOKS, prefShowBookmarksFromCurrentBook)
+      .putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
       .apply();
   }
 

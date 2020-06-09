@@ -1,4 +1,6 @@
-package org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects/*
+package org.kiwix.kiwixmobile.core.history.viewmodel.effects
+
+/*
  * Kiwix Android
  * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
@@ -16,28 +18,16 @@ package org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects/*
  *
  */
 
-import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
-import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
+import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
-data class OpenBookmark(
-  private val bookmark: BookmarkItem,
-  private val zimReaderContainer: ZimReaderContainer
+data class DeleteHistoryItems(
+  private val itemsToDelete: List<HistoryItem>,
+  private val historyDao: HistoryDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val intent = Intent().putExtra(EXTRA_CHOSE_X_URL, bookmark.bookmarkUrl)
-    if (bookmark.zimFilePath != zimReaderContainer.zimCanonicalPath) {
-      intent.putExtra(EXTRA_CHOSE_X_FILE, bookmark.zimFilePath)
-    }
-    activity.setResult(
-      Activity.RESULT_OK,
-      intent
-    )
-    activity.finish()
+    historyDao.deleteHistory(itemsToDelete)
   }
 }

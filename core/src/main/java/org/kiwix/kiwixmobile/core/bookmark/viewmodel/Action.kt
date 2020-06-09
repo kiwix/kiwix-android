@@ -23,13 +23,14 @@ import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 sealed class Action {
   object ExitBookmarks : Action()
   object ExitActionModeMenu : Action()
-  object DeleteBookmarks : Action()
-  object RequestDeleteAllBookmarks : Action()
-  object RequestDeleteSelectedBookmarks : Action()
-  object UpdateBookmarks : Action()
+  object UserClickedConfirmDelete : Action()
+  object UserClickedDeleteButton : Action()
+  object UserClickedDeleteSelectedBookmarks : Action()
 
   data class OnItemClick(val bookmark: BookmarkItem) : Action()
   data class OnItemLongClick(val bookmark: BookmarkItem) : Action()
-  data class ToggleShowBookmarksFromAllBooks(val isChecked: Boolean) : Action()
+  data class UserClickedShowAllToggle(val isChecked: Boolean) : Action()
+  data class AllBookmarkPreferenceChanged(val showAll: Boolean) : Action()
   data class Filter(val searchTerm: String) : Action()
+  data class UpdateBookmarks(val bookmarks: List<BookmarkItem>) : Action()
 }

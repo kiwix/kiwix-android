@@ -16,23 +16,25 @@
  *
  */
 
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.history.viewmodel.State
+package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 
-data class DeleteSelectedOrAllHistoryItems(
-  private val state: MutableLiveData<State>,
-  private val historyDao: HistoryDao
-) : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    val historyItems = state.value?.historyItems?.filterIsInstance<HistoryItem>()
-    if (historyItems?.any { it.isSelected } == true) {
-      historyDao.deleteHistory(historyItems.filter { it.isSelected })
-    } else if (historyItems != null) {
-      historyDao.deleteHistory(historyItems)
+import androidx.appcompat.app.AppCompatActivity
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+
+internal class UpdateAllHistoryPreferenceTest {
+  @Test
+  fun `toggle switch should be toggled`() {
+    val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+    val activity: AppCompatActivity = mockk()
+    UpdateAllHistoryPreference(
+      sharedPreferenceUtil,
+      true
+    ).invokeWith(activity)
+    verify {
+      sharedPreferenceUtil.showHistoryAllBooks = true
     }
   }
 }

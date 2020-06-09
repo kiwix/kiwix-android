@@ -1,4 +1,4 @@
-/*
+package org.kiwix.kiwixmobile.core.history.viewmodel.effects/*
  * Kiwix Android
  * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,8 @@ data class OpenHistoryItem(
     }
     activity.setResult(
       Activity.RESULT_OK,
-      intent)
+      intent
+    )
     activity.finish()
   }
 }

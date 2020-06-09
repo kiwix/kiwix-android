@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 
-import DeleteSelectedOrAllHistoryItems
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import io.mockk.every
@@ -19,10 +18,10 @@ internal class DeleteSelectedOrAllHistoryItemsTest {
     val item1 = createSimpleHistoryItem(isSelected = true)
     val item2 = createSimpleHistoryItem()
     val state: MutableLiveData<State> = mockk()
-    every { state.value } returns SelectionResults(listOf(item1, item2))
+    every { state.value } returns SelectionResults(listOf(item1, item2), true, "", "")
     val historyDao: HistoryDao = mockk()
     val activity: AppCompatActivity = mockk()
-    DeleteSelectedOrAllHistoryItems(state, historyDao).invokeWith(activity)
+    DeleteHistoryItems(listOf(item1), historyDao).invokeWith(activity)
     verify { historyDao.deleteHistory(listOf(item1)) }
   }
 
@@ -31,10 +30,10 @@ internal class DeleteSelectedOrAllHistoryItemsTest {
     val item1 = createSimpleHistoryItem()
     val item2 = createSimpleHistoryItem()
     val state: MutableLiveData<State> = mockk()
-    every { state.value } returns SelectionResults(listOf(item1, item2))
+    every { state.value } returns SelectionResults(listOf(item1, item2), true, "", "")
     val historyDao: HistoryDao = mockk()
     val activity: AppCompatActivity = mockk()
-    DeleteSelectedOrAllHistoryItems(state, historyDao).invokeWith(activity)
+    DeleteHistoryItems(listOf(item1, item2), historyDao).invokeWith(activity)
     verify { historyDao.deleteHistory(listOf(item1, item2)) }
   }
 }

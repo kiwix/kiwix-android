@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_history.no_history
 import kotlinx.android.synthetic.main.activity_history.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -33,12 +32,11 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteAllHistoryItems
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.RequestDeleteSelectedHistoryItems
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.history.viewmodel.State
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -60,13 +58,11 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
         return true
       }
 
-      override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-        return false
-      }
+      override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
 
       override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_context_delete) {
-          historyViewModel.actions.offer(RequestDeleteSelectedHistoryItems)
+          historyViewModel.actions.offer(UserClickedDeleteSelectedHistoryItems)
           return true
         }
         historyViewModel.actions.offer(Action.ExitActionModeMenu)
@@ -99,9 +95,9 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
     history_switch.setOnCheckedChangeListener { _, isChecked ->
-      historyViewModel.actions.offer(ToggleShowHistoryFromAllBooks(isChecked))
+      historyViewModel.actions.offer(UserClickedShowAllToggle(isChecked))
     }
-    history_switch.isChecked = !sharedPreferenceUtil.showHistoryCurrentBook
+    history_switch.isChecked = sharedPreferenceUtil.showHistoryAllBooks
 
     compositeDisposable.add(historyViewModel.effects.subscribe { it.invokeWith(this) })
   }
@@ -127,7 +123,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
       historyViewModel.actions.offer(ExitHistory)
     }
     if (item.itemId == R.id.menu_history_clear) {
-      historyViewModel.actions.offer(RequestDeleteAllHistoryItems)
+      historyViewModel.actions.offer(UserClickedDeleteButton)
     }
     return super.onOptionsItemSelected(item)
   }
@@ -136,24 +132,29 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     when (state) {
       is Results -> {
         actionMode?.finish()
-        state.historyItems?.let { historyAdapter.items = it }
+        historyAdapter.items = state.getHistoryListItems()
+        history_switch.isChecked = state.showAll
         history_switch.isEnabled = true
-        no_history.visibility = View.GONE
+        toggleNoHistoryText(state.historyItems)
       }
       is SelectionResults -> {
-        if (state.historyItems?.filterIsInstance<HistoryItem>()?.any { it.isSelected } == true &&
-          actionMode == null) {
+        if (state.historyItems.any(HistoryItem::isSelected) && actionMode == null) {
           actionMode = startSupportActionMode(actionModeCallback)
         }
-        state.historyItems?.let { historyAdapter.items = it }
+        historyAdapter.items = state.getHistoryListItems()
+        history_switch.isChecked = state.showAll
         history_switch.isEnabled = false
-        no_history.visibility = View.GONE
-      }
-      is NoResults -> {
-        state.historyItems?.let { historyAdapter.items = it }
-        no_history.visibility = View.VISIBLE
+        toggleNoHistoryText(state.historyItems)
       }
     }
+
+  private fun toggleNoHistoryText(items: List<HistoryItem>) {
+    if (items.isEmpty()) {
+      no_history.visibility = View.VISIBLE
+    } else {
+      no_history.visibility = View.GONE
+    }
+  }
 
   override fun onItemClick(favicon: ImageView, history: HistoryItem) {
     historyViewModel.actions.offer(Action.OnItemClick(history))

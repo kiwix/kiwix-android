@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 
-import OpenHistoryItem
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

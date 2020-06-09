@@ -1,6 +1,6 @@
 package org.kiwix.kiwixmobile.core.extensions
 
-inline class HeaderizableList<SUPERTYPE, ITEM : SUPERTYPE, HEADER : SUPERTYPE>(
+inline class HeaderizableList<SUPERTYPE, out ITEM : SUPERTYPE, in HEADER : SUPERTYPE>(
   val list: List<ITEM>
 ) {
   fun foldOverAddingHeaders(
@@ -13,7 +13,7 @@ inline class HeaderizableList<SUPERTYPE, ITEM : SUPERTYPE, HEADER : SUPERTYPE>(
       }
       acc.add(currentItem)
       if (index < list.size - 1) {
-        val nextItem = list.get(index + 1)
+        val nextItem = list[index + 1]
         if (criteriaToAddHeader.invoke(currentItem, nextItem)) {
           acc.add(headerConstructor.invoke(nextItem))
         }

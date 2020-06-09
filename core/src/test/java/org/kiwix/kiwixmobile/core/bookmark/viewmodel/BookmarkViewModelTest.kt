@@ -18,8 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 
-import DeleteSelectedOrAllBookmarkItems
-import OpenBookmark
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -37,9 +35,7 @@ import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.SelectionResults
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.ToggleShowAllBookmarksSwitchAndSaveItsStateToPrefs
 import org.kiwix.kiwixmobile.core.data.Repository
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteBookmarkDialog
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog

@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.core.history.viewmodel.effects
+package org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects
 
 /*
  * Kiwix Android
@@ -21,22 +21,20 @@ package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.DeleteBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteBookmarks
 import javax.inject.Inject
 
-data class ShowDeleteBookmarkDialog(
-  private val actions: PublishProcessor<Action>,
-  private val dialogType: KiwixDialog
+data class ShowDeleteBookmarksDialog(
+  private val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as BookmarksActivity).activityComponent.inject(this)
-    dialogShower.show(dialogType, {
-      actions.offer(DeleteBookmarks)
+    dialogShower.show(DeleteBookmarks, {
+      actions.offer(Action.UserClickedConfirmDelete)
     })
   }
 }

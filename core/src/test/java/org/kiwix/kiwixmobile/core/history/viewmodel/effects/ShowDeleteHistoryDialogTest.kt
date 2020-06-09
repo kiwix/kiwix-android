@@ -8,9 +8,9 @@ import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.DeleteHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
 
 internal class ShowDeleteHistoryDialogTest {
 
@@ -18,7 +18,7 @@ internal class ShowDeleteHistoryDialogTest {
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
     val actions = mockk<PublishProcessor<Action>>(relaxed = true)
     val activity = mockk<HistoryActivity>()
-    val showDeleteHistoryDialog = ShowDeleteHistoryDialog(actions, DeleteSelectedHistory)
+    val showDeleteHistoryDialog = ShowDeleteHistoryDialog(actions)
     val dialogShower = mockk<DialogShower>()
     every { activity.activityComponent.inject(showDeleteHistoryDialog) } answers {
       showDeleteHistoryDialog.dialogShower = dialogShower
@@ -27,9 +27,9 @@ internal class ShowDeleteHistoryDialogTest {
     val lambdaSlot = slot<() -> Unit>()
     showDeleteHistoryDialog.invokeWith(activity)
     verify {
-      dialogShower.show(DeleteSelectedHistory, capture(lambdaSlot))
+      dialogShower.show(DeleteAllHistory, capture(lambdaSlot))
     }
     lambdaSlot.captured.invoke()
-    verify { actions.offer(DeleteHistoryItems) }
+    verify { actions.offer(UserClickedConfirmDelete) }
   }
 }

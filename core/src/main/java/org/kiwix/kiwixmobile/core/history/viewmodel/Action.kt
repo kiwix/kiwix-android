@@ -18,18 +18,19 @@
 
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
 sealed class Action {
   object ExitHistory : Action()
   object ExitActionModeMenu : Action()
-  object DeleteHistoryItems : Action()
-  object RequestDeleteAllHistoryItems : Action()
-  object RequestDeleteSelectedHistoryItems : Action()
+  object UserClickedConfirmDelete : Action()
+  object UserClickedDeleteButton : Action()
+  object UserClickedDeleteSelectedHistoryItems : Action()
 
-  data class OnItemClick(val historyListItem: HistoryListItem) : Action()
+  data class OnItemClick(val historyItem: HistoryItem) : Action()
   data class OnItemLongClick(val historyItem: HistoryItem) : Action()
-  data class ToggleShowHistoryFromAllBooks(val isChecked: Boolean) : Action()
+  data class UserClickedShowAllToggle(val isChecked: Boolean) : Action()
+  data class AllHistoryPreferenceChanged(val showAll: Boolean) : Action()
   data class Filter(val searchTerm: String) : Action()
+  data class UpdateHistory(val history: List<HistoryItem>) : Action()
 }

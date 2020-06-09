@@ -8,9 +8,12 @@ fun createSimpleHistoryItem(
   historyTitle: String = "historyTitle",
   dateString: String = "5 Jul 2020",
   isSelected: Boolean = false,
-  id: Long = 2
+  id: Long = 2,
+  zimId: String = "zimId"
 ): HistoryItem {
-  return HistoryItem(2, "zimId",
+  return HistoryItem(
+    2,
+    zimId,
     "zimName",
     "zimFilePath",
     "favicon",
@@ -19,5 +22,6 @@ fun createSimpleHistoryItem(
     dateString,
     100,
     isSelected,
-    id)
+    id
+  )
 }
