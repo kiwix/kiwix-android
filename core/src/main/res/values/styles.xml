@@ -64,4 +64,11 @@
     <item name="colorAccent">@color/blue400</item>
   </style>
 
+  <style name="Widget.AppCompat.ProgressBar.Horizontal.NoPadding" parent="Widget.AppCompat.ProgressBar.Horizontal">
+    <item name="android:theme">@style/ThemeOverlay.KiwixTheme.ProgressBar</item>
+    <item name="android:minHeight">@dimen/progress_view_height</item>
+    <item name="android:maxHeight">@dimen/progress_view_height</item>
+    <item name="android:indeterminate">false</item>
+  </style>
+
 </resources>

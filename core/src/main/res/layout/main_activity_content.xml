@@ -23,14 +23,13 @@
       <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/activity_main_progress_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal.NoPadding"
         android:max="100"
-        android:indeterminate="false"
-        android:theme="@style/ThemeOverlay.KiwixTheme.ProgressBar"
+        android:visibility="gone"
         app:backgroundColor="?colorOnSurface"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        android:visibility="gone"/>
+        tools:progress="70" />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </com.google.android.material.appbar.AppBarLayout>
 
