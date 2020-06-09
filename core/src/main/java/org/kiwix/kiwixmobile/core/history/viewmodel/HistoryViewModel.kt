@@ -13,11 +13,11 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UpdateHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.DeleteHistoryItems
@@ -61,7 +61,7 @@ class HistoryViewModel @Inject constructor(
       UserClickedDeleteButton -> offerShowDeleteDialog(state)
       is OnItemClick -> handleItemClick(state, action)
       is OnItemLongClick -> handleItemLongClick(state, action)
-      is ToggleShowHistoryFromAllBooks -> offerUpdateToShowAllToggle(action, state)
+      is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
       is Filter -> updateHistoryItemsBasedOnFilter(state, action)
       is UpdateHistory -> updateHistoryList(state, action)
       UserClickedDeleteSelectedHistoryItems -> offerShowDeleteDialog(state)
@@ -93,7 +93,7 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun offerUpdateToShowAllToggle(
-    action: ToggleShowHistoryFromAllBooks,
+    action: UserClickedShowAllToggle,
     state: State
   ): State {
     effects.offer(
@@ -102,7 +102,10 @@ class HistoryViewModel @Inject constructor(
         action.isChecked
       )
     )
-    return state
+    return when (state) {
+      is Results -> state.copy(showAll = action.isChecked)
+      else -> state
+    }
   }
 
   private fun handleItemLongClick(

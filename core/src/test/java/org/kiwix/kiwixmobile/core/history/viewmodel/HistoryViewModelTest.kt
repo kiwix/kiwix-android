@@ -22,7 +22,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ToggleShowHistoryFromAllBooks
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
@@ -431,7 +431,7 @@ internal class HistoryViewModelTest {
     @Test
     fun `ToggleShowHistoryFromAllBooks switches show all books toggle`() {
       actionResultsInEffects(
-        ToggleShowHistoryFromAllBooks(true),
+        UserClickedShowAllToggle(true),
         UpdateAllHistoryPreference(
           sharedPreferenceUtil,
           true

@@ -34,8 +34,8 @@ sealed class State(
 
   private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
 
-  val historyListItems: List<HistoryListItem> by lazy {
-    HeaderizableList<HistoryListItem, HistoryItem, DateItem>(historyItems
+  fun getHistoryListItems(): List<HistoryListItem> {
+    val items = HeaderizableList<HistoryListItem, HistoryItem, DateItem>(historyItems
       .filter {
         it.historyTitle.contains(
           searchTerm,
@@ -47,6 +47,7 @@ sealed class State(
         { historyItem -> DateItem(historyItem.dateString) },
         { current, next -> current.dateString != next.dateString }
       )
+    return items
   }
 
   fun toggleSelectionOfItem(historyListItem: HistoryItem): State {
@@ -60,14 +61,6 @@ sealed class State(
     }
     return SelectionResults(newList, showAll, currentZimId, searchTerm)
   }
-
-  // fun filterBasedOnSearchTerm(searchTerm: String): State =
-  //   copy(historyListItems = historyItems.filter {
-  //     it.historyTitle.contains(
-  //       searchTerm,
-  //       true
-  //     )
-  //   })
 
   data class Results(
     override val historyItems: List<HistoryItem>,
@@ -83,6 +76,6 @@ sealed class State(
     override val searchTerm: String
   ) : State(historyItems, showAll, currentZimId, searchTerm) {
     val selectedItems: List<HistoryItem> =
-      historyListItems.filterIsInstance<HistoryItem>().filter(HistoryItem::isSelected)
+      getHistoryListItems().filterIsInstance<HistoryItem>().filter(HistoryItem::isSelected)
   }
 }
