@@ -2,6 +2,9 @@
 
 adb logcat -c
 adb logcat *:E -v color &
-./gradlew jacocoInstrumentationTestReport; gradlew_return_code=$?
-adb exec-out screencap -p > screencap.png
-gradlew_return_code
+if ./gradlew jacocoInstrumentationTestReport; then
+  echo "jacocoInstrumentationTestReport succeeded" >&2
+else
+  adb exec-out screencap -p >screencap.png
+  echo "jacocoInstrumentationTestReport failed" >&2
+fi
