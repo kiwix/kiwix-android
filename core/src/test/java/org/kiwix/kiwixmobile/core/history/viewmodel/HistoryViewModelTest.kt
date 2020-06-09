@@ -1,6 +1,6 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import OpenHistoryItem
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.OpenHistoryItem
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every

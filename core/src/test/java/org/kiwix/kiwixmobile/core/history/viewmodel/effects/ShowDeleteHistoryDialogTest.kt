@@ -10,7 +10,7 @@ import org.kiwix.kiwixmobile.core.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
 
 internal class ShowDeleteHistoryDialogTest {
 
@@ -27,7 +27,7 @@ internal class ShowDeleteHistoryDialogTest {
     val lambdaSlot = slot<() -> Unit>()
     showDeleteHistoryDialog.invokeWith(activity)
     verify {
-      dialogShower.show(DeleteSelectedHistory, capture(lambdaSlot))
+      dialogShower.show(DeleteAllHistory, capture(lambdaSlot))
     }
     lambdaSlot.captured.invoke()
     verify { actions.offer(UserClickedConfirmDelete) }

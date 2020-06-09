@@ -1,6 +1,6 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import OpenHistoryItem
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.OpenHistoryItem
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
