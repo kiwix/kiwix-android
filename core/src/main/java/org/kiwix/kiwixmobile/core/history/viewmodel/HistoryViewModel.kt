@@ -59,12 +59,12 @@ class HistoryViewModel @Inject constructor(
       ExitActionModeMenu -> deselectAllHistoryItems(state)
       UserClickedConfirmDelete -> offerDeletionOfItems(state)
       UserClickedDeleteButton -> offerShowDeleteDialog(state)
+      UserClickedDeleteSelectedHistoryItems -> offerShowDeleteDialog(state)
       is OnItemClick -> handleItemClick(state, action)
       is OnItemLongClick -> handleItemLongClick(state, action)
       is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
       is Filter -> updateHistoryItemsBasedOnFilter(state, action)
       is UpdateHistory -> updateHistoryList(state, action)
-      UserClickedDeleteSelectedHistoryItems -> offerShowDeleteDialog(state)
       is AllHistoryPreferenceChanged -> changeShowHistoryToggle(state, action)
     }
 
@@ -89,7 +89,12 @@ class HistoryViewModel @Inject constructor(
     action: UpdateHistory
   ): State = when (state) {
     is Results -> state.copy(historyItems = action.history)
-    is SelectionResults -> Results(action.history, state.showAll, zimReaderContainer.id)
+    is SelectionResults -> Results(
+      action.history,
+      state.showAll,
+      zimReaderContainer.id,
+      state.searchTerm
+    )
   }
 
   private fun offerUpdateToShowAllToggle(
@@ -155,6 +160,7 @@ class HistoryViewModel @Inject constructor(
         Results(
           state.historyItems.map { it.copy(isSelected = false) },
           state.showAll,
+          state.currentZimId,
           state.searchTerm
         )
       }

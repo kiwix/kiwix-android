@@ -18,7 +18,7 @@ internal class ShowDeleteHistoryDialogTest {
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
     val actions = mockk<PublishProcessor<Action>>(relaxed = true)
     val activity = mockk<HistoryActivity>()
-    val showDeleteHistoryDialog = ShowDeleteHistoryDialog(actions, DeleteSelectedHistory)
+    val showDeleteHistoryDialog = ShowDeleteHistoryDialog(actions)
     val dialogShower = mockk<DialogShower>()
     every { activity.activityComponent.inject(showDeleteHistoryDialog) } answers {
       showDeleteHistoryDialog.dialogShower = dialogShower

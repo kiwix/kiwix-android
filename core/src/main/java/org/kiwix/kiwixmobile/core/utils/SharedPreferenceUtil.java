@@ -60,7 +60,12 @@ public class SharedPreferenceUtil {
   public static final String PREF_NIGHT_MODE = "pref_night_mode";
   private SharedPreferences sharedPreferences;
   private final PublishProcessor<String> prefStorages = PublishProcessor.create();
-  public final PublishProcessor<Boolean> showAllHistoryToggleSwitch = PublishProcessor.create();
+
+  public PublishProcessor<Boolean> getShowAllHistoryToggleSwitch() {
+    return showAllHistoryToggleSwitch;
+  }
+
+  private final PublishProcessor<Boolean> showAllHistoryToggleSwitch = PublishProcessor.create();
   private final PublishProcessor<NightModeConfig.Mode> nightModes = PublishProcessor.create();
 
   @Inject
