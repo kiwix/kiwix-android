@@ -1,11 +1,12 @@
 package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.OpenHistoryItem
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
@@ -27,9 +28,8 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDel
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedShowAllToggle
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.Results
-import org.kiwix.kiwixmobile.core.history.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.DeleteHistoryItems
+import org.kiwix.kiwixmobile.core.history.viewmodel.effects.OpenHistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.history.viewmodel.effects.UpdateAllHistoryPreference
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -47,10 +47,10 @@ internal class HistoryViewModelTest {
 
   lateinit var viewModel: HistoryViewModel
   private val testScheduler = TestScheduler()
-  private val showAllHistoryToggleSwitch: PublishProcessor<Boolean> = PublishProcessor.create()
 
   init {
     setScheduler(testScheduler)
+    RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
   }
 
   private val itemsFromDb: PublishProcessor<List<HistoryItem>> =
@@ -62,7 +62,6 @@ internal class HistoryViewModelTest {
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showHistoryAllBooks } returns true
-    every { sharedPreferenceUtil.showAllHistoryToggleSwitch } returns showAllHistoryToggleSwitch
     every { historyDao.history() } returns itemsFromDb.distinctUntilChanged()
     viewModel = HistoryViewModel(historyDao, zimReaderContainer, sharedPreferenceUtil)
   }
@@ -86,7 +85,7 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(Results(listOf(), true, "id", ""))
+      viewModel.state.test().assertValue(State(listOf(), true, "id", ""))
     }
 
     @Test
@@ -101,7 +100,7 @@ internal class HistoryViewModelTest {
         searchTerm = searchTerm,
         databaseResults = listOf(item)
       )
-      resultsIn(Results(listOf(item), true, "id", "searchTerm"))
+      resultsIn(State(listOf(item), true, "id", "searchTerm"))
     }
 
     @Test
@@ -113,7 +112,7 @@ internal class HistoryViewModelTest {
         searchTerm = "",
         databaseResults = listOf(item)
       )
-      resultsIn(Results(listOf(item), true, "id", ""))
+      resultsIn(State(listOf(item), true, "id", ""))
     }
 
     @Test
@@ -122,7 +121,7 @@ internal class HistoryViewModelTest {
         searchTerm = "",
         databaseResults = emptyList()
       )
-      resultsIn(Results(emptyList(), true, "id", ""))
+      resultsIn(State(emptyList(), true, "id", ""))
     }
 
     @Test
@@ -137,7 +136,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item)
       )
       viewModel.actions.offer(Filter(searchString2))
-      resultsIn(Results(listOf(item), true, "id", "b"))
+      resultsIn(State(listOf(item), true, "id", "b"))
     }
 
     @Test
@@ -153,7 +152,7 @@ internal class HistoryViewModelTest {
         searchTerm = "b",
         databaseResults = listOf(item)
       )
-      resultsIn(Results(listOf(item), true, "id", "b"))
+      resultsIn(State(listOf(item), true, "id", "b"))
     }
 
     @Test
@@ -172,7 +171,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item)
       )
       viewModel.actions.offer(OnItemLongClick(item))
-      resultsIn(SelectionResults(listOf(item), true, "id", "b"))
+      resultsIn(State(listOf(item), true, "id", "b"))
     }
 
     @Test
@@ -197,7 +196,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item2, item3, item1)
       )
       assertEquals(
-        Results(listOf(item3, item1, item2), true, "id", "")
+        State(listOf(item3, item1, item2), true, "id", "")
           .getHistoryListItems(),
         listOf(date3, item3, date1, item1, date2, item2)
       )
@@ -224,7 +223,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item2, item3, item1)
       )
       assertEquals(
-        Results(listOf(item3, item1, item2), true, "id", "")
+        State(listOf(item3, item1, item2), true, "id", "")
           .getHistoryListItems(),
         listOf(date1, item1, item2, date3, item3)
       )
@@ -236,14 +235,13 @@ internal class HistoryViewModelTest {
         createSimpleHistoryItem(
           "a", "1 Aug 2020"
         )
-      val date = DateItem(item1.dateString)
       emissionOf(
         searchTerm = "",
         databaseResults = listOf(item1)
       )
       viewModel.actions.offer(OnItemLongClick(item1))
       item1.isSelected = true
-      resultsIn(SelectionResults(listOf(item1), true, "id", ""))
+      resultsIn(State(listOf(item1), true, "id", ""))
     }
 
     @Test
@@ -263,7 +261,7 @@ internal class HistoryViewModelTest {
       )
       viewModel.actions.offer(OnItemLongClick(item1))
       viewModel.actions.offer(OnItemClick(item1))
-      resultsIn(Results(listOf(item1, item2), true, "id", ""))
+      resultsIn(State(listOf(item1, item2), true, "id", ""))
     }
 
     @Test
@@ -283,7 +281,7 @@ internal class HistoryViewModelTest {
       viewModel.actions.offer(ExitActionModeMenu)
       item1.isSelected = false
       item2.isSelected = false
-      resultsIn(Results(listOf(item1, item2), true, "id", ""))
+      resultsIn(State(listOf(item1, item2), true, "id", ""))
     }
   }
 
@@ -433,7 +431,7 @@ internal class HistoryViewModelTest {
     fun `DeleteHistoryItems calls DeleteSelectedOrAllHistoryItems side effect`() {
       actionResultsInEffects(
         UserClickedConfirmDelete,
-        DeleteHistoryItems(viewModel.state.value!!.historyItems, historyDao)
+        DeleteHistoryItems(viewModel.state.value!!, historyDao)
       )
     }
 

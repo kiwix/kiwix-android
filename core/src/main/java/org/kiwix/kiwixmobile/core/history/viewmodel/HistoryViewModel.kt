@@ -94,10 +94,10 @@ class HistoryViewModel @Inject constructor(
     action: OnItemClick
   ): State {
     if (state.isInSelectionState) {
-      effects.offer(OpenHistoryItem(action.historyItem, zimReaderContainer))
-      return state
+      return state.toggleSelectionOfItem(action.historyItem)
     }
-    return state.toggleSelectionOfItem(action.historyItem)
+    effects.offer(OpenHistoryItem(action.historyItem, zimReaderContainer))
+    return state
   }
 
   private fun offerShowDeleteDialog(state: State): State {
