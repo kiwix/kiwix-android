@@ -22,12 +22,17 @@ import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.history.viewmodel.State
 
 data class DeleteHistoryItems(
-  private val itemsToDelete: List<HistoryItem>,
+  private val state: State,
   private val historyDao: HistoryDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    historyDao.deleteHistory(itemsToDelete)
+    if (state.isInSelectionState) {
+      historyDao.deleteHistory(state.historyItems.filter(HistoryItem::isSelected))
+    } else {
+      historyDao.deleteHistory(state.historyItems)
+    }
   }
 }

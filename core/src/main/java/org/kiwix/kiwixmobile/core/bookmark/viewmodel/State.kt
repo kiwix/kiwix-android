@@ -20,12 +20,14 @@ package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 
-sealed class State(
-  open val bookmarks: List<BookmarkItem>,
-  open val showAll: Boolean,
-  open val currentZimId: String?,
-  open val searchTerm: String = ""
+data class State(
+  val bookmarks: List<BookmarkItem>,
+  val showAll: Boolean,
+  val currentZimId: String?,
+  val searchTerm: String = ""
 ) {
+
+  val isInSelectionState = bookmarks.any(BookmarkItem::isSelected)
 
   fun getFilteredBookmarks(): List<BookmarkItem> =
     bookmarks
@@ -42,26 +44,6 @@ sealed class State(
         isSelected = !isSelected
       } else it
     }
-    if (newList.none(BookmarkItem::isSelected)) {
-      return Results(newList, showAll, currentZimId, searchTerm)
-    }
-    return SelectionResults(newList, showAll, currentZimId, searchTerm)
-  }
-
-  data class Results(
-    override val bookmarks: List<BookmarkItem>,
-    override val showAll: Boolean,
-    override val currentZimId: String?,
-    override val searchTerm: String = ""
-  ) : State(bookmarks, showAll, currentZimId, searchTerm)
-
-  data class SelectionResults(
-    override val bookmarks: List<BookmarkItem>,
-    override val showAll: Boolean,
-    override val currentZimId: String?,
-    override val searchTerm: String
-  ) : State(bookmarks, showAll, currentZimId, searchTerm) {
-    val selectedItems: List<BookmarkItem> =
-      bookmarks.filter(BookmarkItem::isSelected)
+    return State(newList, showAll, currentZimId, searchTerm)
   }
 }

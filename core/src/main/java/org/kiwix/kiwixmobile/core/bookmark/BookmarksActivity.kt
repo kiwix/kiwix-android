@@ -32,8 +32,6 @@ import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteSel
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.Results
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.SelectionResults
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
@@ -124,33 +122,30 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  private fun render(state: State) =
-    when (state) {
-      is Results -> handleResultsState(state)
-      is SelectionResults -> handleSelectionState(state)
-    }
-
-  private fun handleResultsState(state: State) {
-    actionMode?.finish()
+  private fun render(state: State) {
     val filteredBookmarks = state.getFilteredBookmarks()
     filteredBookmarks.let { bookmarksAdapter.items = it }
-    bookmarks_switch.isEnabled = true
     toggleNoBookmarksText(filteredBookmarks)
+    if (state.isInSelectionState) {
+      handleSelectionState(filteredBookmarks)
+    } else {
+      handleResultsState()
+    }
   }
 
-  private fun handleSelectionState(state: State) {
-    val filteredBookmarks = state.getFilteredBookmarks()
-    if (filteredBookmarks.any(BookmarkItem::isSelected) &&
-      actionMode == null
-    ) {
+  private fun handleResultsState() {
+    actionMode?.finish()
+    bookmarks_switch.isEnabled = true
+  }
+
+  private fun handleSelectionState(filteredBookmarks: List<BookmarkItem>) {
+    if (actionMode == null) {
       actionMode = startSupportActionMode(actionModeCallback)
     }
     val numberOfSelectedItems =
       filteredBookmarks.filter(BookmarkItem::isSelected).size
     actionMode?.title = getString(R.string.selected_items, numberOfSelectedItems)
-    filteredBookmarks.let { bookmarksAdapter.items = it }
     bookmarks_switch.isEnabled = false
-    toggleNoBookmarksText(filteredBookmarks)
   }
 
   private fun toggleNoBookmarksText(items: List<BookmarkItem>) {
