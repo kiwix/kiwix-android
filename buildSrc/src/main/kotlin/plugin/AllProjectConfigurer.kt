@@ -98,7 +98,6 @@ class AllProjectConfigurer {
         ignore(
           "SyntheticAccessor",
           "GoogleAppIndexingApiWarning",
-          "LockedOrientationActivity",
           //TODO stop ignoring below this
           "CheckResult",
           "LabelFor",
