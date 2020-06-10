@@ -22,12 +22,18 @@ import io.objectbox.kotlin.query
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity_
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) {
 
+  private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
   fun history() = box.asFlowable()
-    .map { it.map(::HistoryItem) }
+    .map { mutableList ->
+      mutableList.map(::HistoryItem)
+        .sortedByDescending { historyItem -> dateFormatter.parse(historyItem.dateString) }
+    }
 
   fun saveHistory(historyItem: HistoryItem) {
     box.store.callInTx {

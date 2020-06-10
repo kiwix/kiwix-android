@@ -22,8 +22,6 @@ import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 data class State(
   val historyItems: List<HistoryItem>,
@@ -32,21 +30,18 @@ data class State(
   val searchTerm: String = ""
 ) {
   val isInSelectionState = historyItems.any(HistoryItem::isSelected)
-  private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
 
-  fun getHistoryListItems(): List<HistoryListItem> =
+  val historyListItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(historyItems
       .filter {
         it.historyTitle.contains(
           searchTerm,
           true
         ) && (it.zimId == currentZimId || showAll)
-      }
-      .sortedByDescending { dateFormatter.parse(it.dateString) })
-      .foldOverAddingHeaders(
-        { historyItem -> DateItem(historyItem.dateString) },
-        { current, next -> current.dateString != next.dateString }
-      )
+      }).foldOverAddingHeaders(
+      { historyItem -> DateItem(historyItem.dateString) },
+      { current, next -> current.dateString != next.dateString }
+    )
 
   fun toggleSelectionOfItem(historyListItem: HistoryItem): State {
     val newList = historyItems.map {

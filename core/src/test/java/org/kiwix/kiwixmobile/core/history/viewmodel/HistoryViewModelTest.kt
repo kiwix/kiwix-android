@@ -197,7 +197,7 @@ internal class HistoryViewModelTest {
       )
       assertEquals(
         State(listOf(item3, item1, item2), true, "id", "")
-          .getHistoryListItems(),
+          .historyListItems,
         listOf(date3, item3, date1, item1, date2, item2)
       )
     }
@@ -223,9 +223,9 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item2, item3, item1)
       )
       assertEquals(
-        State(listOf(item3, item1, item2), true, "id", "")
-          .getHistoryListItems(),
-        listOf(date1, item1, item2, date3, item3)
+        listOf(date1, item1, item2, date3, item3),
+        State(listOf(item1, item2, item3), true, "id", "")
+          .historyListItems
       )
     }
 
@@ -298,7 +298,7 @@ internal class HistoryViewModelTest {
           )
         )
       )
-      assertEquals(emptyList<HistoryListItem>(), viewModel.state.value?.getHistoryListItems())
+      assertEquals(emptyList<HistoryListItem>(), viewModel.state.value?.historyListItems)
       // resultsIn(Results(emptyList(), true, "id", "a"))
     }
 
@@ -312,7 +312,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item1, item2)
       )
       viewModel.actions.offer(UserClickedShowAllToggle(true))
-      assertEquals(listOf(date, item1, item2), viewModel.state.value?.getHistoryListItems())
+      assertEquals(listOf(date, item1, item2), viewModel.state.value?.historyListItems)
     }
 
     @Test
@@ -325,7 +325,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item1, item2)
       )
       viewModel.actions.offer(UserClickedShowAllToggle(false))
-      assertEquals(listOf(date, item1), viewModel.state.value?.getHistoryListItems())
+      assertEquals(listOf(date, item1), viewModel.state.value?.historyListItems)
     }
 
     @Test
@@ -336,7 +336,7 @@ internal class HistoryViewModelTest {
         searchTerm = "title_in_caps",
         databaseResults = listOf(item1)
       )
-      assertEquals(listOf(date, item1), viewModel.state.value?.getHistoryListItems())
+      assertEquals(listOf(date, item1), viewModel.state.value?.historyListItems)
     }
   }
 
