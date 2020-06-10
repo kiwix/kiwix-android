@@ -21,11 +21,18 @@ jobs:
           fetch-depth: 1
 
       - name: run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2.0.0
+        uses: ReactiveCircus/android-emulator-runner@v2.8.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
-          script: ./gradlew connectedDebugAndroidTest
+          script: bash contrib/instrumentation_nightly.sh
+
+      - name: Upload screenshot result
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: ${{ matrix.api-level }}
+          path: screencap.png
 
   unit_test_and_release:
     runs-on: ubuntu-latest
