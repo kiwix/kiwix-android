@@ -19,7 +19,6 @@
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
   <string name="save_media_saved">Податотеката е зачувана како %s во Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Пребарувам преземлива содржина. Почекајте…</string>
   <string name="search_label">Пребарај</string>
   <string name="choose_file">Изберете содржинска податотека (*.zim)</string>
   <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>

@@ -60,4 +60,8 @@
     <item name="cardBackgroundColor">@color/card_view_background</item>
   </style>
 
+  <style name="ThemeOverlay.KiwixTheme.ProgressBar" parent="">
+    <item name="colorAccent">@color/blue400</item>
+  </style>
+
 </resources>

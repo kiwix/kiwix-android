@@ -25,7 +25,6 @@
   <string name="save_media">Salvar mídia</string>
   <string name="save_media_error">Ocorreu um erro ao tentar salvar a mídia!</string>
   <string name="save_media_saved">Midia salva como  %s para Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Escaneando por conteúdo para download, aguarde …</string>
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecione um arquivo de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir link em uma nova aba?</string>

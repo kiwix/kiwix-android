@@ -22,7 +22,6 @@
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
   <string name="save_media_saved">Sparade media som %s i Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Söker efter nedladdningsbart innehåll, var god vänta…</string>
   <string name="search_label">Sök</string>
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>

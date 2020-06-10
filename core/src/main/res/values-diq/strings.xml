@@ -24,7 +24,6 @@
   <string name="save_media">Medyay bışevekne</string>
   <string name="save_media_error">Medya qeyd kerdış de yew xeta ameyê meydan!</string>
   <string name="save_media_saved">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Ronıyaye zerreko vineyêno, reca kem bıpawê…</string>
   <string name="search_label">Cı geyre</string>
   <string name="choose_file">Yew dosyay zerreki weçine (*.zim)</string>
   <string name="open_in_new_tab">Gıre xıldayışo newe de abo?</string>

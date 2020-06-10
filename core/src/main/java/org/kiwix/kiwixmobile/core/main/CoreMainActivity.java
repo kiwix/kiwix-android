@@ -61,6 +61,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -172,7 +173,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @BindView(R2.id.activity_main_app_bar)
   AppBarLayout toolbarContainer;
   @BindView(R2.id.activity_main_progress_view)
-  AnimatedProgressBar progressBar;
+  ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
   @BindView(R2.id.activity_main_drawer_layout)
@@ -566,7 +567,6 @@ public abstract class CoreMainActivity extends BaseActivity
       if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
         tabSwitcherRoot.setVisibility(View.GONE);
         startAnimation(tabSwitcherRoot, R.anim.slide_up);
-        progressBar.setVisibility(View.VISIBLE);
         contentFrame.setVisibility(View.VISIBLE);
       }
       selectTab(currentWebViewIndex);
@@ -1649,8 +1649,10 @@ public abstract class CoreMainActivity extends BaseActivity
   @Override
   public void webViewProgressChanged(int progress) {
     if (checkNull(progressBar)) {
+      progressBar.show();
       progressBar.setProgress(progress);
       if (progress == 100) {
+        progressBar.hide();
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
       }
     }

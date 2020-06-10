@@ -21,7 +21,6 @@
   <string name="save_media">Lưu tập tin đa phương tiện</string>
   <string name="save_media_error">Đã xuất hiện lỗi khi lưu phương tiện!</string>
   <string name="save_media_saved" fuzzy="true">Đã lưu phương tiện thành %s trong thư mục hình ảnh Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Đang tìm nội dung có thể tải về, xin vui lòng chờ…</string>
   <string name="search_label">Tìm kiếm</string>
   <string name="choose_file">Chọn một Tập tin Nội dung (*.zim)</string>
   <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
