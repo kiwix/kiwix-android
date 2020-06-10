@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
+import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -175,34 +176,6 @@ internal class HistoryViewModelTest {
     }
 
     @Test
-    fun `order of date headers and items are correct`() {
-      val item1 =
-        createSimpleHistoryItem(
-          "a", "1 Aug 2020"
-        )
-      val date1 = DateItem(item1.dateString)
-      val item2 =
-        createSimpleHistoryItem(
-          "b", "2 Jun 1990"
-        )
-      val date2 = DateItem(item2.dateString)
-      val item3 =
-        createSimpleHistoryItem(
-          "c", "1 Aug 2021"
-        )
-      val date3 = DateItem(item3.dateString)
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item2, item3, item1)
-      )
-      assertEquals(
-        State(listOf(item3, item1, item2), true, "id", "")
-          .historyListItems,
-        listOf(date3, item3, date1, item1, date2, item2)
-      )
-    }
-
-    @Test
     fun `date headers are merged if on same day`() {
       val item1 =
         createSimpleHistoryItem(
@@ -286,20 +259,42 @@ internal class HistoryViewModelTest {
   }
 
   @Nested
-  inner class GetHistoryItemsList {
+  inner class HistoryListItemsTests {
+
+    @Test
+    fun `order of date headers and items are correct`() {
+      val item1 =
+        createSimpleHistoryItem(
+          "a", "1 Aug 2020"
+        )
+      val date1 = DateItem(item1.dateString)
+      val item2 =
+        createSimpleHistoryItem(
+          "b", "2 Jun 1990"
+        )
+      val date2 = DateItem(item2.dateString)
+      val item3 =
+        createSimpleHistoryItem(
+          "c", "1 Aug 2021"
+        )
+      val date3 = DateItem(item3.dateString)
+      val state = State(listOf(item3, item1, item2), true, "id", "")
+      assertThat(
+        state.historyListItems
+      ).isEqualTo(
+        listOf(date3, item3, date1, item1, date2, item2)
+      )
+    }
 
     @Test
     fun `non empty search string with no search results is empty history item list`() {
-      emissionOf(
-        searchTerm = "a",
-        databaseResults = listOf(
-          createSimpleHistoryItem(
-            ""
-          )
-        )
+      val state = State(
+        listOf(createSimpleHistoryItem("")),
+        true,
+        "id",
+        "a"
       )
-      assertEquals(emptyList<HistoryListItem>(), viewModel.state.value?.historyListItems)
-      // resultsIn(Results(emptyList(), true, "id", "a"))
+      assertThat(emptyList<HistoryListItem>()).isEqualTo(state.historyListItems)
     }
 
     @Test
@@ -312,7 +307,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item1, item2)
       )
       viewModel.actions.offer(UserClickedShowAllToggle(true))
-      assertEquals(listOf(date, item1, item2), viewModel.state.value?.historyListItems)
+      assertThat(listOf(date, item1, item2)).isEqualTo(viewModel.state.value?.historyListItems)
     }
 
     @Test

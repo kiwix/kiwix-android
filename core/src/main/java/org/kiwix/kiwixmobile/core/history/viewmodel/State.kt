@@ -49,6 +49,6 @@ data class State(
         isSelected = !isSelected
       } else it
     }
-    return State(newList, showAll, currentZimId, searchTerm)
+    return copy(historyItems = newList)
   }
 }

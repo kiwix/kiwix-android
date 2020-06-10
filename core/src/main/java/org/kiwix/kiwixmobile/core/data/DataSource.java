@@ -40,8 +40,6 @@ public interface DataSource {
 
   Completable saveLanguages(List<Language> languages);
 
-  Single<List<HistoryListItem>> getDateCategorizedHistory(boolean showHistoryCurrentBook);
-
   Completable saveHistory(HistoryListItem.HistoryItem history);
 
   Completable deleteHistory(List<HistoryListItem> historyList);
