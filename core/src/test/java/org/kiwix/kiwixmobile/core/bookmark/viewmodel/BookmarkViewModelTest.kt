@@ -22,7 +22,9 @@ import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Single
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.processors.PublishProcessor
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import junit.framework.Assert
 import org.junit.jupiter.api.BeforeEach
@@ -32,13 +34,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.NoResults
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.Results
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State.SelectionResults
-import org.kiwix.kiwixmobile.core.data.Repository
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.OpenBookmark
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
+import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -46,17 +47,19 @@ import java.util.concurrent.TimeUnit
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class BookmarkViewModelTest {
-  private val bookmarksRepository: Repository = mockk()
+  private val bookmarksDao: NewBookmarksDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
 
   lateinit var viewModel: BookmarkViewModel
   private val testScheduler = TestScheduler()
 
-  private var latestItems: List<BookmarkItem> = listOf()
+  private val itemsFromDb: PublishProcessor<List<BookmarkItem>> =
+    PublishProcessor.create()
 
   init {
     setScheduler(testScheduler)
+    RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
   }
 
   @BeforeEach
@@ -65,8 +68,8 @@ internal class BookmarkViewModelTest {
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showBookmarksAllBooks } returns true
-    every { bookmarksRepository.getBookmarks(any()) } returns Single.just(latestItems)
-    viewModel = BookmarkViewModel(bookmarksRepository, zimReaderContainer, sharedPreferenceUtil)
+    every { bookmarksDao.bookmarks() } returns itemsFromDb.distinctUntilChanged()
+    viewModel = BookmarkViewModel(bookmarksDao, zimReaderContainer, sharedPreferenceUtil)
   }
 
   private fun resultsIn(st: State) {
@@ -76,8 +79,7 @@ internal class BookmarkViewModelTest {
   }
 
   private fun emissionOf(searchTerm: String, databaseResults: List<BookmarkItem>) {
-    latestItems = databaseResults
-    every { bookmarksRepository.getBookmarks(true) } returns Single.just(latestItems)
+    itemsFromDb.offer(databaseResults)
     viewModel.actions.offer(Filter(searchTerm))
   }
 
@@ -86,7 +88,7 @@ internal class BookmarkViewModelTest {
 
     @Test
     fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(NoResults(listOf()))
+      viewModel.state.test().assertValue(State(listOf(), true, "id", ""))
     }
 
     @Test
@@ -97,7 +99,7 @@ internal class BookmarkViewModelTest {
         searchTerm = searchTerm,
         databaseResults = listOf(item)
       )
-      resultsIn(Results((listOf(item))))
+      resultsIn(State(listOf(item), true, "id", "searchTerm"))
     }
 
     @Test
@@ -110,23 +112,14 @@ internal class BookmarkViewModelTest {
           )
         )
       )
-      resultsIn(NoResults(emptyList()))
+      Assert.assertTrue(viewModel.state.value!!.filteredBookmarks.isEmpty())
     }
 
     @Test
-    fun `empty search string with database results shows Results`() {
+    fun `empty search string returns items`() {
       val item = createSimpleBookmarkItem()
       emissionOf(searchTerm = "", databaseResults = listOf(item))
-      resultsIn(Results(listOf(item)))
-    }
-
-    @Test
-    fun `empty search string with no database results is NoResults`() {
-      emissionOf(
-        searchTerm = "",
-        databaseResults = emptyList()
-      )
-      resultsIn(NoResults(emptyList()))
+      Assert.assertTrue(viewModel.state.value!!.filteredBookmarks.contains(item))
     }
 
     @Test
@@ -141,7 +134,7 @@ internal class BookmarkViewModelTest {
         searchTerm = "b",
         databaseResults = listOf(item)
       )
-      resultsIn(Results(listOf(item)))
+      resultsIn(State(listOf(item), true, "id", "b"))
     }
 
     @Test
@@ -158,7 +151,7 @@ internal class BookmarkViewModelTest {
         searchTerm = "b",
         databaseResults = listOf(item)
       )
-      resultsIn(SelectionResults(listOf(item)))
+      Assert.assertTrue(viewModel.state.value!!.isInSelectionState)
     }
 
     @Test
@@ -172,8 +165,7 @@ internal class BookmarkViewModelTest {
         databaseResults = listOf(item1)
       )
       viewModel.actions.offer(Action.OnItemLongClick(item1))
-      item1.isSelected = true
-      resultsIn(SelectionResults(listOf(item1)))
+      Assert.assertTrue(viewModel.state.value!!.isInSelectionState)
     }
 
     @Test
@@ -183,17 +175,7 @@ internal class BookmarkViewModelTest {
       emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
       viewModel.actions.offer(Action.OnItemLongClick(item1))
       viewModel.actions.offer(Action.OnItemClick(item1))
-      resultsIn(Results(listOf(item1, item2)))
-    }
-
-    @Test
-    fun `Deselection via OnItemLongClick exits selection state if last item is deselected`() {
-      val item1 = createSimpleBookmarkItem("a")
-      val item2 = createSimpleBookmarkItem("a")
-      emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      resultsIn(Results(listOf(item1, item2)))
+      Assert.assertFalse(viewModel.state.value!!.isInSelectionState)
     }
 
     @Test
@@ -202,18 +184,12 @@ internal class BookmarkViewModelTest {
       val item2 = createSimpleBookmarkItem("a", isSelected = true)
       emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
       viewModel.actions.offer(Action.ExitActionModeMenu)
-      item1.isSelected = false
-      item2.isSelected = false
-      resultsIn(Results(listOf(item1, item2)))
+      Assert.assertFalse(viewModel.state.value!!.isInSelectionState)
     }
   }
 
   @Nested
-  inner class ActionMapping {
-    @Test
-    fun `ExitedSearch offers Finish`() {
-      actionResultsInEffects(Action.ExitBookmarks, Finish)
-    }
+  inner class ActionResults {
 
     @Test
     fun `ExitActionModeMenu deselects all history items from state`() {
@@ -231,24 +207,12 @@ internal class BookmarkViewModelTest {
       assertItemIsSelected(item1)
     }
 
-    @Test
-    fun `OnItemLongClick selects history item from state if in SelectionMode`() {
-      val item1 = createSimpleBookmarkItem("a", id = 2)
-      val item2 = createSimpleBookmarkItem("a", id = 3)
-      emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      viewModel.actions.offer(Action.OnItemLongClick(item2))
-      assertItemIsSelected(item1)
-      assertItemIsSelected(item2)
-    }
-
-    @Test
-    fun `OnItemLongClick deselects history item from state if in SelectionMode`() {
-      val item1 = createSimpleBookmarkItem("a", id = 2)
-      emissionOf(searchTerm = "", databaseResults = listOf(item1))
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      assertItemIsDeselected(item1)
+    private fun assertItemIsDeselected(item: BookmarkItem) {
+      Assert.assertFalse(
+        viewModel.state.value!!.bookmarks.find {
+          it.databaseId == item.databaseId
+        }?.isSelected == true
+      )
     }
 
     @Test
@@ -262,6 +226,22 @@ internal class BookmarkViewModelTest {
       assertItemIsSelected(item2)
     }
 
+    private fun assertItemIsSelected(item: BookmarkItem) {
+      Assert.assertTrue(
+        viewModel.state.value!!.bookmarks.find {
+          it.databaseId == item.databaseId
+        }?.isSelected == true
+      )
+    }
+  }
+
+  @Nested
+  inner class ActionMapping {
+    @Test
+    fun `ExitedSearch offers Finish`() {
+      actionResultsInEffects(Action.ExitBookmarks, Finish)
+    }
+
     @Test
     fun `OnItemClick offers OpenHistoryItem if not in selection mode `() {
       val item1 = createSimpleBookmarkItem("a", id = 2)
@@ -270,11 +250,10 @@ internal class BookmarkViewModelTest {
     }
 
     @Test
-    fun `ToggleShowHistoryFromAllBooks switches show all books toggle`() {
+    fun `UserClickedShowAllToggle updates shared preferences`() {
       actionResultsInEffects(
-        Action.ToggleShowBookmarksFromAllBooks(true),
-        ToggleShowAllBookmarksSwitchAndSaveItsStateToPrefs(
-          viewModel.showAllSwitchToggle,
+        Action.UserClickedShowAllToggle(true),
+        UpdateAllBookmarksPreference(
           sharedPreferenceUtil,
           true
         )
@@ -282,47 +261,23 @@ internal class BookmarkViewModelTest {
     }
 
     @Test
-    fun `RequestDeleteAllHistoryItems opens dialog to request deletion`() {
+    fun `UserClickedDeleteButton opens dialog to request deletion`() {
       actionResultsInEffects(
-        Action.RequestDeleteAllBookmarks,
-        ShowDeleteBookmarkDialog(viewModel.actions, KiwixDialog.DeleteBookmarks)
+        Action.UserClickedDeleteButton,
+        ShowDeleteBookmarksDialog(viewModel.effects, viewModel.state.value!!, bookmarksDao)
       )
     }
 
     @Test
-    fun `RequestDeleteSelectedBookmarks opens dialog to request deletion`() {
+    fun `UserClickedDeleteSelectedBookmarks opens dialog to request deletion`() {
       actionResultsInEffects(
-        Action.RequestDeleteSelectedBookmarks,
-        ShowDeleteBookmarkDialog(viewModel.actions, KiwixDialog.DeleteBookmarks)
-      )
-    }
-
-    @Test
-    fun `DeleteHistoryItems calls DeleteSelectedOrAllHistoryItems side effect`() {
-      actionResultsInEffects(
-        Action.DeleteBookmarks,
-        DeleteSelectedOrAllBookmarkItems(viewModel.state, bookmarksRepository, viewModel.actions)
+        Action.UserClickedDeleteSelectedBookmarks,
+        ShowDeleteBookmarksDialog(viewModel.effects, viewModel.state.value!!, bookmarksDao)
       )
     }
 
     private fun actionResultsInEffects(action: Action, vararg effects: SideEffect<*>) {
       viewModel.effects.test().also { viewModel.actions.offer(action) }.assertValues(*effects)
-    }
-
-    private fun assertItemIsDeselected(item: BookmarkItem) {
-      Assert.assertFalse(
-        viewModel.state.value?.bookmarkItems?.find {
-          it.databaseId == item.databaseId
-        }?.isSelected == true
-      )
-    }
-
-    private fun assertItemIsSelected(item: BookmarkItem) {
-      Assert.assertTrue(
-        viewModel.state.value?.bookmarkItems?.find {
-          it.databaseId == item.databaseId
-        }?.isSelected == true
-      )
     }
   }
 }

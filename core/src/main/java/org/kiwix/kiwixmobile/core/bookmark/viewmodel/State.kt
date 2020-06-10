@@ -29,7 +29,7 @@ data class State(
 
   val isInSelectionState = bookmarks.any(BookmarkItem::isSelected)
 
-  fun getFilteredBookmarks(): List<BookmarkItem> =
+  val filteredBookmarks: List<BookmarkItem> =
     bookmarks
       .filter {
         it.bookmarkTitle.contains(

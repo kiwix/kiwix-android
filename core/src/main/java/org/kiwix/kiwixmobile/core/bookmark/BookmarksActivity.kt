@@ -123,7 +123,7 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
   }
 
   private fun render(state: State) {
-    val filteredBookmarks = state.getFilteredBookmarks()
+    val filteredBookmarks = state.filteredBookmarks
     filteredBookmarks.let { bookmarksAdapter.items = it }
     toggleNoBookmarksText(filteredBookmarks)
     if (state.isInSelectionState) {

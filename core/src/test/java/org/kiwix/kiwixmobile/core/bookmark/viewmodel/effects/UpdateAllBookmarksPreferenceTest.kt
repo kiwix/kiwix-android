@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.history.viewmodel.effects
+package org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
@@ -24,17 +24,17 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-internal class UpdateAllHistoryPreferenceTest {
+internal class UpdateAllBookmarksPreferenceTest {
   @Test
   fun `toggle switch should save new preference`() {
     val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
     val activity: AppCompatActivity = mockk()
-    UpdateAllHistoryPreference(
+    UpdateAllBookmarksPreference(
       sharedPreferenceUtil,
       true
     ).invokeWith(activity)
     verify {
-      sharedPreferenceUtil.showHistoryAllBooks = true
+      sharedPreferenceUtil.showBookmarksAllBooks = true
     }
   }
 }

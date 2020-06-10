@@ -10,7 +10,7 @@ import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.history.viewmodel.State
 import org.kiwix.kiwixmobile.core.history.viewmodel.createSimpleHistoryItem
 
-internal class DeleteSelectedOrAllHistoryItemsTest {
+internal class DeleteHistoryItemsTest {
 
   @Test
   fun `delete with selected items only deletes the selected items`() {

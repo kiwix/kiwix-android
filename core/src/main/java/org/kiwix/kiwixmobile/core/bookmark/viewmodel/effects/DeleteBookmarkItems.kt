@@ -18,13 +18,13 @@ package org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects
  *
  */
 
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 
 data class DeleteBookmarkItems(
   private val state: State,
@@ -35,7 +35,7 @@ data class DeleteBookmarkItems(
       bookmarksDao.deleteBookmarks(state.bookmarks.filter(BookmarkItem::isSelected))
     } else {
       bookmarksDao.deleteBookmarks(state.bookmarks)
-      Toast.makeText(activity, R.string.all_bookmarks_cleared, Toast.LENGTH_SHORT).show()
+      ShowToast(R.string.all_bookmarks_cleared)
     }
   }
 }
