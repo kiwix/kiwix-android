@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.widget.Toast;
 import com.cprcrack.videowebview.VideoEnabledWebView;
+import io.reactivex.disposables.CompositeDisposable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -55,18 +56,17 @@ public class KiwixWebView extends VideoEnabledWebView {
     0, 0, -1.0f, 0, 255, // blue
     0, 0, 0, 1.0f, 0 // alpha
   };
-  private final ViewGroup videoView;
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   ZimReaderContainer zimReaderContainer;
   private final WebViewCallback callback;
+  private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
   @SuppressLint("SetJavaScriptEnabled")
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
     ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient) {
     super(context, attrs);
-    this.videoView = videoView;
     if (BuildConfig.DEBUG == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       setWebContentsDebuggingEnabled(true);
     }
@@ -121,6 +121,19 @@ public class KiwixWebView extends VideoEnabledWebView {
         return true;
       });
     }
+  }
+
+  @Override protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    compositeDisposable.add(
+      sharedPreferenceUtil.getTextZooms()
+        .subscribe(textZoom -> getSettings().setTextZoom(textZoom))
+    );
+  }
+
+  @Override protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    compositeDisposable.clear();
   }
 
   @Override
