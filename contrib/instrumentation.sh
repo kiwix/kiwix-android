@@ -6,5 +6,5 @@ if ./gradlew jacocoInstrumentationTestReport; then
   echo "jacocoInstrumentationTestReport succeeded" >&2
 else
   adb exec-out screencap -p >screencap.png
-  echo "jacocoInstrumentationTestReport failed" >&2
+  exit 1
 fi
