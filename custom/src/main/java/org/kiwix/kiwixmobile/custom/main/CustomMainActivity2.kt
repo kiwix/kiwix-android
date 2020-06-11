@@ -34,7 +34,7 @@ class CustomMainActivity2 : FragmentActivity() {
         return
       }
       supportFragmentManager.commit {
-        //add fragment
+        add(R.id.fragment_custom_app_container, CustomReaderFragment())
       }
     }
   }

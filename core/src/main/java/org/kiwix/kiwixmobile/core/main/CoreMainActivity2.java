@@ -36,7 +36,6 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -53,7 +52,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
@@ -96,7 +94,6 @@ import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.base.BaseFragment;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
@@ -149,7 +146,7 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
-public abstract class CoreReaderFragment extends BaseFragment
+public abstract class CoreMainActivity2 extends BaseActivity
   implements WebViewCallback,
   MainContract.View,
   MainMenu.MenuClickListener {
@@ -314,26 +311,18 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
-    @Nullable ViewGroup container,
-    @Nullable Bundle savedInstanceState) {
-    View root = inflater.inflate(R.layout.activity_main, container, false);
-    return root;
-  }
-
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
-    new WebView(getActivity()).destroy(); // Workaround for buggy webViews see #710
+    new WebView(this).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
-    //setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);
-    getActivity().setActionBar(toolbar);
-    actionBar = getActivity().getActionBar();
+    actionBar = getSupportActionBar();
 
-    toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+    toolbar.setOnTouchListener(new OnSwipeTouchListener(this) {
 
       @Override
       @SuppressLint("SyntheticAccessor")
@@ -384,7 +373,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     setTableDrawerInfo();
     setTabListener();
 
-    compatCallback = new CompatFindActionModeCallback(getActivity());
+    compatCallback = new CompatFindActionModeCallback(this);
     setUpTTS();
 
     setupDocumentParser();
@@ -392,7 +381,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     loadPrefs();
     updateTitle();
 
-    handleIntentExtras(getArguments());
+    handleIntentExtras(getIntent());
 
     wasHideToolbar = isHideToolbar;
     booksAdapter = new BooksOnDiskAdapter(
@@ -418,20 +407,21 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   //End of onCreate
-  private void handleIntentExtras(Bundle bundle) {
-    if (bundle.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(bundle.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
+  private void handleIntentExtras(Intent intent) {
+
+    if (intent.hasExtra(TAG_FILE_SEARCHED)) {
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
       selectTab(webViewList.size() - 1);
     }
-    if (bundle.hasExtra(EXTRA_CHOSE_X_URL)) {
+    if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
       newMainPageTab();
-      loadUrlWithCurrentWebview(bundle.getStringExtra(EXTRA_CHOSE_X_URL));
+      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_URL));
     }
-    if (bundle.hasExtra(EXTRA_CHOSE_X_TITLE)) {
+    if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
       newMainPageTab();
       loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
     }
-    handleNotificationIntent(bundle);
+    handleNotificationIntent(intent);
   }
 
   private void handleNotificationIntent(Intent intent) {
@@ -493,7 +483,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void setTableDrawerInfo() {
-    tableDrawerRight.setLayoutManager(new LinearLayoutManager(getActivity()));
+    tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
     tableDrawerAdapter = setupTableDrawerAdapter();
     tableDrawerRight.setAdapter(tableDrawerAdapter);
     tableDrawerAdapter.notifyDataSetChanged();
@@ -1083,10 +1073,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @Override public void manageZimFiles(int tab) {
-
-  }
-
   private void externalLinkPopup(Intent intent) {
     alertDialogShower.show(KiwixDialog.ExternalLinkPopup.INSTANCE,
       () -> {
@@ -1657,10 +1643,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
   }
 
-  @Override public void showHomePage() {
-
-  }
-
   @Override
   public void webViewProgressChanged(int progress) {
     if (checkNull(progressBar)) {
@@ -1761,9 +1743,5 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private boolean checkNull(View view) {
     return view != null;
-  }
-
-  @Override public void inject(@NotNull BaseActivity baseActivity) {
-
   }
 }

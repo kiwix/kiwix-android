@@ -20,12 +20,17 @@ package org.kiwix.kiwixmobile.core.base
 
 import android.content.Context
 import androidx.fragment.app.Fragment
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import javax.inject.Inject
 
 /**
  * All fragments should inherit from this fragment.
  */
 
 abstract class BaseFragment : Fragment() {
+
+  @Inject
+  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   override fun onAttach(context: Context) {
     super.onAttach(context)
