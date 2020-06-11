@@ -16,10 +16,15 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.main
+package org.kiwix.kiwixmobile.core.main;
 
-import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.jetbrains.annotations.NotNull;
+import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.base.BaseFragment;
 
-class CustomReaderFragment : CoreReaderFragment() {
+public class CoreReaderFragment extends BaseFragment {
+  @Override public void inject(
+    @NotNull BaseActivity baseActivity) {
 
+  }
 }
