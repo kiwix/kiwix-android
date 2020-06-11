@@ -22,7 +22,7 @@
   android:layout_height="match_parent">
 
   <androidx.fragment.app.FragmentContainerView
-    android:id="@+id/base_fragment"
+    android:id="@+id/fragment_custom_app_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_constraintBottom_toBottomOf="parent"

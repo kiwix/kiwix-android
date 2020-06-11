@@ -18,8 +18,24 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
+import kotlinx.android.synthetic.main.activity_custom_main.fragment_custom_app_container
+import org.kiwix.kiwixmobile.custom.R
 
-class CustomMainActivity2 : AppCompatActivity() {
+class CustomMainActivity2 : FragmentActivity() {
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_custom_main)
 
+    if (fragment_custom_app_container != null) {
+      if (savedInstanceState != null) {
+        return
+      }
+      supportFragmentManager.commit {
+        //add fragment
+      }
+    }
+  }
 }
