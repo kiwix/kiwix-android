@@ -18,9 +18,11 @@
 
 package org.kiwix.kiwixmobile.settings;
 
+import android.view.View;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
+import org.hamcrest.Matcher;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,6 +35,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
 
 public class KiwixSettingsActivityTest {
@@ -49,9 +52,13 @@ public class KiwixSettingsActivityTest {
     clickOn(R.string.pref_wifi_only);
   }
 
-  private void clickOn(@StringRes int stringId) {
+  private void clickOn(@StringRes int... stringIds) {
+    Matcher<View>[] matchers= new Matcher[stringIds.length];
+    for (int i = 0; i < stringIds.length; i++) {
+      matchers[i]= withText(stringIds[i]);
+    }
     onView(withClassName(is(RecyclerView.class.getName())))
-      .perform(actionOnItem(hasDescendant(withText(stringId)), click()));
+      .perform(actionOnItem(hasDescendant(anyOf(matchers)), click()));
   }
 
   @Test
@@ -62,8 +69,8 @@ public class KiwixSettingsActivityTest {
 
   @Test
   public void testStorageDialog() {
-    clickOn(R.string.pref_storage_summary);
-    assertDisplayed(R.string.internal_storage);
+    clickOn(R.string.internal_storage, R.string.external_storage);
+    assertDisplayed(R.string.pref_storage);
   }
 
   @Test
