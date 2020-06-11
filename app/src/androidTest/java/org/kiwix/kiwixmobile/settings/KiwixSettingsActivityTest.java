@@ -60,12 +60,9 @@ public class KiwixSettingsActivityTest {
     assertDisplayed(R.string.pref_language_title);
   }
 
-  /*
-  * This will fail locally but needs these values to pass on CI emulators
-  * */
   @Test
   public void testStorageDialog() {
-    clickOn(R.string.external_storage);
+    clickOn(R.string.pref_storage_summary);
     assertDisplayed(R.string.internal_storage);
   }
 

@@ -69,6 +69,7 @@
   <PreferenceCategory
     android:key="pref_storage"
     android:title="@string/pref_storage"
+    app:summary="@string/pref_storage_summary"
     app:iconSpaceReserved="false">
 
     <Preference
