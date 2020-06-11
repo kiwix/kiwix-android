@@ -231,9 +231,7 @@ class ZimFileReader constructor(
     @JvmField
     val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
 
-    @JvmField
-    val CONTENT_PREFIX =
-      Uri.parse("content://${CoreApp.getInstance().packageName}.zim.base/").toString()
+    const val CONTENT_PREFIX = "zim://content/"
 
     private val INVERT_IMAGES_VIDEO =
       """
