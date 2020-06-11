@@ -20,6 +20,4 @@ package org.kiwix.kiwixmobile.custom.main
 
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 
-class CustomReaderFragment : CoreReaderFragment() {
-
-}
+class CustomReaderFragment : CoreReaderFragment()
