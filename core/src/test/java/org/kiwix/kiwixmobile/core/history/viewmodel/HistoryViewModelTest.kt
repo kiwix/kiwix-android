@@ -8,9 +8,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
-import org.assertj.core.api.AssertionsForClassTypes.assertThat
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -176,33 +174,6 @@ internal class HistoryViewModelTest {
     }
 
     @Test
-    fun `date headers are merged if on same day`() {
-      val item1 =
-        createSimpleHistoryItem(
-          "a", "1 Aug 2020"
-        )
-      val date1 = DateItem(item1.dateString)
-      val item2 =
-        createSimpleHistoryItem(
-          "b", "1 Aug 2020"
-        )
-      val item3 =
-        createSimpleHistoryItem(
-          "c", "1 Aug 2019"
-        )
-      val date3 = DateItem(item3.dateString)
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item2, item3, item1)
-      )
-      assertEquals(
-        listOf(date1, item1, item2, date3, item3),
-        State(listOf(item1, item2, item3), true, "id", "")
-          .historyListItems
-      )
-    }
-
-    @Test
     fun `OnItemLongClick enters selection state`() {
       val item1 =
         createSimpleHistoryItem(
@@ -320,7 +291,7 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item1, item2)
       )
       viewModel.actions.offer(UserClickedShowAllToggle(false))
-      assertEquals(listOf(date, item1), viewModel.state.value?.historyListItems)
+      assertThat(listOf(date, item1)).isEqualTo(viewModel.state.value?.historyListItems)
     }
 
     @Test
@@ -331,7 +302,7 @@ internal class HistoryViewModelTest {
         searchTerm = "title_in_caps",
         databaseResults = listOf(item1)
       )
-      assertEquals(listOf(date, item1), viewModel.state.value?.historyListItems)
+      assertThat(listOf(date, item1)).isEqualTo(viewModel.state.value?.historyListItems)
     }
   }
 
@@ -357,7 +328,7 @@ internal class HistoryViewModelTest {
     }
 
     private fun assertItemIsSelected(item: HistoryItem) {
-      assertTrue(
+      assertThat(
         (viewModel.state.value?.historyItems?.find { it.id == item.id } as HistoryItem).isSelected
       )
     }
