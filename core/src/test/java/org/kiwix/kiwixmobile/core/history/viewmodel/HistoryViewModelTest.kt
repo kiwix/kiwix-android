@@ -23,6 +23,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.ExitHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UpdateHistory
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedConfirmDelete
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
@@ -36,7 +37,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class HistoryViewModelTest {
@@ -61,22 +61,12 @@ internal class HistoryViewModelTest {
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showHistoryAllBooks } returns true
-    every { historyDao.history() } returns itemsFromDb.distinctUntilChanged()
+    every { historyDao.history() } returns itemsFromDb
     viewModel = HistoryViewModel(historyDao, zimReaderContainer, sharedPreferenceUtil)
   }
 
-  private fun resultsIn(st: State) {
-    viewModel.state.test()
-      .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-      .assertValue(st)
-  }
-
-  private fun emissionOf(
-    searchTerm: String,
-    databaseResults: List<HistoryItem>
-  ) {
-    itemsFromDb.offer(databaseResults)
-    viewModel.actions.offer(Filter(searchTerm))
+  private fun resultsIn(st: HistoryState) {
+    viewModel.state.test().assertValue(st)
   }
 
   @Nested
@@ -84,34 +74,101 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(State(listOf(), true, "id", ""))
+      viewModel.state.test().assertValue(state())
     }
 
     @Test
-    fun `non empty search term with search results shows Results`() {
+    internal fun `ExitHistory finishes activity`() {
+      viewModel.effects.test().also { viewModel.actions.offer(ExitHistory) }.assertValue(Finish)
+      viewModel.state.test().assertValue(state())
+    }
+
+    @Test
+    internal fun `ExitActionModeMenu deselects history items`() {
+      viewModel.state.postValue(state(historyItems = listOf(historyItem(isSelected = true))))
+      viewModel.actions.offer(ExitActionModeMenu)
+      viewModel.state.test()
+        .assertValue(state(historyItems = listOf(historyItem(isSelected = false))))
+    }
+
+    @Test
+    internal fun `UserClickedConfirmDelete offers DeleteHistoryItems`() {
+      viewModel.effects.test().also { viewModel.actions.offer(UserClickedConfirmDelete) }
+        .assertValue(DeleteHistoryItems(state(), historyDao))
+      viewModel.state.test().assertValue(state())
+    }
+
+    @Test
+    internal fun `UserClickedDeleteButton offers ShowDeleteHistoryDialog`() {
+      viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteButton) }
+        .assertValue(ShowDeleteHistoryDialog(viewModel.actions))
+      viewModel.state.test().assertValue(state())
+    }
+
+    @Test
+    internal fun `UserClickedDeleteSelectedHistoryItems offers ShowDeleteHistoryDialog`() {
+      viewModel.effects.test()
+        .also { viewModel.actions.offer(UserClickedDeleteSelectedHistoryItems) }
+        .assertValue(ShowDeleteHistoryDialog(viewModel.actions))
+      viewModel.state.test().assertValue(state())
+    }
+
+    @Test
+    internal fun `UserClickedShowAllToggle offers UpdateAllHistoryPreference`() {
+      viewModel.effects.test()
+        .also { viewModel.actions.offer(UserClickedShowAllToggle(false)) }
+        .assertValue(UpdateAllHistoryPreference(sharedPreferenceUtil, false))
+      viewModel.state.test().assertValue(state(showAll = false))
+    }
+
+    @Test
+    internal fun `OnItemClick selects item if one is selected`() {
+      val historyItem = historyItem(isSelected = true)
+      viewModel.state.postValue(state(listOf(historyItem)))
+      viewModel.actions.offer(OnItemClick(historyItem))
+      viewModel.state.test().assertValue(state(listOf(historyItem())))
+    }
+
+    @Test
+    internal fun `OnItemClick offers OpenHistoryItem if none is selected`() {
+      viewModel.state.postValue(state(listOf(historyItem())))
+      viewModel.effects.test()
+        .also { viewModel.actions.offer(OnItemClick(historyItem())) }
+        .assertValue(OpenHistoryItem(historyItem(), zimReaderContainer))
+      viewModel.state.test().assertValue(state(listOf(historyItem())))
+    }
+
+    @Test
+    internal fun `OnItemLongClick selects item if none is selected`() {
+      val historyItem = historyItem()
+      viewModel.state.postValue(state(listOf(historyItem)))
+      viewModel.actions.offer(OnItemLongClick(historyItem))
+      viewModel.state.test().assertValue(state(listOf(historyItem(isSelected = true))))
+    }
+
+    @Test
+    fun `Filter updates search term`() {
       val searchTerm = "searchTerm"
-      val item =
-        createSimpleHistoryItem(
-          historyTitle = searchTerm
-        )
-      val date = DateItem(item.dateString)
-      emissionOf(
-        searchTerm = searchTerm,
-        databaseResults = listOf(item)
-      )
-      resultsIn(State(listOf(item), true, "id", "searchTerm"))
+      viewModel.actions.offer(Filter(searchTerm))
+      viewModel.state.test().assertValue(state(searchTerm = searchTerm))
+    }
+
+    @Test
+    internal fun `UpdateHistory updates history`() {
+      viewModel.actions.offer(UpdateHistory(listOf(historyItem())))
+      viewModel.state.test().assertValue(state(listOf(historyItem())))
     }
 
     @Test
     fun `empty search string with database results shows Results`() {
       val item =
-        createSimpleHistoryItem("")
+        historyItem("")
       val date = DateItem(item.dateString)
       emissionOf(
         searchTerm = "",
         databaseResults = listOf(item)
       )
-      resultsIn(State(listOf(item), true, "id", ""))
+      resultsIn(HistoryState(listOf(item), true, "id", ""))
     }
 
     @Test
@@ -120,7 +177,7 @@ internal class HistoryViewModelTest {
         searchTerm = "",
         databaseResults = emptyList()
       )
-      resultsIn(State(emptyList(), true, "id", ""))
+      resultsIn(HistoryState(emptyList(), true, "id", ""))
     }
 
     @Test
@@ -128,20 +185,20 @@ internal class HistoryViewModelTest {
       val searchString1 = "a"
       val searchString2 = "b"
       val item =
-        createSimpleHistoryItem("b")
+        historyItem("b")
       val date = DateItem(item.dateString)
       emissionOf(
         searchTerm = searchString1,
         databaseResults = listOf(item)
       )
       viewModel.actions.offer(Filter(searchString2))
-      resultsIn(State(listOf(item), true, "id", "b"))
+      resultsIn(HistoryState(listOf(item), true, "id", "b"))
     }
 
     @Test
     fun `only latest search term is used`() {
       val item =
-        createSimpleHistoryItem("b")
+        historyItem("b")
       val date = DateItem(item.dateString)
       emissionOf(
         searchTerm = "a",
@@ -151,13 +208,13 @@ internal class HistoryViewModelTest {
         searchTerm = "b",
         databaseResults = listOf(item)
       )
-      resultsIn(State(listOf(item), true, "id", "b"))
+      resultsIn(HistoryState(listOf(item), true, "id", "b"))
     }
 
     @Test
     fun `enters selection state if item is selected`() {
       val item =
-        createSimpleHistoryItem(
+        historyItem(
           "b"
         )
       val date = DateItem(item.dateString)
@@ -170,13 +227,13 @@ internal class HistoryViewModelTest {
         databaseResults = listOf(item)
       )
       viewModel.actions.offer(OnItemLongClick(item))
-      resultsIn(State(listOf(item), true, "id", "b"))
+      resultsIn(HistoryState(listOf(item), true, "id", "b"))
     }
 
     @Test
     fun `OnItemLongClick enters selection state`() {
       val item1 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020"
         )
       emissionOf(
@@ -185,17 +242,17 @@ internal class HistoryViewModelTest {
       )
       viewModel.actions.offer(OnItemLongClick(item1))
       item1.isSelected = true
-      resultsIn(State(listOf(item1), true, "id", ""))
+      resultsIn(HistoryState(listOf(item1), true, "id", ""))
     }
 
     @Test
     fun `Deselection via OnItemClick exits selection state if last item is deselected`() {
       val item1 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020"
         )
       val item2 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020"
         )
       val date = DateItem(item1.dateString)
@@ -205,17 +262,17 @@ internal class HistoryViewModelTest {
       )
       viewModel.actions.offer(OnItemLongClick(item1))
       viewModel.actions.offer(OnItemClick(item1))
-      resultsIn(State(listOf(item1, item2), true, "id", ""))
+      resultsIn(HistoryState(listOf(item1, item2), true, "id", ""))
     }
 
     @Test
     fun `ExitActionMode deselects all items`() {
       val item1 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020", isSelected = true
         )
       val item2 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020", isSelected = true
         )
       emissionOf(
@@ -225,8 +282,11 @@ internal class HistoryViewModelTest {
       viewModel.actions.offer(ExitActionModeMenu)
       item1.isSelected = false
       item2.isSelected = false
-      resultsIn(State(listOf(item1, item2), true, "id", ""))
+      resultsIn(HistoryState(listOf(item1, item2), true, "id", ""))
     }
+  }
+
+  private fun emissionOf(searchTerm: String, databaseResults: List<HistoryListItem.HistoryItem>) {
   }
 
   @Nested
@@ -235,21 +295,21 @@ internal class HistoryViewModelTest {
     @Test
     fun `order of date headers and items are correct`() {
       val item1 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020"
         )
       val date1 = DateItem(item1.dateString)
       val item2 =
-        createSimpleHistoryItem(
+        historyItem(
           "b", "2 Jun 1990"
         )
       val date2 = DateItem(item2.dateString)
       val item3 =
-        createSimpleHistoryItem(
+        historyItem(
           "c", "1 Aug 2021"
         )
       val date3 = DateItem(item3.dateString)
-      val state = State(listOf(item3, item1, item2), true, "id", "")
+      val state = HistoryState(listOf(item3, item1, item2), true, "id", "")
       assertThat(
         state.historyListItems
       ).isEqualTo(
@@ -259,8 +319,8 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `non empty search string with no search results is empty history item list`() {
-      val state = State(
-        listOf(createSimpleHistoryItem("")),
+      val state = HistoryState(
+        listOf(historyItem("")),
         true,
         "id",
         "a"
@@ -270,8 +330,8 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `showAllHistory results in all history being shown`() {
-      val item1 = createSimpleHistoryItem(zimId = "notCurrentId1")
-      val item2 = createSimpleHistoryItem(zimId = "notCurrentId")
+      val item1 = historyItem(zimId = "notCurrentId1")
+      val item2 = historyItem(zimId = "notCurrentId")
       val date = DateItem(item1.dateString)
       emissionOf(
         searchTerm = "",
@@ -283,8 +343,8 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `showCurrentBook results in current book history being shown`() {
-      val item1 = createSimpleHistoryItem(zimId = "id")
-      val item2 = createSimpleHistoryItem(zimId = "notCurrentId")
+      val item1 = historyItem(zimId = "id")
+      val item2 = historyItem(zimId = "notCurrentId")
       val date = DateItem(item1.dateString)
       emissionOf(
         searchTerm = "",
@@ -296,7 +356,7 @@ internal class HistoryViewModelTest {
 
     @Test
     fun `filter ignores case`() {
-      val item1 = createSimpleHistoryItem(historyTitle = "TITLE_IN_CAPS")
+      val item1 = historyItem(historyTitle = "TITLE_IN_CAPS")
       val date = DateItem(item1.dateString)
       emissionOf(
         searchTerm = "title_in_caps",
@@ -316,7 +376,7 @@ internal class HistoryViewModelTest {
     @Test
     fun `OnItemLongClick selects history item from state`() {
       val item1 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020", isSelected = false
         )
       emissionOf(
@@ -336,11 +396,11 @@ internal class HistoryViewModelTest {
     @Test
     fun `OnItemClick selects history item from state if in SelectionMode`() {
       val item1 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020", id = 2
         )
       val item2 =
-        createSimpleHistoryItem(
+        historyItem(
           "b", "1 Aug 2020", id = 3
         )
       emissionOf(
@@ -356,7 +416,7 @@ internal class HistoryViewModelTest {
     @Test
     fun `OnItemClick offers OpenHistoryItem if not in selection mode `() {
       val item1 =
-        createSimpleHistoryItem(
+        historyItem(
           "a", "1 Aug 2020", id = 2
         )
       emissionOf(

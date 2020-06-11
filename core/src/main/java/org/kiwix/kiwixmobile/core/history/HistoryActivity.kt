@@ -37,7 +37,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButt
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
-import org.kiwix.kiwixmobile.core.history.viewmodel.State
+import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryState
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -127,7 +127,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  private fun render(state: State) {
+  private fun render(state: HistoryState) {
     historyAdapter.items = state.historyListItems
     history_switch.isEnabled = !state.isInSelectionState
     no_history.visibility = if (state.historyListItems.isEmpty()) VISIBLE else GONE

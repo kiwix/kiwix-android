@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
-data class State(
+data class HistoryState(
   val historyItems: List<HistoryItem>,
   val showAll: Boolean,
   val currentZimId: String?,
@@ -33,17 +33,14 @@ data class State(
 
   val historyListItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(historyItems
-      .filter {
-        it.historyTitle.contains(
-          searchTerm,
-          true
-        ) && (it.zimId == currentZimId || showAll)
-      }).foldOverAddingHeaders(
-      { historyItem -> DateItem(historyItem.dateString) },
-      { current, next -> current.dateString != next.dateString }
-    )
+      .filter { showAll || it.zimId == currentZimId }
+      .filter { it.historyTitle.contains(searchTerm, true) })
+      .foldOverAddingHeaders(
+        { historyItem -> DateItem(historyItem.dateString) },
+        { current, next -> current.dateString != next.dateString }
+      )
 
-  fun toggleSelectionOfItem(historyListItem: HistoryItem): State {
+  fun toggleSelectionOfItem(historyListItem: HistoryItem): HistoryState {
     val newList = historyItems.map {
       if (it.id == historyListItem.id) it.apply {
         isSelected = !isSelected

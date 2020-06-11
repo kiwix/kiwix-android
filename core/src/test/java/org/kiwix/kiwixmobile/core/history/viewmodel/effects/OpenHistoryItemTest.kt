@@ -3,12 +3,13 @@ package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.history.viewmodel.createSimpleHistoryItem
+import org.kiwix.kiwixmobile.core.history.viewmodel.historyItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
@@ -16,7 +17,7 @@ import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
 internal class OpenHistoryItemTest {
   @Test
   fun `invokeWith returns an Ok Result with historyUrl`() {
-    val item = createSimpleHistoryItem()
+    val item = historyItem()
     val zimReaderContainer: ZimReaderContainer = mockk()
     every {
       zimReaderContainer.zimCanonicalPath
@@ -31,12 +32,14 @@ internal class OpenHistoryItemTest {
     verify {
       activity.setResult(Activity.RESULT_OK, intent)
       activity.finish()
+      anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.historyUrl)
     }
+    confirmVerified(intent)
   }
 
   @Test
   fun `invokeWith returns an Ok Result with historyUrl and zimFilePath`() {
-    val item = createSimpleHistoryItem()
+    val item = historyItem()
     val zimReaderContainer: ZimReaderContainer = mockk()
     every {
       zimReaderContainer.zimCanonicalPath

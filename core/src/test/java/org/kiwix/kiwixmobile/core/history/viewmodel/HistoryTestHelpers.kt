@@ -4,7 +4,7 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
 // dateFormat = d MMM yyyy
 //             5 Jul 2020
-fun createSimpleHistoryItem(
+fun historyItem(
   historyTitle: String = "historyTitle",
   dateString: String = "5 Jul 2020",
   isSelected: Boolean = false,
@@ -25,3 +25,10 @@ fun createSimpleHistoryItem(
     id
   )
 }
+
+fun state(
+  historyItems: List<HistoryItem> = listOf(),
+  showAll: Boolean = true,
+  zimId: String = "id",
+  searchTerm: String = ""
+): HistoryState = HistoryState(historyItems, showAll, zimId, searchTerm)
