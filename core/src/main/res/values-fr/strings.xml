@@ -50,6 +50,8 @@
   <string name="server_textview_default_message">Sélectionnez les fichiers que vous voulez héberger sur le serveur</string>
   <string name="progress_dialog_starting_server">Démarrage du serveur</string>
   <string name="hotspot_dialog_title">Instructions pour les livres hébergeurs</string>
+  <string name="wifi_dialog_title">Connexion WiFi détectée</string>
+  <string name="wifi_dialog_body">Afin de pouvoir lire les livres sur d’autres appareils, veuillez vous assurer que tous ceux-ci sont connectés au même réseau WiFi.</string>
   <string name="hotspot_dialog_message">Pour que cette fonctionnalité fonctionne, vous devez d’abord activer manuellement votre point d’accès WiFi ou vous assurer que l\'appareil hôte et l\'appareil récepteur appartiennent au même réseau WiFi</string>
   <string name="hotspot_dialog_neutral_button">PROCEDER</string>
   <string name="hotspot_channel_description">Mises à jour concernant l’état de votre point d’accès/serveur.</string>
