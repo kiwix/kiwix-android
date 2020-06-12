@@ -23,5 +23,5 @@ import android.content.Intent
 
 object Intents {
   @JvmStatic fun <T : Activity> internal(clazz: Class<T>): Intent =
-    Intent(clazz.canonicalName).setPackage(CoreApp.getInstance().packageName)
+    Intent(clazz.canonicalName).setPackage(CoreApp.instance.packageName)
 }

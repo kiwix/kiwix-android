@@ -63,7 +63,7 @@ class StorageSelectDialog : DialogFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    CoreApp.getCoreComponent().inject(this)
+    CoreApp.coreComponent.inject(this)
     title.text = aTitle
     device_list.run {
       adapter = storageAdapter
