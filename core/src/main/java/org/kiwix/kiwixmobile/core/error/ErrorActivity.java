@@ -194,7 +194,7 @@ public class ErrorActivity extends BaseActivity {
   private boolean safeContains(Bundle extras, String key) {
     try {
       return extras.containsKey(key);
-    }catch (RuntimeException ignore){
+    } catch (RuntimeException ignore) {
       return false;
     }
   }
