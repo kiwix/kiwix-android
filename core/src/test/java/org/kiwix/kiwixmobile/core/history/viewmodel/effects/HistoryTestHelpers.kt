@@ -21,8 +21,6 @@ package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryState
 
-// dateFormat = d MMM yyyy
-//             5 Jul 2020
 fun historyItem(
   historyTitle: String = "historyTitle",
   dateString: String = "5 Jul 2020",

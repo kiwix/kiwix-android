@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 internal class UpdateAllHistoryPreferenceTest {
   @Test
-  fun `toggle switch should be toggled`() {
+  fun `UpdateAllHistoryPreference updates shared preferences`() {
     val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
     val activity: AppCompatActivity = mockk()
     UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
