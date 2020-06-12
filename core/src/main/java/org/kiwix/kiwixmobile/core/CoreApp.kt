@@ -39,7 +39,6 @@ abstract class CoreApp : Application() {
   companion object {
     @JvmStatic
     lateinit var instance: CoreApp
-      private set
 
     @JvmStatic
     lateinit var coreComponent: CoreComponent
