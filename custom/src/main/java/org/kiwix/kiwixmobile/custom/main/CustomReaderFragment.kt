@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
@@ -45,6 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
+import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import java.util.Locale
 import javax.inject.Inject
@@ -58,6 +60,10 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun showHomePage() {
     Log.e("CustomMain", "tried to show home page")
+  }
+
+  override fun inject(baseActivity: BaseActivity) {
+    (activity as CustomMainActivity).customActivityComponent.inject(activity as CustomMainActivity)
   }
 
   override fun createNewTab() {

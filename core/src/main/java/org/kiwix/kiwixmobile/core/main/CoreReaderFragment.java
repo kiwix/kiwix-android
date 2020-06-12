@@ -97,7 +97,6 @@ import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
-import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.base.BaseFragment;
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
@@ -318,6 +317,11 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
+  @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    presenter.attachView(this);
+  }
+
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
@@ -329,12 +333,12 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    presenter.attachView(this);
+
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck(activity);
     //setContentView(R.layout.activity_main);
-    activity.setSupportActionBar(toolbar);
+    //activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
 
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
@@ -1769,9 +1773,5 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private boolean checkNull(View view) {
     return view != null;
-  }
-
-  @Override public void inject(@NotNull BaseActivity baseActivity) {
-
   }
 }

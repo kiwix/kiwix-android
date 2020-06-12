@@ -29,7 +29,8 @@ private val BaseActivity.customComponent: CustomComponent
     """.trimIndent()
   )
 
-private fun BaseActivity.customApp() = applicationContext as? CustomApp ?: application as? CustomApp
+private fun BaseActivity.customApp() =
+  applicationContext as? CustomApp ?: application as? CustomApp
 
 internal inline val BaseActivity.customActivityComponent
   get() = customComponent.activityComponentBuilder().activity(this).build()
