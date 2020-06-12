@@ -55,6 +55,7 @@ import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -283,6 +284,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private Disposable bookmarkingDisposable;
   private Boolean isBookmarked;
 
+  //TODO
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (actionMode == null) {
@@ -295,6 +297,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     super.onActionModeStarted(mode);
   }
 
+  //TODO
   @Override
   public void onActionModeFinished(ActionMode mode) {
     actionMode = null;
@@ -329,9 +332,9 @@ public abstract class CoreReaderFragment extends BaseFragment
     new WebView(getActivity()).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
     //setContentView(R.layout.activity_main);
-    setSupportActionBar(toolbar);
-    getActivity().setActionBar(toolbar);
-    actionBar = getActivity().getActionBar();
+    AppCompatActivity activity = (AppCompatActivity) getActivity();
+    activity.setSupportActionBar(toolbar);
+    actionBar = activity.getSupportActionBar();
 
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
