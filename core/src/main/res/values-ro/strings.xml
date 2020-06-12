@@ -163,7 +163,7 @@
   <string name="your_languages">Limbi selectate:</string>
   <string name="other_languages">Alte limbi:</string>
   <string name="no_items_msg">Nu sunt item-uri disponibile</string>
-  <string name="crash_title">Ei bine ... Este jenant</string>
+  <string name="crash_title">Ei bine … Este jenant</string>
   <string name="crash_description">Se pare că ne-am prăbușit.</string>
   <string name="crash_checkbox_language">Setările dvs. de limbă</string>
   <string name="crash_checkbox_zimfiles">O Listă cu Fișierele Dvs. Zim</string>
@@ -244,7 +244,7 @@
   <string name="no_devices_found">Nu au fost detectate dispozitive. Atingeți butonul de căutare pentru a încerca din nou.</string>
   <string name="files_for_transfer">FIȘIERE PENTRU TRANSFER</string>
   <string name="preparing_files">Pregătirea fișierelor pentru transfer ....</string>
-  <string name="performing_handshake">Stabilirea legăturii în curs ...</string>
+  <string name="performing_handshake">Stabilirea legăturii în curs …</string>
   <string name="status">Starea</string>
   <string name="pref_clear_all_notes_summary">Șterge toate notele la toate articolele</string>
   <string name="pref_clear_all_notes_title">Ștergeți toate notele</string>
