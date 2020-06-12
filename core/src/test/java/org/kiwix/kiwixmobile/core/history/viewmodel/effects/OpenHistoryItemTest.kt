@@ -9,7 +9,6 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.history.viewmodel.historyItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL

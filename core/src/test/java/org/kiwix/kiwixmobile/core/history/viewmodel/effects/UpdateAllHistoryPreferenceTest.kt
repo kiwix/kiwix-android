@@ -29,10 +29,7 @@ internal class UpdateAllHistoryPreferenceTest {
   fun `toggle switch should be toggled`() {
     val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
     val activity: AppCompatActivity = mockk()
-    UpdateAllHistoryPreference(
-      sharedPreferenceUtil,
-      true
-    ).invokeWith(activity)
+    UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
     verify {
       sharedPreferenceUtil.showHistoryAllBooks = true
     }
