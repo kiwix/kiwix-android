@@ -1,7 +1,10 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  app:iconSpaceReserved="false">
   <PreferenceCategory
     android:key="pref_display"
-    android:title="@string/pref_display_title">
+    android:title="@string/pref_display_title"
+    app:iconSpaceReserved="false">
 
     <ListPreference
       android:defaultValue="-1"
@@ -9,90 +12,113 @@
       android:entryValues="@array/pref_night_modes_values"
       android:key="pref_night_mode"
       android:summary="@string/pref_night_mode_summary"
-      android:title="@string/pref_night_mode" />
+      android:title="@string/pref_night_mode"
+      app:iconSpaceReserved="false" />
 
-    <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
+    <SwitchPreferenceCompat
       android:defaultValue="false"
       android:key="pref_backtotop"
       android:summary="@string/pref_back_to_top_summary"
-      android:title="@string/pref_back_to_top" />
+      android:title="@string/pref_back_to_top"
+      app:iconSpaceReserved="false" />
 
-    <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
+    <SwitchPreferenceCompat
       android:defaultValue="false"
       android:key="pref_hidetoolbar"
       android:summary="@string/pref_hide_toolbar_summary"
-      android:title="@string/pref_hide_toolbar" />
+      android:title="@string/pref_hide_toolbar"
+      app:iconSpaceReserved="false" />
 
+    <SeekBarPreference
+      android:defaultValue="2"
+      android:max="6"
+      app:iconSpaceReserved="false"
+      app:key="text_zoom"
+      app:title="@string/pref_text_zoom_title"
+      app:updatesContinuously="true" />
 
   </PreferenceCategory>
 
   <PreferenceCategory
     android:key="pref_extras"
-    android:title="@string/pref_extras">
+    android:title="@string/pref_extras"
+    app:iconSpaceReserved="false">
 
-    <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
+    <SwitchPreferenceCompat
       android:defaultValue="false"
       android:key="pref_newtab_background"
       android:summary="@string/pref_newtab_background_summary"
-      android:title="@string/pref_newtab_background_title" />
+      android:title="@string/pref_newtab_background_title"
+      app:iconSpaceReserved="false" />
 
-    <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
+    <SwitchPreferenceCompat
       android:defaultValue="true"
       android:key="pref_external_link_popup"
       android:summary="@string/pref_external_link_popup_summary"
-      android:title="@string/pref_external_link_popup_title" />
+      android:title="@string/pref_external_link_popup_title"
+      app:iconSpaceReserved="false" />
 
-    <org.kiwix.kiwixmobile.core.settings.CustomSwitchPreference
+    <SwitchPreferenceCompat
       android:defaultValue="true"
       android:key="pref_wifi_only"
       android:summary="@string/pref_wifi_only"
-      android:title="@string/pref_wifi_only" />
+      android:title="@string/pref_wifi_only"
+      app:iconSpaceReserved="false" />
   </PreferenceCategory>
 
   <PreferenceCategory
     android:key="pref_storage"
-    android:title="@string/pref_storage">
+    app:title="@string/pref_storage"
+    app:iconSpaceReserved="false">
 
     <Preference
       android:key="pref_select_folder"
-      android:title="@string/pref_current_folder" />
+      android:title="@string/pref_current_folder"
+      app:iconSpaceReserved="false" />
 
   </PreferenceCategory>
 
   <PreferenceCategory
     android:key="pref_history"
-    android:title="History">
+    android:title="History"
+    app:iconSpaceReserved="false">
 
     <Preference
       android:key="pref_clear_all_history"
       android:summary="@string/pref_clear_all_history_summary"
-      android:title="@string/pref_clear_all_history_title" />
+      android:title="@string/pref_clear_all_history_title"
+      app:iconSpaceReserved="false" />
 
   </PreferenceCategory>
   <PreferenceCategory
     android:key="pref_notes"
-    android:title="Notes">
+    android:title="Notes"
+    app:iconSpaceReserved="false">
 
     <Preference
       android:key="pref_clear_all_notes"
       android:summary="@string/pref_clear_all_notes_summary"
-      android:title="@string/pref_clear_all_notes_title" />
+      android:title="@string/pref_clear_all_notes_title"
+      app:iconSpaceReserved="false" />
 
   </PreferenceCategory>
   <PreferenceCategory
     android:key="pref_language"
-    android:title="@string/pref_language_title">
+    android:title="@string/pref_language_title"
+    app:iconSpaceReserved="false">
 
     <ListPreference
       android:key="pref_language_chooser"
       android:summary="@string/pref_language_chooser"
-      android:title="@string/pref_language_title" />
+      android:title="@string/pref_language_title"
+      app:iconSpaceReserved="false" />
 
   </PreferenceCategory>
 
   <PreferenceCategory
     android:key="pref_info"
-    android:title="@string/pref_info_title">
+    android:title="@string/pref_info_title"
+    app:iconSpaceReserved="false">
 
     <EditTextPreference
       android:enabled="false"
@@ -100,12 +126,14 @@
       android:persistent="false"
       android:selectable="true"
       android:shouldDisableView="false"
-      android:title="@string/pref_info_version" />
+      android:title="@string/pref_info_version"
+      app:iconSpaceReserved="false" />
 
     <Preference
       android:key="pref_credits"
       android:summary="@string/pref_credits"
-      android:title="@string/pref_credits_title" />
+      android:title="@string/pref_credits_title"
+      app:iconSpaceReserved="false" />
 
   </PreferenceCategory>
 

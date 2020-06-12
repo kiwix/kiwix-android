@@ -30,7 +30,6 @@
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
   <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">İndirilebilir içerik aranıyor, lütfen bekleyin…</string>
   <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
@@ -49,6 +48,8 @@
   <string name="server_textview_default_message">Sunucuda barındırmak istediğiniz dosyaları seçin</string>
   <string name="progress_dialog_starting_server">Sunucu başlatılıyor</string>
   <string name="hotspot_dialog_title">Kitap barındırma talimatları</string>
+  <string name="wifi_dialog_title">WiFi bağlantı algılandı</string>
+  <string name="wifi_dialog_body">Diğer cihazlardaki kitapları görüntülemek için lütfen tüm cihazların aynı WiFi Ağına bağlı olduğundan emin olun.</string>
   <string name="hotspot_dialog_message">Bu özelliğin çalışması için önce WIFI etkin noktanızı manüel olarak açmanız veya ana cihaz ile alıcı cihazın aynı WiFi ağında olduğundan emin olmanız gerekir</string>
   <string name="hotspot_dialog_neutral_button">İLERLENDİ</string>
   <string name="hotspot_channel_description">Hotspot/sunucunuzun durumu ile ilgili güncellemeler.</string>

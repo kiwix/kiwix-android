@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* MSClaudiu
+-->
+<resources>
+  <string name="retry">Reîncercați</string>
+  <string name="download">Descarcă</string>
+  <string name="invalid_installation">Instalare nevalidă. Vă rugăm să descărcați Zim.\n  Asigurați-vă că WiFi este activ și aveți suficient spațiu de stocare</string>
+</resources>

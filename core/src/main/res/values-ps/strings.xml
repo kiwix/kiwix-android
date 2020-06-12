@@ -13,7 +13,6 @@
   <string name="save_media">رسنۍ ساتل لکه…</string>
   <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
   <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
-  <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ…</string>
   <string name="search_label">پلټل</string>
   <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
   <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>

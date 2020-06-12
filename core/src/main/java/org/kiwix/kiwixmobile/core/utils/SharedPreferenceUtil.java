@@ -58,9 +58,10 @@ public class SharedPreferenceUtil {
   private static final String PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book";
   private static final String PREF_HOSTED_BOOKS = "hosted_books";
   public static final String PREF_NIGHT_MODE = "pref_night_mode";
+  private static final String TEXT_ZOOM = "true_text_zoom";
   private SharedPreferences sharedPreferences;
   private final PublishProcessor<String> prefStorages = PublishProcessor.create();
-
+  private final PublishProcessor<Integer> textZooms = PublishProcessor.create();
   private final PublishProcessor<NightModeConfig.Mode> nightModes = PublishProcessor.create();
 
   @Inject
@@ -217,5 +218,18 @@ public class SharedPreferenceUtil {
     sharedPreferences.edit()
       .putStringSet(PREF_HOSTED_BOOKS, hostedBooks)
       .apply();
+  }
+
+  public void setTextZoom(int textZoom) {
+    sharedPreferences.edit().putInt(TEXT_ZOOM, textZoom).apply();
+    textZooms.offer(textZoom);
+  }
+
+  public int getTextZoom() {
+    return sharedPreferences.getInt(TEXT_ZOOM, 100);
+  }
+
+  public Flowable<Integer> getTextZooms() {
+    return textZooms.startWith(getTextZoom());
   }
 }

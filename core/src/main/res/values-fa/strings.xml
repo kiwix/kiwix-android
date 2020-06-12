@@ -22,7 +22,6 @@
   <string name="save_media">ذخیرهٔ رسانه</string>
   <string name="save_media_error">خطایی در حین ذخیره‌سازی این رسانه رخ داد!</string>
   <string name="save_media_saved">رسانه با نام %s در Android/media/org.kiwix…/ ذخیره شد</string>
-  <string name="rescan_fs_warning">چستچو برای محتوای قابل بارگیری، لطفا صبر کنید…</string>
   <string name="search_label">جستجو</string>
   <string name="choose_file">یک پروندهٔ محتوایی را انتخاب کنید (*.zim)</string>
   <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
