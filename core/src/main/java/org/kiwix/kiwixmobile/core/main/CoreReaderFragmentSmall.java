@@ -19,20 +19,22 @@
 package org.kiwix.kiwixmobile.core.main;
 
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
-import butterknife.BindView;
-import org.jetbrains.annotations.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.R2;
-import org.kiwix.kiwixmobile.core.base.BaseActivity;
 
-public abstract class CoreMainActivity2 extends BaseActivity {
-  @BindView(R2.id.toolbar)
-  Toolbar toolbar;
+public class CoreReaderFragmentSmall extends Fragment {
 
-  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    //setContentView(R.layout.activity_main);
-    //setSupportActionBar(toolbar);
+  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
+    @Nullable ViewGroup container,
+    @Nullable Bundle savedInstanceState) {
+    View root = inflater.inflate(R.layout.fragment_main, container, false);
+    //Toolbar toolbar = root.findViewById(R.id.fragment_main_app_bar);
+    //((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+    return root;
   }
 }

@@ -19,24 +19,23 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
-import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity2
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 
-class CustomMainActivity : BaseActivity() {
+class CustomMainActivity : CoreMainActivity2() {
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_custom_main)
 
     if (savedInstanceState != null) {
       return
     }
     supportFragmentManager.beginTransaction()
-      .add(R.id.fragment_custom_app_container, CustomReaderFragment()).commit()
+      .add(R.id.fragment_custom_app_container, CustomReaderFragmentSmall()).commit()
   }
 }

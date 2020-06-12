@@ -16,23 +16,8 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.main;
+package org.kiwix.kiwixmobile.custom.main
 
-import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
-import butterknife.BindView;
-import org.jetbrains.annotations.Nullable;
-import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.core.R2;
-import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.main.CoreReaderFragmentSmall
 
-public abstract class CoreMainActivity2 extends BaseActivity {
-  @BindView(R2.id.toolbar)
-  Toolbar toolbar;
-
-  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    //setContentView(R.layout.activity_main);
-    //setSupportActionBar(toolbar);
-  }
-}
+class CustomReaderFragmentSmall : CoreReaderFragmentSmall()
