@@ -22,7 +22,7 @@
 
     <include
       android:id="@+id/include"
-      layout="@layout/main_activity_content" />
+      layout="@layout/main_fragment_content" />
 
     <RelativeLayout
       android:id="@+id/fullscreen_video_container"

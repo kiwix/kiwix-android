@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -22,7 +22,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
 import butterknife.Unbinder
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -47,7 +46,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
   override fun setContentView(@LayoutRes layoutResID: Int) {
     super.setContentView(layoutResID)
-    unbinder = ButterKnife.bind(this)
+    // unbinder = ButterKnife.bind(this)
   }
 
   // TODO https://issuetracker.google.com/issues/141132133 remove this once appcompat has been fixed
