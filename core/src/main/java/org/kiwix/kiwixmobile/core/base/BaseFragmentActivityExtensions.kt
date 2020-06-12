@@ -16,26 +16,22 @@
  *
  */
 
-package org.kiwix.kiwixmobile.custom.main
+package org.kiwix.kiwixmobile.core.base
 
-import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.commit
-import kotlinx.android.synthetic.main.activity_custom_main.fragment_custom_app_container
-import org.kiwix.kiwixmobile.custom.R
+import android.content.Intent
+import android.view.ActionMode
+import android.view.Menu
+import androidx.appcompat.app.AppCompatActivity
 
-class CustomMainActivity2 : FragmentActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-
-    if (fragment_custom_app_container != null) {
-      if (savedInstanceState != null) {
-        return
-      }
-      supportFragmentManager.commit {
-        add(R.id.fragment_custom_app_container, CustomReaderFragment())
-      }
-    }
+interface BaseFragmentActivityExtensions {
+  enum class Super {
+    ShouldCall,
+    DontCall
   }
+
+  fun onActionModeStarted(actionMode: ActionMode, activity: AppCompatActivity): Super
+  fun onActionModeFinished(actionMode: ActionMode, activity: AppCompatActivity): Super
+  fun onBackPressed(activity: AppCompatActivity): Super
+  fun onNewIntent(intent: Intent, activity: AppCompatActivity): Super
+  fun onCreateOptionsMenu(menu: Menu, activity: AppCompatActivity): Super
 }

@@ -38,6 +38,7 @@ import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -98,6 +99,7 @@ import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.base.BaseFragment;
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
@@ -155,7 +157,8 @@ import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_M
 public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
   MainContract.View,
-  MainMenu.MenuClickListener {
+  MainMenu.MenuClickListener,
+  BaseFragmentActivityExtensions {
 
   public static final String HOME_URL = "file:///android_asset/home.html";
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
@@ -286,24 +289,20 @@ public abstract class CoreReaderFragment extends BaseFragment
   private Disposable bookmarkingDisposable;
   private Boolean isBookmarked;
 
-  //TODO
-  @Override
-  public void onActionModeStarted(ActionMode mode) {
-    if (actionMode == null) {
-      actionMode = mode;
-      Menu menu = mode.getMenu();
-      // Inflate custom menu icon.
-      getMenuInflater().inflate(R.menu.menu_webview_action, menu);
-      configureWebViewSelectionHandler(menu);
-    }
-    super.onActionModeStarted(mode);
+  @Override public Super onActionModeStarted(@NotNull ActionMode actionMode,
+    @NotNull AppCompatActivity activity) {
+    this.actionMode = actionMode;
+    Menu menu = actionMode.getMenu();
+    // Inflate custom menu icon.
+    activity.getMenuInflater().inflate(R.menu.menu_webview_action, menu);
+    configureWebViewSelectionHandler(menu);
+    return Super.ShouldCall;
   }
 
-  //TODO
-  @Override
-  public void onActionModeFinished(ActionMode mode) {
-    actionMode = null;
-    super.onActionModeFinished(mode);
+  @Override public Super onActionModeFinished(@NotNull ActionMode actionMode,
+    @NotNull AppCompatActivity activity) {
+    this.actionMode = null;
+    return Super.ShouldCall;
   }
 
   protected void configureWebViewSelectionHandler(Menu menu) {
@@ -629,8 +628,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     drawerLayout.openDrawer(GravityCompat.END);
   }
 
-  //TODO
-  @Override public void onBackPressed() {
+  @NonNull @Override public Super onBackPressed(@NotNull AppCompatActivity activity) {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
@@ -647,8 +645,9 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
       showHomePage();
     } else {
-      super.onBackPressed();
+      return Super.ShouldCall;
     }
+    return Super.DontCall;
   }
 
   private void checkForRateDialog(AppCompatActivity activity) {
@@ -687,7 +686,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected abstract int getIconResId();
 
   private void goToRateApp() {
-    //TODO
     Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getActivity().getPackageName());
     Uri kiwixBrowserMarketUri =
       Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName());
@@ -1385,12 +1383,11 @@ public abstract class CoreReaderFragment extends BaseFragment
     startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
   }
 
-  //TODO
-  @Override
-  protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
+  @NotNull @Override public Super onNewIntent(@NotNull Intent intent,
+    @NotNull AppCompatActivity activity) {
     handleNotificationIntent(intent);
     handleIntentActions(intent);
+    return Super.ShouldCall;
   }
 
   private void contentsDrawerHint() {
@@ -1549,11 +1546,9 @@ public abstract class CoreReaderFragment extends BaseFragment
     super.onActivityResult(requestCode, resultCode, data);
   }
 
-  //TODO
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
     mainMenu = createMainMenu(menu);
-    return true;
   }
 
   @NotNull protected MainMenu createMainMenu(Menu menu) {

@@ -111,7 +111,7 @@ public abstract class CoreApp extends Application {
       }
       // clear the previous logcat and then write the new one to the file
       try {
-        logFile.createNewFile();
+        //logFile.createNewFile();
         Runtime.getRuntime().exec("logcat -c");
         Runtime.getRuntime().exec("logcat -f " + logFile.getPath() + " -s kiwix");
       } catch (IOException e) {
