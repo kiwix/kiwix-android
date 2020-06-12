@@ -37,6 +37,8 @@
   <string name="server_textview_default_message">Изберете ги податотеките што сакате да ги вдомите на опслужувачот</string>
   <string name="progress_dialog_starting_server">Го покренувам опслужувачот</string>
   <string name="hotspot_dialog_title">Напатствија за вдомување на книги</string>
+  <string name="wifi_dialog_title">Пронајдена е безжична врска</string>
+  <string name="wifi_dialog_body">За да ги читате книгите на други уреди, проверете дали сите тие се поврзани на истата безжична мрежа.</string>
   <string name="hotspot_dialog_message">За да работи оваа можност, најпрвин ќе треба точката за безжичен пристап да ја вклучите рачно, или да се осигурате дека уредот-домаќин и уредот-приемник се на истата безжична мрежа</string>
   <string name="hotspot_dialog_neutral_button">ПРОДОЛЖИ</string>
   <string name="hotspot_channel_description">Известувања за состојбата на вашата пристапна точка/опслужувач.</string>

@@ -18,10 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.settings;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 
@@ -39,7 +39,7 @@ public abstract class CoreSettingsActivity extends BaseActivity {
 
     allHistoryCleared = false;
 
-    getFragmentManager()
+    getSupportFragmentManager()
       .beginTransaction().
       replace(R.id.content_frame, createPreferenceFragment())
       .commit();

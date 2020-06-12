@@ -6,5 +6,5 @@ if ./gradlew connectedDebugAndroidTest; then
   echo "connectedDebugAndroidTest succeeded" >&2
 else
   adb exec-out screencap -p >screencap.png
-  echo "connectedDebugAndroidTest failed" >&2
+  exit 1
 fi
