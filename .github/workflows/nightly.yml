@@ -25,6 +25,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
+          ndk: 21.1.6352462
           script: bash contrib/instrumentation_nightly.sh
 
       - name: Upload screenshot result
