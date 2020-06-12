@@ -43,7 +43,6 @@ abstract class CoreApp : Application() {
 
     @JvmStatic
     lateinit var coreComponent: CoreComponent
-      private set
 
     init {
       AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
