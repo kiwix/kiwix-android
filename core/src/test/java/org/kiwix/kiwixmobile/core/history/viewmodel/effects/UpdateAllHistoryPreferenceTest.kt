@@ -30,8 +30,6 @@ internal class UpdateAllHistoryPreferenceTest {
     val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
     val activity: AppCompatActivity = mockk()
     UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
-    verify {
-      sharedPreferenceUtil.showHistoryAllBooks = true
-    }
+    verify { sharedPreferenceUtil.showHistoryAllBooks = true }
   }
 }

@@ -26,9 +26,7 @@ internal class ShowDeleteHistoryDialogTest {
     }
     val lambdaSlot = slot<() -> Unit>()
     showDeleteHistoryDialog.invokeWith(activity)
-    verify {
-      dialogShower.show(DeleteAllHistory, capture(lambdaSlot))
-    }
+    verify { dialogShower.show(DeleteAllHistory, capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
     verify { actions.offer(UserClickedConfirmDelete) }
   }

@@ -75,26 +75,11 @@ internal class HistoryViewModelTest {
 
   @Test
   internal fun `ExitActionModeMenu deselects history items`() {
-    viewModel.state.postValue(
-      historyState(
-        historyItems = listOf(
-          historyItem(
-            isSelected = true
-          )
-        )
-      )
-    )
+    viewModel.state.postValue(historyState(historyItems = listOf(historyItem(isSelected = true))))
     viewModel.actions.offer(ExitActionModeMenu)
-    viewModel.state.test()
-      .assertValue(
-        historyState(
-          historyItems = listOf(
-            historyItem(
-              isSelected = false
-            )
-          )
-        )
-      )
+    viewModel.state.test().assertValue(
+      historyState(historyItems = listOf(historyItem(isSelected = false)))
+    )
   }
 
   @Test
@@ -113,8 +98,7 @@ internal class HistoryViewModelTest {
 
   @Test
   internal fun `UserClickedDeleteSelectedHistoryItems offers ShowDeleteHistoryDialog`() {
-    viewModel.effects.test()
-      .also { viewModel.actions.offer(UserClickedDeleteSelectedHistoryItems) }
+    viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteSelectedHistoryItems) }
       .assertValue(ShowDeleteHistoryDialog(viewModel.actions))
     viewModel.state.test().assertValue(historyState())
   }
@@ -124,86 +108,43 @@ internal class HistoryViewModelTest {
     viewModel.effects.test()
       .also { viewModel.actions.offer(UserClickedShowAllToggle(false)) }
       .assertValue(UpdateAllHistoryPreference(sharedPreferenceUtil, false))
-    viewModel.state.test().assertValue(
-      historyState(
-        showAll = false
-      )
-    )
+    viewModel.state.test().assertValue(historyState(showAll = false))
   }
 
   @Test
   internal fun `OnItemClick selects item if one is selected`() {
-    val historyItem =
-      historyItem(isSelected = true)
-    viewModel.state.postValue(
-      historyState(
-        listOf(historyItem)
-      )
-    )
+    val historyItem = historyItem(isSelected = true)
+    viewModel.state.postValue(historyState(listOf(historyItem)))
     viewModel.actions.offer(OnItemClick(historyItem))
-    viewModel.state.test().assertValue(
-      historyState(
-        listOf(historyItem())
-      )
-    )
+    viewModel.state.test().assertValue(historyState(listOf(historyItem())))
   }
 
   @Test
   internal fun `OnItemClick offers OpenHistoryItem if none is selected`() {
-    viewModel.state.postValue(
-      historyState(
-        listOf(historyItem())
-      )
-    )
-    viewModel.effects.test()
-      .also { viewModel.actions.offer(OnItemClick(historyItem())) }
+    viewModel.state.postValue(historyState(listOf(historyItem())))
+    viewModel.effects.test().also { viewModel.actions.offer(OnItemClick(historyItem())) }
       .assertValue(OpenHistoryItem(historyItem(), zimReaderContainer))
-    viewModel.state.test().assertValue(
-      historyState(
-        listOf(historyItem())
-      )
-    )
+    viewModel.state.test().assertValue(historyState(listOf(historyItem())))
   }
 
   @Test
   internal fun `OnItemLongClick selects item if none is selected`() {
-    val historyItem =
-      historyItem()
-    viewModel.state.postValue(
-      historyState(
-        listOf(historyItem)
-      )
-    )
+    val historyItem = historyItem()
+    viewModel.state.postValue(historyState(listOf(historyItem)))
     viewModel.actions.offer(OnItemLongClick(historyItem))
-    viewModel.state.test().assertValue(
-      historyState(
-        listOf(
-          historyItem(
-            isSelected = true
-          )
-        )
-      )
-    )
+    viewModel.state.test().assertValue(historyState(listOf(historyItem(isSelected = true))))
   }
 
   @Test
   fun `Filter updates search term`() {
     val searchTerm = "searchTerm"
     viewModel.actions.offer(Filter(searchTerm))
-    viewModel.state.test().assertValue(
-      historyState(
-        searchTerm = searchTerm
-      )
-    )
+    viewModel.state.test().assertValue(historyState(searchTerm = searchTerm))
   }
 
   @Test
   internal fun `UpdateHistory updates history`() {
     viewModel.actions.offer(UpdateHistory(listOf(historyItem())))
-    viewModel.state.test().assertValue(
-      historyState(
-        listOf(historyItem())
-      )
-    )
+    viewModel.state.test().assertValue(historyState(listOf(historyItem())))
   }
 }

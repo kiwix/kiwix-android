@@ -18,15 +18,11 @@ internal class OpenHistoryItemTest {
   fun `invokeWith returns an Ok Result with historyUrl`() {
     val item = historyItem()
     val zimReaderContainer: ZimReaderContainer = mockk()
-    every {
-      zimReaderContainer.zimCanonicalPath
-    } returns "zimFilePath"
+    every { zimReaderContainer.zimCanonicalPath } returns "zimFilePath"
     val activity: AppCompatActivity = mockk()
     mockkConstructor(Intent::class)
     val intent: Intent = mockk()
-    every {
-      anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.historyUrl)
-    } returns intent
+    every { anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.historyUrl) } returns intent
     OpenHistoryItem(item, zimReaderContainer).invokeWith(activity)
     verify {
       activity.setResult(Activity.RESULT_OK, intent)
@@ -40,18 +36,12 @@ internal class OpenHistoryItemTest {
   fun `invokeWith returns an Ok Result with historyUrl and zimFilePath`() {
     val item = historyItem()
     val zimReaderContainer: ZimReaderContainer = mockk()
-    every {
-      zimReaderContainer.zimCanonicalPath
-    } returns "notZimFilePath"
+    every { zimReaderContainer.zimCanonicalPath } returns "notZimFilePath"
     val activity: AppCompatActivity = mockk()
     mockkConstructor(Intent::class)
     val intent: Intent = mockk()
-    every {
-      anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.historyUrl)
-    } returns intent
-    every {
-      intent.putExtra(EXTRA_CHOSE_X_FILE, item.zimFilePath)
-    } returns intent
+    every { anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.historyUrl) } returns intent
+    every { intent.putExtra(EXTRA_CHOSE_X_FILE, item.zimFilePath) } returns intent
     OpenHistoryItem(item, zimReaderContainer).invokeWith(activity)
     verify {
       intent.putExtra(EXTRA_CHOSE_X_FILE, item.zimFilePath)
