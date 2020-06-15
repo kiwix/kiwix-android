@@ -154,7 +154,7 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
-public abstract class CoreReaderFragmentSmall extends BaseFragment
+public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
   MainContract.View,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions {

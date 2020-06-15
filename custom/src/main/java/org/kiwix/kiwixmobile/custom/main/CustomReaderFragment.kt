@@ -42,7 +42,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
-import org.kiwix.kiwixmobile.core.main.CoreReaderFragmentSmall
+import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -58,7 +58,7 @@ import javax.inject.Inject
 
 const val REQUEST_READ_FOR_OBB = 5002
 
-class CustomReaderFragmentSmall : CoreReaderFragmentSmall() {
+class CustomReaderFragmentSmall : CoreReaderFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.customActivityComponent.inject(this)
