@@ -34,7 +34,7 @@ public class KiwixWebChromeClient extends VideoEnabledWebChromeClient {
   @Override
   public void onProgressChanged(WebView view, int progress) {
     callback.webViewProgressChanged(progress);
-    ((CoreMainActivity) view.getContext()).supportInvalidateOptionsMenu();
+    ((CoreMainActivity2) view.getContext()).supportInvalidateOptionsMenu();
   }
 
   @Override public void onReceivedTitle(WebView view, String title) {

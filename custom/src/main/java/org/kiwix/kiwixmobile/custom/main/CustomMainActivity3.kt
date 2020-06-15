@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.custom.main// // /*
+// package org.kiwix.kiwixmobile.custom.main// // /*
 // //  * Kiwix Android
 // //  * Copyright (c) 2019 Kiwix <android.kiwix.org>
 // //  * This program is free software: you can redistribute it and/or modify
