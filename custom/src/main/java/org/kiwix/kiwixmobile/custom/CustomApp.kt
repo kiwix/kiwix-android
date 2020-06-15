@@ -25,6 +25,6 @@ import org.kiwix.kiwixmobile.custom.di.DaggerCustomComponent
 class CustomApp : CoreApp() {
   @Suppress("ConvertLambdaToReference") // we want the entire call to be lazy
   val customComponent: CustomComponent by lazy {
-    DaggerCustomComponent.builder().coreComponent(getCoreComponent()).build()
+    DaggerCustomComponent.builder().coreComponent(coreComponent).build()
   }
 }

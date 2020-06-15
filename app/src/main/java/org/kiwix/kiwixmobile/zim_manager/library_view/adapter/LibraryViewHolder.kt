@@ -73,7 +73,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       libraryBookDate.setTextAndVisibility(item.book.date)
       libraryBookSize.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
       libraryBookLanguage.text = bookUtils.getLanguage(item.book.getLanguage())
-      libraryBookFileName.text = NetworkUtils.parseURL(CoreApp.getInstance(), item.book.url)
+      libraryBookFileName.text = NetworkUtils.parseURL(CoreApp.instance, item.book.url)
       libraryBookFavicon.setBitmap(Base64String(item.book.favicon))
 
       containerView.setOnClickListener { clickAction.invoke(item) }

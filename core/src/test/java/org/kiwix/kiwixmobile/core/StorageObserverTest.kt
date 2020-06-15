@@ -57,8 +57,9 @@ class StorageObserverTest {
 
   init {
     setScheduler(Schedulers.trampoline())
-    mockkStatic(CoreApp::class)
-    every { CoreApp.getInstance().packageName } returns "pkg"
+    val coreApp = mockk<CoreApp>()
+    CoreApp.instance = coreApp
+    every { coreApp.packageName } returns "pkg"
     mockkStatic(Uri::class)
     every { Uri.parse(any()).toString() } returns "pkg"
     zimFileReader = mockk()

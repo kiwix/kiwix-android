@@ -40,7 +40,7 @@ abstract class BaseActivity : AppCompatActivity() {
   protected abstract fun injection(coreComponent: CoreComponent)
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    injection(CoreApp.getCoreComponent())
+    injection(CoreApp.coreComponent)
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
   }

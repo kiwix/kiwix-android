@@ -29,7 +29,7 @@ inline class Seconds(val seconds: Long) {
     val hours = 60 * minutes
     val days = 24 * hours
 
-    val context = CoreApp.getInstance()
+    val context = CoreApp.instance
     return when {
       (seconds / days).roundToLong() > 0 -> String.format(
         Locale.getDefault(), "%d %s %s", (seconds / days).roundToLong(),
