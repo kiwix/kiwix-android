@@ -173,7 +173,7 @@ class CustomReaderFragmentSmall : CoreReaderFragmentSmall() {
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
-      LanguageUtils.handleLocaleChange(activity!!, BuildConfig.ENFORCED_LANG)
+      LanguageUtils.handleLocaleChange(requireActivity(), BuildConfig.ENFORCED_LANG)
       sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG)
       activity?.recreate()
       return true

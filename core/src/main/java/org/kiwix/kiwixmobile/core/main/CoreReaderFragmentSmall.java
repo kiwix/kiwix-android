@@ -321,6 +321,11 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
     }
   }
 
+  @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    setHasOptionsMenu(true);
+  }
+
   @SuppressLint("ClickableViewAccessibility")
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
@@ -333,7 +338,6 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
     handleLocaleCheck();
     activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
-    setHasOptionsMenu(true);
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override
@@ -1548,6 +1552,7 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
 
   @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
+    menu.clear();
     mainMenu = createMainMenu(menu);
   }
 
