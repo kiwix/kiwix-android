@@ -16,13 +16,20 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.history
+package org.kiwix.kiwixmobile.core.history.viewmodel
 
-import dagger.Module
-import dagger.Provides
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 
-@Module
-class HistoryModule {
-  @Provides
-  fun provideHistoryPresenter(presenter: HistoryPresenter): HistoryContract.Presenter = presenter
+sealed class Action {
+  object ExitHistory : Action()
+  object ExitActionModeMenu : Action()
+  object UserClickedConfirmDelete : Action()
+  object UserClickedDeleteButton : Action()
+  object UserClickedDeleteSelectedHistoryItems : Action()
+
+  data class OnItemClick(val historyItem: HistoryItem) : Action()
+  data class OnItemLongClick(val historyItem: HistoryItem) : Action()
+  data class UserClickedShowAllToggle(val isChecked: Boolean) : Action()
+  data class Filter(val searchTerm: String) : Action()
+  data class UpdateHistory(val history: List<HistoryItem>) : Action()
 }
