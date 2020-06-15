@@ -19,9 +19,11 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.TargetApi
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -53,6 +55,8 @@ import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import java.util.Locale
 import javax.inject.Inject
+
+const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomReaderFragmentSmall : CoreReaderFragmentSmall() {
 
@@ -104,14 +108,11 @@ class CustomReaderFragmentSmall : CoreReaderFragmentSmall() {
       },
       onNoFilesFound = {
         if (ContextCompat.checkSelfPermission(
-            activity!!,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-          ) == PackageManager.PERMISSION_DENIED
+            requireActivity(),
+            READ_EXTERNAL_STORAGE
+          ) == PERMISSION_DENIED
         ) {
-          requestPermissions(
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            REQUEST_READ_FOR_OBB
-          )
+          requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
           activity?.finish()
           activity?.start<CustomDownloadActivity>()
@@ -145,13 +146,13 @@ class CustomReaderFragmentSmall : CoreReaderFragmentSmall() {
   private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
     grantResults[0] == PackageManager.PERMISSION_DENIED &&
       !ActivityCompat.shouldShowRequestPermissionRationale(
-        activity!!,
+        requireActivity(),
         Manifest.permission.READ_EXTERNAL_STORAGE
       )
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
-    val onCreateOptionsMenu = super.onCreateOptionsMenu(menu, activity!!.menuInflater)
+    val onCreateOptionsMenu = super.onCreateOptionsMenu(menu, requireActivity().menuInflater)
     menu.findItem(R.id.menu_help)?.isVisible = false
     menu.findItem(R.id.menu_openfile)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false

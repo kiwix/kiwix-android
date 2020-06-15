@@ -159,6 +159,7 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
   MainContract.View,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions {
   public static final String HOME_URL = "file:///android_asset/home.html";
+  private static final int CORE_READER_FRAGMENT = 1;
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
@@ -997,6 +998,7 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
        *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
        **/
       AddNoteDialog dialogFragment = new AddNoteDialog();
+      dialogFragment.setTargetFragment(this, CORE_READER_FRAGMENT);
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG);
       // For DialogFragments, show() handles the fragment commit and display
     }
