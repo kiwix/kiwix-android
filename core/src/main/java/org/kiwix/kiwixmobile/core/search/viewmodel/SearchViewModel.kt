@@ -55,7 +55,10 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessin
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
+private const val DEBOUNCE_MS = 500L
 
 class SearchViewModel @Inject constructor(
   private val recentSearchDao: NewRecentSearchDao,
@@ -148,6 +151,7 @@ class SearchViewModel @Inject constructor(
 
   private fun searchResultsFromZimReader() = filter
     .distinctUntilChanged()
+    .debounce(DEBOUNCE_MS, TimeUnit.MILLISECONDS)
     .switchMap(::searchResults)
 
   private fun searchResults(it: String) = Flowable.fromCallable {

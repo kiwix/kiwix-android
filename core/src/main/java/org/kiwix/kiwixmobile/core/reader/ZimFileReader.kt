@@ -164,7 +164,7 @@ class ZimFileReader constructor(
   @Throws(IOException::class)
   private fun loadAssetFromCache(uri: String): FileInputStream {
     return File(
-      FileUtils.getFileCacheDir(CoreApp.getInstance()),
+      FileUtils.getFileCacheDir(CoreApp.instance),
       uri.substringAfterLast("/")
     ).apply { writeBytes(getContent(uri)) }
       .inputStream()
