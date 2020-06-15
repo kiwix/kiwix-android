@@ -25,7 +25,6 @@
   <string name="save_media">Salvar mídia</string>
   <string name="save_media_error">Ocorreu um erro ao tentar salvar a mídia!</string>
   <string name="save_media_saved">Midia salva como  %s para Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Escaneando por conteúdo para download, aguarde …</string>
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecione um arquivo de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir link em uma nova aba?</string>
@@ -44,6 +43,8 @@
   <string name="server_textview_default_message">Selecione os arquivos que você deseja hospedar no servidor</string>
   <string name="progress_dialog_starting_server">Iniciando servidor</string>
   <string name="hotspot_dialog_title">Instruções para hospedagem de livros</string>
+  <string name="wifi_dialog_title">Conexão WiFi detectada</string>
+  <string name="wifi_dialog_body">Para visualizar livros em outros dispositivos, verifique se todos os dispositivos estão conectados à mesma rede WiFi.</string>
   <string name="hotspot_dialog_message">Para que esse recurso funcione, você precisa primeiro ativar o hotspot WIFI manualmente ou garantir que o dispositivo host e o dispositivo receptor estejam na mesma rede Wi-Fi</string>
   <string name="hotspot_dialog_neutral_button">CONTINUAR</string>
   <string name="hotspot_channel_description">Atualizações sobre o estado do seu ponto de acesso/servidor.</string>

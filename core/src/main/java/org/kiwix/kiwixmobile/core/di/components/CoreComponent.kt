@@ -45,7 +45,6 @@ import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.history.HistoryModule
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -59,7 +58,6 @@ import javax.inject.Singleton
 @Component(
   modules = [
     BookmarksModule::class,
-    HistoryModule::class,
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,

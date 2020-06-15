@@ -55,11 +55,13 @@ public class SharedPreferenceUtil {
   private static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
   private static final String PREF_IS_FIRST_RUN = "isFirstRun";
   private static final String PREF_SHOW_BOOKMARKS_CURRENT_BOOK = "show_bookmarks_current_book";
-  private static final String PREF_SHOW_HISTORY_CURRENT_BOOK = "show_history_current_book";
+  private static final String PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book";
   private static final String PREF_HOSTED_BOOKS = "hosted_books";
   public static final String PREF_NIGHT_MODE = "pref_night_mode";
+  private static final String TEXT_ZOOM = "true_text_zoom";
   private SharedPreferences sharedPreferences;
   private final PublishProcessor<String> prefStorages = PublishProcessor.create();
+  private final PublishProcessor<Integer> textZooms = PublishProcessor.create();
   private final PublishProcessor<NightModeConfig.Mode> nightModes = PublishProcessor.create();
 
   @Inject
@@ -168,13 +170,13 @@ public class SharedPreferenceUtil {
     sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false).apply();
   }
 
-  public boolean getShowHistoryCurrentBook() {
-    return sharedPreferences.getBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, true);
+  public boolean getShowHistoryAllBooks() {
+    return sharedPreferences.getBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, true);
   }
 
-  public void setShowHistoryCurrentBook(boolean prefShowHistoryCurrentBook) {
+  public void setShowHistoryAllBooks(boolean prefShowHistoryAllBooks) {
     sharedPreferences.edit()
-      .putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook)
+      .putBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, prefShowHistoryAllBooks)
       .apply();
   }
 
@@ -216,5 +218,18 @@ public class SharedPreferenceUtil {
     sharedPreferences.edit()
       .putStringSet(PREF_HOSTED_BOOKS, hostedBooks)
       .apply();
+  }
+
+  public void setTextZoom(int textZoom) {
+    sharedPreferences.edit().putInt(TEXT_ZOOM, textZoom).apply();
+    textZooms.offer(textZoom);
+  }
+
+  public int getTextZoom() {
+    return sharedPreferences.getInt(TEXT_ZOOM, 100);
+  }
+
+  public Flowable<Integer> getTextZooms() {
+    return textZooms.startWith(getTextZoom());
   }
 }

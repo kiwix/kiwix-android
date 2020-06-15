@@ -13,7 +13,6 @@
   <string name="save_media">सञ्चिकाम् अमुकनाम्ना रक्ष</string>
   <string name="save_media_error">सञ्चिकायाः रक्षणकाले दोषः समुद्भूतः !</string>
   <string name="save_media_saved">सञ्चिका %1$s -रूपेण स्वचित्राणां समुच्चये रक्ष्यताम्</string>
-  <string name="rescan_fs_warning">ZIM सञ्चिकायाः परीक्षणं (scan) चलदस्ति । कृपया प्रतिक्ष्यताम्…</string>
   <string name="search_label">अन्विष्यताम्</string>
   <string name="choose_file">एतस्याः ZIM पूर्वलिखितसञ्चिकायाः चयनं करोतु (*.zim)</string>
   <string name="open_in_new_tab">एतत् परिसन्धिं नवीन-टेब्-मध्ये उद्घाटयतु</string>

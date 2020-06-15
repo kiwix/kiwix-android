@@ -26,7 +26,6 @@
   <string name="save_media">मीडिया सहेजें</string>
   <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
   <string name="save_media_saved">सहेजे गये मीडिया को %s के रूप में Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">डाउनलोड करने योग्य सामग्री के लिए खोजबीन जारी, कृपया प्रतीक्षा करें …</string>
   <string name="search_label">खोजें</string>
   <string name="choose_file">सामग्री फ़ाइल चुनें (*.zim)</string>
   <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>

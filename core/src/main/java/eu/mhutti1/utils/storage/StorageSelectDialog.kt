@@ -70,7 +70,7 @@ class StorageSelectDialog : DialogFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(activity!!) }
+    Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe(

@@ -28,7 +28,6 @@
   <string name="save_media">미디어 저장</string>
   <string name="save_media_error">미디어 저장을 시도할 때 오류가 발생하였습니다!</string>
   <string name="save_media_saved">미디어(%s)를 Android/media/org.kiwix…/에 저장했습니다</string>
-  <string name="rescan_fs_warning">다운로드 가능한 파일을 검색 중입니다. 기다려 주십시오…</string>
   <string name="search_label">검색</string>
   <string name="choose_file">내용 파일 (*.zim) 선택</string>
   <string name="open_in_new_tab">새 탭으로 링크를 여시겠습니까?</string>
@@ -47,6 +46,7 @@
   <string name="server_textview_default_message">서버에 호스팅할 파일을 선택하십시오</string>
   <string name="progress_dialog_starting_server">서버 시작 중</string>
   <string name="hotspot_dialog_title">도서 호스팅 지침</string>
+  <string name="wifi_dialog_title">WiFi 연결 감지됨</string>
   <string name="hotspot_dialog_message">이 기능이 동작하려면 WIFI 핫스팟을 수동으로 활성화하거나 호스트 장치와 수신 장치가 동일 WiFi 네트워크에 있어야 합니다</string>
   <string name="hotspot_dialog_neutral_button">계속</string>
   <string name="hotspot_channel_description">당신의 핫스팟/서버 상태에 대한 업데이트</string>

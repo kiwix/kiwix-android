@@ -13,7 +13,6 @@
   <string name="save_media">Cadw\'r cyfrwng fel…</string>
   <string name="save_media_error">Gwall wrth geisio cadw\'r cyfrwng!</string>
   <string name="save_media_saved">Arbedwyd cyfryngau fel  %1$s  yn Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Sganio am ffeiliau i\'w lawrlwytho, dal dy ddŵr…</string>
   <string name="search_label">Chwilio</string>
   <string name="choose_file">Dewisiwch Ffeil Gynnwys (*.zim)</string>
   <string name="open_in_new_tab">Agor y ddolen mewn tab newydd?</string>

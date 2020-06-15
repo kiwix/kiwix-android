@@ -19,7 +19,6 @@
   <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
   <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
   <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix…/ တွင် သိမ်းပြီးဖြစ်သည်။</string>
-  <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ …</string>
   <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>

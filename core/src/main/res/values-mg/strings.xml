@@ -13,7 +13,6 @@
   <string name="save_media">Hitahiry ny media ho…</string>
   <string name="save_media_error">Nisy hadisoana nitranga tam-pitahirizana ny haino aman-jery!</string>
   <string name="save_media_saved">Haino aman-jery voatahiry ao amin\'ny %1$s ao amin\'ny petra-tsarinao</string>
-  <string name="rescan_fs_warning">Am-pandinihana ny raktra ZIM, miandrasa azafady....</string>
   <string name="search_label">Hikaroka</string>
   <string name="choose_file">Hisafidy rakitra misy votoatiny (*.zim)</string>
   <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>

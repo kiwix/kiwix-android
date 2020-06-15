@@ -10,7 +10,6 @@
   <string name="menu_exit_full_screen">全画面表示を終了</string>
   <string name="save_media">メディアに名前を付けて保存…</string>
   <string name="save_media_error">メディアを保存しようとした際にエラーが発生しました!</string>
-  <string name="rescan_fs_warning">ダウンロード可能なコンテンツをスキャンしています。お待ちください…</string>
   <string name="search_label">検索</string>
   <string name="open_in_new_tab">リンクを新しいタブで開きますか?</string>
   <string name="error_file_not_found">エラー: 選択した ZIM ファイルが見つかりませんでした。</string>
