@@ -18,6 +18,13 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
+import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragmentSmall
+import org.kiwix.kiwixmobile.custom.customActivityComponent
 
-class CustomReaderFragmentSmall : CoreReaderFragmentSmall()
+class CustomReaderFragmentSmall : CoreReaderFragmentSmall() {
+  override fun inject(baseActivity: BaseActivity) {
+    super.inject(baseActivity)
+    baseActivity.customActivityComponent.inject(this)
+  }
+}

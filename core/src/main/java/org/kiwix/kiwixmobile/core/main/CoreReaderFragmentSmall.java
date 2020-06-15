@@ -30,9 +30,9 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
@@ -41,18 +41,25 @@ import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
+import org.kiwix.kiwixmobile.core.base.BaseActivity;
+import org.kiwix.kiwixmobile.core.base.BaseFragment;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
-public class CoreReaderFragmentSmall extends Fragment {
+public class CoreReaderFragmentSmall extends BaseFragment implements MainContract.View {
 
   @BindView(R2.id.toolbar)
   Toolbar toolbar;
+  private ActionBar actionBar;
 
   private MainMenu mainMenu;
   protected int currentWebViewIndex = 0;
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
+
+  @Inject
+  protected MainContract.Presenter presenter;
 
   @Inject
   protected ZimReaderContainer zimReaderContainer;
@@ -63,7 +70,10 @@ public class CoreReaderFragmentSmall extends Fragment {
     @Nullable Bundle savedInstanceState) {
     View root = inflater.inflate(R.layout.fragment_main, container, false);
     ButterKnife.bind(this, root);
-    ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+    AppCompatActivity activity = (AppCompatActivity) getActivity();
+    presenter.attachView(this);
+    activity.setSupportActionBar(toolbar);
+    actionBar = activity.getSupportActionBar();
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override
@@ -146,5 +156,14 @@ public class CoreReaderFragmentSmall extends Fragment {
   @NotNull
   private String contentUrl(String articleUrl) {
     return Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString();
+  }
+
+  @Override public void addBooks(
+    List<BooksOnDiskListItem> books) {
+
+  }
+
+  @Override public void inject(@NotNull BaseActivity baseActivity) {
+
   }
 }
