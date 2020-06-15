@@ -46,8 +46,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
@@ -166,7 +166,6 @@ internal class SearchViewModelTest {
       viewModel.state.test()
         .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
         .assertValueHistory(
-          NoResults("", FromWebView),
           Results(searchString, listOf(item), FromWebView)
         )
     }
@@ -188,7 +187,7 @@ internal class SearchViewModelTest {
       )
       viewModel.state.test()
         .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(NoResults("", FromWebView), Results("b", listOf(item), FromWebView))
+        .assertValueHistory(Results("b", listOf(item), FromWebView))
     }
 
     @Test
@@ -315,5 +314,6 @@ internal class SearchViewModelTest {
     viewModel.actions.offer(Filter(searchTerm))
     recentsFromDb.offer(databaseResults)
     viewModel.actions.offer(ScreenWasStartedFrom(searchOrigin))
+    testScheduler.advanceTimeBy(500, MILLISECONDS)
   }
 }
