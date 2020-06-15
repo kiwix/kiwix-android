@@ -96,7 +96,7 @@ public class ErrorActivity extends BaseActivity {
 
     Bundle extras = callingIntent.getExtras();
     final Throwable exception;
-    if (extras != null && extras.containsKey(EXCEPTION_KEY)) {
+    if (extras != null && safeContains(extras, EXCEPTION_KEY)) {
       exception = (Throwable) extras.getSerializable(EXCEPTION_KEY);
     } else {
       exception = null;
@@ -189,6 +189,14 @@ public class ErrorActivity extends BaseActivity {
     });
 
     restartButton.setOnClickListener(v -> onRestartClicked());
+  }
+
+  private boolean safeContains(Bundle extras, String key) {
+    try {
+      return extras.containsKey(key);
+    } catch (RuntimeException ignore) {
+      return false;
+    }
   }
 
   private void onRestartClicked() {
