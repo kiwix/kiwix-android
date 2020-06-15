@@ -10,16 +10,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-      android:id="@+id/textView3"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="working"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="@+id/include"
-      app:layout_constraintStart_toStartOf="@+id/include"
-      app:layout_constraintTop_toTopOf="parent" />
-
     <include
       android:id="@+id/include"
       layout="@layout/main_fragment_content" />

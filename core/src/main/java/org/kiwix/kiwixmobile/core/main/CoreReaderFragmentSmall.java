@@ -331,7 +331,7 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
     handleLocaleCheck();
     activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
-
+    setHasOptionsMenu(true);
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override
