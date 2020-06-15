@@ -33,10 +33,12 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragmentSmall
 import org.kiwix.kiwixmobile.core.main.MainMenu
@@ -154,6 +156,11 @@ class CustomReaderFragmentSmall : CoreReaderFragmentSmall() {
     menu.findItem(R.id.menu_openfile)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
+
+  override fun onCreateOptionsMenu(
+    menu: Menu,
+    activity: AppCompatActivity
+  ): BaseFragmentActivityExtensions.Super = BaseFragmentActivityExtensions.Super.ShouldCall
 
   override fun getIconResId() = R.mipmap.ic_launcher
 

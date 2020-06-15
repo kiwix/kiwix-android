@@ -38,6 +38,7 @@ import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -97,6 +98,7 @@ import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseFragment;
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
@@ -154,7 +156,7 @@ import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_M
 public abstract class CoreReaderFragmentSmall extends BaseFragment
   implements WebViewCallback,
   MainContract.View,
-  MainMenu.MenuClickListener {
+  MainMenu.MenuClickListener, BaseFragmentActivityExtensions {
   public static final String HOME_URL = "file:///android_asset/home.html";
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
@@ -284,24 +286,25 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
   };
   private Disposable bookmarkingDisposable;
   private Boolean isBookmarked;
-  //TODO
-  //@Override
-  //public void onActionModeStarted(ActionMode mode) {
-  //  if (actionMode == null) {
-  //    actionMode = mode;
-  //    Menu menu = mode.getMenu();
-  //    // Inflate custom menu icon.
-  //    getActivity().getMenuInflater().inflate(R.menu.menu_webview_action, menu);
-  //    configureWebViewSelectionHandler(menu);
-  //  }
-  //  super.onActionModeStarted(mode);
-  //}
-  //
-  //@Override
-  //public void onActionModeFinished(ActionMode mode) {
-  //  actionMode = null;
-  //  super.onActionModeFinished(mode);
-  //}
+
+  @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
+    @NotNull AppCompatActivity activity) {
+    if (actionMode == null) {
+      actionMode = mode;
+      Menu menu = mode.getMenu();
+      // Inflate custom menu icon.
+      getActivity().getMenuInflater().inflate(R.menu.menu_webview_action, menu);
+      configureWebViewSelectionHandler(menu);
+    }
+
+    return Super.ShouldCall;
+  }
+
+  @NotNull @Override public Super onActionModeFinished(@NotNull ActionMode actionMode,
+    @NotNull AppCompatActivity activity) {
+    actionMode = null;
+    return Super.ShouldCall;
+  }
 
   protected void configureWebViewSelectionHandler(Menu menu) {
     if (menu != null) {
@@ -623,27 +626,27 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
     drawerLayout.openDrawer(GravityCompat.END);
   }
 
-  //TODO
-  //@Override public void onBackPressed() {
-  //  if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
-  //    selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
-  //      : webViewList.size() - 1);
-  //    hideTabSwitcher();
-  //  } else if (isInFullScreenMode()) {
-  //    closeFullScreen();
-  //  } else if (compatCallback.isActive) {
-  //    compatCallback.finish();
-  //  } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-  //    drawerLayout.closeDrawers();
-  //  } else if (getCurrentWebView().canGoBack()
-  //    && !HOME_URL.equals(getCurrentWebView().getUrl())) {
-  //    getCurrentWebView().goBack();
-  //  } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
-  //    showHomePage();
-  //  } else {
-  //    super.onBackPressed();
-  //  }
-  //}
+  @NotNull @Override public Super onBackPressed(@NotNull AppCompatActivity activity) {
+    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+      selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
+        : webViewList.size() - 1);
+      hideTabSwitcher();
+    } else if (isInFullScreenMode()) {
+      closeFullScreen();
+    } else if (compatCallback.isActive) {
+      compatCallback.finish();
+    } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      drawerLayout.closeDrawers();
+    } else if (getCurrentWebView().canGoBack()
+      && !HOME_URL.equals(getCurrentWebView().getUrl())) {
+      getCurrentWebView().goBack();
+    } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
+      showHomePage();
+    } else {
+      return Super.ShouldCall;
+    }
+    return Super.DontCall;
+  }
 
   private void checkForRateDialog() {
     isFirstRun = sharedPreferenceUtil.getPrefIsFirstRun();
@@ -1376,13 +1379,12 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
     startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
   }
 
-  //TODO
-  //@Override
-  //protected void onNewIntent(Intent intent) {
-  //  super.onNewIntent(intent);
-  //  handleNotificationIntent(intent);
-  //  handleIntentActions(intent);
-  //}
+  @NotNull @Override public Super onNewIntent(@NotNull Intent intent,
+    @NotNull AppCompatActivity activity) {
+    handleNotificationIntent(intent);
+    handleIntentActions(intent);
+    return Super.ShouldCall;
+  }
 
   private void contentsDrawerHint() {
     drawerLayout.postDelayed(() -> drawerLayout.openDrawer(GravityCompat.END), 500);
@@ -1541,12 +1543,10 @@ public abstract class CoreReaderFragmentSmall extends BaseFragment
     super.onActivityResult(requestCode, resultCode, data);
   }
 
-  //TODO
-  //@Override
-  //public boolean onCreateOptionsMenu(Menu menu) {
-  //  mainMenu = createMainMenu(menu);
-  //  return true;
-  //}
+  @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
+    mainMenu = createMainMenu(menu);
+  }
 
   @NotNull protected MainMenu createMainMenu(Menu menu) {
     return menuFactory.create(menu, webViewList, !urlIsInvalid(), this, false, false);
