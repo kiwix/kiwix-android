@@ -58,7 +58,7 @@ import javax.inject.Inject
 
 const val REQUEST_READ_FOR_OBB = 5002
 
-class CustomReaderFragmentSmall : CoreReaderFragment() {
+class CustomReaderFragment : CoreReaderFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.customActivityComponent.inject(this)

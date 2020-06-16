@@ -24,7 +24,7 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
-import org.kiwix.kiwixmobile.custom.main.CustomReaderFragmentSmall
+import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 import org.kiwix.kiwixmobile.custom.splash.CustomSplashActivity
 
@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.custom.splash.CustomSplashActivity
 @Subcomponent(modules = [CustomActivityModule::class])
 interface CustomActivityComponent {
   fun inject(customMainActivity: CustomMainActivity)
-  fun inject(customReaderFragmentSmall: CustomReaderFragmentSmall)
+  fun inject(customReaderFragment: CustomReaderFragment)
   fun inject(customSettingsActivity: CustomSettingsActivity)
   fun inject(customDownloadActivity: CustomDownloadActivity)
   fun inject(customSplashActivity: CustomSplashActivity)

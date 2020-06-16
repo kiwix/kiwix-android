@@ -65,7 +65,7 @@ class LibraryFragment : BaseFragment() {
 
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject override lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils

@@ -58,7 +58,7 @@ private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 
 class ZimFileSelectFragment : BaseFragment() {
 
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject override lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private var actionMode: ActionMode? = null

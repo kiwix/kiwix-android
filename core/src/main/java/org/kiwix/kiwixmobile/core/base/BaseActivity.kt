@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.base
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.Unbinder
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -42,11 +41,6 @@ abstract class BaseActivity : AppCompatActivity() {
     injection(CoreApp.getCoreComponent())
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
-  }
-
-  override fun setContentView(@LayoutRes layoutResID: Int) {
-    super.setContentView(layoutResID)
-    // unbinder = ButterKnife.bind(this)
   }
 
   // TODO https://issuetracker.google.com/issues/141132133 remove this once appcompat has been fixed
