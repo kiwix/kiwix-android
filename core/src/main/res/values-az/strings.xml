@@ -8,7 +8,6 @@
   <string name="menu_random_article">Təsadüfi məqalə</string>
   <string name="menu_full_screen">Tam ekran</string>
   <string name="menu_exit_full_screen">Tam ekran rejimini bağla</string>
-  <string name="rescan_fs_warning">ZIM fayllar axtarılır, xahiş edirik, gözləyin…</string>
   <string name="search_label">Axtar</string>
   <string name="choose_file">ZIM məzmunlu fayl seç (*.zim)</string>
   <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>

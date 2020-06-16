@@ -164,7 +164,7 @@ class ZimFileReader constructor(
   @Throws(IOException::class)
   private fun loadAssetFromCache(uri: String): FileInputStream {
     return File(
-      FileUtils.getFileCacheDir(CoreApp.getInstance()),
+      FileUtils.getFileCacheDir(CoreApp.instance),
       uri.substringAfterLast("/")
     ).apply { writeBytes(getContent(uri)) }
       .inputStream()
@@ -233,7 +233,7 @@ class ZimFileReader constructor(
 
     @JvmField
     val CONTENT_PREFIX =
-      Uri.parse("content://${CoreApp.getInstance().packageName}.zim.base/").toString()
+      Uri.parse("content://${CoreApp.instance.packageName}.zim.base/").toString()
 
     private val INVERT_IMAGES_VIDEO =
       """

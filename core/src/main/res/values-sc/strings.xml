@@ -20,7 +20,6 @@
   <string name="save_media">Sarba su mèdia</string>
   <string name="save_media_error">B\'est istadu un\'errore durante su tentativu de sarvamentu de su mèdia!</string>
   <string name="save_media_saved">Mèdia sarvadu comente %s in Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Iscansende pro documentos ZIM, pro praghere iseta…</string>
   <string name="search_label">Chirca</string>
   <string name="choose_file">Ischerta unu documentu de cuntenutu ZIM (*.zim)</string>
   <string name="open_in_new_tab">Abèrrere su ligàmene in un\'ischeda noa?</string>

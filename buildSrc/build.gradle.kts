@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
   implementation("com.android.tools.build:gradle:3.5.3")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.70")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72")
   implementation("com.hiya:jacoco-android:0.2")
   implementation("org.jlleitschuh.gradle:ktlint-gradle:9.2.1")
   implementation("com.google.apis:google-api-services-androidpublisher:v3-rev129-1.25.0")

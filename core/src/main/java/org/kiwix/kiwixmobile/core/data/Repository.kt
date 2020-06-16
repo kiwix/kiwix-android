@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -84,22 +83,6 @@ class Repository @Inject internal constructor(
   override fun saveLanguages(languages: List<Language>) =
     Completable.fromAction { languageDao.insert(languages) }
       .subscribeOn(io)
-
-  override fun getDateCategorizedHistory(showHistoryCurrentBook: Boolean) =
-    Single.just(
-      historyDao.getHistoryList(
-        showHistoryCurrentBook,
-        zimReaderContainer.zimCanonicalPath
-      )
-    ).map {
-      HeaderizableList<HistoryListItem, HistoryItem, DateItem>(it).foldOverAddingHeaders(
-        { historyItem -> DateItem(historyItem.dateString) },
-        { current, next ->
-          current.dateString != next.dateString
-        })
-    }
-      .subscribeOn(io)
-      .observeOn(mainThread)
 
   override fun saveHistory(history: HistoryItem) =
     Completable.fromAction { historyDao.saveHistory(history) }

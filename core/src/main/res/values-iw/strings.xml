@@ -26,7 +26,6 @@
   <string name="save_media">שמירת מדיה</string>
   <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
   <string name="save_media_saved">המדיה נשמרה בתור %s אל Android/media/org.kiwix…/‎</string>
-  <string name="rescan_fs_warning">מתבצעת סריקה לאיתור תכנים הניתנים להורדה, נא להמתין…</string>
   <string name="search_label">חיפוש</string>
   <string name="choose_file">בחירת קובץ תוכן (‎*.zim)</string>
   <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>

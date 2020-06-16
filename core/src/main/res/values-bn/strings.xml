@@ -21,7 +21,6 @@
   <string name="save_media">মিডিয়া সংরক্ষণ করুন</string>
   <string name="save_media_error">মিডিয়া সংরক্ষণের চেষ্টা করার সময় একটি ত্রুটি ঘটেছে!</string>
   <string name="save_media_saved">%s হিসাবে Android/media/org.kiwix…/ এ মিডিয়া সংরক্ষিত হয়েছে</string>
-  <string name="rescan_fs_warning">ডাউনলোডযোগ্য বিষয়বস্তুর জন্য স্ক্যান করা হচ্ছে, দয়া করে অপেক্ষা করুন…</string>
   <string name="search_label">অনুসন্ধান</string>
   <string name="choose_file">একটি বিষয়বস্তুর ফাইল নির্বাচন করুন (*.zim)</string>
   <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>

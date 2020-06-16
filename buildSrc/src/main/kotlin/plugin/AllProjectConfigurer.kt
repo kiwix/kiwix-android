@@ -181,6 +181,7 @@ class AllProjectConfigurer {
       implementation(Libs.xfetch2okhttp)
       implementation(Libs.rxandroid)
       implementation(Libs.rxjava)
+      implementation(Libs.preference_ktx)
     }
   }
 }

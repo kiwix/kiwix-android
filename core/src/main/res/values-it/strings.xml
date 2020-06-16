@@ -22,7 +22,6 @@
   <string name="save_media">Salva file multimediale come…</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
   <string name="save_media_saved">Salvato file multimediale come %s in Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Scansione dei contenuti scaricabili, attendi…</string>
   <string name="search_label">Ricerca</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
   <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>

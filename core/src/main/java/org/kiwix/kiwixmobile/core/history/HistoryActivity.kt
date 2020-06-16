@@ -3,7 +3,8 @@ package org.kiwix.kiwixmobile.core.history
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.ActionMode.Callback
@@ -36,7 +37,7 @@ import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteButt
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedDeleteSelectedHistoryItems
 import org.kiwix.kiwixmobile.core.history.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
-import org.kiwix.kiwixmobile.core.history.viewmodel.State
+import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryState
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -126,25 +127,16 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  private fun render(state: State) {
-    historyAdapter.items = state.getHistoryListItems()
-    if (!state.isInSelectionState) {
-      actionMode?.finish()
-      history_switch.isEnabled = true
-    } else {
+  private fun render(state: HistoryState) {
+    historyAdapter.items = state.historyListItems
+    history_switch.isEnabled = !state.isInSelectionState
+    no_history.visibility = if (state.historyListItems.isEmpty()) VISIBLE else GONE
+    if (state.isInSelectionState) {
       if (actionMode == null) {
         actionMode = startSupportActionMode(actionModeCallback)
       }
-      history_switch.isEnabled = false
-    }
-    toggleNoHistoryText(state)
-  }
-
-  private fun toggleNoHistoryText(state: State) {
-    if (state.getHistoryListItems().isEmpty()) {
-      no_history.visibility = View.VISIBLE
     } else {
-      no_history.visibility = View.GONE
+      actionMode?.finish()
     }
   }
 

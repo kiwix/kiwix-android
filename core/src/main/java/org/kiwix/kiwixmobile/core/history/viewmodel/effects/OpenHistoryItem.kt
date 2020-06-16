@@ -30,13 +30,13 @@ data class OpenHistoryItem(
   private val zimReaderContainer: ZimReaderContainer
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val intent = Intent().putExtra(EXTRA_CHOSE_X_URL, historyItem.historyUrl)
-    if (historyItem.zimFilePath != zimReaderContainer.zimCanonicalPath) {
-      intent.putExtra(EXTRA_CHOSE_X_FILE, historyItem.zimFilePath)
-    }
     activity.setResult(
       Activity.RESULT_OK,
-      intent
+      Intent().putExtra(EXTRA_CHOSE_X_URL, historyItem.historyUrl).apply {
+        if (historyItem.zimFilePath != zimReaderContainer.zimCanonicalPath) {
+          putExtra(EXTRA_CHOSE_X_FILE, historyItem.zimFilePath)
+        }
+      }
     )
     activity.finish()
   }

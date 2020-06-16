@@ -24,7 +24,6 @@
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja medija je prišlo do napake!</string>
   <string name="save_media_saved">Shrani medij kot %s na Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte …</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>

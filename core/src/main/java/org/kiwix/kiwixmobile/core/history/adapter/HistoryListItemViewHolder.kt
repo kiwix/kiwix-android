@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.history.adapter
 
-import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.header_date.header_date
 import kotlinx.android.synthetic.main.item_bookmark_history.favicon
@@ -15,8 +14,9 @@ import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeParseException
 
-sealed class HistoryListItemViewHolder <in T : HistoryListItem>(containerView: View) :
+sealed class HistoryListItemViewHolder<in T : HistoryListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
 
   class HistoryItemViewHolder(
@@ -25,7 +25,6 @@ sealed class HistoryListItemViewHolder <in T : HistoryListItem>(containerView: V
   ) : HistoryListItemViewHolder<HistoryItem>(containerView) {
     override fun bind(item: HistoryItem) {
       title.text = item.historyTitle
-      Log.d("HistoryListItemViewHold", "isSelected=${item.isSelected}")
       if (item.isSelected) {
         favicon.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
       } else {
@@ -42,7 +41,11 @@ sealed class HistoryListItemViewHolder <in T : HistoryListItem>(containerView: V
     override fun bind(item: DateItem) {
       val todaysDate = LocalDate.now()
       val yesterdayDate = todaysDate.minusDays(1)
-      val givenDate = LocalDate.parse(item.dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
+      val givenDate = try {
+        LocalDate.parse(item.dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
+      } catch (ignore: DateTimeParseException) {
+        null
+      }
 
       when (givenDate) {
         todaysDate -> header_date.setText(R.string.time_today)
