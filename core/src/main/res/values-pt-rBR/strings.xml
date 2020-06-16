@@ -271,4 +271,6 @@
   <string name="crash_checkbox_file_system">Detalhes do sistema de arquivos</string>
   <string name="diagnostic_report">Relatório de diagnóstico</string>
   <string name="diagnostic_report_message">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Zoom de texto</string>
 </resources>

@@ -15,19 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.history
 
-import org.kiwix.kiwixmobile.core.base.BaseContract
+package org.kiwix.kiwixmobile.core.history.viewmodel.effects
 
-interface HistoryContract {
-  interface View : BaseContract.View<Presenter> {
-    fun updateHistoryList(historyList: List<HistoryListItem>)
-    fun notifyHistoryListFiltered(historyList: List<HistoryListItem>)
-  }
+import androidx.appcompat.app.AppCompatActivity
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-  interface Presenter : BaseContract.Presenter<View> {
-    fun loadHistory(showHistoryCurrentBook: Boolean)
-    fun filterHistory(historyList: List<HistoryListItem>, newText: String)
-    fun deleteHistory(deleteList: List<HistoryListItem>)
+internal class UpdateAllHistoryPreferenceTest {
+  @Test
+  fun `UpdateAllHistoryPreference updates shared preferences`() {
+    val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+    val activity: AppCompatActivity = mockk()
+    UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
+    verify { sharedPreferenceUtil.showHistoryAllBooks = true }
   }
 }

@@ -103,8 +103,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
-import org.kiwix.kiwixmobile.core.history.HistoryActivity;
-import org.kiwix.kiwixmobile.core.history.HistoryListItem;
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
@@ -123,6 +122,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
+import static org.kiwix.kiwixmobile.core.history.HistoryActivityKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
@@ -868,8 +868,7 @@ public abstract class CoreMainActivity extends BaseActivity
   protected void selectTab(int position) {
     currentWebViewIndex = position;
     contentFrame.removeAllViews();
-
-    KiwixWebView webView = webViewList.get(position);
+    KiwixWebView webView = safelyGetWebView(position);
     if (webView.getParent() != null) {
       ((ViewGroup) webView.getParent()).removeView(webView);
     }
@@ -884,6 +883,16 @@ public abstract class CoreMainActivity extends BaseActivity
     if (!isHideToolbar && webView instanceof ToolbarScrollingKiwixWebView) {
       ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
     }
+  }
+
+  private KiwixWebView safelyGetWebView(int position) {
+    return webViewList.size() == 0 ? newMainPageTab() : webViewList.get(safePosition(position));
+  }
+
+  private int safePosition(int position) {
+    return position < 0 ? 0
+      : position >= webViewList.size() ? webViewList.size() - 1
+        : position;
   }
 
   protected KiwixWebView getCurrentWebView() {
@@ -1493,7 +1502,7 @@ public abstract class CoreMainActivity extends BaseActivity
       case REQUEST_HISTORY_ITEM_CHOSEN:
         hideTabSwitcher();
         if (resultCode == RESULT_OK) {
-          if (data.getBooleanExtra(HistoryActivity.USER_CLEARED_HISTORY, false)) {
+          if (data.getBooleanExtra(USER_CLEARED_HISTORY, false)) {
             for (KiwixWebView kiwixWebView : webViewList) {
               kiwixWebView.clearHistory();
             }

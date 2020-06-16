@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.di.modules.TestNetworkModule
-import org.kiwix.kiwixmobile.core.history.HistoryModule
 import javax.inject.Singleton
 
 /**
@@ -40,7 +39,6 @@ import javax.inject.Singleton
 @Component(
   modules = [
     BookmarksModule::class,
-    HistoryModule::class,
     ApplicationModule::class,
     TestNetworkModule::class,
     JNIModule::class,

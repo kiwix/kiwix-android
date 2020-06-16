@@ -76,5 +76,5 @@ object ActivityExtensions {
       .get(T::class.java)
 
   val Activity.coreActivityComponent
-    get() = CoreApp.getCoreComponent().activityComponentBuilder().activity(this).build()
+    get() = CoreApp.coreComponent.activityComponentBuilder().activity(this).build()
 }

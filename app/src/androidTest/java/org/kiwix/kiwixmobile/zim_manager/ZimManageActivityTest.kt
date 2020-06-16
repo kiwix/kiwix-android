@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
 
   override var activityRule = activityTestRule<ZimManageActivity> {
-    CoreApp.setCoreComponent(testComponent())
+    CoreApp.coreComponent = testComponent()
   }
   private val book = book()
 

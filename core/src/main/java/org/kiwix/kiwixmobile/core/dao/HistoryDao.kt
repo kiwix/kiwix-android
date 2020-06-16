@@ -21,13 +21,16 @@ import io.objectbox.Box
 import io.objectbox.kotlin.query
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity_
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
 import javax.inject.Inject
 
 class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) {
 
-  fun history() = box.asFlowable()
-    .map { it.map(::HistoryItem) }
+  fun history() = box.asFlowable(
+    box.query {
+      orderDesc(HistoryEntity_.timeStamp)
+    }
+  ).map { it.map(::HistoryItem) }
 
   fun saveHistory(historyItem: HistoryItem) {
     box.store.callInTx {
@@ -40,19 +43,6 @@ class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) {
       box.put(HistoryEntity(historyItem))
     }
   }
-
-  fun getHistoryList(
-    showOnlyCurrentBookHistory: Boolean,
-    canonicalPath: String?
-  ) = box
-    .query {
-      if (showOnlyCurrentBookHistory) {
-        canonicalPath?.let { equal(HistoryEntity_.zimFilePath, it) }
-      }
-      orderDesc(HistoryEntity_.timeStamp)
-    }
-    .find()
-    .map(::HistoryItem)
 
   fun deleteHistory(historyList: List<HistoryItem>) {
     box.remove(historyList.map(::HistoryEntity))

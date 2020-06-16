@@ -70,6 +70,8 @@ class ZimReaderContainer @Inject constructor(
       zimFileReader?.load(url)
     )
 
+  fun copyReader(): ZimFileReader? = zimFile?.let(zimFileReaderFactory::create)
+
   val zimFile get() = zimFileReader?.zimFile
 
   val zimCanonicalPath get() = zimFileReader?.zimFile?.canonicalPath
