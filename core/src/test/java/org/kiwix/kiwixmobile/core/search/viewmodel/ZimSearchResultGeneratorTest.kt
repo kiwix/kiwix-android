@@ -40,7 +40,7 @@ internal class ZimSearchResultGeneratorTest {
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val zimFileReader: ZimFileReader = run {
     mockkStatic(CoreApp::class)
-    every { CoreApp.getInstance().packageName } returns "pkg"
+    every { CoreApp.instance.packageName } returns "pkg"
     mockkStatic(Uri::class)
     every { Uri.parse(any()).toString() } returns "pkg"
   }.let { mockk() }

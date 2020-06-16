@@ -1,14 +1,11 @@
 package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.AllBookmarkPreferenceChanged
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ExitBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.Filter
@@ -35,84 +32,55 @@ class BookmarkViewModel @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
 
-  val state = MutableLiveData<State>().apply {
+  val state = MutableLiveData<BookmarkState>().apply {
     value =
-      State(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id, "")
+      BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
   }
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
   private val compositeDisposable = CompositeDisposable()
-  val showAllSwitchToggle =
-    BehaviorProcessor.createDefault(sharedPreferenceUtil.showBookmarksAllBooks)
 
   init {
     compositeDisposable.addAll(
       viewStateReducer(),
       bookmarksDao.bookmarks().subscribeOn(Schedulers.io())
-        .subscribe { actions.offer(UpdateBookmarks(it)) }
+        .subscribe({ actions.offer(UpdateBookmarks(it)) }, Throwable::printStackTrace)
     )
   }
 
   private fun viewStateReducer() =
-    actions.map { reduce(it, state.value!!) }.subscribe(state::postValue)
+    actions.map { reduce(it, state.value!!) }
+      .subscribe(state::postValue, Throwable::printStackTrace)
 
-  private fun reduce(action: Action, state: State): State {
-    val newState = when (action) {
-      ExitBookmarks -> finishBookmarksActivity(state)
-      ExitActionModeMenu -> deselectAllBookmarkItems(state)
-      UserClickedDeleteButton -> offerShowDeleteDialog(state)
-      UserClickedDeleteSelectedBookmarks -> offerShowDeleteDialog(state)
-      is OnItemClick -> handleItemClick(state, action)
-      is OnItemLongClick -> handleItemLongClick(state, action)
-      is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
-      is Filter -> setSearchTerm(state, action)
-      is UpdateBookmarks -> updateBookmarksList(state, action)
-      is AllBookmarkPreferenceChanged -> changeShowBookmarksToggle(state, action)
-    }
-    Log.d(TAG, "New bookmark state: $newState")
-    return newState
+  private fun reduce(action: Action, state: BookmarkState): BookmarkState = when (action) {
+    ExitBookmarks -> finishBookmarkActivity(state)
+    ExitActionModeMenu -> deselectAllBookmarks(state)
+    UserClickedDeleteButton, UserClickedDeleteSelectedBookmarks -> offerShowDeleteDialog(state)
+    is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
+    is OnItemClick -> handleItemClick(state, action)
+    is OnItemLongClick -> handleItemLongClick(state, action)
+    is Filter -> updateBookmarksBasedOnFilter(state, action)
+    is UpdateBookmarks -> updateBookmarks(state, action)
   }
 
-  private fun setSearchTerm(state: State, action: Filter) =
+  private fun updateBookmarksBasedOnFilter(state: BookmarkState, action: Filter) =
     state.copy(searchTerm = action.searchTerm)
 
-  private fun changeShowBookmarksToggle(
-    state: State,
-    action: AllBookmarkPreferenceChanged
-  ): State = state.copy(showAll = action.showAll)
-
-  private fun updateBookmarksList(
-    state: State,
-    action: UpdateBookmarks
-  ): State = state.copy(bookmarks = action.bookmarks)
+  private fun updateBookmarks(state: BookmarkState, action: UpdateBookmarks): BookmarkState =
+    state.copy(bookmarks = action.bookmarks)
 
   private fun offerUpdateToShowAllToggle(
     action: UserClickedShowAllToggle,
-    state: State
-  ): State {
-    effects.offer(
-      UpdateAllBookmarksPreference(
-        sharedPreferenceUtil,
-        action.isChecked
-      )
-    )
+    state: BookmarkState
+  ): BookmarkState {
+    effects.offer(UpdateAllBookmarksPreference(sharedPreferenceUtil, action.isChecked))
     return state.copy(showAll = action.isChecked)
   }
 
-  private fun handleItemLongClick(
-    state: State,
-    action: OnItemLongClick
-  ): State {
-    if (state.isInSelectionState) {
-      return state
-    }
-    return state.toggleSelectionOfItem(action.bookmark)
-  }
+  private fun handleItemLongClick(state: BookmarkState, action: OnItemLongClick): BookmarkState =
+    state.toggleSelectionOfItem(action.bookmark)
 
-  private fun handleItemClick(
-    state: State,
-    action: OnItemClick
-  ): State {
+  private fun handleItemClick(state: BookmarkState, action: OnItemClick): BookmarkState {
     if (state.isInSelectionState) {
       return state.toggleSelectionOfItem(action.bookmark)
     }
@@ -120,15 +88,15 @@ class BookmarkViewModel @Inject constructor(
     return state
   }
 
-  private fun offerShowDeleteDialog(state: State): State {
+  private fun offerShowDeleteDialog(state: BookmarkState): BookmarkState {
     effects.offer(ShowDeleteBookmarksDialog(effects, state, bookmarksDao))
     return state
   }
 
-  private fun deselectAllBookmarkItems(state: State): State =
+  private fun deselectAllBookmarks(state: BookmarkState): BookmarkState =
     state.copy(bookmarks = state.bookmarks.map { it.copy(isSelected = false) })
 
-  private fun finishBookmarksActivity(state: State): State {
+  private fun finishBookmarkActivity(state: BookmarkState): BookmarkState {
     effects.offer(Finish)
     return state
   }

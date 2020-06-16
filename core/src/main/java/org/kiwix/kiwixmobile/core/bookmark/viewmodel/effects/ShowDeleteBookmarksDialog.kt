@@ -22,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteBookmarks
@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 data class ShowDeleteBookmarksDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
-  private val state: State,
+  private val state: BookmarkState,
   private val bookmarksDao: NewBookmarksDao
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower

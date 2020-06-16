@@ -30,8 +30,8 @@ import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteSelectedBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedShowAllToggle
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkViewModel
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
@@ -122,30 +122,24 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  private fun render(state: State) {
+  private fun render(state: BookmarkState) {
     val filteredBookmarks = state.filteredBookmarks
     filteredBookmarks.let { bookmarksAdapter.items = it }
     toggleNoBookmarksText(filteredBookmarks)
+    bookmarks_switch.isEnabled = !state.isInSelectionState
     if (state.isInSelectionState) {
       handleSelectionState(filteredBookmarks)
     } else {
-      handleResultsState()
+      actionMode?.finish()
     }
-  }
-
-  private fun handleResultsState() {
-    actionMode?.finish()
-    bookmarks_switch.isEnabled = true
   }
 
   private fun handleSelectionState(filteredBookmarks: List<BookmarkItem>) {
     if (actionMode == null) {
       actionMode = startSupportActionMode(actionModeCallback)
     }
-    val numberOfSelectedItems =
-      filteredBookmarks.filter(BookmarkItem::isSelected).size
+    val numberOfSelectedItems = filteredBookmarks.filter(BookmarkItem::isSelected).size
     actionMode?.title = getString(R.string.selected_items, numberOfSelectedItems)
-    bookmarks_switch.isEnabled = false
   }
 
   private fun toggleNoBookmarksText(items: List<BookmarkItem>) {

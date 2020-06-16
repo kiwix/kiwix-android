@@ -24,7 +24,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.createSimpleBookmarkItem
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 
@@ -34,7 +34,7 @@ internal class DeleteBookmarkItemsTest {
     val bookmark1: BookmarkItem = createSimpleBookmarkItem()
     val bookmark2: BookmarkItem = createSimpleBookmarkItem()
     val bookmarksDao: NewBookmarksDao = mockk()
-    val state: State = mockk()
+    val state: BookmarkState = mockk()
     every { state.bookmarks } returns listOf(bookmark1, bookmark2)
     every { state.isInSelectionState } returns false
     val activity: AppCompatActivity = mockk()
@@ -47,7 +47,7 @@ internal class DeleteBookmarkItemsTest {
     val bookmark1: BookmarkItem = createSimpleBookmarkItem(isSelected = true)
     val bookmark2: BookmarkItem = createSimpleBookmarkItem()
     val bookmarksDao: NewBookmarksDao = mockk()
-    val state: State = mockk()
+    val state: BookmarkState = mockk()
     every { state.bookmarks } returns listOf(bookmark1, bookmark2)
     every { state.isInSelectionState } returns true
     val activity: AppCompatActivity = mockk()

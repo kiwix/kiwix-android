@@ -22,12 +22,12 @@ import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 
 data class DeleteBookmarkItems(
-  private val state: State,
+  private val state: BookmarkState,
   private val bookmarksDao: NewBookmarksDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {

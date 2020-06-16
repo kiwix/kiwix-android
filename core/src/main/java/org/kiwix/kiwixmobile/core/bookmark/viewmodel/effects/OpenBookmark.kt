@@ -30,13 +30,13 @@ data class OpenBookmark(
   private val zimReaderContainer: ZimReaderContainer
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val intent = Intent().putExtra(EXTRA_CHOSE_X_URL, bookmark.bookmarkUrl)
-    if (bookmark.zimFilePath != zimReaderContainer.zimCanonicalPath) {
-      intent.putExtra(EXTRA_CHOSE_X_FILE, bookmark.zimFilePath)
-    }
     activity.setResult(
       Activity.RESULT_OK,
-      intent
+      Intent().putExtra(EXTRA_CHOSE_X_URL, bookmark.bookmarkUrl).apply {
+        if (bookmark.zimFilePath != zimReaderContainer.zimCanonicalPath) {
+          putExtra(EXTRA_CHOSE_X_FILE, bookmark.zimFilePath)
+        }
+      }
     )
     activity.finish()
   }

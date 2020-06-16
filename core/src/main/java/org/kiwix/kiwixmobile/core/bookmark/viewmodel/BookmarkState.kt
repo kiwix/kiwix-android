@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 
-data class State(
+data class BookmarkState(
   val bookmarks: List<BookmarkItem>,
   val showAll: Boolean,
   val currentZimId: String?,
@@ -29,21 +29,14 @@ data class State(
 
   val isInSelectionState = bookmarks.any(BookmarkItem::isSelected)
 
-  val filteredBookmarks: List<BookmarkItem> =
-    bookmarks
-      .filter {
-        it.bookmarkTitle.contains(
-          searchTerm,
-          true
-        ) && (it.zimId == currentZimId || showAll)
-      }
+  val filteredBookmarks: List<BookmarkItem> = bookmarks
+    .filter { (it.zimId == currentZimId || showAll) }
+    .filter { it.bookmarkTitle.contains(searchTerm, true) }
 
-  fun toggleSelectionOfItem(bookmark: BookmarkItem): State {
+  fun toggleSelectionOfItem(bookmark: BookmarkItem): BookmarkState {
     val newList = bookmarks.map {
-      if (it.databaseId == bookmark.databaseId) it.apply {
-        isSelected = !isSelected
-      } else it
+      if (it.databaseId == bookmark.databaseId) it.apply { isSelected = !isSelected } else it
     }
-    return State(newList, showAll, currentZimId, searchTerm)
+    return BookmarkState(newList, showAll, currentZimId, searchTerm)
   }
 }

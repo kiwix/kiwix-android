@@ -26,7 +26,7 @@ import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.State
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
@@ -36,7 +36,7 @@ internal class ShowDeleteBookmarksDialogTest {
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
     val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
-    val state = mockk<State>()
+    val state = mockk<BookmarkState>()
     val bookmarksDao = mockk<NewBookmarksDao>()
     val activity = mockk<BookmarksActivity>()
     val showDeleteBookmarksDialog = ShowDeleteBookmarksDialog(effects, state, bookmarksDao)

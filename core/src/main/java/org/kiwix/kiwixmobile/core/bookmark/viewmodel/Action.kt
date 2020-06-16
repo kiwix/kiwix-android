@@ -29,7 +29,6 @@ sealed class Action {
   data class OnItemClick(val bookmark: BookmarkItem) : Action()
   data class OnItemLongClick(val bookmark: BookmarkItem) : Action()
   data class UserClickedShowAllToggle(val isChecked: Boolean) : Action()
-  data class AllBookmarkPreferenceChanged(val showAll: Boolean) : Action()
   data class Filter(val searchTerm: String) : Action()
   data class UpdateBookmarks(val bookmarks: List<BookmarkItem>) : Action()
 }

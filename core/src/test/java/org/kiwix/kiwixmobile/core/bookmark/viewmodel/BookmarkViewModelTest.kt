@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 
-import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -72,7 +71,7 @@ internal class BookmarkViewModelTest {
     viewModel = BookmarkViewModel(bookmarksDao, zimReaderContainer, sharedPreferenceUtil)
   }
 
-  private fun resultsIn(st: State) {
+  private fun resultsIn(st: BookmarkState) {
     viewModel.state.test()
       .also { testScheduler.advanceTimeBy(100, TimeUnit.MILLISECONDS) }
       .assertValue(st)
@@ -88,7 +87,7 @@ internal class BookmarkViewModelTest {
 
     @Test
     fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(State(listOf(), true, "id", ""))
+      viewModel.state.test().assertValue(BookmarkState(listOf(), true, "id", ""))
     }
 
     @Test
@@ -99,7 +98,7 @@ internal class BookmarkViewModelTest {
         searchTerm = searchTerm,
         databaseResults = listOf(item)
       )
-      resultsIn(State(listOf(item), true, "id", "searchTerm"))
+      resultsIn(BookmarkState(listOf(item), true, "id", "searchTerm"))
     }
 
     @Test
@@ -134,7 +133,7 @@ internal class BookmarkViewModelTest {
         searchTerm = "b",
         databaseResults = listOf(item)
       )
-      resultsIn(State(listOf(item), true, "id", "b"))
+      resultsIn(BookmarkState(listOf(item), true, "id", "b"))
     }
 
     @Test
