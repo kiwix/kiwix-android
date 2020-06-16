@@ -26,7 +26,8 @@ import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkState
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.bookmarkState
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
@@ -35,11 +36,12 @@ internal class ShowDeleteBookmarksDialogTest {
 
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
+    val actions = mockk<PublishProcessor<Action>>(relaxed = true)
     val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
-    val state = mockk<BookmarkState>()
-    val bookmarksDao = mockk<NewBookmarksDao>()
+    val newBookmarksDao = mockk<NewBookmarksDao>()
     val activity = mockk<BookmarksActivity>()
-    val showDeleteBookmarksDialog = ShowDeleteBookmarksDialog(effects, state, bookmarksDao)
+    val showDeleteBookmarksDialog =
+      ShowDeleteBookmarksDialog(effects, bookmarkState(), newBookmarksDao)
     val dialogShower = mockk<DialogShower>()
     every { activity.activityComponent.inject(showDeleteBookmarksDialog) } answers {
       showDeleteBookmarksDialog.dialogShower = dialogShower
@@ -47,10 +49,8 @@ internal class ShowDeleteBookmarksDialogTest {
     }
     val lambdaSlot = slot<() -> Unit>()
     showDeleteBookmarksDialog.invokeWith(activity)
-    verify {
-      dialogShower.show(KiwixDialog.DeleteBookmarks, capture(lambdaSlot))
-    }
+    verify { dialogShower.show(KiwixDialog.DeleteBookmarks, capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeleteBookmarkItems(state, bookmarksDao)) }
+    verify { effects.offer(DeleteBookmarkItems(bookmarkState(), newBookmarksDao)) }
   }
 }

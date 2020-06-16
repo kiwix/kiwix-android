@@ -19,39 +19,30 @@
 package org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkState
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.createSimpleBookmarkItem
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.bookmark
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.bookmarkState
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 
 internal class DeleteBookmarkItemsTest {
+  private val bookmarksDao: NewBookmarksDao = mockk()
+  val activity: AppCompatActivity = mockk()
+  private val item1 = bookmark()
+  private val item2 = bookmark()
+
   @Test
-  fun `delete without selection deletes all items`() {
-    val bookmark1: BookmarkItem = createSimpleBookmarkItem()
-    val bookmark2: BookmarkItem = createSimpleBookmarkItem()
-    val bookmarksDao: NewBookmarksDao = mockk()
-    val state: BookmarkState = mockk()
-    every { state.bookmarks } returns listOf(bookmark1, bookmark2)
-    every { state.isInSelectionState } returns false
-    val activity: AppCompatActivity = mockk()
-    DeleteBookmarkItems(state, bookmarksDao).invokeWith(activity)
-    verify { bookmarksDao.deleteBookmarks(listOf(bookmark1, bookmark2)) }
+  fun `delete with selected items only deletes the selected items`() {
+    item1.isSelected = true
+    DeleteBookmarkItems(bookmarkState(listOf(item1, item2)), bookmarksDao).invokeWith(activity)
+    verify { bookmarksDao.deleteBookmarks(listOf(item1)) }
   }
 
   @Test
-  fun `delete with selection deletes selected items`() {
-    val bookmark1: BookmarkItem = createSimpleBookmarkItem(isSelected = true)
-    val bookmark2: BookmarkItem = createSimpleBookmarkItem()
-    val bookmarksDao: NewBookmarksDao = mockk()
-    val state: BookmarkState = mockk()
-    every { state.bookmarks } returns listOf(bookmark1, bookmark2)
-    every { state.isInSelectionState } returns true
-    val activity: AppCompatActivity = mockk()
-    DeleteBookmarkItems(state, bookmarksDao).invokeWith(activity)
-    verify { bookmarksDao.deleteBookmarks(listOf(bookmark1)) }
+  fun `delete with no selected items deletes all items`() {
+    item1.isSelected = false
+    DeleteBookmarkItems(bookmarkState(listOf(item1, item2)), bookmarksDao).invokeWith(activity)
+    verify { bookmarksDao.deleteBookmarks(listOf(item1, item2)) }
   }
 }

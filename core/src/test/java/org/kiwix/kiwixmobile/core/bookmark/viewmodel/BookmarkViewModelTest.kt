@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 
+import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -25,14 +26,19 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
-import junit.framework.Assert
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ExitActionModeMenu
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.ExitBookmarks
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UpdateBookmarks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedDeleteSelectedBookmarks
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.OpenBookmark
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
@@ -42,7 +48,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
-import java.util.concurrent.TimeUnit
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class BookmarkViewModelTest {
@@ -50,7 +55,7 @@ internal class BookmarkViewModelTest {
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
 
-  lateinit var viewModel: BookmarkViewModel
+  private lateinit var viewModel: BookmarkViewModel
   private val testScheduler = TestScheduler()
 
   private val itemsFromDb: PublishProcessor<List<BookmarkItem>> =
@@ -71,212 +76,82 @@ internal class BookmarkViewModelTest {
     viewModel = BookmarkViewModel(bookmarksDao, zimReaderContainer, sharedPreferenceUtil)
   }
 
-  private fun resultsIn(st: BookmarkState) {
-    viewModel.state.test()
-      .also { testScheduler.advanceTimeBy(100, TimeUnit.MILLISECONDS) }
-      .assertValue(st)
+  @Test
+  fun `initial state is Initialising`() {
+    viewModel.state.test().assertValue(bookmarkState())
   }
 
-  private fun emissionOf(searchTerm: String, databaseResults: List<BookmarkItem>) {
-    itemsFromDb.offer(databaseResults)
+  @Test
+  internal fun `ExitBookmarks finishes activity`() {
+    viewModel.effects.test().also { viewModel.actions.offer(ExitBookmarks) }.assertValue(Finish)
+    viewModel.state.test().assertValue(bookmarkState())
+  }
+
+  @Test
+  internal fun `ExitActionModeMenu deselects bookmarks items`() {
+    viewModel.state.postValue(bookmarkState(bookmarks = listOf(bookmark(isSelected = true))))
+    viewModel.actions.offer(ExitActionModeMenu)
+    viewModel.state.test().assertValue(
+      bookmarkState(bookmarks = listOf(bookmark(isSelected = false)))
+    )
+  }
+
+  @Test
+  internal fun `UserClickedDeleteButton offers ShowDeleteBookmarkDialog`() {
+    viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteButton) }
+      .assertValue(ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), bookmarksDao))
+    viewModel.state.test().assertValue(bookmarkState())
+  }
+
+  @Test
+  internal fun `UserClickedDeleteSelectedBookmarks offers ShowDeleteBookmarksDialog`() {
+    viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteSelectedBookmarks) }
+      .assertValue(ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), bookmarksDao))
+    viewModel.state.test().assertValue(bookmarkState())
+  }
+
+  @Test
+  internal fun `UserClickedShowAllToggle offers UpdateAllBookmarksPreference`() {
+    viewModel.effects.test()
+      .also { viewModel.actions.offer(UserClickedShowAllToggle(false)) }
+      .assertValue(UpdateAllBookmarksPreference(sharedPreferenceUtil, false))
+    viewModel.state.test().assertValue(bookmarkState(showAll = false))
+  }
+
+  @Test
+  internal fun `OnItemClick selects item if one is selected`() {
+    val bookmark = bookmark(isSelected = true)
+    viewModel.state.postValue(bookmarkState(listOf(bookmark)))
+    viewModel.actions.offer(OnItemClick(bookmark))
+    viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
+  }
+
+  @Test
+  internal fun `OnItemClick offers OpenBookmark if none is selected`() {
+    viewModel.state.postValue(bookmarkState(listOf(bookmark())))
+    viewModel.effects.test().also { viewModel.actions.offer(OnItemClick(bookmark())) }
+      .assertValue(OpenBookmark(bookmark(), zimReaderContainer))
+    viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
+  }
+
+  @Test
+  internal fun `OnItemLongClick selects item if none is selected`() {
+    val bookmark = bookmark()
+    viewModel.state.postValue(bookmarkState(listOf(bookmark)))
+    viewModel.actions.offer(OnItemLongClick(bookmark))
+    viewModel.state.test().assertValue(bookmarkState(listOf(bookmark(isSelected = true))))
+  }
+
+  @Test
+  fun `Filter updates search term`() {
+    val searchTerm = "searchTerm"
     viewModel.actions.offer(Filter(searchTerm))
+    viewModel.state.test().assertValue(bookmarkState(searchTerm = searchTerm))
   }
 
-  @Nested
-  inner class StateTests {
-
-    @Test
-    fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(BookmarkState(listOf(), true, "id", ""))
-    }
-
-    @Test
-    fun `non empty search term with search results shows Results`() {
-      val searchTerm = "searchTerm"
-      val item = createSimpleBookmarkItem("searchTermTitle")
-      emissionOf(
-        searchTerm = searchTerm,
-        databaseResults = listOf(item)
-      )
-      resultsIn(BookmarkState(listOf(item), true, "id", "searchTerm"))
-    }
-
-    @Test
-    fun `non empty search string with no search results is NoResults`() {
-      emissionOf(
-        searchTerm = "a",
-        databaseResults = listOf(
-          createSimpleBookmarkItem(
-            ""
-          )
-        )
-      )
-      Assert.assertTrue(viewModel.state.value!!.filteredBookmarks.isEmpty())
-    }
-
-    @Test
-    fun `empty search string returns items`() {
-      val item = createSimpleBookmarkItem()
-      emissionOf(searchTerm = "", databaseResults = listOf(item))
-      Assert.assertTrue(viewModel.state.value!!.filteredBookmarks.contains(item))
-    }
-
-    @Test
-    fun `only latest search term is used`() {
-      val item =
-        createSimpleBookmarkItem("b")
-      emissionOf(
-        searchTerm = "a",
-        databaseResults = emptyList()
-      )
-      emissionOf(
-        searchTerm = "b",
-        databaseResults = listOf(item)
-      )
-      resultsIn(BookmarkState(listOf(item), true, "id", "b"))
-    }
-
-    @Test
-    fun `enters selection state if item is selected`() {
-      val item =
-        createSimpleBookmarkItem(
-          "b", isSelected = true
-        )
-      emissionOf(
-        searchTerm = "a",
-        databaseResults = emptyList()
-      )
-      emissionOf(
-        searchTerm = "b",
-        databaseResults = listOf(item)
-      )
-      Assert.assertTrue(viewModel.state.value!!.isInSelectionState)
-    }
-
-    @Test
-    fun `OnItemLongClick enters selection state`() {
-      val item1 =
-        createSimpleBookmarkItem(
-          "a"
-        )
-      emissionOf(
-        searchTerm = "",
-        databaseResults = listOf(item1)
-      )
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      Assert.assertTrue(viewModel.state.value!!.isInSelectionState)
-    }
-
-    @Test
-    fun `Deselection via OnItemClick exits selection state if last item is deselected`() {
-      val item1 = createSimpleBookmarkItem("a")
-      val item2 = createSimpleBookmarkItem("a")
-      emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      viewModel.actions.offer(Action.OnItemClick(item1))
-      Assert.assertFalse(viewModel.state.value!!.isInSelectionState)
-    }
-
-    @Test
-    fun `ExitActionMode deselects all items`() {
-      val item1 = createSimpleBookmarkItem("a", isSelected = true)
-      val item2 = createSimpleBookmarkItem("a", isSelected = true)
-      emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
-      viewModel.actions.offer(Action.ExitActionModeMenu)
-      Assert.assertFalse(viewModel.state.value!!.isInSelectionState)
-    }
-  }
-
-  @Nested
-  inner class ActionResults {
-
-    @Test
-    fun `ExitActionModeMenu deselects all history items from state`() {
-      val item1 = createSimpleBookmarkItem("a", isSelected = true)
-      emissionOf(searchTerm = "", databaseResults = listOf(item1))
-      viewModel.actions.offer(Action.ExitActionModeMenu)
-      assertItemIsDeselected(item1)
-    }
-
-    @Test
-    fun `OnItemLongClick selects history item from state`() {
-      val item1 = createSimpleBookmarkItem("a")
-      emissionOf(searchTerm = "", databaseResults = listOf(item1))
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      assertItemIsSelected(item1)
-    }
-
-    private fun assertItemIsDeselected(item: BookmarkItem) {
-      Assert.assertFalse(
-        viewModel.state.value!!.bookmarks.find {
-          it.databaseId == item.databaseId
-        }?.isSelected == true
-      )
-    }
-
-    @Test
-    fun `OnItemClick selects history item from state if in SelectionMode`() {
-      val item1 = createSimpleBookmarkItem("a", id = 2)
-      val item2 = createSimpleBookmarkItem("a", id = 3)
-      emissionOf(searchTerm = "", databaseResults = listOf(item1, item2))
-      viewModel.actions.offer(Action.OnItemLongClick(item1))
-      viewModel.actions.offer(Action.OnItemClick(item2))
-      assertItemIsSelected(item1)
-      assertItemIsSelected(item2)
-    }
-
-    private fun assertItemIsSelected(item: BookmarkItem) {
-      Assert.assertTrue(
-        viewModel.state.value!!.bookmarks.find {
-          it.databaseId == item.databaseId
-        }?.isSelected == true
-      )
-    }
-  }
-
-  @Nested
-  inner class ActionMapping {
-    @Test
-    fun `ExitedSearch offers Finish`() {
-      actionResultsInEffects(Action.ExitBookmarks, Finish)
-    }
-
-    @Test
-    fun `OnItemClick offers OpenHistoryItem if not in selection mode `() {
-      val item1 = createSimpleBookmarkItem("a", id = 2)
-      emissionOf(searchTerm = "", databaseResults = listOf(item1))
-      actionResultsInEffects(Action.OnItemClick(item1), OpenBookmark(item1, zimReaderContainer))
-    }
-
-    @Test
-    fun `UserClickedShowAllToggle updates shared preferences`() {
-      actionResultsInEffects(
-        Action.UserClickedShowAllToggle(true),
-        UpdateAllBookmarksPreference(
-          sharedPreferenceUtil,
-          true
-        )
-      )
-    }
-
-    @Test
-    fun `UserClickedDeleteButton opens dialog to request deletion`() {
-      actionResultsInEffects(
-        Action.UserClickedDeleteButton,
-        ShowDeleteBookmarksDialog(viewModel.effects, viewModel.state.value!!, bookmarksDao)
-      )
-    }
-
-    @Test
-    fun `UserClickedDeleteSelectedBookmarks opens dialog to request deletion`() {
-      actionResultsInEffects(
-        Action.UserClickedDeleteSelectedBookmarks,
-        ShowDeleteBookmarksDialog(viewModel.effects, viewModel.state.value!!, bookmarksDao)
-      )
-    }
-
-    private fun actionResultsInEffects(action: Action, vararg effects: SideEffect<*>) {
-      viewModel.effects.test().also { viewModel.actions.offer(action) }.assertValues(*effects)
-    }
+  @Test
+  internal fun `UpdateBookmarks updates bookmarks`() {
+    viewModel.actions.offer(UpdateBookmarks(listOf(bookmark())))
+    viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
   }
 }

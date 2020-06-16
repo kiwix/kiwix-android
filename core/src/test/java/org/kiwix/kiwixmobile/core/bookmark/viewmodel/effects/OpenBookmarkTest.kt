@@ -21,53 +21,46 @@ package org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.createSimpleBookmarkItem
+import org.kiwix.kiwixmobile.core.bookmark.viewmodel.bookmark
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
 
 internal class OpenBookmarkTest {
   @Test
-  fun `invokeWith returns an Ok Result with historyUrl`() {
-    val item = createSimpleBookmarkItem()
+  fun `invokeWith returns an Ok Result with bookmarkUrl`() {
+    val item = bookmark()
     val zimReaderContainer: ZimReaderContainer = mockk()
-    every {
-      zimReaderContainer.zimCanonicalPath
-    } returns "zimFilePath"
+    every { zimReaderContainer.zimCanonicalPath } returns "zimFilePath"
     val activity: AppCompatActivity = mockk()
     mockkConstructor(Intent::class)
     val intent: Intent = mockk()
-    every {
-      anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.bookmarkUrl)
-    } returns intent
+    every { anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.bookmarkUrl) } returns intent
     OpenBookmark(item, zimReaderContainer).invokeWith(activity)
     verify {
       activity.setResult(Activity.RESULT_OK, intent)
       activity.finish()
+      anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.bookmarkUrl)
     }
+    confirmVerified(intent)
   }
 
   @Test
-  fun `invokeWith returns an Ok Result with historyUrl and zimFilePath`() {
-    val item = createSimpleBookmarkItem()
+  fun `invokeWith returns an Ok Result with bookmarkUrl and zimFilePath`() {
+    val item = bookmark()
     val zimReaderContainer: ZimReaderContainer = mockk()
-    every {
-      zimReaderContainer.zimCanonicalPath
-    } returns "notZimFilePath"
+    every { zimReaderContainer.zimCanonicalPath } returns "notZimFilePath"
     val activity: AppCompatActivity = mockk()
     mockkConstructor(Intent::class)
     val intent: Intent = mockk()
-    every {
-      anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.bookmarkUrl)
-    } returns intent
-    every {
-      intent.putExtra(EXTRA_CHOSE_X_FILE, item.zimFilePath)
-    } returns intent
+    every { anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, item.bookmarkUrl) } returns intent
+    every { intent.putExtra(EXTRA_CHOSE_X_FILE, item.zimFilePath) } returns intent
     OpenBookmark(item, zimReaderContainer).invokeWith(activity)
     verify {
       intent.putExtra(EXTRA_CHOSE_X_FILE, item.zimFilePath)

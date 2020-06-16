@@ -26,15 +26,10 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 internal class UpdateAllBookmarksPreferenceTest {
   @Test
-  fun `toggle switch should save new preference`() {
+  fun `UpdateAllBookmarkPreference updates shared preferences`() {
     val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
     val activity: AppCompatActivity = mockk()
-    UpdateAllBookmarksPreference(
-      sharedPreferenceUtil,
-      true
-    ).invokeWith(activity)
-    verify {
-      sharedPreferenceUtil.showBookmarksAllBooks = true
-    }
+    UpdateAllBookmarksPreference(sharedPreferenceUtil, true).invokeWith(activity)
+    verify { sharedPreferenceUtil.showBookmarksAllBooks = true }
   }
 }
