@@ -207,6 +207,7 @@ class ZimFileReader constructor(
   private fun valueOfJniStringAfter(jniStringFunction: (JNIKiwixString) -> Boolean) =
     JNIKiwixString().takeIf { jniStringFunction(it) }?.value
 
+  @Suppress("ExplicitThis") // this@ZimFileReader.name is required
   fun toBook() = Book().apply {
     title = this@ZimFileReader.title
     id = this@ZimFileReader.id
@@ -219,7 +220,7 @@ class ZimFileReader constructor(
     language = this@ZimFileReader.language
     articleCount = this@ZimFileReader.articleCount.toString()
     mediaCount = this@ZimFileReader.mediaCount.toString()
-    bookName = name
+    bookName = this@ZimFileReader.name
     tags = this@ZimFileReader.tags
   }
 
@@ -231,9 +232,7 @@ class ZimFileReader constructor(
     @JvmField
     val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
 
-    @JvmField
-    val CONTENT_PREFIX =
-      Uri.parse("content://${CoreApp.instance.packageName}.zim.base/").toString()
+    const val CONTENT_PREFIX = "zim://content/"
 
     private val INVERT_IMAGES_VIDEO =
       """
