@@ -26,6 +26,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main_navigation.nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -51,6 +52,8 @@ class KiwixMainActivity : CoreMainActivity2() {
     appBarConfiguration = AppBarConfiguration(
       navController.graph
     )
+    val bottomNavigationBar = nav_view
+    // bottomNavigationBar.visibility = View.GONE
     // setupActionBarWithNavController(navController, appBarConfiguration)
     navView.setupWithNavController(navController)
   }
@@ -88,5 +91,9 @@ class KiwixMainActivity : CoreMainActivity2() {
     supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
   }
 }

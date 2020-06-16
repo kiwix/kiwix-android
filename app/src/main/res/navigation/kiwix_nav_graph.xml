@@ -20,7 +20,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/kiwix_nav_graph"
-  app:startDestination="@id/navigation_library">
+  app:startDestination="@id/navigation_reader">
 
   <fragment
     android:id="@+id/navigation_reader"

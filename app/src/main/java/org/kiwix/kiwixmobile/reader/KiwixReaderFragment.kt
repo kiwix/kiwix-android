@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
 class KiwixReaderFragment : CoreReaderFragment() {
+
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.kiwixActivityComponent.inject(this)
   }
