@@ -30,7 +30,7 @@ data class BookmarkState(
   val isInSelectionState = bookmarks.any(BookmarkItem::isSelected)
 
   val filteredBookmarks: List<BookmarkItem> = bookmarks
-    .filter { (it.zimId == currentZimId || showAll) }
+    .filter { it.zimId == currentZimId || showAll }
     .filter { it.bookmarkTitle.contains(searchTerm, true) }
 
   fun toggleSelectionOfItem(bookmark: BookmarkItem): BookmarkState {
