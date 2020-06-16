@@ -48,7 +48,7 @@ class StorageObserverTest {
   private val downloadModel: DownloadModel = mockk()
   private val file: File = mockk()
   private val readerFactory: Factory = mockk()
-  private val zimFileReader: ZimFileReader
+  private val zimFileReader: ZimFileReader = mock()
 
   private val files: PublishProcessor<List<File>> = PublishProcessor.create()
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
@@ -57,12 +57,6 @@ class StorageObserverTest {
 
   init {
     setScheduler(Schedulers.trampoline())
-    val coreApp = mockk<CoreApp>()
-    CoreApp.instance = coreApp
-    every { coreApp.packageName } returns "pkg"
-    mockkStatic(Uri::class)
-    every { Uri.parse(any()).toString() } returns "pkg"
-    zimFileReader = mockk()
   }
 
   @AfterAll
