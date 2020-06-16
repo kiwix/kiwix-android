@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Kiwix Android
   ~ Copyright (c) 2020 Kiwix <android.kiwix.org>
   ~ This program is free software: you can redistribute it and/or modify
@@ -16,21 +16,12 @@
   ~
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-  <item
-    android:id="@+id/navigation_reader"
-    android:icon="@drawable/ic_reader_navigation_white_24px"
-    android:title="Reader" />
-
-  <item
-    android:id="@+id/navigation_library"
-    android:icon="@drawable/ic_library_navigation_white_24dp"
-    android:title="Library" />
-
-  <item
-    android:id="@+id/navigation_downloads"
-    android:icon="@drawable/ic_download_navigation_white_24dp"
-    android:title="Downloads" />
-
-</menu>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M19,9h-4V3H9v6H5l7,7 7,-7zM5,18v2h14v-2H5z"
+      android:fillColor="#ffffff"/>
+</vector>

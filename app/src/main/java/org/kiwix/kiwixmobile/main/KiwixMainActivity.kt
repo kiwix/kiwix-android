@@ -60,8 +60,8 @@ class KiwixMainActivity : CoreMainActivity2() {
 
   override fun onSupportNavigateUp(): Boolean {
     val navController = findNavController(R.id.nav_host_fragment)
-    return navController.navigateUp()
-      || super.onSupportNavigateUp()
+    return navController.navigateUp() ||
+      super.onSupportNavigateUp()
   }
 
   override fun onActionModeStarted(mode: ActionMode) {

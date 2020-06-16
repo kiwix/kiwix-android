@@ -19,8 +19,6 @@
 package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
-import android.view.Menu
-import android.view.MenuInflater
 import androidx.navigation.fragment.NavHostFragment
 
 class NavigationHostFragment : NavHostFragment() {
