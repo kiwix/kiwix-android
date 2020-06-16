@@ -16,21 +16,7 @@
   ~
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-  <item
-    android:id="@+id/navigation_reader"
-    android:icon="@drawable/ic_reader_navigation_white_24px"
-    android:title="Reader" />
-
-  <item
-    android:id="@+id/navigation_library"
-    android:icon="@drawable/ic_library_navigation_white_24dp"
-    android:title="Library" />
-
-  <item
-    android:id="@+id/navigation_downloads"
-    android:icon="@drawable/ic_download_navigation_white_24dp"
-    android:title="Download" />
-
-</menu>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:alpha="1.0" android:color="@color/white" android:state_checked="true" />
+  <item android:alpha="0.6" android:color="@color/gray" />
+</selector>
