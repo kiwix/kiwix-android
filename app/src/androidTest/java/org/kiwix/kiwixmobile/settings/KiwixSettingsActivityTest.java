@@ -18,10 +18,12 @@
 
 package org.kiwix.kiwixmobile.settings;
 
+import android.Manifest;
 import android.view.View;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 import org.hamcrest.Matcher;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
@@ -42,6 +44,12 @@ public class KiwixSettingsActivityTest {
   @Rule
   public ActivityTestRule<KiwixSettingsActivity> activityTestRule =
     new ActivityTestRule<>(KiwixSettingsActivity.class);
+  @Rule
+  public GrantPermissionRule readPermissionRule =
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule =
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
   public void testToggle() {
