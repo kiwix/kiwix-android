@@ -84,4 +84,21 @@ dependencies {
   implementation(Libs.squidb_annotations)
   implementation(Libs.ink_page_indicator)
   add("kapt", Libs.squidb_processor)
+
+  val navVersion = "2.3.0-rc01"
+
+  // Java language implementation
+  implementation("androidx.navigation:navigation-fragment:$navVersion")
+  implementation("androidx.navigation:navigation-ui:$navVersion")
+
+  // Kotlin
+  implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+  implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+
+  // Dynamic Feature Module Support
+  implementation("androidx.navigation:navigation-dynamic-features-fragment:$navVersion")
+
+  // Testing Navigation
+  androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
+
 }
