@@ -23,8 +23,12 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +43,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.utils.BookUtils
@@ -46,7 +51,9 @@ import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.AvailableSpaceCalculator
@@ -64,6 +71,10 @@ class OnlineLibraryFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
+
+  private var searchItem: MenuItem? = null
+  private var languageItem: MenuItem? = null
+  private var getZimItem: MenuItem? = null
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -90,11 +101,33 @@ class OnlineLibraryFragment : BaseFragment() {
     baseActivity.kiwixActivityComponent.inject(this)
   }
 
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super.onCreateOptionsMenu(menu, inflater)
+    inflater.inflate(R.menu.menu_zim_manager, menu)
+    searchItem = menu.findItem(R.id.action_search)
+    languageItem = menu.findItem(R.id.select_language)
+    getZimItem = menu.findItem(R.id.get_zim_nearby_device)
+    getZimItem?.isVisible = false
+    (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
+      SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
+    )
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.select_language -> activity?.start<LanguageActivity>()
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View = inflater.inflate(R.layout.activity_library, container, false)
+  ): View {
+    setHasOptionsMenu(true)
+    return inflater.inflate(R.layout.activity_library, container, false)
+  }
 
   override fun onViewCreated(
     view: View,

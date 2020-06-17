@@ -21,6 +21,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +40,7 @@ import kotlinx.android.synthetic.main.zim_list.zimfilelist
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -45,6 +49,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import javax.inject.Inject
@@ -58,6 +63,10 @@ class LocalLibraryFragment : BaseFragment() {
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
+
+  private var searchItem: MenuItem? = null
+  private var languageItem: MenuItem? = null
+  private var getZimItem: MenuItem? = null
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -77,6 +86,23 @@ class LocalLibraryFragment : BaseFragment() {
     baseActivity.kiwixActivityComponent.inject(this)
   }
 
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super.onCreateOptionsMenu(menu, inflater)
+    inflater.inflate(R.menu.menu_zim_manager, menu)
+    searchItem = menu.findItem(R.id.action_search)
+    languageItem = menu.findItem(R.id.select_language)
+    getZimItem = menu.findItem(R.id.get_zim_nearby_device)
+    languageItem?.isVisible = false
+    searchItem?.isVisible = false
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.get_zim_nearby_device -> activity?.start<LocalFileTransferActivity>()
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -84,6 +110,7 @@ class LocalLibraryFragment : BaseFragment() {
   ): View? {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
+    setHasOptionsMenu(true)
     return inflater.inflate(R.layout.zim_list, container, false)
   }
 

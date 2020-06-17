@@ -45,6 +45,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -112,6 +113,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
      * - On the receiver device, the activity is started directly from within the 'Get Content'
      * activity, without any file Uris
      * */
+    ButterKnife.bind(this);
     Intent filesIntent = getIntent();
     ArrayList<Uri> fileUriArrayList;
     fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
