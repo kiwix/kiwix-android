@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.core.page.history.viewmodel
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
-import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.historyItem
-import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.historyState
+import org.kiwix.kiwixmobile.core.page.historyItem
+import org.kiwix.kiwixmobile.core.page.historyState
 
 internal class HistoryStateTest {
   @Test

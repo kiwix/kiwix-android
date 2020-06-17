@@ -16,10 +16,17 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
+package org.kiwix.kiwixmobile.core.page
 
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
+
+class PageImpl(
+  override val zimFilePath: String? = "zimFilePath",
+  override val url: String = "url"
+) : Page
 
 fun historyItem(
   historyTitle: String = "historyTitle",
@@ -27,8 +34,8 @@ fun historyItem(
   isSelected: Boolean = false,
   id: Long = 2,
   zimId: String = "zimId"
-): HistoryItem {
-  return HistoryItem(
+): HistoryListItem.HistoryItem {
+  return HistoryListItem.HistoryItem(
     2,
     zimId,
     "zimName",
@@ -44,13 +51,48 @@ fun historyItem(
 }
 
 fun historyState(
-  historyItems: List<HistoryItem> = listOf(),
+  historyItems: List<HistoryListItem.HistoryItem> = listOf(),
   showAll: Boolean = true,
   zimId: String = "id",
   searchTerm: String = ""
 ): HistoryState =
   HistoryState(
     historyItems,
+    showAll,
+    zimId,
+    searchTerm
+  )
+
+fun bookmark(
+  bookmarkTitle: String = "bookmarkTitle",
+  isSelected: Boolean = false,
+  id: Long = 2,
+  zimId: String = "zimId",
+  zimName: String = "zimName",
+  zimFilePath: String = "zimFilePath",
+  bookmarkUrl: String = "bookmarkUrl",
+  favicon: String = "favicon"
+): BookmarkItem {
+  return BookmarkItem(
+    id,
+    zimId,
+    zimName,
+    zimFilePath,
+    bookmarkUrl,
+    bookmarkTitle,
+    favicon,
+    isSelected
+  )
+}
+
+fun bookmarkState(
+  bookmarks: List<BookmarkItem> = listOf(),
+  showAll: Boolean = true,
+  zimId: String = "id",
+  searchTerm: String = ""
+): BookmarkState =
+  BookmarkState(
+    bookmarks,
     showAll,
     zimId,
     searchTerm

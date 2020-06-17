@@ -22,9 +22,9 @@ import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.bookmark
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.bookmarkState
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.page.bookmark
+import org.kiwix.kiwixmobile.core.page.bookmarkState
 
 internal class DeleteBookmarkItemsTest {
   private val bookmarksDao: NewBookmarksDao = mockk()

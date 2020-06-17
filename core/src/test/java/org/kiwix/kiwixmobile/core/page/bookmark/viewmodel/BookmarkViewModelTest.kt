@@ -25,24 +25,25 @@ import io.mockk.mockk
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.TestScheduler
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.ExitActionModeMenu
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.ExitBookmarks
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.OnItemClick
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.UpdateBookmarks
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.UserClickedDeleteButton
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.UserClickedDeleteSelectedBookmarks
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.OpenBookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -56,7 +57,6 @@ internal class BookmarkViewModelTest {
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
 
   private lateinit var viewModel: BookmarkViewModel
-  private val testScheduler = TestScheduler()
 
   private val itemsFromDb: PublishProcessor<List<BookmarkItem>> =
     PublishProcessor.create()
@@ -83,7 +83,7 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `ExitBookmarks finishes activity`() {
-    viewModel.effects.test().also { viewModel.actions.offer(ExitBookmarks) }.assertValue(Finish)
+    viewModel.effects.test().also { viewModel.actions.offer(Exit) }.assertValue(Finish)
     viewModel.state.test().assertValue(bookmarkState())
   }
 
@@ -105,7 +105,7 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `UserClickedDeleteSelectedBookmarks offers ShowDeleteBookmarksDialog`() {
-    viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteSelectedBookmarks) }
+    viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteSelectedPages) }
       .assertValue(ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), bookmarksDao))
     viewModel.state.test().assertValue(bookmarkState())
   }
@@ -151,7 +151,7 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `UpdateBookmarks updates bookmarks`() {
-    viewModel.actions.offer(UpdateBookmarks(listOf(bookmark())))
+    viewModel.actions.offer(UpdatePages(listOf(bookmark())))
     viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
   }
 }

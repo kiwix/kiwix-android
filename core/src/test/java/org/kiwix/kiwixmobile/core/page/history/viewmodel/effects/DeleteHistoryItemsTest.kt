@@ -23,6 +23,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.page.historyItem
+import org.kiwix.kiwixmobile.core.page.historyState
 
 internal class DeleteHistoryItemsTest {
   private val historyDao: HistoryDao = mockk()
