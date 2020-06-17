@@ -99,10 +99,7 @@ class Repository @Inject internal constructor(
     recentSearchDao.deleteSearchHistory()
   }
 
-  override fun getBookmarks(fromCurrentBook: Boolean): Single<List<BookmarkItem>> =
-    Single.just(bookmarksDao.getBookmarks(fromCurrentBook, zimReaderContainer.zimFileReader))
-      .subscribeOn(io)
-      .observeOn(mainThread)
+  override fun getBookmarks(fromCurrentBook: Boolean) = bookmarksDao.bookmarks()
 
   override fun getCurrentZimBookmarksUrl() =
     Single.just(bookmarksDao.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))

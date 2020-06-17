@@ -29,17 +29,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import javax.inject.Inject
 
 class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
-  fun getBookmarks(
-    fromCurrentBook: Boolean,
-    zimFileReader: ZimFileReader?
-  ) = box.query {
-    if (fromCurrentBook) {
-      equal(BookmarkEntity_.zimName, zimFileReader?.name ?: "")
-    }
-    order(BookmarkEntity_.bookmarkTitle)
-  }.find()
-    .map(::BookmarkItem)
-
   fun bookmarks() = box.asFlowable().map { it.map(::BookmarkItem) }
 
   fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {

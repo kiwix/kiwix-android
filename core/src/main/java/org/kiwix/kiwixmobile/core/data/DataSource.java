@@ -46,7 +46,7 @@ public interface DataSource {
 
   Completable clearHistory();
 
-  Single<List<BookmarkItem>> getBookmarks(boolean showFromCurrentBook);
+  Flowable<List<BookmarkItem>> getBookmarks(boolean showFromCurrentBook);
 
   Single<List<String>> getCurrentZimBookmarksUrl();
 

@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.bookmark.adapter
 
-import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.item_bookmark_history.favicon
 import kotlinx.android.synthetic.main.item_bookmark_history.title
@@ -17,7 +16,6 @@ class BookmarkViewHolder(
 ) : BaseViewHolder<BookmarkItem>(containerView) {
   override fun bind(item: BookmarkItem) {
     title.text = item.bookmarkTitle
-    Log.d("BookmarkItemViewHolder", "isSelected=${item.isSelected}")
     if (item.isSelected) {
       favicon.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
     } else {

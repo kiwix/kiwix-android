@@ -2,21 +2,24 @@ package org.kiwix.kiwixmobile.core.bookmark.viewmodel
 
 import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
 
-// dateFormat = d MMM yyyy
-//             5 Jul 2020
 fun bookmark(
   bookmarkTitle: String = "bookmarkTitle",
   isSelected: Boolean = false,
-  id: Long = 2
+  id: Long = 2,
+  zimId: String = "zimId",
+  zimName: String = "zimName",
+  zimFilePath: String = "zimFilePath",
+  bookmarkUrl: String = "bookmarkUrl",
+  favicon: String = "favicon"
 ): BookmarkItem {
   return BookmarkItem(
     id,
-    "zimId",
-    "zimName",
-    "zimFilePath",
-    "bookmarkUrl",
+    zimId,
+    zimName,
+    zimFilePath,
+    bookmarkUrl,
     bookmarkTitle,
-    "favicon",
+    favicon,
     isSelected
   )
 }

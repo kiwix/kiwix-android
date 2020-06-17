@@ -62,7 +62,7 @@ internal class BookmarkViewModelTest {
     PublishProcessor.create()
 
   init {
-    setScheduler(testScheduler)
+    setScheduler(Schedulers.trampoline())
     RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
   }
 
