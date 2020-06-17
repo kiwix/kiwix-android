@@ -25,7 +25,7 @@ import androidx.test.rule.GrantPermissionRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class BookmarksActivityTest {

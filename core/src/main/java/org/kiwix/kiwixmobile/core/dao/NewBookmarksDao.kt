@@ -21,7 +21,7 @@ import io.objectbox.Box
 import io.objectbox.kotlin.query
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.core.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark

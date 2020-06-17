@@ -21,12 +21,12 @@ package org.kiwix.kiwixmobile.core.di.components
 import android.app.Activity
 import dagger.BindsInstance
 import dagger.Subcomponent
-import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
+import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
+import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
-import org.kiwix.kiwixmobile.core.history.HistoryActivity
-import org.kiwix.kiwixmobile.core.history.viewmodel.effects.ShowDeleteHistoryDialog
+import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog

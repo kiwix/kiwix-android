@@ -24,9 +24,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.ViewModelFactory
-import org.kiwix.kiwixmobile.core.bookmark.viewmodel.BookmarkViewModel
+import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
-import org.kiwix.kiwixmobile.core.history.viewmodel.HistoryViewModel
+import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import javax.inject.Singleton
 

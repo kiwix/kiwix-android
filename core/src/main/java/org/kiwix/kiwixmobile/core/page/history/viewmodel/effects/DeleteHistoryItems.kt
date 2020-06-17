@@ -1,6 +1,8 @@
+package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
+
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,33 +17,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.dao.entities
 
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 
-@Entity
-data class HistoryEntity(
-  @Id var id: Long = 0L,
-  val zimId: String,
-  val zimName: String,
-  val zimFilePath: String,
-  val favicon: String?,
-  val historyUrl: String,
-  val historyTitle: String,
-  val dateString: String,
-  val timeStamp: Long
-) {
-  constructor(historyItem: HistoryItem) : this(
-    historyItem.databaseId,
-    historyItem.zimId,
-    historyItem.zimName,
-    historyItem.zimFilePath,
-    historyItem.favicon,
-    historyItem.historyUrl,
-    historyItem.historyTitle,
-    historyItem.dateString,
-    historyItem.timeStamp
-  )
+data class DeleteHistoryItems(
+  private val state: HistoryState,
+  private val historyDao: HistoryDao
+) : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    if (state.isInSelectionState) {
+      historyDao.deleteHistory(state.historyItems.filter(HistoryItem::isSelected))
+    } else {
+      historyDao.deleteHistory(state.historyItems)
+    }
+  }
 }
