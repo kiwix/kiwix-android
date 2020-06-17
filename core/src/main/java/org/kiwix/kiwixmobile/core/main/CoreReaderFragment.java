@@ -162,9 +162,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private static final int CORE_READER_FRAGMENT = 1;
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
-
-  @BindView(R2.id.toolbar)
-  Toolbar toolbar;
   @BindView(R2.id.activity_main_back_to_top_fab)
   FloatingActionButton backToTopButton;
   @BindView(R2.id.activity_main_button_stop_tts)
@@ -205,6 +202,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   ViewGroup videoView;
 
   View root;
+  Toolbar toolbar;
 
   @Inject
   protected MainContract.Presenter presenter;
@@ -336,6 +334,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
+
+    toolbar = activity.findViewById(R.id.toolbar);
     activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {

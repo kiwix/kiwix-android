@@ -87,10 +87,7 @@ class LocalLibraryFragment : BaseFragment() {
     return inflater.inflate(R.layout.zim_list, container, false)
   }
 
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?
-  ) {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     zim_swiperefresh.setOnRefreshListener(::requestFileSystemCheck)
     zimfilelist.run {
@@ -146,9 +143,7 @@ class LocalLibraryFragment : BaseFragment() {
     disposable.clear()
   }
 
-  private fun offerAction(
-    action: ZimManageViewModel.FileSelectActions
-  ) {
+  private fun offerAction(action: ZimManageViewModel.FileSelectActions) {
     zimManageViewModel.fileSelectActions.offer(action)
   }
 

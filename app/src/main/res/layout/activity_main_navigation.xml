@@ -15,33 +15,39 @@
   ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
   ~
   -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/container"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:weightSum="1">
 
-  <com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/nav_view"
-    style="@style/ThemeOverlay.App.BottomNavigationView"
-    android:layout_width="fill_parent"
-    android:layout_height="56dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:menu="@menu/bottom_nav_menu" />
+  <include layout="@layout/layout_toolbar" />
+
 
   <fragment
     android:id="@+id/nav_host_fragment"
     android:name="org.kiwix.kiwixmobile.main.NavigationHostFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="56dp"
+    android:layout_height="0dp"
+    android:layout_weight="1"
     app:defaultNavHost="true"
+    app:layout_constraintBottom_toBottomOf="@+id/nav_view"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/toolbar"
+    app:navGraph="@navigation/kiwix_nav_graph" />
+
+  <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/nav_view"
+    style="@style/ThemeOverlay.App.BottomNavigationView"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:navGraph="@navigation/kiwix_nav_graph" />
+    app:menu="@menu/bottom_nav_menu" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
