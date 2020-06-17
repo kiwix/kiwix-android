@@ -61,7 +61,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import javax.inject.Inject
 
-class LibraryFragment : BaseFragment() {
+class LibraryFragment2 : BaseFragment() {
 
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader

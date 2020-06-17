@@ -22,9 +22,11 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
+import org.kiwix.kiwixmobile.download.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.intro.IntroActivity
 import org.kiwix.kiwixmobile.intro.IntroModule
 import org.kiwix.kiwixmobile.language.LanguageActivity
+import org.kiwix.kiwixmobile.library.LocalLibraryFragment
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.reader.KiwixReaderFragment
@@ -35,7 +37,7 @@ import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment2
 
 @ActivityScope
 @Subcomponent(
@@ -46,7 +48,9 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
   ]
 )
 interface KiwixActivityComponent {
-  fun inject(libraryFragment: LibraryFragment)
+  fun inject(libraryFragment: LocalLibraryFragment)
+  fun inject(libraryFragment: LibraryFragment2)
+  fun inject(downloadFragment: OnlineLibraryFragment)
   fun inject(zimFileSelectFragment: ZimFileSelectFragment)
   fun inject(deleteFiles: DeleteFiles)
   fun inject(kiwixReaderFragment: KiwixReaderFragment)

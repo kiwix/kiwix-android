@@ -23,7 +23,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
+import org.kiwix.kiwixmobile.library.LocalLibraryFragment
 import kotlin.reflect.KFunction0
 
 class SectionsPagerAdapter(
@@ -31,7 +31,7 @@ class SectionsPagerAdapter(
   private val pagerData: Array<PagerData> =
     arrayOf(
       PagerData(::ZimFileSelectFragment, R.string.local_zims),
-      PagerData(::LibraryFragment, R.string.remote_zims)
+      PagerData(::LocalLibraryFragment, R.string.remote_zims)
     ),
   fm: FragmentManager
 ) : FragmentPagerAdapter(fm) {

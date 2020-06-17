@@ -30,13 +30,13 @@
 
   <fragment
     android:id="@+id/navigation_library"
-    android:name="org.kiwix.kiwixmobile.library.LibraryFragment"
+    android:name="org.kiwix.kiwixmobile.library.LocalLibraryFragment"
     android:label="Library"
     tools:layout="@layout/fragment_library" />
 
   <fragment
     android:id="@+id/navigation_downloads"
-    android:name="org.kiwix.kiwixmobile.download.DownloadFragment"
+    android:name="org.kiwix.kiwixmobile.download.OnlineLibraryFragment"
     android:label="Downloads"
     tools:layout="@layout/fragment_download" />
 </navigation>
