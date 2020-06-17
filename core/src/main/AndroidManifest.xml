@@ -28,7 +28,7 @@
       android:name=".search.SearchActivity"
       android:windowSoftInputMode="adjustResize" />
 
-    <activity android:name=".bookmark.BookmarksActivity" />
+    <activity android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity" />
 
     <activity
       android:name=".error.ErrorActivity"
@@ -44,7 +44,7 @@
         android:resource="@xml/provider_paths" />
     </provider>
 
-    <activity android:name=".history.HistoryActivity" />
+    <activity android:name="org.kiwix.kiwixmobile.core.page.history.HistoryActivity" />
     <activity android:name=".help.HelpActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
