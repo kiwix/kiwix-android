@@ -21,10 +21,10 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 
 data class DeleteBookmarkItems(
   private val state: BookmarkState,
@@ -35,7 +35,7 @@ data class DeleteBookmarkItems(
       bookmarksDao.deleteBookmarks(state.pageItems.filter(BookmarkItem::isSelected))
     } else {
       bookmarksDao.deleteBookmarks(state.pageItems)
-      ShowToast(R.string.all_bookmarks_cleared)
+      activity.toast(R.string.all_bookmarks_cleared)
     }
   }
 }
