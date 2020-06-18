@@ -105,6 +105,10 @@ class KiwixMainActivity : CoreMainActivity() {
     kiwixActivityComponent.inject(this)
   }
 
+  override fun onNewNavigationMenuClicked() {
+    TODO("Not yet implemented")
+  }
+
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
     super.hasValidFileAndUrl(url, zimFileReader) && url != HOME_URL
 

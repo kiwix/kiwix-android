@@ -165,6 +165,11 @@ class CustomMainActivity : CoreMainActivity() {
     return false
   }
 
+  override fun onNewNavigationMenuClicked() {
+    val intent = Intent(this, CustomNewNavigationActivity::class.java)
+    startActivity(intent)
+  }
+
   override fun manageZimFiles(tab: Int) {
     // Do nothing
   }

@@ -162,6 +162,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   private static final int CORE_READER_FRAGMENT = 1;
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
+
+  @BindView(R2.id.toolbar)
+  Toolbar toolbar;
   @BindView(R2.id.activity_main_back_to_top_fab)
   FloatingActionButton backToTopButton;
   @BindView(R2.id.activity_main_button_stop_tts)
@@ -170,13 +173,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   Button pauseTTSButton;
   @BindView(R2.id.activity_main_tts_controls)
   Group TTSControls;
-  @BindView(R2.id.activity_main_app_bar)
+  @BindView(R2.id.fragment_main_app_bar)
   AppBarLayout toolbarContainer;
   @BindView(R2.id.activity_main_progress_view)
   ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
-  @BindView(R2.id.activity_main_drawer_layout)
+  @BindView(R2.id.new_navigation_fragment_main_drawer_layout)
   protected DrawerLayout drawerLayout;
   @BindView(R2.id.activity_main_nav_view)
   NavigationView tableDrawerRightContainer;
@@ -202,7 +205,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   ViewGroup videoView;
 
   View root;
-  Toolbar toolbar;
 
   @Inject
   protected MainContract.Presenter presenter;
@@ -319,7 +321,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+  @SuppressLint("ClickableViewAccessibility") @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     setHasOptionsMenu(true);
   }
@@ -334,8 +337,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
-
-    toolbar = activity.findViewById(R.id.toolbar);
     activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
@@ -709,7 +710,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void updateTitle() {
-    actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()));
+    actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()) + " (FRAGMENT)");
   }
 
   private String getValidTitle(String zimFileTitle) {

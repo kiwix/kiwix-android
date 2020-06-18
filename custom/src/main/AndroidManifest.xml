@@ -62,6 +62,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".download.CustomDownloadActivity" />
+    <activity android:name=".main.CustomNewNavigationActivity" />
 
     <receiver android:name=".main.CustomSearchWidget">
       <intent-filter>

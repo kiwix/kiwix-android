@@ -80,7 +80,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     if (BuildConfig.DISABLE_SIDEBAR) {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
       toolbarToc?.isEnabled = false
-      toolbarToc?.alpha = .25f
     }
     return view
   }
@@ -167,6 +166,10 @@ class CustomReaderFragment : CoreReaderFragment() {
     webViewCallback: WebViewCallback,
     zimReaderContainer: ZimReaderContainer
   ) = CustomWebViewClient(webViewCallback, zimReaderContainer)
+
+  override fun onNewNavigationMenuClicked() {
+    // do nothing
+  }
 
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()

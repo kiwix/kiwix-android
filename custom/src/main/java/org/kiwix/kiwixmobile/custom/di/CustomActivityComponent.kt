@@ -24,6 +24,7 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
+import org.kiwix.kiwixmobile.custom.main.CustomNewNavigationActivity
 import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 import org.kiwix.kiwixmobile.custom.splash.CustomSplashActivity
@@ -36,6 +37,7 @@ interface CustomActivityComponent {
   fun inject(customDownloadActivity: CustomDownloadActivity)
   fun inject(customSplashActivity: CustomSplashActivity)
   fun inject(customReaderFragment: CustomReaderFragment)
+  fun inject(customNewNavigationActivity: CustomNewNavigationActivity)
 
   @Subcomponent.Builder
   interface Builder {

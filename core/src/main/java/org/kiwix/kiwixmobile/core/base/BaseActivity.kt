@@ -37,6 +37,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
   private var unbinder: Unbinder? = null
 
+  var isFragmentActivity = false
+    set(value) {
+      field = value
+    }
+
   protected abstract fun injection(coreComponent: CoreComponent)
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +52,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
   override fun setContentView(@LayoutRes layoutResID: Int) {
     super.setContentView(layoutResID)
-    unbinder = ButterKnife.bind(this)
+    if (!isFragmentActivity) {
+      unbinder = ButterKnife.bind(this)
+    }
   }
 
   // TODO https://issuetracker.google.com/issues/141132133 remove this once appcompat has been fixed
