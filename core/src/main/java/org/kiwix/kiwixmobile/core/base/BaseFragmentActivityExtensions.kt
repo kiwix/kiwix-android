@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,24 +18,20 @@
 
 package org.kiwix.kiwixmobile.core.base
 
-import android.content.Context
-import androidx.fragment.app.Fragment
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import javax.inject.Inject
+import android.content.Intent
+import android.view.ActionMode
+import android.view.Menu
+import androidx.appcompat.app.AppCompatActivity
 
-/**
- * All fragments should inherit from this fragment.
- */
-
-abstract class BaseFragment : Fragment() {
-
-  @Inject
-  open lateinit var sharedPreferenceUtil: SharedPreferenceUtil
-
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-    inject(activity as BaseActivity)
+interface BaseFragmentActivityExtensions {
+  enum class Super {
+    ShouldCall,
+    DontCall
   }
 
-  abstract fun inject(baseActivity: BaseActivity)
+  fun onActionModeStarted(actionMode: ActionMode, activity: AppCompatActivity): Super
+  fun onActionModeFinished(actionMode: ActionMode, activity: AppCompatActivity): Super
+  fun onBackPressed(activity: AppCompatActivity): Super
+  fun onNewIntent(intent: Intent, activity: AppCompatActivity): Super
+  fun onCreateOptionsMenu(menu: Menu, activity: AppCompatActivity): Super
 }
