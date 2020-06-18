@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
@@ -58,6 +59,7 @@ private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 class ZimFileSelectFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()

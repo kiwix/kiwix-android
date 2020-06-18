@@ -117,6 +117,7 @@ import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
@@ -210,6 +211,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected MainContract.Presenter presenter;
   @Inject
   StorageObserver storageObserver;
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   protected ZimReaderContainer zimReaderContainer;
   @Inject

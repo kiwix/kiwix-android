@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
@@ -65,6 +66,7 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
   @Inject lateinit var dialogShower: DialogShower
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
