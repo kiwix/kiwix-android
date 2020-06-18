@@ -28,7 +28,7 @@
       android:name=".search.SearchActivity"
       android:windowSoftInputMode="adjustResize" />
 
-    <activity android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity" />
+    <activity android:name=".page.bookmark.BookmarksActivity" />
 
     <activity
       android:name=".error.ErrorActivity"
