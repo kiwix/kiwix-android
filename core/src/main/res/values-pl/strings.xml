@@ -46,9 +46,11 @@
   <string name="hotspot_details_message">Poniżej znajdują się szczegółowe informacje o lokalnym hotspocie.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Wybierz pliki, które chcesz hostować na serwerze</string>
   <string name="progress_dialog_starting_server">Uruchamianie serwera</string>
-  <string name="hotspot_dialog_title" fuzzy="true">Włącz hotspot WIFI</string>
-  <string name="hotspot_dialog_message" fuzzy="true">Aby ta funkcja działała, musisz najpierw ręcznie włączyć WIFI hotspot.</string>
-  <string name="hotspot_dialog_neutral_button" fuzzy="true">TAK, WŁĄCZYŁEM GO</string>
+  <string name="hotspot_dialog_title">Instrukcje dotyczące hostingu książek</string>
+  <string name="wifi_dialog_title">Wykryto połączenie WiFi</string>
+  <string name="wifi_dialog_body">Aby przeglądać książki na innych urządzeniach, upewnij się, że wszystkie urządzenia są podłączone do tej samej sieci Wi-Fi.</string>
+  <string name="hotspot_dialog_message">Aby ta funkcja działała, musisz najpierw ręcznie włączyć hotspot WIFI lub upewnić się, że urządzenie hosta i urządzenie odbiorcze znajdują się w tej samej sieci Wi-Fi</string>
+  <string name="hotspot_dialog_neutral_button">KONTYNUUJ</string>
   <string name="hotspot_channel_description">Aktualizacje o stanie hotspot/server.</string>
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Uruchom serwer</string>
@@ -243,6 +245,7 @@
   <string name="error_during_transfer">Wystąpił błąd podczas przesyłania</string>
   <string name="error_transferring">Błąd podczas przesyłania pliku %s</string>
   <string name="get_content_from_nearby_device">Pobierz zawartość z sąsiedniego urządzenia</string>
+  <string name="search_for_peers">Szukaj Pirów</string>
   <string name="your_device">Twoje urządzenie:</string>
   <string name="nearby_devices">URZĄDZENIA W POBLIŻU</string>
   <string name="no_devices_found">Nie wykryto urządzeń. Naciśnij przycisk wyszukiwania, aby spróbować ponownie.</string>
@@ -258,7 +261,7 @@
   <string name="tag_short_text">Krótki tekst</string>
   <string name="storage_permission_denied">Odrzucono dostęp do pamięci</string>
   <string name="grant_read_storage_permission">Ta aplikacja aby funkcjonować wymaga uprawnień do odczytywania zawartości pamięci. Nadaj jej te uprawnienia w ustawieniach.</string>
-  <string name="go_to_settings" fuzzy="true">Przejdź do ustawień</string>
+  <string name="go_to_settings">Przejdź do ustawień Hotspot</string>
   <string name="no_results">Brak wyników</string>
   <string name="no_bookmarks">Brak zakładek</string>
   <string name="no_history">Nie ma Historii</string>
@@ -272,4 +275,6 @@
   <string name="crash_checkbox_file_system">Szczegóły systemu plików</string>
   <string name="diagnostic_report">Raport diagnostyczny</string>
   <string name="diagnostic_report_message">Prześlij wszystkie poniższe informacje, abyśmy mogli zdiagnozować problem</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Powiększ tekst</string>
 </resources>

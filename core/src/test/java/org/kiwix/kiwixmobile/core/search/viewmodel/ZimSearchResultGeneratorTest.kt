@@ -18,15 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import android.net.Uri
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.reader.SearchResult
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -38,12 +35,7 @@ internal class ZimSearchResultGeneratorTest {
 
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
-  private val zimFileReader: ZimFileReader = run {
-    mockkStatic(CoreApp::class)
-    every { CoreApp.instance.packageName } returns "pkg"
-    mockkStatic(Uri::class)
-    every { Uri.parse(any()).toString() } returns "pkg"
-  }.let { mockk() }
+  private val zimFileReader: ZimFileReader = mockk()
 
   private val zimSearchResultGenerator: ZimSearchResultGenerator =
     ZimSearchResultGenerator(sharedPreferenceUtil, zimReaderContainer)
