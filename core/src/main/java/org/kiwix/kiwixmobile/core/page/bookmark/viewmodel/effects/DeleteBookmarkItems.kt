@@ -32,9 +32,9 @@ data class DeleteBookmarkItems(
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     if (state.isInSelectionState) {
-      bookmarksDao.deleteBookmarks(state.bookmarks.filter(BookmarkItem::isSelected))
+      bookmarksDao.deleteBookmarks(state.pageItems.filter(BookmarkItem::isSelected))
     } else {
-      bookmarksDao.deleteBookmarks(state.bookmarks)
+      bookmarksDao.deleteBookmarks(state.pageItems)
       ShowToast(R.string.all_bookmarks_cleared)
     }
   }

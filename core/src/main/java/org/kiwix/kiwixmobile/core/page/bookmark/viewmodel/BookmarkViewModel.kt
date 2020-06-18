@@ -21,6 +21,8 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -32,14 +34,14 @@ class BookmarkViewModel @Inject constructor(
   private val bookmarksDao: NewBookmarksDao,
   private val zimReaderContainer: ZimReaderContainer,
   private val sharedPreferenceUtil: SharedPreferenceUtil
-) : ViewModel() {
+) : PageViewModel, ViewModel() {
 
-  val state = MutableLiveData<BookmarkState>().apply {
+  override val state = MutableLiveData<PageState>().apply {
     value =
       BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
   }
-  val effects = PublishProcessor.create<SideEffect<*>>()
-  val actions = PublishProcessor.create<Action>()
+  override val effects = PublishProcessor.create<SideEffect<*>>()
+  override val actions = PublishProcessor.create<Action>()
   private val compositeDisposable = CompositeDisposable()
 
   init {
@@ -51,7 +53,7 @@ class BookmarkViewModel @Inject constructor(
   }
 
   private fun viewStateReducer() =
-    actions.map { reduce(it, state.value!!) }
+    actions.map { reduce(it, state.value!! as BookmarkState) }
       .subscribe(state::postValue, Throwable::printStackTrace)
 
   private fun reduce(action: Action, state: BookmarkState): BookmarkState = when (action) {
@@ -69,7 +71,7 @@ class BookmarkViewModel @Inject constructor(
     state.copy(searchTerm = action.searchTerm)
 
   private fun updateBookmarks(state: BookmarkState, action: UpdatePages): BookmarkState =
-    state.copy(bookmarks = action.pages.filterIsInstance<BookmarkItem>())
+    state.copy(pageItems = action.pages.filterIsInstance<BookmarkItem>())
 
   private fun offerUpdateToShowAllToggle(
     action: UserClickedShowAllToggle,
@@ -96,7 +98,7 @@ class BookmarkViewModel @Inject constructor(
   }
 
   private fun deselectAllBookmarks(state: BookmarkState): BookmarkState =
-    state.copy(bookmarks = state.bookmarks.map { it.copy(isSelected = false) })
+    state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
   private fun finishBookmarkActivity(state: BookmarkState): BookmarkState {
     effects.offer(Finish)

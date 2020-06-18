@@ -20,6 +20,8 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
@@ -30,13 +32,13 @@ class HistoryViewModel @Inject constructor(
   private val historyDao: HistoryDao,
   private val zimReaderContainer: ZimReaderContainer,
   private val sharedPreferenceUtil: SharedPreferenceUtil
-) : ViewModel() {
-  val state = MutableLiveData<HistoryState>().apply {
+) : PageViewModel, ViewModel() {
+  override val state = MutableLiveData<PageState>().apply {
     value =
       HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
   }
-  val effects = PublishProcessor.create<SideEffect<*>>()
-  val actions = PublishProcessor.create<Action>()
+  override val effects = PublishProcessor.create<SideEffect<*>>()
+  override val actions = PublishProcessor.create<Action>()
   private val compositeDisposable = CompositeDisposable()
 
   init {
@@ -48,7 +50,7 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun viewStateReducer() =
-    actions.map { reduce(it, state.value!!) }
+    actions.map { reduce(it, state.value!! as HistoryState) }
       .subscribe(state::postValue, Throwable::printStackTrace)
 
   private fun reduce(action: Action, state: HistoryState): HistoryState = when (action) {
@@ -66,7 +68,7 @@ class HistoryViewModel @Inject constructor(
     state.copy(searchTerm = action.searchTerm)
 
   private fun updateHistoryList(state: HistoryState, action: UpdatePages): HistoryState =
-    state.copy(historyItems = action.pages.filterIsInstance<HistoryItem>())
+    state.copy(pageItems = action.pages.filterIsInstance<HistoryItem>())
 
   private fun offerUpdateToShowAllToggle(
     action: UserClickedShowAllToggle,
@@ -93,7 +95,7 @@ class HistoryViewModel @Inject constructor(
   }
 
   private fun deselectAllHistoryItems(state: HistoryState): HistoryState =
-    state.copy(historyItems = state.historyItems.map { it.copy(isSelected = false) })
+    state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
   private fun finishHistoryActivity(state: HistoryState): HistoryState {
     effects.offer(Finish)

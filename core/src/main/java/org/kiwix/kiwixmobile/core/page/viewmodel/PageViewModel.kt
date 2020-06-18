@@ -1,5 +1,3 @@
-package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
-
 /*
  * Kiwix Android
  * Copyright (c) 2020 Kiwix <android.kiwix.org>
@@ -18,21 +16,14 @@ package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
  *
  */
 
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
+package org.kiwix.kiwixmobile.core.page.viewmodel
 
-data class DeleteHistoryItems(
-  private val state: HistoryState,
-  private val historyDao: HistoryDao
-) : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    if (state.isInSelectionState) {
-      historyDao.deleteHistory(state.pageItems.filter(HistoryItem::isSelected))
-    } else {
-      historyDao.deleteHistory(state.pageItems)
-    }
-  }
+import androidx.lifecycle.MutableLiveData
+import io.reactivex.processors.PublishProcessor
+import org.kiwix.kiwixmobile.core.base.SideEffect
+
+interface PageViewModel {
+  val effects: PublishProcessor<SideEffect<*>>
+  val actions: PublishProcessor<Action>
+  val state: MutableLiveData<PageState>
 }

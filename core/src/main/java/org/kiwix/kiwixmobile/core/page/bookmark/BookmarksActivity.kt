@@ -5,76 +5,36 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.view.ActionMode
-import androidx.appcompat.view.ActionMode.Callback
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_bookmarks.bookmarks_switch
 import kotlinx.android.synthetic.main.activity_bookmarks.no_bookmarks
 import kotlinx.android.synthetic.main.activity_history.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.page.PageActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkDelegate.BookmarkItemDelegate
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarksAdapter
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarksAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
-import javax.inject.Inject
 
-class BookmarksActivity : OnItemClickListener, BaseActivity() {
-  val activityComponent by lazy { coreActivityComponent }
+class BookmarksActivity : OnItemClickListener, PageActivity() {
   private var actionMode: ActionMode? = null
-  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-  private val bookmarksViewModel by lazy { viewModel<BookmarkViewModel>(viewModelFactory) }
-  private val compositeDisposable = CompositeDisposable()
-
-  private val actionModeCallback: Callback =
-    object : Callback {
-      override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-        mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
-        return true
-      }
-
-      override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
-
-      override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_context_delete) {
-          bookmarksViewModel.actions.offer(UserClickedDeleteSelectedPages)
-          return true
-        }
-        bookmarksViewModel.actions.offer(ExitActionModeMenu)
-        return false
-      }
-
-      override fun onDestroyActionMode(mode: ActionMode) {
-        bookmarksViewModel.actions.offer(ExitActionModeMenu)
-        actionMode = null
-      }
-    }
+  override val pageViewModel by lazy { viewModel<BookmarkViewModel>(viewModelFactory) }
 
   private val bookmarksAdapter: BookmarksAdapter by lazy {
     BookmarksAdapter(BookmarkItemDelegate(this))
-  }
-
-  override fun injection(coreComponent: CoreComponent) {
-    activityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,16 +49,11 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
     bookmarks_switch.setOnCheckedChangeListener { _, isChecked ->
-      bookmarksViewModel.actions.offer(UserClickedShowAllToggle(isChecked))
+      pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
     bookmarks_switch.isChecked = sharedPreferenceUtil.showBookmarksAllBooks
 
-    compositeDisposable.add(bookmarksViewModel.effects.subscribe { it.invokeWith(this) })
-  }
-
-  override fun onDestroy() {
-    compositeDisposable.clear()
-    super.onDestroy()
+    compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(this) })
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -106,23 +61,24 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     val search = menu.findItem(R.id.menu_bookmarks_search).actionView as SearchView
     search.queryHint = getString(R.string.search_bookmarks)
     search.setOnQueryTextListener(SimpleTextListener {
-      bookmarksViewModel.actions.offer(Filter(it))
+      pageViewModel.actions.offer(Filter(it))
     })
-    bookmarksViewModel.state.observe(this, Observer(::render))
+    pageViewModel.state.observe(this, Observer(::render))
     return true
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == android.R.id.home) {
-      bookmarksViewModel.actions.offer(Exit)
+      pageViewModel.actions.offer(Action.Exit)
     }
     if (item.itemId == R.id.menu_bookmarks_clear) {
-      bookmarksViewModel.actions.offer(UserClickedDeleteButton)
+      pageViewModel.actions.offer(Action.UserClickedDeleteButton)
     }
     return super.onOptionsItemSelected(item)
   }
 
-  private fun render(state: BookmarkState) {
+  override fun render(state: PageState) {
+    state as BookmarkState
     val filteredBookmarks = state.filteredBookmarks
     filteredBookmarks.let { bookmarksAdapter.items = it }
     toggleNoBookmarksText(filteredBookmarks)
@@ -151,9 +107,9 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
   }
 
   override fun onItemClick(bookmark: BookmarkItem) {
-    bookmarksViewModel.actions.offer(OnItemClick(bookmark))
+    pageViewModel.actions.offer(OnItemClick(bookmark))
   }
 
   override fun onItemLongClick(bookmark: BookmarkItem): Boolean =
-    bookmarksViewModel.actions.offer(OnItemLongClick(bookmark))
+    pageViewModel.actions.offer(OnItemLongClick(bookmark))
 }

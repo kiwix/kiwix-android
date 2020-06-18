@@ -22,17 +22,18 @@ import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class HistoryState(
-  val historyItems: List<HistoryItem>,
-  val showAll: Boolean,
-  val currentZimId: String?,
-  val searchTerm: String = ""
-) {
-  val isInSelectionState = historyItems.any(HistoryItem::isSelected)
+  override val pageItems: List<HistoryItem>,
+  override val showAll: Boolean,
+  override val currentZimId: String?,
+  override val searchTerm: String = ""
+) : PageState {
+  val isInSelectionState = pageItems.any(HistoryItem::isSelected)
 
   val historyListItems: List<HistoryListItem> =
-    HeaderizableList<HistoryListItem, HistoryItem, DateItem>(historyItems
+    HeaderizableList<HistoryListItem, HistoryItem, DateItem>(pageItems
       .filter { showAll || it.zimId == currentZimId }
       .filter { it.historyTitle.contains(searchTerm, true) })
       .foldOverAddingHeaders(
@@ -41,11 +42,11 @@ data class HistoryState(
       )
 
   fun toggleSelectionOfItem(historyListItem: HistoryItem): HistoryState {
-    val newList = historyItems.map {
+    val newList = pageItems.map {
       if (it.id == historyListItem.id) it.apply {
         isSelected = !isSelected
       } else it
     }
-    return copy(historyItems = newList)
+    return copy(pageItems = newList)
   }
 }
