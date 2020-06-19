@@ -61,6 +61,8 @@ import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
+import static org.kiwix.kiwixmobile.core.utils.files.FileUtils.isExternalStorageWritable;
+
 /**
  * Created by @author Aditya-Sood (21/05/19) as a part of GSoC 2019
  *
@@ -324,7 +326,7 @@ public class AddNoteDialog extends DialogFragment {
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * */
 
-    if (CoreApp.getInstance().isExternalStorageWritable()) {
+    if (isExternalStorageWritable()) {
 
       if (ContextCompat.checkSelfPermission(getContext(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

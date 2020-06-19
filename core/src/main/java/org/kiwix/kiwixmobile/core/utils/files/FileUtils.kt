@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
 import java.io.File
 import java.io.IOException
+import java.lang.Runtime.getRuntime
 import java.util.ArrayList
 
 object FileUtils {
@@ -219,4 +220,34 @@ object FileUtils {
       File("$fileName.part").exists() -> "$fileName.part"
       else -> "${fileName}aa"
     }
+
+  @JvmStatic fun writeLogFile() {
+    if (isExternalStorageWritable) {
+      val appDirectory =
+        File(Environment.getExternalStorageDirectory().toString() + "/Kiwix")
+      val logFile = File(appDirectory, "logcat.txt")
+      Log.d("KIWIX", "Writing all logs into [" + logFile.path + "]")
+
+      // create a new app folder
+      if (!appDirectory.exists()) {
+        appDirectory.mkdir()
+      }
+
+      if (logFile.exists() && logFile.isFile) {
+        logFile.delete()
+      }
+      // clear the previous logcat and then write the new one to the file
+      try {
+        logFile.createNewFile()
+        getRuntime().exec("logcat -c")
+        Runtime.getRuntime().exec("logcat -f " + logFile.path + " -s kiwix")
+      } catch (e: IOException) {
+        Log.e("KIWIX", "Error while writing logcat.txt", e)
+      }
+    }
+  }
+
+  /* Checks if external storage is available for read and write */
+  @JvmStatic val isExternalStorageWritable: Boolean
+    get() = Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 }
