@@ -21,9 +21,9 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteBookmarks
 import javax.inject.Inject
@@ -37,7 +37,7 @@ data class ShowDeleteBookmarksDialog(
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as BookmarksActivity).activityComponent.inject(this)
     dialogShower.show(DeleteBookmarks, {
-      effects.offer(DeleteBookmarkItems(state, bookmarksDao))
+      effects.offer(DeleteBookmarkItems(effects, state, bookmarksDao))
     })
   }
 }

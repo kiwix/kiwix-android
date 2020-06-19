@@ -9,15 +9,19 @@ import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_history.history_switch
 import kotlinx.android.synthetic.main.activity_history.no_history
 import kotlinx.android.synthetic.main.activity_history.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.page.PageActivity
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryAdapter
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryDelegate.HistoryDateDelegate
@@ -29,14 +33,44 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
+import javax.inject.Inject
 
 const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 
-class HistoryActivity : OnItemClickListener, PageActivity() {
+class HistoryActivity : OnItemClickListener, BaseActivity() {
+  val activityComponent by lazy { coreActivityComponent }
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  val historyViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
   private var actionMode: ActionMode? = null
-  override val pageViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
+  private val compositeDisposable = CompositeDisposable()
+  private val actionModeCallback: ActionMode.Callback =
+    object : ActionMode.Callback {
+      override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+        mode.menuInflater.inflate(R.menu.menu_context_delete, menu)
+        return true
+      }
+
+      override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
+
+      override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_context_delete) {
+          historyViewModel.actions.offer(Action.UserClickedDeleteSelectedPages)
+          return true
+        }
+        historyViewModel.actions.offer(Action.ExitActionModeMenu)
+        return false
+      }
+
+      override fun onDestroyActionMode(mode: ActionMode) {
+        historyViewModel.actions.offer(Action.ExitActionModeMenu)
+        actionMode = null
+      }
+    }
+
+  override fun injection(coreComponent: CoreComponent) {
+    activityComponent.inject(this)
+  }
 
   private val historyAdapter: HistoryAdapter by lazy {
     HistoryAdapter(HistoryItemDelegate(this), HistoryDateDelegate())
@@ -53,9 +87,9 @@ class HistoryActivity : OnItemClickListener, PageActivity() {
     recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     recycler_view.adapter = historyAdapter
 
-    compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(this) })
+    compositeDisposable.add(historyViewModel.effects.subscribe { it.invokeWith(this) })
     history_switch.setOnCheckedChangeListener { _, isChecked ->
-      pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
+      historyViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
     history_switch.isChecked = sharedPreferenceUtil.showHistoryAllBooks
   }
@@ -65,14 +99,13 @@ class HistoryActivity : OnItemClickListener, PageActivity() {
     val search = menu.findItem(R.id.menu_history_search).actionView as SearchView
     search.queryHint = getString(R.string.search_history)
     search.setOnQueryTextListener(SimpleTextListener {
-      pageViewModel.actions.offer(Filter(it))
+      historyViewModel.actions.offer(Filter(it))
     })
-    pageViewModel.state.observe(this, Observer(::render))
+    historyViewModel.state.observe(this, Observer(::render))
     return true
   }
 
-  override fun render(state: PageState) {
-    state as HistoryState
+  fun render(state: HistoryState) {
     historyAdapter.items = state.historyListItems
     history_switch.isEnabled = !state.isInSelectionState
     no_history.visibility = if (state.historyListItems.isEmpty()) VISIBLE else GONE
@@ -85,20 +118,25 @@ class HistoryActivity : OnItemClickListener, PageActivity() {
     }
   }
 
+  override fun onDestroy() {
+    compositeDisposable.clear()
+    super.onDestroy()
+  }
+
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == android.R.id.home) {
-      pageViewModel.actions.offer(Action.Exit)
+      historyViewModel.actions.offer(Action.Exit)
     }
     if (item.itemId == R.id.menu_history_clear) {
-      pageViewModel.actions.offer(Action.UserClickedDeleteButton)
+      historyViewModel.actions.offer(Action.UserClickedDeleteButton)
     }
     return super.onOptionsItemSelected(item)
   }
 
   override fun onItemClick(favicon: ImageView, history: HistoryItem) {
-    pageViewModel.actions.offer(OnItemClick(history))
+    historyViewModel.actions.offer(OnItemClick(history))
   }
 
   override fun onItemLongClick(favicon: ImageView, history: HistoryItem): Boolean =
-    pageViewModel.actions.offer(OnItemLongClick(history))
+    historyViewModel.actions.offer(OnItemLongClick(history))
 }

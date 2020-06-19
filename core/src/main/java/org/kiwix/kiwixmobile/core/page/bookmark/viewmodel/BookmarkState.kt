@@ -19,14 +19,13 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class BookmarkState(
-  override val pageItems: List<BookmarkItem>,
-  override val showAll: Boolean,
-  override val currentZimId: String?,
-  override val searchTerm: String = ""
-) : PageState {
+  val pageItems: List<BookmarkItem>,
+  val showAll: Boolean,
+  val currentZimId: String?,
+  val searchTerm: String = ""
+) {
 
   val isInSelectionState = pageItems.any(BookmarkItem::isSelected)
 

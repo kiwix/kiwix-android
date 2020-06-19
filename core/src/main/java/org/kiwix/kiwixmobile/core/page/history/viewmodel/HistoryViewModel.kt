@@ -20,8 +20,6 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
-import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
-import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
@@ -32,13 +30,13 @@ class HistoryViewModel @Inject constructor(
   private val historyDao: HistoryDao,
   private val zimReaderContainer: ZimReaderContainer,
   private val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel, ViewModel() {
-  override val state = MutableLiveData<PageState>().apply {
+) : ViewModel() {
+  val state = MutableLiveData<HistoryState>().apply {
     value =
       HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
   }
-  override val effects = PublishProcessor.create<SideEffect<*>>()
-  override val actions = PublishProcessor.create<Action>()
+  val effects = PublishProcessor.create<SideEffect<*>>()
+  val actions = PublishProcessor.create<Action>()
   private val compositeDisposable = CompositeDisposable()
 
   init {

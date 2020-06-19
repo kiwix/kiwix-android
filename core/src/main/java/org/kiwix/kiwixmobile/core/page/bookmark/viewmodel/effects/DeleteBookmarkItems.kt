@@ -19,14 +19,16 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
  */
 
 import androidx.appcompat.app.AppCompatActivity
+import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
-import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 
 data class DeleteBookmarkItems(
+  private val effects: PublishProcessor<SideEffect<*>>,
   private val state: BookmarkState,
   private val bookmarksDao: NewBookmarksDao
 ) : SideEffect<Unit> {
@@ -35,7 +37,7 @@ data class DeleteBookmarkItems(
       bookmarksDao.deleteBookmarks(state.pageItems.filter(BookmarkItem::isSelected))
     } else {
       bookmarksDao.deleteBookmarks(state.pageItems)
-      activity.toast(R.string.all_bookmarks_cleared)
+      effects.offer(ShowToast(R.string.all_bookmarks_cleared))
     }
   }
 }

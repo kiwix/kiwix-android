@@ -49,6 +49,6 @@ internal class ShowDeleteBookmarksDialogTest {
     showDeleteBookmarksDialog.invokeWith(activity)
     verify { dialogShower.show(KiwixDialog.DeleteBookmarks, capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeleteBookmarkItems(bookmarkState(), newBookmarksDao)) }
+    verify { effects.offer(DeleteBookmarkItems(effects, bookmarkState(), newBookmarksDao)) }
   }
 }

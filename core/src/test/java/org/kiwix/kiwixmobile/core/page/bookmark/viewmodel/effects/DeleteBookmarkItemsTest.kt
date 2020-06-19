@@ -21,7 +21,9 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
+import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmarkState
@@ -31,18 +33,23 @@ internal class DeleteBookmarkItemsTest {
   val activity: AppCompatActivity = mockk()
   private val item1 = bookmark()
   private val item2 = bookmark()
+  val effects: PublishProcessor<SideEffect<*>> = mockk(relaxed = true)
 
   @Test
   fun `delete with selected items only deletes the selected items`() {
     item1.isSelected = true
-    DeleteBookmarkItems(bookmarkState(listOf(item1, item2)), bookmarksDao).invokeWith(activity)
+    DeleteBookmarkItems(effects, bookmarkState(listOf(item1, item2)), bookmarksDao).invokeWith(
+      activity
+    )
     verify { bookmarksDao.deleteBookmarks(listOf(item1)) }
   }
 
   @Test
   fun `delete with no selected items deletes all items`() {
     item1.isSelected = false
-    DeleteBookmarkItems(bookmarkState(listOf(item1, item2)), bookmarksDao).invokeWith(activity)
+    DeleteBookmarkItems(effects, bookmarkState(listOf(item1, item2)), bookmarksDao).invokeWith(
+      activity
+    )
     verify { bookmarksDao.deleteBookmarks(listOf(item1, item2)) }
   }
 }
