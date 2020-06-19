@@ -25,6 +25,9 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/** Authored by s-ayush2903 on 19 June 2020
+ *
+ * A class for writing logs to the file in the device */
 @Singleton
 class FileLogger {
 
@@ -35,12 +38,14 @@ class FileLogger {
   @Inject
   fun writeLogFile() {
     if (isExternalStorageWritable) {
+
       val appDirectory =
         File(Environment.getExternalStorageDirectory().toString() + "/Kiwix")
-      val logFile = File(appDirectory, "logcat.txt")
+
+      val logFile = File(appDirectory, "logs" + System.currentTimeMillis() + ".txt")
       Log.d("KIWIX", "Writing all logs into [" + logFile.path + "]")
 
-      // create a new app folder
+      // create a new folder
       if (!appDirectory.exists()) {
         appDirectory.mkdir()
       }
@@ -56,6 +61,12 @@ class FileLogger {
       } catch (e: IOException) {
         Log.e("KIWIX", "Error while writing logcat.txt", e)
       }
+    } else {
+      Log.e(TAG, "writeLogFile: No write access to the device's storage!")
     }
+  }
+
+  companion object {
+    private const val TAG: String = "FileLogger"
   }
 }
