@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,8 +40,10 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   private List<DocumentSection> sections;
 
   private int selectedPosition = 0;
+  private Fragment parentFragment;
 
-  TableDrawerAdapter() {
+  TableDrawerAdapter(Fragment parentFragment) {
+    this.parentFragment = parentFragment;
     sections = new ArrayList<>();
   }
 
@@ -72,8 +75,8 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         vh.title.setText(title);
       } else {
         String empty = context.getString(R.string.no_section_info);
-        if (context instanceof CoreMainActivity) {
-          empty = ((CoreMainActivity) context).getCurrentWebView().getTitle();
+        if (parentFragment instanceof CoreReaderFragment) {
+          empty = ((CoreReaderFragment) parentFragment).getCurrentWebView().getTitle();
         }
         vh.title.setText(empty);
       }

@@ -153,6 +153,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.onCreateOptionsMenu(menu, inflater)
     val onCreateOptionsMenu = super.onCreateOptionsMenu(menu, requireActivity().menuInflater)
     menu.findItem(R.id.menu_help)?.isVisible = false
+    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
     menu.findItem(R.id.menu_openfile)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }

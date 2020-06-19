@@ -529,7 +529,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private TableDrawerAdapter setupTableDrawerAdapter() {
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter(this);
     tableDrawerAdapter.setTableClickListener(new TableDrawerAdapter.TableClickListener() {
       @Override
       public void onHeaderClick(View view) {
@@ -1005,8 +1005,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
        *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
        **/
-      AddNoteDialog dialogFragment = new AddNoteDialog();
-      dialogFragment.setTargetFragment(this, CORE_READER_FRAGMENT);
+      AddNoteDialog dialogFragment = new AddNoteDialog(this);
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG);
       // For DialogFragments, show() handles the fragment commit and display
     }

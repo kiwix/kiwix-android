@@ -77,7 +77,7 @@
     android:title="@string/menu_settings"
     app:showAsAction="never" />
   <item
-    android:id="@+id/new_navigation"
+    android:id="@+id/menu_new_navigation"
     android:title="@string/experimental_navigation"
     app:showAsAction="never" />
 
