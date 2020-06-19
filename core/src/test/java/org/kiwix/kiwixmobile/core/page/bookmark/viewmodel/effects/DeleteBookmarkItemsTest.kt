@@ -23,10 +23,12 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 
 internal class DeleteBookmarkItemsTest {
   private val bookmarksDao: NewBookmarksDao = mockk()
@@ -51,5 +53,14 @@ internal class DeleteBookmarkItemsTest {
       activity
     )
     verify { bookmarksDao.deleteBookmarks(listOf(item1, item2)) }
+  }
+
+  @Test
+  fun `delete with no selected items shows toast with message all bookmarks cleared`() {
+    item1.isSelected = false
+    DeleteBookmarkItems(effects, bookmarkState(listOf(item1, item2)), bookmarksDao).invokeWith(
+      activity
+    )
+    verify { effects.offer(ShowToast(R.string.all_bookmarks_cleared)) }
   }
 }
