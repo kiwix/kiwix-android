@@ -29,7 +29,7 @@ import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.writeLogFile
+import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import javax.inject.Inject
 
 abstract class CoreApp : Application() {
@@ -61,6 +61,8 @@ abstract class CoreApp : Application() {
   @Inject
   internal lateinit var jniInitialiser: JNIInitialiser
 
+  private lateinit var fileLogger: FileLogger
+
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
     if (BuildConfig.DEBUG) {
@@ -75,7 +77,7 @@ abstract class CoreApp : Application() {
       .context(this)
       .build()
     AndroidThreeTen.init(this)
-    writeLogFile()
+    fileLogger.writeLogFile()
     coreComponent.inject(this)
     kiwixDatabase.forceMigration()
     downloadMonitor.init()

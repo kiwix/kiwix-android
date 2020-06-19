@@ -50,11 +50,11 @@ import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.core.utils.files.FileLogger;
 
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
-import static org.kiwix.kiwixmobile.core.utils.files.FileUtils.isExternalStorageWritable;
 
 public abstract class CorePrefsFragment extends PreferenceFragmentCompat implements
   SettingsContract.View,
@@ -77,6 +77,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   protected NightModeConfig nightModeConfig;
   @Inject
   protected DialogShower alertDialogShower;
+  FileLogger fileLogger;
 
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -218,7 +219,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   }
 
   private void clearAllNotes() {
-    if (isExternalStorageWritable()) {
+    if (fileLogger.isExternalStorageWritable()) {
       if (ContextCompat.checkSelfPermission(getActivity(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED) {
