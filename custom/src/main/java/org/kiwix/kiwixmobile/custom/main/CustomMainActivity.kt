@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.custom.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.ActionMode
-import android.view.Menu
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
