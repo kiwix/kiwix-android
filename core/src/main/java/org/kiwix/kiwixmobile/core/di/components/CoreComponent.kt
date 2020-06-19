@@ -103,6 +103,7 @@ interface CoreComponent {
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchActivity: SearchActivity)
+
   fun inject(helpActivity: HelpActivity)
   fun inject(settingsActivity: CoreSettingsActivity)
 }
