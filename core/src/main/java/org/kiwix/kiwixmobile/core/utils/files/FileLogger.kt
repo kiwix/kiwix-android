@@ -22,9 +22,17 @@ import android.os.Environment
 import android.util.Log
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FileLogger {
 
+  /* Checks if external storage is available for read and write */
+  val isExternalStorageWritable: Boolean =
+    Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
+
+  @Inject
   fun writeLogFile() {
     if (isExternalStorageWritable) {
       val appDirectory =
@@ -50,9 +58,4 @@ class FileLogger {
       }
     }
   }
-
-  /* Checks if external storage is available for read and write */
-  val isExternalStorageWritable: Boolean
-    /** private modifier is temp */
-    get() = Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 }

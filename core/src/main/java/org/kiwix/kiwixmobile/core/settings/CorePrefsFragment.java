@@ -77,7 +77,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   protected NightModeConfig nightModeConfig;
   @Inject
   protected DialogShower alertDialogShower;
-  FileLogger fileLogger;
+  @Inject FileLogger fileLogger;
 
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

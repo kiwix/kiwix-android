@@ -99,7 +99,7 @@ public class AddNoteDialog extends DialogFragment {
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject ZimReaderContainer zimReaderContainer;
   @Inject protected AlertDialogShower alertDialogShower;
-  FileLogger fileLogger;
+  @Inject FileLogger fileLogger;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {

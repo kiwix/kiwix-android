@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadMonitor
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import javax.inject.Singleton
 
 @Module(
@@ -96,4 +97,8 @@ class ApplicationModule {
   @Singleton
   fun provideConnectivityManager(context: Context): ConnectivityManager =
     context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+  @Provides
+  @Singleton
+  fun provideFileLogger(): FileLogger = FileLogger()
 }

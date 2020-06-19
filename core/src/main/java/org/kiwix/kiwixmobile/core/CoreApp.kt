@@ -61,7 +61,8 @@ abstract class CoreApp : Application() {
   @Inject
   internal lateinit var jniInitialiser: JNIInitialiser
 
-  private lateinit var fileLogger: FileLogger
+  @Inject
+  lateinit var fileLogger: FileLogger
 
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
