@@ -27,7 +27,9 @@ sealed class Action {
   object ReceivedPromptForSpeechInput : Action()
   object StartSpeechInputFailed : Action()
 
-  data class OnItemClick(val searchListItem: SearchListItem) : Action()
+  data class OnItemClick(val searchListItem: SearchListItem, val openInNewTab: Boolean = false) :
+    Action()
+
   data class OnItemLongClick(val searchListItem: SearchListItem) : Action()
   data class Filter(val term: String) : Action()
   data class ScreenWasStartedFrom(val searchOrigin: SearchOrigin) : Action()

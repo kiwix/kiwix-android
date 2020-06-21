@@ -123,7 +123,7 @@ class SearchViewModel @Inject constructor(
       SaveSearchToRecents(recentSearchDao, it.searchListItem, zimReaderContainer.id)
     )
     effects.offer(
-      OpenSearchItem(it.searchListItem)
+      OpenSearchItem(it.searchListItem, it.openInNewTab)
     )
   }
 

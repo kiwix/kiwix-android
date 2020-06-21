@@ -20,6 +20,9 @@ package org.kiwix.kiwixmobile.core.search.adapter
 
 import android.view.View
 import android.widget.TextView
+import androidx.core.view.get
+import kotlinx.android.synthetic.main.list_item_search.view.list_item_search_new_tab_button
+import kotlinx.android.synthetic.main.list_item_search.view.list_item_search_text
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
@@ -30,25 +33,31 @@ sealed class SearchViewHolder<in T : SearchListItem>(containerView: View) :
   class RecentSearchViewHolder(
     override val containerView: View,
     private val onClickListener: (SearchListItem) -> Unit,
+    private val onClickListenerNewTab: (SearchListItem) -> Unit,
     private val onLongClickListener: (SearchListItem) -> Unit
   ) : SearchViewHolder<RecentSearchListItem>(containerView) {
     override fun bind(item: RecentSearchListItem) {
       containerView.setOnClickListener { onClickListener(item) }
+      containerView.list_item_search_new_tab_button
+        .setOnClickListener { onClickListenerNewTab(item) }
       containerView.setOnLongClickListener {
         onLongClickListener(item)
         true
       }
-      (containerView as TextView).text = item.value
+      (containerView.list_item_search_text as TextView).text = item.value
     }
   }
 
   class ZimSearchResultViewHolder(
     override val containerView: View,
-    private val onClickListener: (SearchListItem) -> Unit
+    private val onClickListener: (SearchListItem) -> Unit,
+    private val onClickListenerNewTab: (SearchListItem) -> Unit
   ) : SearchViewHolder<ZimSearchResultListItem>(containerView) {
     override fun bind(item: ZimSearchResultListItem) {
       containerView.setOnClickListener { onClickListener(item) }
-      (containerView as TextView).text = item.value
+      containerView.list_item_search_new_tab_button
+        .setOnClickListener { onClickListenerNewTab(item) }
+      (containerView.list_item_search_text as TextView).text = item.value
     }
   }
 }

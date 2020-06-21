@@ -34,6 +34,7 @@ const val RESULT_HISTORY_CLEARED = 1239
 
 // Tags
 const val TAG_FILE_SEARCHED = "searchedarticle"
+const val TAG_FILE_SEARCHED_NEW_TAB = "searchedarticlenewtabl"
 const val TAG_CURRENT_FILE = "currentzimfile"
 const val TAG_CURRENT_ARTICLES = "currentarticles"
 const val TAG_CURRENT_POSITIONS = "currentpositions"

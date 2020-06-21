@@ -70,10 +70,10 @@ class SearchActivity : BaseActivity() {
   private val compositeDisposable = CompositeDisposable()
   private val searchAdapter: SearchAdapter by lazy {
     SearchAdapter(
-      RecentSearchDelegate(::onItemClick) {
+      RecentSearchDelegate(::onItemClick, ::onItemClickNewTab) {
         searchViewModel.actions.offer(OnItemLongClick(it))
       },
-      ZimSearchResultDelegate(::onItemClick)
+      ZimSearchResultDelegate(::onItemClick, ::onItemClickNewTab)
     )
   }
 
@@ -153,6 +153,10 @@ class SearchActivity : BaseActivity() {
 
   private fun onItemClick(it: SearchListItem) {
     searchViewModel.actions.offer(OnItemClick(it))
+  }
+
+  private fun onItemClickNewTab(it: SearchListItem) {
+    searchViewModel.actions.offer(OnItemClick(it, true))
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

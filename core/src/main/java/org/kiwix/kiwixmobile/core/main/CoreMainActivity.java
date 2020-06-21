@@ -146,6 +146,7 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_FILE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_POSITIONS;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED_NEW_TAB;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
@@ -414,7 +415,9 @@ public abstract class CoreMainActivity extends BaseActivity
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
+      boolean openInNewTab = mainMenu.isInTabSwitcher()
+        || intent.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false);
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), openInNewTab);
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -1475,7 +1478,9 @@ public abstract class CoreMainActivity extends BaseActivity
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            searchForTitle(title, wasFromTabSwitcher);
+            boolean openInNewTab = wasFromTabSwitcher ||
+              data.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false);
+            searchForTitle(title, openInNewTab);
           }
         } else if (resultCode == RESULT_CANCELED) {
           Log.w(TAG_KIWIX, "Search cancelled or exited");
