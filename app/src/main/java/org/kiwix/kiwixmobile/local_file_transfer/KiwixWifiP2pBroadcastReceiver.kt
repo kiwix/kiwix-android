@@ -44,36 +44,24 @@ import android.util.Log
 
 class KiwixWifiP2pBroadcastReceiver(private val p2pEventListener: P2pEventListener) :
   BroadcastReceiver() {
-
   override fun onReceive(context: Context, intent: Intent) {
     when (intent.action) {
-
       WIFI_P2P_STATE_CHANGED_ACTION -> {
         val wifiP2pState = intent.getIntExtra(EXTRA_WIFI_STATE, -1)
-        p2pEventListener.onWifiP2pStateChanged(
-          wifiP2pState == WIFI_P2P_STATE_ENABLED
-        )
+        p2pEventListener.onWifiP2pStateChanged(wifiP2pState == WIFI_P2P_STATE_ENABLED)
       }
-
-      WIFI_P2P_PEERS_CHANGED_ACTION -> {
-        p2pEventListener.onPeersChanged()
-      }
-
+      WIFI_P2P_PEERS_CHANGED_ACTION -> p2pEventListener.onPeersChanged()
       WIFI_P2P_CONNECTION_CHANGED_ACTION -> {
         val networkInfo =
           intent.getParcelableExtra<NetworkInfo>(EXTRA_NETWORK_INFO)
         p2pEventListener.onConnectionChanged(networkInfo.isConnected)
       }
-
       WIFI_P2P_THIS_DEVICE_CHANGED_ACTION -> {
         val userDevice =
           intent.getParcelableExtra<WifiP2pDevice>(EXTRA_WIFI_P2P_DEVICE)
         p2pEventListener.onDeviceChanged(userDevice)
       }
-
-      else -> {
-        Log.d(TAG, "onReceive: No change in P2P connection detected!")
-      }
+      else -> Log.d(TAG, "onReceive: No change in P2P connection detected!")
     }
   }
 
