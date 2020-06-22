@@ -44,7 +44,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -96,15 +95,9 @@ public class AddNoteDialog extends DialogFragment {
 
   private String zimNotesDirectory; // Stores path to directory for the currently open zim's notes
 
-  private Fragment parentFragment;
-
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject ZimReaderContainer zimReaderContainer;
   @Inject protected AlertDialogShower alertDialogShower;
-
-  public AddNoteDialog(Fragment parentFragment) {
-    this.parentFragment = parentFragment;
-  }
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,9 +113,7 @@ public class AddNoteDialog extends DialogFragment {
 
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer.getZimFileTitle();
-      if (parentFragment instanceof CoreReaderFragment) {
-        articleTitle = ((CoreReaderFragment) parentFragment).getCurrentWebView().getTitle();
-      }
+      articleTitle = ((WebViewProvider) getActivity()).getCurrentWebView().getTitle();
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
       String zimNoteDirectoryName = getZimNoteDirectoryName();
@@ -203,7 +194,7 @@ public class AddNoteDialog extends DialogFragment {
 
   private @NonNull String getArticleNotefileName() {
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
-    String articleUrl = ((CoreReaderFragment) parentFragment).getCurrentWebView().getUrl();
+    String articleUrl = ((WebViewProvider) getActivity()).getCurrentWebView().getUrl();
 
     String notefileName = "";
     if (articleUrl == null) {

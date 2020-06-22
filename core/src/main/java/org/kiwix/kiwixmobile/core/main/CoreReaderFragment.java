@@ -158,7 +158,7 @@ import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_M
 public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
   MainContract.View,
-  MainMenu.MenuClickListener, BaseFragmentActivityExtensions {
+  MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
   public static final String HOME_URL = "file:///android_asset/home.html";
   private static final int CORE_READER_FRAGMENT = 1;
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
@@ -529,7 +529,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private TableDrawerAdapter setupTableDrawerAdapter() {
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter(this);
+    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
     tableDrawerAdapter.setTableClickListener(new TableDrawerAdapter.TableClickListener() {
       @Override
       public void onHeaderClick(View view) {
@@ -908,7 +908,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  protected KiwixWebView getCurrentWebView() {
+  @NotNull @Override public KiwixWebView getCurrentWebView() {
     if (webViewList.size() == 0) return newMainPageTab();
     if (currentWebViewIndex < webViewList.size()) {
       return webViewList.get(currentWebViewIndex);
@@ -1005,7 +1005,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
        *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
        **/
-      AddNoteDialog dialogFragment = new AddNoteDialog(this);
+      AddNoteDialog dialogFragment = new AddNoteDialog();
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG);
       // For DialogFragments, show() handles the fragment commit and display
     }

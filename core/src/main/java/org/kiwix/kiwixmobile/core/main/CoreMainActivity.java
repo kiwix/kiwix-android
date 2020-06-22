@@ -25,10 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 
-public abstract class CoreMainActivity extends BaseActivity {
+public abstract class CoreMainActivity extends BaseActivity implements WebViewProvider {
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setFragmentActivity(true);
     setContentView(R.layout.activity_new_navigation);
   }
 
@@ -39,5 +38,14 @@ public abstract class CoreMainActivity extends BaseActivity {
     for (Fragment it : getSupportFragmentManager().getFragments()) {
       it.onActivityResult(requestCode, resultCode, data);
     }
+  }
+
+  @androidx.annotation.Nullable @Override public KiwixWebView getCurrentWebView() {
+    for (Fragment frag : getSupportFragmentManager().getFragments()) {
+      if (frag instanceof WebViewProvider) {
+        return ((WebViewProvider) frag).getCurrentWebView();
+      }
+    }
+    return null;
   }
 }

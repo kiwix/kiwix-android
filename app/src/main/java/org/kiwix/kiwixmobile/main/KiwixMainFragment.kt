@@ -76,7 +76,7 @@ class KiwixMainFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer.zimFile == null && HOME_URL != currentWebView.url) {
+    if (zimReaderContainer.zimFile == null && HOME_URL != getCurrentWebView().url) {
       showHomePage()
     }
   }
@@ -87,7 +87,7 @@ class KiwixMainFragment : CoreReaderFragment() {
   ) = KiwixWebViewClient(webViewCallback, zimReaderContainer)
 
   override fun onNewNavigationMenuClicked() {
-    //do nothing
+    // do nothing
   }
 
   private fun manageExternalLaunchAndRestoringViewState() {
@@ -97,7 +97,7 @@ class KiwixMainFragment : CoreReaderFragment() {
       val filePath = FileUtils.getLocalFilePathByUri(requireActivity().applicationContext, data)
 
       if (filePath == null || !File(filePath).exists()) {
-        currentWebView.snack(R.string.error_file_not_found)
+        getCurrentWebView().snack(R.string.error_file_not_found)
         return
       }
 
@@ -131,11 +131,11 @@ class KiwixMainFragment : CoreReaderFragment() {
   override fun getIconResId() = R.mipmap.ic_launcher
 
   override fun urlIsInvalid() =
-    super.urlIsInvalid() || currentWebView.url == HOME_URL
+    super.urlIsInvalid() || getCurrentWebView().url == HOME_URL
 
   override fun showHomePage() {
-    currentWebView.removeAllViews()
-    currentWebView.loadUrl(HOME_URL)
+    getCurrentWebView().removeAllViews()
+    getCurrentWebView().loadUrl(HOME_URL)
   }
 
   override fun createNewTab() {
@@ -143,7 +143,7 @@ class KiwixMainFragment : CoreReaderFragment() {
   }
 
   override fun isInvalidTitle(zimFileTitle: String?) =
-    super.isInvalidTitle(zimFileTitle) || HOME_URL == currentWebView.url
+    super.isInvalidTitle(zimFileTitle) || HOME_URL == getCurrentWebView().url
 
   private fun uriFromIntent() =
     activity?.intent?.data ?: activity?.intent?.getStringExtra(EXTRA_ZIM_FILE)?.let {
@@ -161,18 +161,18 @@ class KiwixMainFragment : CoreReaderFragment() {
     if (zimFile != null) {
       openZimFile(File(zimFile))
     } else {
-      currentWebView.snack(R.string.zim_not_opened)
+      getCurrentWebView().snack(R.string.zim_not_opened)
     }
     try {
       val urls = JSONArray(zimArticles)
       val positions = JSONArray(zimPositions)
       var i = 0
-      currentWebView.loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      currentWebView.scrollY = positions.getInt(i)
+      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+      getCurrentWebView().scrollY = positions.getInt(i)
       i++
       while (i < urls.length()) {
         newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-        currentWebView.scrollY = positions.getInt(i)
+        getCurrentWebView().scrollY = positions.getInt(i)
         i++
       }
       selectTab(currentTab)
