@@ -87,7 +87,7 @@ class KiwixMainFragment : CoreReaderFragment() {
   ) = KiwixWebViewClient(webViewCallback, zimReaderContainer)
 
   override fun onNewNavigationMenuClicked() {
-    // do nothing
+    startActivity(Intent(activity, KiwixNewNavigationActivity::class.java))
   }
 
   private fun manageExternalLaunchAndRestoringViewState() {

@@ -71,6 +71,6 @@ class CustomMainActivity : CoreMainActivity() {
       return
     }
     supportFragmentManager.beginTransaction()
-      .add(R.id.fragment_custom_app_container, CustomReaderFragment()).commit()
+      .add(R.id.fragment_containter, CustomReaderFragment()).commit()
   }
 }

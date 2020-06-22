@@ -18,8 +18,12 @@
 
 package org.kiwix.kiwixmobile.main
 
-import androidx.fragment.app.Fragment
+import android.content.Intent
+import androidx.navigation.fragment.NavHostFragment
 
-class NavigationHostFragment : Fragment() {
-
+class NavigationHostFragment : NavHostFragment() {
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    childFragmentManager.fragments.forEach { it.onActivityResult(requestCode, resultCode, data) }
+  }
 }
