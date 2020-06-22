@@ -22,7 +22,6 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
-import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
@@ -31,8 +30,9 @@ import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem
-import org.kiwix.kiwixmobile.core.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -99,10 +99,7 @@ class Repository @Inject internal constructor(
     recentSearchDao.deleteSearchHistory()
   }
 
-  override fun getBookmarks(fromCurrentBook: Boolean): Single<List<BookmarkItem>> =
-    Single.just(bookmarksDao.getBookmarks(fromCurrentBook, zimReaderContainer.zimFileReader))
-      .subscribeOn(io)
-      .observeOn(mainThread)
+  override fun getBookmarks() = bookmarksDao.bookmarks()
 
   override fun getCurrentZimBookmarksUrl() =
     Single.just(bookmarksDao.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))
