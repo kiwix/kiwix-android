@@ -15,7 +15,7 @@ jobs:
   coverageReport:
     strategy:
       matrix:
-        api-level: [29, 29, 29, 29, 29]
+        api-level: [21, 30]
       fail-fast: false
     runs-on: macOS-latest
     steps:
@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 1
 
       - name: create instrumentation coverage
-        uses: ReactiveCircus/android-emulator-runner@v2.8.0
+        uses: ReactiveCircus/android-emulator-runner@v2.11.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
