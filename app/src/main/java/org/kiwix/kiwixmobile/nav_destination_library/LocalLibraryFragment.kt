@@ -39,7 +39,6 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.zim_list.file_management_no_files
 import kotlinx.android.synthetic.main.zim_list.zim_swiperefresh
 import kotlinx.android.synthetic.main.zim_list.zimfilelist
-import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -119,11 +118,6 @@ class LocalLibraryFragment : BaseFragment() {
     val activity = activity as AppCompatActivity
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar!!.setTitle(R.string.library)
-    toolbar.setNavigationOnClickListener { activity.onBackPressed() }
-    toolbar.setOnClickListener {
-      if (manageViewPager.currentItem == 1)
-        searchItem?.expandActionView()
-    }
     return root
   }
 

@@ -28,7 +28,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -126,7 +128,12 @@ class OnlineLibraryFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View {
     setHasOptionsMenu(true)
-    return inflater.inflate(R.layout.activity_library, container, false)
+    val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
+    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
+    val activity = activity as AppCompatActivity
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar!!.setTitle(R.string.download)
+    return root
   }
 
   override fun onViewCreated(
