@@ -29,13 +29,12 @@ import javax.inject.Singleton
  *
  * A class for writing logs to the file in the device */
 @Singleton
-class FileLogger {
+class FileLogger @Inject constructor() {
 
   /* Checks if external storage is available for read and write */
   val isExternalStorageWritable: Boolean =
     Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 
-  @Inject
   fun writeLogFile() {
     if (isExternalStorageWritable) {
 

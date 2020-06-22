@@ -52,7 +52,6 @@ import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import javax.inject.Singleton
 
 @Singleton
@@ -106,5 +105,4 @@ interface CoreComponent {
   fun inject(searchActivity: SearchActivity)
   fun inject(helpActivity: HelpActivity)
   fun inject(settingsActivity: CoreSettingsActivity)
-  fun inject(fileLogger: FileLogger)
 }
