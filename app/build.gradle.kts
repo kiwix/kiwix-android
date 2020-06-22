@@ -3,6 +3,7 @@ import plugin.KiwixConfigurationPlugin
 plugins {
   android
   id("com.github.triplet.play") version Versions.com_github_triplet_play_gradle_plugin
+  id("androidx.navigation.safeargs")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 
@@ -93,5 +94,4 @@ dependencies {
   implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
   // Testing Navigation
   androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
-
 }

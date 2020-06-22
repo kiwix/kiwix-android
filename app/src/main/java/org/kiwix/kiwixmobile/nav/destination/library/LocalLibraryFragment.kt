@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav_destination_library
+package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -75,7 +75,7 @@ class LocalLibraryFragment : BaseFragment() {
   }
   private val bookDelegate: BookOnDiskDelegate.BookDelegate by lazy {
     BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
-      { offerAction(ZimManageViewModel.FileSelectActions.RequestOpen(it)) },
+      { offerAction(ZimManageViewModel.FileSelectActions.RequestNavigateTo(it)) },
       { offerAction(ZimManageViewModel.FileSelectActions.RequestMultiSelection(it)) },
       { offerAction(ZimManageViewModel.FileSelectActions.RequestSelect(it)) })
   }
@@ -135,7 +135,8 @@ class LocalLibraryFragment : BaseFragment() {
       zim_swiperefresh.isRefreshing = it!!
     })
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
-      zimManageViewModel.fileSelectActions.offer(ZimManageViewModel.FileSelectActions.RestartActionMode)
+      zimManageViewModel.fileSelectActions
+        .offer(ZimManageViewModel.FileSelectActions.RestartActionMode)
     }
 
     disposable.add(zimManageViewModel.libraryTabIsVisible.subscribe { finishActionMode() })

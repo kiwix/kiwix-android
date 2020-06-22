@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav_destination_download
+package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.content.Intent
 import android.net.ConnectivityManager

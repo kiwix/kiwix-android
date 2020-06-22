@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
@@ -62,6 +63,7 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFile
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFileWithNavigation
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.ShareFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
@@ -89,6 +91,7 @@ class ZimManageViewModel @Inject constructor(
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestOpen(val bookOnDisk: BookOnDisk) : FileSelectActions()
+    data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
     object RequestDeleteMultiSelection : FileSelectActions()
@@ -149,6 +152,7 @@ class ZimManageViewModel @Inject constructor(
   private fun fileSelectActions() = fileSelectActions.subscribe({
     sideEffects.offer(
       when (it) {
+        is RequestNavigateTo -> OpenFileWithNavigation(it.bookOnDisk)
         is RequestOpen -> OpenFile(it.bookOnDisk)
         is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
         RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState())

@@ -29,9 +29,9 @@ import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.KiwixMainFragment
 import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
-import org.kiwix.kiwixmobile.nav_destination_download.OnlineLibraryFragment
-import org.kiwix.kiwixmobile.nav_destination_library.LocalLibraryFragment
-import org.kiwix.kiwixmobile.nav_destination_reader.ReaderFragment
+import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.reader.ReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity

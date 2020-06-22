@@ -23,19 +23,27 @@
   app:startDestination="@id/navigation_library">
   <fragment
     android:id="@+id/navigation_reader"
-    android:name="org.kiwix.kiwixmobile.nav_destination_reader.ReaderFragment"
+    android:name="org.kiwix.kiwixmobile.nav.destination.reader.ReaderFragment"
     android:label="Reader"
-    tools:layout="@layout/fragment_destination_reader" />
+    tools:layout="@layout/fragment_destination_reader">
+    <argument
+      android:name="zimFileUri"
+      app:argType="string" />
+  </fragment>
 
   <fragment
     android:id="@+id/navigation_library"
-    android:name="org.kiwix.kiwixmobile.nav_destination_library.LocalLibraryFragment"
+    android:name="org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment"
     android:label="Library"
-    tools:layout="@layout/fragment_destination_library" />
+    tools:layout="@layout/fragment_destination_library">
+    <action
+      android:id="@+id/action_navigation_library_to_navigation_reader"
+      app:destination="@id/navigation_reader" />
+  </fragment>
 
   <fragment
     android:id="@+id/navigation_downloads"
-    android:name="org.kiwix.kiwixmobile.nav_destination_download.OnlineLibraryFragment"
+    android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
     android:label="Downloads"
     tools:layout="@layout/fragment_destination_download" />
 </navigation>
