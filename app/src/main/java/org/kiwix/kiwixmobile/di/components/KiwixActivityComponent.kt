@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.KiwixMainFragment
+import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
@@ -58,6 +59,7 @@ interface KiwixActivityComponent {
   fun inject(introActivity: IntroActivity)
   fun inject(kiwixSplashActivity: KiwixSplashActivity)
   fun inject(kiwixMainFragment: KiwixMainFragment)
+  fun inject(kiwixNewNavigationActivity: KiwixNewNavigationActivity)
 
   @Subcomponent.Builder
   interface Builder {
