@@ -29,6 +29,8 @@ import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.KiwixMainFragment
 import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
+import org.kiwix.kiwixmobile.nav_destination_download.OnlineLibraryFragment
+import org.kiwix.kiwixmobile.nav_destination_library.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav_destination_reader.ReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
@@ -51,6 +53,7 @@ interface KiwixActivityComponent {
   fun inject(libraryFragment: LibraryFragment)
   fun inject(zimFileSelectFragment: ZimFileSelectFragment)
   fun inject(readerFragment: ReaderFragment)
+  fun inject(localLibraryFragment: LocalLibraryFragment)
   fun inject(deleteFiles: DeleteFiles)
   fun inject(localFileTransferActivity: LocalFileTransferActivity)
   fun inject(zimManageActivity: ZimManageActivity)
@@ -62,6 +65,7 @@ interface KiwixActivityComponent {
   fun inject(kiwixSplashActivity: KiwixSplashActivity)
   fun inject(kiwixMainFragment: KiwixMainFragment)
   fun inject(kiwixNewNavigationActivity: KiwixNewNavigationActivity)
+  fun inject(onlineLibraryFragment: OnlineLibraryFragment)
 
   @Subcomponent.Builder
   interface Builder {

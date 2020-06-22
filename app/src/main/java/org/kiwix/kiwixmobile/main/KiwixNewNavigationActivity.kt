@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.ActionMode
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -50,14 +49,6 @@ class KiwixNewNavigationActivity : CoreNewNavigationActivity() {
     appBarConfiguration = AppBarConfiguration(
       navController.graph
     )
-    val appBarConfiguration = AppBarConfiguration(
-      setOf(
-        R.id.navigation_reader,
-        R.id.navigation_library,
-        R.id.navigation_downloads
-      )
-    )
-    findViewById<Toolbar>(R.id.toolbar).setupWithNavController(navController, appBarConfiguration)
     navView.setupWithNavController(navController)
   }
 

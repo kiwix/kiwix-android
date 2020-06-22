@@ -24,8 +24,6 @@
   android:orientation="vertical"
   android:weightSum="1">
 
-  <include layout="@layout/layout_toolbar" />
-
   <fragment
     android:id="@+id/nav_host_fragment"
     android:name="org.kiwix.kiwixmobile.main.NavigationHostFragment"
