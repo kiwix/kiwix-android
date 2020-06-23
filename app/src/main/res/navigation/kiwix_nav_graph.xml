@@ -18,14 +18,11 @@
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/kiwix_nav_graph"
   app:startDestination="@id/navigation_library">
   <fragment
     android:id="@+id/navigation_reader"
     android:name="org.kiwix.kiwixmobile.nav.destination.reader.ReaderFragment"
-    android:label="Reader"
-    tools:layout="@layout/fragment_destination_reader">
+    android:label="Reader">
     <argument
       android:name="zimFileUri"
       app:argType="string" />
@@ -34,8 +31,7 @@
   <fragment
     android:id="@+id/navigation_library"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment"
-    android:label="Library"
-    tools:layout="@layout/fragment_destination_library">
+    android:label="Library">
     <action
       android:id="@+id/action_navigation_library_to_navigation_reader"
       app:destination="@id/navigation_reader" />
@@ -44,6 +40,5 @@
   <fragment
     android:id="@+id/navigation_downloads"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
-    android:label="Downloads"
-    tools:layout="@layout/fragment_destination_download" />
+    android:label="Downloads" />
 </navigation>

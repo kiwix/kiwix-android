@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.destinationlibrary.LocalLibraryFragmentDirections
+import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
 
 data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.BookOnDisk) :
   SideEffect<Unit> {
@@ -39,12 +39,6 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
         file.toUri().toString()
       )
       activity.findNavController(org.kiwix.kiwixmobile.R.id.nav_host_fragment).navigate(action)
-
-      // activity.finish()
-      // activity.start<KiwixMainActivity> {
-      //   data = file.toUri()
-      //   flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-      // }
     }
   }
 }

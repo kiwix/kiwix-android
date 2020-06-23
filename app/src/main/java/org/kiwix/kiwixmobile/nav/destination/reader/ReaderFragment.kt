@@ -28,7 +28,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.navigation.fragment.navArgs
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -40,6 +39,7 @@ import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
@@ -48,7 +48,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.destinationreader.ReaderFragmentArgs
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.main.KiwixWebViewClient
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
@@ -93,7 +92,7 @@ class ReaderFragment : CoreReaderFragment() {
 
   private fun manageExternalLaunchAndRestoringViewState() {
 
-    val data = uriFromNavigation()
+    val data = uriFromIntent()
     if (data != null) {
       val filePath = FileUtils.getLocalFilePathByUri(requireActivity().applicationContext, data)
 
@@ -146,10 +145,10 @@ class ReaderFragment : CoreReaderFragment() {
   override fun isInvalidTitle(zimFileTitle: String?) =
     super.isInvalidTitle(zimFileTitle) || HOME_URL == getCurrentWebView().url
 
-  private val args: ReaderFragmentArgs by navArgs()
-
-  private fun uriFromNavigation() =
-    args.zimFileUri.let { File(FileUtils.getFileName(it)).toUri() }
+  private fun uriFromIntent() =
+    activity?.intent?.data ?: activity?.intent?.getStringExtra(EXTRA_ZIM_FILE)?.let {
+      File(FileUtils.getFileName(it)).toUri()
+    }
 
   private fun restoreTabStates() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
@@ -194,7 +193,7 @@ class ReaderFragment : CoreReaderFragment() {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
       if ("file" == it.scheme) openZimFile(it.toFile())
-      else activity?.toast(R.string.cannot_open_file)
+      else activity.toast(R.string.cannot_open_file)
     }
     return BaseFragmentActivityExtensions.Super.ShouldCall
   }

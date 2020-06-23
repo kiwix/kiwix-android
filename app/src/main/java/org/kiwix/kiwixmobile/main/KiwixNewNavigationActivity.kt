@@ -41,6 +41,7 @@ class KiwixNewNavigationActivity : CoreNewNavigationActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_new_navigation)
     val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
     navController = findNavController(R.id.nav_host_fragment)

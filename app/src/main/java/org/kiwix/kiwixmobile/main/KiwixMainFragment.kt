@@ -193,7 +193,7 @@ class KiwixMainFragment : CoreReaderFragment() {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
       if ("file" == it.scheme) openZimFile(it.toFile())
-      else activity?.toast(R.string.cannot_open_file)
+      else activity.toast(R.string.cannot_open_file)
     }
     return BaseFragmentActivityExtensions.Super.ShouldCall
   }

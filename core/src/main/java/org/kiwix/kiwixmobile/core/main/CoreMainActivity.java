@@ -28,7 +28,6 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity;
 public abstract class CoreMainActivity extends BaseActivity implements WebViewProvider {
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_new_navigation);
   }
 
   @Override protected void onActivityResult(int requestCode, int resultCode,

@@ -277,6 +277,7 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
   <string name="experimental_navigation">Experimental Navigation</string>
+  <string name="reader">Reader</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>
