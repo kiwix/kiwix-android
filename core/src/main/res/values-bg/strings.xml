@@ -23,7 +23,6 @@
   <string name="save_media">Запази медията</string>
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
   <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Сканиране на файлове за изтегляне, моля, изчакайте…</string>
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
@@ -52,7 +51,7 @@
   <string name="pref_clear_all_history_title">Изтрий история</string>
   <string name="pref_clear_all_history_summary">Изтрийте последните търсения и история на табовете</string>
   <string name="all_history_cleared">Историята е изтрита</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Изтрий историята</string>
+  <string name="clear_all_history_dialog_title">Изтриване на цялата история?</string>
   <string name="delete">Изтриване</string>
   <string name="delete_specific_search_toast">Последните търсения са изтрити</string>
   <string name="hint_contents_drawer_message">Може да плъзнете наляво, за да прегледате съдържанието на статията</string>
@@ -79,9 +78,9 @@
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_zims_toast">Файлът е изтрит</string>
+  <string name="delete_zims_toast">Файловете са изтрити успешно</string>
   <string name="no_files_here">Тук няма файлове</string>
-  <string name="download_no_space" fuzzy="true">Няма достатъчно място за даунлоуд на този файл.</string>
+  <string name="download_no_space">Няма достатъчно място за сваляне.</string>
   <string name="space_available">Налично пространство:</string>
   <string name="zim_simple">Просто</string>
   <string name="zim_no_pic">Без картинки</string>
@@ -99,7 +98,7 @@
   <string name="help_11">ZIM файловете, които са смъкнати в мобилното приложение, се намират във външната памет, в папка с име Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текуща папка</string>
-  <string name="delete_zim_failed" fuzzy="true">За съжаление не успяхме да изтрием този файл. Необходимо е да използвате файлов мениджър за тази цел.</string>
+  <string name="delete_zim_failed">За съжаление не успяхме да изтрием някои файлове. Необходимо е да използвате файлов мениджър за тази цел.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продължете</string>
   <string name="stop">стоп</string>
@@ -123,7 +122,7 @@
   <string name="time_left">остават</string>
   <string name="pref_external_link_popup_title">При зареждане на външни препратки</string>
   <string name="pref_external_link_popup_summary">Показва попъп, за да предупреди за допълнителни разходи или неработещи в офлайн режим препратки.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Зареждане на външна препратка</string>
+  <string name="external_link_popup_dialog_title">Зареждане на външна препратка!</string>
   <string name="external_link_popup_dialog_message">Предстои Ви, да заредите външна препратка. Това може да доведе до допълнителни разходи за трансфер на данни или просто няма да работи, когато сте офлайн. Желаете ли да продължите?</string>
   <string name="do_not_ask_anymore">Не питайте отново за това</string>
   <string name="your_languages">Избрани езици:</string>

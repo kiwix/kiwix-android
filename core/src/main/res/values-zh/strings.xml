@@ -5,6 +5,7 @@
 * Akagisoy
 * Josephine W.
 * Liuxinyu970226
+* SomeyaMako
 * VulpesVulpes825
 * Yfdyh000
 * Ywang
@@ -26,11 +27,11 @@
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
   <string name="save_media_saved">已将媒体作为%s保存至Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">正在扫描可下载内容，请稍候…</string>
   <string name="search_label">搜索</string>
   <string name="choose_file">选择一个内容文件（*.zim）</string>
   <string name="open_in_new_tab">在新标签页打开链接?</string>
   <string name="go_to_wifi_settings_label">转到WIFI设置</string>
+  <string name="wifi_dialog_title">检测到Wi-Fi连接</string>
   <string name="error_file_not_found">错误：找不到选定的ZIM文件。</string>
   <string name="error_file_invalid">错误：选定的文件不是有效ZIM文件。</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
@@ -166,6 +167,6 @@
   <string name="status">状态</string>
   <string name="pref_clear_all_notes_title">清空所有备注</string>
   <string name="storage_permission_denied">存储权限被拒绝</string>
-  <string name="go_to_settings">转到设置</string>
+  <string name="go_to_settings">转到热点设置</string>
   <string name="no_bookmarks">没有书签</string>
 </resources>

@@ -65,7 +65,7 @@ class ZimFileSelectFragment : BaseFragment() {
   private val disposable = CompositeDisposable()
 
   private val zimManageViewModel by lazy {
-    activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
+    requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
   private val bookDelegate: BookDelegate by lazy {
     BookDelegate(sharedPreferenceUtil,
@@ -87,8 +87,8 @@ class ZimFileSelectFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    LanguageUtils(activity!!)
-      .changeFont(activity!!.layoutInflater, sharedPreferenceUtil)
+    LanguageUtils(requireActivity())
+      .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
     return inflater.inflate(R.layout.zim_list, container, false)
   }
 
@@ -121,7 +121,7 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
     {
-      val effectResult = it.invokeWith(activity!! as AppCompatActivity)
+      val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
       if (effectResult is ActionMode) {
         actionMode = effectResult
       }
@@ -159,7 +159,7 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun checkPermissions() {
     if (ContextCompat.checkSelfPermission(
-        activity!!,
+        requireActivity(),
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) != PackageManager.PERMISSION_GRANTED
     ) {

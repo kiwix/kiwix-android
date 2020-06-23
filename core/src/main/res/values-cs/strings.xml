@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Chmee2
 * DemonioCZ
 * Dvorapa
@@ -10,7 +11,6 @@
 * Walter Klosse
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Nápověda</string>
   <string name="menu_home">Domů</string>
   <string name="menu_settings">Nastavení</string>
@@ -26,7 +26,6 @@
   <string name="save_media">Uložit médium jako…</string>
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
   <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Probíhá hledání obsahu ke stažení, prosím čekejte…</string>
   <string name="search_label">Vyhledávání</string>
   <string name="choose_file">Vyberte obsahový soubor (*.zim)</string>
   <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>
@@ -43,9 +42,9 @@
   <string name="hotspot_details_message">Následují podrobnosti vašeho hotspotu.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Vyberte soubory, které si přejete hostovat na svém serveru</string>
   <string name="progress_dialog_starting_server">Server se spouští</string>
-  <string name="hotspot_dialog_title">Zapněte Váš WIFI hotspot</string>
-  <string name="hotspot_dialog_message">Aby tento nástroj fungoval je potřeba ručně nejprve zapnout Váš hotspot.</string>
-  <string name="hotspot_dialog_neutral_button">ANO, ZAPNUL/A JSEM HO</string>
+  <string name="hotspot_dialog_title" fuzzy="true">Zapněte Váš WIFI hotspot</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Aby tento nástroj fungoval je potřeba ručně nejprve zapnout Váš hotspot.</string>
+  <string name="hotspot_dialog_neutral_button" fuzzy="true">ANO, ZAPNUL/A JSEM HO</string>
   <string name="hotspot_channel_description">Update o stavu Vašeho hotspotu/serveru.</string>
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Spustit server</string>
@@ -163,7 +162,7 @@
   <string name="fav_icon">Favicon</string>
   <string name="articleCount">%s článků</string>
   <string name="download_books">Stáhnout knihy</string>
-  <string name="human_kind_knowledge">Znalosti lidstva na vašem telefonu.</string>
+  <string name="humankind_knowledge">Znalosti lidstva na vašem telefonu.</string>
   <string name="welcome_to_the_family">Vítejte do rodiny</string>
   <string name="save_books_offline">Uložit knihy offline</string>
   <string name="download_books_message">Stáhnout knihy a číst ať jste kdekoliv.</string>

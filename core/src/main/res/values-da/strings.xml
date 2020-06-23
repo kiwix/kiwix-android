@@ -22,7 +22,6 @@
   <string name="save_media">Gem medie</string>
   <string name="save_media_error">Der opstod en fejl under forsøg på at gemme mediet!</string>
   <string name="save_media_saved">Gemte medie som %s til Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Søger efter indhold, vent venligst …</string>
   <string name="search_label">Søg</string>
   <string name="choose_file">Vælg en indholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
@@ -155,6 +154,6 @@
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Kun tekst</string>
   <string name="tag_short_text">kort tekst</string>
-  <string name="go_to_settings">Gå til indstillinger</string>
+  <string name="go_to_settings" fuzzy="true">Gå til indstillinger</string>
   <string name="no_bookmarks">Ingen bogmærker</string>
 </resources>

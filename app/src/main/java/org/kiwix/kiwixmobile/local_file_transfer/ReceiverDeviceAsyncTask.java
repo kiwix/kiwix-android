@@ -29,7 +29,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.R;
-
+import static org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus;
 import static org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.ERROR;
 import static org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.SENDING;
 import static org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.SENT;
@@ -74,7 +74,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
           if (BuildConfig.DEBUG) {
             Log.d(TAG, "Sender device connected for " + fileItems.get(fileItemIndex).getFileName());
           }
-          publishProgress(fileItemIndex, SENDING);
+          publishProgress(fileItemIndex, SENDING.ordinal());
 
           final File clientNoteFileLocation = new File(zimStorageRootPath + incomingFileName);
           File dirs = new File(clientNoteFileLocation.getParent());
@@ -89,11 +89,11 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
           WifiDirectManager.copyToOutputStream(client.getInputStream(),
             new FileOutputStream(clientNoteFileLocation));
-          publishProgress(fileItemIndex, SENT);
+          publishProgress(fileItemIndex, SENT.ordinal());
         } catch (IOException e) {
           Log.e(TAG, e.getMessage());
           isTransferErrorFree = false;
-          publishProgress(fileItemIndex, ERROR);
+          publishProgress(fileItemIndex, ERROR.ordinal());
         }
       }
       return (!isCancelled() && isTransferErrorFree);
@@ -106,10 +106,10 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   @Override
   protected void onProgressUpdate(Integer... values) {
     int fileIndex = values[0];
-    int fileStatus = values[1];
+    FileStatus fileStatus = FileStatus.values()[values[1]];
     wifiDirectManager.changeStatus(fileIndex, fileStatus);
 
-    if (fileStatus == ERROR) {
+    if (fileStatus == FileStatus.ERROR) {
       wifiDirectManager.displayToast(R.string.error_transferring, incomingFileName,
         Toast.LENGTH_SHORT);
     }

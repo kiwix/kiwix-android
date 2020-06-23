@@ -22,8 +22,8 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.List;
-import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
-import org.kiwix.kiwixmobile.core.history.HistoryListItem;
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem;
 import org.kiwix.kiwixmobile.core.zim_manager.Language;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
@@ -40,15 +40,13 @@ public interface DataSource {
 
   Completable saveLanguages(List<Language> languages);
 
-  Single<List<HistoryListItem>> getDateCategorizedHistory(boolean showHistoryCurrentBook);
-
   Completable saveHistory(HistoryListItem.HistoryItem history);
 
   Completable deleteHistory(List<HistoryListItem> historyList);
 
   Completable clearHistory();
 
-  Single<List<BookmarkItem>> getBookmarks(boolean showFromCurrentBook);
+  Flowable<List<BookmarkItem>> getBookmarks();
 
   Single<List<String>> getCurrentZimBookmarksUrl();
 

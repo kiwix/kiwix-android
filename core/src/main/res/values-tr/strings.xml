@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 1917 Ekim Devrimi
+* Abijeet Patro
 * Alidemirtas
 * BaRaN6161 TURK
 * Captantrips
@@ -14,7 +15,6 @@
 * Trockya
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Yardım</string>
   <string name="menu_home">Anasayfa</string>
   <string name="menu_settings">Ayarlar</string>
@@ -30,7 +30,6 @@
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
   <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">İndirilebilir içerik aranıyor, lütfen bekleyin…</string>
   <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
@@ -48,9 +47,11 @@
   <string name="hotspot_details_message">Aşağıda yerel etkin noktanızın ayrıntıları verilmiştir.\nSSID: %1$s\nGeçiş: %2$s</string>
   <string name="server_textview_default_message">Sunucuda barındırmak istediğiniz dosyaları seçin</string>
   <string name="progress_dialog_starting_server">Sunucu başlatılıyor</string>
-  <string name="hotspot_dialog_title">WIFI etkin noktanızı açın</string>
-  <string name="hotspot_dialog_message">Bu özelliğin çalışması için önce WIFI hotspot\'unuzu manüel olarak açmanız gerekir.</string>
-  <string name="hotspot_dialog_neutral_button">EVET, AÇTIM</string>
+  <string name="hotspot_dialog_title">Kitap barındırma talimatları</string>
+  <string name="wifi_dialog_title">WiFi bağlantı algılandı</string>
+  <string name="wifi_dialog_body">Diğer cihazlardaki kitapları görüntülemek için lütfen tüm cihazların aynı WiFi Ağına bağlı olduğundan emin olun.</string>
+  <string name="hotspot_dialog_message">Bu özelliğin çalışması için önce WIFI etkin noktanızı manüel olarak açmanız veya ana cihaz ile alıcı cihazın aynı WiFi ağında olduğundan emin olmanız gerekir</string>
+  <string name="hotspot_dialog_neutral_button">İLERLENDİ</string>
   <string name="hotspot_channel_description">Hotspot/sunucunuzun durumu ile ilgili güncellemeler.</string>
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Sunucuyu Başlat</string>
@@ -73,7 +74,7 @@
   <string name="pref_language_chooser">Bir dil seçin</string>
   <string name="pref_credits">Katkıda bulunanlar ve lisanslar</string>
   <string name="pref_credits_title">Katkıda bulunanlar</string>
-  <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor veya uygun dil verileri yüklenmemiş. Makale düzgün okunmamış olabilir.</string>
+  <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor veya uygun dil verileri yüklenmemiş. Madde düzgün okunmamış olabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
@@ -185,7 +186,7 @@
   <string name="articleCount">%s madde</string>
   <string name="get_started">Başla</string>
   <string name="download_books">Kitapları indir</string>
-  <string name="human_kind_knowledge">İnsan türünün bilgisi, telefonunuzda.</string>
+  <string name="humankind_knowledge">İnsan türünün bilgisi, telefonunuzda.</string>
   <string name="welcome_to_the_family">Aileye hoş geldiniz</string>
   <string name="save_books_offline">Kitapları çevrimdışı kaydet</string>
   <string name="download_books_message">Kitapları indirin ve nerede olursanız olun okuyun.</string>
@@ -261,7 +262,7 @@
   <string name="tag_short_text">Kısa Metin</string>
   <string name="storage_permission_denied">Depolama İzni Reddedildi</string>
   <string name="grant_read_storage_permission">Bu uygulama çalışması için depolama okuma yeteneği gerektirir. Lütfen ayarlarınızda izin verin</string>
-  <string name="go_to_settings">Ayarlara Gidin</string>
+  <string name="go_to_settings">Hotspot Ayarlarına Gidin</string>
   <string name="no_results">Bulunamadı</string>
   <string name="no_bookmarks">Yer İmi Yok</string>
   <string name="no_history">Geçmiş Yok</string>

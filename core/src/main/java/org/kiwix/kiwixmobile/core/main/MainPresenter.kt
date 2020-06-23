@@ -19,10 +19,10 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.util.Log
 import org.kiwix.kiwixmobile.core.base.BasePresenter
-import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.main.MainContract.Presenter
 import org.kiwix.kiwixmobile.core.main.MainContract.View
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk

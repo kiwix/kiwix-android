@@ -4,6 +4,7 @@
 * Alexander Yukal
 * Avd2ev
 * DevilishSkull
+* Diman Russkov
 * Facenapalm
 * Fitoschido
 * Gehhrr
@@ -12,6 +13,7 @@
 * Link2xt
 * Movses
 * Okras
+* Pacha Tchernof
 * Putnik
 -->
 <resources>
@@ -28,11 +30,11 @@
   <string name="save_media">Сохранить Медиа-файлы</string>
   <string name="save_media_error">Произошла ошибка при сохранении медиафайла!</string>
   <string name="save_media_saved">Медиафайл сохранён как %s в Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Поиск загружаемого контента, пожалуйста, подождите…</string>
   <string name="search_label">Поиск</string>
   <string name="choose_file">Выберите файл содержимого (*.zim)</string>
   <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
   <string name="server_stopped_successfully_toast_message">Сервер успешно остановлен.</string>
+  <string name="wifi_dialog_title">Обнаружено Wi-Fi подключение</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
@@ -85,7 +87,7 @@
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_zims_toast">Файл удалён</string>
+  <string name="delete_zims_toast">Файл успешно удалён</string>
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space" fuzzy="true">Недостаточно места для загрузки этого файла.</string>
   <string name="space_available">Доступно Места:</string>
@@ -105,7 +107,7 @@
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
-  <string name="delete_zim_failed" fuzzy="true">Извините, мы не смогли удалить этот файл. Вместо этого вам стоит попробовать использовать файловый менеджер.</string>
+  <string name="delete_zim_failed">Извините, мы не смогли удалить некоторые файлы. Вместо этого вам стоит попытаться использовать файловый менеджер.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
   <string name="stop">остановить</string>

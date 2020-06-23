@@ -24,6 +24,6 @@ object UpdateUtils {
   @JvmStatic
   fun reformatProviderUrl(url: String) = url.replace(
     OLD_PROVIDER_DOMAIN,
-    CoreApp.getInstance().packageName + ".zim.base"
+    CoreApp.instance.packageName + ".zim.base"
   )
 }

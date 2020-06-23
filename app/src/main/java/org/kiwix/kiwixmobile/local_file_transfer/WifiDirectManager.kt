@@ -284,7 +284,7 @@ class WifiDirectManager @Inject constructor(
     }
   }
 
-  fun changeStatus(itemIndex: Int, @FileStatus status: Int) {
+  fun changeStatus(itemIndex: Int, status: FileStatus) {
     filesForTransfer[itemIndex].fileStatus = status
     callbacks.onFileStatusChanged(itemIndex)
     if (status == FileStatus.ERROR) {

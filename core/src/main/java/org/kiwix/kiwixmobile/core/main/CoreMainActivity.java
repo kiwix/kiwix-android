@@ -61,6 +61,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -94,16 +95,15 @@ import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem;
-import org.kiwix.kiwixmobile.core.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
+import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
-import org.kiwix.kiwixmobile.core.history.HistoryActivity;
-import org.kiwix.kiwixmobile.core.history.HistoryListItem;
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
@@ -122,6 +122,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
+import static org.kiwix.kiwixmobile.core.page.history.HistoryActivityKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
@@ -172,7 +173,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @BindView(R2.id.activity_main_app_bar)
   AppBarLayout toolbarContainer;
   @BindView(R2.id.activity_main_progress_view)
-  AnimatedProgressBar progressBar;
+  ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
   @BindView(R2.id.activity_main_drawer_layout)
@@ -566,7 +567,6 @@ public abstract class CoreMainActivity extends BaseActivity
       if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
         tabSwitcherRoot.setVisibility(View.GONE);
         startAnimation(tabSwitcherRoot, R.anim.slide_up);
-        progressBar.setVisibility(View.VISIBLE);
         contentFrame.setVisibility(View.VISIBLE);
       }
       selectTab(currentWebViewIndex);
@@ -868,8 +868,7 @@ public abstract class CoreMainActivity extends BaseActivity
   protected void selectTab(int position) {
     currentWebViewIndex = position;
     contentFrame.removeAllViews();
-
-    KiwixWebView webView = webViewList.get(position);
+    KiwixWebView webView = safelyGetWebView(position);
     if (webView.getParent() != null) {
       ((ViewGroup) webView.getParent()).removeView(webView);
     }
@@ -884,6 +883,16 @@ public abstract class CoreMainActivity extends BaseActivity
     if (!isHideToolbar && webView instanceof ToolbarScrollingKiwixWebView) {
       ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
     }
+  }
+
+  private KiwixWebView safelyGetWebView(int position) {
+    return webViewList.size() == 0 ? newMainPageTab() : webViewList.get(safePosition(position));
+  }
+
+  private int safePosition(int position) {
+    return position < 0 ? 0
+      : position >= webViewList.size() ? webViewList.size() - 1
+        : position;
   }
 
   protected KiwixWebView getCurrentWebView() {
@@ -1450,7 +1459,7 @@ public abstract class CoreMainActivity extends BaseActivity
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
-          boolean wasFromTabSwitcher = mainMenu.isInTabSwitcher();
+          boolean wasFromTabSwitcher = mainMenu != null && mainMenu.isInTabSwitcher();
           hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
@@ -1493,7 +1502,7 @@ public abstract class CoreMainActivity extends BaseActivity
       case REQUEST_HISTORY_ITEM_CHOSEN:
         hideTabSwitcher();
         if (resultCode == RESULT_OK) {
-          if (data.getBooleanExtra(HistoryActivity.USER_CLEARED_HISTORY, false)) {
+          if (data.getBooleanExtra(USER_CLEARED_HISTORY, false)) {
             for (KiwixWebView kiwixWebView : webViewList) {
               kiwixWebView.clearHistory();
             }
@@ -1649,8 +1658,10 @@ public abstract class CoreMainActivity extends BaseActivity
   @Override
   public void webViewProgressChanged(int progress) {
     if (checkNull(progressBar)) {
+      progressBar.show();
       progressBar.setProgress(progress);
       if (progress == 100) {
+        progressBar.hide();
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
       }
     }

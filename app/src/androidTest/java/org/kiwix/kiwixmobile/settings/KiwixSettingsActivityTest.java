@@ -18,104 +18,70 @@
 
 package org.kiwix.kiwixmobile.settings;
 
-import android.preference.Preference;
+import android.view.View;
+import androidx.annotation.StringRes;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
+import org.hamcrest.Matcher;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.core.R;
-import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
-import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.PreferenceMatchers.withKey;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 
 public class KiwixSettingsActivityTest {
   @Rule
-  public ActivityTestRule<KiwixMainActivity> activityTestRule =
-    new ActivityTestRule<>(KiwixMainActivity.class);
+  public ActivityTestRule<KiwixSettingsActivity> activityTestRule =
+    new ActivityTestRule<>(KiwixSettingsActivity.class);
 
   @Test
   public void testToggle() {
-    enterSettings();
+    clickOn(R.string.pref_back_to_top);
+    clickOn(R.string.pref_hide_toolbar);
+    clickOn(R.string.pref_newtab_background_title);
+    clickOn(R.string.pref_external_link_popup_title);
+    clickOn(R.string.pref_wifi_only);
+  }
 
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_backtotop")))
-      .perform(click());
-
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_hidetoolbar")))
-      .perform(click());
-
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_newtab_background")))
-      .perform(click());
-
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_external_link_popup")))
-      .perform(click());
-
-    /*onData(allOf(
-        is(instanceOf(Preference.class)),
-        withKey("pref_full_text_search")))
-        .perform(click());*/
-
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_wifi_only")))
-      .perform(click());
+  private void clickOn(@StringRes int... stringIds) {
+    Matcher<View>[] matchers= new Matcher[stringIds.length];
+    for (int i = 0; i < stringIds.length; i++) {
+      matchers[i]= withText(stringIds[i]);
+    }
+    onView(withClassName(is(RecyclerView.class.getName())))
+      .perform(actionOnItem(hasDescendant(anyOf(matchers)), click()));
   }
 
   @Test
   public void testLanguageDialog() {
-    enterSettings();
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_language_chooser")))
-      .perform(click());
-
+    clickOn(R.string.device_default);
     assertDisplayed(R.string.pref_language_title);
   }
 
   @Test
   public void testStorageDialog() {
-    enterSettings();
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_select_folder")))
-      .perform(click());
-
+    clickOn(R.string.internal_storage, R.string.external_storage);
     assertDisplayed(R.string.pref_storage);
   }
 
   @Test
   public void testHistoryDialog() {
-    enterSettings();
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_clear_all_history")))
-      .perform(click());
-
+    clickOn(R.string.pref_clear_all_history_title);
     assertDisplayed(R.string.clear_all_history_dialog_title);
   }
 
   @Test
   public void testNightModeDialog() {
-    enterSettings();
-    onData(allOf(
-      is(instanceOf(Preference.class)),
-      withKey("pref_night_mode")))
-      .perform(click());
-
+    clickOn(R.string.pref_night_mode);
     for (String nightModeString : nightModeStrings()) {
       assertDisplayed(nightModeString);
     }

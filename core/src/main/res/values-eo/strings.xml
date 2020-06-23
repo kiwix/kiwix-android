@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Blahma
 * Fitoschido
 * Kelson
@@ -8,7 +9,6 @@
 * Robin van der Vliet
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Helpo</string>
   <string name="menu_home">Hejmo</string>
   <string name="menu_settings">Agordoj</string>
@@ -23,10 +23,10 @@
   <string name="save_media">Konservi Aŭdvidaĵon</string>
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
   <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Daŭras serĉado de elŝutebla enhavo, bonvolu atendi…</string>
   <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu Dosieron de Enhavo (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
+  <string name="hotspot_dialog_neutral_button">DAŬRIGI</string>
   <string name="error_file_not_found">Eraro: Ne eblis trovi la elektitan ZIM-dosieron.</string>
   <string name="error_file_invalid">Eraro: La elektita dosiero ne estas valida ZIM-dosiero.</string>
   <string name="error_article_url_not_found">Eraro: Ŝargado de la artikolo (Url: %1$s) fiaskis.</string>
@@ -148,7 +148,7 @@
   <string name="articleCount">%s artikoloj</string>
   <string name="get_started">Komenci</string>
   <string name="download_books">Elŝuti librojn</string>
-  <string name="human_kind_knowledge">La sciaro de la homaro, en via telefono.</string>
+  <string name="humankind_knowledge">La sciaro de la homaro, en via telefono.</string>
   <string name="welcome_to_the_family">Bonvenon al la familio</string>
   <string name="save_books_offline">Konservi librojn por senkonekta uzo</string>
   <string name="download_books_message">Elŝuti librojn kaj legi ilin ĉie ajn.</string>

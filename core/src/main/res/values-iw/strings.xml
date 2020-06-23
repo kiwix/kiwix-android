@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Amire80
 * Ghsuvr
 * Guycn2
@@ -10,7 +11,6 @@
 * יאיר מן
 -->
 <resources>
-  <string name="kiwi">קיווי</string>
   <string name="menu_help">עזרה</string>
   <string name="menu_home">בית</string>
   <string name="menu_settings">הגדרות</string>
@@ -26,7 +26,6 @@
   <string name="save_media">שמירת מדיה</string>
   <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
   <string name="save_media_saved">המדיה נשמרה בתור %s אל Android/media/org.kiwix…/‎</string>
-  <string name="rescan_fs_warning">מתבצעת סריקה לאיתור תכנים הניתנים להורדה, נא להמתין…</string>
   <string name="search_label">חיפוש</string>
   <string name="choose_file">בחירת קובץ תוכן (‎*.zim)</string>
   <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
@@ -44,9 +43,9 @@
   <string name="hotspot_details_message">להלן הפרטים של נקודת החיבור המקומית שלך.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">נא לבחור את הקבצים שברצונך לארח בשרת</string>
   <string name="progress_dialog_starting_server">הרצת השרת</string>
-  <string name="hotspot_dialog_title">הפעלת נקודת חיבור הווייפיי שלך</string>
-  <string name="hotspot_dialog_message">כדי שהאפשרות הזאת תעבוד, צריך קודם להפעיל את נקודת חיבור הווייפיי שלך ידנית.</string>
-  <string name="hotspot_dialog_neutral_button">כן, הפעלתי אותה</string>
+  <string name="hotspot_dialog_title" fuzzy="true">הפעלת נקודת חיבור הווייפיי שלך</string>
+  <string name="hotspot_dialog_message" fuzzy="true">כדי שהאפשרות הזאת תעבוד, צריך קודם להפעיל את נקודת חיבור הווייפיי שלך ידנית.</string>
+  <string name="hotspot_dialog_neutral_button" fuzzy="true">כן, הפעלתי אותה</string>
   <string name="hotspot_channel_description">עדכונים על מצב נקודת החיבור והשרת שלך.</string>
   <string name="hotspot_notification_content_title">נקודת חיבור של קיוויקס</string>
   <string name="start_server_label">הרצת השרת</string>
@@ -110,7 +109,7 @@
   <string name="local_zims">מכשיר</string>
   <string name="remote_zims">מקוון</string>
   <string name="library">ספרייה</string>
-  <string name="delete_zim_body" fuzzy="true">למחוק את %s?</string>
+  <string name="delete_zim_body">קובצי ה־zim הבאים יימחקו:\n\n%s</string>
   <string name="delete_zims_toast">הקבצים נמחקו בהצלחה</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום להורדה.</string>
@@ -160,7 +159,7 @@
   <string name="time_yesterday">אתמול</string>
   <string name="pref_external_link_popup_title">תן אזהרה בעת כניסה לקישורים חיצוניים</string>
   <string name="pref_external_link_popup_summary">הצגת בועת אזהרה על תשלומים נוספים או כאשר אין אפשרות עבודה עם קישורים לא-מקוונים.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">העברה לקישור חיצוני</string>
+  <string name="external_link_popup_dialog_title">העברה לקישור חיצוני!</string>
   <string name="external_link_popup_dialog_message">פעולה זו מובילה לקישור חיצוני. כתוצאה מכך עשויות לחול עליך עלויות בגין העברת נתונים או שהקישור לא יעבוד עקב העדר חיבור. להמשיך?</string>
   <string name="do_not_ask_anymore">לא לשאול שוב</string>
   <string name="your_languages">שפות נבחרות:</string>
@@ -181,7 +180,7 @@
   <string name="articleCount">%s ערכים</string>
   <string name="get_started">איך מתחילים</string>
   <string name="download_books">הורדת ספרים</string>
-  <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
+  <string name="humankind_knowledge">Humankind\'s knowledge, on your phone.</string>
   <string name="welcome_to_the_family">ברוכים הבאים למשפחה!</string>
   <string name="save_books_offline">תשמרו ספרים לקריאה ללא חיבור לרשת</string>
   <string name="download_books_message">תורידו ספרים ותקראו אותם בכל מקום.</string>
@@ -257,7 +256,7 @@
   <string name="tag_short_text">טקסט קצר</string>
   <string name="storage_permission_denied">אישור האחסון נדחה</string>
   <string name="grant_read_storage_permission">אפליקציה זו דורשת את אפשרות לקרוא את האחסון שלך כדי לתפקד. אנא הענק את ההרשאה בהגדרות שלך</string>
-  <string name="go_to_settings">לך להגדרות</string>
+  <string name="go_to_settings" fuzzy="true">לך להגדרות</string>
   <string name="no_results">אין תוצאות</string>
   <string name="no_bookmarks">אין סימניות</string>
   <string name="no_history">אין היסטוריה</string>
@@ -267,4 +266,8 @@
   <string name="on">מופעל</string>
   <string name="off">כבוי</string>
   <string name="auto">אוטומטי</string>
+  <string name="send_report">שליחת דוח אבחון</string>
+  <string name="crash_checkbox_file_system">פרטי מערכת קבצים</string>
+  <string name="diagnostic_report">דוח אבחון</string>
+  <string name="diagnostic_report_message">נא לשלוח את כל הפרטים הבאים כדי שנוכל לאבחן את התקלה</string>
 </resources>

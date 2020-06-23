@@ -17,8 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.di.modules
 
-import android.content.Context
-import android.net.ConnectivityManager
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -52,7 +50,4 @@ class NetworkModule {
 
   @Provides @Singleton fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
     ServiceCreator.newHacklistService(okHttpClient, KIWIX_DOWNLOAD_URL)
-
-  @Provides @Singleton fun provideConnectivityManager(context: Context): ConnectivityManager =
-    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 }
