@@ -9,9 +9,9 @@ This file intends to provide links to design resources, display the Kiwix colors
 The Kiwix colors are black and white with different colored accents. For Kiwix Android, black is accented by different shades of blue:
 
 - ![#000000](https://via.placeholder.com/15/000000/000000?text=+) `#000000`/`black`
-- ![#1565c0](https://via.placeholder.com/15/1565c0/000000?text=+) `#1565c0`/`color_primary`
-- ![#2196F3](https://via.placeholder.com/15/2196F3/000000?text=+) `#2196F3`/`accent`
-- ![#42a5f5](https://via.placeholder.com/15/42a5f5/000000?text=+) `#42a5f5`/`blue400`
+- ![#1565c0](https://via.placeholder.com/15/1565c0/000000?text=+) `#1565c0`/`denim_blue800`
+- ![#42a5f5](https://via.placeholder.com/15/42a5f5/000000?text=+) `#42a5f5`/`denim_blue400`
+- ![#2196F3](https://via.placeholder.com/15/2196F3/000000?text=+) `#2196F3`/`dodger_blue`
 
 > Color indicates which elements are interactive, how they relate to other elements, and their level of prominence. Important elements should stand out the most [1].
 
