@@ -56,7 +56,7 @@ import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 
-class ZimFileSelectFragment : BaseFragment() {
+open class ZimFileSelectFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
@@ -64,10 +64,10 @@ class ZimFileSelectFragment : BaseFragment() {
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
 
-  private val zimManageViewModel by lazy {
+  protected val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
-  private val bookDelegate: BookDelegate by lazy {
+  protected open val bookDelegate: BookDelegate by lazy {
     BookDelegate(sharedPreferenceUtil,
       { offerAction(RequestOpen(it)) },
       { offerAction(RequestMultiSelection(it)) },
