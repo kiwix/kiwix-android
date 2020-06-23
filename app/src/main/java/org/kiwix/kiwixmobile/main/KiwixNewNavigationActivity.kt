@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.ActionMode
+import android.view.Menu
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -45,12 +46,17 @@ class KiwixNewNavigationActivity : CoreNewNavigationActivity() {
     val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
     navController = findNavController(R.id.nav_host_fragment)
-    // Passing each menu ID as a set of Ids because each
-    // menu should be considered as top level destinations.
+
     appBarConfiguration = AppBarConfiguration(
       navController.graph
     )
     navView.setupWithNavController(navController)
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    val onCreateOptionsMenu = super.onCreateOptionsMenu(menu)
+    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
+    return onCreateOptionsMenu
   }
 
   override fun onSupportNavigateUp(): Boolean {

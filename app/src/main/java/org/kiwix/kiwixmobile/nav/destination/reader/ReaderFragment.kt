@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -80,6 +81,11 @@ class ReaderFragment : CoreReaderFragment() {
     val view = super.onCreateView(inflater, container, savedInstanceState)
     manageExternalLaunchAndRestoringViewState()
     return view
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
+    super.onCreateOptionsMenu(menu, menuInflater)
+    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
   }
 
   override fun onCreateOptionsMenu(
