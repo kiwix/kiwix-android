@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.core.search.adapter
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.get
+import kotlinx.android.synthetic.main.list_item_search.list_item_search_new_tab_button
+import kotlinx.android.synthetic.main.list_item_search.list_item_search_text
 import kotlinx.android.synthetic.main.list_item_search.view.list_item_search_new_tab_button
 import kotlinx.android.synthetic.main.list_item_search.view.list_item_search_text
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
@@ -55,9 +57,8 @@ sealed class SearchViewHolder<in T : SearchListItem>(containerView: View) :
   ) : SearchViewHolder<ZimSearchResultListItem>(containerView) {
     override fun bind(item: ZimSearchResultListItem) {
       containerView.setOnClickListener { onClickListener(item) }
-      containerView.list_item_search_new_tab_button
-        .setOnClickListener { onClickListenerNewTab(item) }
-      (containerView.list_item_search_text as TextView).text = item.value
+      list_item_search_new_tab_button.setOnClickListener { onClickListenerNewTab(item) }
+      (list_item_search_text as TextView).text = item.value
     }
   }
 }

@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
@@ -156,7 +157,7 @@ class SearchActivity : BaseActivity() {
   }
 
   private fun onItemClickNewTab(it: SearchListItem) {
-    searchViewModel.actions.offer(OnItemClick(it, true))
+    searchViewModel.actions.offer(OnOpenInNewTabClick(it))
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
@@ -89,7 +90,8 @@ class SearchViewModel @Inject constructor(
   private fun actionMapper() = actions.map {
     when (it) {
       ExitedSearch -> effects.offer(Finish)
-      is OnItemClick -> saveSearchAndOpenItem(it)
+      is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
+      is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
       is OnItemLongClick -> showDeleteDialog(it)
       is Filter -> filter.offer(it.term)
       ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
@@ -118,12 +120,12 @@ class SearchViewModel @Inject constructor(
     effects.offer(ShowDeleteSearchDialog(longClick.searchListItem, actions))
   }
 
-  private fun saveSearchAndOpenItem(it: OnItemClick) {
+  private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {
     effects.offer(
-      SaveSearchToRecents(recentSearchDao, it.searchListItem, zimReaderContainer.id)
+      SaveSearchToRecents(recentSearchDao, searchListItem, zimReaderContainer.id)
     )
     effects.offer(
-      OpenSearchItem(it.searchListItem, it.openInNewTab)
+      OpenSearchItem(searchListItem, openInNewTab)
     )
   }
 
