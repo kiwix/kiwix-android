@@ -1263,7 +1263,7 @@ public abstract class CoreMainActivity extends BaseActivity
               goToBookmarks();
               return Unit.INSTANCE;
             },
-            getResources().getColor(R.color.white)
+            getResources().getColor(R.color.alabaster_white)
           );
         } else {
           ContextExtensionsKt.toast(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT);
@@ -1718,7 +1718,7 @@ public abstract class CoreMainActivity extends BaseActivity
             .setAction(getString(R.string.open), v -> {
               if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
             })
-            .setActionTextColor(getResources().getColor(R.color.white))
+            .setActionTextColor(getResources().getColor(R.color.alabaster_white))
             .show();
         } else {
           newTab(url);

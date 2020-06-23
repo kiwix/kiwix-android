@@ -5,16 +5,16 @@
   <!--The same color values are defined for dark theme, but with values more appropriate for -->
   <!--low-luminance UIs. These colors will be used by night/themes.xml.-->
 
-  <color name="color_primary">@color/blue400</color>
+  <color name="color_primary">@color/denim_blue400</color>
 
-  <color name="color_surface">@color/gray900</color>
+  <color name="color_surface">@color/mine_shaft_gray900</color>
   <color name="color_error">@color/pink300</color>
 
-  <color name="color_on_primary">@color/white</color>
-  <color name="color_on_surface">@color/white</color>
-  <color name="color_on_error">@color/white</color>
+  <color name="color_on_primary">@color/alabaster_white</color>
+  <color name="color_on_surface">@color/alabaster_white</color>
+  <color name="color_on_error">@color/alabaster_white</color>
 
-  <color name="text_secondary">@color/gray350</color>
-  <color name="text_tertiary">@color/gray500</color>
-  <color name="card_view_background">@color/gray850</color>
+  <color name="text_secondary">@color/mine_shaft_gray350</color>
+  <color name="text_tertiary">@color/mine_shaft_gray500</color>
+  <color name="card_view_background">@color/mine_shaft_gray850</color>
 </resources>

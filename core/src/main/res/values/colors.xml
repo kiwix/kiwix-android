@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="black">#000000</color>
+  <color name="white">#ffffff</color>
 
-  <color name="accent">#2196F3</color>
-  <color name="white">#fafafa</color>
-  <color name="gray">#5a5a5a</color>
-  <color name="gray900">#212121</color>
-  <color name="blue400">#42a5f5</color>
-  <color name="blue800">#1565c0</color>
+  <color name="dodger_blue">#2196F3</color>
+  <color name="alabaster_white">#fafafa</color>
+  <color name="scorpion_gray">#5a5a5a</color>
+  <color name="denim_blue400">#42a5f5</color>
+  <color name="denim_blue800">#1565c0</color>
   <color name="pink300">#f06292</color>
-  <color name="actionModeBackground">#4285F4</color>
-  <color name="gray350">#FFD6D6D6</color>
-  <color name="gray500">#9E9E9E</color>
-  <color name="gray700">#616161</color>
-  <color name="gray850">#303030</color>
-  <color name="card_view_background">@color/white</color>
-  <color name="text_secondary">@color/gray700</color>
-  <color name="text_tertiary">@color/gray500</color>
+  <color name="cornflower_blue">#4285F4</color>
+  <color name="mine_shaft_gray350">#FFD6D6D6</color>
+  <color name="mine_shaft_gray500">#9E9E9E</color>
+  <color name="mine_shaft_gray900">#212121</color>
+  <color name="mine_shaft_gray700">#616161</color>
+  <color name="mine_shaft_gray850">#303030</color>
+  <color name="monza_red">#b00020</color>
+  <color name="card_view_background">@color/alabaster_white</color>
+  <color name="text_secondary">@color/mine_shaft_gray700</color>
+  <color name="text_tertiary">@color/mine_shaft_gray500</color>
 
   <!--Material Components Colors-->
 
-  <color name="color_primary">@color/blue800</color>
+  <color name="color_primary">@color/denim_blue800</color>
+  <color name="actionModeBackground">@color/cornflower_blue</color>
 
-  <color name="color_surface">@color/white</color>
-  <color name="color_error">#b00020</color>
+  <color name="color_surface">@color/alabaster_white</color>
+  <color name="color_error">@color/monza_red</color>
 
-  <color name="color_on_primary">#ffffff</color>
+  <color name="color_on_primary">@color/white</color>
   <color name="color_on_surface">@color/black</color>
-  <color name="color_on_error">@color/white</color>
+  <color name="color_on_error">@color/alabaster_white</color>
 
 </resources>
