@@ -35,21 +35,18 @@ class FileLogger @Inject constructor() {
   val isExternalStorageWritable: Boolean =
     Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 
-  fun writeLogFile() {
+  fun writeLogFile(): File {
+    val appDirectory = File(Environment.getExternalStorageDirectory().toString() + "/Kiwix")
+    val logFile = File(appDirectory, "logs" + System.currentTimeMillis() + ".txt")
     if (isExternalStorageWritable) {
-
-      val appDirectory =
-        File(Environment.getExternalStorageDirectory().toString() + "/Kiwix")
-
-      val logFile = File(appDirectory, "logs" + System.currentTimeMillis() + ".txt")
       Log.d("KIWIX", "Writing all logs into [" + logFile.path + "]")
-
       // create a new folder
       if (!appDirectory.exists()) {
+        Log.d(TAG, "writeLogFile: Creating new logFile@ $logFile")
         appDirectory.mkdir()
       }
-
       if (logFile.exists() && logFile.isFile) {
+        Log.d(TAG, "writeLogFile: Deleting preExistingFile")
         logFile.delete()
       }
       // clear the previous logcat and then write the new one to the file
@@ -60,9 +57,8 @@ class FileLogger @Inject constructor() {
       } catch (e: IOException) {
         Log.e("KIWIX", "Error while writing logcat.txt", e)
       }
-    } else {
-      Log.e(TAG, "writeLogFile: No write access to the device's storage!")
     }
+    return logFile
   }
 
   companion object {
