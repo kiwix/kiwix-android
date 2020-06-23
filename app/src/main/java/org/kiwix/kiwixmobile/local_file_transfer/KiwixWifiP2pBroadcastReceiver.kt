@@ -33,7 +33,6 @@ import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION
 import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION
 import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_STATE_ENABLED
 import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
-import android.util.Log
 
 /**
  * Helper class for the local file sharing module.
@@ -61,12 +60,7 @@ class KiwixWifiP2pBroadcastReceiver(private val p2pEventListener: P2pEventListen
           intent.getParcelableExtra<WifiP2pDevice>(EXTRA_WIFI_P2P_DEVICE)
         p2pEventListener.onDeviceChanged(userDevice)
       }
-      else -> Log.d(TAG, "onReceive: No change in P2P connection detected!")
     }
-  }
-
-  companion object {
-    private const val TAG = "WifiP2pBroadcastRecvr"
   }
 
   interface P2pEventListener {
