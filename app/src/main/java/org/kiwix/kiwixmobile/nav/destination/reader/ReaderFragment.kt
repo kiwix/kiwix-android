@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,6 +29,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.navigation.fragment.navArgs
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -57,6 +59,17 @@ import java.io.File
 class ReaderFragment : CoreReaderFragment() {
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.kiwixActivityComponent.inject(this)
+  }
+
+  private val args: ReaderFragmentArgs by navArgs()
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    val uri = args.zimFileUri
+
+    if (uri.isNotEmpty()) {
+      openZimFile(Uri.parse(uri).toFile())
+    }
   }
 
   override fun onCreateView(

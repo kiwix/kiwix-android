@@ -35,9 +35,8 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
     if (!file.canRead()) {
       activity.toast(R.string.error_file_not_found)
     } else {
-      val action = LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader(
-        file.toUri().toString()
-      )
+      val action = LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+      action.zimFileUri = file.toUri().toString()
       activity.findNavController(org.kiwix.kiwixmobile.R.id.nav_host_fragment).navigate(action)
     }
   }

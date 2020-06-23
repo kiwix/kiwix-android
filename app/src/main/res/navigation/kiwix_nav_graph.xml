@@ -25,6 +25,7 @@
     android:label="Reader">
     <argument
       android:name="zimFileUri"
+      android:defaultValue=""
       app:argType="string" />
   </fragment>
 
