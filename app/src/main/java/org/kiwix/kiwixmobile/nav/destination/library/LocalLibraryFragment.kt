@@ -34,23 +34,22 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 
 class LocalLibraryFragment : ZimFileSelectFragment() {
 
-  private var searchItem: MenuItem? = null
-  private var languageItem: MenuItem? = null
-  private var getZimItem: MenuItem? = null
-
   override val bookDelegate: BookOnDiskDelegate.BookDelegate by lazy {
     BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
-      { offerAction(ZimManageViewModel.FileSelectActions.RequestNavigateTo(it)) },
-      { offerAction(ZimManageViewModel.FileSelectActions.RequestMultiSelection(it)) },
-      { offerAction(ZimManageViewModel.FileSelectActions.RequestSelect(it)) })
+      { offerAction(RequestNavigateTo(it)) },
+      { offerAction(RequestMultiSelection(it)) },
+      { offerAction(RequestSelect(it)) })
   }
 
-  private fun offerAction(action: ZimManageViewModel.FileSelectActions) {
+  private fun offerAction(action: FileSelectActions) {
     zimManageViewModel.fileSelectActions.offer(action)
   }
 
@@ -60,11 +59,10 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.menu_zim_manager, menu)
-    searchItem = menu.findItem(R.id.action_search)
-    languageItem = menu.findItem(R.id.select_language)
-    getZimItem = menu.findItem(R.id.get_zim_nearby_device)
-    languageItem?.isVisible = false
-    searchItem?.isVisible = false
+    val searchItem = menu.findItem(R.id.action_search)
+    val languageItem = menu.findItem(R.id.select_language)
+    languageItem.isVisible = false
+    searchItem.isVisible = false
     super.onCreateOptionsMenu(menu, inflater)
   }
 
