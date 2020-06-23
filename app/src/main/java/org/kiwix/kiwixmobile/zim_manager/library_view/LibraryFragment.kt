@@ -61,7 +61,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import javax.inject.Inject
 
-class LibraryFragment : BaseFragment() {
+open class LibraryFragment : BaseFragment() {
 
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
@@ -71,7 +71,7 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
 
-  private val zimManageViewModel by lazy {
+  protected val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
 
