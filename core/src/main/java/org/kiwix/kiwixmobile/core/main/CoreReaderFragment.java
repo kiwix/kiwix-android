@@ -160,7 +160,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   MainContract.View,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
   public static final String HOME_URL = "file:///android_asset/home.html";
-  private static final int CORE_READER_FRAGMENT = 1;
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
@@ -426,8 +425,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
     return root;
   }
-
   //End of onCreate
+
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
@@ -1645,7 +1644,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
     final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-    if (hasValidFileAndUrl(url, zimFileReader)) {
+    if (hasValidFileAndUrl(url, zimFileReader) && getActivity() != null) {
       final long timeStamp = System.currentTimeMillis();
       SimpleDateFormat sdf =
         new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
