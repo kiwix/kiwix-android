@@ -11,7 +11,7 @@
     <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
     <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
     <!--selection controls.-->
-    <item name="colorPrimary">@color/color_primary</item>
+    <item name="colorPrimary">@color/denim_blue800</item>
     <item name="colorPrimaryVariant">?colorPrimary</item>
     <item name="colorSecondary">?colorPrimary</item>
     <item name="colorSecondaryVariant">?colorPrimary</item>
@@ -23,7 +23,7 @@
     <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
     <!--and menus. colorError is used to indicate an error state for components such as-->
     <!--text fields.-->
-    <item name="colorSurface">@color/color_surface</item>
+    <item name="colorSurface">@color/alabaster_white</item>
     <item name="android:colorBackground">?colorSurface</item>
     <item name="colorError">@color/color_error</item>
 

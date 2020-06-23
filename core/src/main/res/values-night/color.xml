@@ -5,10 +5,9 @@
   <!--The same color values are defined for dark theme, but with values more appropriate for -->
   <!--low-luminance UIs. These colors will be used by night/themes.xml.-->
 
-  <color name="color_primary">@color/denim_blue400</color>
 
   <color name="color_surface">@color/mine_shaft_gray900</color>
-  <color name="color_error">@color/pink300</color>
+  <color name="color_error">@color/froly_pink300</color>
 
   <color name="color_on_primary">@color/alabaster_white</color>
   <color name="color_on_surface">@color/alabaster_white</color>

@@ -8,7 +8,7 @@
   <color name="scorpion_gray">#5a5a5a</color>
   <color name="denim_blue400">#42a5f5</color>
   <color name="denim_blue800">#1565c0</color>
-  <color name="pink300">#f06292</color>
+  <color name="froly_pink300">#f06292</color>
   <color name="cornflower_blue">#4285F4</color>
   <color name="mine_shaft_gray350">#FFD6D6D6</color>
   <color name="mine_shaft_gray500">#9E9E9E</color>
@@ -22,10 +22,9 @@
 
   <!--Material Components Colors-->
 
-  <color name="color_primary">@color/denim_blue800</color>
   <color name="actionModeBackground">@color/cornflower_blue</color>
-
   <color name="color_surface">@color/alabaster_white</color>
+
   <color name="color_error">@color/monza_red</color>
 
   <color name="color_on_primary">@color/white</color>
