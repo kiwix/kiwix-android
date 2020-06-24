@@ -68,6 +68,6 @@ class KiwixMainActivity : CoreMainActivity() {
       return
     }
     supportFragmentManager.beginTransaction()
-      .add(R.id.fragment_custom_app_container, KiwixMainFragment()).commit()
+      .add(R.id.fragment_custom_app_container, KiwixReaderFragment()).commit()
   }
 }

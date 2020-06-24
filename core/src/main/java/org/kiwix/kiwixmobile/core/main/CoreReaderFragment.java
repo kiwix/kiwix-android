@@ -714,7 +714,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void updateTitle() {
-    actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()) + " (FRAGMENT)");
+    actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()));
   }
 
   private String getValidTitle(String zimFileTitle) {

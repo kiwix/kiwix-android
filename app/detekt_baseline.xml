@@ -5,7 +5,7 @@
     <ID>EmptyFunctionBlock:None.kt$None${ }</ID>
     <ID>EmptyFunctionBlock:SimplePageChangeListener.kt$SimplePageChangeListener${ }</ID>
     <ID>EmptyFunctionBlock:ZimHostActivity.kt$ZimHostActivity.&lt;no name provided&gt;${}</ID>
-    <ID>ForbiddenComment:KiwixMainFragment.kt$KiwixMainFragment$// TODO: Show to user</ID>
+    <ID>ForbiddenComment:KiwixReaderFragment.kt$KiwixReaderFragment$// TODO: Show to user</ID>
     <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( booksOnFileSystem: List&lt;BookOnDisk&gt;, activeDownloads: List&lt;DownloadModel&gt;, allLanguages: List&lt;Language&gt;, libraryNetworkEntity: LibraryNetworkEntity, filter: String, fileSystemState: FileSystemState )</ID>
     <ID>MagicNumber:LibraryListItem.kt$LibraryListItem.LibraryDownloadItem$1000L</ID>
     <ID>MagicNumber:ShareFiles.kt$ShareFiles$24</ID>
@@ -44,7 +44,7 @@
     <ID>ReturnCount:Fat32Checker.kt$Fat32Checker$private fun canCreate4GbFile(storage: String): Boolean</ID>
     <ID>ReturnCount:LanguageActivity.kt$LanguageActivity$override fun onOptionsItemSelected(item: MenuItem): Boolean</ID>
     <ID>TooGenericExceptionCaught:FileWritingFileSystemChecker.kt$FileWritingFileSystemChecker$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:KiwixMainFragment.kt$KiwixMainFragment$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:KiwixReaderFragment.kt$KiwixReaderFragment$e: Exception</ID>
     <ID>TooGenericExceptionThrown:ActivityExtensions.kt$throw RuntimeException( """ applicationContext is ${applicationContext::class.java.simpleName} application is ${application::class.java.simpleName} """.trimIndent() )</ID>
     <ID>TooGenericExceptionThrown:LibraryViewHolder.kt$LibraryViewHolder.LibraryBookViewHolder$throw RuntimeException("impossible invalid state: ${item.fileSystemState}")</ID>
     <ID>TooGenericExceptionThrown:ZimManageViewModel.kt$ZimManageViewModel$throw RuntimeException("Impossible state")</ID>
