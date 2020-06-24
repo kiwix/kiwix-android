@@ -108,7 +108,6 @@ import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
@@ -130,7 +129,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
 import static org.kiwix.kiwixmobile.core.page.history.HistoryActivityKt.USER_CLEARED_HISTORY;
-import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.*;
+import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
@@ -302,13 +301,12 @@ public abstract class CoreReaderFragment extends BaseFragment
       getActivity().getMenuInflater().inflate(R.menu.menu_webview_action, menu);
       configureWebViewSelectionHandler(menu);
     }
-
     return Super.ShouldCall;
   }
 
   @NotNull @Override public Super onActionModeFinished(@NotNull ActionMode actionMode,
     @NotNull AppCompatActivity activity) {
-    actionMode = null;
+    this.actionMode = null;
     return Super.ShouldCall;
   }
 
@@ -656,7 +654,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else {
       return Super.ShouldCall;
     }
-    return Super.DontCall;
+    return Super.ShouldNotCall;
   }
 
   private void checkForRateDialog() {

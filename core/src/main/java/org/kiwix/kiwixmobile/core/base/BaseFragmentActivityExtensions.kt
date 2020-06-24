@@ -22,16 +22,17 @@ import android.content.Intent
 import android.view.ActionMode
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 
 interface BaseFragmentActivityExtensions {
   enum class Super {
     ShouldCall,
-    DontCall
+    ShouldNotCall
   }
 
-  fun onActionModeStarted(actionMode: ActionMode, activity: AppCompatActivity): Super
-  fun onActionModeFinished(actionMode: ActionMode, activity: AppCompatActivity): Super
-  fun onBackPressed(activity: AppCompatActivity): Super
-  fun onNewIntent(intent: Intent, activity: AppCompatActivity): Super
-  fun onCreateOptionsMenu(menu: Menu, activity: AppCompatActivity): Super
+  fun onActionModeStarted(actionMode: ActionMode, activity: AppCompatActivity): Super = ShouldCall
+  fun onActionModeFinished(actionMode: ActionMode, activity: AppCompatActivity): Super = ShouldCall
+  fun onBackPressed(activity: AppCompatActivity): Super = ShouldCall
+  fun onNewIntent(intent: Intent, activity: AppCompatActivity): Super = ShouldCall
+  fun onCreateOptionsMenu(menu: Menu, activity: AppCompatActivity): Super = ShouldCall
 }

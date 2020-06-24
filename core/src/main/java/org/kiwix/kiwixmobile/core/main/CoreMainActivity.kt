@@ -23,6 +23,7 @@ import android.view.ActionMode
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +63,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onBackPressed() {
     supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
+      if (it.onBackPressed(this) == ShouldCall) {
         super.onBackPressed()
       }
     }

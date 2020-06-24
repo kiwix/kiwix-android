@@ -167,11 +167,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
 
-  override fun onCreateOptionsMenu(
-    menu: Menu,
-    activity: AppCompatActivity
-  ): Super = ShouldCall
-
   override fun getIconResId() = R.mipmap.ic_launcher
 
   override fun createWebClient(
