@@ -47,7 +47,7 @@ internal class ShowDeleteBookmarksDialogTest {
     }
     val lambdaSlot = slot<() -> Unit>()
     showDeleteBookmarksDialog.invokeWith(activity)
-    verify { dialogShower.show(KiwixDialog.DeleteBookmarks, capture(lambdaSlot)) }
+    verify { dialogShower.show(KiwixDialog.DeleteAllBookmarks, capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
     verify { effects.offer(DeleteBookmarkItems(effects, bookmarkState(), newBookmarksDao)) }
   }

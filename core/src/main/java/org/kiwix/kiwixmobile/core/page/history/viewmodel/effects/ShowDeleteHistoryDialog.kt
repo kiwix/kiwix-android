@@ -25,7 +25,9 @@ import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 import org.kiwix.kiwixmobile.core.utils.DialogShower
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 import javax.inject.Inject
 
 data class ShowDeleteHistoryDialog(
@@ -36,7 +38,11 @@ data class ShowDeleteHistoryDialog(
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as HistoryActivity).activityComponent.inject(this)
-    dialogShower.show(DeleteAllHistory, {
+    var dialogType: KiwixDialog = DeleteAllHistory
+    if (state.isInSelectionState) {
+      dialogType = DeleteSelectedHistory
+    }
+    dialogShower.show(dialogType, {
       effects.offer(DeleteHistoryItems(state, historyDao))
     })
   }

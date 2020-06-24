@@ -189,7 +189,7 @@ sealed class KiwixDialog(
   }
 
   object DeleteSelectedHistory : KiwixDialog(
-    R.string.delete_history,
+    R.string.delete_selected_history,
     null,
     positiveMessage = R.string.delete,
     negativeMessage = R.string.cancel
@@ -202,8 +202,15 @@ sealed class KiwixDialog(
     negativeMessage = R.string.cancel
   )
 
-  object DeleteBookmarks : KiwixDialog(
+  object DeleteAllBookmarks : KiwixDialog(
     R.string.delete_bookmarks,
+    null,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object DeleteSelectedBookmarks : KiwixDialog(
+    R.string.delete_selected_bookmarks,
     null,
     positiveMessage = R.string.delete,
     negativeMessage = R.string.cancel
