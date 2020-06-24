@@ -25,10 +25,5 @@
   <color name="actionModeBackground">@color/cornflower_blue</color>
   <color name="color_surface">@color/alabaster_white</color>
 
-  <color name="color_error">@color/monza_red</color>
-
-  <color name="color_on_primary">@color/white</color>
-  <color name="color_on_surface">@color/black</color>
-  <color name="color_on_error">@color/alabaster_white</color>
 
 </resources>

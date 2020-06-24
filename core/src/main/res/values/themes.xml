@@ -25,15 +25,15 @@
     <!--text fields.-->
     <item name="colorSurface">@color/alabaster_white</item>
     <item name="android:colorBackground">?colorSurface</item>
-    <item name="colorError">@color/color_error</item>
+    <item name="colorError">@color/monza_red</item>
 
     <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
     <!--on which they appear.-->
-    <item name="colorOnPrimary">@color/color_on_primary</item>
+    <item name="colorOnPrimary">@color/white</item>
     <item name="colorOnSecondary">?colorOnPrimary</item>
-    <item name="colorOnSurface">@color/color_on_surface</item>
+    <item name="colorOnSurface">@color/black</item>
     <item name="colorOnBackground">?colorOnSurface</item>
-    <item name="colorOnError">@color/color_on_error</item>
+    <item name="colorOnError">@color/alabaster_white</item>
 
     <!--Material type attributes-->
     <item name="textAppearanceHeadline1">@style/TextAppearance.KiwixTheme.Headline1</item>

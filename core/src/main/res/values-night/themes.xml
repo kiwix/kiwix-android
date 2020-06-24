@@ -8,9 +8,13 @@
     <item name="colorSurface">@color/mine_shaft_gray900</item>
     <item name="colorError">@color/froly_pink300</item>
 
+
     <item name="colorOnPrimary">@color/alabaster_white</item>
     <item name="colorOnSurface">@color/alabaster_white</item>
-    <item name="colorOnError">@color/alabaster_white</item>
+
+    <!--Black has a contrast ratio of 6.9:1 vs
+        white which has a ratio of 3.05:1 (on froly_pink300)-->
+    <item name="colorOnError">@color/black</item>
   </style>
 
 </resources>
