@@ -40,11 +40,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
@@ -120,6 +122,14 @@ class CustomReaderFragment : CoreReaderFragment() {
     )
   }
 
+  override fun onBackPressed(activity: AppCompatActivity): Super {
+    val result = super.onBackPressed(activity)
+    if (zimReaderContainer.mainPage == getCurrentWebView().url.substringAfter(CONTENT_PREFIX)) {
+      return ShouldCall
+    }
+    return result
+  }
+
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<out String>,
@@ -151,7 +161,6 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
-    val onCreateOptionsMenu = super.onCreateOptionsMenu(menu, requireActivity().menuInflater)
     menu.findItem(R.id.menu_help)?.isVisible = false
     menu.findItem(R.id.menu_new_navigation)?.isVisible = false
     menu.findItem(R.id.menu_openfile)?.isVisible = false
@@ -161,7 +170,7 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(
     menu: Menu,
     activity: AppCompatActivity
-  ): BaseFragmentActivityExtensions.Super = BaseFragmentActivityExtensions.Super.ShouldCall
+  ): Super = ShouldCall
 
   override fun getIconResId() = R.mipmap.ic_launcher
 
