@@ -18,11 +18,8 @@
 
 package org.kiwix.kiwixmobile.main
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.ActionMode
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -30,35 +27,6 @@ import org.kiwix.kiwixmobile.kiwixActivityComponent
 class KiwixMainActivity : CoreMainActivity() {
   override fun injection(coreComponent: CoreComponent) {
     kiwixActivityComponent.inject(this)
-  }
-
-  override fun onActionModeStarted(mode: ActionMode) {
-    super.onActionModeStarted(mode)
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      it.onActionModeStarted(mode, this)
-    }
-  }
-
-  override fun onActionModeFinished(mode: ActionMode) {
-    super.onActionModeFinished(mode)
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      it.onActionModeFinished(mode, this)
-    }
-  }
-
-  override fun onBackPressed() {
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
-        super.onBackPressed()
-      }
-    }
-  }
-
-  override fun onNewIntent(intent: Intent) {
-    super.onNewIntent(intent)
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      it.onNewIntent(intent, this)
-    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
