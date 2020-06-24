@@ -300,13 +300,12 @@ public abstract class CoreReaderFragment extends BaseFragment
       getActivity().getMenuInflater().inflate(R.menu.menu_webview_action, menu);
       configureWebViewSelectionHandler(menu);
     }
-
     return Super.ShouldCall;
   }
 
   @NotNull @Override public Super onActionModeFinished(@NotNull ActionMode actionMode,
     @NotNull AppCompatActivity activity) {
-    actionMode = null;
+    this.actionMode = null;
     return Super.ShouldCall;
   }
 
@@ -654,7 +653,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else {
       return Super.ShouldCall;
     }
-    return Super.DontCall;
+    return Super.ShouldNotCall;
   }
 
   private void checkForRateDialog() {

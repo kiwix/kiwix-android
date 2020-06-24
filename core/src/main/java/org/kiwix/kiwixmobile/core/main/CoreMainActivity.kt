@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,54 +15,36 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-package org.kiwix.kiwixmobile.main
+package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.ActionMode
-import android.view.Menu
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 
-class KiwixNewNavigationActivity : CoreMainActivity() {
-  private lateinit var navController: NavController
-  private lateinit var appBarConfiguration: AppBarConfiguration
-  override fun injection(coreComponent: CoreComponent) {
-    kiwixActivityComponent.inject(this)
-  }
-
+abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_new_navigation)
-    val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
-    navController = findNavController(R.id.nav_host_fragment)
-
-    appBarConfiguration = AppBarConfiguration(
-      navController.graph
-    )
-    navView.setupWithNavController(navController)
+    setContentView(R.layout.activity_main)
   }
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    val onCreateOptionsMenu = super.onCreateOptionsMenu(menu)
-    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
-    return onCreateOptionsMenu
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    supportFragmentManager.fragments.forEach { it.onActivityResult(requestCode, resultCode, data) }
   }
 
-  override fun onSupportNavigateUp(): Boolean {
-    val navController = findNavController(R.id.nav_host_fragment)
-    return navController.navigateUp() ||
-      super.onSupportNavigateUp()
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    supportFragmentManager.fragments.forEach {
+      it.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
   }
 
   override fun onActionModeStarted(mode: ActionMode) {
@@ -81,7 +63,7 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
 
   override fun onBackPressed() {
     supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
+      if (it.onBackPressed(this) == ShouldCall) {
         super.onBackPressed()
       }
     }
@@ -92,5 +74,10 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
     supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
+  }
+
+  override fun getCurrentWebView(): KiwixWebView? {
+    return supportFragmentManager.fragments.filterIsInstance<WebViewProvider>().firstOrNull()
+      ?.getCurrentWebView()
   }
 }

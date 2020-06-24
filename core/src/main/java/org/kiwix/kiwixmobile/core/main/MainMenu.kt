@@ -23,6 +23,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.isVisible
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
@@ -108,6 +109,9 @@ class MainMenu(
       tabSwitcher = null
       tabSwitcherTextView = null
     }
+
+    newNavigation.isVisible = BuildConfig.DEBUG
+
     randomArticle.setShowAsAction(
       if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
         MenuItem.SHOW_AS_ACTION_IF_ROOM

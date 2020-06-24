@@ -27,10 +27,10 @@ import org.kiwix.kiwixmobile.intro.IntroModule
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.main.KiwixMainFragment
 import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
-import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
+import org.kiwix.kiwixmobile.main.KiwixReaderFragment
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.ReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
@@ -63,9 +63,9 @@ interface KiwixActivityComponent {
   fun inject(zimHostActivity: ZimHostActivity)
   fun inject(introActivity: IntroActivity)
   fun inject(kiwixSplashActivity: KiwixSplashActivity)
-  fun inject(kiwixMainFragment: KiwixMainFragment)
   fun inject(kiwixNewNavigationActivity: KiwixNewNavigationActivity)
   fun inject(onlineLibraryFragment: OnlineLibraryFragment)
+  fun inject(kiwixMainFragment: KiwixReaderFragment)
 
   @Subcomponent.Builder
   interface Builder {
