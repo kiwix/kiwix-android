@@ -84,14 +84,8 @@ dependencies {
   implementation(Libs.squidb)
   implementation(Libs.squidb_annotations)
   implementation(Libs.ink_page_indicator)
+  implementation(Libs.navigation_kotlin_fragment)
+  implementation(Libs.navigation_kotlin_ui)
+  androidTestImplementation(Libs.navigation_kotlin_testing)
   add("kapt", Libs.squidb_processor)
-
-  // Navigation component
-  val navVersion = "2.3.0-rc01"
-
-  // Kotlin
-  implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-  implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
-  // Testing Navigation
-  androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 }
