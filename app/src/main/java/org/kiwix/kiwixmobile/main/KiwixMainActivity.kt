@@ -33,8 +33,8 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE
 import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS

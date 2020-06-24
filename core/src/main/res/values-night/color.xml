@@ -4,7 +4,6 @@
   <!--DARK COLOR THEME-->
   <!--The same color values are defined for dark theme, but with values more appropriate for -->
   <!--low-luminance UIs. These colors will be used by night/themes.xml.-->
-  <color name="color_surface">@color/mine_shaft_gray900</color>
 
   <color name="text_secondary">@color/mine_shaft_gray350</color>
   <color name="text_tertiary">@color/mine_shaft_gray500</color>

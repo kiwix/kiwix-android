@@ -23,7 +23,6 @@
   <!--Material Components Colors-->
 
   <color name="actionModeBackground">@color/cornflower_blue</color>
-  <color name="color_surface">@color/alabaster_white</color>
 
 
 </resources>
