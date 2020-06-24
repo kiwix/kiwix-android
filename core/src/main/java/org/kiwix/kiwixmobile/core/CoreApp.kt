@@ -79,7 +79,7 @@ abstract class CoreApp : Application() {
       .context(this)
       .build()
     AndroidThreeTen.init(this)
-    fileLogger.writeLogFile()
+    fileLogger.writeLogFile(this)
     coreComponent.inject(this)
     kiwixDatabase.forceMigration()
     downloadMonitor.init()

@@ -18,10 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.utils.files
 
+import android.content.Context
 import android.os.Environment
 import android.util.Log
 import java.io.File
 import java.io.IOException
+import java.lang.System.currentTimeMillis
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,33 +37,27 @@ class FileLogger @Inject constructor() {
   val isExternalStorageWritable: Boolean =
     Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 
-  fun writeLogFile(): File {
-    val appDirectory = File(Environment.getExternalStorageDirectory().toString() + "/Kiwix")
-    val logFile = File(appDirectory, "logs" + System.currentTimeMillis() + ".txt")
-    if (isExternalStorageWritable) {
-      Log.d("KIWIX", "Writing all logs into [" + logFile.path + "]")
-      // create a new folder
-      if (!appDirectory.exists()) {
-        Log.d(TAG, "writeLogFile: Creating new logFile@ $logFile")
-        appDirectory.mkdir()
-      }
-      if (logFile.exists() && logFile.isFile) {
-        Log.d(TAG, "writeLogFile: Deleting preExistingFile")
-        logFile.delete()
-      }
-      // clear the previous logcat and then write the new one to the file
-      try {
-        logFile.createNewFile()
-        Runtime.getRuntime().exec("logcat -c")
-        Runtime.getRuntime().exec("logcat -f " + logFile.path + " -s kiwix")
-      } catch (e: IOException) {
-        Log.e("KIWIX", "Error while writing logcat.txt", e)
-      }
+  fun writeLogFile(context: Context): File {
+    val logFile = File(context.filesDir, fileName)
+    Log.d("KIWIX", "Writing all logs into [" + logFile.path + "]")
+    if (logFile.exists() && logFile.isFile) {
+      Log.d(TAG, "writeLogFile: Deleting preExistingFile")
+      logFile.delete()
+    }
+    // clear the previous logcat and then write the new one to the file
+    try {
+      logFile.createNewFile()
+      Runtime.getRuntime().exec("logcat -c")
+      Runtime.getRuntime().exec("logcat -f $logFile -s kiwix")
+      Log.d(TAG, "writeLogFile: Log report written Successfully!")
+    } catch (e: IOException) {
+      Log.e("KIWIX", "Error while writing logcat.txt", e)
     }
     return logFile
   }
 
   companion object {
     private const val TAG: String = "FileLogger"
+    private val fileName = "logs" + currentTimeMillis() + ".txt"
   }
 }

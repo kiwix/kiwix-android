@@ -115,13 +115,11 @@ public class ErrorActivity extends BaseActivity {
       String body = getBody();
 
       if (allowLogsCheckbox.isChecked()) {
-        File file = fileLogger.writeLogFile();
-        if (file != null) {
-          Uri path = FileProvider.getUriForFile(this,
-            getApplicationContext().getPackageName() + ".fileProvider", file);
-          emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-          emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-        }
+        File file = fileLogger.writeLogFile(this);
+        Uri path = FileProvider.getUriForFile(this,
+          getApplicationContext().getPackageName() + ".fileProvider", file);
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
       }
 
       if (allowCrashCheckbox.isChecked() && exception != null) {
