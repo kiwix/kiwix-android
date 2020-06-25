@@ -175,7 +175,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   Group TTSControls;
   @BindView(R2.id.fragment_main_app_bar)
   AppBarLayout toolbarContainer;
-  @BindView(R2.id.activity_main_progress_view)
+  @BindView(R2.id.main_fragment_progress_view)
   ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
@@ -1674,8 +1674,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override
   public void webViewProgressChanged(int progress) {
     if (checkNull(progressBar)) {
+      progressBar.show();
       progressBar.setProgress(progress);
       if (progress == 100) {
+        progressBar.hide();
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
       }
     }
