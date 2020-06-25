@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.Menu
+import androidx.appcompat.view.ActionMode
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -36,9 +36,16 @@ import org.kiwix.kiwixmobile.kiwixActivityComponent
 class KiwixNewNavigationActivity : CoreMainActivity() {
   private lateinit var navController: NavController
   private lateinit var appBarConfiguration: AppBarConfiguration
+  private var actionMode: ActionMode? = null
+
   override fun injection(coreComponent: CoreComponent) {
     kiwixActivityComponent.inject(this)
   }
+
+  private val finishActionModeOnDestinationChange =
+    NavController.OnDestinationChangedListener { controller, destination, arguments ->
+      actionMode?.finish()
+    }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -46,11 +53,18 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
     val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
     navController = findNavController(R.id.nav_host_fragment)
+    navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
 
     appBarConfiguration = AppBarConfiguration(
       navController.graph
     )
+
     navView.setupWithNavController(navController)
+  }
+
+  override fun onSupportActionModeStarted(mode: ActionMode) {
+    super.onSupportActionModeStarted(mode)
+    actionMode = mode
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -63,20 +77,6 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
     val navController = findNavController(R.id.nav_host_fragment)
     return navController.navigateUp() ||
       super.onSupportNavigateUp()
-  }
-
-  override fun onActionModeStarted(mode: ActionMode) {
-    super.onActionModeStarted(mode)
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      it.onActionModeStarted(mode, this)
-    }
-  }
-
-  override fun onActionModeFinished(mode: ActionMode) {
-    super.onActionModeFinished(mode)
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      it.onActionModeFinished(mode, this)
-    }
   }
 
   override fun onBackPressed() {
