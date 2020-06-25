@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="black">#000000</color>
   <color name="white">#ffffff</color>
-
-  <color name="dodger_blue">#2196F3</color>
   <color name="alabaster_white">#fafafa</color>
-  <color name="scorpion_gray">#5a5a5a</color>
-  <color name="denim_blue400">#42a5f5</color>
-  <color name="denim_blue800">#1565c0</color>
-  <color name="froly_pink300">#f06292</color>
-  <color name="cornflower_blue">#4285F4</color>
   <color name="mine_shaft_gray350">#FFD6D6D6</color>
   <color name="mine_shaft_gray500">#9E9E9E</color>
-  <color name="mine_shaft_gray900">#212121</color>
+  <color name="scorpion_gray">#5a5a5a</color>
   <color name="mine_shaft_gray700">#616161</color>
   <color name="mine_shaft_gray850">#303030</color>
+  <color name="mine_shaft_gray900">#212121</color>
+  <color name="black">#000000</color>
+  <color name="denim_blue400">#42a5f5</color>
+  <color name="dodger_blue">#2196F3</color>
+  <color name="cornflower_blue">#4285F4</color>
+  <color name="denim_blue800">#1565c0</color>
+  <color name="froly_pink300">#f06292</color>
   <color name="monza_red">#b00020</color>
-  <color name="card_view_background">@color/alabaster_white</color>
-  <color name="text_secondary">@color/mine_shaft_gray700</color>
-  <color name="text_tertiary">@color/mine_shaft_gray500</color>
-
-  <!--Material Components Colors-->
-
-  <color name="actionModeBackground">@color/cornflower_blue</color>
-
-
 </resources>

@@ -7,6 +7,9 @@
     <item name="colorPrimary">@color/denim_blue400</item>
     <item name="colorSurface">@color/mine_shaft_gray900</item>
     <item name="colorError">@color/froly_pink300</item>
+    <item name="textSecondary">@color/mine_shaft_gray350</item>
+    <item name="textTertiary">@color/mine_shaft_gray500</item>
+    <item name="cardViewBackground">@color/mine_shaft_gray850</item>
 
 
     <item name="colorOnPrimary">@color/alabaster_white</item>

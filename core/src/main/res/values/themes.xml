@@ -35,6 +35,10 @@
     <item name="colorOnBackground">?colorOnSurface</item>
     <item name="colorOnError">@color/alabaster_white</item>
 
+    <item name="textSecondary">@color/mine_shaft_gray700</item>
+    <item name="textTertiary">@color/mine_shaft_gray500</item>
+    <item name="cardViewBackground">@color/alabaster_white</item>
+
     <!--Material type attributes-->
     <item name="textAppearanceHeadline1">@style/TextAppearance.KiwixTheme.Headline1</item>
     <item name="textAppearanceHeadline2">@style/TextAppearance.KiwixTheme.Headline2</item>
@@ -71,7 +75,7 @@
   <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
     <item name="android:statusBarColor" tools:ignore="NewApi">@color/black</item>
-    <item name="actionModeBackground">@color/actionModeBackground</item>
+    <item name="actionModeBackground">@color/cornflower_blue</item>
     <item name="windowActionModeOverlay">true</item>
 
     <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->

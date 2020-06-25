@@ -48,7 +48,7 @@
       style="@style/list_item_body"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="@color/text_secondary"
+      android:textColor="?textSecondary"
       android:layout_gravity="start"
       tools:text="Description" />
 
@@ -71,7 +71,7 @@
         style="@style/list_item_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_tertiary"
+        android:textColor="?textTertiary"
         android:layout_weight="1"
         tools:text="In Progress" />
 
@@ -80,7 +80,7 @@
         style="@style/list_item_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_tertiary"
+        android:textColor="?textTertiary"
         tools:text="1min 10secs" />
     </LinearLayout>
   </LinearLayout>

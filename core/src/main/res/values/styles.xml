@@ -57,7 +57,7 @@
   </style>
 
   <style name="Widget.KiwixTheme.CardView" parent="Widget.MaterialComponents.CardView">
-    <item name="cardBackgroundColor">@color/card_view_background</item>
+    <item name="cardBackgroundColor">?cardViewBackground</item>
   </style>
 
   <style name="ThemeOverlay.KiwixTheme.ProgressBar" parent="">
