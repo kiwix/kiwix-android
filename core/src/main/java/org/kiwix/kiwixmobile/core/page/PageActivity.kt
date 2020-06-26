@@ -87,7 +87,7 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
     setSupportActionBar(toolbar)
 
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    supportActionBar?.setTitle(R.string.history)
+    supportActionBar?.title = title
     recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     recyclerView.adapter = pageAdapter
 
