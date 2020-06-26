@@ -2,16 +2,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
   <!--Top level theme to be used in AndroidManifest.xml-->
-  <style name="KiwixTheme" parent="Base.KiwixTheme" />
-
-  <!--Base custom theme which will be shared between both light and dark theme variants-->
-  <style name="Base.KiwixTheme" parent="Base.MaterialThemeBuilder">
-    <!--Material color attributes -->
+  <style name="KiwixTheme" parent="Base.KiwixTheme">
 
     <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
     <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
     <!--selection controls.-->
     <item name="colorPrimary">@color/denim_blue800</item>
+
+    <!--colorBackground appears behind scrollable content and is used for the default window-->
+    <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
+    <!--and menus. colorError is used to indicate an error state for components such as-->
+    <!--text fields.-->
+    <item name="colorSurface">@color/alabaster_white</item>
+    <item name="colorError">@color/monza_red</item>
+
+    <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
+    <!--on which they appear.-->
+    <item name="colorOnPrimary">@color/white</item>
+    <item name="colorOnSurface">@color/black</item>
+    <item name="colorOnError">@color/alabaster_white</item>
+
+    <item name="textSecondary">@color/mine_shaft_gray700</item>
+    <item name="textTertiary">@color/mine_shaft_gray500</item>
+    <item name="cardViewBackground">@color/alabaster_white</item>
+  </style>
+
+  <!--Base custom theme which will be shared between both light and dark theme variants-->
+  <style name="Base.KiwixTheme" parent="Base.MaterialThemeBuilder">
+    <!--Material color attributes -->
+
     <item name="colorPrimaryVariant">?colorPrimary</item>
     <item name="colorSecondary">?colorPrimary</item>
     <item name="colorSecondaryVariant">?colorPrimary</item>
@@ -19,25 +38,9 @@
     <!--Material snackbar attributes-->
     <item name="maxActionInlineWidth">128dp</item>
 
-    <!--colorBackground appears behind scrollable content and is used for the default window-->
-    <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
-    <!--and menus. colorError is used to indicate an error state for components such as-->
-    <!--text fields.-->
-    <item name="colorSurface">@color/alabaster_white</item>
     <item name="android:colorBackground">?colorSurface</item>
-    <item name="colorError">@color/monza_red</item>
-
-    <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
-    <!--on which they appear.-->
-    <item name="colorOnPrimary">@color/white</item>
     <item name="colorOnSecondary">?colorOnPrimary</item>
-    <item name="colorOnSurface">@color/black</item>
     <item name="colorOnBackground">?colorOnSurface</item>
-    <item name="colorOnError">@color/alabaster_white</item>
-
-    <item name="textSecondary">@color/mine_shaft_gray700</item>
-    <item name="textTertiary">@color/mine_shaft_gray500</item>
-    <item name="cardViewBackground">@color/alabaster_white</item>
 
     <!--Material type attributes-->
     <item name="textAppearanceHeadline1">@style/TextAppearance.KiwixTheme.Headline1</item>
