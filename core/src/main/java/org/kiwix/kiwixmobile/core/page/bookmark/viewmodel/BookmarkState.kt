@@ -18,22 +18,25 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class BookmarkState(
-  val pageItems: List<BookmarkItem>,
-  val showAll: Boolean,
-  val currentZimId: String?,
-  val searchTerm: String = ""
-) {
+  override val pageItems: List<BookmarkItem>,
+  override val showAll: Boolean,
+  override val currentZimId: String?,
+  override val searchTerm: String = ""
+) : PageState {
 
-  val isInSelectionState = pageItems.any(BookmarkItem::isSelected)
+  override val isInSelectionState = pageItems.any(BookmarkItem::isSelected)
 
   val filteredBookmarks: List<BookmarkItem> = pageItems
     .filter { it.zimId == currentZimId || showAll }
     .filter { it.bookmarkTitle.contains(searchTerm, true) }
 
-  fun toggleSelectionOfItem(bookmark: BookmarkItem): BookmarkState {
+  override fun toggleSelectionOfItem(bookmark: Page): BookmarkState {
+    bookmark as BookmarkItem
     val newList = pageItems.map {
       if (it.databaseId == bookmark.databaseId) it.apply { isSelected = !isSelected } else it
     }

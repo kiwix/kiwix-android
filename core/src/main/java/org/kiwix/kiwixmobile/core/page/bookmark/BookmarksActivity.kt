@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -113,7 +114,8 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  private fun render(state: BookmarkState) {
+  private fun render(state: PageState) {
+    state as BookmarkState
     val filteredBookmarks = state.filteredBookmarks
     filteredBookmarks.let { bookmarksAdapter.items = it }
     toggleNoBookmarksText(filteredBookmarks)

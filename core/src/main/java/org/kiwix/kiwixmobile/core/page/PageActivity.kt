@@ -16,15 +16,23 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.viewmodel
+package org.kiwix.kiwixmobile.core.page
 
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
+import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 
-interface PageState {
-  val pageItems: List<Page>
-  val showAll: Boolean
-  val currentZimId: String?
-  val searchTerm: String
-  val isInSelectionState: Boolean
-  fun toggleSelectionOfItem(page: Page): PageState
+abstract class PageActivity : OnItemClickListener, BaseActivity() {
+  val activityComponent by lazy { coreActivityComponent }
+  abstract val pageViewModel: PageViewModel
+
+  override fun onItemClick(page: Page) {
+    pageViewModel.actions.offer(Action.OnItemClick(page))
+  }
+
+  override fun onItemLongClick(page: Page): Boolean =
+    pageViewModel.actions.offer(Action.OnItemLongClick(page))
 }

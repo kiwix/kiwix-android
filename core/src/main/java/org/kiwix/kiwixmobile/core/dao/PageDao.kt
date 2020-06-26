@@ -16,15 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.viewmodel
+package org.kiwix.kiwixmobile.core.dao
 
+import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 
-interface PageState {
-  val pageItems: List<Page>
-  val showAll: Boolean
-  val currentZimId: String?
-  val searchTerm: String
-  val isInSelectionState: Boolean
-  fun toggleSelectionOfItem(page: Page): PageState
+interface PageDao {
+  fun pages(): Flowable<List<Page>>
 }

@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
@@ -30,7 +31,7 @@ data class HistoryState(
   override val currentZimId: String?,
   override val searchTerm: String = ""
 ) : PageState {
-  val isInSelectionState = pageItems.any(HistoryItem::isSelected)
+  override val isInSelectionState = pageItems.any(HistoryItem::isSelected)
 
   val historyListItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(pageItems
@@ -41,9 +42,10 @@ data class HistoryState(
         { current, next -> current.dateString != next.dateString }
       )
 
-  fun toggleSelectionOfItem(historyListItem: HistoryItem): HistoryState {
+  override fun toggleSelectionOfItem(historyItem: Page): HistoryState {
+    historyItem as HistoryItem
     val newList = pageItems.map {
-      if (it.id == historyListItem.id) it.apply {
+      if (it.id == historyItem.id) it.apply {
         isSelected = !isSelected
       } else it
     }

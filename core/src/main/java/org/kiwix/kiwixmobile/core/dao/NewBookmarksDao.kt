@@ -24,14 +24,17 @@ import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import javax.inject.Inject
 
-class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
-  fun bookmarks() = box.asFlowable(box.query {
+class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDao {
+  fun bookmarks(): Flowable<List<Page>> = box.asFlowable(box.query {
     order(BookmarkEntity_.bookmarkTitle)
   }).map { it.map(::BookmarkItem) }
+
+  override fun pages(): Flowable<List<Page>> = bookmarks()
 
   fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {
     equal(BookmarkEntity_.zimId, zimFileReader?.id ?: "")
