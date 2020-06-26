@@ -82,7 +82,7 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
   override fun onBackPressed() {
     supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
       if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
-        super.onBackPressed()
+        finish()
       }
     }
   }
