@@ -889,7 +889,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     currentWebViewIndex = position;
     contentFrame.removeAllViews();
 
-    KiwixWebView webView = webViewList.get(position);
+    KiwixWebView webView = safelyGetWebView(position);
     if (webView.getParent() != null) {
       ((ViewGroup) webView.getParent()).removeView(webView);
     }
@@ -904,6 +904,16 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (!isHideToolbar && webView instanceof ToolbarScrollingKiwixWebView) {
       ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
     }
+  }
+
+  private KiwixWebView safelyGetWebView(int position) {
+    return webViewList.size() == 0 ? newMainPageTab() : webViewList.get(safePosition(position));
+  }
+
+  private int safePosition(int position) {
+    return position < 0 ? 0
+      : position >= webViewList.size() ? webViewList.size() - 1
+        : position;
   }
 
   @NotNull @Override public KiwixWebView getCurrentWebView() {
