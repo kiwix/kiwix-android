@@ -40,13 +40,12 @@ sealed class SearchViewHolder<in T : SearchListItem>(containerView: View) :
   ) : SearchViewHolder<RecentSearchListItem>(containerView) {
     override fun bind(item: RecentSearchListItem) {
       containerView.setOnClickListener { onClickListener(item) }
-      containerView.list_item_search_new_tab_button
-        .setOnClickListener { onClickListenerNewTab(item) }
       containerView.setOnLongClickListener {
         onLongClickListener(item)
         true
       }
-      (containerView.list_item_search_text as TextView).text = item.value
+      list_item_search_new_tab_button.setOnClickListener { onClickListenerNewTab(item) }
+      (list_item_search_text as TextView).text = item.value
     }
   }
 
