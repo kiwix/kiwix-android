@@ -25,11 +25,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import com.google.android.material.card.MaterialCardView;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.card.MaterialCardView;
 import java.util.List;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
@@ -44,12 +45,13 @@ import static org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml;
 
 public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
   private final List<KiwixWebView> webViews;
-  private final CoreMainActivity activity;
+  private final AppCompatActivity activity;
   private final NightModeViewPainter painter;
   private TabClickListener listener;
   private int selectedPosition = 0;
 
-  TabsAdapter(CoreMainActivity activity, List<KiwixWebView> webViews, NightModeViewPainter painter) {
+  TabsAdapter(AppCompatActivity activity, List<KiwixWebView> webViews,
+    NightModeViewPainter painter) {
     this.webViews = webViews;
     this.activity = activity;
     this.painter = painter;
@@ -77,8 +79,9 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     MaterialCardView cardView = new MaterialCardView(context);
     cardView.setId(3);
     cardView.setUseCompatPadding(true);
-    cardView.addView(contentImage, new MaterialCardView.LayoutParams(MaterialCardView.LayoutParams.MATCH_PARENT,
-      MaterialCardView.LayoutParams.MATCH_PARENT));
+    cardView.addView(contentImage,
+      new MaterialCardView.LayoutParams(MaterialCardView.LayoutParams.MATCH_PARENT,
+        MaterialCardView.LayoutParams.MATCH_PARENT));
 
     ConstraintLayout constraintLayout = new ConstraintLayout(context);
     constraintLayout.setFocusableInTouchMode(true);

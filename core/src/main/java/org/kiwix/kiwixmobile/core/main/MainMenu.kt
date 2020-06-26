@@ -23,6 +23,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.isVisible
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
@@ -33,9 +34,9 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
-import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 const val REQUEST_FILE_SEARCH = 1236
 
@@ -72,6 +73,7 @@ class MainMenu(
     fun onFullscreenMenuClicked()
     fun onSupportKiwixMenuClicked()
     fun onHostBooksMenuClicked()
+    fun onNewNavigationMenuClicked()
   }
 
   init {
@@ -92,6 +94,7 @@ class MainMenu(
   private val hostBooks = menu.findItem(R.id.menu_host_books)
   private val help = menu.findItem(R.id.menu_help)
   private val settings = menu.findItem(R.id.menu_settings)
+  private val newNavigation = menu.findItem(R.id.menu_new_navigation)
   private val supportKiwix = menu.findItem(R.id.menu_support_kiwix)
   private var isInTabSwitcher: Boolean = false
 
@@ -106,6 +109,9 @@ class MainMenu(
       tabSwitcher = null
       tabSwitcherTextView = null
     }
+
+    newNavigation.isVisible = BuildConfig.DEBUG
+
     randomArticle.setShowAsAction(
       if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
         MenuItem.SHOW_AS_ACTION_IF_ROOM
@@ -133,6 +139,7 @@ class MainMenu(
     library.menuItemClickListener { menuClickListener.onLibraryMenuClicked() }
     readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
     fullscreen.menuItemClickListener { menuClickListener.onFullscreenMenuClicked() }
+    newNavigation.menuItemClickListener { menuClickListener.onNewNavigationMenuClicked() }
     supportKiwix.menuItemClickListener { menuClickListener.onSupportKiwixMenuClicked() }
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
 
