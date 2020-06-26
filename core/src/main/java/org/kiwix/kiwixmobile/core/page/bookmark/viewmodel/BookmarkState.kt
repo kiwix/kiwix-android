@@ -35,10 +35,10 @@ data class BookmarkState(
     .filter { it.zimId == currentZimId || showAll }
     .filter { it.bookmarkTitle.contains(searchTerm, true) }
 
-  override fun toggleSelectionOfItem(bookmark: Page): BookmarkState {
-    bookmark as BookmarkItem
+  override fun toggleSelectionOfItem(page: Page): BookmarkState {
+    page as BookmarkItem
     val newList = pageItems.map {
-      if (it.databaseId == bookmark.databaseId) it.apply { isSelected = !isSelected } else it
+      if (it.databaseId == page.databaseId) it.apply { isSelected = !isSelected } else it
     }
     return BookmarkState(newList, showAll, currentZimId, searchTerm)
   }

@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
+import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -59,12 +60,12 @@ abstract class PageViewModel : ViewModel() {
     is OnItemClick -> handleItemClick(state, action)
     is OnItemLongClick -> handleItemLongClick(state, action)
     is Filter -> updatePagesBasedOnFilter(state, action)
-    is UpdatePages -> updateBookmarks(state, action)
+    is UpdatePages -> updatePages(state, action)
   }
 
   abstract fun updatePagesBasedOnFilter(state: PageState, action: Filter): PageState
 
-  abstract fun updateBookmarks(state: PageState, action: UpdatePages): PageState
+  abstract fun updatePages(state: PageState, action: UpdatePages): PageState
 
   abstract fun offerUpdateToShowAllToggle(
     action: UserClickedShowAllToggle,
@@ -74,7 +75,13 @@ abstract class PageViewModel : ViewModel() {
   private fun handleItemLongClick(state: PageState, action: OnItemLongClick): PageState =
     state.toggleSelectionOfItem(action.page)
 
-  abstract fun handleItemClick(state: PageState, action: OnItemClick): PageState
+  private fun handleItemClick(state: PageState, action: Action.OnItemClick): PageState {
+    if (state.isInSelectionState) {
+      return state.toggleSelectionOfItem(action.page)
+    }
+    effects.offer(OpenPage(action.page, zimReaderContainer))
+    return state
+  }
 
   abstract fun offerShowDeleteDialog(state: PageState): PageState
 

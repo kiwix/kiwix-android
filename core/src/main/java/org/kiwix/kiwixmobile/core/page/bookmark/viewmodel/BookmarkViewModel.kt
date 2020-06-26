@@ -22,7 +22,6 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.OpenBookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
@@ -54,7 +53,7 @@ class BookmarkViewModel @Inject constructor(
   override fun updatePagesBasedOnFilter(state: PageState, action: Action.Filter): PageState =
     (state as BookmarkState).copy(searchTerm = action.searchTerm)
 
-  override fun updateBookmarks(state: PageState, action: Action.UpdatePages): PageState =
+  override fun updatePages(state: PageState, action: Action.UpdatePages): PageState =
     (state as BookmarkState).copy(pageItems = action.pages.filterIsInstance<BookmarkItem>())
 
   override fun offerUpdateToShowAllToggle(
@@ -63,14 +62,6 @@ class BookmarkViewModel @Inject constructor(
   ): PageState {
     effects.offer(UpdateAllBookmarksPreference(sharedPreferenceUtil, action.isChecked))
     return (state as BookmarkState).copy(showAll = action.isChecked)
-  }
-
-  override fun handleItemClick(state: PageState, action: Action.OnItemClick): PageState {
-    if (state.isInSelectionState) {
-      return state.toggleSelectionOfItem(action.page)
-    }
-    effects.offer(OpenBookmark(action.page as BookmarkItem, zimReaderContainer))
-    return state
   }
 
   override fun offerShowDeleteDialog(state: PageState): PageState {

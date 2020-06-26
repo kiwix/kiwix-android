@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -104,7 +105,8 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return true
   }
 
-  private fun render(state: HistoryState) {
+  private fun render(state: PageState) {
+    state as HistoryState
     historyAdapter.items = state.historyListItems
     history_switch.isEnabled = !state.isInSelectionState
     no_history.visibility = if (state.historyListItems.isEmpty()) VISIBLE else GONE

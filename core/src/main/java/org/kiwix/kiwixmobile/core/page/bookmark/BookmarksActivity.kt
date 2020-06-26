@@ -37,10 +37,10 @@ import javax.inject.Inject
 
 class BookmarksActivity : OnItemClickListener, BaseActivity() {
   val activityComponent by lazy { coreActivityComponent }
-  private var actionMode: ActionMode? = null
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-  val compositeDisposable = CompositeDisposable()
   private val bookmarkViewModel by lazy { viewModel<BookmarkViewModel>(viewModelFactory) }
+  private var actionMode: ActionMode? = null
+  val compositeDisposable = CompositeDisposable()
 
   private val actionModeCallback: ActionMode.Callback =
     object : ActionMode.Callback {
