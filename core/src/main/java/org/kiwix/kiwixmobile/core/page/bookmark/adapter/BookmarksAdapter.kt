@@ -7,8 +7,4 @@ class BookmarksAdapter(
   vararg delegates: AdapterDelegate<BookmarkItem>
 ) : BaseDelegateAdapter<BookmarkItem>(*delegates) {
   override fun getIdFor(item: BookmarkItem): Long = item.databaseId
-  interface OnItemClickListener {
-    fun onItemClick(bookmark: BookmarkItem)
-    fun onItemLongClick(bookmark: BookmarkItem): Boolean
-  }
 }

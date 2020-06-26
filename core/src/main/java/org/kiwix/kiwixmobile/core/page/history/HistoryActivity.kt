@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -22,11 +21,11 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryAdapter
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryDelegate.HistoryDateDelegate
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryDelegate.HistoryItemDelegate
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
@@ -105,7 +104,7 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return true
   }
 
-  fun render(state: HistoryState) {
+  private fun render(state: HistoryState) {
     historyAdapter.items = state.historyListItems
     history_switch.isEnabled = !state.isInSelectionState
     no_history.visibility = if (state.historyListItems.isEmpty()) VISIBLE else GONE
@@ -133,10 +132,10 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  override fun onItemClick(favicon: ImageView, history: HistoryItem) {
+  override fun onItemClick(history: Page) {
     historyViewModel.actions.offer(OnItemClick(history))
   }
 
-  override fun onItemLongClick(favicon: ImageView, history: HistoryItem): Boolean =
+  override fun onItemLongClick(history: Page): Boolean =
     historyViewModel.actions.offer(OnItemLongClick(history))
 }

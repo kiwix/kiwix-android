@@ -5,10 +5,10 @@ import kotlinx.android.synthetic.main.item_bookmark_history.favicon
 import kotlinx.android.synthetic.main.item_bookmark_history.title
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarksAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
+import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 
 class BookmarkViewHolder(
   override val containerView: View,

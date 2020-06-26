@@ -16,13 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.viewmodel
+package org.kiwix.kiwixmobile.core.page.adapter
 
-import org.kiwix.kiwixmobile.core.page.adapter.Page
-
-interface PageState {
-  val pageItems: List<Page>
-  val showAll: Boolean
-  val currentZimId: String?
-  val searchTerm: String
+interface Page {
+  val zimFilePath: String?
+  val url: String
 }

@@ -16,9 +16,6 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page
+package org.kiwix.kiwixmobile.core.page.adapter
 
-interface Page {
-  val zimFilePath: String?
-  val url: String
-}
+class PageAdapter

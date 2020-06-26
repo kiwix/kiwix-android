@@ -20,10 +20,11 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkDelegate.BookmarkItemDelegate
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarksAdapter
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarksAdapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
@@ -112,7 +113,7 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  fun render(state: BookmarkState) {
+  private fun render(state: BookmarkState) {
     val filteredBookmarks = state.filteredBookmarks
     filteredBookmarks.let { bookmarksAdapter.items = it }
     toggleNoBookmarksText(filteredBookmarks)
@@ -140,10 +141,10 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     }
   }
 
-  override fun onItemClick(bookmark: BookmarkItem) {
+  override fun onItemClick(bookmark: Page) {
     bookmarkViewModel.actions.offer(OnItemClick(bookmark))
   }
 
-  override fun onItemLongClick(bookmark: BookmarkItem): Boolean =
+  override fun onItemLongClick(bookmark: Page): Boolean =
     bookmarkViewModel.actions.offer(OnItemLongClick(bookmark))
 }

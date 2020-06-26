@@ -16,13 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.viewmodel
+package org.kiwix.kiwixmobile.core.page.adapter
 
-import org.kiwix.kiwixmobile.core.page.adapter.Page
+interface OnItemClickListener {
 
-interface PageState {
-  val pageItems: List<Page>
-  val showAll: Boolean
-  val currentZimId: String?
-  val searchTerm: String
+  fun onItemClick(page: Page)
+
+  fun onItemLongClick(page: Page): Boolean
 }

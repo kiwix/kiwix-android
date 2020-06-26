@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.adapter
 
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
-import org.kiwix.kiwixmobile.core.page.Page
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 data class BookmarkItem(

@@ -1,6 +1,6 @@
 package org.kiwix.kiwixmobile.core.page.viewmodel
 
-import org.kiwix.kiwixmobile.core.page.Page
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 
 sealed class Action {
   object Exit : Action()

@@ -9,7 +9,7 @@ import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryAdapter.OnItemClickListener
+import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.threeten.bp.LocalDate
@@ -30,8 +30,8 @@ sealed class HistoryListItemViewHolder<in T : HistoryListItem>(containerView: Vi
       } else {
         favicon.setBitmap(Base64String(item.favicon))
       }
-      itemView.setOnClickListener { itemClickListener.onItemClick(favicon, item) }
-      itemView.setOnLongClickListener { itemClickListener.onItemLongClick(favicon, item) }
+      itemView.setOnClickListener { itemClickListener.onItemClick(item) }
+      itemView.setOnLongClickListener { itemClickListener.onItemLongClick(item) }
     }
   }
 
