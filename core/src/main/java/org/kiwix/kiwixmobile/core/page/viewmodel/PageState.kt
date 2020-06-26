@@ -19,12 +19,15 @@
 package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 
 interface PageState {
   val pageItems: List<Page>
+  val filteredPageItems: List<PageRelated>
   val showAll: Boolean
   val currentZimId: String?
   val searchTerm: String
   val isInSelectionState: Boolean
+  val numberOfSelectedItems: Int
   fun toggleSelectionOfItem(page: Page): PageState
 }

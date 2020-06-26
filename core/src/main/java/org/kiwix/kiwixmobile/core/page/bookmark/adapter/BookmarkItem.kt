@@ -31,7 +31,8 @@ data class BookmarkItem(
   val bookmarkTitle: String,
   val favicon: String?,
   var isSelected: Boolean = false,
-  override val url: String = bookmarkUrl
+  override val url: String = bookmarkUrl,
+  override val id: Long = databaseId
 ) : Page {
   constructor(entity: BookmarkEntity) : this(
     entity.id,

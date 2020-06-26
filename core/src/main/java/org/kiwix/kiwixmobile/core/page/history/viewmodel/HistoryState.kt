@@ -32,8 +32,9 @@ data class HistoryState(
   override val searchTerm: String = ""
 ) : PageState {
   override val isInSelectionState = pageItems.any(HistoryItem::isSelected)
+  override val numberOfSelectedItems = pageItems.filter(HistoryItem::isSelected).size
 
-  val historyListItems: List<HistoryListItem> =
+  override val filteredPageItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(pageItems
       .filter { showAll || it.zimId == currentZimId }
       .filter { it.historyTitle.contains(searchTerm, true) })

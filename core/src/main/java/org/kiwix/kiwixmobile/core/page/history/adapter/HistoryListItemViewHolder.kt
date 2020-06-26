@@ -10,13 +10,14 @@ import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
+import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
 
-sealed class HistoryListItemViewHolder<in T : HistoryListItem>(containerView: View) :
+sealed class HistoryListItemViewHolder<in T : PageRelated>(containerView: View) :
   BaseViewHolder<T>(containerView) {
 
   class HistoryItemViewHolder(

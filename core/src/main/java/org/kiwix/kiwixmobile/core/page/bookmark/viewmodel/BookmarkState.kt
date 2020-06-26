@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
@@ -30,8 +31,9 @@ data class BookmarkState(
 ) : PageState {
 
   override val isInSelectionState = pageItems.any(BookmarkItem::isSelected)
+  override val numberOfSelectedItems = pageItems.filter(BookmarkItem::isSelected).size
 
-  val filteredBookmarks: List<BookmarkItem> = pageItems
+  override val filteredPageItems: List<PageRelated> = pageItems
     .filter { it.zimId == currentZimId || showAll }
     .filter { it.bookmarkTitle.contains(searchTerm, true) }
 

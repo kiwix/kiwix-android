@@ -5,13 +5,14 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItemViewHolder.HistoryItemViewHolder
+import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItemViewHolder.DateItemViewHolder
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItemViewHolder.HistoryItemViewHolder
 
-sealed class HistoryDelegate<I : HistoryListItem, out VH : HistoryListItemViewHolder<I>> :
-  AbsDelegateAdapter<I, HistoryListItem, VH> {
+sealed class HistoryDelegate<I : PageRelated, out VH : HistoryListItemViewHolder<I>> :
+  AbsDelegateAdapter<I, PageRelated, VH> {
 
   class HistoryItemDelegate(
     private val itemClickListener: OnItemClickListener
@@ -20,7 +21,8 @@ sealed class HistoryDelegate<I : HistoryListItem, out VH : HistoryListItemViewHo
 
     override fun createViewHolder(parent: ViewGroup) =
       HistoryItemViewHolder(
-        parent.inflate(R.layout.item_bookmark_history, false), itemClickListener)
+        parent.inflate(R.layout.item_bookmark_history, false), itemClickListener
+      )
   }
 
   class HistoryDateDelegate : HistoryDelegate<DateItem, DateItemViewHolder>() {

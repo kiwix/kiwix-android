@@ -18,4 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.page.adapter
 
-class PageAdapter
+import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
+import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
+
+class PageAdapter(
+  vararg delegates: AdapterDelegate<PageRelated>
+) : BaseDelegateAdapter<PageRelated>(*delegates) {
+  override fun getIdFor(item: PageRelated): Long = item.id
+}
