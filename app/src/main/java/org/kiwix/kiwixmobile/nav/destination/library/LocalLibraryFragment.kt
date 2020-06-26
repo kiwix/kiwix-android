@@ -63,7 +63,7 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     val languageItem = menu.findItem(R.id.select_language)
     languageItem.isVisible = false
     searchItem.isVisible = false
-    super.onCreateOptionsMenu(menu, inflater)
+    super.onCreateOptionsMenu(menu as Menu, inflater as MenuInflater)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -34,7 +34,9 @@ import androidx.navigation.fragment.navArgs
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -91,13 +93,20 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(
     menu: Menu,
     activity: AppCompatActivity
-  ): BaseFragmentActivityExtensions.Super = BaseFragmentActivityExtensions.Super.ShouldCall
+  ): Super = ShouldCall
 
   override fun onResume() {
     super.onResume()
     if (zimReaderContainer.zimFile == null && HOME_URL != getCurrentWebView().url) {
       showHomePage()
     }
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): Super {
+    if (super.onBackPressed(activity) == ShouldCall) {
+      getActivity()?.finish()
+    }
+    return ShouldNotCall
   }
 
   override fun createWebClient(
@@ -208,13 +217,13 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onNewIntent(
     intent: Intent,
     activity: AppCompatActivity
-  ): BaseFragmentActivityExtensions.Super {
+  ): Super {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
       if ("file" == it.scheme) openZimFile(it.toFile())
       else activity.toast(R.string.cannot_open_file)
     }
-    return BaseFragmentActivityExtensions.Super.ShouldCall
+    return ShouldCall
   }
 
   override fun onHostBooksMenuClicked() {

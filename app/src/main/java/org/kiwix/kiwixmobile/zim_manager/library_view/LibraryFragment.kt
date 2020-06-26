@@ -26,6 +26,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,7 @@ import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
@@ -61,7 +63,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import javax.inject.Inject
 
-open class LibraryFragment : BaseFragment() {
+open class LibraryFragment : BaseFragment(), BaseFragmentActivityExtensions {
 
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
@@ -136,6 +138,11 @@ open class LibraryFragment : BaseFragment() {
         librarySwipeRefresh.isRefreshing = false
       }
     }
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): BaseFragmentActivityExtensions.Super {
+    getActivity()?.finish()
+    return BaseFragmentActivityExtensions.Super.ShouldNotCall
   }
 
   private fun noInternetSnackbar() {
