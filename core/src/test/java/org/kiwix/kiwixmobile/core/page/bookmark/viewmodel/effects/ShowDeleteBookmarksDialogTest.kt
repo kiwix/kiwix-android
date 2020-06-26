@@ -26,10 +26,12 @@ import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.bookmarkState
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllBookmarks
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedBookmarks
 
 internal class ShowDeleteBookmarksDialogTest {
 
@@ -47,8 +49,50 @@ internal class ShowDeleteBookmarksDialogTest {
     }
     val lambdaSlot = slot<() -> Unit>()
     showDeleteBookmarksDialog.invokeWith(activity)
-    verify { dialogShower.show(KiwixDialog.DeleteAllBookmarks, capture(lambdaSlot)) }
+    verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
     verify { effects.offer(DeleteBookmarkItems(effects, bookmarkState(), newBookmarksDao)) }
+  }
+
+  @Test
+  fun `invoke with selected items shows dialog with DeleteSelectedBookmarks title`() {
+    val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
+    val newBookmarksDao = mockk<NewBookmarksDao>()
+    val activity = mockk<BookmarksActivity>()
+    val showDeleteBookmarksDialog =
+      ShowDeleteBookmarksDialog(
+        effects,
+        bookmarkState(listOf(bookmark(isSelected = true))),
+        newBookmarksDao
+      )
+    val dialogShower = mockk<DialogShower>()
+    every { activity.activityComponent.inject(showDeleteBookmarksDialog) } answers {
+      showDeleteBookmarksDialog.dialogShower = dialogShower
+      Unit
+    }
+    val lambdaSlot = slot<() -> Unit>()
+    showDeleteBookmarksDialog.invokeWith(activity)
+    verify { dialogShower.show(DeleteSelectedBookmarks, capture(lambdaSlot)) }
+  }
+
+  @Test
+  fun `invoke with no selected items shows dialog with DeleteAllBookmarks title`() {
+    val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
+    val newBookmarksDao = mockk<NewBookmarksDao>()
+    val activity = mockk<BookmarksActivity>()
+    val showDeleteBookmarksDialog =
+      ShowDeleteBookmarksDialog(
+        effects,
+        bookmarkState(listOf(bookmark())),
+        newBookmarksDao
+      )
+    val dialogShower = mockk<DialogShower>()
+    every { activity.activityComponent.inject(showDeleteBookmarksDialog) } answers {
+      showDeleteBookmarksDialog.dialogShower = dialogShower
+      Unit
+    }
+    val lambdaSlot = slot<() -> Unit>()
+    showDeleteBookmarksDialog.invokeWith(activity)
+    verify { dialogShower.show(DeleteAllBookmarks, capture(lambdaSlot)) }
   }
 }
