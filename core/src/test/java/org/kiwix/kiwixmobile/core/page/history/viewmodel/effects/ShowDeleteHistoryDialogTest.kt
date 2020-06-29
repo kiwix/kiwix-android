@@ -11,6 +11,7 @@ import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
+import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
@@ -29,7 +30,7 @@ internal class ShowDeleteHistoryDialogTest {
     showDeleteHistoryDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeleteHistoryItems(historyState(), historyDao)) }
+    verify { effects.offer(DeletePageItems(historyState(), historyDao)) }
   }
 
   @Test

@@ -29,8 +29,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.bookmarkState
@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
+import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -57,7 +58,7 @@ internal class BookmarkViewModelTest {
 
   private lateinit var viewModel: BookmarkViewModel
 
-  private val itemsFromDb: PublishProcessor<List<BookmarkItem>> =
+  private val itemsFromDb: PublishProcessor<List<Page>> =
     PublishProcessor.create()
 
   init {
@@ -72,6 +73,7 @@ internal class BookmarkViewModelTest {
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showBookmarksAllBooks } returns true
     every { bookmarksDao.bookmarks() } returns itemsFromDb.distinctUntilChanged()
+    every { bookmarksDao.pages() } returns bookmarksDao.bookmarks()
     viewModel = BookmarkViewModel(bookmarksDao, zimReaderContainer, sharedPreferenceUtil)
   }
 
@@ -129,7 +131,7 @@ internal class BookmarkViewModelTest {
   internal fun `OnItemClick offers OpenBookmark if none is selected`() {
     viewModel.state.postValue(bookmarkState(listOf(bookmark())))
     viewModel.effects.test().also { viewModel.actions.offer(OnItemClick(bookmark())) }
-      .assertValue(OpenBookmark(bookmark(), zimReaderContainer))
+      .assertValue(OpenPage(bookmark(), zimReaderContainer))
     viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
   }
 

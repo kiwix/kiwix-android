@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistoryPreference
 import org.kiwix.kiwixmobile.core.page.historyItem
@@ -47,7 +47,7 @@ internal class HistoryViewModelTest {
     RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
   }
 
-  private val itemsFromDb: PublishProcessor<List<HistoryItem>> =
+  private val itemsFromDb: PublishProcessor<List<Page>> =
     PublishProcessor.create()
 
   @BeforeEach
@@ -57,6 +57,7 @@ internal class HistoryViewModelTest {
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showHistoryAllBooks } returns true
     every { historyDao.history() } returns itemsFromDb
+    every { historyDao.pages() } returns historyDao.history()
     viewModel = HistoryViewModel(historyDao, zimReaderContainer, sharedPreferenceUtil)
   }
 

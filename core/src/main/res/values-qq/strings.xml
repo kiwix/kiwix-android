@@ -31,7 +31,6 @@
   <string name="delete_bookmarks">Ask if the user wants to delete all bookmarks.</string>
   <string name="delete_selected_history">Ask if the user wants to delete a number of selected history items.</string>
   <string name="delete_selected_bookmarks">Ask if the user wants to delete a number of selected bookmarks.</string>
-  <string name="selected_bookmarks_cleared">Tell the user that the selected bookmarks has been deleted/cleared</string>
   <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>
   <string name="rate_dialog_positive">{{Identical|Rate}}</string>
