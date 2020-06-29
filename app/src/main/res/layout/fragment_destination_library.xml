@@ -16,33 +16,47 @@
   ~
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  xmlns:tools="http://schemas.android.com/tools"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:orientation="vertical">
 
   <include layout="@layout/layout_toolbar" />
 
-
   <TextView
     android:id="@+id/file_management_no_files"
     style="@style/no_list_content_text"
-    tools:ignore="MissingConstraints"
-    android:text="@string/no_files_here" />
+    android:layout_gravity="center"
+    android:text="@string/no_files_here"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <Button
+    android:id="@+id/go_to_downloads_button_no_files"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/download_books"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/file_management_no_files" />
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     android:id="@+id/zim_swiperefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteX="16dp"
+    tools:layout_editor_absoluteY="-142dp">
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/zimfilelist"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

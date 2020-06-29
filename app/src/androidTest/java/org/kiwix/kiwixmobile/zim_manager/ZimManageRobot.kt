@@ -100,6 +100,7 @@ class ZimManageRobot : BaseRobot() {
 
     fun waitForEmptyView() {
       isVisible(ViewId(R.id.file_management_no_files))
+      isVisible(ViewId(R.id.go_to_downloads_button_no_files))
     }
   }
 }

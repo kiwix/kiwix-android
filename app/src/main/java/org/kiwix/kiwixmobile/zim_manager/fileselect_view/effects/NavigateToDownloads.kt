@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,25 +19,14 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.navigation.findNavController
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
+import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
 
-data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.BookOnDisk) :
-  SideEffect<Unit> {
-
+object NavigateToDownloads : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val file = bookOnDisk.file
-    if (!file.canRead()) {
-      activity.toast(R.string.error_file_not_found)
-    } else {
-      val action = actionNavigationLibraryToNavigationReader()
-      action.zimFileUri = file.toUri().toString()
-      activity.findNavController(R.id.nav_host_fragment).navigate(action)
-    }
+    activity.findNavController(R.id.nav_host_fragment)
+      .navigate(LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationDownloads())
   }
 }

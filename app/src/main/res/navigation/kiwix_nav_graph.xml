@@ -36,6 +36,9 @@
     <action
       android:id="@+id/action_navigation_library_to_navigation_reader"
       app:destination="@id/navigation_reader" />
+    <action
+      android:id="@+id/action_navigation_library_to_navigation_downloads"
+      app:destination="@id/navigation_downloads" />
   </fragment>
 
   <fragment

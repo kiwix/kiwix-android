@@ -28,6 +28,7 @@
     <ID>PackageNaming:LibraryListItem.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
     <ID>PackageNaming:LibraryViewHolder.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
     <ID>PackageNaming:MountFileSystemChecker.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
+    <ID>PackageNaming:NavigateToDownloads.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:NetworkState.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:None.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:OpenFile.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>

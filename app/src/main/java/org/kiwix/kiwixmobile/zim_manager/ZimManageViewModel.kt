@@ -59,8 +59,10 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.NavigateToDownloads
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFile
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFileWithNavigation
@@ -98,6 +100,7 @@ class ZimManageViewModel @Inject constructor(
     object RequestShareMultiSelection : FileSelectActions()
     object MultiModeFinished : FileSelectActions()
     object RestartActionMode : FileSelectActions()
+    object UserClickedDownloadBooksButton : FileSelectActions()
   }
 
   val sideEffects = PublishProcessor.create<SideEffect<Any?>>()
@@ -160,6 +163,7 @@ class ZimManageViewModel @Inject constructor(
         MultiModeFinished -> noSideEffectAndClearSelectionState()
         is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
         RestartActionMode -> StartMultiSelection(fileSelectActions)
+        UserClickedDownloadBooksButton -> NavigateToDownloads
       }
     )
   }, Throwable::printStackTrace)
