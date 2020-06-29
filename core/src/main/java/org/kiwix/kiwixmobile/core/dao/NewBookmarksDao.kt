@@ -35,6 +35,8 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
   }).map { it.map(::BookmarkItem) }
 
   override fun pages(): Flowable<List<Page>> = bookmarks()
+  override fun deletePages(pagesToDelete: List<Page>) =
+    deleteBookmarks(pagesToDelete as List<BookmarkItem>)
 
   fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {
     equal(BookmarkEntity_.zimId, zimFileReader?.id ?: "")

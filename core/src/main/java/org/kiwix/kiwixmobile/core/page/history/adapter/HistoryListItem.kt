@@ -34,7 +34,7 @@ sealed class HistoryListItem : PageRelated {
     val historyTitle: String,
     val dateString: String,
     val timeStamp: Long,
-    var isSelected: Boolean = false,
+    override var isSelected: Boolean = false,
     override val id: Long = databaseId,
     override val url: String = historyUrl
   ) : HistoryListItem(), Page {

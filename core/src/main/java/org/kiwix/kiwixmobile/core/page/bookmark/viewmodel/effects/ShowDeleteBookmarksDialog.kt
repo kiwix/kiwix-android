@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
+import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import javax.inject.Inject
@@ -41,7 +42,7 @@ data class ShowDeleteBookmarksDialog(
       dialogType = KiwixDialog.DeleteSelectedBookmarks
     }
     dialogShower.show(dialogType, {
-      effects.offer(DeleteBookmarkItems(effects, state, bookmarksDao))
+      effects.offer(DeletePageItems(state, bookmarksDao))
     })
   }
 }

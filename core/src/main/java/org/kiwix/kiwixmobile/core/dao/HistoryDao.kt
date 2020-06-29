@@ -35,6 +35,8 @@ class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
   ).map { it.map(::HistoryItem) }
 
   override fun pages(): Flowable<List<Page>> = history()
+  override fun deletePages(pagesToDelete: List<Page>) =
+    deleteHistory(pagesToDelete as List<HistoryItem>)
 
   fun saveHistory(historyItem: HistoryItem) {
     box.store.callInTx {
