@@ -26,6 +26,7 @@ import androidx.navigation.fragment.NavHostFragment
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.WebViewProvider
 
@@ -57,7 +58,9 @@ class NavigationHostFragment : NavHostFragment(), WebViewProvider, BaseFragmentA
   ): Super {
     var result = ShouldCall
     childFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      result = it.onActionModeStarted(actionMode, activity)
+      if (it.onActionModeStarted(actionMode, activity) == ShouldNotCall) {
+        result = ShouldNotCall
+      }
     }
     return result
   }
@@ -68,7 +71,9 @@ class NavigationHostFragment : NavHostFragment(), WebViewProvider, BaseFragmentA
   ): Super {
     var result = ShouldCall
     childFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      result = it.onActionModeFinished(actionMode, activity)
+      if (it.onActionModeFinished(actionMode, activity) == ShouldNotCall) {
+        result = ShouldNotCall
+      }
     }
     return result
   }
@@ -76,7 +81,9 @@ class NavigationHostFragment : NavHostFragment(), WebViewProvider, BaseFragmentA
   override fun onBackPressed(activity: AppCompatActivity): Super {
     var result = ShouldCall
     childFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      result = it.onBackPressed(activity)
+      if (it.onBackPressed(activity) == ShouldNotCall) {
+        result = ShouldNotCall
+      }
     }
     return result
   }
@@ -87,7 +94,9 @@ class NavigationHostFragment : NavHostFragment(), WebViewProvider, BaseFragmentA
   ): Super {
     var result = ShouldCall
     childFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      result = it.onNewIntent(intent, activity)
+      if (it.onNewIntent(intent, activity) == ShouldNotCall) {
+        result = ShouldNotCall
+      }
     }
     return result
   }
@@ -98,7 +107,9 @@ class NavigationHostFragment : NavHostFragment(), WebViewProvider, BaseFragmentA
   ): Super {
     var result = ShouldCall
     childFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      result = it.onCreateOptionsMenu(menu, activity)
+      if (it.onCreateOptionsMenu(menu, activity) == ShouldNotCall) {
+        result = ShouldNotCall
+      }
     }
     return result
   }

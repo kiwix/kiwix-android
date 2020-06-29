@@ -54,11 +54,7 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
 
     navController = findNavController(R.id.nav_host_fragment)
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-
-    appBarConfiguration = AppBarConfiguration(
-      navController.graph
-    )
-
+    appBarConfiguration = AppBarConfiguration(navController.graph)
     navView.setupWithNavController(navController)
   }
 
