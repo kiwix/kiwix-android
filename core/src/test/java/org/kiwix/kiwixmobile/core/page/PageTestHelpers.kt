@@ -26,7 +26,8 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 
 class PageImpl(
   override val zimFilePath: String? = "zimFilePath",
-  override val url: String = "url"
+  override val url: String = "url",
+  override val id: Long
 ) : Page
 
 fun historyItem(

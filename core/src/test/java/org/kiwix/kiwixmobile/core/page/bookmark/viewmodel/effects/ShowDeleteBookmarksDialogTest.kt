@@ -70,9 +70,8 @@ internal class ShowDeleteBookmarksDialogTest {
       showDeleteBookmarksDialog.dialogShower = dialogShower
       Unit
     }
-    val lambdaSlot = slot<() -> Unit>()
     showDeleteBookmarksDialog.invokeWith(activity)
-    verify { dialogShower.show(DeleteSelectedBookmarks, capture(lambdaSlot)) }
+    verify { dialogShower.show(DeleteSelectedBookmarks, any()) }
   }
 
   @Test
