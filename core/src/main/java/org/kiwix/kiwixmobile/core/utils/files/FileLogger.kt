@@ -38,26 +38,34 @@ class FileLogger @Inject constructor() {
     Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 
   fun writeLogFile(context: Context): File {
-    val logFile = File(context.filesDir, fileName)
-    Log.d("KIWIX", "Writing all logs into [" + logFile.path + "]")
-    if (logFile.exists() && logFile.isFile) {
+    // this creates a new folder in private storage with name: logs
+    val logDir = File(context.filesDir, "logs")
+    val logFile = File(logDir, fileName)
+
+    Log.d("KIWIX", "Writing all logs into [" + logDir.path + "]")
+
+    if (!logDir.exists()) {
+      logDir.mkdir()
+    }
+    if (logDir.exists() && logFile.isFile) {
       Log.d(TAG, "writeLogFile: Deleting preExistingFile")
       logFile.delete()
     }
     // clear the previous logcat and then write the new one to the file
     try {
-      logFile.createNewFile()
+      logDir.createNewFile()
       Runtime.getRuntime().exec("logcat -c")
       Runtime.getRuntime().exec("logcat -f $logFile -s kiwix")
       Log.d(TAG, "writeLogFile: Log report written Successfully!")
+      Log.d(TAG, "writeLogFile: Authored report to $logFile")
     } catch (e: IOException) {
-      Log.e("KIWIX", "Error while writing logcat.txt", e)
+      Log.e("KIWIX", "Error while writing $fileName! ", e)
     }
     return logFile
   }
 
   companion object {
-    private const val TAG: String = "FileLogger"
+    private const val TAG = "FileLogger"
     private val fileName = "logs" + currentTimeMillis() + ".txt"
   }
 }

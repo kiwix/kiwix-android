@@ -74,16 +74,15 @@ abstract class CoreApp : Application() {
   override fun onCreate() {
     super.onCreate()
     instance = this
-    fileLogger = FileLogger()
     coreComponent = DaggerCoreComponent.builder()
       .context(this)
       .build()
     AndroidThreeTen.init(this)
-    fileLogger.writeLogFile(this)
     coreComponent.inject(this)
     kiwixDatabase.forceMigration()
     downloadMonitor.init()
     nightModeConfig.init()
+    fileLogger.writeLogFile(this)
     configureStrictMode()
   }
 
