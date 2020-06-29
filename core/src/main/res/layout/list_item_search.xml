@@ -19,18 +19,21 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
-  <include
+  <CheckedTextView
     android:id="@+id/list_item_search_text"
-    layout="@android:layout/simple_selectable_list_item"
     android:layout_width="0dp"
     android:layout_height="?android:attr/listPreferredItemHeight"
+    android:textAppearance="?android:attr/textAppearanceListItem"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    android:gravity="center_vertical"
+    android:background="?android:attr/listChoiceBackgroundIndicator"
+    android:paddingStart="8dip"
+    android:paddingEnd="8dip" />
 
   <Button
     android:id="@+id/list_item_search_new_tab_button"
