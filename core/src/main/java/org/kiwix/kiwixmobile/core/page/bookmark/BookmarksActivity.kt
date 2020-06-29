@@ -83,10 +83,10 @@ class BookmarksActivity : OnItemClickListener, BaseActivity() {
     recycler_view.adapter = bookmarksAdapter
     recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
+    bookmarks_switch.isChecked = sharedPreferenceUtil.showBookmarksAllBooks
     bookmarks_switch.setOnCheckedChangeListener { _, isChecked ->
       bookmarkViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
-    bookmarks_switch.isChecked = sharedPreferenceUtil.showBookmarksAllBooks
 
     compositeDisposable.add(bookmarkViewModel.effects.subscribe { it.invokeWith(this) })
   }

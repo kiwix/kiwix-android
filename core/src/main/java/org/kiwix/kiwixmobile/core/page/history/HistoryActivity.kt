@@ -88,10 +88,10 @@ class HistoryActivity : OnItemClickListener, BaseActivity() {
     recycler_view.adapter = historyAdapter
 
     compositeDisposable.add(historyViewModel.effects.subscribe { it.invokeWith(this) })
+    history_switch.isChecked = sharedPreferenceUtil.showHistoryAllBooks
     history_switch.setOnCheckedChangeListener { _, isChecked ->
       historyViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
-    history_switch.isChecked = sharedPreferenceUtil.showHistoryAllBooks
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
