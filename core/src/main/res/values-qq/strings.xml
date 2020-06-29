@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Authors:
+<?xml version="1.0" encoding="utf-8"?><!-- Authors:
 * Amire80
 * Fitoschido
 * Kelson
@@ -28,6 +27,11 @@
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
   <string name="delete">{{Identical|Delete}}</string>
+  <string name="delete_history">Ask if the user wants to delete all history items.</string>
+  <string name="delete_bookmarks">Ask if the user wants to delete all bookmarks.</string>
+  <string name="delete_selected_history">Ask if the user wants to delete a number of selected history items.</string>
+  <string name="delete_selected_bookmarks">Ask if the user wants to delete a number of selected bookmarks.</string>
+  <string name="selected_bookmarks_cleared">Tell the user that the selected bookmarks has been deleted/cleared</string>
   <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>
   <string name="rate_dialog_positive">{{Identical|Rate}}</string>

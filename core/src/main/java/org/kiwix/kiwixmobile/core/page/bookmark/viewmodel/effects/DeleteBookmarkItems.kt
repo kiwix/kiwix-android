@@ -35,6 +35,7 @@ data class DeleteBookmarkItems(
   override fun invokeWith(activity: AppCompatActivity) {
     if (state.isInSelectionState) {
       bookmarksDao.deleteBookmarks(state.pageItems.filter(BookmarkItem::isSelected))
+      effects.offer(ShowToast(R.string.selected_bookmarks_cleared))
     } else {
       bookmarksDao.deleteBookmarks(state.pageItems)
       effects.offer(ShowToast(R.string.all_bookmarks_cleared))
