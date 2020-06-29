@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Authors:
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
 * Amire80
 * Fitoschido
 * Kelson
 * Liuxinyu970226
 * Robby
 * Shirayuki
+* Stephane
 * The RedBurn
 * Verdy p
 -->
@@ -15,6 +17,7 @@
   <string name="bookmarks">{{Identical|Bookmark}}</string>
   <string name="menu_random_article">{{Identical|Random article}}</string>
   <string name="menu_full_screen">{{Identical|Full screen}}</string>
+  <string name="menu_host_books">Il s\'agit de la fonctionnalité hotspot - l\'anglais \"host books\" n\'est pas particulièrement satisfaisant à la base.</string>
   <string name="search_label">{{Identical|Search}}</string>
   <string name="hotspot_details_message">Do not change:\n* &lt;code&gt;%1$s&lt;/code&gt; (replaced by the “SSID” value identifying the WiFi hotspot identity for users)\n* &lt;code&gt;%2$s&lt;/code&gt; (replaced by the password or code configured in the hotspot to authorize the association and network connection)</string>
   <string name="hotspot_dialog_title">This the title displayed when a user clicks wants to start the server in the host books section</string>
@@ -26,12 +29,8 @@
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
-  <string name="delete">{{Identical|Delete}}</string>
-  <string name="delete_history">Ask if the user wants to delete all history items.</string>
-  <string name="delete_bookmarks">Ask if the user wants to delete all bookmarks.</string>
-  <string name="delete_selected_history">Ask if the user wants to delete a number of selected history items.</string>
-  <string name="delete_selected_bookmarks">Ask if the user wants to delete a number of selected bookmarks.</string>
   <string name="selected_bookmarks_cleared">Tell the user that the selected bookmarks has been deleted/cleared</string>
+  <string name="delete">{{Identical|Delete}}</string>
   <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>
   <string name="rate_dialog_positive">{{Identical|Rate}}</string>
@@ -50,8 +49,12 @@
   <string name="save">{{Identical|Save}}</string>
   <string name="go_to_settings">This is used in the start server dialog and leads the user to mobile hotspot settings when pressed</string>
   <string name="no_bookmarks">This means \"there are no bookmarks\"</string>
-  <string name="experimental_navigation">This is a menu item that opens the applicaiton in a new experimental mode that uses different navigation.</string>
+  <string name="delete_history">Ask if the user wants to delete all history items.</string>
+  <string name="delete_selected_history">Ask if the user wants to delete a number of selected history items.</string>
+  <string name="delete_bookmarks">Ask if the user wants to delete all bookmarks.</string>
+  <string name="delete_selected_bookmarks">Ask if the user wants to delete a number of selected bookmarks.</string>
   <string name="on">This is used in the settings screen to turn on the night mode.</string>
   <string name="off">This is used in the settings screen to turn off the night mode.</string>
   <string name="auto">This is used in the settings screen to turn the night mode on or off automatically depending upon the system settings of the phone.</string>
+  <string name="experimental_navigation">This is a menu item that opens the applicaiton in a new experimental mode that uses different navigation.</string>
 </resources>

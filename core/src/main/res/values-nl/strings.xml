@@ -1,4 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Elroy
+* Festina90
+* Jeleniccz
+* Mainframe98
+* PonkoSasuke
+* Romaine
+* Siebrand
+-->
 <resources>
   <string name="menu_help">Hulp</string>
   <string name="menu_home">Startpagina</string>
@@ -11,10 +20,10 @@
   <string name="menu_read_aloud">Voorlezen</string>
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
   <string name="save_media">Media opslaan als…</string>
-  <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
-  <string name="save_media_saved">Het bestand is opgeslagen als %1$s in uw afbeeldingenmap</string>
+  <string name="save_media_error" fuzzy="true">Er is een fout opgetreden bij het opslaan van de media!</string>
+  <string name="save_media_saved" fuzzy="true">Het bestand is opgeslagen als %1$s in uw afbeeldingenmap</string>
   <string name="search_label">Zoeken</string>
-  <string name="choose_file">Selecteer een ZIM inhoudsbestand (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Selecteer een ZIM inhoudsbestand (*.zim)</string>
   <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
   <string name="error_file_not_found">Fout: het geselecteerde ZIM-bestand kon niet gevonden worden.</string>
   <string name="error_file_invalid">Fout: het geselecteerde bestand is geen geldig ZIM-bestand.</string>
@@ -30,29 +39,68 @@
   <string name="pref_language_chooser">Taal kiezen</string>
   <string name="tts_lang_not_supported">De taak van deze pagina wordt niet ondersteund, of de juiste taalgegevens zijn niet geïnstalleerd. De pagina kan niet correct gelezen worden.</string>
   <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
-  <string name="no_section_info">Geen inhoudsheaders gevonden</string>
-  <string name="request_storage">Om toegang te krijgen tot ZIM-bestanden is toegang tot uw opslag nodig</string>
+  <string name="no_section_info" fuzzy="true">Geen inhoudsheaders gevonden</string>
+  <string name="request_storage" fuzzy="true">Om toegang te krijgen tot ZIM-bestanden is toegang tot uw opslag nodig</string>
+  <string name="delete_recent_search_item">Dit item verwijderen?</string>
+  <string name="delete">Verwijderen</string>
+  <string name="cancel">Annuleren</string>
+  <string name="did_you_know">Wist u dat?</string>
+  <string name="undo">Ongedaan maken</string>
   <string name="bookmark_added">Bladwijzer toegevoegd</string>
   <string name="rate_dialog_title">Beoordeel ons alstublieft</string>
   <string name="rate_dialog_msg_1">Als u geniet van het gebruik van</string>
   <string name="rate_dialog_msg_2">, geef dan even een beoordeling. Dank u wel voor uw steun!</string>
   <string name="rate_dialog_positive">Beoordelen!</string>
   <string name="no_thanks">Nee, bedankt</string>
+  <string name="rate_dialog_neutral">Later</string>
   <string name="pref_newtab_background_title">Nieuw tabblab in de achtergrond openen</string>
   <string name="pref_newtab_background_summary">Nieuwe tabbladen worden niet actief gemaakt</string>
+  <string name="local_zims">Apparaat</string>
   <string name="library">Bibliotheek</string>
+  <string name="zim_simple">Eenvoudig</string>
+  <string name="zim_no_pic">Geen afbeeldingen</string>
   <string name="zim_no_vid">Geen video\'s</string>
   <string name="help_6">Onze inhoud is ondergebracht op de Kiwix website</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="pref_storage">Opslag</string>
+  <string name="pref_current_folder">Huidige map</string>
+  <string name="tts_pause">pauzeren</string>
+  <string name="tts_resume">hervatten</string>
+  <string name="internal_storage">Intern</string>
+  <string name="external_storage">Extern</string>
+  <string name="yes">Ja</string>
+  <string name="no">Nee</string>
+  <string name="next">Volgende</string>
+  <string name="previous">Vorige</string>
+  <string name="time_day">dag</string>
+  <string name="time_hour">u</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
+  <string name="time_left">te gaan</string>
+  <string name="time_today">Vandaag</string>
+  <string name="time_yesterday">Gisteren</string>
+  <string name="your_languages">Geselecteerde talen:</string>
+  <string name="other_languages">Andere talen:</string>
+  <string name="new_tab_shortcut_label">Nieuw tabblad</string>
+  <string name="get_started">Aan de slag</string>
+  <string name="table_of_contents">Inhoudsopgave</string>
+  <string name="save_languages">Talen opslaan</string>
+  <string name="history">Geschiedenis</string>
+  <string name="search_history">Zoekgeschiedenis</string>
+  <string name="close_all_tabs">Alle tabbladen sluiten</string>
+  <string name="pending_state">In afwachting</string>
+  <string name="running_state">In behandeling</string>
+  <string name="complete">Afgerond</string>
+  <string name="paused_state">Gepauzeerd</string>
+  <string name="failed_state">Mislukt: %s</string>
+  <string name="save">Opslaan</string>
+  <string name="note">Opmerking</string>
+  <string name="file_transfer_complete">Bestandsoverdracht compleet</string>
+  <string name="your_device">Uw apparaat:</string>
+  <string name="tag_text_only">Alleen text</string>
+  <string name="no_results">Geen resultaten</string>
+  <string name="no_bookmarks">Geen bladwijzers</string>
+  <string name="no_history">Geen geschiedenis</string>
+  <string name="on">Aan</string>
+  <string name="off">Uit</string>
+  <string name="auto">Automatisch</string>
 </resources>

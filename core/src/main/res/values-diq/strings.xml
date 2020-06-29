@@ -186,7 +186,7 @@
   <string name="your_device">Cihazê Şıma:</string>
   <string name="nearby_devices">NEZDI CİHAZİ</string>
   <string name="files_for_transfer">TRANSFERÊ DOSYAYAN</string>
-  <string name="preparing_files">Keno ke dosyaya transfer kero…</string>
+  <string name="preparing_files">Keno ke dosyaya transfer kero...</string>
   <string name="status">Weziyet</string>
   <string name="tag_pic">Resım</string>
   <string name="tag_vid">Video</string>
@@ -198,8 +198,8 @@
   <string name="no_bookmarks">Nişani çıniyê</string>
   <string name="no_history">Veror Çıniyo</string>
   <string name="device_default">Hesabyayey Cihazi</string>
-  <string name="delete_history">Veror wa Bıesterneyo?</string>
-  <string name="delete_bookmarks">Bookmarki wa Bıesterneyo?</string>
+  <string name="delete_history" fuzzy="true">Veror wa Bıesterneyo?</string>
+  <string name="delete_bookmarks" fuzzy="true">Bookmarki wa Bıesterneyo?</string>
   <string name="on">Akerde</string>
   <string name="off">Racınaye</string>
   <string name="auto">Otomatik</string>

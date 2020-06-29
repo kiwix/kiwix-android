@@ -267,8 +267,8 @@
   <string name="no_bookmarks">Yer İmi Yok</string>
   <string name="no_history">Geçmiş Yok</string>
   <string name="device_default">Cihaz Varsayılanı</string>
-  <string name="delete_history">Geçmiş Silinsin mi?</string>
-  <string name="delete_bookmarks">Yer İşaretleri Silinsin mi?</string>
+  <string name="delete_history" fuzzy="true">Geçmiş Silinsin mi?</string>
+  <string name="delete_bookmarks" fuzzy="true">Yer İşaretleri Silinsin mi?</string>
   <string name="on">Açık</string>
   <string name="off">Kapalı</string>
   <string name="auto">Otomatik</string>
@@ -276,4 +276,7 @@
   <string name="crash_checkbox_file_system">Dosya Sistemi Ayrıntıları</string>
   <string name="diagnostic_report">Teşhis Raporu</string>
   <string name="diagnostic_report_message">Sorunu teşhis edebilmemiz için lütfen aşağıdaki tüm ayrıntıları gönderin</string>
+  <string name="percentage">%%d%</string>
+  <string name="pref_text_zoom_title">Metin Yakınlığı</string>
+  <string name="experimental_navigation">Deneysel Gezintisi</string>
 </resources>

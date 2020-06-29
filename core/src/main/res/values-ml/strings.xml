@@ -130,5 +130,5 @@
   <string name="go_to_settings" fuzzy="true">സജ്ജീകരണങ്ങളിലേക്ക് പോവുക</string>
   <string name="no_results">ഫലങ്ങൾ ഒന്നുമില്ല</string>
   <string name="no_history">നാൾവഴിയില്ല</string>
-  <string name="delete_history">നാൾവഴി ഒഴിവാക്കട്ടെ?</string>
+  <string name="delete_history" fuzzy="true">നാൾവഴി ഒഴിവാക്കട്ടെ?</string>
 </resources>
