@@ -48,9 +48,12 @@ class OnlineLibraryFragment : LibraryFragment() {
     val searchItem = menu.findItem(R.id.action_search)
     val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
     getZimItem?.isVisible = false
+
     (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
       SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
     )
+
+    zimManageViewModel.requestFiltering.onNext("")
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
