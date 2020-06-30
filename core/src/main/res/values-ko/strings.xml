@@ -264,8 +264,8 @@
   <string name="no_bookmarks">북마크가 없습니다!</string>
   <string name="no_history">역사 없음</string>
   <string name="device_default">장치 기본값</string>
-  <string name="delete_history">역사를 삭제할까요?</string>
-  <string name="delete_bookmarks">북마크를 삭제할까요?</string>
+  <string name="delete_history" fuzzy="true">역사를 삭제할까요?</string>
+  <string name="delete_bookmarks" fuzzy="true">북마크를 삭제할까요?</string>
   <string name="on">켜기</string>
   <string name="off">끄기</string>
   <string name="auto">자동</string>

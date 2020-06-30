@@ -25,7 +25,8 @@ import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteBookmarks
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllBookmarks
+import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedBookmarks
 import javax.inject.Inject
 
 data class ShowDeleteBookmarksDialog(
@@ -36,8 +37,7 @@ data class ShowDeleteBookmarksDialog(
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as BookmarksActivity).activityComponent.inject(this)
-    dialogShower.show(DeleteBookmarks, {
-      effects.offer(DeleteBookmarkItems(effects, state, bookmarksDao))
-    })
+    dialogShower.show(if (state.isInSelectionState) DeleteSelectedBookmarks else DeleteAllBookmarks,
+      { effects.offer(DeleteBookmarkItems(effects, state, bookmarksDao)) })
   }
 }

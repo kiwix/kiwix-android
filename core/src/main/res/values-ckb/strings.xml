@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Arya sarhan
+* Cwtiyar
 * Hzr115
 * Kurd
 * Sarchia
@@ -159,6 +160,8 @@
   <string name="no_results">هیچ ئەنجامێک نییە</string>
   <string name="no_bookmarks">ھیچ نیشانکراوێک نییە</string>
   <string name="no_history">ھیچ مێژوویەک نییە</string>
-  <string name="delete_history">مێژوو دەسڕیتەوە؟</string>
-  <string name="delete_bookmarks">کتێبە دەستنیشانکراوەکان دەسڕیتەوە؟</string>
+  <string name="delete_history" fuzzy="true">مێژوو دەسڕیتەوە؟</string>
+  <string name="delete_bookmarks" fuzzy="true">کتێبە دەستنیشانکراوەکان دەسڕیتەوە؟</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">زوومکردنی دەق</string>
 </resources>

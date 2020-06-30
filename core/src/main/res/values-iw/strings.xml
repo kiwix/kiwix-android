@@ -261,8 +261,8 @@
   <string name="no_bookmarks">אין סימניות</string>
   <string name="no_history">אין היסטוריה</string>
   <string name="device_default">ברירת המחדל של המכשיר</string>
-  <string name="delete_history">למחוק היסטוריה?</string>
-  <string name="delete_bookmarks">למחוק מועדפים?</string>
+  <string name="delete_history" fuzzy="true">למחוק היסטוריה?</string>
+  <string name="delete_bookmarks" fuzzy="true">למחוק מועדפים?</string>
   <string name="on">מופעל</string>
   <string name="off">כבוי</string>
   <string name="auto">אוטומטי</string>

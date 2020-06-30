@@ -254,8 +254,8 @@
   <string name="no_bookmarks">Nun hai marcadores</string>
   <string name="no_history">Nun hai Historial</string>
   <string name="device_default">Predeterminao del preséu</string>
-  <string name="delete_history">¿Desaniciar l\'Historial?</string>
-  <string name="delete_bookmarks">¿Desaniciar los Marcadores?</string>
+  <string name="delete_history" fuzzy="true">¿Desaniciar l\'Historial?</string>
+  <string name="delete_bookmarks" fuzzy="true">¿Desaniciar los Marcadores?</string>
   <string name="on">Activáu</string>
   <string name="off">Desactiváu</string>
   <string name="auto">Auto</string>
