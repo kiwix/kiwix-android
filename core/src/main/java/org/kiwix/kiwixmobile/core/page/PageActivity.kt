@@ -24,6 +24,8 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.view.ActionMode
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +45,7 @@ import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
+import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
 abstract class PageActivity : OnItemClickListener, BaseActivity() {
@@ -54,6 +57,7 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
   abstract val title: String
   abstract val noItemsString: String
   abstract val switchString: String
+  abstract val searchQueryHint: String
   abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
 
@@ -81,6 +85,27 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
       }
     }
 
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    menuInflater.inflate(R.menu.menu_page, menu)
+    val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
+    search.queryHint = searchQueryHint
+    search.setOnQueryTextListener(SimpleTextListener {
+      pageViewModel.actions.offer(Action.Filter(it))
+    })
+    pageViewModel.state.observe(this, Observer(::render))
+    return true
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (item.itemId == android.R.id.home) {
+      pageViewModel.actions.offer(Action.Exit)
+    }
+    if (item.itemId == R.id.menu_pages_clear) {
+      pageViewModel.actions.offer(Action.UserClickedDeleteButton)
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(activity_page)
@@ -101,7 +126,12 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
     }
   }
 
-  fun render(state: PageState) {
+  override fun onDestroy() {
+    compositeDisposable.clear()
+    super.onDestroy()
+  }
+
+  private fun render(state: PageState) {
     pageAdapter.items = state.filteredPageItems
     page_switch.isEnabled = !state.isInSelectionState
     no_page.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE

@@ -1,18 +1,11 @@
 package org.kiwix.kiwixmobile.core.page.bookmark
 
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.page.PageActivity
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkDelegate.BookmarkItemDelegate
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 
 class BookmarksActivity : PageActivity() {
   override val pageViewModel by lazy { viewModel<BookmarkViewModel>(viewModelFactory) }
@@ -25,25 +18,5 @@ class BookmarksActivity : PageActivity() {
   override val noItemsString: String by lazy { getString(R.string.no_bookmarks) }
   override val switchString: String by lazy { getString(R.string.bookmarks_from_current_book) }
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showBookmarksAllBooks }
-
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_bookmarks, menu)
-    val search = menu.findItem(R.id.menu_bookmarks_search).actionView as SearchView
-    search.queryHint = getString(R.string.search_bookmarks)
-    search.setOnQueryTextListener(SimpleTextListener {
-      pageViewModel.actions.offer(Filter(it))
-    })
-    pageViewModel.state.observe(this, Observer(::render))
-    return true
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == android.R.id.home) {
-      pageViewModel.actions.offer(Action.Exit)
-    }
-    if (item.itemId == R.id.menu_bookmarks_clear) {
-      pageViewModel.actions.offer(Action.UserClickedDeleteButton)
-    }
-    return super.onOptionsItemSelected(item)
-  }
+  override val searchQueryHint: String by lazy { getString(R.string.search_bookmarks) }
 }
