@@ -107,7 +107,7 @@ object Versions {
 
   const val junit: String = "1.1.1"
 
-  const val navigation: String = "2.3.0-rc01"
+  const val navigation: String = "2.3.0"
 
   /**
    * Current version: "5.6.1"
