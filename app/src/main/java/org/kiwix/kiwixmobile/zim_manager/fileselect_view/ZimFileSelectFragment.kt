@@ -32,7 +32,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import kotlinx.android.synthetic.main.zim_list.file_management_no_files
 import kotlinx.android.synthetic.main.zim_list.zim_swiperefresh
 import kotlinx.android.synthetic.main.zim_list.zimfilelist
@@ -54,7 +53,6 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.UserClickedDownloadBooksButton
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
@@ -112,10 +110,6 @@ open class ZimFileSelectFragment : BaseFragment() {
       zimManageViewModel.fileSelectActions.offer(RestartActionMode)
     }
 
-    go_to_downloads_button_no_files.setOnClickListener {
-      offerAction(UserClickedDownloadBooksButton)
-    }
-
     disposable.add(zimManageViewModel.libraryTabIsVisible.subscribe { finishActionMode() })
   }
 
@@ -132,13 +126,12 @@ open class ZimFileSelectFragment : BaseFragment() {
     }, Throwable::printStackTrace
   )
 
-  private fun render(state: FileSelectListState) {
+  open fun render(state: FileSelectListState) {
     val items = state.bookOnDiskListItems
     bookDelegate.selectionMode = state.selectionMode
     booksOnDiskAdapter.items = items
     actionMode?.title = String.format("%d", state.selectedBooks.size)
     file_management_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
-    go_to_downloads_button_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
   }
 
   override fun onResume() {

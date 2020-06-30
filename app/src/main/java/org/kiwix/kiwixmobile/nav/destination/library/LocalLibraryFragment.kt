@@ -27,6 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
@@ -38,6 +39,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 
 class LocalLibraryFragment : ZimFileSelectFragment() {
@@ -87,5 +89,18 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar!!.setTitle(R.string.library)
     return root
+  }
+
+  override fun render(state: FileSelectListState) {
+    super.render(state)
+    val items = state.bookOnDiskListItems
+    go_to_downloads_button_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    go_to_downloads_button_no_files.setOnClickListener {
+      offerAction(FileSelectActions.UserClickedDownloadBooksButton)
+    }
   }
 }
