@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
@@ -130,6 +131,9 @@ open class ZimFileSelectFragment : BaseFragment() {
     val items = state.bookOnDiskListItems
     bookDelegate.selectionMode = state.selectionMode
     booksOnDiskAdapter.items = items
+    if (items.none(BooksOnDiskListItem::isSelected)) {
+      actionMode?.finish()
+    }
     actionMode?.title = String.format("%d", state.selectedBooks.size)
     file_management_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
   }
