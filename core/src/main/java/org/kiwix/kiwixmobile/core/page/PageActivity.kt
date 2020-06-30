@@ -23,15 +23,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Switch
-import android.widget.TextView
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_page.no_page
+import kotlinx.android.synthetic.main.activity_page.page_switch
+import kotlinx.android.synthetic.main.activity_page.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.layout.activity_page
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
@@ -49,12 +51,8 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
-  abstract val pageAdapter: PageAdapter
-  abstract val showAllPagesSwitch: Switch
-  abstract val noItems: TextView
-  abstract val recyclerView: RecyclerView
-  abstract val layoutId: Int
   abstract val title: String
+  abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
 
   private val actionModeCallback: ActionMode.Callback =
@@ -83,25 +81,25 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(layoutId)
+    setContentView(activity_page)
     setSupportActionBar(toolbar)
 
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     supportActionBar?.title = title
-    recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-    recyclerView.adapter = pageAdapter
+    recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+    recycler_view.adapter = pageAdapter
 
-    showAllPagesSwitch.isChecked = switchIsChecked
+    page_switch.isChecked = switchIsChecked
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(this) })
-    showAllPagesSwitch.setOnCheckedChangeListener { _, isChecked ->
+    page_switch.setOnCheckedChangeListener { _, isChecked ->
       pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
   }
 
   fun render(state: PageState) {
     pageAdapter.items = state.filteredPageItems
-    showAllPagesSwitch.isEnabled = !state.isInSelectionState
-    noItems.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
+    page_switch.isEnabled = !state.isInSelectionState
+    no_page.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
     if (state.isInSelectionState) {
       if (actionMode == null) {
         actionMode = startSupportActionMode(actionModeCallback)

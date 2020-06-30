@@ -2,14 +2,8 @@ package org.kiwix.kiwixmobile.core.page.history
 
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Switch
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_history.history_switch
-import kotlinx.android.synthetic.main.activity_history.no_history
-import kotlinx.android.synthetic.main.activity_history.recycler_view
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.page.PageActivity
@@ -29,10 +23,6 @@ class HistoryActivity : PageActivity() {
   override val pageAdapter by lazy {
     PageAdapter(HistoryItemDelegate(this), HistoryDateDelegate())
   }
-  override val showAllPagesSwitch: Switch by lazy { history_switch }
-  override val noItems: TextView by lazy { no_history }
-  override val recyclerView: RecyclerView by lazy { recycler_view }
-  override val layoutId: Int = R.layout.activity_history
   override val title: String by lazy { getString(R.string.history) }
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showHistoryAllBooks }
 

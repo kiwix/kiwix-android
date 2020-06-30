@@ -27,10 +27,6 @@ class BookmarksActivity : PageActivity() {
     PageAdapter(BookmarkItemDelegate(this))
   }
 
-  override val showAllPagesSwitch: Switch by lazy { bookmarks_switch }
-  override val noItems: TextView by lazy { no_bookmarks }
-  override val recyclerView: RecyclerView by lazy { recycler_view }
-  override val layoutId: Int = R.layout.activity_bookmarks
   override val title: String by lazy { getString(R.string.bookmarks) }
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showBookmarksAllBooks }
 
