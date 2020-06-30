@@ -23,4 +23,5 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 
 interface PageDao {
   fun pages(): Flowable<List<Page>>
+  fun deletePages(pagesToDelete: List<Page>)
 }

@@ -1,5 +1,3 @@
-package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
-
 /*
  * Kiwix Android
  * Copyright (c) 2020 Kiwix <android.kiwix.org>
@@ -18,21 +16,23 @@ package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
  *
  */
 
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
+package org.kiwix.kiwixmobile.core.base
 
-data class DeleteHistoryItems(
-  private val state: HistoryState,
-  private val historyDao: HistoryDao
-) : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    if (state.isInSelectionState) {
-      historyDao.deleteHistory(state.pageItems.filter(HistoryItem::isSelected))
-    } else {
-      historyDao.deleteHistory(state.pageItems)
-    }
+import android.content.Intent
+import android.view.ActionMode
+import android.view.Menu
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
+
+interface BaseFragmentActivityExtensions {
+  enum class Super {
+    ShouldCall,
+    ShouldNotCall
   }
+
+  fun onActionModeStarted(actionMode: ActionMode, activity: AppCompatActivity): Super = ShouldCall
+  fun onActionModeFinished(actionMode: ActionMode, activity: AppCompatActivity): Super = ShouldCall
+  fun onBackPressed(activity: AppCompatActivity): Super = ShouldCall
+  fun onNewIntent(intent: Intent, activity: AppCompatActivity): Super = ShouldCall
+  fun onCreateOptionsMenu(menu: Menu, activity: AppCompatActivity): Super = ShouldCall
 }

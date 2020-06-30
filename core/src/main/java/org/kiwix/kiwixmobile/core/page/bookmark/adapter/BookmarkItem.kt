@@ -30,7 +30,7 @@ data class BookmarkItem(
   val bookmarkUrl: String,
   val bookmarkTitle: String,
   val favicon: String?,
-  var isSelected: Boolean = false,
+  override var isSelected: Boolean = false,
   override val url: String = bookmarkUrl,
   override val id: Long = databaseId
 ) : Page {

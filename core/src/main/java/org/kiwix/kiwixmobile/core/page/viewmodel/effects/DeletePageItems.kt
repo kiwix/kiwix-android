@@ -1,5 +1,3 @@
-package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
-
 /*
  * Kiwix Android
  * Copyright (c) 2020 Kiwix <android.kiwix.org>
@@ -18,27 +16,23 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
  *
  */
 
-import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.processors.PublishProcessor
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
+package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
-data class DeleteBookmarkItems(
-  private val effects: PublishProcessor<SideEffect<*>>,
-  private val state: BookmarkState,
-  private val bookmarksDao: NewBookmarksDao
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
+
+data class DeletePageItems(
+  private val state: PageState,
+  private val pageDao: PageDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     if (state.isInSelectionState) {
-      bookmarksDao.deleteBookmarks(state.pageItems.filter(BookmarkItem::isSelected))
-      effects.offer(ShowToast(R.string.selected_bookmarks_cleared))
+      pageDao.deletePages(state.pageItems.filter(Page::isSelected))
     } else {
-      bookmarksDao.deleteBookmarks(state.pageItems)
-      effects.offer(ShowToast(R.string.all_bookmarks_cleared))
+      pageDao.deletePages(state.pageItems)
     }
   }
 }

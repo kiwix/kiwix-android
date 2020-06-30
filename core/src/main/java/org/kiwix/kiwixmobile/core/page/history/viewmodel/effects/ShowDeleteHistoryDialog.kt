@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
+import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
@@ -38,7 +39,7 @@ data class ShowDeleteHistoryDialog(
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as HistoryActivity).activityComponent.inject(this)
     dialogShower.show(if (state.isInSelectionState) DeleteSelectedHistory else DeleteAllHistory, {
-      effects.offer(DeleteHistoryItems(state, historyDao))
+      effects.offer(DeletePageItems(state, historyDao))
     })
   }
 }

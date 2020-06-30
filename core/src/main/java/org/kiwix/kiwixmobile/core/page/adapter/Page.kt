@@ -25,4 +25,5 @@ interface PageRelated {
 interface Page : PageRelated {
   val zimFilePath: String?
   val url: String
+  val isSelected: Boolean
 }
