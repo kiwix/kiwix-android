@@ -23,6 +23,9 @@ class HistoryActivity : PageActivity() {
   override val pageAdapter by lazy {
     PageAdapter(HistoryItemDelegate(this), HistoryDateDelegate())
   }
+
+  override val noItemsString: String by lazy { getString(R.string.no_history) }
+  override val switchString: String by lazy { getString(R.string.history_from_current_book) }
   override val title: String by lazy { getString(R.string.history) }
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showHistoryAllBooks }
 

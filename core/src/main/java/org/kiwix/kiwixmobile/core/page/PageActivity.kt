@@ -52,6 +52,8 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
   abstract val title: String
+  abstract val noItemsString: String
+  abstract val switchString: String
   abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
 
@@ -89,6 +91,9 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
     recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     recycler_view.adapter = pageAdapter
 
+    no_page.text = noItemsString
+
+    page_switch.text = switchString
     page_switch.isChecked = switchIsChecked
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(this) })
     page_switch.setOnCheckedChangeListener { _, isChecked ->
