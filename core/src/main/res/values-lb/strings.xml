@@ -114,9 +114,10 @@
   <string name="no_results">Keng Resultater</string>
   <string name="no_bookmarks">Keng Lieszeechen!</string>
   <string name="no_history">Keen Historique</string>
-  <string name="delete_history">Versioune läschen?</string>
-  <string name="delete_bookmarks">Lieszeeche läschen?</string>
+  <string name="delete_history" fuzzy="true">Versioune läschen?</string>
+  <string name="delete_bookmarks" fuzzy="true">Lieszeeche läschen?</string>
   <string name="on">Un</string>
   <string name="off">Aus</string>
   <string name="auto">Automatesch</string>
+  <string name="experimental_navigation">Experimentell Naavigatioun</string>
 </resources>
