@@ -224,6 +224,10 @@ class ZimFileReader constructor(
     tags = this@ZimFileReader.tags
   }
 
+  fun dispose() {
+    jniKiwixReader.dispose()
+  }
+
   companion object {
     /*
     * these uris aren't actually nullable but unit tests fail to compile as

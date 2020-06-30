@@ -54,7 +54,7 @@ public class SharedPreferenceUtil {
   private static final String PREF_STORAGE_TITLE = "pref_selected_title";
   private static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
   private static final String PREF_IS_FIRST_RUN = "isFirstRun";
-  private static final String PREF_SHOW_BOOKMARKS_CURRENT_BOOK = "show_bookmarks_current_book";
+  private static final String PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book";
   private static final String PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book";
   private static final String PREF_HOSTED_BOOKS = "hosted_books";
   public static final String PREF_NIGHT_MODE = "pref_night_mode";
@@ -124,11 +124,6 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle);
   }
 
-  public boolean getPrefFullTextSearch() {
-    return false; // Temporarily disable multizim for 2.4
-    //return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
-  }
-
   public void putPrefLanguage(String language) {
     sharedPreferences.edit().putString(PREF_LANG, language).apply();
   }
@@ -180,13 +175,13 @@ public class SharedPreferenceUtil {
       .apply();
   }
 
-  public boolean getShowBookmarksCurrentBook() {
-    return sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, true);
+  public boolean getShowBookmarksAllBooks() {
+    return sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, true);
   }
 
-  public void setShowBookmarksCurrentBook(boolean prefShowBookmarksFromCurrentBook) {
+  public void setShowBookmarksAllBooks(boolean prefShowBookmarksFromCurrentBook) {
     sharedPreferences.edit()
-      .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
+      .putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
       .apply();
   }
 

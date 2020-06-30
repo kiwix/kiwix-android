@@ -156,8 +156,8 @@
   <string name="no_results">بدون نتیجه</string>
   <string name="no_bookmarks">نشانکی نیست</string>
   <string name="no_history">تاریخچه‌ای نیست</string>
-  <string name="delete_history">تاریخچه حذف شود؟</string>
-  <string name="delete_bookmarks">نشانک‌ها حذف شوند؟</string>
+  <string name="delete_history" fuzzy="true">تاریخچه حذف شود؟</string>
+  <string name="delete_bookmarks" fuzzy="true">نشانک‌ها حذف شوند؟</string>
   <string name="on">روشن</string>
   <string name="off">خاموش</string>
   <string name="auto">خودکار</string>

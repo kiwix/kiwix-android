@@ -259,8 +259,8 @@
   <string name="no_bookmarks">Nici un semn de carte</string>
   <string name="no_history">Fără Istorie</string>
   <string name="device_default">Dispozitiv prestabilit</string>
-  <string name="delete_history">Șterge istoricul?</string>
-  <string name="delete_bookmarks">Ștergeți semnele de carte?</string>
+  <string name="delete_history" fuzzy="true">Șterge istoricul?</string>
+  <string name="delete_bookmarks" fuzzy="true">Ștergeți semnele de carte?</string>
   <string name="on">Pornit</string>
   <string name="off">Oprit</string>
   <string name="auto">Auto</string>
@@ -268,4 +268,6 @@
   <string name="crash_checkbox_file_system">Detalii Sistem Fișiere</string>
   <string name="diagnostic_report">Raport Diagnostic</string>
   <string name="diagnostic_report_message">Vă rugăm să trimiteți toate următoarele detalii, astfel încât să putem diagnostica problema</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Mărește text</string>
 </resources>

@@ -26,7 +26,6 @@ import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.bookmark.BookmarksModule
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
@@ -57,7 +56,6 @@ import javax.inject.Singleton
 @Singleton
 @Component(
   modules = [
-    BookmarksModule::class,
     ApplicationModule::class,
     NetworkModule::class,
     JNIModule::class,
@@ -103,6 +101,7 @@ interface CoreComponent {
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchActivity: SearchActivity)
+
   fun inject(helpActivity: HelpActivity)
   fun inject(settingsActivity: CoreSettingsActivity)
 }

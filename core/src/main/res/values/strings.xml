@@ -70,6 +70,7 @@
   <string name="all_history_cleared">All History Cleared</string>
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
   <string name="all_bookmarks_cleared">All Bookmarks Cleared</string>
+  <string name="selected_bookmarks_cleared">Selected Bookmarks Cleared</string>
   <string name="clear_all_history_dialog_title">Clear All History?</string>
   <string name="share">Share</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>
@@ -264,8 +265,10 @@
   <string name="no_bookmarks">No Bookmarks</string>
   <string name="no_history">No History</string>
   <string name="device_default">Device Default</string>
-  <string name="delete_history">Delete History?</string>
-  <string name="delete_bookmarks">Delete Bookmarks?</string>
+  <string name="delete_history">Delete All History?</string>
+  <string name="delete_selected_history">Delete Selected History?</string>
+  <string name="delete_bookmarks">Delete All Bookmarks?</string>
+  <string name="delete_selected_bookmarks">Delete Selected Bookmarks?</string>
   <string name="on">On</string>
   <string name="off">Off</string>
   <string name="auto">Auto</string>
@@ -275,6 +278,7 @@
   <string name="diagnostic_report_message">Please send all the following details so we can diagnose the problem</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
+  <string name="experimental_navigation">Experimental Navigation</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>

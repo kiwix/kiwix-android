@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterAll
@@ -68,11 +69,7 @@ class StorageObserverTest {
     every { fileSearch.scan() } returns files
     every { downloadDao.downloads() } returns downloads
     every { readerFactory.create(file) } returns zimFileReader
-    storageObserver = StorageObserver(
-      downloadDao,
-      fileSearch,
-      readerFactory
-    )
+    storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory)
   }
 
   @Test
@@ -92,6 +89,7 @@ class StorageObserverTest {
     booksOnFileSystem().assertValues(
       listOf(bookOnDisk(book = expectedBook, file = file))
     )
+    verify { zimFileReader.dispose() }
   }
 
   private fun booksOnFileSystem() = storageObserver.booksOnFileSystem

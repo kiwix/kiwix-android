@@ -49,5 +49,6 @@ class StorageObserver @Inject constructor(
     downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
   private fun convertToBookOnDisk(file: File) =
-    zimReaderFactory.create(file)?.let { BookOnDisk(file, it) }
+    zimReaderFactory.create(file)
+      ?.let { zimFileReader -> BookOnDisk(file, zimFileReader).also { zimFileReader.dispose() } }
 }
