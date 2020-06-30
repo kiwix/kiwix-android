@@ -334,11 +334,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @SuppressLint("ClickableViewAccessibility")
-  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
-    @Nullable ViewGroup container,
-    @Nullable Bundle savedInstanceState) {
-    root = inflater.inflate(R.layout.fragment_main, container, false);
-    ButterKnife.bind(this, root);
+  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
@@ -399,7 +396,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     compatCallback = new CompatFindActionModeCallback(activity);
     setUpTTS();
 
-    setupDocumentParser();
+    setupDocumentParser(activity);
 
     loadPrefs();
     updateTitle();
@@ -427,6 +424,13 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (savedInstanceState == null) {
       handleIntentActions(getActivity().getIntent());
     }
+  }
+
+  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
+    @Nullable ViewGroup container,
+    @Nullable Bundle savedInstanceState) {
+    root = inflater.inflate(R.layout.fragment_main, container, false);
+    ButterKnife.bind(this, root);
     return root;
   }
   //End of onCreate
@@ -461,19 +465,20 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void setupDocumentParser() {
+  private void setupDocumentParser(AppCompatActivity activity) {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
         for (TableDrawerAdapter.DocumentSection section : sections) {
           if (section.title.contains("REPLACE_")) {
-            section.title = getResourceString(getActivity().getApplicationContext(), section.title);
+            section.title =
+              getResourceString(activity.getBaseContext(), section.title);
           }
         }
         documentSections.addAll(sections);
         if (title.contains("REPLACE_")) {
           tableDrawerAdapter.setTitle(
-            getResourceString(getActivity().getApplicationContext(), title));
+            getResourceString(activity.getBaseContext(), title));
         } else {
           tableDrawerAdapter.setTitle(title);
         }
