@@ -151,7 +151,7 @@
   <string name="next">Další</string>
   <string name="previous">Předchozí</string>
   <string name="wifi_only_title">Povolit stahování obsahu přes mobilní připojení?</string>
-  <string name="wifi_only_msg">Pokud zvolíte \"Ano\", nebudete v budoucnu varováni. Můžete však toto vždy změnit v Nastavení.</string>
+  <string name="wifi_only_msg">Pokud zvolíte \“Ano\”, nebudete v budoucnu varováni. Můžete však toto vždy změnit v Nastavení.</string>
   <string name="pref_wifi_only">Stahovat obsah pouze přes WiFi</string>
   <string name="time_day">den</string>
   <string name="time_hour">h</string>
@@ -248,8 +248,8 @@
   <string name="nearby_devices">BLÍZKÁ ZAŘÍZENÍ</string>
   <string name="no_devices_found">Žádná zařízení nebyla nalezena. Kliknutím na tlačítko hledat to zkuste znovu.</string>
   <string name="files_for_transfer">SOUBORY K PŘENOSU</string>
-  <string name="preparing_files">Příprava souborů k přenosu...</string>
-  <string name="performing_handshake">Probíhá párování...</string>
+  <string name="preparing_files">Příprava souborů k přenosu…</string>
+  <string name="performing_handshake">Probíhá párování…</string>
   <string name="status">Stav</string>
   <string name="pref_clear_all_notes_summary">Vymazat všechny poznámky ke všem článkům</string>
   <string name="pref_clear_all_notes_title">Vymazat všechny poznámky</string>

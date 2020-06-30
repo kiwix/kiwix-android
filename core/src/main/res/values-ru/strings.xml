@@ -175,7 +175,7 @@
   <string name="your_languages">Выбранные языки:</string>
   <string name="other_languages">Другие языки:</string>
   <string name="no_items_msg">Нет доступных элементов</string>
-  <string name="crash_title">Хммм... Как неловко</string>
+  <string name="crash_title">Хммм… Как неловко</string>
   <string name="crash_description">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
   <string name="crash_checkbox_language">Ваши Языковые Настройки</string>
   <string name="crash_checkbox_zimfiles">Список Ваших Zim Файлов</string>
@@ -255,8 +255,8 @@
   <string name="nearby_devices">УСТРОЙСТВА РЯДОМ</string>
   <string name="no_devices_found">Устройства не найдены. Нажмите кнопку Поиск чтобы попробовать ещё раз.</string>
   <string name="files_for_transfer">ФАЙЛЫ ДЛЯ ПЕРЕДАЧИ</string>
-  <string name="preparing_files">Подготовка файлов для передачи...</string>
-  <string name="performing_handshake">Производим \"рукопожатие\"...</string>
+  <string name="preparing_files">Подготовка файлов для передачи…</string>
+  <string name="performing_handshake">Производим \“рукопожатие\”…</string>
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистить все заметки во всех статьях</string>
   <string name="pref_clear_all_notes_title">Очистить все заметки</string>

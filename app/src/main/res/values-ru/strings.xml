@@ -5,5 +5,5 @@
 <resources>
   <string name="file_system_does_not_support_4gb">Ваша файловая система не поддерживает файлы больше 4GB</string>
   <string name="detecting_file_system">Проверка, поддерживает ли файловая система файлы больше 4GB</string>
-  <string name="cannot_open_file">Невозможно открыть файл\nПожалуйста, попытайтесь найти этот файл во вкладке \"Устройство\" в вашей библиотеке</string>
+  <string name="cannot_open_file">Невозможно открыть файл\nПожалуйста, попытайтесь найти этот файл во вкладке \“Устройство\” в вашей библиотеке</string>
 </resources>
