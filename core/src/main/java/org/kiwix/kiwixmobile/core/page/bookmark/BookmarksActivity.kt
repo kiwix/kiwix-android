@@ -2,14 +2,8 @@ package org.kiwix.kiwixmobile.core.page.bookmark
 
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Switch
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_bookmarks.bookmarks_switch
-import kotlinx.android.synthetic.main.activity_bookmarks.no_bookmarks
-import kotlinx.android.synthetic.main.activity_bookmarks.recycler_view
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.page.PageActivity
