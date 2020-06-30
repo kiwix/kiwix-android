@@ -51,6 +51,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
@@ -203,6 +204,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   ViewGroup videoView;
+  @BindView(R2.id.go_to_library_button_no_open_book)
+  Button noOpenBookButton;
+  @BindView(R2.id.no_open_book_text)
+  TextView noOpenBookText;
 
   View root;
 
@@ -1257,7 +1262,20 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
   //opens home screen when user closes all tabs
 
+  private void displayNoBookOpenViews() {
+    videoView.setVisibility(View.GONE);
+    noOpenBookButton.setVisibility(View.VISIBLE);
+    noOpenBookText.setVisibility(View.VISIBLE);
+  }
+
+  private void hideNoBookOpenViews() {
+    videoView.setVisibility(View.GONE);
+    noOpenBookButton.setVisibility(View.VISIBLE);
+    noOpenBookText.setVisibility(View.VISIBLE);
+  }
+
   private void openHomeScreen() {
+
     new Handler().postDelayed(() -> {
       if (webViewList.size() == 0) {
         createNewTab();
