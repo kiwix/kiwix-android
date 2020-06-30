@@ -26,6 +26,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
@@ -73,6 +74,16 @@ class ReaderFragment : CoreReaderFragment() {
     if (uri.isNotEmpty()) {
       openZimFile(Uri.parse(uri).toFile())
     }
+  }
+
+  override fun openHomeScreen() {
+    displayNoBookOpenViews()
+    if (webViewList.size == 0) {
+      createNewTab()
+      hideTabSwitcher()
+      contentFrame.visibility = GONE
+    }
+    // hideTabSwitcher()
   }
 
   override fun onCreateView(
