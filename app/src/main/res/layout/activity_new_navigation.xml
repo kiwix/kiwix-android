@@ -37,7 +37,7 @@
 
   <com.google.android.material.bottomnavigation.BottomNavigationView
     android:id="@+id/nav_view"
-    style="@style/ThemeOverlay.App.BottomNavigationView"
+    style="@style/Widget.KiwixTheme.BottomNavigationView"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     app:menu="@menu/menu_bottom_nav" />
