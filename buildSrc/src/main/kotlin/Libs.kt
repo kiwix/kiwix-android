@@ -15,6 +15,8 @@ object Libs {
     "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
   const val navigation_kotlin_testing: String =
     "androidx.navigation:navigation-testing:${Versions.navigation}"
+  const val navigation_kotlin_safeargs: String =
+    "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
 
   /**
    * https://developer.android.com/testing
