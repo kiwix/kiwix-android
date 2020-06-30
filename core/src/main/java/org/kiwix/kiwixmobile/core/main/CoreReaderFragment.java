@@ -720,7 +720,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private String getValidTitle(String zimFileTitle) {
-    return isInvalidTitle(zimFileTitle) ? getString(R.string.app_name) : zimFileTitle;
+    return isAdded() && isInvalidTitle(zimFileTitle) ? getString(R.string.app_name) : zimFileTitle;
   }
 
   protected boolean isInvalidTitle(String zimFileTitle) {
