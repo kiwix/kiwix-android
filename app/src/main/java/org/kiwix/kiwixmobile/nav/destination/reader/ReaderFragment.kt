@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.core.net.toUri
@@ -64,18 +63,14 @@ class ReaderFragment : CoreReaderFragment() {
 
   private val args: ReaderFragmentArgs by navArgs()
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    manageExternalLaunchAndRestoringViewState()
     val uri = args.zimFileUri
 
     if (uri.isNotEmpty()) {
       openZimFile(Uri.parse(uri).toFile())
     }
-  }
-
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-    manageExternalLaunchAndRestoringViewState()
   }
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
