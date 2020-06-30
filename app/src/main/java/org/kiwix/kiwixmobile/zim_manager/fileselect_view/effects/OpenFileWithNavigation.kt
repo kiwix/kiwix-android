@@ -20,12 +20,13 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import androidx.navigation.findNavController
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
+import org.kiwix.kiwixmobile.navigate
 
 data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.BookOnDisk) :
   SideEffect<Unit> {
@@ -35,9 +36,9 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
     if (!file.canRead()) {
       activity.toast(R.string.error_file_not_found)
     } else {
-      val action = actionNavigationLibraryToNavigationReader()
-      action.zimFileUri = file.toUri().toString()
-      activity.findNavController(R.id.nav_host_fragment).navigate(action)
+      (activity as BaseActivity).navigate(
+        actionNavigationLibraryToNavigationReader().apply { zimFileUri = file.toUri().toString() }
+      )
     }
   }
 }

@@ -19,14 +19,14 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
+import org.kiwix.kiwixmobile.navigate
 
 object NavigateToDownloads : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.findNavController(R.id.nav_host_fragment)
+    (activity as BaseActivity)
       .navigate(LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationDownloads())
   }
 }
