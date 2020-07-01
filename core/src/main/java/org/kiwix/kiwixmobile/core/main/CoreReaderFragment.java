@@ -889,14 +889,24 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabsAdapter.notifyDataSetChanged();
     Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo, v -> {
-        webViewList.add(index, tempForUndo);
-        tabsAdapter.notifyItemInserted(index);
-        tabsAdapter.notifyDataSetChanged();
-        Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
-        setUpWebViewWithTextToSpeech();
+        restoreDeletedTab(index);
       })
       .show();
     openHomeScreen();
+  }
+
+  protected void restoreDeletedTab(int index) {
+    if (webViewList.isEmpty()) {
+      hideNoBookOpenViews();
+      contentFrame.setVisibility(View.VISIBLE);
+      mainMenu.showBookSpecificMenuItems();
+    }
+    webViewList.add(index, tempForUndo);
+    tabsAdapter.notifyItemInserted(index);
+    tabsAdapter.notifyDataSetChanged();
+    Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
+    setUpWebViewWithTextToSpeech();
+    contentFrame.addView(tempForUndo);
   }
 
   protected void selectTab(int position) {
@@ -1271,15 +1281,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   //opens home screen when user closes all tabs
 
   protected void showNoBookOpenViews() {
-    videoView.setVisibility(View.GONE);
     noOpenBookButton.setVisibility(View.VISIBLE);
     noOpenBookText.setVisibility(View.VISIBLE);
   }
 
   protected void hideNoBookOpenViews() {
-    videoView.setVisibility(View.GONE);
-    noOpenBookButton.setVisibility(View.VISIBLE);
-    noOpenBookText.setVisibility(View.VISIBLE);
+    noOpenBookButton.setVisibility(View.GONE);
+    noOpenBookText.setVisibility(View.GONE);
   }
 
   protected void openHomeScreen() {

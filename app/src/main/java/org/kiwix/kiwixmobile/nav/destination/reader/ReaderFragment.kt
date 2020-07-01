@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.nav.destination.reader
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -61,12 +62,14 @@ import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
+private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
+
 class ReaderFragment : CoreReaderFragment() {
+  private val args: ReaderFragmentArgs by navArgs()
+
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.kiwixActivityComponent.inject(this)
   }
-
-  private val args: ReaderFragmentArgs by navArgs()
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
@@ -98,9 +101,11 @@ class ReaderFragment : CoreReaderFragment() {
   }
 
   override fun openHomeScreen() {
-    if (webViewList.size == 0) {
-      hideTabSwitcher()
-    }
+    Handler().postDelayed({
+      if (webViewList.size == 0) {
+        hideTabSwitcher()
+      }
+    }, HIDE_TAB_SWITCHER_DELAY)
   }
 
   override fun hideTabSwitcher() {
