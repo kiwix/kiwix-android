@@ -212,7 +212,7 @@ class ReaderFragment : CoreReaderFragment() {
     super.urlIsInvalid() || getCurrentWebView().url == HOME_URL
 
   override fun createNewTab() {
-    newTab(HOME_URL)
+    newMainPageTab()
   }
 
   override fun isInvalidTitle(zimFileTitle: String?) =
