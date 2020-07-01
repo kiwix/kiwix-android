@@ -430,7 +430,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED),
+        isInTabSwitcher());
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -442,6 +443,10 @@ public abstract class CoreReaderFragment extends BaseFragment
       loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
     }
     handleNotificationIntent(intent);
+  }
+
+  private boolean isInTabSwitcher() {
+    return mainMenu != null && mainMenu.isInTabSwitcher();
   }
 
   private void handleNotificationIntent(Intent intent) {
@@ -1489,7 +1494,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
-          boolean wasFromTabSwitcher = mainMenu != null && mainMenu.isInTabSwitcher();
+          boolean wasFromTabSwitcher = isInTabSwitcher();
           hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
