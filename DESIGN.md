@@ -17,12 +17,29 @@ The Kiwix colors are black and white with different colored accents. For Kiwix A
 
 For a guide on how to apply colors to UI, see ["Applying color to UI - Material Design"](https://material.io/design/color/applying-color-to-ui.html#backdrop).
 
+## Themes
+Kiwix uses themes to apply styles to views. This means that instead of adding a specific color or style to each view in the application, a theme should be set.
+Themes are defined in res/values/themes.xml or res/values-night/themes.xml depending on night/day.
+The following steps should be followed to set a color or style of a view.
+1. Define the color or style:
+    a. Define the color in core/colors.xml. Use good naming (denim_blue, min_shaft_gray etc..).
+    b. Define the style in core/styles.xml. Follow the naming convention. TODO: (what is the naming convention for styles?)
+2. Add the color or style to a specific theme item in themes.xml
+3. Make sure that the color or style works in both day and night mode. If it does not, add a night compatible color/style to values-night/themes.xml.
+
+For a good video on how to work with themes see link #4 in the resources section below.
+
+## Night mode
+Night mode is a different theme that makes the app easier on the eyes during night. When doing any design, make sure the new design works in night mode.
+Night mode can be activated from the settings menu.
+
 ## Resources
 Following is a list of resources that can and should be used to support a design decision.
 
 1. [Material Design](https://material.io/) - Googles design guide that should be followed to keep Android applications consistent.
 2. [Design for Android](https://developer.android.com/design) - Another design guide by Google, this one is specifically for Android while Material Design is more general.
 3. [Figma](https://www.figma.com) - A tool that can be used to mock design ideas.
+4. [Themes Vs. Styles](google io link)
 
 ## Accessibility
 Accessibility is an important part of Android applications. Especially applications that are as widely used as Kiwix. As such, accessibility should be part of design decisions. This can include choices such as:
