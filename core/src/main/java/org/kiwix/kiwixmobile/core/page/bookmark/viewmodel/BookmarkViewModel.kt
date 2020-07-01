@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
@@ -35,12 +34,10 @@ class BookmarkViewModel @Inject constructor(
   override val pageDao: NewBookmarksDao,
   override val zimReaderContainer: ZimReaderContainer,
   override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel() {
+) : PageViewModel<BookmarkState>() {
 
-  override val state = MutableLiveData<PageState>().apply {
-    value =
-      BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
-  }
+  override fun initialState(): BookmarkState =
+    BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
 
   init {
     compositeDisposable.addAll(

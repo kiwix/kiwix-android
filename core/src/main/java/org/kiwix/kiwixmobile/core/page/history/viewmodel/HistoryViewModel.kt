@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
@@ -35,12 +34,10 @@ class HistoryViewModel @Inject constructor(
   override val pageDao: HistoryDao,
   override val zimReaderContainer: ZimReaderContainer,
   override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel() {
+) : PageViewModel<HistoryState>() {
 
-  override val state = MutableLiveData<PageState>().apply {
-    value =
-      HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
-  }
+  override fun initialState(): HistoryState =
+    HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
 
   init {
     compositeDisposable.addAll(
