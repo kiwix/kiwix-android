@@ -98,13 +98,16 @@ class ReaderFragment : CoreReaderFragment() {
   }
 
   override fun openHomeScreen() {
-    hideTabSwitcher()
+    if (webViewList.size == 0) {
+      hideTabSwitcher()
+    }
   }
 
   override fun hideTabSwitcher() {
     if (actionBar != null) {
       actionBar.setDisplayHomeAsUpEnabled(false)
       actionBar.setDisplayShowTitleEnabled(true)
+
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
       closeAllTabsButton.setImageDrawable(
         ContextCompat.getDrawable(
@@ -119,7 +122,6 @@ class ReaderFragment : CoreReaderFragment() {
         progressBar.progress = 0
         contentFrame.visibility = View.VISIBLE
       }
-      // selectTab(currentWebViewIndex)
       if (mainMenu != null) {
         mainMenu.showWebViewOptions(true)
       }
@@ -130,10 +132,6 @@ class ReaderFragment : CoreReaderFragment() {
       }
     }
   }
-
-  // override fun handleBackOnLastWebViewPage() {
-  //
-  // }
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
