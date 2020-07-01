@@ -4,8 +4,8 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.page.PageActivity
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryDelegate.HistoryDateDelegate
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryDelegate.HistoryItemDelegate
+import org.kiwix.kiwixmobile.core.page.adapter.PageDelegate.HistoryDateDelegate
+import org.kiwix.kiwixmobile.core.page.adapter.PageDelegate.PageItemDelegate
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 
 const val USER_CLEARED_HISTORY: String = "user_cleared_history"
@@ -14,7 +14,7 @@ class HistoryActivity : PageActivity() {
   override val pageViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
 
   override val pageAdapter by lazy {
-    PageAdapter(HistoryItemDelegate(this), HistoryDateDelegate())
+    PageAdapter(PageItemDelegate(this), HistoryDateDelegate())
   }
 
   override val noItemsString: String by lazy { getString(R.string.no_history) }

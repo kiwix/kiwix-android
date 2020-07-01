@@ -37,7 +37,7 @@ data class HistoryState(
   override val filteredPageItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(pageItems
       .filter { showAll || it.zimId == currentZimId }
-      .filter { it.historyTitle.contains(searchTerm, true) })
+      .filter { it.title.contains(searchTerm, true) })
       .foldOverAddingHeaders(
         { historyItem -> DateItem(historyItem.dateString) },
         { current, next -> current.dateString != next.dateString }

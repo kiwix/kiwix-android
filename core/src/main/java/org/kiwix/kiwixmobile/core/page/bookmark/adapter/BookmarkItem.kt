@@ -28,8 +28,8 @@ data class BookmarkItem(
   val zimName: String,
   override val zimFilePath: String?,
   val bookmarkUrl: String,
-  val bookmarkTitle: String,
-  val favicon: String?,
+  override val title: String,
+  override val favicon: String?,
   override var isSelected: Boolean = false,
   override val url: String = bookmarkUrl,
   override val id: Long = databaseId
@@ -53,7 +53,7 @@ data class BookmarkItem(
     zimName = zimFileReader.name,
     zimFilePath = zimFileReader.zimFile.canonicalPath,
     bookmarkUrl = url,
-    bookmarkTitle = title,
+    title = title,
     favicon = zimFileReader.favicon
   )
 }

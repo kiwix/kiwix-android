@@ -35,7 +35,7 @@ data class BookmarkState(
 
   override val filteredPageItems: List<PageRelated> = pageItems
     .filter { it.zimId == currentZimId || showAll }
-    .filter { it.bookmarkTitle.contains(searchTerm, true) }
+    .filter { it.title.contains(searchTerm, true) }
 
   override fun toggleSelectionOfItem(page: Page): BookmarkState {
     page as BookmarkItem

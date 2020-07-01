@@ -29,9 +29,9 @@ sealed class HistoryListItem : PageRelated {
     val zimId: String,
     val zimName: String,
     override val zimFilePath: String,
-    val favicon: String?,
+    override val favicon: String?,
     val historyUrl: String,
-    val historyTitle: String,
+    override val title: String,
     val dateString: String,
     val timeStamp: Long,
     override var isSelected: Boolean = false,
@@ -51,7 +51,7 @@ sealed class HistoryListItem : PageRelated {
       zimFilePath = zimFileReader.zimFile.canonicalPath,
       favicon = zimFileReader.favicon,
       historyUrl = url,
-      historyTitle = title,
+      title = title,
       dateString = dateString,
       timeStamp = timeStamp
     )
