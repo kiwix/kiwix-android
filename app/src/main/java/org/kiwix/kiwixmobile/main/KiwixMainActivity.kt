@@ -31,11 +31,12 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_kiwix_new_navigation)
 
     if (savedInstanceState != null) {
       return
     }
     supportFragmentManager.beginTransaction()
-      .add(R.id.fragment_custom_app_container, KiwixReaderFragment()).commit()
+      .add(R.id.kiwix_fragment_containter, KiwixReaderFragment()).commit()
   }
 }

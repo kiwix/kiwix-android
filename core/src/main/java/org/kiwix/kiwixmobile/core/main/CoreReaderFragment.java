@@ -51,6 +51,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
@@ -160,7 +161,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   MainContract.View,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
   public static final String HOME_URL = "file:///android_asset/home.html";
-  private static final int CORE_READER_FRAGMENT = 1;
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
@@ -204,6 +204,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   ViewGroup videoView;
+  @BindView(R2.id.go_to_library_button_no_open_book)
+  Button noOpenBookButton;
+  @BindView(R2.id.no_open_book_text)
+  TextView noOpenBookText;
 
   View root;
 
@@ -330,11 +334,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @SuppressLint("ClickableViewAccessibility")
-  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
-    @Nullable ViewGroup container,
-    @Nullable Bundle savedInstanceState) {
-    root = inflater.inflate(R.layout.fragment_main, container, false);
-    ButterKnife.bind(this, root);
+  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
@@ -395,7 +396,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     compatCallback = new CompatFindActionModeCallback(activity);
     setUpTTS();
 
-    setupDocumentParser();
+    setupDocumentParser(activity);
 
     loadPrefs();
     updateTitle();
@@ -423,10 +424,17 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (savedInstanceState == null) {
       handleIntentActions(getActivity().getIntent());
     }
-    return root;
   }
 
+  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
+    @Nullable ViewGroup container,
+    @Nullable Bundle savedInstanceState) {
+    root = inflater.inflate(R.layout.fragment_main, container, false);
+    ButterKnife.bind(this, root);
+    return root;
+  }
   //End of onCreate
+
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
@@ -457,19 +465,20 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void setupDocumentParser() {
+  private void setupDocumentParser(AppCompatActivity activity) {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
         for (TableDrawerAdapter.DocumentSection section : sections) {
           if (section.title.contains("REPLACE_")) {
-            section.title = getResourceString(getActivity().getApplicationContext(), section.title);
+            section.title =
+              getResourceString(activity.getBaseContext(), section.title);
           }
         }
         documentSections.addAll(sections);
         if (title.contains("REPLACE_")) {
           tableDrawerAdapter.setTitle(
-            getResourceString(getActivity().getApplicationContext(), title));
+            getResourceString(activity.getBaseContext(), title));
         } else {
           tableDrawerAdapter.setTitle(title);
         }
@@ -716,7 +725,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private String getValidTitle(String zimFileTitle) {
-    return isInvalidTitle(zimFileTitle) ? getString(R.string.app_name) : zimFileTitle;
+    return isAdded() && isInvalidTitle(zimFileTitle) ? getString(R.string.app_name) : zimFileTitle;
   }
 
   protected boolean isInvalidTitle(String zimFileTitle) {
@@ -1258,7 +1267,20 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
   //opens home screen when user closes all tabs
 
+  private void displayNoBookOpenViews() {
+    videoView.setVisibility(View.GONE);
+    noOpenBookButton.setVisibility(View.VISIBLE);
+    noOpenBookText.setVisibility(View.VISIBLE);
+  }
+
+  private void hideNoBookOpenViews() {
+    videoView.setVisibility(View.GONE);
+    noOpenBookButton.setVisibility(View.VISIBLE);
+    noOpenBookText.setVisibility(View.VISIBLE);
+  }
+
   private void openHomeScreen() {
+
     new Handler().postDelayed(() -> {
       if (webViewList.size() == 0) {
         createNewTab();
@@ -1654,7 +1676,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
     final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-    if (hasValidFileAndUrl(url, zimFileReader)) {
+    if (hasValidFileAndUrl(url, zimFileReader) && getActivity() != null) {
       final long timeStamp = System.currentTimeMillis();
       SimpleDateFormat sdf =
         new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));

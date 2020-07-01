@@ -3,6 +3,7 @@ import plugin.KiwixConfigurationPlugin
 plugins {
   android
   id("com.github.triplet.play") version Versions.com_github_triplet_play_gradle_plugin
+  id("androidx.navigation.safeargs")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 
@@ -83,5 +84,8 @@ dependencies {
   implementation(Libs.squidb)
   implementation(Libs.squidb_annotations)
   implementation(Libs.ink_page_indicator)
+  implementation(Libs.navigation_kotlin_fragment)
+  implementation(Libs.navigation_kotlin_ui)
+  androidTestImplementation(Libs.navigation_kotlin_testing)
   add("kapt", Libs.squidb_processor)
 }

@@ -46,17 +46,19 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 
-class ZimFileSelectFragment : BaseFragment() {
+open class ZimFileSelectFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
@@ -64,10 +66,10 @@ class ZimFileSelectFragment : BaseFragment() {
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
 
-  private val zimManageViewModel by lazy {
+  protected val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
-  private val bookDelegate: BookDelegate by lazy {
+  protected open val bookDelegate: BookDelegate by lazy {
     BookDelegate(sharedPreferenceUtil,
       { offerAction(RequestOpen(it)) },
       { offerAction(RequestMultiSelection(it)) },
@@ -92,10 +94,7 @@ class ZimFileSelectFragment : BaseFragment() {
     return inflater.inflate(R.layout.zim_list, container, false)
   }
 
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?
-  ) {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     zim_swiperefresh.setOnRefreshListener(::requestFileSystemCheck)
     zimfilelist.run {
@@ -109,7 +108,7 @@ class ZimFileSelectFragment : BaseFragment() {
       zim_swiperefresh.isRefreshing = it!!
     })
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
-      zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
+      zimManageViewModel.fileSelectActions.offer(RestartActionMode)
     }
 
     disposable.add(zimManageViewModel.libraryTabIsVisible.subscribe { finishActionMode() })
@@ -128,10 +127,13 @@ class ZimFileSelectFragment : BaseFragment() {
     }, Throwable::printStackTrace
   )
 
-  private fun render(state: FileSelectListState) {
+  open fun render(state: FileSelectListState) {
     val items = state.bookOnDiskListItems
     bookDelegate.selectionMode = state.selectionMode
     booksOnDiskAdapter.items = items
+    if (items.none(BooksOnDiskListItem::isSelected)) {
+      actionMode?.finish()
+    }
     actionMode?.title = String.format("%d", state.selectedBooks.size)
     file_management_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
   }
