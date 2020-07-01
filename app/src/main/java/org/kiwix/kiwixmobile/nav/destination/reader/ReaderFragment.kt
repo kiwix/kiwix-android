@@ -117,6 +117,7 @@ class ReaderFragment : CoreReaderFragment() {
         mainMenu.showWebViewOptions(true)
       }
       actionBar.title = getString(R.string.reader)
+      mainMenu.hideBookSpecificMenuItems()
     }
   }
 
