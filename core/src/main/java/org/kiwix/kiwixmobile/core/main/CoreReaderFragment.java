@@ -461,20 +461,23 @@ public abstract class CoreReaderFragment extends BaseFragment
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
-        for (TableDrawerAdapter.DocumentSection section : sections) {
-          if (section.title.contains("REPLACE_")) {
-            section.title = getResourceString(getActivity().getApplicationContext(), section.title);
+        if (isAdded()) {
+          for (TableDrawerAdapter.DocumentSection section : sections) {
+            if (section.title.contains("REPLACE_")) {
+              section.title =
+                getResourceString(getActivity().getApplicationContext(), section.title);
+            }
           }
+          documentSections.addAll(sections);
+          if (title.contains("REPLACE_")) {
+            tableDrawerAdapter.setTitle(
+              getResourceString(getActivity().getApplicationContext(), title));
+          } else {
+            tableDrawerAdapter.setTitle(title);
+          }
+          tableDrawerAdapter.setSections(documentSections);
+          tableDrawerAdapter.notifyDataSetChanged();
         }
-        documentSections.addAll(sections);
-        if (title.contains("REPLACE_")) {
-          tableDrawerAdapter.setTitle(
-            getResourceString(getActivity().getApplicationContext(), title));
-        } else {
-          tableDrawerAdapter.setTitle(title);
-        }
-        tableDrawerAdapter.setSections(documentSections);
-        tableDrawerAdapter.notifyDataSetChanged();
       }
 
       @Override
@@ -706,13 +709,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     try {
       startActivity(goToMarket);
     } catch (ActivityNotFoundException e) {
-      startActivity(new Intent(Intent.ACTION_VIEW,
-        kiwixBrowserMarketUri));
+      startActivity(new Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri));
     }
   }
 
   private void updateTitle() {
-    actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()));
+    if (isAdded()) {
+      actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()));
+    }
   }
 
   private String getValidTitle(String zimFileTitle) {
