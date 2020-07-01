@@ -30,20 +30,21 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
-class OnlineLibraryFragment : LibraryFragment() {
+class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions {
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.kiwixActivityComponent.inject(this)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super.onCreateOptionsMenu(menu, inflater)
+    super<LibraryFragment>.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.menu_zim_manager, menu)
     val searchItem = menu.findItem(R.id.action_search)
     val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
@@ -52,8 +53,12 @@ class OnlineLibraryFragment : LibraryFragment() {
     (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
       SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
     )
-
     zimManageViewModel.requestFiltering.onNext("")
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): BaseFragmentActivityExtensions.Super {
+    getActivity()?.finish()
+    return BaseFragmentActivityExtensions.Super.ShouldNotCall
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

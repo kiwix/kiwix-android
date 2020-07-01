@@ -60,7 +60,7 @@
     <item name="cardBackgroundColor">@color/card_view_background</item>
   </style>
 
-  <style name="ThemeOverlay.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+  <style name="Widget.KiwixTheme.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
     <item name="backgroundTint">@color/black</item>
     <item name="itemIconTint">@drawable/bottom_navigation_theme_selector</item>
     <item name="itemTextColor">@drawable/bottom_navigation_theme_selector</item>

@@ -32,16 +32,11 @@
     android:layout_height="0dp"
     android:layout_weight="1"
     app:defaultNavHost="true"
-    app:layout_constraintBottom_toBottomOf="@+id/nav_view"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/toolbar"
     app:navGraph="@navigation/kiwix_nav_graph"
     tools:ignore="FragmentTagUsage" />
 
   <com.google.android.material.bottomnavigation.BottomNavigationView
     android:id="@+id/nav_view"
-    style="@style/ThemeOverlay.App.BottomNavigationView"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     app:menu="@menu/menu_bottom_nav" />

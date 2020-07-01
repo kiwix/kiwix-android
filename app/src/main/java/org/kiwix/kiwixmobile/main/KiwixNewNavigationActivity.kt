@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -50,12 +50,11 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_new_navigation)
-    val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
     navController = findNavController(R.id.nav_host_fragment)
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
     appBarConfiguration = AppBarConfiguration(navController.graph)
-    navView.setupWithNavController(navController)
+    nav_view.setupWithNavController(navController)
   }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {

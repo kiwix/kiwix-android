@@ -22,15 +22,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.View.GONE
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.main.KiwixWebViewClient
+import org.kiwix.kiwixmobile.navigate
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
@@ -67,33 +68,56 @@ class ReaderFragment : CoreReaderFragment() {
 
   private val args: ReaderFragmentArgs by navArgs()
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    manageExternalLaunchAndRestoringViewState()
     val uri = args.zimFileUri
 
     if (uri.isNotEmpty()) {
       openZimFile(Uri.parse(uri).toFile())
+    }
+
+    noOpenBookButton.setOnClickListener {
+      (activity as AppCompatActivity).navigate(
+        ReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
+      )
     }
   }
 
   override fun openHomeScreen() {
     displayNoBookOpenViews()
     if (webViewList.size == 0) {
-      createNewTab()
+      // createNewTab()
       hideTabSwitcher()
       contentFrame.visibility = GONE
     }
     // hideTabSwitcher()
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    val view = super.onCreateView(inflater, container, savedInstanceState)
-    manageExternalLaunchAndRestoringViewState()
-    return view
+  override fun hideTabSwitcher() {
+    if (actionBar != null) {
+      actionBar.setDisplayHomeAsUpEnabled(false)
+      actionBar.setDisplayShowTitleEnabled(true)
+      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+      closeAllTabsButton.setImageDrawable(
+        ContextCompat.getDrawable(
+          requireActivity(),
+          org.kiwix.kiwixmobile.core.R.drawable.ic_close_black_24dp
+        )
+      )
+      if (tabSwitcherRoot.visibility == View.VISIBLE) {
+        tabSwitcherRoot.visibility = GONE
+        startAnimation(tabSwitcherRoot, org.kiwix.kiwixmobile.core.R.anim.slide_up)
+        progressBar.visibility = View.VISIBLE
+        progressBar.progress = 0
+        contentFrame.visibility = View.VISIBLE
+      }
+      // selectTab(currentWebViewIndex)
+      if (mainMenu != null) {
+        mainMenu.showWebViewOptions(true)
+      }
+      actionBar.title = getString(R.string.reader)
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {

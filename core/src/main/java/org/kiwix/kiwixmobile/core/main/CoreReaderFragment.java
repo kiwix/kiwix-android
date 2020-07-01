@@ -177,7 +177,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.fragment_main_app_bar)
   AppBarLayout toolbarContainer;
   @BindView(R2.id.main_fragment_progress_view)
-  ContentLoadingProgressBar progressBar;
+  protected ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
   @BindView(R2.id.new_navigation_fragment_main_drawer_layout)
@@ -199,13 +199,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_tab_switcher)
   protected View tabSwitcherRoot;
   @BindView(R2.id.tab_switcher_close_all_tabs)
-  FloatingActionButton closeAllTabsButton;
+  protected FloatingActionButton closeAllTabsButton;
   @BindView(R2.id.snackbar_root)
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   protected ViewGroup videoView;
   @BindView(R2.id.go_to_library_button_no_open_book)
-  Button noOpenBookButton;
+  protected Button noOpenBookButton;
   @BindView(R2.id.no_open_book_text)
   TextView noOpenBookText;
 
@@ -262,11 +262,11 @@ public abstract class CoreReaderFragment extends BaseFragment
   private boolean isFirstRun;
   private BooksOnDiskAdapter booksAdapter;
   private AppCompatButton downloadBookButton;
-  private ActionBar actionBar;
+  protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
   private boolean hasLocalBooks;
-  private MainMenu mainMenu;
+  protected MainMenu mainMenu;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -334,11 +334,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @SuppressLint("ClickableViewAccessibility")
-  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
-    @Nullable ViewGroup container,
-    @Nullable Bundle savedInstanceState) {
-    root = inflater.inflate(R.layout.fragment_main, container, false);
-    ButterKnife.bind(this, root);
+  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
@@ -399,7 +396,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     compatCallback = new CompatFindActionModeCallback(activity);
     setUpTTS();
 
-    setupDocumentParser();
+    setupDocumentParser(activity);
 
     loadPrefs();
     updateTitle();
@@ -427,6 +424,13 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (savedInstanceState == null) {
       handleIntentActions(getActivity().getIntent());
     }
+  }
+
+  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
+    @Nullable ViewGroup container,
+    @Nullable Bundle savedInstanceState) {
+    root = inflater.inflate(R.layout.fragment_main, container, false);
+    ButterKnife.bind(this, root);
     return root;
   }
   //End of onCreate
@@ -461,19 +465,20 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void setupDocumentParser() {
+  private void setupDocumentParser(AppCompatActivity activity) {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
         for (TableDrawerAdapter.DocumentSection section : sections) {
           if (section.title.contains("REPLACE_")) {
-            section.title = getResourceString(getActivity().getApplicationContext(), section.title);
+            section.title =
+              getResourceString(activity.getBaseContext(), section.title);
           }
         }
         documentSections.addAll(sections);
         if (title.contains("REPLACE_")) {
           tableDrawerAdapter.setTitle(
-            getResourceString(getActivity().getApplicationContext(), title));
+            getResourceString(activity.getBaseContext(), title));
         } else {
           tableDrawerAdapter.setTitle(title);
         }
@@ -573,7 +578,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void startAnimation(View view, @AnimRes int anim) {
+  protected void startAnimation(View view, @AnimRes int anim) {
     view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), anim));
   }
 
@@ -720,7 +725,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private String getValidTitle(String zimFileTitle) {
-    return isInvalidTitle(zimFileTitle) ? getString(R.string.app_name) : zimFileTitle;
+    return isAdded() && isInvalidTitle(zimFileTitle) ? getString(R.string.app_name) : zimFileTitle;
   }
 
   protected boolean isInvalidTitle(String zimFileTitle) {
@@ -893,7 +898,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected void selectTab(int position) {
     currentWebViewIndex = position;
     contentFrame.removeAllViews();
-
     KiwixWebView webView = safelyGetWebView(position);
     if (webView.getParent() != null) {
       ((ViewGroup) webView.getParent()).removeView(webView);
