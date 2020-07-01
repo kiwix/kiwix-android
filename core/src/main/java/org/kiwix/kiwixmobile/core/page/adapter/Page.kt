@@ -26,6 +26,6 @@ interface Page : PageRelated {
   val zimFilePath: String?
   val url: String
   val title: String
-  val isSelected: Boolean
+  var isSelected: Boolean
   val favicon: String?
 }

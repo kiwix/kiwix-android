@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.core.page.bookmark
 
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.page.PageActivity
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
@@ -13,10 +12,6 @@ class BookmarksActivity : PageActivity() {
 
   override val pageAdapter: PageAdapter by lazy {
     PageAdapter(PageItemDelegate(this))
-  }
-
-  override fun injection(coreComponent: CoreComponent) {
-    activityComponent.inject(this)
   }
 
   override val title: String by lazy { getString(R.string.bookmarks) }

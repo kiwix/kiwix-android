@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
+import androidx.lifecycle.MutableLiveData
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
@@ -30,13 +32,25 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
+  historyDao: HistoryDao,
   override val zimReaderContainer: ZimReaderContainer,
-  override val sharedPreferenceUtil: SharedPreferenceUtil,
-  historyDao: HistoryDao
-) : PageViewModel<HistoryState>(historyDao) {
+  override val sharedPreferenceUtil: SharedPreferenceUtil
+) : PageViewModel(pageDao = historyDao) {
 
-  override fun initialState(): HistoryState =
-    HistoryState(emptyList(), true, null)
+  override val state by lazy {
+    MutableLiveData<PageState>().apply {
+      value =
+        HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
+    }
+  }
+
+  init {
+    compositeDisposable.addAll(
+      viewStateReducer(),
+      pageDao.pages().subscribeOn(Schedulers.io())
+        .subscribe({ actions.offer(Action.UpdatePages(it)) }, Throwable::printStackTrace)
+    )
+  }
 
   override fun updatePagesBasedOnFilter(state: PageState, action: Action.Filter): PageState =
     (state as HistoryState).copy(searchTerm = action.searchTerm)

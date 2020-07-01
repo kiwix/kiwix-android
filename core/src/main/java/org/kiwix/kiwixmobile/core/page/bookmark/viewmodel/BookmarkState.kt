@@ -28,20 +28,13 @@ data class BookmarkState(
   override val showAll: Boolean,
   override val currentZimId: String?,
   override val searchTerm: String = ""
-) : PageState {
-
-  override val isInSelectionState = pageItems.any(BookmarkItem::isSelected)
-  override val numberOfSelectedItems = pageItems.filter(BookmarkItem::isSelected).size
+) : PageState() {
+  override val numberOfSelectedItems: Int = pageItems.filter(Page::isSelected).size
 
   override val filteredPageItems: List<PageRelated> = pageItems
     .filter { it.zimId == currentZimId || showAll }
     .filter { it.title.contains(searchTerm, true) }
 
-  override fun toggleSelectionOfItem(page: Page): BookmarkState {
-    page as BookmarkItem
-    val newList = pageItems.map {
-      if (it.databaseId == page.databaseId) it.apply { isSelected = !isSelected } else it
-    }
-    return BookmarkState(newList, showAll, currentZimId, searchTerm)
-  }
+  override fun copyWithNewItems(newItems: List<Page>): PageState =
+    copy(pageItems = (newItems as List<BookmarkItem>))
 }

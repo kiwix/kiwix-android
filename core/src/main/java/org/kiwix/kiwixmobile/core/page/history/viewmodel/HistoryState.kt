@@ -30,9 +30,8 @@ data class HistoryState(
   override val showAll: Boolean,
   override val currentZimId: String?,
   override val searchTerm: String = ""
-) : PageState {
-  override val isInSelectionState = pageItems.any(HistoryItem::isSelected)
-  override val numberOfSelectedItems = pageItems.filter(HistoryItem::isSelected).size
+) : PageState() {
+  override val numberOfSelectedItems: Int = pageItems.filter(Page::isSelected).size
 
   override val filteredPageItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(pageItems
@@ -43,13 +42,6 @@ data class HistoryState(
         { current, next -> current.dateString != next.dateString }
       )
 
-  override fun toggleSelectionOfItem(historyItem: Page): HistoryState {
-    historyItem as HistoryItem
-    val newList = pageItems.map {
-      if (it.id == historyItem.id) it.apply {
-        isSelected = !isSelected
-      } else it
-    }
-    return copy(pageItems = newList)
-  }
+  override fun copyWithNewItems(newItems: List<Page>): PageState =
+    copy(pageItems = (newItems as List<HistoryItem>))
 }
