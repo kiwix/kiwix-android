@@ -5,12 +5,9 @@
   <style name="KiwixTheme" parent="Base.KiwixTheme">
 
     <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
-    <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
-    <!--selection controls.-->
     <item name="colorPrimary">@color/denim_blue800</item>
 
-    <!--colorBackground appears behind scrollable content and is used for the default window-->
-    <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
+    <!--colorSurface is mapped to the surface of components such as cards, sheets-->
     <!--and menus. colorError is used to indicate an error state for components such as-->
     <!--text fields.-->
     <item name="colorSurface">@color/alabaster_white</item>
@@ -32,13 +29,21 @@
     <!--Material color attributes -->
 
     <item name="colorPrimaryVariant">?colorPrimary</item>
+
+    <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
+    <!--selection controls.-->
     <item name="colorSecondary">?colorPrimary</item>
     <item name="colorSecondaryVariant">?colorPrimary</item>
 
     <!--Material snackbar attributes-->
     <item name="maxActionInlineWidth">128dp</item>
 
+
+    <!--colorBackground appears behind scrollable content and is used for the default window-->
+    <!--background.-->
     <item name="android:colorBackground">?colorSurface</item>
+
+
     <item name="colorOnSecondary">?colorOnPrimary</item>
     <item name="colorOnBackground">?colorOnSurface</item>
 
