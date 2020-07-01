@@ -84,14 +84,26 @@ internal class HistoryViewModelTest {
   @Test
   internal fun `UserClickedDeleteButton offers ShowDeleteHistoryDialog`() {
     viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteButton) }
-      .assertValue(ShowDeleteHistoryDialog(viewModel.effects, historyState(), historyDao))
+      .assertValue(
+        ShowDeleteHistoryDialog(
+          viewModel.effects,
+          historyState(),
+          historyDao
+        )
+      )
     viewModel.state.test().assertValue(historyState())
   }
 
   @Test
   internal fun `UserClickedDeleteSelectedHistoryItems offers ShowDeleteHistoryDialog`() {
     viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteSelectedPages) }
-      .assertValue(ShowDeleteHistoryDialog(viewModel.effects, historyState(), historyDao))
+      .assertValue(
+        ShowDeleteHistoryDialog(
+          viewModel.effects,
+          historyState(),
+          historyDao
+        )
+      )
     viewModel.state.test().assertValue(historyState())
   }
 

@@ -31,13 +31,13 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class BookmarkViewModel @Inject constructor(
-  override val pageDao: NewBookmarksDao,
+  bookmarksDao: NewBookmarksDao,
   override val zimReaderContainer: ZimReaderContainer,
   override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel<BookmarkState>() {
+) : PageViewModel<BookmarkState>(bookmarksDao) {
 
   override fun initialState(): BookmarkState =
-    BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
+    BookmarkState(emptyList(), true, null)
 
   init {
     compositeDisposable.addAll(
@@ -61,11 +61,9 @@ class BookmarkViewModel @Inject constructor(
     return (state as BookmarkState).copy(showAll = action.isChecked)
   }
 
-  override fun offerShowDeleteDialog(state: PageState): PageState {
-    effects.offer(ShowDeleteBookmarksDialog(effects, state as BookmarkState, pageDao))
-    return state
-  }
-
   override fun deselectAllPages(state: PageState): PageState =
     (state as BookmarkState).copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
+
+  override fun createDeletePageDialogEffect(state: PageState) =
+    ShowDeleteBookmarksDialog(effects, state as BookmarkState, pageDao)
 }

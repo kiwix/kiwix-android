@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.core.page.history
 
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.page.PageActivity
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
@@ -15,6 +16,10 @@ class HistoryActivity : PageActivity() {
 
   override val pageAdapter by lazy {
     PageAdapter(PageItemDelegate(this), HistoryDateDelegate())
+  }
+
+  override fun injection(coreComponent: CoreComponent) {
+    activityComponent.inject(this)
   }
 
   override val noItemsString: String by lazy { getString(R.string.no_history) }

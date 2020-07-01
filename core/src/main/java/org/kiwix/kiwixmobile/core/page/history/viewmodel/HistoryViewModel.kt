@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
-import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
@@ -31,21 +30,13 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
-  override val pageDao: HistoryDao,
   override val zimReaderContainer: ZimReaderContainer,
-  override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel<HistoryState>() {
+  override val sharedPreferenceUtil: SharedPreferenceUtil,
+  historyDao: HistoryDao
+) : PageViewModel<HistoryState>(historyDao) {
 
   override fun initialState(): HistoryState =
-    HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
-
-  init {
-    compositeDisposable.addAll(
-      viewStateReducer(),
-      pageDao.pages().subscribeOn(Schedulers.io())
-        .subscribe({ actions.offer(Action.UpdatePages(it)) }, Throwable::printStackTrace)
-    )
-  }
+    HistoryState(emptyList(), true, null)
 
   override fun updatePagesBasedOnFilter(state: PageState, action: Action.Filter): PageState =
     (state as HistoryState).copy(searchTerm = action.searchTerm)
@@ -61,10 +52,8 @@ class HistoryViewModel @Inject constructor(
     return (state as HistoryState).copy(showAll = action.isChecked)
   }
 
-  override fun offerShowDeleteDialog(state: PageState): PageState {
-    effects.offer(ShowDeleteHistoryDialog(effects, state as HistoryState, pageDao))
-    return state
-  }
+  override fun createDeletePageDialogEffect(state: PageState) =
+    ShowDeleteHistoryDialog(effects, state as HistoryState, pageDao)
 
   override fun deselectAllPages(state: PageState): PageState =
     (state as HistoryState).copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })

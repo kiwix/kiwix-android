@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
@@ -39,17 +40,24 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-abstract class PageViewModel<out T : PageState> : ViewModel() {
+abstract class PageViewModel<out T : PageState>(val pageDao: PageDao) : ViewModel() {
   abstract val zimReaderContainer: ZimReaderContainer
   abstract val sharedPreferenceUtil: SharedPreferenceUtil
-  abstract val pageDao: PageDao
   val state = MutableLiveData<PageState>().apply {
     value = initialState()
   }
 
+  val compositeDisposable = CompositeDisposable()
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
-  val compositeDisposable = CompositeDisposable()
+
+  init {
+    compositeDisposable.addAll(
+      viewStateReducer(),
+      pageDao.pages().subscribeOn(Schedulers.io())
+        .subscribe({ actions.offer(Action.UpdatePages(it)) }, Throwable::printStackTrace)
+    )
+  }
 
   fun viewStateReducer(): Disposable =
     actions.map { reduce(it, state.value!!) }
@@ -77,6 +85,11 @@ abstract class PageViewModel<out T : PageState> : ViewModel() {
     state: PageState
   ): PageState
 
+  private fun offerShowDeleteDialog(state: PageState): PageState {
+    effects.offer(createDeletePageDialogEffect(state))
+    return state
+  }
+
   private fun handleItemLongClick(state: PageState, action: OnItemLongClick): PageState =
     state.toggleSelectionOfItem(action.page)
 
@@ -87,8 +100,6 @@ abstract class PageViewModel<out T : PageState> : ViewModel() {
     effects.offer(OpenPage(action.page, zimReaderContainer))
     return state
   }
-
-  abstract fun offerShowDeleteDialog(state: PageState): PageState
 
   abstract fun deselectAllPages(state: PageState): PageState
 
@@ -101,4 +112,6 @@ abstract class PageViewModel<out T : PageState> : ViewModel() {
     compositeDisposable.clear()
     super.onCleared()
   }
+
+  abstract fun createDeletePageDialogEffect(state: PageState): SideEffect<*>
 }
