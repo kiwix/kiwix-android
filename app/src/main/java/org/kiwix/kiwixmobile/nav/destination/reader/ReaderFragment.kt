@@ -123,7 +123,11 @@ class ReaderFragment : CoreReaderFragment() {
       if (mainMenu != null) {
         mainMenu.showWebViewOptions(true)
       }
-      exitBook()
+      if (webViewList.isEmpty()) {
+        exitBook()
+      } else {
+        selectTab(currentWebViewIndex)
+      }
     }
   }
 
