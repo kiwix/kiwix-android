@@ -84,14 +84,21 @@ class ReaderFragment : CoreReaderFragment() {
     }
   }
 
+  override fun showHomePage() {
+    exitBook()
+  }
+
+  private fun exitBook() {
+    // getCurrentWebView().removeAllViews()
+    showNoBookOpenViews()
+    bottomToolbar.visibility = GONE
+    actionBar.title = getString(R.string.reader)
+    contentFrame.visibility = GONE
+    mainMenu.hideBookSpecificMenuItems()
+  }
+
   override fun openHomeScreen() {
-    displayNoBookOpenViews()
-    if (webViewList.size == 0) {
-      // createNewTab()
-      hideTabSwitcher()
-      contentFrame.visibility = GONE
-    }
-    // hideTabSwitcher()
+    hideTabSwitcher()
   }
 
   override fun hideTabSwitcher() {
@@ -116,10 +123,13 @@ class ReaderFragment : CoreReaderFragment() {
       if (mainMenu != null) {
         mainMenu.showWebViewOptions(true)
       }
-      actionBar.title = getString(R.string.reader)
-      mainMenu.hideBookSpecificMenuItems()
+      exitBook()
     }
   }
+
+  // override fun handleBackOnLastWebViewPage() {
+  //
+  // }
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
@@ -196,11 +206,6 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun urlIsInvalid() =
     super.urlIsInvalid() || getCurrentWebView().url == HOME_URL
-
-  override fun showHomePage() {
-    getCurrentWebView().removeAllViews()
-    getCurrentWebView().loadUrl(HOME_URL)
-  }
 
   override fun createNewTab() {
     newTab(HOME_URL)

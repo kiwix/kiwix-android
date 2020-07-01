@@ -659,11 +659,15 @@ public abstract class CoreReaderFragment extends BaseFragment
       && !HOME_URL.equals(getCurrentWebView().getUrl())) {
       getCurrentWebView().goBack();
     } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
-      showHomePage();
+      handleBackOnLastWebViewPage();
     } else {
       return Super.ShouldCall;
     }
     return Super.ShouldNotCall;
+  }
+
+  protected void handleBackOnLastWebViewPage() {
+    showHomePage();
   }
 
   private void checkForRateDialog() {
@@ -1266,7 +1270,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
   //opens home screen when user closes all tabs
 
-  protected void displayNoBookOpenViews() {
+  protected void showNoBookOpenViews() {
     videoView.setVisibility(View.GONE);
     noOpenBookButton.setVisibility(View.VISIBLE);
     noOpenBookText.setVisibility(View.VISIBLE);
