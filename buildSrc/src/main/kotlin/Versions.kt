@@ -18,7 +18,7 @@ object Versions {
 
   const val org_jetbrains_kotlin: String = "1.3.72"
 
-  const val com_google_dagger: String = "2.26" // available: "2.28"
+  const val com_google_dagger: String = "2.26" // available: "2.28.1"
 
   const val com_yahoo_squidb: String = "2.0.0" // available: "3.2.3"
 
@@ -86,7 +86,7 @@ object Versions {
 
   const val core_ktx: String = "1.3.0"
 
-  const val kiwixlib: String = "9.1.2"
+  const val kiwixlib: String = "9.2.3"
 
   const val material: String = "1.1.0"
 
@@ -98,7 +98,7 @@ object Versions {
 
   const val jsr305: String = "3.0.2"
 
-  const val ktlint: String = "0.37.2"
+  const val ktlint: String = "0.36.0" // available: "0.37.2"
 
   const val okhttp: String = "3.12.1" // available: "4.7.2"
 
