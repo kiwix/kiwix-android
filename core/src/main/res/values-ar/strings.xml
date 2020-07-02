@@ -260,10 +260,11 @@
   <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
   <string name="no_history">لا تاريخ</string>
   <string name="device_default">الجهاز الافتراضي</string>
-  <string name="delete_history">حذف التاريخ؟</string>
-  <string name="delete_bookmarks">أزل العلامات المرجعية؟</string>
+  <string name="delete_history" fuzzy="true">حذف التاريخ؟</string>
+  <string name="delete_bookmarks" fuzzy="true">أزل العلامات المرجعية؟</string>
   <string name="on">تشغيل</string>
   <string name="off">تعطيل</string>
   <string name="auto">تلقائي</string>
   <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
+  <string name="experimental_navigation">تصفح تجريبي</string>
 </resources>

@@ -245,8 +245,8 @@
   <string name="no_bookmarks">Inga bokmärken</string>
   <string name="no_history">Ingen historik</string>
   <string name="device_default">Enhetsstandard</string>
-  <string name="delete_history">Radera historik?</string>
-  <string name="delete_bookmarks">Radera bokmärken?</string>
+  <string name="delete_history" fuzzy="true">Radera historik?</string>
+  <string name="delete_bookmarks" fuzzy="true">Radera bokmärken?</string>
   <string name="on">På</string>
   <string name="off">Av</string>
   <string name="auto">Auto</string>

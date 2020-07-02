@@ -197,8 +197,8 @@
   <string name="no_bookmarks">Nişani çıniyê</string>
   <string name="no_history">Veror Çıniyo</string>
   <string name="device_default">Hesabyayey Cihazi</string>
-  <string name="delete_history">Veror wa Bıesterneyo?</string>
-  <string name="delete_bookmarks">Bookmarki wa Bıesterneyo?</string>
+  <string name="delete_history" fuzzy="true">Veror wa Bıesterneyo?</string>
+  <string name="delete_bookmarks" fuzzy="true">Bookmarki wa Bıesterneyo?</string>
   <string name="on">Akerde</string>
   <string name="off">Racınaye</string>
   <string name="auto">Otomatik</string>

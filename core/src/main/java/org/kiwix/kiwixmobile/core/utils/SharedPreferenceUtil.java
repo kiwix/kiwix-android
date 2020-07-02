@@ -124,11 +124,6 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle);
   }
 
-  public boolean getPrefFullTextSearch() {
-    return false; // Temporarily disable multizim for 2.4
-    //return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
-  }
-
   public void putPrefLanguage(String language) {
     sharedPreferences.edit().putString(PREF_LANG, language).apply();
   }

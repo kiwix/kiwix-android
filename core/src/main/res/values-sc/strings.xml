@@ -254,8 +254,8 @@
   <string name="no_bookmarks">Perunu sinnalibru!</string>
   <string name="no_history">Peruna cronologia</string>
   <string name="device_default">Valore predefinidu de su dispositivu</string>
-  <string name="delete_history">Iscantzellare sa cronologia?</string>
-  <string name="delete_bookmarks">Iscantzellare sos sinnalibros?</string>
+  <string name="delete_history" fuzzy="true">Iscantzellare sa cronologia?</string>
+  <string name="delete_bookmarks" fuzzy="true">Iscantzellare sos sinnalibros?</string>
   <string name="on">Alluta</string>
   <string name="off">Istudada</string>
   <string name="auto">Automàtica</string>
