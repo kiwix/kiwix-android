@@ -256,7 +256,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected int currentWebViewIndex = 0;
   private File file;
   private ActionMode actionMode = null;
-  private KiwixWebView tempForUndo;
+  private KiwixWebView tempWebViewForUndo;
+  private File tempZimFileForUndo;
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private boolean isFirstRun;
@@ -880,22 +881,31 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void closeTab(int index) {
-    tempForUndo = webViewList.get(index);
+    tempZimFileForUndo = zimReaderContainer.getZimFile();
+    tempWebViewForUndo = webViewList.get(index);
     webViewList.remove(index);
     if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
       currentWebViewIndex--;
     }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
-    Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
+    Snackbar undo = Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo, v -> {
         restoreDeletedTab(index);
-      })
-      .show();
+      });
+    undo.show();
+    //undo.addCallback(new Snackbar.Callback() {
+    //  @Override public void onDismissed(Snackbar transientBottomBar, int event) {
+    //    super.onDismissed(transientBottomBar, event);
+    //    if (event == DISMISS_EVENT_ACTION) {
+    //      return;
+    //    }
+    //  }
+    //});
     openHomeScreen();
   }
 
-  protected void bookIsOpenHandleViews() {
+  protected void reopenBook() {
     hideNoBookOpenViews();
     contentFrame.setVisibility(View.VISIBLE);
     if (mainMenu != null) {
@@ -905,14 +915,15 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   protected void restoreDeletedTab(int index) {
     if (webViewList.isEmpty()) {
-      bookIsOpenHandleViews();
+      reopenBook();
     }
-    webViewList.add(index, tempForUndo);
+    zimReaderContainer.setZimFile(tempZimFileForUndo);
+    webViewList.add(index, tempWebViewForUndo);
     tabsAdapter.notifyItemInserted(index);
     tabsAdapter.notifyDataSetChanged();
     Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
     setUpWebViewWithTextToSpeech();
-    contentFrame.addView(tempForUndo);
+    contentFrame.addView(tempWebViewForUndo);
   }
 
   protected void selectTab(int position) {

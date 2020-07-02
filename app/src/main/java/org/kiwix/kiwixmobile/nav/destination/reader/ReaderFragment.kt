@@ -93,6 +93,9 @@ class ReaderFragment : CoreReaderFragment() {
     actionBar.title = getString(R.string.reader)
     contentFrame.visibility = GONE
     mainMenu?.hideBookSpecificMenuItems()
+    // close book
+    zimReaderContainer.setZimFile(null)
+    mainMenu?.hideBookSpecificMenuItems()
   }
 
   override fun openHomeScreen() {
@@ -136,6 +139,9 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
     menu.findItem(R.id.menu_new_navigation)?.isVisible = false
+    if (zimReaderContainer?.zimFileReader == null) {
+      mainMenu?.hideBookSpecificMenuItems()
+    }
   }
 
   override fun onCreateOptionsMenu(
@@ -183,12 +189,28 @@ class ReaderFragment : CoreReaderFragment() {
           filePath +
           " -> open this zim file and load menu_main page"
       )
-      bookIsOpenHandleViews()
+      reopenBook()
       openZimFile(File(filePath))
     } else {
-      showHomePage()
+      val settings = getSharedPrefSettings()
+      val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
+      if (zimFile != null && File(zimFile).exists()) {
+        Log.d(
+          TAG_KIWIX,
+          "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
+        )
+        restoreTabStates()
+        // Alternative would be to restore webView state. But more effort to implement, and actually
+        // fits better normal android behavior if after closing app ("back" button) state is not maintained.
+      } else {
+        Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
+        showHomePage()
+      }
     }
   }
+
+  private fun getSharedPrefSettings() =
+    activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
 
   override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
     super.hasValidFileAndUrl(url, zimFileReader) && url != HOME_URL
