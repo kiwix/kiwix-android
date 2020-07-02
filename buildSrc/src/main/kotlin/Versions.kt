@@ -38,7 +38,7 @@ object Versions {
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
-  const val com_github_triplet_play_gradle_plugin: String = "2.6.2" // available: "2.8.0"
+  const val com_github_triplet_play_gradle_plugin: String = "2.8.0"
 
   const val multidex_instrumentation: String = "2.0.0"
 
