@@ -895,11 +895,17 @@ public abstract class CoreReaderFragment extends BaseFragment
     openHomeScreen();
   }
 
+  protected void bookIsOpenHandleViews() {
+    hideNoBookOpenViews();
+    contentFrame.setVisibility(View.VISIBLE);
+    if (mainMenu != null) {
+      mainMenu.showBookSpecificMenuItems();
+    }
+  }
+
   protected void restoreDeletedTab(int index) {
     if (webViewList.isEmpty()) {
-      hideNoBookOpenViews();
-      contentFrame.setVisibility(View.VISIBLE);
-      mainMenu.showBookSpecificMenuItems();
+      bookIsOpenHandleViews();
     }
     webViewList.add(index, tempForUndo);
     tabsAdapter.notifyItemInserted(index);

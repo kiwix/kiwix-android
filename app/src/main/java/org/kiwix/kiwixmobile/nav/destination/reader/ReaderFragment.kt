@@ -73,12 +73,7 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    manageExternalLaunchAndRestoringViewState()
-    val uri = args.zimFileUri
-
-    if (uri.isNotEmpty()) {
-      openZimFile(Uri.parse(uri).toFile())
-    }
+    manageExternalLaunchAndRestoringViewState(args.zimFileUri)
 
     noOpenBookButton.setOnClickListener {
       (activity as AppCompatActivity).navigate(
@@ -97,7 +92,7 @@ class ReaderFragment : CoreReaderFragment() {
     bottomToolbar.visibility = GONE
     actionBar.title = getString(R.string.reader)
     contentFrame.visibility = GONE
-    mainMenu.hideBookSpecificMenuItems()
+    mainMenu?.hideBookSpecificMenuItems()
   }
 
   override fun openHomeScreen() {
@@ -171,11 +166,12 @@ class ReaderFragment : CoreReaderFragment() {
     // do nothing
   }
 
-  private fun manageExternalLaunchAndRestoringViewState() {
+  private fun manageExternalLaunchAndRestoringViewState(uri: String) {
 
-    val data = uriFromIntent()
-    if (data != null) {
-      val filePath = FileUtils.getLocalFilePathByUri(requireActivity().applicationContext, data)
+    if (uri.isNotEmpty()) {
+      val filePath = FileUtils.getLocalFilePathByUri(
+        requireActivity().applicationContext, Uri.parse(uri)
+      )
 
       if (filePath == null || !File(filePath).exists()) {
         getCurrentWebView().snack(R.string.error_file_not_found)
@@ -187,22 +183,10 @@ class ReaderFragment : CoreReaderFragment() {
           filePath +
           " -> open this zim file and load menu_main page"
       )
+      bookIsOpenHandleViews()
       openZimFile(File(filePath))
     } else {
-      val settings = activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-      val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
-      if (zimFile != null && File(zimFile).exists()) {
-        Log.d(
-          TAG_KIWIX,
-          "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
-        )
-        restoreTabStates()
-        // Alternative would be to restore webView state. But more effort to implement, and actually
-        // fits better normal android behavior if after closing app ("back" button) state is not maintained.
-      } else {
-        Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
-        showHomePage()
-      }
+      showHomePage()
     }
   }
 
