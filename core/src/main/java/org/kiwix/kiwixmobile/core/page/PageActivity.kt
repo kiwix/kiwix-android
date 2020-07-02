@@ -139,7 +139,7 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
       if (actionMode == null) {
         actionMode = startSupportActionMode(actionModeCallback)
       }
-      actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems)
+      actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems())
     } else {
       actionMode?.finish()
     }

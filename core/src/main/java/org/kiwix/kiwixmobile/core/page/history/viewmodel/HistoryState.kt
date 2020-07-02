@@ -31,8 +31,6 @@ data class HistoryState(
   override val currentZimId: String?,
   override val searchTerm: String = ""
 ) : PageState() {
-  override val numberOfSelectedItems: Int = pageItems.filter(Page::isSelected).size
-
   override val filteredPageItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(pageItems
       .filter { showAll || it.zimId == currentZimId }

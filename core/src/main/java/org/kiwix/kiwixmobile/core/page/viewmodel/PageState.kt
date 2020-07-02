@@ -24,7 +24,6 @@ import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 abstract class PageState {
   abstract val pageItems: List<Page>
   val isInSelectionState: Boolean by lazy { pageItems.any(Page::isSelected) }
-  abstract val numberOfSelectedItems: Int
   abstract val filteredPageItems: List<PageRelated>
   abstract val showAll: Boolean
   abstract val currentZimId: String?
@@ -37,6 +36,8 @@ abstract class PageState {
     }
     return copyWithNewItems(newList)
   }
+
+  fun numberOfSelectedItems(): Int = pageItems.filter(Page::isSelected).size
 
   abstract fun copyWithNewItems(newItems: List<Page>): PageState
 }

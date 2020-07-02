@@ -29,8 +29,6 @@ data class BookmarkState(
   override val currentZimId: String?,
   override val searchTerm: String = ""
 ) : PageState() {
-  override val numberOfSelectedItems: Int = pageItems.filter(Page::isSelected).size
-
   override val filteredPageItems: List<PageRelated> = pageItems
     .filter { it.zimId == currentZimId || showAll }
     .filter { it.title.contains(searchTerm, true) }
