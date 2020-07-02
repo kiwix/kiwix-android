@@ -1,6 +1,6 @@
 # Design
 
-This file intends to provide links to design resources, display the Kiwix colors, as well as presenting accessibility.
+This file intends to provide information on how to work with design in the Kiwix android applicaiton. 
 
 ## Colors
 
