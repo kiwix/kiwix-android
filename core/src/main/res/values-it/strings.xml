@@ -100,6 +100,6 @@
   <string name="go_to_settings">Vai alle impostazioni hotspot</string>
   <string name="no_results">Nessun risultato</string>
   <string name="no_bookmarks">Nessun segnalibro</string>
-  <string name="delete_history">Cancellare la cronologia?</string>
-  <string name="delete_bookmarks">Cancellare i segnalibri?</string>
+  <string name="delete_history" fuzzy="true">Cancellare la cronologia?</string>
+  <string name="delete_bookmarks" fuzzy="true">Cancellare i segnalibri?</string>
 </resources>

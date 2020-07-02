@@ -63,4 +63,13 @@ internal class DeleteBookmarkItemsTest {
     )
     verify { effects.offer(ShowToast(R.string.all_bookmarks_cleared)) }
   }
+
+  @Test
+  fun `delete with selected items shows toast with message selected bookmarks cleared`() {
+    item1.isSelected = true
+    DeleteBookmarkItems(effects, bookmarkState(listOf(item1, item2)), bookmarksDao).invokeWith(
+      activity
+    )
+    verify { effects.offer(ShowToast(R.string.selected_bookmarks_cleared)) }
+  }
 }

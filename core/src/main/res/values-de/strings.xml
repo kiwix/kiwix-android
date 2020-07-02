@@ -128,8 +128,8 @@
   <string name="other_languages">Weitere Sprachen:</string>
   <string name="no_results">Keine Ergebnisse</string>
   <string name="no_bookmarks">Keine Lesezeichen</string>
-  <string name="delete_history">Verlauf löschen?</string>
-  <string name="delete_bookmarks">Lesezeichen löschen?</string>
+  <string name="delete_history" fuzzy="true">Verlauf löschen?</string>
+  <string name="delete_bookmarks" fuzzy="true">Lesezeichen löschen?</string>
   <string name="send_report">Übermittle das Untersuchungsergebnis</string>
   <string name="crash_checkbox_file_system">Speichere System Details</string>
   <string name="diagnostic_report">Untersuchungsergebnis</string>
