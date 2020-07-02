@@ -25,11 +25,19 @@ jobs:
           fetch-depth: 1
 
       - name: create instrumentation coverage
-        uses: reactivecircus/android-emulator-runner@v2.0.0
+        uses: ReactiveCircus/android-emulator-runner@v2.8.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
+          ndk: 21.3.6528147
           script: bash contrib/instrumentation.sh
+
+      - name: Upload screenshot result
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: ${{ matrix.api-level }}
+          path: screencap.png
 
       - name: create unit coverage
         run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport

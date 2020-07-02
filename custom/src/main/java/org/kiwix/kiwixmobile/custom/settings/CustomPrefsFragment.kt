@@ -19,22 +19,20 @@
 package org.kiwix.kiwixmobile.custom.settings
 
 import android.os.Bundle
-import android.preference.PreferenceCategory
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_LANG
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_WIFI_ONLY
 import org.kiwix.kiwixmobile.custom.BuildConfig
 
 class CustomPrefsFragment : CorePrefsFragment() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    if (BuildConfig.ENFORCED_LANG == "") {
+  override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    super.onCreatePreferences(savedInstanceState, rootKey)
+    if (BuildConfig.ENFORCED_LANG.isEmpty()) {
       setUpLanguageChooser(PREF_LANG)
     } else {
       preferenceScreen.removePreference(findPreference("pref_language"))
     }
-
-    val notificationsCategory = findPreference("pref_extras") as PreferenceCategory
-    notificationsCategory.removePreference(findPreference("pref_wifi_only"))
+    preferenceScreen.removePreference(findPreference(PREF_WIFI_ONLY))
   }
 
   override fun setStorage() {

@@ -32,9 +32,8 @@ import java.util.HashMap;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
-import static org.kiwix.kiwixmobile.core.main.CoreMainActivity.HOME_URL;
+import static org.kiwix.kiwixmobile.core.main.CoreReaderFragment.HOME_URL;
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.CONTENT_PREFIX;
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.UI_URI;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
@@ -47,9 +46,9 @@ public abstract class CoreWebViewClient extends WebViewClient {
   }};
   protected final WebViewCallback callback;
   protected final ZimReaderContainer zimReaderContainer;
-  private final SharedPreferenceUtil sharedPreferenceUtil =
-    new SharedPreferenceUtil(CoreApp.getInstance());
   private View home;
+  private static String LEGACY_CONTENT_PREFIX =
+    Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString();
 
   public CoreWebViewClient(
     WebViewCallback callback, ZimReaderContainer zimReaderContainer) {
@@ -60,7 +59,7 @@ public abstract class CoreWebViewClient extends WebViewClient {
   @Override
   public boolean shouldOverrideUrlLoading(WebView view, String url) {
     callback.webViewUrlLoading();
-
+    url = convertLegacyUrl(url);
     if (zimReaderContainer.isRedirect(url)) {
       if (handleEpubAndPdf(url)) {
         return true;
@@ -90,6 +89,12 @@ public abstract class CoreWebViewClient extends WebViewClient {
     intent.putExtra(EXTRA_EXTERNAL_LINK, true);
     callback.openExternalUrl(intent);
     return true;
+  }
+
+  private String convertLegacyUrl(String url) {
+    return url.startsWith(LEGACY_CONTENT_PREFIX)
+      ? url.replace(LEGACY_CONTENT_PREFIX, CONTENT_PREFIX)
+      : url;
   }
 
   private boolean handleEpubAndPdf(String url) {
@@ -144,6 +149,7 @@ public abstract class CoreWebViewClient extends WebViewClient {
   @Nullable
   @Override
   public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+    url = convertLegacyUrl(url);
     if (url.startsWith(CONTENT_PREFIX)) {
       return zimReaderContainer.load(url);
     } else {

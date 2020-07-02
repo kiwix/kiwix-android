@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Anzeljg
 * Dbc334
 * Eleassar
@@ -9,7 +10,6 @@
 * P̲̳l̳eo
 -->
 <resources>
-  <string name="kiwi">Kivi</string>
   <string name="menu_help">Pomoč</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
@@ -24,7 +24,6 @@
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja medija je prišlo do napake!</string>
   <string name="save_media_saved">Shrani medij kot %s na Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte …</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
@@ -149,7 +148,7 @@
   <string name="articleCount">%s člankov</string>
   <string name="get_started">Prični</string>
   <string name="download_books">Prenesi knjige</string>
-  <string name="human_kind_knowledge">Znanje človeške vrste, na vašem telefonu.</string>
+  <string name="humankind_knowledge">Znanje človeške vrste, na vašem telefonu.</string>
   <string name="welcome_to_the_family">Dobrodošli v družini</string>
   <string name="save_books_offline">Shrani knjige brez povezave</string>
   <string name="download_books_message">Prenesi knjige in preberi, kjer koli že si.</string>

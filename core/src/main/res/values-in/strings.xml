@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Arifin.wijaya
 * Arifpedia
 * Iwan Novirion
@@ -21,7 +22,6 @@
   <string name="save_media">Simpan Media</string>
   <string name="save_media_error">Terjadi kesalahan saat menyimpan media!</string>
   <string name="save_media_saved">Simpan media sebagai %s pada Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Memindai konten yang dapat diunduh, harap tunggu…</string>
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Berkas Konten (*.zim)</string>
   <string name="open_in_new_tab">Buka pranala di tab baru?</string>
@@ -126,7 +126,7 @@
   <string name="do_not_ask_anymore">Jangan tanya lagi</string>
   <string name="your_languages">Bahasa terpilih:</string>
   <string name="other_languages">Bahasa lain:</string>
-  <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
+  <string name="humankind_knowledge">Humankind\'s knowledge, on your phone.</string>
   <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
   <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
   <string name="no_bookmarks">Tidak Ada Markah</string>

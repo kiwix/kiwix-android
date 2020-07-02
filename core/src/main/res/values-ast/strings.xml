@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Macofe
 * Xuacu
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Entamu</string>
   <string name="menu_settings">Configuración</string>
@@ -19,7 +19,6 @@
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">Hebo un error al intentar guardar el mediu.</string>
   <string name="save_media_saved">Mediu guardáu como %s en Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Buscando conteníu descargable; espera, por favor…</string>
   <string name="search_label">Buscar</string>
   <string name="choose_file">Seleiciona un ficheru de conteníu (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir l\'enllaz nuna llingüeta nueva?</string>
@@ -37,9 +36,9 @@
   <string name="hotspot_details_message">Los siguientes son los detalles del to puntu WiFi llocal. \nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Seleiciona los ficheros que quieras agospiar nel sirvidor</string>
   <string name="progress_dialog_starting_server">Aniciando\'l sirvidor</string>
-  <string name="hotspot_dialog_title">Activa\'l to puntu WiFi</string>
-  <string name="hotspot_dialog_message">Pa que funcione esta carauterística primero precises arrancar manualmente\'l to puntu WiFi.</string>
-  <string name="hotspot_dialog_neutral_button">SÍ, ACTIVÉLU</string>
+  <string name="hotspot_dialog_title" fuzzy="true">Activa\'l to puntu WiFi</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Pa que funcione esta carauterística primero precises arrancar manualmente\'l to puntu WiFi.</string>
+  <string name="hotspot_dialog_neutral_button" fuzzy="true">SÍ, ACTIVÉLU</string>
   <string name="hotspot_channel_description">Noticies sobro l\'estáu del to puntu WiFi/sirvidor.</string>
   <string name="hotspot_notification_content_title">Puntu WiFi de Kiwix</string>
   <string name="start_server_label">Aniciar el sirvidor</string>
@@ -174,7 +173,7 @@
   <string name="articleCount">%s artículos</string>
   <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar llibros</string>
-  <string name="human_kind_knowledge">La conocencia de la humanidá, nel to teléfonu.</string>
+  <string name="humankind_knowledge">La conocencia de la humanidá, nel to teléfonu.</string>
   <string name="welcome_to_the_family">Afáyate na familia</string>
   <string name="save_books_offline">Guardar llibros ensin conexón</string>
   <string name="download_books_message">Descarga llibros y llei auquiera que teas.</string>
@@ -250,13 +249,13 @@
   <string name="tag_short_text">Testu curtiu</string>
   <string name="storage_permission_denied">Refugóse\'l permisu d\'almacenamientu</string>
   <string name="grant_read_storage_permission">Esta app precisa ser capaz de lleer l\'almacenamientu pa funcionar. Concede\'l permisu na configuración</string>
-  <string name="go_to_settings">Dir a Configuración</string>
+  <string name="go_to_settings" fuzzy="true">Dir a Configuración</string>
   <string name="no_results">Nun hai resultaos</string>
   <string name="no_bookmarks">Nun hai marcadores</string>
   <string name="no_history">Nun hai Historial</string>
   <string name="device_default">Predeterminao del preséu</string>
-  <string name="delete_history">¿Desaniciar l\'Historial?</string>
-  <string name="delete_bookmarks">¿Desaniciar los Marcadores?</string>
+  <string name="delete_history" fuzzy="true">¿Desaniciar l\'Historial?</string>
+  <string name="delete_bookmarks" fuzzy="true">¿Desaniciar los Marcadores?</string>
   <string name="on">Activáu</string>
   <string name="off">Desactiváu</string>
   <string name="auto">Auto</string>

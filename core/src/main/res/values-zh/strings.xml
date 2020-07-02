@@ -3,8 +3,10 @@
 * A Chinese Wikipedian
 * Abijeet Patro
 * Akagisoy
+* Arthur2e5
 * Josephine W.
 * Liuxinyu970226
+* SomeyaMako
 * VulpesVulpes825
 * Yfdyh000
 * Ywang
@@ -23,15 +25,38 @@
   <string name="menu_exit_full_screen">退出全屏</string>
   <string name="menu_read_aloud">朗读</string>
   <string name="menu_read_aloud_stop">停止朗读</string>
+  <string name="menu_support_kiwix">支持Kiwix</string>
+  <string name="menu_host_books">成为服务器共享书籍</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
   <string name="save_media_saved">已将媒体作为%s保存至Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">正在扫描可下载内容，请稍候…</string>
   <string name="search_label">搜索</string>
   <string name="choose_file">选择一个内容文件（*.zim）</string>
   <string name="open_in_new_tab">在新标签页打开链接?</string>
+  <string name="hotspot_service_channel_name">热点服务频段</string>
+  <string name="hotspot_failed_title">未能启动热点</string>
+  <string name="hotspot_failed_message">你的热点好像已经打开了。请先关闭 Wi-Fi 热点再继续。</string>
   <string name="go_to_wifi_settings_label">转到WIFI设置</string>
+  <string name="hotspot_running">运行热点</string>
+  <string name="no_books_selected_toast_message">请先选择书籍</string>
+  <string name="server_failed_message">未能启动服务器。请打开热点。</string>
+  <string name="server_failed_toast_message">未能启动服务器。</string>
+  <string name="server_started_successfully_toast_message">成功启动服务器。</string>
+  <string name="server_stopped_successfully_toast_message">成功停止服务器。</string>
+  <string name="hotspot_turned_on">热点已开启</string>
+  <string name="hotspot_details_message">以下为您的本地热点的信息。\nSSID：%1$s \n密码：%2$s</string>
+  <string name="server_textview_default_message">选择你想在服务器上共享的文件</string>
+  <string name="progress_dialog_starting_server">正在启动服务器</string>
+  <string name="hotspot_dialog_title">书籍共享说明</string>
+  <string name="wifi_dialog_title">检测到Wi-Fi连接</string>
+  <string name="wifi_dialog_body">要在其他设备上看书，就先要确认所有设备都连接到同一个 WiFi 网络。</string>
+  <string name="hotspot_dialog_message">要让此功能运作，你需要先手动启动 Wi-Fi 热点，或者确定主机和接受设备在同一个 Wi-Fi 网络上。</string>
+  <string name="hotspot_dialog_neutral_button">继续</string>
+  <string name="hotspot_notification_content_title">Kiwix 热点</string>
+  <string name="start_server_label">启动服务器</string>
+  <string name="stop_server_label">中止服务器</string>
   <string name="error_file_not_found">错误：找不到选定的ZIM文件。</string>
+  <string name="zim_not_opened">无法打开 zim 文件</string>
   <string name="error_file_invalid">错误：选定的文件不是有效ZIM文件。</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
   <string name="pref_display_title">显示</string>
@@ -56,9 +81,11 @@
   <string name="pref_clear_all_history_title">清空历史</string>
   <string name="pref_clear_all_history_summary">清空最近搜索及标签历史</string>
   <string name="all_history_cleared">已清空所有历史</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">清空所有历史</string>
+  <string name="pref_clear_all_bookmarks_title">清除书签</string>
+  <string name="clear_all_history_dialog_title">清空所有历史？</string>
   <string name="share">分享</string>
   <string name="delete">删除</string>
+  <string name="cancel">取消</string>
   <string name="delete_specific_search_toast">已移除最近搜索</string>
   <string name="hint_contents_drawer_message">您可以向左滑动来查看此条目的内容</string>
   <string name="got_it">明白了</string>
@@ -86,7 +113,7 @@
   <string name="library">图书馆</string>
   <string name="delete_zims_toast">文件已删除</string>
   <string name="no_files_here">没有文件</string>
-  <string name="download_no_space" fuzzy="true">缺少下载此文件所需的空间。</string>
+  <string name="download_no_space">缺少下载所需的空间。</string>
   <string name="space_available">可用空间：</string>
   <string name="zim_simple">简单</string>
   <string name="zim_no_pic">没有图片</string>
@@ -94,17 +121,17 @@
   <string name="no_network_connection">没有网络连接</string>
   <string name="help_2">Kiwix可以做什么？</string>
   <string name="help_3">Kiwix是一个离线内容阅读器。它的功能就好像一个浏览器，但它不需要访问在线网页，而是从ZIM格式文件中读取内容。</string>
-  <string name="help_4" fuzzy="true">尽管Kiwix原本设计用于提供维基百科离线内容，但它也可以阅读其他内容。</string>
+  <string name="help_4">尽管Kiwix原本设计用于提供维基百科离线内容，但它也可以阅读其他内容。</string>
   <string name="help_5">内容在哪里？</string>
   <string name="help_6">我们的内容存储在Kiwix网站中。</string>
   <string name="help_7">它们以ZIM格式的文件存在。这里是其中一些：</string>
   <string name="help_8">u2022维基百科分别提供每种语言版本</string>
   <string name="help_9">u2022同样可用于例如维基解密或维基文库等其他内容</string>
-  <string name="help_10" fuzzy="true">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
+  <string name="help_10">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
   <string name="help_11">在应用中下载的ZIM文件被存放于外部存储中一个名为Kiwix的文件夹内。</string>
   <string name="pref_storage">存储</string>
   <string name="pref_current_folder">当前文件夹</string>
-  <string name="delete_zim_failed" fuzzy="true">对不起，我们无法删除此文件。您应尝试改用文件管理器。</string>
+  <string name="delete_zim_failed">对不起，我们无法删除一些文件。您应尝试改用文件管理器。</string>
   <string name="tts_pause">暂停</string>
   <string name="tts_resume">恢复</string>
   <string name="stop">停止</string>
@@ -130,7 +157,7 @@
   <string name="time_yesterday">昨天</string>
   <string name="pref_external_link_popup_title">访问外部链接时警告</string>
   <string name="pref_external_link_popup_summary">对额外费用或离线时链接不可用弹出警告</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">正在进入外部链接</string>
+  <string name="external_link_popup_dialog_title">正在进入外部链接！</string>
   <string name="external_link_popup_dialog_message">您正在输入外部链接。这可能导致额外数据转移费用，或当您离线时不能工作。您是否要继续？</string>
   <string name="do_not_ask_anymore">不要再次询问</string>
   <string name="your_languages">选择的语言：</string>
@@ -142,6 +169,7 @@
   <string name="crash_checkbox_logs">应用程序日志</string>
   <string name="crash_checkbox_device">设备细节</string>
   <string name="crash_button_confirm">发送详情</string>
+  <string name="new_tab_shortcut_label">新建标签页</string>
   <string name="get_content_shortcut_label">获取内容</string>
   <string name="articleCount">%s个条目</string>
   <string name="get_started">入门</string>
@@ -166,6 +194,6 @@
   <string name="status">状态</string>
   <string name="pref_clear_all_notes_title">清空所有备注</string>
   <string name="storage_permission_denied">存储权限被拒绝</string>
-  <string name="go_to_settings">转到设置</string>
+  <string name="go_to_settings">转到热点设置</string>
   <string name="no_bookmarks">没有书签</string>
 </resources>

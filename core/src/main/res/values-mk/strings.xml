@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Bjankuloski06
 -->
 <resources>
-  <string name="kiwi">Киви</string>
   <string name="menu_help">Помош</string>
   <string name="menu_home">Почетна</string>
   <string name="menu_settings">Поставки</string>
@@ -19,7 +19,6 @@
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
   <string name="save_media_saved">Податотеката е зачувана како %s во Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Пребарувам преземлива содржина. Почекајте…</string>
   <string name="search_label">Пребарај</string>
   <string name="choose_file">Изберете содржинска податотека (*.zim)</string>
   <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
@@ -37,9 +36,11 @@
   <string name="hotspot_details_message">Следат поединости за вашата месна точка на пристап. \nSSID : %1$s \nЛозинка : %2$s</string>
   <string name="server_textview_default_message">Изберете ги податотеките што сакате да ги вдомите на опслужувачот</string>
   <string name="progress_dialog_starting_server">Го покренувам опслужувачот</string>
-  <string name="hotspot_dialog_title">Вклучете ја вашата точка на безжичнен пристап</string>
-  <string name="hotspot_dialog_message">За да работи оваа можност, најпрвин ќе треба рачно да ја вклучите точката за безжичен пристап.</string>
-  <string name="hotspot_dialog_neutral_button">ДА, ЈА ВКЛУЧИВ</string>
+  <string name="hotspot_dialog_title">Напатствија за вдомување на книги</string>
+  <string name="wifi_dialog_title">Пронајдена е безжична врска</string>
+  <string name="wifi_dialog_body">За да ги читате книгите на други уреди, проверете дали сите тие се поврзани на истата безжична мрежа.</string>
+  <string name="hotspot_dialog_message">За да работи оваа можност, најпрвин ќе треба точката за безжичен пристап да ја вклучите рачно, или да се осигурате дека уредот-домаќин и уредот-приемник се на истата безжична мрежа</string>
+  <string name="hotspot_dialog_neutral_button">ПРОДОЛЖИ</string>
   <string name="hotspot_channel_description">Известувања за состојбата на вашата пристапна точка/опслужувач.</string>
   <string name="hotspot_notification_content_title">Пристапна точка на Кивикс</string>
   <string name="start_server_label">Покрени го опслужувачот</string>
@@ -174,7 +175,7 @@
   <string name="articleCount">%s статии</string>
   <string name="get_started">Започни</string>
   <string name="download_books">Преземи книги</string>
-  <string name="human_kind_knowledge">Севкупното знаење на човештвото, на вашиот телефон.</string>
+  <string name="humankind_knowledge">Севкупното знаење на човештвото, на вашиот телефон.</string>
   <string name="welcome_to_the_family">Добре дојдовте во семејството</string>
   <string name="save_books_offline">Зачувај книги вонмрежно</string>
   <string name="download_books_message">Преземајте книги и читајте ги каде и да сте.</string>
@@ -250,13 +251,13 @@
   <string name="tag_short_text">Краток текст</string>
   <string name="storage_permission_denied">Дозволата за складирање е одбиена</string>
   <string name="grant_read_storage_permission">Прилогов бара пристап до складот за да работи. Дајте му ја таа дозвола во поставките</string>
-  <string name="go_to_settings">Оди во поставките</string>
+  <string name="go_to_settings">Оди во поставките за пристапни точки</string>
   <string name="no_results">Нема исход</string>
   <string name="no_bookmarks">Нема обележувачи</string>
   <string name="no_history">Нема историја</string>
   <string name="device_default">Основно на уредот</string>
-  <string name="delete_history">Да ја избришам историјата?</string>
-  <string name="delete_bookmarks">Да ги избришам обележувачите?</string>
+  <string name="delete_history" fuzzy="true">Да ја избришам историјата?</string>
+  <string name="delete_bookmarks" fuzzy="true">Да ги избришам обележувачите?</string>
   <string name="on">Вкл.</string>
   <string name="off">Искл.</string>
   <string name="auto">Авто</string>
@@ -264,4 +265,7 @@
   <string name="crash_checkbox_file_system">Поединости за податотечниот систем</string>
   <string name="diagnostic_report">Дијагностички извештај</string>
   <string name="diagnostic_report_message">Испратете ги сите следни поединости за да можеме да го дијагностицираме проблемот</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Приближување на текст</string>
+  <string name="experimental_navigation">Опитен прегледник</string>
 </resources>

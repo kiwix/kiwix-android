@@ -20,14 +20,13 @@
   <string name="save_media">Anomena i desa el fitxer…</string>
   <string name="save_media_error" fuzzy="true">S\'ha produït un error en mirar de desar el fitxer!</string>
   <string name="save_media_saved" fuzzy="true">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
-  <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu…</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
   <string name="no_books_selected_toast_message">Seleccioneu llibres primer</string>
   <string name="server_failed_toast_message">No s’ha pogut iniciar el servidor.</string>
   <string name="progress_dialog_starting_server">S’està iniciant el servidor</string>
-  <string name="hotspot_dialog_neutral_button">SÍ, L’HE ACTIVAT</string>
+  <string name="hotspot_dialog_neutral_button">CONTINUA</string>
   <string name="start_server_label">Inicia el servidor</string>
   <string name="stop_server_label">Atura el servidor</string>
   <string name="error_file_not_found">Error: no s\'ha trobat el fitxer ZIM.</string>
@@ -110,4 +109,6 @@
   <string name="tag_text_only">Només text</string>
   <string name="tag_short_text">Text breu</string>
   <string name="no_bookmarks">No hi ha marcadors</string>
+  <string name="send_report">Envia informe de diagnòstic</string>
+  <string name="diagnostic_report">Informe de diagnòstic</string>
 </resources>

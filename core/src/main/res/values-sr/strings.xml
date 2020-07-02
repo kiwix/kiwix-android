@@ -19,7 +19,6 @@
   <string name="menu_read_aloud_stop">Престани да читаш на глас</string>
   <string name="save_media_error">Дошло је до грешке при чувању мултимедије!</string>
   <string name="save_media_saved">Медијска датотека је сачувана (%s) у Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Тражење садржаја који се може преузети, сачекајте…</string>
   <string name="choose_file">Изаберите датотеку са садржајем (*.zim)</string>
   <string name="open_in_new_tab">Отворити везу у новој картици?</string>
   <string name="server_stopped_successfully_toast_message">Сервер је успешно заустављен.</string>
@@ -84,6 +83,13 @@
   <string name="no_bookmarks">Нема обележивача</string>
   <string name="no_history">Нема историјата</string>
   <string name="device_default">Подразумеване вредности уређаја</string>
-  <string name="delete_history">Избрисати историјат?</string>
-  <string name="delete_bookmarks">Избрисати обележиваче?</string>
+  <string name="delete_history" fuzzy="true">Избрисати историјат?</string>
+  <string name="delete_bookmarks" fuzzy="true">Избрисати обележиваче?</string>
+  <string name="on">Укљ.</string>
+  <string name="off">Искљ.</string>
+  <string name="auto">Ауто</string>
+  <string name="send_report">Пошаљи дијагностички извештај</string>
+  <string name="crash_checkbox_file_system">Детаљи о систему датотека</string>
+  <string name="diagnostic_report">Дијагностички извештај</string>
+  <string name="diagnostic_report_message">Пошаљите све детаље како бисмо могли да дијагностикујемо проблем</string>
 </resources>

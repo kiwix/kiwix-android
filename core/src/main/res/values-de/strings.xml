@@ -4,6 +4,7 @@
 * FF11
 * Killarnee
 * Metalhead64
+* Symposiarch
 -->
 <resources>
   <string name="menu_help">Hilfe</string>
@@ -19,7 +20,6 @@
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
   <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
-  <string name="rescan_fs_warning">Scanne herunterladbaren Inhalt. Bitte warten …</string>
   <string name="search_label">Suchen</string>
   <string name="choose_file">Wähle eine Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
@@ -128,6 +128,10 @@
   <string name="other_languages">Weitere Sprachen:</string>
   <string name="no_results">Keine Ergebnisse</string>
   <string name="no_bookmarks">Keine Lesezeichen</string>
-  <string name="delete_history">Verlauf löschen?</string>
-  <string name="delete_bookmarks">Lesezeichen löschen?</string>
+  <string name="delete_history" fuzzy="true">Verlauf löschen?</string>
+  <string name="delete_bookmarks" fuzzy="true">Lesezeichen löschen?</string>
+  <string name="send_report">Übermittle das Untersuchungsergebnis</string>
+  <string name="crash_checkbox_file_system">Speichere System Details</string>
+  <string name="diagnostic_report">Untersuchungsergebnis</string>
+  <string name="diagnostic_report_message">Bitte übermittle alle nachfolgend aufgeführte Details, damit wir das Problem feststellen können</string>
 </resources>

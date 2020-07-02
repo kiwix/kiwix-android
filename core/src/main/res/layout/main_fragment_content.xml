@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Kiwix Android
+  ~ Copyright (c) 2020 Kiwix <android.kiwix.org>
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/activity_main_root"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:animateLayoutChanges="true">
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:id="@+id/fragment_main_app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <include layout="@layout/layout_toolbar" />
+
+      <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/main_fragment_progress_view"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/progress_view_height"
+        android:indeterminate="false"
+        android:max="100"
+        android:theme="@style/ThemeOverlay.KiwixTheme.ProgressBar"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:progress="70" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <FrameLayout
+    android:id="@+id/activity_main_content_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+  <ImageButton
+    android:id="@+id/activity_main_fullscreen_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fullscreen_control_button_margin"
+    android:alpha="0.6"
+    android:background="?colorOnSurface"
+    android:contentDescription="@string/menu_exit_full_screen"
+    android:tint="?colorSurface"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/fullscreen_exit"
+    tools:visibility="visible" />
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/activity_main_back_to_top_fab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:visibility="gone"
+    app:fabSize="mini"
+    app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:srcCompat="@drawable/action_find_previous"
+    tools:visibility="visible" />
+
+  <Button
+    android:id="@+id/activity_main_button_pause_tts"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:alpha="0.6"
+    android:text="@string/tts_pause"
+    android:textStyle="bold"
+    android:visibility="gone"
+    app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+    app:layout_constraintEnd_toStartOf="@id/activity_main_button_stop_tts"
+    app:layout_constraintHorizontal_chainStyle="packed"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <Button
+    android:id="@+id/activity_main_button_stop_tts"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:alpha="0.6"
+    android:text="@string/stop"
+    android:textStyle="bold"
+    android:visibility="gone"
+    app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/activity_main_button_pause_tts" />
+
+  <androidx.constraintlayout.widget.Group
+    android:id="@+id/activity_main_tts_controls"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    app:constraint_referenced_ids="activity_main_button_pause_tts,activity_main_button_stop_tts"
+    tools:visibility="visible" />
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/snackbar_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toTopOf="@id/activity_main_button_pause_tts"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+  <include layout="@layout/bottom_toolbar" />
+
+  <include
+    android:id="@+id/activity_main_tab_switcher"
+    layout="@layout/tab_switcher"
+    android:visibility="gone" />
+</androidx.constraintlayout.widget.ConstraintLayout>

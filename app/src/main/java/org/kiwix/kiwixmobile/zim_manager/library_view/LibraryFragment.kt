@@ -65,14 +65,14 @@ class LibraryFragment : BaseFragment() {
 
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var dialogShower: DialogShower
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
 
   private val zimManageViewModel by lazy {
-    activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
+    requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
 
   private val libraryAdapter: LibraryAdapter by lazy {
@@ -86,7 +86,7 @@ class LibraryFragment : BaseFragment() {
   }
 
   private val noWifiWithWifiOnlyPreferenceSet
-    get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(context!!)
+    get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
 
   private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
 
@@ -216,5 +216,5 @@ class LibraryFragment : BaseFragment() {
     .apply {
       onSelectAction = ::storeDeviceInPreferences
     }
-    .show(fragmentManager!!, getString(R.string.pref_storage))
+    .show(requireFragmentManager(), getString(R.string.pref_storage))
 }

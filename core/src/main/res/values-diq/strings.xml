@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 1917 Ekim Devrimi
+* Abijeet Patro
 * Gorizon
 * Kumkumuk
 * Marmase
@@ -8,7 +9,6 @@
 * Orbot707
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Peşti</string>
   <string name="menu_home">Keye</string>
   <string name="menu_settings">Eyari</string>
@@ -24,7 +24,6 @@
   <string name="save_media">Medyay bışevekne</string>
   <string name="save_media_error">Medya qeyd kerdış de yew xeta ameyê meydan!</string>
   <string name="save_media_saved">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Ronıyaye zerreko vineyêno, reca kem bıpawê…</string>
   <string name="search_label">Cı geyre</string>
   <string name="choose_file">Yew dosyay zerreki weçine (*.zim)</string>
   <string name="open_in_new_tab">Gıre xıldayışo newe de abo?</string>
@@ -39,9 +38,9 @@
   <string name="hotspot_turned_on">Hotspot abiya</string>
   <string name="hotspot_details_message">Cêr de lokal detayê hotspoti deyaye.\nSSID: %1$s\nRavêrdış: %2$s</string>
   <string name="progress_dialog_starting_server">Server gureyneyino</string>
-  <string name="hotspot_dialog_title">Aktiv hotspoti WIFI akerê</string>
-  <string name="hotspot_dialog_message">Serva gureynayışê vêri WIFI hotspoti menuel akerê</string>
-  <string name="hotspot_dialog_neutral_button">EYA, MI AKERDO</string>
+  <string name="hotspot_dialog_title">Telimatê meymandariya kıtaban</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Serva gureynayışê vêri WIFI hotspoti menuel akerê</string>
+  <string name="hotspot_dialog_neutral_button">RAVÊR Şİ</string>
   <string name="hotspot_channel_description">Heqa Hotspot/server eleqeyın rocaney .</string>
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Serveri serkewtış</string>
@@ -154,7 +153,7 @@
   <string name="articleCount">%s meqaley</string>
   <string name="get_started">Ravêr serkewtış</string>
   <string name="download_books">Kıtaban ronê</string>
-  <string name="human_kind_knowledge">Melumatê tewrê insani telefon dere</string>
+  <string name="humankind_knowledge">Melumatê tewrê insani telefon dere</string>
   <string name="welcome_to_the_family">Şıma Heyr ameyê Ailey</string>
   <string name="save_books_offline">Kıtaba offline qeyd kerê</string>
   <string name="download_books_message">Kıtaban ronê u koti dê benê se bıbê bıwanê</string>
@@ -194,13 +193,13 @@
   <string name="tag_text_only">Teyna metin</string>
   <string name="tag_short_text">Metino kılm</string>
   <string name="storage_permission_denied">İcazetê depoy red biyo</string>
-  <string name="go_to_settings">Ravêrê eyaranı</string>
+  <string name="go_to_settings">Şo eyaranê Hotspoti</string>
   <string name="no_results">Neticeyi çıniyê</string>
   <string name="no_bookmarks">Nişani çıniyê</string>
   <string name="no_history">Veror Çıniyo</string>
   <string name="device_default">Hesabyayey Cihazi</string>
-  <string name="delete_history">Veror wa Bıesterneyo?</string>
-  <string name="delete_bookmarks">Bookmarki wa Bıesterneyo?</string>
+  <string name="delete_history" fuzzy="true">Veror wa Bıesterneyo?</string>
+  <string name="delete_bookmarks" fuzzy="true">Bookmarki wa Bıesterneyo?</string>
   <string name="on">Akerde</string>
   <string name="off">Racınaye</string>
   <string name="auto">Otomatik</string>

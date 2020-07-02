@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.di.modules
 
 import android.content.Context
 import android.location.LocationManager
+import android.net.wifi.WifiManager
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -36,6 +37,12 @@ object KiwixModule {
   @JvmStatic
   internal fun provideLocationManager(context: Context): LocationManager =
     context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+  @Provides
+  @KiwixScope
+  @JvmStatic
+  fun provideWifiManager(context: Context): WifiManager =
+    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
   @Provides
   @KiwixScope

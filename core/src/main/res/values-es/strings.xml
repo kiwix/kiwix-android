@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Ark74
 * Ejegg
 * Fitoschido
+* Geryescalier
 * Johny Weissmuller Jr
 * Macofe
 * Macondo
 * MarcoAurelio
+* Ncr
 * VegaDark
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Inicio</string>
   <string name="menu_settings">Configuración</string>
@@ -25,7 +27,6 @@
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
   <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Buscando contenido descargable; espera…</string>
   <string name="search_label">Buscar</string>
   <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
@@ -33,7 +34,7 @@
   <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
   <string name="server_started_successfully_toast_message">Se inició el servidor correctamente.</string>
   <string name="progress_dialog_starting_server">Iniciando el servidor</string>
-  <string name="hotspot_dialog_neutral_button">SÍ, LO HE INICIADO</string>
+  <string name="hotspot_dialog_neutral_button">PROCEDER</string>
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Detener servidor</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
@@ -156,7 +157,7 @@
   <string name="articleCount">%s artículos</string>
   <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar libros</string>
-  <string name="human_kind_knowledge">El conocimiento de la humanidad en tu teléfono.</string>
+  <string name="humankind_knowledge">El conocimiento de la humanidad en tu teléfono.</string>
   <string name="welcome_to_the_family">Te damos la bienvenida a la familia</string>
   <string name="download_books_message">Descarga libros y lee en cualquier lugar.</string>
   <string name="unable_to_add_to_bookmarks">No se puede añadir a los marcadores</string>
@@ -204,11 +205,15 @@
   <string name="tag_text_only">Solo texto</string>
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
-  <string name="go_to_settings">Ir a Configuración</string>
+  <string name="go_to_settings" fuzzy="true">Ir a Configuración</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
   <string name="device_default">Valor predet. del dispositivo</string>
   <string name="on">Activado</string>
   <string name="off">Desactivado</string>
   <string name="auto">Automático</string>
+  <string name="send_report">Enviar informe de diagnóstico</string>
+  <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
+  <string name="diagnostic_report">Informe de diagnóstico</string>
+  <string name="diagnostic_report_message">Envíe todos los detalles siguientes para que podamos diagnosticar el problema.</string>
 </resources>

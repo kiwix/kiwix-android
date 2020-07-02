@@ -38,7 +38,7 @@ class IntroRobot : BaseRobot() {
   init {
     isVisible(getStarted, LONG_WAIT)
     isVisible(TextId(R.string.welcome_to_the_family))
-    isVisible(TextId(R.string.human_kind_knowledge))
+    isVisible(TextId(R.string.humankind_knowledge))
   }
 
   fun swipeLeft() {

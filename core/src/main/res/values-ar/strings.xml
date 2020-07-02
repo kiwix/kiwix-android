@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Dyolf77
 * Eyas
 * Meno25
@@ -10,7 +11,6 @@
 * محمد أحمد عبد الفتاح
 -->
 <resources>
-  <string name="kiwi">كيوي</string>
   <string name="menu_help">المساعدة</string>
   <string name="menu_home">الصفحة الرئيسية</string>
   <string name="menu_settings">الإعدادات</string>
@@ -26,7 +26,6 @@
   <string name="save_media">حفظ الوسائط</string>
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
   <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">جار البحث عن محتوًى قابلٍ للتنزيل، يُرجى الانتظار…</string>
   <string name="search_label">البحث</string>
   <string name="choose_file">حدد ملف محتوى (*.zim)</string>
   <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة؟</string>
@@ -44,9 +43,9 @@
   <string name="hotspot_details_message">فيما يلي تفاصيل الهوت-سبوت الخاص بك.\nSSID: %1$s \nPass: %2$s</string>
   <string name="server_textview_default_message">حدد الملفات التي ترغب في استضافتها على الخادم</string>
   <string name="progress_dialog_starting_server">جار بدء الخادم</string>
-  <string name="hotspot_dialog_title">قم بتشغيل هوت-سبوت الواي فاي الخاص بك</string>
-  <string name="hotspot_dialog_message">لكي تعمل هذه الميزة، يجب عليك أولًا تشغيل هوت-سبوت الواي فاي يدويًا.</string>
-  <string name="hotspot_dialog_neutral_button">نعم، لقد شغلته</string>
+  <string name="hotspot_dialog_title" fuzzy="true">قم بتشغيل هوت-سبوت الواي فاي الخاص بك</string>
+  <string name="hotspot_dialog_message" fuzzy="true">لكي تعمل هذه الميزة، يجب عليك أولًا تشغيل هوت-سبوت الواي فاي يدويًا.</string>
+  <string name="hotspot_dialog_neutral_button" fuzzy="true">نعم، لقد شغلته</string>
   <string name="hotspot_channel_description">تحديثات حول حالة الهوت-سبوت/الخادم الخاص بك.</string>
   <string name="hotspot_notification_content_title">هوت-سبوت كيوكيس</string>
   <string name="start_server_label">بدء الخادم</string>
@@ -181,7 +180,7 @@
   <string name="articleCount">%s مقالات</string>
   <string name="get_started">فلنبدأ</string>
   <string name="download_books">تنزيل الكتب</string>
-  <string name="human_kind_knowledge">أنواع المعرفة الإنسانية على هاتفك.</string>
+  <string name="humankind_knowledge">أنواع المعرفة الإنسانية على هاتفك.</string>
   <string name="welcome_to_the_family">مرحبًا بك في العائلة</string>
   <string name="save_books_offline">حفظ الكتب دون اتصال بالإنترنت</string>
   <string name="download_books_message">قم بتنزيل الكتب واقرأ أينما كنت.</string>
@@ -257,14 +256,16 @@
   <string name="tag_short_text">نص قصير</string>
   <string name="storage_permission_denied">إِذن التّخزين قد رُفِض</string>
   <string name="grant_read_storage_permission">يتطلب هذا التطبيق القدرة على قراءة وظيفة التخزين. يُرجَى منح الإذن في إعداداتك</string>
-  <string name="go_to_settings">اذهب للإعدادات</string>
+  <string name="go_to_settings" fuzzy="true">اذهب للإعدادات</string>
   <string name="no_results">لا نتائج</string>
   <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
   <string name="no_history">لا تاريخ</string>
   <string name="device_default">الجهاز الافتراضي</string>
-  <string name="delete_history">حذف التاريخ؟</string>
-  <string name="delete_bookmarks">أزل العلامات المرجعية؟</string>
+  <string name="delete_history" fuzzy="true">حذف التاريخ؟</string>
+  <string name="delete_bookmarks" fuzzy="true">أزل العلامات المرجعية؟</string>
   <string name="on">تشغيل</string>
   <string name="off">تعطيل</string>
   <string name="auto">تلقائي</string>
+  <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
+  <string name="experimental_navigation">تصفح تجريبي</string>
 </resources>

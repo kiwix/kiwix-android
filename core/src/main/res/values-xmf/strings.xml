@@ -18,7 +18,6 @@
   <string name="save_media">მედიაფაილეფიშ ჩუალა</string>
   <string name="save_media_error">მედიაფაილიშ ჩუალას ჩილათაქ მოხვადჷ!</string>
   <string name="save_media_saved">მედიაფაილი ჩუალირი რე მუჭოთ %s, ქძ. Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">გიმახარგალი დინოხიშ გორუა, ქორთხინთ ქუჯინით…</string>
   <string name="search_label">გორუა</string>
   <string name="choose_file">გეგშაგორით დინოხიშ ფაილი (*.zim)</string>
   <string name="open_in_new_tab">გონბწყათო რცხუ ახალი აშნაკიდას?</string>
@@ -27,8 +26,8 @@
   <string name="server_failed_toast_message">სერვერქ ვეჩირთინუ.</string>
   <string name="server_started_successfully_toast_message">ჩერვერქ ჩერთუ.</string>
   <string name="hotspot_details_message">გიმე მოჩამილი რე თქვანი აბანური ინტერნეტ-მეჭირინაფაშ ჭურჭულიშ გეშა ინფორმაცია. \nSSID : %1$s \nPass : %2$s</string>
-  <string name="hotspot_dialog_title">ჩართით თქვანი WIFI მეჭირინაფაშ ჭურჭული</string>
-  <string name="hotspot_dialog_neutral_button">ქო, ჩართული მაფუ</string>
+  <string name="hotspot_dialog_title" fuzzy="true">ჩართით თქვანი WIFI მეჭირინაფაშ ჭურჭული</string>
+  <string name="hotspot_dialog_neutral_button" fuzzy="true">ქო, ჩართული მაფუ</string>
   <string name="error_file_not_found">ჩილათა: გიშაგორილი ZIM-ფაილქ ვეგორუ.</string>
   <string name="error_file_invalid">ჩილათა: გიშაგორილი ფაილი ვა რე თინი ZIM-ფაილი.</string>
   <string name="error_article_url_not_found">ჩილათა: სტატიაშ (Url: %1$s) გიმოხარგუაქ ვემიხუჯინუ.</string>

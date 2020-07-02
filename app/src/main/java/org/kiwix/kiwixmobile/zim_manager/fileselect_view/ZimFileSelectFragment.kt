@@ -40,8 +40,8 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
@@ -58,14 +58,14 @@ private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 
 class ZimFileSelectFragment : BaseFragment() {
 
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
 
   private val zimManageViewModel by lazy {
-    activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
+    requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
   private val bookDelegate: BookDelegate by lazy {
     BookDelegate(sharedPreferenceUtil,
@@ -87,8 +87,8 @@ class ZimFileSelectFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    LanguageUtils(activity!!)
-      .changeFont(activity!!.layoutInflater, sharedPreferenceUtil)
+    LanguageUtils(requireActivity())
+      .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
     return inflater.inflate(R.layout.zim_list, container, false)
   }
 
@@ -121,7 +121,7 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
     {
-      val effectResult = it.invokeWith(activity!! as AppCompatActivity)
+      val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
       if (effectResult is ActionMode) {
         actionMode = effectResult
       }
@@ -159,7 +159,7 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun checkPermissions() {
     if (ContextCompat.checkSelfPermission(
-        activity!!,
+        requireActivity(),
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) != PackageManager.PERMISSION_GRANTED
     ) {

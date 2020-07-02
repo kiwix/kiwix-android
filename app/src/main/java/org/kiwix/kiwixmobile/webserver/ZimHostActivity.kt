@@ -25,6 +25,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
+import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
@@ -55,6 +57,10 @@ import javax.inject.Inject
 class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   @Inject
   internal lateinit var presenter: ZimHostContract.Presenter
+
+  @Inject
+  internal lateinit var connectivityReporter: ConnectivityReporter
+
   @Inject
   internal lateinit var alertDialogShower: AlertDialogShower
   private lateinit var recyclerViewZimHost: RecyclerView
@@ -127,9 +133,24 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private fun startStopServer() {
     when {
       ServerUtils.isServerStarted -> stopServer()
-      selectedBooksPath.size > 0 -> startHotspotManuallyDialog()
+      selectedBooksPath.size > 0 -> {
+        when {
+          connectivityReporter.checkWifi() -> startWifiDialog()
+          connectivityReporter.checkTethering() -> startKiwixHotspot()
+          else -> startHotspotManuallyDialog()
+        }
+      }
       else -> toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
     }
+  }
+
+  private fun startKiwixHotspot() {
+    progressDialog = ProgressDialog.show(
+      this,
+      getString(R.string.progress_dialog_starting_server), "",
+      true
+    )
+    startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
   }
 
   private fun stopServer() {
@@ -225,16 +246,22 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
     alertDialogShower.show(KiwixDialog.StartHotspotManually,
       ::launchTetheringSettingsScreen,
-      {},
-      {
-        progressDialog = ProgressDialog.show(
-          this,
-          getString(R.string.progress_dialog_starting_server), "",
-          true
-        )
-        startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
-      }
+      ::openWifiSettings,
+      {}
     )
+  }
+
+  private fun startWifiDialog() {
+    alertDialogShower.show(
+      KiwixDialog.WiFiOnWhenHostingBooks,
+      ::openWifiSettings,
+      {},
+      ::startKiwixHotspot
+    )
+  }
+
+  private fun openWifiSettings() {
+    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
   }
 
   private fun createHotspotIntent(action: String): Intent =

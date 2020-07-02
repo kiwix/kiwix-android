@@ -22,7 +22,6 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
-import org.kiwix.kiwixmobile.core.bookmark.BookmarkItem
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
@@ -30,9 +29,10 @@ import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
-import org.kiwix.kiwixmobile.core.history.HistoryListItem
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.DateItem
-import org.kiwix.kiwixmobile.core.history.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -66,8 +66,7 @@ class Repository @Inject internal constructor(
   override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
     .map { it.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title } }
     .map {
-      foldOverAddingHeaders(
-        it,
+      HeaderizableList<BooksOnDiskListItem, BookOnDisk, LanguageItem>(it).foldOverAddingHeaders(
         { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
         { current, next -> current.locale.displayName != next.locale.displayName })
     }
@@ -85,22 +84,6 @@ class Repository @Inject internal constructor(
     Completable.fromAction { languageDao.insert(languages) }
       .subscribeOn(io)
 
-  override fun getDateCategorizedHistory(showHistoryCurrentBook: Boolean) =
-    Single.just(
-      historyDao.getHistoryList(
-        showHistoryCurrentBook,
-        zimReaderContainer.zimCanonicalPath
-      )
-    )
-      .map {
-        foldOverAddingHeaders(
-          it,
-          { historyItem -> DateItem(historyItem.dateString) },
-          { current, next -> current.dateString != next.dateString })
-      }
-      .subscribeOn(io)
-      .observeOn(mainThread)
-
   override fun saveHistory(history: HistoryItem) =
     Completable.fromAction { historyDao.saveHistory(history) }
       .subscribeOn(io)
@@ -116,10 +99,7 @@ class Repository @Inject internal constructor(
     recentSearchDao.deleteSearchHistory()
   }
 
-  override fun getBookmarks(fromCurrentBook: Boolean): Single<List<BookmarkItem>> =
-    Single.just(bookmarksDao.getBookmarks(fromCurrentBook, zimReaderContainer.zimFileReader))
-      .subscribeOn(io)
-      .observeOn(mainThread)
+  override fun getBookmarks() = bookmarksDao.bookmarks()
 
   override fun getCurrentZimBookmarksUrl() =
     Single.just(bookmarksDao.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))
@@ -137,24 +117,4 @@ class Repository @Inject internal constructor(
   override fun deleteBookmark(bookmarkUrl: String): Completable? =
     Completable.fromAction { bookmarksDao.deleteBookmark(bookmarkUrl) }
       .subscribeOn(io)
-
-  private fun <SUPERTYPE, ITEM : SUPERTYPE, HEADER : SUPERTYPE> foldOverAddingHeaders(
-    it: List<ITEM>,
-    headerConstructor: (ITEM) -> HEADER,
-    criteriaToAddHeader: (ITEM, ITEM) -> Boolean
-  ): MutableList<SUPERTYPE> = it.foldIndexed(mutableListOf(),
-    { index, acc, currentItem ->
-      if (index == 0) {
-        acc.add(headerConstructor.invoke(currentItem))
-      }
-      acc.add(currentItem)
-      if (index < it.size - 1) {
-        val nextItem = it[index + 1]
-        if (criteriaToAddHeader.invoke(currentItem, nextItem)) {
-          acc.add(headerConstructor.invoke(nextItem))
-        }
-      }
-      acc
-    }
-  )
 }

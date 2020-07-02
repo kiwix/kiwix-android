@@ -7,7 +7,6 @@
 * Praveenp
 -->
 <resources>
-  <string name="kiwi">കിവി</string>
   <string name="menu_help">സഹായം</string>
   <string name="menu_home">പ്രധാനം</string>
   <string name="menu_settings">ഐച്ഛികങ്ങള്‍</string>
@@ -20,7 +19,6 @@
   <string name="menu_read_aloud_stop">ഉച്ചത്തിൽ വായിക്കുന്നത് നിർത്തുക</string>
   <string name="save_media">മീഡിയ സേവ് ചെയ്യുക</string>
   <string name="save_media_error">മീഡിയ സേവ് ചെയ്യാൻ ശ്രമിക്കുമ്പോൾ ഒരു പിഴവുണ്ടായി!</string>
-  <string name="rescan_fs_warning" fuzzy="true">സിം ഫയലുകൾക്കായി തിരയുന്നു. ദയവായി കാത്തിരിക്കൂ..</string>
   <string name="search_label">തിരയുക</string>
   <string name="choose_file">ഒരു കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കുക</string>
   <string name="open_in_new_tab">കണ്ണി പുതിയ ടാബിൽ തുറക്കണോ?</string>
@@ -35,7 +33,7 @@
   <string name="server_stopped_successfully_toast_message">സെർവർ വിജയകരമായി നിർത്തി.</string>
   <string name="hotspot_turned_on">ഹോട്ട്സ്പോട്ട് ഓൺ ആക്കിയിരിക്കുന്നു</string>
   <string name="progress_dialog_starting_server">സെർവർ തുടങ്ങുന്നു</string>
-  <string name="hotspot_dialog_title">താങ്കളുടെ വൈഫൈ ഹോട്ട്സ്പോട്ട് ഓൺ ആക്കുക</string>
+  <string name="hotspot_dialog_title" fuzzy="true">താങ്കളുടെ വൈഫൈ ഹോട്ട്സ്പോട്ട് ഓൺ ആക്കുക</string>
   <string name="hotspot_notification_content_title">കിവിക്സ് ഹോട്ട്സ്പോട്ട്</string>
   <string name="start_server_label">സെർവർ തുടങ്ങുക</string>
   <string name="stop_server_label">സെർവർ നിർത്തുക</string>
@@ -129,8 +127,8 @@
   <string name="pref_clear_all_notes_summary">എല്ലാ ലേഖനങ്ങളിൽ നിന്നും കുറിപ്പുകൾ ഒഴിവാക്കുക</string>
   <string name="pref_clear_all_notes_title">എല്ലാ കുറിപ്പുകളും ഒഴിവാക്കുക</string>
   <string name="tag_pic">ചിത്രം</string>
-  <string name="go_to_settings">സജ്ജീകരണങ്ങളിലേക്ക് പോവുക</string>
+  <string name="go_to_settings" fuzzy="true">സജ്ജീകരണങ്ങളിലേക്ക് പോവുക</string>
   <string name="no_results">ഫലങ്ങൾ ഒന്നുമില്ല</string>
   <string name="no_history">നാൾവഴിയില്ല</string>
-  <string name="delete_history">നാൾവഴി ഒഴിവാക്കട്ടെ?</string>
+  <string name="delete_history" fuzzy="true">നാൾവഴി ഒഴിവാക്കട്ടെ?</string>
 </resources>

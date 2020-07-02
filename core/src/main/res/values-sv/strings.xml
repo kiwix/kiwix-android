@@ -7,7 +7,6 @@
 * WikiPhoenix
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Hjälp</string>
   <string name="menu_home">Hem</string>
   <string name="menu_settings">Inställningar</string>
@@ -23,7 +22,6 @@
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
   <string name="save_media_saved">Sparade media som %s i Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Söker efter nedladdningsbart innehåll, var god vänta…</string>
   <string name="search_label">Sök</string>
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
@@ -41,9 +39,9 @@
   <string name="hotspot_details_message">Information om din lokala surfpunkt. \nSSID : %1$s \nLösen : %2$s</string>
   <string name="server_textview_default_message">Välj filerna du vill vara värd för på servern</string>
   <string name="progress_dialog_starting_server">Startar server</string>
-  <string name="hotspot_dialog_title">Aktivera din WiFi-surfpunkt</string>
-  <string name="hotspot_dialog_message">För att denna funktion ska fungera måste du först aktivera din WiFi-surfpunkt manuellt.</string>
-  <string name="hotspot_dialog_neutral_button">JA, JAG HAR AKTIVERAT DET</string>
+  <string name="hotspot_dialog_title" fuzzy="true">Aktivera din WiFi-surfpunkt</string>
+  <string name="hotspot_dialog_message">För att denna funktion ska fungera måste du först aktivera din WiFi-surfpunkt manuellt eller se till att värdens enhet och mottagarens enhet är på samma nätverk.</string>
+  <string name="hotspot_dialog_neutral_button">FORTSÄTT</string>
   <string name="hotspot_channel_description">Uppdateringar om tillståndet för din surfpunkt/server.</string>
   <string name="hotspot_notification_content_title">Kiwix-surfpunkt</string>
   <string name="start_server_label">Starta server</string>
@@ -178,7 +176,7 @@
   <string name="articleCount">%s artiklar</string>
   <string name="get_started">Kom igång</string>
   <string name="download_books">Ladda ned böcker</string>
-  <string name="human_kind_knowledge">Mänsklighetens kunskap i din telefon</string>
+  <string name="humankind_knowledge">Mänsklighetens kunskap i din telefon</string>
   <string name="welcome_to_the_family">Välkommen till famlijen</string>
   <string name="save_books_offline">Spara böcker offline</string>
   <string name="download_books_message">Ladda ned böcker och läs var du än är.</string>
@@ -243,14 +241,15 @@
   <string name="tag_short_text">Kort text</string>
   <string name="storage_permission_denied">Lagringsbehörighet nekades</string>
   <string name="grant_read_storage_permission">Denna app behöver kunna läsa från lagringsutrymmet för att fungera. Var god bevilja behörigheten i dina inställningar.</string>
-  <string name="go_to_settings">Gå till inställningar</string>
+  <string name="go_to_settings">Gå till surfpunktsinställningarna</string>
   <string name="no_results">Inga resultat</string>
   <string name="no_bookmarks">Inga bokmärken</string>
   <string name="no_history">Ingen historik</string>
   <string name="device_default">Enhetsstandard</string>
-  <string name="delete_history">Radera historik?</string>
-  <string name="delete_bookmarks">Radera bokmärken?</string>
+  <string name="delete_history" fuzzy="true">Radera historik?</string>
+  <string name="delete_bookmarks" fuzzy="true">Radera bokmärken?</string>
   <string name="on">På</string>
   <string name="off">Av</string>
   <string name="auto">Auto</string>
+  <string name="crash_checkbox_file_system">Filsystemsdetaljer</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Eduardo Addad de Oliveira
 * Felipe L. Ewald
 * Freeedusoft
@@ -9,7 +10,6 @@
 * Webysther
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Início</string>
   <string name="menu_settings">Configurações</string>
@@ -25,7 +25,6 @@
   <string name="save_media">Salvar mídia</string>
   <string name="save_media_error">Ocorreu um erro ao tentar salvar a mídia!</string>
   <string name="save_media_saved">Midia salva como  %s para Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Escaneando por conteúdo para download, aguarde …</string>
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecione um arquivo de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir link em uma nova aba?</string>
@@ -43,9 +42,11 @@
   <string name="hotspot_details_message">A seguir estão os detalhes do seu ponto de acesso local.\nSSID : %1$s \nPasse : %2$s</string>
   <string name="server_textview_default_message">Selecione os arquivos que você deseja hospedar no servidor</string>
   <string name="progress_dialog_starting_server">Iniciando servidor</string>
-  <string name="hotspot_dialog_title">Ligue o seu ponto de acesso wi-fi</string>
-  <string name="hotspot_dialog_message">Para que esse recurso funcione, você precisa primeiro ativar o rede WIFI manualmente.</string>
-  <string name="hotspot_dialog_neutral_button">SIM, EU LIGUEI</string>
+  <string name="hotspot_dialog_title">Instruções para hospedagem de livros</string>
+  <string name="wifi_dialog_title">Conexão WiFi detectada</string>
+  <string name="wifi_dialog_body">Para visualizar livros em outros dispositivos, verifique se todos os dispositivos estão conectados à mesma rede WiFi.</string>
+  <string name="hotspot_dialog_message">Para que esse recurso funcione, você precisa primeiro ativar o hotspot WIFI manualmente ou garantir que o dispositivo host e o dispositivo receptor estejam na mesma rede Wi-Fi</string>
+  <string name="hotspot_dialog_neutral_button">CONTINUAR</string>
   <string name="hotspot_channel_description">Atualizações sobre o estado do seu ponto de acesso/servidor.</string>
   <string name="hotspot_notification_content_title">Wi-Fi Kiwix</string>
   <string name="start_server_label">Iniciar servidor</string>
@@ -180,7 +181,7 @@
   <string name="articleCount">%s artigos</string>
   <string name="get_started">Começar</string>
   <string name="download_books">Download de livros</string>
-  <string name="human_kind_knowledge">Conhecimento do tipo humano, no seu telefone.</string>
+  <string name="humankind_knowledge">Conhecimento do tipo humano, no seu telefone.</string>
   <string name="welcome_to_the_family">Bem-vindo à família</string>
   <string name="save_books_offline">Salvar livros off-line</string>
   <string name="download_books_message">Faça o download de livros e leia onde você estiver.</string>
@@ -256,14 +257,21 @@
   <string name="tag_short_text">Texto curto</string>
   <string name="storage_permission_denied">Permissão de armazenamento negada</string>
   <string name="grant_read_storage_permission">Este aplicativo requer a capacidade de ler o armazenamento para funcionar. Conceda a permissão nas suas configurações</string>
-  <string name="go_to_settings">Vá para as configurações</string>
+  <string name="go_to_settings">Vá para configurações do ponto de acesso</string>
   <string name="no_results">Sem resultados</string>
   <string name="no_bookmarks">Sem Favoritos</string>
   <string name="no_history">Sem histórico</string>
   <string name="device_default">Padrão do dispositivo</string>
-  <string name="delete_history">Apagar histórico?</string>
-  <string name="delete_bookmarks">Excluir marcadores?</string>
+  <string name="delete_history" fuzzy="true">Apagar histórico?</string>
+  <string name="delete_bookmarks" fuzzy="true">Excluir marcadores?</string>
   <string name="on">Lig</string>
   <string name="off">Des</string>
   <string name="auto">Auto</string>
+  <string name="send_report">Enviar relatório de diagnóstico</string>
+  <string name="crash_checkbox_file_system">Detalhes do sistema de arquivos</string>
+  <string name="diagnostic_report">Relatório de diagnóstico</string>
+  <string name="diagnostic_report_message">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Zoom de texto</string>
+  <string name="experimental_navigation">Navegação experimental</string>
 </resources>

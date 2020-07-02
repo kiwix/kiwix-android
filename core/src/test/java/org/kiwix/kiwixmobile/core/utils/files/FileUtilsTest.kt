@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.utils.files
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -68,13 +67,11 @@ class FileUtilsTest {
       .withFailMessage("Nothing is returned in this case")
   }
 
-  private fun testWith(
-    extension: String,
-    fileExists: Boolean
-  ) {
+  private fun testWith(extension: String, fileExists: Boolean) {
     expect(extension, fileExists)
-    mockkStatic(CoreApp::class)
-    every { CoreApp.getInstance().packageName } returns "mock_package"
+    val coreApp = mockk<CoreApp>()
+    CoreApp.instance = coreApp
+    every { coreApp.packageName } returns "mock_package"
     val files = FileUtils.getAllZimParts(testBook)
     assertThat(files.size).isEqualTo(1)
       .withFailMessage("Only a single book is returned in case the file has extension $extension")
@@ -87,10 +84,7 @@ class FileUtilsTest {
     }
   }
 
-  private fun expect(
-    extension: String,
-    fileExists: Boolean
-  ) {
+  private fun expect(extension: String, fileExists: Boolean) {
     every { mockFile.path } returns "$fileName$extension"
     every { mockFile.exists() } returns fileExists
   }

@@ -18,11 +18,10 @@
 
 package org.kiwix.kiwixmobile.core
 
-import android.net.Uri
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.AfterAll
@@ -48,7 +47,7 @@ class StorageObserverTest {
   private val downloadModel: DownloadModel = mockk()
   private val file: File = mockk()
   private val readerFactory: Factory = mockk()
-  private val zimFileReader: ZimFileReader
+  private val zimFileReader: ZimFileReader = mockk()
 
   private val files: PublishProcessor<List<File>> = PublishProcessor.create()
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
@@ -57,11 +56,6 @@ class StorageObserverTest {
 
   init {
     setScheduler(Schedulers.trampoline())
-    mockkStatic(CoreApp::class)
-    every { CoreApp.getInstance().packageName } returns "pkg"
-    mockkStatic(Uri::class)
-    every { Uri.parse(any()).toString() } returns "pkg"
-    zimFileReader = mockk()
   }
 
   @AfterAll
@@ -75,11 +69,7 @@ class StorageObserverTest {
     every { fileSearch.scan() } returns files
     every { downloadDao.downloads() } returns downloads
     every { readerFactory.create(file) } returns zimFileReader
-    storageObserver = StorageObserver(
-      downloadDao,
-      fileSearch,
-      readerFactory
-    )
+    storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory)
   }
 
   @Test
@@ -99,6 +89,7 @@ class StorageObserverTest {
     booksOnFileSystem().assertValues(
       listOf(bookOnDisk(book = expectedBook, file = file))
     )
+    verify { zimFileReader.dispose() }
   }
 
   private fun booksOnFileSystem() = storageObserver.booksOnFileSystem

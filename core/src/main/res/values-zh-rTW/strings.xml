@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Kly
 * LNDDYL
 * Liuxinyu970226
@@ -8,7 +9,6 @@
 * Wehwei
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">說明</string>
   <string name="menu_home">首頁</string>
   <string name="menu_settings">設定</string>
@@ -24,7 +24,6 @@
   <string name="save_media">儲存媒體</string>
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>
   <string name="save_media_saved">已將媒體以 %1$s 儲存到 Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">正在掃描可下載內容，請稍候…</string>
   <string name="search_label">搜尋</string>
   <string name="choose_file">請選擇一份內容檔案 (*.zim)</string>
   <string name="open_in_new_tab">在新分頁打開連結？</string>
@@ -42,9 +41,11 @@
   <string name="hotspot_details_message">以下為您的本地熱點詳細內容。\nSSID：%1$s \n密碼：%2$s</string>
   <string name="server_textview_default_message">選擇您想要在伺服器上託管的檔案</string>
   <string name="progress_dialog_starting_server">開啟伺服器中</string>
-  <string name="hotspot_dialog_title">啟動您的 WIFI 熱點</string>
-  <string name="hotspot_dialog_message">要讓此功能運作的話，您需要先手動將您的 WIFI 熱點開啟。</string>
-  <string name="hotspot_dialog_neutral_button">是的，我已開啟</string>
+  <string name="hotspot_dialog_title">書籍託管說明</string>
+  <string name="wifi_dialog_title">偵測到 WiFi 連線</string>
+  <string name="wifi_dialog_body">為了在其它設備上檢視書籍，請確認所有的設備都是連線到相同的 WiFi 網路。</string>
+  <string name="hotspot_dialog_message">要讓此功能運作的話，您需要先手動將您的 WIFI 熱點開啟，或是確認主機設備與接收設備是在同一個 WiFi 網路上</string>
+  <string name="hotspot_dialog_neutral_button">前往</string>
   <string name="hotspot_channel_description">關於您的熱點/伺服器狀態的更新。</string>
   <string name="hotspot_notification_content_title">Kiwix 熱點</string>
   <string name="start_server_label">開啟伺服器</string>
@@ -179,7 +180,7 @@
   <string name="articleCount">%s 個條目</string>
   <string name="get_started">入門</string>
   <string name="download_books">下載書籍</string>
-  <string name="human_kind_knowledge">在您手機上的人類知識。</string>
+  <string name="humankind_knowledge">在您手機上的人類知識。</string>
   <string name="welcome_to_the_family">歡迎來到這個大家庭</string>
   <string name="save_books_offline">儲存書籍離線</string>
   <string name="download_books_message">下載書籍來隨時隨地閱讀。</string>
@@ -225,7 +226,7 @@
   <string name="discovery_initiated">初始偵測</string>
   <string name="discovery_failed">偵測失敗</string>
   <string name="severe_loss_error">嚴重錯誤！請嘗試停用/重新啟用 WiFi P2P</string>
-  <string name="connection_failed">連接失敗</string>
+  <string name="connection_failed">連線失敗</string>
   <string name="permission_rationale_location">Android 需要位置權限來允許應用程式去偵測端點設備</string>
   <string name="permission_refused_location">沒有位置權限無法定位端點設備</string>
   <string name="permission_refused_storage">沒有儲存權限無法存取 zim 檔案</string>
@@ -255,13 +256,13 @@
   <string name="tag_short_text">簡短文字</string>
   <string name="storage_permission_denied">儲存裝置權限被拒絕</string>
   <string name="grant_read_storage_permission">此應用程式需要可讀取儲存裝置的功能。請在您的設定裡授予權限</string>
-  <string name="go_to_settings">前往設定</string>
+  <string name="go_to_settings">前往熱點設定</string>
   <string name="no_results">沒有結果</string>
   <string name="no_bookmarks">沒有書籤！</string>
   <string name="no_history">沒有歷史</string>
   <string name="device_default">設備預設</string>
-  <string name="delete_history">刪除歷史？</string>
-  <string name="delete_bookmarks">刪除書籤？</string>
+  <string name="delete_history" fuzzy="true">刪除歷史？</string>
+  <string name="delete_bookmarks" fuzzy="true">刪除書籤？</string>
   <string name="on">開啟</string>
   <string name="off">關閉</string>
   <string name="auto">自動</string>
@@ -269,4 +270,7 @@
   <string name="crash_checkbox_file_system">檔案系統詳細資訊</string>
   <string name="diagnostic_report">診斷報告</string>
   <string name="diagnostic_report_message">請傳送所有以下詳細資訊，以讓我們可以方便診斷問題</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">文字縮放</string>
+  <string name="experimental_navigation">實現性導覽</string>
 </resources>

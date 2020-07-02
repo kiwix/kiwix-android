@@ -91,7 +91,14 @@ sealed class KiwixDialog(
     R.string.hotspot_dialog_title,
     R.string.hotspot_dialog_message,
     R.string.go_to_settings,
-    null,
+    R.string.go_to_wifi_settings_label
+  )
+
+  object WiFiOnWhenHostingBooks : KiwixDialog(
+    R.string.wifi_dialog_title,
+    R.string.wifi_dialog_body,
+    positiveMessage = R.string.go_to_wifi_settings_label,
+    negativeMessage = null,
     neutralMessage = R.string.hotspot_dialog_neutral_button
   )
 
@@ -181,15 +188,29 @@ sealed class KiwixDialog(
     )
   }
 
-  object DeleteHistory : KiwixDialog(
+  object DeleteSelectedHistory : KiwixDialog(
+    R.string.delete_selected_history,
+    null,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object DeleteAllHistory : KiwixDialog(
     R.string.delete_history,
     null,
     positiveMessage = R.string.delete,
     negativeMessage = R.string.cancel
   )
 
-  object DeleteBookmarks : KiwixDialog(
+  object DeleteAllBookmarks : KiwixDialog(
     R.string.delete_bookmarks,
+    null,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object DeleteSelectedBookmarks : KiwixDialog(
+    R.string.delete_selected_bookmarks,
     null,
     positiveMessage = R.string.delete,
     negativeMessage = R.string.cancel

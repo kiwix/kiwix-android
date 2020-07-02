@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abijeet Patro
 * Alno
 * Derugon
 * Djiboun
@@ -7,6 +8,7 @@
 * Fitoschido
 * Gomoko
 * Kelson
+* Stephane
 * The RedBurn
 * Thibaut120094
 * Urhixidur
@@ -15,7 +17,6 @@
 * Yasten
 -->
 <resources>
-  <string name="kiwi">Kiwi</string>
   <string name="menu_help">Aide</string>
   <string name="menu_home">Accueil</string>
   <string name="menu_settings">Options</string>
@@ -27,11 +28,10 @@
   <string name="menu_read_aloud">Lire à haute voix</string>
   <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
   <string name="menu_support_kiwix">Soutenir Kiwix</string>
-  <string name="menu_host_books">Héberger des livres</string>
+  <string name="menu_host_books">Diffuser des contenus</string>
   <string name="save_media">Enregistrer le média</string>
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
   <string name="save_media_saved">Média enregistré sous %s dans le dossier Android/media/org.kiwix…/</string>
-  <string name="rescan_fs_warning">Recherche de contenu téléchargeable, veuillez patienter…</string>
   <string name="search_label">Rechercher</string>
   <string name="choose_file">Sélectionner un fichier de contenu (*.zim)</string>
   <string name="open_in_new_tab">Ouvrir le lien dans un nouvel onglet ?</string>
@@ -49,9 +49,11 @@
   <string name="hotspot_details_message">Voici les détails de votre point d’accès local.\nSSID : %1$s\nPasse : %2$s</string>
   <string name="server_textview_default_message">Sélectionnez les fichiers que vous voulez héberger sur le serveur</string>
   <string name="progress_dialog_starting_server">Démarrage du serveur</string>
-  <string name="hotspot_dialog_title">Activez votre point d’accès WiFi</string>
-  <string name="hotspot_dialog_message">Pour que cette fonctionnalité fonctionne, vous devez d’abord activer votre point d’accès WiFi manuellement.</string>
-  <string name="hotspot_dialog_neutral_button">OUI, JE L’AI BIEN DÉMARRÉ</string>
+  <string name="hotspot_dialog_title">Instructions pour les livres hébergeurs</string>
+  <string name="wifi_dialog_title">Connexion WiFi détectée</string>
+  <string name="wifi_dialog_body">Afin de pouvoir lire les livres sur d’autres appareils, veuillez vous assurer que tous ceux-ci sont connectés au même réseau WiFi.</string>
+  <string name="hotspot_dialog_message">Pour que cette fonctionnalité fonctionne, vous devez d’abord activer manuellement votre point d’accès WiFi ou vous assurer que l\'appareil hôte et l\'appareil récepteur appartiennent au même réseau WiFi</string>
+  <string name="hotspot_dialog_neutral_button">PROCEDER</string>
   <string name="hotspot_channel_description">Mises à jour concernant l’état de votre point d’accès/serveur.</string>
   <string name="hotspot_notification_content_title">Point d’accès Kiwix</string>
   <string name="start_server_label">Démarrer le serveur</string>
@@ -97,10 +99,10 @@
   <string name="undo">Annuler</string>
   <string name="tab_closed">Onglet fermé</string>
   <string name="bookmark_added">Marque-page ajouté</string>
-  <string name="rate_dialog_title">Veuillez nous noter</string>
+  <string name="rate_dialog_title">Merci de nous évaluer</string>
   <string name="rate_dialog_msg_1">Si vous aimez utiliser</string>
   <string name="rate_dialog_msg_2">, veuillez prendre un moment pour l’évaluer. Merci pour votre soutien !</string>
-  <string name="rate_dialog_positive">Notez !</string>
+  <string name="rate_dialog_positive">Donnez nous une note!</string>
   <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>
   <string name="open">Ouvrir</string>
@@ -171,7 +173,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Et bien… c’est embarrassant</string>
+  <string name="crash_title">Eh bien… c’est embarrassant</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -186,7 +188,7 @@
   <string name="articleCount">%s articles</string>
   <string name="get_started">Commencer</string>
   <string name="download_books">Télécharger des livres</string>
-  <string name="human_kind_knowledge">Connaissances de l’espèce humaine, sur votre téléphone.</string>
+  <string name="humankind_knowledge">Connaissances de l’espèce humaine, sur votre téléphone.</string>
   <string name="welcome_to_the_family">Bienvenue dans la famille</string>
   <string name="save_books_offline">Enregistrer des livres hors connexion</string>
   <string name="download_books_message">Téléchargez et lisez des livres où que vous soyez.</string>
@@ -262,18 +264,21 @@
   <string name="tag_short_text">Texte bref</string>
   <string name="storage_permission_denied">Autorisation de stockage refusée</string>
   <string name="grant_read_storage_permission">Cette application a besoin de la possibilité de lire le stockage pour pouvoir fonctionner. Veuillez accorder le droit dans vos paramètres.</string>
-  <string name="go_to_settings">Aller aux paramètres</string>
+  <string name="go_to_settings">Aller aux paramètres de Hotspot</string>
   <string name="no_results">Aucun résultat</string>
   <string name="no_bookmarks">Aucun marque-page</string>
   <string name="no_history">Aucun historique</string>
   <string name="device_default">Appareil par défaut</string>
-  <string name="delete_history">Supprimer l’historique ?</string>
-  <string name="delete_bookmarks">Supprimer les marque-pages ?</string>
+  <string name="delete_history" fuzzy="true">Supprimer l’historique ?</string>
+  <string name="delete_bookmarks" fuzzy="true">Supprimer les marque-pages ?</string>
   <string name="on">Activé</string>
   <string name="off">Désactivé</string>
   <string name="auto">Automatique</string>
   <string name="send_report">Envoyer le rapport de diagnostic</string>
   <string name="crash_checkbox_file_system">Détails du système de fichiers</string>
   <string name="diagnostic_report">Rapport de diagnostic</string>
-  <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivant afin que nous puissions diagnostiquer le problème</string>
+  <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivants afin que nous puissions diagnostiquer le problème</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Zoomer le texte</string>
+  <string name="experimental_navigation">Navigation expérimentale</string>
 </resources>
