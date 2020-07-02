@@ -118,9 +118,9 @@ public class ErrorActivity extends BaseActivity {
 
       if (allowLogsCheckbox.isChecked()) {
         File file = fileLogger.writeLogFile(this);
-        Log.d("SEARCHING.....", "onCreate: Searching @ "+ getPackageName()+ " .fileProvider"+ file);
+        Log.d("SEARCHING.....", "onCreate: Searching @ "+ "org.kiwix.kiwixmobile"+ " .fileProvider"+ file);
         Uri path = getUriForFile(this,
-          getPackageName() + ".fileProvider", file);
+          "org.kiwix.kiwixmobile.fileprovider", file);
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         emailIntent.putExtra(Intent.EXTRA_STREAM, path);
       }
