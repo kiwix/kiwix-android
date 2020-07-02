@@ -659,10 +659,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else if (getCurrentWebView().canGoBack()
       && !HOME_URL.equals(getCurrentWebView().getUrl())) {
       getCurrentWebView().goBack();
-    } else if (zimReaderContainer.getZimFile() == null) {
-      return Super.ShouldCall;
-    } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
-      handleBackOnLastWebViewPage();
     } else {
       return Super.ShouldCall;
     }
