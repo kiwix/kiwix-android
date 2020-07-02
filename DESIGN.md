@@ -24,16 +24,15 @@ The following steps should be followed to set a color or style of a view.
 1. Define the color or style:
     * Define the color in `core/colors.xml`. Use good naming (`denim_blue`, `mine_shaft_gray` etc..).
     * Define the style in `core/styles.xml`. Follow the naming convention. `TODO:` (what is the naming convention for styles?)
-2. Add the color or style to a specific theme item in `themes.xml`.
-3. Make sure that the color or style works in both day and night mode. If it does not, add a night compatible color/style to `values-night/themes.xml`.
+2. Add the color or style to a specific theme attribute in `themes.xml`.
+3. Make sure that the color or style works in both day and night mode. If it does not, add the dark mode compatible attribute to `values-night/themes.xml`.
 
 For a video on how to work with themes, styles and colors, see [Developing Themes with Style (Android Dev Summit '19)](https://www.youtube.com/watch?v=Owkf8DhAOSo).
 
-## Night mode
-Night mode is a different theme that makes the app easier on the eyes during night. When doing any design, make sure the new design works in night mode.
-Night mode can be activated from the settings menu. 
+## Night Mode / Dark Theme
+Night mode is a different theme that has many benefits such as saving battery and improving visibility in low light conditions [2]. When doing any design, make sure the new design works in dark mode. Night mode can be activated from the systems settings or from the kiwix app. 
 
-Whenever a resource exists in both `res/*-night` and `res/*` it will be used as such. For example: `kiwix_icon_with_title.png` exists in both `res/drawable` and `res/drawable-night` which means that the image in `res/drawable-night` will be used automagically in night mode. 
+Whenever a resource exists in both `res/*-night` and `res/*` it will be used as such. For example: `kiwix_icon_with_title.png` exists in both `res/drawable` and `res/drawable-night` which means that the image in `res/drawable-night` will be used automagically in night mode. For further reading see [[2]](https://developer.android.com/guide/topics/ui/look-and-feel/darktheme). 
 
 ## Resources
 Following is a list of resources that can and should be used to support a design decision.
@@ -54,5 +53,7 @@ Kiwix does not yet contain content descriptions for its UI elements. This can pr
 See ["Make apps more accessible"](https://developer.android.com/guide/topics/ui/accessibility/apps) for a more detailed guide on accessibility. [Firefox Fenix](https://github.com/mozilla-mobile/shared-docs/blob/master/android/accessibility_guide.md) also has a great concise description of accessibility. A third accessibility resource is googles [list of key steps](https://android-developers.googleblog.com/2012/04/accessibility-are-you-serving-all-your.html) for making sure an Android application is accessible.
 
 [1] https://material.io/design/color/the-color-system.html 2020-06-04
+
+[2] https://developer.android.com/guide/topics/ui/look-and-feel/darktheme 2020-07-02
 
 
