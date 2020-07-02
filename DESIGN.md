@@ -19,13 +19,13 @@ For a guide on how to apply colors to UI, see ["Applying color to UI - Material 
 
 ## Themes
 Kiwix uses themes to apply styles to views. This means that instead of adding a specific color or style to each view in the application, a theme should be set.
-Themes are defined in res/values/themes.xml or res/values-night/themes.xml depending on night/day.
+Themes are defined in `res/values/themes.xml` or `res/values-night/themes.xml` depending on night/day.
 The following steps should be followed to set a color or style of a view.
 1. Define the color or style:
-    * Define the color in core/colors.xml. Use good naming (denim_blue, min_shaft_gray etc..).
-    * Define the style in core/styles.xml. Follow the naming convention. TODO: (what is the naming convention for styles?)
-2. Add the color or style to a specific theme item in themes.xml
-3. Make sure that the color or style works in both day and night mode. If it does not, add a night compatible color/style to values-night/themes.xml.
+    * Define the color in `core/colors.xml`. Use good naming (`denim_blue`, `mine_shaft_gray` etc..).
+    * Define the style in `core/styles.xml`. Follow the naming convention. `TODO:` (what is the naming convention for styles?)
+2. Add the color or style to a specific theme item in `themes.xml`.
+3. Make sure that the color or style works in both day and night mode. If it does not, add a night compatible color/style to `values-night/themes.xml`.
 
 For a video on how to work with themes, styles and colors, see [Developing Themes with Style (Android Dev Summit '19)](https://www.youtube.com/watch?v=Owkf8DhAOSo).
 
