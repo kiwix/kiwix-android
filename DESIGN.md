@@ -31,7 +31,9 @@ For a video on how to work with themes, styles and colors, see [Developing Theme
 
 ## Night mode
 Night mode is a different theme that makes the app easier on the eyes during night. When doing any design, make sure the new design works in night mode.
-Night mode can be activated from the settings menu.
+Night mode can be activated from the settings menu. 
+
+Whenever a resource exists in both `res/*-night` and `res/*` it will be used as such. For example: `kiwix_icon_with_title.png` exists in both `res/drawable` and `res/drawable-night` which means that the image in `res/drawable-night` will be used automagically in night mode. 
 
 ## Resources
 Following is a list of resources that can and should be used to support a design decision.
