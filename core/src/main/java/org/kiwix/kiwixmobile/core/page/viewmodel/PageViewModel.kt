@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
@@ -54,6 +55,14 @@ abstract class PageViewModel(
   protected fun viewStateReducer(): Disposable =
     actions.map { reduce(it, state.value!!) }
       .subscribe(state::postValue, Throwable::printStackTrace)
+
+  protected fun addDisposablesToCompositeDisposable() {
+    compositeDisposable.addAll(
+      viewStateReducer(),
+      pageDao.pages().subscribeOn(Schedulers.io())
+        .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
+    )
+  }
 
   private fun reduce(action: Action, state: PageState): PageState = when (action) {
     Exit -> finishActivity(state)

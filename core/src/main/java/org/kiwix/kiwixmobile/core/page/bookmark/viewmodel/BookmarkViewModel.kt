@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
@@ -45,11 +44,7 @@ class BookmarkViewModel @Inject constructor(
   }
 
   init {
-    compositeDisposable.addAll(
-      viewStateReducer(),
-      pageDao.pages().subscribeOn(Schedulers.io())
-        .subscribe({ actions.offer(Action.UpdatePages(it)) }, Throwable::printStackTrace)
-    )
+    addDisposablesToCompositeDisposable()
   }
 
   override fun updatePagesBasedOnFilter(state: PageState, action: Action.Filter): PageState =
