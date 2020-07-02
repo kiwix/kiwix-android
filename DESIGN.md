@@ -27,7 +27,7 @@ The following steps should be followed to set a color or style of a view.
 2. Add the color or style to a specific theme item in themes.xml
 3. Make sure that the color or style works in both day and night mode. If it does not, add a night compatible color/style to values-night/themes.xml.
 
-For a good video on how to work with themes see link #4 in the resources section below.
+For a good video on how to work with themes see [Developing Themes with Style (Android Dev Summit '19)](https://www.youtube.com/watch?v=Owkf8DhAOSo).
 
 ## Night mode
 Night mode is a different theme that makes the app easier on the eyes during night. When doing any design, make sure the new design works in night mode.
@@ -39,7 +39,6 @@ Following is a list of resources that can and should be used to support a design
 1. [Material Design](https://material.io/) - Googles design guide that should be followed to keep Android applications consistent.
 2. [Design for Android](https://developer.android.com/design) - Another design guide by Google, this one is specifically for Android while Material Design is more general.
 3. [Figma](https://www.figma.com) - A tool that can be used to mock design ideas.
-4. [Developing Themes with Style (Android Dev Summit '19)](https://www.youtube.com/watch?v=Owkf8DhAOSo)
 
 ## Accessibility
 Accessibility is an important part of Android applications. Especially applications that are as widely used as Kiwix. As such, accessibility should be part of design decisions. This can include choices such as:
