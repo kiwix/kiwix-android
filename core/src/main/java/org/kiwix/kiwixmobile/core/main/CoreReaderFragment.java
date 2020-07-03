@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -36,7 +36,9 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,10 +54,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
@@ -69,6 +72,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import com.google.android.material.appbar.AppBarLayout;
@@ -94,16 +98,16 @@ import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
-import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.base.BaseFragment;
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
-import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem;
+import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
@@ -113,18 +117,19 @@ import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
 import static org.kiwix.kiwixmobile.core.page.history.HistoryActivityKt.USER_CLEARED_HISTORY;
-import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection;
-import static org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener;
+import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
@@ -151,16 +156,15 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
-public abstract class CoreMainActivity extends BaseActivity
+public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
   MainContract.View,
-  MainMenu.MenuClickListener {
-
+  MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
   public static final String HOME_URL = "file:///android_asset/home.html";
+  private static final int CORE_READER_FRAGMENT = 1;
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
-  @BindView(R2.id.activity_main_root)
-  ConstraintLayout root;
+
   @BindView(R2.id.toolbar)
   Toolbar toolbar;
   @BindView(R2.id.activity_main_back_to_top_fab)
@@ -171,13 +175,13 @@ public abstract class CoreMainActivity extends BaseActivity
   Button pauseTTSButton;
   @BindView(R2.id.activity_main_tts_controls)
   Group TTSControls;
-  @BindView(R2.id.activity_main_app_bar)
+  @BindView(R2.id.fragment_main_app_bar)
   AppBarLayout toolbarContainer;
-  @BindView(R2.id.activity_main_progress_view)
+  @BindView(R2.id.main_fragment_progress_view)
   ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
-  @BindView(R2.id.activity_main_drawer_layout)
+  @BindView(R2.id.new_navigation_fragment_main_drawer_layout)
   protected DrawerLayout drawerLayout;
   @BindView(R2.id.activity_main_nav_view)
   NavigationView tableDrawerRightContainer;
@@ -202,10 +206,14 @@ public abstract class CoreMainActivity extends BaseActivity
   @BindView(R2.id.fullscreen_video_container)
   ViewGroup videoView;
 
+  View root;
+
   @Inject
   protected MainContract.Presenter presenter;
   @Inject
   StorageObserver storageObserver;
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   protected ZimReaderContainer zimReaderContainer;
   @Inject
@@ -231,7 +239,7 @@ public abstract class CoreMainActivity extends BaseActivity
       backToTopButton.hide();
     }
   };
-  private List<DocumentSection> documentSections;
+  private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
   private boolean wasHideToolbar = true;
   private boolean isHideToolbar = true;
@@ -285,22 +293,22 @@ public abstract class CoreMainActivity extends BaseActivity
   private Disposable bookmarkingDisposable;
   private Boolean isBookmarked;
 
-  @Override
-  public void onActionModeStarted(ActionMode mode) {
+  @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
+    @NotNull AppCompatActivity activity) {
     if (actionMode == null) {
       actionMode = mode;
       Menu menu = mode.getMenu();
       // Inflate custom menu icon.
-      getMenuInflater().inflate(R.menu.menu_webview_action, menu);
+      getActivity().getMenuInflater().inflate(R.menu.menu_webview_action, menu);
       configureWebViewSelectionHandler(menu);
     }
-    super.onActionModeStarted(mode);
+    return Super.ShouldCall;
   }
 
-  @Override
-  public void onActionModeFinished(ActionMode mode) {
-    actionMode = null;
-    super.onActionModeFinished(mode);
+  @NotNull @Override public Super onActionModeFinished(@NotNull ActionMode actionMode,
+    @NotNull AppCompatActivity activity) {
+    this.actionMode = null;
+    return Super.ShouldCall;
   }
 
   protected void configureWebViewSelectionHandler(Menu menu) {
@@ -316,18 +324,25 @@ public abstract class CoreMainActivity extends BaseActivity
     }
   }
 
-  @SuppressLint("ClickableViewAccessibility")
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    presenter.attachView(this);
-    new WebView(this).destroy(); // Workaround for buggy webViews see #710
-    handleLocaleCheck();
-    setContentView(R.layout.activity_main);
-    setSupportActionBar(toolbar);
-    actionBar = getSupportActionBar();
+  @SuppressLint("ClickableViewAccessibility") @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    setHasOptionsMenu(true);
+  }
 
-    toolbar.setOnTouchListener(new OnSwipeTouchListener(this) {
+  @SuppressLint("ClickableViewAccessibility")
+  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
+    @Nullable ViewGroup container,
+    @Nullable Bundle savedInstanceState) {
+    root = inflater.inflate(R.layout.fragment_main, container, false);
+    ButterKnife.bind(this, root);
+    AppCompatActivity activity = (AppCompatActivity) getActivity();
+    presenter.attachView(this);
+    new WebView(activity).destroy(); // Workaround for buggy webViews see #710
+    handleLocaleCheck();
+    activity.setSupportActionBar(toolbar);
+    actionBar = activity.getSupportActionBar();
+    toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override
       @SuppressLint("SyntheticAccessor")
@@ -378,7 +393,7 @@ public abstract class CoreMainActivity extends BaseActivity
     setTableDrawerInfo();
     setTabListener();
 
-    compatCallback = new CompatFindActionModeCallback(this);
+    compatCallback = new CompatFindActionModeCallback(activity);
     setUpTTS();
 
     setupDocumentParser();
@@ -386,7 +401,7 @@ public abstract class CoreMainActivity extends BaseActivity
     loadPrefs();
     updateTitle();
 
-    handleIntentExtras(getIntent());
+    handleIntentExtras(getActivity().getIntent());
 
     wasHideToolbar = isHideToolbar;
     booksAdapter = new BooksOnDiskAdapter(
@@ -407,8 +422,9 @@ public abstract class CoreMainActivity extends BaseActivity
     // Only check intent on first start of activity. Otherwise the intents will enter infinite loops
     // when "Don't keep activities" is on.
     if (savedInstanceState == null) {
-      handleIntentActions(getIntent());
+      handleIntentActions(getActivity().getIntent());
     }
+    return root;
   }
 
   //End of onCreate
@@ -447,15 +463,16 @@ public abstract class CoreMainActivity extends BaseActivity
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
-      public void sectionsLoaded(String title, List<DocumentSection> sections) {
-        for (DocumentSection section : sections) {
+      public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
+        for (TableDrawerAdapter.DocumentSection section : sections) {
           if (section.title.contains("REPLACE_")) {
-            section.title = getResourceString(getApplicationContext(), section.title);
+            section.title = getResourceString(getActivity().getApplicationContext(), section.title);
           }
         }
         documentSections.addAll(sections);
         if (title.contains("REPLACE_")) {
-          tableDrawerAdapter.setTitle(getResourceString(getApplicationContext(), title));
+          tableDrawerAdapter.setTitle(
+            getResourceString(getActivity().getApplicationContext(), title));
         } else {
           tableDrawerAdapter.setTitle(title);
         }
@@ -490,14 +507,14 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void setTableDrawerInfo() {
-    tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
+    tableDrawerRight.setLayoutManager(new LinearLayoutManager(getActivity()));
     tableDrawerAdapter = setupTableDrawerAdapter();
     tableDrawerRight.setAdapter(tableDrawerAdapter);
     tableDrawerAdapter.notifyDataSetChanged();
   }
 
   private void setupTabsAdapter() {
-    tabsAdapter = new TabsAdapter(this, webViewList, painter);
+    tabsAdapter = new TabsAdapter((AppCompatActivity) getActivity(), webViewList, painter);
     tabsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
       @Override
       public void onChanged() {
@@ -509,13 +526,13 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void addFileReader() {
-    documentParserJs = new FileReader().readFile("js/documentParser.js", this);
+    documentParserJs = new FileReader().readFile("js/documentParser.js", getActivity());
     documentSections = new ArrayList<>();
   }
 
   private TableDrawerAdapter setupTableDrawerAdapter() {
     TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
-    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
+    tableDrawerAdapter.setTableClickListener(new TableDrawerAdapter.TableClickListener() {
       @Override
       public void onHeaderClick(View view) {
         getCurrentWebView().setScrollY(0);
@@ -536,7 +553,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private void showTabSwitcher() {
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeAsUpIndicator(
-      ContextCompat.getDrawable(this, R.drawable.ic_round_add_white_36dp));
+      ContextCompat.getDrawable(getActivity(), R.drawable.ic_round_add_white_36dp));
     actionBar.setDisplayShowTitleEnabled(false);
 
     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -566,10 +583,11 @@ public abstract class CoreMainActivity extends BaseActivity
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
       closeAllTabsButton.setImageDrawable(
-        ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
+        ContextCompat.getDrawable(getActivity(), R.drawable.ic_close_black_24dp));
       if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
         tabSwitcherRoot.setVisibility(View.GONE);
         startAnimation(tabSwitcherRoot, R.anim.slide_up);
+        progressBar.setVisibility(View.VISIBLE);
         contentFrame.setVisibility(View.VISIBLE);
       }
       selectTab(currentWebViewIndex);
@@ -620,7 +638,7 @@ public abstract class CoreMainActivity extends BaseActivity
     drawerLayout.openDrawer(GravityCompat.END);
   }
 
-  @Override public void onBackPressed() {
+  @NotNull @Override public Super onBackPressed(@NotNull AppCompatActivity activity) {
     if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
@@ -637,20 +655,21 @@ public abstract class CoreMainActivity extends BaseActivity
     } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
       showHomePage();
     } else {
-      super.onBackPressed();
+      return Super.ShouldCall;
     }
+    return Super.ShouldNotCall;
   }
 
   private void checkForRateDialog() {
     isFirstRun = sharedPreferenceUtil.getPrefIsFirstRun();
-    visitCounterPref = new RateAppCounter(this);
+    visitCounterPref = new RateAppCounter(getActivity());
     tempVisitCount = visitCounterPref.getCount();
     ++tempVisitCount;
     visitCounterPref.setCount(tempVisitCount);
 
     if (tempVisitCount >= 10
       && !visitCounterPref.getNoThanksState()
-      && NetworkUtils.isNetworkAvailable(this) && !BuildConfig.DEBUG) {
+      && NetworkUtils.isNetworkAvailable(getActivity()) && !BuildConfig.DEBUG) {
       showRateDialog();
     }
   }
@@ -677,9 +696,9 @@ public abstract class CoreMainActivity extends BaseActivity
   protected abstract int getIconResId();
 
   private void goToRateApp() {
-    Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getPackageName());
+    Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getActivity().getPackageName());
     Uri kiwixBrowserMarketUri =
-      Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
+      Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName());
 
     Intent goToMarket = new Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri);
 
@@ -708,11 +727,11 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void setUpTTS() {
-    tts = new KiwixTextToSpeech(this, () -> {
+    tts = new KiwixTextToSpeech(getActivity(), () -> {
     }, new KiwixTextToSpeech.OnSpeakingListener() {
       @Override
       public void onSpeakingStarted() {
-        runOnUiThread(() -> {
+        getActivity().runOnUiThread(() -> {
           if (mainMenu != null) {
             mainMenu.onTextToSpeechStartedTalking();
           }
@@ -722,7 +741,7 @@ public abstract class CoreMainActivity extends BaseActivity
 
       @Override
       public void onSpeakingEnded() {
-        runOnUiThread(() -> {
+        getActivity().runOnUiThread(() -> {
           if (mainMenu != null) {
             mainMenu.onTextToSpeechStoppedTalking();
           }
@@ -771,12 +790,12 @@ public abstract class CoreMainActivity extends BaseActivity
 
   // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
   private void handleLocaleCheck() {
-    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
-    new LanguageUtils(this).changeFont(getLayoutInflater(), sharedPreferenceUtil);
+    LanguageUtils.handleLocaleChange(getActivity(), sharedPreferenceUtil);
+    new LanguageUtils(getActivity()).changeFont(getLayoutInflater(), sharedPreferenceUtil);
   }
 
-  @Override
-  protected void onDestroy() {
+  @Override public void onDestroyView() {
+    super.onDestroyView();
     safeDispose();
     presenter.detachView();
     if (downloadBookButton != null) {
@@ -788,7 +807,7 @@ public abstract class CoreMainActivity extends BaseActivity
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
     // TODO create a base Activity class that class this.
-    FileUtils.deleteCachedFiles(this);
+    FileUtils.deleteCachedFiles(getActivity());
     tts.shutdown();
   }
 
@@ -807,15 +826,17 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private KiwixWebView getWebView(String url) {
-    AttributeSet attrs = StyleUtils.getAttributes(this, R.xml.webview);
+    AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
     KiwixWebView webView;
     if (!isHideToolbar) {
       webView = new ToolbarScrollingKiwixWebView(
-        this, this, attrs, root, videoView, createWebClient(this, zimReaderContainer),
+        getActivity(), this, attrs, (ViewGroup) root, videoView,
+        createWebClient(this, zimReaderContainer),
         toolbarContainer, bottomToolbar, sharedPreferenceUtil);
     } else {
       webView = new ToolbarStaticKiwixWebView(
-        this, this, attrs, root, videoView, createWebClient(this, zimReaderContainer),
+        getActivity(), this, attrs, (ViewGroup) root, videoView,
+        createWebClient(this, zimReaderContainer),
         sharedPreferenceUtil);
     }
     loadUrl(url, webView);
@@ -871,6 +892,7 @@ public abstract class CoreMainActivity extends BaseActivity
   protected void selectTab(int position) {
     currentWebViewIndex = position;
     contentFrame.removeAllViews();
+
     KiwixWebView webView = safelyGetWebView(position);
     if (webView.getParent() != null) {
       ((ViewGroup) webView.getParent()).removeView(webView);
@@ -898,7 +920,7 @@ public abstract class CoreMainActivity extends BaseActivity
         : position;
   }
 
-  protected KiwixWebView getCurrentWebView() {
+  @NotNull @Override public KiwixWebView getCurrentWebView() {
     if (webViewList.size() == 0) return newMainPageTab();
     if (currentWebViewIndex < webViewList.size()) {
       return webViewList.get(currentWebViewIndex);
@@ -985,8 +1007,10 @@ public abstract class CoreMainActivity extends BaseActivity
 
   /** Creates the full screen AddNoteDialog, which is a DialogFragment */
   private void showAddNoteDialog() {
-    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment previousInstance = getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
+    FragmentTransaction fragmentTransaction =
+      getActivity().getSupportFragmentManager().beginTransaction();
+    Fragment previousInstance =
+      getActivity().getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
 
     // To prevent multiple instances of the DialogFragment
     if (previousInstance == null) {
@@ -1002,7 +1026,7 @@ public abstract class CoreMainActivity extends BaseActivity
   private boolean requestExternalStorageWritePermissionForNotes() {
     if (Build.VERSION.SDK_INT >= 23) { // For Marshmallow & higher API levels
 
-      if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+      if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         == PERMISSION_GRANTED) {
         return true;
       } else {
@@ -1011,7 +1035,8 @@ public abstract class CoreMainActivity extends BaseActivity
            *  1) User has previously checked on "Don't ask me again", and/or
            *  2) Permission has been disabled on device
            */
-          ContextExtensionsKt.toast(this, R.string.ext_storage_permission_rationale_add_note,
+          ContextExtensionsKt.toast(getActivity(),
+            R.string.ext_storage_permission_rationale_add_note,
             Toast.LENGTH_LONG);
         }
 
@@ -1029,7 +1054,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @OnLongClick(R2.id.bottom_toolbar_bookmark)
   boolean goToBookmarks() {
     saveTabStates();
-    Intent intentBookmarks = new Intent(this, BookmarksActivity.class);
+    Intent intentBookmarks = new Intent(getActivity(), BookmarksActivity.class);
     startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
     return true;
   }
@@ -1040,8 +1065,8 @@ public abstract class CoreMainActivity extends BaseActivity
     exitFullscreenButton.setVisibility(View.VISIBLE);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
-    getWindow().addFlags(fullScreenFlag);
-    getWindow().clearFlags(classicScreenFlag);
+    getActivity().getWindow().addFlags(fullScreenFlag);
+    getActivity().getWindow().clearFlags(classicScreenFlag);
 
     if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
       contentFrame.setPadding(0, 0, 0, 0);
@@ -1061,18 +1086,18 @@ public abstract class CoreMainActivity extends BaseActivity
 
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
-    getWindow().clearFlags(fullScreenFlag);
-    getWindow().addFlags(classicScreenFlag);
+    getActivity().getWindow().clearFlags(fullScreenFlag);
+    getActivity().getWindow().addFlags(classicScreenFlag);
     getCurrentWebView().requestLayout();
     if (!isHideToolbar) {
-      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarHeight(this));
+      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarHeight(getActivity()));
     }
     sharedPreferenceUtil.putPrefFullScreen(false);
   }
 
   @Override
   public void openExternalUrl(Intent intent) {
-    if (intent.resolveActivity(getPackageManager()) != null) {
+    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
       // Show popup with warning that this url is external and could lead to additional costs
       // or may event not work when the user is offline.
       if (intent.hasExtra(EXTRA_EXTERNAL_LINK)
@@ -1084,7 +1109,7 @@ public abstract class CoreMainActivity extends BaseActivity
       }
     } else {
       String error = getString(R.string.no_reader_application_installed);
-      Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+      Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
     }
   }
 
@@ -1112,7 +1137,7 @@ public abstract class CoreMainActivity extends BaseActivity
         updateTitle();
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
-        ContextExtensionsKt.toast(this, R.string.error_file_not_found, Toast.LENGTH_LONG);
+        ContextExtensionsKt.toast(getActivity(), R.string.error_file_not_found, Toast.LENGTH_LONG);
         showHomePage();
       }
     } else {
@@ -1122,12 +1147,12 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private boolean hasPermission(String permission) {
-    return ContextCompat.checkSelfPermission(this, permission) == PERMISSION_GRANTED;
+    return ContextCompat.checkSelfPermission(getActivity(), permission) == PERMISSION_GRANTED;
   }
 
   private void requestExternalStoragePermission() {
     ActivityCompat.requestPermissions(
-      this,
+      getActivity(),
       new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
       REQUEST_STORAGE_PERMISSION
     );
@@ -1163,7 +1188,7 @@ public abstract class CoreMainActivity extends BaseActivity
         );
       updateUrlProcessor();
     } else {
-      ContextExtensionsKt.toast(this, R.string.error_file_invalid, Toast.LENGTH_LONG);
+      ContextExtensionsKt.toast(getActivity(), R.string.error_file_invalid, Toast.LENGTH_LONG);
       showHomePage();
     }
   }
@@ -1193,7 +1218,7 @@ public abstract class CoreMainActivity extends BaseActivity
             .setAction(R.string.menu_settings, view -> {
               Intent intent = new Intent();
               intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-              Uri uri = Uri.fromParts("package", getPackageName(), null);
+              Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
               intent.setData(uri);
               startActivity(intent);
             }).show();
@@ -1207,7 +1232,7 @@ public abstract class CoreMainActivity extends BaseActivity
           // Successfully granted permission, so opening the note keeper
           showAddNoteDialog();
         } else {
-          Toast.makeText(getApplicationContext(),
+          Toast.makeText(getActivity().getApplicationContext(),
             getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG)
             .show();
         }
@@ -1269,7 +1294,8 @@ public abstract class CoreMainActivity extends BaseActivity
             getResources().getColor(R.color.white)
           );
         } else {
-          ContextExtensionsKt.toast(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT);
+          ContextExtensionsKt.toast(getActivity(), R.string.unable_to_add_to_bookmarks,
+            Toast.LENGTH_SHORT);
         }
       }
     }
@@ -1319,14 +1345,14 @@ public abstract class CoreMainActivity extends BaseActivity
   private void goToSearch(boolean isVoice) {
     final String zimFile = zimReaderContainer.getZimCanonicalPath();
     saveTabStates();
-    Intent i = new Intent(this, SearchActivity.class);
+    Intent i = new Intent(getActivity(), SearchActivity.class);
     i.putExtra(EXTRA_ZIM_FILE, zimFile);
     i.putExtra(EXTRA_IS_WIDGET_VOICE, isVoice);
     startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
   }
 
   private void handleIntentActions(Intent intent) {
-    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
+    Log.d(TAG_KIWIX, "action" + getActivity().getIntent().getAction());
     if (intent.getAction() != null) {
       if (zimReaderContainer.getId() != null) {
         startIntentBasedOnAction(intent);
@@ -1356,7 +1382,7 @@ public abstract class CoreMainActivity extends BaseActivity
       case Intent.ACTION_VIEW:
         if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
           saveTabStates();
-          Intent i = new Intent(this, SearchActivity.class);
+          Intent i = new Intent(getActivity(), SearchActivity.class);
           if (intent.getData() != null) {
             i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
           }
@@ -1368,18 +1394,18 @@ public abstract class CoreMainActivity extends BaseActivity
 
   private void goToSearchWithText(Intent intent) {
     saveTabStates();
-    Intent i = new Intent(this, SearchActivity.class);
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+    Intent i = new Intent(getActivity(), SearchActivity.class);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
     }
     startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
   }
 
-  @Override
-  protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
+  @NotNull @Override public Super onNewIntent(@NotNull Intent intent,
+    @NotNull AppCompatActivity activity) {
     handleNotificationIntent(intent);
     handleIntentActions(intent);
+    return Super.ShouldCall;
   }
 
   private void contentsDrawerHint() {
@@ -1473,7 +1499,7 @@ public abstract class CoreMainActivity extends BaseActivity
             KiwixWebView webView = getCurrentWebView();
             compatCallback.setActive();
             compatCallback.setWebView(webView);
-            startSupportActionMode(compatCallback);
+            ((AppCompatActivity) getActivity()).startSupportActionMode(compatCallback);
             compatCallback.setText(title);
             compatCallback.findAll();
             compatCallback.showSoftInput();
@@ -1486,13 +1512,13 @@ public abstract class CoreMainActivity extends BaseActivity
           Log.w(TAG_KIWIX, "Search cancelled or exited");
         } else {
           Log.w(TAG_KIWIX, "Unhandled search failure");
-          Toast.makeText(this, R.string.search_error, Toast.LENGTH_SHORT).show();
+          Toast.makeText(getActivity(), R.string.search_error, Toast.LENGTH_SHORT).show();
         }
         break;
       case REQUEST_PREFERENCES:
         hideTabSwitcher();
         if (resultCode == RESULT_RESTART) {
-          recreate();
+          getActivity().recreate();
         }
         if (resultCode == RESULT_HISTORY_CLEARED) {
           webViewList.clear();
@@ -1520,7 +1546,8 @@ public abstract class CoreMainActivity extends BaseActivity
             if (pathExtra != null) {
               final File file = new File(pathExtra);
               if (!file.exists()) {
-                Toast.makeText(this, R.string.error_file_not_found, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.error_file_not_found, Toast.LENGTH_LONG)
+                  .show();
                 return;
               }
               openZimFile(file);
@@ -1540,10 +1567,10 @@ public abstract class CoreMainActivity extends BaseActivity
     super.onActivityResult(requestCode, resultCode, data);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
+    menu.clear();
     mainMenu = createMainMenu(menu);
-    return true;
   }
 
   @NotNull protected MainMenu createMainMenu(Menu menu) {
@@ -1588,7 +1615,7 @@ public abstract class CoreMainActivity extends BaseActivity
   }
 
   private void saveTabStates() {
-    SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
+    SharedPreferences settings = getActivity().getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     SharedPreferences.Editor editor = settings.edit();
 
     JSONArray urls = new JSONArray();
@@ -1635,8 +1662,8 @@ public abstract class CoreMainActivity extends BaseActivity
     if (hasValidFileAndUrl(url, zimFileReader)) {
       final long timeStamp = System.currentTimeMillis();
       SimpleDateFormat sdf =
-        new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
-      HistoryListItem.HistoryItem history = new HistoryListItem.HistoryItem(
+        new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
+      HistoryItem history = new HistoryItem(
         getCurrentWebView().getUrl(),
         getCurrentWebView().getTitle(),
         sdf.format(new Date(timeStamp)),
@@ -1657,7 +1684,7 @@ public abstract class CoreMainActivity extends BaseActivity
   @Override
   public void webViewFailedLoading(String url) {
     String error = String.format(getString(R.string.error_article_url_not_found), url);
-    Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
   }
 
   @Override
