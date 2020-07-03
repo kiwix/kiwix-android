@@ -21,8 +21,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import org.kiwix.kiwixmobile.core.utils.DimenUtils;
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 /**
  * {@link KiwixWebView} which keeps the app bar fixed.
@@ -30,28 +28,34 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 @SuppressLint("ViewConstructor")
 public class ToolbarStaticKiwixWebView extends KiwixWebView {
-
-  private final int heightDifference;
-  private final SharedPreferenceUtil sharedPreferenceUtil;
-
-  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback,
-    AttributeSet attrs, ViewGroup nonVideoView, ViewGroup videoView,
-    CoreWebViewClient webViewClient,
-    SharedPreferenceUtil sharedPreferenceUtil) {
+  public ToolbarStaticKiwixWebView(Context context,
+    WebViewCallback callback, AttributeSet attrs, ViewGroup nonVideoView,
+    ViewGroup videoView,
+    CoreWebViewClient webViewClient) {
     super(context, callback, attrs, nonVideoView, videoView, webViewClient);
-    heightDifference = DimenUtils.getToolbarHeight(context);
-    this.sharedPreferenceUtil = sharedPreferenceUtil;
-    setTranslationY(heightDifference);
   }
 
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    if (sharedPreferenceUtil.getPrefFullScreen()) {
-      setTranslationY(0);
-      super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    } else {
-      setTranslationY(heightDifference);
-      super.onMeasure(widthMeasureSpec, heightMeasureSpec - heightDifference);
-    }
-  }
+  //private final int heightDifference;
+  //private final SharedPreferenceUtil sharedPreferenceUtil;
+  //
+  //public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback,
+  //  AttributeSet attrs, ViewGroup nonVideoView, ViewGroup videoView,
+  //  CoreWebViewClient webViewClient,
+  //  SharedPreferenceUtil sharedPreferenceUtil) {
+  //  super(context, callback, attrs, nonVideoView, videoView, webViewClient);
+  //  heightDifference = DimenUtils.getToolbarHeight(context);
+  //  this.sharedPreferenceUtil = sharedPreferenceUtil;
+  //  setTranslationY(heightDifference);
+  //}
+  //
+  //@Override
+  //protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+  //  if (sharedPreferenceUtil.getPrefFullScreen()) {
+  //    setTranslationY(0);
+  //    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+  //  } else {
+  //    setTranslationY(heightDifference);
+  //    super.onMeasure(widthMeasureSpec, heightMeasureSpec - heightDifference);
+  //  }
+  //}
 }

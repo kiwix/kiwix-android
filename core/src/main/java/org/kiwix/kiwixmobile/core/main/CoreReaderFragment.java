@@ -66,6 +66,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -208,6 +209,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   Button noOpenBookButton;
   @BindView(R2.id.no_open_book_text)
   TextView noOpenBookText;
+
+  //TODO: REMOVE:
+  @BindView(R2.id.nested_scrolling) NestedScrollView scrollView;
 
   View root;
 
@@ -833,18 +837,8 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private KiwixWebView getWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
-    KiwixWebView webView;
-    if (!isHideToolbar) {
-      webView = new ToolbarScrollingKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
-        createWebClient(this, zimReaderContainer),
-        toolbarContainer, bottomToolbar, sharedPreferenceUtil);
-    } else {
-      webView = new ToolbarStaticKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
-        createWebClient(this, zimReaderContainer),
-        sharedPreferenceUtil);
-    }
+    KiwixWebView webView = new KiwixWebView(getActivity(), this, attrs, (ViewGroup) root, videoView,
+      createWebClient(this, zimReaderContainer));
     loadUrl(url, webView);
     return webView;
   }

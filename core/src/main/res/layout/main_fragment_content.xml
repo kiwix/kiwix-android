@@ -24,17 +24,25 @@
   android:layout_height="match_parent"
   android:animateLayoutChanges="true">
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/fragment_main_app_bar"
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/fragment_main_app_bar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toTopOf="parent">
 
-      <include layout="@layout/layout_toolbar" />
+      <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/KiwixTheme"
+        app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        tools:showIn="@layout/activity_search" />
 
       <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/main_fragment_progress_view"
@@ -47,13 +55,22 @@
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:progress="70" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-  </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-  <FrameLayout
-    android:id="@+id/activity_main_content_frame"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    <androidx.core.widget.NestedScrollView
+      android:id="@+id/nested_scrolling"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:fillViewport="true"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+      <FrameLayout
+        android:id="@+id/activity_main_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    </androidx.core.widget.NestedScrollView>
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
   <ImageButton
     android:id="@+id/activity_main_fullscreen_button"
