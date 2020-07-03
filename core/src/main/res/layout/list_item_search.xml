@@ -22,30 +22,29 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
-  <CheckedTextView
+  <TextView
     android:id="@+id/list_item_search_text"
     android:layout_width="0dp"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:textAppearance="?android:attr/textAppearanceListItem"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:gravity="center_vertical"
     android:background="?android:attr/listChoiceBackgroundIndicator"
+    android:gravity="center_vertical"
     android:paddingStart="8dip"
-    android:paddingEnd="8dip" />
+    android:paddingEnd="8dip"
+    android:textAppearance="?android:attr/textAppearanceListItem"
+    app:layout_constraintEnd_toStartOf="@+id/list_item_search_new_tab_button"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-  <Button
+  <ImageButton
     android:id="@+id/list_item_search_new_tab_button"
-    style="@style/Widget.AppCompat.Button.Borderless"
+    style="?android:attr/borderlessButtonStyle"
     android:layout_width="wrap_content"
     android:layout_height="0dp"
-    android:background="@drawable/ic_open_in_new_24dp"
+    android:adjustViewBounds="true"
     android:contentDescription="@string/search_open_in_new_tab"
-    app:backgroundTint="@android:color/transparent"
-    app:icon="@drawable/ic_open_in_new_24dp"
+    android:scaleType="centerInside"
+    app:srcCompat="@drawable/ic_open_in_new_24dp"
     app:iconGravity="end"
-    app:iconTint="@color/gray"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
