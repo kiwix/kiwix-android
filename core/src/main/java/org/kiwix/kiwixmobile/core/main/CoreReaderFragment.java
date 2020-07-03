@@ -50,7 +50,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.AnimRes;
@@ -78,6 +77,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -188,7 +188,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_content_frame)
   protected FrameLayout contentFrame;
   @BindView(R2.id.bottom_toolbar)
-  protected LinearLayout bottomToolbar;
+  protected BottomAppBar bottomToolbar;
   @BindView(R2.id.bottom_toolbar_bookmark)
   ImageView bottomToolbarBookmark;
   @BindView(R2.id.bottom_toolbar_arrow_back)
