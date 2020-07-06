@@ -14,7 +14,7 @@ import org.gradle.plugin.use.PluginDependencySpec
 object Versions {
   const val androidx_test_espresso: String = "3.2.0"
 
-  const val com_squareup_retrofit2: String = "2.9.0"
+  const val com_squareup_retrofit2: String = "2.5.0" // available: "2.9.0"
 
   const val org_jetbrains_kotlin: String = "1.3.72"
 
@@ -44,7 +44,7 @@ object Versions {
 
   const val javax_annotation_api: String = "1.3.2"
 
-  const val logging_interceptor: String = "3.12.1" // available: "4.7.2"
+  const val logging_interceptor: String = "3.6.0" // available: "4.7.2"
 
   const val ink_page_indicator: String = "1.3.0"
 
@@ -100,7 +100,7 @@ object Versions {
 
   const val ktlint: String = "0.36.0" // available: "0.37.2"
 
-  const val okhttp: String = "3.12.1" // available: "4.7.2"
+  const val okhttp: String = "3.6.0" // available: "4.7.2"
 
   const val rxjava: String = "2.2.19"
 
