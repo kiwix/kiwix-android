@@ -12,7 +12,7 @@ ext {
   set("versionMajor", 3)
   set("versionMinor", 3)
   set("versionPatch", 3)
-} 
+}
 
 fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext["versionPatch"]}"
 
