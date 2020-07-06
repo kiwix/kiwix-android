@@ -247,8 +247,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   };
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
-  private boolean wasHideToolbar = true;
-  private boolean isHideToolbar = true;
   private boolean isOpenNewTabInBackground;
   private boolean isExternalLinkPopup;
   private String documentParserJs;
@@ -389,7 +387,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     checkForRateDialog();
 
-    isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
 
     addFileReader();
     setupTabsAdapter();
@@ -406,7 +403,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     handleIntentExtras(getActivity().getIntent());
 
-    wasHideToolbar = isHideToolbar;
     booksAdapter = new BooksOnDiskAdapter(
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         bookOnDiskItem -> {
@@ -903,10 +899,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     updateUrlProcessor();
     updateTableOfContents();
     updateTitle();
-
-    if (!isHideToolbar && webView instanceof ToolbarScrollingKiwixWebView) {
-      ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
-    }
   }
 
   private KiwixWebView safelyGetWebView(int position) {
@@ -1066,14 +1058,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
     getActivity().getWindow().addFlags(fullScreenFlag);
     getActivity().getWindow().clearFlags(classicScreenFlag);
-
-    if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
-      contentFrame.setPadding(0, 0, 0, 0);
-    }
     getCurrentWebView().requestLayout();
-    if (!isHideToolbar) {
-      this.getCurrentWebView().setTranslationY(0);
-    }
+
     sharedPreferenceUtil.putPrefFullScreen(true);
   }
 
@@ -1088,9 +1074,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     getActivity().getWindow().clearFlags(fullScreenFlag);
     getActivity().getWindow().addFlags(classicScreenFlag);
     getCurrentWebView().requestLayout();
-    if (!isHideToolbar) {
-      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarHeight(getActivity()));
-    }
     sharedPreferenceUtil.putPrefFullScreen(false);
   }
 
@@ -1316,14 +1299,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override
   public void onResume() {
     super.onResume();
-    if (wasHideToolbar != isHideToolbar) {
-      wasHideToolbar = isHideToolbar;
-      for (int i = 0; i < webViewList.size(); i++) {
-        webViewList.set(i, getWebView(webViewList.get(i).getUrl()));
-      }
-      selectTab(currentWebViewIndex);
-      setUpWebViewWithTextToSpeech();
-    }
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
@@ -1341,12 +1316,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       if (!urlIsInvalid()
         && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
         bottomToolbar.setVisibility(View.VISIBLE);
-        if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
-          contentFrame.setPadding(0, 0, 0,
-            (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
-        } else {
-          contentFrame.setPadding(0, 0, 0, 0);
-        }
+        contentFrame.setPadding(0, 0, 0, 0);
       } else {
         bottomToolbar.setVisibility(View.GONE);
         contentFrame.setPadding(0, 0, 0, 0);
@@ -1608,7 +1578,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
-    isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
     isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
 
