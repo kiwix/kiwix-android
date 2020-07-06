@@ -49,6 +49,9 @@
   <string name="save">{{Identical|Save}}</string>
   <string name="go_to_settings">This is used in the start server dialog and leads the user to mobile hotspot settings when pressed</string>
   <string name="no_bookmarks">This means \"there are no bookmarks\"</string>
+  <string name="download">The title of the fragment/place where books are downloaded.</string>
+  <string name="reader">The title of the fragment/place where books are read.</string>
+  <string name="experimental_navigation">This is a menu item that opens the applicaiton in a new experimental mode that uses different navigation.</string>
   <string name="delete_history">Ask if the user wants to delete all history items.</string>
   <string name="delete_selected_history">Ask if the user wants to delete a number of selected history items.</string>
   <string name="delete_bookmarks">Ask if the user wants to delete all bookmarks.</string>
@@ -56,5 +59,4 @@
   <string name="on">This is used in the settings screen to turn on the night mode.</string>
   <string name="off">This is used in the settings screen to turn off the night mode.</string>
   <string name="auto">This is used in the settings screen to turn the night mode on or off automatically depending upon the system settings of the phone.</string>
-  <string name="experimental_navigation">This is a menu item that opens the applicaiton in a new experimental mode that uses different navigation.</string>
 </resources>

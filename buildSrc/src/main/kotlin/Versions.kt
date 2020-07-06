@@ -1,4 +1,3 @@
-import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -108,6 +107,8 @@ object Versions {
 
   const val junit: String = "1.1.1"
 
+  const val navigation: String = "2.3.0"
+
   /**
    * Current version: "6.1.1"
    * See issue 19: How to update Gradle itself?
@@ -122,4 +123,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
   inline get() =
-      id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+    id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)

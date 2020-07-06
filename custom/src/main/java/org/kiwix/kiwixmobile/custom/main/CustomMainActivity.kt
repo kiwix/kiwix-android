@@ -34,10 +34,12 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+
     if (savedInstanceState != null) {
       return
     }
     supportFragmentManager.beginTransaction()
-      .add(R.id.fragment_custom_app_container, CustomReaderFragment()).commit()
+      .add(R.id.fragment_containter, CustomReaderFragment()).commit()
   }
 }

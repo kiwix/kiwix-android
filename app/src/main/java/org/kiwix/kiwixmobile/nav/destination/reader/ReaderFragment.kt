@@ -16,19 +16,24 @@
  *
  */
 
-package org.kiwix.kiwixmobile.main
+package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.navigation.fragment.navArgs
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -46,25 +51,37 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.main.KiwixWebViewClient
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
-class KiwixReaderFragment : CoreReaderFragment() {
-
+class ReaderFragment : CoreReaderFragment() {
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.kiwixActivityComponent.inject(this)
   }
 
+  private val args: ReaderFragmentArgs by navArgs()
+
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     manageExternalLaunchAndRestoringViewState()
+    val uri = args.zimFileUri
+
+    if (uri.isNotEmpty()) {
+      openZimFile(Uri.parse(uri).toFile())
+    }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
+    super.onCreateOptionsMenu(menu, menuInflater)
+    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
   }
 
   override fun onCreateOptionsMenu(
     menu: Menu,
     activity: AppCompatActivity
-  ): BaseFragmentActivityExtensions.Super = BaseFragmentActivityExtensions.Super.ShouldCall
+  ): Super = ShouldCall
 
   override fun onResume() {
     super.onResume()
@@ -73,13 +90,20 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
+  override fun onBackPressed(activity: AppCompatActivity): Super {
+    if (super.onBackPressed(activity) == ShouldCall) {
+      getActivity()?.finish()
+    }
+    return ShouldNotCall
+  }
+
   override fun createWebClient(
     webViewCallback: WebViewCallback,
     zimReaderContainer: ZimReaderContainer
   ) = KiwixWebViewClient(webViewCallback, zimReaderContainer)
 
   override fun onNewNavigationMenuClicked() {
-    startActivity(Intent(activity, KiwixNewNavigationActivity::class.java))
+    // do nothing
   }
 
   private fun manageExternalLaunchAndRestoringViewState() {
@@ -181,13 +205,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun onNewIntent(
     intent: Intent,
     activity: AppCompatActivity
-  ): BaseFragmentActivityExtensions.Super {
+  ): Super {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
       if ("file" == it.scheme) openZimFile(it.toFile())
       else activity.toast(R.string.cannot_open_file)
     }
-    return BaseFragmentActivityExtensions.Super.ShouldCall
+    return ShouldCall
   }
 
   override fun onHostBooksMenuClicked() {

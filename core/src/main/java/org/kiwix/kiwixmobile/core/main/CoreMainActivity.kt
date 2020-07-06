@@ -28,7 +28,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.Shou
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_new_navigation)
+    setContentView(R.layout.activity_main)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,7 +77,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   override fun getCurrentWebView(): KiwixWebView? {
-    return supportFragmentManager.fragments.filterIsInstance<WebViewProvider>().first()
-      .getCurrentWebView()
+    return supportFragmentManager.fragments.filterIsInstance<WebViewProvider>().firstOrNull()
+      ?.getCurrentWebView()
   }
 }
