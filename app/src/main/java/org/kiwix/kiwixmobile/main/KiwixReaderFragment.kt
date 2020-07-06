@@ -107,8 +107,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
           TAG_KIWIX,
           "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
         )
-        openZimFile(File(zimFile))
-        // restoreTabStates()
+        restoreTabStates()
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {

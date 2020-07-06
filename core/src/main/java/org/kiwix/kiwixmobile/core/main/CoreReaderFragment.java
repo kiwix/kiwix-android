@@ -65,7 +65,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -346,17 +345,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     handleLocaleCheck();
     activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      //activity.findViewById(R.id.coordinatorMain)
-      //contentFrame
-      //  .setOnScrollChangeListener(
-      //    (view, i, i1, i2, i3) -> System.out.println("scrooolllling"));
-      //scrollView.setOnScrollChangeListener(
-      //  (View.OnScrollChangeListener) (view, i, i1, i2, i3) -> {
-      //    getCurrentWebView().onScrollChanged(i, i1, i2, i3);
-      //    System.out.println(view);
-      //  });
-    }
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override
