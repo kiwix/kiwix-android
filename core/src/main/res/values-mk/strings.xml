@@ -74,6 +74,7 @@
   <string name="all_history_cleared">Сета историја е исчистена</string>
   <string name="pref_clear_all_bookmarks_title">Исчисти обележувачи</string>
   <string name="all_bookmarks_cleared">Сите обележувачи се исчистени</string>
+  <string name="selected_bookmarks_cleared">Избраните обележувачи се исчистени</string>
   <string name="clear_all_history_dialog_title">Да ја исчистам сета историја</string>
   <string name="share">Сподели</string>
   <string name="selected_file_cab_app_chooser_title">Сподели ZIM-податотеки со:</string>
@@ -256,8 +257,10 @@
   <string name="no_bookmarks">Нема обележувачи</string>
   <string name="no_history">Нема историја</string>
   <string name="device_default">Основно на уредот</string>
-  <string name="delete_history" fuzzy="true">Да ја избришам историјата?</string>
-  <string name="delete_bookmarks" fuzzy="true">Да ги избришам обележувачите?</string>
+  <string name="delete_history">Да ја избришам сета историја?</string>
+  <string name="delete_selected_history">Да ја избришам избраната историја?</string>
+  <string name="delete_bookmarks">Да ги избришам сите обележувачи?</string>
+  <string name="delete_selected_bookmarks">Да ги избришам избраните обележувачи?</string>
   <string name="on">Вкл.</string>
   <string name="off">Искл.</string>
   <string name="auto">Авто</string>
