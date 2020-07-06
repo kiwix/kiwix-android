@@ -430,7 +430,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED), mainMenu.isInTabSwitcher());
+      searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED),
+        isInTabSwitcher());
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -442,6 +443,10 @@ public abstract class CoreReaderFragment extends BaseFragment
       loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
     }
     handleNotificationIntent(intent);
+  }
+
+  private boolean isInTabSwitcher() {
+    return mainMenu != null && mainMenu.isInTabSwitcher();
   }
 
   private void handleNotificationIntent(Intent intent) {
@@ -461,20 +466,23 @@ public abstract class CoreReaderFragment extends BaseFragment
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
-        for (TableDrawerAdapter.DocumentSection section : sections) {
-          if (section.title.contains("REPLACE_")) {
-            section.title = getResourceString(getActivity().getApplicationContext(), section.title);
+        if (isAdded()) {
+          for (TableDrawerAdapter.DocumentSection section : sections) {
+            if (section.title.contains("REPLACE_")) {
+              section.title =
+                getResourceString(getActivity().getApplicationContext(), section.title);
+            }
           }
+          documentSections.addAll(sections);
+          if (title.contains("REPLACE_")) {
+            tableDrawerAdapter.setTitle(
+              getResourceString(getActivity().getApplicationContext(), title));
+          } else {
+            tableDrawerAdapter.setTitle(title);
+          }
+          tableDrawerAdapter.setSections(documentSections);
+          tableDrawerAdapter.notifyDataSetChanged();
         }
-        documentSections.addAll(sections);
-        if (title.contains("REPLACE_")) {
-          tableDrawerAdapter.setTitle(
-            getResourceString(getActivity().getApplicationContext(), title));
-        } else {
-          tableDrawerAdapter.setTitle(title);
-        }
-        tableDrawerAdapter.setSections(documentSections);
-        tableDrawerAdapter.notifyDataSetChanged();
       }
 
       @Override
@@ -706,13 +714,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     try {
       startActivity(goToMarket);
     } catch (ActivityNotFoundException e) {
-      startActivity(new Intent(Intent.ACTION_VIEW,
-        kiwixBrowserMarketUri));
+      startActivity(new Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri));
     }
   }
 
   private void updateTitle() {
-    actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()));
+    if (isAdded()) {
+      actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()));
+    }
   }
 
   private String getValidTitle(String zimFileTitle) {
@@ -1485,7 +1494,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     switch (requestCode) {
       case MainMenuKt.REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
-          boolean wasFromTabSwitcher = mainMenu != null && mainMenu.isInTabSwitcher();
+          boolean wasFromTabSwitcher = isInTabSwitcher();
           hideTabSwitcher();
           String title =
             data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
