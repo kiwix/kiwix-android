@@ -211,7 +211,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   TextView noOpenBookText;
 
   //TODO: REMOVE:
-  @BindView(R2.id.nested_scrolling) NestedScrollView scrollView;
+  //@BindView(R2.id.nested_scrolling) NestedScrollView scrollView;
 
   View root;
 
@@ -346,6 +346,17 @@ public abstract class CoreReaderFragment extends BaseFragment
     handleLocaleCheck();
     activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      //activity.findViewById(R.id.coordinatorMain)
+      //contentFrame
+      //  .setOnScrollChangeListener(
+      //    (view, i, i1, i2, i3) -> System.out.println("scrooolllling"));
+      //scrollView.setOnScrollChangeListener(
+      //  (View.OnScrollChangeListener) (view, i, i1, i2, i3) -> {
+      //    getCurrentWebView().onScrollChanged(i, i1, i2, i3);
+      //    System.out.println(view);
+      //  });
+    }
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override

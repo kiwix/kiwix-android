@@ -139,6 +139,7 @@ public class KiwixWebView extends VideoEnabledWebView {
   @Override
   protected void onScrollChanged(int l, int t, int oldl, int oldt) {
     super.onScrollChanged(l, t, oldl, oldt);
+    System.out.println("scrooooollling");
     int windowHeight;
     if (getMeasuredHeight() > 0) {
       windowHeight = getMeasuredHeight();

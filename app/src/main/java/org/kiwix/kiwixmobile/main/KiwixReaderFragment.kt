@@ -107,7 +107,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
           TAG_KIWIX,
           "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
         )
-        restoreTabStates()
+        openZimFile(File(zimFile))
+        // restoreTabStates()
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
@@ -160,11 +161,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
       val positions = JSONArray(zimPositions)
       var i = 0
       getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      getCurrentWebView().scrollY = positions.getInt(i)
+      // getCurrentWebView().scrollY = positions.getInt(i)
       i++
       while (i < urls.length()) {
         newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-        getCurrentWebView().scrollY = positions.getInt(i)
+        // getCurrentWebView().scrollY = positions.getInt(i)
         i++
       }
       selectTab(currentTab)

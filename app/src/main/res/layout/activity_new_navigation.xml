@@ -39,6 +39,7 @@
     android:id="@+id/nav_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
     app:menu="@menu/menu_bottom_nav" />
 
 
