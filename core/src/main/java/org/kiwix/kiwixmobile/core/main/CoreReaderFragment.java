@@ -899,14 +899,6 @@ public abstract class CoreReaderFragment extends BaseFragment
         restoreDeletedTab(index);
       });
     undo.show();
-    //undo.addCallback(new Snackbar.Callback() {
-    //  @Override public void onDismissed(Snackbar transientBottomBar, int event) {
-    //    super.onDismissed(transientBottomBar, event);
-    //    if (event == DISMISS_EVENT_ACTION) {
-    //      return;
-    //    }
-    //  }
-    //});
     openHomeScreen();
   }
 
@@ -925,7 +917,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     zimReaderContainer.setZimFile(tempZimFileForUndo);
     webViewList.add(index, tempWebViewForUndo);
     tabsAdapter.notifyItemInserted(index);
-    tabsAdapter.notifyDataSetChanged();
     Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
     setUpWebViewWithTextToSpeech();
     contentFrame.addView(tempWebViewForUndo);

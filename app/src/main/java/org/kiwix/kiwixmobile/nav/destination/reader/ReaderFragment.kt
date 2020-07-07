@@ -28,18 +28,19 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.View.GONE
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
@@ -87,15 +88,16 @@ class ReaderFragment : CoreReaderFragment() {
   }
 
   private fun exitBook() {
-    // getCurrentWebView().removeAllViews()
     showNoBookOpenViews()
     bottomToolbar.visibility = GONE
     actionBar.title = getString(R.string.reader)
     contentFrame.visibility = GONE
     mainMenu?.hideBookSpecificMenuItems()
-    // close book
+    closeZimBook()
+  }
+
+  private fun closeZimBook() {
     zimReaderContainer.setZimFile(null)
-    mainMenu?.hideBookSpecificMenuItems()
   }
 
   override fun openHomeScreen() {
@@ -112,15 +114,11 @@ class ReaderFragment : CoreReaderFragment() {
       actionBar.setDisplayShowTitleEnabled(true)
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-      closeAllTabsButton.setImageDrawable(
-        ContextCompat.getDrawable(
-          requireActivity(),
-          org.kiwix.kiwixmobile.core.R.drawable.ic_close_black_24dp
-        )
-      )
+
+      closeAllTabsButton.setImageDrawableCompat(R.drawable.ic_close_black_24dp)
       if (tabSwitcherRoot.visibility == View.VISIBLE) {
         tabSwitcherRoot.visibility = GONE
-        startAnimation(tabSwitcherRoot, org.kiwix.kiwixmobile.core.R.anim.slide_up)
+        startAnimation(tabSwitcherRoot, anim.slide_up)
         progressBar.visibility = View.VISIBLE
         progressBar.progress = 0
         contentFrame.visibility = View.VISIBLE
@@ -139,7 +137,7 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
     menu.findItem(R.id.menu_new_navigation)?.isVisible = false
-    if (zimReaderContainer?.zimFileReader == null) {
+    if (zimReaderContainer.zimFileReader == null) {
       mainMenu?.hideBookSpecificMenuItems()
     }
   }
