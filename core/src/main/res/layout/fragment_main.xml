@@ -35,7 +35,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:text="@string/no_open_book"
-      android:textAppearance="@style/TextAppearance.KiwixTheme.Headline5"
+      android:textAppearance="?textAppearanceHeadline5"
       android:visibility="gone"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
