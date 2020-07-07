@@ -22,8 +22,8 @@ Kiwix uses themes to apply styles to views. This means that instead of adding a 
 Themes are defined in `res/values/themes.xml` or `res/values-night/themes.xml` depending on night/day.
 The following steps should be followed to set a color or style of a view.
 1. Define the color or style:
-    * Define the color in `core/colors.xml`. Use good naming (`denim_blue`, `mine_shaft_gray` etc..).
-    * Define the style in `core/styles.xml`. Most styles override theme attributes and should be named to indicate that. This is done by naming the style to match its parent. That is, `Widget.MaterialComponent.*` -> `Widget.KiwixTheme.*`. If multiple styles for the same parent are needed, descriptive names should be used, e.x. `list_item_title`. 
+    * Define the color in `core/colors.xml`. Use good naming (`denim_blue`, `mine_shaft_gray` etc..). Our recommended tool to name colors is [Chirag Mehta - Name that color](http://chir.ag/projects/name-that-color/#6195ED).
+    * Define the style in `core/styles.xml`. For our default styles, applied with theme attributes, the naming convention is `Widget.KiwixTheme.*` and these should ideally inherit from their `Widget.MaterialComponent.*`, should no such parent exist, it is generally advisable to google "how to style [Component]". When there are two or more of a view that differ stylistically from our default styling, but are identical to each other visually, it is appropriate to extract a style to keep the XML DRY. A non-default style should use a descriptive name. e.x. `list_item_title`. 
 2. Add the color or style to a specific theme attribute in `themes.xml`.
 3. Make sure that the color or style works in both day and night mode. If it does not, add the dark mode compatible attribute to `values-night/themes.xml`.
 
