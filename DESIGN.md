@@ -32,7 +32,10 @@ For a video on how to work with themes, styles and colors, see [Developing Theme
 ## Night Mode / Dark Theme
 Night mode is a different theme that has many benefits such as saving battery and improving visibility in low light conditions [2]. When doing any design, make sure the new design works in dark mode. Night mode can be activated from the systems settings or from the kiwix app. 
 
-Whenever a resource exists in both `res/*-night` and `res/*` it will be used as such. For example: `kiwix_icon_with_title.png` exists in both `res/drawable` and `res/drawable-night` which means that the image in `res/drawable-night` will be used automagically in night mode. For further reading on development with dark mode, see [[2]](https://developer.android.com/guide/topics/ui/look-and-feel/darktheme). 
+Whenever a resource exists in both `res/*-night` and `res/*` it will be used as such. For example: `kiwix_icon_with_title.png` exists in both `res/drawable` and `res/drawable-night` which means that the image in `res/drawable-night` will be used automagically in night mode. For further reading on development with dark mode, see [Material Design - Dark Theme](https://developer.android.com/guide/topics/ui/look-and-feel/darktheme). 
+
+## Typography
+Text should contrast well, use the correct weight and size to present content as clearly and efficiently as possible. Google provides a "type scale" system that provides thirteen styles of typography to use for different contexts. Just as we do not give specific style attributes to views, we should not use specific text style attributes for text. Instead a type style should be used. For example, the button type style should be used for text on a button. To generate new type styles use the [Material Design type scale generator](https://material.io/design/typography/the-type-system.html#type-scale). To use type styles in practice, find a type style in `core/../res/type.xml` (e.x. `TextAppearance.KiwixTheme.Button`) and add it to a theme. Alternatively add a new type scale style to `core/../res/type.xml`. Additional reading can be found at [Material Design - Type System](https://material.io/design/typography/the-type-system.html#type-scale). 
 
 ## Resources
 Following is a list of resources that can and should be used to support a design decision.
@@ -51,6 +54,10 @@ Accessibility is an important part of Android applications. Especially applicati
 Kiwix does not yet contain content descriptions for its UI elements. This can prohibit users with for example poor eyesight to use Kiwix successfully. Therefore, newly introduced interactive elements should contain content descriptions (boy scout rule applies here too!). 
 
 See ["Make apps more accessible"](https://developer.android.com/guide/topics/ui/accessibility/apps) for a more detailed guide on accessibility. [Firefox Fenix](https://github.com/mozilla-mobile/shared-docs/blob/master/android/accessibility_guide.md) also has a great concise description of accessibility. A third accessibility resource is googles [list of key steps](https://android-developers.googleblog.com/2012/04/accessibility-are-you-serving-all-your.html) for making sure an Android application is accessible.
+<br/>
+<br/>
+<br/>
+<br/>
 
 [1] https://material.io/design/color/the-color-system.html 2020-06-04
 
