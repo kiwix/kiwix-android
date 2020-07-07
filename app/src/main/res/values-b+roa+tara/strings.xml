@@ -5,5 +5,5 @@
 <resources>
   <string name="file_system_does_not_support_4gb">\'U file system tune non ge supporte le file cchiù granne de 4GB</string>
   <string name="detecting_file_system">Stoche a condrolle ce \'u file system tune pò ccrejà le file cchiù granne de 4GB</string>
-  <string name="cannot_open_file">Aprture d\'u fail sciute a male\nPe piacere pruève arrete a cercà stu fail jndr\'à Schede d\'u despositive d\'a libbreria  toje.</string>
+  <string name="cannot_open_file">Aprture d\‘u fail sciute a male\nPe piacere pruève arrete a cercà stu fail jndr\’à Schede d\'u despositive d\'a libbreria  toje.</string>
 </resources>

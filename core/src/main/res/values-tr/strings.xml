@@ -279,7 +279,7 @@
   <string name="crash_checkbox_file_system">Dosya Sistemi Ayrıntıları</string>
   <string name="diagnostic_report">Teşhis Raporu</string>
   <string name="diagnostic_report_message">Sorunu teşhis edebilmemiz için lütfen aşağıdaki tüm ayrıntıları gönderin</string>
-  <string name="percentage">%%d%</string>
+  <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Metin Yakınlığı</string>
   <string name="experimental_navigation">Deneysel Gezintisi</string>
 </resources>
