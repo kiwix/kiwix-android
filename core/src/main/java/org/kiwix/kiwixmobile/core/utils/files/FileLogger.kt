@@ -27,9 +27,9 @@ import java.lang.System.currentTimeMillis
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Authored by s-ayush2903 on 19 June 2020
- *
- * A class for writing logs to the file in the device */
+/** Authored by s-ayush2903 on 19 June 2020 */
+
+/** A class for writing logs to the file in the device */
 @Singleton
 class FileLogger @Inject constructor() {
 
@@ -38,7 +38,7 @@ class FileLogger @Inject constructor() {
     Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 
   fun writeLogFile(context: Context): File {
-    // this creates a new folder in private storage with name: logs
+    // Create a new folder in private storage with name: logs
     val logDir = File(context.filesDir, "logs")
     val logFile = File(logDir, fileName)
 
@@ -47,11 +47,12 @@ class FileLogger @Inject constructor() {
     if (!logDir.exists()) {
       logDir.mkdir()
     }
+    // Delete the pre-existing file
     if (logDir.exists() && logFile.isFile) {
       Log.d(TAG, "writeLogFile: Deleting preExistingFile")
       logFile.delete()
     }
-    // clear the previous logcat and then write the new one to the file
+
     try {
       logDir.createNewFile()
       Runtime.getRuntime().exec("logcat -c")
