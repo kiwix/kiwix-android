@@ -281,7 +281,7 @@
   <string name="pref_text_zoom_title">Text Zoom</string>
   <string name="experimental_navigation">Experimental Navigation</string>
   <string name="reader">Reader</string>
-  <string name="no_open_book">No book open</string>
+  <string name="no_open_book">No open book</string>
   <string name="open_library">Open library</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
