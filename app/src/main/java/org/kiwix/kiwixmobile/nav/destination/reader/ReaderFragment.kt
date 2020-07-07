@@ -29,7 +29,6 @@ import android.view.View
 import android.view.View.GONE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
-import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
 import org.json.JSONArray
@@ -45,9 +44,7 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
@@ -149,13 +146,16 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer.zimFile == null && HOME_URL != getCurrentWebView().url) {
+    if (zimReaderContainer.zimFile == null) {
       showHomePage()
     }
   }
 
   override fun onBackPressed(activity: AppCompatActivity): Super {
-    if (super.onBackPressed(activity) == ShouldCall) {
+    val callType = super.onBackPressed(activity)
+    if (callType == ShouldCall && getCurrentWebView().canGoBack()) {
+      getCurrentWebView().goBack()
+    } else if (callType == ShouldCall) {
       getActivity()?.finish()
     }
     return ShouldNotCall
@@ -210,25 +210,11 @@ class ReaderFragment : CoreReaderFragment() {
   private fun getSharedPrefSettings() =
     activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
 
-  override fun hasValidFileAndUrl(url: String?, zimFileReader: ZimFileReader?) =
-    super.hasValidFileAndUrl(url, zimFileReader) && url != HOME_URL
-
   override fun getIconResId() = R.mipmap.ic_launcher
-
-  override fun urlIsInvalid() =
-    super.urlIsInvalid() || getCurrentWebView().url == HOME_URL
 
   override fun createNewTab() {
     newMainPageTab()
   }
-
-  override fun isInvalidTitle(zimFileTitle: String?) =
-    super.isInvalidTitle(zimFileTitle) || HOME_URL == getCurrentWebView().url
-
-  private fun uriFromIntent() =
-    activity?.intent?.data ?: activity?.intent?.getStringExtra(EXTRA_ZIM_FILE)?.let {
-      File(FileUtils.getFileName(it)).toUri()
-    }
 
   private fun restoreTabStates() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)

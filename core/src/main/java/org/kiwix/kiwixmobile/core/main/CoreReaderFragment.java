@@ -160,7 +160,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
   MainContract.View,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
-  public static final String HOME_URL = "file:///android_asset/home.html";
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
@@ -662,17 +661,10 @@ public abstract class CoreReaderFragment extends BaseFragment
       compatCallback.finish();
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
-    } else if (getCurrentWebView().canGoBack()
-      && !HOME_URL.equals(getCurrentWebView().getUrl())) {
-      getCurrentWebView().goBack();
     } else {
       return Super.ShouldCall;
     }
     return Super.ShouldNotCall;
-  }
-
-  protected void handleBackOnLastWebViewPage() {
-    showHomePage();
   }
 
   private void checkForRateDialog() {
@@ -917,6 +909,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     zimReaderContainer.setZimFile(tempZimFileForUndo);
     webViewList.add(index, tempWebViewForUndo);
     tabsAdapter.notifyItemInserted(index);
+    tabsAdapter.notifyDataSetChanged();
+
     Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
     setUpWebViewWithTextToSpeech();
     contentFrame.addView(tempWebViewForUndo);
@@ -1633,7 +1627,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private boolean shouldActivateNightMode(KiwixWebView kiwixWebView) {
-    return kiwixWebView != null && !HOME_URL.equals(kiwixWebView.getUrl());
+    return kiwixWebView != null;
   }
 
   private void loadPrefs() {
