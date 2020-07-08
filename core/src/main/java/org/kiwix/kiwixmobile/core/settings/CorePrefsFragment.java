@@ -219,7 +219,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   }
 
   private void clearAllNotes() {
-    if (fileLogger.isExternalStorageWritable()) {
+    if (CoreApp.isExternalStorageWritable()) {
       if (ContextCompat.checkSelfPermission(getActivity(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED) {

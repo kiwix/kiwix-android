@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.utils.files
 
 import android.content.Context
-import android.os.Environment
 import android.util.Log
 import java.io.File
 import java.io.IOException
@@ -32,10 +31,6 @@ import javax.inject.Singleton
 /** A class for writing logs to the file in the device */
 @Singleton
 class FileLogger @Inject constructor() {
-
-  /* Checks if external storage is available for read and write */
-  val isExternalStorageWritable: Boolean =
-    Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
 
   fun writeLogFile(context: Context): File {
     // Create a new folder in private storage with name: logs
@@ -67,6 +62,7 @@ class FileLogger @Inject constructor() {
 
   companion object {
     private const val TAG = "FileLogger"
-    private val fileName = "logs" + currentTimeMillis() + ".txt"
+    private val fileName: String
+      get() = "logs" + currentTimeMillis() + ".txt"
   }
 }

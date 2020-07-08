@@ -326,7 +326,7 @@ public class AddNoteDialog extends DialogFragment {
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * */
 
-    if (fileLogger.isExternalStorageWritable()) {
+    if (CoreApp.isExternalStorageWritable()) {
 
       if (ContextCompat.checkSelfPermission(getContext(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

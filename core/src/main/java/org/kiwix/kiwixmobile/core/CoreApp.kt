@@ -34,6 +34,12 @@ import javax.inject.Inject
 
 abstract class CoreApp : Application() {
   companion object {
+
+    /* Checks if external storage is available for read and write */
+    @JvmStatic
+    val isExternalStorageWritable: Boolean =
+      android.os.Environment.MEDIA_MOUNTED == android.os.Environment.getExternalStorageState()
+
     @JvmStatic
     lateinit var instance: CoreApp
 
