@@ -39,7 +39,7 @@ Text should contrast well, use the correct weight and size to present content as
 
 Views using the same style often use different text style. Therefore text styles, and view styles are seperated and can be used simultaneously. To keep an android application consistent in style, thirteen text style attributes should be defined. These style attributes can be generated ([Material Design type scale generator](https://material.io/design/typography/the-type-system.html#type-scale)), or defined by editing `core/../values/type.xml`. 
 
-All text should have a text style to simplifiy appearance changes. To set a text style, simply set the `textAppearance` property using one of the thirteen text style attributes from `core/../values/type.xml`. Text can also be grouped if they are related and uses the same text style. This grouping can be done by creating a style that inherits a specific text appearance. E.x. `<style name="no_content_text" parent="TextAppearance.KiwixTheme.Headline5" />`.
+All text should have a text style to simplifiy appearance changes. To set a text style, simply set the `textAppearance` property using one of the thirteen text style attributes from `core/../values/type.xml`. Text can also be grouped if they are related and uses the same text style. This grouping can be done by creating a style that inherits, or sets a specific text appearance. E.x. `<style name="no_content_text" parent="TextAppearance.KiwixTheme.Headline5" />`.
 
 Additional reading can be found at [Material Design - Type System](https://material.io/design/typography/the-type-system.html#type-scale). 
 
