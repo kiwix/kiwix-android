@@ -30,17 +30,16 @@ abstract class PageState<T : Page> {
   }
 
   abstract val visiblePageItems: List<PageRelated>
-
   abstract val showAll: Boolean
   abstract val currentZimId: String?
   abstract val searchTerm: String
-  fun toggleSelectionOfItem(page: Page): PageState<T> {
-    val newList = pageItems.map {
+
+  fun getItemsAfterToggleSelectionOfItem(page: Page): List<T> {
+    return pageItems.map {
       if (it.id == page.id) it.apply {
         isSelected = !isSelected
       } else it
     }
-    return copyWithNewItems(newList)
   }
 
   fun numberOfSelectedItems(): Int = pageItems.filter(Page::isSelected).size

@@ -24,7 +24,6 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
-import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -34,10 +33,10 @@ class BookmarkViewModel @Inject constructor(
   bookmarksDao: NewBookmarksDao,
   override val zimReaderContainer: ZimReaderContainer,
   override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel<BookmarkItem>(bookmarksDao) {
+) : PageViewModel<BookmarkItem, BookmarkState>(bookmarksDao) {
 
   override val state by lazy {
-    MutableLiveData<PageState<BookmarkItem>>().apply {
+    MutableLiveData<BookmarkState>().apply {
       value =
         BookmarkState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
     }
@@ -48,28 +47,31 @@ class BookmarkViewModel @Inject constructor(
   }
 
   override fun updatePagesBasedOnFilter(
-    state: PageState<BookmarkItem>,
+    state: BookmarkState,
     action: Action.Filter
-  ): PageState<BookmarkItem> =
-    (state as BookmarkState).copy(searchTerm = action.searchTerm)
+  ): BookmarkState =
+    state.copy(searchTerm = action.searchTerm)
 
   override fun updatePages(
-    state: PageState<BookmarkItem>,
+    state: BookmarkState,
     action: Action.UpdatePages
-  ): PageState<BookmarkItem> =
-    (state as BookmarkState).copy(pageItems = action.pages.filterIsInstance<BookmarkItem>())
+  ): BookmarkState =
+    state.copy(pageItems = action.pages.filterIsInstance<BookmarkItem>())
 
   override fun offerUpdateToShowAllToggle(
     action: Action.UserClickedShowAllToggle,
-    state: PageState<BookmarkItem>
-  ): PageState<BookmarkItem> {
+    state: BookmarkState
+  ): BookmarkState {
     effects.offer(UpdateAllBookmarksPreference(sharedPreferenceUtil, action.isChecked))
-    return (state as BookmarkState).copy(showAll = action.isChecked)
+    return state.copy(showAll = action.isChecked)
   }
 
-  override fun deselectAllPages(state: PageState<BookmarkItem>): PageState<BookmarkItem> =
-    (state as BookmarkState).copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
+  override fun deselectAllPages(state: BookmarkState): BookmarkState =
+    state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
-  override fun createDeletePageDialogEffect(state: PageState<BookmarkItem>) =
+  override fun createDeletePageDialogEffect(state: BookmarkState) =
     ShowDeleteBookmarksDialog(effects, state, pageDao)
+
+  override fun copyWithNewItems(state: BookmarkState, newItems: List<BookmarkItem>): BookmarkState =
+    state.copy(pageItems = newItems)
 }

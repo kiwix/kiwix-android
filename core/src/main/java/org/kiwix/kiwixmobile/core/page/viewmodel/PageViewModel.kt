@@ -41,13 +41,13 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-abstract class PageViewModel<T : Page>(
+abstract class PageViewModel<T : Page, S : PageState<T>>(
   protected val pageDao: PageDao
 ) : ViewModel() {
 
   abstract val zimReaderContainer: ZimReaderContainer
   abstract val sharedPreferenceUtil: SharedPreferenceUtil
-  abstract val state: MutableLiveData<PageState<T>>
+  abstract val state: MutableLiveData<S>
 
   val compositeDisposable = CompositeDisposable()
   val effects = PublishProcessor.create<SideEffect<*>>()
@@ -65,7 +65,7 @@ abstract class PageViewModel<T : Page>(
     )
   }
 
-  private fun reduce(action: Action, state: PageState<T>): PageState<T> = when (action) {
+  private fun reduce(action: Action, state: S): S = when (action) {
     Exit -> finishActivity(state)
     ExitActionModeMenu -> deselectAllPages(state)
     UserClickedDeleteButton, UserClickedDeleteSelectedPages -> offerShowDeleteDialog(state)
@@ -76,34 +76,36 @@ abstract class PageViewModel<T : Page>(
     is UpdatePages -> updatePages(state, action)
   }
 
-  abstract fun updatePagesBasedOnFilter(state: PageState<T>, action: Filter): PageState<T>
+  abstract fun updatePagesBasedOnFilter(state: S, action: Filter): S
 
-  abstract fun updatePages(state: PageState<T>, action: UpdatePages): PageState<T>
+  abstract fun updatePages(state: S, action: UpdatePages): S
 
   abstract fun offerUpdateToShowAllToggle(
     action: UserClickedShowAllToggle,
-    state: PageState<T>
-  ): PageState<T>
+    state: S
+  ): S
 
-  private fun offerShowDeleteDialog(state: PageState<T>): PageState<T> {
+  private fun offerShowDeleteDialog(state: S): S {
     effects.offer(createDeletePageDialogEffect(state))
     return state
   }
 
-  private fun handleItemLongClick(state: PageState<T>, action: OnItemLongClick): PageState<T> =
-    state.toggleSelectionOfItem(action.page)
+  private fun handleItemLongClick(state: S, action: OnItemLongClick): S =
+    copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page))
 
-  private fun handleItemClick(state: PageState<T>, action: Action.OnItemClick): PageState<T> {
+  abstract fun copyWithNewItems(state: S, newItems: List<T>): S
+
+  private fun handleItemClick(state: S, action: Action.OnItemClick): S {
     if (state.isInSelectionState) {
-      return state.toggleSelectionOfItem(action.page)
+      return copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page))
     }
     effects.offer(OpenPage(action.page, zimReaderContainer))
     return state
   }
 
-  abstract fun deselectAllPages(state: PageState<T>): PageState<T>
+  abstract fun deselectAllPages(state: S): S
 
-  private fun finishActivity(state: PageState<T>): PageState<T> {
+  private fun finishActivity(state: S): S {
     effects.offer(Finish)
     return state
   }
@@ -113,5 +115,5 @@ abstract class PageViewModel<T : Page>(
     super.onCleared()
   }
 
-  abstract fun createDeletePageDialogEffect(state: PageState<T>): SideEffect<*>
+  abstract fun createDeletePageDialogEffect(state: S): SideEffect<*>
 }

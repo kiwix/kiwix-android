@@ -50,7 +50,7 @@ import javax.inject.Inject
 
 abstract class PageActivity : OnItemClickListener, BaseActivity() {
   val activityComponent by lazy { coreActivityComponent }
-  abstract val pageViewModel: PageViewModel<*>
+  abstract val pageViewModel: PageViewModel<*, *>
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
