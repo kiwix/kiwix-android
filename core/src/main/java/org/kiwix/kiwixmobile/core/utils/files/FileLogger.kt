@@ -50,8 +50,8 @@ class FileLogger @Inject constructor() {
 
     try {
       logDir.createNewFile()
-      Runtime.getRuntime().exec("logcat -c")
       Runtime.getRuntime().exec("logcat -f $logFile -s kiwix")
+      Runtime.getRuntime().exec("logcat -b all -v color -d")
       Log.d(TAG, "writeLogFile: Log report written Successfully!")
       Log.d(TAG, "writeLogFile: Authored report to $logFile")
     } catch (e: IOException) {
