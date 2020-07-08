@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
-import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
@@ -28,11 +27,9 @@ data class BookmarkState(
   override val showAll: Boolean,
   override val currentZimId: String?,
   override val searchTerm: String = ""
-) : PageState() {
-  override val filteredPageItems: List<PageRelated> = pageItems
-    .filter { it.zimId == currentZimId || showAll }
-    .filter { it.title.contains(searchTerm, true) }
+) : PageState<BookmarkItem>() {
+  override val visiblePageItems: List<PageRelated> = filteredPageItems as List<BookmarkItem>
 
-  override fun copyWithNewItems(newItems: List<Page>): PageState =
-    copy(pageItems = (newItems as List<BookmarkItem>))
+  override fun copyWithNewItems(newItems: List<BookmarkItem>): PageState<BookmarkItem> =
+    copy(pageItems = (newItems))
 }

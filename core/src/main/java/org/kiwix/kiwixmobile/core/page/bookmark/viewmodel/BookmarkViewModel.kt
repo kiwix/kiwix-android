@@ -34,10 +34,10 @@ class BookmarkViewModel @Inject constructor(
   bookmarksDao: NewBookmarksDao,
   override val zimReaderContainer: ZimReaderContainer,
   override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel(bookmarksDao) {
+) : PageViewModel<BookmarkItem>(bookmarksDao) {
 
   override val state by lazy {
-    MutableLiveData<PageState>().apply {
+    MutableLiveData<PageState<BookmarkItem>>().apply {
       value =
         BookmarkState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
     }
@@ -47,23 +47,29 @@ class BookmarkViewModel @Inject constructor(
     addDisposablesToCompositeDisposable()
   }
 
-  override fun updatePagesBasedOnFilter(state: PageState, action: Action.Filter): PageState =
+  override fun updatePagesBasedOnFilter(
+    state: PageState<BookmarkItem>,
+    action: Action.Filter
+  ): PageState<BookmarkItem> =
     (state as BookmarkState).copy(searchTerm = action.searchTerm)
 
-  override fun updatePages(state: PageState, action: Action.UpdatePages): PageState =
+  override fun updatePages(
+    state: PageState<BookmarkItem>,
+    action: Action.UpdatePages
+  ): PageState<BookmarkItem> =
     (state as BookmarkState).copy(pageItems = action.pages.filterIsInstance<BookmarkItem>())
 
   override fun offerUpdateToShowAllToggle(
     action: Action.UserClickedShowAllToggle,
-    state: PageState
-  ): PageState {
+    state: PageState<BookmarkItem>
+  ): PageState<BookmarkItem> {
     effects.offer(UpdateAllBookmarksPreference(sharedPreferenceUtil, action.isChecked))
     return (state as BookmarkState).copy(showAll = action.isChecked)
   }
 
-  override fun deselectAllPages(state: PageState): PageState =
+  override fun deselectAllPages(state: PageState<BookmarkItem>): PageState<BookmarkItem> =
     (state as BookmarkState).copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
-  override fun createDeletePageDialogEffect(state: PageState) =
-    ShowDeleteBookmarksDialog(effects, state as BookmarkState, pageDao)
+  override fun createDeletePageDialogEffect(state: PageState<BookmarkItem>) =
+    ShowDeleteBookmarksDialog(effects, state, pageDao)
 }

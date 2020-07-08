@@ -24,7 +24,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 data class BookmarkItem(
   val databaseId: Long = 0L,
-  val zimId: String,
+  override val zimId: String,
   val zimName: String,
   override val zimFilePath: String?,
   val bookmarkUrl: String,

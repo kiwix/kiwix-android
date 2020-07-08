@@ -26,6 +26,7 @@ import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
@@ -40,19 +41,19 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-abstract class PageViewModel(
-  val pageDao: PageDao
+abstract class PageViewModel<T : Page>(
+  protected val pageDao: PageDao
 ) : ViewModel() {
 
   abstract val zimReaderContainer: ZimReaderContainer
   abstract val sharedPreferenceUtil: SharedPreferenceUtil
-  abstract val state: MutableLiveData<PageState>
+  abstract val state: MutableLiveData<PageState<T>>
 
   val compositeDisposable = CompositeDisposable()
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
 
-  protected fun viewStateReducer(): Disposable =
+  private fun viewStateReducer(): Disposable =
     actions.map { reduce(it, state.value!!) }
       .subscribe(state::postValue, Throwable::printStackTrace)
 
@@ -64,7 +65,7 @@ abstract class PageViewModel(
     )
   }
 
-  private fun reduce(action: Action, state: PageState): PageState = when (action) {
+  private fun reduce(action: Action, state: PageState<T>): PageState<T> = when (action) {
     Exit -> finishActivity(state)
     ExitActionModeMenu -> deselectAllPages(state)
     UserClickedDeleteButton, UserClickedDeleteSelectedPages -> offerShowDeleteDialog(state)
@@ -75,24 +76,24 @@ abstract class PageViewModel(
     is UpdatePages -> updatePages(state, action)
   }
 
-  abstract fun updatePagesBasedOnFilter(state: PageState, action: Filter): PageState
+  abstract fun updatePagesBasedOnFilter(state: PageState<T>, action: Filter): PageState<T>
 
-  abstract fun updatePages(state: PageState, action: UpdatePages): PageState
+  abstract fun updatePages(state: PageState<T>, action: UpdatePages): PageState<T>
 
   abstract fun offerUpdateToShowAllToggle(
     action: UserClickedShowAllToggle,
-    state: PageState
-  ): PageState
+    state: PageState<T>
+  ): PageState<T>
 
-  private fun offerShowDeleteDialog(state: PageState): PageState {
+  private fun offerShowDeleteDialog(state: PageState<T>): PageState<T> {
     effects.offer(createDeletePageDialogEffect(state))
     return state
   }
 
-  private fun handleItemLongClick(state: PageState, action: OnItemLongClick): PageState =
+  private fun handleItemLongClick(state: PageState<T>, action: OnItemLongClick): PageState<T> =
     state.toggleSelectionOfItem(action.page)
 
-  private fun handleItemClick(state: PageState, action: Action.OnItemClick): PageState {
+  private fun handleItemClick(state: PageState<T>, action: Action.OnItemClick): PageState<T> {
     if (state.isInSelectionState) {
       return state.toggleSelectionOfItem(action.page)
     }
@@ -100,9 +101,9 @@ abstract class PageViewModel(
     return state
   }
 
-  abstract fun deselectAllPages(state: PageState): PageState
+  abstract fun deselectAllPages(state: PageState<T>): PageState<T>
 
-  private fun finishActivity(state: PageState): PageState {
+  private fun finishActivity(state: PageState<T>): PageState<T> {
     effects.offer(Finish)
     return state
   }
@@ -112,5 +113,5 @@ abstract class PageViewModel(
     super.onCleared()
   }
 
-  abstract fun createDeletePageDialogEffect(state: PageState): SideEffect<*>
+  abstract fun createDeletePageDialogEffect(state: PageState<T>): SideEffect<*>
 }

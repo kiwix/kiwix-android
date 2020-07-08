@@ -50,7 +50,7 @@ import javax.inject.Inject
 
 abstract class PageActivity : OnItemClickListener, BaseActivity() {
   val activityComponent by lazy { coreActivityComponent }
-  abstract val pageViewModel: PageViewModel
+  abstract val pageViewModel: PageViewModel<*>
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
@@ -131,8 +131,8 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
     super.onDestroy()
   }
 
-  private fun render(state: PageState) {
-    pageAdapter.items = state.filteredPageItems
+  private fun render(state: PageState<*>) {
+    pageAdapter.items = state.visiblePageItems
     page_switch.isEnabled = !state.isInSelectionState
     no_page.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
     if (state.isInSelectionState) {

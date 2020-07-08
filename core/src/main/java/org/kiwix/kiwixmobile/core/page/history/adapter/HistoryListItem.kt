@@ -26,7 +26,7 @@ sealed class HistoryListItem : PageRelated {
 
   data class HistoryItem constructor(
     val databaseId: Long = 0L,
-    val zimId: String,
+    override val zimId: String,
     val zimName: String,
     override val zimFilePath: String,
     override val favicon: String?,

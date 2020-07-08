@@ -23,7 +23,8 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllBookmarks
@@ -32,7 +33,7 @@ import javax.inject.Inject
 
 data class ShowDeleteBookmarksDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
-  private val state: BookmarkState,
+  private val state: PageState<BookmarkItem>,
   private val bookmarksDao: PageDao
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower

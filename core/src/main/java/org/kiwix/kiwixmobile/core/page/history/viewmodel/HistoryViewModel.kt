@@ -34,10 +34,10 @@ class HistoryViewModel @Inject constructor(
   historyDao: HistoryDao,
   override val zimReaderContainer: ZimReaderContainer,
   override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel(pageDao = historyDao) {
+) : PageViewModel<HistoryItem>(pageDao = historyDao) {
 
   override val state by lazy {
-    MutableLiveData<PageState>().apply {
+    MutableLiveData<PageState<HistoryItem>>().apply {
       value =
         HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
     }
@@ -47,23 +47,29 @@ class HistoryViewModel @Inject constructor(
     addDisposablesToCompositeDisposable()
   }
 
-  override fun updatePagesBasedOnFilter(state: PageState, action: Action.Filter): PageState =
+  override fun updatePagesBasedOnFilter(
+    state: PageState<HistoryItem>,
+    action: Action.Filter
+  ): PageState<HistoryItem> =
     (state as HistoryState).copy(searchTerm = action.searchTerm)
 
-  override fun updatePages(state: PageState, action: Action.UpdatePages): PageState =
+  override fun updatePages(
+    state: PageState<HistoryItem>,
+    action: Action.UpdatePages
+  ): PageState<HistoryItem> =
     (state as HistoryState).copy(pageItems = action.pages.filterIsInstance<HistoryItem>())
 
   override fun offerUpdateToShowAllToggle(
     action: Action.UserClickedShowAllToggle,
-    state: PageState
-  ): PageState {
+    state: PageState<HistoryItem>
+  ): PageState<HistoryItem> {
     effects.offer(UpdateAllHistoryPreference(sharedPreferenceUtil, action.isChecked))
     return (state as HistoryState).copy(showAll = action.isChecked)
   }
 
-  override fun createDeletePageDialogEffect(state: PageState) =
+  override fun createDeletePageDialogEffect(state: PageState<HistoryItem>) =
     ShowDeleteHistoryDialog(effects, state as HistoryState, pageDao)
 
-  override fun deselectAllPages(state: PageState): PageState =
+  override fun deselectAllPages(state: PageState<HistoryItem>): PageState<HistoryItem> =
     (state as HistoryState).copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 }

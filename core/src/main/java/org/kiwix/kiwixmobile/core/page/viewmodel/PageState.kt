@@ -21,14 +21,20 @@ package org.kiwix.kiwixmobile.core.page.viewmodel
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 
-abstract class PageState {
-  abstract val pageItems: List<Page>
+abstract class PageState<T : Page> {
+  abstract val pageItems: List<T>
   val isInSelectionState: Boolean by lazy { pageItems.any(Page::isSelected) }
-  abstract val filteredPageItems: List<PageRelated>
+  protected val filteredPageItems: List<T> by lazy {
+    pageItems.filter { showAll || it.zimId == currentZimId }
+      .filter { it.title.contains(searchTerm, true) }
+  }
+
+  abstract val visiblePageItems: List<PageRelated>
+
   abstract val showAll: Boolean
   abstract val currentZimId: String?
   abstract val searchTerm: String
-  fun toggleSelectionOfItem(page: Page): PageState {
+  fun toggleSelectionOfItem(page: Page): PageState<T> {
     val newList = pageItems.map {
       if (it.id == page.id) it.apply {
         isSelected = !isSelected
@@ -39,5 +45,5 @@ abstract class PageState {
 
   fun numberOfSelectedItems(): Int = pageItems.filter(Page::isSelected).size
 
-  abstract fun copyWithNewItems(newItems: List<Page>): PageState
+  abstract fun copyWithNewItems(newItems: List<T>): PageState<T>
 }
