@@ -35,7 +35,13 @@ Night mode is a different theme that has many benefits such as saving battery an
 Whenever a resource exists in both `res/*-night` and `res/*` it will be used as such. For example: `kiwix_icon_with_title.png` exists in both `res/drawable` and `res/drawable-night` which means that the image in `res/drawable-night` will be used automagically in night mode. For further reading on development with dark mode, see [Material Design - Dark Theme](https://developer.android.com/guide/topics/ui/look-and-feel/darktheme). 
 
 ## Typography
-Text should contrast well, use the correct weight and size to present content as clearly and efficiently as possible. Google provides a "type scale" system that provides thirteen styles of typography to use for different contexts. Just as we do not give specific style attributes to views, we should not use specific text style attributes for text. Instead a type style should be used. For example, the button type style should be used for text on a button. To generate new type styles use the [Material Design type scale generator](https://material.io/design/typography/the-type-system.html#type-scale). To use type styles in practice, find a type style in `core/../res/type.xml` (e.x. `TextAppearance.KiwixTheme.Button`) and add it to a theme. Alternatively add a new type scale style to `core/../res/type.xml`. Additional reading can be found at [Material Design - Type System](https://material.io/design/typography/the-type-system.html#type-scale). 
+Text should contrast well, use the correct weight and size to present content as clearly and efficiently as possible. 
+
+Views using the same style often use different text style. Therefore text styles, and view styles are seperated and can be used simultaneously. To keep an android application consistent in style, thirteen text style attributes should be defined. These style attributes can be generated ([Material Design type scale generator](https://material.io/design/typography/the-type-system.html#type-scale)), or defined by editing `core/../values/type.xml`. 
+
+All text should have a text style to simplifiy appearance changes. To set a text style, simply set the `textAppearance` property using one of the thirteen text style attributes from `core/../values/type.xml`. Text can also be grouped if they are related and uses the same text style. This is done by creating a new attribute for the text group in `core/../values/attrs.xml` and assigning one of the thirteen text appearances to this new attribute. This attribute can then be set as the textAppearance for the group of texts. 
+
+Additional reading can be found at [Material Design - Type System](https://material.io/design/typography/the-type-system.html#type-scale). 
 
 ## Resources
 Following is a list of resources that can and should be used to support a design decision.
