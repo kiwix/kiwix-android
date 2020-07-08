@@ -17,7 +17,7 @@
     android:layout_marginEnd="8dp"
     android:text="@string/crash_description"
     android:textAlignment="center"
-    android:textColor="@color/white"
+    android:textColor="@color/alabaster_white"
     android:textSize="14sp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +30,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="32dp"
-    android:background="@color/white"
+    android:background="@color/alabaster_white"
     android:text="@string/crash_button_confirm"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,7 @@
     android:layout_marginTop="60dp"
     android:layout_marginEnd="8dp"
     android:text="@string/crash_title"
-    android:textColor="@color/white"
+    android:textColor="@color/alabaster_white"
     android:textSize="24sp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.505"
@@ -101,7 +101,7 @@
         android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/crash_checkbox_language"
-        android:textColor="@color/white" />
+        android:textColor="@color/alabaster_white" />
 
       <CheckBox
         android:id="@+id/allowLogs"
@@ -112,7 +112,7 @@
         android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/crash_checkbox_logs"
-        android:textColor="@color/white" />
+        android:textColor="@color/alabaster_white" />
 
       <CheckBox
         android:id="@+id/allowCrash"
@@ -123,7 +123,7 @@
         android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/crash_checkbox_exception"
-        android:textColor="@color/white" />
+        android:textColor="@color/alabaster_white" />
 
       <CheckBox
         android:id="@+id/allowZims"
@@ -134,7 +134,7 @@
         android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/crash_checkbox_zimfiles"
-        android:textColor="@color/white" />
+        android:textColor="@color/alabaster_white" />
 
       <CheckBox
         android:id="@+id/allowDeviceDetails"
@@ -145,7 +145,7 @@
         android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/crash_checkbox_device"
-        android:textColor="@color/white" />
+        android:textColor="@color/alabaster_white" />
 
       <CheckBox
         android:id="@+id/allowFileSystemDetails"
@@ -156,7 +156,7 @@
         android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/crash_checkbox_file_system"
-        android:textColor="@color/white" />
+        android:textColor="@color/alabaster_white" />
     </LinearLayout>
   </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

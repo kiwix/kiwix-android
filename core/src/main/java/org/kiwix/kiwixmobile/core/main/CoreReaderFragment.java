@@ -1297,7 +1297,7 @@ public abstract class CoreReaderFragment extends BaseFragment
               goToBookmarks();
               return Unit.INSTANCE;
             },
-            getResources().getColor(R.color.white)
+            getResources().getColor(R.color.alabaster_white)
           );
         } else {
           ContextExtensionsKt.toast(getActivity(), R.string.unable_to_add_to_bookmarks,
@@ -1754,7 +1754,7 @@ public abstract class CoreReaderFragment extends BaseFragment
             .setAction(getString(R.string.open), v -> {
               if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
             })
-            .setActionTextColor(getResources().getColor(R.color.white))
+            .setActionTextColor(getResources().getColor(R.color.alabaster_white))
             .show();
         } else {
           newTab(url);
