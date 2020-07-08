@@ -4,5 +4,6 @@
   <declare-styleable name="SliderPreference">
     <attr name="android:summary" />
   </declare-styleable>
+  <attr name="textAppearanceNoContent" format="reference" />
 
 </resources>

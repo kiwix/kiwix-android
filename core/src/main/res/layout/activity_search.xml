@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/no_results"
-        android:textAppearance="?textAppearanceHeadline6" />
+        android:textAppearance="?textAppearanceNoContent" />
 
     </ViewAnimator>
 
