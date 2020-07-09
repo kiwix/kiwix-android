@@ -37,7 +37,6 @@ import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.layout.activity_page
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -143,10 +142,6 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
     } else {
       actionMode?.finish()
     }
-  }
-
-  override fun injection(coreComponent: CoreComponent) {
-    activityComponent.inject(this)
   }
 
   override fun onItemClick(page: Page) {

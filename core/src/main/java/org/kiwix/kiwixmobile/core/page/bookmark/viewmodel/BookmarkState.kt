@@ -28,8 +28,8 @@ data class BookmarkState(
   override val currentZimId: String?,
   override val searchTerm: String = ""
 ) : PageState<BookmarkItem>() {
-  override val visiblePageItems: List<PageRelated> = filteredPageItems as List<BookmarkItem>
+  override val visiblePageItems: List<PageRelated> = filteredPageItems
 
   override fun copyWithNewItems(newItems: List<BookmarkItem>): PageState<BookmarkItem> =
-    copy(pageItems = (newItems))
+    copy(pageItems = newItems)
 }

@@ -24,7 +24,6 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
-import org.kiwix.kiwixmobile.core.page.PageActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
@@ -43,7 +42,6 @@ interface CoreActivityComponent {
   fun inject(corePrefsFragment: CorePrefsFragment)
   fun inject(historyActivity: HistoryActivity)
   fun inject(bookmarksActivity: BookmarksActivity)
-  fun inject(pageActivity: PageActivity)
   fun inject(addNoteDialog: AddNoteDialog)
 
   @Subcomponent.Builder

@@ -47,7 +47,12 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
 
   abstract val zimReaderContainer: ZimReaderContainer
   abstract val sharedPreferenceUtil: SharedPreferenceUtil
-  abstract val state: MutableLiveData<S>
+  abstract fun initialState(): S
+  val state: MutableLiveData<S> by lazy {
+    MutableLiveData<S>().apply {
+      value = initialState()
+    }
+  }
 
   val compositeDisposable = CompositeDisposable()
   val effects = PublishProcessor.create<SideEffect<*>>()

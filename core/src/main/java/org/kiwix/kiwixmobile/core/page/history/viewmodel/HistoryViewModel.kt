@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
@@ -35,12 +34,8 @@ class HistoryViewModel @Inject constructor(
   override val sharedPreferenceUtil: SharedPreferenceUtil
 ) : PageViewModel<HistoryItem, HistoryState>(pageDao = historyDao) {
 
-  override val state by lazy {
-    MutableLiveData<HistoryState>().apply {
-      value =
-        HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
-    }
-  }
+  override fun initialState(): HistoryState =
+    HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
 
   init {
     addDisposablesToCompositeDisposable()

@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import io.mockk.mockk
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
@@ -32,10 +31,7 @@ class TestablePageViewModel(
   override val sharedPreferenceUtil: SharedPreferenceUtil,
   val dao: PageDao
 ) : PageViewModel<Page, TestablePageState>(dao) {
-
-  override val state by lazy {
-    MutableLiveData<TestablePageState>(TestablePageState())
-  }
+  override fun initialState(): TestablePageState = TestablePageState()
 
   init {
     addDisposablesToCompositeDisposable()
