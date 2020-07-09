@@ -260,8 +260,10 @@
   <string name="no_bookmarks">אין סימניות</string>
   <string name="no_history">אין היסטוריה</string>
   <string name="device_default">ברירת המחדל של המכשיר</string>
-  <string name="delete_history" fuzzy="true">למחוק היסטוריה?</string>
-  <string name="delete_bookmarks" fuzzy="true">למחוק מועדפים?</string>
+  <string name="delete_history">למחוק את כל ההיסטוריה?</string>
+  <string name="delete_selected_history">למחוק את ההיסטוריה שנבחרה?</string>
+  <string name="delete_bookmarks">למחוק את כל המועדפים?</string>
+  <string name="delete_selected_bookmarks">למחוק את המועדפים שנבחרו?</string>
   <string name="on">מופעל</string>
   <string name="off">כבוי</string>
   <string name="auto">אוטומטי</string>
@@ -269,4 +271,5 @@
   <string name="crash_checkbox_file_system">פרטי מערכת קבצים</string>
   <string name="diagnostic_report">דוח אבחון</string>
   <string name="diagnostic_report_message">נא לשלוח את כל הפרטים הבאים כדי שנוכל לאבחן את התקלה</string>
+  <string name="experimental_navigation">ניווט ניסיוני</string>
 </resources>

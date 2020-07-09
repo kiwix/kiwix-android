@@ -34,7 +34,7 @@
 
   <style name="Widget.KiwixTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout">
     <item name="android:background">@color/black</item>
-    <item name="tabTextColor">@color/white</item>
+    <item name="tabTextColor">@color/alabaster_white</item>
   </style>
 
   <style name="Widget.KiwixTheme.Chip.Choice.Static" parent="Widget.MaterialComponents.Chip.Choice">
@@ -57,11 +57,11 @@
   </style>
 
   <style name="Widget.KiwixTheme.CardView" parent="Widget.MaterialComponents.CardView">
-    <item name="cardBackgroundColor">@color/card_view_background</item>
+    <item name="cardBackgroundColor">?cardViewBackground</item>
   </style>
 
   <style name="ThemeOverlay.KiwixTheme.ProgressBar" parent="">
-    <item name="colorAccent">@color/blue400</item>
+    <item name="colorAccent">@color/denim_blue400</item>
   </style>
 
 </resources>

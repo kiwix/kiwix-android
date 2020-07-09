@@ -261,8 +261,10 @@
   <string name="no_bookmarks">Sem Favoritos</string>
   <string name="no_history">Sem histórico</string>
   <string name="device_default">Padrão do dispositivo</string>
-  <string name="delete_history" fuzzy="true">Apagar histórico?</string>
-  <string name="delete_bookmarks" fuzzy="true">Excluir marcadores?</string>
+  <string name="delete_history">Excluir todo o histórico?</string>
+  <string name="delete_selected_history">Excluir histórico selecionado?</string>
+  <string name="delete_bookmarks">Excluir todos os favoritos?</string>
+  <string name="delete_selected_bookmarks">Excluir favoritos selecionados?</string>
   <string name="on">Lig</string>
   <string name="off">Des</string>
   <string name="auto">Auto</string>

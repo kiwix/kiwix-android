@@ -255,8 +255,10 @@
   <string name="no_bookmarks">Нема обележувачи</string>
   <string name="no_history">Нема историја</string>
   <string name="device_default">Основно на уредот</string>
-  <string name="delete_history" fuzzy="true">Да ја избришам историјата?</string>
-  <string name="delete_bookmarks" fuzzy="true">Да ги избришам обележувачите?</string>
+  <string name="delete_history">Да ја избришам сета историја?</string>
+  <string name="delete_selected_history">Да ја избришам избраната историја?</string>
+  <string name="delete_bookmarks">Да ги избришам сите обележувачи?</string>
+  <string name="delete_selected_bookmarks">Да ги избришам избраните обележувачи?</string>
   <string name="on">Вкл.</string>
   <string name="off">Искл.</string>
   <string name="auto">Авто</string>

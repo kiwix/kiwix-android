@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Susann Schweden
+-->
+<resources>
+  <string name="retry">Erneut versuchen</string>
+  <string name="download">Herunterladen</string>
+  <string name="invalid_installation">Ungültige Installation. Bitte ZIM herunterladen.\nStellen Sie sicher, das Wi-Fi an ist und sie genügend Speicherplatz haben</string>
+</resources>

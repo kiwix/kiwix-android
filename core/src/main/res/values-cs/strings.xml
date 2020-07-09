@@ -150,7 +150,7 @@
   <string name="next">Další</string>
   <string name="previous">Předchozí</string>
   <string name="wifi_only_title">Povolit stahování obsahu přes mobilní připojení?</string>
-  <string name="wifi_only_msg">Pokud zvolíte \“Ano\”, nebudete v budoucnu varováni. Můžete však toto vždy změnit v Nastavení.</string>
+  <string name="wifi_only_msg">Pokud zvolíte “Ano”, nebudete v budoucnu varováni. Můžete však toto vždy změnit v Nastavení.</string>
   <string name="pref_wifi_only">Stahovat obsah pouze přes WiFi</string>
   <string name="time_day">den</string>
   <string name="time_hour">h</string>

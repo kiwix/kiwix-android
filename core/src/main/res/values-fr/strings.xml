@@ -268,8 +268,10 @@
   <string name="no_bookmarks">Aucun marque-page</string>
   <string name="no_history">Aucun historique</string>
   <string name="device_default">Appareil par défaut</string>
-  <string name="delete_history" fuzzy="true">Supprimer l’historique ?</string>
-  <string name="delete_bookmarks" fuzzy="true">Supprimer les marque-pages ?</string>
+  <string name="delete_history">Supprimer tout l’historique ?</string>
+  <string name="delete_selected_history">Supprimer l’historique sélectionné ?</string>
+  <string name="delete_bookmarks">Supprimer tous les signets  ?</string>
+  <string name="delete_selected_bookmarks">Supprimer les marque-pages sélectionnés ?</string>
   <string name="on">Activé</string>
   <string name="off">Désactivé</string>
   <string name="auto">Automatique</string>

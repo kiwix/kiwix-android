@@ -255,7 +255,7 @@
   <string name="no_devices_found">Устройства не найдены. Нажмите кнопку Поиск чтобы попробовать ещё раз.</string>
   <string name="files_for_transfer">ФАЙЛЫ ДЛЯ ПЕРЕДАЧИ</string>
   <string name="preparing_files">Подготовка файлов для передачи…</string>
-  <string name="performing_handshake">Производим \“рукопожатие\”…</string>
+  <string name="performing_handshake">Производим “рукопожатие”…</string>
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистить все заметки во всех статьях</string>
   <string name="pref_clear_all_notes_title">Очистить все заметки</string>
@@ -270,8 +270,10 @@
   <string name="no_bookmarks">Нет Закладок</string>
   <string name="no_history">История пуста</string>
   <string name="device_default">Настройки устройства по умолчанию</string>
-  <string name="delete_history" fuzzy="true">Удалить историю?</string>
-  <string name="delete_bookmarks" fuzzy="true">Удалить закладки?</string>
+  <string name="delete_history">Удалить всю историю?</string>
+  <string name="delete_selected_history">Очистить Выбранную историю?</string>
+  <string name="delete_bookmarks">Удалить все закладки?</string>
+  <string name="delete_selected_bookmarks">Удалить Выбранные Закладки?</string>
   <string name="on">Вкл</string>
   <string name="off">Выкл</string>
   <string name="auto">Авто</string>
