@@ -60,7 +60,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.core.utils.files.FileLogger;
 
 /**
  * Created by @author Aditya-Sood (21/05/19) as a part of GSoC 2019
@@ -99,7 +98,6 @@ public class AddNoteDialog extends DialogFragment {
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject ZimReaderContainer zimReaderContainer;
   @Inject protected AlertDialogShower alertDialogShower;
-  @Inject FileLogger fileLogger;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -326,7 +324,7 @@ public class AddNoteDialog extends DialogFragment {
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * */
 
-    if (CoreApp.isExternalStorageWritable()) {
+    if (CoreApp.getInstance().isExternalStorageWritable()) {
 
       if (ContextCompat.checkSelfPermission(getContext(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
