@@ -42,12 +42,13 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 abstract class PageViewModel<T : Page, S : PageState<T>>(
-  protected val pageDao: PageDao
+  protected val pageDao: PageDao,
+  val sharedPreferenceUtil: SharedPreferenceUtil,
+  val zimReaderContainer: ZimReaderContainer
 ) : ViewModel() {
 
-  abstract val zimReaderContainer: ZimReaderContainer
-  abstract val sharedPreferenceUtil: SharedPreferenceUtil
   abstract fun initialState(): S
+
   val state: MutableLiveData<S> by lazy {
     MutableLiveData<S>().apply {
       value = initialState()
@@ -57,6 +58,10 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   private val compositeDisposable = CompositeDisposable()
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
+
+  init {
+    addDisposablesToCompositeDisposable()
+  }
 
   private fun viewStateReducer(): Disposable =
     actions.map { reduce(it, state.value!!) }

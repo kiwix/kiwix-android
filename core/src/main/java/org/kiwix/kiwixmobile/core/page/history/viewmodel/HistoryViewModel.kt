@@ -30,16 +30,12 @@ import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
   historyDao: HistoryDao,
-  override val zimReaderContainer: ZimReaderContainer,
-  override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel<HistoryItem, HistoryState>(pageDao = historyDao) {
+  zimReaderContainer: ZimReaderContainer,
+  sharedPrefs: SharedPreferenceUtil
+) : PageViewModel<HistoryItem, HistoryState>(historyDao, sharedPrefs, zimReaderContainer) {
 
   override fun initialState(): HistoryState =
     HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
-
-  init {
-    addDisposablesToCompositeDisposable()
-  }
 
   override fun updatePagesBasedOnFilter(
     state: HistoryState,

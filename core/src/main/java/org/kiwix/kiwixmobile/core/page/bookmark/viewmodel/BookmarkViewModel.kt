@@ -30,9 +30,9 @@ import javax.inject.Inject
 
 class BookmarkViewModel @Inject constructor(
   bookmarksDao: NewBookmarksDao,
-  override val zimReaderContainer: ZimReaderContainer,
-  override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel<BookmarkItem, BookmarkState>(bookmarksDao) {
+  zimReaderContainer: ZimReaderContainer,
+  sharedPrefs: SharedPreferenceUtil
+) : PageViewModel<BookmarkItem, BookmarkState>(bookmarksDao, sharedPrefs, zimReaderContainer) {
 
   override fun initialState(): BookmarkState =
     BookmarkState(
@@ -40,10 +40,6 @@ class BookmarkViewModel @Inject constructor(
       sharedPreferenceUtil.showBookmarksAllBooks,
       zimReaderContainer.id
     )
-
-  init {
-    addDisposablesToCompositeDisposable()
-  }
 
   override fun updatePagesBasedOnFilter(
     state: BookmarkState,
