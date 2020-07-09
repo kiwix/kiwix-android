@@ -54,7 +54,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
     }
   }
 
-  val compositeDisposable = CompositeDisposable()
+  private val compositeDisposable = CompositeDisposable()
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
 

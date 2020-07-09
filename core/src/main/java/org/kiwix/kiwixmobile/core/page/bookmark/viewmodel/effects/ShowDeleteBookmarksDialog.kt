@@ -34,12 +34,12 @@ import javax.inject.Inject
 data class ShowDeleteBookmarksDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
   private val state: PageState<BookmarkItem>,
-  private val bookmarksDao: PageDao
+  private val pageDao: PageDao
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as BookmarksActivity).activityComponent.inject(this)
     dialogShower.show(if (state.isInSelectionState) DeleteSelectedBookmarks else DeleteAllBookmarks,
-      { effects.offer(DeletePageItems(state, bookmarksDao)) })
+      { effects.offer(DeletePageItems(state, pageDao)) })
   }
 }
