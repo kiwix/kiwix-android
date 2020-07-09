@@ -80,6 +80,7 @@
   <string name="all_history_cleared">Eliminando todo o histórico</string>
   <string name="pref_clear_all_bookmarks_title">Limpar marcadores</string>
   <string name="all_bookmarks_cleared">Todos os marcadores limpos</string>
+  <string name="selected_bookmarks_cleared">Marcadores selecionados limpos</string>
   <string name="clear_all_history_dialog_title">Limpar todo o histórico?</string>
   <string name="share">Compartilhar</string>
   <string name="selected_file_cab_app_chooser_title">Compartilhe arquivos ZIM com:</string>
@@ -262,8 +263,10 @@
   <string name="no_bookmarks">Sem Favoritos</string>
   <string name="no_history">Sem histórico</string>
   <string name="device_default">Padrão do dispositivo</string>
-  <string name="delete_history" fuzzy="true">Apagar histórico?</string>
-  <string name="delete_bookmarks" fuzzy="true">Excluir marcadores?</string>
+  <string name="delete_history">Excluir todo o histórico?</string>
+  <string name="delete_selected_history">Excluir histórico selecionado?</string>
+  <string name="delete_bookmarks">Excluir todos os favoritos?</string>
+  <string name="delete_selected_bookmarks">Excluir favoritos selecionados?</string>
   <string name="on">Lig</string>
   <string name="off">Des</string>
   <string name="auto">Auto</string>
