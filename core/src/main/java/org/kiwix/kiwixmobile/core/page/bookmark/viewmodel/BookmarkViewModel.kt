@@ -38,7 +38,11 @@ class BookmarkViewModel @Inject constructor(
   override val state by lazy {
     MutableLiveData<BookmarkState>().apply {
       value =
-        BookmarkState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
+        BookmarkState(
+          emptyList(),
+          sharedPreferenceUtil.showBookmarksAllBooks,
+          zimReaderContainer.id
+        )
     }
   }
 

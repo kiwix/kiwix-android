@@ -17,7 +17,6 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHisto
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistoryPreference
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
@@ -28,7 +27,6 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelecte
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -63,12 +61,6 @@ internal class HistoryViewModelTest {
 
   @Test
   fun `initial state is Initialising`() {
-    viewModel.state.test().assertValue(historyState())
-  }
-
-  @Test
-  internal fun `ExitHistory finishes activity`() {
-    viewModel.effects.test().also { viewModel.actions.offer(Exit) }.assertValue(Finish)
     viewModel.state.test().assertValue(historyState())
   }
 

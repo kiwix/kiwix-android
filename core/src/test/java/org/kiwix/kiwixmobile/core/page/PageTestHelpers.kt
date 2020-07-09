@@ -27,8 +27,11 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 class PageImpl(
   override val zimFilePath: String? = "zimFilePath",
   override val url: String = "url",
-  override val isSelected: Boolean = false,
-  override val id: Long = 0L
+  override var isSelected: Boolean = false,
+  override val id: Long = 0L,
+  override val zimId: String = "zimId",
+  override val title: String = "title",
+  override val favicon: String? = "favicon"
 ) : Page
 
 fun historyItem(
@@ -93,10 +96,4 @@ fun bookmarkState(
   showAll: Boolean = true,
   zimId: String = "id",
   searchTerm: String = ""
-): BookmarkState =
-  BookmarkState(
-    bookmarks,
-    showAll,
-    zimId,
-    searchTerm
-  )
+): BookmarkState = BookmarkState(bookmarks, showAll, zimId, searchTerm)
