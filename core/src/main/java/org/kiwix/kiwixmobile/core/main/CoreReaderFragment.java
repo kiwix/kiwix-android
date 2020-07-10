@@ -1657,28 +1657,30 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewUrlFinishedLoading() {
-    updateTableOfContents();
-    tabsAdapter.notifyDataSetChanged();
-    updateUrlProcessor();
-    updateBottomToolbarArrowsAlpha();
-    String url = getCurrentWebView().getUrl();
-    final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-    if (hasValidFileAndUrl(url, zimFileReader)) {
-      final long timeStamp = System.currentTimeMillis();
-      SimpleDateFormat sdf =
-        new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
-      HistoryItem history = new HistoryItem(
-        getCurrentWebView().getUrl(),
-        getCurrentWebView().getTitle(),
-        sdf.format(new Date(timeStamp)),
-        timeStamp,
-        zimFileReader
-      );
-      presenter.saveHistory(history);
+    if(isAdded()) {
+      updateTableOfContents();
+      tabsAdapter.notifyDataSetChanged();
+      updateUrlProcessor();
+      updateBottomToolbarArrowsAlpha();
+      String url = getCurrentWebView().getUrl();
+      final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
+      if (hasValidFileAndUrl(url, zimFileReader)) {
+        final long timeStamp = System.currentTimeMillis();
+        SimpleDateFormat sdf =
+          new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
+        HistoryItem history = new HistoryItem(
+          getCurrentWebView().getUrl(),
+          getCurrentWebView().getTitle(),
+          sdf.format(new Date(timeStamp)),
+          timeStamp,
+          zimFileReader
+        );
+        presenter.saveHistory(history);
+      }
+      updateBottomToolbarVisibility();
+      openFullScreenIfEnabled();
+      updateNightMode();
     }
-    updateBottomToolbarVisibility();
-    openFullScreenIfEnabled();
-    updateNightMode();
   }
 
   protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {
