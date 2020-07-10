@@ -40,11 +40,9 @@ import javax.inject.Singleton
 class SharedPreferenceUtil @Inject constructor(context: Context?) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
-  val prefStorages =
-    PublishProcessor.create<String>()
+  val prefStorages = PublishProcessor.create<String>()
   private val textZooms = PublishProcessor.create<Int>()
-  private val nightModes =
-    PublishProcessor.create<NightModeConfig.Mode>()
+  private val nightModes = PublishProcessor.create<NightModeConfig.Mode>()
 
   val prefWifiOnly: Boolean
     get() = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true)
@@ -62,31 +60,21 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
     get() = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false)
 
   val prefNewTabBackground: Boolean
-    get() = sharedPreferences.getBoolean(
-      PREF_NEW_TAB_BACKGROUND,
-      false
-    )
+    get() = sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false)
 
   val prefExternalLinkPopup: Boolean
-    get() = sharedPreferences.getBoolean(
-      PREF_EXTERNAL_LINK_POPUP,
-      true
-    )
+    get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
 
   val prefLanguage: String
-    get() = sharedPreferences.getString(
-      PREF_LANG,
-      Locale.ROOT.toString()
-    )
+    get() = sharedPreferences.getString(PREF_LANG, Locale.ROOT.toString())
 
   val prefStorage: String
     get() {
-      val storage =
-        sharedPreferences.getString(PREF_STORAGE, null)
+      val storage = sharedPreferences.getString(PREF_STORAGE, null)
       if (storage == null) {
         val defaultStorage = defaultStorage()
         putPrefStorage(defaultStorage)
-        return defaultStorage
+        return defaultStorage().also { putPrefStorage(it) }
       } else if (!File(storage).exists()) {
         return defaultStorage()
       }
@@ -94,10 +82,11 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
     }
 
   private fun defaultStorage(): String {
-    val externalFilesDir =
-      ContextCompat.getExternalFilesDirs(instance, null)[0]
-    return if (externalFilesDir != null) externalFilesDir.path else instance.filesDir
-      .path // workaround for emulators
+    val externalFilesDir = ContextCompat.getExternalFilesDirs(instance, null)[0]
+    return if (externalFilesDir != null)
+      externalFilesDir.path
+    else
+      instance.filesDir.path // workaround for emulators
   }
 
   fun getPrefStorageTitle(defaultTitle: String): String =
@@ -113,12 +102,10 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
     sharedPreferences.edit().putBoolean(PREF_WIFI_ONLY, wifiOnly).apply()
 
   fun putPrefStorageTitle(storageTitle: String?) =
-    sharedPreferences.edit()
-      .putString(PREF_STORAGE_TITLE, storageTitle).apply()
+    sharedPreferences.edit().putString(PREF_STORAGE_TITLE, storageTitle).apply()
 
   fun putPrefStorage(storage: String) {
-    sharedPreferences.edit().putString(PREF_STORAGE, storage).apply()
-    prefStorages.onNext(storage)
+    sharedPreferences.edit().putString(PREF_STORAGE, storage).apply(); prefStorages.onNext(storage)
   }
 
   fun getPrefStorages(): Flowable<String> = prefStorages.startWith(prefStorage)
@@ -131,43 +118,25 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
 
   fun showIntro(): Boolean = sharedPreferences.getBoolean(PREF_SHOW_INTRO, true)
 
-  fun setIntroShown() =
-    sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false).apply()
+  fun setIntroShown() = sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false).apply()
 
   var showHistoryAllBooks: Boolean
-    get() = sharedPreferences.getBoolean(
-      PREF_SHOW_HISTORY_ALL_BOOKS,
-      true
-    )
+    get() = sharedPreferences.getBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, true)
     set(prefShowHistoryAllBooks) {
-      sharedPreferences.edit()
-        .putBoolean(
-          PREF_SHOW_HISTORY_ALL_BOOKS,
-          prefShowHistoryAllBooks
-        )
+      sharedPreferences.edit().putBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, prefShowHistoryAllBooks)
         .apply()
     }
 
   var showBookmarksAllBooks: Boolean
-    get() = sharedPreferences.getBoolean(
-      PREF_SHOW_BOOKMARKS_ALL_BOOKS,
-      true
-    )
+    get() = sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
     set(prefShowBookmarksFromCurrentBook) {
       sharedPreferences.edit()
-        .putBoolean(
-          PREF_SHOW_BOOKMARKS_ALL_BOOKS,
-          prefShowBookmarksFromCurrentBook
-        )
-        .apply()
+        .putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook).apply()
     }
 
   val nightMode: NightModeConfig.Mode
     get() = from(
-      sharedPreferences.getString(
-        PREF_NIGHT_MODE,
-        "" + AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-      )
+      sharedPreferences.getString(PREF_NIGHT_MODE, "" + AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         .toInt()
     )
 
@@ -176,21 +145,15 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
   fun updateNightMode() = nightModes.offer(nightMode)
 
   var hostedBooks: Set<String>
-    get() = sharedPreferences.getStringSet(
-      PREF_HOSTED_BOOKS,
-      HashSet()
-    )
+    get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, HashSet())
     set(hostedBooks) {
-      sharedPreferences.edit()
-        .putStringSet(PREF_HOSTED_BOOKS, hostedBooks)
-        .apply()
+      sharedPreferences.edit().putStringSet(PREF_HOSTED_BOOKS, hostedBooks).apply()
     }
 
   var textZoom: Int
     get() = sharedPreferences.getInt(TEXT_ZOOM, DEFAULT_ZOOM)
     set(textZoom) {
-      sharedPreferences.edit().putInt(TEXT_ZOOM, textZoom).apply()
-      textZooms.offer(textZoom)
+      sharedPreferences.edit().putInt(TEXT_ZOOM, textZoom).apply(); textZooms.offer(textZoom)
     }
 
   fun getTextZooms(): Flowable<Int> = textZooms.startWith(textZoom)
