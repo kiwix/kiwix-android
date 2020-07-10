@@ -100,31 +100,21 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
       .path // workaround for emulators
   }
 
-  fun getPrefStorageTitle(defaultTitle: String?): String {
-    return sharedPreferences.getString(
-      PREF_STORAGE_TITLE,
-      defaultTitle
-    )
-  }
+  fun getPrefStorageTitle(defaultTitle: String): String =
+    sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle)
 
-  fun putPrefLanguage(language: String?) {
+  fun putPrefLanguage(language: String?) =
     sharedPreferences.edit().putString(PREF_LANG, language).apply()
-  }
 
-  fun putPrefIsFirstRun(isFirstRun: Boolean) {
-    sharedPreferences.edit()
-      .putBoolean(PREF_IS_FIRST_RUN, isFirstRun).apply()
-  }
+  fun putPrefIsFirstRun(isFirstRun: Boolean) =
+    sharedPreferences.edit().putBoolean(PREF_IS_FIRST_RUN, isFirstRun).apply()
 
-  fun putPrefWifiOnly(wifiOnly: Boolean) {
-    sharedPreferences.edit().putBoolean(PREF_WIFI_ONLY, wifiOnly)
-      .apply()
-  }
+  fun putPrefWifiOnly(wifiOnly: Boolean) =
+    sharedPreferences.edit().putBoolean(PREF_WIFI_ONLY, wifiOnly).apply()
 
-  fun putPrefStorageTitle(storageTitle: String?) {
+  fun putPrefStorageTitle(storageTitle: String?) =
     sharedPreferences.edit()
       .putString(PREF_STORAGE_TITLE, storageTitle).apply()
-  }
 
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit().putString(PREF_STORAGE, storage).apply()
@@ -133,23 +123,16 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
 
   fun getPrefStorages(): Flowable<String> = prefStorages.startWith(prefStorage)
 
-  fun putPrefFullScreen(fullScreen: Boolean) {
-    sharedPreferences.edit().putBoolean(PREF_FULLSCREEN, fullScreen)
-      .apply()
-  }
+  fun putPrefFullScreen(fullScreen: Boolean) =
+    sharedPreferences.edit().putBoolean(PREF_FULLSCREEN, fullScreen).apply()
 
-  fun putPrefExternalLinkPopup(externalLinkPopup: Boolean) {
-    sharedPreferences.edit()
-      .putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup)
-      .apply()
-  }
+  fun putPrefExternalLinkPopup(externalLinkPopup: Boolean) =
+    sharedPreferences.edit().putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply()
 
   fun showIntro(): Boolean = sharedPreferences.getBoolean(PREF_SHOW_INTRO, true)
 
-  fun setIntroShown() {
-    sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false)
-      .apply()
-  }
+  fun setIntroShown() =
+    sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false).apply()
 
   var showHistoryAllBooks: Boolean
     get() = sharedPreferences.getBoolean(
@@ -190,9 +173,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
 
   fun nightModes(): Flowable<NightModeConfig.Mode> = nightModes.startWith(nightMode)
 
-  fun updateNightMode() {
-    nightModes.offer(nightMode)
-  }
+  fun updateNightMode() = nightModes.offer(nightMode)
 
   var hostedBooks: Set<String>
     get() = sharedPreferences.getStringSet(
