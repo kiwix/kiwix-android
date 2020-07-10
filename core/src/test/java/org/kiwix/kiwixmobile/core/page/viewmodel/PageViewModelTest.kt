@@ -30,7 +30,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.page.PageImpl
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.pageState
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
+import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -42,7 +46,6 @@ internal class PageViewModelTest {
   private val pageDao: PageDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
-  private val state = TestablePageState()
 
   private lateinit var viewModel: TestablePageViewModel
   private val testScheduler = TestScheduler()
@@ -65,8 +68,37 @@ internal class PageViewModelTest {
   }
 
   @Test
+  fun `initial state is Initialising`() {
+    viewModel.state.test().assertValue(pageState())
+  }
+
+  @Test
   fun `Exit finishes activity`() {
-    viewModel.effects.test().also { viewModel.actions.offer(Action.Exit) }.assertValue(Finish)
-    viewModel.state.test().assertValue(state)
+    viewModel.effects.test().also { viewModel.actions.offer(Exit) }.assertValue(Finish)
+    viewModel.state.test().assertValue(pageState())
+  }
+
+  @Test
+  internal fun `OnItemClick selects item if one is selected`() {
+    val page = PageImpl(isSelected = true)
+    viewModel.state.postValue(TestablePageState(listOf(page)))
+    viewModel.actions.offer(Action.OnItemClick(page))
+    viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl())))
+  }
+
+  @Test
+  internal fun `OnItemClick offers OpenPage if none is selected`() {
+    viewModel.state.postValue(TestablePageState(listOf(PageImpl())))
+    viewModel.effects.test().also { viewModel.actions.offer(Action.OnItemClick(PageImpl())) }
+      .assertValue(OpenPage(PageImpl(), zimReaderContainer))
+    viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl())))
+  }
+
+  @Test
+  internal fun `OnItemLongClick selects item if none is selected`() {
+    val page = PageImpl()
+    viewModel.state.postValue(TestablePageState(listOf(page)))
+    viewModel.actions.offer(Action.OnItemLongClick(page))
+    viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl(isSelected = true))))
   }
 }

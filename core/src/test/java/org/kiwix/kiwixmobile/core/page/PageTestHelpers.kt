@@ -23,8 +23,9 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
+import org.kiwix.kiwixmobile.core.page.viewmodel.TestablePageState
 
-class PageImpl(
+data class PageImpl(
   override val zimFilePath: String? = "zimFilePath",
   override val url: String = "url",
   override var isSelected: Boolean = false,
@@ -92,8 +93,10 @@ fun bookmark(
 }
 
 fun bookmarkState(
-  bookmarks: List<BookmarkItem> = listOf(),
+  bookmarks: List<BookmarkItem> = emptyList(),
   showAll: Boolean = true,
   zimId: String = "id",
   searchTerm: String = ""
 ): BookmarkState = BookmarkState(bookmarks, showAll, zimId, searchTerm)
+
+fun pageState(): TestablePageState = TestablePageState()

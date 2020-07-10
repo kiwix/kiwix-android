@@ -23,19 +23,17 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
+import org.kiwix.kiwixmobile.core.page.pageState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 class TestablePageViewModel(
-  override val zimReaderContainer: ZimReaderContainer,
-  override val sharedPreferenceUtil: SharedPreferenceUtil,
+  zimReaderContainer: ZimReaderContainer,
+  sharedPreferenceUtil: SharedPreferenceUtil,
   val dao: PageDao
-) : PageViewModel<Page, TestablePageState>(dao) {
-  override fun initialState(): TestablePageState = TestablePageState()
+) : PageViewModel<Page, TestablePageState>(dao, sharedPreferenceUtil, zimReaderContainer) {
 
-  init {
-    addDisposablesToCompositeDisposable()
-  }
+  override fun initialState(): TestablePageState = pageState()
 
   override fun updatePagesBasedOnFilter(
     state: TestablePageState,
@@ -62,7 +60,7 @@ class TestablePageViewModel(
   override fun createDeletePageDialogEffect(state: TestablePageState): SideEffect<*> = mockk()
 }
 
-class TestablePageState(
+data class TestablePageState(
   override val pageItems: List<Page> = emptyList(),
   override val visiblePageItems: List<PageRelated> = pageItems,
   override val showAll: Boolean = true,
