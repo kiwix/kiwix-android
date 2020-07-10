@@ -69,4 +69,6 @@ data class TestablePageState(
 ) : PageState<Page>() {
   override fun copyWithNewItems(newItems: List<Page>): PageState<Page> =
     TestablePageState(pageItems = pageItems)
+
+  val publicFilteredPageItems = filteredPageItems
 }
