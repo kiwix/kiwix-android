@@ -928,7 +928,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @NotNull @Override public KiwixWebView getCurrentWebView() {
     if (webViewList.size() == 0) return newMainPageTab();
-    if (currentWebViewIndex < webViewList.size()) {
+    if (currentWebViewIndex < webViewList.size() && currentWebViewIndex > 0) {
       return webViewList.get(currentWebViewIndex);
     } else {
       return webViewList.get(0);
