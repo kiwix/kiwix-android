@@ -24,7 +24,7 @@
   android:layout_height="match_parent"
   android:animateLayoutChanges="true">
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
+  <org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -69,7 +69,7 @@
 
     <include layout="@layout/bottom_toolbar" />
 
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
 
   <ImageButton
     android:id="@+id/activity_main_fullscreen_button"
