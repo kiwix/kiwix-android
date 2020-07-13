@@ -22,25 +22,30 @@
   android:id="@+id/container"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:weightSum="1">
+  android:orientation="vertical">
 
-  <fragment
-    android:id="@+id/nav_host_fragment"
-    android:name="org.kiwix.kiwixmobile.main.NavigationHostFragment"
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    app:defaultNavHost="true"
-    app:navGraph="@navigation/kiwix_nav_graph"
-    tools:ignore="FragmentTagUsage" />
+    android:layout_height="match_parent">
 
-  <com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/nav_view"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-    app:menu="@menu/menu_bottom_nav" />
+    <fragment
+      android:id="@+id/nav_host_fragment"
+      android:name="org.kiwix.kiwixmobile.main.NavigationHostFragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:defaultNavHost="true"
+      app:navGraph="@navigation/kiwix_nav_graph"
+      tools:ignore="FragmentTagUsage" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+      android:id="@+id/nav_view"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+      app:layout_scrollFlags="scroll|enterAlways|snap"
+      app:menu="@menu/menu_bottom_nav" />
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </LinearLayout>
