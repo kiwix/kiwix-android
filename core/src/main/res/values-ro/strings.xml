@@ -61,7 +61,6 @@
   <string name="pref_back_to_top">Începutul paginii</string>
   <string name="pref_back_to_top_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
   <string name="pref_hide_toolbar">Ascunde bara de unelte când miști scrolezi</string>
-  <string name="pref_hide_toolbar_summary">Ascunde bara de căutare când pagina este în partea de jos</string>
   <string name="pref_language_title">Limba</string>
   <string name="pref_language_chooser">Alegeți o limbă</string>
   <string name="pref_credits">Contribuitori și Licențe</string>

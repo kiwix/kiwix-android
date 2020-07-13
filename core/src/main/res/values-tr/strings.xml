@@ -69,7 +69,6 @@
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
   <string name="pref_hide_toolbar">Araç Çubuğunu Görünür Tut</string>
-  <string name="pref_hide_toolbar_summary">Sayfa kaydırılırken araç çubuğunu gizle</string>
   <string name="pref_language_title">Dil</string>
   <string name="pref_language_chooser">Bir dil seçin</string>
   <string name="pref_credits">Katkıda bulunanlar ve lisanslar</string>

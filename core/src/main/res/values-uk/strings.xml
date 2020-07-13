@@ -36,7 +36,6 @@
   <string name="pref_back_to_top">Повернутись угору</string>
   <string name="pref_back_to_top_summary">Відображати кнопки в кінці сторінки для прокрутки вгору</string>
   <string name="pref_hide_toolbar">Приховувати панель інструментів при прокручуванні</string>
-  <string name="pref_hide_toolbar_summary">Приховувати панель інструментів, коли виконується прокручування сторінки</string>
   <string name="pref_language_title">Мова</string>
   <string name="pref_language_chooser">Оберіть мову</string>
   <string name="pref_credits">Дописувачі й ліцензії</string>

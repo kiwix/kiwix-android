@@ -57,7 +57,6 @@
   <string name="pref_back_to_top">Torra a su cumintzu</string>
   <string name="pref_back_to_top_summary">Ammustra unu butone a sa fine de sa pàgina pro torrare a su cumintzu</string>
   <string name="pref_hide_toolbar">Mantene sa barra de sas ainas visìbile</string>
-  <string name="pref_hide_toolbar_summary">Non permitit a sa barra de sas ainas de iscùrrere a foras de sa vista cando ses pompiende cuntenutos</string>
   <string name="pref_language_title">Limba</string>
   <string name="pref_language_chooser">Issèbera una limba</string>
   <string name="pref_credits">Contribuidores e Litzèntzias</string>

@@ -114,7 +114,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
-import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
@@ -387,7 +386,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     checkForRateDialog();
 
-
     addFileReader();
     setupTabsAdapter();
     setTableDrawerInfo();
@@ -593,6 +591,7 @@ public abstract class CoreReaderFragment extends BaseFragment
         tabSwitcherRoot.setVisibility(View.GONE);
         startAnimation(tabSwitcherRoot, R.anim.slide_up);
         progressBar.setVisibility(View.VISIBLE);
+        progressBar.hide();
         contentFrame.setVisibility(View.VISIBLE);
       }
       selectTab(currentWebViewIndex);

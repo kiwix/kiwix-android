@@ -39,7 +39,6 @@
   <string name="pref_back_to_top">ჟილე დორთა</string>
   <string name="pref_back_to_top_summary">ხასჷლაშ ბოლოს ჟილე დორთაშ კონჭიშ ძირაფა</string>
   <string name="pref_hide_toolbar">ხეჭკუდეფიშ პანელიშ ტყობინაფა გონოჯინაშ რეჟიმს</string>
-  <string name="pref_hide_toolbar_summary">ხეჭკუდეფიშ პანელიშ ტყობინაფა ხასჷლაშ გიმე გინოჯინაშ რეჟიმს</string>
   <string name="pref_language_title">ნინა</string>
   <string name="pref_language_chooser">გეგშაგორით ნინა</string>
   <string name="pref_credits">მახვარებუეფი დო ლიცენზიეფი</string>

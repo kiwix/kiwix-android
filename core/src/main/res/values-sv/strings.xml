@@ -59,7 +59,6 @@
   <string name="pref_back_to_top">Tillbaka till toppen</string>
   <string name="pref_back_to_top_summary">Visar en knapp i slutet på sidan för att rulla upp till toppen</string>
   <string name="pref_hide_toolbar">Dölj verktygsfält vid rullning</string>
-  <string name="pref_hide_toolbar_summary">Dölj verktygsfältet när sidan rullar nedåt</string>
   <string name="pref_language_title">Språk</string>
   <string name="pref_language_chooser">Välj ett språk</string>
   <string name="pref_credits">Bidragsgivare och licenser</string>

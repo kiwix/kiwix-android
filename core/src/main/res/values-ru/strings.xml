@@ -73,7 +73,6 @@
   <string name="pref_back_to_top">Вернуться наверх</string>
   <string name="pref_back_to_top_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
   <string name="pref_hide_toolbar">Прятать панель инструментов при прокрутке</string>
-  <string name="pref_hide_toolbar_summary">Прятать панель инструментов при прокрутке страницы вниз</string>
   <string name="pref_language_title">Язык</string>
   <string name="pref_language_chooser">Выберите язык</string>
   <string name="pref_credits">Пользователи и Лицензии</string>
