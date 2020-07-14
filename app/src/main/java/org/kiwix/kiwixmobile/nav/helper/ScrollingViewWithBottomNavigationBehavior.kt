@@ -30,7 +30,6 @@ import org.kiwix.kiwixmobile.R
 
 class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: AttributeSet) :
   AppBarLayout.ScrollingViewBehavior(context, attrs) {
-  // We add a bottom margin to avoid the bottom navigation bar
   private var bottomMargin = 0
 
   override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean =
