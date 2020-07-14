@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -54,10 +55,8 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.main.KiwixWebViewClient
 import org.kiwix.kiwixmobile.navigate
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -163,7 +162,7 @@ class ReaderFragment : CoreReaderFragment() {
   override fun createWebClient(
     webViewCallback: WebViewCallback,
     zimReaderContainer: ZimReaderContainer
-  ) = KiwixWebViewClient(webViewCallback, zimReaderContainer)
+  ) = CoreWebViewClient(webViewCallback, zimReaderContainer)
 
   override fun onNewNavigationMenuClicked() {
     // do nothing
@@ -245,10 +244,6 @@ class ReaderFragment : CoreReaderFragment() {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
       // TODO: Show to user
     }
-  }
-
-  override fun manageZimFiles(tab: Int) {
-    activity?.start<ZimManageActivity> { putExtra(ZimManageActivity.TAB_EXTRA, tab) }
   }
 
   override fun onNewIntent(

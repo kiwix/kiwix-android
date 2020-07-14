@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
@@ -153,7 +154,6 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     menu.findItem(R.id.menu_help)?.isVisible = false
-    menu.findItem(R.id.menu_openfile)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
 
@@ -162,7 +162,7 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun createWebClient(
     webViewCallback: WebViewCallback,
     zimReaderContainer: ZimReaderContainer
-  ) = CustomWebViewClient(webViewCallback, zimReaderContainer)
+  ) = CoreWebViewClient(webViewCallback, zimReaderContainer)
 
   override fun onNewNavigationMenuClicked() {
     // do nothing
@@ -200,10 +200,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
     }
     super.configureWebViewSelectionHandler(menu)
-  }
-
-  override fun manageZimFiles(tab: Int) {
-    // Do nothing
   }
 
   override fun showHomePage() {

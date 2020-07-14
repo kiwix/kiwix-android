@@ -23,7 +23,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.isVisible
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
@@ -68,7 +67,6 @@ class MainMenu(
     fun onAddNoteMenuClicked()
     fun onBookmarksMenuClicked()
     fun onRandomArticleMenuClicked()
-    fun onLibraryMenuClicked()
     fun onReadAloudMenuClicked()
     fun onFullscreenMenuClicked()
     fun onSupportKiwixMenuClicked()
@@ -86,7 +84,6 @@ class MainMenu(
     tabSwitcher?.actionView?.findViewById(R.id.ic_tab_switcher_text)
   private val bookmarks = menu.findItem(R.id.menu_bookmarks_list)
   private val history = menu.findItem(R.id.menu_history)
-  private val library = menu.findItem(R.id.menu_openfile)
   private val addNote = menu.findItem(R.id.menu_add_note)
   private val randomArticle = menu.findItem(R.id.menu_random_article)
   private val fullscreen = menu.findItem(R.id.menu_fullscreen)
@@ -133,7 +130,6 @@ class MainMenu(
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
     bookmarks.menuItemClickListener { menuClickListener.onBookmarksMenuClicked() }
     randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }
-    library.menuItemClickListener { menuClickListener.onLibraryMenuClicked() }
     readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
     fullscreen.menuItemClickListener { menuClickListener.onFullscreenMenuClicked() }
     supportKiwix.menuItemClickListener { menuClickListener.onSupportKiwixMenuClicked() }

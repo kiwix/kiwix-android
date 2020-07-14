@@ -980,10 +980,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @Override public void onLibraryMenuClicked() {
-    manageZimFiles(hasLocalBooks ? 0 : 1);
-  }
-
   @Override public void onRandomArticleMenuClicked() {
     openRandomArticle();
   }
@@ -1381,10 +1377,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (intent.getAction() != null) {
       if (zimReaderContainer.getId() != null) {
         startIntentBasedOnAction(intent);
-      } else {
-        if (CoreSearchWidget.MIC_CLICKED.equals(intent.getAction())) {
-          manageZimFiles(0);
-        }
       }
     }
   }
@@ -1788,8 +1780,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);
-    downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
-    downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
     updateTitle();
   }
 

@@ -31,8 +31,6 @@ public interface WebViewCallback {
 
   void openExternalUrl(Intent intent);
 
-  void manageZimFiles(int tab);
-
   void webViewProgressChanged(int progress);
 
   void webViewTitleUpdated(String title);
