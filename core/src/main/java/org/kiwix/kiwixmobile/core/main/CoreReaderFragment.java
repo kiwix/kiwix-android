@@ -912,6 +912,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
     setUpWebViewWithTextToSpeech();
+    updateBottomToolbarVisibility();
     contentFrame.addView(tempWebViewForUndo);
   }
 
