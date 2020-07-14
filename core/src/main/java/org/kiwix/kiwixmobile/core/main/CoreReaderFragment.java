@@ -205,7 +205,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.fullscreen_video_container)
   ViewGroup videoView;
   @BindView(R2.id.activity_main_root)
-  View root;
+  View activityMainRoot;
 
   @Inject
   protected MainContract.Presenter presenter;
@@ -836,12 +836,12 @@ public abstract class CoreReaderFragment extends BaseFragment
     KiwixWebView webView;
     if (!isHideToolbar) {
       webView = new ToolbarScrollingKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
+        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
         createWebClient(this, zimReaderContainer),
         toolbarContainer, bottomToolbar, sharedPreferenceUtil);
     } else {
       webView = new ToolbarStaticKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
+        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
         createWebClient(this, zimReaderContainer),
         sharedPreferenceUtil);
     }
