@@ -74,7 +74,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
       if (storage == null) {
         val defaultStorage = defaultStorage()
         putPrefStorage(defaultStorage)
-        return defaultStorage().also { putPrefStorage(it) }
+        return defaultStorage().also(this@SharedPreferenceUtil::putPrefStorage)
       } else if (!File(storage).exists()) {
         return defaultStorage()
       }
