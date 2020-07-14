@@ -29,11 +29,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -69,15 +66,10 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var dialogShower: DialogShower
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    val view = super.onCreateView(inflater, container, savedInstanceState)
-
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
     if (enforcedLanguage()) {
-      return view
+      return
     }
     openObbOrZim()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -85,7 +77,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
       toolbarToc?.isEnabled = false
     }
-    return view
   }
 
   override fun setDrawerLockMode(lockMode: Int) {
