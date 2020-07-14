@@ -44,8 +44,9 @@
   <string name="server_textview_default_message">נא לבחור את הקבצים שברצונך לארח בשרת</string>
   <string name="progress_dialog_starting_server">הרצת השרת</string>
   <string name="hotspot_dialog_title" fuzzy="true">הפעלת נקודת חיבור הווייפיי שלך</string>
+  <string name="wifi_dialog_title">חיבור WiFi אותר</string>
   <string name="hotspot_dialog_message" fuzzy="true">כדי שהאפשרות הזאת תעבוד, צריך קודם להפעיל את נקודת חיבור הווייפיי שלך ידנית.</string>
-  <string name="hotspot_dialog_neutral_button" fuzzy="true">כן, הפעלתי אותה</string>
+  <string name="hotspot_dialog_neutral_button">להמשיך</string>
   <string name="hotspot_channel_description">עדכונים על מצב נקודת החיבור והשרת שלך.</string>
   <string name="hotspot_notification_content_title">נקודת חיבור של קיוויקס</string>
   <string name="start_server_label">הרצת השרת</string>
@@ -256,7 +257,7 @@
   <string name="tag_short_text">טקסט קצר</string>
   <string name="storage_permission_denied">אישור האחסון נדחה</string>
   <string name="grant_read_storage_permission">אפליקציה זו דורשת את אפשרות לקרוא את האחסון שלך כדי לתפקד. אנא הענק את ההרשאה בהגדרות שלך</string>
-  <string name="go_to_settings" fuzzy="true">לך להגדרות</string>
+  <string name="go_to_settings">לך להגדרות נקודת גישה</string>
   <string name="no_results">אין תוצאות</string>
   <string name="no_bookmarks">אין סימניות</string>
   <string name="no_history">אין היסטוריה</string>
@@ -272,5 +273,6 @@
   <string name="crash_checkbox_file_system">פרטי מערכת קבצים</string>
   <string name="diagnostic_report">דוח אבחון</string>
   <string name="diagnostic_report_message">נא לשלוח את כל הפרטים הבאים כדי שנוכל לאבחן את התקלה</string>
+  <string name="pref_text_zoom_title">תקריב טקסט</string>
   <string name="experimental_navigation">ניווט ניסיוני</string>
 </resources>

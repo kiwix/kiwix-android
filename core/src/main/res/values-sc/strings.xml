@@ -38,6 +38,8 @@
   <string name="server_textview_default_message">Ischerta sos documentos chi cheres istrangiare in su servidore</string>
   <string name="progress_dialog_starting_server">Aviende su servidore</string>
   <string name="hotspot_dialog_title">Istrutziones pro istrangiare libros</string>
+  <string name="wifi_dialog_title">Connessione WiFi rilevada</string>
+  <string name="wifi_dialog_body">Pro pòdere pompiare sos libros in àteros dispositivos, assegura·ti chi totu sos dispositivos siant connessos a sa matessi retza WiFi.</string>
   <string name="hotspot_dialog_message">Pro permìtere a custa funtzionalidade de funtzionare depes, in antis, allùghere manualmente s\'hotspot WIFI tuo o t\'assegurare chi su dispositivu de istrangiamentu e su chi retzet siant in sa matessi retza WiFi</string>
   <string name="hotspot_dialog_neutral_button">SIGHI</string>
   <string name="hotspot_channel_description">Agiornamentos a pitzu de s\'istadu de s\'hotspot/servidore tuo.</string>
@@ -73,6 +75,7 @@
   <string name="all_history_cleared">Cronologia iscantzellada de su totu</string>
   <string name="pref_clear_all_bookmarks_title">Isbòida sos sinnalibros</string>
   <string name="all_bookmarks_cleared">As iscantzelladu totu sos sinnalibros</string>
+  <string name="selected_bookmarks_cleared">Sinnalibros ischertados iscantzellados</string>
   <string name="clear_all_history_dialog_title">Iscantzellare totu sa cronologia?</string>
   <string name="share">Cumpartzi</string>
   <string name="selected_file_cab_app_chooser_title">Cumpartzi documentos ZIM cun:</string>
@@ -255,8 +258,10 @@
   <string name="no_bookmarks">Perunu sinnalibru!</string>
   <string name="no_history">Peruna cronologia</string>
   <string name="device_default">Valore predefinidu de su dispositivu</string>
-  <string name="delete_history" fuzzy="true">Iscantzellare sa cronologia?</string>
-  <string name="delete_bookmarks" fuzzy="true">Iscantzellare sos sinnalibros?</string>
+  <string name="delete_history">Iscantzellare totu sa cronologia?</string>
+  <string name="delete_selected_history">Iscantzellare sa cronologia ischertada?</string>
+  <string name="delete_bookmarks">Iscantzellare totu sos sinnalibros?</string>
+  <string name="delete_selected_bookmarks">Iscantzellare sos sinnalibros ischertados?</string>
   <string name="on">Alluta</string>
   <string name="off">Istudada</string>
   <string name="auto">Automàtica</string>
@@ -264,4 +269,7 @@
   <string name="crash_checkbox_file_system">Detàllios de su sistema de documentos</string>
   <string name="diagnostic_report">Raportu de diagnòstica</string>
   <string name="diagnostic_report_message">Pro praghere imbia totu sos detàllios chi sighent, in manera chi amus a pòdere diagnosticare su problema</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Ismanniamentu de su testu</string>
+  <string name="experimental_navigation">Navigatzione isperimentale</string>
 </resources>
