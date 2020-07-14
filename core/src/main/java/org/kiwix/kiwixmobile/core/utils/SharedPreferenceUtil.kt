@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getExternalFilesDirs
 import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
@@ -81,13 +81,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
       return storage
     }
 
-  private fun defaultStorage(): String {
-    val externalFilesDir = ContextCompat.getExternalFilesDirs(instance, null)[0]
-    return if (externalFilesDir != null)
-      externalFilesDir.path
-    else
-      instance.filesDir.path // workaround for emulators
-  }
+  private fun defaultStorage(): String =
+    (getExternalFilesDirs(instance, null)[0])?.let { it.path } ?: instance.filesDir.path
 
   fun getPrefStorageTitle(defaultTitle: String): String =
     sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle)
