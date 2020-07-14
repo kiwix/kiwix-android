@@ -33,10 +33,8 @@
       android:name="org.kiwix.kiwixmobile.main.NavigationHostFragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_gravity="bottom"
       app:defaultNavHost="true"
       app:layout_behavior=".nav.helper.ScrollingViewWithBottomNavigationBehavior"
-      app:layout_dodgeInsetEdges="bottom"
       app:navGraph="@navigation/kiwix_nav_graph"
       tools:ignore="FragmentTagUsage" />
 
@@ -46,6 +44,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
       app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+      app:layout_scrollFlags="scroll|enterAlways"
       app:menu="@menu/menu_bottom_nav" />
   </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
 

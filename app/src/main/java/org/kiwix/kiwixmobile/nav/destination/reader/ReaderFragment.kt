@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.core.net.toUri
@@ -71,6 +72,15 @@ class ReaderFragment : CoreReaderFragment() {
     if (uri.isNotEmpty()) {
       openZimFile(Uri.parse(uri).toFile())
     }
+  }
+
+  override fun onPause() {
+    super.onPause()
+    // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
+    // this resets the margin to zero, before fragment navigation.
+    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
+    params?.bottomMargin = 0
+    parentFragment?.view?.requestLayout()
   }
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
