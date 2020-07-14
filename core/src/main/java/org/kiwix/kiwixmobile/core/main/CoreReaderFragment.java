@@ -153,7 +153,6 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_POSITIONS
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
-import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
 public abstract class CoreReaderFragment extends BaseFragment
@@ -474,19 +473,9 @@ public abstract class CoreReaderFragment extends BaseFragment
       @Override
       public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
-          for (TableDrawerAdapter.DocumentSection section : sections) {
-            if (section.title.contains("REPLACE_")) {
-              section.title =
-                getResourceString(activity.getBaseContext(), section.title);
-            }
-          }
           documentSections.addAll(sections);
-          if (title.contains("REPLACE_")) {
-            tableDrawerAdapter.setTitle(
-              getResourceString(activity.getBaseContext(), title));
-          } else {
-            tableDrawerAdapter.setTitle(title);
-          }
+          tableDrawerAdapter.setTitle(title);
+
           tableDrawerAdapter.setSections(documentSections);
           tableDrawerAdapter.notifyDataSetChanged();
         }

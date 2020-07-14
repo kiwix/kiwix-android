@@ -134,10 +134,7 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
       ((ViewGroup) webView.getParent()).removeView(webView);
     }
     String webViewTitle = fromHtml(webView.getTitle()).toString();
-    if (webViewTitle.contains("REPLACE_")) {
-      webViewTitle =
-        getResourceString(holder.title.getContext().getApplicationContext(), webViewTitle);
-    } else if (webViewTitle.contains("content://org.kiwix")) {
+    if (webViewTitle.contains("content://org.kiwix")) {
       webViewTitle = activity.getString(R.string.menu_home);
     }
     holder.title.setText(webViewTitle);

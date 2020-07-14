@@ -227,9 +227,6 @@ class LanguageUtils(private val context: Context) {
     @JvmStatic
     fun getResourceString(appContext: Context, str: String): String {
       var resourceName = str
-      if (resourceName.contains("REPLACE_")) {
-        resourceName = resourceName.replace("REPLACE_", "")
-      }
       val resourceId = appContext.resources
         .getIdentifier(resourceName, "string", appContext.packageName)
       return appContext.resources.getString(resourceId)
