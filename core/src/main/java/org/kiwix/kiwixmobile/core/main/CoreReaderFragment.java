@@ -908,7 +908,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
     zimReaderContainer.setZimFile(tempZimFileForUndo);
     webViewList.add(index, tempWebViewForUndo);
-    tabsAdapter.notifyItemInserted(index);
     tabsAdapter.notifyDataSetChanged();
 
     Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
