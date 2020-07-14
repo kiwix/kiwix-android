@@ -204,7 +204,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   ViewGroup videoView;
-
+  @BindView(R2.id.activity_main_root)
   View root;
 
   @Inject
@@ -333,7 +333,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
-    root = inflater.inflate(R.layout.fragment_main, container, false);
+    View root = inflater.inflate(R.layout.fragment_main, container, false);
     ButterKnife.bind(this, root);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     presenter.attachView(this);
@@ -1657,7 +1657,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewUrlFinishedLoading() {
-    if(isAdded()) {
+    if (isAdded()) {
       updateTableOfContents();
       tabsAdapter.notifyDataSetChanged();
       updateUrlProcessor();
