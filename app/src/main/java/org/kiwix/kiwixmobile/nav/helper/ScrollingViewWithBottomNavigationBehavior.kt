@@ -48,9 +48,9 @@ class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: Attribu
       val readerNavNewMargin = (coordinatorHeight - navBarYPosition).toInt()
       if (dependency is BottomNavigationView && readerNavNewMargin != bottomMargin) {
         bottomMargin = readerNavNewMargin
-        val layout = readerBottomAppBar.layoutParams as ViewGroup.MarginLayoutParams
+        val layout = child.layoutParams as ViewGroup.MarginLayoutParams
         layout.bottomMargin = bottomMargin
-        readerBottomAppBar.requestLayout()
+        child.requestLayout()
         return true
       }
     }
