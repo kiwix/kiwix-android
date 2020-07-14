@@ -45,8 +45,6 @@
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
       app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-      app:layout_insetEdge="top"
-      app:layout_scrollFlags="scroll|enterAlways|snap"
       app:menu="@menu/menu_bottom_nav" />
   </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
 
