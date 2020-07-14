@@ -133,7 +133,6 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
-    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
     if (zimReaderContainer.zimFileReader == null) {
       mainMenu?.hideBookSpecificMenuItems()
     }

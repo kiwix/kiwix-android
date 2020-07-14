@@ -282,5 +282,4 @@
   <string name="diagnostic_report_message">Пожалуйста, пришлите нам всю информацию ниже, чтобы мы смогли обнаружить проблему</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Масштаб Текста</string>
-  <string name="experimental_navigation">Экспериментальная навигация</string>
 </resources>

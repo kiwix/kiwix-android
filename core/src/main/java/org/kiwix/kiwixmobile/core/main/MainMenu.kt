@@ -94,7 +94,6 @@ class MainMenu(
   private val hostBooks = menu.findItem(R.id.menu_host_books)
   private val help = menu.findItem(R.id.menu_help)
   private val settings = menu.findItem(R.id.menu_settings)
-  private val newNavigation = menu.findItem(R.id.menu_new_navigation)
   private val supportKiwix = menu.findItem(R.id.menu_support_kiwix)
   private var isInTabSwitcher: Boolean = false
 
@@ -109,8 +108,6 @@ class MainMenu(
       tabSwitcher = null
       tabSwitcherTextView = null
     }
-
-    newNavigation.isVisible = BuildConfig.DEBUG
 
     randomArticle.setShowAsAction(
       if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -139,7 +136,6 @@ class MainMenu(
     library.menuItemClickListener { menuClickListener.onLibraryMenuClicked() }
     readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
     fullscreen.menuItemClickListener { menuClickListener.onFullscreenMenuClicked() }
-    newNavigation.menuItemClickListener { menuClickListener.onNewNavigationMenuClicked() }
     supportKiwix.menuItemClickListener { menuClickListener.onSupportKiwixMenuClicked() }
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
 

@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import androidx.appcompat.view.ActionMode
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -60,12 +59,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)
     actionMode = mode
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    val onCreateOptionsMenu = super.onCreateOptionsMenu(menu)
-    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
-    return onCreateOptionsMenu
   }
 
   override fun onSupportNavigateUp(): Boolean {
