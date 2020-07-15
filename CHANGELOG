@@ -1,3 +1,14 @@
+3.3.4
+NEW: Updated translations
+BUGFIX: Fullscreen videos were not displaying
+BUGFIX: Urls containing "?" were not loading properly
+BUGFIX: Notifications were erroneously allowing the user to pause a download
+BUGFIX: Urls with "#" anchors now load to the correct portion of the page
++ Lots More
+
+3.3.3
+BUGFIX: Crash on older devices due to OKHTTP
+
 3.3.2
 NEW: Better flow for hosting books
 NEW: Control text zoom for zim files
