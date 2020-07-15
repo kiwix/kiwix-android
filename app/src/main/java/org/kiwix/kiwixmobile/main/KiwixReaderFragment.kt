@@ -160,11 +160,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
       val positions = JSONArray(zimPositions)
       var i = 0
       getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      // getCurrentWebView().scrollY = positions.getInt(i)
+      getCurrentWebView().scrollY = positions.getInt(i)
       i++
       while (i < urls.length()) {
         newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-        // getCurrentWebView().scrollY = positions.getInt(i)
+        getCurrentWebView().scrollY = positions.getInt(i)
         i++
       }
       selectTab(currentTab)
