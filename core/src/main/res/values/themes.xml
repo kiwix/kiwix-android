@@ -20,7 +20,7 @@
     <item name="colorOnError">@color/alabaster_white</item>
 
     <item name="textSecondary">@color/mine_shaft_gray700</item>
-    <item name="textTertiary">@color/mine_shaft_gray500</item>
+    <item name="textTertiary">@color/mine_shaft_gray600</item>
     <item name="cardViewBackground">@color/alabaster_white</item>
   </style>
 
