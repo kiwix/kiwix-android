@@ -290,7 +290,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   };
   private Disposable bookmarkingDisposable;
-  private Boolean isBookmarked;
+  private boolean isBookmarked;
 
   @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
     @NotNull AppCompatActivity activity) {
