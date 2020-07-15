@@ -65,7 +65,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
   val prefExternalLinkPopup: Boolean
     get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
 
-  val prefLanguage: String
+  val prefLanguage: String?
     get() = sharedPreferences.getString(PREF_LANG, Locale.ROOT.toString())
 
   val prefStorage: String
@@ -74,7 +74,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
       if (storage == null) {
         val defaultStorage = defaultStorage()
         putPrefStorage(defaultStorage)
-        return defaultStorage().also(this@SharedPreferenceUtil::putPrefStorage)
+        return defaultStorage().also(::putPrefStorage)
       } else if (!File(storage).exists()) {
         return defaultStorage()
       }
@@ -82,9 +82,9 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
     }
 
   private fun defaultStorage(): String =
-    (getExternalFilesDirs(instance, null)[0])?.let { it.path } ?: instance.filesDir.path
+    getExternalFilesDirs(instance, null)[0]?.path ?: instance.filesDir.path
 
-  fun getPrefStorageTitle(defaultTitle: String): String =
+  fun getPrefStorageTitle(defaultTitle: String): String? =
     sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle)
 
   fun putPrefLanguage(language: String?) =
@@ -102,8 +102,6 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit().putString(PREF_STORAGE, storage).apply(); prefStorages.onNext(storage)
   }
-
-  fun getPrefStorages(): Flowable<String> = prefStorages.startWith(prefStorage)
 
   fun putPrefFullScreen(fullScreen: Boolean) =
     sharedPreferences.edit().putBoolean(PREF_FULLSCREEN, fullScreen).apply()
@@ -124,22 +122,19 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
 
   var showBookmarksAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
-    set(prefShowBookmarksFromCurrentBook) {
-      sharedPreferences.edit()
-        .putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook).apply()
-    }
+    set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit()
+      .putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook).apply()
 
   val nightMode: NightModeConfig.Mode
     get() = from(
-      sharedPreferences.getString(PREF_NIGHT_MODE, "" + AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        .toInt()
+      sharedPreferences.getString("", null)?.toInt() ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     )
 
   fun nightModes(): Flowable<NightModeConfig.Mode> = nightModes.startWith(nightMode)
 
   fun updateNightMode() = nightModes.offer(nightMode)
 
-  var hostedBooks: Set<String>
+  var hostedBooks: Set<String>?
     get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, HashSet())
     set(hostedBooks) {
       sharedPreferences.edit().putStringSet(PREF_HOSTED_BOOKS, hostedBooks).apply()

@@ -194,7 +194,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onResume() {
     super.onResume()
-    presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
+    sharedPreferenceUtil.hostedBooks?.let(presenter::loadBooks)
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.getSocketAddress()
       layoutServerStarted()
