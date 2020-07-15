@@ -28,6 +28,12 @@ import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
 import org.kiwix.kiwixmobile.core.R
 
+/**
+ * Taken from
+ * https://stackoverflow.com/questions/34181372/coordinatorlayout-inside-another-coordinatorlayout
+ * By user Fabian https://stackoverflow.com/users/5343268/fabian
+ * 2020-07-15
+ */
 class NestedCoordinatorLayout @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
