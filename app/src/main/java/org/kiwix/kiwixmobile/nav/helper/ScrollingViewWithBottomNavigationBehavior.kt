@@ -28,6 +28,11 @@ import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.kiwix.kiwixmobile.R
 
+/**
+ * Inspired by James @ https://stackoverflow.com/users/165783/james
+ * for his answer on https://stackoverflow.com/questions/47917354/coordinatorlayout-content-child-overlaps-bottomnavigationview
+ * 2020-07-15
+ */
 class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: AttributeSet) :
   AppBarLayout.ScrollingViewBehavior(context, attrs) {
   private var bottomMargin = 0
