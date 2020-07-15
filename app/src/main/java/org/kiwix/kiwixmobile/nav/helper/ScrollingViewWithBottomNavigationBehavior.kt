@@ -41,23 +41,40 @@ class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: Attribu
     dependency: View
   ): Boolean {
     val result = super.onDependentViewChanged(parent, child, dependency)
-    val readerBottomAppBar: BottomAppBar? = child.findViewById(R.id.bottom_toolbar)
-    if (readerBottomAppBar != null) {
-      val navBarYPosition = dependency.y
-      val coordinatorHeight = parent.height
-      val readerNavNewMargin = (coordinatorHeight - navBarYPosition).toInt()
-      if (dependency is BottomNavigationView && readerNavNewMargin != bottomMargin) {
-        bottomMargin = readerNavNewMargin
-        val layout = child.layoutParams as ViewGroup.MarginLayoutParams
-        layout.bottomMargin = bottomMargin
-        child.requestLayout()
-        return true
-      }
+    if (dependency is BottomNavigationView) {
+      if (moveFragmentWithNavigationBar(child, dependency, parent)) return true
     }
     return result
   }
 
-  override fun onDependentViewRemoved(parent: CoordinatorLayout, child: View, dependency: View) {
-    super.onDependentViewRemoved(parent, child, dependency)
+  private fun moveFragmentWithNavigationBar(
+    fragmentContainer: View,
+    navigationBar: BottomNavigationView,
+    coordinatorLayout: CoordinatorLayout
+  ): Boolean {
+    val readerBottomAppBar: BottomAppBar? = fragmentContainer.findViewById(R.id.bottom_toolbar)
+    if (readerBottomAppBar != null) {
+      val newBottomMargin = calculateNewBottomMargin(navigationBar, coordinatorLayout)
+      if (newBottomMargin != bottomMargin) {
+        changeReaderToolbarMargin(newBottomMargin, fragmentContainer)
+        return true
+      }
+    }
+    return false
+  }
+
+  private fun calculateNewBottomMargin(
+    navigationBar: BottomNavigationView,
+    coordinatorLayout: CoordinatorLayout
+  ): Int = (coordinatorLayout.height - navigationBar.y).toInt()
+
+  private fun changeReaderToolbarMargin(
+    newBottomMargin: Int,
+    fragmentContainer: View
+  ) {
+    bottomMargin = newBottomMargin
+    val layout = fragmentContainer.layoutParams as ViewGroup.MarginLayoutParams
+    layout.bottomMargin = bottomMargin
+    fragmentContainer.requestLayout()
   }
 }
