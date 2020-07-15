@@ -204,8 +204,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   ViewGroup videoView;
-
-  View root;
+  @BindView(R2.id.activity_main_root)
+  View activityMainRoot;
 
   @Inject
   protected MainContract.Presenter presenter;
@@ -333,7 +333,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
-    root = inflater.inflate(R.layout.fragment_main, container, false);
+    View root = inflater.inflate(R.layout.fragment_main, container, false);
     ButterKnife.bind(this, root);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     presenter.attachView(this);
@@ -836,12 +836,12 @@ public abstract class CoreReaderFragment extends BaseFragment
     KiwixWebView webView;
     if (!isHideToolbar) {
       webView = new ToolbarScrollingKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
+        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
         createWebClient(this, zimReaderContainer),
         toolbarContainer, bottomToolbar, sharedPreferenceUtil);
     } else {
       webView = new ToolbarStaticKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
+        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
         createWebClient(this, zimReaderContainer),
         sharedPreferenceUtil);
     }
@@ -1657,7 +1657,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewUrlFinishedLoading() {
-    if(isAdded()) {
+    if (isAdded()) {
       updateTableOfContents();
       tabsAdapter.notifyDataSetChanged();
       updateUrlProcessor();
