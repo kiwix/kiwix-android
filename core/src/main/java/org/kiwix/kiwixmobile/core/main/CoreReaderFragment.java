@@ -868,6 +868,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
+    snackbarRoot.bringToFront();
     Snackbar.make(snackbarRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo, v -> {
         webViewList.add(index, tempForUndo);
