@@ -208,9 +208,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.no_open_book_text)
   TextView noOpenBookText;
 
-  //TODO: REMOVE:
-  //@BindView(R2.id.nested_scrolling) NestedScrollView scrollView;
-
   View root;
 
   @Inject
@@ -829,7 +826,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private KiwixWebView getWebView(String url) {
+  private KiwixWebView createWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
     KiwixWebView webView = new KiwixWebView(getActivity(), this, attrs, (ViewGroup) root, videoView,
       createWebClient(this, zimReaderContainer));
@@ -846,7 +843,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   protected KiwixWebView newTab(String url) {
-    KiwixWebView webView = getWebView(url);
+    KiwixWebView webView = createWebView(url);
     webViewList.add(webView);
     selectTab(webViewList.size() - 1);
     tabsAdapter.notifyDataSetChanged();
@@ -856,7 +853,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void newTabInBackground(String url) {
-    KiwixWebView webView = getWebView(url);
+    KiwixWebView webView = createWebView(url);
     webViewList.add(webView);
     tabsAdapter.notifyDataSetChanged();
     setUpWebViewWithTextToSpeech();
@@ -1315,10 +1312,8 @@ public abstract class CoreReaderFragment extends BaseFragment
       if (!urlIsInvalid()
         && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
         bottomToolbar.setVisibility(View.VISIBLE);
-        contentFrame.setPadding(0, 0, 0, 0);
       } else {
         bottomToolbar.setVisibility(View.GONE);
-        contentFrame.setPadding(0, 0, 0, 0);
       }
     }
   }

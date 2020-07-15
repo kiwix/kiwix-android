@@ -70,7 +70,6 @@
       app:layout_constraintTop_toTopOf="parent"
       app:srcCompat="@drawable/ic_toc_24dp" />
   </androidx.constraintlayout.widget.ConstraintLayout>
-  <!--  </LinearLayout>-->
 
 
 </com.google.android.material.bottomappbar.BottomAppBar>
