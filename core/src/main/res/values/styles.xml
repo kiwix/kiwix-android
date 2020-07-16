@@ -53,6 +53,7 @@
     <item name="android:layout_gravity">end</item>
     <item name="android:paddingRight">@dimen/switch_padding</item>
     <item name="android:paddingBottom">@dimen/switch_padding_bottom</item>
+    <item name="android:switchPadding">8dp</item>
     <item name="android:theme">@style/ThemeOverlay.KiwixTheme.Switch</item>
     <item name="android:textAppearance">@style/TextAppearance.KiwixTheme.Body2</item>
     <item name="android:textColor">?colorOnPrimary</item>
