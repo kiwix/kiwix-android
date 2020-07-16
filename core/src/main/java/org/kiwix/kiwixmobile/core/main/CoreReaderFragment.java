@@ -835,8 +835,9 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private KiwixWebView createWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
-    KiwixWebView webView = new KiwixWebView(getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-      createWebClient(this, zimReaderContainer));
+    KiwixWebView webView =
+      new KiwixWebView(getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
+        createWebClient(this, zimReaderContainer));
     loadUrl(url, webView);
     return webView;
   }
@@ -1587,7 +1588,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
 
     openFullScreenIfEnabled();
-    updateNightMode();
+    //updateNightMode();
   }
 
   private boolean isInFullScreenMode() {
