@@ -62,7 +62,6 @@
   <string name="pref_night_mode_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
-  <string name="pref_hide_toolbar">維持工具列可見</string>
   <string name="pref_language_title">語言</string>
   <string name="pref_language_chooser">選擇語言</string>
   <string name="pref_credits">貢獻者和許可協議</string>
@@ -78,6 +77,7 @@
   <string name="all_history_cleared">所有歷史記錄已清除</string>
   <string name="pref_clear_all_bookmarks_title">清除書籤</string>
   <string name="all_bookmarks_cleared">已清除所有書籤</string>
+  <string name="selected_bookmarks_cleared">所選的書籤已清除</string>
   <string name="clear_all_history_dialog_title">清除所有歷史記錄？</string>
   <string name="share">分享</string>
   <string name="selected_file_cab_app_chooser_title">分享 ZIM 檔案以：</string>
@@ -260,8 +260,10 @@
   <string name="no_bookmarks">沒有書籤！</string>
   <string name="no_history">沒有歷史</string>
   <string name="device_default">設備預設</string>
-  <string name="delete_history" fuzzy="true">刪除歷史？</string>
-  <string name="delete_bookmarks" fuzzy="true">刪除書籤？</string>
+  <string name="delete_history">刪除所有歷史？</string>
+  <string name="delete_selected_history">刪除所選的歷史？</string>
+  <string name="delete_bookmarks">刪除所有書籤？</string>
+  <string name="delete_selected_bookmarks">刪除所選的書籤？</string>
   <string name="on">開啟</string>
   <string name="off">關閉</string>
   <string name="auto">自動</string>

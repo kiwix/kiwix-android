@@ -32,7 +32,6 @@
   <string name="pref_night_mode_summary">Diskouez ar pennadoù gant livioù eilpennet</string>
   <string name="pref_back_to_top">Distreiñ da grec\'h ar bajenn</string>
   <string name="pref_back_to_top_summary">Diskwel ur bouton e traoñ ar bajenn evit distreiñ d\'an deroù</string>
-  <string name="pref_hide_toolbar">Kuzhat ar varrenn ostilh pa vezer o tibuniñ</string>
   <string name="pref_language_title">Yezh</string>
   <string name="pref_language_chooser">Dibabit ur yezh</string>
   <string name="pref_credits">Kendaolerien hag aotreoù-implijout</string>

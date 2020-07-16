@@ -1,3 +1,15 @@
+3.3.2
+NEW: Better flow for hosting books
+NEW: Control text zoom for zim files
+NEW: Bookmarks/History internals rewrite
+NEW: Updated translations
+BUGFIX: Search results were inaccurate when typing too quickly
+BUGFIX: new zim scheme for addressing content
+BUGFIX: Native memory leaks fixed
+BUGFIX: fix crash on returning to webview from search result
+BUGFIX: some zim files could not be found after downloading
++ Lots More
+
 3.3.1
 NEW: Send Diagnostic Reports
 BUGFIX: Loading older zim files could fail

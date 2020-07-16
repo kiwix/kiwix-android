@@ -46,7 +46,6 @@
   <string name="pref_night_mode_summary">Näytä artikkelit käänteisillä väreillä</string>
   <string name="pref_back_to_top">Takaisin alkuun</string>
   <string name="pref_back_to_top_summary">Näytä painike sivun lopussa rullataksesi ylös alkuun</string>
-  <string name="pref_hide_toolbar">Pidä työkalupalkki näkyvissä</string>
   <string name="pref_language_title">Kieli</string>
   <string name="pref_language_chooser">Valitse kieli</string>
   <string name="pref_credits">Avustajat ja lisenssit</string>

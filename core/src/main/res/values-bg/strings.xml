@@ -36,7 +36,6 @@
   <string name="pref_night_mode_summary">Показване на статии в „нощен режим“</string>
   <string name="pref_back_to_top">Връщане в началото</string>
   <string name="pref_back_to_top_summary">Показване на бутон в края на страницата за превъртане нагоре</string>
-  <string name="pref_hide_toolbar">Лентата с инструменти винаги видима</string>
   <string name="pref_language_title">Език</string>
   <string name="pref_language_chooser">Избиране на език</string>
   <string name="pref_credits">Сътрудници и лицензи</string>

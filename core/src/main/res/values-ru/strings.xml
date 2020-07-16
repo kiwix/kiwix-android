@@ -72,7 +72,6 @@
   <string name="pref_night_mode_summary">Показать статьи инвертированными цветами</string>
   <string name="pref_back_to_top">Вернуться наверх</string>
   <string name="pref_back_to_top_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
-  <string name="pref_hide_toolbar">Прятать панель инструментов при прокрутке</string>
   <string name="pref_language_title">Язык</string>
   <string name="pref_language_chooser">Выберите язык</string>
   <string name="pref_credits">Пользователи и Лицензии</string>
@@ -88,6 +87,7 @@
   <string name="all_history_cleared">Вся история очищена</string>
   <string name="pref_clear_all_bookmarks_title">Очистить закладки</string>
   <string name="all_bookmarks_cleared">Все закладки удалены</string>
+  <string name="selected_bookmarks_cleared">Выбранные Закладки Очищены</string>
   <string name="clear_all_history_dialog_title">Очистить всю историю?</string>
   <string name="share">Поделиться</string>
   <string name="selected_file_cab_app_chooser_title">Поделиться файлами ZIM с:</string>
@@ -255,7 +255,7 @@
   <string name="no_devices_found">Устройства не найдены. Нажмите кнопку Поиск чтобы попробовать ещё раз.</string>
   <string name="files_for_transfer">ФАЙЛЫ ДЛЯ ПЕРЕДАЧИ</string>
   <string name="preparing_files">Подготовка файлов для передачи…</string>
-  <string name="performing_handshake">Производим \“рукопожатие\”…</string>
+  <string name="performing_handshake">Производим “рукопожатие”…</string>
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистить все заметки во всех статьях</string>
   <string name="pref_clear_all_notes_title">Очистить все заметки</string>
@@ -270,8 +270,10 @@
   <string name="no_bookmarks">Нет Закладок</string>
   <string name="no_history">История пуста</string>
   <string name="device_default">Настройки устройства по умолчанию</string>
-  <string name="delete_history" fuzzy="true">Удалить историю?</string>
-  <string name="delete_bookmarks" fuzzy="true">Удалить закладки?</string>
+  <string name="delete_history">Удалить всю историю?</string>
+  <string name="delete_selected_history">Очистить Выбранную историю?</string>
+  <string name="delete_bookmarks">Удалить все закладки?</string>
+  <string name="delete_selected_bookmarks">Удалить Выбранные Закладки?</string>
   <string name="on">Вкл</string>
   <string name="off">Выкл</string>
   <string name="auto">Авто</string>

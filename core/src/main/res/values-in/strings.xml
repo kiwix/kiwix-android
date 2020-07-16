@@ -3,6 +3,7 @@
 * Abijeet Patro
 * Arifin.wijaya
 * Arifpedia
+* Esiahaan
 * Iwan Novirion
 * Kenrick95
 * Relly Komaruzaman
@@ -19,13 +20,28 @@
   <string name="menu_exit_full_screen">Keluar dari modus layar penuh</string>
   <string name="menu_read_aloud">Bacakan</string>
   <string name="menu_read_aloud_stop">Hentikan pembacaan</string>
+  <string name="menu_support_kiwix">Dukung Kiwix</string>
   <string name="save_media">Simpan Media</string>
   <string name="save_media_error">Terjadi kesalahan saat menyimpan media!</string>
   <string name="save_media_saved">Simpan media sebagai %s pada Android/media/org.kiwix…/</string>
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Berkas Konten (*.zim)</string>
   <string name="open_in_new_tab">Buka pranala di tab baru?</string>
+  <string name="hotspot_service_channel_name">Saluran Servis Hotspot</string>
+  <string name="hotspot_failed_title">Hotspot gagal dihidupkan</string>
+  <string name="hotspot_failed_message">Tampaknya hotspot Anda telah hidup. Silakan memutuskan koneksi hotspot wifi Anda untuk lanjut.</string>
+  <string name="go_to_wifi_settings_label">Ke pengaturan WIFI</string>
+  <string name="server_failed_message">Server tidak dapat dihidupkan. Silakan menyalakan hotspot Anda.</string>
+  <string name="server_failed_toast_message">Server tidak dapat dinyalakan.</string>
+  <string name="server_started_successfully_toast_message">Server berhasil dinyalakan.</string>
+  <string name="server_stopped_successfully_toast_message">Server berhasil dimatikan.</string>
+  <string name="hotspot_turned_on">Hotspot sudah menyala.</string>
+  <string name="hotspot_details_message">Berikut adalah detil hotspot lokal Anda.\nSSID : %1$s\nPass : %2$s</string>
+  <string name="progress_dialog_starting_server">Menyalakan server</string>
+  <string name="hotspot_dialog_neutral_button">LANJUT</string>
+  <string name="server_started_message">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
   <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
+  <string name="zim_not_opened">Zim file tidak dapat dibuka</string>
   <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>
   <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
   <string name="pref_display_title">Tampilan</string>
@@ -35,7 +51,6 @@
   <string name="pref_night_mode_summary">Tampilkan artikel dengan warna terbalik</string>
   <string name="pref_back_to_top">Kembali ke Atas</string>
   <string name="pref_back_to_top_summary">Tampilkan tombol di akhir halaman untuk menggulir ke atas</string>
-  <string name="pref_hide_toolbar">Sembunyikan bilah alat saat menggulir</string>
   <string name="pref_language_title">Bahasa</string>
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="pref_credits">Kontributor dan Lisensi</string>
@@ -50,7 +65,10 @@
   <string name="pref_clear_all_history_summary">Hapus riwayat penelusuran dan tab terakhir</string>
   <string name="all_history_cleared">Semua Markah Telah Dibersihkan</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">Bersihkan Semua Markah</string>
+  <string name="share">Bagikan</string>
+  <string name="selected_file_cab_app_chooser_title">Bagikan ZIM file dengan:</string>
   <string name="delete">Hapus</string>
+  <string name="cancel">Batalkan</string>
   <string name="delete_specific_search_toast">Penelusuran terakhir telah dihapus</string>
   <string name="hint_contents_drawer_message">Anda bisa menggulir ke kiri untuk melihat isi artikel ini</string>
   <string name="got_it">Mengerti</string>
@@ -76,9 +94,10 @@
   <string name="local_zims">Perangkat</string>
   <string name="remote_zims">Daring</string>
   <string name="library">Perpustakaan</string>
+  <string name="delete_zim_body">Zim file berikut akan dihapus:\n\n%s</string>
   <string name="delete_zims_toast">Berkas telah dihapus</string>
   <string name="no_files_here">Tidak ada berkas disini</string>
-  <string name="download_no_space" fuzzy="true">Ruang tidak mencukupi untuk mengunduh berkas ini.</string>
+  <string name="download_no_space">Tidak tersedia cukup ruang data untuk mengunduh.</string>
   <string name="space_available">Ruang yang Tersedia:</string>
   <string name="zim_simple">Sederhana</string>
   <string name="zim_no_pic">Tanpa Gambar</string>
@@ -86,7 +105,7 @@
   <string name="no_network_connection">Tidak ada sambungan jaringan</string>
   <string name="help_2">Apa yang Kiwix lakukan?</string>
   <string name="help_3">Kiwix adalah pembaca konten luring. Ini sangat mirip peramban tapi bukannya mengakses halaman web daring, Kiwix membaca konten dari sebuah berkas dalam format ZIM.</string>
-  <string name="help_4" fuzzy="true">Pada awalnya Kiwix dirancang untuk menyediakan Wikipedia luring, namun juga dapat membaca konten lainnya.</string>
+  <string name="help_4">Meskipun Kiwix awalnya dirancang untuk menyediakan Wikipedia secara offline, Kiwix juga dapat membaca konten lainnya.</string>
   <string name="help_5">Dimana kontennya?</string>
   <string name="help_6">Konten kami disimpan di situs web Kiwix.</string>
   <string name="help_7">Mereka tersedia sebagai berkas ZIM. Ada banyak dari mereka:</string>
@@ -126,6 +145,13 @@
   <string name="your_languages">Bahasa terpilih:</string>
   <string name="other_languages">Bahasa lain:</string>
   <string name="humankind_knowledge">Humankind\'s knowledge, on your phone.</string>
+  <string name="go_to_previous_page">Ke halaman sebelumnya</string>
+  <string name="go_to_next_page">Ke halaman berikutnya</string>
+  <string name="select_languages">Pilih bahasa</string>
+  <string name="save_languages">Simpan bahasa</string>
+  <string name="send_feedback">Kirim masukan</string>
+  <string name="close_all_tabs">Tutup semua tab</string>
+  <string name="complete">Selesai</string>
   <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
   <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
   <string name="no_bookmarks">Tidak Ada Markah</string>

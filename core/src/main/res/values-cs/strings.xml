@@ -65,7 +65,6 @@
   <string name="pref_night_mode_summary">Zobrazuje stránky v invertovaných barvách.</string>
   <string name="pref_back_to_top">Zpět na začátek</string>
   <string name="pref_back_to_top_summary">Zobrazit tlačítko “Zpět na začátek” na konci stránky</string>
-  <string name="pref_hide_toolbar">Ponechat viditelný panel nástrojů</string>
   <string name="pref_language_title">Jazyk</string>
   <string name="pref_language_chooser">Vyberte jazyk</string>
   <string name="pref_credits">Přispěvatelé a licence</string>
@@ -150,7 +149,7 @@
   <string name="next">Další</string>
   <string name="previous">Předchozí</string>
   <string name="wifi_only_title">Povolit stahování obsahu přes mobilní připojení?</string>
-  <string name="wifi_only_msg">Pokud zvolíte \“Ano\”, nebudete v budoucnu varováni. Můžete však toto vždy změnit v Nastavení.</string>
+  <string name="wifi_only_msg">Pokud zvolíte “Ano”, nebudete v budoucnu varováni. Můžete však toto vždy změnit v Nastavení.</string>
   <string name="pref_wifi_only">Stahovat obsah pouze přes WiFi</string>
   <string name="time_day">den</string>
   <string name="time_hour">h</string>

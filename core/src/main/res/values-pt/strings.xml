@@ -41,7 +41,6 @@
   <string name="pref_night_mode_summary">Mostrar artigos com as cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
   <string name="pref_back_to_top_summary">Apresentar um botão no fim da página para voltar ao topo da página</string>
-  <string name="pref_hide_toolbar">Ocultar a barra de ferramentas ao deslizar</string>
   <string name="pref_language_title">Língua</string>
   <string name="pref_language_chooser">Escolha um idioma</string>
   <string name="pref_credits">Contribuidores e Licenças</string>

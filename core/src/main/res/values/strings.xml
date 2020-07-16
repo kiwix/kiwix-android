@@ -53,7 +53,6 @@
   <string name="pref_night_mode_summary">Show articles with inverted colors</string>
   <string name="pref_back_to_top">Back to Top</string>
   <string name="pref_back_to_top_summary">Display a button at the end of the page to scroll up to the top</string>
-  <string name="pref_hide_toolbar">Keep Toolbar Visible</string>
   <string name="pref_language_title">Language</string>
   <string name="pref_language_chooser">Choose a language</string>
   <string name="pref_credits">Contributors and Licenses</string>

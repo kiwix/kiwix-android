@@ -52,7 +52,7 @@
     android:layout_height="2dp"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
-    android:background="@color/accent"
+    android:background="@color/dodger_blue"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_device_name" />
@@ -113,7 +113,7 @@
     android:layout_marginStart="5dp"
     android:layout_marginTop="200dp"
     android:layout_marginEnd="5dp"
-    android:background="@color/accent"
+    android:background="@color/dodger_blue"
     app:layout_constraintBottom_toTopOf="@+id/text_view_files_for_transfer"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"

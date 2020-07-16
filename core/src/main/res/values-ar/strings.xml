@@ -62,7 +62,6 @@
   <string name="pref_night_mode_summary">عرض المقالات بألوانٍ معكوسة</string>
   <string name="pref_back_to_top">ارجع إلى الأعلى</string>
   <string name="pref_back_to_top_summary">عرض أيقونة في نهاية الصفحة للذهاب إلى الأعلى</string>
-  <string name="pref_hide_toolbar">اجعل شريط الأدوات مرئيًا</string>
   <string name="pref_language_title">اللغة</string>
   <string name="pref_language_chooser">اختر اللغة</string>
   <string name="pref_credits">المساهمون والتراخيص</string>
