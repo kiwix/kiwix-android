@@ -28,7 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
-    app:ipi_currentPageIndicatorColor="@color/blue800"
+    app:ipi_currentPageIndicatorColor="@color/denim_blue800"
     app:ipi_pageIndicatorColor="@color/blueTransparent"
     app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
