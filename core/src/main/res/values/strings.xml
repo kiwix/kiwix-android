@@ -283,6 +283,7 @@
   <string name="reader">Reader</string>
   <string name="no_open_book">No open book</string>
   <string name="open_library">Open library</string>
+  <string name="tab_restored">Tab restored</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>
