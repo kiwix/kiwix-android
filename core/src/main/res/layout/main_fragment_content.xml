@@ -29,6 +29,25 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+
+    <androidx.core.widget.NestedScrollView
+      android:id="@+id/nested_scrollview_content_main"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+      <FrameLayout
+        android:id="@+id/activity_main_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+      android:id="@+id/activity_main_tab_switcher"
+      layout="@layout/tab_switcher"
+      android:visibility="gone" />
+
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/fragment_main_app_bar"
       android:layout_width="match_parent"
@@ -48,19 +67,6 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:progress="70" />
     </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-      android:id="@+id/nested_scrollview_content_main"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-      <FrameLayout
-        android:id="@+id/activity_main_content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    </androidx.core.widget.NestedScrollView>
 
     <include layout="@layout/bottom_toolbar" />
 
@@ -134,8 +140,4 @@
     app:layout_constraintEnd_toStartOf="parent"
     app:layout_constraintStart_toStartOf="parent" />
 
-  <include
-    android:id="@+id/activity_main_tab_switcher"
-    layout="@layout/tab_switcher"
-    android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>
