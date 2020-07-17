@@ -19,15 +19,17 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
   <TextView
     android:id="@+id/list_item_search_text"
     android:layout_width="0dp"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
     android:background="?android:attr/listChoiceBackgroundIndicator"
     android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingStart="8dip"
     android:paddingEnd="8dip"
     android:textAppearance="?android:attr/textAppearanceListItem"
@@ -40,11 +42,8 @@
     style="?android:attr/borderlessButtonStyle"
     android:layout_width="wrap_content"
     android:layout_height="0dp"
-    android:adjustViewBounds="true"
     android:contentDescription="@string/search_open_in_new_tab"
-    android:scaleType="centerInside"
     app:srcCompat="@drawable/ic_open_in_new_24dp"
-    app:iconGravity="end"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent" />

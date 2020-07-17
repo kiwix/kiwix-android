@@ -25,10 +25,6 @@ android {
       isMinifyEnabled = false
     }
   }
-
-  defaultConfig {
-    vectorDrawables.useSupportLibrary = true
-  }
 }
 
 fun shouldUseLocalVersion() = File(projectDir, "libs").exists()
