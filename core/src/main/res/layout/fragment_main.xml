@@ -20,8 +20,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/new_navigation_fragment_main_drawer_layout"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:fitsSystemWindows="true">
+  android:layout_height="match_parent">
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

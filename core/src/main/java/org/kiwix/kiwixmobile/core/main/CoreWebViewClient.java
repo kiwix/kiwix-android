@@ -48,6 +48,7 @@ public abstract class CoreWebViewClient extends WebViewClient {
   private View home;
   private static String LEGACY_CONTENT_PREFIX =
     Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString();
+  private String urlWithAnchor;
 
   public CoreWebViewClient(
     WebViewCallback callback, ZimReaderContainer zimReaderContainer) {
@@ -59,6 +60,7 @@ public abstract class CoreWebViewClient extends WebViewClient {
   public boolean shouldOverrideUrlLoading(WebView view, String url) {
     callback.webViewUrlLoading();
     url = convertLegacyUrl(url);
+    urlWithAnchor = url.contains("#") ? url : null;
     if (zimReaderContainer.isRedirect(url)) {
       if (handleEpubAndPdf(url)) {
         return true;
@@ -126,12 +128,24 @@ public abstract class CoreWebViewClient extends WebViewClient {
     }
 
     view.removeView(home);
+    jumpToAnchor(view, url);
     callback.webViewUrlFinishedLoading();
   }
 
-  protected abstract void onUrlEqualToHome(WebView view);
+  /*
+   * If 2 urls are the same aside from the `#` component then calling load
+   * does not trigger our loading code and the webview will go to the anchor
+   * */
+  private void jumpToAnchor(WebView view, String loadedUrl) {
+    if (urlWithAnchor != null && urlWithAnchor.startsWith(loadedUrl)) {
+      view.loadUrl(urlWithAnchor);
+      urlWithAnchor = null;
+    }
+  }
 
   protected abstract void onInvalidUrl(WebView view);
+
+  protected abstract void onUrlEqualToHome(WebView view);
 
   protected void inflateHomeView(WebView view) {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
