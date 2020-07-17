@@ -1,3 +1,27 @@
+3.3.4
+NEW: Updated translations
+BUGFIX: Fullscreen videos were not displaying
+BUGFIX: Urls containing "?" were not loading properly
+BUGFIX: Notifications were erroneously allowing the user to pause a download
+BUGFIX: Urls with "#" anchors now load to the correct portion of the page
+BUGFIX: Save Media on long click was not working
++ Lots More
+
+3.3.3
+BUGFIX: Crash on older devices due to OKHTTP
+
+3.3.2
+NEW: Better flow for hosting books
+NEW: Control text zoom for zim files
+NEW: Bookmarks/History internals rewrite
+NEW: Updated translations
+BUGFIX: Search results were inaccurate when typing too quickly
+BUGFIX: new zim scheme for addressing content
+BUGFIX: Native memory leaks fixed
+BUGFIX: fix crash on returning to webview from search result
+BUGFIX: some zim files could not be found after downloading
++ Lots More
+
 3.3.1
 NEW: Send Diagnostic Reports
 BUGFIX: Loading older zim files could fail

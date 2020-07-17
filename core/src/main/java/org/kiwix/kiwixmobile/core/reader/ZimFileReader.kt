@@ -49,7 +49,7 @@ private const val TAG = "ZimFileReader"
 
 class ZimFileReader constructor(
   val zimFile: File,
-  val jniKiwixReader: JNIKiwixReader = JNIKiwixReader(zimFile.canonicalPath),
+  private val jniKiwixReader: JNIKiwixReader = JNIKiwixReader(zimFile.canonicalPath),
   private val nightModeConfig: NightModeConfig
 ) {
   interface Factory {
@@ -125,7 +125,7 @@ class ZimFileReader constructor(
     return loadContent(uri)
   }
 
-  fun readMimeType(uri: String) = uri.removeArguments().let {
+  fun readMimeType(uri: String) = uri.filePath.let {
     it.mimeType?.takeIf(String::isNotEmpty) ?: mimeTypeFromReader(it) ?: DEFAULT_MIME_TYPE
   }.also { Log.d(TAG, "getting mimetype for $uri = $it") }
 
@@ -192,7 +192,7 @@ class ZimFileReader constructor(
   }
 
   private fun getContentAndMimeType(uri: String) = with(JNIKiwixString()) {
-    getContent(url = JNIKiwixString(uri.filePath.removeArguments()), mime = this) to value
+    getContent(url = JNIKiwixString(uri.filePath), mime = this) to value
   }
 
   private fun getContent(
@@ -258,11 +258,10 @@ class ZimFileReader constructor(
   }
 }
 
-private fun String.removeArguments() = substringBefore("?")
 private val Uri.filePath: String
   get() = toString().filePath
 private val String.filePath: String
-  get() = substringAfter(CONTENT_PREFIX).substringBefore("#")
+  get() = substringAfter(CONTENT_PREFIX).substringBefore("#").substringBefore("?")
 private val String.mimeType: String?
   get() = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
     MimeTypeMap.getFileExtensionFromUrl(this)
