@@ -22,7 +22,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.util.TypedValue.complexToDimensionPixelSize
 import android.view.LayoutInflater
 import android.view.Menu
@@ -40,6 +39,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
@@ -89,14 +89,15 @@ class ReaderFragment : CoreReaderFragment() {
   }
 
   private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
-    val typedValueMargin = TypedValue()
-    context?.theme?.resolveAttribute(android.R.attr.actionBarSize, typedValueMargin, true)
-    setParentFragmentsBottomMargin(
-      complexToDimensionPixelSize(
-        typedValueMargin.data,
-        resources.displayMetrics
+    val actionBarHeight = context?.getAttribute(android.R.attr.actionBarSize)
+    if (actionBarHeight != null) {
+      setParentFragmentsBottomMargin(
+        complexToDimensionPixelSize(
+          actionBarHeight,
+          resources.displayMetrics
+        )
       )
-    )
+    }
   }
 
   private fun setParentFragmentsBottomMargin(margin: Int) {
