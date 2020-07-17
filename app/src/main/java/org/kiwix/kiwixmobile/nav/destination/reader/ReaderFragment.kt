@@ -22,8 +22,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.util.TypedValue.complexToDimensionPixelSize
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
@@ -74,13 +78,38 @@ class ReaderFragment : CoreReaderFragment() {
     }
   }
 
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    val view = super.onCreateView(inflater, container, savedInstanceState)
+    setFragmentContainerBottomMarginToSizeOfNavBar()
+    return view
+  }
+
+  private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
+    val typedValueMargin = TypedValue()
+    context?.theme?.resolveAttribute(android.R.attr.actionBarSize, typedValueMargin, true)
+    setParentFragmentsBottomMargin(
+      complexToDimensionPixelSize(
+        typedValueMargin.data,
+        resources.displayMetrics
+      )
+    )
+  }
+
+  private fun setParentFragmentsBottomMargin(margin: Int) {
+    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
+    params?.bottomMargin = margin
+    parentFragment?.view?.requestLayout()
+  }
+
   override fun onPause() {
     super.onPause()
     // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
     // this resets the margin to zero, before fragment navigation.
-    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
-    params?.bottomMargin = 0
-    parentFragment?.view?.requestLayout()
+    setParentFragmentsBottomMargin(0)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
