@@ -28,7 +28,6 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.Companion.from
 import java.io.File
-import java.util.HashSet
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -100,7 +99,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
     sharedPreferences.edit().putString(PREF_STORAGE_TITLE, storageTitle).apply()
 
   fun putPrefStorage(storage: String) {
-    sharedPreferences.edit().putString(PREF_STORAGE, storage).apply(); prefStorages.onNext(storage)
+    sharedPreferences.edit().putString(PREF_STORAGE, storage).apply()
+    prefStorages.onNext(storage)
   }
 
   fun putPrefFullScreen(fullScreen: Boolean) =
