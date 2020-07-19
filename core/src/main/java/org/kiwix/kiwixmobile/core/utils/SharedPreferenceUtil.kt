@@ -22,6 +22,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
+import androidx.core.content.edit
 import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
@@ -87,43 +88,43 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
     sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle)
 
   fun putPrefLanguage(language: String?) =
-    sharedPreferences.edit().putString(PREF_LANG, language).apply()
+    sharedPreferences.edit { putString(PREF_LANG, language) }
 
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
-    sharedPreferences.edit().putBoolean(PREF_IS_FIRST_RUN, isFirstRun).apply()
+    sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
 
   fun putPrefWifiOnly(wifiOnly: Boolean) =
-    sharedPreferences.edit().putBoolean(PREF_WIFI_ONLY, wifiOnly).apply()
+    sharedPreferences.edit { putBoolean(PREF_WIFI_ONLY, wifiOnly) }
 
   fun putPrefStorageTitle(storageTitle: String?) =
-    sharedPreferences.edit().putString(PREF_STORAGE_TITLE, storageTitle).apply()
+    sharedPreferences.edit { putString(PREF_STORAGE_TITLE, storageTitle) }
 
   fun putPrefStorage(storage: String) {
-    sharedPreferences.edit().putString(PREF_STORAGE, storage).apply()
+    sharedPreferences.edit { putString(PREF_STORAGE, storage) }
     prefStorages.onNext(storage)
   }
 
   fun putPrefFullScreen(fullScreen: Boolean) =
-    sharedPreferences.edit().putBoolean(PREF_FULLSCREEN, fullScreen).apply()
+    sharedPreferences.edit { putBoolean(PREF_FULLSCREEN, fullScreen) }
 
   fun putPrefExternalLinkPopup(externalLinkPopup: Boolean) =
-    sharedPreferences.edit().putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply()
+    sharedPreferences.edit { putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup) }
 
   fun showIntro(): Boolean = sharedPreferences.getBoolean(PREF_SHOW_INTRO, true)
 
-  fun setIntroShown() = sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false).apply()
+  fun setIntroShown() = sharedPreferences.edit { putBoolean(PREF_SHOW_INTRO, false) }
 
   var showHistoryAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, true)
     set(prefShowHistoryAllBooks) {
-      sharedPreferences.edit().putBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, prefShowHistoryAllBooks)
-        .apply()
+      sharedPreferences.edit { putBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, prefShowHistoryAllBooks) }
     }
 
   var showBookmarksAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
-    set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit()
-      .putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook).apply()
+    set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {
+      putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
+    }
 
   val nightMode: NightModeConfig.Mode
     get() = from(
@@ -138,13 +139,14 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
   var hostedBooks: Set<String>?
     get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, HashSet())
     set(hostedBooks) {
-      sharedPreferences.edit().putStringSet(PREF_HOSTED_BOOKS, hostedBooks).apply()
+      sharedPreferences.edit { putStringSet(PREF_HOSTED_BOOKS, hostedBooks) }
     }
 
   var textZoom: Int
     get() = sharedPreferences.getInt(TEXT_ZOOM, DEFAULT_ZOOM)
     set(textZoom) {
-      sharedPreferences.edit().putInt(TEXT_ZOOM, textZoom).apply(); textZooms.offer(textZoom)
+      sharedPreferences.edit { putInt(TEXT_ZOOM, textZoom) }
+      textZooms.offer(textZoom)
     }
 
   fun getTextZooms(): Flowable<Int> = textZooms.startWith(textZoom)
