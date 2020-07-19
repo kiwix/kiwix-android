@@ -127,7 +127,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
 
   val nightMode: NightModeConfig.Mode
     get() = from(
-      sharedPreferences.getString("", null)?.toInt() ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+      sharedPreferences.getString(PREF_NIGHT_MODE, null)?.toInt()
+        ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     )
 
   fun nightModes(): Flowable<NightModeConfig.Mode> = nightModes.startWith(nightMode)
