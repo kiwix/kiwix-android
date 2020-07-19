@@ -65,8 +65,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
   val prefExternalLinkPopup: Boolean
     get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
 
-  val prefLanguage: String?
-    get() = sharedPreferences.getString(PREF_LANG, Locale.ROOT.toString())
+  val prefLanguage: String
+    get() = sharedPreferences.getString(PREF_LANG, "")?.toString() ?: Locale.ROOT.toString()
 
   val prefStorage: String
     get() {
@@ -84,10 +84,10 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
   private fun defaultStorage(): String =
     getExternalFilesDirs(instance, null)[0]?.path ?: instance.filesDir.path
 
-  fun getPrefStorageTitle(defaultTitle: String): String? =
-    sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle)
+  fun getPrefStorageTitle(defaultTitle: String): String =
+    sharedPreferences.getString(PREF_STORAGE_TITLE, "")?.toString() ?: defaultTitle
 
-  fun putPrefLanguage(language: String?) =
+  fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
 
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
@@ -96,7 +96,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
   fun putPrefWifiOnly(wifiOnly: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_WIFI_ONLY, wifiOnly) }
 
-  fun putPrefStorageTitle(storageTitle: String?) =
+  fun putPrefStorageTitle(storageTitle: String) =
     sharedPreferences.edit { putString(PREF_STORAGE_TITLE, storageTitle) }
 
   fun putPrefStorage(storage: String) {
@@ -136,8 +136,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
 
   fun updateNightMode() = nightModes.offer(nightMode)
 
-  var hostedBooks: Set<String>?
-    get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, HashSet())
+  var hostedBooks: Set<String>
+    get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
     set(hostedBooks) {
       sharedPreferences.edit { putStringSet(PREF_HOSTED_BOOKS, hostedBooks) }
     }
