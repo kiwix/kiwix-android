@@ -37,10 +37,10 @@ import javax.inject.Singleton
  * Manager for the Default Shared Preferences of the application.
  */
 @Singleton
-class SharedPreferenceUtil @Inject constructor(context: Context?) {
+class SharedPreferenceUtil @Inject constructor(context: Context) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
-  val prefStorages = PublishProcessor.create<String>()
+  private val prefStorages = PublishProcessor.create<String>()
   private val textZooms = PublishProcessor.create<Int>()
   private val nightModes = PublishProcessor.create<NightModeConfig.Mode>()
 
@@ -66,26 +66,23 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
     get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
 
   val prefLanguage: String
-    get() = sharedPreferences.getString(PREF_LANG, "")?.toString() ?: Locale.ROOT.toString()
+    get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
 
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
-      if (storage == null) {
-        val defaultStorage = defaultStorage()
-        putPrefStorage(defaultStorage)
-        return defaultStorage().also(::putPrefStorage)
-      } else if (!File(storage).exists()) {
-        return defaultStorage()
+      return when {
+        storage == null -> defaultStorage().also(::putPrefStorage)
+        !File(storage).exists() -> defaultStorage()
+        else -> storage
       }
-      return storage
     }
 
   private fun defaultStorage(): String =
     getExternalFilesDirs(instance, null)[0]?.path ?: instance.filesDir.path
 
   fun getPrefStorageTitle(defaultTitle: String): String =
-    sharedPreferences.getString(PREF_STORAGE_TITLE, "")?.toString() ?: defaultTitle
+    sharedPreferences.getString(PREF_STORAGE_TITLE, "") ?: defaultTitle
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
@@ -103,6 +100,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context?) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
     prefStorages.onNext(storage)
   }
+
+  fun getPrefStorages(): Flowable<String> = prefStorages.startWith(prefStorage)
 
   fun putPrefFullScreen(fullScreen: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_FULLSCREEN, fullScreen) }

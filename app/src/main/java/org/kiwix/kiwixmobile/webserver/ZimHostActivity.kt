@@ -38,9 +38,9 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
-import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
@@ -194,7 +194,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onResume() {
     super.onResume()
-    sharedPreferenceUtil.hostedBooks?.let(presenter::loadBooks)
+    presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.getSocketAddress()
       layoutServerStarted()

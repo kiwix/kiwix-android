@@ -42,7 +42,7 @@ class Fat32Checker constructor(
 
   init {
     Flowable.combineLatest(
-      sharedPreferenceUtil.prefStorages
+      sharedPreferenceUtil.getPrefStorages()
         .distinctUntilChanged()
         .doOnNext { fileSystemStates.offer(Unknown) },
       requestCheckSystemFileType,
