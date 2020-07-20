@@ -2,6 +2,7 @@
 <!-- Authors:
 * Abijeet Patro
 * Jopparn
+* Sabelöga
 * Skalman
 * Susann Schweden
 * Technic2
@@ -259,4 +260,7 @@
   <string name="send_report">Skicka diagnostisk rapport</string>
   <string name="crash_checkbox_file_system">Filsystemsdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Text-zoomning</string>
+  <string name="experimental_navigation">Experimentell navigering</string>
 </resources>

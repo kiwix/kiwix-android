@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.search.adapter
 
 import android.view.ViewGroup
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
@@ -31,27 +32,31 @@ sealed class SearchDelegate<I : SearchListItem, out VH : SearchViewHolder<I>> :
 
   class RecentSearchDelegate(
     private val onClickListener: (SearchListItem) -> Unit,
+    private val onClickListenerNewTab: (SearchListItem) -> Unit,
     private val onLongClickListener: (SearchListItem) -> Unit
   ) : SearchDelegate<RecentSearchListItem, RecentSearchViewHolder>() {
     override val itemClass = RecentSearchListItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
       RecentSearchViewHolder(
-        parent.inflate(android.R.layout.simple_selectable_list_item, false),
+        parent.inflate(R.layout.list_item_search, false),
         onClickListener,
+        onClickListenerNewTab,
         onLongClickListener
       )
   }
 
   class ZimSearchResultDelegate(
-    private val onClickListener: (SearchListItem) -> Unit
+    private val onClickListener: (SearchListItem) -> Unit,
+    private val onClickListenerNewTab: (SearchListItem) -> Unit
   ) : SearchDelegate<ZimSearchResultListItem, ZimSearchResultViewHolder>() {
     override val itemClass = ZimSearchResultListItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
       ZimSearchResultViewHolder(
-        parent.inflate(android.R.layout.simple_selectable_list_item, false),
-        onClickListener
+        parent.inflate(R.layout.list_item_search, false),
+        onClickListener,
+        onClickListenerNewTab
       )
   }
 }

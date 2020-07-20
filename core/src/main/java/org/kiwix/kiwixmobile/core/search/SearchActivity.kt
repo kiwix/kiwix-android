@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
@@ -70,10 +71,10 @@ class SearchActivity : BaseActivity() {
   private val compositeDisposable = CompositeDisposable()
   private val searchAdapter: SearchAdapter by lazy {
     SearchAdapter(
-      RecentSearchDelegate(::onItemClick) {
+      RecentSearchDelegate(::onItemClick, ::onItemClickNewTab) {
         searchViewModel.actions.offer(OnItemLongClick(it))
       },
-      ZimSearchResultDelegate(::onItemClick)
+      ZimSearchResultDelegate(::onItemClick, ::onItemClickNewTab)
     )
   }
 
@@ -153,6 +154,10 @@ class SearchActivity : BaseActivity() {
 
   private fun onItemClick(it: SearchListItem) {
     searchViewModel.actions.offer(OnItemClick(it))
+  }
+
+  private fun onItemClickNewTab(it: SearchListItem) {
+    searchViewModel.actions.offer(OnOpenInNewTabClick(it))
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

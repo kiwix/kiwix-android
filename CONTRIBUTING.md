@@ -56,11 +56,11 @@ If you wish to rebase you should be following the [Golden Rule](https://www.atla
 
 ### Design and style
 
-For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/edit/develop/DESIGN.md).
+For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/blob/develop/DESIGN.md).
 
 ### Adding new string resources
 
-To add a new string resource see [STRING_RESOURCES.md](https://github.com/kiwix/kiwix-android/edit/develop/STRING_RESOURCES.md).
+To add a new string resource see [STRING_RESOURCES.md](https://github.com/kiwix/kiwix-android/blob/develop/STRING_RESOURCES.md).
 
 ### Building
 
@@ -119,7 +119,7 @@ Code coverage results can be seen under `[module]/build/reports/`
 ### Continous Integration
 
 All PRs will have all these tests run and a combined coverage report will be attached, if coverage is to go down the PR will be marked failed. On Travis CI the automated tests are run on an emulator. To
-learn more about the commands run on the CI please refer to [.travis.yml](https://github.com/kiwix/kiwix-android/blob/master/.travis.yml)
+learn more about the commands run on the CI please refer to [.github/workflows](https://github.com/kiwix/kiwix-android/tree/develop/.github/workflows).
 
 
 _These guidelines are based on [Tools for Government Data Archiving](https://github.com/edgi-govdata-archiving/overview/blob/master/CONTRIBUTING.md)'s._
