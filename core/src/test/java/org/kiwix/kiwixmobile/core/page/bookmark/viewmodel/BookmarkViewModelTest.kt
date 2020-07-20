@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
-import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -33,14 +32,9 @@ import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.bookmarkState
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
@@ -79,46 +73,47 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  internal fun `ExitActionModeMenu deselects bookmarks items`() {
-    viewModel.state.postValue(bookmarkState(bookmarks = listOf(bookmark(isSelected = true))))
-    viewModel.actions.offer(ExitActionModeMenu)
-    viewModel.state.test().assertValue(
+  internal fun `updatePagesBasedOnFilter returns state with new searchTerm`() {
+    assertThat(
+      viewModel.updatePagesBasedOnFilter(bookmarkState(), Filter("filter"))
+    ).isEqualTo(
+      bookmarkState(searchTerm = "filter")
+    )
+  }
+
+  @Test
+  internal fun `updatePages returns state with updated items`() {
+    assertThat(
+      viewModel.updatePages(bookmarkState(), UpdatePages(listOf(bookmark())))
+    ).isEqualTo(
+      bookmarkState(listOf(bookmark()))
+    )
+  }
+
+  @Test
+  internal fun `deselectAllPages deselects bookmarks items`() {
+    assertThat(
+      viewModel.deselectAllPages(bookmarkState(bookmarks = listOf(bookmark(isSelected = true))))
+    ).isEqualTo(
       bookmarkState(bookmarks = listOf(bookmark(isSelected = false)))
     )
   }
 
   @Test
-  internal fun `UserClickedDeleteButton offers ShowDeleteBookmarkDialog`() {
-    viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteButton) }
-      .assertValue(ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), bookmarksDao))
-    viewModel.state.test().assertValue(bookmarkState())
+  internal fun `createDeletePageDialogEffect returns correct dialog`() {
+    assertThat(
+      viewModel.createDeletePageDialogEffect(bookmarkState())
+    ).isEqualTo(
+      ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), bookmarksDao)
+    )
   }
 
   @Test
-  internal fun `UserClickedDeleteSelectedBookmarks offers ShowDeleteBookmarksDialog`() {
-    viewModel.effects.test().also { viewModel.actions.offer(UserClickedDeleteSelectedPages) }
-      .assertValue(ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), bookmarksDao))
-    viewModel.state.test().assertValue(bookmarkState())
-  }
-
-  @Test
-  internal fun `UserClickedShowAllToggle offers UpdateAllBookmarksPreference`() {
-    viewModel.effects.test()
-      .also { viewModel.actions.offer(UserClickedShowAllToggle(false)) }
-      .assertValue(UpdateAllBookmarksPreference(sharedPreferenceUtil, false))
-    viewModel.state.test().assertValue(bookmarkState(showAll = false))
-  }
-
-  @Test
-  fun `Filter updates search term`() {
-    val searchTerm = "searchTerm"
-    viewModel.actions.offer(Filter(searchTerm))
-    viewModel.state.test().assertValue(bookmarkState(searchTerm = searchTerm))
-  }
-
-  @Test
-  internal fun `UpdatePages updates bookmarks`() {
-    viewModel.actions.offer(UpdatePages(listOf(bookmark())))
-    viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
+  internal fun `copyWithNewItems returns state with copied items`() {
+    assertThat(
+      viewModel.copyWithNewItems(bookmarkState(), listOf(bookmark()))
+    ).isEqualTo(
+      bookmarkState(listOf(bookmark()))
+    )
   }
 }

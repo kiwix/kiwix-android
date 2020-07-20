@@ -41,6 +41,8 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -96,12 +98,30 @@ internal class PageViewModelTest {
   }
 
   @Test
-  fun `UserClickedDeleteButton calls offerShowDeleteDialog`() {
+  fun `UserClickedShowAllToggle calls offerUpdateToShowAllToggle`() {
     mockkObject(viewModel)
     val action = UserClickedShowAllToggle(true)
     viewModel.actions.offer(action)
     verify {
       viewModel.offerUpdateToShowAllToggle(action, pageState())
+    }
+  }
+
+  @Test
+  fun `UserClickedDeleteButton calls createDeletePageDialogEffect`() {
+    mockkObject(viewModel)
+    viewModel.actions.offer(UserClickedDeleteButton)
+    verify {
+      viewModel.createDeletePageDialogEffect(pageState())
+    }
+  }
+
+  @Test
+  fun `UserClickedDeleteSelectedPages calls createDeletePageDialogEffect`() {
+    mockkObject(viewModel)
+    viewModel.actions.offer(UserClickedDeleteSelectedPages)
+    verify {
+      viewModel.createDeletePageDialogEffect(pageState())
     }
   }
 
