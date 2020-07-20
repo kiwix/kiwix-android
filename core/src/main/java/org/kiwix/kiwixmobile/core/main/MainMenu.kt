@@ -164,6 +164,14 @@ class MainMenu(
     search.setOnMenuItemClickListener { navigateToSearch(zimFileReader) }
   }
 
+  fun hideBookSpecificMenuItems() {
+    setVisibility(false, search, tabSwitcher, randomArticle, addNote)
+  }
+
+  fun showBookSpecificMenuItems() {
+    setVisibility(true, search, tabSwitcher, randomArticle, addNote)
+  }
+
   fun showTabSwitcherOptions() {
     isInTabSwitcher = true
     setVisibility(false, randomArticle, readAloud, addNote, fullscreen)
