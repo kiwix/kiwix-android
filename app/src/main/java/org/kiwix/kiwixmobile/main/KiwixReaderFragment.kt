@@ -28,7 +28,8 @@ import androidx.core.net.toUri
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
+import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -50,6 +51,8 @@ import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
+private const val HOME_URL = "file:///android_asset/home.html"
+
 class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
@@ -64,7 +67,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(
     menu: Menu,
     activity: AppCompatActivity
-  ): BaseFragmentActivityExtensions.Super = BaseFragmentActivityExtensions.Super.ShouldCall
+  ): Super = ShouldCall
 
   override fun onResume() {
     super.onResume()
@@ -80,6 +83,17 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onNewNavigationMenuClicked() {
     startActivity(Intent(activity, KiwixNewNavigationActivity::class.java))
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): Super {
+    var callType = super.onBackPressed(activity)
+    if (callType == ShouldCall && getCurrentWebView().canGoBack() &&
+      HOME_URL != getCurrentWebView().url
+    ) {
+      getCurrentWebView().goBack()
+      callType = Super.ShouldNotCall
+    }
+    return callType
   }
 
   private fun manageExternalLaunchAndRestoringViewState() {
@@ -181,13 +195,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun onNewIntent(
     intent: Intent,
     activity: AppCompatActivity
-  ): BaseFragmentActivityExtensions.Super {
+  ): Super {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
       if ("file" == it.scheme) openZimFile(it.toFile())
       else activity.toast(R.string.cannot_open_file)
     }
-    return BaseFragmentActivityExtensions.Super.ShouldCall
+    return ShouldCall
   }
 
   override fun onHostBooksMenuClicked() {

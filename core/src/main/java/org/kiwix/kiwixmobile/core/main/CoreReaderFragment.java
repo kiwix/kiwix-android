@@ -160,7 +160,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
   MainContract.View,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
-  public static final String HOME_URL = "file:///android_asset/home.html";
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
@@ -177,7 +176,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.fragment_main_app_bar)
   AppBarLayout toolbarContainer;
   @BindView(R2.id.main_fragment_progress_view)
-  ContentLoadingProgressBar progressBar;
+  protected ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
   @BindView(R2.id.new_navigation_fragment_main_drawer_layout)
@@ -199,13 +198,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_tab_switcher)
   protected View tabSwitcherRoot;
   @BindView(R2.id.tab_switcher_close_all_tabs)
-  FloatingActionButton closeAllTabsButton;
+  protected FloatingActionButton closeAllTabsButton;
   @BindView(R2.id.snackbar_root)
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
-  ViewGroup videoView;
+  protected ViewGroup videoView;
   @BindView(R2.id.go_to_library_button_no_open_book)
-  Button noOpenBookButton;
+  protected Button noOpenBookButton;
   @BindView(R2.id.no_open_book_text)
   TextView noOpenBookText;
   @BindView(R2.id.activity_main_root)
@@ -256,17 +255,18 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected int currentWebViewIndex = 0;
   private File file;
   private ActionMode actionMode = null;
-  private KiwixWebView tempForUndo;
+  private KiwixWebView tempWebViewForUndo;
+  private File tempZimFileForUndo;
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private boolean isFirstRun;
   private BooksOnDiskAdapter booksAdapter;
   private AppCompatButton downloadBookButton;
-  private ActionBar actionBar;
+  protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
   private boolean hasLocalBooks;
-  private MainMenu mainMenu;
+  protected MainMenu mainMenu;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -584,7 +584,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void startAnimation(View view, @AnimRes int anim) {
+  protected void startAnimation(View view, @AnimRes int anim) {
     view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), anim));
   }
 
@@ -661,11 +661,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       compatCallback.finish();
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
-    } else if (getCurrentWebView().canGoBack()
-      && !HOME_URL.equals(getCurrentWebView().getUrl())) {
-      getCurrentWebView().goBack();
-    } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
-      showHomePage();
     } else {
       return Super.ShouldCall;
     }
@@ -883,29 +878,47 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void closeTab(int index) {
-    tempForUndo = webViewList.get(index);
+    tempZimFileForUndo = zimReaderContainer.getZimFile();
+    tempWebViewForUndo = webViewList.get(index);
     webViewList.remove(index);
     if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
       currentWebViewIndex--;
     }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
-    Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
+    Snackbar undo = Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo, v -> {
-        webViewList.add(index, tempForUndo);
-        tabsAdapter.notifyItemInserted(index);
-        tabsAdapter.notifyDataSetChanged();
-        Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
-        setUpWebViewWithTextToSpeech();
-      })
-      .show();
+        restoreDeletedTab(index);
+      });
+    undo.show();
     openHomeScreen();
+  }
+
+  protected void reopenBook() {
+    hideNoBookOpenViews();
+    contentFrame.setVisibility(View.VISIBLE);
+    if (mainMenu != null) {
+      mainMenu.showBookSpecificMenuItems();
+    }
+  }
+
+  protected void restoreDeletedTab(int index) {
+    if (webViewList.isEmpty()) {
+      reopenBook();
+    }
+    zimReaderContainer.setZimFile(tempZimFileForUndo);
+    webViewList.add(index, tempWebViewForUndo);
+    tabsAdapter.notifyDataSetChanged();
+
+    Snackbar.make(snackbarRoot, R.string.tab_restored, Snackbar.LENGTH_SHORT).show();
+    setUpWebViewWithTextToSpeech();
+    updateBottomToolbarVisibility();
+    contentFrame.addView(tempWebViewForUndo);
   }
 
   protected void selectTab(int position) {
     currentWebViewIndex = position;
     contentFrame.removeAllViews();
-
     KiwixWebView webView = safelyGetWebView(position);
     if (webView.getParent() != null) {
       ((ViewGroup) webView.getParent()).removeView(webView);
@@ -1274,19 +1287,17 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
   //opens home screen when user closes all tabs
 
-  private void displayNoBookOpenViews() {
-    videoView.setVisibility(View.GONE);
+  protected void showNoBookOpenViews() {
     noOpenBookButton.setVisibility(View.VISIBLE);
     noOpenBookText.setVisibility(View.VISIBLE);
   }
 
-  private void hideNoBookOpenViews() {
-    videoView.setVisibility(View.GONE);
-    noOpenBookButton.setVisibility(View.VISIBLE);
-    noOpenBookText.setVisibility(View.VISIBLE);
+  protected void hideNoBookOpenViews() {
+    noOpenBookButton.setVisibility(View.GONE);
+    noOpenBookText.setVisibility(View.GONE);
   }
 
-  private void openHomeScreen() {
+  protected void openHomeScreen() {
     new Handler().postDelayed(() -> {
       if (webViewList.size() == 0) {
         createNewTab();
@@ -1616,7 +1627,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private boolean shouldActivateNightMode(KiwixWebView kiwixWebView) {
-    return kiwixWebView != null && !HOME_URL.equals(kiwixWebView.getUrl());
+    return kiwixWebView != null;
   }
 
   private void loadPrefs() {

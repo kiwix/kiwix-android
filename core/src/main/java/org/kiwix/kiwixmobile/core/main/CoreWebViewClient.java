@@ -33,7 +33,6 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
-import static org.kiwix.kiwixmobile.core.main.CoreReaderFragment.HOME_URL;
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.CONTENT_PREFIX;
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.UI_URI;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
@@ -128,20 +127,15 @@ public abstract class CoreWebViewClient extends WebViewClient {
       return;
     }
 
-    if (url.equals(HOME_URL)) {
-      onUrlEqualToHome(view);
-    } else {
-      view.removeView(home);
-    }
-
+    view.removeView(home);
     jumpToAnchor(view, url);
     callback.webViewUrlFinishedLoading();
   }
 
   /*
-  * If 2 urls are the same aside from the `#` component then calling load
-  * does not trigger our loading code and the webview will go to the anchor
-  * */
+   * If 2 urls are the same aside from the `#` component then calling load
+   * does not trigger our loading code and the webview will go to the anchor
+   * */
   private void jumpToAnchor(WebView view, String loadedUrl) {
     if (urlWithAnchor != null && urlWithAnchor.startsWith(loadedUrl)) {
       view.loadUrl(urlWithAnchor);
@@ -149,9 +143,9 @@ public abstract class CoreWebViewClient extends WebViewClient {
     }
   }
 
-  protected abstract void onUrlEqualToHome(WebView view);
-
   protected abstract void onInvalidUrl(WebView view);
+
+  protected abstract void onUrlEqualToHome(WebView view);
 
   protected void inflateHomeView(WebView view) {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());

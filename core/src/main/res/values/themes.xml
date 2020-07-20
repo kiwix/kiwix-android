@@ -61,7 +61,6 @@
     <item name="textAppearanceButton">@style/TextAppearance.KiwixTheme.Button</item>
     <item name="textAppearanceCaption">@style/TextAppearance.KiwixTheme.Caption</item>
     <item name="textAppearanceOverline">@style/TextAppearance.KiwixTheme.Overline</item>
-
     <!--Material shape attributes-->
     <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.KiwixTheme.SmallComponent
     </item>
