@@ -265,8 +265,8 @@
   <string name="no_bookmarks">Brak zakładek</string>
   <string name="no_history">Nie ma Historii</string>
   <string name="device_default">Domyślne urządzenie</string>
-  <string name="delete_history">Usunąć historię?</string>
-  <string name="delete_bookmarks">Usunąć zakładki?</string>
+  <string name="delete_history" fuzzy="true">Usunąć historię?</string>
+  <string name="delete_bookmarks" fuzzy="true">Usunąć zakładki?</string>
   <string name="on">Włącz</string>
   <string name="off">Wyłącz</string>
   <string name="auto">Automatycznie</string>

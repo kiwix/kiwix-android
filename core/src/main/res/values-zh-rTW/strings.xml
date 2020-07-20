@@ -260,8 +260,10 @@
   <string name="no_bookmarks">沒有書籤！</string>
   <string name="no_history">沒有歷史</string>
   <string name="device_default">設備預設</string>
-  <string name="delete_history">刪除歷史？</string>
-  <string name="delete_bookmarks">刪除書籤？</string>
+  <string name="delete_history">刪除所有歷史？</string>
+  <string name="delete_selected_history">刪除所選的歷史？</string>
+  <string name="delete_bookmarks">刪除所有書籤？</string>
+  <string name="delete_selected_bookmarks">刪除所選的書籤？</string>
   <string name="on">開啟</string>
   <string name="off">關閉</string>
   <string name="auto">自動</string>
@@ -271,4 +273,5 @@
   <string name="diagnostic_report_message">請傳送所有以下詳細資訊，以讓我們可以方便診斷問題</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字縮放</string>
+  <string name="experimental_navigation">實現性導覽</string>
 </resources>

@@ -4,6 +4,7 @@
 * Alex00728
 * CYAN
 * Codenstory
+* Ellif
 * Gongsoonyee
 * Jerrykim306
 * Macofe
@@ -41,7 +42,7 @@
   <string name="server_failed_toast_message">서버를 시작하지 못했습니다.</string>
   <string name="server_started_successfully_toast_message">서버가 성공적으로 시작되었습니다.</string>
   <string name="server_stopped_successfully_toast_message">서버가 성공적으로 중단되었습니다.</string>
-  <string name="hotspot_turned_on">핫스팟이 켜져있습니다</string>
+  <string name="hotspot_turned_on">핫스팟이 켜져 있습니다</string>
   <string name="hotspot_details_message">다음은 로컬 핫스팟의 상세 정보입니다.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">서버에 호스팅할 파일을 선택하십시오</string>
   <string name="progress_dialog_starting_server">서버 시작 중</string>
@@ -264,7 +265,9 @@
   <string name="no_history">역사 없음</string>
   <string name="device_default">장치 기본값</string>
   <string name="delete_history">역사를 삭제할까요?</string>
+  <string name="delete_selected_history">선택한 역사를 지울까요?</string>
   <string name="delete_bookmarks">북마크를 삭제할까요?</string>
+  <string name="delete_selected_bookmarks">선택한 북마크를 지울까요?</string>
   <string name="on">켜기</string>
   <string name="off">끄기</string>
   <string name="auto">자동</string>
@@ -272,4 +275,6 @@
   <string name="crash_checkbox_file_system">파일 시스템 세부 정보</string>
   <string name="diagnostic_report">진단 보고서</string>
   <string name="diagnostic_report_message">저희가 문제를 진단할 수 있도록 다음의 자세한 정보를 모두 보내 주세요</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">글자 크기 조정</string>
 </resources>

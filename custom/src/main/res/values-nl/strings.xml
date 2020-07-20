@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Mainframe98
+-->
+<resources>
+  <string name="retry">Opnieuw proberen</string>
+  <string name="download">Downloaden</string>
+</resources>

@@ -138,5 +138,9 @@
   <string name="your_languages">Επιλεγμένες γλώσσες:</string>
   <string name="other_languages">Άλλες γλώσσες:</string>
   <string name="no_bookmarks">Χωρίς σελιδοδείκτες</string>
+  <string name="delete_history">Διαγραφή όλου του ιστορικού;</string>
+  <string name="delete_selected_history">Διαγραφή επιλεγμένου ιστορικού;</string>
+  <string name="delete_bookmarks">Διαγραφή όλων των σελιδοδεικτών;</string>
+  <string name="delete_selected_bookmarks">Διαγραφή επιλεγμένων σελιδοδεικτών;</string>
   <string name="pref_text_zoom_title">Μεγέθυνση κειμένου</string>
 </resources>

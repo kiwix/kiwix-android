@@ -4,6 +4,7 @@
 * CloeRiva
 * Einreiher
 * G.garatti
+* Gianfranco
 * Matteocng
 * Nivit
 * Purodha
@@ -100,6 +101,7 @@
   <string name="go_to_settings">Vai alle impostazioni hotspot</string>
   <string name="no_results">Nessun risultato</string>
   <string name="no_bookmarks">Nessun segnalibro</string>
-  <string name="delete_history">Cancellare la cronologia?</string>
-  <string name="delete_bookmarks">Cancellare i segnalibri?</string>
+  <string name="delete_history">Cancellare tutta la cronologia?</string>
+  <string name="delete_bookmarks">Cancellare tutti i segnalibri?</string>
+  <string name="experimental_navigation">Navigazione sperimentale</string>
 </resources>

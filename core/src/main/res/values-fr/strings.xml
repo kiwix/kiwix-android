@@ -28,7 +28,7 @@
   <string name="menu_read_aloud">Lire à haute voix</string>
   <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
   <string name="menu_support_kiwix">Soutenir Kiwix</string>
-  <string name="menu_host_books">Héberger des livres</string>
+  <string name="menu_host_books">Diffuser des contenus</string>
   <string name="save_media">Enregistrer le média</string>
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
   <string name="save_media_saved">Média enregistré sous %s dans le dossier Android/media/org.kiwix…/</string>
@@ -172,7 +172,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Et bien… c’est embarrassant</string>
+  <string name="crash_title">Eh bien… c’est embarrassant</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -268,8 +268,10 @@
   <string name="no_bookmarks">Aucun marque-page</string>
   <string name="no_history">Aucun historique</string>
   <string name="device_default">Appareil par défaut</string>
-  <string name="delete_history">Supprimer l’historique ?</string>
-  <string name="delete_bookmarks">Supprimer les marque-pages ?</string>
+  <string name="delete_history">Supprimer tout l’historique ?</string>
+  <string name="delete_selected_history">Supprimer l’historique sélectionné ?</string>
+  <string name="delete_bookmarks">Supprimer tous les signets  ?</string>
+  <string name="delete_selected_bookmarks">Supprimer les marque-pages sélectionnés ?</string>
   <string name="on">Activé</string>
   <string name="off">Désactivé</string>
   <string name="auto">Automatique</string>
@@ -278,5 +280,6 @@
   <string name="diagnostic_report">Rapport de diagnostic</string>
   <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivants afin que nous puissions diagnostiquer le problème</string>
   <string name="percentage">%d%%</string>
-  <string name="pref_text_zoom_title">Zoom du texte</string>
+  <string name="pref_text_zoom_title">Zoomer le texte</string>
+  <string name="experimental_navigation">Navigation expérimentale</string>
 </resources>

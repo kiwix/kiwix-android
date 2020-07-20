@@ -30,6 +30,7 @@ import androidx.core.app.NotificationCompat
 import com.tonyodev.fetch2.DefaultFetchNotificationManager
 import com.tonyodev.fetch2.DownloadNotification
 import com.tonyodev.fetch2.Fetch
+import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -58,7 +59,59 @@ class FetchDownloadNotificationManager(context: Context) :
     downloadNotification: DownloadNotification,
     context: Context
   ) {
-    super.updateNotification(notificationBuilder, downloadNotification, context)
+    // super method but with pause button removed
+    val smallIcon = if (downloadNotification.isDownloading) {
+      android.R.drawable.stat_sys_download
+    } else {
+      android.R.drawable.stat_sys_download_done
+    }
+    notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+      .setSmallIcon(smallIcon)
+      .setContentTitle(downloadNotification.title)
+      .setContentText(getSubtitleText(context, downloadNotification))
+      .setOngoing(downloadNotification.isOnGoingNotification)
+      .setGroup(downloadNotification.groupId.toString())
+      .setGroupSummary(false)
+    if (downloadNotification.isFailed || downloadNotification.isCompleted) {
+      notificationBuilder.setProgress(0, 0, false)
+    } else {
+      val progressIndeterminate = downloadNotification.progressIndeterminate
+      val maxProgress = if (downloadNotification.progressIndeterminate) 0 else 100
+      val progress = if (downloadNotification.progress < 0) 0 else downloadNotification.progress
+      notificationBuilder.setProgress(maxProgress, progress, progressIndeterminate)
+    }
+    when {
+      downloadNotification.isDownloading ->
+        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+          .addAction(
+            R.drawable.fetch_notification_cancel,
+            context.getString(R.string.fetch_notification_download_cancel),
+            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.CANCEL)
+          )
+      downloadNotification.isPaused ->
+        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+          .addAction(
+            R.drawable.fetch_notification_resume,
+            context.getString(R.string.fetch_notification_download_resume),
+            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.RESUME)
+          )
+          .addAction(
+            R.drawable.fetch_notification_cancel,
+            context.getString(R.string.fetch_notification_download_cancel),
+            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.CANCEL)
+          )
+      downloadNotification.isQueued ->
+        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+      else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
+    }
+    notificationCustomisation(downloadNotification, notificationBuilder, context)
+  }
+
+  private fun notificationCustomisation(
+    downloadNotification: DownloadNotification,
+    notificationBuilder: NotificationCompat.Builder,
+    context: Context
+  ) {
     if (downloadNotification.isCompleted) {
       val internal = Intents.internal(CoreMainActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

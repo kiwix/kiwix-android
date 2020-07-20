@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Juandev
+* Klaras
 -->
 <resources>
+  <string name="retry">Zkusit znovu</string>
+  <string name="download">Stáhnout</string>
+  <string name="invalid_installation">Neplatná instalace. Stáhněte si prosím Zim.\nZkontrolujte, zda je zapnuto WiFi a zda máte v úložišti dostatek místa</string>
 </resources>

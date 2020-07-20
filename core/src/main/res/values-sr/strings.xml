@@ -82,8 +82,10 @@
   <string name="no_bookmarks">Нема обележивача</string>
   <string name="no_history">Нема историјата</string>
   <string name="device_default">Подразумеване вредности уређаја</string>
-  <string name="delete_history">Избрисати историјат?</string>
-  <string name="delete_bookmarks">Избрисати обележиваче?</string>
+  <string name="delete_history">Избрисати целу историју?</string>
+  <string name="delete_selected_history">Избрисати изабрану историју?</string>
+  <string name="delete_bookmarks">Избрисати све обележиваче?</string>
+  <string name="delete_selected_bookmarks">Избрисати изабране обележиваче?</string>
   <string name="on">Укљ.</string>
   <string name="off">Искљ.</string>
   <string name="auto">Ауто</string>
@@ -91,4 +93,5 @@
   <string name="crash_checkbox_file_system">Детаљи о систему датотека</string>
   <string name="diagnostic_report">Дијагностички извештај</string>
   <string name="diagnostic_report_message">Пошаљите све детаље како бисмо могли да дијагностикујемо проблем</string>
+  <string name="experimental_navigation">Експериментална навигација</string>
 </resources>
