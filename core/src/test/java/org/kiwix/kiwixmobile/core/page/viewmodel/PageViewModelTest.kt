@@ -22,6 +22,8 @@ import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.verify
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
@@ -34,6 +36,12 @@ import org.kiwix.kiwixmobile.core.page.PageImpl
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.pageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
@@ -79,17 +87,36 @@ internal class PageViewModelTest {
   }
 
   @Test
+  fun `ExitActionModeMenu calls deslectAllPages`() {
+    mockkObject(viewModel)
+    viewModel.actions.offer(ExitActionModeMenu)
+    verify {
+      viewModel.deselectAllPages(pageState())
+    }
+  }
+
+  @Test
+  fun `UserClickedDeleteButton calls offerShowDeleteDialog`() {
+    mockkObject(viewModel)
+    val action = UserClickedShowAllToggle(true)
+    viewModel.actions.offer(action)
+    verify {
+      viewModel.offerUpdateToShowAllToggle(action, pageState())
+    }
+  }
+
+  @Test
   internal fun `OnItemClick selects item if one is selected`() {
     val page = PageImpl(isSelected = true)
     viewModel.state.postValue(TestablePageState(listOf(page)))
-    viewModel.actions.offer(Action.OnItemClick(page))
+    viewModel.actions.offer(OnItemClick(page))
     viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl())))
   }
 
   @Test
   internal fun `OnItemClick offers OpenPage if none is selected`() {
     viewModel.state.postValue(TestablePageState(listOf(PageImpl())))
-    viewModel.effects.test().also { viewModel.actions.offer(Action.OnItemClick(PageImpl())) }
+    viewModel.effects.test().also { viewModel.actions.offer(OnItemClick(PageImpl())) }
       .assertValue(OpenPage(PageImpl(), zimReaderContainer))
     viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl())))
   }
@@ -98,7 +125,27 @@ internal class PageViewModelTest {
   internal fun `OnItemLongClick selects item if none is selected`() {
     val page = PageImpl()
     viewModel.state.postValue(TestablePageState(listOf(page)))
-    viewModel.actions.offer(Action.OnItemLongClick(page))
+    viewModel.actions.offer(OnItemLongClick(page))
     viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl(isSelected = true))))
+  }
+
+  @Test
+  fun `Filter calls updatePagesBasedOnFilter`() {
+    mockkObject(viewModel)
+    val action = Filter("filter")
+    viewModel.actions.offer(action)
+    verify {
+      viewModel.updatePagesBasedOnFilter(pageState(), action)
+    }
+  }
+
+  @Test
+  fun `UpdatePages calls updatePages`() {
+    mockkObject(viewModel)
+    val action = UpdatePages(emptyList())
+    viewModel.actions.offer(action)
+    verify {
+      viewModel.updatePages(pageState(), action)
+    }
   }
 }

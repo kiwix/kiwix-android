@@ -25,6 +25,7 @@ import io.mockk.mockk
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -73,8 +74,8 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  fun `Initial state is initialising a bookmark state`() {
-    viewModel.state.test().assertValue(bookmarkState())
+  fun `Initial state returns initial state`() {
+    assertThat(viewModel.initialState()).isEqualTo(bookmarkState())
   }
 
   @Test

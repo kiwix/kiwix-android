@@ -8,6 +8,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -57,8 +58,8 @@ internal class HistoryViewModelTest {
   }
 
   @Test
-  fun `Initial state is initialising a history state`() {
-    viewModel.state.test().assertValue(historyState())
+  fun `Initial state returns initial state`() {
+    assertThat(viewModel.initialState()).isEqualTo(historyState())
   }
 
   @Test

@@ -27,21 +27,6 @@ import org.kiwix.kiwixmobile.core.page.historyState
 internal class HistoryStateTest {
 
   @Test
-  internal fun `visiblePageItems returns history from all books when showAll is true`() {
-    val item = historyItem(isSelected = false)
-    assertThat(historyState(listOf(item), showAll = true).visiblePageItems)
-      .isEqualTo(listOf(DateItem(item.dateString), item))
-  }
-
-  @Test
-  internal fun `visiblePageItems returns history from current book when showAll is false`() {
-    val item1 = historyItem(isSelected = false, zimId = "id1")
-    val item2 = historyItem(isSelected = false, zimId = "id2")
-    assertThat(historyState(listOf(item1, item2), showAll = false, zimId = "id1").visiblePageItems)
-      .isEqualTo(listOf(DateItem(item1.dateString), item1))
-  }
-
-  @Test
   internal fun `visiblePageItems returns history based on filter`() {
     val matchingItem = historyItem(historyTitle = "Title")
     val nonMatchingItem = historyItem(historyTitle = "noMatch")
