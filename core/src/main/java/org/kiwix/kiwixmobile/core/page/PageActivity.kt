@@ -37,7 +37,6 @@ import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.layout.activity_page
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -50,7 +49,7 @@ import javax.inject.Inject
 
 abstract class PageActivity : OnItemClickListener, BaseActivity() {
   val activityComponent by lazy { coreActivityComponent }
-  abstract val pageViewModel: PageViewModel
+  abstract val pageViewModel: PageViewModel<*, *>
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
@@ -131,22 +130,18 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
     super.onDestroy()
   }
 
-  private fun render(state: PageState) {
-    pageAdapter.items = state.filteredPageItems
+  private fun render(state: PageState<*>) {
+    pageAdapter.items = state.visiblePageItems
     page_switch.isEnabled = !state.isInSelectionState
     no_page.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
     if (state.isInSelectionState) {
       if (actionMode == null) {
         actionMode = startSupportActionMode(actionModeCallback)
       }
-      actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems)
+      actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems())
     } else {
       actionMode?.finish()
     }
-  }
-
-  override fun injection(coreComponent: CoreComponent) {
-    activityComponent.inject(this)
   }
 
   override fun onItemClick(page: Page) {

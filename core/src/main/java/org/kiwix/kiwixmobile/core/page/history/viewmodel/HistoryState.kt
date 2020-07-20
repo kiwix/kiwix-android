@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
@@ -30,26 +29,12 @@ data class HistoryState(
   override val showAll: Boolean,
   override val currentZimId: String?,
   override val searchTerm: String = ""
-) : PageState {
-  override val isInSelectionState = pageItems.any(HistoryItem::isSelected)
-  override val numberOfSelectedItems = pageItems.filter(HistoryItem::isSelected).size
+) : PageState<HistoryItem>() {
+  override val visiblePageItems: List<HistoryListItem> =
+    HeaderizableList<HistoryListItem, HistoryItem, DateItem>(filteredPageItems)
+      .foldOverAddingHeaders({ historyItem -> DateItem(historyItem.dateString) },
+        { current, next -> current.dateString != next.dateString })
 
-  override val filteredPageItems: List<HistoryListItem> =
-    HeaderizableList<HistoryListItem, HistoryItem, DateItem>(pageItems
-      .filter { showAll || it.zimId == currentZimId }
-      .filter { it.historyTitle.contains(searchTerm, true) })
-      .foldOverAddingHeaders(
-        { historyItem -> DateItem(historyItem.dateString) },
-        { current, next -> current.dateString != next.dateString }
-      )
-
-  override fun toggleSelectionOfItem(historyItem: Page): HistoryState {
-    historyItem as HistoryItem
-    val newList = pageItems.map {
-      if (it.id == historyItem.id) it.apply {
-        isSelected = !isSelected
-      } else it
-    }
-    return copy(pageItems = newList)
-  }
+  override fun copyWithNewItems(newItems: List<HistoryItem>): PageState<HistoryItem> =
+    copy(pageItems = (newItems))
 }

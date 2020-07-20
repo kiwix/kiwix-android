@@ -24,7 +24,12 @@ internal class ShowDeleteHistoryDialogTest {
 
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
-    val showDeleteHistoryDialog = ShowDeleteHistoryDialog(effects, historyState(), historyDao)
+    val showDeleteHistoryDialog =
+      ShowDeleteHistoryDialog(
+        effects,
+        historyState(),
+        historyDao
+      )
     mockkActivityInjection(showDeleteHistoryDialog)
     val lambdaSlot = slot<() -> Unit>()
     showDeleteHistoryDialog.invokeWith(activity)
@@ -35,11 +40,12 @@ internal class ShowDeleteHistoryDialogTest {
 
   @Test
   fun `invoke with selected item shows dialog with delete selected items title`() {
-    val showDeleteHistoryDialog = ShowDeleteHistoryDialog(
-      effects,
-      historyState(listOf(historyItem(isSelected = true))),
-      historyDao
-    )
+    val showDeleteHistoryDialog =
+      ShowDeleteHistoryDialog(
+        effects,
+        historyState(listOf(historyItem(isSelected = true))),
+        historyDao
+      )
     mockkActivityInjection(showDeleteHistoryDialog)
     showDeleteHistoryDialog.invokeWith(activity)
     verify { dialogShower.show(DeleteSelectedHistory, any()) }
@@ -47,7 +53,12 @@ internal class ShowDeleteHistoryDialogTest {
 
   @Test
   fun `invoke with no selected items shows dialog with delete all items title`() {
-    val showDeleteHistoryDialog = ShowDeleteHistoryDialog(effects, historyState(), historyDao)
+    val showDeleteHistoryDialog =
+      ShowDeleteHistoryDialog(
+        effects,
+        historyState(),
+        historyDao
+      )
     mockkActivityInjection(showDeleteHistoryDialog)
     showDeleteHistoryDialog.invokeWith(activity)
     verify { dialogShower.show(DeleteAllHistory, any()) }

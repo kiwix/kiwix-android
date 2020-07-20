@@ -16,17 +16,18 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.adapter
+package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
-interface PageRelated {
-  val id: Long
-}
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.page.bookmark
+import org.kiwix.kiwixmobile.core.page.bookmarkState
 
-interface Page : PageRelated {
-  val zimFilePath: String?
-  val zimId: String
-  val url: String
-  val title: String
-  var isSelected: Boolean
-  val favicon: String?
+internal class BookmarkStateTest {
+  @Test
+  internal fun `copyNewItems should set new items to pageItems`() {
+    assertThat(bookmarkState(emptyList()).copy(listOf(bookmark())).pageItems).isEqualTo(
+      listOf(bookmark())
+    )
+  }
 }

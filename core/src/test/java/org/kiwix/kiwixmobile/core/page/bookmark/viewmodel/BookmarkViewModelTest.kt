@@ -34,18 +34,13 @@ import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.bookmarkState
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
-import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -78,13 +73,7 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  fun `initial state is Initialising`() {
-    viewModel.state.test().assertValue(bookmarkState())
-  }
-
-  @Test
-  internal fun `ExitBookmarks finishes activity`() {
-    viewModel.effects.test().also { viewModel.actions.offer(Exit) }.assertValue(Finish)
+  fun `Initial state is initialising a bookmark state`() {
     viewModel.state.test().assertValue(bookmarkState())
   }
 
@@ -120,30 +109,6 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  internal fun `OnItemClick selects item if one is selected`() {
-    val bookmark = bookmark(isSelected = true)
-    viewModel.state.postValue(bookmarkState(listOf(bookmark)))
-    viewModel.actions.offer(OnItemClick(bookmark))
-    viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
-  }
-
-  @Test
-  internal fun `OnItemClick offers OpenBookmark if none is selected`() {
-    viewModel.state.postValue(bookmarkState(listOf(bookmark())))
-    viewModel.effects.test().also { viewModel.actions.offer(OnItemClick(bookmark())) }
-      .assertValue(OpenPage(bookmark(), zimReaderContainer))
-    viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
-  }
-
-  @Test
-  internal fun `OnItemLongClick selects item if none is selected`() {
-    val bookmark = bookmark()
-    viewModel.state.postValue(bookmarkState(listOf(bookmark)))
-    viewModel.actions.offer(OnItemLongClick(bookmark))
-    viewModel.state.test().assertValue(bookmarkState(listOf(bookmark(isSelected = true))))
-  }
-
-  @Test
   fun `Filter updates search term`() {
     val searchTerm = "searchTerm"
     viewModel.actions.offer(Filter(searchTerm))
@@ -151,7 +116,7 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  internal fun `UpdateBookmarks updates bookmarks`() {
+  internal fun `UpdatePages updates bookmarks`() {
     viewModel.actions.offer(UpdatePages(listOf(bookmark())))
     viewModel.state.test().assertValue(bookmarkState(listOf(bookmark())))
   }

@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class DeletePageItems(
-  private val state: PageState,
+  private val state: PageState<*>,
   private val pageDao: PageDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {

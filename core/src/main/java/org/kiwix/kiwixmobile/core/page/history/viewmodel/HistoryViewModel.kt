@@ -18,57 +18,51 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistoryPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
-import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
-  override val pageDao: HistoryDao,
-  override val zimReaderContainer: ZimReaderContainer,
-  override val sharedPreferenceUtil: SharedPreferenceUtil
-) : PageViewModel() {
+  historyDao: HistoryDao,
+  zimReaderContainer: ZimReaderContainer,
+  sharedPrefs: SharedPreferenceUtil
+) : PageViewModel<HistoryItem, HistoryState>(historyDao, sharedPrefs, zimReaderContainer) {
 
-  override val state = MutableLiveData<PageState>().apply {
-    value =
-      HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
-  }
+  override fun initialState(): HistoryState =
+    HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
 
-  init {
-    compositeDisposable.addAll(
-      viewStateReducer(),
-      pageDao.pages().subscribeOn(Schedulers.io())
-        .subscribe({ actions.offer(Action.UpdatePages(it)) }, Throwable::printStackTrace)
-    )
-  }
+  override fun updatePagesBasedOnFilter(
+    state: HistoryState,
+    action: Action.Filter
+  ): HistoryState =
+    state.copy(searchTerm = action.searchTerm)
 
-  override fun updatePagesBasedOnFilter(state: PageState, action: Action.Filter): PageState =
-    (state as HistoryState).copy(searchTerm = action.searchTerm)
-
-  override fun updatePages(state: PageState, action: Action.UpdatePages): PageState =
-    (state as HistoryState).copy(pageItems = action.pages.filterIsInstance<HistoryItem>())
+  override fun updatePages(
+    state: HistoryState,
+    action: Action.UpdatePages
+  ): HistoryState =
+    state.copy(pageItems = action.pages.filterIsInstance<HistoryItem>())
 
   override fun offerUpdateToShowAllToggle(
     action: Action.UserClickedShowAllToggle,
-    state: PageState
-  ): PageState {
+    state: HistoryState
+  ): HistoryState {
     effects.offer(UpdateAllHistoryPreference(sharedPreferenceUtil, action.isChecked))
-    return (state as HistoryState).copy(showAll = action.isChecked)
+    return state.copy(showAll = action.isChecked)
   }
 
-  override fun offerShowDeleteDialog(state: PageState): PageState {
-    effects.offer(ShowDeleteHistoryDialog(effects, state as HistoryState, pageDao))
-    return state
-  }
+  override fun createDeletePageDialogEffect(state: HistoryState) =
+    ShowDeleteHistoryDialog(effects, state, pageDao)
 
-  override fun deselectAllPages(state: PageState): PageState =
-    (state as HistoryState).copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
+  override fun deselectAllPages(state: HistoryState): HistoryState =
+    state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
+
+  override fun copyWithNewItems(state: HistoryState, newItems: List<HistoryItem>): HistoryState =
+    state.copy(pageItems = newItems)
 }

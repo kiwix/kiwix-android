@@ -23,8 +23,10 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
@@ -39,20 +41,41 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-abstract class PageViewModel : ViewModel() {
-  abstract val zimReaderContainer: ZimReaderContainer
-  abstract val sharedPreferenceUtil: SharedPreferenceUtil
-  abstract val pageDao: PageDao
-  abstract val state: MutableLiveData<PageState>
+abstract class PageViewModel<T : Page, S : PageState<T>>(
+  protected val pageDao: PageDao,
+  val sharedPreferenceUtil: SharedPreferenceUtil,
+  val zimReaderContainer: ZimReaderContainer
+) : ViewModel() {
+
+  abstract fun initialState(): S
+
+  val state: MutableLiveData<S> by lazy {
+    MutableLiveData<S>().apply {
+      value = initialState()
+    }
+  }
+
+  private val compositeDisposable = CompositeDisposable()
   val effects = PublishProcessor.create<SideEffect<*>>()
   val actions = PublishProcessor.create<Action>()
-  val compositeDisposable = CompositeDisposable()
 
-  fun viewStateReducer(): Disposable =
+  init {
+    addDisposablesToCompositeDisposable()
+  }
+
+  private fun viewStateReducer(): Disposable =
     actions.map { reduce(it, state.value!!) }
       .subscribe(state::postValue, Throwable::printStackTrace)
 
-  private fun reduce(action: Action, state: PageState): PageState = when (action) {
+  protected fun addDisposablesToCompositeDisposable() {
+    compositeDisposable.addAll(
+      viewStateReducer(),
+      pageDao.pages().subscribeOn(Schedulers.io())
+        .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
+    )
+  }
+
+  private fun reduce(action: Action, state: S): S = when (action) {
     Exit -> finishActivity(state)
     ExitActionModeMenu -> deselectAllPages(state)
     UserClickedDeleteButton, UserClickedDeleteSelectedPages -> offerShowDeleteDialog(state)
@@ -63,31 +86,36 @@ abstract class PageViewModel : ViewModel() {
     is UpdatePages -> updatePages(state, action)
   }
 
-  abstract fun updatePagesBasedOnFilter(state: PageState, action: Filter): PageState
+  abstract fun updatePagesBasedOnFilter(state: S, action: Filter): S
 
-  abstract fun updatePages(state: PageState, action: UpdatePages): PageState
+  abstract fun updatePages(state: S, action: UpdatePages): S
 
   abstract fun offerUpdateToShowAllToggle(
     action: UserClickedShowAllToggle,
-    state: PageState
-  ): PageState
+    state: S
+  ): S
 
-  private fun handleItemLongClick(state: PageState, action: OnItemLongClick): PageState =
-    state.toggleSelectionOfItem(action.page)
+  private fun offerShowDeleteDialog(state: S): S {
+    effects.offer(createDeletePageDialogEffect(state))
+    return state
+  }
 
-  private fun handleItemClick(state: PageState, action: Action.OnItemClick): PageState {
+  private fun handleItemLongClick(state: S, action: OnItemLongClick): S =
+    copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page))
+
+  abstract fun copyWithNewItems(state: S, newItems: List<T>): S
+
+  private fun handleItemClick(state: S, action: Action.OnItemClick): S {
     if (state.isInSelectionState) {
-      return state.toggleSelectionOfItem(action.page)
+      return copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page))
     }
     effects.offer(OpenPage(action.page, zimReaderContainer))
     return state
   }
 
-  abstract fun offerShowDeleteDialog(state: PageState): PageState
+  abstract fun deselectAllPages(state: S): S
 
-  abstract fun deselectAllPages(state: PageState): PageState
-
-  private fun finishActivity(state: PageState): PageState {
+  private fun finishActivity(state: S): S {
     effects.offer(Finish)
     return state
   }
@@ -96,4 +124,6 @@ abstract class PageViewModel : ViewModel() {
     compositeDisposable.clear()
     super.onCleared()
   }
+
+  abstract fun createDeletePageDialogEffect(state: S): SideEffect<*>
 }
