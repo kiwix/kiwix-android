@@ -283,5 +283,6 @@
   <string name="diagnostic_report_message">Veuillez envoyer tous les détails suivants afin que nous puissions diagnostiquer le problème</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoomer le texte</string>
+  <string name="search_open_in_new_tab">Ouvrir dans un nouvel onglet</string>
   <string name="experimental_navigation">Navigation expérimentale</string>
 </resources>
