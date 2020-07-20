@@ -278,6 +278,7 @@
   <string name="diagnostic_report_message">Please send all the following details so we can diagnose the problem</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
+  <string name="search_open_in_new_tab">Open in new tab</string>
   <string name="experimental_navigation">Experimental Navigation</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
