@@ -65,7 +65,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -203,8 +202,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   protected ViewGroup videoView;
-  @BindView(R2.id.nested_scrollview_content_main)
-  NestedScrollView nestedScrollView;
   @BindView(R2.id.go_to_library_button_no_open_book)
   protected Button noOpenBookButton;
   @BindView(R2.id.no_open_book_text)
@@ -833,9 +830,10 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private KiwixWebView createWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
-    KiwixWebView webView =
-      new KiwixWebView(getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-        createWebClient(this, zimReaderContainer));
+    KiwixWebView webView = new ToolbarScrollingKiwixWebView(
+      getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
+      createWebClient(this, zimReaderContainer),
+      toolbarContainer, bottomToolbar, sharedPreferenceUtil);
     loadUrl(url, webView);
     return webView;
   }
@@ -1584,8 +1582,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void updateNightMode() {
-    painter.update(getCurrentWebView(), this::shouldActivateNightMode, videoView, nestedScrollView,
-      contentFrame);
+    painter.update(getCurrentWebView(), this::shouldActivateNightMode, videoView);
   }
 
   private boolean shouldActivateNightMode(KiwixWebView kiwixWebView) {

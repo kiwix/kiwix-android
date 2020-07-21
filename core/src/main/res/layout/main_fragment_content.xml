@@ -30,18 +30,10 @@
     android:fitsSystemWindows="true">
 
 
-    <androidx.core.widget.NestedScrollView
-      android:id="@+id/nested_scrollview_content_main"
+    <FrameLayout
+      android:id="@+id/activity_main_content_frame"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-      <FrameLayout
-        android:id="@+id/activity_main_content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    </androidx.core.widget.NestedScrollView>
+      android:layout_height="match_parent" />
 
     <include
       android:id="@+id/activity_main_tab_switcher"
