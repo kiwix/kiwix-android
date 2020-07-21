@@ -46,6 +46,14 @@
 
         <data android:scheme="content" />
         <data android:mimeType="application/octet-stream" />
+
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="KiwixSearchWidget.TEXT_CLICKED" />
+        <action android:name="KiwixSearchWidget.ICON_CLICKED" />
+        <action android:name="KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
@@ -164,14 +172,6 @@
     <service android:name=".webserver.wifi_hotspot.HotspotService" />
 
     <receiver android:name=".main.KiwixSearchWidget">
-      <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-        <action android:name="KiwixSearchWidget.TEXT_CLICKED" />
-        <action android:name="KiwixSearchWidget.ICON_CLICKED" />
-        <action android:name="KiwixSearchWidget.MIC_CLICKED" />
-        <action android:name="KiwixSearchWidget.STAR_CLICKED" />
-      </intent-filter>
-
       <meta-data
         android:name="android.appwidget.provider"
         android:resource="@xml/kiwix_widget_provider_info" />

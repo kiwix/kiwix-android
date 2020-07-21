@@ -121,8 +121,6 @@ import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -259,7 +257,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private boolean isFirstRun;
-  private BooksOnDiskAdapter booksAdapter;
   private AppCompatButton downloadBookButton;
   protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
@@ -403,16 +400,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     handleIntentExtras(getActivity().getIntent());
 
     wasHideToolbar = isHideToolbar;
-    booksAdapter = new BooksOnDiskAdapter(
-      new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
-        bookOnDiskItem -> {
-          open(bookOnDiskItem);
-          return Unit.INSTANCE;
-        },
-        null,
-        null),
-      BookOnDiskDelegate.LanguageDelegate.INSTANCE
-    );
 
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
@@ -1777,9 +1764,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override
   public void setHomePage(View view) {
     painter.deactivateNightMode(getCurrentWebView(), videoView);
-    RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
-    presenter.loadBooks();
-    homeRecyclerView.setAdapter(booksAdapter);
     updateTitle();
   }
 
@@ -1789,7 +1773,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void addBooks(List<BooksOnDiskListItem> books) {
-    booksAdapter.setItems(books);
   }
 
   private void searchFiles() {
