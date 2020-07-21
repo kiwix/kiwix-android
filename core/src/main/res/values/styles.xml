@@ -49,7 +49,7 @@
 
   <style name="switch_style">
     <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_height">48dp</item>
     <item name="android:layout_gravity">end</item>
     <item name="android:paddingRight">@dimen/switch_padding</item>
     <item name="android:paddingBottom">@dimen/switch_padding_bottom</item>
