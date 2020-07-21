@@ -74,7 +74,7 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     close.setId(2);
     close.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_clear_white_24dp));
     ImageViewExtensionsKt.tint(close,
-      ContextExtensionsKt.getColorAttribute(context, R.attr.colorOnSurface));
+      ContextExtensionsKt.getAttribute(context, R.attr.colorOnSurface));
 
     MaterialCardView cardView = new MaterialCardView(context);
     cardView.setId(3);

@@ -70,8 +70,6 @@
   <string name="pref_night_mode_summary">Afficher les articles en couleurs inversées</string>
   <string name="pref_back_to_top">Retourner au début</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir au début</string>
-  <string name="pref_hide_toolbar">Laisser la barre d’outils visible</string>
-  <string name="pref_hide_toolbar_summary">Masquer la barre d’outils quand la page défile vers le bas</string>
   <string name="pref_language_title">Langue</string>
   <string name="pref_language_chooser">Choisir une langue</string>
   <string name="pref_credits">Contributeurs et licences</string>
@@ -87,6 +85,7 @@
   <string name="all_history_cleared">Tout l’historique est effacé</string>
   <string name="pref_clear_all_bookmarks_title">Supprimer les marque-pages</string>
   <string name="all_bookmarks_cleared">Tous les marque-pages ont été supprimés</string>
+  <string name="selected_bookmarks_cleared">Signets sélectionnés effacés</string>
   <string name="clear_all_history_dialog_title">Effacer tout l’historique ?</string>
   <string name="share">Partager</string>
   <string name="selected_file_cab_app_chooser_title">Partager des fichiers ZIM avec :</string>
@@ -269,8 +268,10 @@
   <string name="no_bookmarks">Aucun marque-page</string>
   <string name="no_history">Aucun historique</string>
   <string name="device_default">Appareil par défaut</string>
-  <string name="delete_history" fuzzy="true">Supprimer l’historique ?</string>
-  <string name="delete_bookmarks" fuzzy="true">Supprimer les marque-pages ?</string>
+  <string name="delete_history">Supprimer tout l’historique ?</string>
+  <string name="delete_selected_history">Supprimer l’historique sélectionné ?</string>
+  <string name="delete_bookmarks">Supprimer tous les signets  ?</string>
+  <string name="delete_selected_bookmarks">Supprimer les marque-pages sélectionnés ?</string>
   <string name="on">Activé</string>
   <string name="off">Désactivé</string>
   <string name="auto">Automatique</string>

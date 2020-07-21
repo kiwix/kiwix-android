@@ -62,8 +62,6 @@
   <string name="pref_night_mode_summary">הצגת ערכים עם צבעים הפוכים</string>
   <string name="pref_back_to_top">חזרה למעלה</string>
   <string name="pref_back_to_top_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
-  <string name="pref_hide_toolbar">הסתרת סרגל הכלים בעת גלילה</string>
-  <string name="pref_hide_toolbar_summary">הסתר את סרגל הכלים בעת גלילה לתחתית הדף</string>
   <string name="pref_language_title">שפה</string>
   <string name="pref_language_chooser">בחירת שפה</string>
   <string name="pref_credits">תורמים ורשיונות</string>
@@ -261,8 +259,10 @@
   <string name="no_bookmarks">אין סימניות</string>
   <string name="no_history">אין היסטוריה</string>
   <string name="device_default">ברירת המחדל של המכשיר</string>
-  <string name="delete_history" fuzzy="true">למחוק היסטוריה?</string>
-  <string name="delete_bookmarks" fuzzy="true">למחוק מועדפים?</string>
+  <string name="delete_history">למחוק את כל ההיסטוריה?</string>
+  <string name="delete_selected_history">למחוק את ההיסטוריה שנבחרה?</string>
+  <string name="delete_bookmarks">למחוק את כל המועדפים?</string>
+  <string name="delete_selected_bookmarks">למחוק את המועדפים שנבחרו?</string>
   <string name="on">מופעל</string>
   <string name="off">כבוי</string>
   <string name="auto">אוטומטי</string>
