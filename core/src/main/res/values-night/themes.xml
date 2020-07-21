@@ -12,6 +12,8 @@
     <item name="colorOnSurface">@color/alabaster_white</item>
     <item name="colorOnError">@color/alabaster_white</item>
 
+    <item name="snackbarButtonStyle">@style/snackbar_button</item>
+
     <item name="textSecondary">@color/mine_shaft_gray350</item>
     <item name="textTertiary">@color/mine_shaft_gray500</item>
     <item name="cardViewBackground">@color/mine_shaft_gray850</item>
