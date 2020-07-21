@@ -51,8 +51,6 @@
   <string name="pref_night_mode_summary">Tampilkan artikel dengan warna terbalik</string>
   <string name="pref_back_to_top">Kembali ke Atas</string>
   <string name="pref_back_to_top_summary">Tampilkan tombol di akhir halaman untuk menggulir ke atas</string>
-  <string name="pref_hide_toolbar">Sembunyikan bilah alat saat menggulir</string>
-  <string name="pref_hide_toolbar_summary">Sembunyikan bilah alat saat halaman bergulir ke bawah</string>
   <string name="pref_language_title">Bahasa</string>
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="pref_credits">Kontributor dan Lisensi</string>

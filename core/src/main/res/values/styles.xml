@@ -20,6 +20,10 @@
     <item name="itemTextAppearance">?textAppearanceBody2</item>
   </style>
 
+  <style name="Widget.KiwixTheme.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
+    <item name="backgroundTint">@color/black</item>
+  </style>
+
   <style name="Widget.KiwixTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
     <item name="android:background">@color/black</item>
   </style>

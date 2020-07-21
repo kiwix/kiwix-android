@@ -50,7 +50,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.AnimRes;
@@ -77,6 +76,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -114,7 +114,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
-import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
@@ -174,7 +173,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_tts_controls)
   Group TTSControls;
   @BindView(R2.id.fragment_main_app_bar)
-  AppBarLayout toolbarContainer;
+  protected AppBarLayout toolbarContainer;
   @BindView(R2.id.main_fragment_progress_view)
   protected ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
@@ -186,7 +185,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_content_frame)
   protected FrameLayout contentFrame;
   @BindView(R2.id.bottom_toolbar)
-  protected LinearLayout bottomToolbar;
+  protected BottomAppBar bottomToolbar;
   @BindView(R2.id.bottom_toolbar_bookmark)
   ImageView bottomToolbarBookmark;
   @BindView(R2.id.bottom_toolbar_arrow_back)
@@ -208,14 +207,14 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.no_open_book_text)
   TextView noOpenBookText;
   @BindView(R2.id.activity_main_root)
-  View activityMainRoot;
+  protected View activityMainRoot;
 
   @Inject
   protected MainContract.Presenter presenter;
   @Inject
   StorageObserver storageObserver;
   @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
+  protected SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   protected ZimReaderContainer zimReaderContainer;
   @Inject
@@ -243,8 +242,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   };
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
-  private boolean wasHideToolbar = true;
-  private boolean isHideToolbar = true;
   private boolean isOpenNewTabInBackground;
   private boolean isExternalLinkPopup;
   private String documentParserJs;
@@ -386,8 +383,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     checkForRateDialog();
 
-    isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
-
     addFileReader();
     setupTabsAdapter();
     setTableDrawerInfo();
@@ -403,7 +398,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     handleIntentExtras(getActivity().getIntent());
 
-    wasHideToolbar = isHideToolbar;
     booksAdapter = new BooksOnDiskAdapter(
       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
         bookOnDiskItem -> {
@@ -600,6 +594,7 @@ public abstract class CoreReaderFragment extends BaseFragment
         tabSwitcherRoot.setVisibility(View.GONE);
         startAnimation(tabSwitcherRoot, R.anim.slide_up);
         progressBar.setVisibility(View.VISIBLE);
+        progressBar.hide();
         contentFrame.setVisibility(View.VISIBLE);
       }
       selectTab(currentWebViewIndex);
@@ -827,28 +822,25 @@ public abstract class CoreReaderFragment extends BaseFragment
     loadUrl(url, getCurrentWebView());
   }
 
-  private void loadUrl(String url, KiwixWebView webview) {
+  protected void loadUrl(String url, KiwixWebView webview) {
     if (url != null && !url.endsWith("null")) {
       webview.loadUrl(url);
     }
   }
 
-  private KiwixWebView getWebView(String url) {
+  private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
-    KiwixWebView webView;
-    if (!isHideToolbar) {
-      webView = new ToolbarScrollingKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-        createWebClient(this, zimReaderContainer),
-        toolbarContainer, bottomToolbar, sharedPreferenceUtil);
-    } else {
-      webView = new ToolbarStaticKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-        createWebClient(this, zimReaderContainer),
-        sharedPreferenceUtil);
-    }
+    KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
     return webView;
+  }
+
+  @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {
+    return new ToolbarScrollingKiwixWebView(
+      getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
+      createWebClient(this, zimReaderContainer),
+      toolbarContainer, bottomToolbar,
+      sharedPreferenceUtil);
   }
 
   protected abstract CoreWebViewClient createWebClient(
@@ -860,7 +852,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   protected KiwixWebView newTab(String url) {
-    KiwixWebView webView = getWebView(url);
+    KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
     selectTab(webViewList.size() - 1);
     tabsAdapter.notifyDataSetChanged();
@@ -870,7 +862,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void newTabInBackground(String url) {
-    KiwixWebView webView = getWebView(url);
+    KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
     tabsAdapter.notifyDataSetChanged();
     setUpWebViewWithTextToSpeech();
@@ -886,11 +878,11 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
-    Snackbar undo = Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
+    snackbarRoot.bringToFront();
+    Snackbar.make(snackbarRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo, v -> {
         restoreDeletedTab(index);
-      });
-    undo.show();
+      }).show();
     openHomeScreen();
   }
 
@@ -930,10 +922,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     updateUrlProcessor();
     updateTableOfContents();
     updateTitle();
-
-    if (!isHideToolbar && webView instanceof ToolbarScrollingKiwixWebView) {
-      ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
-    }
   }
 
   private KiwixWebView safelyGetWebView(int position) {
@@ -1093,14 +1081,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
     getActivity().getWindow().addFlags(fullScreenFlag);
     getActivity().getWindow().clearFlags(classicScreenFlag);
-
-    if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
-      contentFrame.setPadding(0, 0, 0, 0);
-    }
     getCurrentWebView().requestLayout();
-    if (!isHideToolbar) {
-      this.getCurrentWebView().setTranslationY(0);
-    }
+
     sharedPreferenceUtil.putPrefFullScreen(true);
   }
 
@@ -1115,9 +1097,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     getActivity().getWindow().clearFlags(fullScreenFlag);
     getActivity().getWindow().addFlags(classicScreenFlag);
     getCurrentWebView().requestLayout();
-    if (!isHideToolbar) {
-      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarHeight(getActivity()));
-    }
     sharedPreferenceUtil.putPrefFullScreen(false);
   }
 
@@ -1340,14 +1319,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override
   public void onResume() {
     super.onResume();
-    if (wasHideToolbar != isHideToolbar) {
-      wasHideToolbar = isHideToolbar;
-      for (int i = 0; i < webViewList.size(); i++) {
-        webViewList.set(i, getWebView(webViewList.get(i).getUrl()));
-      }
-      selectTab(currentWebViewIndex);
-      setUpWebViewWithTextToSpeech();
-    }
 
     updateBottomToolbarVisibility();
     presenter.loadBooks();
@@ -1365,15 +1336,8 @@ public abstract class CoreReaderFragment extends BaseFragment
       if (!urlIsInvalid()
         && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
         bottomToolbar.setVisibility(View.VISIBLE);
-        if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
-          contentFrame.setPadding(0, 0, 0,
-            (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
-        } else {
-          contentFrame.setPadding(0, 0, 0, 0);
-        }
       } else {
         bottomToolbar.setVisibility(View.GONE);
-        contentFrame.setPadding(0, 0, 0, 0);
       }
     }
   }
@@ -1632,7 +1596,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
-    isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
     isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
 

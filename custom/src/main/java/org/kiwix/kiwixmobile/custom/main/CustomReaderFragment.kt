@@ -48,7 +48,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -63,7 +62,6 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   @Inject lateinit var customFileValidator: CustomFileValidator
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var dialogShower: DialogShower
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {

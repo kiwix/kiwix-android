@@ -22,15 +22,20 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.AttributeSet
 import android.util.Log
+import android.util.TypedValue.complexToDimensionPixelSize
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
+import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.anim
@@ -39,10 +44,12 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -131,6 +138,41 @@ class ReaderFragment : CoreReaderFragment() {
     }
   }
 
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    val view = super.onCreateView(inflater, container, savedInstanceState)
+    setFragmentContainerBottomMarginToSizeOfNavBar()
+    return view
+  }
+
+  private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
+    val actionBarHeight = context?.getAttribute(android.R.attr.actionBarSize)
+    if (actionBarHeight != null) {
+      setParentFragmentsBottomMargin(
+        complexToDimensionPixelSize(
+          actionBarHeight,
+          resources.displayMetrics
+        )
+      )
+    }
+  }
+
+  private fun setParentFragmentsBottomMargin(margin: Int) {
+    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
+    params?.bottomMargin = margin
+    parentFragment?.view?.requestLayout()
+  }
+
+  override fun onPause() {
+    super.onPause()
+    // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
+    // this resets the margin to zero, before fragment navigation.
+    setParentFragmentsBottomMargin(0)
+  }
+
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
     menu.findItem(R.id.menu_new_navigation)?.isVisible = false
@@ -205,6 +247,15 @@ class ReaderFragment : CoreReaderFragment() {
         showHomePage()
       }
     }
+  }
+
+  override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
+    return ToolbarScrollingKiwixWebView(
+      activity, this, attrs, activityMainRoot as ViewGroup, videoView,
+      createWebClient(this, zimReaderContainer),
+      toolbarContainer, bottomToolbar, requireActivity().nav_view,
+      sharedPreferenceUtil
+    )
   }
 
   private fun getSharedPrefSettings() =

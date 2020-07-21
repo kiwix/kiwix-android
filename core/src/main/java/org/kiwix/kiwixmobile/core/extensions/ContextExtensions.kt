@@ -57,7 +57,7 @@ val Context.locale: Locale
     if (VERSION.SDK_INT >= VERSION_CODES.N) resources.configuration.locales.get(0)
     else resources.configuration.locale
 
-fun Context.getColorAttribute(@AttrRes attributeRes: Int) = with(TypedValue()) {
+fun Context.getAttribute(@AttrRes attributeRes: Int) = with(TypedValue()) {
   if (theme.resolveAttribute(attributeRes, this, true))
     data
   else

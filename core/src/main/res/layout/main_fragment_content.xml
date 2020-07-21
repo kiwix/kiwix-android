@@ -24,17 +24,28 @@
   android:layout_height="match_parent"
   android:animateLayoutChanges="true">
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/fragment_main_app_bar"
+  <org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <FrameLayout
+      android:id="@+id/activity_main_content_frame"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+    <include
+      android:id="@+id/activity_main_tab_switcher"
+      layout="@layout/tab_switcher"
+      android:visibility="gone" />
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/fragment_main_app_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-      <include layout="@layout/layout_toolbar" />
+      <include layout="@layout/layout_scrolling_toolbar" />
 
       <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/main_fragment_progress_view"
@@ -47,13 +58,11 @@
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:progress="70" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-  </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-  <FrameLayout
-    android:id="@+id/activity_main_content_frame"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    <include layout="@layout/bottom_toolbar" />
+
+  </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
 
   <ImageButton
     android:id="@+id/activity_main_fullscreen_button"
@@ -77,7 +86,7 @@
     android:layout_margin="@dimen/activity_horizontal_margin"
     android:visibility="gone"
     app:fabSize="mini"
-    app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:srcCompat="@drawable/action_find_previous"
     tools:visibility="visible" />
@@ -90,7 +99,7 @@
     android:text="@string/tts_pause"
     android:textStyle="bold"
     android:visibility="gone"
-    app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+    app:layout_constraintBottom_toTopOf="parent"
     app:layout_constraintEnd_toStartOf="@id/activity_main_button_stop_tts"
     app:layout_constraintHorizontal_chainStyle="packed"
     app:layout_constraintStart_toStartOf="parent" />
@@ -103,7 +112,7 @@
     android:text="@string/stop"
     android:textStyle="bold"
     android:visibility="gone"
-    app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+    app:layout_constraintBottom_toTopOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/activity_main_button_pause_tts" />
 
@@ -119,13 +128,8 @@
     android:id="@+id/snackbar_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_constraintBottom_toTopOf="@id/activity_main_button_pause_tts"
-    app:layout_constraintEnd_toEndOf="parent" />
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
 
-  <include layout="@layout/bottom_toolbar" />
-
-  <include
-    android:id="@+id/activity_main_tab_switcher"
-    layout="@layout/tab_switcher"
-    android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

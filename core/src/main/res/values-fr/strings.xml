@@ -70,8 +70,6 @@
   <string name="pref_night_mode_summary">Afficher les articles en couleurs inversées</string>
   <string name="pref_back_to_top">Retourner au début</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir au début</string>
-  <string name="pref_hide_toolbar">Laisser la barre d’outils visible</string>
-  <string name="pref_hide_toolbar_summary">Masquer la barre d’outils quand la page défile vers le bas</string>
   <string name="pref_language_title">Langue</string>
   <string name="pref_language_chooser">Choisir une langue</string>
   <string name="pref_credits">Contributeurs et licences</string>

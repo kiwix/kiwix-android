@@ -38,8 +38,6 @@
   <string name="pref_night_mode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
   <string name="pref_back_to_top">Vissza a lap tetejére</string>
   <string name="pref_back_to_top_summary">Gomb megjelenítése a lap alján, melynek segítségével visszatérhetsz a lap tetejére</string>
-  <string name="pref_hide_toolbar">Eszköztár elrejtése görgetés esetén</string>
-  <string name="pref_hide_toolbar_summary">Eszköztár elrejtése az oldal legörgetésénél</string>
   <string name="pref_language_title">Nyelv</string>
   <string name="pref_language_chooser">Válassz nyelvet</string>
   <string name="pref_credits">Közreműködők és licenszek</string>

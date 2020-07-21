@@ -57,8 +57,6 @@
   <string name="pref_night_mode_summary">Прикажувај ги статиите во обратни бои</string>
   <string name="pref_back_to_top">Најгоре</string>
   <string name="pref_back_to_top_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
-  <string name="pref_hide_toolbar">Скриј го алатникот при лизгање</string>
-  <string name="pref_hide_toolbar_summary">Скриј го алатникот кога при надолно лизгање по страницата</string>
   <string name="pref_language_title">Јазик</string>
   <string name="pref_language_chooser">Изберете јазик</string>
   <string name="pref_credits">Учесници и лиценци</string>

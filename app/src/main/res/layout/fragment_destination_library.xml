@@ -16,52 +16,61 @@
   ~
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:layout_height="match_parent">
 
-  <include layout="@layout/layout_toolbar" />
-
-  <androidx.constraintlayout.widget.ConstraintLayout
+  <org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
+    <com.google.android.material.appbar.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
-    <TextView
-      android:id="@+id/file_management_no_files"
-      style="@style/no_list_content_text"
-      android:layout_gravity="center"
-      android:text="@string/no_files_here"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      <include layout="@layout/layout_scrolling_toolbar" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <Button
-      android:id="@+id/go_to_downloads_button_no_files"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/download_books"
-      android:visibility="gone"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/file_management_no_files" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
       android:id="@+id/zim_swiperefresh"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
       <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/zimfilelist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+  </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+  <TextView
+    android:id="@+id/file_management_no_files"
+    style="@style/no_list_content_text"
+    android:layout_gravity="center"
+    android:text="@string/no_files_here"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <Button
+    android:id="@+id/go_to_downloads_button_no_files"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/download_books"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/file_management_no_files" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
