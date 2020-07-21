@@ -173,7 +173,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_tts_controls)
   Group TTSControls;
   @BindView(R2.id.fragment_main_app_bar)
-  AppBarLayout toolbarContainer;
+  protected AppBarLayout toolbarContainer;
   @BindView(R2.id.main_fragment_progress_view)
   protected ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
@@ -207,14 +207,14 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.no_open_book_text)
   TextView noOpenBookText;
   @BindView(R2.id.activity_main_root)
-  View activityMainRoot;
+  protected View activityMainRoot;
 
   @Inject
   protected MainContract.Presenter presenter;
   @Inject
   StorageObserver storageObserver;
   @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
+  protected SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   protected ZimReaderContainer zimReaderContainer;
   @Inject
@@ -822,20 +822,25 @@ public abstract class CoreReaderFragment extends BaseFragment
     loadUrl(url, getCurrentWebView());
   }
 
-  private void loadUrl(String url, KiwixWebView webview) {
+  protected void loadUrl(String url, KiwixWebView webview) {
     if (url != null && !url.endsWith("null")) {
       webview.loadUrl(url);
     }
   }
 
-  private KiwixWebView createWebView(String url) {
+  private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
-    KiwixWebView webView = new ToolbarScrollingKiwixWebView(
-      getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-      createWebClient(this, zimReaderContainer),
-      toolbarContainer, bottomToolbar, sharedPreferenceUtil);
+    KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
     return webView;
+  }
+
+  @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {
+    return new ToolbarScrollingKiwixWebView(
+      getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
+      createWebClient(this, zimReaderContainer),
+      toolbarContainer, bottomToolbar,
+      sharedPreferenceUtil);
   }
 
   protected abstract CoreWebViewClient createWebClient(
@@ -847,7 +852,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   protected KiwixWebView newTab(String url) {
-    KiwixWebView webView = createWebView(url);
+    KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
     selectTab(webViewList.size() - 1);
     tabsAdapter.notifyDataSetChanged();
@@ -857,7 +862,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void newTabInBackground(String url) {
-    KiwixWebView webView = createWebView(url);
+    KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
     tabsAdapter.notifyDataSetChanged();
     setUpWebViewWithTextToSpeech();

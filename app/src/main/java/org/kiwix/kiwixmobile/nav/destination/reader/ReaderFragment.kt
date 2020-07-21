@@ -22,6 +22,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue.complexToDimensionPixelSize
 import android.view.LayoutInflater
@@ -34,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
+import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.anim
@@ -47,6 +49,7 @@ import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -244,6 +247,15 @@ class ReaderFragment : CoreReaderFragment() {
         showHomePage()
       }
     }
+  }
+
+  override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
+    return ToolbarScrollingKiwixWebView(
+      activity, this, attrs, activityMainRoot as ViewGroup, videoView,
+      createWebClient(this, zimReaderContainer),
+      toolbarContainer, bottomToolbar, requireActivity().nav_view,
+      sharedPreferenceUtil
+    )
   }
 
   private fun getSharedPrefSettings() =
