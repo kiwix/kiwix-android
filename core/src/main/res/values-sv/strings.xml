@@ -29,7 +29,7 @@
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
   <string name="hotspot_service_channel_name">Surfpunktstjänstkanal</string>
   <string name="hotspot_failed_title">Misslyckades att starta surfpunkt</string>
-  <string name="hotspot_failed_message">Det verkar som att din surfpunkt är redan aktiverad. Var god inaktivera din WiFi-surfpunkt för att fortsätta.</string>
+  <string name="hotspot_failed_message">Det verkar som att din surfpunkt redan är aktiverad. Var god inaktivera din WiFi-surfpunkt för att fortsätta.</string>
   <string name="go_to_wifi_settings_label">Gå till WiFi-inställningar</string>
   <string name="hotspot_running">Aktiv surfpunkt</string>
   <string name="no_books_selected_toast_message">Välj böcker först</string>
@@ -67,7 +67,7 @@
   <string name="pref_language_title">Språk</string>
   <string name="pref_language_chooser">Välj ett språk</string>
   <string name="pref_credits">Bidragsgivare och licenser</string>
-  <string name="pref_credits_title">Erkännanden</string>
+  <string name="pref_credits_title">Tacka till</string>
   <string name="tts_lang_not_supported">Språket på denna sida stöds inte, eller så har lämplig språkdata inte installerats. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
@@ -262,7 +262,9 @@
   <string name="send_report">Skicka diagnostisk rapport</string>
   <string name="crash_checkbox_file_system">Filsystemsdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>
+  <string name="diagnostic_report_message">Vänligen skicka följande detaljer så vi kan diagnostisera problemet.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text-zoomning</string>
+  <string name="search_open_in_new_tab">Öppna i ny flik</string>
   <string name="experimental_navigation">Experimentell navigering</string>
 </resources>
