@@ -49,8 +49,8 @@ import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
-import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
+import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -61,6 +61,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.navigate
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
@@ -86,8 +87,8 @@ class ReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun showHomePage() {
-    exitBook()
+  override fun addBooks(books: MutableList<BooksOnDiskListItem>?) {
+    // do nothing
   }
 
   private fun exitBook() {
@@ -187,7 +188,7 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onResume() {
     super.onResume()
     if (zimReaderContainer.zimFile == null) {
-      showHomePage()
+      exitBook()
     }
   }
 
@@ -242,7 +243,7 @@ class ReaderFragment : CoreReaderFragment() {
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
         Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
-        showHomePage()
+        exitBook()
       }
     }
   }

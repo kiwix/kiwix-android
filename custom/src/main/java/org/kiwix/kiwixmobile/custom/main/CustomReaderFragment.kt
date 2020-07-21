@@ -28,7 +28,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.widget.ImageView
@@ -49,6 +48,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -76,6 +76,10 @@ class CustomReaderFragment : CoreReaderFragment() {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
       toolbarToc?.isEnabled = false
     }
+  }
+
+  override fun addBooks(books: MutableList<BooksOnDiskListItem>?) {
+    // do nothing
   }
 
   override fun setDrawerLockMode(lockMode: Int) {
@@ -198,10 +202,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
     }
     super.configureWebViewSelectionHandler(menu)
-  }
-
-  override fun showHomePage() {
-    Log.e("CustomMain", "tried to show home page")
   }
 
   override fun createNewTab() {

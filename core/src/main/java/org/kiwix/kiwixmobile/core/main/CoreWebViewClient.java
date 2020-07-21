@@ -121,10 +121,6 @@ public class CoreWebViewClient extends WebViewClient {
     Log.d(TAG_KIWIX, "invalidUrl = " + invalidUrl);
 
     if (invalidUrl) {
-      Log.e(
-        TAG_KIWIX,
-        "Abandoning WebView as there's a problem getting the content for this custom app."
-      );
       return;
     }
 

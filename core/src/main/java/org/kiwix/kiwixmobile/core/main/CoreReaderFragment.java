@@ -120,7 +120,6 @@ import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -1114,7 +1113,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
         ContextExtensionsKt.toast(getActivity(), R.string.error_file_not_found, Toast.LENGTH_LONG);
-        showHomePage();
       }
     } else {
       this.file = file;
@@ -1165,7 +1163,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       updateUrlProcessor();
     } else {
       ContextExtensionsKt.toast(getActivity(), R.string.error_file_invalid, Toast.LENGTH_LONG);
-      showHomePage();
     }
   }
 
@@ -1723,20 +1720,6 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
         return Unit.INSTANCE;
       });
-  }
-
-  @Override
-  public void setHomePage(View view) {
-    painter.deactivateNightMode(getCurrentWebView(), videoView);
-    updateTitle();
-  }
-
-  private void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
-    openZimFile(bookOnDisk.getFile());
-  }
-
-  @Override
-  public void addBooks(List<BooksOnDiskListItem> books) {
   }
 
   private void searchFiles() {
