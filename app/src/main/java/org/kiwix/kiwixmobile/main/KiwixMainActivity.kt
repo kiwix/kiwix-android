@@ -23,7 +23,6 @@ import android.os.Bundle
 import androidx.appcompat.view.ActionMode
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
 import org.kiwix.kiwixmobile.R
@@ -34,7 +33,6 @@ import org.kiwix.kiwixmobile.kiwixActivityComponent
 
 class KiwixMainActivity : CoreMainActivity() {
   private lateinit var navController: NavController
-  private lateinit var appBarConfiguration: AppBarConfiguration
   private var actionMode: ActionMode? = null
   val cachedComponent by lazy { kiwixActivityComponent }
 
@@ -53,7 +51,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
     navController = findNavController(R.id.nav_host_fragment)
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-    appBarConfiguration = AppBarConfiguration(navController.graph)
     nav_view.setupWithNavController(navController)
   }
 
