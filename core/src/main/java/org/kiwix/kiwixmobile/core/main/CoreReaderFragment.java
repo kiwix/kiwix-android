@@ -386,14 +386,13 @@ public abstract class CoreReaderFragment extends BaseFragment
     compatCallback = new CompatFindActionModeCallback(activity);
     setUpTTS();
 
-    setupDocumentParser(activity);
+    setupDocumentParser();
 
     loadPrefs();
     updateTitle();
 
     handleIntentExtras(getActivity().getIntent());
 
-    searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
 
@@ -447,7 +446,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void setupDocumentParser(AppCompatActivity activity) {
+  private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
@@ -1185,7 +1184,6 @@ public abstract class CoreReaderFragment extends BaseFragment
           if (file != null) {
             openZimFile(file);
           }
-          scanStorageForZims();
         } else {
           Snackbar.make(snackbarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
             .setAction(R.string.menu_settings, view -> {
@@ -1213,16 +1211,6 @@ public abstract class CoreReaderFragment extends BaseFragment
         break;
       }
     }
-  }
-
-  private void scanStorageForZims() {
-    storageObserver.getBooksOnFileSystem()
-      .take(1)
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(books -> {
-        presenter.saveBooks(books);
-        hasLocalBooks = !books.isEmpty();
-      }, Throwable::printStackTrace);
   }
 
   @OnClick(R2.id.tab_switcher_close_all_tabs)
@@ -1289,7 +1277,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     super.onResume();
 
     updateBottomToolbarVisibility();
-    presenter.loadBooks();
     updateNightMode();
   }
 
@@ -1720,14 +1707,6 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
         return Unit.INSTANCE;
       });
-  }
-
-  private void searchFiles() {
-    if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      scanStorageForZims();
-    } else {
-      requestExternalStoragePermission();
-    }
   }
 
   private boolean checkNull(View view) {

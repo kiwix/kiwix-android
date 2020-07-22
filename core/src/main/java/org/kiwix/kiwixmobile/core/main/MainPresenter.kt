@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.main.MainContract.Presenter
 import org.kiwix.kiwixmobile.core.main.MainContract.View
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
 private const val TAG = "MainPresenter"
@@ -33,17 +32,6 @@ private const val TAG = "MainPresenter"
 @ActivityScope
 internal class MainPresenter @Inject constructor(private val dataSource: DataSource) :
   BasePresenter<View?>(), Presenter {
-  override fun loadBooks() {
-    compositeDisposable.add(
-      dataSource.languageCategorizedBooks.subscribe(
-        { view?.addBooks(it) }
-      ) { e -> Log.e(TAG, "Unable to load books", e) })
-  }
-
-  override fun saveBooks(book: List<BookOnDisk>) {
-    dataSource.saveBooks(book)
-      .subscribe(::loadBooks) { e -> Log.e(TAG, "Unable to save books", e) }
-  }
 
   override fun saveHistory(history: HistoryItem) {
     dataSource.saveHistory(history)

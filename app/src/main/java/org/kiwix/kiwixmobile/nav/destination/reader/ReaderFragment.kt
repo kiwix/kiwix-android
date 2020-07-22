@@ -61,7 +61,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.navigate
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
@@ -85,10 +84,6 @@ class ReaderFragment : CoreReaderFragment() {
         ReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
       )
     }
-  }
-
-  override fun addBooks(books: MutableList<BooksOnDiskListItem>?) {
-    // do nothing
   }
 
   private fun exitBook() {
