@@ -49,13 +49,6 @@
 
       </intent-filter>
       <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-        <action android:name="KiwixSearchWidget.TEXT_CLICKED" />
-        <action android:name="KiwixSearchWidget.ICON_CLICKED" />
-        <action android:name="KiwixSearchWidget.MIC_CLICKED" />
-        <action android:name="KiwixSearchWidget.STAR_CLICKED" />
-      </intent-filter>
-      <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
         <category android:name="android.intent.category.DEFAULT" />
@@ -175,6 +168,14 @@
       <meta-data
         android:name="android.appwidget.provider"
         android:resource="@xml/kiwix_widget_provider_info" />
+
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="KiwixSearchWidget.TEXT_CLICKED" />
+        <action android:name="KiwixSearchWidget.ICON_CLICKED" />
+        <action android:name="KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="KiwixSearchWidget.STAR_CLICKED" />
+      </intent-filter>
     </receiver>
   </application>
 </manifest>
