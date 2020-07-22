@@ -18,11 +18,8 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.util.Log
-import org.kiwix.kiwixmobile.core.base.BaseContract
-import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.main.MainContract.Presenter
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import javax.inject.Inject
@@ -30,20 +27,19 @@ import javax.inject.Inject
 private const val TAG = "MainPresenter"
 
 @ActivityScope
-internal class MainPresenter @Inject constructor(private val dataSource: DataSource) :
-  BasePresenter<BaseContract.View<Presenter>>(), Presenter {
+class MainRepositoryActions @Inject constructor(private val dataSource: DataSource) {
 
-  override fun saveHistory(history: HistoryItem) {
+  fun saveHistory(history: HistoryItem) {
     dataSource.saveHistory(history)
       .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
   }
 
-  override fun saveBookmark(bookmark: BookmarkItem) {
+  fun saveBookmark(bookmark: BookmarkItem) {
     dataSource.saveBookmark(bookmark)
       .subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
   }
 
-  override fun deleteBookmark(bookmarkUrl: String) {
+  fun deleteBookmark(bookmarkUrl: String) {
     dataSource.deleteBookmark(bookmarkUrl)
       .subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
   }

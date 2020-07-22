@@ -99,7 +99,6 @@ import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
-import org.kiwix.kiwixmobile.core.base.BaseContract;
 import org.kiwix.kiwixmobile.core.base.BaseFragment;
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
@@ -126,7 +125,6 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
-import static org.kiwix.kiwixmobile.core.main.MainContract.Presenter;
 import static org.kiwix.kiwixmobile.core.page.history.HistoryActivityKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
@@ -154,7 +152,7 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
 public abstract class CoreReaderFragment extends BaseFragment
-  implements WebViewCallback, BaseContract.View<Presenter>,
+  implements WebViewCallback,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
@@ -207,8 +205,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected View activityMainRoot;
 
   @Inject
-  protected Presenter presenter;
-  @Inject
   StorageObserver storageObserver;
   @Inject
   protected SharedPreferenceUtil sharedPreferenceUtil;
@@ -226,6 +222,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected DialogShower alertDialogShower;
   @Inject
   protected NightModeViewPainter painter;
+  @Inject
+  MainRepositoryActions repositoryActions;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -330,7 +328,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
-    presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
     activity.setSupportActionBar(toolbar);
@@ -774,7 +771,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     safeDispose();
-    presenter.detachView();
     if (downloadBookButton != null) {
       downloadBookButton.setOnClickListener(null);
     }
@@ -1247,12 +1243,12 @@ public abstract class CoreReaderFragment extends BaseFragment
     String articleUrl = getCurrentWebView().getUrl();
     if (articleUrl != null) {
       if (isBookmarked) {
-        presenter.deleteBookmark(articleUrl);
+        repositoryActions.deleteBookmark(articleUrl);
         ViewExtensionsKt.snack(snackbarRoot, R.string.bookmark_removed);
       } else {
         final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
         if (zimFileReader != null) {
-          presenter.saveBookmark(
+          repositoryActions.saveBookmark(
             new BookmarkItem(getCurrentWebView().getTitle(), articleUrl, zimFileReader)
           );
           ViewExtensionsKt.snack(
@@ -1620,7 +1616,7 @@ public abstract class CoreReaderFragment extends BaseFragment
           timeStamp,
           zimFileReader
         );
-        presenter.saveHistory(history);
+        repositoryActions.saveHistory(history);
       }
       updateBottomToolbarVisibility();
       openFullScreenIfEnabled();
