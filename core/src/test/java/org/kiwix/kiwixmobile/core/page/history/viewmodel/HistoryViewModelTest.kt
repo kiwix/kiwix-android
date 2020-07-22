@@ -93,16 +93,16 @@ internal class HistoryViewModelTest {
   }
 
   @Test
+  fun `deselectAllPages returns state with all pages deselected`() {
+    assertThat(viewModel.deselectAllPages(historyState(listOf(historyItem(isSelected = true)))))
+      .isEqualTo(historyState(listOf(historyItem(isSelected = false))))
+  }
+
+  @Test
   fun `createDeletePageDialogEffect returns ShowDeleteHistoryDialog`() {
     assertThat(viewModel.createDeletePageDialogEffect(historyState())).isEqualTo(
       ShowDeleteHistoryDialog(viewModel.effects, historyState(), historyDao)
     )
-  }
-
-  @Test
-  fun `deselectAllPages returns state with all pages deselected`() {
-    assertThat(viewModel.deselectAllPages(historyState(listOf(historyItem(isSelected = true)))))
-      .isEqualTo(historyState(listOf(historyItem(isSelected = false))))
   }
 
   @Test

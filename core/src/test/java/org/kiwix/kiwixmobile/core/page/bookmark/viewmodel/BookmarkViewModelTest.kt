@@ -32,7 +32,9 @@ import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
+import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -79,6 +81,32 @@ internal class BookmarkViewModelTest {
     ).isEqualTo(
       bookmarkState(searchTerm = "filter")
     )
+  }
+
+  @Test
+  fun `updatePages return state with bookmark items`() {
+    assertThat(viewModel.updatePages(bookmarkState(), UpdatePages(listOf(bookmark())))).isEqualTo(
+      bookmarkState(listOf(bookmark()))
+    )
+  }
+
+  @Test
+  fun `offerUpdateToShowAllToggle offers UpdateAllBookmarksPreference`() {
+    viewModel.effects.test().also {
+      viewModel.offerUpdateToShowAllToggle(
+        Action.UserClickedShowAllToggle(false), bookmarkState()
+      )
+    }.assertValues(UpdateAllBookmarksPreference(sharedPreferenceUtil, false))
+  }
+
+  @Test
+  fun `offerUpdateToShowAllToggle returns state with showAll set to input value`() {
+    assertThat(
+      viewModel.offerUpdateToShowAllToggle(
+        Action.UserClickedShowAllToggle(false),
+        bookmarkState()
+      )
+    ).isEqualTo(bookmarkState(showAll = false))
   }
 
   @Test
