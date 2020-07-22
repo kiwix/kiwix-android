@@ -18,11 +18,11 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.util.Log
+import org.kiwix.kiwixmobile.core.base.BaseContract
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.main.MainContract.Presenter
-import org.kiwix.kiwixmobile.core.main.MainContract.View
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import javax.inject.Inject
@@ -31,7 +31,7 @@ private const val TAG = "MainPresenter"
 
 @ActivityScope
 internal class MainPresenter @Inject constructor(private val dataSource: DataSource) :
-  BasePresenter<View?>(), Presenter {
+  BasePresenter<BaseContract.View<Presenter>>(), Presenter {
 
   override fun saveHistory(history: HistoryItem) {
     dataSource.saveHistory(history)

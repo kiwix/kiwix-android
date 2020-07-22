@@ -28,10 +28,7 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem;
 
 public class MainContract {
 
-  interface View extends BaseContract.View<Presenter> {
-  }
-
-  public interface Presenter extends BaseContract.Presenter<View> {
+  public interface Presenter extends BaseContract.Presenter<BaseContract.View<Presenter>> {
 
     void saveHistory(HistoryListItem.HistoryItem history);
 

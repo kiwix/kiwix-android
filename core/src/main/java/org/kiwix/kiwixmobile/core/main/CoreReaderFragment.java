@@ -99,6 +99,7 @@ import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
+import org.kiwix.kiwixmobile.core.base.BaseContract;
 import org.kiwix.kiwixmobile.core.base.BaseFragment;
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
@@ -125,6 +126,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
+import static org.kiwix.kiwixmobile.core.main.MainContract.Presenter;
 import static org.kiwix.kiwixmobile.core.page.history.HistoryActivityKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
@@ -152,8 +154,7 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
 public abstract class CoreReaderFragment extends BaseFragment
-  implements WebViewCallback,
-  MainContract.View,
+  implements WebViewCallback, BaseContract.View<Presenter>,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
@@ -206,7 +207,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected View activityMainRoot;
 
   @Inject
-  protected MainContract.Presenter presenter;
+  protected Presenter presenter;
   @Inject
   StorageObserver storageObserver;
   @Inject
