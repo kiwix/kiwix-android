@@ -19,12 +19,12 @@ package org.kiwix.kiwixmobile.main
 
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.core.R.id
+import org.kiwix.kiwixmobile.R
 
 fun main(func: MainRobot.() -> Unit) = MainRobot().apply(func)
 
 class MainRobot : BaseRobot() {
   init {
-    isVisible(ViewId(id.activity_main_root))
+    isVisible(ViewId(R.id.new_navigation_container))
   }
 }
