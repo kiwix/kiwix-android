@@ -36,9 +36,10 @@ class KiwixMainActivity : CoreMainActivity() {
   private lateinit var navController: NavController
   private lateinit var appBarConfiguration: AppBarConfiguration
   private var actionMode: ActionMode? = null
+  val cachedComponent by lazy { kiwixActivityComponent }
 
   override fun injection(coreComponent: CoreComponent) {
-    kiwixActivityComponent.inject(this)
+    cachedComponent.inject(this)
   }
 
   private val finishActionModeOnDestinationChange =

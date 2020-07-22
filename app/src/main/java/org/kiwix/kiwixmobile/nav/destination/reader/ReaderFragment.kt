@@ -62,7 +62,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.navigate
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import java.io.File
@@ -73,7 +73,7 @@ class ReaderFragment : CoreReaderFragment() {
   private val args: ReaderFragmentArgs by navArgs()
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.kiwixActivityComponent.inject(this)
+    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
