@@ -33,22 +33,24 @@ class TestablePageViewModel(
   val dao: PageDao
 ) : PageViewModel<Page, TestablePageState>(dao, sharedPreferenceUtil, zimReaderContainer) {
 
+  var createDeletePageDialogEffectCalled = false
+
   override fun initialState(): TestablePageState = pageState()
 
   override fun updatePagesBasedOnFilter(
     state: TestablePageState,
     action: Action.Filter
-  ): TestablePageState = state
+  ): TestablePageState = state.copy(searchTerm = "updatePagesBasedOnFilter${action.searchTerm}")
 
   override fun updatePages(
     state: TestablePageState,
     action: Action.UpdatePages
-  ): TestablePageState = state
+  ): TestablePageState = state.copy(searchTerm = "updatePagesCalled")
 
   override fun offerUpdateToShowAllToggle(
     action: Action.UserClickedShowAllToggle,
     state: TestablePageState
-  ): TestablePageState = state
+  ): TestablePageState = state.copy(searchTerm = "offerUpdateToShowAllToggleCalled")
 
   override fun copyWithNewItems(
     state: TestablePageState,
@@ -56,8 +58,13 @@ class TestablePageViewModel(
   ): TestablePageState =
     state
 
-  override fun deselectAllPages(state: TestablePageState): TestablePageState = state
-  override fun createDeletePageDialogEffect(state: TestablePageState): SideEffect<*> = mockk()
+  override fun deselectAllPages(state: TestablePageState): TestablePageState =
+    state.copy(searchTerm = "deselectAllPagesCalled")
+
+  override fun createDeletePageDialogEffect(state: TestablePageState): SideEffect<*> {
+    createDeletePageDialogEffectCalled = true
+    return mockk()
+  }
 }
 
 data class TestablePageState(

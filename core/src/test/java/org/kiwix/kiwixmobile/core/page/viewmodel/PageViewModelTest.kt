@@ -22,12 +22,11 @@ import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.verify
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -90,39 +89,28 @@ internal class PageViewModelTest {
 
   @Test
   fun `ExitActionModeMenu calls deslectAllPages`() {
-    mockkObject(viewModel)
     viewModel.actions.offer(ExitActionModeMenu)
-    verify {
-      viewModel.deselectAllPages(pageState())
-    }
+    viewModel.state.test().assertValue(TestablePageState(searchTerm = "deselectAllPagesCalled"))
   }
 
   @Test
   fun `UserClickedShowAllToggle calls offerUpdateToShowAllToggle`() {
-    mockkObject(viewModel)
     val action = UserClickedShowAllToggle(true)
     viewModel.actions.offer(action)
-    verify {
-      viewModel.offerUpdateToShowAllToggle(action, pageState())
-    }
+    viewModel.state.test()
+      .assertValue(TestablePageState(searchTerm = "offerUpdateToShowAllToggleCalled"))
   }
 
   @Test
   fun `UserClickedDeleteButton calls createDeletePageDialogEffect`() {
-    mockkObject(viewModel)
     viewModel.actions.offer(UserClickedDeleteButton)
-    verify {
-      viewModel.createDeletePageDialogEffect(pageState())
-    }
+    assertThat(viewModel.createDeletePageDialogEffectCalled).isEqualTo(true)
   }
 
   @Test
   fun `UserClickedDeleteSelectedPages calls createDeletePageDialogEffect`() {
-    mockkObject(viewModel)
     viewModel.actions.offer(UserClickedDeleteSelectedPages)
-    verify {
-      viewModel.createDeletePageDialogEffect(pageState())
-    }
+    assertThat(viewModel.createDeletePageDialogEffectCalled).isEqualTo(true)
   }
 
   @Test
@@ -151,21 +139,15 @@ internal class PageViewModelTest {
 
   @Test
   fun `Filter calls updatePagesBasedOnFilter`() {
-    mockkObject(viewModel)
-    val action = Filter("filter")
-    viewModel.actions.offer(action)
-    verify {
-      viewModel.updatePagesBasedOnFilter(pageState(), action)
-    }
+    viewModel.actions.offer(Filter("Called"))
+    viewModel.state.test()
+      .assertValue(TestablePageState(searchTerm = "updatePagesBasedOnFilterCalled"))
   }
 
   @Test
   fun `UpdatePages calls updatePages`() {
-    mockkObject(viewModel)
-    val action = UpdatePages(emptyList())
-    viewModel.actions.offer(action)
-    verify {
-      viewModel.updatePages(pageState(), action)
-    }
+    viewModel.actions.offer(UpdatePages(emptyList()))
+    viewModel.state.test()
+      .assertValue(TestablePageState(searchTerm = "updatePagesCalled"))
   }
 }
