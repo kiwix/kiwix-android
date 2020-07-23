@@ -2,13 +2,14 @@
 <resources>
   <color name="white">#ffffff</color>
   <color name="alabaster_white">#fafafa</color>
-  <color name="mine_shaft_gray350">#FFD6D6D6</color>
+  <color name="mine_shaft_gray350">#D6D6D6</color>
   <color name="mine_shaft_gray500">#9E9E9E</color>
   <color name="scorpion_gray">#5a5a5a</color>
-  <color name="mine_shaft_gray700">#616161</color>
+  <color name="mine_shaft_gray600">#757575</color>
   <color name="mine_shaft_gray850">#303030</color>
   <color name="mine_shaft_gray900">#212121</color>
   <color name="black">#000000</color>
+  <color name="denim_blue200">#90caf9</color>
   <color name="denim_blue400">#42a5f5</color>
   <color name="dodger_blue">#2196F3</color>
   <color name="cornflower_blue">#4285F4</color>

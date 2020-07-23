@@ -32,6 +32,7 @@
     <SeekBarPreference
       android:defaultValue="2"
       android:max="6"
+      android:summary="@string/pref_text_zoom_summary"
       app:iconSpaceReserved="false"
       app:key="text_zoom"
       app:title="@string/pref_text_zoom_title"
@@ -68,8 +69,8 @@
 
   <PreferenceCategory
     android:key="pref_storage"
-    app:title="@string/pref_storage"
-    app:iconSpaceReserved="false">
+    app:iconSpaceReserved="false"
+    app:title="@string/pref_storage">
 
     <Preference
       android:key="pref_select_folder"
