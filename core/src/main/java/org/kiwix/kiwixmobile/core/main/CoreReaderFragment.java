@@ -252,11 +252,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private boolean isFirstRun;
-  private AppCompatButton downloadBookButton;
   protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
-  private boolean hasLocalBooks;
   protected MainMenu mainMenu;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
@@ -771,12 +769,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     safeDispose();
-    if (downloadBookButton != null) {
-      downloadBookButton.setOnClickListener(null);
-    }
     super.onDestroy();
     tabCallback = null;
-    downloadBookButton = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
     // TODO create a base Activity class that class this.
@@ -808,14 +802,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {
     return new ToolbarScrollingKiwixWebView(
       getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-      createWebClient(this, zimReaderContainer),
+      new CoreWebViewClient(this, zimReaderContainer),
       toolbarContainer, bottomToolbar,
       sharedPreferenceUtil);
   }
-
-  protected abstract CoreWebViewClient createWebClient(
-    WebViewCallback webViewCallback,
-    ZimReaderContainer zimReaderContainer);
 
   protected KiwixWebView newMainPageTab() {
     return newTab(contentUrl(zimReaderContainer.getMainPage()));

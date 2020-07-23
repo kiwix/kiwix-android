@@ -51,8 +51,6 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
-import org.kiwix.kiwixmobile.core.main.WebViewCallback
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
@@ -197,11 +195,6 @@ class ReaderFragment : CoreReaderFragment() {
     return ShouldNotCall
   }
 
-  override fun createWebClient(
-    webViewCallback: WebViewCallback,
-    zimReaderContainer: ZimReaderContainer
-  ) = CoreWebViewClient(webViewCallback, zimReaderContainer)
-
   override fun onNewNavigationMenuClicked() {
     // do nothing
   }
@@ -246,7 +239,7 @@ class ReaderFragment : CoreReaderFragment() {
   override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
     return ToolbarScrollingKiwixWebView(
       activity, this, attrs, activityMainRoot as ViewGroup, videoView,
-      createWebClient(this, zimReaderContainer),
+      CoreWebViewClient(this, zimReaderContainer),
       toolbarContainer, bottomToolbar, requireActivity().nav_view,
       sharedPreferenceUtil
     )

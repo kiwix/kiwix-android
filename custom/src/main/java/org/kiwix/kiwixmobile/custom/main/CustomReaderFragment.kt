@@ -40,11 +40,8 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
-import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -155,11 +152,6 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher
-
-  override fun createWebClient(
-    webViewCallback: WebViewCallback,
-    zimReaderContainer: ZimReaderContainer
-  ) = CoreWebViewClient(webViewCallback, zimReaderContainer)
 
   override fun onNewNavigationMenuClicked() {
     // do nothing
