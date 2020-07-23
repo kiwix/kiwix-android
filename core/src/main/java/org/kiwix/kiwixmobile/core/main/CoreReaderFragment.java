@@ -181,7 +181,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.new_navigation_fragment_main_drawer_layout)
   protected DrawerLayout drawerLayout;
   @BindView(R2.id.activity_main_nav_view)
-  NavigationView tableDrawerRightContainer;
+  protected NavigationView tableDrawerRightContainer;
   @BindView(R2.id.activity_main_content_frame)
   protected FrameLayout contentFrame;
   @BindView(R2.id.bottom_toolbar)
@@ -337,7 +337,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
-    activity.setSupportActionBar(toolbar);
+    setSupportActionBar(activity);
     actionBar = activity.getSupportActionBar();
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
@@ -377,6 +377,8 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
       }
     });
+
+    loadDrawerViews();
 
     tableDrawerRight =
       tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
@@ -418,6 +420,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (savedInstanceState == null) {
       handleIntentActions(getActivity().getIntent());
     }
+  }
+
+  protected void loadDrawerViews() {
+    // do nothing as views are already loaded.
+  }
+
+  protected void setSupportActionBar(AppCompatActivity activity) {
+    activity.setSupportActionBar(toolbar);
   }
 
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,

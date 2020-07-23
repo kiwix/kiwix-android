@@ -27,7 +27,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
@@ -74,11 +73,6 @@ class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions 
     savedInstanceState: Bundle?
   ): View {
     setHasOptionsMenu(true)
-    val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
-    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as AppCompatActivity
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar!!.setTitle(R.string.download)
-    return root
+    return inflater.inflate(R.layout.fragment_destination_download, container, false)
   }
 }

@@ -21,13 +21,20 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.ActionMode
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_new_navigation.container
+import kotlinx.android.synthetic.main.activity_new_navigation.nav_host_fragment
+import kotlinx.android.synthetic.main.activity_new_navigation.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -37,6 +44,7 @@ import org.kiwix.kiwixmobile.kiwixActivityComponent
 class KiwixNewNavigationActivity : CoreMainActivity() {
   private lateinit var navController: NavController
   private lateinit var appBarConfiguration: AppBarConfiguration
+  private lateinit var drawerToggle: ActionBarDrawerToggle
   private var actionMode: ActionMode? = null
 
   override fun injection(coreComponent: CoreComponent) {
@@ -54,7 +62,18 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
 
     navController = findNavController(R.id.nav_host_fragment)
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-    appBarConfiguration = AppBarConfiguration(navController.graph, container)
+    appBarConfiguration = AppBarConfiguration(
+      setOf(
+        R.id.navigation_downloads,
+        R.id.navigation_library,
+        R.id.navigation_reader
+      ), container
+    )
+    findViewById<NavigationView>(R.id.drawer_nav_view).setupWithNavController(navController)
+    findViewById<Toolbar>(R.id.toolbar).setupWithNavController(navController, appBarConfiguration)
+    setSupportActionBar(toolbar)
+    drawerToggle =
+      ActionBarDrawerToggle(this, container, toolbar, R.string.open, R.string.close_all_tabs)
     bottom_nav_view.setupWithNavController(navController)
   }
 
@@ -67,6 +86,13 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
     val onCreateOptionsMenu = super.onCreateOptionsMenu(menu)
     menu.findItem(R.id.menu_new_navigation)?.isVisible = false
     return onCreateOptionsMenu
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle.onOptionsItemSelected(item)) {
+      return true
+    }
+    return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
   }
 
   override fun onSupportNavigateUp(): Boolean {

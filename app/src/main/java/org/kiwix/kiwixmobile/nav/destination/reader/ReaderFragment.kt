@@ -35,7 +35,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
+import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.anim
@@ -85,6 +85,11 @@ class ReaderFragment : CoreReaderFragment() {
         ReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
       )
     }
+  }
+
+  override fun loadDrawerViews() {
+    drawerLayout = requireActivity().findViewById(R.id.container)
+    tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
   }
 
   override fun showHomePage() {
@@ -253,7 +258,7 @@ class ReaderFragment : CoreReaderFragment() {
     return ToolbarScrollingKiwixWebView(
       activity, this, attrs, activityMainRoot as ViewGroup, videoView,
       createWebClient(this, zimReaderContainer),
-      toolbarContainer, bottomToolbar, requireActivity().nav_view,
+      toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
       sharedPreferenceUtil
     )
   }
@@ -262,6 +267,10 @@ class ReaderFragment : CoreReaderFragment() {
     activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
 
   override fun getIconResId() = R.mipmap.ic_launcher
+
+  override fun setSupportActionBar(activity: AppCompatActivity?) {
+    // do nothing
+  }
 
   override fun createNewTab() {
     newMainPageTab()

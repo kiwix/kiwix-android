@@ -25,8 +25,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -83,12 +81,7 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
     setHasOptionsMenu(true)
-    val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
-    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as AppCompatActivity
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar!!.setTitle(R.string.library)
-    return root
+    return inflater.inflate(R.layout.fragment_destination_library, container, false)
   }
 
   override fun render(state: FileSelectListState) {
