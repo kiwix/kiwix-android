@@ -57,7 +57,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.Group;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -568,7 +567,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       progressBar.hide();
       selectTab(currentWebViewIndex);
       if (mainMenu != null) {
-        mainMenu.showWebViewOptions(!urlIsInvalid());
+        mainMenu.showWebViewOptions(urlIsValid());
       }
     }
   }
@@ -1130,7 +1129,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
     if (zimFileReader != null) {
       if (mainMenu != null) {
-        mainMenu.onFileOpened(zimFileReader, !urlIsInvalid());
+        mainMenu.onFileOpened(zimFileReader, urlIsValid());
       }
       openMainPage();
       safeDispose();
@@ -1275,7 +1274,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void updateBottomToolbarVisibility() {
     if (checkNull(bottomToolbar)) {
-      if (!urlIsInvalid()
+      if (urlIsValid()
         && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
         bottomToolbar.setVisibility(View.VISIBLE);
       } else {
@@ -1510,11 +1509,11 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull protected MainMenu createMainMenu(Menu menu) {
-    return menuFactory.create(menu, webViewList, !urlIsInvalid(), this, false, false);
+    return menuFactory.create(menu, webViewList, urlIsValid(), this, false, false);
   }
 
-  protected boolean urlIsInvalid() {
-    return getCurrentWebView().getUrl() == null;
+  protected boolean urlIsValid() {
+    return getCurrentWebView().getUrl() != null;
   }
 
   private void updateUrlProcessor() {

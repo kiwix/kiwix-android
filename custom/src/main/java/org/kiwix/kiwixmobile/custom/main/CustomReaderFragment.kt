@@ -172,7 +172,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     return menuFactory.create(
       menu!!,
       webViewList,
-      !urlIsInvalid(),
+      urlIsValid(),
       this,
       BuildConfig.DISABLE_READ_ALOUD,
       BuildConfig.DISABLE_TABS
