@@ -25,7 +25,6 @@ import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue.complexToDimensionPixelSize
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -86,6 +85,10 @@ class ReaderFragment : CoreReaderFragment() {
         ReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
       )
     }
+
+    (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    (activity as KiwixNewNavigationActivity).setupDrawerToggle(toolbar)
+    setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
   override fun loadDrawerViews() {
@@ -120,9 +123,6 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun hideTabSwitcher() {
     if (actionBar != null) {
-      actionBar.setDisplayHomeAsUpEnabled(false)
-      actionBar.setDisplayShowTitleEnabled(true)
-
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
       closeAllTabsButton.setImageDrawableCompat(R.drawable.ic_close_black_24dp)
@@ -142,18 +142,6 @@ class ReaderFragment : CoreReaderFragment() {
         selectTab(currentWebViewIndex)
       }
     }
-  }
-
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    val view = super.onCreateView(inflater, container, savedInstanceState)
-    (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    (activity as KiwixNewNavigationActivity).setupDrawerToggle(toolbar)
-    setFragmentContainerBottomMarginToSizeOfNavBar()
-    return view
   }
 
   private fun setFragmentContainerBottomMarginToSizeOfNavBar() {

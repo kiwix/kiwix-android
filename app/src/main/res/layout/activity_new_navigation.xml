@@ -56,7 +56,7 @@
     android:layout_gravity="start"
     android:fitsSystemWindows="true"
     app:headerLayout="@layout/nav_main"
-    app:menu="@menu/menu_main" />
+    app:menu="@menu/drawer_menu_main" />
 
   <com.google.android.material.navigation.NavigationView
     android:id="@+id/reader_drawer_nav_view"

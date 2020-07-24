@@ -337,7 +337,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
-    setSupportActionBar(activity);
+    activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
@@ -424,10 +424,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   protected void loadDrawerViews() {
     // do nothing as views are already loaded.
-  }
-
-  protected void setSupportActionBar(AppCompatActivity activity) {
-    activity.setSupportActionBar(toolbar);
   }
 
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
