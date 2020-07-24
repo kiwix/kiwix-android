@@ -40,7 +40,7 @@ data class HistoryEntity(
     historyItem.zimFilePath,
     historyItem.favicon,
     historyItem.historyUrl,
-    historyItem.historyTitle,
+    historyItem.title,
     historyItem.dateString,
     historyItem.timeStamp
   )

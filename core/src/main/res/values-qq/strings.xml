@@ -28,8 +28,6 @@
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
-  <string name="pref_text_zoom_summary">Tell the user that this preference changes the text size in 25% increments.</string>
-  <string name="selected_bookmarks_cleared">Tell the user that the selected bookmarks has been deleted/cleared</string>
   <string name="delete">{{Identical|Delete}}</string>
   <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>

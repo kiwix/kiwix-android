@@ -79,7 +79,6 @@
   <string name="pref_clear_all_history_summary">ניקוי מילות חיפוש קודמות והיסטוריית כרטיסיות</string>
   <string name="all_history_cleared">כל ההיסטוריה נמחקה</string>
   <string name="pref_clear_all_bookmarks_title">ניקוי סימניות</string>
-  <string name="all_bookmarks_cleared">כל הסימניות נוקו</string>
   <string name="clear_all_history_dialog_title">לנקות את כל ההיסטוריה?</string>
   <string name="share">שיתוף</string>
   <string name="selected_file_cab_app_chooser_title">שיתוף קובצי ZIM עם:</string>

@@ -41,7 +41,6 @@
   <string name="delete_recent_search_item">Избрисати ову ставку?</string>
   <string name="all_history_cleared">Цела историја је обрисана</string>
   <string name="pref_clear_all_bookmarks_title">Обриши обележиваче</string>
-  <string name="all_bookmarks_cleared">Сви обележивачи су обрисани</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">Брисање целе историје</string>
   <string name="delete">Избриши</string>
   <string name="delete_specific_search_toast">Недавне претраге су уклоњене</string>

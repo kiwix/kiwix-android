@@ -16,20 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
+package org.kiwix.kiwixmobile.core.page.adapter
 
-import androidx.appcompat.app.AppCompatActivity
-import io.mockk.mockk
-import io.mockk.verify
-import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
+import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
-internal class UpdateAllHistoryPreferenceTest {
-  @Test
-  fun `UpdateAllHistoryPreference updates shared preferences`() {
-    val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
-    val activity: AppCompatActivity = mockk()
-    UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
-    verify { sharedPreferenceUtil.showHistoryAllBooks = true }
-  }
+class PageAdapter(
+  vararg delegates: AdapterDelegate<PageRelated>
+) : BaseDelegateAdapter<PageRelated>(*delegates) {
+  override fun getIdFor(item: PageRelated): Long = item.id
 }

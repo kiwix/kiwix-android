@@ -16,20 +16,18 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
+package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
-import androidx.appcompat.app.AppCompatActivity
-import io.mockk.mockk
-import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.page.bookmark
+import org.kiwix.kiwixmobile.core.page.bookmarkState
 
-internal class UpdateAllHistoryPreferenceTest {
+internal class BookmarkStateTest {
   @Test
-  fun `UpdateAllHistoryPreference updates shared preferences`() {
-    val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
-    val activity: AppCompatActivity = mockk()
-    UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
-    verify { sharedPreferenceUtil.showHistoryAllBooks = true }
+  internal fun `copyNewItems should set new items to pageItems`() {
+    assertThat(bookmarkState(emptyList()).copy(listOf(bookmark())).pageItems).isEqualTo(
+      listOf(bookmark())
+    )
   }
 }

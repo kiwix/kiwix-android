@@ -33,16 +33,19 @@ import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
 
 internal class OpenPageTest {
+  val page = PageImpl()
+  private val zimReaderContainer: ZimReaderContainer = mockk()
+  val activity: AppCompatActivity = mockk(relaxed = true)
+  val intent: Intent = mockk()
+
+  init {
+    mockkConstructor(Intent::class)
+    every { anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, page.url) } returns intent
+  }
 
   @Test
   fun `invokeWith returns an Ok Result with historyUrl`() {
-    val page = PageImpl()
-    val zimReaderContainer: ZimReaderContainer = mockk()
     every { zimReaderContainer.zimCanonicalPath } returns "zimFilePath"
-    val activity: AppCompatActivity = mockk()
-    mockkConstructor(Intent::class)
-    val intent: Intent = mockk()
-    every { anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, page.url) } returns intent
     OpenPage(page, zimReaderContainer).invokeWith(activity)
     verify {
       activity.setResult(Activity.RESULT_OK, intent)
@@ -54,13 +57,7 @@ internal class OpenPageTest {
 
   @Test
   fun `invokeWith returns an Ok Result with historyUrl and zimFilePath`() {
-    val page = PageImpl()
-    val zimReaderContainer: ZimReaderContainer = mockk()
     every { zimReaderContainer.zimCanonicalPath } returns "notZimFilePath"
-    val activity: AppCompatActivity = mockk()
-    mockkConstructor(Intent::class)
-    val intent: Intent = mockk()
-    every { anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, page.url) } returns intent
     every { intent.putExtra(EXTRA_CHOSE_X_FILE, page.zimFilePath) } returns intent
     OpenPage(page, zimReaderContainer).invokeWith(activity)
     verify {

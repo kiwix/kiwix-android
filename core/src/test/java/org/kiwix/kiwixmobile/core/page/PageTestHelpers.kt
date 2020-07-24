@@ -18,14 +18,21 @@
 
 package org.kiwix.kiwixmobile.core.page
 
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
+import org.kiwix.kiwixmobile.core.page.viewmodel.TestablePageState
 
-class PageImpl(
+data class PageImpl(
   override val zimFilePath: String? = "zimFilePath",
-  override val url: String = "url"
+  override val url: String = "url",
+  override var isSelected: Boolean = false,
+  override val id: Long = 0L,
+  override val zimId: String = "zimId",
+  override val title: String = "title",
+  override val favicon: String? = "favicon"
 ) : Page
 
 fun historyItem(
@@ -86,14 +93,10 @@ fun bookmark(
 }
 
 fun bookmarkState(
-  bookmarks: List<BookmarkItem> = listOf(),
+  bookmarks: List<BookmarkItem> = emptyList(),
   showAll: Boolean = true,
   zimId: String = "id",
   searchTerm: String = ""
-): BookmarkState =
-  BookmarkState(
-    bookmarks,
-    showAll,
-    zimId,
-    searchTerm
-  )
+): BookmarkState = BookmarkState(bookmarks, showAll, zimId, searchTerm)
+
+fun pageState(): TestablePageState = TestablePageState()

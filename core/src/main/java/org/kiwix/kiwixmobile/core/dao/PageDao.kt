@@ -16,20 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
+package org.kiwix.kiwixmobile.core.dao
 
-import androidx.appcompat.app.AppCompatActivity
-import io.mockk.mockk
-import io.mockk.verify
-import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import io.reactivex.Flowable
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 
-internal class UpdateAllHistoryPreferenceTest {
-  @Test
-  fun `UpdateAllHistoryPreference updates shared preferences`() {
-    val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
-    val activity: AppCompatActivity = mockk()
-    UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
-    verify { sharedPreferenceUtil.showHistoryAllBooks = true }
-  }
+interface PageDao {
+  fun pages(): Flowable<List<Page>>
+  fun deletePages(pagesToDelete: List<Page>)
 }
