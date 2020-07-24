@@ -223,13 +223,5 @@ class LanguageUtils(private val context: Context) {
     @JvmStatic
     fun getTypeface(languageCode: String) =
       fontExceptions[languageCode] ?: "fonts/DejaVuSansCondensed.ttf"
-
-    @JvmStatic
-    fun getResourceString(appContext: Context, str: String): String {
-      var resourceName = str
-      val resourceId = appContext.resources
-        .getIdentifier(resourceName, "string", appContext.packageName)
-      return appContext.resources.getString(resourceId)
-    }
   }
 }

@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.main;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -43,7 +42,6 @@ public class CoreWebViewClient extends WebViewClient {
   }};
   protected final WebViewCallback callback;
   protected final ZimReaderContainer zimReaderContainer;
-  private View home;
   private static String LEGACY_CONTENT_PREFIX =
     Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString();
   private String urlWithAnchor;
@@ -117,14 +115,14 @@ public class CoreWebViewClient extends WebViewClient {
   @Override
   public void onPageFinished(WebView view, String url) {
     boolean invalidUrl =
-      url.equals("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/null");
+      url.equals(CONTENT_PREFIX + CoreApp.getInstance().getPackageName() + ".zim.base/null");
+
     Log.d(TAG_KIWIX, "invalidUrl = " + invalidUrl);
 
     if (invalidUrl) {
       return;
     }
 
-    view.removeView(home);
     jumpToAnchor(view, url);
     callback.webViewUrlFinishedLoading();
   }
@@ -139,7 +137,6 @@ public class CoreWebViewClient extends WebViewClient {
       urlWithAnchor = null;
     }
   }
-
 
   @Nullable
   @Override
