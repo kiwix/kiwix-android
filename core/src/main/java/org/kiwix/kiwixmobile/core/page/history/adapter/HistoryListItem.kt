@@ -18,23 +18,23 @@
 package org.kiwix.kiwixmobile.core.page.history.adapter
 
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
-import org.kiwix.kiwixmobile.core.page.Page
+import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
-sealed class HistoryListItem {
-  abstract val id: Long
+sealed class HistoryListItem : PageRelated {
 
   data class HistoryItem constructor(
     val databaseId: Long = 0L,
-    val zimId: String,
+    override val zimId: String,
     val zimName: String,
     override val zimFilePath: String,
-    val favicon: String?,
+    override val favicon: String?,
     val historyUrl: String,
-    val historyTitle: String,
+    override val title: String,
     val dateString: String,
     val timeStamp: Long,
-    var isSelected: Boolean = false,
+    override var isSelected: Boolean = false,
     override val id: Long = databaseId,
     override val url: String = historyUrl
   ) : HistoryListItem(), Page {
@@ -51,7 +51,7 @@ sealed class HistoryListItem {
       zimFilePath = zimFileReader.zimFile.canonicalPath,
       favicon = zimFileReader.favicon,
       historyUrl = url,
-      historyTitle = title,
+      title = title,
       dateString = dateString,
       timeStamp = timeStamp
     )

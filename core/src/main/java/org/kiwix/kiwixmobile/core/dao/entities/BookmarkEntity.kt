@@ -38,7 +38,7 @@ data class BookmarkEntity(
     item.zimName,
     item.zimFilePath,
     item.bookmarkUrl,
-    item.bookmarkTitle,
+    item.title,
     item.favicon
   )
 

@@ -23,7 +23,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import androidx.core.content.ContextCompat;
@@ -42,10 +42,12 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao;
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.files.FileLogger;
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 import org.kiwix.kiwixmobile.zim_manager.MountInfo;
 import org.kiwix.kiwixmobile.zim_manager.MountPointProducer;
 
+import static androidx.core.content.FileProvider.getUriForFile;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getCurrentLocale;
 
 public class ErrorActivity extends BaseActivity {
@@ -58,6 +60,8 @@ public class ErrorActivity extends BaseActivity {
   ZimReaderContainer zimReaderContainer;
   @Inject
   MountPointProducer mountPointProducer;
+  @Inject
+  FileLogger fileLogger;
 
   @BindView(R2.id.reportButton)
   Button reportButton;
@@ -112,16 +116,10 @@ public class ErrorActivity extends BaseActivity {
       String body = getBody();
 
       if (allowLogsCheckbox.isChecked()) {
-        File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
-        File logFile = new File(appDirectory, "logcat.txt");
-        if (logFile.exists()) {
-          Uri path =
-            FileProvider.getUriForFile(this,
-              getApplicationContext().getPackageName() + ".fileprovider",
-              logFile);
-          emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-          emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-        }
+        File file = fileLogger.writeLogFile(this);
+        Uri path = getUriForFile(this, getApplicationContext().getPackageName()+ ".fileprovider", file);
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
       }
 
       if (allowCrashCheckbox.isChecked() && exception != null) {

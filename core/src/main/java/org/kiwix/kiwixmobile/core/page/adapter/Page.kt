@@ -16,9 +16,17 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page
+package org.kiwix.kiwixmobile.core.page.adapter
 
-interface Page {
+interface PageRelated {
+  val id: Long
+}
+
+interface Page : PageRelated {
   val zimFilePath: String?
+  val zimId: String
   val url: String
+  val title: String
+  var isSelected: Boolean
+  val favicon: String?
 }

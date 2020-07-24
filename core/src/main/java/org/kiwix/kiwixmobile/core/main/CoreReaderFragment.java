@@ -151,6 +151,7 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_FILE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_POSITIONS;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED_NEW_TAB;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
@@ -204,8 +205,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   ViewGroup videoView;
-
-  View root;
+  @BindView(R2.id.activity_main_root)
+  View activityMainRoot;
 
   @Inject
   protected MainContract.Presenter presenter;
@@ -290,7 +291,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   };
   private Disposable bookmarkingDisposable;
-  private Boolean isBookmarked;
+  private boolean isBookmarked;
 
   @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
     @NotNull AppCompatActivity activity) {
@@ -333,7 +334,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
-    root = inflater.inflate(R.layout.fragment_main, container, false);
+    View root = inflater.inflate(R.layout.fragment_main, container, false);
     ButterKnife.bind(this, root);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     presenter.attachView(this);
@@ -430,8 +431,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   private void handleIntentExtras(Intent intent) {
 
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
+      boolean openInNewTab = isInTabSwitcher()
+        || intent.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false);
       searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED),
-        isInTabSwitcher());
+        openInNewTab);
       selectTab(webViewList.size() - 1);
     }
     if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
@@ -836,12 +839,12 @@ public abstract class CoreReaderFragment extends BaseFragment
     KiwixWebView webView;
     if (!isHideToolbar) {
       webView = new ToolbarScrollingKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
+        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
         createWebClient(this, zimReaderContainer),
         toolbarContainer, bottomToolbar, sharedPreferenceUtil);
     } else {
       webView = new ToolbarStaticKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
+        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
         createWebClient(this, zimReaderContainer),
         sharedPreferenceUtil);
     }
@@ -928,7 +931,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @NotNull @Override public KiwixWebView getCurrentWebView() {
     if (webViewList.size() == 0) return newMainPageTab();
-    if (currentWebViewIndex < webViewList.size()) {
+    if (currentWebViewIndex < webViewList.size() && currentWebViewIndex > 0) {
       return webViewList.get(currentWebViewIndex);
     } else {
       return webViewList.get(0);
@@ -1510,7 +1513,9 @@ public abstract class CoreReaderFragment extends BaseFragment
             compatCallback.findAll();
             compatCallback.showSoftInput();
           } else {
-            searchForTitle(title, wasFromTabSwitcher);
+            boolean openInNewTab = wasFromTabSwitcher ||
+              data.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false);
+            searchForTitle(title, openInNewTab);
           }
         } else if (resultCode == RESULT_CANCELED) {
           Log.w(TAG_KIWIX, "Search cancelled or exited");
@@ -1657,28 +1662,30 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewUrlFinishedLoading() {
-    updateTableOfContents();
-    tabsAdapter.notifyDataSetChanged();
-    updateUrlProcessor();
-    updateBottomToolbarArrowsAlpha();
-    String url = getCurrentWebView().getUrl();
-    final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-    if (hasValidFileAndUrl(url, zimFileReader)) {
-      final long timeStamp = System.currentTimeMillis();
-      SimpleDateFormat sdf =
-        new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
-      HistoryItem history = new HistoryItem(
-        getCurrentWebView().getUrl(),
-        getCurrentWebView().getTitle(),
-        sdf.format(new Date(timeStamp)),
-        timeStamp,
-        zimFileReader
-      );
-      presenter.saveHistory(history);
+    if (isAdded()) {
+      updateTableOfContents();
+      tabsAdapter.notifyDataSetChanged();
+      updateUrlProcessor();
+      updateBottomToolbarArrowsAlpha();
+      String url = getCurrentWebView().getUrl();
+      final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
+      if (hasValidFileAndUrl(url, zimFileReader)) {
+        final long timeStamp = System.currentTimeMillis();
+        SimpleDateFormat sdf =
+          new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
+        HistoryItem history = new HistoryItem(
+          getCurrentWebView().getUrl(),
+          getCurrentWebView().getTitle(),
+          sdf.format(new Date(timeStamp)),
+          timeStamp,
+          zimFileReader
+        );
+        presenter.saveHistory(history);
+      }
+      updateBottomToolbarVisibility();
+      openFullScreenIfEnabled();
+      updateNightMode();
     }
-    updateBottomToolbarVisibility();
-    openFullScreenIfEnabled();
-    updateNightMode();
   }
 
   protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {

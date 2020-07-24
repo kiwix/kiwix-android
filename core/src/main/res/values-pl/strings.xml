@@ -83,7 +83,6 @@
   <string name="pref_clear_all_history_summary">Wyczyść historię ostatnich wyszukiwań i kart</string>
   <string name="all_history_cleared">Usunięto całą historię</string>
   <string name="pref_clear_all_bookmarks_title">Wyczyść zakładki</string>
-  <string name="all_bookmarks_cleared">Wszystkie zakładki zostały wyczyszczone</string>
   <string name="clear_all_history_dialog_title">Wyczyść całą historię?</string>
   <string name="share">Udostępnij</string>
   <string name="selected_file_cab_app_chooser_title">Udostępnij pliki ZIM:</string>
