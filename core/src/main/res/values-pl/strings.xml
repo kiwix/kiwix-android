@@ -67,8 +67,6 @@
   <string name="pref_night_mode_summary">Pokaż artykuły w trybie nocnym</string>
   <string name="pref_back_to_top">Powrót do góry</string>
   <string name="pref_back_to_top_summary">Wyświetl przycisk na końcu strony, aby przewinąć do góry</string>
-  <string name="pref_hide_toolbar">Ukryj pasek narzędzi gdy przesuwasz stronę</string>
-  <string name="pref_hide_toolbar_summary">Uniemożliwia przewijanie paska narzędzi podczas przeglądania zawartości</string>
   <string name="pref_language_title">Język</string>
   <string name="pref_language_chooser">Wybierz język</string>
   <string name="pref_credits">Współtwórcy i licencje</string>

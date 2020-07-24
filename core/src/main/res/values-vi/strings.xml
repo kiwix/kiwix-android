@@ -34,8 +34,6 @@
   <string name="pref_night_mode_summary">Đảo ngược màu sắc trong bài</string>
   <string name="pref_back_to_top">Trở lên Đầu trang</string>
   <string name="pref_back_to_top_summary">Hiển thị nút ở cuối trang để di chuyển lên trên cùng</string>
-  <string name="pref_hide_toolbar">Ẩn thanh tác vụ khi kéo</string>
-  <string name="pref_hide_toolbar_summary">Ẩn thanh tác vụ khi kéo xuống trang</string>
   <string name="pref_language_title">Ngôn ngữ</string>
   <string name="pref_language_chooser">Chọn ngôn ngữ</string>
   <string name="pref_credits">Những người đóng góp và Bản quyền</string>

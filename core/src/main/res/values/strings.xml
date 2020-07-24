@@ -53,8 +53,6 @@
   <string name="pref_night_mode_summary">Show articles with inverted colors</string>
   <string name="pref_back_to_top">Back to Top</string>
   <string name="pref_back_to_top_summary">Display a button at the end of the page to scroll up to the top</string>
-  <string name="pref_hide_toolbar">Keep Toolbar Visible</string>
-  <string name="pref_hide_toolbar_summary">Keeps the toolbar from scrolling out of view when browsing content</string>
   <string name="pref_language_title">Language</string>
   <string name="pref_language_chooser">Choose a language</string>
   <string name="pref_credits">Contributors and Licenses</string>
@@ -279,8 +277,10 @@
   <string name="diagnostic_report_message">Please send all the following details so we can diagnose the problem</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
-  <string name="experimental_navigation">Experimental Navigation</string>
-  <string name="reader">Reader</string>
+<string name="reader">Reader</string>
+  <string name="no_open_book">No open book</string>
+  <string name="open_library">Open library</string>
+  <string name="tab_restored">Tab restored</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>

@@ -34,8 +34,6 @@
   <string name="pref_night_mode_summary">উল্টানো রঙসহ নিবন্ধ দেখান</string>
   <string name="pref_back_to_top">উপরে ফিরুন</string>
   <string name="pref_back_to_top_summary">উপরে স্ক্রল করতে পাতার শেষে একটি বোতাম প্রদর্শিত হবে</string>
-  <string name="pref_hide_toolbar">স্ক্রোল করার সময় সরঞ্জামদণ্ড লুকান</string>
-  <string name="pref_hide_toolbar_summary">পৃষ্ঠাটি স্ক্রোল করার সময় সরঞ্জামদণ্ডটি লুকিয়ে রাখুন</string>
   <string name="pref_language_title">ভাষা</string>
   <string name="pref_language_chooser">একটি ভাষা নির্বাচন করুন</string>
   <string name="pref_credits">অবদানকারী এবং লাইসেন্স</string>

@@ -27,12 +27,6 @@
     app:showAsAction="never" />
 
   <item
-    android:id="@+id/menu_openfile"
-    android:icon="@drawable/action_open_file"
-    android:title="@string/library"
-    app:showAsAction="never" />
-
-  <item
     android:id="@+id/menu_add_note"
     android:icon="@drawable/ic_add_note"
     android:title="@string/note"
@@ -75,10 +69,6 @@
   <item
     android:id="@+id/menu_settings"
     android:title="@string/menu_settings"
-    app:showAsAction="never" />
-  <item
-    android:id="@+id/menu_new_navigation"
-    android:title="@string/experimental_navigation"
     app:showAsAction="never" />
 
   <item

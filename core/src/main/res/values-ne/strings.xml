@@ -2,6 +2,7 @@
 <!-- Authors:
 * Ganesh Paudel
 * Macofe
+* Nirajan pant
 * पर्वत सुबेदी
 * राम प्रसाद जोशी
 * सरोज कुमार ढकाल
@@ -41,6 +42,7 @@
   <string name="pref_clear_all_history_title">इतिहास खाली गर्नुहोस्</string>
   <string name="all_history_cleared">सबै इतिहास खाली गरियो</string>
   <string name="pref_clear_all_bookmarks_title">पुस्तक चिनाेहरू हटाउनुहाेस्</string>
+  <string name="selected_bookmarks_cleared">रोजिएका बुकमार्कहरू हटाइयो</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">सबै इतिहास हटाउनुहोस्</string>
   <string name="delete">हटाउने</string>
   <string name="delete_specific_search_toast">हालको खोज हटाइयो</string>
@@ -100,4 +102,8 @@
   <string name="no_bookmarks">कुनै पनि पुस्तक चिनोहरू छैनन्</string>
   <string name="no_history">कुनैपनि इतिहास छैन</string>
   <string name="device_default">पुनर्निधारित उपकरण</string>
+  <string name="delete_history">सबै इतिहास मेटाउने?</string>
+  <string name="delete_selected_history">रोजिएको इतिहास मेटाउने?</string>
+  <string name="delete_bookmarks">सबै बुकमार्कहरू मेटाउने?</string>
+  <string name="delete_selected_bookmarks">रोजिएका बुकमार्कहरू मेटाउने?</string>
 </resources>

@@ -28,12 +28,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -45,13 +41,10 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.Shou
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -66,18 +59,12 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   @Inject lateinit var customFileValidator: CustomFileValidator
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var dialogShower: DialogShower
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    val view = super.onCreateView(inflater, container, savedInstanceState)
-
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
     if (enforcedLanguage()) {
-      return view
+      return
     }
     openObbOrZim()
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -85,7 +72,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
       toolbarToc?.isEnabled = false
     }
-    return view
   }
 
   override fun setDrawerLockMode(lockMode: Int) {
@@ -162,21 +148,10 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     menu.findItem(R.id.menu_help)?.isVisible = false
-    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
-    menu.findItem(R.id.menu_openfile)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher
-
-  override fun createWebClient(
-    webViewCallback: WebViewCallback,
-    zimReaderContainer: ZimReaderContainer
-  ) = CustomWebViewClient(webViewCallback, zimReaderContainer)
-
-  override fun onNewNavigationMenuClicked() {
-    // do nothing
-  }
 
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
@@ -193,7 +168,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     return menuFactory.create(
       menu!!,
       webViewList,
-      !urlIsInvalid(),
+      urlIsValid(),
       this,
       BuildConfig.DISABLE_READ_ALOUD,
       BuildConfig.DISABLE_TABS
@@ -210,14 +185,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
     }
     super.configureWebViewSelectionHandler(menu)
-  }
-
-  override fun manageZimFiles(tab: Int) {
-    // Do nothing
-  }
-
-  override fun showHomePage() {
-    Log.e("CustomMain", "tried to show home page")
   }
 
   override fun createNewTab() {

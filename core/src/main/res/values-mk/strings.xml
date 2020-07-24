@@ -57,8 +57,6 @@
   <string name="pref_night_mode_summary">Прикажувај ги статиите во обратни бои</string>
   <string name="pref_back_to_top">Најгоре</string>
   <string name="pref_back_to_top_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
-  <string name="pref_hide_toolbar">Скриј го алатникот при лизгање</string>
-  <string name="pref_hide_toolbar_summary">Скриј го алатникот кога при надолно лизгање по страницата</string>
   <string name="pref_language_title">Јазик</string>
   <string name="pref_language_chooser">Изберете јазик</string>
   <string name="pref_credits">Учесници и лиценци</string>
@@ -74,6 +72,7 @@
   <string name="all_history_cleared">Сета историја е исчистена</string>
   <string name="pref_clear_all_bookmarks_title">Исчисти обележувачи</string>
   <string name="all_bookmarks_cleared">Сите обележувачи се исчистени</string>
+  <string name="selected_bookmarks_cleared">Избраните обележувачи се исчистени</string>
   <string name="clear_all_history_dialog_title">Да ја исчистам сета историја</string>
   <string name="share">Сподели</string>
   <string name="selected_file_cab_app_chooser_title">Сподели ZIM-податотеки со:</string>
@@ -256,8 +255,10 @@
   <string name="no_bookmarks">Нема обележувачи</string>
   <string name="no_history">Нема историја</string>
   <string name="device_default">Основно на уредот</string>
-  <string name="delete_history" fuzzy="true">Да ја избришам историјата?</string>
-  <string name="delete_bookmarks" fuzzy="true">Да ги избришам обележувачите?</string>
+  <string name="delete_history">Да ја избришам сета историја?</string>
+  <string name="delete_selected_history">Да ја избришам избраната историја?</string>
+  <string name="delete_bookmarks">Да ги избришам сите обележувачи?</string>
+  <string name="delete_selected_bookmarks">Да ги избришам избраните обележувачи?</string>
   <string name="on">Вкл.</string>
   <string name="off">Искл.</string>
   <string name="auto">Авто</string>
@@ -267,5 +268,4 @@
   <string name="diagnostic_report_message">Испратете ги сите следни поединости за да можеме да го дијагностицираме проблемот</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Приближување на текст</string>
-  <string name="experimental_navigation">Опитен прегледник</string>
 </resources>

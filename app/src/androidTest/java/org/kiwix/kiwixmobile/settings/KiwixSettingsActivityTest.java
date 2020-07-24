@@ -46,16 +46,15 @@ public class KiwixSettingsActivityTest {
   @Test
   public void testToggle() {
     clickOn(R.string.pref_back_to_top);
-    clickOn(R.string.pref_hide_toolbar);
     clickOn(R.string.pref_newtab_background_title);
     clickOn(R.string.pref_external_link_popup_title);
     clickOn(R.string.pref_wifi_only);
   }
 
   private void clickOn(@StringRes int... stringIds) {
-    Matcher<View>[] matchers= new Matcher[stringIds.length];
+    Matcher<View>[] matchers = new Matcher[stringIds.length];
     for (int i = 0; i < stringIds.length; i++) {
-      matchers[i]= withText(stringIds[i]);
+      matchers[i] = withText(stringIds[i]);
     }
     onView(withClassName(is(RecyclerView.class.getName())))
       .perform(actionOnItem(hasDescendant(anyOf(matchers)), click()));

@@ -2,38 +2,50 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
   <!--Top level theme to be used in AndroidManifest.xml-->
-  <style name="KiwixTheme" parent="Base.KiwixTheme" />
+  <style name="KiwixTheme" parent="Base.KiwixTheme">
+
+    <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
+    <item name="colorPrimary">@color/denim_blue800</item>
+
+    <!--colorSurface is mapped to the surface of components such as cards, sheets-->
+    <!--and menus. colorError is used to indicate an error state for components such as-->
+    <!--text fields.-->
+    <item name="colorSurface">@color/alabaster_white</item>
+    <item name="colorError">@color/monza_red</item>
+
+    <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
+    <!--on which they appear.-->
+    <item name="colorOnPrimary">@color/white</item>
+    <item name="colorOnSurface">@color/black</item>
+    <item name="colorOnError">@color/alabaster_white</item>
+
+    <item name="textSecondary">@color/mine_shaft_gray700</item>
+    <item name="textTertiary">@color/mine_shaft_gray500</item>
+    <item name="cardViewBackground">@color/alabaster_white</item>
+  </style>
 
   <!--Base custom theme which will be shared between both light and dark theme variants-->
   <style name="Base.KiwixTheme" parent="Base.MaterialThemeBuilder">
     <!--Material color attributes -->
 
-    <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
+    <item name="colorPrimaryVariant">?colorPrimary</item>
+
     <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
     <!--selection controls.-->
-    <item name="colorPrimary">@color/color_primary</item>
-    <item name="colorPrimaryVariant">?colorPrimary</item>
     <item name="colorSecondary">?colorPrimary</item>
     <item name="colorSecondaryVariant">?colorPrimary</item>
 
     <!--Material snackbar attributes-->
     <item name="maxActionInlineWidth">128dp</item>
 
-    <!--colorBackground appears behind scrollable content and is used for the default window-->
-    <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
-    <!--and menus. colorError is used to indicate an error state for components such as-->
-    <!--text fields.-->
-    <item name="colorSurface">@color/color_surface</item>
-    <item name="android:colorBackground">?colorSurface</item>
-    <item name="colorError">@color/color_error</item>
 
-    <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
-    <!--on which they appear.-->
-    <item name="colorOnPrimary">@color/color_on_primary</item>
+    <!--colorBackground appears behind scrollable content and is used for the default window-->
+    <!--background.-->
+    <item name="android:colorBackground">?colorSurface</item>
+
+
     <item name="colorOnSecondary">?colorOnPrimary</item>
-    <item name="colorOnSurface">@color/color_on_surface</item>
     <item name="colorOnBackground">?colorOnSurface</item>
-    <item name="colorOnError">@color/color_on_error</item>
 
     <!--Material type attributes-->
     <item name="textAppearanceHeadline1">@style/TextAppearance.KiwixTheme.Headline1</item>
@@ -49,7 +61,6 @@
     <item name="textAppearanceButton">@style/TextAppearance.KiwixTheme.Button</item>
     <item name="textAppearanceCaption">@style/TextAppearance.KiwixTheme.Caption</item>
     <item name="textAppearanceOverline">@style/TextAppearance.KiwixTheme.Overline</item>
-
     <!--Material shape attributes-->
     <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.KiwixTheme.SmallComponent
     </item>
@@ -64,6 +75,7 @@
     <item name="navigationViewStyle">@style/Widget.KiwixTheme.NavigationView</item>
     <item name="materialCardViewStyle">@style/Widget.KiwixTheme.CardView</item>
     <item name="bottomNavigationStyle">@style/Widget.KiwixTheme.BottomNavigationView</item>
+    <item name="bottomAppBarStyle">@style/Widget.KiwixTheme.BottomAppBar</item>
     <item name="toolbarStyle">@style/Widget.KiwixTheme.Toolbar</item>
     <item name="tabStyle">@style/Widget.KiwixTheme.TabLayout</item>
     <item name="appBarLayoutStyle">@style/Widget.KiwixTheme.AppBar</item>
@@ -72,7 +84,7 @@
   <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
     <item name="android:statusBarColor" tools:ignore="NewApi">@color/black</item>
-    <item name="actionModeBackground">@color/actionModeBackground</item>
+    <item name="actionModeBackground">@color/cornflower_blue</item>
     <item name="windowActionModeOverlay">true</item>
 
     <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->

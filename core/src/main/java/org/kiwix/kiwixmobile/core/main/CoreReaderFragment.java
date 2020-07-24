@@ -50,7 +50,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.AnimRes;
@@ -58,7 +57,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.Group;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -77,6 +75,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -114,16 +113,12 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
-import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -153,14 +148,11 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_POSITIONS
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
-import static org.kiwix.kiwixmobile.core.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_MOBILE;
 
 public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
-  MainContract.View,
   MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
-  public static final String HOME_URL = "file:///android_asset/home.html";
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
@@ -175,9 +167,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_tts_controls)
   Group TTSControls;
   @BindView(R2.id.fragment_main_app_bar)
-  AppBarLayout toolbarContainer;
+  protected AppBarLayout toolbarContainer;
   @BindView(R2.id.main_fragment_progress_view)
-  ContentLoadingProgressBar progressBar;
+  protected ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
   @BindView(R2.id.new_navigation_fragment_main_drawer_layout)
@@ -187,7 +179,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_content_frame)
   protected FrameLayout contentFrame;
   @BindView(R2.id.bottom_toolbar)
-  protected LinearLayout bottomToolbar;
+  protected BottomAppBar bottomToolbar;
   @BindView(R2.id.bottom_toolbar_bookmark)
   ImageView bottomToolbarBookmark;
   @BindView(R2.id.bottom_toolbar_arrow_back)
@@ -199,24 +191,22 @@ public abstract class CoreReaderFragment extends BaseFragment
   @BindView(R2.id.activity_main_tab_switcher)
   protected View tabSwitcherRoot;
   @BindView(R2.id.tab_switcher_close_all_tabs)
-  FloatingActionButton closeAllTabsButton;
+  protected FloatingActionButton closeAllTabsButton;
   @BindView(R2.id.snackbar_root)
   CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
-  ViewGroup videoView;
+  protected ViewGroup videoView;
   @BindView(R2.id.go_to_library_button_no_open_book)
-  Button noOpenBookButton;
+  protected Button noOpenBookButton;
   @BindView(R2.id.no_open_book_text)
   TextView noOpenBookText;
+  @BindView(R2.id.activity_main_root)
+  protected View activityMainRoot;
 
-  View root;
-
-  @Inject
-  protected MainContract.Presenter presenter;
   @Inject
   StorageObserver storageObserver;
   @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
+  protected SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   protected ZimReaderContainer zimReaderContainer;
   @Inject
@@ -231,6 +221,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected DialogShower alertDialogShower;
   @Inject
   protected NightModeViewPainter painter;
+  @Inject
+  MainRepositoryActions repositoryActions;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -244,8 +236,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   };
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
-  private boolean wasHideToolbar = true;
-  private boolean isHideToolbar = true;
   private boolean isOpenNewTabInBackground;
   private boolean isExternalLinkPopup;
   private String documentParserJs;
@@ -256,17 +246,15 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected int currentWebViewIndex = 0;
   private File file;
   private ActionMode actionMode = null;
-  private KiwixWebView tempForUndo;
+  private KiwixWebView tempWebViewForUndo;
+  private File tempZimFileForUndo;
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private boolean isFirstRun;
-  private BooksOnDiskAdapter booksAdapter;
-  private AppCompatButton downloadBookButton;
-  private ActionBar actionBar;
+  protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
-  private boolean hasLocalBooks;
-  private MainMenu mainMenu;
+  protected MainMenu mainMenu;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -294,7 +282,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   };
   private Disposable bookmarkingDisposable;
-  private Boolean isBookmarked;
+  private boolean isBookmarked;
 
   @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
     @NotNull AppCompatActivity activity) {
@@ -337,7 +325,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
-    presenter.attachView(this);
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
     activity.setSupportActionBar(toolbar);
@@ -386,8 +373,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     checkForRateDialog();
 
-    isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
-
     addFileReader();
     setupTabsAdapter();
     setTableDrawerInfo();
@@ -396,26 +381,13 @@ public abstract class CoreReaderFragment extends BaseFragment
     compatCallback = new CompatFindActionModeCallback(activity);
     setUpTTS();
 
-    setupDocumentParser(activity);
+    setupDocumentParser();
 
     loadPrefs();
     updateTitle();
 
     handleIntentExtras(getActivity().getIntent());
 
-    wasHideToolbar = isHideToolbar;
-    booksAdapter = new BooksOnDiskAdapter(
-      new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
-        bookOnDiskItem -> {
-          open(bookOnDiskItem);
-          return Unit.INSTANCE;
-        },
-        null,
-        null),
-      BookOnDiskDelegate.LanguageDelegate.INSTANCE
-    );
-
-    searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
 
@@ -429,7 +401,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
-    root = inflater.inflate(R.layout.fragment_main, container, false);
+    View root = inflater.inflate(R.layout.fragment_main, container, false);
     ButterKnife.bind(this, root);
     return root;
   }
@@ -469,24 +441,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void setupDocumentParser(AppCompatActivity activity) {
+  private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
-          for (TableDrawerAdapter.DocumentSection section : sections) {
-            if (section.title.contains("REPLACE_")) {
-              section.title =
-                getResourceString(activity.getBaseContext(), section.title);
-            }
-          }
           documentSections.addAll(sections);
-          if (title.contains("REPLACE_")) {
-            tableDrawerAdapter.setTitle(
-              getResourceString(activity.getBaseContext(), title));
-          } else {
-            tableDrawerAdapter.setTitle(title);
-          }
+          tableDrawerAdapter.setTitle(title);
+
           tableDrawerAdapter.setSections(documentSections);
           tableDrawerAdapter.notifyDataSetChanged();
         }
@@ -584,7 +546,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void startAnimation(View view, @AnimRes int anim) {
+  protected void startAnimation(View view, @AnimRes int anim) {
     view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), anim));
   }
 
@@ -602,9 +564,10 @@ public abstract class CoreReaderFragment extends BaseFragment
         progressBar.setVisibility(View.VISIBLE);
         contentFrame.setVisibility(View.VISIBLE);
       }
+      progressBar.hide();
       selectTab(currentWebViewIndex);
       if (mainMenu != null) {
-        mainMenu.showWebViewOptions(!urlIsInvalid());
+        mainMenu.showWebViewOptions(urlIsValid());
       }
     }
   }
@@ -661,11 +624,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       compatCallback.finish();
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
-    } else if (getCurrentWebView().canGoBack()
-      && !HOME_URL.equals(getCurrentWebView().getUrl())) {
-      getCurrentWebView().goBack();
-    } else if (!HOME_URL.equals(getCurrentWebView().getUrl())) {
-      showHomePage();
     } else {
       return Super.ShouldCall;
     }
@@ -810,13 +768,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     safeDispose();
-    presenter.detachView();
-    if (downloadBookButton != null) {
-      downloadBookButton.setOnClickListener(null);
-    }
     super.onDestroy();
     tabCallback = null;
-    downloadBookButton = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
     // TODO create a base Activity class that class this.
@@ -832,40 +785,33 @@ public abstract class CoreReaderFragment extends BaseFragment
     loadUrl(url, getCurrentWebView());
   }
 
-  private void loadUrl(String url, KiwixWebView webview) {
+  protected void loadUrl(String url, KiwixWebView webview) {
     if (url != null && !url.endsWith("null")) {
       webview.loadUrl(url);
     }
   }
 
-  private KiwixWebView getWebView(String url) {
+  private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
-    KiwixWebView webView;
-    if (!isHideToolbar) {
-      webView = new ToolbarScrollingKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
-        createWebClient(this, zimReaderContainer),
-        toolbarContainer, bottomToolbar, sharedPreferenceUtil);
-    } else {
-      webView = new ToolbarStaticKiwixWebView(
-        getActivity(), this, attrs, (ViewGroup) root, videoView,
-        createWebClient(this, zimReaderContainer),
-        sharedPreferenceUtil);
-    }
+    KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
     return webView;
   }
 
-  protected abstract CoreWebViewClient createWebClient(
-    WebViewCallback webViewCallback,
-    ZimReaderContainer zimReaderContainer);
+  @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {
+    return new ToolbarScrollingKiwixWebView(
+      getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
+      new CoreWebViewClient(this, zimReaderContainer),
+      toolbarContainer, bottomToolbar,
+      sharedPreferenceUtil);
+  }
 
   protected KiwixWebView newMainPageTab() {
     return newTab(contentUrl(zimReaderContainer.getMainPage()));
   }
 
   protected KiwixWebView newTab(String url) {
-    KiwixWebView webView = getWebView(url);
+    KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
     selectTab(webViewList.size() - 1);
     tabsAdapter.notifyDataSetChanged();
@@ -875,7 +821,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void newTabInBackground(String url) {
-    KiwixWebView webView = getWebView(url);
+    KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
     tabsAdapter.notifyDataSetChanged();
     setUpWebViewWithTextToSpeech();
@@ -883,29 +829,47 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void closeTab(int index) {
-    tempForUndo = webViewList.get(index);
+    tempZimFileForUndo = zimReaderContainer.getZimFile();
+    tempWebViewForUndo = webViewList.get(index);
     webViewList.remove(index);
     if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
       currentWebViewIndex--;
     }
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyDataSetChanged();
-    Snackbar.make(tabSwitcherRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
+    snackbarRoot.bringToFront();
+    Snackbar.make(snackbarRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo, v -> {
-        webViewList.add(index, tempForUndo);
-        tabsAdapter.notifyItemInserted(index);
-        tabsAdapter.notifyDataSetChanged();
-        Snackbar.make(snackbarRoot, "Tab restored", Snackbar.LENGTH_SHORT).show();
-        setUpWebViewWithTextToSpeech();
-      })
-      .show();
+        restoreDeletedTab(index);
+      }).show();
     openHomeScreen();
+  }
+
+  protected void reopenBook() {
+    hideNoBookOpenViews();
+    contentFrame.setVisibility(View.VISIBLE);
+    if (mainMenu != null) {
+      mainMenu.showBookSpecificMenuItems();
+    }
+  }
+
+  protected void restoreDeletedTab(int index) {
+    if (webViewList.isEmpty()) {
+      reopenBook();
+    }
+    zimReaderContainer.setZimFile(tempZimFileForUndo);
+    webViewList.add(index, tempWebViewForUndo);
+    tabsAdapter.notifyDataSetChanged();
+
+    Snackbar.make(snackbarRoot, R.string.tab_restored, Snackbar.LENGTH_SHORT).show();
+    setUpWebViewWithTextToSpeech();
+    updateBottomToolbarVisibility();
+    contentFrame.addView(tempWebViewForUndo);
   }
 
   protected void selectTab(int position) {
     currentWebViewIndex = position;
     contentFrame.removeAllViews();
-
     KiwixWebView webView = safelyGetWebView(position);
     if (webView.getParent() != null) {
       ((ViewGroup) webView.getParent()).removeView(webView);
@@ -917,10 +881,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     updateUrlProcessor();
     updateTableOfContents();
     updateTitle();
-
-    if (!isHideToolbar && webView instanceof ToolbarScrollingKiwixWebView) {
-      ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
-    }
   }
 
   private KiwixWebView safelyGetWebView(int position) {
@@ -935,7 +895,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @NotNull @Override public KiwixWebView getCurrentWebView() {
     if (webViewList.size() == 0) return newMainPageTab();
-    if (currentWebViewIndex < webViewList.size()) {
+    if (currentWebViewIndex < webViewList.size() && currentWebViewIndex > 0) {
       return webViewList.get(currentWebViewIndex);
     } else {
       return webViewList.get(0);
@@ -976,10 +936,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       }
       tts.stop();
     }
-  }
-
-  @Override public void onLibraryMenuClicked() {
-    manageZimFiles(hasLocalBooks ? 0 : 1);
   }
 
   @Override public void onRandomArticleMenuClicked() {
@@ -1080,14 +1036,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
     getActivity().getWindow().addFlags(fullScreenFlag);
     getActivity().getWindow().clearFlags(classicScreenFlag);
-
-    if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
-      contentFrame.setPadding(0, 0, 0, 0);
-    }
     getCurrentWebView().requestLayout();
-    if (!isHideToolbar) {
-      this.getCurrentWebView().setTranslationY(0);
-    }
+
     sharedPreferenceUtil.putPrefFullScreen(true);
   }
 
@@ -1102,9 +1052,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     getActivity().getWindow().clearFlags(fullScreenFlag);
     getActivity().getWindow().addFlags(classicScreenFlag);
     getCurrentWebView().requestLayout();
-    if (!isHideToolbar) {
-      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarHeight(getActivity()));
-    }
     sharedPreferenceUtil.putPrefFullScreen(false);
   }
 
@@ -1151,7 +1098,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
         ContextExtensionsKt.toast(getActivity(), R.string.error_file_not_found, Toast.LENGTH_LONG);
-        showHomePage();
       }
     } else {
       this.file = file;
@@ -1183,7 +1129,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
     if (zimFileReader != null) {
       if (mainMenu != null) {
-        mainMenu.onFileOpened(zimFileReader, !urlIsInvalid());
+        mainMenu.onFileOpened(zimFileReader, urlIsValid());
       }
       openMainPage();
       safeDispose();
@@ -1202,7 +1148,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       updateUrlProcessor();
     } else {
       ContextExtensionsKt.toast(getActivity(), R.string.error_file_invalid, Toast.LENGTH_LONG);
-      showHomePage();
     }
   }
 
@@ -1225,7 +1170,6 @@ public abstract class CoreReaderFragment extends BaseFragment
           if (file != null) {
             openZimFile(file);
           }
-          scanStorageForZims();
         } else {
           Snackbar.make(snackbarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
             .setAction(R.string.menu_settings, view -> {
@@ -1255,16 +1199,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private void scanStorageForZims() {
-    storageObserver.getBooksOnFileSystem()
-      .take(1)
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(books -> {
-        presenter.saveBooks(books);
-        hasLocalBooks = !books.isEmpty();
-      }, Throwable::printStackTrace);
-  }
-
   @OnClick(R2.id.tab_switcher_close_all_tabs)
   void closeAllTabs() {
     rotate(closeAllTabsButton);
@@ -1274,20 +1208,17 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
   //opens home screen when user closes all tabs
 
-  private void displayNoBookOpenViews() {
-    videoView.setVisibility(View.GONE);
+  protected void showNoBookOpenViews() {
     noOpenBookButton.setVisibility(View.VISIBLE);
     noOpenBookText.setVisibility(View.VISIBLE);
   }
 
-  private void hideNoBookOpenViews() {
-    videoView.setVisibility(View.GONE);
-    noOpenBookButton.setVisibility(View.VISIBLE);
-    noOpenBookText.setVisibility(View.VISIBLE);
+  protected void hideNoBookOpenViews() {
+    noOpenBookButton.setVisibility(View.GONE);
+    noOpenBookText.setVisibility(View.GONE);
   }
 
-  private void openHomeScreen() {
-
+  protected void openHomeScreen() {
     new Handler().postDelayed(() -> {
       if (webViewList.size() == 0) {
         createNewTab();
@@ -1301,12 +1232,12 @@ public abstract class CoreReaderFragment extends BaseFragment
     String articleUrl = getCurrentWebView().getUrl();
     if (articleUrl != null) {
       if (isBookmarked) {
-        presenter.deleteBookmark(articleUrl);
+        repositoryActions.deleteBookmark(articleUrl);
         ViewExtensionsKt.snack(snackbarRoot, R.string.bookmark_removed);
       } else {
         final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
         if (zimFileReader != null) {
-          presenter.saveBookmark(
+          repositoryActions.saveBookmark(
             new BookmarkItem(getCurrentWebView().getTitle(), articleUrl, zimFileReader)
           );
           ViewExtensionsKt.snack(
@@ -1317,7 +1248,7 @@ public abstract class CoreReaderFragment extends BaseFragment
               goToBookmarks();
               return Unit.INSTANCE;
             },
-            getResources().getColor(R.color.white)
+            getResources().getColor(R.color.alabaster_white)
           );
         } else {
           ContextExtensionsKt.toast(getActivity(), R.string.unable_to_add_to_bookmarks,
@@ -1330,17 +1261,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override
   public void onResume() {
     super.onResume();
-    if (wasHideToolbar != isHideToolbar) {
-      wasHideToolbar = isHideToolbar;
-      for (int i = 0; i < webViewList.size(); i++) {
-        webViewList.set(i, getWebView(webViewList.get(i).getUrl()));
-      }
-      selectTab(currentWebViewIndex);
-      setUpWebViewWithTextToSpeech();
-    }
 
     updateBottomToolbarVisibility();
-    presenter.loadBooks();
     updateNightMode();
   }
 
@@ -1352,18 +1274,11 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void updateBottomToolbarVisibility() {
     if (checkNull(bottomToolbar)) {
-      if (!urlIsInvalid()
+      if (urlIsValid()
         && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
         bottomToolbar.setVisibility(View.VISIBLE);
-        if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
-          contentFrame.setPadding(0, 0, 0,
-            (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
-        } else {
-          contentFrame.setPadding(0, 0, 0, 0);
-        }
       } else {
         bottomToolbar.setVisibility(View.GONE);
-        contentFrame.setPadding(0, 0, 0, 0);
       }
     }
   }
@@ -1382,10 +1297,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (intent.getAction() != null) {
       if (zimReaderContainer.getId() != null) {
         startIntentBasedOnAction(intent);
-      } else {
-        if (CoreSearchWidget.MIC_CLICKED.equals(intent.getAction())) {
-          manageZimFiles(0);
-        }
       }
     }
   }
@@ -1598,11 +1509,11 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull protected MainMenu createMainMenu(Menu menu) {
-    return menuFactory.create(menu, webViewList, !urlIsInvalid(), this, false, false);
+    return menuFactory.create(menu, webViewList, urlIsValid(), this, false, false);
   }
 
-  protected boolean urlIsInvalid() {
-    return getCurrentWebView().getUrl() == null;
+  protected boolean urlIsValid() {
+    return getCurrentWebView().getUrl() != null;
   }
 
   private void updateUrlProcessor() {
@@ -1617,12 +1528,11 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private boolean shouldActivateNightMode(KiwixWebView kiwixWebView) {
-    return kiwixWebView != null && !HOME_URL.equals(kiwixWebView.getUrl());
+    return kiwixWebView != null;
   }
 
   private void loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
-    isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
     isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
 
@@ -1677,28 +1587,30 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewUrlFinishedLoading() {
-    updateTableOfContents();
-    tabsAdapter.notifyDataSetChanged();
-    updateUrlProcessor();
-    updateBottomToolbarArrowsAlpha();
-    String url = getCurrentWebView().getUrl();
-    final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-    if (hasValidFileAndUrl(url, zimFileReader) && getActivity() != null) {
-      final long timeStamp = System.currentTimeMillis();
-      SimpleDateFormat sdf =
-        new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
-      HistoryItem history = new HistoryItem(
-        getCurrentWebView().getUrl(),
-        getCurrentWebView().getTitle(),
-        sdf.format(new Date(timeStamp)),
-        timeStamp,
-        zimFileReader
-      );
-      presenter.saveHistory(history);
+    if (isAdded()) {
+      updateTableOfContents();
+      tabsAdapter.notifyDataSetChanged();
+      updateUrlProcessor();
+      updateBottomToolbarArrowsAlpha();
+      String url = getCurrentWebView().getUrl();
+      final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
+      if (hasValidFileAndUrl(url, zimFileReader)) {
+        final long timeStamp = System.currentTimeMillis();
+        SimpleDateFormat sdf =
+          new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
+        HistoryItem history = new HistoryItem(
+          getCurrentWebView().getUrl(),
+          getCurrentWebView().getTitle(),
+          sdf.format(new Date(timeStamp)),
+          timeStamp,
+          zimFileReader
+        );
+        repositoryActions.saveHistory(history);
+      }
+      updateBottomToolbarVisibility();
+      openFullScreenIfEnabled();
+      updateNightMode();
     }
-    updateBottomToolbarVisibility();
-    openFullScreenIfEnabled();
-    updateNightMode();
   }
 
   protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {
@@ -1774,41 +1686,13 @@ public abstract class CoreReaderFragment extends BaseFragment
             .setAction(getString(R.string.open), v -> {
               if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
             })
-            .setActionTextColor(getResources().getColor(R.color.white))
+            .setActionTextColor(getResources().getColor(R.color.alabaster_white))
             .show();
         } else {
           newTab(url);
         }
         return Unit.INSTANCE;
       });
-  }
-
-  @Override
-  public void setHomePage(View view) {
-    painter.deactivateNightMode(getCurrentWebView(), videoView);
-    RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
-    presenter.loadBooks();
-    homeRecyclerView.setAdapter(booksAdapter);
-    downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
-    downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
-    updateTitle();
-  }
-
-  private void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
-    openZimFile(bookOnDisk.getFile());
-  }
-
-  @Override
-  public void addBooks(List<BooksOnDiskListItem> books) {
-    booksAdapter.setItems(books);
-  }
-
-  private void searchFiles() {
-    if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      scanStorageForZims();
-    } else {
-      requestExternalStoragePermission();
-    }
   }
 
   private boolean checkNull(View view) {
