@@ -24,7 +24,6 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
-import com.schibsted.spain.barista.rule.BaristaRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -32,7 +31,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -54,9 +52,6 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 public class LanguageActivityTest {
 
   @Rule
-  public BaristaRule<ZimManageActivity> activityTestRule =
-    BaristaRule.create(ZimManageActivity.class);
-  @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
@@ -66,7 +61,6 @@ public class LanguageActivityTest {
   @Before
   public void setUp() {
     Intents.init();
-    activityTestRule.launchActivity();
   }
 
   @Test
@@ -86,7 +80,7 @@ public class LanguageActivityTest {
     String language2 = "german";
 
     // References for the checkboxes for the corresponding languages
-    ViewInteraction checkBox1, checkBox2;
+    ViewInteraction checkBox1;
 
     // Initialise Test test languages
     // Search for a particular language

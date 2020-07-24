@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
@@ -81,7 +81,7 @@ open class ZimFileSelectFragment : BaseFragment() {
   }
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as ZimManageActivity).cachedComponent.inject(this)
+    baseActivity.kiwixActivityComponent.inject(this)
   }
 
   override fun onCreateView(

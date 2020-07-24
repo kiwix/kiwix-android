@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.splash.CoreSplashActivity
 import org.kiwix.kiwixmobile.intro.IntroActivity
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 class KiwixSplashActivity : CoreSplashActivity() {
 
@@ -35,5 +35,5 @@ class KiwixSplashActivity : CoreSplashActivity() {
     get() = if (sharedPreferenceUtil.showIntro())
       Intent(this, IntroActivity::class.java)
     else
-      Intent(this, KiwixNewNavigationActivity::class.java)
+      Intent(this, KiwixMainActivity::class.java)
 }

@@ -48,9 +48,8 @@ import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
-import org.kiwix.kiwixmobile.core.main.WebViewCallback
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
@@ -59,12 +58,9 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
-import org.kiwix.kiwixmobile.main.KiwixWebViewClient
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.navigate
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -73,7 +69,7 @@ class ReaderFragment : CoreReaderFragment() {
   private val args: ReaderFragmentArgs by navArgs()
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.kiwixActivityComponent.inject(this)
+    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -87,17 +83,13 @@ class ReaderFragment : CoreReaderFragment() {
     }
 
     (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    (activity as KiwixNewNavigationActivity).setupDrawerToggle(toolbar)
+    (activity as KiwixMainActivity).setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
   override fun loadDrawerViews() {
-    drawerLayout = requireActivity().findViewById(R.id.container)
+    drawerLayout = requireActivity().findViewById(R.id.new_navigation_container)
     tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
-  }
-
-  override fun showHomePage() {
-    exitBook()
   }
 
   private fun exitBook() {
@@ -184,7 +176,7 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onResume() {
     super.onResume()
     if (zimReaderContainer.zimFile == null) {
-      showHomePage()
+      exitBook()
     }
   }
 
@@ -196,15 +188,6 @@ class ReaderFragment : CoreReaderFragment() {
       getActivity()?.finish()
     }
     return ShouldNotCall
-  }
-
-  override fun createWebClient(
-    webViewCallback: WebViewCallback,
-    zimReaderContainer: ZimReaderContainer
-  ) = KiwixWebViewClient(webViewCallback, zimReaderContainer)
-
-  override fun onNewNavigationMenuClicked() {
-    // do nothing
   }
 
   private fun manageExternalLaunchAndRestoringViewState(uri: String) {
@@ -239,7 +222,7 @@ class ReaderFragment : CoreReaderFragment() {
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
         Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
-        showHomePage()
+        exitBook()
       }
     }
   }
@@ -247,7 +230,7 @@ class ReaderFragment : CoreReaderFragment() {
   override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
     return ToolbarScrollingKiwixWebView(
       activity, this, attrs, activityMainRoot as ViewGroup, videoView,
-      createWebClient(this, zimReaderContainer),
+      CoreWebViewClient(this, zimReaderContainer),
       toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
       sharedPreferenceUtil
     )
@@ -292,10 +275,6 @@ class ReaderFragment : CoreReaderFragment() {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
       // TODO: Show to user
     }
-  }
-
-  override fun manageZimFiles(tab: Int) {
-    activity?.start<ZimManageActivity> { putExtra(ZimManageActivity.TAB_EXTRA, tab) }
   }
 
   override fun onNewIntent(

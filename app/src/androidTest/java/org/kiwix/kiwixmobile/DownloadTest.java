@@ -22,7 +22,6 @@ import android.Manifest;
 import android.util.Log;
 import androidx.test.espresso.IdlingPolicies;
 import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -41,15 +40,11 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
 import static androidx.test.espresso.Espresso.onData;
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static junit.framework.Assert.fail;
-import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.captureAndSaveScreenshot;
@@ -98,11 +93,6 @@ public class DownloadTest {
     clickOn(R.string.remote_zims);
 
     captureAndSaveScreenshot("Before-checking-for-ZimManager-Main-Activity");
-    ViewInteraction viewPager2 = onView(
-      allOf(withId(R.id.manageViewPager),
-        withParent(allOf(withId(R.id.zim_manager_main_activity),
-          withParent(withId(android.R.id.content)))),
-        isDisplayed()));
     captureAndSaveScreenshot("After-the-check-completed");
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);

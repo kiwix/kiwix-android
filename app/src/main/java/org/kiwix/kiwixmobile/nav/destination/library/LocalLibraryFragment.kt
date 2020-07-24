@@ -35,7 +35,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
-import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
@@ -90,7 +90,7 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     activity.supportActionBar!!.setTitle(R.string.library)
-    (activity as KiwixNewNavigationActivity).setupDrawerToggle(toolbar)
+    (activity as KiwixMainActivity).setupDrawerToggle(toolbar)
     return root
   }
 

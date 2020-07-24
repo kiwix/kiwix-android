@@ -94,4 +94,4 @@
   <string name="crash_checkbox_file_system">Детаљи о систему датотека</string>
   <string name="diagnostic_report">Дијагностички извештај</string>
   <string name="diagnostic_report_message">Пошаљите све детаље како бисмо могли да дијагностикујемо проблем</string>
-  </resources>
+</resources>

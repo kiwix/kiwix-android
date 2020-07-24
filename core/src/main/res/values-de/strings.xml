@@ -272,4 +272,4 @@
   <string name="diagnostic_report_message">Bitte übermittle alle nachfolgend aufgeführte Details, damit wir das Problem feststellen können</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
-  </resources>
+</resources>
