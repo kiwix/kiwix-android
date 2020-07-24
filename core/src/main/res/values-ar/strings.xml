@@ -265,5 +265,4 @@
   <string name="off">تعطيل</string>
   <string name="auto">تلقائي</string>
   <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
-  <string name="experimental_navigation">تصفح تجريبي</string>
-</resources>
+  </resources>

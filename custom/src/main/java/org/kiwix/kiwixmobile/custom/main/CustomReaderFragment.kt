@@ -151,8 +151,6 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     menu.findItem(R.id.menu_help)?.isVisible = false
-    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
-    menu.findItem(R.id.menu_openfile)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
 

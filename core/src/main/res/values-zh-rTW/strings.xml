@@ -273,5 +273,4 @@
   <string name="diagnostic_report_message">請傳送所有以下詳細資訊，以讓我們可以方便診斷問題</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字縮放</string>
-  <string name="experimental_navigation">實現性導覽</string>
-</resources>
+  </resources>
