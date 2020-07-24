@@ -54,8 +54,7 @@
   <string name="open_library">The action of opening the library destination, used on a button.</string>
   <string name="download">The title of the fragment/place where books are downloaded.</string>
   <string name="reader">The title of the fragment/place where books are read.</string>
-  <string name="experimental_navigation">This is a menu item that opens the applicaiton in a new experimental mode that uses different navigation.</string>
-  <string name="delete_history">Ask if the user wants to delete all history items.</string>
+<string name="delete_history">Ask if the user wants to delete all history items.</string>
   <string name="delete_selected_history">Ask if the user wants to delete a number of selected history items.</string>
   <string name="delete_bookmarks">Ask if the user wants to delete all bookmarks.</string>
   <string name="delete_selected_bookmarks">Ask if the user wants to delete a number of selected bookmarks.</string>

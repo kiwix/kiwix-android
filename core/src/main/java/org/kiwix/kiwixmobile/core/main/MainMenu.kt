@@ -23,7 +23,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.isVisible
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
@@ -68,12 +67,10 @@ class MainMenu(
     fun onAddNoteMenuClicked()
     fun onBookmarksMenuClicked()
     fun onRandomArticleMenuClicked()
-    fun onLibraryMenuClicked()
     fun onReadAloudMenuClicked()
     fun onFullscreenMenuClicked()
     fun onSupportKiwixMenuClicked()
     fun onHostBooksMenuClicked()
-    fun onNewNavigationMenuClicked()
   }
 
   init {
@@ -86,7 +83,6 @@ class MainMenu(
     tabSwitcher?.actionView?.findViewById(R.id.ic_tab_switcher_text)
   private val bookmarks = menu.findItem(R.id.menu_bookmarks_list)
   private val history = menu.findItem(R.id.menu_history)
-  private val library = menu.findItem(R.id.menu_openfile)
   private val addNote = menu.findItem(R.id.menu_add_note)
   private val randomArticle = menu.findItem(R.id.menu_random_article)
   private val fullscreen = menu.findItem(R.id.menu_fullscreen)
@@ -94,7 +90,6 @@ class MainMenu(
   private val hostBooks = menu.findItem(R.id.menu_host_books)
   private val help = menu.findItem(R.id.menu_help)
   private val settings = menu.findItem(R.id.menu_settings)
-  private val newNavigation = menu.findItem(R.id.menu_new_navigation)
   private val supportKiwix = menu.findItem(R.id.menu_support_kiwix)
   private var isInTabSwitcher: Boolean = false
 
@@ -109,8 +104,6 @@ class MainMenu(
       tabSwitcher = null
       tabSwitcherTextView = null
     }
-
-    newNavigation.isVisible = BuildConfig.DEBUG
 
     randomArticle.setShowAsAction(
       if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -136,10 +129,8 @@ class MainMenu(
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
     bookmarks.menuItemClickListener { menuClickListener.onBookmarksMenuClicked() }
     randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }
-    library.menuItemClickListener { menuClickListener.onLibraryMenuClicked() }
     readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
     fullscreen.menuItemClickListener { menuClickListener.onFullscreenMenuClicked() }
-    newNavigation.menuItemClickListener { menuClickListener.onNewNavigationMenuClicked() }
     supportKiwix.menuItemClickListener { menuClickListener.onSupportKiwixMenuClicked() }
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
 

@@ -273,5 +273,4 @@
   <string name="diagnostic_report_message">Zašlete prosím všechny následující podrobnosti, abychom mohli problém diagnostikovat</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zvětšit text</string>
-  <string name="experimental_navigation">Experimentální navigace</string>
 </resources>

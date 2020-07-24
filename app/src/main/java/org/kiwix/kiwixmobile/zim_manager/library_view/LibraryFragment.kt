@@ -48,10 +48,10 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.BookDelegate
@@ -91,7 +91,7 @@ open class LibraryFragment : BaseFragment() {
   private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as ZimManageActivity).cachedComponent.inject(this)
+    baseActivity.kiwixActivityComponent.inject(this)
   }
 
   override fun onCreateView(

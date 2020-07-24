@@ -214,5 +214,4 @@
   <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
   <string name="diagnostic_report">Informe de diagnóstico</string>
   <string name="diagnostic_report_message">Envíe todos los detalles siguientes para que podamos diagnosticar el problema.</string>
-  <string name="experimental_navigation">Navegación experimental</string>
 </resources>

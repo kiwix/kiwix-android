@@ -106,5 +106,4 @@
   <string name="delete_selected_history">रोजिएको इतिहास मेटाउने?</string>
   <string name="delete_bookmarks">सबै बुकमार्कहरू मेटाउने?</string>
   <string name="delete_selected_bookmarks">रोजिएका बुकमार्कहरू मेटाउने?</string>
-  <string name="experimental_navigation">प्रयोगात्मक नेभिगेसन</string>
 </resources>

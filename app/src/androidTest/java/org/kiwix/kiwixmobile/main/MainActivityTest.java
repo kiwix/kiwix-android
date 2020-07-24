@@ -25,6 +25,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,12 @@ public class MainActivityTest {
   public GrantPermissionRule writePermissionRule =
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+  @Before
+  public void setup() {
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    clickOn(R.string.reader);
+  }
+
   @Test
   public void navigateHelp() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -69,16 +76,12 @@ public class MainActivityTest {
   @Test
   public void navigateDeviceContent() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.local_zims);
+    clickOn(R.string.library);
   }
 
   @Test
   public void navigateOnlineContent() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.remote_zims);
+    clickOn(R.string.download);
   }
 }

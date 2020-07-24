@@ -274,5 +274,4 @@
   <string name="diagnostic_report_message">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
-  <string name="experimental_navigation">Navegação experimental</string>
 </resources>
