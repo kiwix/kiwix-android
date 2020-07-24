@@ -38,14 +38,6 @@
       app:navGraph="@navigation/kiwix_nav_graph"
       tools:ignore="FragmentTagUsage" />
 
-
-    <androidx.appcompat.widget.Toolbar
-      android:id="@+id/activity_toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:popupTheme="@style/KiwixTheme"
-      app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
       android:id="@+id/bottom_nav_view"
       android:layout_width="fill_parent"

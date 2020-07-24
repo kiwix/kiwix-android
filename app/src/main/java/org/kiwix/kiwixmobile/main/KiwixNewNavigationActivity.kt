@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.ActionMode
@@ -31,7 +30,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_new_navigation.activity_toolbar
 import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_new_navigation.container
 import org.kiwix.kiwixmobile.R
@@ -69,19 +67,6 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
       ), container
     )
     findViewById<NavigationView>(R.id.drawer_nav_view).setupWithNavController(navController)
-    findViewById<Toolbar>(R.id.activity_toolbar).setupWithNavController(
-      navController,
-      appBarConfiguration
-    )
-    setSupportActionBar(activity_toolbar)
-    drawerToggle =
-      ActionBarDrawerToggle(
-        this,
-        container,
-        activity_toolbar,
-        R.string.open,
-        R.string.close_all_tabs
-      )
     bottom_nav_view.setupWithNavController(navController)
   }
 
@@ -90,10 +75,14 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
     actionMode = mode
   }
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    val onCreateOptionsMenu = super.onCreateOptionsMenu(menu)
-    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
-    return onCreateOptionsMenu
+  fun setupDrawerToggle(toolbar: Toolbar) {
+    drawerToggle =
+      ActionBarDrawerToggle(
+        this, container, toolbar, R.string.open, R.string.close_all_tabs
+      )
+    container.addDrawerListener(drawerToggle)
+    drawerToggle.isDrawerIndicatorEnabled = true
+    drawerToggle.syncState()
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

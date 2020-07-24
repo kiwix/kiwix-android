@@ -27,6 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
@@ -34,6 +35,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
+import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
 class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions {
@@ -73,6 +75,13 @@ class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions 
     savedInstanceState: Bundle?
   ): View {
     setHasOptionsMenu(true)
-    return inflater.inflate(R.layout.fragment_destination_download, container, false)
+    val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
+    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
+    val activity = activity as AppCompatActivity
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar!!.setTitle(R.string.download)
+    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    (activity as KiwixNewNavigationActivity).setupDrawerToggle(toolbar)
+    return root
   }
 }

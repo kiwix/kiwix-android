@@ -163,7 +163,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
   @BindView(R2.id.toolbar)
-  Toolbar toolbar;
+  protected Toolbar toolbar;
   @BindView(R2.id.activity_main_back_to_top_fab)
   FloatingActionButton backToTopButton;
   @BindView(R2.id.activity_main_button_stop_tts)

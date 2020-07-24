@@ -61,6 +61,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
 import org.kiwix.kiwixmobile.main.KiwixWebViewClient
 import org.kiwix.kiwixmobile.navigate
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
@@ -149,6 +150,8 @@ class ReaderFragment : CoreReaderFragment() {
     savedInstanceState: Bundle?
   ): View? {
     val view = super.onCreateView(inflater, container, savedInstanceState)
+    (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    (activity as KiwixNewNavigationActivity).setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
     return view
   }
@@ -267,10 +270,6 @@ class ReaderFragment : CoreReaderFragment() {
     activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
 
   override fun getIconResId() = R.mipmap.ic_launcher
-
-  override fun setSupportActionBar(activity: AppCompatActivity?) {
-    // do nothing
-  }
 
   override fun createNewTab() {
     newMainPageTab()

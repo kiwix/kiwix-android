@@ -25,6 +25,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -33,6 +35,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
+import org.kiwix.kiwixmobile.main.KiwixNewNavigationActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
@@ -63,7 +66,7 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     val languageItem = menu.findItem(R.id.select_language)
     languageItem.isVisible = false
     searchItem.isVisible = false
-    super.onCreateOptionsMenu(menu as Menu, inflater as MenuInflater)
+    super.onCreateOptionsMenu(menu, inflater)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -81,7 +84,14 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
     setHasOptionsMenu(true)
-    return inflater.inflate(R.layout.fragment_destination_library, container, false)
+    val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
+    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
+    val activity = activity as AppCompatActivity
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    activity.supportActionBar!!.setTitle(R.string.library)
+    (activity as KiwixNewNavigationActivity).setupDrawerToggle(toolbar)
+    return root
   }
 
   override fun render(state: FileSelectListState) {
