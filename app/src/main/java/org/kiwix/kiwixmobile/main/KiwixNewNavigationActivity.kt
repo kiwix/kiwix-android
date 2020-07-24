@@ -31,10 +31,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_new_navigation.activity_toolbar
 import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_new_navigation.container
-import kotlinx.android.synthetic.main.activity_new_navigation.nav_host_fragment
-import kotlinx.android.synthetic.main.activity_new_navigation.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -70,10 +69,19 @@ class KiwixNewNavigationActivity : CoreMainActivity() {
       ), container
     )
     findViewById<NavigationView>(R.id.drawer_nav_view).setupWithNavController(navController)
-    findViewById<Toolbar>(R.id.toolbar).setupWithNavController(navController, appBarConfiguration)
-    setSupportActionBar(toolbar)
+    findViewById<Toolbar>(R.id.activity_toolbar).setupWithNavController(
+      navController,
+      appBarConfiguration
+    )
+    setSupportActionBar(activity_toolbar)
     drawerToggle =
-      ActionBarDrawerToggle(this, container, toolbar, R.string.open, R.string.close_all_tabs)
+      ActionBarDrawerToggle(
+        this,
+        container,
+        activity_toolbar,
+        R.string.open,
+        R.string.close_all_tabs
+      )
     bottom_nav_view.setupWithNavController(navController)
   }
 
