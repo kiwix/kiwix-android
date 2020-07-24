@@ -195,10 +195,6 @@ class ReaderFragment : CoreReaderFragment() {
     return ShouldNotCall
   }
 
-  override fun onNewNavigationMenuClicked() {
-    // do nothing
-  }
-
   private fun manageExternalLaunchAndRestoringViewState(uri: String) {
 
     if (uri.isNotEmpty()) {

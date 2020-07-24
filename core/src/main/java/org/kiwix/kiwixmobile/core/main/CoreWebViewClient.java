@@ -115,7 +115,7 @@ public class CoreWebViewClient extends WebViewClient {
   @Override
   public void onPageFinished(WebView view, String url) {
     boolean invalidUrl =
-      url.equals(CONTENT_PREFIX + CoreApp.getInstance().getPackageName() + ".zim.base/null");
+      url.equals(CONTENT_PREFIX + "null");
 
     Log.d(TAG_KIWIX, "invalidUrl = " + invalidUrl);
 

@@ -71,7 +71,6 @@ class MainMenu(
     fun onFullscreenMenuClicked()
     fun onSupportKiwixMenuClicked()
     fun onHostBooksMenuClicked()
-    fun onNewNavigationMenuClicked()
   }
 
   init {
