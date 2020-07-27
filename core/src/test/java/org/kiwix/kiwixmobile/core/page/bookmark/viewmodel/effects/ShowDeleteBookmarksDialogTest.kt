@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllBookmarks
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedBookmarks
@@ -48,7 +49,7 @@ internal class ShowDeleteBookmarksDialogTest {
     showDeleteBookmarksDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeleteBookmarkItems(effects, bookmarkState(), newBookmarksDao)) }
+    verify { effects.offer(DeletePageItems(bookmarkState(), newBookmarksDao)) }
   }
 
   private fun mockkActivityInjection(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog) {

@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function4
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
@@ -71,13 +73,16 @@ class SearchViewModel @Inject constructor(
   val actions = PublishProcessor.create<Action>()
   private val filter = BehaviorProcessor.createDefault("")
   private val searchOrigin = BehaviorProcessor.createDefault(FromWebView)
+  private val searchResults = PublishProcessor.create<List<SearchListItem>>()
 
   private val compositeDisposable = CompositeDisposable()
+  private var searchTask: Disposable? = null
 
   init {
     compositeDisposable.addAll(
       viewStateReducer(),
-      actionMapper()
+      actionMapper(),
+      searchResultEventsFromZimReader()
     )
   }
 
@@ -89,7 +94,8 @@ class SearchViewModel @Inject constructor(
   private fun actionMapper() = actions.map {
     when (it) {
       ExitedSearch -> effects.offer(Finish)
-      is OnItemClick -> saveSearchAndOpenItem(it)
+      is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
+      is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
       is OnItemLongClick -> showDeleteDialog(it)
       is Filter -> filter.offer(it.term)
       ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
@@ -118,19 +124,19 @@ class SearchViewModel @Inject constructor(
     effects.offer(ShowDeleteSearchDialog(longClick.searchListItem, actions))
   }
 
-  private fun saveSearchAndOpenItem(it: OnItemClick) {
+  private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {
     effects.offer(
-      SaveSearchToRecents(recentSearchDao, it.searchListItem, zimReaderContainer.id)
+      SaveSearchToRecents(recentSearchDao, searchListItem, zimReaderContainer.id)
     )
     effects.offer(
-      OpenSearchItem(it.searchListItem)
+      OpenSearchItem(searchListItem, openInNewTab)
     )
   }
 
   private fun viewStateReducer() =
     Flowable.combineLatest(
       recentSearchDao.recentSearches(zimReaderContainer.id),
-      searchResultsFromZimReader(),
+      searchResults,
       filter,
       searchOrigin,
       Function4(this::reduce)
@@ -149,12 +155,20 @@ class SearchViewModel @Inject constructor(
     else -> NoResults(searchString, searchOrigin)
   }
 
-  private fun searchResultsFromZimReader() = filter
+  private fun searchResultEventsFromZimReader() = filter
     .distinctUntilChanged()
     .debounce(DEBOUNCE_MS, TimeUnit.MILLISECONDS)
-    .switchMap(::searchResults)
+    .subscribe(::performSearch)
 
-  private fun searchResults(it: String) = Flowable.fromCallable {
-    searchResultGenerator.generateSearchResults(it)
-  }.subscribeOn(Schedulers.io())
+  private fun performSearch(searchTerm: String) {
+    compositeDisposable.add(
+      Flowable.fromCallable { searchResultGenerator.generateSearchResults(searchTerm) }
+        .subscribeOn(Schedulers.io())
+        .subscribe { searchResults.offer(it) }
+        .also {
+          searchTask?.dispose()
+          searchTask = it
+        }
+    )
+  }
 }

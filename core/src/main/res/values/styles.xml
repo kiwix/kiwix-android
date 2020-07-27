@@ -44,6 +44,7 @@
   <style name="Widget.KiwixTheme.Chip.Choice.Static" parent="Widget.MaterialComponents.Chip.Choice">
     <item name="android:clickable">false</item>
     <item name="android:textAlignment" tools:ignore="NewApi">center</item>
+    <item name="android:textColor">?textSecondary</item>
   </style>
 
   <style name="list_item_title" parent="TextAppearance.KiwixTheme.Subtitle1" />
@@ -54,12 +55,23 @@
 
   <style name="switch_style">
     <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_height">48dp</item>
     <item name="android:layout_gravity">end</item>
+    <item name="android:paddingRight">@dimen/switch_padding</item>
     <item name="android:paddingBottom">@dimen/switch_padding_bottom</item>
     <item name="android:switchPadding">@dimen/switch_padding</item>
+    <item name="android:theme">@style/ThemeOverlay.KiwixTheme.Switch</item>
     <item name="android:textAppearance">@style/TextAppearance.KiwixTheme.Body2</item>
-    <item name="theme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+    <item name="android:textColor">?colorOnPrimary</item>
+  </style>
+
+  <style name="snackbar_button" parent="Widget.MaterialComponents.Button.TextButton">
+    <item name="android:textColor">?colorSurface</item>
+  </style>
+
+  <style name="ThemeOverlay.KiwixTheme.Switch" parent="ThemeOverlay.AppCompat.Light">
+    <item name="colorControlActivated">@color/denim_blue200</item>
+    <item name="android:colorForeground">@color/alabaster_white</item>
   </style>
 
   <style name="Widget.KiwixTheme.CardView" parent="Widget.MaterialComponents.CardView">

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Authors:
+<?xml version="1.0" encoding="utf-8"?><!-- Authors:
 * Amire80
 * Fitoschido
 * Kelson
@@ -29,7 +28,6 @@
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
-  <string name="selected_bookmarks_cleared">Tell the user that the selected bookmarks has been deleted/cleared</string>
   <string name="delete">{{Identical|Delete}}</string>
   <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>

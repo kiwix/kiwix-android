@@ -76,8 +76,6 @@
   <string name="pref_clear_all_history_summary">清除近期搜尋和分頁歷史記錄</string>
   <string name="all_history_cleared">所有歷史記錄已清除</string>
   <string name="pref_clear_all_bookmarks_title">清除書籤</string>
-  <string name="all_bookmarks_cleared">已清除所有書籤</string>
-  <string name="selected_bookmarks_cleared">所選的書籤已清除</string>
   <string name="clear_all_history_dialog_title">清除所有歷史記錄？</string>
   <string name="share">分享</string>
   <string name="selected_file_cab_app_chooser_title">分享 ZIM 檔案以：</string>

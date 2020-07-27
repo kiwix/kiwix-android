@@ -24,12 +24,17 @@ import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
+import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 
-data class OpenSearchItem(private val searchListItem: SearchListItem) : SideEffect<Unit> {
+data class OpenSearchItem(
+  private val searchListItem: SearchListItem,
+  private val openInNewTab: Boolean = false
+) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.setResult(
       Activity.RESULT_OK,
       Intent().putExtra(TAG_FILE_SEARCHED, searchListItem.value)
+        .putExtra(TAG_FILE_SEARCHED_NEW_TAB, openInNewTab)
     )
     activity.finish()
   }
