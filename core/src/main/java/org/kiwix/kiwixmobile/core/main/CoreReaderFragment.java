@@ -1559,7 +1559,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     return sharedPreferenceUtil.getPrefFullScreen();
   }
 
-  private void saveTabStates() {
+  public void saveTabStates() {
     SharedPreferences settings = getActivity().getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     SharedPreferences.Editor editor = settings.edit();
 

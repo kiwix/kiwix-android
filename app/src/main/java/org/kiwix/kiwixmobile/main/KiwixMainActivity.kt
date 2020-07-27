@@ -36,7 +36,6 @@ import kotlinx.android.synthetic.main.activity_new_navigation.drawer_nav_view
 import kotlinx.android.synthetic.main.activity_new_navigation.new_navigation_container
 import kotlinx.android.synthetic.main.activity_new_navigation.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
@@ -47,11 +46,13 @@ import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.BOOKMARK_CHOSEN_REQUEST
 import org.kiwix.kiwixmobile.core.utils.EXTRA_EXTERNAL_LINK
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.nav.destination.reader.ReaderFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import javax.inject.Inject
 
@@ -167,22 +168,16 @@ class KiwixMainActivity : CoreMainActivity(), NavigationView.OnNavigationItemSel
   }
 
   private fun openSettingsActivity() {
-    startActivityForResult(
-      Intents.internal(CoreSettingsActivity::class.java),
-      REQUEST_PREFERENCES
-    )
+    startActivityForResult(intent<CoreSettingsActivity>(), REQUEST_PREFERENCES)
   }
 
   private fun openHistoryActivity() {
-    startActivityForResult(
-      intent<HistoryActivity>(),
-      REQUEST_HISTORY_ITEM_CHOSEN
-    )
+    startActivityForResult(intent<HistoryActivity>(), REQUEST_HISTORY_ITEM_CHOSEN)
   }
 
   private fun openBookmarksActivity() {
-    startActivity(
-      intent<BookmarksActivity>()
-    )
+    supportFragmentManager.fragments.filterIsInstance<ReaderFragment>()
+      .forEach(ReaderFragment::saveTabStates)
+    startActivityForResult(intent<BookmarksActivity>(), BOOKMARK_CHOSEN_REQUEST)
   }
 }
