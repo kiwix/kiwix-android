@@ -69,7 +69,6 @@
   <string name="pref_clear_all_history_summary">Llimpiar les busques recién y l\'historial de llingüetes</string>
   <string name="all_history_cleared">Llimpióse tol historial</string>
   <string name="pref_clear_all_bookmarks_title">Llimpiar los marcadores</string>
-  <string name="all_bookmarks_cleared">Llimpiaos tolos marcadores</string>
   <string name="clear_all_history_dialog_title">¿Llimpiar tol historial?</string>
   <string name="share">Compartir</string>
   <string name="selected_file_cab_app_chooser_title">Compartir los ficheros ZIM con:</string>

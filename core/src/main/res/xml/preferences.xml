@@ -25,6 +25,7 @@
     <SeekBarPreference
       android:defaultValue="2"
       android:max="6"
+      android:summary="@string/pref_text_zoom_summary"
       app:iconSpaceReserved="false"
       app:key="text_zoom"
       app:title="@string/pref_text_zoom_title"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Dutchy45
 * Elroy
 * Festina90
 * Jeleniccz
@@ -100,6 +101,7 @@
   <string name="no_results">Geen resultaten</string>
   <string name="no_bookmarks">Geen bladwijzers</string>
   <string name="no_history">Geen geschiedenis</string>
+  <string name="delete_history">Verwijder gehele geschiedenis?</string>
   <string name="on">Aan</string>
   <string name="off">Uit</string>
   <string name="auto">Automatisch</string>

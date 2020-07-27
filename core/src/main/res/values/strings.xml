@@ -67,8 +67,6 @@
   <string name="pref_clear_all_history_summary">Clear recent searches and tabs history</string>
   <string name="all_history_cleared">All History Cleared</string>
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
-  <string name="all_bookmarks_cleared">All Bookmarks Cleared</string>
-  <string name="selected_bookmarks_cleared">Selected Bookmarks Cleared</string>
   <string name="clear_all_history_dialog_title">Clear All History?</string>
   <string name="share">Share</string>
   <string name="selected_file_cab_app_chooser_title" tools:keep="@string/selected_file_cab_app_chooser_title">Share ZIM files with:</string>
@@ -253,6 +251,7 @@
   <string name="status" tools:keep="@string/status">Status</string>
   <string name="pref_clear_all_notes_summary">Clears all notes on all articles</string>
   <string name="pref_clear_all_notes_title">Clear all notes</string>
+  <string name="pref_text_zoom_summary">Change text size with 25% increments.</string>
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Text Only</string>
@@ -277,7 +276,8 @@
   <string name="diagnostic_report_message">Please send all the following details so we can diagnose the problem</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
-<string name="reader">Reader</string>
+  <string name="search_open_in_new_tab">Open in new tab</string>
+  <string name="reader">Reader</string>
   <string name="no_open_book">No open book</string>
   <string name="open_library">Open library</string>
   <string name="tab_restored">Tab restored</string>
