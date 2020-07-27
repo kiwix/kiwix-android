@@ -115,6 +115,9 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun hideTabSwitcher() {
     if (actionBar != null) {
+      actionBar.setDisplayShowTitleEnabled(true)
+      (activity as KiwixMainActivity).setupDrawerToggle(toolbar)
+
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
       closeAllTabsButton.setImageDrawableCompat(R.drawable.ic_close_black_24dp)

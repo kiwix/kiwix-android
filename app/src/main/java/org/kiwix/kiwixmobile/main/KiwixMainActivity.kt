@@ -108,7 +108,6 @@ class KiwixMainActivity : CoreMainActivity(), NavigationView.OnNavigationItemSel
         this, new_navigation_container, toolbar, R.string.open, R.string.close_all_tabs
       )
     new_navigation_container.addDrawerListener(drawerToggle)
-    drawerToggle.isDrawerIndicatorEnabled = true
     drawerToggle.syncState()
   }
 
