@@ -52,7 +52,6 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.nav.destination.reader.ReaderFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import javax.inject.Inject
 
@@ -176,8 +175,6 @@ class KiwixMainActivity : CoreMainActivity(), NavigationView.OnNavigationItemSel
   }
 
   private fun openBookmarksActivity() {
-    supportFragmentManager.fragments.filterIsInstance<ReaderFragment>()
-      .forEach(ReaderFragment::saveTabStates)
     startActivityForResult(intent<BookmarksActivity>(), BOOKMARK_CHOSEN_REQUEST)
   }
 }
