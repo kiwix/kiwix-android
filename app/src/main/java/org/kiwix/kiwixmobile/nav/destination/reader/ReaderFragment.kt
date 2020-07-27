@@ -42,11 +42,11 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
@@ -60,7 +60,6 @@ import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.navigate
-import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -83,7 +82,7 @@ class ReaderFragment : CoreReaderFragment() {
     }
 
     (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    (activity as KiwixMainActivity).setupDrawerToggle(toolbar)
+    (activity as CoreMainActivity).setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
@@ -116,7 +115,7 @@ class ReaderFragment : CoreReaderFragment() {
   override fun hideTabSwitcher() {
     if (actionBar != null) {
       actionBar.setDisplayShowTitleEnabled(true)
-      (activity as KiwixMainActivity).setupDrawerToggle(toolbar)
+      (activity as CoreMainActivity).setupDrawerToggle(toolbar)
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
@@ -290,9 +289,5 @@ class ReaderFragment : CoreReaderFragment() {
       else activity.toast(R.string.cannot_open_file)
     }
     return ShouldCall
-  }
-
-  override fun onHostBooksMenuClicked() {
-    activity?.start<ZimHostActivity>()
   }
 }

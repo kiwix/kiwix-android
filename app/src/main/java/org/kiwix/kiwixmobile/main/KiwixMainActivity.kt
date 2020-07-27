@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -30,7 +29,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_new_navigation.drawer_nav_view
 import kotlinx.android.synthetic.main.activity_new_navigation.new_navigation_container
@@ -40,27 +38,18 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
-import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
-import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
-import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.BOOKMARK_CHOSEN_REQUEST
-import org.kiwix.kiwixmobile.core.utils.EXTRA_EXTERNAL_LINK
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
-import javax.inject.Inject
 
-class KiwixMainActivity : CoreMainActivity(), NavigationView.OnNavigationItemSelectedListener {
+class KiwixMainActivity : CoreMainActivity() {
   private lateinit var navController: NavController
   private lateinit var appBarConfiguration: AppBarConfiguration
-  private lateinit var drawerToggle: ActionBarDrawerToggle
+
   private var actionMode: ActionMode? = null
-  @Inject lateinit var alertDialogShower: AlertDialogShower
+
   val cachedComponent by lazy { kiwixActivityComponent }
 
   override fun injection(coreComponent: CoreComponent) {
@@ -88,6 +77,7 @@ class KiwixMainActivity : CoreMainActivity(), NavigationView.OnNavigationItemSel
     drawer_nav_view.setupWithNavController(navController)
     drawer_nav_view.setNavigationItemSelectedListener(this)
     bottom_nav_view.setupWithNavController(navController)
+    navigationContainer = new_navigation_container
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -100,15 +90,6 @@ class KiwixMainActivity : CoreMainActivity(), NavigationView.OnNavigationItemSel
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)
     actionMode = mode
-  }
-
-  fun setupDrawerToggle(toolbar: Toolbar) {
-    drawerToggle =
-      ActionBarDrawerToggle(
-        this, new_navigation_container, toolbar, R.string.open, R.string.close_all_tabs
-      )
-    new_navigation_container.addDrawerListener(drawerToggle)
-    drawerToggle.syncState()
   }
 
   override fun onSupportNavigateUp(): Boolean {
@@ -139,42 +120,24 @@ class KiwixMainActivity : CoreMainActivity(), NavigationView.OnNavigationItemSel
     }
   }
 
+  override fun setupDrawerToggle(toolbar: Toolbar) {
+    drawerToggle =
+      ActionBarDrawerToggle(
+        this, new_navigation_container, toolbar, R.string.open, R.string.close_all_tabs
+      )
+    new_navigation_container.addDrawerListener(drawerToggle)
+    drawerToggle.syncState()
+  }
+
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
-      R.id.menu_settings -> openSettingsActivity()
-      R.id.menu_help -> start<HelpActivity>()
       R.id.menu_host_books -> start<ZimHostActivity>()
-      R.id.menu_history -> openHistoryActivity()
-      R.id.menu_bookmarks_list -> openBookmarksActivity()
-      else -> return false
+      else -> return super.onNavigationItemSelected(item)
     }
     return true
   }
 
-  private fun openSupportKiwixExternalLink() {
-    val intent = Intent(
-      Intent.ACTION_VIEW,
-      Uri.parse("https://www.kiwix.org/support")
-    ).putExtra(EXTRA_EXTERNAL_LINK, true)
-    alertDialogShower.show(
-      KiwixDialog.ExternalLinkPopup,
-      { startActivity(intent) }, {
-        sharedPreferenceUtil.putPrefExternalLinkPopup(false)
-        startActivity(intent)
-      }
-    )
-  }
-
-  private fun openSettingsActivity() {
-    startActivityForResult(intent<CoreSettingsActivity>(), REQUEST_PREFERENCES)
-  }
-
-  private fun openHistoryActivity() {
-    startActivityForResult(intent<HistoryActivity>(), REQUEST_HISTORY_ITEM_CHOSEN)
-  }
-
-  private fun openBookmarksActivity() {
-    startActivityForResult(intent<BookmarksActivity>(), BOOKMARK_CHOSEN_REQUEST)
+  override fun openSettingsActivity() {
+    startActivityForResult(intent<KiwixSettingsActivity>(), REQUEST_PREFERENCES)
   }
 }

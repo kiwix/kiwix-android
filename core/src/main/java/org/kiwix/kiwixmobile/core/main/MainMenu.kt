@@ -24,7 +24,6 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.isVisible
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R2.id.menu_add_note
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchActivity
@@ -59,12 +58,9 @@ class MainMenu(
     fun onTabMenuClicked()
     fun onHomeMenuClicked()
     fun onAddNoteMenuClicked()
-    fun onBookmarksMenuClicked()
     fun onRandomArticleMenuClicked()
     fun onReadAloudMenuClicked()
     fun onFullscreenMenuClicked()
-    fun onSupportKiwixMenuClicked()
-    fun onHostBooksMenuClicked()
   }
 
   init {

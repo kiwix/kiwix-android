@@ -19,10 +19,17 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 
 const val REQUEST_READ_FOR_OBB = 5002
 
@@ -41,5 +48,27 @@ class CustomMainActivity : CoreMainActivity() {
     }
     supportFragmentManager.beginTransaction()
       .add(R.id.fragment_containter, CustomReaderFragment()).commit()
+
+    navigationContainer = findViewById(R.id.custom_drawer_container)
+  }
+
+  override fun setupDrawerToggle(toolbar: Toolbar) {
+    drawerToggle =
+      ActionBarDrawerToggle(
+        this,
+        findViewById(R.id.custom_drawer_container),
+        toolbar,
+        R.string.open,
+        R.string.close_all_tabs
+      )
+    findViewById<DrawerLayout>(R.id.custom_drawer_container).addDrawerListener(drawerToggle)
+    drawerToggle.syncState()
+    findViewById<NavigationView>(R.id.drawer_nav_view).setNavigationItemSelectedListener(this)
+    findViewById<NavigationView>(R.id.drawer_nav_view).menu.findItem(R.id.menu_host_books)
+      .isVisible = false
+  }
+
+  override fun openSettingsActivity() {
+    startActivityForResult(intent<CustomSettingsActivity>(), REQUEST_PREFERENCES)
   }
 }

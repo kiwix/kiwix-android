@@ -401,9 +401,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  protected void loadDrawerViews() {
-    // do nothing as views are already loaded.
-  }
+  protected abstract void loadDrawerViews();
 
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
@@ -561,12 +559,12 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   protected void hideTabSwitcher() {
     if (actionBar != null) {
-      actionBar.setDisplayHomeAsUpEnabled(false);
       actionBar.setDisplayShowTitleEnabled(true);
+      ((CoreMainActivity) requireActivity()).setupDrawerToggle(toolbar);
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
       closeAllTabsButton.setImageDrawable(
-        ContextCompat.getDrawable(getActivity(), R.drawable.ic_close_black_24dp));
+        ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp));
       if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
         tabSwitcherRoot.setVisibility(View.GONE);
         startAnimation(tabSwitcherRoot, R.anim.slide_up);
@@ -916,15 +914,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     return mainMenu.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
   }
 
-  @Override public void onSupportKiwixMenuClicked() {
-    openExternalUrl(
-      new Intent(
-        Intent.ACTION_VIEW,
-        Uri.parse("https://www.kiwix.org/support")
-      ).putExtra(EXTRA_EXTERNAL_LINK, true)
-    );
-  }
-
   @Override public void onFullscreenMenuClicked() {
     if (isInFullScreenMode()) {
       closeFullScreen();
@@ -951,10 +940,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     openRandomArticle();
   }
 
-  @Override public void onBookmarksMenuClicked() {
-    goToBookmarks();
-  }
-
   @Override public void onAddNoteMenuClicked() {
     if (requestExternalStorageWritePermissionForNotes()) {
       showAddNoteDialog();
@@ -975,10 +960,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else {
       showTabSwitcher();
     }
-  }
-
-  @Override public void onHostBooksMenuClicked() {
-    // to be implemented in subclasses
   }
 
   protected abstract void createNewTab();

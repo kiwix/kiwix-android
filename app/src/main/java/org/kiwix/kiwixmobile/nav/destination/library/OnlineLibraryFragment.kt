@@ -32,10 +32,10 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
 class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions {
@@ -81,7 +81,7 @@ class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions 
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar!!.setTitle(R.string.download)
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    (activity as KiwixMainActivity).setupDrawerToggle(toolbar)
+    (activity as CoreMainActivity).setupDrawerToggle(toolbar)
     return root
   }
 }
