@@ -29,11 +29,15 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.lazyView
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 
 const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
+
+  private val drawerNavView: NavigationView by lazyView(R.id.drawer_nav_view)
+  private val drawerContainer: DrawerLayout by lazyView(R.id.custom_drawer_container)
 
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
@@ -54,31 +58,23 @@ class CustomMainActivity : CoreMainActivity() {
     drawerToggle =
       ActionBarDrawerToggle(
         this,
-        findViewById(R.id.custom_drawer_container),
+        drawerContainer,
         toolbar,
         R.string.open,
         R.string.close_all_tabs
       )
-    findViewById<DrawerLayout>(R.id.custom_drawer_container).addDrawerListener(drawerToggle)
+    drawerContainer.addDrawerListener(drawerToggle)
     drawerToggle.syncState()
-    findViewById<NavigationView>(R.id.drawer_nav_view).setNavigationItemSelectedListener(this)
-    findViewById<NavigationView>(R.id.drawer_nav_view).menu.findItem(R.id.menu_host_books)
+    drawerNavView.setNavigationItemSelectedListener(this)
+    drawerNavView.menu.findItem(R.id.menu_host_books)
       .isVisible = false
   }
 
   override fun navigationDrawerIsOpen(): Boolean =
-    findViewById<DrawerLayout>(R.id.custom_drawer_container).isDrawerOpen(
-      findViewById<NavigationView>(
-        R.id.drawer_nav_view
-      )
-    )
+    drawerContainer.isDrawerOpen(drawerNavView)
 
   override fun closeNavigationDrawer() {
-    findViewById<DrawerLayout>(R.id.custom_drawer_container).closeDrawer(
-      findViewById<NavigationView>(
-        R.id.drawer_nav_view
-      )
-    )
+    drawerContainer.closeDrawer(drawerNavView)
   }
 
   override fun openSettingsActivity() {
