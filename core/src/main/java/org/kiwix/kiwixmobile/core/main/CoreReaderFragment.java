@@ -789,7 +789,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     loadUrlWithCurrentWebview("javascript:(" + documentParserJs + ")()");
   }
 
-  private void loadUrlWithCurrentWebview(String url) {
+  protected void loadUrlWithCurrentWebview(String url) {
     loadUrl(url, getCurrentWebView());
   }
 

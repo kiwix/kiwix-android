@@ -31,6 +31,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
@@ -74,7 +75,17 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+    if (arguments != null) {
+      val args = ReaderFragmentArgs.fromBundle(requireArguments())
+      if (args.pageUrl.isNotEmpty()) {
+        if (args.zimFileUri.isNotEmpty()) {
+          tryOpeningZimFile(args)
+        }
+        loadUrlWithCurrentWebview(args.pageUrl)
+      } else {
+        manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+      }
+    }
     val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {
       activity.navigate(
@@ -84,6 +95,16 @@ class ReaderFragment : CoreReaderFragment() {
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     activity.setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
+  }
+
+  private fun tryOpeningZimFile(args: ReaderFragmentArgs) {
+    val file = File(args.zimFileUri)
+    if (!file.exists()) {
+      Toast.makeText(activity, R.string.error_file_not_found, Toast.LENGTH_LONG)
+        .show()
+      return
+    }
+    openZimFile(file)
   }
 
   override fun loadDrawerViews() {

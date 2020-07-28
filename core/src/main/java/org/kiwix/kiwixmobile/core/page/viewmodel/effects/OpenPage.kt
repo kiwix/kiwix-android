@@ -18,31 +18,19 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
-import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
-import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
 
 data class OpenPage(
   private val page: Page,
   private val zimReaderContainer: ZimReaderContainer
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.setResult(
-      Activity.RESULT_OK,
-      Intent().putExtra(EXTRA_CHOSE_X_URL, page.url).apply {
-        if (page.zimFilePath != zimReaderContainer.zimCanonicalPath) {
-          putExtra(EXTRA_CHOSE_X_FILE, page.zimFilePath)
-        }
-      }
-    )
     if (page.zimFilePath != zimReaderContainer.zimCanonicalPath) {
-      (activity as CoreMainActivity).openPage(page.url, page.zimFilePath)
+      (activity as CoreMainActivity).openPage(page.url, page.zimFilePath!!)
     } else {
       (activity as CoreMainActivity).openPage(page.url)
     }

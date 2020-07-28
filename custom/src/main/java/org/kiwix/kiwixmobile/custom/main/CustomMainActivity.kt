@@ -85,7 +85,7 @@ class CustomMainActivity : CoreMainActivity() {
     //
   }
 
-  override fun openPage(pageUrl: String, zimFilePath: String?) {
+  override fun openPage(pageUrl: String, zimFilePath: String) {
     //
   }
 }

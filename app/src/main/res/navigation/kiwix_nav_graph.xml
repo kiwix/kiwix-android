@@ -27,6 +27,11 @@
       android:name="zimFileUri"
       android:defaultValue=""
       app:argType="string" />
+
+    <argument
+      android:name="pageUrl"
+      android:defaultValue=""
+      app:argType="string" />
     <action
       android:id="@+id/action_navigation_reader_to_navigation_library"
       app:destination="@id/navigation_library" />

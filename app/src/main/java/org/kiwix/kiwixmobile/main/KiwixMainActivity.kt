@@ -24,6 +24,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -158,8 +159,8 @@ class KiwixMainActivity : CoreMainActivity() {
     closeNavigationDrawer()
   }
 
-  override fun openPage(pageUrl: String, zimFilePath: String?) {
-    navigate(R.id.navigation_reader)
-    // openZimFile(file)
+  override fun openPage(pageUrl: String, zimFilePath: String) {
+    val bundle = bundleOf("pageUrl" to pageUrl, "zimFileUri" to zimFilePath)
+    navigate(R.id.navigation_reader, bundle)
   }
 }
