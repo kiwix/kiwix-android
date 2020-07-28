@@ -24,12 +24,10 @@ import android.view.ActionMode
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
@@ -45,7 +43,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   NavigationView.OnNavigationItemSelectedListener {
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
-  protected lateinit var navigationContainer: DrawerLayout
   protected lateinit var drawerToggle: ActionBarDrawerToggle
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,14 +80,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     }
   }
 
-  override fun onBackPressed() {
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == ShouldCall) {
-        super.onBackPressed()
-      }
-    }
-  }
-
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
@@ -116,6 +105,21 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     }
     return true
   }
+
+  override fun onBackPressed() {
+    if (navigationDrawerIsOpen()) {
+      closeNavigationDrawer()
+      return
+    }
+    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+      if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
+        super.onBackPressed()
+      }
+    }
+  }
+
+  abstract fun navigationDrawerIsOpen(): Boolean
+  abstract fun closeNavigationDrawer()
 
   private fun openSupportKiwixExternalLink() {
     Uri.parse("https://www.kiwix.org/support")

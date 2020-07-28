@@ -77,11 +77,13 @@ class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions 
     setHasOptionsMenu(true)
     val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
     val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as AppCompatActivity
+    val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
-    activity.supportActionBar!!.setTitle(R.string.download)
-    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setTitle(R.string.download)
+    }
+    activity.setupDrawerToggle(toolbar)
     return root
   }
 }

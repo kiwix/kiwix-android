@@ -25,7 +25,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import org.kiwix.kiwixmobile.R
@@ -86,11 +85,14 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     setHasOptionsMenu(true)
     val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
     val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as AppCompatActivity
+    val activity = activity as CoreMainActivity
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setTitle(R.string.library)
+    }
     activity.setSupportActionBar(toolbar)
-    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    activity.supportActionBar!!.setTitle(R.string.library)
-    (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+
+    activity.setupDrawerToggle(toolbar)
     return root
   }
 

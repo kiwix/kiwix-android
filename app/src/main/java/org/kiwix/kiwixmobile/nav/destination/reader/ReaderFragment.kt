@@ -74,15 +74,14 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     manageExternalLaunchAndRestoringViewState(args.zimFileUri)
-
+    val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {
-      (activity as AppCompatActivity).navigate(
+      activity.navigate(
         ReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
       )
     }
-
-    (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    activity.setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 

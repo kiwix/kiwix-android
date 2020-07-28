@@ -48,8 +48,6 @@ class CustomMainActivity : CoreMainActivity() {
     }
     supportFragmentManager.beginTransaction()
       .add(R.id.fragment_containter, CustomReaderFragment()).commit()
-
-    navigationContainer = findViewById(R.id.custom_drawer_container)
   }
 
   override fun setupDrawerToggle(toolbar: Toolbar) {
@@ -66,6 +64,21 @@ class CustomMainActivity : CoreMainActivity() {
     findViewById<NavigationView>(R.id.drawer_nav_view).setNavigationItemSelectedListener(this)
     findViewById<NavigationView>(R.id.drawer_nav_view).menu.findItem(R.id.menu_host_books)
       .isVisible = false
+  }
+
+  override fun navigationDrawerIsOpen(): Boolean =
+    findViewById<DrawerLayout>(R.id.custom_drawer_container).isDrawerOpen(
+      findViewById<NavigationView>(
+        R.id.drawer_nav_view
+      )
+    )
+
+  override fun closeNavigationDrawer() {
+    findViewById<DrawerLayout>(R.id.custom_drawer_container).closeDrawer(
+      findViewById<NavigationView>(
+        R.id.drawer_nav_view
+      )
+    )
   }
 
   override fun openSettingsActivity() {

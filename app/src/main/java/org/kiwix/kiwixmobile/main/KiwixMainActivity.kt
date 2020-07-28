@@ -77,7 +77,6 @@ class KiwixMainActivity : CoreMainActivity() {
     drawer_nav_view.setupWithNavController(navController)
     drawer_nav_view.setNavigationItemSelectedListener(this)
     bottom_nav_view.setupWithNavController(navController)
-    navigationContainer = new_navigation_container
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -99,18 +98,25 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun onBackPressed() {
-    if (new_navigation_container.isDrawerOpen(drawer_nav_view)) {
-      new_navigation_container.closeDrawer(drawer_nav_view)
-      return
-    } else if (new_navigation_container.isDrawerOpen(reader_drawer_nav_view)) {
-      new_navigation_container.closeDrawer(reader_drawer_nav_view)
+    if (readerDrawerIsOpen()) {
+      closeReaderDrawer()
       return
     }
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
-        super.onBackPressed()
-      }
-    }
+    super.onBackPressed()
+  }
+
+  private fun closeReaderDrawer() {
+    new_navigation_container.closeDrawer(reader_drawer_nav_view)
+  }
+
+  private fun readerDrawerIsOpen() =
+    new_navigation_container.isDrawerOpen(reader_drawer_nav_view)
+
+  override fun navigationDrawerIsOpen(): Boolean =
+    new_navigation_container.isDrawerOpen(drawer_nav_view)
+
+  override fun closeNavigationDrawer() {
+    new_navigation_container.closeDrawer(drawer_nav_view)
   }
 
   override fun onNewIntent(intent: Intent) {
