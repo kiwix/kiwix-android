@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,16 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.main
 
-import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
+package org.kiwix.kiwixmobile.core.extensions
 
-fun main(func: MainRobot.() -> Unit) = MainRobot().apply(func)
+import android.content.Intent
+import android.net.Uri
 
-class MainRobot : BaseRobot() {
-  init {
-    isVisible(ViewId(R.id.navigation_container))
-  }
-}
+fun Uri.browserIntent() = Intent(Intent.ACTION_VIEW, this)

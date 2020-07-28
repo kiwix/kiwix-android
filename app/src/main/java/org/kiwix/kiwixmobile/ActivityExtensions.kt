@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile
 
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
@@ -36,6 +37,9 @@ private fun BaseActivity.kiwixApp() = applicationContext as? KiwixApp ?: applica
 
 fun AppCompatActivity.navigate(action: NavDirections) =
   findNavController(R.id.nav_host_fragment).navigate(action)
+
+fun AppCompatActivity.navigate(@IdRes fragmentId: Int) =
+  findNavController(R.id.nav_host_fragment).navigate(fragmentId)
 
 internal inline val BaseActivity.kiwixActivityComponent
   get() = kiwixComponent

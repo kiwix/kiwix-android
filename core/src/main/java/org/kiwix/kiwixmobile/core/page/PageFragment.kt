@@ -19,11 +19,14 @@
 package org.kiwix.kiwixmobile.core.page
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -32,12 +35,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_page.no_page
-import kotlinx.android.synthetic.main.activity_page.page_switch
-import kotlinx.android.synthetic.main.activity_page.recycler_view
+import kotlinx.android.synthetic.main.fragment_page.no_page
+import kotlinx.android.synthetic.main.fragment_page.page_switch
+import kotlinx.android.synthetic.main.fragment_page.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.layout.activity_page
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -106,10 +108,9 @@ abstract class PageFragment : OnItemClickListener, BaseFragment() {
     return super.onOptionsItemSelected(item)
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
     val activity = requireActivity() as AppCompatActivity
-    activity.setContentView(activity_page)
     activity.setSupportActionBar(toolbar)
 
     activity.supportActionBar?.apply {
@@ -128,6 +129,12 @@ abstract class PageFragment : OnItemClickListener, BaseFragment() {
       pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
   }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? = inflater.inflate(R.layout.fragment_page, container, false)
 
   override fun onDestroy() {
     compositeDisposable.clear()

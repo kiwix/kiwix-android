@@ -23,18 +23,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.isVisible
-import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
-import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchActivity
-import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
-import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
-import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 const val REQUEST_FILE_SEARCH = 1236
@@ -65,12 +58,9 @@ class MainMenu(
     fun onTabMenuClicked()
     fun onHomeMenuClicked()
     fun onAddNoteMenuClicked()
-    fun onBookmarksMenuClicked()
     fun onRandomArticleMenuClicked()
     fun onReadAloudMenuClicked()
     fun onFullscreenMenuClicked()
-    fun onSupportKiwixMenuClicked()
-    fun onHostBooksMenuClicked()
   }
 
   init {
@@ -81,16 +71,10 @@ class MainMenu(
   private var tabSwitcher: MenuItem? = menu.findItem(R.id.menu_tab_switcher)
   private var tabSwitcherTextView: TextView? =
     tabSwitcher?.actionView?.findViewById(R.id.ic_tab_switcher_text)
-  private val bookmarks = menu.findItem(R.id.menu_bookmarks_list)
-  private val history = menu.findItem(R.id.menu_history)
   private val addNote = menu.findItem(R.id.menu_add_note)
   private val randomArticle = menu.findItem(R.id.menu_random_article)
   private val fullscreen = menu.findItem(R.id.menu_fullscreen)
   private var readAloud: MenuItem? = menu.findItem(R.id.menu_read_aloud)
-  private val hostBooks = menu.findItem(R.id.menu_host_books)
-  private val help = menu.findItem(R.id.menu_help)
-  private val settings = menu.findItem(R.id.menu_settings)
-  private val supportKiwix = menu.findItem(R.id.menu_support_kiwix)
   private var isInTabSwitcher: Boolean = false
 
   init {
@@ -112,27 +96,10 @@ class MainMenu(
         MenuItem.SHOW_AS_ACTION_NEVER
     )
     tabSwitcher?.actionView?.setOnClickListener { menuClickListener.onTabMenuClicked() }
-    help.menuItemClickListener { activity.start<HelpActivity>() }
-    settings.menuItemClickListener {
-      activity.startActivityForResult(
-        internal(CoreSettingsActivity::class.java),
-        REQUEST_PREFERENCES
-      )
-    }
-    history.menuItemClickListener {
-      activity.startActivityForResult(
-        activity.intent<HistoryFragment>(),
-        REQUEST_HISTORY_ITEM_CHOSEN
-      )
-    }
-    hostBooks.menuItemClickListener { menuClickListener.onHostBooksMenuClicked() }
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
-    bookmarks.menuItemClickListener { menuClickListener.onBookmarksMenuClicked() }
     randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }
     readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
     fullscreen.menuItemClickListener { menuClickListener.onFullscreenMenuClicked() }
-    supportKiwix.menuItemClickListener { menuClickListener.onSupportKiwixMenuClicked() }
-    addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
 
     showWebViewOptions(urlIsValid)
     zimFileReader?.let {

@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
@@ -76,9 +77,13 @@ class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions 
     setHasOptionsMenu(true)
     val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
     val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as AppCompatActivity
+    val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
-    activity.supportActionBar!!.setTitle(R.string.download)
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setTitle(R.string.download)
+    }
+    activity.setupDrawerToggle(toolbar)
     return root
   }
 }

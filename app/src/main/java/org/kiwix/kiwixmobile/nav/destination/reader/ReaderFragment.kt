@@ -25,7 +25,6 @@ import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue.complexToDimensionPixelSize
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -36,7 +35,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
+import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.anim
@@ -44,11 +43,11 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
@@ -62,7 +61,6 @@ import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.navigate
-import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -77,12 +75,20 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     manageExternalLaunchAndRestoringViewState(args.zimFileUri)
-
+    val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {
-      (activity as AppCompatActivity).navigate(
+      activity.navigate(
         ReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
       )
     }
+    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    activity.setupDrawerToggle(toolbar)
+    setFragmentContainerBottomMarginToSizeOfNavBar()
+  }
+
+  override fun loadDrawerViews() {
+    drawerLayout = requireActivity().findViewById(R.id.navigation_container)
+    tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
   }
 
   private fun exitBook() {
@@ -108,8 +114,8 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun hideTabSwitcher() {
     if (actionBar != null) {
-      actionBar.setDisplayHomeAsUpEnabled(false)
       actionBar.setDisplayShowTitleEnabled(true)
+      (activity as CoreMainActivity).setupDrawerToggle(toolbar)
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
@@ -132,16 +138,6 @@ class ReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    val view = super.onCreateView(inflater, container, savedInstanceState)
-    setFragmentContainerBottomMarginToSizeOfNavBar()
-    return view
-  }
-
   private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
     val actionBarHeight = context?.getAttribute(android.R.attr.actionBarSize)
     if (actionBarHeight != null) {
@@ -157,12 +153,6 @@ class ReaderFragment : CoreReaderFragment() {
   private fun setParentFragmentsBottomMarginTo(margin: Int) {
     val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
     params?.bottomMargin = margin
-    parentFragment?.view?.requestLayout()
-  }
-
-  private fun setParentFragmentsTopMarginTo(margin: Int) {
-    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
-    params?.topMargin = margin
     parentFragment?.view?.requestLayout()
   }
 
@@ -243,21 +233,21 @@ class ReaderFragment : CoreReaderFragment() {
     return ToolbarScrollingKiwixWebView(
       activity, this, attrs, activityMainRoot as ViewGroup, videoView,
       CoreWebViewClient(this, zimReaderContainer),
-      toolbarContainer, bottomToolbar, requireActivity().nav_view,
+      toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
       sharedPreferenceUtil
     )
   }
 
   override fun openFullScreen() {
     super.openFullScreen()
-    requireActivity().nav_view.visibility = GONE
+    requireActivity().bottom_nav_view.visibility = GONE
     setParentFragmentsBottomMarginTo(0)
     getCurrentWebView().translationY = 0f
   }
 
   override fun closeFullScreen() {
     super.closeFullScreen()
-    requireActivity().nav_view.visibility = VISIBLE
+    requireActivity().bottom_nav_view.visibility = VISIBLE
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
@@ -312,9 +302,5 @@ class ReaderFragment : CoreReaderFragment() {
       else activity.toast(R.string.cannot_open_file)
     }
     return ShouldCall
-  }
-
-  override fun onHostBooksMenuClicked() {
-    activity?.start<ZimHostActivity>()
   }
 }

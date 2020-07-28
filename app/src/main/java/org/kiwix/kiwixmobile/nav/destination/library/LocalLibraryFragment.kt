@@ -25,12 +25,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -65,7 +65,7 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     val languageItem = menu.findItem(R.id.select_language)
     languageItem.isVisible = false
     searchItem.isVisible = false
-    super.onCreateOptionsMenu(menu as Menu, inflater as MenuInflater)
+    super.onCreateOptionsMenu(menu, inflater)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -85,9 +85,14 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     setHasOptionsMenu(true)
     val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
     val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as AppCompatActivity
+    val activity = activity as CoreMainActivity
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setTitle(R.string.library)
+    }
     activity.setSupportActionBar(toolbar)
-    activity.supportActionBar!!.setTitle(R.string.library)
+
+    activity.setupDrawerToggle(toolbar)
     return root
   }
 

@@ -20,20 +20,37 @@ package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.ActionMode
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
-import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
+import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
+import kotlinx.android.synthetic.main.activity_kiwix_main.drawer_nav_view
+import kotlinx.android.synthetic.main.activity_kiwix_main.navigation_container
+import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.navigate
+import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 
 class KiwixMainActivity : CoreMainActivity() {
   private lateinit var navController: NavController
+  private lateinit var appBarConfiguration: AppBarConfiguration
+
   private var actionMode: ActionMode? = null
+
   val cachedComponent by lazy { kiwixActivityComponent }
 
   override fun injection(coreComponent: CoreComponent) {
@@ -47,11 +64,27 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_new_navigation)
+    setContentView(R.layout.activity_kiwix_main)
 
     navController = findNavController(R.id.nav_host_fragment)
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-    nav_view.setupWithNavController(navController)
+    appBarConfiguration = AppBarConfiguration(
+      setOf(
+        R.id.navigation_downloads,
+        R.id.navigation_library,
+        R.id.navigation_reader
+      ), navigation_container
+    )
+    drawer_nav_view.setupWithNavController(navController)
+    drawer_nav_view.setNavigationItemSelectedListener(this)
+    bottom_nav_view.setupWithNavController(navController)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle.onOptionsItemSelected(item)) {
+      return true
+    }
+    return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
   }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {
@@ -66,11 +99,25 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun onBackPressed() {
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
-        super.onBackPressed()
-      }
+    if (readerDrawerIsOpen()) {
+      closeReaderDrawer()
+      return
     }
+    super.onBackPressed()
+  }
+
+  private fun closeReaderDrawer() {
+    navigation_container.closeDrawer(reader_drawer_nav_view)
+  }
+
+  private fun readerDrawerIsOpen() =
+    navigation_container.isDrawerOpen(reader_drawer_nav_view)
+
+  override fun navigationDrawerIsOpen(): Boolean =
+    navigation_container.isDrawerOpen(drawer_nav_view)
+
+  override fun closeNavigationDrawer() {
+    navigation_container.closeDrawer(drawer_nav_view)
   }
 
   override fun onNewIntent(intent: Intent) {
@@ -78,5 +125,36 @@ class KiwixMainActivity : CoreMainActivity() {
     supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
+  }
+
+  override fun setupDrawerToggle(toolbar: Toolbar) {
+    drawerToggle =
+      ActionBarDrawerToggle(
+        this, navigation_container, toolbar, R.string.open, R.string.close_all_tabs
+      )
+    navigation_container.addDrawerListener(drawerToggle)
+    drawerToggle.syncState()
+  }
+
+  override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.menu_host_books -> start<ZimHostActivity>()
+      else -> return super.onNavigationItemSelected(item)
+    }
+    return true
+  }
+
+  override fun openSettingsActivity() {
+    startActivityForResult(intent<KiwixSettingsActivity>(), REQUEST_PREFERENCES)
+  }
+
+  override fun openHistoryActivity() {
+    navigate(R.id.historyFragment)
+    closeNavigationDrawer()
+  }
+
+  override fun openBookmarksActivity() {
+    navigate(R.id.bookmarksFragment)
+    closeNavigationDrawer()
   }
 }

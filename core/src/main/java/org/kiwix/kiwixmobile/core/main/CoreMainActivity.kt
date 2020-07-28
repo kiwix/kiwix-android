@@ -18,18 +18,28 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
-import android.os.Bundle
+import android.net.Uri
 import android.view.ActionMode
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.openExternalUrl
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.help.HelpActivity
+import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.EXTRA_EXTERNAL_LINK
+import javax.inject.Inject
 
-abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-  }
+abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
+  NavigationView.OnNavigationItemSelectedListener {
+
+  @Inject lateinit var alertDialogShower: AlertDialogShower
+  protected lateinit var drawerToggle: ActionBarDrawerToggle
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
@@ -61,14 +71,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  override fun onBackPressed() {
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == ShouldCall) {
-        super.onBackPressed()
-      }
-    }
-  }
-
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
@@ -80,4 +82,47 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     return supportFragmentManager.fragments.filterIsInstance<WebViewProvider>().firstOrNull()
       ?.getCurrentWebView()
   }
+
+  abstract fun setupDrawerToggle(toolbar: Toolbar)
+
+  override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
+      R.id.menu_settings -> openSettingsActivity()
+      R.id.menu_help -> start<HelpActivity>()
+      R.id.menu_history -> openHistoryActivity()
+      R.id.menu_bookmarks_list -> openBookmarksActivity()
+      else -> return false
+    }
+    return true
+  }
+
+  override fun onBackPressed() {
+    if (navigationDrawerIsOpen()) {
+      closeNavigationDrawer()
+      return
+    }
+    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+      if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
+        super.onBackPressed()
+      }
+    }
+  }
+
+  abstract fun navigationDrawerIsOpen(): Boolean
+  abstract fun closeNavigationDrawer()
+
+  private fun openSupportKiwixExternalLink() {
+    openExternalUrl(
+      sharedPreferenceUtil,
+      alertDialogShower,
+      Uri.parse("https://www.kiwix.org/support").browserIntent().putExtra(
+        EXTRA_EXTERNAL_LINK, true
+      )
+    )
+  }
+
+  abstract fun openSettingsActivity()
+  abstract fun openHistoryActivity()
+  abstract fun openBookmarksActivity()
 }
