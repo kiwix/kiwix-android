@@ -3,7 +3,7 @@ package org.kiwix.kiwixmobile.core.page.history
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.page.PageActivity
+import org.kiwix.kiwixmobile.core.page.PageFragment
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
 import org.kiwix.kiwixmobile.core.page.adapter.PageDelegate.HistoryDateDelegate
 import org.kiwix.kiwixmobile.core.page.adapter.PageDelegate.PageItemDelegate
@@ -11,7 +11,7 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 
 const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 
-class HistoryActivity : PageActivity() {
+class HistoryActivity : PageFragment() {
   override val pageViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
 
   override val pageAdapter by lazy {
