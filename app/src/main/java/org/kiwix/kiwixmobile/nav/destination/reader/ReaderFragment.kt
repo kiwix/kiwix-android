@@ -30,6 +30,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
@@ -144,7 +145,7 @@ class ReaderFragment : CoreReaderFragment() {
   private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
     val actionBarHeight = context?.getAttribute(android.R.attr.actionBarSize)
     if (actionBarHeight != null) {
-      setParentFragmentsBottomMargin(
+      setParentFragmentsBottomMarginTo(
         complexToDimensionPixelSize(
           actionBarHeight,
           resources.displayMetrics
@@ -153,9 +154,15 @@ class ReaderFragment : CoreReaderFragment() {
     }
   }
 
-  private fun setParentFragmentsBottomMargin(margin: Int) {
+  private fun setParentFragmentsBottomMarginTo(margin: Int) {
     val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
     params?.bottomMargin = margin
+    parentFragment?.view?.requestLayout()
+  }
+
+  private fun setParentFragmentsTopMarginTo(margin: Int) {
+    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
+    params?.topMargin = margin
     parentFragment?.view?.requestLayout()
   }
 
@@ -163,7 +170,7 @@ class ReaderFragment : CoreReaderFragment() {
     super.onPause()
     // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
     // this resets the margin to zero, before fragment navigation.
-    setParentFragmentsBottomMargin(0)
+    setParentFragmentsBottomMarginTo(0)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -239,6 +246,19 @@ class ReaderFragment : CoreReaderFragment() {
       toolbarContainer, bottomToolbar, requireActivity().nav_view,
       sharedPreferenceUtil
     )
+  }
+
+  override fun openFullScreen() {
+    super.openFullScreen()
+    requireActivity().nav_view.visibility = GONE
+    setParentFragmentsBottomMarginTo(0)
+    getCurrentWebView().translationY = 0f
+  }
+
+  override fun closeFullScreen() {
+    super.closeFullScreen()
+    requireActivity().nav_view.visibility = VISIBLE
+    setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
   private fun getSharedPrefSettings() =
