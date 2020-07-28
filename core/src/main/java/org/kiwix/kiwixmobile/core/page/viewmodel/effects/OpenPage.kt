@@ -22,6 +22,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
@@ -40,6 +41,12 @@ data class OpenPage(
         }
       }
     )
-    activity.finish()
+    if (page.zimFilePath != zimReaderContainer.zimCanonicalPath) {
+      (activity as CoreMainActivity).openPage(page.url, page.zimFilePath)
+    } else {
+      (activity as CoreMainActivity).openPage(page.url)
+    }
+
+    // (activity as CoreMainActivity).navigate(R.id.navigation_re)
   }
 }

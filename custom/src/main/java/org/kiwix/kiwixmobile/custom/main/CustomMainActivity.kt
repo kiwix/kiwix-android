@@ -84,4 +84,8 @@ class CustomMainActivity : CoreMainActivity() {
   override fun openBookmarksActivity() {
     //
   }
+
+  override fun openPage(pageUrl: String, zimFilePath: String?) {
+    //
+  }
 }

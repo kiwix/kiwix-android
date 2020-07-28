@@ -157,4 +157,9 @@ class KiwixMainActivity : CoreMainActivity() {
     navigate(R.id.bookmarksFragment)
     closeNavigationDrawer()
   }
+
+  override fun openPage(pageUrl: String, zimFilePath: String?) {
+    navigate(R.id.navigation_reader)
+    // openZimFile(file)
+  }
 }

@@ -776,7 +776,9 @@ public abstract class CoreReaderFragment extends BaseFragment
     safeDispose();
     super.onDestroy();
     tabCallback = null;
-    hideBackToTopTimer.cancel();
+    if (hideBackToTopTimer != null) {
+      hideBackToTopTimer.cancel();
+    }
     hideBackToTopTimer = null;
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());

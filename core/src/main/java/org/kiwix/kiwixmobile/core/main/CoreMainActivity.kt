@@ -125,4 +125,5 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   abstract fun openSettingsActivity()
   abstract fun openHistoryActivity()
   abstract fun openBookmarksActivity()
+  abstract fun openPage(pageUrl: String, zimFilePath: String? = null)
 }

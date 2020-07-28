@@ -134,7 +134,10 @@ abstract class PageFragment : OnItemClickListener, BaseFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? = inflater.inflate(R.layout.fragment_page, container, false)
+  ): View? {
+    setHasOptionsMenu(true)
+    return inflater.inflate(R.layout.fragment_page, container, false)
+  }
 
   override fun onDestroy() {
     compositeDisposable.clear()
