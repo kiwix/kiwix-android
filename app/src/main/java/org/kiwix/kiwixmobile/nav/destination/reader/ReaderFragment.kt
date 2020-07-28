@@ -34,7 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
+import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.anim
@@ -86,7 +86,7 @@ class ReaderFragment : CoreReaderFragment() {
   }
 
   override fun loadDrawerViews() {
-    drawerLayout = requireActivity().findViewById(R.id.new_navigation_container)
+    drawerLayout = requireActivity().findViewById(R.id.navigation_container)
     tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
   }
 

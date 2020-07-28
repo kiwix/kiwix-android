@@ -29,10 +29,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
-import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
-import kotlinx.android.synthetic.main.activity_new_navigation.drawer_nav_view
-import kotlinx.android.synthetic.main.activity_new_navigation.new_navigation_container
-import kotlinx.android.synthetic.main.activity_new_navigation.reader_drawer_nav_view
+import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
+import kotlinx.android.synthetic.main.activity_kiwix_main.drawer_nav_view
+import kotlinx.android.synthetic.main.activity_kiwix_main.navigation_container
+import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -63,7 +63,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_new_navigation)
+    setContentView(R.layout.activity_kiwix_main)
 
     navController = findNavController(R.id.nav_host_fragment)
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
@@ -72,7 +72,7 @@ class KiwixMainActivity : CoreMainActivity() {
         R.id.navigation_downloads,
         R.id.navigation_library,
         R.id.navigation_reader
-      ), new_navigation_container
+      ), navigation_container
     )
     drawer_nav_view.setupWithNavController(navController)
     drawer_nav_view.setNavigationItemSelectedListener(this)
@@ -106,17 +106,17 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun closeReaderDrawer() {
-    new_navigation_container.closeDrawer(reader_drawer_nav_view)
+    navigation_container.closeDrawer(reader_drawer_nav_view)
   }
 
   private fun readerDrawerIsOpen() =
-    new_navigation_container.isDrawerOpen(reader_drawer_nav_view)
+    navigation_container.isDrawerOpen(reader_drawer_nav_view)
 
   override fun navigationDrawerIsOpen(): Boolean =
-    new_navigation_container.isDrawerOpen(drawer_nav_view)
+    navigation_container.isDrawerOpen(drawer_nav_view)
 
   override fun closeNavigationDrawer() {
-    new_navigation_container.closeDrawer(drawer_nav_view)
+    navigation_container.closeDrawer(drawer_nav_view)
   }
 
   override fun onNewIntent(intent: Intent) {
@@ -129,9 +129,9 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun setupDrawerToggle(toolbar: Toolbar) {
     drawerToggle =
       ActionBarDrawerToggle(
-        this, new_navigation_container, toolbar, R.string.open, R.string.close_all_tabs
+        this, navigation_container, toolbar, R.string.open, R.string.close_all_tabs
       )
-    new_navigation_container.addDrawerListener(drawerToggle)
+    navigation_container.addDrawerListener(drawerToggle)
     drawerToggle.syncState()
   }
 

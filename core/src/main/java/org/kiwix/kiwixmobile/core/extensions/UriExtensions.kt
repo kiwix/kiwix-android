@@ -18,30 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.core.content.ContextCompat.startActivity
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.EXTRA_EXTERNAL_LINK
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-fun Uri.browserIntent(
-  sharedPreferenceUtil: SharedPreferenceUtil,
-  alertDialogShower: AlertDialogShower,
-  context: Context
-) {
-  val intent = Intent(Intent.ACTION_VIEW, this).putExtra(EXTRA_EXTERNAL_LINK, true)
-  if (sharedPreferenceUtil.prefExternalLinkPopup) {
-    alertDialogShower.show(
-      KiwixDialog.ExternalLinkPopup, { startActivity(context, intent, null) },
-      {},
-      {
-        sharedPreferenceUtil.putPrefExternalLinkPopup(false)
-        startActivity(context, intent, null)
-      })
-  } else {
-    startActivity(context, intent, null)
-  }
-}
+fun Uri.browserIntent() = Intent(Intent.ACTION_VIEW, this)

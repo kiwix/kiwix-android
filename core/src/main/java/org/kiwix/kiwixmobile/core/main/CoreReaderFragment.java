@@ -173,7 +173,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
-  @BindView(R2.id.new_navigation_fragment_main_drawer_layout)
+  @BindView(R2.id.navigation_fragment_main_drawer_layout)
   protected DrawerLayout drawerLayout;
   @BindView(R2.id.activity_main_nav_view)
   protected NavigationView tableDrawerRightContainer;

@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.openExternalUrl
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.help.HelpActivity
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.BOOKMARK_CHOSEN_REQUEST
+import org.kiwix.kiwixmobile.core.utils.EXTRA_EXTERNAL_LINK
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
 import javax.inject.Inject
 
@@ -122,8 +124,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   abstract fun closeNavigationDrawer()
 
   private fun openSupportKiwixExternalLink() {
-    Uri.parse("https://www.kiwix.org/support")
-      .browserIntent(sharedPreferenceUtil, alertDialogShower, this)
+    openExternalUrl(
+      sharedPreferenceUtil,
+      alertDialogShower,
+      Uri.parse("https://www.kiwix.org/support").browserIntent().putExtra(
+        EXTRA_EXTERNAL_LINK, true
+      )
+    )
   }
 
   abstract fun openSettingsActivity()
