@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.view.ActionMode
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -46,11 +45,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
   protected lateinit var drawerToggle: ActionBarDrawerToggle
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-  }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)

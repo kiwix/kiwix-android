@@ -21,23 +21,19 @@ package org.kiwix.kiwixmobile.custom.main
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
+import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import org.kiwix.kiwixmobile.custom.lazyView
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 
 const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
-
-  private val drawerNavView: NavigationView by lazyView(R.id.drawer_nav_view)
-  private val drawerContainer: DrawerLayout by lazyView(R.id.custom_drawer_container)
 
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
@@ -58,23 +54,23 @@ class CustomMainActivity : CoreMainActivity() {
     drawerToggle =
       ActionBarDrawerToggle(
         this,
-        drawerContainer,
+        custom_drawer_container,
         toolbar,
         R.string.open,
         R.string.close_all_tabs
       )
-    drawerContainer.addDrawerListener(drawerToggle)
+    custom_drawer_container.addDrawerListener(drawerToggle)
     drawerToggle.syncState()
-    drawerNavView.setNavigationItemSelectedListener(this)
-    drawerNavView.menu.findItem(R.id.menu_host_books)
+    drawer_nav_view.setNavigationItemSelectedListener(this)
+    drawer_nav_view.menu.findItem(R.id.menu_host_books)
       .isVisible = false
   }
 
   override fun navigationDrawerIsOpen(): Boolean =
-    drawerContainer.isDrawerOpen(drawerNavView)
+    custom_drawer_container.isDrawerOpen(drawer_nav_view)
 
   override fun closeNavigationDrawer() {
-    drawerContainer.closeDrawer(drawerNavView)
+    custom_drawer_container.closeDrawer(drawer_nav_view)
   }
 
   override fun openSettingsActivity() {
