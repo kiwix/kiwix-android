@@ -28,7 +28,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
@@ -121,7 +121,7 @@ class MainMenu(
     }
     history.menuItemClickListener {
       activity.startActivityForResult(
-        activity.intent<HistoryActivity>(),
+        activity.intent<HistoryFragment>(),
         REQUEST_HISTORY_ITEM_CHOSEN
       )
     }

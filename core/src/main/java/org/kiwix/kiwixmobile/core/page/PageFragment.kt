@@ -45,13 +45,14 @@ import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
 abstract class PageFragment : OnItemClickListener, BaseFragment() {
-  // val activityComponent by lazy { coreActivityComponent }
   abstract val pageViewModel: PageViewModel<*, *>
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
   abstract val title: String

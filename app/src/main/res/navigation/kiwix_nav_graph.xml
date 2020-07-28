@@ -30,6 +30,12 @@
     <action
       android:id="@+id/action_navigation_reader_to_navigation_library"
       app:destination="@id/navigation_library" />
+    <action
+      android:id="@+id/action_navigation_reader_to_bookmarksFragment2"
+      app:destination="@id/bookmarksFragment" />
+    <action
+      android:id="@+id/action_navigation_reader_to_historyFragment"
+      app:destination="@id/historyFragment" />
   </fragment>
 
   <fragment
@@ -42,10 +48,31 @@
     <action
       android:id="@+id/action_navigation_library_to_navigation_downloads"
       app:destination="@id/navigation_downloads" />
+    <action
+      android:id="@+id/action_navigation_library_to_bookmarksFragment"
+      app:destination="@id/bookmarksFragment" />
+    <action
+      android:id="@+id/action_navigation_library_to_historyFragment"
+      app:destination="@id/historyFragment" />
   </fragment>
 
   <fragment
     android:id="@+id/navigation_downloads"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
-    android:label="Downloads" />
+    android:label="Downloads" >
+    <action
+      android:id="@+id/action_navigation_downloads_to_bookmarksFragment"
+      app:destination="@id/bookmarksFragment" />
+    <action
+      android:id="@+id/action_navigation_downloads_to_historyFragment"
+      app:destination="@id/historyFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/bookmarksFragment"
+    android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
+    android:label="BookmarksFragment" />
+  <fragment
+    android:id="@+id/historyFragment"
+    android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
+    android:label="HistoryFragment" />
 </navigation>

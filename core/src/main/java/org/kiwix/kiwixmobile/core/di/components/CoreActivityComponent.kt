@@ -24,9 +24,9 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
+import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
-import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.search.SearchActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
@@ -40,8 +40,8 @@ interface CoreActivityComponent {
   fun inject(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog)
   fun inject(showDeleteHistoryDialog: ShowDeleteHistoryDialog)
   fun inject(corePrefsFragment: CorePrefsFragment)
-  fun inject(historyActivity: HistoryActivity)
-  fun inject(bookmarksActivity: BookmarksActivity)
+  fun inject(historyActivity: HistoryFragment)
+  fun inject(bookmarksActivity: BookmarksFragment)
   fun inject(addNoteDialog: AddNoteDialog)
 
   @Subcomponent.Builder

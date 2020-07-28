@@ -25,14 +25,14 @@ import androidx.test.rule.GrantPermissionRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment;
 
 @RunWith(AndroidJUnit4.class)
 public class BookmarksActivityTest {
 
   @Rule
-  public ActivityTestRule<BookmarksActivity> mActivityTestRule = new ActivityTestRule<>(
-    BookmarksActivity.class);
+  public ActivityTestRule<BookmarksFragment> mActivityTestRule = new ActivityTestRule<>(
+    BookmarksFragment.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
