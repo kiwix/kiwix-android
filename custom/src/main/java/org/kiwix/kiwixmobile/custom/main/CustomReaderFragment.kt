@@ -169,6 +169,7 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun loadDrawerViews() {
     drawerLayout = requireActivity().findViewById(R.id.custom_drawer_container)
+    tableDrawerRightContainer = requireActivity().findViewById(R.id.activity_main_nav_view)
   }
 
   override fun createMainMenu(menu: Menu?): MainMenu {
