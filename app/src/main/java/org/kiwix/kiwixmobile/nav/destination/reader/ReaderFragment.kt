@@ -36,7 +36,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
+import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.anim
@@ -160,12 +160,6 @@ class ReaderFragment : CoreReaderFragment() {
     parentFragment?.view?.requestLayout()
   }
 
-  private fun setParentFragmentsTopMarginTo(margin: Int) {
-    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
-    params?.topMargin = margin
-    parentFragment?.view?.requestLayout()
-  }
-
   override fun onPause() {
     super.onPause()
     // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
@@ -243,21 +237,21 @@ class ReaderFragment : CoreReaderFragment() {
     return ToolbarScrollingKiwixWebView(
       activity, this, attrs, activityMainRoot as ViewGroup, videoView,
       CoreWebViewClient(this, zimReaderContainer),
-      toolbarContainer, bottomToolbar, requireActivity().nav_view,
+      toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
       sharedPreferenceUtil
     )
   }
 
   override fun openFullScreen() {
     super.openFullScreen()
-    requireActivity().nav_view.visibility = GONE
+    requireActivity().bottom_nav_view.visibility = GONE
     setParentFragmentsBottomMarginTo(0)
     getCurrentWebView().translationY = 0f
   }
 
   override fun closeFullScreen() {
     super.closeFullScreen()
-    requireActivity().nav_view.visibility = VISIBLE
+    requireActivity().bottom_nav_view.visibility = VISIBLE
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 

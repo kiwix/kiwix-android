@@ -24,7 +24,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import kotlinx.android.synthetic.main.activity_new_navigation.nav_view
+import kotlinx.android.synthetic.main.activity_new_navigation.bottom_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -51,7 +51,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
     navController = findNavController(R.id.nav_host_fragment)
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-    nav_view.setupWithNavController(navController)
+    bottom_nav_view.setupWithNavController(navController)
   }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {
