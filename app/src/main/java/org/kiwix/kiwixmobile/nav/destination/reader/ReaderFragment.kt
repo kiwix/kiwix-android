@@ -156,12 +156,6 @@ class ReaderFragment : CoreReaderFragment() {
     parentFragment?.view?.requestLayout()
   }
 
-  private fun setParentFragmentsTopMarginTo(margin: Int) {
-    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
-    params?.topMargin = margin
-    parentFragment?.view?.requestLayout()
-  }
-
   override fun onPause() {
     super.onPause()
     // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
@@ -246,14 +240,14 @@ class ReaderFragment : CoreReaderFragment() {
 
   override fun openFullScreen() {
     super.openFullScreen()
-    requireActivity().nav_view.visibility = GONE
+    requireActivity().bottom_nav_view.visibility = GONE
     setParentFragmentsBottomMarginTo(0)
     getCurrentWebView().translationY = 0f
   }
 
   override fun closeFullScreen() {
     super.closeFullScreen()
-    requireActivity().nav_view.visibility = VISIBLE
+    requireActivity().bottom_nav_view.visibility = VISIBLE
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
