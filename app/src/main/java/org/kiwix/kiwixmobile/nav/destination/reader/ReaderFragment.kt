@@ -69,6 +69,7 @@ private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 class ReaderFragment : CoreReaderFragment() {
   private val args: ReaderFragmentArgs by navArgs()
 
+  //usueless comment, remove if seen
   override fun inject(baseActivity: BaseActivity) {
     (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
