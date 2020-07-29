@@ -33,7 +33,6 @@ import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.BOOKMARK_CHOSEN_REQUEST
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
@@ -44,7 +43,6 @@ const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   NavigationView.OnNavigationItemSelectedListener {
 
-  @Inject lateinit var alertDialogShower: AlertDialogShower
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
   protected lateinit var drawerToggle: ActionBarDrawerToggle
 

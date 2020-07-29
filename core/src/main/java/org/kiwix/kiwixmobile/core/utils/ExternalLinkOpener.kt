@@ -41,8 +41,7 @@ class ExternalLinkOpener @Inject constructor(
         openLink(intent)
       }
     } else {
-      val error = activity.getString(R.string.no_reader_application_installed)
-      activity.toast(error)
+      activity.toast(R.string.no_reader_application_installed)
     }
   }
 
@@ -52,8 +51,10 @@ class ExternalLinkOpener @Inject constructor(
 
   private fun requestOpenLink(intent: Intent) {
     alertDialogShower.show(
-      KiwixDialog.ExternalLinkPopup, { ContextCompat.startActivity(activity, intent, null) },
-      {}, {
+      KiwixDialog.ExternalLinkPopup,
+      { ContextCompat.startActivity(activity, intent, null) },
+      {},
+      {
         sharedPreferenceUtil.putPrefExternalLinkPopup(false)
         ContextCompat.startActivity(activity, intent, null)
       })

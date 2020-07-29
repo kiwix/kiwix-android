@@ -25,8 +25,5 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Clean assemble
-        run: ./gradlew clean assemble
-
       - name: Build all configurations
         run: ./gradlew assemble
