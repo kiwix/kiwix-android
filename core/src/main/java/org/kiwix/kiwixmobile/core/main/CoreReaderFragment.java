@@ -1019,7 +1019,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     return true;
   }
 
-  private void openFullScreen() {
+  protected void openFullScreen() {
     toolbarContainer.setVisibility(View.GONE);
     bottomToolbar.setVisibility(View.GONE);
     exitFullscreenButton.setVisibility(View.VISIBLE);
@@ -1033,7 +1033,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @OnClick(R2.id.activity_main_fullscreen_button)
-  void closeFullScreen() {
+  protected void closeFullScreen() {
     toolbarContainer.setVisibility(View.VISIBLE);
     updateBottomToolbarVisibility();
     exitFullscreenButton.setVisibility(View.GONE);
