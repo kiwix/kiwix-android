@@ -35,6 +35,11 @@ android {
     }
   }
 }
+dependencies {
+  implementation(Libs.navigation_kotlin_fragment)
+  implementation(Libs.navigation_kotlin_ui)
+  androidTestImplementation(Libs.navigation_kotlin_testing)
+}
 
 fun ProductFlavor.createDownloadTask(file: File): Task {
   return tasks.create("download${name.capitalize()}Zim") {

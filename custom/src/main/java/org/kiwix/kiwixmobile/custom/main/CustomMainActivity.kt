@@ -21,6 +21,10 @@ package org.kiwix.kiwixmobile.custom.main
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -35,6 +39,9 @@ const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
 
+  private lateinit var navController: NavController
+  private lateinit var appBarConfiguration: AppBarConfiguration
+
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
   }
@@ -43,11 +50,21 @@ class CustomMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    navController = findNavController(R.id.custom_nav_controller)
+    // appBarConfiguration = AppBarConfiguration(navController.graph)
+    // setupActionBarWithNavController(navController, appBarConfiguration)
+    drawer_nav_view.setupWithNavController(navController)
+
     if (savedInstanceState != null) {
       return
     }
-    supportFragmentManager.beginTransaction()
-      .add(R.id.fragment_containter, CustomReaderFragment()).commit()
+    // supportFragmentManager.beginTransaction()
+    //   .add(R.id.custom_nav_controller, CustomReaderFragment()).commit()
+  }
+
+  override fun onSupportNavigateUp(): Boolean {
+    return navController.navigateUp()
+      || super.onSupportNavigateUp()
   }
 
   override fun setupDrawerToggle(toolbar: Toolbar) {

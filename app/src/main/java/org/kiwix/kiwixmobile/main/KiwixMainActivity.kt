@@ -27,7 +27,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
@@ -48,7 +47,6 @@ import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 
 class KiwixMainActivity : CoreMainActivity() {
   private lateinit var navController: NavController
-  private lateinit var appBarConfiguration: AppBarConfiguration
 
   private var actionMode: ActionMode? = null
 
@@ -69,13 +67,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
     navController = findNavController(R.id.nav_host_fragment)
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-    appBarConfiguration = AppBarConfiguration(
-      setOf(
-        R.id.navigation_downloads,
-        R.id.navigation_library,
-        R.id.navigation_reader
-      ), navigation_container
-    )
     drawer_nav_view.setupWithNavController(navController)
     drawer_nav_view.setNavigationItemSelectedListener(this)
     bottom_nav_view.setupWithNavController(navController)
