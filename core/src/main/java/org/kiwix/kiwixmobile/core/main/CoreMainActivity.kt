@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.BOOKMARK_CHOSEN_REQUEST
+import org.kiwix.kiwixmobile.core.utils.KIWIX_SUPPORT_WEBSITE
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -159,7 +160,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     openExternalUrl(
       sharedPreferenceUtil,
       alertDialogShower,
-      "https://www.kiwix.org/support".toUri().browserIntent()
+      KIWIX_SUPPORT_WEBSITE.toUri().browserIntent()
     )
   }
 

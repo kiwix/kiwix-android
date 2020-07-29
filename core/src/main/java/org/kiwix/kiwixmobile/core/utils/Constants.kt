@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 const val TAG_KIWIX = "kiwix"
 const val CONTACT_EMAIL_ADDRESS = "android@kiwix.org"
+const val KIWIX_SUPPORT_WEBSITE = "https://www.kiwix.org/support"
 
 // Request stuff
 const val REQUEST_STORAGE_PERMISSION = 1
