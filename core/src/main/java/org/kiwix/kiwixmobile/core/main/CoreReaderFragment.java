@@ -131,7 +131,6 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUE
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_ZIM_FILE;
@@ -1049,9 +1048,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
       // Show popup with warning that this url is external and could lead to additional costs
       // or may event not work when the user is offline.
-      if (intent.hasExtra(EXTRA_EXTERNAL_LINK)
-        && intent.getBooleanExtra(EXTRA_EXTERNAL_LINK, false)
-        && isExternalLinkPopup) {
+      if (isExternalLinkPopup) {
         externalLinkPopup(intent);
       } else {
         startActivity(intent);

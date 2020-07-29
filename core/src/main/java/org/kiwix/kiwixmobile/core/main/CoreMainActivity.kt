@@ -18,13 +18,12 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
-import android.net.Uri
 import android.view.ActionMode
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -32,12 +31,12 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.BOOKMARK_CHOSEN_REQUEST
-import org.kiwix.kiwixmobile.core.utils.EXTRA_EXTERNAL_LINK
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -120,9 +119,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   abstract fun navigationDrawerIsOpen(): Boolean
   abstract fun closeNavigationDrawer()
 
-  private fun urlIntentIsValid(intent: Intent) =
-    (intent.hasExtra(EXTRA_EXTERNAL_LINK) && intent.getBooleanExtra(EXTRA_EXTERNAL_LINK, false))
-
   private fun requestOpenLink(
     alertDialogShower: AlertDialogShower,
     intent: Intent,
@@ -144,14 +140,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     if (intent.resolveActivity(packageManager) != null) {
       // Show popup with warning that this url is external and could lead to additional costs
       // or may event not work when the user is offline.
-      if (urlIntentIsValid(intent) && sharedPreferenceUtil.prefExternalLinkPopup) {
+      if (sharedPreferenceUtil.prefExternalLinkPopup) {
         requestOpenLink(alertDialogShower, intent, sharedPreferenceUtil)
       } else {
         openLink(intent)
       }
     } else {
       val error = getString(R.string.no_reader_application_installed)
-      Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+      toast(error)
     }
   }
 
@@ -163,9 +159,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     openExternalUrl(
       sharedPreferenceUtil,
       alertDialogShower,
-      Uri.parse("https://www.kiwix.org/support").browserIntent().putExtra(
-        EXTRA_EXTERNAL_LINK, true
-      )
+      "https://www.kiwix.org/support".toUri().browserIntent()
     )
   }
 
