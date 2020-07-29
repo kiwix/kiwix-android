@@ -275,4 +275,5 @@
   <string name="diagnostic_report_message">저희가 문제를 진단할 수 있도록 다음의 자세한 정보를 모두 보내 주세요</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">글자 크기 조정</string>
+  <string name="search_open_in_new_tab">새 탭으로 열기</string>
 </resources>

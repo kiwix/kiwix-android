@@ -253,6 +253,7 @@
   <string name="status">Durum</string>
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
+  <string name="pref_text_zoom_summary">Metin boyutunu %25\'lik artışlarla değiştirin.</string>
   <string name="tag_pic">Resim</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Yalnızca Metin</string>
@@ -277,4 +278,5 @@
   <string name="diagnostic_report_message">Sorunu teşhis edebilmemiz için lütfen aşağıdaki tüm ayrıntıları gönderin</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Metin Yakınlığı</string>
+  <string name="search_open_in_new_tab">Yeni sekmede aç</string>
 </resources>

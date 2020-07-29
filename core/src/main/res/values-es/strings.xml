@@ -240,7 +240,7 @@
   <string name="tag_text_only">Solo texto</string>
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
-  <string name="go_to_settings">Ve a los ajustes de punto de acceso</string>
+  <string name="go_to_settings">Ir a la configuración del punto de acceso</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
   <string name="device_default">Valor predet. del dispositivo</string>

@@ -255,6 +255,7 @@
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>
+  <string name="pref_text_zoom_summary">Modifier la taille du texte par incrément de 25%.</string>
   <string name="tag_pic">Image</string>
   <string name="tag_vid">Vidéo</string>
   <string name="tag_text_only">Texte seulement</string>

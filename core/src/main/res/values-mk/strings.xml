@@ -242,6 +242,7 @@
   <string name="status">Состојба</string>
   <string name="pref_clear_all_notes_summary">Ги чисти сите белешки на сите статии</string>
   <string name="pref_clear_all_notes_title">Исчисти ги сите белешки</string>
+  <string name="pref_text_zoom_summary">Промени големина на текст во стапки од 25 %.</string>
   <string name="tag_pic">Слика</string>
   <string name="tag_vid">Видео</string>
   <string name="tag_text_only">Само текст</string>
@@ -266,4 +267,5 @@
   <string name="diagnostic_report_message">Испратете ги сите следни поединости за да можеме да го дијагностицираме проблемот</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Приближување на текст</string>
+  <string name="search_open_in_new_tab">Отвори во ново јазиче</string>
 </resources>
