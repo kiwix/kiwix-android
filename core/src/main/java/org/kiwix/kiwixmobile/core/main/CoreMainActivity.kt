@@ -22,7 +22,6 @@ import android.view.ActionMode
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
@@ -31,22 +30,22 @@ import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
-import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity
 import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.BOOKMARK_CHOSEN_REQUEST
-import org.kiwix.kiwixmobile.core.utils.KIWIX_SUPPORT_URL
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.REQUEST_HISTORY_ITEM_CHOSEN
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
+
+const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   NavigationView.OnNavigationItemSelectedListener {
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
+  @Inject lateinit var externalLinkOpener: ExternalLinkOpener
   protected lateinit var drawerToggle: ActionBarDrawerToggle
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -105,6 +104,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     return true
   }
 
+  private fun openSupportKiwixExternalLink() {
+    externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent())
+  }
+
   override fun onBackPressed() {
     if (navigationDrawerIsOpen()) {
       closeNavigationDrawer()
@@ -119,50 +122,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
 
   abstract fun navigationDrawerIsOpen(): Boolean
   abstract fun closeNavigationDrawer()
-
-  private fun requestOpenLink(
-    alertDialogShower: AlertDialogShower,
-    intent: Intent,
-    sharedPreferenceUtil: SharedPreferenceUtil
-  ) {
-    alertDialogShower.show(
-      KiwixDialog.ExternalLinkPopup, { ContextCompat.startActivity(this, intent, null) },
-      {}, {
-        sharedPreferenceUtil.putPrefExternalLinkPopup(false)
-        ContextCompat.startActivity(this, intent, null)
-      })
-  }
-
-  private fun openExternalUrl(
-    sharedPreferenceUtil: SharedPreferenceUtil,
-    alertDialogShower: AlertDialogShower,
-    intent: Intent
-  ) {
-    if (intent.resolveActivity(packageManager) != null) {
-      // Show popup with warning that this url is external and could lead to additional costs
-      // or may event not work when the user is offline.
-      if (sharedPreferenceUtil.prefExternalLinkPopup) {
-        requestOpenLink(alertDialogShower, intent, sharedPreferenceUtil)
-      } else {
-        openLink(intent)
-      }
-    } else {
-      val error = getString(R.string.no_reader_application_installed)
-      toast(error)
-    }
-  }
-
-  private fun openLink(intent: Intent) {
-    startActivity(intent)
-  }
-
-  private fun openSupportKiwixExternalLink() {
-    openExternalUrl(
-      sharedPreferenceUtil,
-      alertDialogShower,
-      KIWIX_SUPPORT_URL.toUri().browserIntent()
-    )
-  }
 
   abstract fun openSettingsActivity()
 

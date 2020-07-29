@@ -113,6 +113,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
@@ -222,6 +223,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected NightModeViewPainter painter;
   @Inject
   MainRepositoryActions repositoryActions;
+  @Inject
+  ExternalLinkOpener externalLinkOpener;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -1045,35 +1048,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void openExternalUrl(Intent intent) {
-    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-      // Show popup with warning that this url is external and could lead to additional costs
-      // or may event not work when the user is offline.
-      if (isExternalLinkPopup) {
-        externalLinkPopup(intent);
-      } else {
-        startActivity(intent);
-      }
-    } else {
-      String error = getString(R.string.no_reader_application_installed);
-      Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
-    }
-  }
-
-  private void externalLinkPopup(Intent intent) {
-    alertDialogShower.show(KiwixDialog.ExternalLinkPopup.INSTANCE,
-      () -> {
-        startActivity(intent);
-        return Unit.INSTANCE;
-      },
-      null,
-      () -> {
-        sharedPreferenceUtil.putPrefExternalLinkPopup(false);
-        isExternalLinkPopup = false;
-
-        startActivity(intent);
-        return Unit.INSTANCE;
-      }
-    );
+    externalLinkOpener.openExternalUrl(intent);
   }
 
   protected void openZimFile(@NonNull File file) {
