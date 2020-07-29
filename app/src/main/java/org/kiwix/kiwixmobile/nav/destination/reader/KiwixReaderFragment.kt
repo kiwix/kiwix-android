@@ -74,15 +74,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     if (arguments != null) {
-      val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
-      if (args.pageUrl.isNotEmpty()) {
-        if (args.zimFileUri.isNotEmpty()) {
-          tryOpeningZimFile(args)
-        }
-        loadUrlWithCurrentWebview(args.pageUrl)
-      } else {
-        manageExternalLaunchAndRestoringViewState(args.zimFileUri)
-      }
+      openPageInBookFromNavigationArguments()
     }
     val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {
@@ -93,6 +85,18 @@ class KiwixReaderFragment : CoreReaderFragment() {
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     activity.setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
+  }
+
+  private fun openPageInBookFromNavigationArguments() {
+    val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
+    if (args.pageUrl.isNotEmpty()) {
+      if (args.zimFileUri.isNotEmpty()) {
+        tryOpeningZimFile(args)
+      }
+      loadUrlWithCurrentWebview(args.pageUrl)
+    } else {
+      manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+    }
   }
 
   private fun tryOpeningZimFile(args: KiwixReaderFragmentArgs) {

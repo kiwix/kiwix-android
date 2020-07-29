@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.custom.main
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -33,6 +34,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.navigate
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 
 const val REQUEST_READ_FOR_OBB = 5002
@@ -51,15 +53,11 @@ class CustomMainActivity : CoreMainActivity() {
     setContentView(R.layout.activity_main)
 
     navController = findNavController(R.id.custom_nav_controller)
-    // appBarConfiguration = AppBarConfiguration(navController.graph)
-    // setupActionBarWithNavController(navController, appBarConfiguration)
     drawer_nav_view.setupWithNavController(navController)
 
     if (savedInstanceState != null) {
       return
     }
-    // supportFragmentManager.beginTransaction()
-    //   .add(R.id.custom_nav_controller, CustomReaderFragment()).commit()
   }
 
   override fun onSupportNavigateUp(): Boolean =
@@ -93,14 +91,17 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun openHistoryActivity() {
-    //
+    navigate(R.id.historyFragment)
+    closeNavigationDrawer()
   }
 
   override fun openBookmarksActivity() {
-    //
+    navigate(R.id.bookmarksFragment)
+    closeNavigationDrawer()
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
-    //
+    val bundle = bundleOf("pageUrl" to pageUrl, "zimFileUri" to zimFilePath)
+    navigate(R.id.customReaderFragment, bundle)
   }
 }

@@ -23,7 +23,12 @@
   <fragment
     android:id="@+id/customReaderFragment"
     android:name="org.kiwix.kiwixmobile.custom.main.CustomReaderFragment"
-    android:label="CustomReaderFragment" />
+    android:label="CustomReaderFragment">
+    <argument
+      android:name="pageUrl"
+      android:defaultValue=""
+      app:argType="string" />
+  </fragment>
   <fragment
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"

@@ -53,6 +53,8 @@ import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import java.util.Locale
 import javax.inject.Inject
 
+const val PAGE_URL_KEY = "pageUrl"
+
 class CustomReaderFragment : CoreReaderFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
@@ -67,7 +69,11 @@ class CustomReaderFragment : CoreReaderFragment() {
     if (enforcedLanguage()) {
       return
     }
+
     openObbOrZim()
+    if (arguments != null) {
+      loadPageFromNavigationArguments()
+    }
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (BuildConfig.DISABLE_SIDEBAR) {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
@@ -75,6 +81,13 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
     (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+  }
+
+  private fun loadPageFromNavigationArguments() {
+    val pageUrl = requireArguments().getString(PAGE_URL_KEY)
+    if (pageUrl?.isNotEmpty() == true) {
+      loadUrlWithCurrentWebview(pageUrl)
+    }
   }
 
   override fun setDrawerLockMode(lockMode: Int) {
