@@ -23,6 +23,7 @@ import android.view.ActionMode
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -43,7 +44,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    supportFragmentManager.fragments.forEach { it.onActivityResult(requestCode, resultCode, data) }
+    activeFragments().forEach { it.onActivityResult(requestCode, resultCode, data) }
   }
 
   override fun onRequestPermissionsResult(
@@ -52,34 +53,34 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    supportFragmentManager.fragments.forEach {
+    activeFragments().forEach {
       it.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
   }
 
   override fun onActionModeStarted(mode: ActionMode) {
     super.onActionModeStarted(mode)
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+    activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().forEach {
       it.onActionModeStarted(mode, this)
     }
   }
 
   override fun onActionModeFinished(mode: ActionMode) {
     super.onActionModeFinished(mode)
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+    activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().forEach {
       it.onActionModeFinished(mode, this)
     }
   }
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+    activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
   }
 
   override fun getCurrentWebView(): KiwixWebView? {
-    return supportFragmentManager.fragments.filterIsInstance<WebViewProvider>().firstOrNull()
+    return activeFragments().filterIsInstance<WebViewProvider>().firstOrNull()
       ?.getCurrentWebView()
   }
 
@@ -102,12 +103,18 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
       closeNavigationDrawer()
       return
     }
-    supportFragmentManager.fragments.filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+    if (activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().isEmpty()) {
+      return super.onBackPressed()
+    }
+    activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().forEach {
       if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
         super.onBackPressed()
       }
     }
   }
+
+  private fun activeFragments(): MutableList<Fragment> =
+    supportFragmentManager.fragments
 
   abstract fun navigationDrawerIsOpen(): Boolean
   abstract fun closeNavigationDrawer()
