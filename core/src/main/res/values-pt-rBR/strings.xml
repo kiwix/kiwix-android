@@ -250,6 +250,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Limpar todas as notas em todos os artigos</string>
   <string name="pref_clear_all_notes_title">Limpar todas as notas</string>
+  <string name="pref_text_zoom_summary">Altere o tamanho do texto com incrementos de 25%.</string>
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Somente texto</string>

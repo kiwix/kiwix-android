@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Authors:
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
 * Amire80
 * Fitoschido
 * Kelson
@@ -45,6 +46,7 @@
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
   <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
   <string name="save">{{Identical|Save}}</string>
+  <string name="pref_text_zoom_summary">Tell the user that this preference changes the text size in 25% increments.</string>
   <string name="go_to_settings">This is used in the start server dialog and leads the user to mobile hotspot settings when pressed</string>
   <string name="no_bookmarks">This means \"there are no bookmarks\"</string>
   <string name="delete_history">Ask if the user wants to delete all history items.</string>

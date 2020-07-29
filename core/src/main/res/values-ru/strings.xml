@@ -259,6 +259,7 @@
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистить все заметки во всех статьях</string>
   <string name="pref_clear_all_notes_title">Очистить все заметки</string>
+  <string name="pref_text_zoom_summary">Изменить размер текста с шагом 25%</string>
   <string name="tag_pic">Изображение</string>
   <string name="tag_vid">Видео</string>
   <string name="tag_text_only">Только текст</string>
@@ -283,5 +284,6 @@
   <string name="diagnostic_report_message">Пожалуйста, пришлите нам всю информацию ниже, чтобы мы смогли обнаружить проблему</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Масштаб Текста</string>
+  <string name="search_open_in_new_tab">Открыть в новой вкладке</string>
   <string name="experimental_navigation">Экспериментальная навигация</string>
 </resources>
