@@ -62,10 +62,8 @@ class CustomMainActivity : CoreMainActivity() {
     //   .add(R.id.custom_nav_controller, CustomReaderFragment()).commit()
   }
 
-  override fun onSupportNavigateUp(): Boolean {
-    return navController.navigateUp()
-      || super.onSupportNavigateUp()
-  }
+  override fun onSupportNavigateUp(): Boolean =
+    navController.navigateUp() || super.onSupportNavigateUp()
 
   override fun setupDrawerToggle(toolbar: Toolbar) {
     drawerToggle =

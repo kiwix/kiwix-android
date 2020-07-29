@@ -21,7 +21,7 @@
   app:startDestination="@id/navigation_library">
   <fragment
     android:id="@+id/navigation_reader"
-    android:name="org.kiwix.kiwixmobile.nav.destination.reader.ReaderFragment"
+    android:name="org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment"
     android:label="Reader">
     <argument
       android:name="zimFileUri"

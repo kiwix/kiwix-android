@@ -35,7 +35,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
@@ -66,8 +65,7 @@ import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
-class ReaderFragment : CoreReaderFragment() {
-  private val args: ReaderFragmentArgs by navArgs()
+class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
     (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
@@ -76,7 +74,7 @@ class ReaderFragment : CoreReaderFragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     if (arguments != null) {
-      val args = ReaderFragmentArgs.fromBundle(requireArguments())
+      val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
       if (args.pageUrl.isNotEmpty()) {
         if (args.zimFileUri.isNotEmpty()) {
           tryOpeningZimFile(args)
@@ -89,7 +87,7 @@ class ReaderFragment : CoreReaderFragment() {
     val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {
       activity.navigate(
-        ReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
+        KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
       )
     }
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -97,7 +95,7 @@ class ReaderFragment : CoreReaderFragment() {
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
-  private fun tryOpeningZimFile(args: ReaderFragmentArgs) {
+  private fun tryOpeningZimFile(args: KiwixReaderFragmentArgs) {
     val file = File(args.zimFileUri)
     if (!file.exists()) {
       Toast.makeText(activity, R.string.error_file_not_found, Toast.LENGTH_LONG)
