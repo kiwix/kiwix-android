@@ -41,6 +41,10 @@ class CustomMainActivity : CoreMainActivity() {
   override val navController: NavController by lazy {
     findNavController(R.id.custom_nav_controller)
   }
+  override val bookmarksFragmentResId: Int
+    get() = R.id.bookmarksFragment
+  override val historyFragmentResId: Int
+    get() = R.id.historyFragment
 
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
@@ -82,16 +86,6 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun openSettingsActivity() {
     startActivityForResult(intent<CustomSettingsActivity>(), REQUEST_PREFERENCES)
-  }
-
-  override fun openHistoryActivity() {
-    navigate(R.id.historyFragment)
-    closeNavigationDrawer()
-  }
-
-  override fun openBookmarksActivity() {
-    navigate(R.id.bookmarksFragment)
-    closeNavigationDrawer()
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {

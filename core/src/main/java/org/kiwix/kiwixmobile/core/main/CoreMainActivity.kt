@@ -46,6 +46,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   protected lateinit var drawerToggle: ActionBarDrawerToggle
 
   abstract val navController: NavController
+  abstract val bookmarksFragmentResId: Int
+  abstract val historyFragmentResId: Int
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
@@ -147,7 +149,16 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   }
 
   abstract fun openSettingsActivity()
-  abstract fun openHistoryActivity()
-  abstract fun openBookmarksActivity()
+
+  private fun openHistoryActivity() {
+    navigate(historyFragmentResId)
+    closeNavigationDrawer()
+  }
+
+  private fun openBookmarksActivity() {
+    navigate(bookmarksFragmentResId)
+    closeNavigationDrawer()
+  }
+
   abstract fun openPage(pageUrl: String, zimFilePath: String = "")
 }

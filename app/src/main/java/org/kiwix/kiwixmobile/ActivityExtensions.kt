@@ -18,11 +18,6 @@
 
 package org.kiwix.kiwixmobile
 
-import android.os.Bundle
-import androidx.annotation.IdRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.di.components.KiwixComponent
 

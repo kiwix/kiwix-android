@@ -21,8 +21,6 @@ package org.kiwix.kiwixmobile.custom
 import android.app.Activity
 import android.view.View
 import androidx.annotation.IdRes
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.custom.di.CustomComponent
 
@@ -40,4 +38,3 @@ internal inline val BaseActivity.customActivityComponent
   get() = customComponent.activityComponentBuilder().activity(this).build()
 
 fun <T : View> Activity.lazyView(@IdRes viewId: Int): Lazy<T> = lazy { findViewById<T>(viewId) }
-

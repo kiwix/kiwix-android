@@ -49,6 +49,10 @@ class KiwixMainActivity : CoreMainActivity() {
 
   val cachedComponent by lazy { kiwixActivityComponent }
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
+  override val bookmarksFragmentResId: Int
+    get() = R.id.bookmarksFragment
+  override val historyFragmentResId: Int
+    get() = R.id.historyFragment
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
@@ -62,7 +66,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_kiwix_main)
-
 
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
     drawer_nav_view.setupWithNavController(navController)
@@ -136,16 +139,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun openSettingsActivity() {
     startActivityForResult(intent<KiwixSettingsActivity>(), REQUEST_PREFERENCES)
-  }
-
-  override fun openHistoryActivity() {
-    navigate(R.id.historyFragment)
-    closeNavigationDrawer()
-  }
-
-  override fun openBookmarksActivity() {
-    navigate(R.id.bookmarksFragment)
-    closeNavigationDrawer()
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
