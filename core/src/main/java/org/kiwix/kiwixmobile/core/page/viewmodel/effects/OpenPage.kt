@@ -34,7 +34,5 @@ data class OpenPage(
     } else {
       (activity as CoreMainActivity).openPage(page.url)
     }
-
-    // (activity as CoreMainActivity).navigate(R.id.navigation_re)
   }
 }

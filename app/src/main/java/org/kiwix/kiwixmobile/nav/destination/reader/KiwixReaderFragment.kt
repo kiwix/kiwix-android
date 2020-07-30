@@ -72,9 +72,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    if (arguments != null) {
-      openPageInBookFromNavigationArguments()
-    }
+
     val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {
       activity.navigate(
@@ -84,6 +82,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     activity.setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
+    if (arguments != null) {
+      openPageInBookFromNavigationArguments()
+    }
   }
 
   private fun openPageInBookFromNavigationArguments() {
@@ -93,6 +94,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         tryOpeningZimFile(args)
       }
       loadUrlWithCurrentWebview(args.pageUrl)
+      requireArguments().clear()
     } else {
       manageExternalLaunchAndRestoringViewState(args.zimFileUri)
     }

@@ -74,9 +74,6 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (drawerToggle.onOptionsItemSelected(item)) {
-      return true
-    }
     return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
   }
 

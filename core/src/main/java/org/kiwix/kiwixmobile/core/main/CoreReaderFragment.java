@@ -224,16 +224,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Inject
   MainRepositoryActions repositoryActions;
 
-  private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
-    @Override
-    public void onTick(long millisUntilFinished) {
-    }
-
-    @Override
-    public void onFinish() {
-      backToTopButton.hide();
-    }
-  };
+  private CountDownTimer hideBackToTopTimer;
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
   private boolean isOpenNewTabInBackground;
@@ -255,32 +246,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
   protected MainMenu mainMenu;
-  private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
-    @Override
-    public int getMovementFlags(@NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder) {
-      return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
-    }
-
-    @Override
-    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-      boolean isCurrentlyActive) {
-      super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-      viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
-    }
-
-    @Override
-    public boolean onMove(@NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-      return false;
-    }
-
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-      closeTab(viewHolder.getAdapterPosition());
-    }
-  };
+  private ItemTouchHelper.Callback tabCallback;
   private Disposable bookmarkingDisposable;
   private boolean isBookmarked;
 
@@ -329,6 +295,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     handleLocaleCheck();
     activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
+    initHideBackToTopTimer();
+    initTabCallback();
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override
@@ -398,6 +366,48 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (savedInstanceState == null) {
       handleIntentActions(getActivity().getIntent());
     }
+  }
+
+  private void initTabCallback() {
+    tabCallback = new ItemTouchHelper.Callback() {
+      @Override
+      public int getMovementFlags(@NonNull RecyclerView recyclerView,
+        @NonNull RecyclerView.ViewHolder viewHolder) {
+        return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
+      }
+
+      @Override
+      public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
+        @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+        boolean isCurrentlyActive) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
+      }
+
+      @Override
+      public boolean onMove(@NonNull RecyclerView recyclerView,
+        @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        return false;
+      }
+
+      @Override
+      public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        closeTab(viewHolder.getAdapterPosition());
+      }
+    };
+  }
+
+  private void initHideBackToTopTimer() {
+    hideBackToTopTimer = new CountDownTimer(1200, 1200) {
+      @Override
+      public void onTick(long millisUntilFinished) {
+      }
+
+      @Override
+      public void onFinish() {
+        backToTopButton.hide();
+      }
+    };
   }
 
   protected abstract void loadDrawerViews();
@@ -779,6 +789,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (hideBackToTopTimer != null) {
       hideBackToTopTimer.cancel();
     }
+    webViewList.clear();
     hideBackToTopTimer = null;
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
@@ -902,7 +913,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull @Override public KiwixWebView getCurrentWebView() {
-    if (webViewList.size() == 0) return newMainPageTab();
+    if (webViewList.size() == 0) {
+      return newMainPageTab();
+    }
     if (currentWebViewIndex < webViewList.size() && currentWebViewIndex > 0) {
       return webViewList.get(currentWebViewIndex);
     } else {
