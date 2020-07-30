@@ -41,16 +41,14 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.navigate
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 
 class KiwixMainActivity : CoreMainActivity() {
-  private lateinit var navController: NavController
-
   private var actionMode: ActionMode? = null
 
   val cachedComponent by lazy { kiwixActivityComponent }
+  override val navController by lazy { findNavController(R.id.nav_host_fragment) }
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
@@ -65,7 +63,7 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_kiwix_main)
 
-    navController = findNavController(R.id.nav_host_fragment)
+
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
     drawer_nav_view.setupWithNavController(navController)
     drawer_nav_view.setNavigationItemSelectedListener(this)
@@ -85,7 +83,7 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun onSupportNavigateUp(): Boolean {
-    val navController = findNavController(R.id.nav_host_fragment)
+    val navController = navController
     return navController.navigateUp() ||
       super.onSupportNavigateUp()
   }

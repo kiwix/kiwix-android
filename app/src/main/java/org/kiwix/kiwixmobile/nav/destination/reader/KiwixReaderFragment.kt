@@ -60,7 +60,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.navigate
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300

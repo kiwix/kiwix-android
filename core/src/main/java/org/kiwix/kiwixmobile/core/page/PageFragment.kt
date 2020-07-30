@@ -41,6 +41,7 @@ import kotlinx.android.synthetic.main.fragment_page.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
@@ -110,7 +111,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    val activity = requireActivity() as AppCompatActivity
+    val activity = requireActivity() as CoreMainActivity
     activity.setSupportActionBar(toolbar)
 
     activity.supportActionBar?.apply {

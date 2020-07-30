@@ -36,15 +36,6 @@ private val BaseActivity.kiwixComponent: KiwixComponent
 
 private fun BaseActivity.kiwixApp() = applicationContext as? KiwixApp ?: application as? KiwixApp
 
-fun AppCompatActivity.navigate(action: NavDirections) =
-  findNavController(R.id.nav_host_fragment).navigate(action)
-
-fun AppCompatActivity.navigate(@IdRes fragmentId: Int) =
-  findNavController(R.id.nav_host_fragment).navigate(fragmentId)
-
-fun AppCompatActivity.navigate(@IdRes fragmentId: Int, bundle: Bundle) =
-  findNavController(R.id.nav_host_fragment).navigate(fragmentId, bundle)
-
 internal inline val BaseActivity.kiwixActivityComponent
   get() = kiwixComponent
     .activityComponentBuilder()

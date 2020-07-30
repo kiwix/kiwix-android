@@ -24,8 +24,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -34,15 +32,15 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import org.kiwix.kiwixmobile.custom.navigate
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 
 const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
 
-  private lateinit var navController: NavController
-  private lateinit var appBarConfiguration: AppBarConfiguration
+  override val navController: NavController by lazy {
+    findNavController(R.id.custom_nav_controller)
+  }
 
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
@@ -51,10 +49,6 @@ class CustomMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-
-    navController = findNavController(R.id.custom_nav_controller)
-    drawer_nav_view.setupWithNavController(navController)
-
     if (savedInstanceState != null) {
       return
     }

@@ -19,11 +19,14 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.ActionMode
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -41,6 +44,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
   protected lateinit var drawerToggle: ActionBarDrawerToggle
+
+  abstract val navController: NavController
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
@@ -127,6 +132,18 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
         EXTRA_EXTERNAL_LINK, true
       )
     )
+  }
+
+  fun navigate(action: NavDirections) {
+    navController.navigate(action)
+  }
+
+  fun navigate(fragmentId: Int) {
+    navController.navigate(fragmentId)
+  }
+
+  fun navigate(fragmentId: Int, bundle: Bundle) {
+    navController.navigate(fragmentId, bundle)
   }
 
   abstract fun openSettingsActivity()
