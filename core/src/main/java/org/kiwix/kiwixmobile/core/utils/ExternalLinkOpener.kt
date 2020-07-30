@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import javax.inject.Inject
@@ -52,11 +51,11 @@ class ExternalLinkOpener @Inject constructor(
   private fun requestOpenLink(intent: Intent) {
     alertDialogShower.show(
       KiwixDialog.ExternalLinkPopup,
-      { ContextCompat.startActivity(activity, intent, null) },
+      { activity.startActivity(intent) },
       {},
       {
         sharedPreferenceUtil.putPrefExternalLinkPopup(false)
-        ContextCompat.startActivity(activity, intent, null)
+        activity.startActivity(intent)
       })
   }
 }
