@@ -23,7 +23,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
-import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
@@ -40,8 +39,7 @@ import javax.inject.Inject
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 
-abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
-  NavigationView.OnNavigationItemSelectedListener {
+abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
   protected lateinit var drawerToggle: ActionBarDrawerToggle
@@ -90,7 +88,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
 
   abstract fun setupDrawerToggle(toolbar: Toolbar)
 
-  override fun onNavigationItemSelected(item: MenuItem): Boolean {
+  open fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
       R.id.menu_settings -> openSettingsActivity()
@@ -99,7 +97,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
       R.id.menu_bookmarks_list -> openBookmarksActivity()
       else -> return false
     }
-    closeNavigationDrawer()
     return true
   }
 

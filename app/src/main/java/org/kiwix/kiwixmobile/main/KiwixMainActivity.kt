@@ -75,7 +75,10 @@ class KiwixMainActivity : CoreMainActivity() {
       ), navigation_container
     )
     drawer_nav_view.setupWithNavController(navController)
-    drawer_nav_view.setNavigationItemSelectedListener(this)
+    drawer_nav_view.setNavigationItemSelectedListener { item ->
+      closeNavigationDrawer()
+      onNavigationItemSelected(item)
+    }
     bottom_nav_view.setupWithNavController(navController)
   }
 

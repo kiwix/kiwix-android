@@ -61,7 +61,10 @@ class CustomMainActivity : CoreMainActivity() {
       )
     custom_drawer_container.addDrawerListener(drawerToggle)
     drawerToggle.syncState()
-    drawer_nav_view.setNavigationItemSelectedListener(this)
+    drawer_nav_view.setNavigationItemSelectedListener { item ->
+      closeNavigationDrawer()
+      onNavigationItemSelected(item)
+    }
     drawer_nav_view.menu.findItem(R.id.menu_host_books)
       .isVisible = false
   }
