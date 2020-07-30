@@ -99,6 +99,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
       R.id.menu_bookmarks_list -> openBookmarksActivity()
       else -> return false
     }
+    closeNavigationDrawer()
     return true
   }
 
