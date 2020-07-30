@@ -105,6 +105,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     return true
   }
 
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (item.itemId == android.R.id.home) {
+      navController.popBackStack()
+      return true
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   override fun onBackPressed() {
     if (navigationDrawerIsOpen()) {
       closeNavigationDrawer()
@@ -140,7 +148,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
     navController.navigate(action)
   }
 
-  fun navigate(fragmentId: Int) {
+  private fun navigate(fragmentId: Int) {
     navController.navigate(fragmentId)
   }
 
