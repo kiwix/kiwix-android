@@ -51,11 +51,11 @@ class ExternalLinkOpener @Inject constructor(
   private fun requestOpenLink(intent: Intent) {
     alertDialogShower.show(
       KiwixDialog.ExternalLinkPopup,
-      { activity.startActivity(intent) },
-      {},
+      { openLink(intent) },
+      { },
       {
         sharedPreferenceUtil.putPrefExternalLinkPopup(false)
-        activity.startActivity(intent)
+        openLink(intent)
       })
   }
 }

@@ -26,7 +26,6 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
-import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
@@ -43,11 +42,10 @@ internal class ExternalLinkOpenerTest {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
     val lambdaSlot = slot<() -> Unit>()
-    val externalLinkOpener =
-      spyk(ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower))
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
     verify {
-      alertDialogShower.show(any(), capture(lambdaSlot), any(), any())
+      alertDialogShower.show(KiwixDialog.ExternalLinkPopup, capture(lambdaSlot), any(), any())
     }
     lambdaSlot.captured.invoke()
     verify { activity.startActivity(intent) }
@@ -58,11 +56,10 @@ internal class ExternalLinkOpenerTest {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
     val lambdaSlot = slot<() -> Unit>()
-    val externalLinkOpener =
-      spyk(ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower))
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
     verify {
-      alertDialogShower.show(any(), any(), capture(lambdaSlot), any())
+      alertDialogShower.show(KiwixDialog.ExternalLinkPopup, any(), capture(lambdaSlot), any())
     }
     lambdaSlot.captured.invoke()
     verify(exactly = 0) { activity.startActivity(intent) }
@@ -73,11 +70,10 @@ internal class ExternalLinkOpenerTest {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
     val lambdaSlot = slot<() -> Unit>()
-    val externalLinkOpener =
-      spyk(ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower))
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
     verify {
-      alertDialogShower.show(any(), any(), any(), capture(lambdaSlot))
+      alertDialogShower.show(KiwixDialog.ExternalLinkPopup, any(), any(), capture(lambdaSlot))
     }
     lambdaSlot.captured.invoke()
     verify {
@@ -90,8 +86,7 @@ internal class ExternalLinkOpenerTest {
   internal fun `intent is started if external link popup preference is false`() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns false
-    val externalLinkOpener =
-      spyk(ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower))
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
     verify { activity.startActivity(intent) }
   }
@@ -99,8 +94,7 @@ internal class ExternalLinkOpenerTest {
   @Test
   internal fun `toast if packageManager is null`() {
     every { intent.resolveActivity(activity.packageManager) } returns null
-    val externalLinkOpener =
-      spyk(ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower))
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     mockkStatic(Toast::class)
     justRun {
       Toast.makeText(activity, R.string.no_reader_application_installed, Toast.LENGTH_LONG).show()
