@@ -163,7 +163,7 @@
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="other_languages">Weitere Sprachen:</string>
   <string name="no_items_msg">Keine Objekte verfügbar</string>
-  <string name="crash_title">Also… Das ist peinlich.</string>
+  <string name="crash_title">Also... Das ist peinlich.</string>
   <string name="crash_description">Es sieht aus, als wären wir abgestürzt.\n\nWürde es Ihnen etwas ausmachen, uns bei der Behebung dieses Problems zu helfen, indem Sie uns die folgenden Informationen schicken?</string>
   <string name="crash_checkbox_language">Ihre Spracheinstellungen</string>
   <string name="crash_checkbox_zimfiles">Eine Liste Ihrer ZIM-Dateien</string>
