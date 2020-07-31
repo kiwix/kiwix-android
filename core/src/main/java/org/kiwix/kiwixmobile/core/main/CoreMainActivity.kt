@@ -118,8 +118,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   abstract fun navigationDrawerIsOpen(): Boolean
   abstract fun closeNavigationDrawer()
-
   abstract fun openSettingsActivity()
+
+  fun disableDrawerIndicator() {
+    drawerToggle.isDrawerIndicatorEnabled = false
+  }
 
   private fun openHistoryActivity() {
     startActivityForResult(intent<HistoryActivity>(), REQUEST_HISTORY_ITEM_CHOSEN)

@@ -533,6 +533,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void showTabSwitcher() {
+    ((CoreMainActivity) requireActivity()).disableDrawerIndicator();
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeAsUpIndicator(
       ContextCompat.getDrawable(getActivity(), R.drawable.ic_round_add_white_36dp));

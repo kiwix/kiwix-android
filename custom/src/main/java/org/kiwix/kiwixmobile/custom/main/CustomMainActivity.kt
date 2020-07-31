@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
@@ -50,12 +51,18 @@ class CustomMainActivity : CoreMainActivity() {
       .add(R.id.fragment_containter, CustomReaderFragment()).commit()
   }
 
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle.isDrawerIndicatorEnabled) {
+      return drawerToggle.onOptionsItemSelected(item)
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   override fun setupDrawerToggle(toolbar: Toolbar) {
     drawerToggle =
       ActionBarDrawerToggle(
         this,
         custom_drawer_container,
-        toolbar,
         R.string.open,
         R.string.close_all_tabs
       )
