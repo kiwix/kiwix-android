@@ -26,8 +26,8 @@ import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.bookmark
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.bookmarkState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.DialogShower
@@ -37,7 +37,7 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedBookmarks
 internal class ShowDeleteBookmarksDialogTest {
   val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
   private val newBookmarksDao = mockk<NewBookmarksDao>()
-  val activity = mockk<BookmarksFragment>()
+  val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
 
   @Test
@@ -53,7 +53,7 @@ internal class ShowDeleteBookmarksDialogTest {
   }
 
   private fun mockkActivityInjection(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog) {
-    every { activity.activityComponent.inject(showDeleteBookmarksDialog) } answers {
+    every { activity.cachedComponent.inject(showDeleteBookmarksDialog) } answers {
       showDeleteBookmarksDialog.dialogShower = dialogShower
       Unit
     }

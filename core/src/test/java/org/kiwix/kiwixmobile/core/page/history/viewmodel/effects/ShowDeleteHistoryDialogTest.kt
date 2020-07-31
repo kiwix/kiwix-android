@@ -8,7 +8,7 @@ import io.reactivex.processors.PublishProcessor
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
-import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
@@ -19,7 +19,7 @@ import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
 internal class ShowDeleteHistoryDialogTest {
   val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
   private val historyDao = mockk<HistoryDao>()
-  val activity = mockk<HistoryFragment>()
+  val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
 
   @Test
@@ -65,7 +65,7 @@ internal class ShowDeleteHistoryDialogTest {
   }
 
   private fun mockkActivityInjection(showDeleteHistoryDialog: ShowDeleteHistoryDialog) {
-    every { activity.activityComponent.inject(showDeleteHistoryDialog) } answers {
+    every { activity.cachedComponent.inject(showDeleteHistoryDialog) } answers {
       showDeleteHistoryDialog.dialogShower = dialogShower
       Unit
     }
