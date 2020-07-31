@@ -29,10 +29,11 @@ data class OpenPage(
   private val zimReaderContainer: ZimReaderContainer
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
+    activity as CoreMainActivity
     if (page.zimFilePath != zimReaderContainer.zimCanonicalPath) {
-      (activity as CoreMainActivity).openPage(page.url, page.zimFilePath!!)
+      activity.openPage(page.url, page.zimFilePath!!)
     } else {
-      (activity as CoreMainActivity).openPage(page.url)
+      activity.openPage(page.url)
     }
   }
 }
