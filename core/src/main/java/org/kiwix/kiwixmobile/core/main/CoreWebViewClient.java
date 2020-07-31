@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.CONTENT_PREFIX;
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.UI_URI;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 
 public class CoreWebViewClient extends WebViewClient {
@@ -83,7 +82,6 @@ public class CoreWebViewClient extends WebViewClient {
 
     // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-    intent.putExtra(EXTRA_EXTERNAL_LINK, true);
     callback.openExternalUrl(intent);
     return true;
   }

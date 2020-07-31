@@ -113,6 +113,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
@@ -131,7 +132,6 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUE
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_EXTERNAL_LINK;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_ZIM_FILE;
@@ -158,7 +158,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
   @BindView(R2.id.toolbar)
-  Toolbar toolbar;
+  protected Toolbar toolbar;
   @BindView(R2.id.activity_main_back_to_top_fab)
   FloatingActionButton backToTopButton;
   @BindView(R2.id.activity_main_button_stop_tts)
@@ -173,10 +173,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected ContentLoadingProgressBar progressBar;
   @BindView(R2.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
-  @BindView(R2.id.new_navigation_fragment_main_drawer_layout)
+  @BindView(R2.id.navigation_fragment_main_drawer_layout)
   protected DrawerLayout drawerLayout;
-  @BindView(R2.id.activity_main_nav_view)
-  NavigationView tableDrawerRightContainer;
+  protected NavigationView tableDrawerRightContainer;
   @BindView(R2.id.activity_main_content_frame)
   protected FrameLayout contentFrame;
   @BindView(R2.id.bottom_toolbar)
@@ -224,6 +223,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected NightModeViewPainter painter;
   @Inject
   MainRepositoryActions repositoryActions;
+  @Inject
+  ExternalLinkOpener externalLinkOpener;
 
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -369,6 +370,8 @@ public abstract class CoreReaderFragment extends BaseFragment
       }
     });
 
+    loadDrawerViews();
+
     tableDrawerRight =
       tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
 
@@ -398,6 +401,8 @@ public abstract class CoreReaderFragment extends BaseFragment
       handleIntentActions(getActivity().getIntent());
     }
   }
+
+  protected abstract void loadDrawerViews();
 
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
@@ -528,6 +533,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void showTabSwitcher() {
+    ((CoreMainActivity) requireActivity()).disableDrawerIndicator();
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeAsUpIndicator(
       ContextCompat.getDrawable(getActivity(), R.drawable.ic_round_add_white_36dp));
@@ -555,12 +561,12 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   protected void hideTabSwitcher() {
     if (actionBar != null) {
-      actionBar.setDisplayHomeAsUpEnabled(false);
       actionBar.setDisplayShowTitleEnabled(true);
+      ((CoreMainActivity) requireActivity()).setupDrawerToggle(toolbar);
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
       closeAllTabsButton.setImageDrawable(
-        ContextCompat.getDrawable(getActivity(), R.drawable.ic_close_black_24dp));
+        ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp));
       if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
         tabSwitcherRoot.setVisibility(View.GONE);
         startAnimation(tabSwitcherRoot, R.anim.slide_up);
@@ -910,15 +916,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     return mainMenu.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
   }
 
-  @Override public void onSupportKiwixMenuClicked() {
-    openExternalUrl(
-      new Intent(
-        Intent.ACTION_VIEW,
-        Uri.parse("https://www.kiwix.org/support")
-      ).putExtra(EXTRA_EXTERNAL_LINK, true)
-    );
-  }
-
   @Override public void onFullscreenMenuClicked() {
     if (isInFullScreenMode()) {
       closeFullScreen();
@@ -945,10 +942,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     openRandomArticle();
   }
 
-  @Override public void onBookmarksMenuClicked() {
-    goToBookmarks();
-  }
-
   @Override public void onAddNoteMenuClicked() {
     if (requestExternalStorageWritePermissionForNotes()) {
       showAddNoteDialog();
@@ -969,10 +962,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else {
       showTabSwitcher();
     }
-  }
-
-  @Override public void onHostBooksMenuClicked() {
-    // to be implemented in subclasses
   }
 
   protected abstract void createNewTab();
@@ -1060,37 +1049,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void openExternalUrl(Intent intent) {
-    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-      // Show popup with warning that this url is external and could lead to additional costs
-      // or may event not work when the user is offline.
-      if (intent.hasExtra(EXTRA_EXTERNAL_LINK)
-        && intent.getBooleanExtra(EXTRA_EXTERNAL_LINK, false)
-        && isExternalLinkPopup) {
-        externalLinkPopup(intent);
-      } else {
-        startActivity(intent);
-      }
-    } else {
-      String error = getString(R.string.no_reader_application_installed);
-      Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
-    }
-  }
-
-  private void externalLinkPopup(Intent intent) {
-    alertDialogShower.show(KiwixDialog.ExternalLinkPopup.INSTANCE,
-      () -> {
-        startActivity(intent);
-        return Unit.INSTANCE;
-      },
-      null,
-      () -> {
-        sharedPreferenceUtil.putPrefExternalLinkPopup(false);
-        isExternalLinkPopup = false;
-
-        startActivity(intent);
-        return Unit.INSTANCE;
-      }
-    );
+    externalLinkOpener.openExternalUrl(intent);
   }
 
   protected void openZimFile(@NonNull File file) {
