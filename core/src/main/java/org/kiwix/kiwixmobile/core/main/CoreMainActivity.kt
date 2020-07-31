@@ -30,6 +30,7 @@ import androidx.navigation.NavDirections
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.help.HelpActivity
@@ -46,6 +47,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val navController: NavController
   abstract val bookmarksFragmentResId: Int
   abstract val historyFragmentResId: Int
+  abstract val cachedComponent: CoreActivityComponent
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)

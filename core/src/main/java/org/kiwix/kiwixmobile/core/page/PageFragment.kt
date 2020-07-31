@@ -97,7 +97,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     search.setOnQueryTextListener(SimpleTextListener {
       pageViewModel.actions.offer(Action.Filter(it))
     })
-    pageViewModel.state.observe(this, Observer(::render))
+    pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

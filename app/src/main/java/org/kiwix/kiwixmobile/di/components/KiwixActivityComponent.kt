@@ -21,6 +21,7 @@ import android.app.Activity
 import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.intro.IntroActivity
 import org.kiwix.kiwixmobile.intro.IntroModule
@@ -46,7 +47,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
     IntroModule::class
   ]
 )
-interface KiwixActivityComponent {
+interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(libraryFragment: LibraryFragment)
   fun inject(zimFileSelectFragment: ZimFileSelectFragment)
   fun inject(readerFragment: KiwixReaderFragment)

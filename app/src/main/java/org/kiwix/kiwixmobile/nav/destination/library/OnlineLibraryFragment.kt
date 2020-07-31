@@ -34,14 +34,14 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
-import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
 class OnlineLibraryFragment : LibraryFragment(), FragmentActivityExtensions {
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.kiwixActivityComponent.inject(this)
+    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

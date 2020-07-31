@@ -33,8 +33,8 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
-import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
@@ -56,7 +56,7 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
   }
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.kiwixActivityComponent.inject(this)
+    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

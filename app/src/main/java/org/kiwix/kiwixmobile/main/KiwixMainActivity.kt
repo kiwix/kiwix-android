@@ -47,12 +47,10 @@ import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
 
-  val cachedComponent by lazy { kiwixActivityComponent }
+  override val cachedComponent by lazy { kiwixActivityComponent }
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
-  override val bookmarksFragmentResId: Int
-    get() = R.id.bookmarksFragment
-  override val historyFragmentResId: Int
-    get() = R.id.historyFragment
+  override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val historyFragmentResId: Int = R.id.historyFragment
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)

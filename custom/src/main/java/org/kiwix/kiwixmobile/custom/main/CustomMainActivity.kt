@@ -42,10 +42,9 @@ class CustomMainActivity : CoreMainActivity() {
   override val navController: NavController by lazy {
     findNavController(R.id.custom_nav_controller)
   }
-  override val bookmarksFragmentResId: Int
-    get() = R.id.bookmarksFragment
-  override val historyFragmentResId: Int
-    get() = R.id.historyFragment
+  override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val historyFragmentResId: Int = R.id.historyFragment
+  override val cachedComponent by lazy { customActivityComponent }
 
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
