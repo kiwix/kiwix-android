@@ -22,20 +22,13 @@ import android.app.Activity
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.EXTRA_EXTERNAL_LINK
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 object ActivityExtensions {
 
@@ -63,45 +56,6 @@ object ActivityExtensions {
         onDestroyAction()
       }
     })
-  }
-
-  fun Activity.openExternalUrl(
-    sharedPreferenceUtil: SharedPreferenceUtil,
-    alertDialogShower: AlertDialogShower,
-    intent: Intent
-  ) {
-    if (intent.resolveActivity(packageManager) != null) {
-      // Show popup with warning that this url is external and could lead to additional costs
-      // or may event not work when the user is offline.
-      if (urlIntentIsValid(intent) && sharedPreferenceUtil.prefExternalLinkPopup) {
-        requestOpenLink(alertDialogShower, intent, sharedPreferenceUtil)
-      } else {
-        openLink(intent)
-      }
-    } else {
-      val error = getString(R.string.no_reader_application_installed)
-      Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-    }
-  }
-
-  private fun Activity.openLink(intent: Intent) {
-    ContextCompat.startActivity(this, intent, null)
-  }
-
-  private fun urlIntentIsValid(intent: Intent) =
-    (intent.hasExtra(EXTRA_EXTERNAL_LINK) && intent.getBooleanExtra(EXTRA_EXTERNAL_LINK, false))
-
-  private fun Activity.requestOpenLink(
-    alertDialogShower: AlertDialogShower,
-    intent: Intent,
-    sharedPreferenceUtil: SharedPreferenceUtil
-  ) {
-    alertDialogShower.show(
-      KiwixDialog.ExternalLinkPopup, { ContextCompat.startActivity(this, intent, null) },
-      {}, {
-        sharedPreferenceUtil.putPrefExternalLinkPopup(false)
-        ContextCompat.startActivity(this, intent, null)
-      })
   }
 
   inline fun <reified T : Activity> Activity.start(

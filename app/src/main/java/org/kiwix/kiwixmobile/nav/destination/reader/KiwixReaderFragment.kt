@@ -35,6 +35,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R

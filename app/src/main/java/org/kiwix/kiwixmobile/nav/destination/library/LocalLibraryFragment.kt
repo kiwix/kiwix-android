@@ -86,12 +86,11 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
     val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
     val activity = activity as CoreMainActivity
+    activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       setTitle(R.string.library)
     }
-    activity.setSupportActionBar(toolbar)
-
     activity.setupDrawerToggle(toolbar)
     return root
   }

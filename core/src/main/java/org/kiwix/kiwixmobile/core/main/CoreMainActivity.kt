@@ -18,31 +18,29 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.ActionMode
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.openExternalUrl
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.EXTRA_EXTERNAL_LINK
+import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import javax.inject.Inject
 
-abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
-  NavigationView.OnNavigationItemSelectedListener {
+const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 
-  @Inject lateinit var alertDialogShower: AlertDialogShower
+abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
+
+  @Inject lateinit var externalLinkOpener: ExternalLinkOpener
   protected lateinit var drawerToggle: ActionBarDrawerToggle
 
   abstract val navController: NavController
@@ -93,7 +91,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
 
   abstract fun setupDrawerToggle(toolbar: Toolbar)
 
-  override fun onNavigationItemSelected(item: MenuItem): Boolean {
+  open fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
       R.id.menu_settings -> openSettingsActivity()
@@ -111,6 +109,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
       return true
     }
     return super.onOptionsItemSelected(item)
+  }
+
+  private fun openSupportKiwixExternalLink() {
+    externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent())
   }
 
   override fun onBackPressed() {
@@ -134,16 +136,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   abstract fun navigationDrawerIsOpen(): Boolean
   abstract fun closeNavigationDrawer()
 
-  private fun openSupportKiwixExternalLink() {
-    openExternalUrl(
-      sharedPreferenceUtil,
-      alertDialogShower,
-      Uri.parse("https://www.kiwix.org/support").browserIntent().putExtra(
-        EXTRA_EXTERNAL_LINK, true
-      )
-    )
-  }
-
   fun navigate(action: NavDirections) {
     navController.navigate(action)
   }
@@ -157,6 +149,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider,
   }
 
   abstract fun openSettingsActivity()
+
+  fun disableDrawerIndicator() {
+    drawerToggle.isDrawerIndicatorEnabled = false
+  }
 
   private fun openHistoryActivity() {
     navigate(historyFragmentResId)

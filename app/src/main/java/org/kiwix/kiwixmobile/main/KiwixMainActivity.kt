@@ -69,11 +69,17 @@ class KiwixMainActivity : CoreMainActivity() {
 
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
     drawer_nav_view.setupWithNavController(navController)
-    drawer_nav_view.setNavigationItemSelectedListener(this)
+    drawer_nav_view.setNavigationItemSelectedListener { item ->
+      closeNavigationDrawer()
+      onNavigationItemSelected(item)
+    }
     bottom_nav_view.setupWithNavController(navController)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle.isDrawerIndicatorEnabled) {
+      return drawerToggle.onOptionsItemSelected(item)
+    }
     return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
   }
 
@@ -83,7 +89,6 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun onSupportNavigateUp(): Boolean {
-    val navController = navController
     return navController.navigateUp() ||
       super.onSupportNavigateUp()
   }
@@ -119,9 +124,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun setupDrawerToggle(toolbar: Toolbar) {
     drawerToggle =
-      ActionBarDrawerToggle(
-        this, navigation_container, toolbar, R.string.open, R.string.close_all_tabs
-      )
+      ActionBarDrawerToggle(this, navigation_container, R.string.open, R.string.close_all_tabs)
     navigation_container.addDrawerListener(drawerToggle)
     drawerToggle.syncState()
   }

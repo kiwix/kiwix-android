@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
@@ -61,18 +62,27 @@ class CustomMainActivity : CoreMainActivity() {
   override fun onSupportNavigateUp(): Boolean =
     navController.navigateUp() || super.onSupportNavigateUp()
 
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle.isDrawerIndicatorEnabled) {
+      return drawerToggle.onOptionsItemSelected(item)
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   override fun setupDrawerToggle(toolbar: Toolbar) {
     drawerToggle =
       ActionBarDrawerToggle(
         this,
         custom_drawer_container,
-        toolbar,
         R.string.open,
         R.string.close_all_tabs
       )
     custom_drawer_container.addDrawerListener(drawerToggle)
     drawerToggle.syncState()
-    drawer_nav_view.setNavigationItemSelectedListener(this)
+    drawer_nav_view.setNavigationItemSelectedListener { item ->
+      closeNavigationDrawer()
+      onNavigationItemSelected(item)
+    }
     drawer_nav_view.menu.findItem(R.id.menu_host_books)
       .isVisible = false
   }

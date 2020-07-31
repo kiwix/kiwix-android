@@ -31,6 +31,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.R;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
@@ -51,25 +54,31 @@ public class MainActivityTest {
 
   @Before
   public void setup() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     clickOn(R.string.reader);
   }
 
   @Test
   public void navigateHelp() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
+    openDrawer();
+    clickOn(R.string.menu_help);
+  }
+
+  private void openDrawer() {
+    onView(withContentDescription("Open")).perform(click());
   }
 
   @Test
   public void navigateSettings() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    openDrawer();
     enterSettings();
   }
 
   @Test
   public void navigateBookmarks() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    openDrawer();
     BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.bookmarks));
   }
 
