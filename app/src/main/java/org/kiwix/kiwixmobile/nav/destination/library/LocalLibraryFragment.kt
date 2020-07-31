@@ -25,6 +25,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import org.kiwix.kiwixmobile.R
@@ -57,6 +58,11 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.kiwixActivityComponent.inject(this)
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    (activity as AppCompatActivity).setSupportActionBar(null)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
