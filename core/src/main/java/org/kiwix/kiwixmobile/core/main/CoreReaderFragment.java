@@ -1024,7 +1024,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     toolbarContainer.setVisibility(View.GONE);
     bottomToolbar.setVisibility(View.GONE);
     exitFullscreenButton.setVisibility(View.VISIBLE);
-    exitFullscreenButton.getBackground().setAlpha(60);
+    exitFullscreenButton.getBackground().setAlpha(153);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
     getActivity().getWindow().addFlags(fullScreenFlag);
@@ -1039,6 +1039,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     toolbarContainer.setVisibility(View.VISIBLE);
     updateBottomToolbarVisibility();
     exitFullscreenButton.setVisibility(View.GONE);
+    exitFullscreenButton.getBackground().setAlpha(255);
 
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
