@@ -31,7 +31,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
@@ -101,8 +100,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun tryOpeningZimFile(args: KiwixReaderFragmentArgs) {
     val file = File(args.zimFileUri)
     if (!file.exists()) {
-      Toast.makeText(activity, R.string.error_file_not_found, Toast.LENGTH_LONG)
-        .show()
+      activity.toast(R.string.error_file_not_found)
       return
     }
     openZimFile(file)
