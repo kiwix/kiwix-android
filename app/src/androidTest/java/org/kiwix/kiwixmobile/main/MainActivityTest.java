@@ -78,6 +78,7 @@ public class MainActivityTest {
   @Test
   public void navigateBookmarks() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    openDrawer();
     BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.bookmarks));
   }
 
