@@ -44,6 +44,9 @@ import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 
+const val PAGE_URL_KEY = "pageUrl"
+const val ZIM_FILE_URI_KEY = "zimFileUri"
+
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
 
@@ -140,7 +143,9 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
-    val bundle = bundleOf("pageUrl" to pageUrl, "zimFileUri" to zimFilePath)
-    navigate(R.id.navigation_reader, bundle)
+    navigate(
+      R.id.navigation_reader,
+      bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
+    )
   }
 }
