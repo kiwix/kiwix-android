@@ -18,9 +18,10 @@
 
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/new_navigation_fragment_main_drawer_layout"
+  android:id="@+id/navigation_fragment_main_drawer_layout"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:fitsSystemWindows="true">
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -30,11 +31,11 @@
 
     <TextView
       android:id="@+id/no_open_book_text"
+      style="@style/no_content_text"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:text="@string/no_open_book"
-      style="@style/no_content_text"
       android:visibility="gone"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
@@ -59,11 +60,4 @@
       android:visibility="invisible" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
-  <com.google.android.material.navigation.NavigationView
-    android:id="@+id/activity_main_nav_view"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="end"
-    android:layout_marginTop="24dp"
-    app:headerLayout="@layout/drawer_right" />
 </androidx.drawerlayout.widget.DrawerLayout>

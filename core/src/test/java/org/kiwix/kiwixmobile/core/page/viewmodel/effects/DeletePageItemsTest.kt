@@ -16,18 +16,18 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
+package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
 
-internal class DeleteHistoryItemsTest {
-  private val historyDao: HistoryDao = mockk()
+internal class DeletePageItemsTest {
+  private val pageDao: PageDao = mockk(relaxed = true)
   val activity: AppCompatActivity = mockk()
   private val item1 = historyItem()
   private val item2 = historyItem()
@@ -35,14 +35,14 @@ internal class DeleteHistoryItemsTest {
   @Test
   fun `delete with selected items only deletes the selected items`() {
     item1.isSelected = true
-    DeleteHistoryItems(historyState(listOf(item1, item2)), historyDao).invokeWith(activity)
-    verify { historyDao.deleteHistory(listOf(item1)) }
+    DeletePageItems(historyState(listOf(item1, item2)), pageDao).invokeWith(activity)
+    verify { pageDao.deletePages(listOf(item1)) }
   }
 
   @Test
   fun `delete with no selected items deletes all items`() {
     item1.isSelected = false
-    DeleteHistoryItems(historyState(listOf(item1, item2)), historyDao).invokeWith(activity)
-    verify { historyDao.deleteHistory(listOf(item1, item2)) }
+    DeletePageItems(historyState(listOf(item1, item2)), pageDao).invokeWith(activity)
+    verify { pageDao.deletePages(listOf(item1, item2)) }
   }
 }

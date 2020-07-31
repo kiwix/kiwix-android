@@ -2,6 +2,7 @@
 <!-- Authors:
 * Abijeet Patro
 * Ark74
+* Carlespera
 * Ejegg
 * Fitoschido
 * Geryescalier
@@ -30,11 +31,25 @@
   <string name="search_label">Buscar</string>
   <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
+  <string name="hotspot_service_channel_name">Canal de servicio de punto de acceso</string>
+  <string name="hotspot_failed_title">Fallo al iniciar el punto de acceso</string>
+  <string name="hotspot_failed_message">Parece que tu punto de acceso está activado. Inhabilita tu punto de acceso WiFi para continuar.</string>
   <string name="go_to_wifi_settings_label">Ir a config. de wifi</string>
+  <string name="no_books_selected_toast_message">Selecciona libros primero</string>
+  <string name="server_failed_message">No se pudo iniciar el servidor. Conecta tu punto de acceso</string>
   <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
   <string name="server_started_successfully_toast_message">Se inició el servidor correctamente.</string>
+  <string name="server_stopped_successfully_toast_message">Servidor detenido con éxito.</string>
+  <string name="hotspot_turned_on">Punto de acceso activado</string>
+  <string name="hotspot_details_message">A continuación se muestran los detalles de tu punto de acceso local:\nSSID : %1$s\nContraseña : %2$s</string>
+  <string name="server_textview_default_message">Selecciona los archivos que quieras alojar en el servidor</string>
   <string name="progress_dialog_starting_server">Iniciando el servidor</string>
+  <string name="hotspot_dialog_title">Instrucciones para alojar libros</string>
+  <string name="wifi_dialog_title">Detectada conexión WiFi</string>
+  <string name="wifi_dialog_body">Para ver libros en otros dispositivos, asegúrate de que todos los dispositivos están conectados a la misma red WiFi.</string>
   <string name="hotspot_dialog_neutral_button">PROCEDER</string>
+  <string name="hotspot_channel_description">Actualizaciones sobre el estado de tu punto de acceso / servidor.</string>
+  <string name="hotspot_notification_content_title">Punto de acceso Kiwix</string>
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Detener servidor</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
@@ -61,8 +76,10 @@
   <string name="pref_clear_all_history_title">Limpiar el historial</string>
   <string name="pref_clear_all_history_summary">Borrar las búsquedas recientes y el historial de pestañas</string>
   <string name="all_history_cleared">Borrado todo el historial</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Borrar todo el historial</string>
+  <string name="pref_clear_all_bookmarks_title">Borrar marcadores</string>
+  <string name="clear_all_history_dialog_title">Borrar todo el historial?</string>
   <string name="share">Compartir</string>
+  <string name="selected_file_cab_app_chooser_title">Compartir archivos ZIM con:</string>
   <string name="delete">Borrar</string>
   <string name="cancel">Cancelar</string>
   <string name="delete_specific_search_toast">Búsquedas recientes eliminadas</string>
@@ -90,6 +107,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En línea</string>
   <string name="library">Biblioteca</string>
+  <string name="delete_zim_body">Los siguientes archivos ZIM serán eliminados:\n\n%s</string>
   <string name="delete_zims_toast">Archivo eliminado</string>
   <string name="no_files_here">Ningún archivo aquí</string>
   <string name="download_no_space">No queda espacio suficiente para la descarga.</string>
@@ -106,11 +124,11 @@
   <string name="help_7">Están disponibles como archivos ZIM. Hay un montón:</string>
   <string name="help_8">• Wikipedia está disponible para cada idioma por separado</string>
   <string name="help_9">• Otros contenidos, como Wikileaks o Wikisource también están disponibles</string>
-  <string name="help_10" fuzzy="true">Puedes descargar los archivos ZIM elegidos en la aplicación, o bien seleccionar cuidadosamente los que quieras, descargarlos desde una computadora y transferirlos a tu tarjeta SD.</string>
+  <string name="help_10">Puedes descargar los archivos ZIM elegidos en la aplicación, o bien seleccionar cuidadosamente los que quieras, descargarlos desde una computadora y transferirlos a tu tarjeta SD.</string>
   <string name="help_11">Los archivos ZIM descargados en la aplicación se encuentran en el directorio de almacenamiento externo, en una carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamiento</string>
   <string name="pref_current_folder">Carpeta actual</string>
-  <string name="delete_zim_failed" fuzzy="true">No podemos eliminar este archivo. Deberías probar con un administrador de archivos.</string>
+  <string name="delete_zim_failed">No podemos eliminar algunos archivos. Deberías probar con un administrador de archivos.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">detener</string>
@@ -122,6 +140,7 @@
   <string name="confirm_stop_download_msg">¿Seguro que quieres detener esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
   <string name="tts_not_enabled">Texto a voz no está activado para este archivo ZIM</string>
+  <string name="search_error">Error inesperado durante la búsqueda. Vuelve a intentarlo</string>
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir descargar contenido mediante la red móvil?</string>
@@ -145,6 +164,7 @@
   <string name="crash_title">Bien, esto es vergonzoso</string>
   <string name="crash_description">Parece que nos colgamos.\n¿Te importaría ayudarnos a solucionar este problema enviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">Tu configuración de idioma</string>
+  <string name="crash_checkbox_zimfiles">Una lista de todos tus archivos ZIM</string>
   <string name="crash_checkbox_exception">Detalles del bloqueo</string>
   <string name="crash_checkbox_logs">Registros de la aplicación</string>
   <string name="crash_checkbox_device">Datos del dispositivo</string>
@@ -157,6 +177,7 @@
   <string name="download_books">Descargar libros</string>
   <string name="humankind_knowledge">El conocimiento de la humanidad en tu teléfono.</string>
   <string name="welcome_to_the_family">Te damos la bienvenida a la familia</string>
+  <string name="save_books_offline">Guardar libros sin conexión</string>
   <string name="download_books_message">Descarga libros y lee en cualquier lugar.</string>
   <string name="unable_to_add_to_bookmarks">No se puede añadir a los marcadores</string>
   <string name="go_to_previous_page">Ir a la página anterior</string>
@@ -165,11 +186,12 @@
   <string name="select_languages">Seleccionar idiomas</string>
   <string name="save_languages">Guardar idiomas</string>
   <string name="send_feedback">Enviar comentarios</string>
+  <string name="expand">Desplegar</string>
   <string name="history">Historial</string>
-  <string name="history_from_current_book" fuzzy="true">Historial del libro actual</string>
+  <string name="history_from_current_book">Ver historial de todos los libros</string>
   <string name="search_history">Historial de búsquedas</string>
   <string name="selected_items">%1$d seleccionado</string>
-  <string name="bookmarks_from_current_book" fuzzy="true">Marcadores del libro actual</string>
+  <string name="bookmarks_from_current_book">Ver marcadores de todos los libros</string>
   <string name="search_bookmarks">Buscar en marcadores</string>
   <string name="switch_tabs">Cambiar de pestaña</string>
   <string name="close_all_tabs">Cerrar todas las pestañas</string>
@@ -179,34 +201,53 @@
   <string name="paused_state">En pausa</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
+  <string name="wiki_article_title">Título del artículo de la Wiki</string>
+  <string name="ext_storage_permission_rationale_add_note">Se necesitan permisos de almacenamiento para notas</string>
   <string name="ext_storage_write_permission_denied_add_note">No se pueden utilizar las notas sin acceso al almacenamiento</string>
   <string name="note_save_unsuccessful">No se pudo guardar la nota</string>
   <string name="note_delete_successful">Se eliminó la nota correctamente</string>
   <string name="note_delete_unsuccessful">No se eliminó la nota</string>
+  <string name="note_save_successful">Nota guardada</string>
   <string name="note_save_error_storage_not_writable">Error al guardar la nota: no se puede escribir en el almacenamiento</string>
   <string name="note_share_error_file_missing">El archivo de la nota no existe</string>
   <string name="note_share_app_chooser_title">Compartir archivo de nota con:</string>
   <string name="confirmation_alert_dialog_message">¿Descartar cambios no guardados?</string>
   <string name="delete_notes_confirmation_msg">¿Quieres eliminar todas las notas?</string>
   <string name="ext_storage_permission_not_granted">Error: no se concedió el permiso de almacenamiento</string>
+  <string name="notes_deletion_successful">Carpeta de notas eliminada</string>
   <string name="notes_deletion_unsuccessful">No se borraron algunos artículos</string>
   <string name="books_count">%d libros</string>
+  <string name="severe_loss_error">¡Error grave! Prueba inhabilitando / rehabilitando WiFi punto a punto</string>
   <string name="connection_failed">Falló la conexión</string>
+  <string name="permission_rationale_location">Se requieren permisos de localización en Android para detectar dispositivos participantes</string>
+  <string name="permission_refused_storage">No se puede acceder a archivos ZIM sin permisos de almacenamiento</string>
+  <string name="request_enable_wifi">Habilita WiFi punto a punt en ajustes del sistema</string>
+  <string name="transfer_to">Transferir archivos a %s?</string>
+  <string name="file_transfer_complete">Transferencia de archivo completada</string>
   <string name="error_during_transfer">Se encontró un error durante la transferencia</string>
   <string name="error_transferring">Error al transferir el archivo %s</string>
+  <string name="your_device">Tu dispositivo:</string>
   <string name="nearby_devices">DISPOSITIVOS CERCANOS</string>
+  <string name="no_devices_found">Dispositivos no detectados. Toca el botón de búsqueda para intentarlo de nuevo.</string>
   <string name="files_for_transfer">ARCHIVOS QUE TRANSFERIR</string>
   <string name="preparing_files">Preparando archivos para su transferencia…</string>
   <string name="performing_handshake">Realizando protocolo de enlace…</string>
   <string name="status">Estado</string>
-  <string name="pref_clear_all_notes_title" fuzzy="true">Borrar todas las notas</string>
+  <string name="pref_clear_all_notes_summary">Elimina todas las notas de todos los artículos</string>
+  <string name="pref_clear_all_notes_title">Borrar todas las notas</string>
+  <string name="tag_pic">Foto</string>
+  <string name="tag_vid">Vídeo</string>
   <string name="tag_text_only">Solo texto</string>
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
-  <string name="go_to_settings" fuzzy="true">Ir a Configuración</string>
+  <string name="go_to_settings">Ir a la configuración del punto de acceso</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
   <string name="device_default">Valor predet. del dispositivo</string>
+  <string name="delete_history">¿Borrar todo el historial?</string>
+  <string name="delete_selected_history">¿Eliminar el historial seleccionado?</string>
+  <string name="delete_bookmarks">¿Borrar todos los marcadores?</string>
+  <string name="delete_selected_bookmarks">¿Eliminar los marcadores seleccionados?</string>
   <string name="on">Activado</string>
   <string name="off">Desactivado</string>
   <string name="auto">Automático</string>
@@ -214,4 +255,6 @@
   <string name="crash_checkbox_file_system">Datos del sistema operativo</string>
   <string name="diagnostic_report">Informe de diagnóstico</string>
   <string name="diagnostic_report_message">Envíe todos los detalles siguientes para que podamos diagnosticar el problema.</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Zoom de texto</string>
 </resources>

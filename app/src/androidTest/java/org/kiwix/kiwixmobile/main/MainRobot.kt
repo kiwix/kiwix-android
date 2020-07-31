@@ -25,6 +25,6 @@ fun main(func: MainRobot.() -> Unit) = MainRobot().apply(func)
 
 class MainRobot : BaseRobot() {
   init {
-    isVisible(ViewId(R.id.new_navigation_container))
+    isVisible(ViewId(R.id.navigation_container))
   }
 }

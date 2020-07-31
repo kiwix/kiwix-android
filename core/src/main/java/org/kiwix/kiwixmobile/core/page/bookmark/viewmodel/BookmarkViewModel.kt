@@ -1,110 +1,72 @@
+/*
+ * Kiwix Android
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
-import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.OpenBookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
-const val TAG: String = "BookmarkViewModel"
-
 class BookmarkViewModel @Inject constructor(
-  private val bookmarksDao: NewBookmarksDao,
-  private val zimReaderContainer: ZimReaderContainer,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
-) : ViewModel() {
+  bookmarksDao: NewBookmarksDao,
+  zimReaderContainer: ZimReaderContainer,
+  sharedPrefs: SharedPreferenceUtil
+) : PageViewModel<BookmarkItem, BookmarkState>(bookmarksDao, sharedPrefs, zimReaderContainer) {
 
-  val state = MutableLiveData<BookmarkState>().apply {
-    value =
-      BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
-  }
-  val effects = PublishProcessor.create<SideEffect<*>>()
-  val actions = PublishProcessor.create<Action>()
-  private val compositeDisposable = CompositeDisposable()
-
-  init {
-    compositeDisposable.addAll(
-      viewStateReducer(),
-      bookmarksDao.bookmarks().subscribeOn(Schedulers.io())
-        .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
+  override fun initialState(): BookmarkState =
+    BookmarkState(
+      emptyList(),
+      sharedPreferenceUtil.showBookmarksAllBooks,
+      zimReaderContainer.id
     )
-  }
 
-  private fun viewStateReducer() =
-    actions.map { reduce(it, state.value!! as BookmarkState) }
-      .subscribe(state::postValue, Throwable::printStackTrace)
-
-  private fun reduce(action: Action, state: BookmarkState): BookmarkState = when (action) {
-    Exit -> finishBookmarkActivity(state)
-    ExitActionModeMenu -> deselectAllBookmarks(state)
-    UserClickedDeleteButton, UserClickedDeleteSelectedPages -> offerShowDeleteDialog(state)
-    is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
-    is OnItemClick -> handleItemClick(state, action)
-    is OnItemLongClick -> handleItemLongClick(state, action)
-    is Filter -> updateBookmarksBasedOnFilter(state, action)
-    is UpdatePages -> updateBookmarks(state, action)
-  }
-
-  private fun updateBookmarksBasedOnFilter(state: BookmarkState, action: Filter) =
+  override fun updatePagesBasedOnFilter(
+    state: BookmarkState,
+    action: Action.Filter
+  ): BookmarkState =
     state.copy(searchTerm = action.searchTerm)
 
-  private fun updateBookmarks(state: BookmarkState, action: UpdatePages): BookmarkState =
+  override fun updatePages(
+    state: BookmarkState,
+    action: Action.UpdatePages
+  ): BookmarkState =
     state.copy(pageItems = action.pages.filterIsInstance<BookmarkItem>())
 
-  private fun offerUpdateToShowAllToggle(
-    action: UserClickedShowAllToggle,
+  override fun offerUpdateToShowAllToggle(
+    action: Action.UserClickedShowAllToggle,
     state: BookmarkState
   ): BookmarkState {
     effects.offer(UpdateAllBookmarksPreference(sharedPreferenceUtil, action.isChecked))
     return state.copy(showAll = action.isChecked)
   }
 
-  private fun handleItemLongClick(state: BookmarkState, action: OnItemLongClick): BookmarkState =
-    state.toggleSelectionOfItem(action.page as BookmarkItem)
-
-  private fun handleItemClick(state: BookmarkState, action: OnItemClick): BookmarkState {
-    if (state.isInSelectionState) {
-      return state.toggleSelectionOfItem(action.page as BookmarkItem)
-    }
-    effects.offer(OpenBookmark(action.page as BookmarkItem, zimReaderContainer))
-    return state
-  }
-
-  private fun offerShowDeleteDialog(state: BookmarkState): BookmarkState {
-    effects.offer(ShowDeleteBookmarksDialog(effects, state, bookmarksDao))
-    return state
-  }
-
-  private fun deselectAllBookmarks(state: BookmarkState): BookmarkState =
+  override fun deselectAllPages(state: BookmarkState): BookmarkState =
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
-  private fun finishBookmarkActivity(state: BookmarkState): BookmarkState {
-    effects.offer(Finish)
-    return state
-  }
+  override fun createDeletePageDialogEffect(state: BookmarkState) =
+    ShowDeleteBookmarksDialog(effects, state, pageDao)
 
-  override fun onCleared() {
-    compositeDisposable.clear()
-    super.onCleared()
-  }
+  override fun copyWithNewItems(state: BookmarkState, newItems: List<BookmarkItem>): BookmarkState =
+    state.copy(pageItems = newItems)
 }

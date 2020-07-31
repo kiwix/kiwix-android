@@ -80,8 +80,6 @@
   <string name="pref_clear_all_history_summary">최근 검색 및 탭 역사 지우기</string>
   <string name="all_history_cleared">모든 역사를 삭제했습니다</string>
   <string name="pref_clear_all_bookmarks_title">북마크 삭제</string>
-  <string name="all_bookmarks_cleared">모든 북마크가 삭제되었습니다</string>
-  <string name="selected_bookmarks_cleared">선택한 북마크들이 삭제되었습니다.</string>
   <string name="clear_all_history_dialog_title">모든 역사를 지우시겠습니까?</string>
   <string name="share">공유</string>
   <string name="selected_file_cab_app_chooser_title">ZIM 파일을 다음과 공유:</string>
@@ -277,4 +275,5 @@
   <string name="diagnostic_report_message">저희가 문제를 진단할 수 있도록 다음의 자세한 정보를 모두 보내 주세요</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">글자 크기 조정</string>
+  <string name="search_open_in_new_tab">새 탭으로 열기</string>
 </resources>

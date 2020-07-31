@@ -38,9 +38,9 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
-import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
@@ -214,7 +214,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private fun layoutServerStarted() {
     serverTextView.text = getString(R.string.server_started_message, ip)
     startServerButton.text = getString(R.string.stop_server_label)
-    startServerButton.setBackgroundColor(resources.getColor(R.color.stopServer))
+    startServerButton.setBackgroundColor(resources.getColor(R.color.stopServerRed))
     bookDelegate.selectionMode = SelectionMode.NORMAL
     booksAdapter.notifyDataSetChanged()
   }
@@ -222,7 +222,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   private fun layoutServerStopped() {
     serverTextView.text = getString(R.string.server_textview_default_message)
     startServerButton.text = getString(R.string.start_server_label)
-    startServerButton.setBackgroundColor(resources.getColor(R.color.greenTick))
+    startServerButton.setBackgroundColor(resources.getColor(R.color.startServerGreen))
     bookDelegate.selectionMode = SelectionMode.MULTI
     booksAdapter.notifyDataSetChanged()
   }

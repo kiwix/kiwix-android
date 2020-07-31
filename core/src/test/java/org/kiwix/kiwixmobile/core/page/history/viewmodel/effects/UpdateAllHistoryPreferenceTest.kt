@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 internal class UpdateAllHistoryPreferenceTest {
   @Test
   fun `UpdateAllHistoryPreference updates shared preferences`() {
-    val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+    val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
     val activity: AppCompatActivity = mockk()
     UpdateAllHistoryPreference(sharedPreferenceUtil, true).invokeWith(activity)
     verify { sharedPreferenceUtil.showHistoryAllBooks = true }

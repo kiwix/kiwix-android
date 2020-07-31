@@ -40,7 +40,6 @@
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
   <string name="all_history_cleared">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>
   <string name="pref_clear_all_bookmarks_title">မှတ်သားထားသော စာအုပ်များကိုဖျက်ပါ</string>
-  <string name="all_bookmarks_cleared">မှတ်သားထားသော စာအုပ်များအားလုံး ရှင်းပြီး</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">မှတ်တမ်းများအားလုံး ရှင်းလင်းရန်</string>
   <string name="share">မျှဝေ</string>
   <string name="delete">ဖျက်</string>

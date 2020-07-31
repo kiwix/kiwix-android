@@ -77,8 +77,6 @@
   <string name="pref_clear_all_history_summary">Limpar pesquisas recentes e histórico de guias</string>
   <string name="all_history_cleared">Eliminando todo o histórico</string>
   <string name="pref_clear_all_bookmarks_title">Limpar marcadores</string>
-  <string name="all_bookmarks_cleared">Todos os marcadores limpos</string>
-  <string name="selected_bookmarks_cleared">Marcadores selecionados limpos</string>
   <string name="clear_all_history_dialog_title">Limpar todo o histórico?</string>
   <string name="share">Compartilhar</string>
   <string name="selected_file_cab_app_chooser_title">Compartilhe arquivos ZIM com:</string>
@@ -250,6 +248,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Limpar todas as notas em todos os artigos</string>
   <string name="pref_clear_all_notes_title">Limpar todas as notas</string>
+  <string name="pref_text_zoom_summary">Altere o tamanho do texto com incrementos de 25%.</string>
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Somente texto</string>
@@ -274,4 +273,5 @@
   <string name="diagnostic_report_message">Envie todos os detalhes a seguir para que possamos diagnosticar o problema</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
+  <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
 </resources>

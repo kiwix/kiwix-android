@@ -34,6 +34,7 @@ const val RESULT_HISTORY_CLEARED = 1239
 
 // Tags
 const val TAG_FILE_SEARCHED = "searchedarticle"
+const val TAG_FILE_SEARCHED_NEW_TAB = "searchedarticlenewtab"
 const val TAG_CURRENT_FILE = "currentzimfile"
 const val TAG_CURRENT_ARTICLES = "currentarticles"
 const val TAG_CURRENT_POSITIONS = "currentpositions"
@@ -45,7 +46,6 @@ const val EXTRA_ZIM_FILE = "zimFile"
 const val EXTRA_CHOSE_X_URL = "choseXURL"
 const val EXTRA_CHOSE_X_TITLE = "choseXTitle"
 const val EXTRA_CHOSE_X_FILE = "choseXFile"
-const val EXTRA_EXTERNAL_LINK = "external_link"
 const val EXTRA_SEARCH = "search"
 const val EXTRA_IS_WIDGET_VOICE = "isWidgetVoice"
 const val HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService"

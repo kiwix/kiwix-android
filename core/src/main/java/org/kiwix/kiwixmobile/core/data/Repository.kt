@@ -99,7 +99,7 @@ class Repository @Inject internal constructor(
     recentSearchDao.deleteSearchHistory()
   }
 
-  override fun getBookmarks() = bookmarksDao.bookmarks()
+  override fun getBookmarks() = bookmarksDao.bookmarks() as Flowable<List<BookmarkItem>>
 
   override fun getCurrentZimBookmarksUrl() =
     Single.just(bookmarksDao.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))

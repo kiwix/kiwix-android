@@ -116,7 +116,7 @@ public class KiwixWebView extends VideoEnabledWebView {
       || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
       MenuItem saveMenu = menu.add(0, 1, 0, getResources().getString(R.string.save_media));
       saveMenu.setOnMenuItemClickListener(item -> {
-        Message msg = new SaveHandler().obtainMessage();
+        Message msg = new SaveHandler(zimReaderContainer).obtainMessage();
         requestFocusNodeHref(msg);
         return true;
       });
@@ -152,6 +152,12 @@ public class KiwixWebView extends VideoEnabledWebView {
   }
 
   static class SaveHandler extends Handler {
+    private final ZimReaderContainer zimReaderContainer;
+
+    public SaveHandler(ZimReaderContainer zimReaderContainer) {
+      this.zimReaderContainer = zimReaderContainer;
+    }
+
     private String getDecodedFileName(String url, String src) {
       String fileName = "";
       if (url != null) {
@@ -164,7 +170,7 @@ public class KiwixWebView extends VideoEnabledWebView {
       return fileName.substring(fileName.indexOf("%3A") + 1);
     }
 
-    @SuppressLint("StringFormatInvalid") @Override
+    @Override
     public void handleMessage(Message msg) {
       String url = (String) msg.getData().get("url");
       String src = (String) msg.getData().get("src");
@@ -192,7 +198,7 @@ public class KiwixWebView extends VideoEnabledWebView {
 
         try {
           InputStream input =
-            CoreApp.getInstance().getContentResolver().openInputStream(source);
+            zimReaderContainer.load(source.toString()).getData();
           OutputStream output = new FileOutputStream(storageDir);
 
           byte[] buffer = new byte[1024];

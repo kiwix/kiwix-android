@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
@@ -226,7 +227,17 @@ internal class SearchViewModelTest {
       actionResultsInEffects(
         OnItemClick(searchListItem),
         SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
-        OpenSearchItem(searchListItem)
+        OpenSearchItem(searchListItem, false)
+      )
+    }
+
+    @Test
+    fun `OnOpenInNewTabClick offers Saves and Opens in new tab`() {
+      val searchListItem = RecentSearchListItem("")
+      actionResultsInEffects(
+        OnOpenInNewTabClick(searchListItem),
+        SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
+        OpenSearchItem(searchListItem, true)
       )
     }
 
