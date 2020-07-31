@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -75,6 +76,17 @@ class KiwixMainActivity : CoreMainActivity() {
       onNavigationItemSelected(item)
     }
     bottom_nav_view.setupWithNavController(navController)
+
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+      if (destination.id == R.id.navigation_downloads ||
+        destination.id == R.id.navigation_library ||
+        destination.id == R.id.navigation_reader
+      ) {
+        bottom_nav_view.visibility = View.VISIBLE
+      } else {
+        bottom_nav_view.visibility = View.GONE
+      }
+    }
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
