@@ -22,9 +22,9 @@ import android.content.Intent
 import android.view.ActionMode
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 
-interface BaseFragmentActivityExtensions {
+interface FragmentActivityExtensions {
   enum class Super {
     ShouldCall,
     ShouldNotCall

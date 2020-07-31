@@ -29,7 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.help.HelpActivity
@@ -65,21 +65,21 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onActionModeStarted(mode: ActionMode) {
     super.onActionModeStarted(mode)
-    activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onActionModeStarted(mode, this)
     }
   }
 
   override fun onActionModeFinished(mode: ActionMode) {
     super.onActionModeFinished(mode)
-    activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onActionModeFinished(mode, this)
     }
   }
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
-    activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().forEach {
+    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
   }
@@ -120,11 +120,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       closeNavigationDrawer()
       return
     }
-    if (activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().isEmpty()) {
+    if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
       return super.onBackPressed()
     }
-    activeFragments().filterIsInstance<BaseFragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == BaseFragmentActivityExtensions.Super.ShouldCall) {
+    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
+      if (it.onBackPressed(this) == FragmentActivityExtensions.Super.ShouldCall) {
         super.onBackPressed()
       }
     }
@@ -140,7 +140,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigate(action)
   }
 
-  private fun navigate(fragmentId: Int) {
+  fun navigate(fragmentId: Int) {
     navController.navigate(fragmentId)
   }
 

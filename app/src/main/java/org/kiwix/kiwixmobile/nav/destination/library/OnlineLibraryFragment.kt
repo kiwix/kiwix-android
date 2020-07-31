@@ -30,7 +30,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -38,7 +38,7 @@ import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
-class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions {
+class OnlineLibraryFragment : LibraryFragment(), FragmentActivityExtensions {
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.kiwixActivityComponent.inject(this)
@@ -57,9 +57,9 @@ class OnlineLibraryFragment : LibraryFragment(), BaseFragmentActivityExtensions 
     zimManageViewModel.requestFiltering.onNext("")
   }
 
-  override fun onBackPressed(activity: AppCompatActivity): BaseFragmentActivityExtensions.Super {
+  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
     getActivity()?.finish()
-    return BaseFragmentActivityExtensions.Super.ShouldNotCall
+    return FragmentActivityExtensions.Super.ShouldNotCall
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

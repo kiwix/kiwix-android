@@ -40,9 +40,9 @@ import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldNotCall
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -82,9 +82,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     activity.setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
-    if (arguments != null) {
-      openPageInBookFromNavigationArguments()
-    }
+    openPageInBookFromNavigationArguments()
   }
 
   private fun openPageInBookFromNavigationArguments() {

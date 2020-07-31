@@ -99,14 +99,13 @@ import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseFragment;
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions;
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment;
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -153,7 +152,7 @@ import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_M
 
 public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
-  MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
+  MainMenu.MenuClickListener, FragmentActivityExtensions, WebViewProvider {
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
@@ -1030,8 +1029,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   @OnLongClick(R2.id.bottom_toolbar_bookmark)
   boolean goToBookmarks() {
     saveTabStates();
-    Intent intentBookmarks = new Intent(getActivity(), BookmarksFragment.class);
-    startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
+    CoreMainActivity parentActivity = (CoreMainActivity) requireActivity();
+    parentActivity.navigate(parentActivity.getBookmarksFragmentResId());
     return true;
   }
 
