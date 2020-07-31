@@ -26,6 +26,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
@@ -133,6 +134,11 @@ class KiwixMainActivity : CoreMainActivity() {
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
+  }
+
+  override fun disableDrawer() {
+    super.disableDrawer()
+    navigation_container.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
   }
 
   override fun setupDrawerToggle(toolbar: Toolbar) {

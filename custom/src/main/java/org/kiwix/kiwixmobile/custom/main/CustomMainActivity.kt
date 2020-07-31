@@ -23,6 +23,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
@@ -84,6 +85,11 @@ class CustomMainActivity : CoreMainActivity() {
     }
     drawer_nav_view.menu.findItem(R.id.menu_host_books)
       .isVisible = false
+  }
+
+  override fun disableDrawer() {
+    super.disableDrawer()
+    custom_drawer_container.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
   }
 
   override fun navigationDrawerIsOpen(): Boolean =

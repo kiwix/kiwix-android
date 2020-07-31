@@ -152,18 +152,23 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   abstract fun openSettingsActivity()
 
-  fun disableDrawerIndicator() {
+  open fun disableDrawer() {
     drawerToggle.isDrawerIndicatorEnabled = false
   }
 
   private fun openHistoryActivity() {
     navigate(historyFragmentResId)
-    closeNavigationDrawer()
+    handleDrawerOnNavigation()
   }
 
   private fun openBookmarksActivity() {
     navigate(bookmarksFragmentResId)
+    handleDrawerOnNavigation()
+  }
+
+  private fun handleDrawerOnNavigation() {
     closeNavigationDrawer()
+    disableDrawer()
   }
 
   abstract fun openPage(pageUrl: String, zimFilePath: String = "")
