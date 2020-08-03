@@ -22,11 +22,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.ActionMode
-import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
@@ -54,6 +51,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override val cachedComponent by lazy { kiwixActivityComponent }
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
+  override val drawerContainerLayout by lazy { navigation_container }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
 
@@ -116,17 +114,17 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun closeReaderDrawer() {
-    navigation_container.closeDrawer(reader_drawer_nav_view)
+    drawerContainerLayout.closeDrawer(reader_drawer_nav_view)
   }
 
   private fun readerDrawerIsOpen() =
-    navigation_container.isDrawerOpen(reader_drawer_nav_view)
+    drawerContainerLayout.isDrawerOpen(reader_drawer_nav_view)
 
   override fun navigationDrawerIsOpen(): Boolean =
-    navigation_container.isDrawerOpen(drawer_nav_view)
+    drawerContainerLayout.isDrawerOpen(drawer_nav_view)
 
   override fun closeNavigationDrawer() {
-    navigation_container.closeDrawer(drawer_nav_view)
+    drawerContainerLayout.closeDrawer(drawer_nav_view)
   }
 
   override fun onNewIntent(intent: Intent) {
@@ -134,18 +132,6 @@ class KiwixMainActivity : CoreMainActivity() {
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
-  }
-
-  override fun disableDrawer() {
-    super.disableDrawer()
-    navigation_container.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-  }
-
-  override fun setupDrawerToggle(toolbar: Toolbar) {
-    drawerToggle =
-      ActionBarDrawerToggle(this, navigation_container, R.string.open, R.string.close_all_tabs)
-    navigation_container.addDrawerListener(drawerToggle)
-    drawerToggle.syncState()
   }
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {

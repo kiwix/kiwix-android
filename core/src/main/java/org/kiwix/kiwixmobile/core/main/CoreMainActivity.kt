@@ -24,6 +24,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -45,6 +46,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   protected lateinit var drawerToggle: ActionBarDrawerToggle
 
   abstract val navController: NavController
+  abstract val drawerContainerLayout: DrawerLayout
   abstract val bookmarksFragmentResId: Int
   abstract val historyFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
@@ -91,7 +93,23 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       ?.getCurrentWebView()
   }
 
-  abstract fun setupDrawerToggle(toolbar: Toolbar)
+  open fun setupDrawerToggle(toolbar: Toolbar) {
+    drawerToggle =
+      ActionBarDrawerToggle(
+        this,
+        drawerContainerLayout,
+        R.string.open_drawer,
+        R.string.close_drawer
+      )
+    drawerContainerLayout.addDrawerListener(drawerToggle)
+    drawerToggle.syncState()
+    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+  }
+
+  open fun disableDrawer() {
+    drawerToggle.isDrawerIndicatorEnabled = false
+    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+  }
 
   open fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
@@ -151,10 +169,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   abstract fun openSettingsActivity()
-
-  open fun disableDrawer() {
-    drawerToggle.isDrawerIndicatorEnabled = false
-  }
 
   private fun openHistoryActivity() {
     navigate(historyFragmentResId)

@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
@@ -43,6 +42,7 @@ class CustomMainActivity : CoreMainActivity() {
   override val navController: NavController by lazy {
     findNavController(R.id.custom_nav_controller)
   }
+  override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
   override val cachedComponent by lazy { customActivityComponent }
@@ -70,15 +70,6 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun setupDrawerToggle(toolbar: Toolbar) {
-    drawerToggle =
-      ActionBarDrawerToggle(
-        this,
-        custom_drawer_container,
-        R.string.open,
-        R.string.close_all_tabs
-      )
-    custom_drawer_container.addDrawerListener(drawerToggle)
-    drawerToggle.syncState()
     drawer_nav_view.setNavigationItemSelectedListener { item ->
       closeNavigationDrawer()
       onNavigationItemSelected(item)
@@ -87,16 +78,11 @@ class CustomMainActivity : CoreMainActivity() {
       .isVisible = false
   }
 
-  override fun disableDrawer() {
-    super.disableDrawer()
-    custom_drawer_container.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-  }
-
   override fun navigationDrawerIsOpen(): Boolean =
-    custom_drawer_container.isDrawerOpen(drawer_nav_view)
+    drawerContainerLayout.isDrawerOpen(drawer_nav_view)
 
   override fun closeNavigationDrawer() {
-    custom_drawer_container.closeDrawer(drawer_nav_view)
+    drawerContainerLayout.closeDrawer(drawer_nav_view)
   }
 
   override fun openSettingsActivity() {
