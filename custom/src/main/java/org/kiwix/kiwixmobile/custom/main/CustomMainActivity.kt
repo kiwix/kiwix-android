@@ -70,6 +70,7 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun setupDrawerToggle(toolbar: Toolbar) {
+    super.setupDrawerToggle(toolbar)
     drawer_nav_view.setNavigationItemSelectedListener { item ->
       closeNavigationDrawer()
       onNavigationItemSelected(item)
