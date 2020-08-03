@@ -5,6 +5,7 @@
 * Grondin
 * Joan manel
 * Macondo
+* Mguix
 -->
 <resources>
   <string name="menu_help">Ajuda</string>
@@ -18,8 +19,8 @@
   <string name="menu_read_aloud">Llegir en veu alta</string>
   <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
   <string name="save_media">Anomena i desa el fitxer…</string>
-  <string name="save_media_error" fuzzy="true">S\'ha produït un error en mirar de desar el fitxer!</string>
-  <string name="save_media_saved" fuzzy="true">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
+  <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
+  <string name="save_media_saved">Multimèdia desat com %s en Android/media/org.kiwix…/</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
@@ -60,22 +61,22 @@
   <string name="new_tab_snack_bar">Article obert en una pestanya nova</string>
   <string name="local_zims">Dispositiu</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body" fuzzy="true">Voleu suprimir %s?</string>
+  <string name="delete_zim_body">Els següents arxius ZIM seran eliminats:\n\n%s</string>
   <string name="delete_zims_toast">Fitxer esborrat</string>
   <string name="no_files_here">Cap fitxer aquí</string>
   <string name="download_no_space">L’espai és insuficient per a la baixada.</string>
   <string name="no_network_connection">Cap connexió de xarxa</string>
   <string name="help_2">Què fa Kiwix?</string>
   <string name="help_3">Kiwix és un lector de contingut sense connexió. Actua molt semblant a un navegador però en comptes d\'accedir a pàgines web en línia, llegeix el contingut d\'un fitxer en format ZIM.</string>
-  <string name="help_4" fuzzy="true">Si bé Kiwix es va dissenyar originalment per a proporcionar una Wikipedia sense connexió, també pot llegir altres continguts.</string>
+  <string name="help_4">Si bé Kiwix es va dissenyar originalment per a proporcionar una Wikipedia sense connexió, també pot llegir altres continguts.</string>
   <string name="help_5">On està el contingut?</string>
   <string name="help_6">El nostre contingut està allotjat en el lloc web de Kiwix</string>
   <string name="help_7">Estan disponibles com a fitxers ZIM. Hi ha molts d\'ells:</string>
   <string name="help_8">• La Viquipèdia està disponible per separat per a cada idioma</string>
   <string name="help_9">• Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
-  <string name="help_10" fuzzy="true">Pots descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulguis, descarregar-los des d\'un ordinador i transferir-los a la targeta SD.</string>
+  <string name="help_10">Podeu descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulgueu, descarregar-los des d\'un ordinador i transferir-los a la vostra targeta SD.</string>
   <string name="help_11">Els fitxers ZIM descarregats en l\'aplicació es troben al directori d\'emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
-  <string name="delete_zim_failed" fuzzy="true">No podem eliminar aquest fitxer. Hauries de provar amb un administrador de fitxers.</string>
+  <string name="delete_zim_failed">No podem eliminar alguns arxius. Hauries de provar amb un administrador d\'arxius</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Sí</string>
@@ -84,7 +85,7 @@
   <string name="confirm_stop_download_msg">Segur que vols aturar aquesta descàrrega?</string>
   <string name="download_change_storage">Selector de dispositiu d\'emmagatzematge</string>
   <string name="next">Següent</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Accés a enllaç extern</string>
+  <string name="external_link_popup_dialog_title">Accés a enllaç extern!</string>
   <string name="external_link_popup_dialog_message">Estàs entrant a un enllaç extern. Això podria ocasionar-te costos addicionals per transferència de dades o, senzillament, no funcionarà si no tens connexió. Vols continuar?</string>
   <string name="do_not_ask_anymore">No tornar a preguntar</string>
   <string name="your_languages">Idiomes seleccionats:</string>
