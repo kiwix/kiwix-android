@@ -138,6 +138,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     savedInstanceState: Bundle?
   ): View? {
     setHasOptionsMenu(true)
+    (activity as AppCompatActivity).setSupportActionBar(null)
     return inflater.inflate(R.layout.fragment_page, container, false)
   }
 

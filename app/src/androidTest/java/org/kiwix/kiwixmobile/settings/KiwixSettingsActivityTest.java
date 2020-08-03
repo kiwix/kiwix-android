@@ -40,8 +40,8 @@ import static org.hamcrest.Matchers.is;
 
 public class KiwixSettingsActivityTest {
   @Rule
-  public ActivityTestRule<KiwixSettingsActivity> activityTestRule =
-    new ActivityTestRule<>(KiwixSettingsActivity.class);
+  public ActivityTestRule<KiwixSettingsFragment> activityTestRule =
+    new ActivityTestRule<>(KiwixSettingsFragment.class);
 
   @Test
   public void testToggle() {

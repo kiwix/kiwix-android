@@ -168,7 +168,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigate(fragmentId, bundle)
   }
 
-  abstract fun openSettingsActivity()
+  open fun openSettingsActivity() {
+    handleDrawerOnNavigation()
+  }
 
   private fun openHistoryActivity() {
     navigate(historyFragmentResId)

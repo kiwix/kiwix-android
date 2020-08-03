@@ -28,12 +28,9 @@ import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 
 const val REQUEST_READ_FOR_OBB = 5002
 
@@ -87,7 +84,8 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun openSettingsActivity() {
-    startActivityForResult(intent<CustomSettingsActivity>(), REQUEST_PREFERENCES)
+    super.openSettingsActivity()
+    navigate(R.id.customSettingsFragment)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {

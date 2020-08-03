@@ -35,12 +35,9 @@ import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 
 const val PAGE_URL_KEY = "pageUrl"
@@ -143,7 +140,8 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun openSettingsActivity() {
-    startActivityForResult(intent<KiwixSettingsActivity>(), REQUEST_PREFERENCES)
+    super.openSettingsActivity()
+    navigate(R.id.kiwixSettingsFragment)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {

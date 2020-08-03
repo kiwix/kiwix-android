@@ -137,12 +137,6 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-    <activity android:name=".settings.KiwixSettingsActivity">
-      <intent-filter>
-        <action android:name="org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity" />
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
-    </activity>
     <activity android:name=".language.LanguageActivity" />
     <activity
       android:name=".local_file_transfer.LocalFileTransferActivity"
