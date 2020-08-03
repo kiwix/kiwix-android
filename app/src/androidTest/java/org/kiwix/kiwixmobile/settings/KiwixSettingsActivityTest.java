@@ -18,15 +18,20 @@
 
 package org.kiwix.kiwixmobile.settings;
 
+import android.Manifest;
 import android.view.View;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import org.hamcrest.Matcher;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -37,11 +42,27 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
+import static org.kiwix.kiwixmobile.utils.StandardActions.openDrawer;
 
 public class KiwixSettingsActivityTest {
   @Rule
-  public ActivityTestRule<KiwixSettingsFragment> activityTestRule =
-    new ActivityTestRule<>(KiwixSettingsFragment.class);
+  public ActivityTestRule<KiwixMainActivity> activityTestRule =
+    new ActivityTestRule<>(KiwixMainActivity.class);
+  @Rule
+  public GrantPermissionRule readPermissionRule =
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule =
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+  @Before
+  public void setup() {
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    openDrawer();
+    enterSettings();
+  }
 
   @Test
   public void testToggle() {
