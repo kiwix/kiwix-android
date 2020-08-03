@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.settings;
 import android.Manifest;
 import android.view.View;
 import androidx.annotation.StringRes;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
@@ -37,16 +36,15 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.is;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 import static org.kiwix.kiwixmobile.utils.StandardActions.openDrawer;
 
-public class KiwixSettingsActivityTest {
+public class KiwixSettingsFragmentTest {
   @Rule
   public ActivityTestRule<KiwixMainActivity> activityTestRule =
     new ActivityTestRule<>(KiwixMainActivity.class);
@@ -77,7 +75,7 @@ public class KiwixSettingsActivityTest {
     for (int i = 0; i < stringIds.length; i++) {
       matchers[i] = withText(stringIds[i]);
     }
-    onView(withClassName(is(RecyclerView.class.getName())))
+    onView(withId(R.id.recycler_view))
       .perform(actionOnItem(hasDescendant(anyOf(matchers)), click()));
   }
 
