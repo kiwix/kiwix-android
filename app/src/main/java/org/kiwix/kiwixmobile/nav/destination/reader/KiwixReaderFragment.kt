@@ -91,10 +91,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
         tryOpeningZimFile(args)
       }
       loadUrlWithCurrentWebview(args.pageUrl)
-      requireArguments().clear()
     } else {
       manageExternalLaunchAndRestoringViewState(args.zimFileUri)
     }
+    requireArguments().clear()
   }
 
   private fun tryOpeningZimFile(args: KiwixReaderFragmentArgs) {

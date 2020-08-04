@@ -23,7 +23,6 @@ import android.view.View;
 import androidx.annotation.StringRes;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
-import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import org.hamcrest.Matcher;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -40,7 +39,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static org.hamcrest.Matchers.anyOf;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 import static org.kiwix.kiwixmobile.utils.StandardActions.openDrawer;
 
@@ -57,7 +55,6 @@ public class KiwixSettingsFragmentTest {
 
   @Before
   public void setup() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     openDrawer();
     enterSettings();
   }
