@@ -13,11 +13,7 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 
 class HistoryFragment : PageFragment() {
-  override val pageViewModel by lazy {
-    viewModel<HistoryViewModel>(
-      viewModelFactory
-    )
-  }
+  override val pageViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
 
   override val pageAdapter by lazy {
     PageAdapter(PageItemDelegate(this), HistoryDateDelegate())

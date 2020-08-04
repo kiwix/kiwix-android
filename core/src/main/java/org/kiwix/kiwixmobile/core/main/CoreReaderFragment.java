@@ -1602,7 +1602,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewProgressChanged(int progress) {
-    if (checkNull(progressBar)) {
+    if (checkNull(progressBar) && isAdded()) {
       progressBar.show();
       progressBar.setProgress(progress);
       if (progress == 100) {

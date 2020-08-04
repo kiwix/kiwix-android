@@ -114,7 +114,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     super.onActivityCreated(savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
     activity.setSupportActionBar(toolbar)
-
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       title = title
