@@ -139,8 +139,8 @@ class KiwixMainActivity : CoreMainActivity() {
     return true
   }
 
-  override fun openSettingsActivity() {
-    super.openSettingsActivity()
+  override fun openSettings() {
+    super.openSettings()
     navigate(R.id.kiwixSettingsFragment)
   }
 

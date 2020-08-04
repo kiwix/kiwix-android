@@ -103,5 +103,5 @@ interface CoreComponent {
   fun inject(searchActivity: SearchActivity)
 
   fun inject(helpActivity: HelpActivity)
-  fun inject(settingsActivity: CoreSettingsFragment)
+  fun inject(settingsFragment: CoreSettingsFragment)
 }

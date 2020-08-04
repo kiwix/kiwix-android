@@ -83,8 +83,8 @@ class CustomMainActivity : CoreMainActivity() {
     drawerContainerLayout.closeDrawer(drawer_nav_view)
   }
 
-  override fun openSettingsActivity() {
-    super.openSettingsActivity()
+  override fun openSettings() {
+    super.openSettings()
     navigate(R.id.customSettingsFragment)
   }
 

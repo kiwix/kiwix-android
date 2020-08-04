@@ -114,7 +114,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   open fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
-      R.id.menu_settings -> openSettingsActivity()
+      R.id.menu_settings -> openSettings()
       R.id.menu_help -> start<HelpActivity>()
       R.id.menu_history -> openHistoryActivity()
       R.id.menu_bookmarks_list -> openBookmarksActivity()
@@ -168,7 +168,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigate(fragmentId, bundle)
   }
 
-  open fun openSettingsActivity() {
+  open fun openSettings() {
     handleDrawerOnNavigation()
   }
 

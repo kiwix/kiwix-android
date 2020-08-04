@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.custom.splash.CustomSplashActivity
 @Subcomponent(modules = [CustomActivityModule::class])
 interface CustomActivityComponent : CoreActivityComponent {
   fun inject(customMainActivity: CustomMainActivity)
-  fun inject(customSettingsActivity: CustomSettingsFragment)
+  fun inject(customSettingsFragment: CustomSettingsFragment)
   fun inject(customDownloadActivity: CustomDownloadActivity)
   fun inject(customSplashActivity: CustomSplashActivity)
   fun inject(customReaderFragment: CustomReaderFragment)
