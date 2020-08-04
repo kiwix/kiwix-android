@@ -28,6 +28,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
+import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -47,6 +48,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
+  abstract val drawerNavView: NavigationView
   abstract val bookmarksFragmentResId: Int
   abstract val historyFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
@@ -123,6 +125,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     return true
   }
 
+  private fun navigationDrawerIsOpen(): Boolean =
+    drawerContainerLayout.isDrawerOpen(drawerNavView)
+
+  fun closeNavigationDrawer() {
+    drawerContainerLayout.closeDrawer(drawerNavView)
+  }
+
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == android.R.id.home) {
       navController.popBackStack()
@@ -152,9 +161,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   private fun activeFragments(): MutableList<Fragment> =
     supportFragmentManager.fragments
-
-  abstract fun navigationDrawerIsOpen(): Boolean
-  abstract fun closeNavigationDrawer()
 
   fun navigate(action: NavDirections) {
     navController.navigate(action)

@@ -48,7 +48,8 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override val cachedComponent by lazy { kiwixActivityComponent }
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
-  override val drawerContainerLayout by lazy { navigation_container }
+  override val drawerContainerLayout by lazy { navigation_container!! }
+  override val drawerNavView by lazy { drawer_nav_view!! }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
 
@@ -116,13 +117,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun readerDrawerIsOpen() =
     drawerContainerLayout.isDrawerOpen(reader_drawer_nav_view)
-
-  override fun navigationDrawerIsOpen(): Boolean =
-    drawerContainerLayout.isDrawerOpen(drawer_nav_view)
-
-  override fun closeNavigationDrawer() {
-    drawerContainerLayout.closeDrawer(drawer_nav_view)
-  }
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
