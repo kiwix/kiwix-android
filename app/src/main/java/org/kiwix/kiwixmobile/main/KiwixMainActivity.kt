@@ -36,12 +36,10 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
-import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 
 const val PAGE_URL_KEY = "pageUrl"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
@@ -136,10 +134,15 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.menu_host_books -> start<ZimHostActivity>()
+      R.id.menu_host_books -> openZimHostFragment()
       else -> return super.onNavigationItemSelected(item)
     }
     return true
+  }
+
+  private fun openZimHostFragment() {
+    disableDrawer()
+    navigate(R.id.zimHostFragment)
   }
 
   override fun openSettingsActivity() {

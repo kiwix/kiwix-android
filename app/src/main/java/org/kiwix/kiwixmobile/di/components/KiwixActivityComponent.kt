@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
-import org.kiwix.kiwixmobile.webserver.ZimHostActivity
+import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
@@ -56,7 +56,7 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(localFileTransferActivity: LocalFileTransferActivity)
   fun inject(languageActivity: LanguageActivity)
   fun inject(kiwixSettingsActivity: KiwixSettingsActivity)
-  fun inject(zimHostActivity: ZimHostActivity)
+  fun inject(zimHostActivity: ZimHostFragment)
   fun inject(introActivity: IntroActivity)
   fun inject(kiwixSplashActivity: KiwixSplashActivity)
   fun inject(kiwixMainActivity: KiwixMainActivity)
