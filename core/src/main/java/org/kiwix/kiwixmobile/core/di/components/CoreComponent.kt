@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
-import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -102,6 +101,5 @@ interface CoreComponent {
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchActivity: SearchActivity)
 
-  fun inject(helpActivity: HelpActivity)
   fun inject(settingsActivity: CoreSettingsActivity)
 }

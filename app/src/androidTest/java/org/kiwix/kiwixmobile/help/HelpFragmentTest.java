@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,32 +16,29 @@
  *
  */
 
-package org.kiwix.kiwixmobile.main;
+package org.kiwix.kiwixmobile.help;
 
 import android.Manifest;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
-import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
-import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class HelpFragmentTest {
+
   @Rule
   public ActivityTestRule<KiwixMainActivity> activityTestRule =
     new ActivityTestRule<>(KiwixMainActivity.class);
@@ -54,43 +51,23 @@ public class MainActivityTest {
 
   @Before
   public void setup() {
-    clickOn(R.string.reader);
-  }
-
-  @Test
-  public void navigateHelp() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     openDrawer();
     clickOn(R.string.menu_help);
   }
 
+  @Test
+  public void verifyHelpActivity() {
+    HelpRobot helpRobot = new HelpRobot();
+    helpRobot.clickOnWhatDoesKiwixDo();
+    helpRobot.assertWhatDoesKiwixDoIsExpanded();
+    helpRobot.clickOnWhatDoesKiwixDo();
+    helpRobot.clickOnWhereIsContent();
+    helpRobot.assertWhereIsContentIsExpanded();
+    helpRobot.clickOnWhereIsContent();
+    helpRobot.clickOnSendFeedback();
+  }
+
   private void openDrawer() {
     onView(withContentDescription(R.string.open_drawer)).perform(click());
-  }
-
-  @Test
-  public void navigateSettings() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    openDrawer();
-    enterSettings();
-  }
-
-  @Test
-  public void navigateBookmarks() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    openDrawer();
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.bookmarks));
-  }
-
-  @Test
-  public void navigateDeviceContent() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.library);
-  }
-
-  @Test
-  public void navigateOnlineContent() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.download);
   }
 }

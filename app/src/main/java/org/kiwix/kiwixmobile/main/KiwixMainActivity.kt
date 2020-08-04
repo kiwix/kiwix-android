@@ -57,6 +57,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val helpFragmentResId: Int = R.id.helpFragment
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
