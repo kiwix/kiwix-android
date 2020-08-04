@@ -250,6 +250,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private ItemTouchHelper.Callback tabCallback;
   private Disposable bookmarkingDisposable;
   private boolean isBookmarked;
+  private AttributeSet attrs;
 
   @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
     @NotNull AppCompatActivity activity) {
@@ -298,6 +299,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     actionBar = activity.getSupportActionBar();
     initHideBackToTopTimer();
     initTabCallback();
+    attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override
@@ -811,7 +813,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private KiwixWebView initalizeWebView(String url) {
-    AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
     return webView;
