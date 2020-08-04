@@ -238,6 +238,11 @@ class ReaderFragment : CoreReaderFragment() {
     )
   }
 
+  override fun onDestroyView() {
+    super.onDestroyView()
+    (activity as AppCompatActivity).setSupportActionBar(null)
+  }
+
   override fun openFullScreen() {
     super.openFullScreen()
     requireActivity().bottom_nav_view.visibility = GONE
