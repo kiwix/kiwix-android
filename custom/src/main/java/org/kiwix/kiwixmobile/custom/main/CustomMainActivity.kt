@@ -25,6 +25,7 @@ import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -43,6 +44,7 @@ class CustomMainActivity : CoreMainActivity() {
     findNavController(R.id.custom_nav_controller)
   }
   override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
+  override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
   override val cachedComponent by lazy { customActivityComponent }
@@ -77,13 +79,6 @@ class CustomMainActivity : CoreMainActivity() {
     }
     drawer_nav_view.menu.findItem(R.id.menu_host_books)
       .isVisible = false
-  }
-
-  override fun navigationDrawerIsOpen(): Boolean =
-    drawerContainerLayout.isDrawerOpen(drawer_nav_view)
-
-  override fun closeNavigationDrawer() {
-    drawerContainerLayout.closeDrawer(drawer_nav_view)
   }
 
   override fun openSettingsActivity() {
