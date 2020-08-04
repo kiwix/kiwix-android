@@ -78,7 +78,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private var ip: String? = null
   private var serviceConnection: ServiceConnection? = null
   private var progressDialog: ProgressDialog? = null
-  // override val tag = "ZimHostActivity"
 
   private val selectedBooksPath: ArrayList<String>
     get() {

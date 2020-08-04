@@ -56,7 +56,7 @@ interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(localFileTransferActivity: LocalFileTransferActivity)
   fun inject(languageActivity: LanguageActivity)
   fun inject(kiwixSettingsActivity: KiwixSettingsActivity)
-  fun inject(zimHostActivity: ZimHostFragment)
+  fun inject(zimHostFragment: ZimHostFragment)
   fun inject(introActivity: IntroActivity)
   fun inject(kiwixSplashActivity: KiwixSplashActivity)
   fun inject(kiwixMainActivity: KiwixMainActivity)
