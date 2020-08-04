@@ -84,6 +84,11 @@ open class ZimFileSelectFragment : BaseFragment() {
     baseActivity.kiwixActivityComponent.inject(this)
   }
 
+  override fun onDestroyView() {
+    super.onDestroyView()
+    actionMode = null
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
