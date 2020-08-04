@@ -16,30 +16,24 @@
  *
  */
 
-package org.kiwix.kiwixmobile.main;
+package org.kiwix.kiwixmobile.webserver;
 
 import android.Manifest;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
-import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.R;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
+import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 import static org.kiwix.kiwixmobile.utils.StandardActions.openDrawer;
 
-@LargeTest
-@RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class KiwixZimHostFragmentTest {
   @Rule
   public ActivityTestRule<KiwixMainActivity> activityTestRule =
     new ActivityTestRule<>(KiwixMainActivity.class);
@@ -52,39 +46,16 @@ public class MainActivityTest {
 
   @Before
   public void setup() {
-    clickOn(R.string.reader);
-  }
-
-  @Test
-  public void navigateHelp() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     openDrawer();
-    clickOn(R.string.menu_help);
+    clickOn(R.string.menu_host_books);
   }
 
   @Test
-  public void navigateSettings() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    openDrawer();
-    enterSettings();
-  }
-
-  @Test
-  public void navigateBookmarks() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    openDrawer();
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.bookmarks));
-  }
-
-  @Test
-  public void navigateDeviceContent() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.library);
-  }
-
-  @Test
-  public void navigateOnlineContent() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.download);
+  public void testStartServer() {
+    clickOn(R.string.start_server_label);
+    assertDisplayed(R.string.wifi_dialog_body);
+    assertDisplayed(R.string.wifi_dialog_title);
   }
 }
+
