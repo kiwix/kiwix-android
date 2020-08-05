@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.ActionMode
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -157,6 +158,20 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         super.onBackPressed()
       }
     }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+    if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
+      return super.onCreateOptionsMenu(menu)
+    }
+    var returnValue = true
+    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
+      if (it.onCreateOptionsMenu(menu, this) == FragmentActivityExtensions.Super.ShouldCall) {
+        returnValue = super.onCreateOptionsMenu(menu)
+      }
+    }
+    return returnValue
   }
 
   private fun activeFragments(): MutableList<Fragment> =

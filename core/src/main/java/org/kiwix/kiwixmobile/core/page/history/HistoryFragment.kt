@@ -4,6 +4,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.PageFragment
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
 import org.kiwix.kiwixmobile.core.page.adapter.PageDelegate.HistoryDateDelegate
@@ -25,7 +26,7 @@ class HistoryFragment : PageFragment() {
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showHistoryAllBooks }
 
   override fun inject(baseActivity: BaseActivity) {
-    requireActivity().coreActivityComponent.inject(this)
+    (baseActivity as CoreMainActivity).coreActivityComponent.inject(this)
   }
 
   override val searchQueryHint: String by lazy { getString(R.string.search_history) }

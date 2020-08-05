@@ -90,6 +90,21 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       }
     }
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setHasOptionsMenu(true)
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    val activity = requireActivity() as CoreMainActivity
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      title = title
+    }
+  }
+
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.menu_page, menu)
     val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
@@ -97,7 +112,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     search.setOnQueryTextListener(SimpleTextListener {
       pageViewModel.actions.offer(Action.Filter(it))
     })
-    pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
+    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -113,11 +128,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      title = title
-    }
     recycler_view.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     recycler_view.adapter = pageAdapter
 
@@ -129,16 +139,14 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     page_switch.setOnCheckedChangeListener { _, isChecked ->
       pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
+    pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
   }
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    setHasOptionsMenu(true)
-    return inflater.inflate(R.layout.fragment_page, container, false)
-  }
+  ): View? = inflater.inflate(R.layout.fragment_page, container, false)
 
   override fun onDestroy() {
     compositeDisposable.clear()
