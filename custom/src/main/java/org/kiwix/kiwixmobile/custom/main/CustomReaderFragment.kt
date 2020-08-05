@@ -38,8 +38,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
@@ -79,8 +79,10 @@ class CustomReaderFragment : CoreReaderFragment() {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
       toolbarToc?.isEnabled = false
     }
-    (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+    with(activity as AppCompatActivity) {
+      supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+      setupDrawerToggle(toolbar)
+    }
   }
 
   private fun loadPageFromNavigationArguments() {

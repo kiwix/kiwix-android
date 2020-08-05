@@ -25,12 +25,14 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDirections
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 object ActivityExtensions {
@@ -81,6 +83,11 @@ object ActivityExtensions {
   fun Activity.navigate(action: NavDirections) {
     (this as CoreMainActivity).navigate(action)
   }
+
+  fun Activity.cachedComponent(): CoreActivityComponent = (this as CoreMainActivity).cachedComponent
+
+  fun Activity.setupDrawerToggle(toolbar: Toolbar) =
+    (this as CoreMainActivity).setupDrawerToggle(toolbar)
 
   fun Activity.navigate(fragmentId: Int) {
     (this as CoreMainActivity).navigate(fragmentId)

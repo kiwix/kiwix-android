@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -135,7 +136,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun hideTabSwitcher() {
     if (actionBar != null) {
       actionBar.setDisplayShowTitleEnabled(true)
-      (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+      activity?.setupDrawerToggle(toolbar)
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 

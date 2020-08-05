@@ -4,7 +4,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.viewModel
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.PageFragment
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
 import org.kiwix.kiwixmobile.core.page.adapter.PageDelegate.PageItemDelegate
@@ -23,7 +22,7 @@ class BookmarksFragment : PageFragment() {
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showBookmarksAllBooks }
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as CoreMainActivity).coreActivityComponent.inject(this)
+    baseActivity.coreActivityComponent.inject(this)
   }
 
   override val searchQueryHint: String by lazy { getString(R.string.search_bookmarks) }
