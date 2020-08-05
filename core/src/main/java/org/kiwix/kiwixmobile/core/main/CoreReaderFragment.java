@@ -1332,7 +1332,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull
-  private String contentUrl(String articleUrl) {
+  protected String contentUrl(String articleUrl) {
     return Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString();
   }
 
