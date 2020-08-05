@@ -41,6 +41,8 @@ import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import javax.inject.Inject
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
+const val PAGE_URL_KEY = "pageUrl"
+const val ZIM_FILE_URI_KEY = "zimFileUri"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
@@ -95,6 +97,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     return activeFragments().filterIsInstance<WebViewProvider>().firstOrNull()
       ?.getCurrentWebView()
   }
+
+  override fun onSupportNavigateUp(): Boolean =
+    navController.navigateUp() || super.onSupportNavigateUp()
 
   open fun setupDrawerToggle(toolbar: Toolbar) {
     drawerToggle =

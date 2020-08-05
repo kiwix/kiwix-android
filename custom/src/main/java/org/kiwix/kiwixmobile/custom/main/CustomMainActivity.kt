@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -61,9 +62,6 @@ class CustomMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun onSupportNavigateUp(): Boolean =
-    navController.navigateUp() || super.onSupportNavigateUp()
-
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (drawerToggle.isDrawerIndicatorEnabled) {
       return drawerToggle.onOptionsItemSelected(item)
@@ -86,7 +84,7 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
-    val bundle = bundleOf("pageUrl" to pageUrl, "zimFileUri" to zimFilePath)
+    val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     navigate(R.id.customReaderFragment, bundle)
   }
 }
