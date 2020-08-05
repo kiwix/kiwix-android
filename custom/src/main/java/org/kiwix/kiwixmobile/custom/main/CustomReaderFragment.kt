@@ -103,13 +103,12 @@ class CustomReaderFragment : CoreReaderFragment() {
   private fun restoreLastOpenedTab() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
-    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
     val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
     val urls = JSONArray(zimArticles)
-    val positions = JSONArray(zimPositions)
+    val zimPositions = JSONArray(settings.getString(TAG_CURRENT_POSITIONS, null))
     selectTab(currentTab)
     loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
-    getCurrentWebView().scrollY = positions.getInt(currentTab)
+    getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
   }
 
   override fun setDrawerLockMode(lockMode: Int) {
