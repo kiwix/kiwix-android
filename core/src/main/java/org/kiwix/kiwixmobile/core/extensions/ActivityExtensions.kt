@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +29,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavDirections
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 object ActivityExtensions {
 
@@ -74,6 +77,18 @@ object ActivityExtensions {
   ) =
     ViewModelProviders.of(this, viewModelFactory)
       .get(T::class.java)
+
+  fun Activity.navigate(action: NavDirections) {
+    (this as CoreMainActivity).navigate(action)
+  }
+
+  fun Activity.navigate(fragmentId: Int) {
+    (this as CoreMainActivity).navigate(fragmentId)
+  }
+
+  fun Activity.navigate(fragmentId: Int, bundle: Bundle) {
+    (this as CoreMainActivity).navigate(fragmentId, bundle)
+  }
 
   val Activity.coreActivityComponent
     get() = CoreApp.coreComponent.activityComponentBuilder().activity(this).build()
