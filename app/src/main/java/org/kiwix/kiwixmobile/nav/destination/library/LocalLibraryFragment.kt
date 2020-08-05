@@ -25,7 +25,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import org.kiwix.kiwixmobile.R
@@ -60,11 +59,6 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
     (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
-    (activity as AppCompatActivity).setSupportActionBar(null)
-  }
-
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.menu_zim_manager, menu)
     val searchItem = menu.findItem(R.id.action_search)
@@ -88,7 +82,6 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
   ): View? {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
-    setHasOptionsMenu(true)
     val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
     val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
     val activity = activity as CoreMainActivity
@@ -98,6 +91,7 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
       setTitle(R.string.library)
     }
     activity.setupDrawerToggle(toolbar)
+    setHasOptionsMenu(true)
     return root
   }
 

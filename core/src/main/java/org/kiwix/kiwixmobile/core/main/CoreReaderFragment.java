@@ -282,15 +282,10 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @SuppressLint("ClickableViewAccessibility") @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+  @SuppressLint("ClickableViewAccessibility")
+  @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     setHasOptionsMenu(true);
-  }
-
-  @SuppressLint("ClickableViewAccessibility")
-  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
@@ -786,11 +781,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     safeDispose();
-    super.onDestroy();
     tabCallback = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
-    webViewList.clear();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
     tts.shutdown();
@@ -811,7 +804,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private KiwixWebView initalizeWebView(String url) {
-    AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
+    AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
     return webView;
@@ -1601,7 +1594,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewProgressChanged(int progress) {
-    if (checkNull(progressBar)) {
+    if (checkNull(progressBar) && isAdded()) {
       progressBar.show();
       progressBar.setProgress(progress);
       if (progress == 100) {

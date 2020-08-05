@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -69,8 +70,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
     (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
     val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {
@@ -135,7 +136,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun hideTabSwitcher() {
     if (actionBar != null) {
       actionBar.setDisplayShowTitleEnabled(true)
-      (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+      activity?.setupDrawerToggle(toolbar)
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
@@ -256,11 +257,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
       toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
       sharedPreferenceUtil
     )
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    (activity as AppCompatActivity).setSupportActionBar(null)
   }
 
   override fun openFullScreen() {

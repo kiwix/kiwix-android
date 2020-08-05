@@ -57,11 +57,6 @@ class OnlineLibraryFragment : LibraryFragment(), FragmentActivityExtensions {
     zimManageViewModel.requestFiltering.onNext("")
   }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
-    (activity as AppCompatActivity).setSupportActionBar(null)
-  }
-
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
     getActivity()?.finish()
     return FragmentActivityExtensions.Super.ShouldNotCall

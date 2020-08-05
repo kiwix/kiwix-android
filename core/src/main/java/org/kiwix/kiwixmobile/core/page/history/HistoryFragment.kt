@@ -13,11 +13,7 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 const val USER_CLEARED_HISTORY: String = "user_cleared_history"
 
 class HistoryFragment : PageFragment() {
-  override val pageViewModel by lazy {
-    viewModel<HistoryViewModel>(
-      viewModelFactory
-    )
-  }
+  override val pageViewModel by lazy { viewModel<HistoryViewModel>(viewModelFactory) }
 
   override val pageAdapter by lazy {
     PageAdapter(PageItemDelegate(this), HistoryDateDelegate())
@@ -29,7 +25,7 @@ class HistoryFragment : PageFragment() {
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showHistoryAllBooks }
 
   override fun inject(baseActivity: BaseActivity) {
-    requireActivity().coreActivityComponent.inject(this)
+    baseActivity.coreActivityComponent.inject(this)
   }
 
   override val searchQueryHint: String by lazy { getString(R.string.search_history) }

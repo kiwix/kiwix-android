@@ -31,13 +31,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.R;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
+import static org.kiwix.kiwixmobile.utils.StandardActions.openDrawer;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -62,10 +60,6 @@ public class MainActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     openDrawer();
     clickOn(R.string.menu_help);
-  }
-
-  private void openDrawer() {
-    onView(withContentDescription(R.string.open_drawer)).perform(click());
   }
 
   @Test
