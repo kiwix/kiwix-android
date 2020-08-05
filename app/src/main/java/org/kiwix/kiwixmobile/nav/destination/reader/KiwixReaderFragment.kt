@@ -70,8 +70,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
     (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
     val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {

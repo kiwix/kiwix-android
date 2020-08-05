@@ -30,6 +30,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -64,8 +65,8 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Inject lateinit var customFileValidator: CustomFileValidator
   @Inject lateinit var dialogShower: DialogShower
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
       return
     }

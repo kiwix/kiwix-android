@@ -95,16 +95,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     setHasOptionsMenu(true)
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    val activity = requireActivity() as CoreMainActivity
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      title = title
-    }
-  }
-
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.menu_page, menu)
     val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
@@ -125,12 +115,16 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     return super.onOptionsItemSelected(item)
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
     recycler_view.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     recycler_view.adapter = pageAdapter
-
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      title = title
+    }
     no_page.text = noItemsString
 
     page_switch.text = switchString
