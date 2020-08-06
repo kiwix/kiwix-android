@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.AttributeSet
@@ -58,6 +59,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -85,24 +87,32 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   private fun openPageInBookFromNavigationArguments() {
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
+
     if (args.pageUrl.isNotEmpty()) {
       if (args.zimFileUri.isNotEmpty()) {
-        tryOpeningZimFile(args)
+        tryOpeningZimFile(args.zimFileUri)
       }
       loadUrlWithCurrentWebview(args.pageUrl)
-      requireArguments().clear()
     } else {
-      manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+      if (args.zimFileUri.isNotEmpty()) {
+        tryOpeningZimFile(args.zimFileUri)
+      } else {
+        manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+      }
     }
+    requireArguments().clear()
   }
 
-  private fun tryOpeningZimFile(args: KiwixReaderFragmentArgs) {
-    val file = File(args.zimFileUri)
-    if (!file.exists()) {
+  private fun tryOpeningZimFile(zimFileUri: String) {
+    val filePath = FileUtils.getLocalFilePathByUri(
+      requireActivity().applicationContext, Uri.parse(zimFileUri)
+    )
+
+    if (filePath == null || !File(filePath).exists()) {
       activity.toast(R.string.error_file_not_found)
       return
     }
-    openZimFile(file)
+    openZimFile(File(filePath))
   }
 
   override fun loadDrawerViews() {
@@ -211,23 +221,23 @@ class KiwixReaderFragment : CoreReaderFragment() {
     return ShouldNotCall
   }
 
-  private fun manageExternalLaunchAndRestoringViewState(uri: String) {
+  private fun manageExternalLaunchAndRestoringViewState(zimFileUri: String) {
     val settings = getSharedPrefSettings()
     val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
-    if (zimFile != null && File(zimFile).exists()) {
+    if (zimFileUri.isNotEmpty() || (zimFile != null && File(zimFile).exists())) {
       Log.d(
         TAG_KIWIX,
         "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
       )
       webViewList.clear()
-      restoreTabStates()
+      restoreTabStates(zimFileUri)
     } else {
       Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
       exitBook()
     }
   }
 
-  private fun restoreTabStates() {
+  private fun restoreTabStates(zimFileUri: String) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
     val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
