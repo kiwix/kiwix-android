@@ -74,6 +74,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import butterknife.Unbinder;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -229,7 +230,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
   private boolean isOpenNewTabInBackground;
-  private boolean isExternalLinkPopup;
   private String documentParserJs;
   private DocumentParser documentParser;
   private KiwixTextToSpeech tts;
@@ -250,6 +250,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private ItemTouchHelper.Callback tabCallback;
   private Disposable bookmarkingDisposable;
   private boolean isBookmarked;
+  private Unbinder unbinder;
 
   @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
     @NotNull AppCompatActivity activity) {
@@ -412,7 +413,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
     View root = inflater.inflate(R.layout.fragment_main, container, false);
-    ButterKnife.bind(this, root);
+    unbinder = ButterKnife.bind(this, root);
     return root;
   }
 
@@ -784,6 +785,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabCallback = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
+    unbinder.unbind();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
     tts.shutdown();
@@ -1503,7 +1505,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private void loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
-    isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
 
     if (!isBackToTopEnabled) {
       backToTopButton.hide();
