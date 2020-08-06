@@ -19,22 +19,17 @@
 package org.kiwix.kiwixmobile.custom.di
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
-import org.kiwix.kiwixmobile.custom.CustomViewModelFactory
+import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadViewModel
 
-@Module
+@Module(includes = [CoreViewModelModule::class])
 abstract class CustomViewModelModule {
   @Binds
   @IntoMap
   @ViewModelKey(CustomDownloadViewModel::class)
   abstract fun bindCustomDownloadViewModel(zimManageViewModel: CustomDownloadViewModel): ViewModel
-
-  @Binds
-  abstract fun bindViewModelFactory(factory: CustomViewModelFactory):
-    ViewModelProvider.Factory
 }

@@ -37,7 +37,7 @@ data class ShowDeleteHistoryDialog(
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.cachedComponent().inject(this)
+    activity.cachedComponent.inject(this)
     dialogShower.show(if (state.isInSelectionState) DeleteSelectedHistory else DeleteAllHistory, {
       effects.offer(DeletePageItems(state, pageDao))
     })

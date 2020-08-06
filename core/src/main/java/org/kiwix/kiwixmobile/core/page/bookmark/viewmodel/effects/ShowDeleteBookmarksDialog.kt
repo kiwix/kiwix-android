@@ -38,7 +38,7 @@ data class ShowDeleteBookmarksDialog(
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.cachedComponent().inject(this)
+    activity.cachedComponent.inject(this)
     dialogShower.show(if (state.isInSelectionState) DeleteSelectedBookmarks else DeleteAllBookmarks,
       { effects.offer(DeletePageItems(state, pageDao)) })
   }

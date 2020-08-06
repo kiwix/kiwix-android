@@ -28,13 +28,13 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
@@ -56,7 +56,7 @@ class LocalLibraryFragment : ZimFileSelectFragment() {
   }
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
+    baseActivity.cachedComponent.inject(this)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

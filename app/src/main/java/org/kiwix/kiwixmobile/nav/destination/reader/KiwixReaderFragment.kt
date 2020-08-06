@@ -36,6 +36,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
@@ -57,7 +58,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -65,7 +65,7 @@ private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
+    baseActivity.cachedComponent.inject(this)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

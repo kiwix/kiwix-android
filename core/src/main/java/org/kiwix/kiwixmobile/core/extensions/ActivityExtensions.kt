@@ -84,7 +84,8 @@ object ActivityExtensions {
     (this as CoreMainActivity).navigate(action)
   }
 
-  fun Activity.cachedComponent(): CoreActivityComponent = (this as CoreMainActivity).cachedComponent
+  val Activity.cachedComponent: CoreActivityComponent
+    get() = (this as CoreMainActivity).cachedComponent
 
   fun Activity.setupDrawerToggle(toolbar: Toolbar) =
     (this as CoreMainActivity).setupDrawerToggle(toolbar)
