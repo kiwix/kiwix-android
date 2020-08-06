@@ -107,8 +107,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     setUpToolbar()
 
     bookDelegate =
@@ -233,8 +233,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     booksAdapter.notifyDataSetChanged()
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
+  override fun onDestroyView() {
+    super.onDestroyView()
+    recyclerViewZimHost.adapter = null
     presenter.detachView()
   }
 

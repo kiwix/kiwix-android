@@ -44,8 +44,7 @@ class ZimHostPresenter @Inject internal constructor(private val dataSource: Data
               )
           }
         books
-      }
-      .subscribe(object : SingleObserver<List<BooksOnDiskListItem>> {
+      }.subscribe(object : SingleObserver<List<BooksOnDiskListItem>> {
         override fun onSubscribe(d: Disposable) {
           compositeDisposable.add(d)
         }
