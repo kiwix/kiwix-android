@@ -789,6 +789,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
     tts.shutdown();
+    tts = null;
   }
 
   private void updateTableOfContents() {
