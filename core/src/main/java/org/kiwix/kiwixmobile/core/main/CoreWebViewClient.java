@@ -47,8 +47,10 @@ public abstract class CoreWebViewClient extends WebViewClient {
   protected final WebViewCallback callback;
   protected final ZimReaderContainer zimReaderContainer;
   private View home;
-  private static String LEGACY_CONTENT_PREFIX =
-    Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString();
+  private static String[] LEGACY_CONTENT_PREFIXES = new String[] {
+    "zim://content/",
+    Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString()
+  };
   private String urlWithAnchor;
 
   public CoreWebViewClient(
@@ -94,9 +96,12 @@ public abstract class CoreWebViewClient extends WebViewClient {
   }
 
   private String convertLegacyUrl(String url) {
-    return url.startsWith(LEGACY_CONTENT_PREFIX)
-      ? url.replace(LEGACY_CONTENT_PREFIX, CONTENT_PREFIX)
-      : url;
+    for (String legacyContentPrefix : LEGACY_CONTENT_PREFIXES) {
+      if (url.startsWith(legacyContentPrefix)) {
+        return url.replace(legacyContentPrefix, CONTENT_PREFIX);
+      }
+    }
+    return url;
   }
 
   private boolean handleEpubAndPdf(String url) {
@@ -139,9 +144,9 @@ public abstract class CoreWebViewClient extends WebViewClient {
   }
 
   /*
-  * If 2 urls are the same aside from the `#` component then calling load
-  * does not trigger our loading code and the webview will go to the anchor
-  * */
+   * If 2 urls are the same aside from the `#` component then calling load
+   * does not trigger our loading code and the webview will go to the anchor
+   * */
   private void jumpToAnchor(WebView view, String loadedUrl) {
     if (urlWithAnchor != null && urlWithAnchor.startsWith(loadedUrl)) {
       view.loadUrl(urlWithAnchor);

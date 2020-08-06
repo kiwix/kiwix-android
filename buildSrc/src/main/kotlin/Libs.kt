@@ -49,6 +49,23 @@ object Libs {
   const val retrofit: String = "com.squareup.retrofit2:retrofit:" + Versions.com_squareup_retrofit2
 
   /**
+   * https://square.github.io/okhttp/
+   */
+  const val logging_interceptor: String = "com.squareup.okhttp3:logging-interceptor:" +
+      Versions.com_squareup_okhttp3
+
+  /**
+   * https://square.github.io/okhttp/
+   */
+  const val mockwebserver: String = "com.squareup.okhttp3:mockwebserver:" +
+      Versions.com_squareup_okhttp3
+
+  /**
+   * https://square.github.io/okhttp/
+   */
+  const val okhttp: String = "com.squareup.okhttp3:okhttp:" + Versions.com_squareup_okhttp3
+
+  /**
    * https://kotlinlang.org/
    */
   const val kotlin_android_extensions: String = "org.jetbrains.kotlin:kotlin-android-extensions:" +
@@ -169,6 +186,11 @@ object Libs {
   /**
    * https://objectbox.io
    */
+  const val objectbox_java: String = "io.objectbox:objectbox-java:" + Versions.io_objectbox
+
+  /**
+   * https://objectbox.io
+   */
   const val objectbox_kotlin: String = "io.objectbox:objectbox-kotlin:" + Versions.io_objectbox
 
   /**
@@ -236,12 +258,6 @@ object Libs {
   const val javax_annotation_api: String = "javax.annotation:javax.annotation-api:" +
       Versions.javax_annotation_api
 
-  /**
-   * https://square.github.io/okhttp/
-   */
-  const val logging_interceptor: String = "com.squareup.okhttp3:logging-interceptor:" +
-      Versions.logging_interceptor
-
   const val ink_page_indicator: String = "com.pacioianu.david:ink-page-indicator:" +
       Versions.ink_page_indicator
 
@@ -271,11 +287,6 @@ object Libs {
    * https://junit.org/junit5/
    */
   const val junit_jupiter: String = "org.junit.jupiter:junit-jupiter:" + Versions.junit_jupiter
-
-  /**
-   * https://square.github.io/okhttp/
-   */
-  const val mockwebserver: String = "com.squareup.okhttp3:mockwebserver:" + Versions.mockwebserver
 
   const val xfetch2okhttp: String = "androidx.tonyodev.fetch2okhttp:xfetch2okhttp:" +
       Versions.xfetch2okhttp
@@ -346,7 +357,7 @@ object Libs {
   const val kiwixlib: String = "org.kiwix.kiwixlib:kiwixlib:" + Versions.kiwixlib
 
   /**
-   * http://developer.android.com/tools/extras/support-library.html
+   * https://github.com/material-components/material-components-android
    */
   const val material: String = "com.google.android.material:material:" + Versions.material
 
@@ -367,14 +378,14 @@ object Libs {
   const val ktlint: String = "com.pinterest:ktlint:" + Versions.ktlint
 
   /**
-   * https://square.github.io/okhttp/
-   */
-  const val okhttp: String = "com.squareup.okhttp3:okhttp:" + Versions.okhttp
-
-  /**
    * https://github.com/ReactiveX/RxJava
    */
   const val rxjava: String = "io.reactivex.rxjava2:rxjava:" + Versions.rxjava
+
+  /**
+   * https://developer.android.com/jetpack/androidx
+   */
+  const val webkit: String = "androidx.webkit:webkit:" + Versions.webkit
 
   /**
    * https://developer.android.com/studio
