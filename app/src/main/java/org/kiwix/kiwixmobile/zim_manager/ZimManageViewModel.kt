@@ -116,8 +116,6 @@ class ZimManageViewModel @Inject constructor(
   val requestFiltering = BehaviorProcessor.createDefault("")
   val currentPage = PublishProcessor.create<Int>()
 
-  val libraryTabIsVisible = currentPage.map { it == 1 }.filter { it }
-
   private val compositeDisposable = CompositeDisposable()
 
   init {

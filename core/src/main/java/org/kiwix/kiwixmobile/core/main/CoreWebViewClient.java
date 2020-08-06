@@ -41,8 +41,10 @@ public class CoreWebViewClient extends WebViewClient {
   }};
   protected final WebViewCallback callback;
   protected final ZimReaderContainer zimReaderContainer;
-  private static String LEGACY_CONTENT_PREFIX =
-    Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString();
+  private static String[] LEGACY_CONTENT_PREFIXES = new String[] {
+    "zim://content/",
+    Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString()
+  };
   private String urlWithAnchor;
 
   public CoreWebViewClient(
@@ -87,9 +89,12 @@ public class CoreWebViewClient extends WebViewClient {
   }
 
   private String convertLegacyUrl(String url) {
-    return url.startsWith(LEGACY_CONTENT_PREFIX)
-      ? url.replace(LEGACY_CONTENT_PREFIX, CONTENT_PREFIX)
-      : url;
+    for (String legacyContentPrefix : LEGACY_CONTENT_PREFIXES) {
+      if (url.startsWith(legacyContentPrefix)) {
+        return url.replace(legacyContentPrefix, CONTENT_PREFIX);
+      }
+    }
+    return url;
   }
 
   private boolean handleEpubAndPdf(String url) {

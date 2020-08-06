@@ -48,6 +48,10 @@ public class StandardActions {
     BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_settings));
   }
 
+  public static void openDrawer() {
+    onView(withContentDescription(R.string.open_drawer)).perform(click());
+  }
+
   public static void deleteZimIfExists(String zimName, Integer adapterId) {
     try {
       onData(withContent(zimName)).inAdapterView(withId(adapterId)).perform(longClick());

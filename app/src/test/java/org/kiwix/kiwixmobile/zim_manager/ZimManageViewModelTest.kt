@@ -514,18 +514,4 @@ class ZimManageViewModelTest {
         .assertValues(StartMultiSelection(viewModel.fileSelectActions))
     }
   }
-
-  @Test
-  fun `libraryTabIsVisible emits when currentPage is 1`() {
-    viewModel.libraryTabIsVisible.test()
-      .also { viewModel.currentPage.offer(1) }
-      .assertValue(true)
-  }
-
-  @Test
-  fun `libraryTabIsVisible does not emit when currentPage is 0`() {
-    viewModel.libraryTabIsVisible.test()
-      .also { viewModel.currentPage.offer(0) }
-      .assertEmpty()
-  }
 }

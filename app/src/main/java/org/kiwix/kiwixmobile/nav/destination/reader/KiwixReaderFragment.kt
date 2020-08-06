@@ -37,11 +37,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -58,7 +60,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -66,11 +67,11 @@ private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
+    baseActivity.cachedComponent.inject(this)
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
     val activity = activity as CoreMainActivity
     noOpenBookButton.setOnClickListener {
@@ -86,24 +87,32 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   private fun openPageInBookFromNavigationArguments() {
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
+
     if (args.pageUrl.isNotEmpty()) {
       if (args.zimFileUri.isNotEmpty()) {
-        tryOpeningZimFile(args)
+        tryOpeningZimFile(args.zimFileUri)
       }
       loadUrlWithCurrentWebview(args.pageUrl)
     } else {
-      manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+      if (args.zimFileUri.isNotEmpty()) {
+        tryOpeningZimFile(args.zimFileUri)
+      } else {
+        manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+      }
     }
     requireArguments().clear()
   }
 
-  private fun tryOpeningZimFile(args: KiwixReaderFragmentArgs) {
-    val file = File(args.zimFileUri)
-    if (!file.exists()) {
+  private fun tryOpeningZimFile(zimFileUri: String) {
+    val filePath = FileUtils.getLocalFilePathByUri(
+      requireActivity().applicationContext, Uri.parse(zimFileUri)
+    )
+
+    if (filePath == null || !File(filePath).exists()) {
       activity.toast(R.string.error_file_not_found)
       return
     }
-    openZimFile(file)
+    openZimFile(File(filePath))
   }
 
   override fun loadDrawerViews() {
@@ -135,7 +144,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun hideTabSwitcher() {
     if (actionBar != null) {
       actionBar.setDisplayShowTitleEnabled(true)
-      (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+      activity?.setupDrawerToggle(toolbar)
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
@@ -212,40 +221,51 @@ class KiwixReaderFragment : CoreReaderFragment() {
     return ShouldNotCall
   }
 
-  private fun manageExternalLaunchAndRestoringViewState(uri: String) {
-
-    if (uri.isNotEmpty()) {
-      val filePath = FileUtils.getLocalFilePathByUri(
-        requireActivity().applicationContext, Uri.parse(uri)
-      )
-
-      if (filePath == null || !File(filePath).exists()) {
-        getCurrentWebView().snack(R.string.error_file_not_found)
-        return
-      }
-
+  private fun manageExternalLaunchAndRestoringViewState(zimFileUri: String) {
+    val settings = getSharedPrefSettings()
+    val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
+    if (zimFileUri.isNotEmpty() || (zimFile != null && File(zimFile).exists())) {
       Log.d(
-        TAG_KIWIX, "Kiwix started from a file manager. Intent filePath: " +
-          filePath +
-          " -> open this zim file and load menu_main page"
+        TAG_KIWIX,
+        "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
       )
-      reopenBook()
-      openZimFile(File(filePath))
+      webViewList.clear()
+      restoreTabStates(zimFileUri)
     } else {
-      val settings = getSharedPrefSettings()
-      val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
-      if (zimFile != null && File(zimFile).exists()) {
-        Log.d(
-          TAG_KIWIX,
-          "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
-        )
-        restoreTabStates()
-        // Alternative would be to restore webView state. But more effort to implement, and actually
-        // fits better normal android behavior if after closing app ("back" button) state is not maintained.
-      } else {
-        Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
-        exitBook()
+      Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
+      exitBook()
+    }
+  }
+
+  private fun restoreTabStates(zimFileUri: String) {
+    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
+    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
+    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
+    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
+
+    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
+
+    if (zimFile != null) {
+      openZimFile(File(zimFile))
+    } else {
+      getCurrentWebView().snack(R.string.zim_not_opened)
+    }
+    try {
+      val urls = JSONArray(zimArticles)
+      val positions = JSONArray(zimPositions)
+      var i = 0
+      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+      getCurrentWebView().scrollY = positions.getInt(i)
+      i++
+      while (i < urls.length()) {
+        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+        safelyGetWebView(i).scrollY = positions.getInt(i)
+        i++
       }
+      selectTab(currentTab)
+    } catch (e: Exception) {
+      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
+      // TODO: Show to user
     }
   }
 
@@ -256,11 +276,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
       toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
       sharedPreferenceUtil
     )
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    (activity as AppCompatActivity).setSupportActionBar(null)
   }
 
   override fun openFullScreen() {
@@ -283,38 +298,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  private fun restoreTabStates() {
-    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
-    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
-    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
-
-    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
-
-    if (zimFile != null) {
-      openZimFile(File(zimFile))
-    } else {
-      getCurrentWebView().snack(R.string.zim_not_opened)
-    }
-    try {
-      val urls = JSONArray(zimArticles)
-      val positions = JSONArray(zimPositions)
-      var i = 0
-      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      getCurrentWebView().scrollY = positions.getInt(i)
-      i++
-      while (i < urls.length()) {
-        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-        getCurrentWebView().scrollY = positions.getInt(i)
-        i++
-      }
-      selectTab(currentTab)
-    } catch (e: Exception) {
-      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
-      // TODO: Show to user
-    }
   }
 
   override fun onNewIntent(

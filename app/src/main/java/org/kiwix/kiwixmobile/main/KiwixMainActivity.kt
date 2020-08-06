@@ -39,11 +39,10 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
-
-const val PAGE_URL_KEY = "pageUrl"
-const val ZIM_FILE_URI_KEY = "zimFileUri"
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
@@ -94,11 +93,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)
     actionMode = mode
-  }
-
-  override fun onSupportNavigateUp(): Boolean {
-    return navController.navigateUp() ||
-      super.onSupportNavigateUp()
   }
 
   override fun onBackPressed() {

@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.ActionMode
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -40,6 +41,8 @@ import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import javax.inject.Inject
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
+const val PAGE_URL_KEY = "pageUrl"
+const val ZIM_FILE_URI_KEY = "zimFileUri"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
@@ -95,6 +98,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       ?.getCurrentWebView()
   }
 
+  override fun onSupportNavigateUp(): Boolean =
+    navController.navigateUp() || super.onSupportNavigateUp()
+
   open fun setupDrawerToggle(toolbar: Toolbar) {
     drawerToggle =
       ActionBarDrawerToggle(
@@ -132,14 +138,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     drawerContainerLayout.closeDrawer(drawerNavView)
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == android.R.id.home) {
-      navController.popBackStack()
-      return true
-    }
-    return super.onOptionsItemSelected(item)
-  }
-
   private fun openSupportKiwixExternalLink() {
     externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent())
   }
@@ -157,6 +155,20 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         super.onBackPressed()
       }
     }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+    if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
+      return super.onCreateOptionsMenu(menu)
+    }
+    var returnValue = true
+    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
+      if (it.onCreateOptionsMenu(menu, this) == FragmentActivityExtensions.Super.ShouldCall) {
+        returnValue = super.onCreateOptionsMenu(menu)
+      }
+    }
+    return returnValue
   }
 
   private fun activeFragments(): MutableList<Fragment> =
