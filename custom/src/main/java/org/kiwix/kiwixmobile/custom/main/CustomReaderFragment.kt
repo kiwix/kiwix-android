@@ -36,6 +36,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
@@ -47,6 +48,11 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
+import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -71,10 +77,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       return
     }
 
-    openObbOrZim()
-    if (arguments != null) {
-      loadPageFromNavigationArguments()
-    }
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (BuildConfig.DISABLE_SIDEBAR) {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
@@ -84,13 +86,29 @@ class CustomReaderFragment : CoreReaderFragment() {
       supportActionBar!!.setDisplayHomeAsUpEnabled(true)
       setupDrawerToggle(toolbar)
     }
+    loadPageFromNavigationArguments()
   }
 
   private fun loadPageFromNavigationArguments() {
-    val pageUrl = requireArguments().getString(PAGE_URL_KEY)
+    val pageUrl: String? = requireArguments().getString(PAGE_URL_KEY)
     if (pageUrl?.isNotEmpty() == true) {
       loadUrlWithCurrentWebview(pageUrl)
+    } else {
+      openObbOrZim()
+      restoreLastOpenedTab()
     }
+    requireArguments().clear()
+  }
+
+  private fun restoreLastOpenedTab() {
+    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
+    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
+    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
+    val urls = JSONArray(zimArticles)
+    val zimPositions = JSONArray(settings.getString(TAG_CURRENT_POSITIONS, null))
+    selectTab(currentTab)
+    loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
+    getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
   }
 
   override fun setDrawerLockMode(lockMode: Int) {

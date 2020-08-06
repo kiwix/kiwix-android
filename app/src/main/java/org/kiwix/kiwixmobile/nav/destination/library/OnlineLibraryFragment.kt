@@ -29,19 +29,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.language.LanguageActivity
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
 class OnlineLibraryFragment : LibraryFragment(), FragmentActivityExtensions {
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
+    baseActivity.cachedComponent.inject(this)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

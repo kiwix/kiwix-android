@@ -27,6 +27,7 @@ import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -47,6 +48,7 @@ import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.SearchActivity
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -84,6 +86,7 @@ interface CoreComponent {
   fun dataSource(): DataSource
   fun fetchDownloadDao(): FetchDownloadDao
   fun newBookDao(): NewBookDao
+  fun historyDao(): HistoryDao
   fun newLanguagesDao(): NewLanguagesDao
   fun recentSearchDao(): NewRecentSearchDao
   fun newBookmarksDao(): NewBookmarksDao
@@ -93,6 +96,7 @@ interface CoreComponent {
   fun bookDao(): BookDao
   fun bookmarksDao(): BookmarksDao
   fun notificationManager(): NotificationManager
+  fun searchResultGenerator(): SearchResultGenerator
 
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)

@@ -142,9 +142,10 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     savedInstanceState: Bundle?
   ): View? = inflater.inflate(R.layout.fragment_page, container, false)
 
-  override fun onDestroy() {
+  override fun onDestroyView() {
+    super.onDestroyView()
     compositeDisposable.clear()
-    super.onDestroy()
+    recycler_view.adapter = null
   }
 
   private fun render(state: PageState<*>) {
