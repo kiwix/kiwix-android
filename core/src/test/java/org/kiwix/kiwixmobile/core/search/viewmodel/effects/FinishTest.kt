@@ -28,7 +28,7 @@ internal class FinishTest {
   @Test
   fun `invoke with finishes the activity`() {
     val activity = mockk<AppCompatActivity>()
-    Finish.invokeWith(activity)
+    PopFragmentBackstack.invokeWith(activity)
     verify { activity.finish() }
   }
 }

@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelecte
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -82,8 +82,9 @@ internal class PageViewModelTest {
   }
 
   @Test
-  fun `Exit finishes activity`() {
-    viewModel.effects.test().also { viewModel.actions.offer(Exit) }.assertValue(Finish)
+  fun `Exit calls PopFragmentBackstack`() {
+    viewModel.effects.test().also { viewModel.actions.offer(Exit) }
+      .assertValue(PopFragmentBackstack)
     viewModel.state.test().assertValue(pageState())
   }
 
