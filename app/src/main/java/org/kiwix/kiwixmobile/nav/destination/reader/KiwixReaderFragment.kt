@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.AttributeSet
@@ -58,7 +57,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import java.io.File
 
@@ -214,39 +212,50 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun manageExternalLaunchAndRestoringViewState(uri: String) {
-
-    if (uri.isNotEmpty()) {
-      val filePath = FileUtils.getLocalFilePathByUri(
-        requireActivity().applicationContext, Uri.parse(uri)
-      )
-
-      if (filePath == null || !File(filePath).exists()) {
-        getCurrentWebView().snack(R.string.error_file_not_found)
-        return
-      }
-
+    val settings = getSharedPrefSettings()
+    val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
+    if (zimFile != null && File(zimFile).exists()) {
       Log.d(
-        TAG_KIWIX, "Kiwix started from a file manager. Intent filePath: " +
-          filePath +
-          " -> open this zim file and load menu_main page"
+        TAG_KIWIX,
+        "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
       )
-      reopenBook()
-      openZimFile(File(filePath))
+      webViewList.clear()
+      restoreTabStates()
     } else {
-      val settings = getSharedPrefSettings()
-      val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
-      if (zimFile != null && File(zimFile).exists()) {
-        Log.d(
-          TAG_KIWIX,
-          "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
-        )
-        restoreTabStates()
-        // Alternative would be to restore webView state. But more effort to implement, and actually
-        // fits better normal android behavior if after closing app ("back" button) state is not maintained.
-      } else {
-        Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
-        exitBook()
+      Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
+      exitBook()
+    }
+  }
+
+  private fun restoreTabStates() {
+    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
+    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
+    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
+    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
+
+    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
+
+    if (zimFile != null) {
+      openZimFile(File(zimFile))
+    } else {
+      getCurrentWebView().snack(R.string.zim_not_opened)
+    }
+    try {
+      val urls = JSONArray(zimArticles)
+      val positions = JSONArray(zimPositions)
+      var i = 0
+      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+      getCurrentWebView().scrollY = positions.getInt(i)
+      i++
+      while (i < urls.length()) {
+        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+        safelyGetWebView(i).scrollY = positions.getInt(i)
+        i++
       }
+      selectTab(currentTab)
+    } catch (e: Exception) {
+      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
+      // TODO: Show to user
     }
   }
 
@@ -279,38 +288,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  private fun restoreTabStates() {
-    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
-    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
-    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
-
-    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
-
-    if (zimFile != null) {
-      openZimFile(File(zimFile))
-    } else {
-      getCurrentWebView().snack(R.string.zim_not_opened)
-    }
-    try {
-      val urls = JSONArray(zimArticles)
-      val positions = JSONArray(zimPositions)
-      var i = 0
-      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      getCurrentWebView().scrollY = positions.getInt(i)
-      i++
-      while (i < urls.length()) {
-        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-        getCurrentWebView().scrollY = positions.getInt(i)
-        i++
-      }
-      selectTab(currentTab)
-    } catch (e: Exception) {
-      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
-      // TODO: Show to user
-    }
   }
 
   override fun onNewIntent(

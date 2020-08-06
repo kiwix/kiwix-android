@@ -895,7 +895,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     updateTitle();
   }
 
-  private KiwixWebView safelyGetWebView(int position) {
+  protected KiwixWebView safelyGetWebView(int position) {
     return webViewList.size() == 0 ? newMainPageTab() : webViewList.get(safePosition(position));
   }
 
