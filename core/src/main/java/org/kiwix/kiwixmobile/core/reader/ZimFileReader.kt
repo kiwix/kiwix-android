@@ -236,7 +236,7 @@ class ZimFileReader constructor(
     @JvmField
     val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
 
-    const val CONTENT_PREFIX = "zim://content/"
+    const val CONTENT_PREFIX = "https://kiwix.app/"
 
     private val INVERT_IMAGES_VIDEO =
       """
@@ -253,7 +253,8 @@ class ZimFileReader constructor(
           filter: invert(0); 
         }
       """.trimIndent()
-    private val assetExtensions = listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv", "svg")
+    private val assetExtensions =
+      listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv", "svg", "warc")
     private const val DEFAULT_MIME_TYPE = "application/octet-stream"
   }
 }
