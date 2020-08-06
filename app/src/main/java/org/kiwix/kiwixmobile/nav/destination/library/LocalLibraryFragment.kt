@@ -111,15 +111,9 @@ class LocalLibraryFragment : BaseFragment() {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
 
-    disposable.add(zimManageViewModel.libraryTabIsVisible.subscribe { finishActionMode() })
-
     go_to_downloads_button_no_files.setOnClickListener {
       offerAction(FileSelectActions.UserClickedDownloadBooksButton)
     }
-  }
-
-  private fun finishActionMode() {
-    actionMode?.finish()
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
