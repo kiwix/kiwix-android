@@ -25,11 +25,13 @@ import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -43,6 +45,7 @@ class CustomMainActivity : CoreMainActivity() {
     findNavController(R.id.custom_nav_controller)
   }
   override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
+  override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
   override val cachedComponent by lazy { customActivityComponent }
@@ -58,9 +61,6 @@ class CustomMainActivity : CoreMainActivity() {
       return
     }
   }
-
-  override fun onSupportNavigateUp(): Boolean =
-    navController.navigateUp() || super.onSupportNavigateUp()
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (drawerToggle.isDrawerIndicatorEnabled) {
@@ -79,19 +79,12 @@ class CustomMainActivity : CoreMainActivity() {
       .isVisible = false
   }
 
-  override fun navigationDrawerIsOpen(): Boolean =
-    drawerContainerLayout.isDrawerOpen(drawer_nav_view)
-
-  override fun closeNavigationDrawer() {
-    drawerContainerLayout.closeDrawer(drawer_nav_view)
-  }
-
   override fun openSettingsActivity() {
     startActivityForResult(intent<CustomSettingsActivity>(), REQUEST_PREFERENCES)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
-    val bundle = bundleOf("pageUrl" to pageUrl, "zimFileUri" to zimFilePath)
+    val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     navigate(R.id.customReaderFragment, bundle)
   }
 }

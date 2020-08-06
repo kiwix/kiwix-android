@@ -21,13 +21,15 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.drawer_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.navigation_container
@@ -37,19 +39,19 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
-
-const val PAGE_URL_KEY = "pageUrl"
-const val ZIM_FILE_URI_KEY = "zimFileUri"
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
 
   override val cachedComponent by lazy { kiwixActivityComponent }
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
-  override val drawerContainerLayout by lazy { navigation_container }
+  override val drawerContainerLayout: DrawerLayout by lazy { navigation_container }
+  override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
 
@@ -74,15 +76,11 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     bottom_nav_view.setupWithNavController(navController)
 
+    val topLevelDestinations =
+      setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
+
     navController.addOnDestinationChangedListener { _, destination, _ ->
-      if (destination.id == R.id.navigation_downloads ||
-        destination.id == R.id.navigation_library ||
-        destination.id == R.id.navigation_reader
-      ) {
-        bottom_nav_view.visibility = View.VISIBLE
-      } else {
-        bottom_nav_view.visibility = View.GONE
-      }
+      bottom_nav_view.isVisible = destination.id in topLevelDestinations
     }
   }
 
@@ -96,11 +94,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)
     actionMode = mode
-  }
-
-  override fun onSupportNavigateUp(): Boolean {
-    return navController.navigateUp() ||
-      super.onSupportNavigateUp()
   }
 
   override fun onBackPressed() {
@@ -117,13 +110,6 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun readerDrawerIsOpen() =
     drawerContainerLayout.isDrawerOpen(reader_drawer_nav_view)
-
-  override fun navigationDrawerIsOpen(): Boolean =
-    drawerContainerLayout.isDrawerOpen(drawer_nav_view)
-
-  override fun closeNavigationDrawer() {
-    drawerContainerLayout.closeDrawer(drawer_nav_view)
-  }
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)

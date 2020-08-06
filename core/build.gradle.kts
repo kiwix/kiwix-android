@@ -61,7 +61,7 @@ dependencies {
   implementation(Libs.android_arch_lifecycle_extensions)
   implementation(Libs.objectbox_kotlin)
   implementation(Libs.objectbox_rxjava)
-
+  implementation(Libs.webkit)
   // navigation
   implementation(Libs.navigation_kotlin_fragment)
   implementation(Libs.navigation_kotlin_ui)

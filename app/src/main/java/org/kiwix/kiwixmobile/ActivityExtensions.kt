@@ -19,7 +19,9 @@
 package org.kiwix.kiwixmobile
 
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.di.components.KiwixActivityComponent
 import org.kiwix.kiwixmobile.di.components.KiwixComponent
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 private val BaseActivity.kiwixComponent: KiwixComponent
   get() = kiwixApp()?.kiwixComponent ?: throw RuntimeException(
@@ -30,6 +32,9 @@ private val BaseActivity.kiwixComponent: KiwixComponent
   )
 
 private fun BaseActivity.kiwixApp() = applicationContext as? KiwixApp ?: application as? KiwixApp
+
+val BaseActivity.cachedComponent: KiwixActivityComponent
+  get() = (this as KiwixMainActivity).cachedComponent
 
 internal inline val BaseActivity.kiwixActivityComponent
   get() = kiwixComponent

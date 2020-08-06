@@ -74,6 +74,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import butterknife.Unbinder;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -229,7 +230,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
   private boolean isOpenNewTabInBackground;
-  private boolean isExternalLinkPopup;
   private String documentParserJs;
   private DocumentParser documentParser;
   private KiwixTextToSpeech tts;
@@ -250,6 +250,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private ItemTouchHelper.Callback tabCallback;
   private Disposable bookmarkingDisposable;
   private boolean isBookmarked;
+  private Unbinder unbinder;
 
   @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
     @NotNull AppCompatActivity activity) {
@@ -282,15 +283,10 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @SuppressLint("ClickableViewAccessibility") @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+  @SuppressLint("ClickableViewAccessibility")
+  @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     setHasOptionsMenu(true);
-  }
-
-  @SuppressLint("ClickableViewAccessibility")
-  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
@@ -417,7 +413,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
     View root = inflater.inflate(R.layout.fragment_main, container, false);
-    ButterKnife.bind(this, root);
+    unbinder = ButterKnife.bind(this, root);
     return root;
   }
 
@@ -786,16 +782,16 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     safeDispose();
-    super.onDestroy();
     tabCallback = null;
-    if (hideBackToTopTimer != null) {
-      hideBackToTopTimer.cancel();
-    }
-    webViewList.clear();
+    hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
+    tableDrawerAdapter.setTableClickListener(null);
+    tableDrawerAdapter = null;
+    unbinder.unbind();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
     tts.shutdown();
+    tts = null;
   }
 
   private void updateTableOfContents() {
@@ -813,7 +809,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private KiwixWebView initalizeWebView(String url) {
-    AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
+    AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
     return webView;
@@ -904,7 +900,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     updateTitle();
   }
 
-  private KiwixWebView safelyGetWebView(int position) {
+  protected KiwixWebView safelyGetWebView(int position) {
     return webViewList.size() == 0 ? newMainPageTab() : webViewList.get(safePosition(position));
   }
 
@@ -1341,7 +1337,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull
-  private String contentUrl(String articleUrl) {
+  protected String contentUrl(String articleUrl) {
     return Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString();
   }
 
@@ -1512,7 +1508,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private void loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
-    isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
 
     if (!isBackToTopEnabled) {
       backToTopButton.hide();
@@ -1603,7 +1598,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewProgressChanged(int progress) {
-    if (checkNull(progressBar)) {
+    if (checkNull(progressBar) && isAdded()) {
       progressBar.show();
       progressBar.setProgress(progress);
       if (progress == 100) {

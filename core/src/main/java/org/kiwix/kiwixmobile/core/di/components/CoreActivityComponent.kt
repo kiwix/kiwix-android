@@ -40,8 +40,8 @@ interface CoreActivityComponent {
   fun inject(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog)
   fun inject(showDeleteHistoryDialog: ShowDeleteHistoryDialog)
   fun inject(corePrefsFragment: CorePrefsFragment)
-  fun inject(historyActivity: HistoryFragment)
-  fun inject(bookmarksActivity: BookmarksFragment)
+  fun inject(historyFragment: HistoryFragment)
+  fun inject(bookmarksFragment: BookmarksFragment)
   fun inject(addNoteDialog: AddNoteDialog)
 
   @Subcomponent.Builder

@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.ActionMode
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -28,6 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
+import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -39,6 +41,8 @@ import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import javax.inject.Inject
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
+const val PAGE_URL_KEY = "pageUrl"
+const val ZIM_FILE_URI_KEY = "zimFileUri"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
@@ -47,6 +51,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
+  abstract val drawerNavView: NavigationView
   abstract val bookmarksFragmentResId: Int
   abstract val historyFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
@@ -93,6 +98,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       ?.getCurrentWebView()
   }
 
+  override fun onSupportNavigateUp(): Boolean =
+    navController.navigateUp() || super.onSupportNavigateUp()
+
   open fun setupDrawerToggle(toolbar: Toolbar) {
     drawerToggle =
       ActionBarDrawerToggle(
@@ -123,12 +131,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     return true
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == android.R.id.home) {
-      navController.popBackStack()
-      return true
-    }
-    return super.onOptionsItemSelected(item)
+  private fun navigationDrawerIsOpen(): Boolean =
+    drawerContainerLayout.isDrawerOpen(drawerNavView)
+
+  fun closeNavigationDrawer() {
+    drawerContainerLayout.closeDrawer(drawerNavView)
   }
 
   private fun openSupportKiwixExternalLink() {
@@ -150,11 +157,22 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+    if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
+      return super.onCreateOptionsMenu(menu)
+    }
+    var returnValue = true
+    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
+      if (it.onCreateOptionsMenu(menu, this) == FragmentActivityExtensions.Super.ShouldCall) {
+        returnValue = super.onCreateOptionsMenu(menu)
+      }
+    }
+    return returnValue
+  }
+
   private fun activeFragments(): MutableList<Fragment> =
     supportFragmentManager.fragments
-
-  abstract fun navigationDrawerIsOpen(): Boolean
-  abstract fun closeNavigationDrawer()
 
   fun navigate(action: NavDirections) {
     navController.navigate(action)
