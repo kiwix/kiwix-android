@@ -90,6 +90,7 @@ class LocalLibraryFragment : BaseFragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     actionMode = null
+    zimfilelist.adapter = null
     disposable.clear()
   }
 

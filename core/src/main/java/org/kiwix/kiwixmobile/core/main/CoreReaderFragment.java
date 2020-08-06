@@ -785,6 +785,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabCallback = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
+    tableDrawerAdapter.setTableClickListener(null);
+    tableDrawerAdapter = null;
     unbinder.unbind();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
