@@ -21,10 +21,15 @@
   app:startDestination="@id/navigation_library">
   <fragment
     android:id="@+id/navigation_reader"
-    android:name="org.kiwix.kiwixmobile.nav.destination.reader.ReaderFragment"
+    android:name="org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment"
     android:label="Reader">
     <argument
       android:name="zimFileUri"
+      android:defaultValue=""
+      app:argType="string" />
+
+    <argument
+      android:name="pageUrl"
       android:defaultValue=""
       app:argType="string" />
     <action
@@ -48,4 +53,12 @@
     android:id="@+id/navigation_downloads"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
     android:label="Downloads" />
+  <fragment
+    android:id="@+id/bookmarksFragment"
+    android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
+    android:label="BookmarksFragment" />
+  <fragment
+    android:id="@+id/historyFragment"
+    android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
+    android:label="HistoryFragment" />
 </navigation>

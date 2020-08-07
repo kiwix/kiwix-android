@@ -19,16 +19,15 @@
 package org.kiwix.kiwixmobile.di.modules
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import org.kiwix.kiwixmobile.KiwixViewModelFactory
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
+import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 
-@Module
+@Module(includes = [CoreViewModelModule::class])
 abstract class KiwixViewModelModule {
   @Binds
   @IntoMap
@@ -39,8 +38,4 @@ abstract class KiwixViewModelModule {
   @IntoMap
   @ViewModelKey(LanguageViewModel::class)
   abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
-
-  @Binds
-  abstract fun bindViewModelFactory(factory: KiwixViewModelFactory):
-    ViewModelProvider.Factory
 }

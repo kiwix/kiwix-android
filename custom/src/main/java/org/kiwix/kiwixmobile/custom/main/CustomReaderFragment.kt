@@ -30,28 +30,37 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
+import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import java.util.Locale
 import javax.inject.Inject
+
+const val PAGE_URL_KEY = "pageUrl"
 
 class CustomReaderFragment : CoreReaderFragment() {
 
@@ -62,19 +71,44 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Inject lateinit var customFileValidator: CustomFileValidator
   @Inject lateinit var dialogShower: DialogShower
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
       return
     }
-    openObbOrZim()
+
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (BuildConfig.DISABLE_SIDEBAR) {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
       toolbarToc?.isEnabled = false
     }
-    (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    (activity as CoreMainActivity).setupDrawerToggle(toolbar)
+    with(activity as AppCompatActivity) {
+      supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+      setupDrawerToggle(toolbar)
+    }
+    loadPageFromNavigationArguments()
+  }
+
+  private fun loadPageFromNavigationArguments() {
+    val pageUrl: String? = requireArguments().getString(PAGE_URL_KEY)
+    if (pageUrl?.isNotEmpty() == true) {
+      loadUrlWithCurrentWebview(pageUrl)
+    } else {
+      openObbOrZim()
+      restoreLastOpenedTab()
+    }
+    requireArguments().clear()
+  }
+
+  private fun restoreLastOpenedTab() {
+    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
+    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
+    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
+    val urls = JSONArray(zimArticles)
+    val zimPositions = JSONArray(settings.getString(TAG_CURRENT_POSITIONS, null))
+    selectTab(currentTab)
+    loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
+    getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
   }
 
   override fun setDrawerLockMode(lockMode: Int) {

@@ -20,13 +20,18 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -36,6 +41,15 @@ const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
 
+  override val navController: NavController by lazy {
+    findNavController(R.id.custom_nav_controller)
+  }
+  override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
+  override val drawerNavView: NavigationView by lazy { drawer_nav_view }
+  override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val historyFragmentResId: Int = R.id.historyFragment
+  override val cachedComponent by lazy { customActivityComponent }
+
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
   }
@@ -43,12 +57,9 @@ class CustomMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-
     if (savedInstanceState != null) {
       return
     }
-    supportFragmentManager.beginTransaction()
-      .add(R.id.fragment_containter, CustomReaderFragment()).commit()
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -59,15 +70,7 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun setupDrawerToggle(toolbar: Toolbar) {
-    drawerToggle =
-      ActionBarDrawerToggle(
-        this,
-        custom_drawer_container,
-        R.string.open,
-        R.string.close_all_tabs
-      )
-    custom_drawer_container.addDrawerListener(drawerToggle)
-    drawerToggle.syncState()
+    super.setupDrawerToggle(toolbar)
     drawer_nav_view.setNavigationItemSelectedListener { item ->
       closeNavigationDrawer()
       onNavigationItemSelected(item)
@@ -76,14 +79,12 @@ class CustomMainActivity : CoreMainActivity() {
       .isVisible = false
   }
 
-  override fun navigationDrawerIsOpen(): Boolean =
-    custom_drawer_container.isDrawerOpen(drawer_nav_view)
-
-  override fun closeNavigationDrawer() {
-    custom_drawer_container.closeDrawer(drawer_nav_view)
-  }
-
   override fun openSettingsActivity() {
     startActivityForResult(intent<CustomSettingsActivity>(), REQUEST_PREFERENCES)
+  }
+
+  override fun openPage(pageUrl: String, zimFilePath: String) {
+    val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
+    navigate(R.id.customReaderFragment, bundle)
   }
 }
