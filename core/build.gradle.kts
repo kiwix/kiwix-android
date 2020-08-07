@@ -14,7 +14,6 @@ buildscript {
 }
 plugins {
   `android-library`
-  id("androidx.navigation.safeargs")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
@@ -62,8 +61,4 @@ dependencies {
   implementation(Libs.objectbox_kotlin)
   implementation(Libs.objectbox_rxjava)
   implementation(Libs.webkit)
-  // navigation
-  implementation(Libs.navigation_kotlin_fragment)
-  implementation(Libs.navigation_kotlin_ui)
-  androidTestImplementation(Libs.navigation_kotlin_testing)
 }
