@@ -16,19 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects
+package org.kiwix.kiwixmobile.core.extensions
 
-import androidx.appcompat.app.AppCompatActivity
-import io.mockk.mockk
-import io.mockk.verify
-import org.junit.jupiter.api.Test
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 
-internal class FinishTest {
-
-  @Test
-  fun `invoke with finishes the activity`() {
-    val activity = mockk<AppCompatActivity>()
-    Finish.invokeWith(activity)
-    verify { activity.finish() }
-  }
-}
+inline fun <reified T : ViewModel> Fragment.viewModel(
+  viewModelFactory: ViewModelProvider.Factory
+) = ViewModelProviders.of(this, viewModelFactory).get(T::class.java)

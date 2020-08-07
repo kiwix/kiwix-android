@@ -22,17 +22,17 @@
   android:id="@+id/custom_drawer_container"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:fitsSystemWindows="true"
   tools:ignore="UnusedIds">
 
-  <androidx.fragment.app.FragmentContainerView
-    android:id="@+id/fragment_containter"
+  <fragment
+    android:id="@+id/custom_nav_controller"
+    android:name="androidx.navigation.fragment.NavHostFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:ignore="UnusedIds" />
+    app:defaultNavHost="true"
+    app:navGraph="@navigation/custom_nav_graph"
+    tools:ignore="FragmentTagUsage" />
 
   <com.google.android.material.navigation.NavigationView
     android:id="@+id/drawer_nav_view"

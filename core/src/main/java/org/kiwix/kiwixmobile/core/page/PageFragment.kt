@@ -19,10 +19,15 @@
 package org.kiwix.kiwixmobile.core.page
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -30,27 +35,28 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_page.no_page
-import kotlinx.android.synthetic.main.activity_page.page_switch
-import kotlinx.android.synthetic.main.activity_page.recycler_view
+import kotlinx.android.synthetic.main.fragment_page.no_page
+import kotlinx.android.synthetic.main.fragment_page.page_switch
+import kotlinx.android.synthetic.main.fragment_page.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.layout.activity_page
-import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
+import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
-abstract class PageActivity : OnItemClickListener, BaseActivity() {
-  val activityComponent by lazy { coreActivityComponent }
+abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActivityExtensions {
   abstract val pageViewModel: PageViewModel<*, *>
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
   abstract val title: String
@@ -84,15 +90,19 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
       }
     }
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_page, menu)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setHasOptionsMenu(true)
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.menu_page, menu)
     val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
     search.queryHint = searchQueryHint
     search.setOnQueryTextListener(SimpleTextListener {
       pageViewModel.actions.offer(Action.Filter(it))
     })
-    pageViewModel.state.observe(this, Observer(::render))
-    return true
+    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -105,29 +115,37 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(activity_page)
-    setSupportActionBar(toolbar)
-
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    supportActionBar?.title = title
-    recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    val activity = requireActivity() as CoreMainActivity
+    recycler_view.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     recycler_view.adapter = pageAdapter
-
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      title = title
+    }
     no_page.text = noItemsString
 
     page_switch.text = switchString
     page_switch.isChecked = switchIsChecked
-    compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(this) })
+    compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
     page_switch.setOnCheckedChangeListener { _, isChecked ->
       pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
+    pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
   }
 
-  override fun onDestroy() {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? = inflater.inflate(R.layout.fragment_page, container, false)
+
+  override fun onDestroyView() {
+    super.onDestroyView()
     compositeDisposable.clear()
-    super.onDestroy()
+    recycler_view.adapter = null
   }
 
   private fun render(state: PageState<*>) {
@@ -136,7 +154,8 @@ abstract class PageActivity : OnItemClickListener, BaseActivity() {
     no_page.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
     if (state.isInSelectionState) {
       if (actionMode == null) {
-        actionMode = startSupportActionMode(actionModeCallback)
+        actionMode =
+          (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
       }
       actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems())
     } else {

@@ -74,6 +74,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import butterknife.Unbinder;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -99,14 +100,13 @@ import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.StorageObserver;
 import org.kiwix.kiwixmobile.core.base.BaseFragment;
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions;
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions;
 import org.kiwix.kiwixmobile.core.dao.NewBookDao;
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao;
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity;
 import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
-import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
@@ -125,7 +125,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
-import static org.kiwix.kiwixmobile.core.page.history.HistoryActivityKt.USER_CLEARED_HISTORY;
+import static org.kiwix.kiwixmobile.core.page.history.HistoryFragmentKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUEST;
@@ -153,7 +153,7 @@ import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_KIWIX_M
 
 public abstract class CoreReaderFragment extends BaseFragment
   implements WebViewCallback,
-  MainMenu.MenuClickListener, BaseFragmentActivityExtensions, WebViewProvider {
+  MainMenu.MenuClickListener, FragmentActivityExtensions, WebViewProvider {
   protected final List<KiwixWebView> webViewList = new ArrayList<>();
   private final BehaviorProcessor<String> webUrlsProcessor = BehaviorProcessor.create();
 
@@ -226,20 +226,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Inject
   ExternalLinkOpener externalLinkOpener;
 
-  private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
-    @Override
-    public void onTick(long millisUntilFinished) {
-    }
-
-    @Override
-    public void onFinish() {
-      backToTopButton.hide();
-    }
-  };
+  private CountDownTimer hideBackToTopTimer;
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
   private boolean isOpenNewTabInBackground;
-  private boolean isExternalLinkPopup;
   private String documentParserJs;
   private DocumentParser documentParser;
   private KiwixTextToSpeech tts;
@@ -257,34 +247,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
   protected MainMenu mainMenu;
-  private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
-    @Override
-    public int getMovementFlags(@NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder) {
-      return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
-    }
-
-    @Override
-    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-      boolean isCurrentlyActive) {
-      super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-      viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
-    }
-
-    @Override
-    public boolean onMove(@NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-      return false;
-    }
-
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-      closeTab(viewHolder.getAdapterPosition());
-    }
-  };
+  private ItemTouchHelper.Callback tabCallback;
   private Disposable bookmarkingDisposable;
   private boolean isBookmarked;
+  private Unbinder unbinder;
 
   @NotNull @Override public Super onActionModeStarted(@NotNull ActionMode mode,
     @NotNull AppCompatActivity activity) {
@@ -317,20 +283,17 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @SuppressLint("ClickableViewAccessibility") @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+  @SuppressLint("ClickableViewAccessibility")
+  @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     setHasOptionsMenu(true);
-  }
-
-  @SuppressLint("ClickableViewAccessibility")
-  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     new WebView(activity).destroy(); // Workaround for buggy webViews see #710
     handleLocaleCheck();
     activity.setSupportActionBar(toolbar);
     actionBar = activity.getSupportActionBar();
+    initHideBackToTopTimer();
+    initTabCallback();
     toolbar.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
 
       @Override
@@ -402,13 +365,55 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
+  private void initTabCallback() {
+    tabCallback = new ItemTouchHelper.Callback() {
+      @Override
+      public int getMovementFlags(@NonNull RecyclerView recyclerView,
+        @NonNull RecyclerView.ViewHolder viewHolder) {
+        return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
+      }
+
+      @Override
+      public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
+        @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+        boolean isCurrentlyActive) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
+      }
+
+      @Override
+      public boolean onMove(@NonNull RecyclerView recyclerView,
+        @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        return false;
+      }
+
+      @Override
+      public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        closeTab(viewHolder.getAdapterPosition());
+      }
+    };
+  }
+
+  private void initHideBackToTopTimer() {
+    hideBackToTopTimer = new CountDownTimer(1200, 1200) {
+      @Override
+      public void onTick(long millisUntilFinished) {
+      }
+
+      @Override
+      public void onFinish() {
+        backToTopButton.hide();
+      }
+    };
+  }
+
   protected abstract void loadDrawerViews();
 
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
     View root = inflater.inflate(R.layout.fragment_main, container, false);
-    ButterKnife.bind(this, root);
+    unbinder = ButterKnife.bind(this, root);
     return root;
   }
 
@@ -533,7 +538,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void showTabSwitcher() {
-    ((CoreMainActivity) requireActivity()).disableDrawerIndicator();
+    ((CoreMainActivity) requireActivity()).disableDrawer();
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeAsUpIndicator(
       ContextCompat.getDrawable(getActivity(), R.drawable.ic_round_add_white_36dp));
@@ -777,20 +782,23 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     safeDispose();
-    super.onDestroy();
     tabCallback = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
+    tableDrawerAdapter.setTableClickListener(null);
+    tableDrawerAdapter = null;
+    unbinder.unbind();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
     tts.shutdown();
+    tts = null;
   }
 
   private void updateTableOfContents() {
     loadUrlWithCurrentWebview("javascript:(" + documentParserJs + ")()");
   }
 
-  private void loadUrlWithCurrentWebview(String url) {
+  protected void loadUrlWithCurrentWebview(String url) {
     loadUrl(url, getCurrentWebView());
   }
 
@@ -801,7 +809,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private KiwixWebView initalizeWebView(String url) {
-    AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
+    AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
     return webView;
@@ -892,7 +900,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     updateTitle();
   }
 
-  private KiwixWebView safelyGetWebView(int position) {
+  protected KiwixWebView safelyGetWebView(int position) {
     return webViewList.size() == 0 ? newMainPageTab() : webViewList.get(safePosition(position));
   }
 
@@ -903,7 +911,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull @Override public KiwixWebView getCurrentWebView() {
-    if (webViewList.size() == 0) return newMainPageTab();
+    if (webViewList.size() == 0) {
+      return newMainPageTab();
+    }
     if (currentWebViewIndex < webViewList.size() && currentWebViewIndex > 0) {
       return webViewList.get(currentWebViewIndex);
     } else {
@@ -1015,8 +1025,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   @OnLongClick(R2.id.bottom_toolbar_bookmark)
   boolean goToBookmarks() {
     saveTabStates();
-    Intent intentBookmarks = new Intent(getActivity(), BookmarksActivity.class);
-    startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
+    CoreMainActivity parentActivity = (CoreMainActivity) requireActivity();
+    parentActivity.navigate(parentActivity.getBookmarksFragmentResId());
     return true;
   }
 
@@ -1327,7 +1337,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull
-  private String contentUrl(String articleUrl) {
+  protected String contentUrl(String articleUrl) {
     return Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString();
   }
 
@@ -1498,7 +1508,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private void loadPrefs() {
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isOpenNewTabInBackground = sharedPreferenceUtil.getPrefNewTabBackground();
-    isExternalLinkPopup = sharedPreferenceUtil.getPrefExternalLinkPopup();
 
     if (!isBackToTopEnabled) {
       backToTopButton.hide();
@@ -1589,7 +1598,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewProgressChanged(int progress) {
-    if (checkNull(progressBar)) {
+    if (checkNull(progressBar) && isAdded()) {
       progressBar.show();
       progressBar.setProgress(progress);
       if (progress == 100) {

@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,15 +16,19 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
-import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
-object NavigateToDownloads : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    activity.navigate(LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationDownloads())
+internal class PopFragmentBackstackTest {
+
+  @Test
+  fun `invoke with pops activity backstack`() {
+    val activity = mockk<CoreMainActivity>(relaxed = true)
+    PopFragmentBackstack.invokeWith(activity)
+    verify { activity.navController.popBackStack() }
   }
 }

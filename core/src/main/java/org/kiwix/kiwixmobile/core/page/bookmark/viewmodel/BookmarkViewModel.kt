@@ -35,11 +35,7 @@ class BookmarkViewModel @Inject constructor(
 ) : PageViewModel<BookmarkItem, BookmarkState>(bookmarksDao, sharedPrefs, zimReaderContainer) {
 
   override fun initialState(): BookmarkState =
-    BookmarkState(
-      emptyList(),
-      sharedPreferenceUtil.showBookmarksAllBooks,
-      zimReaderContainer.id
-    )
+    BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
 
   override fun updatePagesBasedOnFilter(
     state: BookmarkState,
