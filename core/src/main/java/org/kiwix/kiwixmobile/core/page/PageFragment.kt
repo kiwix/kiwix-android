@@ -140,11 +140,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    setHasOptionsMenu(true)
-    (activity as AppCompatActivity).setSupportActionBar(null)
-    return inflater.inflate(R.layout.fragment_page, container, false)
-  }
+  ): View? = inflater.inflate(R.layout.fragment_page, container, false)
 
   override fun onDestroyView() {
     super.onDestroyView()
