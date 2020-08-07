@@ -18,17 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
-internal class FinishTest {
+internal class PopFragmentBackstackTest {
 
   @Test
-  fun `invoke with finishes the activity`() {
-    val activity = mockk<AppCompatActivity>()
+  fun `invoke with pops activity backstack`() {
+    val activity = mockk<CoreMainActivity>(relaxed = true)
     PopFragmentBackstack.invokeWith(activity)
-    verify { activity.finish() }
+    verify { activity.navController.popBackStack() }
   }
 }
