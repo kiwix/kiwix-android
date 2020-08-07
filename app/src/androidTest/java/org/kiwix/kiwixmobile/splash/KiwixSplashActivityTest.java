@@ -34,7 +34,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.intro.IntroActivity;
+import org.kiwix.kiwixmobile.intro.IntroFragment;
 import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
@@ -70,7 +70,7 @@ public class KiwixSplashActivityTest {
     activityTestRule.launchActivity(new Intent());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    intended(hasComponent(IntroActivity.class.getName()));
+    intended(hasComponent(IntroFragment.class.getName()));
 
     // Verify that the value of the "intro shown" boolean inside the SharedPreferences Database is not changed until the "Get started" button is pressed
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

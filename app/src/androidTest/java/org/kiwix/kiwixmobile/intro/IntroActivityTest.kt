@@ -23,9 +23,9 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
+class IntroActivityTest : BaseActivityTest<IntroFragment>() {
 
-  override var activityRule = activityTestRule<IntroActivity>()
+  override var activityRule = activityTestRule<IntroFragment>()
 
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {

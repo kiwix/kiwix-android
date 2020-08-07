@@ -56,6 +56,11 @@ class KiwixMainActivity : CoreMainActivity() {
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val initialDestinationFragmentId: Int
+    get() = if (sharedPreferenceUtil.showIntro())
+      R.id.introFragment
+    else
+      R.id.libraryFragment
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
@@ -79,7 +84,7 @@ class KiwixMainActivity : CoreMainActivity() {
     bottom_nav_view.setupWithNavController(navController)
 
     val topLevelDestinations =
-      setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
+      setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
       bottom_nav_view.isVisible = destination.id in topLevelDestinations
@@ -134,7 +139,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
     navigate(
-      R.id.navigation_reader,
+      R.id.readerFragment,
       bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     )
   }
