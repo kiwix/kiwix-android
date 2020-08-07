@@ -32,7 +32,7 @@ abstract class CoreSettingsFragment : BaseFragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     requireActivity().supportFragmentManager
-      .beginTransaction().replace(R.id.content_frame, createPreferenceFragment()!!)
+      .beginTransaction().replace(R.id.content_frame, createPreferenceFragment())
       .commit()
     setUpToolbar()
   }
