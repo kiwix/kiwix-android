@@ -39,10 +39,6 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
 public class StandardActions {
 
-  public static void openDrawer() {
-    onView(withContentDescription(getResourceString(R.string.open_drawer))).perform(click());
-  }
-
   public static void enterSettings() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_settings));
