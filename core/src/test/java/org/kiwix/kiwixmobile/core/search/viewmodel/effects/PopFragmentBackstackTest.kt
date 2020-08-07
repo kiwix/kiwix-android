@@ -23,12 +23,12 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
-internal class FinishTest {
+internal class PopFragmentBackstackTest {
 
   @Test
-  fun `invoke with finishes the activity`() {
+  fun `invoke with pops activity backstack`() {
     val activity = mockk<CoreMainActivity>(relaxed = true)
     PopFragmentBackstack.invokeWith(activity)
-    verify { (activity as CoreMainActivity).navController.popBackStack() }
+    verify { activity.navController.popBackStack() }
   }
 }
