@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
 import android.view.ActionMode
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -95,19 +94,6 @@ class NavigationHostFragment : NavHostFragment(), WebViewProvider, FragmentActiv
     var result = ShouldCall
     childFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       if (it.onNewIntent(intent, activity) == ShouldNotCall) {
-        result = ShouldNotCall
-      }
-    }
-    return result
-  }
-
-  override fun onCreateOptionsMenu(
-    menu: Menu,
-    activity: AppCompatActivity
-  ): Super {
-    var result = ShouldCall
-    childFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
-      if (it.onCreateOptionsMenu(menu, activity) == ShouldNotCall) {
         result = ShouldNotCall
       }
     }
