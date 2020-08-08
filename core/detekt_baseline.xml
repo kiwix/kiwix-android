@@ -24,10 +24,14 @@
     <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
+    <ID>MemberNameEqualsClassName:VideoEnabledWebChromeClient.kt$VideoEnabledWebChromeClient$fun View?.videoEnabledWebChromeClient(activityVideoView: ViewGroup?)</ID>
+    <ID>MemberNameEqualsClassName:VideoEnabledWebChromeClient.kt$VideoEnabledWebChromeClient$fun ViewGroup?.videoEnabledWebChromeClient( activityNonVideoView: View?, loadingView: View? )</ID>
+    <ID>MemberNameEqualsClassName:VideoEnabledWebChromeClient.kt$VideoEnabledWebChromeClient$fun ViewGroup?.videoEnabledWebChromeClient( activityNonVideoView: View?, loadingView: View?, webView: VideoEnabledWebView? )</ID>
     <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
     <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
     <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$loadICUData</ID>
     <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$canWrite</ID>
+    <ID>NestedBlockDepth:VideoEnabledWebChromeClient.kt$VideoEnabledWebChromeClient$onShowCustomView</ID>
     <ID>PackageNaming:ArticleCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:BookOnDiskDelegate.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
     <ID>PackageNaming:BooksOnDiskAdapter.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
