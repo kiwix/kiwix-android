@@ -311,8 +311,8 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   private val isLocationServiceEnabled: Boolean
-    get() = (isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-      isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+    get() = isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+      isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
   private fun isProviderEnabled(locationProvider: String): Boolean {
     return try {

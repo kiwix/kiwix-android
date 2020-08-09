@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.local_file_transfer;
+package org.kiwix.kiwixmobile.localfiletransfer;
 
 import android.os.AsyncTask;
 import android.util.Log;
