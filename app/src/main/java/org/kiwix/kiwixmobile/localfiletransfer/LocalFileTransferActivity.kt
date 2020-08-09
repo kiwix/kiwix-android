@@ -15,11 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.local_file_transfer
+package org.kiwix.kiwixmobile.localfiletransfer
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -33,26 +32,26 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+import kotlinx.android.synthetic.main.activity_local_file_transfer.list_peer_devices
+import kotlinx.android.synthetic.main.activity_local_file_transfer.progress_bar_searching_peers
+import kotlinx.android.synthetic.main.activity_local_file_transfer.recycler_view_transfer_files
+import kotlinx.android.synthetic.main.activity_local_file_transfer.text_view_device_name
+import kotlinx.android.synthetic.main.activity_local_file_transfer.text_view_empty_peer_list
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.local_file_transfer.WifiDirectManager.Companion.getDeviceStatus
-import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiP2pDelegate
-import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiPeerListAdapter
+import org.kiwix.kiwixmobile.localfiletransfer.WifiDirectManager.Companion.getDeviceStatus
+import org.kiwix.kiwixmobile.localfiletransfer.adapter.WifiP2pDelegate
+import org.kiwix.kiwixmobile.localfiletransfer.adapter.WifiPeerListAdapter
 import java.util.ArrayList
-import java.util.Collections
 import javax.inject.Inject
 
 /**
@@ -68,42 +67,27 @@ import javax.inject.Inject
  * 2) After handshake, starting the files transfer using [SenderDeviceAsyncTask] on the sender
  * device and [ReceiverDeviceAsyncTask] files receiving device
  */
-@SuppressLint("GoogleAppIndexingApiWarning")
+@SuppressLint("GoogleAppIndexingApiWarning", "Registered")
 class LocalFileTransferActivity : BaseActivity(),
   WifiDirectManager.Callbacks {
   @Inject
-  var alertDialogShower: AlertDialogShower? = null
+  lateinit var alertDialogShower: AlertDialogShower
 
   @Inject
-  var wifiDirectManager: WifiDirectManager? = null
+  lateinit var wifiDirectManager: WifiDirectManager
 
   @Inject
-  var locationManager: LocationManager? = null
+  lateinit var locationManager: LocationManager
 
-  @BindView(R.id.toolbar)
-  var actionBar: Toolbar? = null
-
-  @BindView(R.id.text_view_device_name)
-  var deviceName: TextView? = null
-
-  @BindView(R.id.progress_bar_searching_peers)
-  var searchingPeersProgressBar: ProgressBar? = null
-
-  @BindView(R.id.list_peer_devices)
-  var peerDeviceList: RecyclerView? = null
-
-  @BindView(R.id.text_view_empty_peer_list)
-  var textViewPeerDevices: TextView? = null
-
-  @BindView(R.id.recycler_view_transfer_files)
-  var filesRecyclerView: RecyclerView? = null
   private var isFileSender = false // Whether the device is the file sender or not
   private var filesForTransfer = ArrayList<FileItem>()
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_local_file_transfer)
+
     /*
      * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
      * - On the sender device, this activity is started from the app chooser post selection
@@ -114,25 +98,28 @@ class LocalFileTransferActivity : BaseActivity(),
     val filesIntent = intent
     val fileUriArrayList: ArrayList<Uri>?
     fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
-    isFileSender = fileUriArrayList != null && fileUriArrayList.size > 0
-    setSupportActionBar(actionBar)
-    actionBar!!.setNavigationIcon(R.drawable.ic_close_white_24dp)
-    actionBar!!.setNavigationOnClickListener { finish() }
+    isFileSender = fileUriArrayList?.isNotEmpty() == true && fileUriArrayList.size > 0
+
+    val toolbar: Toolbar =
+      findViewById(R.id.toolbar)
+    // I know this is not the best method, but android extensions were showing 'unknown reference' error
+    setSupportActionBar(toolbar)
+    toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+    toolbar.setNavigationOnClickListener { finish() }
     wifiPeerListAdapter = WifiPeerListAdapter(
-      WifiP2pDelegate { wifiP2pDevice: WifiP2pDevice? ->
-        wifiDirectManager!!.sendToDevice(wifiP2pDevice!!)
-      }
+      WifiP2pDelegate(wifiDirectManager::sendToDevice)
     )
-    peerDeviceList!!.adapter = wifiPeerListAdapter
-    peerDeviceList!!.layoutManager = LinearLayoutManager(this)
-    peerDeviceList!!.setHasFixedSize(true)
+
+    list_peer_devices?.adapter = wifiPeerListAdapter
+    list_peer_devices?.layoutManager = LinearLayoutManager(this)
+    list_peer_devices?.setHasFixedSize(true)
     if (isFileSender) {
-      for (i in fileUriArrayList.indices) {
-        filesForTransfer.add(FileItem(fileUriArrayList[i]))
+      fileUriArrayList.map {
+        filesForTransfer.add(FileItem(it))
       }
       displayFileTransferProgress(filesForTransfer)
     }
-    wifiDirectManager!!.startWifiDirectManager(filesForTransfer)
+    wifiDirectManager.startWifiDirectManager(filesForTransfer)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -141,43 +128,42 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    var status = false
     return if (item.itemId == R.id.menu_item_search_devices) {
-
       /* Permissions essential for this module */
       if (!checkCoarseLocationAccessPermission()) {
-        return true
+        status = true
       }
       if (!checkExternalStorageWritePermission()) {
-        return true
+        status = true
       }
-
-      /* Initiate discovery */if (!wifiDirectManager!!.isWifiP2pEnabled) {
+      /* Initiate discovery */
+      if (!wifiDirectManager.isWifiP2pEnabled) {
         requestEnableWifiP2pServices()
-        return true
+        status = true
       }
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled) {
         requestEnableLocationServices()
-        return true
+        status = true
       }
       showPeerDiscoveryProgressBar()
-      wifiDirectManager!!.discoverPeerDevices()
-      true
-    } else {
-      super.onOptionsItemSelected(item)
-    }
+      wifiDirectManager.discoverPeerDevices()
+      status
+    } else
+      return super.onOptionsItemSelected(item)
   }
 
   private fun showPeerDiscoveryProgressBar() { // Setup UI for searching peers
-    searchingPeersProgressBar!!.visibility = View.VISIBLE
-    peerDeviceList!!.visibility = View.INVISIBLE
-    textViewPeerDevices!!.visibility = View.INVISIBLE
+    progress_bar_searching_peers?.visibility = View.VISIBLE
+    list_peer_devices?.visibility = View.INVISIBLE
+    text_view_empty_peer_list?.visibility = View.INVISIBLE
   }
 
   /* From WifiDirectManager.Callbacks interface */
   override fun onUserDeviceDetailsAvailable(userDevice: WifiP2pDevice?) {
     // Update UI with user device's details
     if (userDevice != null) {
-      deviceName!!.text = userDevice.deviceName
+      text_view_device_name?.text = userDevice.deviceName
       Log.d(
         TAG,
         getDeviceStatus(userDevice.status)
@@ -186,7 +172,7 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   override fun onConnectionToPeersLost() {
-    wifiPeerListAdapter!!.items = Collections.EMPTY_LIST as List<WifiP2pDevice>
+    wifiPeerListAdapter?.items = emptyList()
   }
 
   override fun onFilesForTransferAvailable(filesForTransfer: ArrayList<FileItem>) {
@@ -196,19 +182,19 @@ class LocalFileTransferActivity : BaseActivity(),
 
   private fun displayFileTransferProgress(filesToSend: ArrayList<FileItem>) {
     fileListAdapter = FileListAdapter(filesToSend)
-    filesRecyclerView!!.adapter = fileListAdapter
-    filesRecyclerView!!.layoutManager = LinearLayoutManager(this)
+    recycler_view_transfer_files?.adapter = fileListAdapter
+    recycler_view_transfer_files?.layoutManager = LinearLayoutManager(this)
   }
 
   override fun onFileStatusChanged(itemIndex: Int) {
-    fileListAdapter!!.notifyItemChanged(itemIndex)
+    fileListAdapter?.notifyItemChanged(itemIndex)
   }
 
   override fun updateListOfAvailablePeers(peers: WifiP2pDeviceList) {
     val deviceList: List<WifiP2pDevice> = ArrayList<WifiP2pDevice>(peers.deviceList)
-    searchingPeersProgressBar!!.visibility = View.GONE
-    peerDeviceList!!.visibility = View.VISIBLE
-    wifiPeerListAdapter!!.items = deviceList
+    progress_bar_searching_peers?.visibility = View.GONE
+    list_peer_devices?.visibility = View.VISIBLE
+    wifiPeerListAdapter?.items = deviceList
     if (deviceList.isEmpty()) {
       Log.d(TAG, "No devices found")
     }
@@ -219,8 +205,12 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   /* Helper methods used for checking permissions and states of services */
-  private fun checkCoarseLocationAccessPermission(): Boolean { // Required by Android to detect wifi-p2p peers
-    return if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+  private fun checkCoarseLocationAccessPermission(): Boolean {
+    // Required by Android to detect wifi-p2p peers
+    return if (ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+      )
       == PackageManager.PERMISSION_DENIED
     ) {
       if (ActivityCompat.shouldShowRequestPermissionRationale(
@@ -228,7 +218,7 @@ class LocalFileTransferActivity : BaseActivity(),
           Manifest.permission.ACCESS_COARSE_LOCATION
         )
       ) {
-        alertDialogShower!!.show(KiwixDialog.LocationPermissionRationale,
+        alertDialogShower.show(KiwixDialog.LocationPermissionRationale,
           {
             ActivityCompat.requestPermissions(
               this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -243,12 +233,16 @@ class LocalFileTransferActivity : BaseActivity(),
       }
       false
     } else {
-      true // Control reaches here: Either permission granted at install time, or at the time of request
+      true
+      // Control reaches here: Either permission granted at install time, or at the time of request
     }
   }
 
   private fun checkExternalStorageWritePermission(): Boolean { // To access and store the zims
-    return if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    return if (ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+      )
       == PackageManager.PERMISSION_DENIED
     ) {
       if (ActivityCompat.shouldShowRequestPermissionRationale(
@@ -256,7 +250,7 @@ class LocalFileTransferActivity : BaseActivity(),
           Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
       ) {
-        alertDialogShower!!.show(KiwixDialog.StoragePermissionRationale, {
+        alertDialogShower.show(KiwixDialog.StoragePermissionRationale, {
           ActivityCompat.requestPermissions(
             this@LocalFileTransferActivity,
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -271,12 +265,14 @@ class LocalFileTransferActivity : BaseActivity(),
       }
       false
     } else {
-      true // Control reaches here: Either permission granted at install time, or at the time of request
+      true
+      // Control reaches here: Either permission granted at install time, or at the time of request
     }
   }
 
   override fun onRequestPermissionsResult(
-    requestCode: Int, permissions: Array<String>,
+    requestCode: Int,
+    permissions: Array<String>,
     grantResults: IntArray
   ) {
     if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
@@ -286,11 +282,12 @@ class LocalFileTransferActivity : BaseActivity(),
             TAG,
             "Location permission not granted"
           )
-          showToast(
+          Toast.makeText(
             this,
             R.string.permission_refused_location,
             Toast.LENGTH_LONG
-          )
+          ).show()
+
           finish()
         }
         PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
@@ -298,11 +295,12 @@ class LocalFileTransferActivity : BaseActivity(),
             TAG,
             "Storage write permission not granted"
           )
-          showToast(
+          Toast.makeText(
             this,
             R.string.permission_refused_storage,
             Toast.LENGTH_LONG
-          )
+          ).show()
+
           finish()
         }
         else -> {
@@ -313,12 +311,12 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   private val isLocationServiceEnabled: Boolean
-    get() = (isProviderEnabled(LocationManager.GPS_PROVIDER)
-      || isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+    get() = (isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+      isProviderEnabled(LocationManager.NETWORK_PROVIDER))
 
   private fun isProviderEnabled(locationProvider: String): Boolean {
     return try {
-      locationManager!!.isProviderEnabled(locationProvider)
+      locationManager.isProviderEnabled(locationProvider)
     } catch (ex: SecurityException) {
       ex.printStackTrace()
       false
@@ -329,28 +327,28 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   private fun requestEnableLocationServices() {
-    alertDialogShower!!.show(KiwixDialog.EnableLocationServices, {
-      startActivityForResult(
-        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
-        REQUEST_ENABLE_LOCATION_SERVICES
-      )
-    }, {
-      showToast(
+    alertDialogShower.show(
+      KiwixDialog.EnableLocationServices, {
+        startActivityForResult(
+          Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
+          REQUEST_ENABLE_LOCATION_SERVICES
+        )
+      }, Toast.makeText(
         this@LocalFileTransferActivity, R.string.discovery_needs_location,
         Toast.LENGTH_SHORT
-      )
-    })
+      )::show
+    )
   }
 
   private fun requestEnableWifiP2pServices() {
-    alertDialogShower!!.show(KiwixDialog.EnableWifiP2pServices, {
-      startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-    }, {
-      showToast(
+    alertDialogShower.show(
+      KiwixDialog.EnableWifiP2pServices, {
+        startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+      }, Toast.makeText(
         this@LocalFileTransferActivity, R.string.discovery_needs_wifi,
         Toast.LENGTH_SHORT
-      )
-    })
+      )::show
+    )
   }
 
   override fun onActivityResult(
@@ -361,11 +359,11 @@ class LocalFileTransferActivity : BaseActivity(),
     when (requestCode) {
       REQUEST_ENABLE_LOCATION_SERVICES -> {
         if (!isLocationServiceEnabled) {
-          showToast(
+          Toast.makeText(
             this,
             R.string.permission_refused_location,
             Toast.LENGTH_LONG
-          )
+          ).show()
         }
       }
       else -> {
@@ -375,7 +373,7 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   override fun onDestroy() {
-    wifiDirectManager!!.stopWifiDirectManager()
+    wifiDirectManager.stopWifiDirectManager()
     super.onDestroy()
   }
 
@@ -389,26 +387,5 @@ class LocalFileTransferActivity : BaseActivity(),
     const val REQUEST_ENABLE_LOCATION_SERVICES = 1
     private const val PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1
     private const val PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 2
-
-    /* Miscellaneous helper methods */
-    fun showToast(
-      context: Context,
-      stringResource: Int,
-      duration: Int
-    ) {
-      showToast(
-        context,
-        context.getString(stringResource),
-        duration
-      )
-    }
-
-    private fun showToast(
-      context: Context?,
-      text: String?,
-      duration: Int
-    ) {
-      Toast.makeText(context, text, duration).show()
-    }
   }
 }
