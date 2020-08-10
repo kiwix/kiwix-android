@@ -32,8 +32,19 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
   private final int toolbarHeight = DimenUtils.getToolbarHeight(getContext());
   private final View toolbarView;
   private final View bottomBarView;
+  private final View parentNavigationBar;
   private final SharedPreferenceUtil sharedPreferenceUtil;
   private float startY;
+
+  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
+    ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient, View toolbarView,
+    View bottomBarView, View parentNavigationBar, SharedPreferenceUtil sharedPreferenceUtil) {
+    super(context, callback, attrs, nonVideoView, videoView, webViewClient);
+    this.toolbarView = toolbarView;
+    this.bottomBarView = bottomBarView;
+    this.parentNavigationBar = parentNavigationBar;
+    this.sharedPreferenceUtil = sharedPreferenceUtil;
+  }
 
   public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
     ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient, View toolbarView,
@@ -41,6 +52,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
     super(context, callback, attrs, nonVideoView, videoView, webViewClient);
     this.toolbarView = toolbarView;
     this.bottomBarView = bottomBarView;
+    this.parentNavigationBar = null;
     this.sharedPreferenceUtil = sharedPreferenceUtil;
   }
 
@@ -58,6 +70,10 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
     toolbarView.setTranslationY(newTranslation);
     bottomBarView.setTranslationY(
       newTranslation * -1 * (bottomBarView.getHeight() / (float) (toolbarHeight)));
+    if (parentNavigationBar != null) {
+      parentNavigationBar.setTranslationY(
+        newTranslation * -1 * (parentNavigationBar.getHeight() / (float) (toolbarHeight)));
+    }
     this.setTranslationY(newTranslation + toolbarHeight);
     return toolbarHeight + newTranslation != 0 && newTranslation != 0;
   }

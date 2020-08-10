@@ -25,11 +25,10 @@ import dagger.Provides
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.main.MainContract
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.MainMenu.Factory
 import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
-import org.kiwix.kiwixmobile.core.main.MainPresenter
+import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.DialogShower
@@ -43,8 +42,8 @@ abstract class ActivityModule {
   companion object {
     @Provides
     @ActivityScope
-    fun providesMainPresenter(dataSource: DataSource): MainContract.Presenter =
-      MainPresenter(dataSource)
+    fun providesMainPresenter(dataSource: DataSource): MainRepositoryActions =
+      MainRepositoryActions(dataSource)
 
     @Provides
     @ActivityScope

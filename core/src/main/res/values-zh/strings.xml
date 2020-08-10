@@ -67,8 +67,6 @@
   <string name="pref_night_mode_summary">以反色调显示文章</string>
   <string name="pref_back_to_top">返回顶端</string>
   <string name="pref_back_to_top_summary">在页底显示一个按钮以供返回顶端</string>
-  <string name="pref_hide_toolbar">当滚动时隐藏工具栏</string>
-  <string name="pref_hide_toolbar_summary">当页面向下滚动时隐藏工具栏</string>
   <string name="pref_language_title">语言</string>
   <string name="pref_language_chooser">选择语言</string>
   <string name="pref_credits">贡献者和授权</string>
@@ -202,5 +200,4 @@
   <string name="delete_bookmarks">要删除所有书签吗？</string>
   <string name="delete_selected_bookmarks">要删除所选的书签吗？</string>
   <string name="search_open_in_new_tab">在新标签页打开</string>
-  <string name="experimental_navigation">试验性导航</string>
 </resources>
