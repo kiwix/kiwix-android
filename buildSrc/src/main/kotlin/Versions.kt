@@ -1,4 +1,3 @@
-import kotlin.String
 import org.gradle.plugin.use.PluginDependenciesSpec
 import org.gradle.plugin.use.PluginDependencySpec
 
@@ -20,15 +19,15 @@ object Versions {
 
   const val org_jetbrains_kotlin: String = "1.3.72"
 
-  const val com_google_dagger: String = "2.26" // available: "2.28.3"
+  const val com_google_dagger: String = "2.28.3"
 
   const val com_yahoo_squidb: String = "2.0.0" // available: "3.2.3"
 
-  const val com_jakewharton: String = "10.2.1" // available: "10.2.2"
+  const val com_jakewharton: String = "10.2.2"
 
   const val androidx_test: String = "1.2.0"
 
-  const val io_objectbox: String = "2.6.0" // available: "2.7.0"
+  const val io_objectbox: String = "2.7.0"
 
   const val org_jacoco: String = "0.7.9"
 
@@ -82,11 +81,11 @@ object Versions {
 
   const val rxandroid: String = "2.1.1"
 
-  const val core_ktx: String = "1.3.0" // available: "1.3.1"
+  const val core_ktx: String = "1.3.1"
 
-  const val kiwixlib: String = "9.2.3" // available: "9.3.1"
+  const val kiwixlib: String = "9.3.1"
 
-  const val material: String = "1.1.0" // available: "1.2.0"
+  const val material: String = "1.2.0"
 
   const val multidex: String = "2.0.1"
 
@@ -96,7 +95,7 @@ object Versions {
 
   const val jsr305: String = "3.0.2"
 
-  const val ktlint: String = "0.36.0" // available: "0.37.2"
+  const val ktlint: String = "0.37.2"
 
   const val rxjava: String = "2.2.19"
 
@@ -120,4 +119,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
   inline get() =
-      id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+    id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
