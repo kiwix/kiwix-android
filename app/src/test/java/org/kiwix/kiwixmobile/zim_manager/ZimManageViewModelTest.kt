@@ -63,7 +63,6 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFile
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.ShareFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
