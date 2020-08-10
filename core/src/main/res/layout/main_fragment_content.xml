@@ -82,7 +82,7 @@
     android:id="@+id/activity_main_back_to_top_fab"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginBottom="?attr/actionBarSize"
     android:visibility="gone"
     app:fabSize="mini"
