@@ -55,6 +55,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val bookmarksFragmentResId: Int
   abstract val historyFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
+  abstract val topLevelDestinations: Set<Int>
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
@@ -190,7 +191,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   private fun openHistoryActivity() {
     navigate(historyFragmentResId)
-    handleDrawerOnNavigation()
   }
 
   private fun openBookmarksActivity() {
@@ -198,7 +198,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     handleDrawerOnNavigation()
   }
 
-  private fun handleDrawerOnNavigation() {
+  protected fun handleDrawerOnNavigation() {
     closeNavigationDrawer()
     disableDrawer()
   }
