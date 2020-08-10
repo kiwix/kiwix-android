@@ -15,10 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.localfiletransfer
+package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -48,9 +49,9 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.localfiletransfer.WifiDirectManager.Companion.getDeviceStatus
-import org.kiwix.kiwixmobile.localfiletransfer.adapter.WifiP2pDelegate
-import org.kiwix.kiwixmobile.localfiletransfer.adapter.WifiPeerListAdapter
+import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
+import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
+import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -110,9 +111,9 @@ class LocalFileTransferActivity : BaseActivity(),
       WifiP2pDelegate(wifiDirectManager::sendToDevice)
     )
 
-    list_peer_devices?.adapter = wifiPeerListAdapter
-    list_peer_devices?.layoutManager = LinearLayoutManager(this)
-    list_peer_devices?.setHasFixedSize(true)
+    list_peer_devices.adapter = wifiPeerListAdapter
+    list_peer_devices.layoutManager = LinearLayoutManager(this)
+    list_peer_devices.setHasFixedSize(true)
     if (isFileSender) {
       fileUriArrayList.map {
         filesForTransfer.add(FileItem(it))
@@ -128,42 +129,46 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    var status = false
-    return if (item.itemId == R.id.menu_item_search_devices) {
+    /* var status = false */
+    if (item.itemId == R.id.menu_item_search_devices) {
       /* Permissions essential for this module */
-      if (!checkCoarseLocationAccessPermission()) {
-        status = true
+      return when {
+        !checkCoarseLocationAccessPermission() -> {
+          true
+        }
+        !checkExternalStorageWritePermission() -> {
+          true
+        }
+        /* Initiate discovery */
+        !wifiDirectManager.isWifiP2pEnabled -> {
+          requestEnableWifiP2pServices()
+          true
+        }
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
+          requestEnableLocationServices()
+          true
+        }
+        else -> {
+          showPeerDiscoveryProgressBar()
+          wifiDirectManager.discoverPeerDevices()
+          true
+        }
       }
-      if (!checkExternalStorageWritePermission()) {
-        status = true
-      }
-      /* Initiate discovery */
-      if (!wifiDirectManager.isWifiP2pEnabled) {
-        requestEnableWifiP2pServices()
-        status = true
-      }
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled) {
-        requestEnableLocationServices()
-        status = true
-      }
-      showPeerDiscoveryProgressBar()
-      wifiDirectManager.discoverPeerDevices()
-      status
-    } else
-      return super.onOptionsItemSelected(item)
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   private fun showPeerDiscoveryProgressBar() { // Setup UI for searching peers
-    progress_bar_searching_peers?.visibility = View.VISIBLE
-    list_peer_devices?.visibility = View.INVISIBLE
-    text_view_empty_peer_list?.visibility = View.INVISIBLE
+    progress_bar_searching_peers.visibility = View.VISIBLE
+    list_peer_devices.visibility = View.INVISIBLE
+    text_view_empty_peer_list.visibility = View.INVISIBLE
   }
 
   /* From WifiDirectManager.Callbacks interface */
   override fun onUserDeviceDetailsAvailable(userDevice: WifiP2pDevice?) {
     // Update UI with user device's details
     if (userDevice != null) {
-      text_view_device_name?.text = userDevice.deviceName
+      text_view_device_name.text = userDevice.deviceName
       Log.d(
         TAG,
         getDeviceStatus(userDevice.status)
@@ -182,8 +187,8 @@ class LocalFileTransferActivity : BaseActivity(),
 
   private fun displayFileTransferProgress(filesToSend: ArrayList<FileItem>) {
     fileListAdapter = FileListAdapter(filesToSend)
-    recycler_view_transfer_files?.adapter = fileListAdapter
-    recycler_view_transfer_files?.layoutManager = LinearLayoutManager(this)
+    recycler_view_transfer_files.adapter = fileListAdapter
+    recycler_view_transfer_files.layoutManager = LinearLayoutManager(this)
   }
 
   override fun onFileStatusChanged(itemIndex: Int) {
@@ -192,8 +197,8 @@ class LocalFileTransferActivity : BaseActivity(),
 
   override fun updateListOfAvailablePeers(peers: WifiP2pDeviceList) {
     val deviceList: List<WifiP2pDevice> = ArrayList<WifiP2pDevice>(peers.deviceList)
-    progress_bar_searching_peers?.visibility = View.GONE
-    list_peer_devices?.visibility = View.VISIBLE
+    progress_bar_searching_peers.visibility = View.GONE
+    list_peer_devices.visibility = View.VISIBLE
     wifiPeerListAdapter?.items = deviceList
     if (deviceList.isEmpty()) {
       Log.d(TAG, "No devices found")
@@ -282,11 +287,7 @@ class LocalFileTransferActivity : BaseActivity(),
             TAG,
             "Location permission not granted"
           )
-          Toast.makeText(
-            this,
-            R.string.permission_refused_location,
-            Toast.LENGTH_LONG
-          ).show()
+          R.string.permission_refused_location.toast(this)
 
           finish()
         }
@@ -295,11 +296,7 @@ class LocalFileTransferActivity : BaseActivity(),
             TAG,
             "Storage write permission not granted"
           )
-          Toast.makeText(
-            this,
-            R.string.permission_refused_storage,
-            Toast.LENGTH_LONG
-          ).show()
+          R.string.permission_refused_storage.toast(this)
 
           finish()
         }
@@ -333,10 +330,8 @@ class LocalFileTransferActivity : BaseActivity(),
           Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
           REQUEST_ENABLE_LOCATION_SERVICES
         )
-      }, Toast.makeText(
-        this@LocalFileTransferActivity, R.string.discovery_needs_location,
-        Toast.LENGTH_SHORT
-      )::show
+      },
+      R.string.discovery_needs_location.toast(this)::show
     )
   }
 
@@ -344,10 +339,7 @@ class LocalFileTransferActivity : BaseActivity(),
     alertDialogShower.show(
       KiwixDialog.EnableWifiP2pServices, {
         startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-      }, Toast.makeText(
-        this@LocalFileTransferActivity, R.string.discovery_needs_wifi,
-        Toast.LENGTH_SHORT
-      )::show
+      }, R.string.discovery_needs_wifi.toast(this)::show
     )
   }
 
@@ -359,11 +351,7 @@ class LocalFileTransferActivity : BaseActivity(),
     when (requestCode) {
       REQUEST_ENABLE_LOCATION_SERVICES -> {
         if (!isLocationServiceEnabled) {
-          Toast.makeText(
-            this,
-            R.string.permission_refused_location,
-            Toast.LENGTH_LONG
-          ).show()
+          R.string.permission_refused_location.toast(this)
         }
       }
       else -> {
@@ -371,6 +359,9 @@ class LocalFileTransferActivity : BaseActivity(),
       }
     }
   }
+
+  fun Any.toast(context: Context, duration: Int = Toast.LENGTH_SHORT): Toast =
+    Toast.makeText(context, this.toString(), duration).apply { show() }
 
   override fun onDestroy() {
     wifiDirectManager.stopWifiDirectManager()

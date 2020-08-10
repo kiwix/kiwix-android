@@ -35,10 +35,10 @@
     <ID>PackageNaming:ShareFiles.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:SimplePageChangeListener.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:StartMultiSelection.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:WifiDirectManager.kt$package org.kiwix.kiwixmobile.localfiletransfer</ID>
-    <ID>PackageNaming:WifiP2pDelegate.kt$package org.kiwix.kiwixmobile.localfiletransfer.adapter</ID>
-    <ID>PackageNaming:WifiP2pViewHolder.kt$package org.kiwix.kiwixmobile.localfiletransfer.adapter</ID>
-    <ID>PackageNaming:WifiPeerListAdapter.kt$package org.kiwix.kiwixmobile.localfiletransfer.adapter</ID>
+    <ID>PackageNaming:WifiDirectManager.kt$package org.kiwix.kiwixmobile.localFileTransfer</ID>
+    <ID>PackageNaming:WifiP2pDelegate.kt$package org.kiwix.kiwixmobile.localFileTransfer.adapter</ID>
+    <ID>PackageNaming:WifiP2pViewHolder.kt$package org.kiwix.kiwixmobile.localFileTransfer.adapter</ID>
+    <ID>PackageNaming:WifiPeerListAdapter.kt$package org.kiwix.kiwixmobile.localFileTransfer.adapter</ID>
     <ID>PackageNaming:ZimFileSelectFragment.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:ZimManageActivity.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:ZimManageViewModel.kt$package org.kiwix.kiwixmobile.zim_manager</ID>

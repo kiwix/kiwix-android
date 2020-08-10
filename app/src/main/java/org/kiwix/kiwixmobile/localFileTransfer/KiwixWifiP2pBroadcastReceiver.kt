@@ -18,7 +18,7 @@
 
 @file:Suppress("PackageNaming")
 
-package org.kiwix.kiwixmobile.localfiletransfer
+package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.content.BroadcastReceiver
 import android.content.Context

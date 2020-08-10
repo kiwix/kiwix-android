@@ -15,12 +15,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.localfiletransfer.adapter
+
+package org.kiwix.kiwixmobile.localFileTransfer.adapter
 
 import android.net.wifi.p2p.WifiP2pDevice
-import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
+import android.view.View
+import kotlinx.android.synthetic.main.row_peer_device.row_device_name
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 
-internal class WifiPeerListAdapter(wifiP2pDelegate: WifiP2pDelegate) :
-  BaseDelegateAdapter<WifiP2pDevice>(wifiP2pDelegate) {
-  override fun getIdFor(item: WifiP2pDevice) = item.deviceAddress.hashCode().toLong() ?: 0L
+class WifiP2pViewHolder(
+  override val containerView: View,
+  private val onItemClickAction: (WifiP2pDevice) -> Unit
+) : BaseViewHolder<WifiP2pDevice>(containerView) {
+  override fun bind(item: WifiP2pDevice) {
+    row_device_name.text = item.deviceName
+    containerView.setOnClickListener {
+      onItemClickAction.invoke(item)
+    }
+  }
 }

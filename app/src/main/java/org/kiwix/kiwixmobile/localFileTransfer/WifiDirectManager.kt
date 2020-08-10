@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.localfiletransfer
+package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -45,8 +45,8 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog.FileTransferConfirmation
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.localfiletransfer.FileItem.FileStatus
-import org.kiwix.kiwixmobile.localfiletransfer.KiwixWifiP2pBroadcastReceiver.P2pEventListener
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus
+import org.kiwix.kiwixmobile.localFileTransfer.KiwixWifiP2pBroadcastReceiver.P2pEventListener
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream

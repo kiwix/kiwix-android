@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.intro.IntroActivity
 import org.kiwix.kiwixmobile.intro.IntroModule
 import org.kiwix.kiwixmobile.language.LanguageActivity
-import org.kiwix.kiwixmobile.localfiletransfer.LocalFileTransferActivity
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity

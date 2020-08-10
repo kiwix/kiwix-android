@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.localfiletransfer;
+package org.kiwix.kiwixmobile.localFileTransfer;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -29,9 +29,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 
-import static org.kiwix.kiwixmobile.localfiletransfer.FileItem.FileStatus.ERROR;
-import static org.kiwix.kiwixmobile.localfiletransfer.FileItem.FileStatus.SENDING;
-import static org.kiwix.kiwixmobile.localfiletransfer.FileItem.FileStatus.SENT;
+import static org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR;
+import static org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING;
+import static org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT;
 
 /**
  * Helper class for the local file sharing module.

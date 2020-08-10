@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.localfiletransfer;
+package org.kiwix.kiwixmobile.localFileTransfer;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -29,10 +29,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.R;
-import static org.kiwix.kiwixmobile.localfiletransfer.FileItem.FileStatus;
-import static org.kiwix.kiwixmobile.localfiletransfer.FileItem.FileStatus.ERROR;
-import static org.kiwix.kiwixmobile.localfiletransfer.FileItem.FileStatus.SENDING;
-import static org.kiwix.kiwixmobile.localfiletransfer.FileItem.FileStatus.SENT;
+import static org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus;
+import static org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR;
+import static org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING;
+import static org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT;
 
 /**
  * Helper class for the local file sharing module.

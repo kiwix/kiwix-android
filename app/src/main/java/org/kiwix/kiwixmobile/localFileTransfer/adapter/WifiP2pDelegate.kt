@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.localfiletransfer.adapter
+package org.kiwix.kiwixmobile.localFileTransfer.adapter
 
 import android.net.wifi.p2p.WifiP2pDevice
 import android.view.ViewGroup
