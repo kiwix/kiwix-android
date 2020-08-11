@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -26,3 +27,10 @@ import androidx.lifecycle.ViewModelProviders
 inline fun <reified T : ViewModel> Fragment.viewModel(
   viewModelFactory: ViewModelProvider.Factory
 ) = ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
+
+fun Fragment.toast(
+  stringId: Int,
+  length: Int = Toast.LENGTH_LONG
+) {
+  requireActivity().toast(stringId, length)
+}

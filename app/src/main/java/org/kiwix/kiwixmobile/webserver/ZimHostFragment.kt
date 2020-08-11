@@ -146,7 +146,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
           else -> startHotspotManuallyDialog()
         }
       }
-      else -> requireActivity().toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
+      else -> toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
     }
   }
 
@@ -245,8 +245,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     activity.supportActionBar!!.title = getString(R.string.menu_host_books)
     activity.supportActionBar!!.setHomeButtonEnabled(true)
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-    // toolbar.setNavigationOnClickListener { onBackPressed() }
   }
 
   // Advice user to turn on hotspot manually for API<26
@@ -285,7 +283,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onServerFailedToStart() {
-    requireActivity().toast(R.string.server_failed_toast_message)
+    toast(R.string.server_failed_toast_message)
   }
 
   private fun launchTetheringSettingsScreen() {
@@ -313,7 +311,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onIpAddressInvalid() {
     progressDialog!!.dismiss()
-    requireActivity().toast(R.string.server_failed_message, Toast.LENGTH_SHORT)
+    toast(R.string.server_failed_message, Toast.LENGTH_SHORT)
   }
 
   companion object {
