@@ -34,12 +34,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.intro.IntroFragment;
+import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
@@ -70,7 +74,7 @@ public class KiwixSplashActivityTest {
     activityTestRule.launchActivity(new Intent());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    intended(hasComponent(IntroFragment.class.getName()));
+    onView(withId(R.id.get_started)).check(matches(isDisplayed()));
 
     // Verify that the value of the "intro shown" boolean inside the SharedPreferences Database is not changed until the "Get started" button is pressed
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
