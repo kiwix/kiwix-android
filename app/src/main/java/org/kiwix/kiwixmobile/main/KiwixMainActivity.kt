@@ -89,6 +89,7 @@ class KiwixMainActivity : CoreMainActivity() {
     navController.addOnDestinationChangedListener { _, destination, _ ->
       bottom_nav_view.isVisible = destination.id in topLevelDestinations
     }
+    navigate(initialDestinationFragmentId)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

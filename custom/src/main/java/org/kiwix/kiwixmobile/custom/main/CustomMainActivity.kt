@@ -61,6 +61,7 @@ class CustomMainActivity : CoreMainActivity() {
     if (savedInstanceState != null) {
       return
     }
+    navigate(initialDestinationFragmentId)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
