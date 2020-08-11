@@ -7,16 +7,7 @@
   android:fitsSystemWindows="true"
   tools:context=".webserver.ZimHostFragment">
 
-  <androidx.appcompat.widget.Toolbar
-    android:id="@+id/toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:popupTheme="@style/KiwixTheme"
-    app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-    tools:showIn="@layout/activity_search" />
+  <include layout="@layout/layout_toolbar" />
 
   <TextView
     android:id="@+id/serverTextView"

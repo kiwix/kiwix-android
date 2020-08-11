@@ -35,7 +35,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_zim_host.recyclerViewZimHost
 import kotlinx.android.synthetic.main.activity_zim_host.serverTextView
 import kotlinx.android.synthetic.main.activity_zim_host.startServerButton
-import kotlinx.android.synthetic.main.activity_zim_host.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -109,7 +108,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setUpToolbar()
+    setUpToolbar(view)
 
     bookDelegate =
       BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, multiSelectAction = ::select)
@@ -239,9 +238,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     presenter.detachView()
   }
 
-  private fun setUpToolbar() {
+  private fun setUpToolbar(view: View) {
     val activity = requireActivity() as AppCompatActivity
-    activity.setSupportActionBar(toolbar)
+    activity.setSupportActionBar(view.findViewById(R.id.toolbar))
     activity.supportActionBar!!.title = getString(R.string.menu_host_books)
     activity.supportActionBar!!.setHomeButtonEnabled(true)
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
