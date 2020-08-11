@@ -50,7 +50,7 @@ class ZimHostPresenter @Inject internal constructor(private val dataSource: Data
         }
 
         override fun onSuccess(books: List<BooksOnDiskListItem>) {
-          view!!.addBooks(books)
+          view?.addBooks(books)
         }
 
         override fun onError(e: Throwable) {

@@ -45,6 +45,8 @@ import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 
+const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
+
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
 
@@ -81,6 +83,13 @@ class KiwixMainActivity : CoreMainActivity() {
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
       bottom_nav_view.isVisible = destination.id in topLevelDestinations
+    }
+  }
+
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
+    if (intent.action == NAVIGATE_TO_ZIM_HOST_FRAGMENT) {
+      openZimHostFragment()
     }
   }
 
