@@ -21,14 +21,17 @@ import android.os.Build
 import androidx.test.filters.SdkSuppress
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class IntroActivityTest : BaseActivityTest<IntroFragment>() {
+class IntroFragmentTest : BaseActivityTest<KiwixMainActivity>() {
 
-  override var activityRule = activityTestRule<IntroFragment>()
+  override var activityRule = activityTestRule<KiwixMainActivity>()
 
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {
+    activityRule.activity.navigate(R.id.introFragment)
     intro {
       swipeLeft()
     } clickGetStarted { }

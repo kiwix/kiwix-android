@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.intro
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,7 +49,7 @@ class IntroFragment : BaseFragment(), IntroContract.View {
     private const val animationDuration: Long = 800
   }
 
-  private val handler = Handler()
+  private val handler = Handler(Looper.getMainLooper())
   private val timer = Timer()
 
   @Inject

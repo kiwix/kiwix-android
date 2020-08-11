@@ -48,8 +48,8 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 @RunWith(AndroidJUnit4.class)
 public class KiwixSplashActivityTest {
 
-  private ActivityTestRule<KiwixSplashActivity> activityTestRule =
-    new ActivityTestRule<>(KiwixSplashActivity.class, true, false);
+  private ActivityTestRule<KiwixMainActivity> activityTestRule =
+    new ActivityTestRule<>(KiwixMainActivity.class, true, false);
   @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
