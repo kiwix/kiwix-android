@@ -29,8 +29,10 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
+
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.HOTSPOT_SERVICE_CHANNEL_ID;
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment;
+import static org.kiwix.kiwixmobile.main.KiwixMainActivityKt.NAVIGATE_TO_ZIM_HOST_FRAGMENT;
 
 public class HotspotNotificationManager {
 
@@ -60,8 +62,9 @@ public class HotspotNotificationManager {
   }
 
   @NonNull public Notification buildForegroundNotification() {
-    Intent targetIntent = new Intent(context, ZimHostFragment.class);
+    Intent targetIntent = new Intent(context, KiwixMainActivity.class);
     targetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    targetIntent.setAction(NAVIGATE_TO_ZIM_HOST_FRAGMENT);
     PendingIntent contentIntent =
       PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
