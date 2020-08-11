@@ -35,10 +35,10 @@ abstract class BaseActivityTest<T : Activity> {
   @get:Rule
   abstract var activityRule: ActivityTestRule<T>
   @get:Rule
-  var readPermissionRule: GrantPermissionRule =
+  open var readPermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(permission.READ_EXTERNAL_STORAGE)
   @get:Rule
-  var writePermissionRule: GrantPermissionRule =
+  open var writePermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(permission.WRITE_EXTERNAL_STORAGE)
 
   val context: Context by lazy {
