@@ -44,6 +44,7 @@ class CustomMainActivity : CoreMainActivity() {
   override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val settingsFragmentResId: Int = R.id.customSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
   override val cachedComponent by lazy { customActivityComponent }
 
@@ -74,11 +75,6 @@ class CustomMainActivity : CoreMainActivity() {
     }
     drawer_nav_view.menu.findItem(R.id.menu_host_books)
       .isVisible = false
-  }
-
-  override fun openSettings() {
-    super.openSettings()
-    navigate(R.id.customSettingsFragment)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {

@@ -52,6 +52,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val drawerContainerLayout: DrawerLayout by lazy { navigation_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
 
   override fun injection(coreComponent: CoreComponent) {
@@ -123,11 +124,6 @@ class KiwixMainActivity : CoreMainActivity() {
       else -> return super.onNavigationItemSelected(item)
     }
     return true
-  }
-
-  override fun openSettings() {
-    super.openSettings()
-    navigate(R.id.kiwixSettingsFragment)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {

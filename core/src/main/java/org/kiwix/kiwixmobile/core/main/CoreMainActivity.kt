@@ -48,11 +48,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
   protected lateinit var drawerToggle: ActionBarDrawerToggle
-
   abstract val navController: NavController
+
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
   abstract val bookmarksFragmentResId: Int
+  abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
 
@@ -186,8 +187,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigate(fragmentId, bundle)
   }
 
-  open fun openSettings() {
+  fun openSettings() {
     handleDrawerOnNavigation()
+    navigate(settingsFragmentResId)
   }
 
   private fun openHistoryActivity() {
