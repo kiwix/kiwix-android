@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.navigation.NavDeepLinkBuilder;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.KiwixMainActivity;
@@ -65,8 +66,12 @@ public class HotspotNotificationManager {
     Intent targetIntent = new Intent(context, KiwixMainActivity.class);
     targetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     targetIntent.setAction(NAVIGATE_TO_ZIM_HOST_FRAGMENT);
+
     PendingIntent contentIntent =
-      PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+      new NavDeepLinkBuilder(context).setComponentName(KiwixMainActivity.class)
+        .setGraph(R.navigation.kiwix_nav_graph)
+        .setDestination(R.id.zimHostFragment)
+        .createPendingIntent();
 
     hotspotNotificationChannel();
 

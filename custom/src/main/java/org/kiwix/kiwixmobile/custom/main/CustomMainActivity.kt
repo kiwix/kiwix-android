@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
@@ -60,13 +59,6 @@ class CustomMainActivity : CoreMainActivity() {
     if (savedInstanceState != null) {
       return
     }
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (drawerToggle.isDrawerIndicatorEnabled) {
-      return drawerToggle.onOptionsItemSelected(item)
-    }
-    return super.onOptionsItemSelected(item)
   }
 
   override fun setupDrawerToggle(toolbar: Toolbar) {

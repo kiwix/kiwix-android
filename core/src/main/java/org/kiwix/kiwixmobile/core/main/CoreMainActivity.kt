@@ -47,7 +47,7 @@ const val ZIM_FILE_URI_KEY = "zimFileUri"
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
-  protected lateinit var drawerToggle: ActionBarDrawerToggle
+  protected var drawerToggle: ActionBarDrawerToggle? = null
 
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
@@ -70,6 +70,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     activeFragments().forEach {
       it.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle?.isDrawerIndicatorEnabled == true) {
+      return drawerToggle!!.onOptionsItemSelected(item)
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   override fun onActionModeStarted(mode: ActionMode) {
@@ -109,13 +116,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         R.string.open_drawer,
         R.string.close_drawer
       )
-    drawerContainerLayout.addDrawerListener(drawerToggle)
-    drawerToggle.syncState()
+    drawerContainerLayout.addDrawerListener(drawerToggle!!)
+    drawerToggle!!.syncState()
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
   }
 
   open fun disableDrawer() {
-    drawerToggle.isDrawerIndicatorEnabled = false
+    drawerToggle?.isDrawerIndicatorEnabled = false
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
   }
 
