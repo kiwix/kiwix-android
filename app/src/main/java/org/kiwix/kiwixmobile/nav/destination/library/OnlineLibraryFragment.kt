@@ -32,10 +32,9 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
-import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
 class OnlineLibraryFragment : LibraryFragment(), FragmentActivityExtensions {
@@ -64,7 +63,7 @@ class OnlineLibraryFragment : LibraryFragment(), FragmentActivityExtensions {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.select_language -> activity?.start<LanguageActivity>()
+      R.id.select_language -> requireActivity().navigate(R.id.languageFragment)
     }
     return super.onOptionsItemSelected(item)
   }
