@@ -63,6 +63,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val cachedComponent: CoreActivityComponent
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    setTheme(R.style.Base_KiwixTheme)
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
