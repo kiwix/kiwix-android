@@ -193,7 +193,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private fun unbindService() {
     hotspotService?.let {
       requireActivity().unbindService(serviceConnection)
-      it.registerCallBack(null)
     }
   }
 
