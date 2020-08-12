@@ -63,7 +63,7 @@ class WifiDirectManager @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
-  private val callbacks = activity as Callbacks
+  protected var callbacks: Callbacks? = null
 
   /* Helper methods */
   /* Variables related to the WiFi P2P API */
@@ -146,7 +146,7 @@ class WifiDirectManager @Inject constructor(
     isWifiP2pEnabled = isEnabled
     if (!isWifiP2pEnabled) {
       activity.toast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT)
-      callbacks.onConnectionToPeersLost()
+      callbacks?.onConnectionToPeersLost()
     }
     Log.d(TAG, "WiFi P2P state changed - $isWifiP2pEnabled")
   }
@@ -164,20 +164,20 @@ class WifiDirectManager @Inject constructor(
       manager.requestConnectionInfo(channel, this)
     } else {
       // Not connected after connection change -> Disconnected
-      callbacks.onConnectionToPeersLost()
+      callbacks?.onConnectionToPeersLost()
     }
   }
 
   // Update UI with wifi-direct details about the user device
   override fun onDeviceChanged(userDevice: WifiP2pDevice?) =
-    callbacks.onUserDeviceDetailsAvailable(userDevice)
+    callbacks?.onUserDeviceDetailsAvailable(userDevice)!!
 
   /* From WifiP2pManager.ChannelListener interface */
   override fun onChannelDisconnected() {
     // Upon disconnection, retry one more time
     if (shouldRetry) {
       Log.d(TAG, "Channel lost, trying again")
-      callbacks.onConnectionToPeersLost()
+      callbacks?.onConnectionToPeersLost()
       shouldRetry = false
       manager.initialize(activity, Looper.getMainLooper(), this)
     } else {
@@ -187,7 +187,7 @@ class WifiDirectManager @Inject constructor(
 
   /* From WifiP2pManager.PeerListListener callback-interface */
   override fun onPeersAvailable(peers: WifiP2pDeviceList) =
-    callbacks.updateListOfAvailablePeers(peers)
+    callbacks?.updateListOfAvailablePeers(peers)!!
 
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   override fun onConnectionInfoAvailable(groupInfo: WifiP2pInfo) {
@@ -268,7 +268,7 @@ class WifiDirectManager @Inject constructor(
   private fun startFileTransfer() {
     if (isGroupFormed) {
       if (isFileSender) {
-        Log.d(LocalFileTransferActivity.TAG, "Starting file transfer")
+        Log.d(LocalFileTransferFragment.TAG, "Starting file transfer")
         fileReceiverDeviceAddress =
           if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
@@ -276,7 +276,7 @@ class WifiDirectManager @Inject constructor(
           it.execute()
         }
       } else {
-        callbacks.onFilesForTransferAvailable(filesForTransfer)
+        callbacks?.onFilesForTransferAvailable(filesForTransfer)
         receiverDeviceAsyncTask = ReceiverDeviceAsyncTask(this).also {
           it.execute()
         }
@@ -286,7 +286,7 @@ class WifiDirectManager @Inject constructor(
 
   fun changeStatus(itemIndex: Int, status: FileStatus) {
     filesForTransfer[itemIndex].fileStatus = status
-    callbacks.onFileStatusChanged(itemIndex)
+    callbacks?.onFileStatusChanged(itemIndex)
     if (status == FileStatus.ERROR) {
       displayToast(
         R.string.error_transferring, filesForTransfer[itemIndex].fileName,
@@ -348,7 +348,7 @@ class WifiDirectManager @Inject constructor(
     } else {
       activity.toast(R.string.error_during_transfer, Toast.LENGTH_LONG)
     }
-    callbacks.onFileTransferComplete()
+    callbacks?.onFileTransferComplete()
   }
 
   interface Callbacks {
@@ -368,7 +368,7 @@ class WifiDirectManager @Inject constructor(
       outputStream: OutputStream
     ) {
       inputStream.use { input -> outputStream.use { output -> input.copyTo(output) } }
-      Log.d(LocalFileTransferActivity.TAG, "Both streams closed")
+      Log.d(LocalFileTransferFragment.TAG, "Both streams closed")
     }
 
     @JvmStatic fun getDeviceStatus(status: Int): String {

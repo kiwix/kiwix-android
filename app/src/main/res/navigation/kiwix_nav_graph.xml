@@ -61,4 +61,8 @@
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
     android:label="HistoryFragment" />
+  <fragment
+    android:id="@+id/localFileTransferFragment"
+    android:name="org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferFragment"
+    android:label="LocalFileTransferFragment" />
 </navigation>

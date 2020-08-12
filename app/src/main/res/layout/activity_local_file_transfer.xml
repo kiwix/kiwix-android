@@ -8,7 +8,7 @@
   android:fitsSystemWindows="true"
   tools:context="org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity">
 
-  <include layout="@layout/layout_standard_app_bar" />
+  <include layout="@layout/layout_toolbar" />
 
   <TextView
     android:id="@+id/text_view_your_device"
@@ -23,9 +23,9 @@
     android:text="@string/your_device"
     android:textSize="13sp"
     android:textStyle="italic"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/app_bar" />
 
   <TextView
@@ -40,9 +40,9 @@
     android:textIsSelectable="true"
     android:textSize="17sp"
     android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_your_device"
     tools:hint="Device Name" />
 
@@ -53,8 +53,8 @@
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
     android:background="@color/dodger_blue"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_device_name" />
 
   <TextView
@@ -67,8 +67,8 @@
     android:text="@string/nearby_devices"
     android:textSize="16sp"
     app:fontFamily="monospace"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/view_device_list_boundary" />
 
   <androidx.recyclerview.widget.RecyclerView
@@ -77,8 +77,8 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:visibility="invisible"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device"
     app:layout_constraintVertical_bias="0.0" />
 
@@ -90,8 +90,8 @@
     android:background="@android:color/transparent"
     android:gravity="center"
     android:text="@string/no_devices_found"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
 
   <ProgressBar
@@ -102,8 +102,8 @@
     android:background="@android:color/transparent"
     android:indeterminate="true"
     android:visibility="gone"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
 
   <View
@@ -115,8 +115,8 @@
     android:layout_marginEnd="5dp"
     android:background="@color/dodger_blue"
     app:layout_constraintBottom_toTopOf="@+id/text_view_files_for_transfer"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
 
   <TextView
@@ -130,8 +130,8 @@
     android:textSize="16sp"
     app:fontFamily="monospace"
     app:layout_constraintBottom_toTopOf="@id/recycler_view_transfer_files"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/view_file_list_boundary" />
 
   <androidx.recyclerview.widget.RecyclerView
@@ -140,8 +140,8 @@
     android:layout_height="0dp"
     android:background="@android:color/transparent"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

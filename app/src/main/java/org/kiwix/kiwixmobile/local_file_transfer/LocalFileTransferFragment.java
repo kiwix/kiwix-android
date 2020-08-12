@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.local_file_transfer;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,34 +32,39 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
-import org.kiwix.kiwixmobile.ActivityExtensionsKt;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
+import org.kiwix.kiwixmobile.core.base.BaseFragment;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiP2pDelegate;
 import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiPeerListAdapter;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
 /**
  * Created by @Aditya-Sood as a part of GSoC 2019.
@@ -74,7 +80,7 @@ import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiPeerListAdapter;
  * device and {@link ReceiverDeviceAsyncTask} files receiving device
  */
 @SuppressLint("GoogleAppIndexingApiWarning")
-public class LocalFileTransferActivity extends BaseActivity implements
+public class LocalFileTransferFragment extends BaseFragment implements
   WifiDirectManager.Callbacks {
 
   // Not a typo, 'Log' tags have a length upper limit of 25 characters
@@ -87,7 +93,6 @@ public class LocalFileTransferActivity extends BaseActivity implements
   @Inject WifiDirectManager wifiDirectManager;
   @Inject LocationManager locationManager;
 
-  @BindView(R.id.toolbar) Toolbar actionBar;
   @BindView(R.id.text_view_device_name) TextView deviceName;
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
   @BindView(R.id.list_peer_devices) RecyclerView peerDeviceList;
@@ -101,10 +106,18 @@ public class LocalFileTransferActivity extends BaseActivity implements
 
   private WifiPeerListAdapter wifiPeerListAdapter;
 
-  @Override
-  protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_local_file_transfer);
+  @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
+    @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    View root = inflater.inflate(R.layout.activity_local_file_transfer, container, false);
+    ButterKnife.bind(this, root);
+    return root;
+  }
+
+  @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    CoreMainActivity activity = (CoreMainActivity) requireActivity();
+    setHasOptionsMenu(true);
+    wifiDirectManager.setCallbacks(this);
     /*
      * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
      * - On the sender device, this activity is started from the app chooser post selection
@@ -112,14 +125,12 @@ public class LocalFileTransferActivity extends BaseActivity implements
      * - On the receiver device, the activity is started directly from within the 'Get Content'
      * activity, without any file Uris
      * */
-    Intent filesIntent = getIntent();
+    Intent filesIntent = activity.getIntent();
     ArrayList<Uri> fileUriArrayList;
     fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
     isFileSender = (fileUriArrayList != null && fileUriArrayList.size() > 0);
 
-    setSupportActionBar(actionBar);
-    actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-    actionBar.setNavigationOnClickListener(v -> finish());
+    activity.setSupportActionBar(view.findViewById(R.id.toolbar));
 
     wifiPeerListAdapter = new WifiPeerListAdapter(
       new WifiP2pDelegate(wifiP2pDevice -> {
@@ -129,7 +140,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
       )
     );
     peerDeviceList.setAdapter(wifiPeerListAdapter);
-    peerDeviceList.setLayoutManager(new LinearLayoutManager(this));
+    peerDeviceList.setLayoutManager(new LinearLayoutManager(activity));
     peerDeviceList.setHasFixedSize(true);
 
     if (isFileSender) {
@@ -143,10 +154,9 @@ public class LocalFileTransferActivity extends BaseActivity implements
     wifiDirectManager.startWifiDirectManager(filesForTransfer);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-    getMenuInflater().inflate(R.menu.wifi_file_share_items, menu);
-    return true;
+  @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    inflater.inflate(R.menu.wifi_file_share_items, menu);
+    super.onCreateOptionsMenu(menu, inflater);
   }
 
   @Override
@@ -212,7 +222,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
   private void displayFileTransferProgress(@NonNull ArrayList<FileItem> filesToSend) {
     fileListAdapter = new FileListAdapter(filesToSend);
     filesRecyclerView.setAdapter(fileListAdapter);
-    filesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    filesRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
   }
 
   @Override
@@ -229,31 +239,32 @@ public class LocalFileTransferActivity extends BaseActivity implements
     wifiPeerListAdapter.setItems(deviceList);
 
     if (deviceList.size() == 0) {
-      Log.d(LocalFileTransferActivity.TAG, "No devices found");
+      Log.d(LocalFileTransferFragment.TAG, "No devices found");
     }
   }
 
   @Override
   public void onFileTransferComplete() {
-    finish();
+    requireActivity().onBackPressed();
   }
 
   /* Helper methods used for checking permissions and states of services */
   private boolean checkCoarseLocationAccessPermission() { // Required by Android to detect wifi-p2p peers
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+    Activity activity = requireActivity();
+    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
       == PackageManager.PERMISSION_DENIED) {
 
-      if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+      if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
         Manifest.permission.ACCESS_COARSE_LOCATION)) {
         alertDialogShower.show(KiwixDialog.LocationPermissionRationale.INSTANCE,
           (Function0<Unit>) () -> {
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(activity,
               new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
               PERMISSION_REQUEST_CODE_COARSE_LOCATION);
             return Unit.INSTANCE;
           });
       } else {
-        ActivityCompat.requestPermissions(this,
+        ActivityCompat.requestPermissions(activity,
           new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
           PERMISSION_REQUEST_CODE_COARSE_LOCATION);
       }
@@ -264,22 +275,23 @@ public class LocalFileTransferActivity extends BaseActivity implements
   }
 
   private boolean checkExternalStorageWritePermission() { // To access and store the zims
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    if (ContextCompat.checkSelfPermission(requireActivity(),
+      Manifest.permission.WRITE_EXTERNAL_STORAGE)
       == PackageManager.PERMISSION_DENIED) {
 
-      if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+      if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
         alertDialogShower.show(KiwixDialog.StoragePermissionRationale.INSTANCE,
           new Function0<Unit>() {
             @Override public Unit invoke() {
-              ActivityCompat.requestPermissions(LocalFileTransferActivity.this,
+              ActivityCompat.requestPermissions(requireActivity(),
                 new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
                 PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
               return Unit.INSTANCE;
             }
           });
       } else {
-        ActivityCompat.requestPermissions(this,
+        ActivityCompat.requestPermissions(requireActivity(),
           new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
           PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
       }
@@ -299,16 +311,16 @@ public class LocalFileTransferActivity extends BaseActivity implements
         case PERMISSION_REQUEST_CODE_COARSE_LOCATION: {
           Log.e(TAG, "Location permission not granted");
 
-          showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
-          finish();
+          showToast(requireActivity(), R.string.permission_refused_location, Toast.LENGTH_LONG);
+          requireActivity().onBackPressed();
           break;
         }
 
         case PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS: {
           Log.e(TAG, "Storage write permission not granted");
 
-          showToast(this, R.string.permission_refused_storage, Toast.LENGTH_LONG);
-          finish();
+          showToast(requireActivity(), R.string.permission_refused_storage, Toast.LENGTH_LONG);
+          requireActivity().onBackPressed();
           break;
         }
 
@@ -345,8 +357,7 @@ public class LocalFileTransferActivity extends BaseActivity implements
       },
       new Function0<Unit>() {
         @Override public Unit invoke() {
-          showToast(LocalFileTransferActivity.this, R.string.discovery_needs_location,
-            Toast.LENGTH_SHORT);
+          showToast(requireActivity(), R.string.discovery_needs_location, Toast.LENGTH_SHORT);
           return Unit.INSTANCE;
         }
       });
@@ -362,19 +373,17 @@ public class LocalFileTransferActivity extends BaseActivity implements
       },
       new Function0<Unit>() {
         @Override public Unit invoke() {
-          showToast(LocalFileTransferActivity.this, R.string.discovery_needs_wifi,
-            Toast.LENGTH_SHORT);
+          showToast(requireActivity(), R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
           return Unit.INSTANCE;
         }
       });
   }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+  @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     switch (requestCode) {
       case REQUEST_ENABLE_LOCATION_SERVICES: {
         if (!isLocationServiceEnabled()) {
-          showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
+          showToast(requireActivity(), R.string.permission_refused_location, Toast.LENGTH_LONG);
         }
         break;
       }
@@ -395,12 +404,13 @@ public class LocalFileTransferActivity extends BaseActivity implements
     Toast.makeText(context, text, duration).show();
   }
 
-  @Override protected void onDestroy() {
+  @Override public void onDestroy() {
     wifiDirectManager.stopWifiDirectManager();
     super.onDestroy();
   }
 
-  @Override protected void injection(CoreComponent coreComponent) {
-    ActivityExtensionsKt.getKiwixActivityComponent(this).inject(this);
+  @Override public void inject(
+    @NotNull BaseActivity baseActivity) {
+    ((KiwixMainActivity) baseActivity).getCachedComponent().inject(this);
   }
 }
