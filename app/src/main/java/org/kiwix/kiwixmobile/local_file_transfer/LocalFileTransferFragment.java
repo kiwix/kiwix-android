@@ -108,7 +108,7 @@ public class LocalFileTransferFragment extends BaseFragment implements
 
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    View root = inflater.inflate(R.layout.activity_local_file_transfer, container, false);
+    View root = inflater.inflate(R.layout.fragment_local_file_transfer, container, false);
     ButterKnife.bind(this, root);
     return root;
   }
