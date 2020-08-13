@@ -131,6 +131,7 @@ public class LocalFileTransferFragment extends BaseFragment implements
     isFileSender = (fileUriArrayList != null && fileUriArrayList.size() > 0);
 
     activity.setSupportActionBar(view.findViewById(R.id.toolbar));
+    activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     wifiPeerListAdapter = new WifiPeerListAdapter(
       new WifiP2pDelegate(wifiP2pDevice -> {

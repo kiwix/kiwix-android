@@ -8,6 +8,7 @@
   android:fitsSystemWindows="true"
   tools:context="org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity">
 
+
   <include layout="@layout/layout_toolbar" />
 
   <TextView
@@ -26,7 +27,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
   <TextView
     android:id="@+id/text_view_device_name"

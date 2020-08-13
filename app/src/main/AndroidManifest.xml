@@ -144,22 +144,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".language.LanguageActivity" />
-    <activity
-      android:name=".local_file_transfer.LocalFileTransferActivity"
-      android:label="Send to nearby device"
-      android:screenOrientation="portrait">
-      <intent-filter>
-        <action android:name="android.intent.action.SEND_MULTIPLE" />
-        <category android:name="android.intent.category.DEFAULT" />
 
-        <data android:mimeType="application/octet-stream" />
-        <data android:pathPattern=".*\\.zim" />
-        <data android:pathPattern=".*\\..*\\.zim" />
-        <data android:pathPattern=".*\\..*\\..*\\.zim" />
-        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim" />
-        <data android:host="*" />
-      </intent-filter>
-    </activity>
     <activity android:name=".webserver.ZimHostActivity" />
 
     <service android:name=".webserver.wifi_hotspot.HotspotService" />

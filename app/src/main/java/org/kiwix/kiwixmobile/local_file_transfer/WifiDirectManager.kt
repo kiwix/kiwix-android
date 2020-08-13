@@ -58,7 +58,7 @@ import javax.inject.Inject
  * Manager for the Wifi-P2p API, used in the local file transfer module
  */
 @SuppressWarnings("MissingPermission")
-class WifiDirectManager @Inject constructor(
+open class WifiDirectManager @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower
