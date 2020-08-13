@@ -6,7 +6,7 @@
     <item name="colorPrimary">@color/denim_blue200</item>
 
     // keep the "kiwix blue" color of all buttons
-    <item name="materialButtonStyle">@style/Widget.KiwixTheme.Button</item>
+    <item name="materialButtonStyle">@style/kiwix_blue_button</item>
 
     <item name="colorSurface">@color/mine_shaft_gray900</item>
     <item name="colorError">@color/froly_pink300</item>

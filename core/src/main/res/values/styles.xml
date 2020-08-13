@@ -66,7 +66,7 @@
     <item name="android:textColor">?colorOnPrimary</item>
   </style>
 
-  <style name="Widget.KiwixTheme.Button" parent="Widget.MaterialComponents.Button">
+  <style name="kiwix_blue_button" parent="Widget.MaterialComponents.Button">
     <item name="backgroundTint">@color/denim_blue800</item>
   </style>
 
