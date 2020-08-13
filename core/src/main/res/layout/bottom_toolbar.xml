@@ -8,6 +8,7 @@
   android:layout_gravity="bottom"
   android:padding="8dp"
   app:hideOnScroll="true"
+  app:layout_insetEdge="bottom"
   tools:ignore="BottomAppBar">
 
   <androidx.constraintlayout.widget.ConstraintLayout

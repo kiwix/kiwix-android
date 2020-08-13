@@ -86,6 +86,7 @@
     android:layout_marginBottom="?attr/actionBarSize"
     android:visibility="gone"
     app:fabSize="mini"
+    app:layout_dodgeInsetEdges="bottom"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:srcCompat="@drawable/action_find_previous"
