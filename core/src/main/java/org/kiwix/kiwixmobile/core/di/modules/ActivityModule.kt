@@ -39,15 +39,12 @@ abstract class ActivityModule {
   @ActivityScope
   abstract fun bindDialogShower(alertDialogShower: AlertDialogShower): DialogShower
 
-  @Module
   companion object {
-    @JvmStatic
     @Provides
     @ActivityScope
     fun providesMainPresenter(dataSource: DataSource): MainRepositoryActions =
       MainRepositoryActions(dataSource)
 
-    @JvmStatic
     @Provides
     @ActivityScope
     fun providesMainMenuFactory(activity: Activity, zimReaderContainer: ZimReaderContainer):
