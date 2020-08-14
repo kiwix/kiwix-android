@@ -70,7 +70,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context) {
 
   val prefStorage: String
     get() {
-      val storage = sharedPreferences.getString(PREF_STORAGE, null)
+      val storage = sharedPreferences.getString(PREF_STORAGE, "")
       return when {
         storage == null -> defaultStorage().also(::putPrefStorage)
         !File(storage).exists() -> defaultStorage()
@@ -82,7 +82,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context) {
     getExternalFilesDirs(instance, null)[0]?.path ?: instance.filesDir.path
 
   fun getPrefStorageTitle(defaultTitle: String): String =
-    sharedPreferences.getString(PREF_STORAGE_TITLE, "") ?: defaultTitle
+    sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle) ?: defaultTitle
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
