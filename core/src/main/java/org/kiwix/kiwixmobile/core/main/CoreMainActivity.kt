@@ -63,8 +63,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     activeFragments().forEach { it.onActivityResult(requestCode, resultCode, data) }
   }
 
-  override fun onPostCreate(savedInstanceState: Bundle?) {
-    super.onPostCreate(savedInstanceState)
+  override fun onStart() {
+    super.onStart()
     navController.addOnDestinationChangedListener { _, destination, _ ->
       configureActivityBasedOn(destination)
     }
