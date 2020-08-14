@@ -26,6 +26,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
@@ -81,14 +82,9 @@ class KiwixMainActivity : CoreMainActivity() {
     bottom_nav_view.setupWithNavController(navController)
   }
 
-  override fun onPostCreate(savedInstanceState: Bundle?) {
-    super.onPostCreate(savedInstanceState)
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-      bottom_nav_view.isVisible = destination.id in topLevelDestinations
-      if (destination.id !in topLevelDestinations) {
-        handleDrawerOnNavigation()
-      }
-    }
+  override fun configureActivityBasedOn(destination: NavDestination) {
+    super.configureActivityBasedOn(destination)
+    bottom_nav_view.isVisible = destination.id in topLevelDestinations
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

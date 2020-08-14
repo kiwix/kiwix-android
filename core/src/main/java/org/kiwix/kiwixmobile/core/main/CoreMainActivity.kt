@@ -28,6 +28,7 @@ import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.R
@@ -60,6 +61,19 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     activeFragments().forEach { it.onActivityResult(requestCode, resultCode, data) }
+  }
+
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+      configureActivityBasedOn(destination)
+    }
+  }
+
+  open fun configureActivityBasedOn(destination: NavDestination) {
+    if (destination.id !in topLevelDestinations) {
+      handleDrawerOnNavigation()
+    }
   }
 
   override fun onRequestPermissionsResult(
