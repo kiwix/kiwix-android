@@ -70,7 +70,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context) {
 
   val prefStorage: String
     get() {
-      val storage = sharedPreferences.getString(PREF_STORAGE, "")
+      val storage = sharedPreferences.getString(PREF_STORAGE, null)
       return when {
         storage == null -> defaultStorage().also(::putPrefStorage)
         !File(storage).exists() -> defaultStorage()
