@@ -128,7 +128,7 @@ public class KiwixTextToSpeech {
       } else {
         tts.setLanguage(locale);
 
-        if (getFeatures(tts, locale).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) {
+        if (getFeatures(tts).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) {
           ContextExtensionsKt.toast(context, R.string.tts_lang_not_supported,
             Toast.LENGTH_LONG);
           return;
@@ -141,10 +141,8 @@ public class KiwixTextToSpeech {
     }
   }
 
-  @SuppressLint("NewApi")
-  private Set<String> getFeatures(TextToSpeech tts, Locale locale) {
-    return VERSION.SDK_INT < VERSION_CODES.LOLLIPOP ? tts.getFeatures(locale)
-      : tts.getVoice().getFeatures();
+  private Set<String> getFeatures(TextToSpeech tts) {
+    return tts.getVoice().getFeatures();
   }
 
   private void loadURL(WebView webView) {

@@ -21,7 +21,6 @@ import android.annotation.TargetApi
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.os.Environment
 import android.provider.DocumentsContract
@@ -93,9 +92,7 @@ object FileUtils {
     context: Context,
     uri: Uri
   ): String? {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-      DocumentsContract.isDocumentUri(context, uri)
-    ) {
+    if (DocumentsContract.isDocumentUri(context, uri)) {
       if ("com.android.externalstorage.documents" == uri.authority) {
         val documentId = DocumentsContract.getDocumentId(uri)
           .split(":")

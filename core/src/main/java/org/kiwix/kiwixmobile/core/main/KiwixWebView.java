@@ -67,7 +67,7 @@ public class KiwixWebView extends VideoEnabledWebView {
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
     ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient) {
     super(context, attrs);
-    if (BuildConfig.DEBUG == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    if (BuildConfig.DEBUG) {
       setWebContentsDebuggingEnabled(true);
     }
     this.callback = callback;
