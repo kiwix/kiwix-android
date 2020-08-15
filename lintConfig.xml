@@ -23,5 +23,8 @@
     <ignore path="src/main/res/drawable/kiwix_icon_with_title.png" />
     <ignore path="src/main/res/drawable/search_widget_preview.png" />
   </issue>
+  <issue id="ConvertToWebp">
+    <ignore path="src/main/res/drawable/search_widget_preview.png" />
+  </issue>
 
 </lint>
