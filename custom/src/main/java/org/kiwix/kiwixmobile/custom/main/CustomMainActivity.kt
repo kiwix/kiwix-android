@@ -50,6 +50,8 @@ class CustomMainActivity : CoreMainActivity() {
   override val historyFragmentResId: Int = R.id.historyFragment
   override val initialDestinationFragmentId: Int = R.id.customReaderFragment
   override val cachedComponent by lazy { customActivityComponent }
+  override val topLevelDestinations =
+    setOf(R.id.customReaderFragment)
 
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
@@ -62,6 +64,15 @@ class CustomMainActivity : CoreMainActivity() {
       return
     }
     navigate(initialDestinationFragmentId)
+  }
+
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+      if (destination.id !in topLevelDestinations) {
+        handleDrawerOnNavigation()
+      }
+    }
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
