@@ -111,6 +111,7 @@ class CustomReaderFragment : CoreReaderFragment() {
       loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
       getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
     }
+  }
 
   override fun setDrawerLockMode(lockMode: Int) {
     super.setDrawerLockMode(
