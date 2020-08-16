@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -46,6 +45,7 @@ import kotlinx.android.synthetic.main.activity_local_file_transfer.text_view_emp
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -103,7 +103,6 @@ class LocalFileTransferActivity : BaseActivity(),
 
     val toolbar: Toolbar =
       findViewById(R.id.toolbar)
-    // I know this is not the best method, but android extensions were showing 'unknown reference' error
     setSupportActionBar(toolbar)
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     toolbar.setNavigationOnClickListener { finish() }
@@ -129,7 +128,6 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    /* var status = false */
     if (item.itemId == R.id.menu_item_search_devices) {
       /* Permissions essential for this module */
       return when {
@@ -287,7 +285,10 @@ class LocalFileTransferActivity : BaseActivity(),
             TAG,
             "Location permission not granted"
           )
-          R.string.permission_refused_location.toast(this)
+          this.toast(
+            R.string.permission_refused_location,
+            Toast.LENGTH_SHORT
+          )
 
           finish()
         }
@@ -296,8 +297,10 @@ class LocalFileTransferActivity : BaseActivity(),
             TAG,
             "Storage write permission not granted"
           )
-          R.string.permission_refused_storage.toast(this)
-
+          this.toast(
+            R.string.permission_refused_storage,
+            Toast.LENGTH_SHORT
+          )
           finish()
         }
         else -> {
@@ -331,7 +334,12 @@ class LocalFileTransferActivity : BaseActivity(),
           REQUEST_ENABLE_LOCATION_SERVICES
         )
       },
-      R.string.discovery_needs_location.toast(this)::show
+      {
+        this.toast(
+          R.string.discovery_needs_location,
+          Toast.LENGTH_SHORT
+        )
+      }
     )
   }
 
@@ -339,7 +347,12 @@ class LocalFileTransferActivity : BaseActivity(),
     alertDialogShower.show(
       KiwixDialog.EnableWifiP2pServices, {
         startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-      }, R.string.discovery_needs_wifi.toast(this)::show
+      }, {
+        this.toast(
+          R.string.discovery_needs_wifi,
+          Toast.LENGTH_SHORT
+        )
+      }
     )
   }
 
@@ -351,7 +364,10 @@ class LocalFileTransferActivity : BaseActivity(),
     when (requestCode) {
       REQUEST_ENABLE_LOCATION_SERVICES -> {
         if (!isLocationServiceEnabled) {
-          R.string.permission_refused_location.toast(this)
+          this.toast(
+            R.string.permission_refused_location,
+            Toast.LENGTH_SHORT
+          )
         }
       }
       else -> {
@@ -359,9 +375,6 @@ class LocalFileTransferActivity : BaseActivity(),
       }
     }
   }
-
-  fun Any.toast(context: Context, duration: Int = Toast.LENGTH_SHORT): Toast =
-    Toast.makeText(context, this.toString(), duration).apply { show() }
 
   override fun onDestroy() {
     wifiDirectManager.stopWifiDirectManager()
