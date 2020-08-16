@@ -107,8 +107,10 @@ class CustomReaderFragment : CoreReaderFragment() {
     val urls = JSONArray(zimArticles)
     val zimPositions = JSONArray(settings.getString(TAG_CURRENT_POSITIONS, null))
     selectTab(currentTab)
-    loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
-    getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
+    if (urls.length() > 0) {
+      loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
+      getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
+    }
   }
 
   override fun setDrawerLockMode(lockMode: Int) {
