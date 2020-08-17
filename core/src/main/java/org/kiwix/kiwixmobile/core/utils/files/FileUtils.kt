@@ -17,11 +17,9 @@
  */
 package org.kiwix.kiwixmobile.core.utils.files
 
-import android.annotation.TargetApi
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
-import android.os.Build.VERSION_CODES
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
@@ -119,7 +117,6 @@ object FileUtils {
     return null
   }
 
-  @TargetApi(VERSION_CODES.KITKAT)
   private fun documentProviderContentQuery(context: Context, uri: Uri) =
     contentQuery(
       context,

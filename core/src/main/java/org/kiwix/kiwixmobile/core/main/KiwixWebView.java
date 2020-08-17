@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -181,8 +180,7 @@ public class KiwixWebView extends VideoEnabledWebView {
 
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
-          && CoreApp.getInstance().getExternalMediaDirs().length > 0) {
+        if (CoreApp.getInstance().getExternalMediaDirs().length > 0) {
           root = CoreApp.getInstance().getExternalMediaDirs()[0];
         }
 

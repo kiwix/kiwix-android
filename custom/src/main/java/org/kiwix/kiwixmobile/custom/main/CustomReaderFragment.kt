@@ -176,7 +176,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     })
   }
 
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
   private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
     grantResults[0] == PackageManager.PERMISSION_DENIED &&
       !ActivityCompat.shouldShowRequestPermissionRationale(
