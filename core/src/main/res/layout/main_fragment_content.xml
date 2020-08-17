@@ -69,7 +69,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/fullscreen_control_button_margin"
-    android:alpha="0.6"
     android:background="?colorOnSurface"
     android:contentDescription="@string/menu_exit_full_screen"
     android:tint="?colorSurface"

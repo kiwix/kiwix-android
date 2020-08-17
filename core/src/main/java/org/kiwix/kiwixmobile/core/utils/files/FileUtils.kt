@@ -93,7 +93,6 @@ object FileUtils {
     context: Context,
     uri: Uri
   ): String? {
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
       DocumentsContract.isDocumentUri(context, uri)
     ) {
@@ -110,11 +109,16 @@ object FileUtils {
         } catch (ignore: IllegalArgumentException) {
           null
         }
-    } else if ("content".equals(uri.scheme!!, ignoreCase = true)) {
-      return contentQuery(context, uri)
-    } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
+    } else if (uri.scheme != null) {
+      if ("content".equals(uri.scheme!!, ignoreCase = true)) {
+        return contentQuery(context, uri)
+      } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
+        return uri.path
+      }
+    } else {
       return uri.path
     }
+
     return null
   }
 
