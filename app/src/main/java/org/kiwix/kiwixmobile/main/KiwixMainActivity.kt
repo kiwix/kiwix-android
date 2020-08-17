@@ -65,7 +65,7 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private val finishActionModeOnDestinationChange =
-    NavController.OnDestinationChangedListener { controller, destination, arguments ->
+    NavController.OnDestinationChangedListener { _, _, _ ->
       actionMode?.finish()
     }
 
@@ -82,8 +82,8 @@ class KiwixMainActivity : CoreMainActivity() {
     bottom_nav_view.setupWithNavController(navController)
   }
 
-  override fun onPostCreate(savedInstanceState: Bundle?) {
-    super.onPostCreate(savedInstanceState)
+  override fun onStart() {
+    super.onStart()
     navController.addOnDestinationChangedListener { _, destination, _ ->
       bottom_nav_view.isVisible = destination.id in topLevelDestinations
       if (destination.id !in topLevelDestinations) {

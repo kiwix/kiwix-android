@@ -65,8 +65,8 @@ class CustomMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun onPostCreate(savedInstanceState: Bundle?) {
-    super.onPostCreate(savedInstanceState)
+  override fun onStart() {
+    super.onStart()
     navController.addOnDestinationChangedListener { _, destination, _ ->
       if (destination.id !in topLevelDestinations) {
         handleDrawerOnNavigation()
