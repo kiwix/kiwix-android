@@ -93,7 +93,6 @@
     <inspection_tool class="AndroidLintInstantApps" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIntentReset" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintInvalidNavigation" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintInvalidPermission" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintJobSchedulerService" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintKeyboardInaccessibleWidget" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintKotlinPropertyAccess" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -101,7 +100,6 @@
     <inspection_tool class="AndroidLintLambdaLast" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintLintBaseline" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintLocaleFolder" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintLockedOrientationActivity" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintLogConditional" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintMangledCRLF" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintManifestOrder" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -135,7 +133,6 @@
     <inspection_tool class="AndroidLintProxyPassword" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintPxUsage" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintRecycle" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintRecyclerView" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintRedundantNamespace" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintRegistered" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintRelativeOverlap" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -162,7 +159,6 @@
     <inspection_tool class="AndroidLintSimpleDateFormat" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintSlices" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintSmallSp" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintSourceLockedOrientationActivity" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintSpUsage" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintStateListReachable" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintStaticFieldLeak" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -191,7 +187,6 @@
     <inspection_tool class="AndroidLintUnsafeDynamicallyLoadedCode" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnsafeNativeCodeLocation" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnsafeProtectedBroadcastReceiver" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintUnsupportedChromeOsCameraSystemFeature" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintUntranslatable" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnusedAttribute" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnusedIds" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -305,7 +300,7 @@
     <inspection_tool class="PlatformExtensionReceiverOfInline" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PrivatePropertyName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PropertyName" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="ProtectedInFinal" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="ProtectedInFinal" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="PublicApiImplicitType" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="RecursiveEqualsCall" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RecursivePropertyAccessor" enabled="true" level="ERROR" enabled_by_default="true" />
