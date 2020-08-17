@@ -74,7 +74,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (drawerToggle?.isDrawerIndicatorEnabled == true) {
-      return drawerToggle!!.onOptionsItemSelected(item)
+      return drawerToggle?.onOptionsItemSelected(item) == true
     }
     return super.onOptionsItemSelected(item)
   }
@@ -116,8 +116,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         R.string.open_drawer,
         R.string.close_drawer
       )
-    drawerContainerLayout.addDrawerListener(drawerToggle!!)
-    drawerToggle!!.syncState()
+    drawerToggle?.let {
+      drawerContainerLayout.addDrawerListener(it)
+      it.syncState()
+    }
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
   }
 
