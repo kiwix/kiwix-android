@@ -88,7 +88,6 @@ class LocalFileTransferActivity : BaseActivity(),
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_local_file_transfer)
-
     /*
      * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
      * - On the sender device, this activity is started from the app chooser post selection
@@ -131,12 +130,10 @@ class LocalFileTransferActivity : BaseActivity(),
     if (item.itemId == R.id.menu_item_search_devices) {
       /* Permissions essential for this module */
       return when {
-        !checkCoarseLocationAccessPermission() -> {
+        !checkCoarseLocationAccessPermission() ->
           true
-        }
-        !checkExternalStorageWritePermission() -> {
+        !checkExternalStorageWritePermission() ->
           true
-        }
         /* Initiate discovery */
         !wifiDirectManager.isWifiP2pEnabled -> {
           requestEnableWifiP2pServices()
@@ -168,8 +165,7 @@ class LocalFileTransferActivity : BaseActivity(),
     if (userDevice != null) {
       text_view_device_name.text = userDevice.deviceName
       Log.d(
-        TAG,
-        getDeviceStatus(userDevice.status)
+        TAG, getDeviceStatus(userDevice.status)
       )
     }
   }
@@ -216,23 +212,25 @@ class LocalFileTransferActivity : BaseActivity(),
       )
       == PackageManager.PERMISSION_DENIED
     ) {
-      if (ActivityCompat.shouldShowRequestPermissionRationale(
+      when {
+        ActivityCompat.shouldShowRequestPermissionRationale(
           this,
           Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-      ) {
-        alertDialogShower.show(KiwixDialog.LocationPermissionRationale,
-          {
-            ActivityCompat.requestPermissions(
-              this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-              PERMISSION_REQUEST_CODE_COARSE_LOCATION
-            )
-          })
-      } else {
-        ActivityCompat.requestPermissions(
-          this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-          PERMISSION_REQUEST_CODE_COARSE_LOCATION
-        )
+        ) -> {
+          alertDialogShower.show(KiwixDialog.LocationPermissionRationale,
+            {
+              ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                PERMISSION_REQUEST_CODE_COARSE_LOCATION
+              )
+            })
+        }
+        else -> {
+          ActivityCompat.requestPermissions(
+            this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+            PERMISSION_REQUEST_CODE_COARSE_LOCATION
+          )
+        }
       }
       false
     } else {
@@ -281,31 +279,23 @@ class LocalFileTransferActivity : BaseActivity(),
     if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
       when (requestCode) {
         PERMISSION_REQUEST_CODE_COARSE_LOCATION -> {
-          Log.e(
-            TAG,
-            "Location permission not granted"
-          )
+          Log.e(TAG, "Location permission not granted")
           this.toast(
             R.string.permission_refused_location,
             Toast.LENGTH_SHORT
           )
-
           finish()
         }
         PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
-          Log.e(
-            TAG,
-            "Storage write permission not granted"
-          )
+          Log.e(TAG, "Storage write permission not granted")
           this.toast(
             R.string.permission_refused_storage,
             Toast.LENGTH_SHORT
           )
           finish()
         }
-        else -> {
+        else ->
           super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
       }
     }
   }
@@ -370,9 +360,8 @@ class LocalFileTransferActivity : BaseActivity(),
           )
         }
       }
-      else -> {
+      else ->
         super.onActivityResult(requestCode, resultCode, data)
-      }
     }
   }
 
