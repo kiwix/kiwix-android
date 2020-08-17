@@ -308,6 +308,7 @@ open class WifiDirectManager @Inject constructor(
       disconnect()
     }
     unregisterWifiDirectBroadcastReceiver()
+    callbacks = null
   }
 
   private fun disconnect() {

@@ -120,6 +120,12 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
+    when (intent.action) {
+      Intent.ACTION_SEND_MULTIPLE -> {
+        setIntent(intent)
+        navigate(R.id.localFileTransferFragment)
+      }
+    }
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
