@@ -280,7 +280,7 @@ class LocalFileTransferActivity : BaseActivity(),
       when (requestCode) {
         PERMISSION_REQUEST_CODE_COARSE_LOCATION -> {
           Log.e(TAG, "Location permission not granted")
-          this.toast(
+          toast(
             R.string.permission_refused_location,
             Toast.LENGTH_SHORT
           )
@@ -288,7 +288,7 @@ class LocalFileTransferActivity : BaseActivity(),
         }
         PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
           Log.e(TAG, "Storage write permission not granted")
-          this.toast(
+          toast(
             R.string.permission_refused_storage,
             Toast.LENGTH_SHORT
           )
@@ -325,7 +325,7 @@ class LocalFileTransferActivity : BaseActivity(),
         )
       },
       {
-        this.toast(
+        toast(
           R.string.discovery_needs_location,
           Toast.LENGTH_SHORT
         )
@@ -338,7 +338,7 @@ class LocalFileTransferActivity : BaseActivity(),
       KiwixDialog.EnableWifiP2pServices, {
         startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
       }, {
-        this.toast(
+        toast(
           R.string.discovery_needs_wifi,
           Toast.LENGTH_SHORT
         )
@@ -354,7 +354,7 @@ class LocalFileTransferActivity : BaseActivity(),
     when (requestCode) {
       REQUEST_ENABLE_LOCATION_SERVICES -> {
         if (!isLocationServiceEnabled) {
-          this.toast(
+          toast(
             R.string.permission_refused_location,
             Toast.LENGTH_SHORT
           )
