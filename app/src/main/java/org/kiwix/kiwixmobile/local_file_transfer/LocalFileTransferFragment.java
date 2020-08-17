@@ -49,6 +49,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -104,12 +105,14 @@ public class LocalFileTransferFragment extends BaseFragment implements
   private ArrayList<FileItem> filesForTransfer = new ArrayList<>();
   private FileListAdapter fileListAdapter;
 
+  private Unbinder unbinder;
+
   private WifiPeerListAdapter wifiPeerListAdapter;
 
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View root = inflater.inflate(R.layout.fragment_local_file_transfer, container, false);
-    ButterKnife.bind(this, root);
+    unbinder = ButterKnife.bind(this, root);
     return root;
   }
 
@@ -403,6 +406,11 @@ public class LocalFileTransferFragment extends BaseFragment implements
 
   static void showToast(Context context, String text, int duration) {
     Toast.makeText(context, text, duration).show();
+  }
+
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    unbinder.unbind();
   }
 
   @Override public void onDestroy() {
