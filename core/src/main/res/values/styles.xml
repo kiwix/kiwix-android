@@ -36,6 +36,7 @@
     <item name="android:windowBackground">@drawable/launch_screen</item>
   </style>
 
+
   <style name="Widget.KiwixTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout">
     <item name="android:background">@color/black</item>
     <item name="tabTextColor">@color/alabaster_white</item>
@@ -64,6 +65,10 @@
     <item name="android:theme">@style/ThemeOverlay.KiwixTheme.Switch</item>
     <item name="android:textAppearance">@style/TextAppearance.KiwixTheme.Body2</item>
     <item name="android:textColor">?colorOnPrimary</item>
+  </style>
+
+  <style name="kiwix_blue_button" parent="Widget.MaterialComponents.Button">
+    <item name="backgroundTint">@color/denim_blue800</item>
   </style>
 
   <style name="snackbar_button" parent="Widget.MaterialComponents.Button.TextButton">

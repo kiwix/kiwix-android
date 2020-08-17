@@ -55,6 +55,8 @@ class KiwixMainActivity : CoreMainActivity() {
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val topLevelDestinations =
+    setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
@@ -76,12 +78,15 @@ class KiwixMainActivity : CoreMainActivity() {
       onNavigationItemSelected(item)
     }
     bottom_nav_view.setupWithNavController(navController)
+  }
 
-    val topLevelDestinations =
-      setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
-
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
     navController.addOnDestinationChangedListener { _, destination, _ ->
       bottom_nav_view.isVisible = destination.id in topLevelDestinations
+      if (destination.id !in topLevelDestinations) {
+        handleDrawerOnNavigation()
+      }
     }
   }
 
