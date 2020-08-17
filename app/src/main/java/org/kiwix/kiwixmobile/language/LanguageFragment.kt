@@ -130,16 +130,16 @@ class LanguageFragment : BaseFragment() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    var returnValue = false
-    when (item.itemId) {
+    val returnValue = when (item.itemId) {
       android.R.id.home -> {
         requireActivity().onBackPressed()
-        returnValue = true
+        return true
       }
       R.id.menu_language_save -> {
         languageViewModel.actions.offer(Action.SaveAll)
-        returnValue = true
+        true
       }
+      else -> false
     }
     return returnValue || super.onOptionsItemSelected(item)
   }
