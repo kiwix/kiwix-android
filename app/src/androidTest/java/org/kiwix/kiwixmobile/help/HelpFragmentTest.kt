@@ -17,31 +17,22 @@
  */
 package org.kiwix.kiwixmobile.help
 
-import android.Manifest
 import android.os.Build
 import androidx.test.filters.SdkSuppress
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.rule.ActivityTestRule
-import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.Test
+import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class HelpFragmentTest {
+class HelpFragmentTest : BaseActivityTest<KiwixMainActivity>() {
 
   @get:Rule
-  var activityRule: ActivityTestRule<KiwixMainActivity> =
+  override var activityRule: ActivityTestRule<KiwixMainActivity> =
     ActivityTestRule(KiwixMainActivity::class.java)
-
-  @get:Rule
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
-
-  @get:Rule
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
   @Test
   fun verifyHelpActivity() {

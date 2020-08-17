@@ -34,11 +34,13 @@ import org.kiwix.kiwixmobile.core.di.components.TestComponent
 abstract class BaseActivityTest<T : Activity> {
   @get:Rule
   abstract var activityRule: ActivityTestRule<T>
+
   @get:Rule
-  open var readPermissionRule: GrantPermissionRule =
+  var readPermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(permission.READ_EXTERNAL_STORAGE)
+
   @get:Rule
-  open var writePermissionRule: GrantPermissionRule =
+  var writePermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(permission.WRITE_EXTERNAL_STORAGE)
 
   val context: Context by lazy {
