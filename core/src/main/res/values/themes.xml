@@ -22,6 +22,8 @@
     <item name="textSecondary">@color/mine_shaft_gray850</item>
     <item name="textTertiary">@color/mine_shaft_gray600</item>
     <item name="cardViewBackground">@color/alabaster_white</item>
+
+
   </style>
 
   <!--Base custom theme which will be shared between both light and dark theme variants-->
