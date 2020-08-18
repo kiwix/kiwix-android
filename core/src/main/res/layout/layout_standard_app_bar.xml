@@ -7,7 +7,7 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   app:layout_constraintTop_toTopOf="parent"
-  tools:showIn="@layout/activity_help">
+  tools:showIn="@layout/fragment_help">
 
   <include layout="@layout/layout_toolbar" />
 </com.google.android.material.appbar.AppBarLayout>

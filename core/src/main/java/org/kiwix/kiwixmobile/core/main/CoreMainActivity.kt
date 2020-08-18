@@ -34,9 +34,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
-import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import javax.inject.Inject
 
@@ -49,12 +47,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
   protected lateinit var drawerToggle: ActionBarDrawerToggle
   abstract val navController: NavController
-
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
   abstract val bookmarksFragmentResId: Int
   abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
+  abstract val helpFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
 
@@ -125,12 +123,17 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     when (item.itemId) {
       R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
       R.id.menu_settings -> openSettings()
-      R.id.menu_help -> start<HelpActivity>()
+      R.id.menu_help -> openHelpFragment()
       R.id.menu_history -> openHistoryActivity()
       R.id.menu_bookmarks_list -> openBookmarksActivity()
       else -> return false
     }
     return true
+  }
+
+  private fun openHelpFragment() {
+    navigate(helpFragmentResId)
+    handleDrawerOnNavigation()
   }
 
   private fun navigationDrawerIsOpen(): Boolean =
@@ -188,7 +191,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigate(fragmentId, bundle)
   }
 
-  fun openSettings() {
+  private fun openSettings() {
     handleDrawerOnNavigation()
     navigate(settingsFragmentResId)
   }

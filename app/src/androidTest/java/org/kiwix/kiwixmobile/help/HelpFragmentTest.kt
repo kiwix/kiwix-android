@@ -19,18 +19,24 @@ package org.kiwix.kiwixmobile.help
 
 import android.os.Build
 import androidx.test.filters.SdkSuppress
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.rule.ActivityTestRule
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.help.HelpActivity
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
-class HelpActivityTest : BaseActivityTest<HelpActivity>() {
+class HelpFragmentTest : BaseActivityTest<KiwixMainActivity>() {
 
-  override var activityRule: ActivityTestRule<HelpActivity> = activityTestRule()
+  @get:Rule
+  override var activityRule: ActivityTestRule<KiwixMainActivity> =
+    ActivityTestRule(KiwixMainActivity::class.java)
 
   @Test
   fun verifyHelpActivity() {
+    runOnUiThread { activityRule.activity.navigate(R.id.helpFragment) }
     help {
       clickOnWhatDoesKiwixDo()
       assertWhatDoesKiwixDoIsExpanded()

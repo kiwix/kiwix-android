@@ -54,6 +54,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val helpFragmentResId: Int = R.id.helpFragment
   override val topLevelDestinations =
     setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
 
@@ -62,7 +63,7 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private val finishActionModeOnDestinationChange =
-    NavController.OnDestinationChangedListener { controller, destination, arguments ->
+    NavController.OnDestinationChangedListener { _, _, _ ->
       actionMode?.finish()
     }
 
@@ -79,8 +80,8 @@ class KiwixMainActivity : CoreMainActivity() {
     bottom_nav_view.setupWithNavController(navController)
   }
 
-  override fun onPostCreate(savedInstanceState: Bundle?) {
-    super.onPostCreate(savedInstanceState)
+  override fun onStart() {
+    super.onStart()
     navController.addOnDestinationChangedListener { _, destination, _ ->
       bottom_nav_view.isVisible = destination.id in topLevelDestinations
       if (destination.id !in topLevelDestinations) {
