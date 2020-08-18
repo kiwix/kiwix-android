@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase;
+import org.kiwix.kiwixmobile.core.data.local.entity.BookDataSource;
 import org.kiwix.kiwixmobile.core.data.local.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;

@@ -23,13 +23,17 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import butterknife.BindView
+import kotlinx.android.synthetic.main.activity_kiwix_error.allowCrash
+import kotlinx.android.synthetic.main.activity_kiwix_error.allowDeviceDetails
+import kotlinx.android.synthetic.main.activity_kiwix_error.allowFileSystemDetails
+import kotlinx.android.synthetic.main.activity_kiwix_error.allowLanguage
+import kotlinx.android.synthetic.main.activity_kiwix_error.allowLogs
+import kotlinx.android.synthetic.main.activity_kiwix_error.allowZims
+import kotlinx.android.synthetic.main.activity_kiwix_error.reportButton
+import kotlinx.android.synthetic.main.activity_kiwix_error.restartButton
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R2
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -55,54 +59,32 @@ open class ErrorActivity : BaseActivity() {
   @Inject
   var fileLogger: FileLogger? = null
 
-  @BindView(R2.id.reportButton)
-  var reportButton: Button? = null
-
-  @BindView(R2.id.restartButton)
-  var restartButton: Button? = null
-
-  @BindView(R2.id.allowLanguage)
-  var allowLanguageCheckbox: CheckBox? = null
-
-  @BindView(R2.id.allowZims)
-  var allowZimsCheckbox: CheckBox? = null
-
-  @BindView(R2.id.allowCrash)
-  var allowCrashCheckbox: CheckBox? = null
-
-  @BindView(R2.id.allowLogs)
-  var allowLogsCheckbox: CheckBox? = null
-
-  @BindView(R2.id.allowDeviceDetails)
-  var allowDeviceDetailsCheckbox: CheckBox? = null
-
-  @BindView(R2.id.allowFileSystemDetails)
-  var allowFileSystemDetailsCheckbox: CheckBox? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_kiwix_error)
     val callingIntent = intent
     val extras = callingIntent.extras
-    val exception: Throwable?
-    exception = if (extras != null && safeContains(extras, EXCEPTION_KEY)) {
+    val exception = if (extras != null && safeContains(extras, EXCEPTION_KEY)) {
       extras.getSerializable(EXCEPTION_KEY) as Throwable
     } else {
       null
     }
-    reportButton!!.setOnClickListener { v: View? ->
+    reportButton.setOnClickListener {
       val emailIntent = Intent(Intent.ACTION_SEND)
       emailIntent.type = "vnd.android.cursor.dir/email"
       emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("android-crash-feedback@kiwix.org"))
       emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
       var body: String? = body
-      if (allowLogsCheckbox!!.isChecked) {
+      if (allowLogs.isChecked) {
         val file = fileLogger!!.writeLogFile(this)
         val path =
           FileProvider.getUriForFile(this, applicationContext.packageName + ".fileprovider", file)
-        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path)
+        with(emailIntent) {
+          addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+          emailIntent.putExtra(Intent.EXTRA_STREAM, path)
+        }
       }
-      if (allowCrashCheckbox!!.isChecked && exception != null) {
+      if (allowCrash.isChecked && exception != null) {
         body += """
             Exception Details:
 
@@ -111,7 +93,7 @@ open class ErrorActivity : BaseActivity() {
 
             """.trimIndent()
       }
-      if (allowZimsCheckbox!!.isChecked) {
+      if (allowZims.isChecked) {
         val books = bookDao!!.getBooks()
         val sb = StringBuilder()
         for ((_, book) in books) {
@@ -135,7 +117,7 @@ open class ErrorActivity : BaseActivity() {
 
             """.trimIndent()
       }
-      if (allowLanguageCheckbox!!.isChecked) {
+      if (allowLanguage.isChecked) {
         body += """
             Current Locale:
             ${getCurrentLocale(applicationContext)}
@@ -143,7 +125,7 @@ open class ErrorActivity : BaseActivity() {
 
             """.trimIndent()
       }
-      if (allowDeviceDetailsCheckbox!!.isChecked) {
+      if (allowDeviceDetails.isChecked) {
         body += """Device Details:
 Device:[${Build.DEVICE}]
 Model:[${Build.MODEL}]
@@ -154,7 +136,7 @@ App Version:[$versionName $versionCode]
 
 """
       }
-      if (allowFileSystemDetailsCheckbox!!.isChecked) {
+      if (allowFileSystemDetails.isChecked) {
         body += "Mount Points\n"
         for (mountInfo in mountPointProducer!!.produce()) {
           body += """
@@ -173,7 +155,7 @@ App Version:[$versionName $versionCode]
       emailIntent.putExtra(Intent.EXTRA_TEXT, body)
       startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), 1)
     }
-    restartButton!!.setOnClickListener { v: View? -> onRestartClicked() }
+    restartButton.setOnClickListener { v: View? -> onRestartClicked() }
   }
 
   private fun safeContains(extras: Bundle, key: String): Boolean {
