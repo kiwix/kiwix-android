@@ -27,7 +27,6 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
@@ -37,12 +36,12 @@ import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.webserver.ZimHostActivity
+
+const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
@@ -93,13 +92,6 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (drawerToggle.isDrawerIndicatorEnabled) {
-      return drawerToggle.onOptionsItemSelected(item)
-    }
-    return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
-  }
-
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)
     actionMode = mode
@@ -129,10 +121,15 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.menu_host_books -> start<ZimHostActivity>()
+      R.id.menu_host_books -> openZimHostFragment()
       else -> return super.onNavigationItemSelected(item)
     }
     return true
+  }
+
+  private fun openZimHostFragment() {
+    disableDrawer()
+    navigate(R.id.zimHostFragment)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {

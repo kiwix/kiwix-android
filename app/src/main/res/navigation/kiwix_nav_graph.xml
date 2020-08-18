@@ -66,6 +66,10 @@
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
     android:label="HistoryFragment" />
   <fragment
+    android:id="@+id/zimHostFragment"
+    android:name="org.kiwix.kiwixmobile.webserver.ZimHostFragment"
+    android:label="HistoryFragment" />
+  <fragment
     android:id="@+id/helpFragment"
     android:name="org.kiwix.kiwixmobile.core.help.HelpFragment"
     android:label="HelpFragment" />

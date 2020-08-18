@@ -50,7 +50,7 @@ const val KIWIX_INTERNAL_ERROR = 10
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
-  protected lateinit var drawerToggle: ActionBarDrawerToggle
+  protected var drawerToggle: ActionBarDrawerToggle? = null
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
@@ -96,6 +96,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle?.isDrawerIndicatorEnabled == true) {
+      return drawerToggle?.onOptionsItemSelected(item) == true
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   override fun onActionModeStarted(mode: ActionMode) {
     super.onActionModeStarted(mode)
     activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
@@ -133,13 +140,15 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         R.string.open_drawer,
         R.string.close_drawer
       )
-    drawerContainerLayout.addDrawerListener(drawerToggle)
-    drawerToggle.syncState()
+    drawerToggle?.let {
+      drawerContainerLayout.addDrawerListener(it)
+      it.syncState()
+    }
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
   }
 
   open fun disableDrawer() {
-    drawerToggle.isDrawerIndicatorEnabled = false
+    drawerToggle?.isDrawerIndicatorEnabled = false
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
   }
 
