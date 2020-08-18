@@ -54,6 +54,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val helpFragmentResId: Int = R.id.helpFragment
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 
@@ -62,7 +63,7 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private val finishActionModeOnDestinationChange =
-    NavController.OnDestinationChangedListener { controller, destination, arguments ->
+    NavController.OnDestinationChangedListener { _, _, _ ->
       actionMode?.finish()
     }
 
