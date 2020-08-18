@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.edit
 import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
-import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.Companion.from
 import java.io.File
@@ -37,7 +36,7 @@ import javax.inject.Singleton
  * Manager for the Default Shared Preferences of the application.
  */
 @Singleton
-class SharedPreferenceUtil @Inject constructor(context: Context) {
+class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
   private val _prefStorages = PublishProcessor.create<String>()
@@ -81,8 +80,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context) {
     }
 
   private fun defaultStorage(): String =
-    getExternalFilesDirs(instance, null)[0]?.path
-      ?: instance.filesDir.path  // a workaround for emulators
+    getExternalFilesDirs(context, null)[0]?.path
+      ?: context.filesDir.path  // a workaround for emulators
 
   fun getPrefStorageTitle(defaultTitle: String): String =
     sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle) ?: defaultTitle
