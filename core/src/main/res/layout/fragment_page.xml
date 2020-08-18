@@ -13,7 +13,14 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:showIn="@layout/fragment_help">
 
-    <include layout="@layout/layout_toolbar" />
+
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:popupTheme="@style/KiwixTheme"
+      app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+      tools:showIn="@layout/activity_search" />
 
     <Switch
       android:id="@+id/page_switch"
