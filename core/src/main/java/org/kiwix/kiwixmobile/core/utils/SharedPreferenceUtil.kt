@@ -41,7 +41,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
   private val _prefStorages = PublishProcessor.create<String>()
-  val prefStorages = _prefStorages.startWith { prefStorage }
+  val prefStorages
+    get() = _prefStorages.startWith { _prefStorages }
   private val textZooms = PublishProcessor.create<Int>()
   private val nightModes = PublishProcessor.create<NightModeConfig.Mode>()
 
