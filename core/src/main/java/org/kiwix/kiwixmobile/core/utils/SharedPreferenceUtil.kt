@@ -83,7 +83,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   private fun defaultStorage(): String =
     getExternalFilesDirs(context, null)[0]?.path
-      ?: context.filesDir.path  // a workaround for emulators
+      ?: context.filesDir.path // a workaround for emulators
 
   fun getPrefStorageTitle(defaultTitle: String): String =
     sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle) ?: defaultTitle
