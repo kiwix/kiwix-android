@@ -36,13 +36,10 @@ import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 
@@ -54,6 +51,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val drawerContainerLayout: DrawerLayout by lazy { navigation_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
   override val topLevelDestinations =
     setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
@@ -128,10 +126,6 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun openZimHostFragment() {
     disableDrawer()
     navigate(R.id.zimHostFragment)
-  }
-
-  override fun openSettingsActivity() {
-    startActivityForResult(intent<KiwixSettingsActivity>(), REQUEST_PREFERENCES)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
