@@ -38,6 +38,10 @@
     android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
     android:label="BookmarksFragment" />
   <fragment
+    android:id="@+id/helpFragment"
+    android:name="org.kiwix.kiwixmobile.core.help.HelpFragment"
+    android:label="HelpFragment" />
+  <fragment
     android:id="@+id/customSettingsFragment"
     android:name="org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment"
     android:label="CustomSettingsFragment" />
