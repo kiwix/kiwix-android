@@ -40,7 +40,8 @@ import javax.inject.Singleton
 class SharedPreferenceUtil @Inject constructor(context: Context) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
-  private val prefStorages = PublishProcessor.create<String>()
+  private val _prefStorages = PublishProcessor.create<String>()
+  val prefStorages = _prefStorages.startWith { prefStorage }
   private val textZooms = PublishProcessor.create<Int>()
   private val nightModes = PublishProcessor.create<NightModeConfig.Mode>()
 
@@ -98,10 +99,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context) {
 
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
-    prefStorages.onNext(storage)
+    _prefStorages.onNext(storage)
   }
-
-  fun getPrefStorages(): Flowable<String> = prefStorages.startWith(prefStorage)
 
   fun putPrefFullScreen(fullScreen: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_FULLSCREEN, fullScreen) }
