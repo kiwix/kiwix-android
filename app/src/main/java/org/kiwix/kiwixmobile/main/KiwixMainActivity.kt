@@ -56,11 +56,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override val historyFragmentResId: Int = R.id.historyFragment
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
-  override val initialDestinationFragmentId: Int
-    get() = if (sharedPreferenceUtil.showIntro())
-      R.id.introFragment
-    else
-      R.id.libraryFragment
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
@@ -92,7 +87,9 @@ class KiwixMainActivity : CoreMainActivity() {
         handleDrawerOnNavigation()
       }
     }
-    navigate(initialDestinationFragmentId)
+    if (sharedPreferenceUtil.showIntro()) {
+      navigate(R.id.introFragment)
+    }
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

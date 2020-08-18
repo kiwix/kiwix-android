@@ -46,7 +46,6 @@ class CustomMainActivity : CoreMainActivity() {
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.customSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
-  override val initialDestinationFragmentId: Int = R.id.customReaderFragment
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinations =
     setOf(R.id.customReaderFragment)
@@ -61,7 +60,6 @@ class CustomMainActivity : CoreMainActivity() {
     if (savedInstanceState != null) {
       return
     }
-    navigate(initialDestinationFragmentId)
   }
 
   override fun onPostCreate(savedInstanceState: Bundle?) {

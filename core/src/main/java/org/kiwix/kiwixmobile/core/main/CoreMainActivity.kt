@@ -60,7 +60,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val bookmarksFragmentResId: Int
   abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
-  abstract val initialDestinationFragmentId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
 
