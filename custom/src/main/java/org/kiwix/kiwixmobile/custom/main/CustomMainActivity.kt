@@ -29,13 +29,10 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 
 const val REQUEST_READ_FOR_OBB = 5002
 
@@ -47,7 +44,9 @@ class CustomMainActivity : CoreMainActivity() {
   override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val settingsFragmentResId: Int = R.id.customSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val helpFragmentResId: Int = R.id.helpFragment
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinations =
     setOf(R.id.customReaderFragment)
@@ -64,8 +63,8 @@ class CustomMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun onPostCreate(savedInstanceState: Bundle?) {
-    super.onPostCreate(savedInstanceState)
+  override fun onStart() {
+    super.onStart()
     navController.addOnDestinationChangedListener { _, destination, _ ->
       if (destination.id !in topLevelDestinations) {
         handleDrawerOnNavigation()
@@ -88,10 +87,6 @@ class CustomMainActivity : CoreMainActivity() {
     }
     drawer_nav_view.menu.findItem(R.id.menu_host_books)
       .isVisible = false
-  }
-
-  override fun openSettingsActivity() {
-    startActivityForResult(intent<CustomSettingsActivity>(), REQUEST_PREFERENCES)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
