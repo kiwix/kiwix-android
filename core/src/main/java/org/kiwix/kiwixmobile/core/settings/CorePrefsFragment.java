@@ -203,7 +203,6 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   private void clearAllHistoryDialog() {
     alertDialogShower.show(KiwixDialog.ClearAllHistory.INSTANCE, () -> {
       presenter.clearHistory();
-      CoreSettingsActivity.allHistoryCleared = true;
       Snackbar.make(getView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
       return Unit.INSTANCE;
     });

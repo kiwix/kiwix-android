@@ -52,12 +52,6 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-    <activity android:name=".settings.CustomSettingsActivity">
-      <intent-filter>
-        <action android:name="org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity" />
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
-    </activity>
     <activity android:name=".download.CustomDownloadActivity" />
 
     <receiver android:name=".main.CustomSearchWidget">

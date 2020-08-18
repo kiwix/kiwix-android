@@ -65,4 +65,8 @@
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
     android:label="HistoryFragment" />
+  <fragment
+    android:id="@+id/kiwixSettingsFragment"
+    android:name="org.kiwix.kiwixmobile.settings.KiwixSettingsFragment"
+    android:label="KiwixSettingsFragment" />
 </navigation>
