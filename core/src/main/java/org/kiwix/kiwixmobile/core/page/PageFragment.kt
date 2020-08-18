@@ -96,13 +96,13 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.menu_page, menu)
     val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
     search.queryHint = searchQueryHint
     search.setOnQueryTextListener(SimpleTextListener {
       pageViewModel.actions.offer(Action.Filter(it))
     })
-    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
