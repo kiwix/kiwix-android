@@ -42,7 +42,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val _prefStorages = PublishProcessor.create<String>()
   val prefStorages
     get() = _prefStorages.startWith { prefStorage }
-  private val textZooms = PublishProcessor.create<Int>()
+  private val _textZooms = PublishProcessor.create<Int>()
+  val textZooms
+    get() = _textZooms.startWith { textZoom }
   private val nightModes = PublishProcessor.create<NightModeConfig.Mode>()
 
   val prefWifiOnly: Boolean
@@ -145,10 +147,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = sharedPreferences.getInt(TEXT_ZOOM, DEFAULT_ZOOM)
     set(textZoom) {
       sharedPreferences.edit { putInt(TEXT_ZOOM, textZoom) }
-      textZooms.offer(textZoom)
+      _textZooms.offer(textZoom)
     }
-
-  fun getTextZooms(): Flowable<Int> = textZooms.startWith(textZoom)
 
   companion object {
     // Prefs
