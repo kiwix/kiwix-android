@@ -56,7 +56,6 @@ import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
@@ -419,13 +418,6 @@ class ZimManageViewModelTest {
 
   @Nested
   inner class SideEffects {
-    @Test
-    fun `RequestOpen offers OpenFile`() {
-      val bookOnDisk = bookOnDisk()
-      viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(RequestOpen(bookOnDisk)) }
-        .assertValues(OpenFile(bookOnDisk))
-    }
 
     @Test
     fun `RequestMultiSelection offers StartMultiSelection and selects a book`() {
