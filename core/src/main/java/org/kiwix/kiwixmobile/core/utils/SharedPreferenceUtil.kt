@@ -42,7 +42,7 @@ class SharedPreferenceUtil @Inject constructor(context: Context) {
     PreferenceManager.getDefaultSharedPreferences(context)
   private val _prefStorages = PublishProcessor.create<String>()
   val prefStorages
-    get() = _prefStorages.startWith { _prefStorages }
+    get() = _prefStorages.startWith { prefStorage }
   private val textZooms = PublishProcessor.create<Int>()
   private val nightModes = PublishProcessor.create<NightModeConfig.Mode>()
 
@@ -81,7 +81,8 @@ class SharedPreferenceUtil @Inject constructor(context: Context) {
     }
 
   private fun defaultStorage(): String =
-    getExternalFilesDirs(instance, null)[0]?.path ?: instance.filesDir.path
+    getExternalFilesDirs(instance, null)[0]?.path
+      ?: instance.filesDir.path  // a workaround for emulators
 
   fun getPrefStorageTitle(defaultTitle: String): String =
     sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle) ?: defaultTitle
