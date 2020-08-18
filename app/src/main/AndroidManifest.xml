@@ -153,7 +153,6 @@
         <data android:host="*" />
       </intent-filter>
     </activity>
-    <activity android:name=".webserver.ZimHostActivity" />
 
     <service android:name=".webserver.wifi_hotspot.HotspotService" />
 

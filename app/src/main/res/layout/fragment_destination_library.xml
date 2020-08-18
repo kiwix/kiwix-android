@@ -34,13 +34,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-      <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@style/KiwixTheme"
-        app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+      <include layout="@layout/layout_scrolling_toolbar" />
     </com.google.android.material.appbar.AppBarLayout>
 
 
