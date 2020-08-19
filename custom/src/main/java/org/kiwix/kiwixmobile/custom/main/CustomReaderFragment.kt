@@ -47,10 +47,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -98,18 +94,16 @@ class CustomReaderFragment : CoreReaderFragment() {
     requireArguments().clear()
   }
 
-  private fun isInvalidJson(jsonString: String?): Boolean = jsonString == null || jsonString == "[]"
+  override fun restoreViewStateOnInvalidJSON() {
+    openHomeScreen()
+  }
 
-  private fun manageExternalLaunchAndRestoringViewState() {
-    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
-    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
-    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
-    if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
-      openHomeScreen()
-    } else {
-      restoreTabs(zimArticles, zimPositions, currentTab)
-    }
+  override fun restoreViewStateOnValidJSON(
+    zimArticles: String,
+    zimPositions: String,
+    currentTab: Int
+  ) {
+    restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
   override fun setDrawerLockMode(lockMode: Int) {

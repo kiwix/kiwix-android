@@ -1676,25 +1676,54 @@ public abstract class CoreReaderFragment extends BaseFragment
     return view != null;
   }
 
+  private boolean isInvalidJson(String jsonString) {
+    return jsonString == null || jsonString.equals("[]");
+  }
+
+  protected void manageExternalLaunchAndRestoringViewState() {
+    SharedPreferences settings =
+      requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0);
+    String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
+    String zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null);
+    int currentTab = safelyGetCurrentTab(settings);
+    if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
+      restoreViewStateOnInvalidJSON();
+    } else {
+      restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab);
+    }
+  }
+
+  private int safelyGetCurrentTab(SharedPreferences settings) {
+    return Math.max(settings.getInt(TAG_CURRENT_TAB, 0), 0);
+  }
+
   protected void restoreTabs(@Nullable String zimArticles, @Nullable String zimPositions,
     int currentTab) {
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
       int i = 0;
-      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(0)));
-      getCurrentWebView().setScrollY(positions.getInt(0));
-      i++;
-      while (i < urls.length()) {
-        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)));
-        safelyGetWebView(i).setScrollY(positions.getInt(i));
+      // tabs are already restored if the webViewList includes more tabs than the default
+      if (webViewList.size() == 1) {
+        getCurrentWebView().setScrollY(positions.getInt(0));
         i++;
+        while (i < urls.length()) {
+          newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)));
+          safelyGetWebView(i).setScrollY(positions.getInt(i));
+          i++;
+        }
       }
       selectTab(currentTab);
+      webViewList.get(currentTab).loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
       getCurrentWebView().setScrollY(positions.getInt(currentTab));
     } catch (JSONException e) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
       ContextExtensionsKt.toast(getActivity(), "Could not restore tabs.", Toast.LENGTH_LONG);
     }
   }
+
+  protected abstract void restoreViewStateOnValidJSON(String zimArticles,
+    String zimPositions, int currentTab);
+
+  public abstract void restoreViewStateOnInvalidJSON();
 }
