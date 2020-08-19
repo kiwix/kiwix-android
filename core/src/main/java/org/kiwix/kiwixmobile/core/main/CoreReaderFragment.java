@@ -788,7 +788,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     tableDrawerAdapter.setTableClickListener(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
-    toolbar = null;
     webViewList.clear();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
