@@ -37,8 +37,6 @@
   <string name="pref_night_mode_summary">Prikaz člankov z obrnjenimi barvami</string>
   <string name="pref_back_to_top">Nazaj na vrh</string>
   <string name="pref_back_to_top_summary">Na dnu strani prikaži gumb za pomik na vrh strani</string>
-  <string name="pref_hide_toolbar">Naj bo orodna vrstica vidna</string>
-  <string name="pref_hide_toolbar_summary">Med brskanjem po vsebini preprečuje, da se orodna vrstica pomika po pogledu</string>
   <string name="pref_language_title">Jezik</string>
   <string name="pref_language_chooser">Izberite jezik</string>
   <string name="pref_credits">Sodelujoči in licence</string>

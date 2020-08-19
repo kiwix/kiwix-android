@@ -22,16 +22,10 @@
       android:title="@string/pref_back_to_top"
       app:iconSpaceReserved="false" />
 
-    <SwitchPreferenceCompat
-      android:defaultValue="false"
-      android:key="pref_hidetoolbar"
-      android:summary="@string/pref_hide_toolbar_summary"
-      android:title="@string/pref_hide_toolbar"
-      app:iconSpaceReserved="false" />
-
     <SeekBarPreference
       android:defaultValue="2"
       android:max="6"
+      android:summary="@string/pref_text_zoom_summary"
       app:iconSpaceReserved="false"
       app:key="text_zoom"
       app:title="@string/pref_text_zoom_title"
@@ -68,8 +62,8 @@
 
   <PreferenceCategory
     android:key="pref_storage"
-    app:title="@string/pref_storage"
-    app:iconSpaceReserved="false">
+    app:iconSpaceReserved="false"
+    app:title="@string/pref_storage">
 
     <Preference
       android:key="pref_select_folder"

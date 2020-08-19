@@ -20,6 +20,10 @@
     <item name="itemTextAppearance">?textAppearanceBody2</item>
   </style>
 
+  <style name="Widget.KiwixTheme.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
+    <item name="backgroundTint">@color/black</item>
+  </style>
+
   <style name="Widget.KiwixTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
     <item name="android:background">@color/black</item>
   </style>
@@ -32,6 +36,7 @@
     <item name="android:windowBackground">@drawable/launch_screen</item>
   </style>
 
+
   <style name="Widget.KiwixTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout">
     <item name="android:background">@color/black</item>
     <item name="tabTextColor">@color/alabaster_white</item>
@@ -40,24 +45,49 @@
   <style name="Widget.KiwixTheme.Chip.Choice.Static" parent="Widget.MaterialComponents.Chip.Choice">
     <item name="android:clickable">false</item>
     <item name="android:textAlignment" tools:ignore="NewApi">center</item>
+    <item name="android:textColor">?textSecondary</item>
   </style>
 
   <style name="list_item_title" parent="TextAppearance.KiwixTheme.Subtitle1" />
 
   <style name="list_item_body" parent="TextAppearance.KiwixTheme.Subtitle2" />
 
+  <style name="no_content_text" parent="TextAppearance.KiwixTheme.Headline5" />
+
   <style name="switch_style">
     <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_height">48dp</item>
     <item name="android:layout_gravity">end</item>
+    <item name="android:paddingRight">@dimen/switch_padding</item>
     <item name="android:paddingBottom">@dimen/switch_padding_bottom</item>
     <item name="android:switchPadding">@dimen/switch_padding</item>
+    <item name="android:theme">@style/ThemeOverlay.KiwixTheme.Switch</item>
     <item name="android:textAppearance">@style/TextAppearance.KiwixTheme.Body2</item>
-    <item name="theme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+    <item name="android:textColor">?colorOnPrimary</item>
+  </style>
+
+  <style name="kiwix_blue_button" parent="Widget.MaterialComponents.Button">
+    <item name="backgroundTint">@color/denim_blue800</item>
+  </style>
+
+  <style name="snackbar_button" parent="Widget.MaterialComponents.Button.TextButton">
+    <item name="android:textColor">?colorSurface</item>
+  </style>
+
+  <style name="ThemeOverlay.KiwixTheme.Switch" parent="ThemeOverlay.AppCompat.Light">
+    <item name="colorControlActivated">@color/denim_blue200</item>
+    <item name="android:colorForeground">@color/alabaster_white</item>
   </style>
 
   <style name="Widget.KiwixTheme.CardView" parent="Widget.MaterialComponents.CardView">
     <item name="cardBackgroundColor">?cardViewBackground</item>
+  </style>
+
+  <style name="Widget.KiwixTheme.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+    <item name="backgroundTint">@color/black</item>
+    <item name="itemIconTint">@drawable/bottom_navigation_theme_selector</item>
+    <item name="itemTextColor">@drawable/bottom_navigation_theme_selector</item>
+    <item name="itemRippleColor">@drawable/bottom_navigation_theme_selector</item>
   </style>
 
   <style name="ThemeOverlay.KiwixTheme.ProgressBar" parent="">

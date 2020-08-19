@@ -17,22 +17,6 @@
     app:showAsAction="always" />
 
   <item
-    android:id="@+id/menu_bookmarks_list"
-    android:title="@string/bookmarks"
-    app:showAsAction="never" />
-
-  <item
-    android:id="@+id/menu_history"
-    android:title="@string/history"
-    app:showAsAction="never" />
-
-  <item
-    android:id="@+id/menu_openfile"
-    android:icon="@drawable/action_open_file"
-    android:title="@string/library"
-    app:showAsAction="never" />
-
-  <item
     android:id="@+id/menu_add_note"
     android:icon="@drawable/ic_add_note"
     android:title="@string/note"
@@ -61,29 +45,5 @@
     android:visible="false"
     app:showAsAction="never"
     tools:visible="true" />
-
-  <item
-    android:id="@+id/menu_host_books"
-    android:title="@string/menu_host_books"
-    app:showAsAction="never" />
-
-  <item
-    android:id="@+id/menu_help"
-    android:title="@string/menu_help"
-    app:showAsAction="never" />
-
-  <item
-    android:id="@+id/menu_settings"
-    android:title="@string/menu_settings"
-    app:showAsAction="never" />
-  <item
-    android:id="@+id/menu_new_navigation"
-    android:title="@string/experimental_navigation"
-    app:showAsAction="never" />
-
-  <item
-    android:id="@+id/menu_support_kiwix"
-    android:title="@string/menu_support_kiwix"
-    app:showAsAction="never" />
 
 </menu>

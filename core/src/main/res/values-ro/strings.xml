@@ -60,8 +60,6 @@
   <string name="pref_night_mode_summary">Afișează articolele în culori inversate</string>
   <string name="pref_back_to_top">Începutul paginii</string>
   <string name="pref_back_to_top_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
-  <string name="pref_hide_toolbar">Ascunde bara de unelte când miști scrolezi</string>
-  <string name="pref_hide_toolbar_summary">Ascunde bara de căutare când pagina este în partea de jos</string>
   <string name="pref_language_title">Limba</string>
   <string name="pref_language_chooser">Alegeți o limbă</string>
   <string name="pref_credits">Contribuitori și Licențe</string>
@@ -76,7 +74,6 @@
   <string name="pref_clear_all_history_summary">Curăță căutările recente și istoricul filelor</string>
   <string name="all_history_cleared">Tot istoricul curățat</string>
   <string name="pref_clear_all_bookmarks_title">Șterge semnele de carte</string>
-  <string name="all_bookmarks_cleared">Toate semnele de carte șterse</string>
   <string name="clear_all_history_dialog_title">Șterge tot istoricul</string>
   <string name="share">Distribuie</string>
   <string name="selected_file_cab_app_chooser_title">Distribuie fișiere ZIM cu:</string>

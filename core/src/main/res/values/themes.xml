@@ -19,8 +19,8 @@
     <item name="colorOnSurface">@color/black</item>
     <item name="colorOnError">@color/alabaster_white</item>
 
-    <item name="textSecondary">@color/mine_shaft_gray700</item>
-    <item name="textTertiary">@color/mine_shaft_gray500</item>
+    <item name="textSecondary">@color/mine_shaft_gray850</item>
+    <item name="textTertiary">@color/mine_shaft_gray600</item>
     <item name="cardViewBackground">@color/alabaster_white</item>
   </style>
 
@@ -61,7 +61,6 @@
     <item name="textAppearanceButton">@style/TextAppearance.KiwixTheme.Button</item>
     <item name="textAppearanceCaption">@style/TextAppearance.KiwixTheme.Caption</item>
     <item name="textAppearanceOverline">@style/TextAppearance.KiwixTheme.Overline</item>
-
     <!--Material shape attributes-->
     <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.KiwixTheme.SmallComponent
     </item>
@@ -75,6 +74,8 @@
     <item name="bottomSheetDialogTheme">@style/ThemeOverlay.KiwixTheme.BottomSheetDialog</item>
     <item name="navigationViewStyle">@style/Widget.KiwixTheme.NavigationView</item>
     <item name="materialCardViewStyle">@style/Widget.KiwixTheme.CardView</item>
+    <item name="bottomNavigationStyle">@style/Widget.KiwixTheme.BottomNavigationView</item>
+    <item name="bottomAppBarStyle">@style/Widget.KiwixTheme.BottomAppBar</item>
     <item name="toolbarStyle">@style/Widget.KiwixTheme.Toolbar</item>
     <item name="tabStyle">@style/Widget.KiwixTheme.TabLayout</item>
     <item name="appBarLayoutStyle">@style/Widget.KiwixTheme.AppBar</item>

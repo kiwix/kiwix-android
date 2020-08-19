@@ -28,6 +28,8 @@ sealed class Action {
   object StartSpeechInputFailed : Action()
 
   data class OnItemClick(val searchListItem: SearchListItem) : Action()
+  data class OnOpenInNewTabClick(val searchListItem: SearchListItem) : Action()
+
   data class OnItemLongClick(val searchListItem: SearchListItem) : Action()
   data class Filter(val term: String) : Action()
   data class ScreenWasStartedFrom(val searchOrigin: SearchOrigin) : Action()

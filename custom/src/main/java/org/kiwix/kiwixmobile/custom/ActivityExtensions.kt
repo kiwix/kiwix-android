@@ -18,6 +18,9 @@
 
 package org.kiwix.kiwixmobile.custom
 
+import android.app.Activity
+import android.view.View
+import androidx.annotation.IdRes
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.custom.di.CustomComponent
 
@@ -33,3 +36,5 @@ private fun BaseActivity.customApp() = applicationContext as? CustomApp ?: appli
 
 internal inline val BaseActivity.customActivityComponent
   get() = customComponent.activityComponentBuilder().activity(this).build()
+
+fun <T : View> Activity.lazyView(@IdRes viewId: Int): Lazy<T> = lazy { findViewById<T>(viewId) }

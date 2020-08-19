@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Carlespera
 * Ihojose
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Tu sistema de archivos no soporta archivos por encima de 4GB</string>
   <string name="detecting_file_system">Detectando si el archivo del sistema puede crear archivos de 4GB</string>
+  <string name="cannot_open_file">Fallo al abrir el archivo\nPrueba a buscar el archivo en la pestaña Dispositivo de tu biblioteca</string>
 </resources>

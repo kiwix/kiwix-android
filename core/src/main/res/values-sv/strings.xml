@@ -2,6 +2,7 @@
 <!-- Authors:
 * Abijeet Patro
 * Jopparn
+* Sabelöga
 * Skalman
 * Susann Schweden
 * Technic2
@@ -28,7 +29,7 @@
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
   <string name="hotspot_service_channel_name">Surfpunktstjänstkanal</string>
   <string name="hotspot_failed_title">Misslyckades att starta surfpunkt</string>
-  <string name="hotspot_failed_message">Det verkar som att din surfpunkt är redan aktiverad. Var god inaktivera din WiFi-surfpunkt för att fortsätta.</string>
+  <string name="hotspot_failed_message">Det verkar som att din surfpunkt redan är aktiverad. Var god inaktivera din WiFi-surfpunkt för att fortsätta.</string>
   <string name="go_to_wifi_settings_label">Gå till WiFi-inställningar</string>
   <string name="hotspot_running">Aktiv surfpunkt</string>
   <string name="no_books_selected_toast_message">Välj böcker först</string>
@@ -40,7 +41,7 @@
   <string name="hotspot_details_message">Information om din lokala surfpunkt. \nSSID : %1$s \nLösen : %2$s</string>
   <string name="server_textview_default_message">Välj filerna du vill vara värd för på servern</string>
   <string name="progress_dialog_starting_server">Startar server</string>
-  <string name="hotspot_dialog_title" fuzzy="true">Aktivera din WiFi-surfpunkt</string>
+  <string name="hotspot_dialog_title">Instruktioner för att hantera böcker</string>
   <string name="wifi_dialog_title">WiFi-förbindelse upptäckt</string>
   <string name="wifi_dialog_body">För att kunna se böcker på andra enheter, måste säkerställas att alla enheter är anslutna till samma WiFi-nätverk.</string>
   <string name="hotspot_dialog_message">För att denna funktion ska fungera måste du först aktivera din WiFi-surfpunkt manuellt eller se till att värdens enhet och mottagarens enhet är på samma nätverk.</string>
@@ -61,12 +62,10 @@
   <string name="pref_night_mode_summary">Visa artiklar med inverterade färger</string>
   <string name="pref_back_to_top">Tillbaka till toppen</string>
   <string name="pref_back_to_top_summary">Visar en knapp i slutet på sidan för att rulla upp till toppen</string>
-  <string name="pref_hide_toolbar">Fortsätt visa verktygsfältet</string>
-  <string name="pref_hide_toolbar_summary">Skyddar verktygsfältet från att försvinna när du bläddrar i innehållet</string>
   <string name="pref_language_title">Språk</string>
   <string name="pref_language_chooser">Välj ett språk</string>
   <string name="pref_credits">Bidragsgivare och licenser</string>
-  <string name="pref_credits_title">Erkännanden</string>
+  <string name="pref_credits_title">Tacka till</string>
   <string name="tts_lang_not_supported">Språket på denna sida stöds inte, eller så har lämplig språkdata inte installerats. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
@@ -77,8 +76,6 @@
   <string name="pref_clear_all_history_summary">Rensa senaste sökningar och flikhistorik</string>
   <string name="all_history_cleared">All historik rensades</string>
   <string name="pref_clear_all_bookmarks_title">Rensa bokmärken</string>
-  <string name="all_bookmarks_cleared">Alla bokmärken rensades</string>
-  <string name="selected_bookmarks_cleared">Utvalda bokmärken rensades</string>
   <string name="clear_all_history_dialog_title">Rensa all historik?</string>
   <string name="share">Dela</string>
   <string name="selected_file_cab_app_chooser_title">Dela ZIM-filer med:</string>
@@ -261,4 +258,8 @@
   <string name="send_report">Skicka diagnostisk rapport</string>
   <string name="crash_checkbox_file_system">Filsystemsdetaljer</string>
   <string name="diagnostic_report">Diagnostisk rapport</string>
+  <string name="diagnostic_report_message">Vänligen skicka följande detaljer så vi kan diagnostisera problemet.</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Text-zoomning</string>
+  <string name="search_open_in_new_tab">Öppna i ny flik</string>
 </resources>

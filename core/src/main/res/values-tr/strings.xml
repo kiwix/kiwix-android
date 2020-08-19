@@ -68,8 +68,6 @@
   <string name="pref_night_mode_summary">Makaleleri ters çevrilmiş renklerle göster</string>
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
-  <string name="pref_hide_toolbar">Araç Çubuğunu Görünür Tut</string>
-  <string name="pref_hide_toolbar_summary">Sayfa kaydırılırken araç çubuğunu gizle</string>
   <string name="pref_language_title">Dil</string>
   <string name="pref_language_chooser">Bir dil seçin</string>
   <string name="pref_credits">Katkıda bulunanlar ve lisanslar</string>
@@ -84,8 +82,6 @@
   <string name="pref_clear_all_history_summary">Son aramalar ve sekmeler geçmişini temizle</string>
   <string name="all_history_cleared">Tüm geçmiş temizlendi</string>
   <string name="pref_clear_all_bookmarks_title">Yer imlerini temizle</string>
-  <string name="all_bookmarks_cleared">Tüm Yer İmleri Temizlendi</string>
-  <string name="selected_bookmarks_cleared">Seçilen Yer İşaretleri Temizlendi</string>
   <string name="clear_all_history_dialog_title">Tüm Geçmişi Silinsin mi?</string>
   <string name="share">Paylaş</string>
   <string name="selected_file_cab_app_chooser_title">ZIM dosyalarını şu kişilerle paylaş:</string>
@@ -257,6 +253,7 @@
   <string name="status">Durum</string>
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
+  <string name="pref_text_zoom_summary">Metin boyutunu %25\'lik artışlarla değiştirin.</string>
   <string name="tag_pic">Resim</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Yalnızca Metin</string>
@@ -281,5 +278,5 @@
   <string name="diagnostic_report_message">Sorunu teşhis edebilmemiz için lütfen aşağıdaki tüm ayrıntıları gönderin</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Metin Yakınlığı</string>
-  <string name="experimental_navigation">Deneysel Gezintisi</string>
+  <string name="search_open_in_new_tab">Yeni sekmede aç</string>
 </resources>

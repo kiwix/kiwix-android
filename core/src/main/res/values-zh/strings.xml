@@ -6,6 +6,7 @@
 * Arthur2e5
 * Josephine W.
 * Liuxinyu970226
+* Shuiwater
 * SomeyaMako
 * VulpesVulpes825
 * Yfdyh000
@@ -66,8 +67,6 @@
   <string name="pref_night_mode_summary">以反色调显示文章</string>
   <string name="pref_back_to_top">返回顶端</string>
   <string name="pref_back_to_top_summary">在页底显示一个按钮以供返回顶端</string>
-  <string name="pref_hide_toolbar">当滚动时隐藏工具栏</string>
-  <string name="pref_hide_toolbar_summary">当页面向下滚动时隐藏工具栏</string>
   <string name="pref_language_title">语言</string>
   <string name="pref_language_chooser">选择语言</string>
   <string name="pref_credits">贡献者和授权</string>
@@ -196,4 +195,9 @@
   <string name="storage_permission_denied">存储权限被拒绝</string>
   <string name="go_to_settings">转到热点设置</string>
   <string name="no_bookmarks">没有书签</string>
+  <string name="delete_history">要删除所有历史记录吗？</string>
+  <string name="delete_selected_history">要删除所选的历史记录吗？</string>
+  <string name="delete_bookmarks">要删除所有书签吗？</string>
+  <string name="delete_selected_bookmarks">要删除所选的书签吗？</string>
+  <string name="search_open_in_new_tab">在新标签页打开</string>
 </resources>

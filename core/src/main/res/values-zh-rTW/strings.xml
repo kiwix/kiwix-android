@@ -62,8 +62,6 @@
   <string name="pref_night_mode_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
-  <string name="pref_hide_toolbar">維持工具列可見</string>
-  <string name="pref_hide_toolbar_summary">當瀏覽內容時，讓工具列不會滾動出檢視內容之外</string>
   <string name="pref_language_title">語言</string>
   <string name="pref_language_chooser">選擇語言</string>
   <string name="pref_credits">貢獻者和許可協議</string>
@@ -78,8 +76,6 @@
   <string name="pref_clear_all_history_summary">清除近期搜尋和分頁歷史記錄</string>
   <string name="all_history_cleared">所有歷史記錄已清除</string>
   <string name="pref_clear_all_bookmarks_title">清除書籤</string>
-  <string name="all_bookmarks_cleared">已清除所有書籤</string>
-  <string name="selected_bookmarks_cleared">所選的書籤已清除</string>
   <string name="clear_all_history_dialog_title">清除所有歷史記錄？</string>
   <string name="share">分享</string>
   <string name="selected_file_cab_app_chooser_title">分享 ZIM 檔案以：</string>
@@ -251,6 +247,7 @@
   <string name="status">狀態</string>
   <string name="pref_clear_all_notes_summary">清除在所有條目裡的所有註解</string>
   <string name="pref_clear_all_notes_title">清除所有註釋</string>
+  <string name="pref_text_zoom_summary">以 25% 更改文字大小</string>
   <string name="tag_pic">圖片</string>
   <string name="tag_vid">影片</string>
   <string name="tag_text_only">僅限文字</string>
@@ -275,5 +272,5 @@
   <string name="diagnostic_report_message">請傳送所有以下詳細資訊，以讓我們可以方便診斷問題</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字縮放</string>
-  <string name="experimental_navigation">實現性導覽</string>
+  <string name="search_open_in_new_tab">在新分頁開啟</string>
 </resources>

@@ -6,6 +6,7 @@
 * Dvorapa
 * Juandev
 * Klaras
+* Matěj Suchánek
 * Meliganai
 * Mininis11
 * Tchoř
@@ -65,8 +66,6 @@
   <string name="pref_night_mode_summary">Zobrazuje stránky v invertovaných barvách.</string>
   <string name="pref_back_to_top">Zpět na začátek</string>
   <string name="pref_back_to_top_summary">Zobrazit tlačítko “Zpět na začátek” na konci stránky</string>
-  <string name="pref_hide_toolbar">Ponechat viditelný panel nástrojů</string>
-  <string name="pref_hide_toolbar_summary">Zabraňuje odsunutí panelu nástrojů mimo obrazovku při prohlížení obsahu.</string>
   <string name="pref_language_title">Jazyk</string>
   <string name="pref_language_chooser">Vyberte jazyk</string>
   <string name="pref_credits">Přispěvatelé a licence</string>
@@ -81,7 +80,6 @@
   <string name="pref_clear_all_history_summary">Smazat nedávná hledání a historii karet</string>
   <string name="all_history_cleared">Všechna historie odstraněna</string>
   <string name="pref_clear_all_bookmarks_title">Vymazat záložky</string>
-  <string name="all_bookmarks_cleared">Všechny záložky byly vymazány</string>
   <string name="clear_all_history_dialog_title">Smazat celou historii?</string>
   <string name="share">Sdílet</string>
   <string name="selected_file_cab_app_chooser_title">Sdílet soubory ZIM s:</string>
@@ -161,7 +159,7 @@
   <string name="time_today">Dnes</string>
   <string name="time_yesterday">Včera</string>
   <string name="pref_external_link_popup_title">Upozornit při vkládání externích odkazů</string>
-  <string name="pref_external_link_popup_summary">Zobrazit vyskakovací zprávu, které Vás upozorní na další možné finanční náklady nebo nefunkčnost offline odkazů.</string>
+  <string name="pref_external_link_popup_summary">Zobrazit vyskakovací zprávu, která vás upozorní na další možné finanční náklady nebo nefunkčnost offline odkazů.</string>
   <string name="external_link_popup_dialog_title">Vkládám externí odkaz!</string>
   <string name="external_link_popup_dialog_message">Vkládáte externí odkaz. Toto může vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
@@ -275,5 +273,4 @@
   <string name="diagnostic_report_message">Zašlete prosím všechny následující podrobnosti, abychom mohli problém diagnostikovat</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zvětšit text</string>
-  <string name="experimental_navigation">Experimentální navigace</string>
 </resources>

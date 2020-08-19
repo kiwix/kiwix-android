@@ -29,7 +29,6 @@
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
-  <string name="selected_bookmarks_cleared">Tell the user that the selected bookmarks has been deleted/cleared</string>
   <string name="delete">{{Identical|Delete}}</string>
   <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>
@@ -45,16 +44,21 @@
   <string name="previous">{{Identical|Previous}}</string>
   <string name="time_left">This is the past participle of the verb “to leave” (meaning “quitted” or “exited”). This is used in a context of “X minutes left” to finish a download.</string>
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
+  <string name="tab_restored">Tell the user that a tab has been restored.</string>
   <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
   <string name="save">{{Identical|Save}}</string>
+  <string name="pref_text_zoom_summary">Tell the user that this preference changes the text size in 25% increments.</string>
   <string name="go_to_settings">This is used in the start server dialog and leads the user to mobile hotspot settings when pressed</string>
   <string name="no_bookmarks">This means \"there are no bookmarks\"</string>
-  <string name="delete_history">Ask if the user wants to delete all history items.</string>
+  <string name="no_open_book">Tell the user that they have not opened a book.</string>
+  <string name="open_library">The action of opening the library destination, used on a button.</string>
+  <string name="download">The title of the fragment/place where books are downloaded.</string>
+  <string name="reader">The title of the fragment/place where books are read.</string>
+<string name="delete_history">Ask if the user wants to delete all history items.</string>
   <string name="delete_selected_history">Ask if the user wants to delete a number of selected history items.</string>
   <string name="delete_bookmarks">Ask if the user wants to delete all bookmarks.</string>
   <string name="delete_selected_bookmarks">Ask if the user wants to delete a number of selected bookmarks.</string>
   <string name="on">This is used in the settings screen to turn on the night mode.</string>
   <string name="off">This is used in the settings screen to turn off the night mode.</string>
   <string name="auto">This is used in the settings screen to turn the night mode on or off automatically depending upon the system settings of the phone.</string>
-  <string name="experimental_navigation">This is a menu item that opens the applicaiton in a new experimental mode that uses different navigation.</string>
 </resources>
