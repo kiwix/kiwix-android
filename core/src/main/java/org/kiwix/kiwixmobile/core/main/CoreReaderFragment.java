@@ -1673,4 +1673,22 @@ public abstract class CoreReaderFragment extends BaseFragment
   private boolean checkNull(View view) {
     return view != null;
   }
+
+  protected void restoresTabs(@org.jetbrains.annotations.Nullable String zimArticles,
+    @org.jetbrains.annotations.Nullable String zimPositions, int currentTab){
+
+    //val urls = new JSONArray(zimArticles);
+    //val positions = JSONArray(zimPositions)
+    //var i = 0
+    //getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(0)))
+    //getCurrentWebView().scrollY = positions.getInt(0)
+    //i++
+    //while (i < urls.length()) {
+    //  newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+    //  safelyGetWebView(i).scrollY = positions.getInt(i)
+    //  i++
+    //}
+    //selectTab(currentTab)
+    //getCurrentWebView().scrollY = positions.getInt(currentTab)
+  }
 }

@@ -250,23 +250,18 @@ class KiwixReaderFragment : CoreReaderFragment() {
     } else {
       getCurrentWebView().snack(R.string.zim_not_opened)
     }
-    try {
-      val urls = JSONArray(zimArticles)
-      val positions = JSONArray(zimPositions)
-      var i = 0
-      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      getCurrentWebView().scrollY = positions.getInt(i)
+    val urls = JSONArray(zimArticles)
+    val positions = JSONArray(zimPositions)
+    var i = 0
+    getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+    getCurrentWebView().scrollY = positions.getInt(i)
+    i++
+    while (i < urls.length()) {
+      newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+      safelyGetWebView(i).scrollY = positions.getInt(i)
       i++
-      while (i < urls.length()) {
-        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-        safelyGetWebView(i).scrollY = positions.getInt(i)
-        i++
-      }
-      selectTab(currentTab)
-    } catch (e: Exception) {
-      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
-      // TODO: Show to user
     }
+    selectTab(currentTab)
   }
 
   override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {

@@ -114,7 +114,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
   }
 
-  private fun restoresTabs(
+  override fun restoresTabs(
     zimArticles: String?,
     zimPositions: String?,
     currentTab: Int
