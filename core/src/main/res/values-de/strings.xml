@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Authors:
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
 * 1233qwer1234qwer4
 * DraconicDark
 * FF11
@@ -60,8 +61,6 @@
   <string name="pref_night_mode_summary">Artikel mit umgekehrten Farben anzeigen</string>
   <string name="pref_back_to_top">Zurück nach oben</string>
   <string name="pref_back_to_top_summary">Zeigt einen Button am Seitenende an, um zum Anfang hochzuscrollen.</string>
-  <string name="pref_hide_toolbar">Werkzeugleiste weiterhin anzeigen</string>
-  <string name="pref_hide_toolbar_summary">Verhindert, dass die Werkzeugleiste verschwindet, wenn auf der Seite im Inhalt gebrowst wird</string>
   <string name="pref_language_title">Sprache</string>
   <string name="pref_language_chooser">Eine Sprache auswählen</string>
   <string name="pref_credits">Autoren und Lizenzen</string>
@@ -271,5 +270,4 @@
   <string name="diagnostic_report_message">Bitte übermittle alle nachfolgend aufgeführte Details, damit wir das Problem feststellen können</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
-  <string name="experimental_navigation">Experimentelle Navigation</string>
 </resources>

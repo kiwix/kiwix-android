@@ -57,8 +57,6 @@
   <string name="pref_night_mode_summary">Прикажувај ги статиите во обратни бои</string>
   <string name="pref_back_to_top">Најгоре</string>
   <string name="pref_back_to_top_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
-  <string name="pref_hide_toolbar">Скриј го алатникот при лизгање</string>
-  <string name="pref_hide_toolbar_summary">Скриј го алатникот кога при надолно лизгање по страницата</string>
   <string name="pref_language_title">Јазик</string>
   <string name="pref_language_chooser">Изберете јазик</string>
   <string name="pref_credits">Учесници и лиценци</string>
@@ -244,6 +242,7 @@
   <string name="status">Состојба</string>
   <string name="pref_clear_all_notes_summary">Ги чисти сите белешки на сите статии</string>
   <string name="pref_clear_all_notes_title">Исчисти ги сите белешки</string>
+  <string name="pref_text_zoom_summary">Промени големина на текст во стапки од 25 %.</string>
   <string name="tag_pic">Слика</string>
   <string name="tag_vid">Видео</string>
   <string name="tag_text_only">Само текст</string>
@@ -268,5 +267,5 @@
   <string name="diagnostic_report_message">Испратете ги сите следни поединости за да можеме да го дијагностицираме проблемот</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Приближување на текст</string>
-  <string name="experimental_navigation">Опитен прегледник</string>
+  <string name="search_open_in_new_tab">Отвори во ново јазиче</string>
 </resources>

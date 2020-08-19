@@ -66,6 +66,13 @@ abstract class CoreApp : Application() {
   @Inject
   lateinit var fileLogger: FileLogger
 
+  /**
+   * The init of this class does the work of initializing,
+   * simply injecting it is all that there is to be done
+   */
+  @Inject
+  lateinit var serviceWorkerInitialiser: ServiceWorkerInitialiser
+
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
     if (BuildConfig.DEBUG) {

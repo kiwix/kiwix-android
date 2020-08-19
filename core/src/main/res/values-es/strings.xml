@@ -63,8 +63,6 @@
   <string name="pref_night_mode_summary">Mostrar artículos con colores invertidos</string>
   <string name="pref_back_to_top">Volver al principio</string>
   <string name="pref_back_to_top_summary">Mostrar un botón al final de la página para desplazarse al comienzo</string>
-  <string name="pref_hide_toolbar">Ocultar la barra de herramientas al desplazarse</string>
-  <string name="pref_hide_toolbar_summary">Ocultar la barra de herramientas cuando la página se desplaza hacia abajo</string>
   <string name="pref_language_title">Idioma</string>
   <string name="pref_language_chooser">Elige un idioma</string>
   <string name="pref_credits">Colaboradores y licencias</string>
@@ -242,7 +240,7 @@
   <string name="tag_text_only">Solo texto</string>
   <string name="tag_short_text">Texto breve</string>
   <string name="storage_permission_denied">Se rechazó el permiso de almacenamiento</string>
-  <string name="go_to_settings">Ve a los ajustes de punto de acceso</string>
+  <string name="go_to_settings">Ir a la configuración del punto de acceso</string>
   <string name="no_results">No hay ningún resultado</string>
   <string name="no_bookmarks">No hay marcadores</string>
   <string name="device_default">Valor predet. del dispositivo</string>
@@ -259,5 +257,4 @@
   <string name="diagnostic_report_message">Envíe todos los detalles siguientes para que podamos diagnosticar el problema.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
-  <string name="experimental_navigation">Navegación experimental</string>
 </resources>

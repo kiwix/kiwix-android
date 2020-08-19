@@ -50,9 +50,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefWifiOnly: Boolean
     get() = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true)
 
-  val prefHideToolbar: Boolean
-    get() = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true)
-
   val prefIsFirstRun: Boolean
     get() = sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true)
 
@@ -158,7 +155,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"
     private const val PREF_BACK_TO_TOP = "pref_backtotop"
-    private const val PREF_HIDE_TOOLBAR = "pref_hidetoolbar"
     private const val PREF_FULLSCREEN = "pref_fullscreen"
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     private const val PREF_STORAGE_TITLE = "pref_selected_title"

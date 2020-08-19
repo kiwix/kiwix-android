@@ -34,19 +34,16 @@ import org.kiwix.kiwixmobile.zim_manager.MountPointProducer
 object KiwixModule {
   @Provides
   @KiwixScope
-  @JvmStatic
   internal fun provideLocationManager(context: Context): LocationManager =
     context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
   @Provides
   @KiwixScope
-  @JvmStatic
   fun provideWifiManager(context: Context): WifiManager =
     context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
   @Provides
   @KiwixScope
-  @JvmStatic
   internal fun provideFat32Checker(
     sharedPreferenceUtil: SharedPreferenceUtil,
     mountPointProducer: MountPointProducer

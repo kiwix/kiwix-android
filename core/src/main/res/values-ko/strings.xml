@@ -66,8 +66,6 @@
   <string name="pref_night_mode_summary">반전된 색으로 문서를 보여줍니다</string>
   <string name="pref_back_to_top">맨 위로 돌아가기</string>
   <string name="pref_back_to_top_summary">맨 위로 올라가는 버튼을 페이지의 끝에 표시합니다</string>
-  <string name="pref_hide_toolbar">도구 모음을 계속 보이기</string>
-  <string name="pref_hide_toolbar_summary">페이지를 아래로 스크롤할 때 도구 모음 숨기기</string>
   <string name="pref_language_title">언어</string>
   <string name="pref_language_chooser">언어 선택</string>
   <string name="pref_credits">기여자 및 라이선스</string>
@@ -277,4 +275,5 @@
   <string name="diagnostic_report_message">저희가 문제를 진단할 수 있도록 다음의 자세한 정보를 모두 보내 주세요</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">글자 크기 조정</string>
+  <string name="search_open_in_new_tab">새 탭으로 열기</string>
 </resources>

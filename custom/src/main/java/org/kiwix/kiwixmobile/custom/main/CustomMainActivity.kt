@@ -19,14 +19,38 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
+import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
+import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.settings.CustomSettingsActivity
 
 const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
+
+  override val navController: NavController by lazy {
+    findNavController(R.id.custom_nav_controller)
+  }
+  override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
+  override val drawerNavView: NavigationView by lazy { drawer_nav_view }
+  override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val historyFragmentResId: Int = R.id.historyFragment
+  override val cachedComponent by lazy { customActivityComponent }
+  override val topLevelDestinations =
+    setOf(R.id.customReaderFragment)
 
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
@@ -34,10 +58,44 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
     if (savedInstanceState != null) {
       return
     }
-    supportFragmentManager.beginTransaction()
-      .add(R.id.fragment_custom_app_container, CustomReaderFragment()).commit()
+  }
+
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+      if (destination.id !in topLevelDestinations) {
+        handleDrawerOnNavigation()
+      }
+    }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle.isDrawerIndicatorEnabled) {
+      return drawerToggle.onOptionsItemSelected(item)
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
+  override fun setupDrawerToggle(toolbar: Toolbar) {
+    super.setupDrawerToggle(toolbar)
+    drawer_nav_view.setNavigationItemSelectedListener { item ->
+      closeNavigationDrawer()
+      onNavigationItemSelected(item)
+    }
+    drawer_nav_view.menu.findItem(R.id.menu_host_books)
+      .isVisible = false
+  }
+
+  override fun openSettingsActivity() {
+    startActivityForResult(intent<CustomSettingsActivity>(), REQUEST_PREFERENCES)
+  }
+
+  override fun openPage(pageUrl: String, zimFilePath: String) {
+    val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
+    navigate(R.id.customReaderFragment, bundle)
   }
 }

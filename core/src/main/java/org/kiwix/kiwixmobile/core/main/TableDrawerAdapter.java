@@ -73,7 +73,9 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       } else {
         String empty = context.getString(R.string.no_section_info);
         if (context instanceof WebViewProvider) {
-          empty = ((WebViewProvider) context).getCurrentWebView().getTitle();
+          if (((WebViewProvider) context).getCurrentWebView() != null) {
+            empty = ((WebViewProvider) context).getCurrentWebView().getTitle();
+          }
         }
         vh.title.setText(empty);
       }

@@ -63,8 +63,6 @@
   <string name="pref_night_mode_summary">Mostrar artigos com cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
   <string name="pref_back_to_top_summary">Mostra um botão no fim da página para voltar ao topo</string>
-  <string name="pref_hide_toolbar">Manter a barra de ferramentas visível</string>
-  <string name="pref_hide_toolbar_summary">Impede que a barra de ferramentas fique fora da vista ao navegar pelo conteúdo</string>
   <string name="pref_language_title">Idioma</string>
   <string name="pref_language_chooser">Escolha um idioma</string>
   <string name="pref_credits">Contribuintes e Licenças</string>
@@ -250,6 +248,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Limpar todas as notas em todos os artigos</string>
   <string name="pref_clear_all_notes_title">Limpar todas as notas</string>
+  <string name="pref_text_zoom_summary">Altere o tamanho do texto com incrementos de 25%.</string>
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Somente texto</string>
@@ -275,5 +274,4 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
   <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
-  <string name="experimental_navigation">Navegação experimental</string>
 </resources>
