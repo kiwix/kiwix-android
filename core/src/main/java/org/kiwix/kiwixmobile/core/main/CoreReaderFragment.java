@@ -94,6 +94,7 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
@@ -119,6 +120,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
+import org.kiwix.kiwixmobile.core.utils.UpdateUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -1674,21 +1676,25 @@ public abstract class CoreReaderFragment extends BaseFragment
     return view != null;
   }
 
-  protected void restoresTabs(@org.jetbrains.annotations.Nullable String zimArticles,
-    @org.jetbrains.annotations.Nullable String zimPositions, int currentTab){
-
-    //val urls = new JSONArray(zimArticles);
-    //val positions = JSONArray(zimPositions)
-    //var i = 0
-    //getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(0)))
-    //getCurrentWebView().scrollY = positions.getInt(0)
-    //i++
-    //while (i < urls.length()) {
-    //  newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-    //  safelyGetWebView(i).scrollY = positions.getInt(i)
-    //  i++
-    //}
-    //selectTab(currentTab)
-    //getCurrentWebView().scrollY = positions.getInt(currentTab)
+  protected void restoreTabs(@Nullable String zimArticles, @Nullable String zimPositions,
+    int currentTab) {
+    try {
+      JSONArray urls = new JSONArray(zimArticles);
+      JSONArray positions = new JSONArray(zimPositions);
+      int i = 0;
+      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(0)));
+      getCurrentWebView().setScrollY(positions.getInt(0));
+      i++;
+      while (i < urls.length()) {
+        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)));
+        safelyGetWebView(i).setScrollY(positions.getInt(i));
+        i++;
+      }
+      selectTab(currentTab);
+      getCurrentWebView().setScrollY(positions.getInt(currentTab));
+    } catch (JSONException e) {
+      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
+      ContextExtensionsKt.toast(getActivity(), "Could not restore tabs.", Toast.LENGTH_LONG);
+    }
   }
 }

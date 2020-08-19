@@ -36,7 +36,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
@@ -52,7 +51,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
-import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -110,28 +108,8 @@ class CustomReaderFragment : CoreReaderFragment() {
     if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
       openHomeScreen()
     } else {
-      restoresTabs(zimArticles, zimPositions, currentTab)
+      restoreTabs(zimArticles, zimPositions, currentTab)
     }
-  }
-
-  override fun restoresTabs(
-    zimArticles: String?,
-    zimPositions: String?,
-    currentTab: Int
-  ) {
-    val urls = JSONArray(zimArticles)
-    val positions = JSONArray(zimPositions)
-    var i = 0
-    getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(0)))
-    getCurrentWebView().scrollY = positions.getInt(0)
-    i++
-    while (i < urls.length()) {
-      newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      safelyGetWebView(i).scrollY = positions.getInt(i)
-      i++
-    }
-    selectTab(currentTab)
-    getCurrentWebView().scrollY = positions.getInt(currentTab)
   }
 
   override fun setDrawerLockMode(lockMode: Int) {

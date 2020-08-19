@@ -35,7 +35,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
-import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
@@ -58,7 +57,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
 
@@ -250,18 +248,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     } else {
       getCurrentWebView().snack(R.string.zim_not_opened)
     }
-    val urls = JSONArray(zimArticles)
-    val positions = JSONArray(zimPositions)
-    var i = 0
-    getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-    getCurrentWebView().scrollY = positions.getInt(i)
-    i++
-    while (i < urls.length()) {
-      newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      safelyGetWebView(i).scrollY = positions.getInt(i)
-      i++
-    }
-    selectTab(currentTab)
+    restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
   override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
