@@ -37,8 +37,6 @@
   <string name="pref_night_mode_summary">Montri artikolojn inverskolore</string>
   <string name="pref_back_to_top">Reiri al Supro</string>
   <string name="pref_back_to_top_summary">Montri suprenan rulumilon paĝofine</string>
-  <string name="pref_hide_toolbar">Kaŝi ilobreton dum rulumado</string>
-  <string name="pref_hide_toolbar_summary">Kaŝi ilobreton post rulumado malsupren</string>
   <string name="pref_language_title">Lingvo</string>
   <string name="pref_language_chooser">Elektu lingvon</string>
   <string name="pref_credits">Kontribuintoj kaj Permesiloj</string>

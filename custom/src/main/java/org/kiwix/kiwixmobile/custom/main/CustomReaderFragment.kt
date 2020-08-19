@@ -28,36 +28,39 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super
-import org.kiwix.kiwixmobile.core.base.BaseFragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.main.WebViewCallback
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
+import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
+import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import java.util.Locale
 import javax.inject.Inject
+
+const val PAGE_URL_KEY = "pageUrl"
 
 class CustomReaderFragment : CoreReaderFragment() {
 
@@ -66,26 +69,48 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   @Inject lateinit var customFileValidator: CustomFileValidator
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var dialogShower: DialogShower
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    val view = super.onCreateView(inflater, container, savedInstanceState)
-
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
-      return view
+      return
     }
-    openObbOrZim()
+
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     if (BuildConfig.DISABLE_SIDEBAR) {
       val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
       toolbarToc?.isEnabled = false
     }
-    return view
+    with(activity as AppCompatActivity) {
+      supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+      setupDrawerToggle(toolbar)
+    }
+    loadPageFromNavigationArguments()
+  }
+
+  private fun loadPageFromNavigationArguments() {
+    val pageUrl: String? = requireArguments().getString(PAGE_URL_KEY)
+    if (pageUrl?.isNotEmpty() == true) {
+      loadUrlWithCurrentWebview(pageUrl)
+    } else {
+      openObbOrZim()
+      restoreLastOpenedTab()
+    }
+    requireArguments().clear()
+  }
+
+  private fun restoreLastOpenedTab() {
+    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
+    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
+    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
+    val urls = JSONArray(zimArticles)
+    val zimPositions = JSONArray(settings.getString(TAG_CURRENT_POSITIONS, null))
+    selectTab(currentTab)
+    if (urls.length() > 0) {
+      loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
+      getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
+    }
   }
 
   override fun setDrawerLockMode(lockMode: Int) {
@@ -162,21 +187,10 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     menu.findItem(R.id.menu_help)?.isVisible = false
-    menu.findItem(R.id.menu_new_navigation)?.isVisible = false
-    menu.findItem(R.id.menu_openfile)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher
-
-  override fun createWebClient(
-    webViewCallback: WebViewCallback,
-    zimReaderContainer: ZimReaderContainer
-  ) = CustomWebViewClient(webViewCallback, zimReaderContainer)
-
-  override fun onNewNavigationMenuClicked() {
-    // do nothing
-  }
 
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
@@ -189,11 +203,16 @@ class CustomReaderFragment : CoreReaderFragment() {
     return false
   }
 
+  override fun loadDrawerViews() {
+    drawerLayout = requireActivity().findViewById(R.id.custom_drawer_container)
+    tableDrawerRightContainer = requireActivity().findViewById(R.id.activity_main_nav_view)
+  }
+
   override fun createMainMenu(menu: Menu?): MainMenu {
     return menuFactory.create(
       menu!!,
       webViewList,
-      !urlIsInvalid(),
+      urlIsValid(),
       this,
       BuildConfig.DISABLE_READ_ALOUD,
       BuildConfig.DISABLE_TABS
@@ -210,14 +229,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
     }
     super.configureWebViewSelectionHandler(menu)
-  }
-
-  override fun manageZimFiles(tab: Int) {
-    // Do nothing
-  }
-
-  override fun showHomePage() {
-    Log.e("CustomMain", "tried to show home page")
   }
 
   override fun createNewTab() {

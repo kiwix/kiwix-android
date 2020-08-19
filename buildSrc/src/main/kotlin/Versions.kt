@@ -105,6 +105,8 @@ object Versions {
 
   const val junit: String = "1.1.1"
 
+  const val navigation: String = "2.3.0"
+
   /**
    * Current version: "6.2"
    * See issue 19: How to update Gradle itself?

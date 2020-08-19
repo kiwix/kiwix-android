@@ -53,8 +53,6 @@
   <string name="pref_night_mode_summary">Show articles with inverted colors</string>
   <string name="pref_back_to_top">Back to Top</string>
   <string name="pref_back_to_top_summary">Display a button at the end of the page to scroll up to the top</string>
-  <string name="pref_hide_toolbar">Keep Toolbar Visible</string>
-  <string name="pref_hide_toolbar_summary">Keeps the toolbar from scrolling out of view when browsing content</string>
   <string name="pref_language_title">Language</string>
   <string name="pref_language_chooser">Choose a language</string>
   <string name="pref_credits">Contributors and Licenses</string>
@@ -103,6 +101,7 @@
   <string name="delete_zims_toast" tools:keep="@string/delete_zims_toast">Files deleted successfully</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
   <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
+  <string name="download">Download</string>
   <string name="space_available" tools:keep="@string/space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">No Pictures</string>
@@ -278,7 +277,12 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
   <string name="search_open_in_new_tab">Open in new tab</string>
-  <string name="experimental_navigation">Experimental Navigation</string>
+  <string name="reader">Reader</string>
+  <string name="no_open_book">No open book</string>
+  <string name="open_library">Open library</string>
+  <string name="tab_restored">Tab restored</string>
+  <string name="open_drawer">Open Drawer</string>
+  <string name="close_drawer">Close Drawer</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>

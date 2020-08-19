@@ -56,14 +56,12 @@ import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RestartActionMode
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFile
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.ShareFiles
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
@@ -420,13 +418,6 @@ class ZimManageViewModelTest {
 
   @Nested
   inner class SideEffects {
-    @Test
-    fun `RequestOpen offers OpenFile`() {
-      val bookOnDisk = bookOnDisk()
-      viewModel.sideEffects.test()
-        .also { viewModel.fileSelectActions.offer(RequestOpen(bookOnDisk)) }
-        .assertValues(OpenFile(bookOnDisk))
-    }
 
     @Test
     fun `RequestMultiSelection offers StartMultiSelection and selects a book`() {
@@ -513,19 +504,5 @@ class ZimManageViewModelTest {
         .also { viewModel.fileSelectActions.offer(RestartActionMode) }
         .assertValues(StartMultiSelection(viewModel.fileSelectActions))
     }
-  }
-
-  @Test
-  fun `libraryTabIsVisible emits when currentPage is 1`() {
-    viewModel.libraryTabIsVisible.test()
-      .also { viewModel.currentPage.offer(1) }
-      .assertValue(true)
-  }
-
-  @Test
-  fun `libraryTabIsVisible does not emit when currentPage is 0`() {
-    viewModel.libraryTabIsVisible.test()
-      .also { viewModel.currentPage.offer(0) }
-      .assertEmpty()
   }
 }

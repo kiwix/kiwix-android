@@ -66,8 +66,6 @@
   <string name="pref_night_mode_summary">Zobrazuje stránky v invertovaných barvách.</string>
   <string name="pref_back_to_top">Zpět na začátek</string>
   <string name="pref_back_to_top_summary">Zobrazit tlačítko “Zpět na začátek” na konci stránky</string>
-  <string name="pref_hide_toolbar">Ponechat viditelný panel nástrojů</string>
-  <string name="pref_hide_toolbar_summary">Zabraňuje odsunutí panelu nástrojů mimo obrazovku při prohlížení obsahu.</string>
   <string name="pref_language_title">Jazyk</string>
   <string name="pref_language_chooser">Vyberte jazyk</string>
   <string name="pref_credits">Přispěvatelé a licence</string>
@@ -275,5 +273,4 @@
   <string name="diagnostic_report_message">Zašlete prosím všechny následující podrobnosti, abychom mohli problém diagnostikovat</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zvětšit text</string>
-  <string name="experimental_navigation">Experimentální navigace</string>
 </resources>

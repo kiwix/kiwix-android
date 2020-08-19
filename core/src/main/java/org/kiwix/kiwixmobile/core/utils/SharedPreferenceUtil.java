@@ -48,7 +48,6 @@ public class SharedPreferenceUtil {
   public static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
   public static final String PREF_SHOW_INTRO = "showIntro";
   private static final String PREF_BACK_TO_TOP = "pref_backtotop";
-  private static final String PREF_HIDE_TOOLBAR = "pref_hidetoolbar";
   private static final String PREF_FULLSCREEN = "pref_fullscreen";
   private static final String PREF_NEW_TAB_BACKGROUND = "pref_newtab_background";
   private static final String PREF_STORAGE_TITLE = "pref_selected_title";
@@ -71,10 +70,6 @@ public class SharedPreferenceUtil {
 
   public boolean getPrefWifiOnly() {
     return sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
-  }
-
-  public boolean getPrefHideToolbar() {
-    return sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true);
   }
 
   public boolean getPrefIsFirstRun() {

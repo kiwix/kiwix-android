@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.main;
 
 import android.content.Intent;
-import android.view.View;
 
 public interface WebViewCallback {
   void webViewUrlLoading();
@@ -27,11 +26,7 @@ public interface WebViewCallback {
 
   void webViewFailedLoading(String failingUrl);
 
-  void showHomePage();
-
   void openExternalUrl(Intent intent);
-
-  void manageZimFiles(int tab);
 
   void webViewProgressChanged(int progress);
 
@@ -40,6 +35,4 @@ public interface WebViewCallback {
   void webViewPageChanged(int page, int maxPages);
 
   void webViewLongClick(String url);
-
-  void setHomePage(View view);
 }
