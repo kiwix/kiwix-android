@@ -137,7 +137,6 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-    <activity android:name=".language.LanguageActivity" />
     <activity
       android:name=".local_file_transfer.LocalFileTransferActivity"
       android:label="Send to nearby device"
