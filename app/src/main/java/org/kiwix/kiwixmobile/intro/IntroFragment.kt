@@ -23,6 +23,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.fragment_intro.get_started
@@ -34,6 +35,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
@@ -41,7 +43,7 @@ import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
 
-class IntroFragment : BaseFragment(), IntroContract.View {
+class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtensions {
 
   companion object {
     private const val timerDelay: Long = 0
@@ -100,6 +102,11 @@ class IntroFragment : BaseFragment(), IntroContract.View {
       it.setOnClickListener(null)
     }
     views = emptyArray()
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
+    requireActivity().finish()
+    return super.onBackPressed(activity)
   }
 
   private fun startMainActivity() {
