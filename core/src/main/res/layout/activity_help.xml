@@ -15,9 +15,9 @@
     android:layout_height="wrap_content"
     android:contentDescription="@string/send_feedback"
     android:padding="@dimen/activity_horizontal_margin"
+    android:src="@drawable/ic_feedback_blue_24dp"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/app_bar"
-    app:srcCompat="@drawable/ic_feedback_blue_24dp" />
+    app:layout_constraintTop_toBottomOf="@+id/app_bar" />
 
   <TextView
     android:id="@+id/activity_help_feedback_text_view"
@@ -44,9 +44,9 @@
     android:layout_height="wrap_content"
     android:contentDescription="@string/send_feedback"
     android:padding="@dimen/activity_horizontal_margin"
+    android:src="@drawable/ic_feedback_orange_24dp"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/activity_help_feedback_divider"
-    app:srcCompat="@drawable/ic_feedback_orange_24dp" />
+    app:layout_constraintTop_toBottomOf="@+id/activity_help_feedback_divider" />
 
   <TextView
     android:id="@+id/activity_help_diagnostic_text_view"
