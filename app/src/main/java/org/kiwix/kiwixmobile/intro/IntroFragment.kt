@@ -52,7 +52,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
   }
 
   private val handler = Handler(Looper.getMainLooper())
-  private val timer = Timer()
+  private lateinit var timer: Timer
 
   @Inject
   internal lateinit var presenter: IntroContract.Presenter
@@ -75,6 +75,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
       addOnPageChangeListener(SimplePageChangeListener(::updateView, ::handleDraggingState))
     }
     tab_indicator.setViewPager(view_pager)
+    timer = Timer()
     timer.schedule(object : TimerTask() {
       override fun run() {
         handler.post {
