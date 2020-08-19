@@ -36,8 +36,8 @@ import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
 import java.util.Timer
 import java.util.TimerTask
@@ -106,7 +106,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
   }
 
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    requireActivity().finish()
+    activity.finish()
     return super.onBackPressed(activity)
   }
 
@@ -114,7 +114,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     dismissAutoRotate()
     startActivity(internal(CoreMainActivity::class.java))
     presenter.setIntroShown()
-    (requireActivity() as KiwixMainActivity).navController.popBackStack()
+    requireActivity().navigate(R.id.libraryFragment)
   }
 
   private fun updateView(position: Int) {
