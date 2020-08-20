@@ -43,6 +43,7 @@
     android:label="Library">
     <action
       android:id="@+id/action_navigation_library_to_navigation_reader"
+      app:popUpTo="@id/readerFragment"
       app:destination="@id/readerFragment" />
     <action
       android:id="@+id/action_navigation_library_to_navigation_downloads"
