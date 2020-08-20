@@ -118,6 +118,9 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
   }
 
   private fun updateView(position: Int) {
+    if (airplane == null) {
+      return
+    }
     airplane.isVisible = position == 1
     if (position == 1) {
       airplane.animate().translationX(airplane.width.toFloat()).duration = animationDuration
