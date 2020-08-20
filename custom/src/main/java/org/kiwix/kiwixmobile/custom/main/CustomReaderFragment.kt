@@ -190,8 +190,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
 
-  override fun getIconResId() = R.mipmap.ic_launcher
-
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
