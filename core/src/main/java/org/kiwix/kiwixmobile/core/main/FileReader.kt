@@ -18,21 +18,19 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Context
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStreamReader
+
 class FileReader {
   fun readFile(filePath: String?, context: Context): String {
     return try {
       val buf = StringBuilder()
       val json = context.assets.open(filePath)
-      val bufferedReader =
-        BufferedReader(InputStreamReader(json, "UTF-8"))
-      var str: String?
-      while (bufferedReader.readLine().also { str = it } != null) {
-        buf.append(str)
+      val reader = json.bufferedReader()
+      var line = reader.readLine()
+      while (line != null) {
+        buf.append(line)
+        line = reader.readLine()
       }
-      bufferedReader.close()
       "$buf"
     } catch (e: IOException) {
       e.printStackTrace()
