@@ -15,31 +15,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.main;
+package org.kiwix.kiwixmobile.core.main
 
-import android.content.Context;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-public class FileReader {
-
-  public String readFile(String filePath, Context context) {
-    try {
-      StringBuilder buf = new StringBuilder();
-      InputStream json = context.getAssets().open(filePath);
-      BufferedReader in =
-        new BufferedReader(new InputStreamReader(json, "UTF-8"));
-      String str;
-
-      while ((str = in.readLine()) != null) {
-        buf.append(str);
+import android.content.Context
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+class FileReader {
+  fun readFile(filePath: String?, context: Context): String {
+    return try {
+      val buf = StringBuilder()
+      val json = context.assets.open(filePath)
+      val bufferedReader =
+        BufferedReader(InputStreamReader(json, "UTF-8"))
+      var str: String?
+      while (bufferedReader.readLine().also { str = it } != null) {
+        buf.append(str)
       }
-
-      in.close();
-      return buf.toString();
-    } catch (Exception e) {
-      return "";
+      bufferedReader.close()
+      "$buf"
+    } catch (e: IOException) {
+      e.printStackTrace()
+      ""
     }
   }
 }
