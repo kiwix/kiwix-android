@@ -22,13 +22,11 @@ import java.io.BufferedReader
 import java.io.IOException
 
 class FileReader {
-  fun readFile(filePath: String?, context: Context): String {
-    return try {
-      val json = context.assets.open(filePath)
-      return json.bufferedReader().use(BufferedReader::readText)
-    } catch (e: IOException) {
-      e.printStackTrace()
-      ""
-    }
+  fun readFile(filePath: String?, context: Context): String = try {
+    context.assets.open(filePath)
+      .bufferedReader()
+      .use(BufferedReader::readText)
+  } catch (e: IOException) {
+    "".also { e.printStackTrace() }
   }
 }
