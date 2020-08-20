@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,27 +15,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.help
 
-import androidx.test.rule.ActivityTestRule
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.help.HelpActivity
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-class HelpActivityTest : BaseActivityTest<HelpActivity>() {
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
-  override var activityRule: ActivityTestRule<HelpActivity> = activityTestRule()
+internal class FinishActivityTest {
 
   @Test
-  fun verifyHelpActivity() {
-    help {
-      clickOnWhatDoesKiwixDo()
-      assertWhatDoesKiwixDoIsExpanded()
-      clickOnWhatDoesKiwixDo()
-      clickOnWhereIsContent()
-      assertWhereIsContentIsExpanded()
-      clickOnWhereIsContent()
-      clickOnSendFeedback()
-    }
+  fun `invoke with finishes activity`() {
+    val activity = mockk<CoreMainActivity>(relaxed = true)
+    FinishActivity.invokeWith(activity)
+    verify { activity.finish() }
   }
 }

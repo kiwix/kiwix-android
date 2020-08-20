@@ -77,7 +77,7 @@ object Versions {
 
   const val simple_xml: String = "2.7.1"
 
-  const val appcompat: String = "1.1.0"
+  const val appcompat: String = "1.2.0"
 
   const val rxandroid: String = "2.1.1"
 
