@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
 import java.util.Timer
@@ -114,7 +114,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     dismissAutoRotate()
     startActivity(internal(CoreMainActivity::class.java))
     presenter.setIntroShown()
-    requireActivity().navigate(R.id.libraryFragment)
+    requireActivity().popNavigationBackstack()
   }
 
   private fun updateView(position: Int) {
