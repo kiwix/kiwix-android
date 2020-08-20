@@ -659,7 +659,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void showRateDialog() {
-    alertDialogShower.show(new KiwixDialog.ShowRate(getIconResId()),
+    alertDialogShower.show(new KiwixDialog.ShowRate(getIconResId(), requireActivity()),
       () -> {
         visitCounterPref.setNoThanksState(true);
         goToRateApp();

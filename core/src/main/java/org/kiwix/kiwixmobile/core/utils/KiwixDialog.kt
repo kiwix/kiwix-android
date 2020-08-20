@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
+import android.app.Activity
 import android.net.wifi.WifiConfiguration
 import android.view.View
 import org.kiwix.kiwixmobile.core.R
@@ -127,17 +128,22 @@ sealed class KiwixDialog(
     neutralMessage = R.string.do_not_ask_anymore
   )
 
-  data class ShowRate(override val args: List<Any>, val customIcon: Int?) : KiwixDialog(
-    R.string.rate_dialog_title,
-    R.string.triple_arg_format_string,
-    R.string.rate_dialog_positive,
-    R.string.no_thanks,
-    icon = customIcon,
-    neutralMessage = R.string.rate_dialog_neutral
-  ),
+  data class ShowRate(override val args: List<Any>, val customIcon: Int?) :
+    KiwixDialog(
+      R.string.rate_dialog_title,
+      R.string.triple_arg_format_string,
+      R.string.rate_dialog_positive,
+      R.string.no_thanks,
+      icon = customIcon,
+      neutralMessage = R.string.rate_dialog_neutral
+    ),
     HasBodyFormatArgs {
-    constructor(icon: Int?) : this(
-      listOf(R.string.rate_dialog_msg_1, R.string.app_name, R.string.rate_dialog_msg_2),
+    constructor(icon: Int?, activity: Activity) : this(
+      listOf(
+        activity.getString(R.string.rate_dialog_msg_1),
+        activity.getString(R.string.app_name),
+        activity.getString(R.string.rate_dialog_msg_2)
+      ),
       icon
     )
   }
