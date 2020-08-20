@@ -45,7 +45,6 @@ import javax.inject.Inject
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
-const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 10
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 

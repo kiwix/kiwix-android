@@ -24,10 +24,11 @@ import android.net.Uri
 import androidx.annotation.IdRes
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.main.VISITS_REQUIRED_TO_SHOW_RATE_DIALOG
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
+
+const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 10
 
 @ActivityScope
 class RateDialogHandler @Inject constructor(
