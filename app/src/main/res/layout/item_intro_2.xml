@@ -9,15 +9,15 @@
     android:id="@+id/airplane"
     android:layout_width="wrap_content"
     android:layout_height="0dp"
-    app:layout_constraintHeight_max="121dp"
-    android:scaleType="fitCenter"
     android:alpha="1.0"
     android:contentDescription="@string/save_books_offline"
+    android:scaleType="fitCenter"
+    android:src="@drawable/ic_airplane"
     android:visibility="invisible"
     app:layout_constraintBottom_toTopOf="@id/heading"
     app:layout_constraintEnd_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_airplane" />
+    app:layout_constraintHeight_max="121dp"
+    app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
     android:id="@+id/heading"
