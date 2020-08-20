@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Process
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -30,17 +31,21 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
+import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
+const val KIWIX_INTERNAL_ERROR = 10
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
@@ -55,6 +60,25 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val helpFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    setTheme(R.style.KiwixTheme)
+    super.onCreate(savedInstanceState)
+    if (!BuildConfig.DEBUG) {
+      val appContext = applicationContext
+      Thread.setDefaultUncaughtExceptionHandler { paramThread: Thread?,
+        paramThrowable: Throwable? ->
+        val intent = Intent(appContext, ErrorActivity::class.java)
+        val extras = Bundle()
+        extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)
+        intent.putExtras(extras)
+        appContext.startActivity(intent)
+        finish()
+        Process.killProcess(Process.myPid())
+        exitProcess(KIWIX_INTERNAL_ERROR)
+      }
+    }
+  }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)

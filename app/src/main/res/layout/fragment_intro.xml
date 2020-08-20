@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".intro.IntroActivity">
+  tools:context=".intro.IntroFragment">
 
   <org.kiwix.kiwixmobile.intro.CustomViewPager
     android:id="@+id/view_pager"

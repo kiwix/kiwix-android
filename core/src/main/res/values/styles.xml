@@ -32,7 +32,7 @@
     <item name="android:background">@color/black</item>
   </style>
 
-  <style name="ThemeOverlay.KiwixTheme.Launcher" parent="">
+  <style name="KiwixTheme.Launcher">
     <item name="android:windowBackground">@drawable/launch_screen</item>
   </style>
 

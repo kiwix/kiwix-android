@@ -18,9 +18,9 @@
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  app:startDestination="@id/navigation_library">
+  app:startDestination="@id/libraryFragment">
   <fragment
-    android:id="@+id/navigation_reader"
+    android:id="@+id/readerFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment"
     android:label="Reader">
     <argument
@@ -34,29 +34,39 @@
       app:argType="string" />
     <action
       android:id="@+id/action_navigation_reader_to_navigation_library"
-      app:destination="@id/navigation_library" />
+      app:destination="@id/libraryFragment" />
   </fragment>
 
   <fragment
-    android:id="@+id/navigation_library"
+    android:id="@+id/libraryFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment"
     android:label="Library">
     <action
       android:id="@+id/action_navigation_library_to_navigation_reader"
-      app:destination="@id/navigation_reader" />
+      app:popUpTo="@id/readerFragment"
+      app:destination="@id/readerFragment" />
     <action
       android:id="@+id/action_navigation_library_to_navigation_downloads"
-      app:destination="@id/navigation_downloads" />
+      app:destination="@id/downloadsFragment" />
   </fragment>
 
   <fragment
-    android:id="@+id/navigation_downloads"
+    android:id="@+id/downloadsFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
     android:label="Downloads" />
   <fragment
     android:id="@+id/bookmarksFragment"
     android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
     android:label="BookmarksFragment" />
+  <fragment
+    android:id="@+id/introFragment"
+    android:name="org.kiwix.kiwixmobile.intro.IntroFragment"
+    android:label="IntroFragment" >
+    <action
+      android:id="@+id/action_introFragment_to_libraryFragment"
+      app:popUpTo="@id/libraryFragment"
+      app:destination="@id/libraryFragment" />
+  </fragment>
   <fragment
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"

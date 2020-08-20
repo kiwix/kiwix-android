@@ -55,7 +55,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val historyFragmentResId: Int = R.id.historyFragment
   override val helpFragmentResId: Int = R.id.helpFragment
   override val topLevelDestinations =
-    setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
+    setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
@@ -86,6 +86,9 @@ class KiwixMainActivity : CoreMainActivity() {
       if (destination.id !in topLevelDestinations) {
         handleDrawerOnNavigation()
       }
+    }
+    if (sharedPreferenceUtil.showIntro()) {
+      navigate(R.id.introFragment)
     }
   }
 
@@ -131,7 +134,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
     navigate(
-      R.id.navigation_reader,
+      R.id.readerFragment,
       bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     )
   }

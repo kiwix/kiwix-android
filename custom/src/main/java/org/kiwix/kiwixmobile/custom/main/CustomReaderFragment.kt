@@ -95,20 +95,43 @@ class CustomReaderFragment : CoreReaderFragment() {
       loadUrlWithCurrentWebview(pageUrl)
     } else {
       openObbOrZim()
-      restoreLastOpenedTab()
+      manageExternalLaunchAndRestoringViewState()
     }
     requireArguments().clear()
   }
 
-  private fun restoreLastOpenedTab() {
+  private fun isInvalidJson(jsonString: String?): Boolean = jsonString == null || jsonString == "[]"
+
+  private fun manageExternalLaunchAndRestoringViewState() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
+    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
     val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
+    if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
+      openHomeScreen()
+    } else {
+      restoresTabs(zimArticles, zimPositions, currentTab)
+    }
+  }
+
+  private fun restoresTabs(
+    zimArticles: String?,
+    zimPositions: String?,
+    currentTab: Int
+  ) {
     val urls = JSONArray(zimArticles)
-    val zimPositions = JSONArray(settings.getString(TAG_CURRENT_POSITIONS, null))
+    val positions = JSONArray(zimPositions)
+    var i = 0
+    getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(0)))
+    getCurrentWebView().scrollY = positions.getInt(0)
+    i++
+    while (i < urls.length()) {
+      newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
+      safelyGetWebView(i).scrollY = positions.getInt(i)
+      i++
+    }
     selectTab(currentTab)
-    loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
-    getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
+    getCurrentWebView().scrollY = positions.getInt(currentTab)
   }
 
   override fun setDrawerLockMode(lockMode: Int) {

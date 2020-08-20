@@ -98,6 +98,10 @@ object ActivityExtensions {
     (this as CoreMainActivity).navigate(fragmentId, bundle)
   }
 
+  fun Activity.popNavigationBackstack() {
+    (this as CoreMainActivity).navController.popBackStack()
+  }
+
   val Activity.coreActivityComponent
     get() = CoreApp.coreComponent.activityComponentBuilder().activity(this).build()
 }

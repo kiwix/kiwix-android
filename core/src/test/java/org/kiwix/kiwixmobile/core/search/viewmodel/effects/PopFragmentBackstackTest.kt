@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 internal class PopFragmentBackstackTest {
@@ -29,6 +30,6 @@ internal class PopFragmentBackstackTest {
   fun `invoke with pops activity backstack`() {
     val activity = mockk<CoreMainActivity>(relaxed = true)
     PopFragmentBackstack.invokeWith(activity)
-    verify { activity.navController.popBackStack() }
+    verify { activity.popNavigationBackstack() }
   }
 }
