@@ -17,9 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.ActionMode
 import android.view.Menu
@@ -33,7 +31,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -41,10 +38,8 @@ import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.help.HelpActivity
-import org.kiwix.kiwixmobile.core.utils.DialogShower
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.ShowRate
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
@@ -55,13 +50,8 @@ const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 10
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
+  @Inject lateinit var rateDialogHandler: RateDialogHandler
   protected lateinit var drawerToggle: ActionBarDrawerToggle
-
-  @Inject
-  protected lateinit var alertDialogShower: DialogShower
-  private var visitCounterPref: RateAppCounter? = null
-  private var tempVisitCount = 0
-  private var isFirstRun = false
 
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
@@ -78,7 +68,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
-    checkForRateDialog()
+    rateDialogHandler.checkForRateDialog(getIconResId())
     navController.addOnDestinationChangedListener { _, destination, _ ->
       configureActivityBasedOn(destination)
     }
@@ -233,56 +223,5 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   abstract fun openPage(pageUrl: String, zimFilePath: String = "")
 
-  private fun checkForRateDialog() {
-    isFirstRun = sharedPreferenceUtil.prefIsFirstRun
-    visitCounterPref = RateAppCounter(this)
-    tempVisitCount = visitCounterPref?.count!!
-    ++tempVisitCount
-    visitCounterPref?.count = tempVisitCount
-    if (canShowRateDialog()) {
-      showRateDialog()
-    }
-  }
-
-  private fun canShowRateDialog(): Boolean {
-    return tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG &&
-      visitCounterPref?.noThanksState == false &&
-      NetworkUtils.isNetworkAvailable(this) && !BuildConfig.DEBUG
-  }
-
-  private fun showRateDialog() {
-    alertDialogShower.show(ShowRate(getIconResId(), this),
-      {
-        visitCounterPref?.noThanksState = true
-        goToRateApp()
-      },
-      {
-        visitCounterPref?.noThanksState = true
-      },
-      {
-        tempVisitCount = 0
-        visitCounterPref?.count = tempVisitCount
-      }
-    )
-  }
-
   protected abstract fun getIconResId(): Int
-
-  private fun goToRateApp() {
-    val kiwixLocalMarketUri =
-      Uri.parse("market://details?id=$packageName")
-    val kiwixBrowserMarketUri =
-      Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
-    val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri)
-    goToMarket.addFlags(
-      Intent.FLAG_ACTIVITY_NO_HISTORY or
-        Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET or
-        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-    )
-    try {
-      startActivity(goToMarket)
-    } catch (e: ActivityNotFoundException) {
-      startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
-    }
-  }
 }
