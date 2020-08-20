@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.error
 
 import android.os.Bundle
 import android.view.View
+import kotlinx.android.synthetic.main.activity_kiwix_error.allowCrash
 import kotlinx.android.synthetic.main.activity_kiwix_error.messageText
 import kotlinx.android.synthetic.main.activity_kiwix_error.textView2
 import org.kiwix.kiwixmobile.core.R
@@ -30,16 +31,16 @@ class DiagnosticReportActivity : ErrorActivity() {
     super.onCreate(savedInstanceState)
     textView2.setText(R.string.diagnostic_report)
     messageText.setText(R.string.diagnostic_report_message)
-    allowCrashCheckbox.visibility = View.GONE
+    allowCrash.visibility = View.GONE
   }
 
   override fun restartApp() {
     finish()
   }
 
-  override fun getSubject() = "Somebody has sent a Diagnostic Report  "
+  override val subject = "Somebody has sent a Diagnostic Report  "
 
-  override fun getBody() = """
+  override val body = """
     Hi Kiwix Developers,
     I am having an issue with the app and would like you to check these details
     
