@@ -36,8 +36,9 @@ import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
 import java.util.Timer
 import java.util.TimerTask
@@ -52,7 +53,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
   }
 
   private val handler = Handler(Looper.getMainLooper())
-  private lateinit var timer: Timer
+  private var timer: Timer? = Timer()
 
   @Inject
   internal lateinit var presenter: IntroContract.Presenter
@@ -75,8 +76,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
       addOnPageChangeListener(SimplePageChangeListener(::updateView, ::handleDraggingState))
     }
     tab_indicator.setViewPager(view_pager)
-    timer = Timer()
-    timer.schedule(object : TimerTask() {
+    timer?.schedule(object : TimerTask() {
       override fun run() {
         handler.post {
           if (currentPage == views.size) currentPage = 0
@@ -98,7 +98,8 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
   override fun onDestroyView() {
     super.onDestroyView()
     handler.removeCallbacksAndMessages(null)
-    timer.cancel()
+    timer?.cancel()
+    timer = null
     views.forEach {
       it.setOnClickListener(null)
     }
@@ -114,7 +115,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     dismissAutoRotate()
     startActivity(internal(CoreMainActivity::class.java))
     presenter.setIntroShown()
-    requireActivity().popNavigationBackstack()
+    (requireActivity() as KiwixMainActivity).navController.navigate(IntroFragmentDirections.actionIntroFragmentToLibraryFragment())
   }
 
   private fun updateView(position: Int) {
@@ -138,6 +139,6 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
 
   private fun dismissAutoRotate() {
     handler.removeCallbacksAndMessages(null)
-    timer.cancel()
+    timer?.cancel()
   }
 }

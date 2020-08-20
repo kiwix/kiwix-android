@@ -60,7 +60,12 @@
   <fragment
     android:id="@+id/introFragment"
     android:name="org.kiwix.kiwixmobile.intro.IntroFragment"
-    android:label="IntroFragment" />
+    android:label="IntroFragment" >
+    <action
+      android:id="@+id/action_introFragment_to_libraryFragment"
+      app:popUpTo="@id/libraryFragment"
+      app:destination="@id/libraryFragment" />
+  </fragment>
   <fragment
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
