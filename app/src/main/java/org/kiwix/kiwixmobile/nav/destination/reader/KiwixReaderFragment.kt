@@ -216,21 +216,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     return ShouldNotCall
   }
 
-  // override fun manageExternalLaunchAndRestoringViewState() {
-  //   val settings = getSharedPrefSettings()
-  //   val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
-  //   if (zimFileUri.isNotEmpty() || (zimFile != null && File(zimFile).exists())) {
-  //     Log.d(
-  //       TAG_KIWIX,
-  //       "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
-  //     )
-  //     webViewList.clear()
-  //     restoreTabStates()
-  //   } else {
-  //     restoreViewStateOnInvalidJSON()
-  //   }
-  // }
-
   override fun restoreViewStateOnInvalidJSON() {
     Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
     exitBook()
