@@ -35,6 +35,9 @@
     <action
       android:id="@+id/action_navigation_reader_to_navigation_library"
       app:destination="@id/libraryFragment" />
+    <action
+      android:id="@+id/action_readerFragment_to_searchFragment"
+      app:destination="@id/searchFragment" />
   </fragment>
 
   <fragment

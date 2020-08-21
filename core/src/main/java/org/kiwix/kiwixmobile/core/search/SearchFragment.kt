@@ -111,7 +111,6 @@ class SearchFragment : BaseFragment() {
     with(requireActivity() as CoreMainActivity) {
       setSupportActionBar(view.findViewById(R.id.toolbar))
       supportActionBar?.apply {
-        setHomeAsUpIndicator(R.drawable.ic_action_back)
         setHomeButtonEnabled(true)
         title = getString(R.string.menu_search_in_text)
       }
