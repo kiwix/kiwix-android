@@ -284,10 +284,7 @@ class KiwixTextToSpeech internal constructor(
 
         override fun onError(s: String) {
           Log.e(TAG_KIWIX, "TextToSpeech Error: $s")
-          Toast.makeText(
-            context, R.string.texttospeech_error,
-            Toast.LENGTH_SHORT
-          ).show()
+          context.toast(R.string.texttospeech_error, Toast.LENGTH_SHORT)
         }
       })
     }
