@@ -39,12 +39,15 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
+const val SEARCH_ITEM_TITLE = "searchItemTitle"
+const val SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
 const val KIWIX_INTERNAL_ERROR = 10
 
@@ -52,6 +55,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   abstract val searchFragmentResId: Int
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
+  @Inject lateinit var zimReaderContainer: ZimReaderContainer
   private var drawerToggle: ActionBarDrawerToggle? = null
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
@@ -263,4 +267,5 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   abstract fun openPage(pageUrl: String, zimFilePath: String = "")
+  abstract fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean)
 }

@@ -40,6 +40,8 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
+import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
@@ -144,5 +146,12 @@ class KiwixMainActivity : CoreMainActivity() {
       R.id.readerFragment,
       bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     )
+  }
+
+  override fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean) {
+    val url = zimReaderContainer.titleToUrl(searchItemTitle)
+    if (url != null) {
+      openPage(zimReaderContainer.urlSuffixToParsableUrl(url), "")
+    }
   }
 }

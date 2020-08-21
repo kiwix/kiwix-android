@@ -86,4 +86,8 @@ class CustomMainActivity : CoreMainActivity() {
     val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     navigate(R.id.customReaderFragment, bundle)
   }
+
+  override fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean) {
+    TODO("Not yet implemented")
+  }
 }
