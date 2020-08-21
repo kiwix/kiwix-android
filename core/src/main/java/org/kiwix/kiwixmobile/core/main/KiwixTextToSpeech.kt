@@ -87,8 +87,7 @@ class KiwixTextToSpeech internal constructor(
         onInitSucceedListener.onInitSucceed()
       } else {
         Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
-        Toast.makeText(context, R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT)
-          .show()
+        context.toast(R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT)
       }
     })
   }
