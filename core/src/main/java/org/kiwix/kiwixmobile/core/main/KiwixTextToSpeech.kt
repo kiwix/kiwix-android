@@ -177,11 +177,11 @@ class KiwixTextToSpeech internal constructor(
   }
 
   fun stop() {
-    tts?.let { tts ->
+    tts?.let {
       {
-        if (tts.stop() == TextToSpeech.SUCCESS) {
+        if (it.stop() == TextToSpeech.SUCCESS) {
           currentTTSTask = null
-          tts.setOnUtteranceProgressListener(null)
+          it.setOnUtteranceProgressListener(null)
           onSpeakingListener.onSpeakingEnded()
         }
       }
@@ -245,7 +245,7 @@ class KiwixTextToSpeech internal constructor(
     fun onSpeakingEnded()
   }
 
-  inner class TTSTask // start();
+  inner class TTSTask
     (private val pieces: List<String>) {
     private val currentPiece =
       AtomicInteger(0)
