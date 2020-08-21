@@ -139,4 +139,6 @@ class KiwixMainActivity : CoreMainActivity() {
       bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     )
   }
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 }

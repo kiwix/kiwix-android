@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,8 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.utils
+package org.kiwix.kiwixmobile.core.utils.dialog
 
+import android.app.Activity
 import android.net.wifi.WifiConfiguration
 import android.view.View
 import org.kiwix.kiwixmobile.core.R
@@ -127,17 +128,22 @@ sealed class KiwixDialog(
     neutralMessage = R.string.do_not_ask_anymore
   )
 
-  data class ShowRate(override val args: List<Any>, val customIcon: Int?) : KiwixDialog(
-    R.string.rate_dialog_title,
-    R.string.triple_arg_format_string,
-    R.string.rate_dialog_positive,
-    R.string.no_thanks,
-    icon = customIcon,
-    neutralMessage = R.string.rate_dialog_neutral
-  ),
+  data class ShowRate(override val args: List<Any>, val customIcon: Int?) :
+    KiwixDialog(
+      R.string.rate_dialog_title,
+      R.string.triple_arg_format_string,
+      R.string.rate_dialog_positive,
+      R.string.no_thanks,
+      icon = customIcon,
+      neutralMessage = R.string.rate_dialog_neutral
+    ),
     HasBodyFormatArgs {
-    constructor(icon: Int?) : this(
-      listOf(R.string.rate_dialog_msg_1, R.string.app_name, R.string.rate_dialog_msg_2),
+    constructor(icon: Int?, activity: Activity) : this(
+      listOf(
+        activity.getString(R.string.rate_dialog_msg_1),
+        activity.getString(R.string.app_name),
+        activity.getString(R.string.rate_dialog_msg_2)
+      ),
       icon
     )
   }
