@@ -266,6 +266,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     disableDrawer()
   }
 
-  abstract fun openPage(pageUrl: String, zimFilePath: String = "")
+  abstract fun openPage(
+    pageUrl: String,
+    zimFilePath: String = "",
+    shouldOpenInNewTab: Boolean = false
+  )
+
   abstract fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean)
 }

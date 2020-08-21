@@ -91,7 +91,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
       }
-      loadUrlWithCurrentWebview(args.pageUrl)
+      if (args.shouldOpenInNewTab) {
+      } else {
+        loadUrlWithCurrentWebview(args.pageUrl)
+      }
     } else {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
