@@ -54,8 +54,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.FinishActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
@@ -217,8 +217,8 @@ internal class SearchViewModelTest {
   @Nested
   inner class ActionMapping {
     @Test
-    fun `ExitedSearch offers Finish`() {
-      actionResultsInEffects(ExitedSearch, FinishActivity)
+    fun `ExitedSearch offers PopFragmentBackstack`() {
+      actionResultsInEffects(ExitedSearch, PopFragmentBackstack)
     }
 
     @Test
