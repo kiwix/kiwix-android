@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.iSO3ToLocale
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import java.util.HashMap
-import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -129,7 +128,7 @@ class KiwixTextToSpeech internal constructor(
         Toast.makeText(context, R.string.tts_lang_not_supported, Toast.LENGTH_LONG).show()
       } else {
         tts?.language = locale
-        if (getFeatures(tts, locale).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) {
+        if (getFeatures(tts).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) {
           context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
           return
         }
@@ -140,13 +139,9 @@ class KiwixTextToSpeech internal constructor(
     }
   }
 
-  @SuppressLint("NewApi") private fun getFeatures(
-    tts: TextToSpeech?,
-    locale: Locale
-  ): Set<String> {
-    return tts!!.voice
-      .features
-  }
+  private fun getFeatures(
+    tts: TextToSpeech?
+  ): Set<String> = tts!!.voice.features
 
   private fun loadURL(webView: WebView) {
     // We use JavaScript to get the content of the page conveniently, earlier making some
