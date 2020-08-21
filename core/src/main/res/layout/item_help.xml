@@ -21,11 +21,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:contentDescription="@string/expand"
-    android:tint="?colorOnSurface"
+    android:src="@drawable/action_find_next"
     app:layout_constraintBottom_toBottomOf="@id/item_help_title"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="@id/item_help_title"
-    app:srcCompat="@drawable/action_find_next" />
+    app:tint="?colorOnSurface" />
 
   <TextView
     android:id="@+id/item_help_description"

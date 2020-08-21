@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.utils
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
@@ -197,12 +196,8 @@ class LanguageUtils(private val context: Context) {
           Locale(language)
       Locale.setDefault(locale)
       val config = Configuration()
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        config.setLocale(locale)
-        config.setLayoutDirection(locale)
-      } else {
-        config.locale = locale
-      }
+      config.setLocale(locale)
+      config.setLayoutDirection(locale)
       context.resources
         .updateConfiguration(config, context.resources.displayMetrics)
     }

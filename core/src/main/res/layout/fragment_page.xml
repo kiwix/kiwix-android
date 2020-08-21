@@ -22,7 +22,7 @@
       app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
       tools:showIn="@layout/activity_search" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/page_switch"
       style="@style/switch_style" />
 
