@@ -85,4 +85,6 @@ class CustomMainActivity : CoreMainActivity() {
     val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     navigate(R.id.customReaderFragment, bundle)
   }
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 }

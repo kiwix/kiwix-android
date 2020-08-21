@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -51,7 +52,9 @@ const val KIWIX_INTERNAL_ERROR = 10
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
+  @Inject lateinit var rateDialogHandler: RateDialogHandler
   protected var drawerToggle: ActionBarDrawerToggle? = null
+
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
@@ -88,6 +91,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
+    rateDialogHandler.checkForRateDialog(getIconResId())
     navController.addOnDestinationChangedListener { _, destination, _ ->
       configureActivityBasedOn(destination)
     }
@@ -258,4 +262,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   abstract fun openPage(pageUrl: String, zimFilePath: String = "")
+
+  protected abstract fun getIconResId(): Int
 }

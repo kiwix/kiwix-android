@@ -30,6 +30,8 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
 internal class ExternalLinkOpenerTest {
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
