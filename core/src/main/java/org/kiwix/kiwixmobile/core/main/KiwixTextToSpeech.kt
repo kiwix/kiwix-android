@@ -34,7 +34,6 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.iSO3ToLocale
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import java.util.ArrayList
 import java.util.HashMap
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
@@ -298,12 +297,7 @@ class KiwixTextToSpeech internal constructor(
   private inner class TTSJavaScriptInterface {
     @JavascriptInterface fun speakAloud(content: String) {
       val splitted = content.split("[\\n.;]".toRegex()).toTypedArray()
-      val pieces: MutableList<String> = ArrayList()
-      splitted.forEach { s ->
-        if (s.trim { it <= ' ' }.isNotEmpty()) {
-          pieces.add(s.trim { it <= ' ' })
-        }
-      }
+      val pieces = splitted.filter(String::isNotBlank)
       if (pieces.isNotEmpty()) {
         onSpeakingListener.onSpeakingStarted()
       } else {
