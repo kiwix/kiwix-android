@@ -48,17 +48,14 @@ import java.util.concurrent.atomic.AtomicInteger
  * @param onSpeakingListener listener that receives an event when speaking just started or
  */
 class KiwixTextToSpeech internal constructor(
-  context: Context,
+  val context: Context,
   onInitSucceedListener: OnInitSucceedListener,
-  onSpeakingListener: OnSpeakingListener,
-  onAudioFocusChangeListener: OnAudioFocusChangeListener,
+  val onSpeakingListener: OnSpeakingListener,
+  private val onAudioFocusChangeListener: OnAudioFocusChangeListener,
   private val zimReaderContainer: ZimReaderContainer
 ) {
-  private val focusLock: Any
-  private val context: Context
-  private val onSpeakingListener: OnSpeakingListener
-  private val am: AudioManager
-  private val onAudioFocusChangeListener: OnAudioFocusChangeListener
+  private val focusLock: Any = Any()
+  private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
   @JvmField var currentTTSTask: TTSTask? = null
   private var tts: TextToSpeech? = null
 
@@ -71,11 +68,6 @@ class KiwixTextToSpeech internal constructor(
 
   init {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech")
-    this.context = context
-    this.onSpeakingListener = onSpeakingListener
-    this.onAudioFocusChangeListener = onAudioFocusChangeListener
-    am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    focusLock = Any()
     initTTS(onInitSucceedListener)
   }
 
