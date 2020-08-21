@@ -81,7 +81,7 @@ class LocalFileTransferActivity : BaseActivity(),
   lateinit var locationManager: LocationManager
 
   private var isFileSender = false // Whether the device is the file sender or not
-  private var filesForTransfer = ArrayList<FileItem>()
+  private lateinit var filesForTransfer: List<FileItem>
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
 
@@ -113,9 +113,10 @@ class LocalFileTransferActivity : BaseActivity(),
     list_peer_devices.layoutManager = LinearLayoutManager(this)
     list_peer_devices.setHasFixedSize(true)
     if (isFileSender) {
-      fileUriArrayList.map {
-        filesForTransfer.add(FileItem(it))
-      }
+      // fileUriArrayList.map {
+      //   filesForTransfer.add(FileItem(it))
+      // }
+      filesForTransfer = fileUriArrayList.map(::FileItem)
       displayFileTransferProgress(filesForTransfer)
     }
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
@@ -174,12 +175,12 @@ class LocalFileTransferActivity : BaseActivity(),
     wifiPeerListAdapter?.items = emptyList()
   }
 
-  override fun onFilesForTransferAvailable(filesForTransfer: ArrayList<FileItem>) {
+  override fun onFilesForTransferAvailable(filesForTransfer: List<FileItem>) {
     this.filesForTransfer = filesForTransfer
     displayFileTransferProgress(filesForTransfer)
   }
 
-  private fun displayFileTransferProgress(filesToSend: ArrayList<FileItem>) {
+  private fun displayFileTransferProgress(filesToSend: List<FileItem>) {
     fileListAdapter = FileListAdapter(filesToSend)
     recycler_view_transfer_files.adapter = fileListAdapter
     recycler_view_transfer_files.layoutManager = LinearLayoutManager(this)

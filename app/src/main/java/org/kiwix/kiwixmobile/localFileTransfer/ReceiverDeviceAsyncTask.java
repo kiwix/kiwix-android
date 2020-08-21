@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.R;
 import static org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus;
@@ -61,7 +62,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
       Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.FILE_TRANSFER_PORT);
 
       final String zimStorageRootPath = wifiDirectManager.getZimStorageRootPath();
-      ArrayList<FileItem> fileItems = wifiDirectManager.getFilesForTransfer();
+      List<FileItem> fileItems = wifiDirectManager.getFilesForTransfer();
       boolean isTransferErrorFree = true;
 
       if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size() + " files");

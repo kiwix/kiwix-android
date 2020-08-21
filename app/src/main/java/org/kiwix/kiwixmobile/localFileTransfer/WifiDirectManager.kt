@@ -93,7 +93,7 @@ class WifiDirectManager @Inject constructor(
 
   // IP address of the file receiving device
   private lateinit var fileReceiverDeviceAddress: InetAddress
-  private lateinit var filesForTransfer: ArrayList<FileItem>
+  private lateinit var filesForTransfer: List<FileItem>
 
   // Whether the device is the file sender or not
   var isFileSender = false
@@ -101,7 +101,7 @@ class WifiDirectManager @Inject constructor(
   private var hasSenderStartedConnection = false
 
   /* Initialisations for using the WiFi P2P API */
-  fun startWifiDirectManager(filesForTransfer: ArrayList<FileItem>) {
+  fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
     manager = activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
@@ -355,7 +355,7 @@ class WifiDirectManager @Inject constructor(
     fun onUserDeviceDetailsAvailable(userDevice: WifiP2pDevice?)
     fun onConnectionToPeersLost()
     fun updateListOfAvailablePeers(peers: WifiP2pDeviceList)
-    fun onFilesForTransferAvailable(filesForTransfer: ArrayList<FileItem>)
+    fun onFilesForTransferAvailable(filesForTransfer: List<FileItem>)
     fun onFileStatusChanged(itemIndex: Int)
     fun onFileTransferComplete()
   }
