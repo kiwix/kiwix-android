@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.main;
+package org.kiwix.kiwixmobile.core.utils.dialog;
 
 import android.content.Context;
 import android.content.SharedPreferences;

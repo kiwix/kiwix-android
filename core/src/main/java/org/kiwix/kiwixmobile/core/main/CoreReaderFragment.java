@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -113,11 +112,10 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
-import org.kiwix.kiwixmobile.core.utils.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils;
@@ -242,8 +240,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private ActionMode actionMode = null;
   private KiwixWebView tempWebViewForUndo;
   private File tempZimFileForUndo;
-  private RateAppCounter visitCounterPref;
-  private int tempVisitCount;
   private boolean isFirstRun;
   protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
@@ -339,8 +335,6 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     tableDrawerRight =
       tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
-
-    checkForRateDialog();
 
     addFileReader();
     setupTabsAdapter();
@@ -644,59 +638,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       return Super.ShouldCall;
     }
     return Super.ShouldNotCall;
-  }
-
-  private void checkForRateDialog() {
-    isFirstRun = sharedPreferenceUtil.getPrefIsFirstRun();
-    visitCounterPref = new RateAppCounter(getActivity());
-    tempVisitCount = visitCounterPref.getCount();
-    ++tempVisitCount;
-    visitCounterPref.setCount(tempVisitCount);
-
-    if (tempVisitCount >= 10
-      && !visitCounterPref.getNoThanksState()
-      && NetworkUtils.isNetworkAvailable(getActivity()) && !BuildConfig.DEBUG) {
-      showRateDialog();
-    }
-  }
-
-  private void showRateDialog() {
-    alertDialogShower.show(new KiwixDialog.ShowRate(getIconResId()),
-      () -> {
-        visitCounterPref.setNoThanksState(true);
-        goToRateApp();
-        return Unit.INSTANCE;
-      },
-      () -> {
-        visitCounterPref.setNoThanksState(true);
-        return Unit.INSTANCE;
-      },
-      () -> {
-        tempVisitCount = 0;
-        visitCounterPref.setCount(tempVisitCount);
-        return Unit.INSTANCE;
-      }
-    );
-  }
-
-  protected abstract int getIconResId();
-
-  private void goToRateApp() {
-    Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getActivity().getPackageName());
-    Uri kiwixBrowserMarketUri =
-      Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName());
-
-    Intent goToMarket = new Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri);
-
-    goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-      Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
-      Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-
-    try {
-      startActivity(goToMarket);
-    } catch (ActivityNotFoundException e) {
-      startActivity(new Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri));
-    }
   }
 
   private void updateTitle() {

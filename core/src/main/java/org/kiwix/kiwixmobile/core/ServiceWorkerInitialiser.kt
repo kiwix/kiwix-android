@@ -18,8 +18,6 @@
 
 package org.kiwix.kiwixmobile.core
 
-import android.content.Context
-import android.os.Build
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import androidx.webkit.ServiceWorkerClientCompat
@@ -28,21 +26,13 @@ import androidx.webkit.WebViewFeature
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import javax.inject.Inject
 
-class ServiceWorkerInitialiser @Inject constructor(
-  context: Context,
-  zimReaderContainer: ZimReaderContainer
-) {
+class ServiceWorkerInitialiser @Inject constructor(zimReaderContainer: ZimReaderContainer) {
   init {
     if (WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE)) {
       ServiceWorkerControllerCompat.getInstance()
         .setServiceWorkerClient(object : ServiceWorkerClientCompat() {
-          override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-              zimReaderContainer.load(request.url.toString())
-            } else {
-              null
-            }
-          }
+          override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? =
+            zimReaderContainer.load(request.url.toString())
         })
     }
   }

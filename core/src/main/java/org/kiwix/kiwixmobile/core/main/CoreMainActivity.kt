@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
@@ -48,6 +49,7 @@ const val ZIM_FILE_URI_KEY = "zimFileUri"
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
+  @Inject lateinit var rateDialogHandler: RateDialogHandler
   protected lateinit var drawerToggle: ActionBarDrawerToggle
 
   abstract val navController: NavController
@@ -65,6 +67,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
+    rateDialogHandler.checkForRateDialog(getIconResId())
     navController.addOnDestinationChangedListener { _, destination, _ ->
       configureActivityBasedOn(destination)
     }
@@ -218,4 +221,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   abstract fun openPage(pageUrl: String, zimFilePath: String = "")
+
+  protected abstract fun getIconResId(): Int
 }

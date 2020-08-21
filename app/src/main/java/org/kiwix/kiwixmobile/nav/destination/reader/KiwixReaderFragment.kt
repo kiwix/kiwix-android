@@ -274,8 +274,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
-  override fun getIconResId() = R.mipmap.ic_launcher
-
   override fun createNewTab() {
     newMainPageTab()
   }

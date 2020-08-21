@@ -57,8 +57,8 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.R2;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower;
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
 /**

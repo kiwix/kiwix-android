@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,19 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.intro
+package org.kiwix.kiwixmobile.core.utils.dialog
 
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+import android.app.Dialog
 
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
+interface DialogShower {
+  fun show(
+    dialog: KiwixDialog,
+    vararg clickListeners: (() -> Unit)
+  )
 
-  override var activityRule = activityTestRule<IntroActivity>()
-
-  @Test
-  fun viewIsSwipeableAndNavigatesToMain() {
-    intro {
-      swipeLeft()
-    } clickGetStarted { }
-  }
+  fun create(
+    dialog: KiwixDialog,
+    vararg clickListeners: (() -> Unit)
+  ): Dialog
 }

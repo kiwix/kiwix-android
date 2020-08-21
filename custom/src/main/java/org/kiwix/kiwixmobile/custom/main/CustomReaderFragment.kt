@@ -44,8 +44,8 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
-import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
@@ -169,7 +169,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     })
   }
 
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
   private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
     grantResults[0] == PackageManager.PERMISSION_DENIED &&
       !ActivityCompat.shouldShowRequestPermissionRationale(
@@ -182,8 +181,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     menu.findItem(R.id.menu_help)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
-
-  override fun getIconResId() = R.mipmap.ic_launcher
 
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
