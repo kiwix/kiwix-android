@@ -82,7 +82,7 @@ class CustomMainActivity : CoreMainActivity() {
       .isVisible = false
   }
 
-  override fun openPage(pageUrl: String, zimFilePath: String) {
+  override fun openPage(pageUrl: String, zimFilePath: String, shouldOpenInNewTab: Boolean) {
     val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     navigate(R.id.customReaderFragment, bundle)
   }
@@ -90,4 +90,6 @@ class CustomMainActivity : CoreMainActivity() {
   override fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean) {
     TODO("Not yet implemented")
   }
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 }

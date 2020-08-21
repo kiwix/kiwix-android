@@ -92,6 +92,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         tryOpeningZimFile(args.zimFileUri)
       }
       if (args.shouldOpenInNewTab) {
+        openArticleInNewTab(args.pageUrl)
       } else {
         loadUrlWithCurrentWebview(args.pageUrl)
       }
@@ -295,8 +296,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   private fun getSharedPrefSettings() =
     activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-
-  override fun getIconResId() = R.mipmap.ic_launcher
 
   override fun createNewTab() {
     newMainPageTab()

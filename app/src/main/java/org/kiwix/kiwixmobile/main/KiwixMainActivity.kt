@@ -159,4 +159,6 @@ class KiwixMainActivity : CoreMainActivity() {
       openPage(zimReaderContainer.urlSuffixToParsableUrl(url), "", shouldOpenInNewTab)
     }
   }
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 }

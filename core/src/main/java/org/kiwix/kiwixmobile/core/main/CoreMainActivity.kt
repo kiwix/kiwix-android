@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -55,6 +56,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   abstract val searchFragmentResId: Int
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
+  @Inject lateinit var rateDialogHandler: RateDialogHandler
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
   private var drawerToggle: ActionBarDrawerToggle? = null
   abstract val navController: NavController
@@ -93,6 +95,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
+    rateDialogHandler.checkForRateDialog(getIconResId())
     navController.addOnDestinationChangedListener { _, destination, _ ->
       configureActivityBasedOn(destination)
     }
@@ -273,4 +276,5 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   )
 
   abstract fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean)
+  protected abstract fun getIconResId(): Int
 }

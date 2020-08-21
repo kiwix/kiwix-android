@@ -25,8 +25,8 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteZims
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteZims
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.kiwixActivityComponent

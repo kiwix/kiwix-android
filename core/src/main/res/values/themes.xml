@@ -90,6 +90,7 @@
     <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
     <item name="colorPrimaryDark">?colorPrimaryVariant</item>
     <item name="colorAccent">?colorSecondary</item>
+    <item name="android:navigationBarColor">@color/black</item>
 
   </style>
 
