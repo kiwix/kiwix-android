@@ -467,8 +467,9 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
+
       @Override
-      public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
+      public void sectionsLoaded(String title, List<? extends TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           for (TableDrawerAdapter.DocumentSection section : sections) {
             if (section.title.contains("REPLACE_")) {
