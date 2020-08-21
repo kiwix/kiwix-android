@@ -55,8 +55,8 @@ import org.kiwix.kiwixmobile.ActivityExtensionsKt;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.core.base.BaseActivity;
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent;
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower;
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower;
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiP2pDelegate;
 import org.kiwix.kiwixmobile.local_file_transfer.adapter.WifiPeerListAdapter;
 

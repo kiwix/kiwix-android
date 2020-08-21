@@ -30,9 +30,9 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmarkState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
-import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllBookmarks
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedBookmarks
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllBookmarks
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedBookmarks
 
 internal class ShowDeleteBookmarksDialogTest {
   val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
