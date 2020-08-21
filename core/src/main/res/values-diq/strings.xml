@@ -101,6 +101,7 @@
   <string name="delete_zims_toast">Dosyay hewl esteriyayê</string>
   <string name="no_files_here">Tiya dosyeyi çıniyê</string>
   <string name="download_no_space">Serba ronayışi rê ca bes niyo.</string>
+  <string name="download">Biya war</string>
   <string name="space_available">Karnıyayiye erd:</string>
   <string name="zim_simple">Besit</string>
   <string name="zim_no_pic">Resımi çıniyê</string>
@@ -184,7 +185,7 @@
   <string name="your_device">Cihazê Şıma:</string>
   <string name="nearby_devices">NEZDI CİHAZİ</string>
   <string name="files_for_transfer">TRANSFERÊ DOSYAYAN</string>
-  <string name="preparing_files">Keno ke dosyaya transfer kero…</string>
+  <string name="preparing_files">Keno ke dosyaya transfer kero...</string>
   <string name="status">Weziyet</string>
   <string name="tag_pic">Resım</string>
   <string name="tag_vid">Video</string>

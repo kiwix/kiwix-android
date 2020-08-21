@@ -115,6 +115,7 @@
   <string name="delete_zims_toast">Plik został usunięty</string>
   <string name="no_files_here">Tu nie ma plików</string>
   <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
+  <string name="download">Pobierz</string>
   <string name="space_available">Dostępne miejsce:</string>
   <string name="zim_simple">Prosty</string>
   <string name="zim_no_pic">Brak obrazka</string>
@@ -274,4 +275,7 @@
   <string name="diagnostic_report_message">Prześlij wszystkie poniższe informacje, abyśmy mogli zdiagnozować problem</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Powiększ tekst</string>
+  <string name="no_open_book">Brak otwartych książek</string>
+  <string name="open_library">Otwórz bibliotekę</string>
+  <string name="tab_restored">Odtworzono zakładkę</string>
 </resources>

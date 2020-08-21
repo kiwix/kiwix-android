@@ -10,6 +10,7 @@
 * Joseph
 * Kumkumuk
 * McAang
+* MuratTheTurkish
 * Rapsar
 * Sayginer
 * Trockya
@@ -116,6 +117,7 @@
   <string name="delete_zims_toast">Dosyalar başarıyla silindi</string>
   <string name="no_files_here">Dosya yok</string>
   <string name="download_no_space">İndirmek için yetersiz alan.</string>
+  <string name="download">İndir</string>
   <string name="space_available">Kullanılabilir Alan:</string>
   <string name="zim_simple">Basit</string>
   <string name="zim_no_pic">Resim Yok</string>
@@ -279,4 +281,10 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Metin Yakınlığı</string>
   <string name="search_open_in_new_tab">Yeni sekmede aç</string>
+  <string name="reader">Okuyucu</string>
+  <string name="no_open_book">Açık kitap yok</string>
+  <string name="open_library">Kütüphaneyi aç</string>
+  <string name="tab_restored">Sekme geri getirildi</string>
+  <string name="open_drawer">Çekmeceyi Aç</string>
+  <string name="close_drawer">Çekmeceyi Kapat</string>
 </resources>

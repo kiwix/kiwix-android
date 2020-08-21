@@ -103,6 +103,7 @@
   <string name="delete_zims_toast">Los ficheros desaniciáronse correutamente</string>
   <string name="no_files_here">Nun hai nengún ficheru equí</string>
   <string name="download_no_space">Nun hai espaciu abondo pa descargar.</string>
+  <string name="download">Descargar</string>
   <string name="space_available">Espaciu disponible:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Nun hai imáxenes</string>

@@ -3,5 +3,5 @@
 * Robby
 -->
 <resources>
-  <string name="download">{{Identical|Download}}</string>
+  <string name="download">The title of the fragment/place where books are downloaded.</string>
 </resources>
