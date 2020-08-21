@@ -48,6 +48,7 @@ class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
 
   override val cachedComponent by lazy { kiwixActivityComponent }
+  override val searchFragmentResId: Int = R.id.searchFragment
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
   override val drawerContainerLayout: DrawerLayout by lazy { navigation_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }

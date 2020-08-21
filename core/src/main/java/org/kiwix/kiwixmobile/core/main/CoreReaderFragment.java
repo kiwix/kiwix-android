@@ -110,7 +110,6 @@ import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
-import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
 import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
@@ -1259,12 +1258,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void goToSearch(boolean isVoice) {
-    final String zimFile = zimReaderContainer.getZimCanonicalPath();
-    saveTabStates();
-    Intent i = new Intent(getActivity(), SearchActivity.class);
-    i.putExtra(EXTRA_ZIM_FILE, zimFile);
-    i.putExtra(EXTRA_IS_WIDGET_VOICE, isVoice);
-    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+    //final String zimFile = zimReaderContainer.getZimCanonicalPath();
+    //saveTabStates();
+    openSearch();
+    //Intent i = new Intent(getActivity(), SearchActivity.class);
+    //i.putExtra(EXTRA_ZIM_FILE, zimFile);
+    //i.putExtra(EXTRA_IS_WIDGET_VOICE, isVoice);
+    //startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
   }
 
   private void handleIntentActions(Intent intent) {
@@ -1294,23 +1294,29 @@ public abstract class CoreReaderFragment extends BaseFragment
       case Intent.ACTION_VIEW:
         if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
           saveTabStates();
-          Intent i = new Intent(getActivity(), SearchActivity.class);
-          if (intent.getData() != null) {
-            i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
-          }
-          startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+          openSearch();
+          //Intent i = new Intent(getActivity(), SearchActivity.class);
+          //if (intent.getData() != null) {
+          //  i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+          //}
+          //startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
         }
         break;
     }
   }
 
+  private void openSearch() {
+    ((CoreMainActivity) requireActivity()).openSearch();
+  }
+
   private void goToSearchWithText(Intent intent) {
     saveTabStates();
-    Intent i = new Intent(getActivity(), SearchActivity.class);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
-    }
-    startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
+    openSearch();
+    //Intent i = new Intent(getActivity(), SearchActivity.class);
+    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    //  i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+    //}
+    //startActivityForResult(i, MainMenuKt.REQUEST_FILE_SEARCH);
   }
 
   @NotNull @Override public Super onNewIntent(@NotNull Intent intent,

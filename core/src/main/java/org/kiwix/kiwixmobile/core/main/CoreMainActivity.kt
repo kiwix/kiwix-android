@@ -50,8 +50,9 @@ const val KIWIX_INTERNAL_ERROR = 10
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
+  abstract val searchFragmentResId: Int
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
-  protected var drawerToggle: ActionBarDrawerToggle? = null
+  private var drawerToggle: ActionBarDrawerToggle? = null
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
@@ -171,8 +172,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
       R.id.menu_settings -> openSettings()
       R.id.menu_help -> openHelpFragment()
-      R.id.menu_history -> openHistoryActivity()
-      R.id.menu_bookmarks_list -> openBookmarksActivity()
+      R.id.menu_history -> openHistory()
+      R.id.menu_bookmarks_list -> openBookmarks()
       else -> return false
     }
     return true
@@ -243,11 +244,15 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navigate(settingsFragmentResId)
   }
 
-  private fun openHistoryActivity() {
+  private fun openHistory() {
     navigate(historyFragmentResId)
   }
 
-  private fun openBookmarksActivity() {
+  fun openSearch() {
+    navigate(searchFragmentResId)
+  }
+
+  private fun openBookmarks() {
     navigate(bookmarksFragmentResId)
     handleDrawerOnNavigation()
   }

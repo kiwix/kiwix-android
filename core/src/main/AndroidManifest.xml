@@ -25,11 +25,6 @@
     tools:targetApi="m">
 
     <activity
-      android:name=".search.SearchActivity"
-      android:windowSoftInputMode="adjustResize" />
-
-
-    <activity
       android:name=".error.ErrorActivity"
       android:process=":error_activity" />
 

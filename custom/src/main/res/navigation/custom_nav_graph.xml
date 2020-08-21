@@ -45,4 +45,8 @@
     android:id="@+id/customSettingsFragment"
     android:name="org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment"
     android:label="CustomSettingsFragment" />
+  <fragment
+    android:id="@+id/searchFragment"
+    android:name="org.kiwix.kiwixmobile.core.search.SearchFragment"
+    android:label="SearchFragment" />
 </navigation>
