@@ -131,9 +131,6 @@ import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUE
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_IS_WIDGET_VOICE;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_SEARCH;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_FILE_SELECT;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_HISTORY_ITEM_CHOSEN;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_PREFERENCES;
@@ -469,7 +466,9 @@ public abstract class CoreReaderFragment extends BaseFragment
       @Override
       public void clearSections() {
         documentSections.clear();
-        tableDrawerAdapter.notifyDataSetChanged();
+        if (tableDrawerAdapter != null) {
+          tableDrawerAdapter.notifyDataSetChanged();
+        }
       }
     });
   }

@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.searchViewAnimator
 import kotlinx.android.synthetic.main.activity_search.search_list
-import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -46,6 +45,7 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchAdapter
 import org.kiwix.kiwixmobile.core.search.adapter.SearchDelegate.RecentSearchDelegate
 import org.kiwix.kiwixmobile.core.search.adapter.SearchDelegate.ZimSearchResultDelegate
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
@@ -95,7 +95,8 @@ class SearchFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setupToolbar()
+    setupToolbar(view)
+
     search_list.run {
       adapter = searchAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -106,9 +107,9 @@ class SearchFragment : BaseFragment() {
     })
   }
 
-  private fun setupToolbar() {
+  private fun setupToolbar(view: View) {
     with(requireActivity() as CoreMainActivity) {
-      setSupportActionBar(toolbar)
+      setSupportActionBar(view.findViewById(R.id.toolbar))
       supportActionBar?.apply {
         setHomeAsUpIndicator(R.drawable.ic_action_back)
         setHomeButtonEnabled(true)
@@ -146,7 +147,7 @@ class SearchFragment : BaseFragment() {
     }
 
     searchViewModel.state.observe(this, Observer(::render))
-    // searchViewModel.actions.offer(CreatedWithIntent(intent))
+    searchViewModel.actions.offer(Action.CreatedWithIntent(null))
   }
 
   private fun render(state: State) {

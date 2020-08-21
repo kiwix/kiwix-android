@@ -143,7 +143,7 @@ class MainMenu(
 
   private fun navigateToSearch(zimFileReader: ZimFileReader): Boolean {
     (activity as CoreMainActivity).openSearch()
-    activity.overridePendingTransition(0, 0)
+    // activity.overridePendingTransition(0, 0)
     // activity.startActivityForResult(
     //   activity.intent<SearchActivity> {
     //     putExtra(EXTRA_ZIM_FILE, zimFileReader.zimFile.absolutePath)
