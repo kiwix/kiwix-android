@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
@@ -111,7 +110,7 @@ class KiwixTextToSpeech internal constructor(
           TAG_KIWIX, "TextToSpeech: disabled " +
             zimReaderContainer.language
         )
-        Toast.makeText(context, R.string.tts_not_enabled, Toast.LENGTH_LONG).show()
+        context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
       if (locale == null || tts?.isLanguageAvailable(locale)
@@ -125,7 +124,7 @@ class KiwixTextToSpeech internal constructor(
           TAG_KIWIX, "TextToSpeech: language not supported: " +
             zimReaderContainer.language
         )
-        Toast.makeText(context, R.string.tts_lang_not_supported, Toast.LENGTH_LONG).show()
+        context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
       } else {
         tts?.language = locale
         if (getFeatures(tts).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) {
