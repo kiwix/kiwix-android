@@ -65,11 +65,11 @@
       android:id="@+id/activity_main_back_to_top_fab"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:src="@drawable/action_find_previous"
       android:visibility="gone"
       app:fabSize="mini"
       app:layout_anchor="@id/bottom_toolbar"
       app:layout_dodgeInsetEdges="bottom"
-      app:src="@drawable/action_find_previous"
       tools:visibility="visible" />
   </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
 
