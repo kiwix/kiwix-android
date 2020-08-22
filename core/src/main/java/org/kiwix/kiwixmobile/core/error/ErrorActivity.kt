@@ -69,7 +69,7 @@ open class ErrorActivity : BaseActivity() {
     } else {
       null
     }
-    reportButton!!.setOnClickListener {
+    reportButton.setOnClickListener {
       val emailIntent = Intent(Intent.ACTION_SEND)
       emailIntent.type = "vnd.android.cursor.dir/email"
       emailIntent.putExtra(
@@ -77,7 +77,7 @@ open class ErrorActivity : BaseActivity() {
         arrayOf("android-crash-feedback@kiwix.org")
       )
       emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
-      var body = body
+      var body = initialBody
       if (allowLogs.isChecked) {
         val file = fileLogger.writeLogFile(this)
         val path = FileProvider.getUriForFile(
@@ -91,72 +91,67 @@ open class ErrorActivity : BaseActivity() {
       if (allowCrash.isChecked && exception != null) {
         body += """
         Exception Details:
-
         ${toStackTraceString(exception)}
-
-
         """.trimIndent()
       }
       if (allowZims.isChecked) {
-        val sb = StringBuilder()
-        bookDao.getBooks().forEach {
-          val bookString = """
+        val allZimFiles = bookDao.getBooks().joinToString {
+          """
           ${it.book.getTitle()}:
           Articles: [${it.book.getArticleCount()}]
           Creator: [${it.book.getCreator()}]
-
+          
           """.trimIndent()
-          sb.append(bookString)
         }
-        val allZimFiles = "$sb"
         val currentZimFile = zimReaderContainer.zimCanonicalPath
         body += """
         Curent Zim File:
         $currentZimFile
-
         All Zim Files in DB:
         $allZimFiles
-
-
         """.trimIndent()
       }
       if (allowLanguage.isChecked) {
         body += """
         Current Locale:
         ${getCurrentLocale(applicationContext)}
-
-
         """.trimIndent()
       }
       if (allowDeviceDetails.isChecked) {
         body += """Device Details:
-Device:[${Build.DEVICE}]
-Model:[${Build.MODEL}]
-Manufacturer:[${Build.MANUFACTURER}]
-Time:[${Build.TIME}]
-Android Version:[${Build.VERSION.RELEASE}]
-App Version:[$versionName $versionCode]
-
-"""
+        Device:[${Build.DEVICE}]
+        Model:[${Build.MODEL}]
+        Manufacturer:[${Build.MANUFACTURER}]
+        Time:[${Build.TIME}]
+        Android Version:[${Build.VERSION.RELEASE}]
+        App Version:[$versionName $versionCode]
+        
+        """
       }
       if (allowFileSystemDetails.isChecked) {
         body += "Mount Points\n"
-        mountPointProducer.produce().forEach {
-          body += """
+        val mountPointInfo = mountPointProducer.produce().joinToString {
+          """
           $it
-
+          
           """.trimIndent()
         }
+        body += mountPointInfo
         body += "\nExternal Directories\n"
-        for (externalFilesDir in ContextCompat.getExternalFilesDirs(this, null)) body += """
-        ${if (externalFilesDir != null) externalFilesDir.path else "null"}
-
-        """.trimIndent()
+        for (externalFilesDir in ContextCompat.getExternalFilesDirs(this, null)) {
+          body += """
+          ${if (externalFilesDir != null) externalFilesDir.path else "null"}
+  
+          """.trimIndent()
+        }
       }
-      emailIntent.putExtra(Intent.EXTRA_TEXT, body)
-      startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), 1)
+      startActivityForResult(
+        Intent.createChooser(Intent().apply {
+          putExtra(Intent.EXTRA_TEXT, body)
+        }, "Send email..."), 1
+      )
     }
-    restartButton!!.setOnClickListener { onRestartClicked() }
+    restartButton.setOnClickListener { onRestartClicked() }
   }
 
   private fun safeContains(extras: Bundle): Boolean {
@@ -174,12 +169,10 @@ App Version:[$versionName $versionCode]
   protected open val subject: String
     get() = "Someone has reported a crash"
 
-  protected open val body: String
+  protected open val initialBody: String
     get() = """
       Hi Kiwix Developers!
       The Android app crashed, here are some details to help fix it:
-
-
       """.trimIndent()
 
   private val versionCode: Int

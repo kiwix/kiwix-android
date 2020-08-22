@@ -40,7 +40,7 @@ class DiagnosticReportActivity : ErrorActivity() {
 
   override val subject = "Somebody has sent a Diagnostic Report  "
 
-  override val body = """
+  override val initialBody = """
     Hi Kiwix Developers,
     I am having an issue with the app and would like you to check these details
     
