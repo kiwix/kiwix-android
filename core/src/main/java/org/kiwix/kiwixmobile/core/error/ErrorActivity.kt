@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.error
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
@@ -179,20 +178,12 @@ open class ErrorActivity : BaseActivity() {
       """.trimIndent()
 
   private val versionCode: Int
-    get() = try {
-      packageManager
-        .getPackageInfo(packageName, ZERO).versionCode
-    } catch (e: PackageManager.NameNotFoundException) {
-      throw RuntimeException(e)
-    }
+    get() = packageManager
+      .getPackageInfo(packageName, ZERO).versionCode
 
   private val versionName: String
-    get() = try {
-      packageManager
-        .getPackageInfo(packageName, ZERO).versionName
-    } catch (e: PackageManager.NameNotFoundException) {
-      throw RuntimeException(e)
-    }
+    get() = packageManager
+      .getPackageInfo(packageName, ZERO).versionName
 
   private fun toStackTraceString(exception: Throwable): String {
     val stringWriter = StringWriter()
