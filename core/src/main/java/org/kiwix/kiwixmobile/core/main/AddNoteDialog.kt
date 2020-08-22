@@ -129,7 +129,7 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun onFailureToCreateAddNoteDialog() {
-    showToast(R.string.error_file_not_found, Toast.LENGTH_LONG)
+    context.toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
     closeKeyboard()
     requireFragmentManager().beginTransaction().remove(this).commit()
   }
@@ -341,7 +341,7 @@ class AddNoteDialog : DialogFragment() {
           TAG,
           "WRITE_EXTERNAL_STORAGE permission not granted"
         )
-        showToast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
+        context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
         return
       }
       val notesFolder = File(zimNotesDirectory)
@@ -359,7 +359,7 @@ class AddNoteDialog : DialogFragment() {
           val fileOutputStream = FileOutputStream(noteFile)
           fileOutputStream.write(noteText.toByteArray())
           fileOutputStream.close()
-          showToast(R.string.note_save_successful, Toast.LENGTH_SHORT)
+          context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
           noteEdited = false // As no unsaved changes remain
           enableDeleteNoteMenuItem()
         } catch (e: IOException) {
@@ -449,7 +449,7 @@ class AddNoteDialog : DialogFragment() {
         Uri.fromFile(noteFile)
       }
     } else {
-      showToast(R.string.note_share_error_file_missing, Toast.LENGTH_SHORT)
+      context.toast(R.string.note_share_error_file_missing, Toast.LENGTH_SHORT)
     }
     if (noteFileUri != null) {
       val noteFileShareIntent = Intent(Intent.ACTION_SEND)
@@ -464,10 +464,6 @@ class AddNoteDialog : DialogFragment() {
         startActivity(shareChooser)
       }
     }
-  }
-
-  private fun showToast(stringResource: Int, duration: Int) {
-    Toast.makeText(activity, stringResource, duration).show()
   }
 
   private fun dismissAddNoteDialog() {
