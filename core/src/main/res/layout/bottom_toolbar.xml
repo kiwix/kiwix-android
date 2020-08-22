@@ -5,9 +5,10 @@
   android:id="@+id/bottom_toolbar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:fabAlignmentMode="end"
   android:layout_gravity="bottom"
   android:padding="8dp"
+  app:fabAlignmentMode="end"
+  app:fabCradleVerticalOffset="@dimen/fab_vertical_offset"
   app:hideOnScroll="true"
   tools:ignore="BottomAppBar">
 
