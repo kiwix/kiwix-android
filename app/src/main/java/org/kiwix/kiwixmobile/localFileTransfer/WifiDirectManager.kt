@@ -98,6 +98,7 @@ class WifiDirectManager @Inject constructor(
   // Whether the device is the file sender or not
   var isFileSender = false
     private set
+
   private var hasSenderStartedConnection = false
 
   /* Initialisations for using the WiFi P2P API */

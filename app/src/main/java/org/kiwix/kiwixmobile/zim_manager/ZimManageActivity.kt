@@ -98,9 +98,9 @@ class ZimManageActivity : BaseActivity() {
   private fun setUpToolbar() {
     val toolbar = findViewById<Toolbar>(R.id.toolbar)
     setSupportActionBar(toolbar)
-    supportActionBar!!.setHomeButtonEnabled(true)
-    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    supportActionBar!!.setTitle(R.string.library)
+    supportActionBar?.setHomeButtonEnabled(true)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    supportActionBar?.setTitle(R.string.library)
     toolbar.setNavigationOnClickListener { onBackPressed() }
     toolbar.setOnClickListener {
       if (manageViewPager.currentItem == 1)
