@@ -60,19 +60,23 @@ open class ErrorActivity : BaseActivity() {
   @Inject
   lateinit var fileLogger: FileLogger
 
+  private lateinit var body: String
+  private var exception: Throwable? = null
+  private lateinit var emailIntent: Intent
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_kiwix_error)
     val callingIntent = intent
     val extras = callingIntent.extras
-    val exception = if (extras != null && safeContains(extras)) {
+    exception = if (extras != null && safeContains(extras)) {
       extras.getSerializable(EXCEPTION_KEY) as Throwable
     } else {
       null
     }
     reportButton.setOnClickListener {
-      val emailIntent = Intent(Intent.ACTION_SEND)
-      emailIntent.apply {
+      emailIntent = Intent(Intent.ACTION_SEND)
+      with(emailIntent) {
         type = "vnd.android.cursor.dir/email"
         putExtra(
           Intent.EXTRA_EMAIL,
@@ -80,50 +84,58 @@ open class ErrorActivity : BaseActivity() {
         )
         putExtra(Intent.EXTRA_SUBJECT, subject)
       }
-      var body = initialBody
-      if (allowLogs.isChecked) {
-        val file = fileLogger.writeLogFile(this)
-        val path = FileProvider.getUriForFile(
-          this,
-          applicationContext.packageName + ".fileprovider",
-          file
-        )
-        emailIntent.apply {
-          addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-          putExtra(Intent.EXTRA_STREAM, path)
-        }
+      body = initialBody
+      buildBody()
+      startActivityForResult(
+        Intent.createChooser(Intent().apply {
+          putExtra(Intent.EXTRA_TEXT, body)
+        }, "Send email..."), 1
+      )
+    }
+    restartButton.setOnClickListener { restartApp() }
+  }
+
+  private fun buildBody() {
+    if (allowLogs.isChecked) {
+      val file = fileLogger.writeLogFile(this)
+      val path =
+        FileProvider.getUriForFile(this, applicationContext.packageName + ".fileprovider", file)
+      with(emailIntent) {
+        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        putExtra(android.content.Intent.EXTRA_STREAM, path)
       }
-      if (allowCrash.isChecked && exception != null) {
-        body += """
+    }
+    if (allowCrash.isChecked && exception != null) {
+      body += """
         Exception Details:
-        ${toStackTraceString(exception)}
+        ${toStackTraceString(exception!!)}
         """.trimIndent()
-      }
-      if (allowZims.isChecked) {
-        val allZimFiles = bookDao.getBooks().joinToString {
-          """
+    }
+    if (allowZims.isChecked) {
+      val allZimFiles = bookDao.getBooks().joinToString {
+        """
           ${it.book.getTitle()}:
           Articles: [${it.book.getArticleCount()}]
           Creator: [${it.book.getCreator()}]
           
           """.trimIndent()
-        }
-        val currentZimFile = zimReaderContainer.zimCanonicalPath
-        body += """
-        Curent Zim File:
+      }
+      val currentZimFile = zimReaderContainer.zimCanonicalPath
+      body += """
+        Current Zim File:
         $currentZimFile
         All Zim Files in DB:
         $allZimFiles
         """.trimIndent()
-      }
-      if (allowLanguage.isChecked) {
-        body += """
+    }
+    if (allowLanguage.isChecked) {
+      body += """
         Current Locale:
         ${getCurrentLocale(applicationContext)}
         """.trimIndent()
-      }
-      if (allowDeviceDetails.isChecked) {
-        body += """Device Details:
+    }
+    if (allowDeviceDetails.isChecked) {
+      body += """Device Details:
         Device:[${Build.DEVICE}]
         Model:[${Build.MODEL}]
         Manufacturer:[${Build.MANUFACTURER}]
@@ -132,31 +144,23 @@ open class ErrorActivity : BaseActivity() {
         App Version:[$versionName $versionCode]
         
         """
-      }
-      if (allowFileSystemDetails.isChecked) {
-        body += "Mount Points\n"
-        val mountPointInfo = mountPointProducer.produce().joinToString {
-          """
+    }
+    if (allowFileSystemDetails.isChecked) {
+      body += "Mount Points\n"
+      val mountPointInfo = mountPointProducer.produce().joinToString {
+        """
           $it
           
           """.trimIndent()
-        }
-        body += mountPointInfo
-        body += "\nExternal Directories\n"
-        for (externalFilesDir in ContextCompat.getExternalFilesDirs(this, null)) {
-          body += """
+      }
+      body += "$mountPointInfo\nExternal Directories\n"
+      for (externalFilesDir in ContextCompat.getExternalFilesDirs(this, null)) {
+        body += """
           ${if (externalFilesDir != null) externalFilesDir.path else "null"}
   
           """.trimIndent()
-        }
       }
-      startActivityForResult(
-        Intent.createChooser(Intent().apply {
-          putExtra(Intent.EXTRA_TEXT, body)
-        }, "Send email..."), 1
-      )
     }
-    restartButton.setOnClickListener { restartApp() }
   }
 
   private fun safeContains(extras: Bundle): Boolean {
