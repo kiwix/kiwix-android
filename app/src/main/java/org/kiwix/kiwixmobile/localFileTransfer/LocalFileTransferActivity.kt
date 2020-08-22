@@ -113,9 +113,6 @@ class LocalFileTransferActivity : BaseActivity(),
     list_peer_devices.layoutManager = LinearLayoutManager(this)
     list_peer_devices.setHasFixedSize(true)
     if (isFileSender) {
-      // fileUriArrayList.map {
-      //   filesForTransfer.add(FileItem(it))
-      // }
       filesForTransfer = fileUriArrayList.map(::FileItem)
       displayFileTransferProgress(filesForTransfer)
     }
