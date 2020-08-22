@@ -26,6 +26,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
@@ -56,6 +57,8 @@ class KiwixMainActivity : CoreMainActivity() {
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val topLevelDestinations =
+    setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
@@ -77,13 +80,11 @@ class KiwixMainActivity : CoreMainActivity() {
       onNavigationItemSelected(item)
     }
     bottom_nav_view.setupWithNavController(navController)
+  }
 
-    val topLevelDestinations =
-      setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
-
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-      bottom_nav_view.isVisible = destination.id in topLevelDestinations
-    }
+  override fun configureActivityBasedOn(destination: NavDestination) {
+    super.configureActivityBasedOn(destination)
+    bottom_nav_view.isVisible = destination.id in topLevelDestinations
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -138,4 +139,6 @@ class KiwixMainActivity : CoreMainActivity() {
       bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     )
   }
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 }

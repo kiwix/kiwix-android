@@ -21,57 +21,55 @@
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:contentDescription="@string/bookmarks"
+      android:src="@drawable/ic_bookmark_border_24dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@id/bottom_toolbar_arrow_back"
       app:layout_constraintHorizontal_chainStyle="spread"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_bookmark_border_24dp" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
       android:id="@+id/bottom_toolbar_arrow_back"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:contentDescription="@string/go_to_previous_page"
+      android:src="@drawable/ic_keyboard_arrow_left_24dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@id/bottom_toolbar_home"
       app:layout_constraintStart_toEndOf="@id/bottom_toolbar_bookmark"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
       android:id="@+id/bottom_toolbar_home"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:contentDescription="@string/menu_home"
+      android:src="@drawable/action_home"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@id/bottom_toolbar_arrow_forward"
       app:layout_constraintStart_toEndOf="@id/bottom_toolbar_arrow_back"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/action_home" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
       android:id="@+id/bottom_toolbar_arrow_forward"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:contentDescription="@string/go_to_next_page"
+      android:src="@drawable/ic_keyboard_arrow_right_24dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@id/bottom_toolbar_toc"
       app:layout_constraintStart_toEndOf="@id/bottom_toolbar_home"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
       android:id="@+id/bottom_toolbar_toc"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:contentDescription="@string/table_of_contents"
+      android:src="@drawable/ic_toc_24dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@id/bottom_toolbar_arrow_forward"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_toc_24dp" />
+      app:layout_constraintTop_toTopOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </com.google.android.material.bottomappbar.BottomAppBar>

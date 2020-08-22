@@ -49,6 +49,8 @@ class CustomMainActivity : CoreMainActivity() {
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val historyFragmentResId: Int = R.id.historyFragment
   override val cachedComponent by lazy { customActivityComponent }
+  override val topLevelDestinations =
+    setOf(R.id.customReaderFragment)
 
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
@@ -59,6 +61,15 @@ class CustomMainActivity : CoreMainActivity() {
     setContentView(R.layout.activity_main)
     if (savedInstanceState != null) {
       return
+    }
+  }
+
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+      if (destination.id !in topLevelDestinations) {
+        handleDrawerOnNavigation()
+      }
     }
   }
 
@@ -87,4 +98,6 @@ class CustomMainActivity : CoreMainActivity() {
     val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     navigate(R.id.customReaderFragment, bundle)
   }
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 }
