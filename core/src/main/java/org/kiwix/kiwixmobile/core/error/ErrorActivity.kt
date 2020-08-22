@@ -65,20 +65,21 @@ open class ErrorActivity : BaseActivity() {
     setContentView(R.layout.activity_kiwix_error)
     val callingIntent = intent
     val extras = callingIntent.extras
-    val exception: Throwable?
-    exception = if (extras != null && safeContains(extras)) {
+    val exception = if (extras != null && safeContains(extras)) {
       extras.getSerializable(EXCEPTION_KEY) as Throwable
     } else {
       null
     }
     reportButton.setOnClickListener {
       val emailIntent = Intent(Intent.ACTION_SEND)
-      emailIntent.type = "vnd.android.cursor.dir/email"
-      emailIntent.putExtra(
-        Intent.EXTRA_EMAIL,
-        arrayOf("android-crash-feedback@kiwix.org")
-      )
-      emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+      emailIntent.apply {
+        type = "vnd.android.cursor.dir/email"
+        putExtra(
+          Intent.EXTRA_EMAIL,
+          arrayOf("android-crash-feedback@kiwix.org")
+        )
+        putExtra(Intent.EXTRA_SUBJECT, subject)
+      }
       var body = initialBody
       if (allowLogs.isChecked) {
         val file = fileLogger.writeLogFile(this)
@@ -87,8 +88,10 @@ open class ErrorActivity : BaseActivity() {
           applicationContext.packageName + ".fileprovider",
           file
         )
-        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path)
+        emailIntent.apply {
+          addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+          putExtra(Intent.EXTRA_STREAM, path)
+        }
       }
       if (allowCrash.isChecked && exception != null) {
         body += """
@@ -153,7 +156,7 @@ open class ErrorActivity : BaseActivity() {
         }, "Send email..."), 1
       )
     }
-    restartButton.setOnClickListener { onRestartClicked() }
+    restartButton.setOnClickListener { restartApp() }
   }
 
   private fun safeContains(extras: Bundle): Boolean {
@@ -162,10 +165,6 @@ open class ErrorActivity : BaseActivity() {
     } catch (ignore: RuntimeException) {
       false
     }
-  }
-
-  private fun onRestartClicked() {
-    restartApp()
   }
 
   protected open val subject: String
