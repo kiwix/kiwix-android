@@ -246,7 +246,7 @@ class KiwixTextToSpeech internal constructor(
       }
     }
 
-    @SuppressLint("NewApi") fun start() {
+    fun start() {
       paused = if (!paused) {
         return
       } else {
