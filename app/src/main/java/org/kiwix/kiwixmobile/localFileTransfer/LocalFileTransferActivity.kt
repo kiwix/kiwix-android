@@ -113,7 +113,7 @@ class LocalFileTransferActivity : BaseActivity(),
     list_peer_devices.layoutManager = LinearLayoutManager(this)
     list_peer_devices.setHasFixedSize(true)
     if (isFileSender) {
-      filesForTransfer = fileUriArrayList.map(::FileItem)
+      filesForTransfer = fileUriArrayList.map { FileItem(it) }
       displayFileTransferProgress(filesForTransfer)
     }
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
