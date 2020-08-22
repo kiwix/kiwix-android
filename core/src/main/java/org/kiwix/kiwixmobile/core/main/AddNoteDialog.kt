@@ -1,0 +1,501 @@
+/*
+ * Kiwix Android
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+package org.kiwix.kiwixmobile.core.main
+
+import android.Manifest
+import android.app.Dialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.fragment.app.DialogFragment
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.Unbinder
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R2
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileReader
+import java.io.IOException
+import javax.inject.Inject
+
+/**
+ * Created by @author Aditya-Sood (21/05/19) as a part of GSoC 2019
+ *
+ * AddNoteDialog extends DialogFragment and is used to display the note corresponding to a
+ * particular article (of a particular zim file/wiki/book) as a full-screen dialog fragment.
+ *
+ * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
+ */
+
+// constant
+const val DISABLE_ICON_ITEM_ALPHA = 130
+const val ENABLE_ICON_ITEM_ALPHA = 255
+
+class AddNoteDialog : DialogFragment() {
+  @JvmField @BindView(R2.id.toolbar)
+  var toolbar: Toolbar? = null // Displays options for the note dialog
+
+  @JvmField @BindView(R2.id.add_note_text_view)
+  var addNoteTextView: TextView? = null // Displays article title
+
+  @JvmField @BindView(R2.id.add_note_edit_text)
+  var addNoteEditText: EditText? = null // Displays the note text
+
+  private var unbinder: Unbinder? = null
+  private var zimFileName: String? = null
+  private var zimFileTitle: String? = null
+  private var articleTitle: String? = null
+
+  // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
+  private var articleNotefileName: String? = null
+  private var noteFileExists = false
+  private var noteEdited = false
+
+  // Keeps track of state of the note (whether edited since last save)
+  private var zimNotesDirectory: String? =
+    null // Stores path to directory for the currently open zim's notes
+
+  @JvmField @Inject
+  var sharedPreferenceUtil: SharedPreferenceUtil? = null
+
+  @JvmField @Inject
+  var zimReaderContainer: ZimReaderContainer? = null
+
+  @JvmField @Inject
+  var alertDialogShower: AlertDialogShower? = null
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    coreComponent
+      .activityComponentBuilder()
+      .activity(requireActivity())
+      .build()
+      .inject(this)
+
+    // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
+    zimFileName = zimReaderContainer!!.zimCanonicalPath
+    if (zimFileName != null) { // No zim file currently opened
+      zimFileTitle = zimReaderContainer!!.zimFileTitle
+      articleTitle = (activity as WebViewProvider?)!!.getCurrentWebView()!!.title
+
+      // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
+      val zimNoteDirectoryName = zimNoteDirectoryName
+      articleNotefileName = getArticleNotefileName()
+      zimNotesDirectory = "$NOTES_DIRECTORY$zimNoteDirectoryName/"
+    } else {
+      onFailureToCreateAddNoteDialog()
+    }
+  }
+
+  private fun onFailureToCreateAddNoteDialog() {
+    showToast(R.string.error_file_not_found, Toast.LENGTH_LONG)
+    closeKeyboard()
+    requireFragmentManager().beginTransaction().remove(this).commit()
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View {
+    super.onCreateView(inflater, container, savedInstanceState)
+    val view = inflater.inflate(R.layout.dialog_add_note, container, false)
+    unbinder = ButterKnife.bind(this, view)
+    toolbar!!.setTitle(R.string.note)
+    toolbar!!.setNavigationIcon(R.drawable.ic_close_white_24dp)
+    toolbar!!.setNavigationOnClickListener { v: View? ->
+      exitAddNoteDialog()
+      closeKeyboard()
+    }
+    toolbar!!.setOnMenuItemClickListener { item: MenuItem ->
+      when (item.itemId) {
+        R.id.share_note -> { // Opens app-chooser for sharing the note text file
+          shareNote()
+        }
+        R.id.save_note -> { // Saves the note as a text file
+          saveNote(addNoteEditText!!.text.toString())
+        }
+        R.id.delete_note -> {
+          deleteNote()
+        }
+      }
+      true
+    }
+    toolbar!!.inflateMenu(R.menu.menu_add_note_dialog)
+    // 'Share' disabled for empty notes, 'Save' disabled for unedited notes
+    disableMenuItems()
+    addNoteTextView!!.text = articleTitle
+
+    // Show the previously saved note if it exists
+    displayNote()
+    addNoteEditText!!.addTextChangedListener(object : TextWatcher {
+      @SuppressWarnings("EmptyFunctionBlock")
+      override fun beforeTextChanged(
+        s: CharSequence,
+        start: Int,
+        count: Int,
+        after: Int
+      ) {
+      }
+
+      override fun onTextChanged(
+        s: CharSequence,
+        start: Int,
+        before: Int,
+        count: Int
+      ) {
+        noteEdited = true
+        enableSaveNoteMenuItem()
+        enableShareNoteMenuItem()
+      }
+
+      @SuppressWarnings("EmptyFunctionBlock")
+      override fun afterTextChanged(s: Editable) {
+      }
+    })
+    return view
+  }
+
+  private val zimNoteDirectoryName: String
+    get() {
+      val noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName!!)
+      return (if (noteDirectoryName.isNotEmpty()) noteDirectoryName else zimFileTitle)!!
+    }
+
+  private fun getArticleNotefileName(): String {
+    // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
+    val articleUrl = (activity as WebViewProvider?)!!.getCurrentWebView()!!.url
+    var noteFileName = ""
+    if (articleUrl == null) {
+      onFailureToCreateAddNoteDialog()
+    } else {
+      noteFileName = getTextAfterLastSlashWithoutExtension(articleUrl)
+    }
+    return (if (noteFileName.isNotEmpty()) noteFileName else articleTitle)!!
+  }
+
+  private fun getTextAfterLastSlashWithoutExtension(path: String): String {
+    /* That's about exactly what it does.
+     *
+     * From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
+     * From "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html", returns "Main_Page"
+     * For null input or on being unable to find required text, returns null
+     * */
+    val rightmostSlash = path.lastIndexOf('/')
+    val rightmostDot = path.lastIndexOf('.')
+    return if (rightmostSlash > -1 && rightmostDot > -1) {
+      path.substring(
+        rightmostSlash + 1, if (rightmostDot > rightmostSlash) rightmostDot else path.length
+      )
+    } else ""
+    // If couldn't find a dot and/or slash in the url
+  }
+
+  // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
+  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    return object : Dialog(requireContext(), theme) {
+      override fun onBackPressed() {
+        exitAddNoteDialog()
+      }
+    }
+  }
+
+  private fun exitAddNoteDialog() {
+    if (noteEdited) {
+      alertDialogShower!!.show(
+        KiwixDialog.NotesDiscardConfirmation,
+        ::dismissAddNoteDialog
+      )
+    } else {
+      // Closing unedited note dialog straightaway
+      dismissAddNoteDialog()
+    }
+  }
+
+  private fun disableMenuItems() {
+    if (toolbar!!.menu != null) {
+      val saveItem = toolbar!!.menu.findItem(R.id.save_note)
+      val shareItem = toolbar!!.menu.findItem(R.id.share_note)
+      val deleteItem = toolbar!!.menu.findItem(R.id.delete_note)
+      saveItem.isEnabled = false
+      shareItem.isEnabled = false
+      deleteItem.isEnabled = false
+      saveItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
+      shareItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
+      deleteItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu")
+    }
+  }
+
+  private fun enableSaveNoteMenuItem() {
+    if (toolbar!!.menu != null) {
+      val saveItem = toolbar!!.menu.findItem(R.id.save_note)
+      saveItem.isEnabled = true
+      saveItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu")
+    }
+  }
+
+  private fun enableDeleteNoteMenuItem() {
+    if (toolbar!!.menu != null) {
+      val deleteItem = toolbar!!.menu.findItem(R.id.delete_note)
+      deleteItem.isEnabled = true
+      deleteItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu")
+    }
+  }
+
+  private fun enableShareNoteMenuItem() {
+    if (toolbar!!.menu != null) {
+      val shareItem = toolbar!!.menu.findItem(R.id.share_note)
+      shareItem.isEnabled = true
+      shareItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu")
+    }
+  }
+
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
+    if (!noteFileExists) {
+      // Prepare for input in case of empty/new note
+      addNoteEditText!!.requestFocus()
+      showKeyboard()
+    }
+  }
+
+  private fun showKeyboard() {
+    val inputMethodManager =
+      requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+  }
+
+  private fun closeKeyboard() {
+    val inputMethodManager =
+      requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.toggleSoftInput(
+      InputMethodManager.HIDE_IMPLICIT_ONLY,
+      0
+    )
+  }
+
+  private fun saveNote(noteText: String) {
+
+    /* String content of the EditText, given by noteText, is saved into the text file given by:
+     *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
+     * */
+    if (instance.isExternalStorageWritable) {
+      if (ContextCompat.checkSelfPermission(
+          requireContext(),
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) != PackageManager.PERMISSION_GRANTED
+      ) {
+        Log.d(
+          TAG,
+          "WRITE_EXTERNAL_STORAGE permission not granted"
+        )
+        showToast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
+        return
+      }
+      val notesFolder = File(zimNotesDirectory)
+      var folderExists = true
+      if (!notesFolder.exists()) {
+        // Try creating folder if it doesn't exist
+        folderExists = notesFolder.mkdirs()
+      }
+      if (folderExists) {
+        val noteFile =
+          File(notesFolder.absolutePath, "$articleNotefileName.txt")
+
+        // Save note text-file code:
+        try {
+          val fileOutputStream = FileOutputStream(noteFile)
+          fileOutputStream.write(noteText.toByteArray())
+          fileOutputStream.close()
+          showToast(R.string.note_save_successful, Toast.LENGTH_SHORT)
+          noteEdited = false // As no unsaved changes remain
+          enableDeleteNoteMenuItem()
+        } catch (e: IOException) {
+          e.printStackTrace()
+            .also { context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG) }
+        }
+      } else {
+        context.toast(R.string.note_save_successful, Toast.LENGTH_LONG)
+        Log.d(TAG, "Required folder doesn't exist")
+      }
+    } else {
+      context.toast(R.string.note_save_error_storage_not_writable, Toast.LENGTH_LONG)
+    }
+  }
+
+  private fun deleteNote() {
+    val notesFolder = File(zimNotesDirectory)
+    val noteFile =
+      File(notesFolder.absolutePath, "$articleNotefileName.txt")
+    val noteDeleted = noteFile.delete()
+    if (noteDeleted) {
+      addNoteEditText!!.text.clear()
+      disableMenuItems()
+      context.toast(R.string.note_delete_successful, Toast.LENGTH_LONG)
+    } else {
+      context.toast(R.string.note_delete_unsuccessful, Toast.LENGTH_LONG)
+    }
+  }
+
+  /* String content of the note text file given at:
+   *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
+   * is displayed in the EditText field (note content area)
+   */
+  private fun displayNote() {
+
+    val noteFile = File("$zimNotesDirectory$articleNotefileName.txt")
+    if (noteFile.exists()) {
+      writeNote(noteFile)
+    }
+
+    // No action in case the note file for the currently open article doesn't exist
+  }
+
+  private fun writeNote(noteFile: File) {
+    noteFileExists = true
+    val contents = StringBuilder()
+    try {
+      BufferedReader(FileReader(noteFile)).use { input ->
+        var line: String?
+        while (input.readLine().also { line = it } != null) {
+          contents.append(line)
+          contents.append(System.getProperty("line.separator"))
+        }
+      }
+    } catch (e: IOException) {
+      e.printStackTrace()
+      Log.d(TAG, "Error reading line with BufferedReader")
+    }
+    addNoteEditText!!.setText("$contents") // Display the note content
+    addNoteEditText!!.setSelection(addNoteEditText!!.text.length - 1)
+    enableShareNoteMenuItem() // As note content exists which can be shared
+    enableDeleteNoteMenuItem()
+  }
+
+  private fun shareNote() {
+
+    /* The note text file corresponding to the currently open article, given at:
+     *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
+     * is shared via an app-chooser intent
+     * */
+    if (noteEdited) {
+      saveNote(
+        addNoteEditText!!.text.toString()
+      ) // Save edited note before sharing the text file
+    }
+    val noteFile = File("$zimNotesDirectory$articleNotefileName.txt")
+    var noteFileUri: Uri? = null
+    if (noteFile.exists()) {
+      noteFileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        // From Nougat 7 (API 24) access to files is shared temporarily with other apps
+        // Need to use FileProvider for the same
+        FileProvider.getUriForFile(
+          requireContext(), requireContext().packageName + ".fileprovider",
+          noteFile
+        )
+      } else {
+        Uri.fromFile(noteFile)
+      }
+    } else {
+      showToast(R.string.note_share_error_file_missing, Toast.LENGTH_SHORT)
+    }
+    if (noteFileUri != null) {
+      val noteFileShareIntent = Intent(Intent.ACTION_SEND)
+      noteFileShareIntent.type = "application/octet-stream"
+      noteFileShareIntent.putExtra(Intent.EXTRA_STREAM, noteFileUri)
+      noteFileShareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+      val shareChooser = Intent.createChooser(
+        noteFileShareIntent,
+        getString(R.string.note_share_app_chooser_title)
+      )
+      if (noteFileShareIntent.resolveActivity(requireActivity().packageManager) != null) {
+        startActivity(shareChooser)
+      }
+    }
+  }
+
+  private fun showToast(stringResource: Int, duration: Int) {
+    Toast.makeText(activity, stringResource, duration).show()
+  }
+
+  private fun dismissAddNoteDialog() {
+    val dialog = dialog
+    dialog?.dismiss()
+    closeKeyboard()
+  }
+
+  override fun onStart() {
+    super.onStart()
+    val dialog = dialog
+    if (dialog != null) {
+      val width = ViewGroup.LayoutParams.MATCH_PARENT
+      val height = ViewGroup.LayoutParams.MATCH_PARENT
+      dialog.window.setLayout(width, height)
+    }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    if (unbinder != null) {
+      unbinder!!.unbind()
+    }
+  }
+
+  companion object {
+    @JvmField val NOTES_DIRECTORY =
+      Environment.getExternalStorageDirectory().toString() + "/Kiwix/Notes/"
+    const val TAG = "AddNoteDialog"
+  }
+}
