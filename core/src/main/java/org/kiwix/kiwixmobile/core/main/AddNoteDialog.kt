@@ -53,11 +53,10 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
-import java.io.FileReader
 import java.io.IOException
+import java.lang.StringBuilder
 import javax.inject.Inject
 
 /**
@@ -407,9 +406,9 @@ class AddNoteDialog : DialogFragment() {
     noteFileExists = true
     val contents = StringBuilder()
     try {
-      BufferedReader(FileReader(noteFile)).use { input ->
+      noteFile.bufferedReader().use { bufferReader ->
         var line: String?
-        while (input.readLine().also { line = it } != null) {
+        while (bufferReader.readLine().also { line = it } != null) {
           contents.append(line)
           contents.append(System.getProperty("line.separator"))
         }
@@ -431,9 +430,7 @@ class AddNoteDialog : DialogFragment() {
      * is shared via an app-chooser intent
      * */
     if (noteEdited) {
-      saveNote(
-        addNoteEditText!!.text.toString()
-      ) // Save edited note before sharing the text file
+      saveNote(addNoteEditText!!.text.toString()) // Save edited note before sharing the text file
     }
     val noteFile = File("$zimNotesDirectory$articleNotefileName.txt")
     var noteFileUri: Uri? = null
