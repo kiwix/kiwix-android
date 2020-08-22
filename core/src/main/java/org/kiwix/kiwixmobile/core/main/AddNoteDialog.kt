@@ -82,13 +82,13 @@ class AddNoteDialog : DialogFragment() {
   @JvmField @BindView(R2.id.add_note_edit_text)
   var addNoteEditText: EditText? = null // Displays the note text
 
-  private var unbinder: Unbinder? = null
+  private lateinit var unbinder: Unbinder
   private var zimFileName: String? = null
   private var zimFileTitle: String? = null
   private var articleTitle: String? = null
 
   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
-  private var articleNotefileName: String? = null
+  private lateinit var articleNoteFileName: String
   private var noteFileExists = false
   private var noteEdited = false
 
@@ -116,11 +116,11 @@ class AddNoteDialog : DialogFragment() {
     zimFileName = zimReaderContainer!!.zimCanonicalPath
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer!!.zimFileTitle
-      articleTitle = (activity as WebViewProvider?)!!.getCurrentWebView()!!.title
+      articleTitle = (activity as WebViewProvider?)!!.getCurrentWebView()?.title
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
       val zimNoteDirectoryName = zimNoteDirectoryName
-      articleNotefileName = getArticleNotefileName()
+      articleNoteFileName = getArticleNotefileName()
       zimNotesDirectory = "$NOTES_DIRECTORY$zimNoteDirectoryName/"
     } else {
       onFailureToCreateAddNoteDialog()
@@ -143,7 +143,7 @@ class AddNoteDialog : DialogFragment() {
     unbinder = ButterKnife.bind(this, view)
     toolbar!!.setTitle(R.string.note)
     toolbar!!.setNavigationIcon(R.drawable.ic_close_white_24dp)
-    toolbar!!.setNavigationOnClickListener { v: View? ->
+    toolbar!!.setNavigationOnClickListener {
       exitAddNoteDialog()
       closeKeyboard()
     }
@@ -351,7 +351,7 @@ class AddNoteDialog : DialogFragment() {
       }
       if (folderExists) {
         val noteFile =
-          File(notesFolder.absolutePath, "$articleNotefileName.txt")
+          File(notesFolder.absolutePath, "$articleNoteFileName.txt")
 
         // Save note text-file code:
         try {
@@ -377,7 +377,7 @@ class AddNoteDialog : DialogFragment() {
   private fun deleteNote() {
     val notesFolder = File(zimNotesDirectory)
     val noteFile =
-      File(notesFolder.absolutePath, "$articleNotefileName.txt")
+      File(notesFolder.absolutePath, "$articleNoteFileName.txt")
     val noteDeleted = noteFile.delete()
     if (noteDeleted) {
       addNoteEditText!!.text.clear()
@@ -394,7 +394,7 @@ class AddNoteDialog : DialogFragment() {
    */
   private fun displayNote() {
 
-    val noteFile = File("$zimNotesDirectory$articleNotefileName.txt")
+    val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
     if (noteFile.exists()) {
       writeNote(noteFile)
     }
@@ -432,7 +432,7 @@ class AddNoteDialog : DialogFragment() {
     if (noteEdited) {
       saveNote(addNoteEditText!!.text.toString()) // Save edited note before sharing the text file
     }
-    val noteFile = File("$zimNotesDirectory$articleNotefileName.txt")
+    val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
     var noteFileUri: Uri? = null
     if (noteFile.exists()) {
       noteFileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -475,15 +475,13 @@ class AddNoteDialog : DialogFragment() {
     if (dialog != null) {
       val width = ViewGroup.LayoutParams.MATCH_PARENT
       val height = ViewGroup.LayoutParams.MATCH_PARENT
-      dialog.window.setLayout(width, height)
+      dialog.window?.setLayout(width, height)
     }
   }
 
   override fun onDestroyView() {
     super.onDestroyView()
-    if (unbinder != null) {
-      unbinder!!.unbind()
-    }
+    unbinder.unbind()
   }
 
   companion object {
