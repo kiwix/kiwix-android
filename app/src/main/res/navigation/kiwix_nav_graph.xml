@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Kiwix Android
+  ~ Copyright (c) 2020 Kiwix <android.kiwix.org>
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  app:startDestination="@id/navigation_library">
+  <fragment
+    android:id="@+id/navigation_reader"
+    android:name="org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment"
+    android:label="Reader">
+    <argument
+      android:name="zimFileUri"
+      android:defaultValue=""
+      app:argType="string" />
+
+    <argument
+      android:name="pageUrl"
+      android:defaultValue=""
+      app:argType="string" />
+    <action
+      android:id="@+id/action_navigation_reader_to_navigation_library"
+      app:destination="@id/navigation_library" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/navigation_library"
+    android:name="org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment"
+    android:label="Library">
+    <action
+      android:id="@+id/action_navigation_library_to_navigation_reader"
+      app:destination="@id/navigation_reader" />
+    <action
+      android:id="@+id/action_navigation_library_to_navigation_downloads"
+      app:destination="@id/navigation_downloads" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/navigation_downloads"
+    android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
+    android:label="Downloads" />
+  <fragment
+    android:id="@+id/bookmarksFragment"
+    android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
+    android:label="BookmarksFragment" />
+  <fragment
+    android:id="@+id/historyFragment"
+    android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
+    android:label="HistoryFragment" />
+</navigation>

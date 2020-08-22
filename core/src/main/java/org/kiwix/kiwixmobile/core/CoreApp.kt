@@ -24,7 +24,6 @@ import android.os.Environment.MEDIA_MOUNTED
 import android.os.Environment.getExternalStorageState
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase
@@ -41,10 +40,6 @@ abstract class CoreApp : Application() {
 
     @JvmStatic
     lateinit var coreComponent: CoreComponent
-
-    init {
-      AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-    }
   }
 
   @Inject
@@ -65,6 +60,13 @@ abstract class CoreApp : Application() {
 
   @Inject
   lateinit var fileLogger: FileLogger
+
+  /**
+   * The init of this class does the work of initializing,
+   * simply injecting it is all that there is to be done
+   */
+  @Inject
+  lateinit var serviceWorkerInitialiser: ServiceWorkerInitialiser
 
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
@@ -114,9 +116,7 @@ abstract class CoreApp : Application() {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             detectContentUriWithoutPermission()
           }
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            detectFileUriExposure()
-          }
+          detectFileUriExposure()
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             detectNonSdkApiUsage()
           }

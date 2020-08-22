@@ -25,6 +25,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +35,7 @@ import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.c
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
+import static org.kiwix.kiwixmobile.utils.StandardActions.openDrawer;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -48,37 +50,41 @@ public class MainActivityTest {
   public GrantPermissionRule writePermissionRule =
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+  @Before
+  public void setup() {
+    clickOn(R.string.reader);
+  }
+
   @Test
   public void navigateHelp() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
+    openDrawer();
+    clickOn(R.string.menu_help);
   }
 
   @Test
   public void navigateSettings() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    openDrawer();
     enterSettings();
   }
 
   @Test
   public void navigateBookmarks() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    openDrawer();
     BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.bookmarks));
   }
 
   @Test
   public void navigateDeviceContent() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.local_zims);
+    clickOn(R.string.library);
   }
 
   @Test
   public void navigateOnlineContent() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    clickOn(R.string.remote_zims);
+    clickOn(R.string.download);
   }
 }

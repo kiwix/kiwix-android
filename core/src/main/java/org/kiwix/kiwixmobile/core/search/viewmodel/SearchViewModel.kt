@@ -48,7 +48,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.Finish
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.FinishActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
@@ -93,7 +93,7 @@ class SearchViewModel @Inject constructor(
 
   private fun actionMapper() = actions.map {
     when (it) {
-      ExitedSearch -> effects.offer(Finish)
+      ExitedSearch -> effects.offer(FinishActivity)
       is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
       is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
       is OnItemLongClick -> showDeleteDialog(it)

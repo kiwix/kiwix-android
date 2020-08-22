@@ -46,8 +46,8 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.utils.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
@@ -113,7 +113,7 @@ class LocalFileTransferActivity : BaseActivity(),
     list_peer_devices.layoutManager = LinearLayoutManager(this)
     list_peer_devices.setHasFixedSize(true)
     if (isFileSender) {
-      filesForTransfer = fileUriArrayList.map { FileItem(it) }
+      filesForTransfer = fileUriArrayList.map(::FileItem)
       displayFileTransferProgress(filesForTransfer)
     }
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
@@ -215,7 +215,8 @@ class LocalFileTransferActivity : BaseActivity(),
           this,
           Manifest.permission.ACCESS_COARSE_LOCATION
         ) -> {
-          alertDialogShower.show(KiwixDialog.LocationPermissionRationale,
+          alertDialogShower.show(
+            KiwixDialog.LocationPermissionRationale,
             {
               ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),

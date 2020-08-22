@@ -18,8 +18,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="24dp"
     android:contentDescription="@string/close_all_tabs"
+    android:src="@drawable/ic_close_black_24dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:srcCompat="@drawable/ic_close_black_24dp" />
+    app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,14 +17,11 @@
  */
 package org.kiwix.kiwixmobile.help
 
-import android.os.Build
-import androidx.test.filters.SdkSuppress
 import androidx.test.rule.ActivityTestRule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.help.HelpActivity
 
-@SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
 class HelpActivityTest : BaseActivityTest<HelpActivity>() {
 
   override var activityRule: ActivityTestRule<HelpActivity> = activityTestRule()

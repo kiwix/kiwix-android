@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;

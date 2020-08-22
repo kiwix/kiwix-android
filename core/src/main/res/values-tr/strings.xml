@@ -68,8 +68,6 @@
   <string name="pref_night_mode_summary">Makaleleri ters çevrilmiş renklerle göster</string>
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
-  <string name="pref_hide_toolbar">Araç Çubuğunu Görünür Tut</string>
-  <string name="pref_hide_toolbar_summary">Sayfa kaydırılırken araç çubuğunu gizle</string>
   <string name="pref_language_title">Dil</string>
   <string name="pref_language_chooser">Bir dil seçin</string>
   <string name="pref_credits">Katkıda bulunanlar ve lisanslar</string>
@@ -281,5 +279,4 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Metin Yakınlığı</string>
   <string name="search_open_in_new_tab">Yeni sekmede aç</string>
-  <string name="experimental_navigation">Deneysel Gezintisi</string>
 </resources>

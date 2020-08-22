@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.utils
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
@@ -197,12 +196,8 @@ class LanguageUtils(private val context: Context) {
           Locale(language)
       Locale.setDefault(locale)
       val config = Configuration()
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        config.setLocale(locale)
-        config.setLayoutDirection(locale)
-      } else {
-        config.locale = locale
-      }
+      config.setLocale(locale)
+      config.setLayoutDirection(locale)
       context.resources
         .updateConfiguration(config, context.resources.displayMetrics)
     }
@@ -223,16 +218,5 @@ class LanguageUtils(private val context: Context) {
     @JvmStatic
     fun getTypeface(languageCode: String) =
       fontExceptions[languageCode] ?: "fonts/DejaVuSansCondensed.ttf"
-
-    @JvmStatic
-    fun getResourceString(appContext: Context, str: String): String {
-      var resourceName = str
-      if (resourceName.contains("REPLACE_")) {
-        resourceName = resourceName.replace("REPLACE_", "")
-      }
-      val resourceId = appContext.resources
-        .getIdentifier(resourceName, "string", appContext.packageName)
-      return appContext.resources.getString(resourceId)
-    }
   }
 }

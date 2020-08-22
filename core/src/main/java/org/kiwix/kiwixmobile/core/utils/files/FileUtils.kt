@@ -17,12 +17,9 @@
  */
 package org.kiwix.kiwixmobile.core.utils.files
 
-import android.annotation.TargetApi
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import android.os.Build.VERSION_CODES
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
@@ -93,10 +90,7 @@ object FileUtils {
     context: Context,
     uri: Uri
   ): String? {
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-      DocumentsContract.isDocumentUri(context, uri)
-    ) {
+    if (DocumentsContract.isDocumentUri(context, uri)) {
       if ("com.android.externalstorage.documents" == uri.authority) {
         val documentId = DocumentsContract.getDocumentId(uri)
           .split(":")
@@ -110,15 +104,19 @@ object FileUtils {
         } catch (ignore: IllegalArgumentException) {
           null
         }
-    } else if ("content".equals(uri.scheme!!, ignoreCase = true)) {
-      return contentQuery(context, uri)
-    } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
+    } else if (uri.scheme != null) {
+      if ("content".equals(uri.scheme!!, ignoreCase = true)) {
+        return contentQuery(context, uri)
+      } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
+        return uri.path
+      }
+    } else {
       return uri.path
     }
+
     return null
   }
 
-  @TargetApi(VERSION_CODES.KITKAT)
   private fun documentProviderContentQuery(context: Context, uri: Uri) =
     contentQuery(
       context,

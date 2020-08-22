@@ -21,19 +21,20 @@ import android.app.Activity
 import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.intro.IntroActivity
 import org.kiwix.kiwixmobile.intro.IntroModule
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.main.KiwixReaderFragment
+import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
@@ -45,19 +46,19 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
     IntroModule::class
   ]
 )
-interface KiwixActivityComponent {
+interface KiwixActivityComponent : CoreActivityComponent {
   fun inject(libraryFragment: LibraryFragment)
-  fun inject(zimFileSelectFragment: ZimFileSelectFragment)
+  fun inject(readerFragment: KiwixReaderFragment)
+  fun inject(localLibraryFragment: LocalLibraryFragment)
   fun inject(deleteFiles: DeleteFiles)
   fun inject(localFileTransferActivity: LocalFileTransferActivity)
-  fun inject(zimManageActivity: ZimManageActivity)
   fun inject(languageActivity: LanguageActivity)
-  fun inject(kiwixMainActivity: KiwixMainActivity)
   fun inject(kiwixSettingsActivity: KiwixSettingsActivity)
   fun inject(zimHostActivity: ZimHostActivity)
   fun inject(introActivity: IntroActivity)
   fun inject(kiwixSplashActivity: KiwixSplashActivity)
-  fun inject(kiwixMainFragment: KiwixReaderFragment)
+  fun inject(kiwixMainActivity: KiwixMainActivity)
+  fun inject(onlineLibraryFragment: OnlineLibraryFragment)
 
   @Subcomponent.Builder
   interface Builder {

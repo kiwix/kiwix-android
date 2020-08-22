@@ -22,12 +22,12 @@ import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
-import org.kiwix.kiwixmobile.core.page.history.HistoryActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
-import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllHistory
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedHistory
 import javax.inject.Inject
 
 data class ShowDeleteHistoryDialog(
@@ -37,7 +37,7 @@ data class ShowDeleteHistoryDialog(
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
-    (activity as HistoryActivity).activityComponent.inject(this)
+    activity.cachedComponent.inject(this)
     dialogShower.show(if (state.isInSelectionState) DeleteSelectedHistory else DeleteAllHistory, {
       effects.offer(DeletePageItems(state, pageDao))
     })

@@ -31,9 +31,6 @@ import java.io.File
 class AppConfigurer {
   fun configure(target: Project) {
     target.configureExtension<AppExtension> {
-      defaultConfig {
-        vectorDrawables.useSupportLibrary = true
-      }
       signingConfigs {
         create("releaseSigningConfig") {
           storeFile = File(target.rootDir, "kiwix-android.keystore")

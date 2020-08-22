@@ -23,7 +23,10 @@ import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import org.kiwix.kiwixmobile.core.R;
 
 import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
@@ -39,6 +42,10 @@ public class StandardActions {
   public static void enterSettings() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_settings));
+  }
+
+  public static void openDrawer() {
+    onView(withContentDescription(R.string.open_drawer)).perform(click());
   }
 
   public static void deleteZimIfExists(String zimName, Integer adapterId) {

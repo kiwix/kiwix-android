@@ -62,8 +62,6 @@
   <string name="pref_night_mode_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
-  <string name="pref_hide_toolbar">維持工具列可見</string>
-  <string name="pref_hide_toolbar_summary">當瀏覽內容時，讓工具列不會滾動出檢視內容之外</string>
   <string name="pref_language_title">語言</string>
   <string name="pref_language_chooser">選擇語言</string>
   <string name="pref_credits">貢獻者和許可協議</string>
@@ -275,5 +273,4 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字縮放</string>
   <string name="search_open_in_new_tab">在新分頁開啟</string>
-  <string name="experimental_navigation">實現性導覽</string>
 </resources>

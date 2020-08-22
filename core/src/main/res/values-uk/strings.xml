@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Authors:
+<?xml version="1.0" encoding="utf-8"?><!-- Authors:
 * Andriykopanytsia
 * Asokolov
 * Base
@@ -63,8 +62,6 @@
   <string name="pref_night_mode_summary">Показати статті з інвертованими кольорами</string>
   <string name="pref_back_to_top">Повернутись угору</string>
   <string name="pref_back_to_top_summary">Відображати кнопки в кінці сторінки для прокрутки вгору</string>
-  <string name="pref_hide_toolbar">Приховувати панель інструментів при прокручуванні</string>
-  <string name="pref_hide_toolbar_summary">Приховувати панель інструментів, коли виконується прокручування сторінки</string>
   <string name="pref_language_title">Мова</string>
   <string name="pref_language_chooser">Оберіть мову</string>
   <string name="pref_credits">Дописувачі й ліцензії</string>
@@ -276,5 +273,4 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Збільшити текст</string>
   <string name="search_open_in_new_tab">Відкрити у новій вкладці</string>
-  <string name="experimental_navigation">Дослідна навіґація</string>
 </resources>

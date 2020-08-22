@@ -43,15 +43,15 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.StopDownload
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.YesNoDialog.WifiOnly
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.StopDownload
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.BookDelegate
@@ -61,7 +61,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import javax.inject.Inject
 
-class LibraryFragment : BaseFragment() {
+open class LibraryFragment : BaseFragment() {
 
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
@@ -71,7 +71,7 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
 
-  private val zimManageViewModel by lazy {
+  protected val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
 
@@ -91,7 +91,7 @@ class LibraryFragment : BaseFragment() {
   private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as ZimManageActivity).cachedComponent.inject(this)
+    baseActivity.kiwixActivityComponent.inject(this)
   }
 
   override fun onCreateView(

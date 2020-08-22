@@ -42,7 +42,6 @@ public class ZimTest {
   }
 
   @Test
-  @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
   public void zimTest() {
     Intent intent = new Intent();
     File file = new File(context.getFilesDir(), "test.zim");
