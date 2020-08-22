@@ -87,20 +87,6 @@
     app:srcCompat="@drawable/fullscreen_exit"
     tools:visibility="visible" />
 
-  <!--  <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-  <!--    android:id="@+id/activity_main_back_to_top_fab"-->
-  <!--    android:layout_width="wrap_content"-->
-  <!--    android:layout_height="wrap_content"-->
-  <!--    android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
-  <!--    android:layout_marginBottom="?attr/actionBarSize"-->
-  <!--    android:visibility="gone"-->
-  <!--    app:fabSize="mini"-->
-  <!--    app:layout_dodgeInsetEdges="bottom"-->
-  <!--    app:layout_constraintBottom_toBottomOf="parent"-->
-  <!--    app:layout_constraintEnd_toEndOf="parent"-->
-  <!--    app:srcCompat="@drawable/action_find_previous"-->
-  <!--    tools:visibility="visible" />-->
-
   <Button
     android:id="@+id/activity_main_button_pause_tts"
     android:layout_width="0dp"
