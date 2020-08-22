@@ -45,6 +45,9 @@ import java.io.StringWriter
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
+private const val STATUS = 10
+private const val ZERO = 0
+
 open class ErrorActivity : BaseActivity() {
   @Inject
   lateinit var bookDao: NewBookDao
@@ -178,7 +181,7 @@ open class ErrorActivity : BaseActivity() {
   private val versionCode: Int
     get() = try {
       packageManager
-        .getPackageInfo(packageName, 0).versionCode
+        .getPackageInfo(packageName, ZERO).versionCode
     } catch (e: PackageManager.NameNotFoundException) {
       throw RuntimeException(e)
     }
@@ -186,7 +189,7 @@ open class ErrorActivity : BaseActivity() {
   private val versionName: String
     get() = try {
       packageManager
-        .getPackageInfo(packageName, 0).versionName
+        .getPackageInfo(packageName, ZERO).versionName
     } catch (e: PackageManager.NameNotFoundException) {
       throw RuntimeException(e)
     }
@@ -220,7 +223,7 @@ open class ErrorActivity : BaseActivity() {
     const val EXCEPTION_KEY = "exception"
     private fun killCurrentProcess() {
       Process.killProcess(Process.myPid())
-      exitProcess(10)
+      exitProcess(STATUS)
     }
   }
 }
