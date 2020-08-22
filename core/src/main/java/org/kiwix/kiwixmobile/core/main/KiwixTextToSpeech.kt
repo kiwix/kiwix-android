@@ -54,7 +54,7 @@ class KiwixTextToSpeech internal constructor(
   private val focusLock: Any = Any()
   private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
   @JvmField var currentTTSTask: TTSTask? = null
-  private var tts: TextToSpeech? = null
+  private lateinit var tts: TextToSpeech
 
   /**
    * Returns whether the TTS is initialized.
@@ -93,13 +93,12 @@ class KiwixTextToSpeech internal constructor(
    */
   fun readAloud(webView: WebView) {
     val isPaused = currentTTSTask?.paused
-    val isSpeaking = tts?.isSpeaking
     if (isPaused == true) {
       onSpeakingListener.onSpeakingEnded()
       currentTTSTask = null
-    } else if (isSpeaking == true) {
-      if (tts!!.stop() == TextToSpeech.SUCCESS) {
-        tts!!.setOnUtteranceProgressListener(null)
+    } else if (tts.isSpeaking) {
+      if (tts.stop() == TextToSpeech.SUCCESS) {
+        tts.setOnUtteranceProgressListener(null)
         onSpeakingListener.onSpeakingEnded()
       }
     } else {
@@ -113,11 +112,9 @@ class KiwixTextToSpeech internal constructor(
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
-      if (locale == null || tts?.isLanguageAvailable(locale)
+      if (locale == null || tts.isLanguageAvailable(locale)
           .also {
-            it?.let {
-              result = it
-            }
+            result = it
           } == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED
       ) {
         Log.d(
@@ -126,7 +123,7 @@ class KiwixTextToSpeech internal constructor(
         )
         context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
       } else {
-        tts?.language = locale
+        tts.language = locale
         if (getFeatures(tts).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) {
           context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
           return
@@ -161,7 +158,7 @@ class KiwixTextToSpeech internal constructor(
   }
 
   fun stop() {
-    tts?.let {
+    tts.let {
       {
         if (it.stop() == TextToSpeech.SUCCESS) {
           currentTTSTask = null
@@ -204,7 +201,7 @@ class KiwixTextToSpeech internal constructor(
    * @see android.speech.tts.TextToSpeech.shutdown
    */
   fun shutdown() {
-    tts?.shutdown()
+    tts.shutdown()
   }
 
   /**
@@ -235,12 +232,8 @@ class KiwixTextToSpeech internal constructor(
     fun pause() {
       paused = true
       currentPiece.decrementAndGet()
-      tts?.let { tts ->
-        {
-          tts.setOnUtteranceProgressListener(null)
-          tts.stop()
-        }
-      }
+      tts.setOnUtteranceProgressListener(null)
+      tts.stop()
     }
 
     fun start() {
@@ -254,11 +247,11 @@ class KiwixTextToSpeech internal constructor(
       // the utterance listener to be notified
       params[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "kiwixLastMessage"
       if (currentPiece.get() < pieces.size) {
-        tts?.speak(pieces[currentPiece.getAndIncrement()], TextToSpeech.QUEUE_ADD, params)
+        tts.speak(pieces[currentPiece.getAndIncrement()], TextToSpeech.QUEUE_ADD, params)
       } else {
         stop()
       }
-      tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+      tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
         @SuppressWarnings("EmptyFunctionBlock")
         override fun onStart(s: String) {
         }
@@ -269,7 +262,7 @@ class KiwixTextToSpeech internal constructor(
             stop()
             return
           }
-          tts?.speak(pieces[line], TextToSpeech.QUEUE_ADD, params)
+          tts.speak(pieces[line], TextToSpeech.QUEUE_ADD, params)
           currentPiece.getAndIncrement()
         }
 
