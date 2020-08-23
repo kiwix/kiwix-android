@@ -84,11 +84,11 @@ class AddNoteDialog : DialogFragment() {
   // Stores path to directory for the currently open zim's notes
   private var zimNotesDirectory: String? = null
 
-  @JvmField @Inject
-  var sharedPreferenceUtil: SharedPreferenceUtil? = null
+  @Inject
+  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
-  @JvmField @Inject
-  var zimReaderContainer: ZimReaderContainer? = null
+  @Inject
+  lateinit var zimReaderContainer: ZimReaderContainer
 
   @JvmField @Inject
   var alertDialogShower: AlertDialogShower? = null
@@ -101,9 +101,9 @@ class AddNoteDialog : DialogFragment() {
       .inject(this)
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
-    zimFileName = zimReaderContainer?.zimCanonicalPath
+    zimFileName = zimReaderContainer.zimCanonicalPath
     if (zimFileName != null) { // No zim file currently opened
-      zimFileTitle = zimReaderContainer?.zimFileTitle
+      zimFileTitle = zimReaderContainer.zimFileTitle
       articleTitle = (activity as WebViewProvider?)?.getCurrentWebView()?.title
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
