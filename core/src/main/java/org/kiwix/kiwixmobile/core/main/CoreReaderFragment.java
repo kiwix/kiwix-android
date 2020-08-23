@@ -1272,14 +1272,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     alertDialogShower.show(KiwixDialog.ContentsDrawerHint.INSTANCE);
   }
 
-  private void openArticleInNewTab(String articleUrl) {
+  protected void openArticleInNewTab(String articleUrl) {
     if (articleUrl != null) {
       createNewTab();
       loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
     }
   }
 
-  private void openArticle(String articleUrl) {
+  protected void openArticle(String articleUrl) {
     if (articleUrl != null) {
       loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(articleUrl)));
     }

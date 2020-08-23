@@ -92,10 +92,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
         tryOpeningZimFile(args.zimFileUri)
       }
       if (args.shouldOpenInNewTab) {
-        openArticleInNewTab(args.pageUrl)
-      } else {
-        loadUrlWithCurrentWebview(args.pageUrl)
+        manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+        createNewTab()
       }
+      loadUrlWithCurrentWebview(args.pageUrl)
     } else {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
@@ -233,14 +233,14 @@ class KiwixReaderFragment : CoreReaderFragment() {
         "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
       )
       webViewList.clear()
-      restoreTabStates(zimFileUri)
+      restoreTabStates()
     } else {
       Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
       exitBook()
     }
   }
 
-  private fun restoreTabStates(zimFileUri: String) {
+  private fun restoreTabStates() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
     val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
