@@ -51,13 +51,11 @@ public class DocumentParser(private var listener: DocumentParser.SectionsListene
       val section = DocumentSection()
       section.title = section.title.trim();
       section.id = id;
-      var level: Int
-      try {
-        val character: String = element.substring(element.length - 1)
-        level = Integer.parseInt(character)
-        Integer.parseInt(id)
-      } catch (e: NumberFormatException) {
-        level = 0
+      var level: Int?
+      val character: String = element.substring(element.length - 1)
+      level = character.toIntOrNull()
+      if (level == null) {
+        level = 0;
       }
       section.level = level;
       sections.add(section)
