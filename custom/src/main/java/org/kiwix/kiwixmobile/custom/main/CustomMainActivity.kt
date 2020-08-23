@@ -82,6 +82,10 @@ class CustomMainActivity : CoreMainActivity() {
       .isVisible = false
   }
 
+  override fun openSearch() {
+    TODO("Not yet implemented")
+  }
+
   override fun openPage(pageUrl: String, zimFilePath: String, shouldOpenInNewTab: Boolean) {
     val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     navigate(R.id.customReaderFragment, bundle)

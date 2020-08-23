@@ -255,9 +255,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navigate(historyFragmentResId)
   }
 
-  fun openSearch() {
-    navigate(searchFragmentResId)
-  }
+  abstract fun openSearch()
 
   private fun openBookmarks() {
     navigate(bookmarksFragmentResId)

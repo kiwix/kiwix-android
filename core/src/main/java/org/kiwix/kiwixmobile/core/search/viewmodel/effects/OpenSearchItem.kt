@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
@@ -28,11 +29,7 @@ data class OpenSearchItem(
   private val openInNewTab: Boolean = false
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    // activity.setResult(
-    //   Activity.RESULT_OK,
-    //   Intent().putExtra(TAG_FILE_SEARCHED, searchListItem.value)
-    //     .putExtra(TAG_FILE_SEARCHED_NEW_TAB, openInNewTab)
-    // )
+    activity.popNavigationBackstack()
     (activity as CoreMainActivity).openSearchItem(searchListItem.value, openInNewTab)
   }
 }

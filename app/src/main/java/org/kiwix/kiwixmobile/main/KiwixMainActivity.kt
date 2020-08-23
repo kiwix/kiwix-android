@@ -44,6 +44,7 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 
@@ -140,6 +141,10 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun openZimHostFragment() {
     disableDrawer()
     navigate(R.id.zimHostFragment)
+  }
+
+  override fun openSearch() {
+    navigate(KiwixReaderFragmentDirections.actionReaderFragmentToSearchFragment())
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String, shouldOpenInNewTab: Boolean) {
