@@ -40,9 +40,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.dialog_add_note.add_note_edit_text
 import kotlinx.android.synthetic.main.dialog_add_note.add_note_text_view
-import kotlinx.android.synthetic.main.dialog_add_note.view.add_note_edit_text
-import kotlinx.android.synthetic.main.dialog_add_note.view.add_note_text_view
-import kotlinx.android.synthetic.main.layout_toolbar.view.toolbar
+import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
@@ -130,58 +128,6 @@ class AddNoteDialog : DialogFragment() {
   ): View {
     super.onCreateView(inflater, container, savedInstanceState)
     root = inflater.inflate(R.layout.dialog_add_note, container, false)
-    root.toolbar.setTitle(R.string.note)
-    root.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
-    root.toolbar.setNavigationOnClickListener {
-      exitAddNoteDialog()
-      closeKeyboard()
-    }
-    root.toolbar.setOnMenuItemClickListener { item: MenuItem ->
-      when (item.itemId) {
-        R.id.share_note -> { // Opens app-chooser for sharing the note text file
-          shareNote()
-        }
-        R.id.save_note -> { // Saves the note as a text file
-          saveNote(root.add_note_edit_text.text.toString())
-        }
-        R.id.delete_note -> {
-          deleteNote()
-        }
-      }
-      true
-    }
-    root.toolbar.inflateMenu(R.menu.menu_add_note_dialog)
-    // 'Share' disabled for empty notes, 'Save' disabled for unedited notes
-    disableMenuItems()
-    add_note_text_view.text = articleTitle
-
-    // Show the previously saved note if it exists
-    displayNote()
-    add_note_edit_text.addTextChangedListener(object : TextWatcher {
-      @SuppressWarnings("EmptyFunctionBlock")
-      override fun beforeTextChanged(
-        s: CharSequence,
-        start: Int,
-        count: Int,
-        after: Int
-      ) {
-      }
-
-      override fun onTextChanged(
-        s: CharSequence,
-        start: Int,
-        before: Int,
-        count: Int
-      ) {
-        noteEdited = true
-        enableSaveNoteMenuItem()
-        enableShareNoteMenuItem()
-      }
-
-      @SuppressWarnings("EmptyFunctionBlock")
-      override fun afterTextChanged(s: Editable) {
-      }
-    })
     return root
   }
 
@@ -242,10 +188,10 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun disableMenuItems() {
-    if (root.toolbar.menu != null) {
-      val saveItem = root.toolbar.menu.findItem(R.id.save_note)
-      val shareItem = root.toolbar.menu.findItem(R.id.share_note)
-      val deleteItem = root.toolbar.menu.findItem(R.id.delete_note)
+    if (toolbar.menu != null) {
+      val saveItem = toolbar.menu.findItem(R.id.save_note)
+      val shareItem = toolbar.menu.findItem(R.id.share_note)
+      val deleteItem = toolbar.menu.findItem(R.id.delete_note)
       saveItem.isEnabled = false
       shareItem.isEnabled = false
       deleteItem.isEnabled = false
@@ -258,8 +204,8 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun enableSaveNoteMenuItem() {
-    if (root.toolbar.menu != null) {
-      val saveItem = root.toolbar.menu.findItem(R.id.save_note)
+    if (toolbar.menu != null) {
+      val saveItem = toolbar.menu.findItem(R.id.save_note)
       saveItem.isEnabled = true
       saveItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -268,8 +214,8 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun enableDeleteNoteMenuItem() {
-    if (root.toolbar.menu != null) {
-      val deleteItem = root.toolbar.menu.findItem(R.id.delete_note)
+    if (toolbar.menu != null) {
+      val deleteItem = toolbar.menu.findItem(R.id.delete_note)
       deleteItem.isEnabled = true
       deleteItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -278,8 +224,8 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun enableShareNoteMenuItem() {
-    if (root.toolbar.menu != null) {
-      val shareItem = root.toolbar.menu.findItem(R.id.share_note)
+    if (toolbar.menu != null) {
+      val shareItem = toolbar.menu.findItem(R.id.share_note)
       shareItem.isEnabled = true
       shareItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -292,9 +238,61 @@ class AddNoteDialog : DialogFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
+    toolbar.setTitle(R.string.note)
+    toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+    toolbar.setNavigationOnClickListener {
+      exitAddNoteDialog()
+      closeKeyboard()
+    }
+    toolbar.setOnMenuItemClickListener { item: MenuItem ->
+      when (item.itemId) {
+        R.id.share_note -> { // Opens app-chooser for sharing the note text file
+          shareNote()
+        }
+        R.id.save_note -> { // Saves the note as a text file
+          saveNote(add_note_edit_text.text.toString())
+        }
+        R.id.delete_note -> {
+          deleteNote()
+        }
+      }
+      true
+    }
+    toolbar.inflateMenu(R.menu.menu_add_note_dialog)
+    // 'Share' disabled for empty notes, 'Save' disabled for unedited notes
+    disableMenuItems()
+    add_note_text_view.text = articleTitle
+
+    // Show the previously saved note if it exists
+    displayNote()
+    add_note_edit_text.addTextChangedListener(object : TextWatcher {
+      @SuppressWarnings("EmptyFunctionBlock")
+      override fun beforeTextChanged(
+        s: CharSequence,
+        start: Int,
+        count: Int,
+        after: Int
+      ) {
+      }
+
+      override fun onTextChanged(
+        s: CharSequence,
+        start: Int,
+        before: Int,
+        count: Int
+      ) {
+        noteEdited = true
+        enableSaveNoteMenuItem()
+        enableShareNoteMenuItem()
+      }
+
+      @SuppressWarnings("EmptyFunctionBlock")
+      override fun afterTextChanged(s: Editable) {
+      }
+    })
     if (!noteFileExists) {
       // Prepare for input in case of empty/new note
-      root.add_note_edit_text.requestFocus()
+      add_note_edit_text.requestFocus()
       showKeyboard()
     }
   }
@@ -369,7 +367,7 @@ class AddNoteDialog : DialogFragment() {
       File(notesFolder.absolutePath, "$articleNoteFileName.txt")
     val noteDeleted = noteFile.delete()
     if (noteDeleted) {
-      root.add_note_edit_text.text.clear()
+      add_note_edit_text.text.clear()
       disableMenuItems()
       context.toast(R.string.note_delete_successful, Toast.LENGTH_LONG)
     } else {
@@ -406,8 +404,8 @@ class AddNoteDialog : DialogFragment() {
       e.printStackTrace()
       Log.d(TAG, "Error reading line with BufferedReader")
     }
-    root.add_note_edit_text.setText("$contents") // Display the note content
-    root.add_note_edit_text.setSelection(root.add_note_edit_text.text.length - 1)
+    add_note_edit_text.setText("$contents") // Display the note content
+    add_note_edit_text.setSelection(add_note_edit_text.text.length - 1)
     enableShareNoteMenuItem() // As note content exists which can be shared
     enableDeleteNoteMenuItem()
   }
@@ -420,7 +418,7 @@ class AddNoteDialog : DialogFragment() {
      * */
     if (noteEdited) {
       // Save edited note before sharing the text file
-      saveNote(root.add_note_edit_text.text.toString())
+      saveNote(add_note_edit_text.text.toString())
     }
     val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
     var noteFileUri: Uri? = null
