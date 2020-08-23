@@ -34,20 +34,18 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
+import kotlinx.android.synthetic.main.dialog_add_note.add_note_edit_text
+import kotlinx.android.synthetic.main.dialog_add_note.add_note_text_view
+import kotlinx.android.synthetic.main.dialog_add_note.view.add_note_edit_text
+import kotlinx.android.synthetic.main.dialog_add_note.view.add_note_text_view
+import kotlinx.android.synthetic.main.layout_toolbar.view.toolbar
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R2
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -73,16 +71,6 @@ const val DISABLE_ICON_ITEM_ALPHA = 130
 const val ENABLE_ICON_ITEM_ALPHA = 255
 
 class AddNoteDialog : DialogFragment() {
-  @JvmField @BindView(R2.id.toolbar)
-  var toolbar: Toolbar? = null // Displays options for the note dialog
-
-  @JvmField @BindView(R2.id.add_note_text_view)
-  var addNoteTextView: TextView? = null // Displays article title
-
-  @JvmField @BindView(R2.id.add_note_edit_text)
-  var addNoteEditText: EditText? = null // Displays the note text
-
-  private lateinit var unbinder: Unbinder
   private var zimFileName: String? = null
   private var zimFileTitle: String? = null
   private var articleTitle: String? = null
@@ -92,9 +80,11 @@ class AddNoteDialog : DialogFragment() {
   private var noteFileExists = false
   private var noteEdited = false
 
+  private lateinit var root: View
+
   // Keeps track of state of the note (whether edited since last save)
-  private var zimNotesDirectory: String? =
-    null // Stores path to directory for the currently open zim's notes
+  // Stores path to directory for the currently open zim's notes
+  private var zimNotesDirectory: String? = null
 
   @JvmField @Inject
   var sharedPreferenceUtil: SharedPreferenceUtil? = null
@@ -113,10 +103,10 @@ class AddNoteDialog : DialogFragment() {
       .inject(this)
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
-    zimFileName = zimReaderContainer!!.zimCanonicalPath
+    zimFileName = zimReaderContainer?.zimCanonicalPath
     if (zimFileName != null) { // No zim file currently opened
-      zimFileTitle = zimReaderContainer!!.zimFileTitle
-      articleTitle = (activity as WebViewProvider?)!!.getCurrentWebView()?.title
+      zimFileTitle = zimReaderContainer?.zimFileTitle
+      articleTitle = (activity as WebViewProvider?)?.getCurrentWebView()?.title
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
       val zimNoteDirectoryName = zimNoteDirectoryName
@@ -139,21 +129,20 @@ class AddNoteDialog : DialogFragment() {
     savedInstanceState: Bundle?
   ): View {
     super.onCreateView(inflater, container, savedInstanceState)
-    val view = inflater.inflate(R.layout.dialog_add_note, container, false)
-    unbinder = ButterKnife.bind(this, view)
-    toolbar!!.setTitle(R.string.note)
-    toolbar!!.setNavigationIcon(R.drawable.ic_close_white_24dp)
-    toolbar!!.setNavigationOnClickListener {
+    root = inflater.inflate(R.layout.dialog_add_note, container, false)
+    root.toolbar.setTitle(R.string.note)
+    root.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+    root.toolbar.setNavigationOnClickListener {
       exitAddNoteDialog()
       closeKeyboard()
     }
-    toolbar!!.setOnMenuItemClickListener { item: MenuItem ->
+    root.toolbar.setOnMenuItemClickListener { item: MenuItem ->
       when (item.itemId) {
         R.id.share_note -> { // Opens app-chooser for sharing the note text file
           shareNote()
         }
         R.id.save_note -> { // Saves the note as a text file
-          saveNote(addNoteEditText!!.text.toString())
+          saveNote(root.add_note_edit_text.text.toString())
         }
         R.id.delete_note -> {
           deleteNote()
@@ -161,14 +150,14 @@ class AddNoteDialog : DialogFragment() {
       }
       true
     }
-    toolbar!!.inflateMenu(R.menu.menu_add_note_dialog)
+    root.toolbar.inflateMenu(R.menu.menu_add_note_dialog)
     // 'Share' disabled for empty notes, 'Save' disabled for unedited notes
     disableMenuItems()
-    addNoteTextView!!.text = articleTitle
+    add_note_text_view.text = articleTitle
 
     // Show the previously saved note if it exists
     displayNote()
-    addNoteEditText!!.addTextChangedListener(object : TextWatcher {
+    add_note_edit_text.addTextChangedListener(object : TextWatcher {
       @SuppressWarnings("EmptyFunctionBlock")
       override fun beforeTextChanged(
         s: CharSequence,
@@ -193,7 +182,7 @@ class AddNoteDialog : DialogFragment() {
       override fun afterTextChanged(s: Editable) {
       }
     })
-    return view
+    return root
   }
 
   private val zimNoteDirectoryName: String
@@ -204,7 +193,7 @@ class AddNoteDialog : DialogFragment() {
 
   private fun getArticleNotefileName(): String {
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
-    val articleUrl = (activity as WebViewProvider?)!!.getCurrentWebView()!!.url
+    val articleUrl = (activity as WebViewProvider?)?.getCurrentWebView()?.url
     var noteFileName = ""
     if (articleUrl == null) {
       onFailureToCreateAddNoteDialog()
@@ -242,7 +231,7 @@ class AddNoteDialog : DialogFragment() {
 
   private fun exitAddNoteDialog() {
     if (noteEdited) {
-      alertDialogShower!!.show(
+      alertDialogShower?.show(
         KiwixDialog.NotesDiscardConfirmation,
         ::dismissAddNoteDialog
       )
@@ -253,10 +242,10 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun disableMenuItems() {
-    if (toolbar!!.menu != null) {
-      val saveItem = toolbar!!.menu.findItem(R.id.save_note)
-      val shareItem = toolbar!!.menu.findItem(R.id.share_note)
-      val deleteItem = toolbar!!.menu.findItem(R.id.delete_note)
+    if (root.toolbar.menu != null) {
+      val saveItem = root.toolbar.menu.findItem(R.id.save_note)
+      val shareItem = root.toolbar.menu.findItem(R.id.share_note)
+      val deleteItem = root.toolbar.menu.findItem(R.id.delete_note)
       saveItem.isEnabled = false
       shareItem.isEnabled = false
       deleteItem.isEnabled = false
@@ -269,8 +258,8 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun enableSaveNoteMenuItem() {
-    if (toolbar!!.menu != null) {
-      val saveItem = toolbar!!.menu.findItem(R.id.save_note)
+    if (root.toolbar.menu != null) {
+      val saveItem = root.toolbar.menu.findItem(R.id.save_note)
       saveItem.isEnabled = true
       saveItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -279,8 +268,8 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun enableDeleteNoteMenuItem() {
-    if (toolbar!!.menu != null) {
-      val deleteItem = toolbar!!.menu.findItem(R.id.delete_note)
+    if (root.toolbar.menu != null) {
+      val deleteItem = root.toolbar.menu.findItem(R.id.delete_note)
       deleteItem.isEnabled = true
       deleteItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -289,8 +278,8 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun enableShareNoteMenuItem() {
-    if (toolbar!!.menu != null) {
-      val shareItem = toolbar!!.menu.findItem(R.id.share_note)
+    if (root.toolbar.menu != null) {
+      val shareItem = root.toolbar.menu.findItem(R.id.share_note)
       shareItem.isEnabled = true
       shareItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -305,7 +294,7 @@ class AddNoteDialog : DialogFragment() {
     super.onViewCreated(view, savedInstanceState)
     if (!noteFileExists) {
       // Prepare for input in case of empty/new note
-      addNoteEditText!!.requestFocus()
+      root.add_note_edit_text.requestFocus()
       showKeyboard()
     }
   }
@@ -380,7 +369,7 @@ class AddNoteDialog : DialogFragment() {
       File(notesFolder.absolutePath, "$articleNoteFileName.txt")
     val noteDeleted = noteFile.delete()
     if (noteDeleted) {
-      addNoteEditText!!.text.clear()
+      root.add_note_edit_text.text.clear()
       disableMenuItems()
       context.toast(R.string.note_delete_successful, Toast.LENGTH_LONG)
     } else {
@@ -417,8 +406,8 @@ class AddNoteDialog : DialogFragment() {
       e.printStackTrace()
       Log.d(TAG, "Error reading line with BufferedReader")
     }
-    addNoteEditText!!.setText("$contents") // Display the note content
-    addNoteEditText!!.setSelection(addNoteEditText!!.text.length - 1)
+    root.add_note_edit_text.setText("$contents") // Display the note content
+    root.add_note_edit_text.setSelection(root.add_note_edit_text.text.length - 1)
     enableShareNoteMenuItem() // As note content exists which can be shared
     enableDeleteNoteMenuItem()
   }
@@ -430,7 +419,8 @@ class AddNoteDialog : DialogFragment() {
      * is shared via an app-chooser intent
      * */
     if (noteEdited) {
-      saveNote(addNoteEditText!!.text.toString()) // Save edited note before sharing the text file
+      // Save edited note before sharing the text file
+      saveNote(root.add_note_edit_text.text.toString())
     }
     val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
     var noteFileUri: Uri? = null
@@ -477,11 +467,6 @@ class AddNoteDialog : DialogFragment() {
       val height = ViewGroup.LayoutParams.MATCH_PARENT
       dialog.window?.setLayout(width, height)
     }
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    unbinder.unbind()
   }
 
   companion object {
