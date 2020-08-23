@@ -63,6 +63,15 @@ open class ErrorActivity : BaseActivity() {
   private lateinit var body: String
   private var exception: Throwable? = null
   private lateinit var emailIntent: Intent
+  private val deviceDetails = """Device Details:
+        Device:[${Build.DEVICE}]
+        Model:[${Build.MODEL}]
+        Manufacturer:[${Build.MANUFACTURER}]
+        Time:[${Build.TIME}]
+        Android Version:[${Build.VERSION.RELEASE}]
+        App Version:[$versionName $versionCode]
+        
+        """
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -135,15 +144,7 @@ open class ErrorActivity : BaseActivity() {
         """.trimIndent()
     }
     if (allowDeviceDetails.isChecked) {
-      body += """Device Details:
-        Device:[${Build.DEVICE}]
-        Model:[${Build.MODEL}]
-        Manufacturer:[${Build.MANUFACTURER}]
-        Time:[${Build.TIME}]
-        Android Version:[${Build.VERSION.RELEASE}]
-        App Version:[$versionName $versionCode]
-        
-        """
+      body += deviceDetails
     }
     if (allowFileSystemDetails.isChecked) {
       body += "Mount Points\n"
