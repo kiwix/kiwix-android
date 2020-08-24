@@ -83,16 +83,14 @@ open class ErrorActivity : BaseActivity() {
     } else {
       null
     }
+    setupReportButton()
+    addExtrasToEmailIntent()
+    restartButton.setOnClickListener { restartApp() }
+  }
+
+  private fun setupReportButton() {
     reportButton.setOnClickListener {
       emailIntent = Intent(Intent.ACTION_SEND)
-      with(emailIntent) {
-        type = "vnd.android.cursor.dir/email"
-        putExtra(
-          Intent.EXTRA_EMAIL,
-          arrayOf("android-crash-feedback@kiwix.org")
-        )
-        putExtra(Intent.EXTRA_SUBJECT, subject)
-      }
       body = initialBody
       buildBody()
       startActivityForResult(
@@ -101,10 +99,17 @@ open class ErrorActivity : BaseActivity() {
         }, "Send email..."), 1
       )
     }
-    restartButton.setOnClickListener { restartApp() }
   }
 
-  private fun buildBody() {
+  private fun addExtrasToEmailIntent() {
+    with(emailIntent) {
+      type = "vnd.android.cursor.dir/email"
+      putExtra(
+        Intent.EXTRA_EMAIL,
+        arrayOf("android-crash-feedback@kiwix.org")
+      )
+      putExtra(Intent.EXTRA_SUBJECT, subject)
+    }
     if (allowLogs.isChecked) {
       val file = fileLogger.writeLogFile(this)
       val path =
@@ -114,6 +119,9 @@ open class ErrorActivity : BaseActivity() {
         putExtra(android.content.Intent.EXTRA_STREAM, path)
       }
     }
+  }
+
+  private fun buildBody() {
     if (allowCrash.isChecked && exception != null) {
       body += """
         Exception Details:
