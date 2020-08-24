@@ -51,15 +51,11 @@ public class DocumentParser(private var listener: DocumentParser.SectionsListene
         title = sectionTitle.trim()
         return
       }
-
-      val section = DocumentSection()
-      section.title = section.title.trim();
-      section.id = id;
-      val character: String = element.substring(element.length - 1)
-      val level = character.toIntOrNull() ?: 0
-
-      section.level = level
-      sections.add(section)
+      sections.add(DocumentSection().apply {
+        this.id = id
+        title = sectionTitle.trim()
+        level = element.takeLast(element.length - 1).toIntOrNull() ?: 0
+      })
     }
 
     @JavascriptInterface
