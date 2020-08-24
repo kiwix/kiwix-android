@@ -65,9 +65,6 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
     }
   }
 
-  private fun nightModeStrings(): Array<String> {
-    return activityRule.activity
-      .resources
-      .getStringArray(R.array.pref_night_modes_entries)
-  }
+  private fun nightModeStrings(): Array<String> =
+    activityRule.activity.resources.getStringArray(R.array.pref_night_modes_entries)
 }

@@ -38,6 +38,7 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
   SettingsRobot().applyWithViewHierarchyPrinting { func }
 
 class SettingsRobot : BaseRobot() {
+
   fun clickOn(@StringRes vararg stringIds: Int) {
     val matchers: Array<Matcher<View>?> = arrayOfNulls(stringIds.size)
     for (i in stringIds.indices) {
