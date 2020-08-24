@@ -18,5 +18,5 @@
   <dimen name="section_list_height">56dp</dimen>
   <dimen name="card_margin">5dp</dimen>
 
-  <dimen name="fab_vertical_offset">20dp</dimen>
+  <dimen name="fab_vertical_offset">25dp</dimen>
 </resources>
