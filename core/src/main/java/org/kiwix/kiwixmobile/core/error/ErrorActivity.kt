@@ -60,7 +60,6 @@ open class ErrorActivity : BaseActivity() {
   @Inject
   lateinit var fileLogger: FileLogger
 
-  private lateinit var body: String
   private var exception: Throwable? = null
   private lateinit var emailIntent: Intent
   private val deviceDetails = """Device Details:
@@ -83,25 +82,21 @@ open class ErrorActivity : BaseActivity() {
     } else {
       null
     }
-    setupReportButton()
     addExtrasToEmailIntent()
+    setupReportButton()
     restartButton.setOnClickListener { restartApp() }
   }
 
   private fun setupReportButton() {
     reportButton.setOnClickListener {
-      emailIntent = Intent(Intent.ACTION_SEND)
-      body = initialBody
-      buildBody()
       startActivityForResult(
-        Intent.createChooser(Intent().apply {
-          putExtra(Intent.EXTRA_TEXT, body)
-        }, "Send email..."), 1
+        Intent.createChooser(emailIntent, "Send email..."), 1
       )
     }
   }
 
   private fun addExtrasToEmailIntent() {
+    emailIntent = Intent(Intent.ACTION_SEND)
     with(emailIntent) {
       type = "vnd.android.cursor.dir/email"
       putExtra(
@@ -109,6 +104,7 @@ open class ErrorActivity : BaseActivity() {
         arrayOf("android-crash-feedback@kiwix.org")
       )
       putExtra(Intent.EXTRA_SUBJECT, subject)
+      putExtra(Intent.EXTRA_TEXT, buildBody())
     }
     if (allowLogs.isChecked) {
       val file = fileLogger.writeLogFile(this)
@@ -121,7 +117,8 @@ open class ErrorActivity : BaseActivity() {
     }
   }
 
-  private fun buildBody() {
+  private fun buildBody(): String {
+    var body = initialBody
     if (allowCrash.isChecked && exception != null) {
       body += """
         Exception Details:
@@ -170,6 +167,7 @@ open class ErrorActivity : BaseActivity() {
           """.trimIndent()
       }
     }
+    return body
   }
 
   private fun safeContains(extras: Bundle): Boolean {
