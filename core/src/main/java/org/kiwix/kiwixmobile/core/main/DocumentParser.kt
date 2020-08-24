@@ -22,19 +22,22 @@ import android.os.Handler
 import android.os.Looper
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import kotlin.collections.List
+import kotlin.collections.ArrayList
+
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 
 public class DocumentParser(private var listener: DocumentParser.SectionsListener) {
 
-  private var tittle: String = ""
-  private var sections = ArrayList<TableDrawerAdapter.DocumentSection>();
+  private var title: String = ""
+  private var sections = ArrayList<TableDrawerAdapter.DocumentSection>()
 
   public fun initInterface(webView: WebView) {
     webView.addJavascriptInterface(ParserCallback(), "Documentparser")
   }
 
   public interface SectionsListener {
-    fun sectionsLoaded(tittle: String = "", sections: List<DocumentSection>)
+    fun sectionsLoaded(title: String, sections: List<DocumentSection>)
 
     fun clearSections()
   }
@@ -42,41 +45,40 @@ public class DocumentParser(private var listener: DocumentParser.SectionsListene
   inner class ParserCallback() {
 
     @JavascriptInterface
-    public fun parse(sectionTittle: String, element: String, id: String) {
+    public fun parse(sectionTitle: String, element: String, id: String) {
 
       if (element == "H1") {
-        tittle = sectionTittle.trim()
+        title = sectionTitle.trim()
         return
       }
+
       val section = DocumentSection()
       section.title = section.title.trim();
       section.id = id;
-      var level: Int?
       val character: String = element.substring(element.length - 1)
-      level = character.toIntOrNull()
-      if (level == null) {
-        level = 0;
-      }
-      section.level = level;
+      val level = character.toIntOrNull() ?: 0
+
+      section.level = level
       sections.add(section)
     }
 
     @JavascriptInterface
     public fun start() {
-      tittle = ""
+      title = ""
       sections = ArrayList()
       Handler(Looper.getMainLooper()).post(Runnable(listener::clearSections))
     }
 
     @JavascriptInterface
     public fun stop() {
-      val listToBeSentToMainThread: List<DocumentSection> = ArrayList(sections);
+      val listToBeSentToMainThread: List<DocumentSection> = ArrayList(sections)
       Handler(Looper.getMainLooper()).post {
         listener.sectionsLoaded(
-          tittle,
+          title,
           listToBeSentToMainThread
         )
       }
     }
   }
 }
+
