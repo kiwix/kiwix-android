@@ -58,6 +58,7 @@
   <string name="pref_newtab_background_summary">Nieuwe tabbladen worden niet actief gemaakt</string>
   <string name="local_zims">Apparaat</string>
   <string name="library">Bibliotheek</string>
+  <string name="download">Downloaden</string>
   <string name="zim_simple">Eenvoudig</string>
   <string name="zim_no_pic">Geen afbeeldingen</string>
   <string name="zim_no_vid">Geen video\'s</string>
