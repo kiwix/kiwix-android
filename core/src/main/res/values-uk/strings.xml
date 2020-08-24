@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Authors:
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
 * Andriykopanytsia
 * Asokolov
 * Base
@@ -110,6 +111,7 @@
   <string name="delete_zims_toast">Файл вилучено</string>
   <string name="no_files_here">Тут немає файлів</string>
   <string name="download_no_space">Недостатньо простору для завантаження.</string>
+  <string name="download">Завантажити</string>
   <string name="space_available">Доступний простір:</string>
   <string name="zim_simple">Простий</string>
   <string name="zim_no_pic">Без зображень</string>

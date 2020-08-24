@@ -70,6 +70,7 @@
   <string name="delete_zims_toast">پرونده‌ها با موفقیت حذف شدند</string>
   <string name="no_files_here">هیچ پرونده‌ای در این‌جا نیست</string>
   <string name="download_no_space" fuzzy="true">فضای ناکافی برای بارگیری پرونده</string>
+  <string name="download">بارگیری</string>
   <string name="space_available">فضای موجود:</string>
   <string name="zim_simple">ساده</string>
   <string name="zim_no_pic">هیچ عکسی نیست</string>

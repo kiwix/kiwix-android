@@ -96,6 +96,7 @@
   <string name="delete_zims_toast">Dateiä erfolgriich glöscht</string>
   <string name="no_files_here">Hie hets ke Dateiä</string>
   <string name="download_no_space">Nid gnüegend Spiicherplatz um abezladä.</string>
+  <string name="download">Abelade</string>
   <string name="space_available">Verfüegbaare Spiicherplatz:</string>
   <string name="zim_simple">Eifach</string>
   <string name="zim_no_pic">Ke Bilder</string>

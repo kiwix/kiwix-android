@@ -110,6 +110,7 @@
   <string name="delete_zims_toast">檔案刪除成功</string>
   <string name="no_files_here">沒有檔案在此</string>
   <string name="download_no_space">沒有足夠的空間來下載。</string>
+  <string name="download">下載</string>
   <string name="space_available">可用空間：</string>
   <string name="zim_simple">簡易</string>
   <string name="zim_no_pic">沒有圖片</string>
@@ -273,4 +274,10 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字縮放</string>
   <string name="search_open_in_new_tab">在新分頁開啟</string>
+  <string name="reader">讀者</string>
+  <string name="no_open_book">沒有開啟的書籍</string>
+  <string name="open_library">開啟圖書館</string>
+  <string name="tab_restored">分頁已恢復</string>
+  <string name="open_drawer">開啟抽屜</string>
+  <string name="close_drawer">關閉抽屜</string>
 </resources>
