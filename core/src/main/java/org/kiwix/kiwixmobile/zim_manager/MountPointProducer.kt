@@ -44,8 +44,8 @@ data class MountInfo(val device: String, val mountPoint: String, val fileSystem:
   val doesNotSupport4GBFiles = DOES_NOT_SUPPORT_4GB_FILE_SYSTEMS.contains(fileSystem)
 
   companion object {
-    private val VIRTUAL_FILE_SYSTEMS = listOf("fuse", "sdcardfs")
+    private val VIRTUAL_FILE_SYSTEMS = listOf("fuse", "sdcardfs", "sdfat")
     private val SUPPORTS_4GB_FILE_SYSTEMS = listOf("ext4", "exfat")
-    private val DOES_NOT_SUPPORT_4GB_FILE_SYSTEMS = listOf("fat32", "vfat", "sdfat")
+    private val DOES_NOT_SUPPORT_4GB_FILE_SYSTEMS = listOf("fat32", "vfat")
   }
 }

@@ -64,6 +64,7 @@
   <string name="delete_zims_toast">फाइल मेटियो</string>
   <string name="no_files_here">यहाँ कुनै फाइलहरू छैनन्</string>
   <string name="download_no_space" fuzzy="true">यो फाइल डाउनलोड गर्न पर्याप्त स्थान छैन।</string>
+  <string name="download">डाउनलोड गरिएकाे</string>
   <string name="zim_simple">साधारण</string>
   <string name="zim_no_pic">तस्विर छैन</string>
   <string name="zim_no_vid">भिडियो छैन</string>

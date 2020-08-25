@@ -101,6 +101,7 @@
   <string name="delete_zims_toast">Dosyay hewl esteriyayê</string>
   <string name="no_files_here">Tiya dosyeyi çıniyê</string>
   <string name="download_no_space">Serba ronayışi rê ca bes niyo.</string>
+  <string name="download">Biya war</string>
   <string name="space_available">Karnıyayiye erd:</string>
   <string name="zim_simple">Besit</string>
   <string name="zim_no_pic">Resımi çıniyê</string>

@@ -111,6 +111,7 @@
   <string name="delete_zims_toast">הקבצים נמחקו בהצלחה</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום להורדה.</string>
+  <string name="download">הורדה</string>
   <string name="space_available">נפח זמין:</string>
   <string name="zim_simple">פשוט</string>
   <string name="zim_no_pic">אין תמונות</string>
