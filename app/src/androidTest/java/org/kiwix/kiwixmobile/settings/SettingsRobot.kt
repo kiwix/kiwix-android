@@ -81,6 +81,9 @@ class SettingsRobot : BaseRobot() {
 
   fun invokeNightModeDialog() {
     clickRecyclerViewItems(R.string.pref_night_mode)
+    for (nightModeString in nightModeStrings()) {
+      assertDisplayed(nightModeString)
+    }
   }
 
   fun invokeContributorsDialog() {
@@ -92,4 +95,7 @@ class SettingsRobot : BaseRobot() {
     clickRecyclerViewItems(R.string.pref_info_version)
     clickRecyclerViewItems(R.string.pref_text_zoom_title)
   }
+
+  private fun nightModeStrings(): Array<String> =
+    context.resources.getStringArray(R.array.pref_night_modes_entries)
 }

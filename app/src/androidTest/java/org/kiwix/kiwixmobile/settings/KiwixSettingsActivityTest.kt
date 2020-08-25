@@ -17,25 +17,38 @@
  */
 package org.kiwix.kiwixmobile.settings
 
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.R
 
 class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
 
   override var activityRule = activityTestRule<KiwixSettingsActivity>()
 
   @Test
-  fun executeSettingsActivity() {
+  fun testToggling() {
     settingsRobo {
       toggleButtons()
-      invokeContributorsDialog()
-      invokeHistoryDeletionDialog()
+    }
+  }
+
+  @Test
+  fun testLanguageDialog() {
+    settingsRobo {
       invokeLanguageDialog()
-      // invokeNightModeDialog()
+    }
+  }
+
+  @Test
+  fun testStorageDialog() {
+    settingsRobo {
       invokeStorageDialog()
-      checkRemainingTextViews()
+    }
+  }
+
+  @Test
+  fun testHistoryDialog() {
+    settingsRobo {
+      invokeHistoryDeletionDialog()
     }
   }
 
@@ -43,12 +56,20 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   fun testNightModeDialog() {
     settingsRobo {
       invokeNightModeDialog()
-      for (nightModeString in nightModeStrings()) {
-        assertDisplayed(nightModeString)
-      }
     }
   }
 
-  private fun nightModeStrings(): Array<String> =
-    activityRule.activity.resources.getStringArray(R.array.pref_night_modes_entries)
+  // @Test
+  // fun testCreditsDialog() {
+  //   settingsRobo {
+  //     invokeContributorsDialog()
+  //   }
+  // }
+
+  @Test
+  fun testVersionTextView() {
+    settingsRobo {
+      checkRemainingTextViews()
+    }
+  }
 }
