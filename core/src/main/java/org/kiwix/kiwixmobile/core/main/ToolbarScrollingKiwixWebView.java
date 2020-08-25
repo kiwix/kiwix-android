@@ -51,6 +51,13 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
     this.toolbarView = toolbarView;
     this.bottomBarView = bottomBarView;
     this.sharedPreferenceUtil = sharedPreferenceUtil;
+    // The webview needs to be scrolled with 0 to not be slightly hidden on startup.
+    // See https://github.com/kiwix/kiwix-android/issues/2304 for issue description.
+    fixInitalScrollingIssue();
+  }
+
+  private void fixInitalScrollingIssue() {
+    moveToolbar(0);
   }
 
   private boolean moveToolbar(int scrollDelta) {
