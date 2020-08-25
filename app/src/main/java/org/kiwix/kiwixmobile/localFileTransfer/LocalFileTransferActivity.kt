@@ -81,7 +81,6 @@ class LocalFileTransferActivity : BaseActivity(),
   lateinit var locationManager: LocationManager
 
   private var isFileSender = false // Whether the device is the file sender or not
-  private lateinit var filesForTransfer: List<FileItem>
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
 
@@ -96,9 +95,10 @@ class LocalFileTransferActivity : BaseActivity(),
      * activity, without any file Uris
      * */
     val filesIntent = intent
+    lateinit var filesForTransfer: List<FileItem>
     val fileUriArrayList: ArrayList<Uri>?
     fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
-    isFileSender = fileUriArrayList?.isNotEmpty() == true && fileUriArrayList.size > 0
+    isFileSender = fileUriArrayList?.isNotEmpty() == true
 
     val toolbar: Toolbar =
       findViewById(R.id.toolbar)
@@ -173,7 +173,6 @@ class LocalFileTransferActivity : BaseActivity(),
   }
 
   override fun onFilesForTransferAvailable(filesForTransfer: List<FileItem>) {
-    this.filesForTransfer = filesForTransfer
     displayFileTransferProgress(filesForTransfer)
   }
 
