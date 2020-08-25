@@ -30,6 +30,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
 
 /**
@@ -41,7 +42,7 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
 
 class SettingsRobot : BaseRobot() {
 
-  fun clickOn(@StringRes vararg stringIds: Int) {
+  private fun clickRecyclerViewItems(@StringRes vararg stringIds: Int) {
     val matchers: Array<Matcher<View>?> = arrayOfNulls(stringIds.size)
     for (i in stringIds.indices) {
       matchers[i] = withText(stringIds[i])
@@ -56,25 +57,34 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun toggleButtons() {
-    clickOn(R.string.pref_back_to_top)
-    clickOn(R.string.pref_newtab_background_title)
-    clickOn(R.string.pref_external_link_popup_title)
-    clickOn(R.string.pref_wifi_only)
+    clickRecyclerViewItems(R.string.pref_back_to_top)
+    clickRecyclerViewItems(R.string.pref_newtab_background_title)
+    clickRecyclerViewItems(R.string.pref_external_link_popup_title)
+    clickRecyclerViewItems(R.string.pref_wifi_only)
   }
 
   fun invokeLanguageDialog() {
-    clickOn(R.string.device_default)
+    clickRecyclerViewItems(R.string.device_default)
   }
 
   fun invokeStorageDialog() {
-    clickOn(R.string.internal_storage, R.string.external_storage)
+    clickRecyclerViewItems(R.string.internal_storage, R.string.external_storage)
   }
 
   fun invokeHistoryDeletionDialog() {
-    clickOn(R.string.pref_clear_all_history_title)
+    clickRecyclerViewItems(R.string.pref_clear_all_history_title)
   }
 
   fun invokeNightModeDialog() {
-    clickOn(R.string.pref_night_mode)
+    clickRecyclerViewItems(R.string.pref_night_mode)
+  }
+
+  fun invokeContributorsDialog() {
+    clickRecyclerViewItems(R.string.pref_credits_title)
+    isVisible(Text("Contributors"))
+  }
+
+  fun checkRemainingTextViews() {
+    clickRecyclerViewItems(R.string.pref_info_version, R.string.pref_text_zoom_title)
   }
 }

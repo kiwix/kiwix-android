@@ -67,6 +67,20 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
     }
   }
 
+  @Test
+  fun testCreditsDialog() {
+    settingsRobo {
+      invokeContributorsDialog()
+    }
+  }
+
+  @Test
+  fun testVersionTextView() {
+    settingsRobo {
+      checkRemainingTextViews()
+    }
+  }
+
   private fun nightModeStrings(): Array<String> =
     activityRule.activity.resources.getStringArray(R.array.pref_night_modes_entries)
 }
