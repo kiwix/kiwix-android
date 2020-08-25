@@ -30,6 +30,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.core.R
 
 /**
  * Authored by Ayush Shrivastava on 25/8/20
@@ -52,5 +53,28 @@ class SettingsRobot : BaseRobot() {
         hasDescendant(Matchers.anyOf(*matchers)), ViewActions.click()
       )
     )
+  }
+
+  fun toggleButtons() {
+    clickOn(R.string.pref_back_to_top)
+    clickOn(R.string.pref_newtab_background_title)
+    clickOn(R.string.pref_external_link_popup_title)
+    clickOn(R.string.pref_wifi_only)
+  }
+
+  fun invokeLanguageDialog() {
+    clickOn(R.string.device_default)
+  }
+
+  fun invokeStorageDialog() {
+    clickOn(R.string.internal_storage, R.string.external_storage)
+  }
+
+  fun invokeHistoryDeletionDialog() {
+    clickOn(R.string.pref_clear_all_history_title)
+  }
+
+  fun invokeNightModeDialog() {
+    clickOn(R.string.pref_night_mode)
   }
 }

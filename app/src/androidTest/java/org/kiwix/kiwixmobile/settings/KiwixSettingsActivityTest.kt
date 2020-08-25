@@ -27,19 +27,16 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   override var activityRule = activityTestRule<KiwixSettingsActivity>()
 
   @Test
-  fun testToggle() {
+  fun testToggling() {
     settingsRobo {
-      clickOn(R.string.pref_back_to_top)
-      clickOn(R.string.pref_newtab_background_title)
-      clickOn(R.string.pref_external_link_popup_title)
-      clickOn(R.string.pref_wifi_only)
+      toggleButtons()
     }
   }
 
   @Test
   fun testLanguageDialog() {
     settingsRobo {
-      clickOn(R.string.device_default)
+      invokeLanguageDialog()
       assertDisplayed(R.string.pref_language_title)
     }
   }
@@ -47,7 +44,7 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   @Test
   fun testStorageDialog() {
     settingsRobo {
-      clickOn(R.string.internal_storage, R.string.external_storage)
+      invokeStorageDialog()
       assertDisplayed(R.string.pref_storage)
     }
   }
@@ -55,7 +52,7 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   @Test
   fun testHistoryDialog() {
     settingsRobo {
-      clickOn(R.string.pref_clear_all_history_title)
+      invokeHistoryDeletionDialog()
       assertDisplayed(R.string.clear_all_history_dialog_title)
     }
   }
@@ -63,7 +60,7 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   @Test
   fun testNightModeDialog() {
     settingsRobo {
-      clickOn(R.string.pref_night_mode)
+      invokeNightModeDialog()
       for (nightModeString in nightModeStrings()) {
         assertDisplayed(nightModeString)
       }
