@@ -255,7 +255,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navigate(historyFragmentResId)
   }
 
-  abstract fun openSearch()
+  abstract fun openSearch(searchString: String = "", zimFile: String = "", isVoice: Boolean = false)
 
   private fun openBookmarks() {
     navigate(bookmarksFragmentResId)

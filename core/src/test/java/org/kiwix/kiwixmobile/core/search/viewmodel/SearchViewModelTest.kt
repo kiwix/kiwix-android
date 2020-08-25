@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultL
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithArguments
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
@@ -269,7 +269,7 @@ internal class SearchViewModelTest {
     fun `CreatedWithIntent offers SearchIntentProcessing`() {
       val intent = mockk<Intent>()
       actionResultsInEffects(
-        CreatedWithIntent(intent),
+        CreatedWithArguments(intent),
         SearchIntentProcessing(intent, viewModel.actions)
       )
     }

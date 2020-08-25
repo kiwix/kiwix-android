@@ -143,8 +143,11 @@ class KiwixMainActivity : CoreMainActivity() {
     navigate(R.id.zimHostFragment)
   }
 
-  override fun openSearch() {
-    navigate(KiwixReaderFragmentDirections.actionReaderFragmentToSearchFragment())
+  override fun openSearch(searchString: String, zimFile: String, isVoice: Boolean) {
+    val action =
+      KiwixReaderFragmentDirections.actionReaderFragmentToSearchFragment(searchString, zimFile)
+    action.isVoice = isVoice
+    navigate(action)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String, shouldOpenInNewTab: Boolean) {

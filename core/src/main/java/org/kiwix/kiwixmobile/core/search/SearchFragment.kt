@@ -61,6 +61,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
+const val NAV_ARG_SEARCH_STRING = "searchString"
+
 class SearchFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -96,7 +98,6 @@ class SearchFragment : BaseFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setupToolbar(view)
-
     search_list.run {
       adapter = searchAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -146,7 +147,7 @@ class SearchFragment : BaseFragment() {
     }
 
     searchViewModel.state.observe(this, Observer(::render))
-    searchViewModel.actions.offer(Action.CreatedWithIntent(null))
+    searchViewModel.actions.offer(Action.CreatedWithArguments(arguments))
   }
 
   private fun render(state: State) {

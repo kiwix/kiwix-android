@@ -35,7 +35,7 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithArguments
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
@@ -100,7 +100,7 @@ class SearchViewModel @Inject constructor(
       is Filter -> filter.offer(it.term)
       ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
       is ConfirmedDelete -> deleteItemAndShowToast(it)
-      is CreatedWithIntent -> effects.offer(SearchIntentProcessing(it.intent, actions))
+      is CreatedWithArguments -> effects.offer(SearchIntentProcessing(it.arguments, actions))
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
       is ActivityResultReceived ->
