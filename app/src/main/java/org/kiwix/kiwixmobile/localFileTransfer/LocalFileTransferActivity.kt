@@ -96,9 +96,9 @@ class LocalFileTransferActivity : BaseActivity(),
      * */
     val filesIntent = intent
     lateinit var filesForTransfer: List<FileItem>
-    val fileUriArrayList: ArrayList<Uri>?
-    fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
-    isFileSender = fileUriArrayList?.isNotEmpty() == true
+    val fileUriArrayList: ArrayList<Uri> =
+      filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+    isFileSender = fileUriArrayList.isNotEmpty() == true
 
     val toolbar: Toolbar =
       findViewById(R.id.toolbar)
