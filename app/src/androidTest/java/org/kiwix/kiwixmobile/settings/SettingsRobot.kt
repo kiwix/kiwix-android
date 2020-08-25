@@ -27,6 +27,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.kiwix.kiwixmobile.BaseRobot
@@ -65,14 +66,17 @@ class SettingsRobot : BaseRobot() {
 
   fun invokeLanguageDialog() {
     clickRecyclerViewItems(R.string.device_default)
+    assertDisplayed(R.string.pref_language_title)
   }
 
   fun invokeStorageDialog() {
     clickRecyclerViewItems(R.string.internal_storage, R.string.external_storage)
+    assertDisplayed(R.string.pref_storage)
   }
 
   fun invokeHistoryDeletionDialog() {
     clickRecyclerViewItems(R.string.pref_clear_all_history_title)
+    assertDisplayed(R.string.clear_all_history_dialog_title)
   }
 
   fun invokeNightModeDialog() {
@@ -85,6 +89,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun checkRemainingTextViews() {
-    clickRecyclerViewItems(R.string.pref_info_version, R.string.pref_text_zoom_title)
+    clickRecyclerViewItems(R.string.pref_info_version)
+    clickRecyclerViewItems(R.string.pref_text_zoom_title)
   }
 }
