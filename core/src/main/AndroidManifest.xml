@@ -22,7 +22,8 @@
     android:supportsRtl="true"
     android:theme="@style/KiwixTheme"
     android:usesCleartextTraffic="true"
-    tools:targetApi="m">
+    android:resizeableActivity="true"
+    tools:targetApi="n">
 
     <activity
       android:name=".search.SearchActivity"
