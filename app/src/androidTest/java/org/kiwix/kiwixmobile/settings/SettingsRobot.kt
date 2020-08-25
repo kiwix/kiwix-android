@@ -21,11 +21,12 @@ package org.kiwix.kiwixmobile.settings
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers
-import applyWithViewHierarchyPrinting
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.withClassName
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.kiwix.kiwixmobile.BaseRobot
@@ -35,21 +36,20 @@ import org.kiwix.kiwixmobile.BaseRobot
  */
 
 fun settingsRobo(func: SettingsRobot.() -> Unit) =
-  SettingsRobot().applyWithViewHierarchyPrinting { func }
+  SettingsRobot().apply(func)
 
 class SettingsRobot : BaseRobot() {
 
   fun clickOn(@StringRes vararg stringIds: Int) {
     val matchers: Array<Matcher<View>?> = arrayOfNulls(stringIds.size)
     for (i in stringIds.indices) {
-      matchers[i] = ViewMatchers.withText(stringIds[i])
+      matchers[i] = withText(stringIds[i])
     }
-
-    Espresso.onView(
-      ViewMatchers.withClassName(Matchers.`is`(RecyclerView::class.java.name))
+    onView(
+      withClassName(Matchers.`is`(RecyclerView::class.java.name))
     ).perform(
-      RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-        ViewMatchers.hasDescendant(Matchers.anyOf(*matchers)), ViewActions.click()
+      actionOnItem<RecyclerView.ViewHolder>(
+        hasDescendant(Matchers.anyOf(*matchers)), ViewActions.click()
       )
     )
   }
