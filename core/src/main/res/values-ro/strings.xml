@@ -108,6 +108,7 @@
   <string name="delete_zims_toast">Filă ștearsă cu succes</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
   <string name="download_no_space">Spațiu insuficient pentru a descarca.</string>
+  <string name="download">Descarcă</string>
   <string name="space_available">Spațiu disponibil:</string>
   <string name="zim_simple">Simplu</string>
   <string name="zim_no_pic">Fără imagini</string>

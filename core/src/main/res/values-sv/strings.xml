@@ -110,6 +110,7 @@
   <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned.</string>
+  <string name="download">Ladda ned</string>
   <string name="space_available">Tillgängligt utrymme:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Inga bilder</string>

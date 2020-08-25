@@ -29,7 +29,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-
     <FrameLayout
       android:id="@+id/activity_main_content_frame"
       android:layout_width="match_parent"
@@ -62,6 +61,16 @@
 
     <include layout="@layout/bottom_toolbar" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/activity_main_back_to_top_fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/action_find_previous"
+      android:visibility="gone"
+      app:fabSize="mini"
+      app:layout_anchor="@id/bottom_toolbar"
+      app:layout_dodgeInsetEdges="bottom"
+      tools:visibility="visible" />
   </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
 
   <ImageButton
@@ -76,19 +85,6 @@
     android:visibility="gone"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:visibility="visible" />
-
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/activity_main_back_to_top_fab"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:layout_marginBottom="?attr/actionBarSize"
-    android:src="@drawable/action_find_previous"
-    android:visibility="gone"
-    app:fabSize="mini"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
     tools:visibility="visible" />
 
   <Button

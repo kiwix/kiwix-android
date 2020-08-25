@@ -94,6 +94,7 @@
   <string name="delete_zim_body">Seuraava(t) zim-tiedosto(t) tullaan poistamaan:\n\n%s</string>
   <string name="delete_zims_toast">Tiedosto poistettu</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
+  <string name="download">Lataa</string>
   <string name="space_available">Tilaa käytettävissä:</string>
   <string name="zim_simple">Yksinkertainen</string>
   <string name="zim_no_pic">Ei kuvia</string>

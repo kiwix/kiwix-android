@@ -23,7 +23,7 @@ import android.os.Environment
 import androidx.preference.Preference
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_STORAGE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE
 
 class KiwixPrefsFragment : CorePrefsFragment() {
 

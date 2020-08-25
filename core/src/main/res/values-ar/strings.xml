@@ -110,6 +110,7 @@
   <string name="delete_zims_toast">حُذف الملف</string>
   <string name="no_files_here">لا توجد ملفات هنا</string>
   <string name="download_no_space">لا توجد مساحة كافية للتنزيل.</string>
+  <string name="download">تنزيل</string>
   <string name="space_available">المساحة المتاحة:</string>
   <string name="zim_simple">بسيط</string>
   <string name="zim_no_pic">لا توجد صور</string>
@@ -264,4 +265,5 @@
   <string name="off">تعطيل</string>
   <string name="auto">تلقائي</string>
   <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
+  <string name="open_library">افتح المكتبة</string>
 </resources>
