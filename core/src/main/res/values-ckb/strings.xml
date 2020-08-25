@@ -76,6 +76,7 @@
   <string name="delete_zim_body" fuzzy="true">لابردنی %s</string>
   <string name="delete_zims_toast">پەڕگە سڕدرایەوە</string>
   <string name="no_files_here">ھیچ پەڕگەیەک لێرە نییە</string>
+  <string name="download">داگرتن</string>
   <string name="space_available">بۆشایی بەردەستە:</string>
   <string name="zim_simple">سادە</string>
   <string name="zim_no_pic">بەبێ وێنە</string>

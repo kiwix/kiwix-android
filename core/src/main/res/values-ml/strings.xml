@@ -71,6 +71,7 @@
   <string name="library">ഗ്രന്ഥപ്പുര</string>
   <string name="delete_zim_body" fuzzy="true">%s മായ്ക്കണോ?</string>
   <string name="no_files_here">ഇവിടെ പ്രമാണങ്ങളൊന്നുമില്ല</string>
+  <string name="download">ഡൗൺലോഡ് ചെയ്യുക</string>
   <string name="zim_no_pic">ചിത്രങ്ങളില്ല</string>
   <string name="help_2">കിവിക്സ് എന്താണ് ചെയ്യുന്നത്?</string>
   <string name="tts_pause">താത്കാലികമായി നിർത്തുക</string>

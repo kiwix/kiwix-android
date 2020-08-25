@@ -105,6 +105,7 @@
   <string name="delete_zims_toast">Податотеката е успешно избришана</string>
   <string name="no_files_here">Нема податотеки</string>
   <string name="download_no_space">Нема доволно место за преземање.</string>
+  <string name="download">Преземи</string>
   <string name="space_available">Достапен простор:</string>
   <string name="zim_simple">Просто</string>
   <string name="zim_no_pic">Без слики</string>
@@ -268,4 +269,10 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Приближување на текст</string>
   <string name="search_open_in_new_tab">Отвори во ново јазиче</string>
+  <string name="reader">Читач</string>
+  <string name="no_open_book">Нема отворена книга</string>
+  <string name="open_library">Отворена библиотека</string>
+  <string name="tab_restored">Јазичето е повратено</string>
+  <string name="open_drawer">Отвори фиока</string>
+  <string name="close_drawer">Затвори фиока</string>
 </resources>

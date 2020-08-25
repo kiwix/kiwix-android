@@ -118,6 +118,7 @@
   <string name="delete_zims_toast">Les fichiers ont bien été supprimés</string>
   <string name="no_files_here">Aucun fichier ici</string>
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
+  <string name="download">Télécharger</string>
   <string name="space_available">Espace disponible :</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Aucune image</string>
@@ -281,4 +282,10 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoomer le texte</string>
   <string name="search_open_in_new_tab">Ouvrir dans un nouvel onglet</string>
+  <string name="reader">Lecteur</string>
+  <string name="no_open_book">Pas de livre ouvert</string>
+  <string name="open_library">Ouvrir la bibliothèque</string>
+  <string name="tab_restored">Onglet restauré</string>
+  <string name="open_drawer">Ouvrir le tiroir</string>
+  <string name="close_drawer">Fermer le tiroir</string>
 </resources>

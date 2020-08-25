@@ -106,6 +106,7 @@
   <string name="delete_zims_toast">Documentu iscantzelladu chene problemas</string>
   <string name="no_files_here">Perunu documentu inoghe</string>
   <string name="download_no_space">Sa memòria non bastat pro l\'iscarrigare.</string>
+  <string name="download">Iscàrriga</string>
   <string name="space_available">Ispàtziu disponìbile:</string>
   <string name="zim_simple">Sèmplitze</string>
   <string name="zim_no_pic">Peruna immàgine</string>

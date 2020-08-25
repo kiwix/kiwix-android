@@ -84,6 +84,7 @@
   <string name="delete_zims_toast">Ficheiros apagados</string>
   <string name="no_files_here">Não há ficheiros aqui</string>
   <string name="download_no_space" fuzzy="true">Espaço insuficiente para o download deste ficheiro.</string>
+  <string name="download">Transferir</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="zim_simple">Simples</string>
   <string name="zim_no_pic">Sem imagens</string>
