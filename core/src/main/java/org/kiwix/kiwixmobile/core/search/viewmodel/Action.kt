@@ -35,7 +35,7 @@ sealed class Action {
   data class Filter(val term: String) : Action()
   data class ScreenWasStartedFrom(val searchOrigin: SearchOrigin) : Action()
   data class ConfirmedDelete(val searchListItem: SearchListItem) : Action()
-  data class CreatedWithArguments(val arguments: Bundle) : Action()
+  data class CreatedWithArguments(val arguments: Bundle?) : Action()
   data class ActivityResultReceived(val requestCode: Int, val resultCode: Int, val data: Intent?) :
     Action()
 }
