@@ -61,28 +61,16 @@ open class ErrorActivity : BaseActivity() {
   lateinit var fileLogger: FileLogger
 
   private var exception: Throwable? = null
-  private lateinit var emailIntent: Intent
-  private val deviceDetails = """Device Details:
-        Device:[${Build.DEVICE}]
-        Model:[${Build.MODEL}]
-        Manufacturer:[${Build.MANUFACTURER}]
-        Time:[${Build.TIME}]
-        Android Version:[${Build.VERSION.RELEASE}]
-        App Version:[$versionName $versionCode]
-        
-        """
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_kiwix_error)
-    val callingIntent = intent
-    val extras = callingIntent.extras
+    val extras = intent.extras
     exception = if (extras != null && safeContains(extras)) {
       extras.getSerializable(EXCEPTION_KEY) as Throwable
     } else {
       null
     }
-    addExtrasToEmailIntent()
     setupReportButton()
     restartButton.setOnClickListener { restartApp() }
   }
@@ -90,14 +78,13 @@ open class ErrorActivity : BaseActivity() {
   private fun setupReportButton() {
     reportButton.setOnClickListener {
       startActivityForResult(
-        Intent.createChooser(emailIntent, "Send email..."), 1
+        Intent.createChooser(emailIntent(), "Send email..."), 1
       )
     }
   }
 
-  private fun addExtrasToEmailIntent() {
-    emailIntent = Intent(Intent.ACTION_SEND)
-    with(emailIntent) {
+  private fun emailIntent(): Intent {
+    return Intent(Intent.ACTION_SEND).apply {
       type = "vnd.android.cursor.dir/email"
       putExtra(
         Intent.EXTRA_EMAIL,
@@ -105,69 +92,100 @@ open class ErrorActivity : BaseActivity() {
       )
       putExtra(Intent.EXTRA_SUBJECT, subject)
       putExtra(Intent.EXTRA_TEXT, buildBody())
-    }
-    if (allowLogs.isChecked) {
-      val file = fileLogger.writeLogFile(this)
-      val path =
-        FileProvider.getUriForFile(this, applicationContext.packageName + ".fileprovider", file)
-      with(emailIntent) {
+      if (allowLogs.isChecked) {
+        val file = fileLogger.writeLogFile(this@ErrorActivity)
+        val path =
+          FileProvider.getUriForFile(
+            this@ErrorActivity,
+            applicationContext.packageName + ".fileprovider",
+            file
+          )
         addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        putExtra(android.content.Intent.EXTRA_STREAM, path)
+        this.putExtra(android.content.Intent.EXTRA_STREAM, path)
       }
     }
   }
 
   private fun buildBody(): String {
-    var body = initialBody
-    if (allowCrash.isChecked && exception != null) {
-      body += """
-        Exception Details:
-        ${toStackTraceString(exception!!)}
-        """.trimIndent()
+    return """
+      $initialBody
+      
+      ${if (allowCrash.isChecked && exception != null) exceptionDetails() else ""}
+      ${if (allowZims.isChecked) zimFiles() else ""}
+      ${if (allowLanguage.isChecked) languageLocale() else ""}
+      ${if (allowDeviceDetails.isChecked) deviceDetails() else ""}
+      ${if (allowFileSystemDetails.isChecked) systemDetails() else ""}
+       """.trimIndent()
+  }
+
+  private fun exceptionDetails(): String {
+    return """
+      Exception Details:
+      ${toStackTraceString(exception!!)}
+      """.trimIndent()
+  }
+
+  private fun zimFiles(): String {
+    val allZimFiles = bookDao.getBooks().joinToString {
+      """
+      ${it.book.getTitle()}:
+      Articles: [${it.book.getArticleCount()}]
+    Parcelable.Creator: [${it.book.getCreator()}]
+      """.trimIndent()
     }
-    if (allowZims.isChecked) {
-      val allZimFiles = bookDao.getBooks().joinToString {
-        """
-          ${it.book.getTitle()}:
-          Articles: [${it.book.getArticleCount()}]
-          Creator: [${it.book.getCreator()}]
-          
-          """.trimIndent()
-      }
-      val currentZimFile = zimReaderContainer.zimCanonicalPath
-      body += """
+    val currentZimFile = zimReaderContainer.zimCanonicalPath
+    return """
         Current Zim File:
         $currentZimFile
         All Zim Files in DB:
         $allZimFiles
+        
         """.trimIndent()
-    }
-    if (allowLanguage.isChecked) {
-      body += """
-        Current Locale:
-        ${getCurrentLocale(applicationContext)}
+  }
+
+  private fun languageLocale(): String {
+    return """
+      Current Locale:
+      ${getCurrentLocale(applicationContext)}
+      
+    """.trimIndent()
+  }
+
+  private fun deviceDetails(): String {
+    return """
+      BluetoothClass.Device Details:
+      Device:[${Build.DEVICE}]
+      Model:[${Build.MODEL}]
+      Manufacturer:[${Build.MANUFACTURER}]
+      Time:[${Build.TIME}]
+      Android Version:[${Build.VERSION.RELEASE}]
+      App Version:[$versionName $versionCode]
+      
+    """.trimIndent()
+  }
+
+  private fun systemDetails(): String {
+    return """
+      Mount Points
+      ${mountPointProducer.produce().joinToString {
+      """
+        $it
         """.trimIndent()
-    }
-    if (allowDeviceDetails.isChecked) {
-      body += deviceDetails
-    }
-    if (allowFileSystemDetails.isChecked) {
-      body += "Mount Points\n"
-      val mountPointInfo = mountPointProducer.produce().joinToString {
-        """
-          $it
-          
-          """.trimIndent()
-      }
-      body += "$mountPointInfo\nExternal Directories\n"
-      for (externalFilesDir in ContextCompat.getExternalFilesDirs(this, null)) {
-        body += """
+    }}
+      External Directories
+      ${externalFileDetails()}
+    """.trimIndent()
+  }
+
+  private fun externalFileDetails(): String {
+    var details = ""
+    for (externalFilesDir in ContextCompat.getExternalFilesDirs(this, null)) {
+      details += """
           ${if (externalFilesDir != null) externalFilesDir.path else "null"}
-  
+
           """.trimIndent()
-      }
     }
-    return body
+    return details
   }
 
   private fun safeContains(extras: Bundle): Boolean {
@@ -196,9 +214,11 @@ open class ErrorActivity : BaseActivity() {
       .getPackageInfo(packageName, ZERO).versionName
 
   private fun toStackTraceString(exception: Throwable): String {
-    val stringWriter = StringWriter()
-    exception.printStackTrace(PrintWriter(stringWriter))
-    return "$stringWriter"
+    return {
+      StringWriter().apply {
+        exception.printStackTrace(PrintWriter(this))
+      }
+    }.toString()
   }
 
   open fun restartApp() {
