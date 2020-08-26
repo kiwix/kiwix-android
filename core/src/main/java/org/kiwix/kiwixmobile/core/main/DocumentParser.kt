@@ -33,7 +33,7 @@ public class DocumentParser(private var listener: DocumentParser.SectionsListene
   private var sections = ArrayList<TableDrawerAdapter.DocumentSection>()
 
   public fun initInterface(webView: WebView) {
-    webView.addJavascriptInterface(ParserCallback(), "Documentparser")
+    webView.addJavascriptInterface(ParserCallback(), "DocumentParser")
   }
 
   public interface SectionsListener {
@@ -42,7 +42,7 @@ public class DocumentParser(private var listener: DocumentParser.SectionsListene
     fun clearSections()
   }
 
-  inner class ParserCallback() {
+  inner class ParserCallback {
 
     @JavascriptInterface
     public fun parse(sectionTitle: String, element: String, id: String) {
