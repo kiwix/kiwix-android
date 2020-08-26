@@ -18,14 +18,13 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 internal class SearchInPreviousScreenTest {
 
@@ -33,13 +32,11 @@ internal class SearchInPreviousScreenTest {
   fun `invoke with returns positive result with string to previous screen`() {
     val searchString = "search"
     mockkConstructor(Intent::class)
-    val activity = mockk<AppCompatActivity>()
+    val activity = mockk<CoreMainActivity>(relaxed = true)
     SearchInPreviousScreen(searchString).invokeWith(activity)
     verify {
-      anyConstructed<Intent>().putExtra(SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT, true)
-      anyConstructed<Intent>().putExtra(TAG_FILE_SEARCHED, searchString)
-      activity.setResult(Activity.RESULT_OK, any())
-      activity.finish()
+      activity.popNavigationBackstack()
+      activity.findInPage(searchString)
     }
   }
 }

@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import android.content.Intent
+import android.os.Bundle
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -58,8 +58,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchArgumentProcessing
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
@@ -267,10 +267,10 @@ internal class SearchViewModelTest {
 
     @Test
     fun `CreatedWithIntent offers SearchIntentProcessing`() {
-      val intent = mockk<Intent>()
+      val bundle = mockk<Bundle>()
       actionResultsInEffects(
-        CreatedWithArguments(intent),
-        SearchArgumentProcessing(intent, viewModel.actions)
+        CreatedWithArguments(bundle),
+        SearchArgumentProcessing(bundle, viewModel.actions)
       )
     }
 
