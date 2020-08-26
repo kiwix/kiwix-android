@@ -22,7 +22,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -38,15 +37,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
-import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
-import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
-import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
-import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
-import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
-import org.kiwix.kiwixmobile.core.utils.titleToUrl
-import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
@@ -62,6 +52,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val readerFragmentResId: Int = R.id.readerFragment
   override val helpFragmentResId: Int = R.id.helpFragment
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
@@ -144,39 +135,6 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun openZimHostFragment() {
     disableDrawer()
     navigate(R.id.zimHostFragment)
-  }
-
-  override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
-    navigate(
-      R.id.searchFragment,
-      bundleOf(
-        NAV_ARG_SEARCH_STRING to searchString,
-        TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
-        EXTRA_IS_WIDGET_VOICE to isVoice
-      )
-    )
-  }
-
-  override fun openPage(pageUrl: String, zimFilePath: String, shouldOpenInNewTab: Boolean) {
-    navigate(
-      R.id.readerFragment,
-      bundleOf(
-        PAGE_URL_KEY to pageUrl,
-        ZIM_FILE_URI_KEY to zimFilePath,
-        SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
-      )
-    )
-  }
-
-  override fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean) {
-    val url = zimReaderContainer.titleToUrl(searchItemTitle)
-    if (url != null) {
-      openPage(zimReaderContainer.urlSuffixToParsableUrl(url), "", shouldOpenInNewTab)
-    }
-  }
-
-  override fun findInPage(searchString: String) {
-    navigate(R.id.readerFragment, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher

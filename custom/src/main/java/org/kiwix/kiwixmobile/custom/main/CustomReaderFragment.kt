@@ -90,12 +90,19 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private fun loadPageFromNavigationArguments() {
-    val pageUrl: String? = requireArguments().getString(PAGE_URL_KEY)
-    if (pageUrl?.isNotEmpty() == true) {
-      loadUrlWithCurrentWebview(pageUrl)
+    val args = CustomReaderFragmentArgs.fromBundle(requireArguments())
+    if (args.pageUrl.isNotEmpty()) {
+      if (args.shouldOpenInNewTab) {
+        manageExternalLaunchAndRestoringViewState()
+        createNewTab()
+      }
+      loadUrlWithCurrentWebview(args.pageUrl)
     } else {
       openObbOrZim()
       manageExternalLaunchAndRestoringViewState()
+    }
+    if (args.findInPageSearchString.isNotEmpty()) {
+      findInPage(args.findInPageSearchString)
     }
     requireArguments().clear()
   }

@@ -26,6 +26,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -40,8 +41,13 @@ import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
+import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -255,11 +261,31 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navigate(historyFragmentResId)
   }
 
-  abstract fun openSearch(
+  fun openSearch(
     searchString: String = "",
     isOpenedFromTabView: Boolean = false,
     isVoice: Boolean = false
-  )
+  ) {
+    navigate(
+      searchFragmentResId,
+      bundleOf(
+        NAV_ARG_SEARCH_STRING to searchString,
+        TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
+        EXTRA_IS_WIDGET_VOICE to isVoice
+      )
+    )
+  }
+
+  fun openPage(pageUrl: String, zimFilePath: String = "", shouldOpenInNewTab: Boolean = false) {
+    navigate(
+      readerFragmentResId,
+      bundleOf(
+        PAGE_URL_KEY to pageUrl,
+        ZIM_FILE_URI_KEY to zimFilePath,
+        SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
+      )
+    )
+  }
 
   private fun openBookmarks() {
     navigate(bookmarksFragmentResId)
@@ -271,13 +297,17 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     disableDrawer()
   }
 
-  abstract fun openPage(
-    pageUrl: String,
-    zimFilePath: String = "",
-    shouldOpenInNewTab: Boolean = false
-  )
+  fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean) {
+    val url = zimReaderContainer.titleToUrl(searchItemTitle)
+    if (url != null) {
+      openPage(zimReaderContainer.urlSuffixToParsableUrl(url), "", shouldOpenInNewTab)
+    }
+  }
 
-  abstract fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean)
-  abstract fun findInPage(searchString: String)
+  fun findInPage(searchString: String) {
+    navigate(readerFragmentResId, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
+  }
+
   protected abstract fun getIconResId(): Int
+  abstract val readerFragmentResId: Int
 }

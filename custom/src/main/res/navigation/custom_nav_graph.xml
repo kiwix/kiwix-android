@@ -28,6 +28,14 @@
       android:name="pageUrl"
       android:defaultValue=""
       app:argType="string" />
+    <argument
+      android:name="findInPageSearchString"
+      android:defaultValue=""
+      app:argType="string" />
+    <argument
+      android:name="shouldOpenInNewTab"
+      android:defaultValue="false"
+      app:argType="boolean" />
   </fragment>
   <fragment
     android:id="@+id/historyFragment"
