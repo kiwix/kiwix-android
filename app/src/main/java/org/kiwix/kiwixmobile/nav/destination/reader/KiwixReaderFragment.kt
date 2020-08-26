@@ -103,6 +103,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
         manageExternalLaunchAndRestoringViewState(args.zimFileUri)
       }
     }
+    if (args.findInPageSearchString.isNotEmpty()) {
+      findInPage(args.findInPageSearchString)
+    }
     requireArguments().clear()
   }
 

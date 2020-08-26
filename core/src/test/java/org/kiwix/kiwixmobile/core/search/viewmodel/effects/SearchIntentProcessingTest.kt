@@ -54,7 +54,7 @@ internal class SearchIntentProcessingTest {
 
   @Test
   fun `invoke with does nothing with null data`() {
-    SearchIntentProcessing(null, actions).invokeWith(activity)
+    SearchArgumentProcessing(null, actions).invokeWith(activity)
     verify { actions wasNot Called }
   }
 
@@ -63,7 +63,7 @@ internal class SearchIntentProcessingTest {
     val extra = ""
     every { intent.hasExtra(Intent.EXTRA_PROCESS_TEXT) } returns true
     every { intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT) } returns extra
-    SearchIntentProcessing(intent, actions).invokeWith(activity)
+    SearchArgumentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(any<ScreenWasStartedFrom>())
       actions.offer(Filter(extra))
@@ -75,7 +75,7 @@ internal class SearchIntentProcessingTest {
     val extra = ""
     every { intent.hasExtra(EXTRA_SEARCH) } returns true
     every { intent.getStringExtra(EXTRA_SEARCH) } returns extra
-    SearchIntentProcessing(intent, actions).invokeWith(activity)
+    SearchArgumentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(any<ScreenWasStartedFrom>())
       actions.offer(Filter(extra))
@@ -85,7 +85,7 @@ internal class SearchIntentProcessingTest {
   @Test
   fun `invoke with offers action when EXTRA_IS_WIDGET_VOICE present`() {
     every { intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false) } returns true
-    SearchIntentProcessing(intent, actions).invokeWith(activity)
+    SearchArgumentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(any<ScreenWasStartedFrom>())
       actions.offer(ReceivedPromptForSpeechInput)
@@ -95,7 +95,7 @@ internal class SearchIntentProcessingTest {
   @Test
   fun `invoke with offers action when TAG_FROM_TAB_SWITCHER present`() {
     every { intent.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false) } returns true
-    SearchIntentProcessing(intent, actions).invokeWith(activity)
+    SearchArgumentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(ScreenWasStartedFrom(FromTabView))
     }
@@ -104,7 +104,7 @@ internal class SearchIntentProcessingTest {
   @Test
   fun `invoke with offers action when TAG_FROM_TAB_SWITCHER not present`() {
     every { intent.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false) } returns false
-    SearchIntentProcessing(intent, actions).invokeWith(activity)
+    SearchArgumentProcessing(intent, actions).invokeWith(activity)
     verifySequence {
       actions.offer(ScreenWasStartedFrom(FromWebView))
     }

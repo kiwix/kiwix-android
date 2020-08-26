@@ -1198,9 +1198,8 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void goToSearch(boolean isVoice) {
-    final String zimFile = zimReaderContainer.getZimCanonicalPath();
     saveTabStates();
-    openSearch("", zimFile, isVoice);
+    openSearch("", false, isVoice);
   }
 
   private void handleIntentActions(Intent intent) {
@@ -1234,14 +1233,14 @@ public abstract class CoreReaderFragment extends BaseFragment
           if (intent.getData() != null) {
             searchString = intent.getData().getLastPathSegment();
           }
-          openSearch(searchString, "", false);
+          openSearch(searchString, false, false);
         }
         break;
     }
   }
 
-  private void openSearch(String searchString, String zimFile, Boolean isVoice) {
-    ((CoreMainActivity) requireActivity()).openSearch(searchString, zimFile, isVoice);
+  private void openSearch(String searchString, Boolean isOpenedFromTabView, Boolean isVoice) {
+    ((CoreMainActivity) requireActivity()).openSearch(searchString, isOpenedFromTabView, isVoice);
   }
 
   private void goToSearchWithText(Intent intent) {
@@ -1250,7 +1249,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       searchString = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
     }
-    openSearch(searchString, "", false);
+    openSearch(searchString, false, false);
   }
 
   @NotNull @Override public Super onNewIntent(@NotNull Intent intent,
@@ -1347,14 +1346,7 @@ public abstract class CoreReaderFragment extends BaseFragment
           boolean isSearchInText =
             data.getBooleanExtra(SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT, false);
           if (isSearchInText) {
-            //if the search is localized trigger find in page UI.
-            KiwixWebView webView = getCurrentWebView();
-            compatCallback.setActive();
-            compatCallback.setWebView(webView);
-            ((AppCompatActivity) getActivity()).startSupportActionMode(compatCallback);
-            compatCallback.setText(title);
-            compatCallback.findAll();
-            compatCallback.showSoftInput();
+            findInPage(title);
           } else {
             boolean openInNewTab = wasFromTabSwitcher ||
               data.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false);
@@ -1417,6 +1409,17 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
 
     super.onActivityResult(requestCode, resultCode, data);
+  }
+
+  protected void findInPage(String title) {
+    //if the search is localized trigger find in page UI.
+    KiwixWebView webView = getCurrentWebView();
+    compatCallback.setActive();
+    compatCallback.setWebView(webView);
+    ((AppCompatActivity) getActivity()).startSupportActionMode(compatCallback);
+    compatCallback.setText(title);
+    compatCallback.findAll();
+    compatCallback.showSoftInput();
   }
 
   @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {

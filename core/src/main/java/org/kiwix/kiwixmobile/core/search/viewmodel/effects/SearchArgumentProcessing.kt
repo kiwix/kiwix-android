@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
-data class SearchIntentProcessing(
+data class SearchArgumentProcessing(
   private val bundle: Bundle?,
   private val actions: PublishProcessor<Action>
 ) : SideEffect<Unit> {

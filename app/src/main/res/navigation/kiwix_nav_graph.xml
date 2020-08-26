@@ -27,7 +27,10 @@
       android:name="zimFileUri"
       android:defaultValue=""
       app:argType="string" />
-
+    <argument
+      android:name="findInPageSearchString"
+      android:defaultValue=""
+      app:argType="string" />
     <argument
       android:name="pageUrl"
       android:defaultValue=""
@@ -107,15 +110,5 @@
       android:id="@+id/action_searchFragment_to_readerFragment"
       app:destination="@id/readerFragment"
       app:popUpTo="@id/readerFragment" />
-    <argument
-      android:name="searchString"
-      app:argType="string" />
-    <argument
-      android:name="zimFile"
-      app:argType="string" />
-    <argument
-      android:name="isVoice"
-      app:argType="boolean"
-      android:defaultValue="false" />
   </fragment>
 </navigation>

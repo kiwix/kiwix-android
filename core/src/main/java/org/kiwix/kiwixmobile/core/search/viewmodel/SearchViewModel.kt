@@ -53,7 +53,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessing
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchArgumentProcessing
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
@@ -100,7 +100,7 @@ class SearchViewModel @Inject constructor(
       is Filter -> filter.offer(it.term)
       ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
       is ConfirmedDelete -> deleteItemAndShowToast(it)
-      is CreatedWithArguments -> effects.offer(SearchIntentProcessing(it.arguments, actions))
+      is CreatedWithArguments -> effects.offer(SearchArgumentProcessing(it.arguments, actions))
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
       is ActivityResultReceived ->

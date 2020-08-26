@@ -38,13 +38,16 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.SHOULD_OPEN_IN_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
+import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 
@@ -143,11 +146,15 @@ class KiwixMainActivity : CoreMainActivity() {
     navigate(R.id.zimHostFragment)
   }
 
-  override fun openSearch(searchString: String, zimFile: String, isVoice: Boolean) {
-    val action =
-      KiwixReaderFragmentDirections.actionReaderFragmentToSearchFragment(searchString, zimFile)
-    action.isVoice = isVoice
-    navigate(action)
+  override fun openSearch(searchString: String, isOpenedFromTabView: Boolean, isVoice: Boolean) {
+    navigate(
+      R.id.searchFragment,
+      bundleOf(
+        NAV_ARG_SEARCH_STRING to searchString,
+        TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
+        EXTRA_IS_WIDGET_VOICE to isVoice
+      )
+    )
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String, shouldOpenInNewTab: Boolean) {
@@ -166,6 +173,10 @@ class KiwixMainActivity : CoreMainActivity() {
     if (url != null) {
       openPage(zimReaderContainer.urlSuffixToParsableUrl(url), "", shouldOpenInNewTab)
     }
+  }
+
+  override fun findInPage(searchString: String) {
+    navigate(R.id.readerFragment, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher

@@ -18,22 +18,15 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 data class SearchInPreviousScreen(private val searchString: String) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.setResult(
-      Activity.RESULT_OK,
-      Intent().apply {
-        putExtra(EXTRA_SEARCH_IN_TEXT, true)
-        putExtra(TAG_FILE_SEARCHED, searchString)
-      }
-    )
-    activity.finish()
+    activity.popNavigationBackstack()
+    (activity as CoreMainActivity).findInPage(searchString)
   }
 
   companion object {

@@ -59,7 +59,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessing
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchArgumentProcessing
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
@@ -270,7 +270,7 @@ internal class SearchViewModelTest {
       val intent = mockk<Intent>()
       actionResultsInEffects(
         CreatedWithArguments(intent),
-        SearchIntentProcessing(intent, viewModel.actions)
+        SearchArgumentProcessing(intent, viewModel.actions)
       )
     }
 

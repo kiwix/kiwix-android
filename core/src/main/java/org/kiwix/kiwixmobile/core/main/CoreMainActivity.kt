@@ -47,8 +47,8 @@ import kotlin.system.exitProcess
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
-const val SEARCH_ITEM_TITLE = "searchItemTitle"
 const val SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
+const val FIND_IN_PAGE_SEARCH_STRING = "findInPageSearchString"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
 const val KIWIX_INTERNAL_ERROR = 10
 
@@ -255,7 +255,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navigate(historyFragmentResId)
   }
 
-  abstract fun openSearch(searchString: String = "", zimFile: String = "", isVoice: Boolean = false)
+  abstract fun openSearch(
+    searchString: String = "",
+    isOpenedFromTabView: Boolean = false,
+    isVoice: Boolean = false
+  )
 
   private fun openBookmarks() {
     navigate(bookmarksFragmentResId)
@@ -274,5 +278,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   )
 
   abstract fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean)
+  abstract fun findInPage(searchString: String)
   protected abstract fun getIconResId(): Int
 }
