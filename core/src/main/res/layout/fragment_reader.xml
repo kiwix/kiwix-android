@@ -27,7 +27,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/main_fragment_content" />
+    <include layout="@layout/reader_fragment_content" />
 
     <TextView
       android:id="@+id/no_open_book_text"
