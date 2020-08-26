@@ -1043,7 +1043,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
     if (zimFileReader != null) {
       if (mainMenu != null) {
-        mainMenu.onFileOpened(zimFileReader, urlIsValid());
+        mainMenu.onFileOpened(urlIsValid());
       }
       openMainPage();
       safeDispose();
