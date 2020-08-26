@@ -142,7 +142,7 @@
   <string name="tts_not_enabled">لم يتم تمكين النص إلى الكلام لملف زيم (ZIM) هذا</string>
   <string name="texttospeech_initialization_failed">فشل تهيئة النص إلى كلام. حاول مرةً أخرى</string>
   <string name="texttospeech_error">خطأٌ غير متوقع في تحويل النص إلى كلام. حاول مرةً أخرى</string>
-  <string name="search_error">خطأٌ غير متوقع أثناء البحث. حاول مرةً أخرى</string>
+
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>

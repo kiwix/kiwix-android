@@ -110,34 +110,23 @@ import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
+import org.kiwix.kiwixmobile.core.utils.UpdateUtils;
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
-import org.kiwix.kiwixmobile.core.utils.UpdateUtils;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
-import static org.kiwix.kiwixmobile.core.page.history.HistoryFragmentKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.BOOKMARK_CHOSEN_REQUEST;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_FILE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_FILE_SELECT;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_HISTORY_ITEM_CHOSEN;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_PREFERENCES;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_HISTORY_CLEARED;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_ARTICLES;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_FILE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_POSITIONS;
@@ -1335,84 +1324,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    Log.i(TAG_KIWIX, "Intent data: " + data);
-    switch (requestCode) {
-      case MainMenuKt.REQUEST_FILE_SEARCH:
-        if (resultCode == RESULT_OK) {
-          boolean wasFromTabSwitcher = isInTabSwitcher();
-          hideTabSwitcher();
-          String title =
-            data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
-          boolean isSearchInText =
-            data.getBooleanExtra(SearchInPreviousScreen.EXTRA_SEARCH_IN_TEXT, false);
-          if (isSearchInText) {
-            findInPage(title);
-          } else {
-            boolean openInNewTab = wasFromTabSwitcher ||
-              data.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false);
-            searchForTitle(title, openInNewTab);
-          }
-        } else if (resultCode == RESULT_CANCELED) {
-          Log.w(TAG_KIWIX, "Search cancelled or exited");
-        } else {
-          Log.w(TAG_KIWIX, "Unhandled search failure");
-          Toast.makeText(getActivity(), R.string.search_error, Toast.LENGTH_SHORT).show();
-        }
-        break;
-      case REQUEST_PREFERENCES:
-        hideTabSwitcher();
-        if (resultCode == RESULT_RESTART) {
-          getActivity().recreate();
-        }
-        if (resultCode == RESULT_HISTORY_CLEARED) {
-          webViewList.clear();
-          newMainPageTab();
-          tabsAdapter.notifyDataSetChanged();
-        }
-        loadPrefs();
-        break;
-
-      case BOOKMARK_CHOSEN_REQUEST:
-      case REQUEST_FILE_SELECT:
-      case REQUEST_HISTORY_ITEM_CHOSEN:
-        hideTabSwitcher();
-        if (resultCode == RESULT_OK) {
-          if (data.getBooleanExtra(USER_CLEARED_HISTORY, false)) {
-            for (KiwixWebView kiwixWebView : webViewList) {
-              kiwixWebView.clearHistory();
-            }
-            webViewList.clear();
-            createNewTab();
-          } else {
-            String title = data.getStringExtra(EXTRA_CHOSE_X_TITLE);
-            String url = data.getStringExtra(EXTRA_CHOSE_X_URL);
-            String pathExtra = data.getStringExtra(EXTRA_CHOSE_X_FILE);
-            if (pathExtra != null) {
-              final File file = new File(pathExtra);
-              if (!file.exists()) {
-                Toast.makeText(getActivity(), R.string.error_file_not_found, Toast.LENGTH_LONG)
-                  .show();
-                return;
-              }
-              openZimFile(file);
-            } else {
-              newMainPageTab();
-            }
-            loadUrlWithCurrentWebview(url != null ? url
-              : zimReaderContainer.getPageUrlFromTitle(title));
-          }
-        }
-        return;
-
-      default:
-        break;
-    }
-
-    super.onActivityResult(requestCode, resultCode, data);
-  }
-
   protected void findInPage(String title) {
     //if the search is localized trigger find in page UI.
     KiwixWebView webView = getCurrentWebView();
@@ -1658,7 +1569,8 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
       }
       selectTab(currentTab);
-      webViewList.get(currentTab).loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
+      webViewList.get(currentTab)
+        .loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
       getCurrentWebView().setScrollY(positions.getInt(currentTab));
     } catch (JSONException e) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);

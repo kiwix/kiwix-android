@@ -147,7 +147,7 @@
   <string name="tts_not_enabled">Tekst na mowę nie jest włączony dla tego pliku ZIM</string>
   <string name="texttospeech_initialization_failed">Inicjalizacja zamiany tekstu na mowę nie powiodła się. Spróbuj ponownie</string>
   <string name="texttospeech_error">Nieoczekiwany błąd w zamianie tekstu na mowę. Spróbuj ponownie</string>
-  <string name="search_error">Nieoczekiwany błąd podczas wyszukiwania. Spróbuj ponownie</string>
+
   <string name="next">Następny</string>
   <string name="previous">Poprzednia</string>
   <string name="wifi_only_title">Zezwolić na pobieranie zawartości przez sieć komórkową?</string>

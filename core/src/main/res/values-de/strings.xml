@@ -141,7 +141,7 @@
   <string name="tts_not_enabled">Text-to-Speech ist für diese ZIM-Datei nicht aktiviert</string>
   <string name="texttospeech_initialization_failed">Die Initialisierung von Text-to-Speech ist fehlgeschlagen. Bitte versuchen Sie es noch einmal</string>
   <string name="texttospeech_error">Unerwarteter Fehler bei Text-to-Speech. Bitte versuchen Sie es noch einmal</string>
-  <string name="search_error">Unerwarteter Fehler beim Suchen. Bitte versuchen Sie es noch einmal</string>
+
   <string name="next">Nächste</string>
   <string name="previous">Vorherige</string>
   <string name="wifi_only_title">Herunterladen des Inhalts über das mobile Netzwerk erlauben?</string>
