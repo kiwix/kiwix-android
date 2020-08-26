@@ -80,7 +80,6 @@ class LocalFileTransferActivity : BaseActivity(),
   @Inject
   lateinit var locationManager: LocationManager
 
-  private var isFileSender = false // Whether the device is the file sender or not
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
 
@@ -95,10 +94,12 @@ class LocalFileTransferActivity : BaseActivity(),
      * activity, without any file Uris
      * */
     val filesIntent = intent
-    lateinit var filesForTransfer: List<FileItem>
-    val fileUriArrayList: ArrayList<Uri> =
+    val fileUriArrayList: ArrayList<Uri>? =
       filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
-    isFileSender = fileUriArrayList.isNotEmpty() == true
+    val isFileSender = fileUriArrayList?.isNotEmpty()
+    val filesForTransfer: List<FileItem> = if (isFileSender!!) {
+      fileUriArrayList.map(::FileItem)
+    } else emptyList()
 
     val toolbar: Toolbar =
       findViewById(R.id.toolbar)
@@ -112,10 +113,10 @@ class LocalFileTransferActivity : BaseActivity(),
     list_peer_devices.adapter = wifiPeerListAdapter
     list_peer_devices.layoutManager = LinearLayoutManager(this)
     list_peer_devices.setHasFixedSize(true)
-    if (isFileSender) {
-      filesForTransfer = fileUriArrayList.map(::FileItem)
+
+    if (isFileSender)
       displayFileTransferProgress(filesForTransfer)
-    }
+
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
   }
 
