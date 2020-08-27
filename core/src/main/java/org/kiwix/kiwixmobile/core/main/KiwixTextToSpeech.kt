@@ -21,7 +21,12 @@ import android.content.Context
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
 import android.speech.tts.TextToSpeech
+import android.speech.tts.TextToSpeech.Engine
+import android.speech.tts.TextToSpeech.LANG_MISSING_DATA
+import android.speech.tts.TextToSpeech.LANG_NOT_SUPPORTED
 import android.speech.tts.TextToSpeech.OnInitListener
+import android.speech.tts.TextToSpeech.QUEUE_ADD
+import android.speech.tts.TextToSpeech.SUCCESS
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.webkit.JavascriptInterface
@@ -70,7 +75,7 @@ class KiwixTextToSpeech internal constructor(
 
   private fun initTTS(onInitSucceedListener: OnInitSucceedListener) {
     tts = TextToSpeech(instance, OnInitListener { status: Int ->
-      if (status == TextToSpeech.SUCCESS) {
+      if (status == SUCCESS) {
         Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
         this.isInitialized = true
         onInitSucceedListener.onInitSucceed()
@@ -92,18 +97,16 @@ class KiwixTextToSpeech internal constructor(
    * Starts speaking the WebView content aloud (or stops it if TTS is speaking now).
    */
   fun readAloud(webView: WebView) {
-    val isPaused = currentTTSTask?.paused
-    if (isPaused == true) {
+    if (currentTTSTask?.paused == true) {
       onSpeakingListener.onSpeakingEnded()
       currentTTSTask = null
     } else if (tts.isSpeaking) {
-      if (tts.stop() == TextToSpeech.SUCCESS) {
+      if (tts.stop() == SUCCESS) {
         tts.setOnUtteranceProgressListener(null)
         onSpeakingListener.onSpeakingEnded()
       }
     } else {
       val locale = iSO3ToLocale(zimReaderContainer.language)
-      var result = 0
       if ("mul" == zimReaderContainer.language) {
         Log.d(
           TAG_KIWIX, "TextToSpeech: disabled " +
@@ -112,19 +115,14 @@ class KiwixTextToSpeech internal constructor(
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
-      if (locale == null || tts.isLanguageAvailable(locale)
-          .also {
-            result = it
-          } == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED
-      ) {
+      if (locale == null || isMissingOrUnsupportedLanguage(tts.isLanguageAvailable(locale))) {
         Log.d(
-          TAG_KIWIX, "TextToSpeech: language not supported: " +
-            zimReaderContainer.language
+          TAG_KIWIX, "TextToSpeech: language not supported:  ${zimReaderContainer.language}"
         )
         context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
       } else {
         tts.language = locale
-        if (getFeatures(tts).contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED)) {
+        if (getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)) {
           context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
           return
         }
@@ -134,6 +132,10 @@ class KiwixTextToSpeech internal constructor(
       }
     }
   }
+
+  private fun isMissingOrUnsupportedLanguage(languageAvailabilityResult: Int): Boolean =
+    languageAvailabilityResult == LANG_MISSING_DATA ||
+      languageAvailabilityResult == LANG_NOT_SUPPORTED
 
   private fun getFeatures(
     tts: TextToSpeech?
@@ -160,7 +162,7 @@ class KiwixTextToSpeech internal constructor(
   fun stop() {
     tts.let {
       {
-        if (it.stop() == TextToSpeech.SUCCESS) {
+        if (it.stop() == SUCCESS) {
           currentTTSTask = null
           it.setOnUtteranceProgressListener(null)
           onSpeakingListener.onSpeakingEnded()
@@ -237,17 +239,15 @@ class KiwixTextToSpeech internal constructor(
     }
 
     fun start() {
-      paused = if (!paused) {
+      paused = (if (!paused) {
         return
-      } else {
-        false
-      }
+      } else false)
       val params = HashMap<String, String>()
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
-      params[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "kiwixLastMessage"
+      params[Engine.KEY_PARAM_UTTERANCE_ID] = "kiwixLastMessage"
       if (currentPiece.get() < pieces.size) {
-        tts.speak(pieces[currentPiece.getAndIncrement()], TextToSpeech.QUEUE_ADD, params)
+        tts.speak(pieces[currentPiece.getAndIncrement()], QUEUE_ADD, params)
       } else {
         stop()
       }
@@ -262,7 +262,7 @@ class KiwixTextToSpeech internal constructor(
             stop()
             return
           }
-          tts.speak(pieces[line], TextToSpeech.QUEUE_ADD, params)
+          tts.speak(pieces[line], QUEUE_ADD, params)
           currentPiece.getAndIncrement()
         }
 
