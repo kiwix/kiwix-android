@@ -730,6 +730,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     hideBackToTopTimer = null;
     webViewList.clear();
     actionBar = null;
+    mainMenu = null;
+    tabRecyclerView.setAdapter(null);
     tableDrawerAdapter.setTableClickListener(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
