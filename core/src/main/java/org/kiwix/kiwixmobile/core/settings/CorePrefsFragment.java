@@ -26,7 +26,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
@@ -46,10 +45,10 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
@@ -267,7 +266,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   public void openFolderSelect() {
     StorageSelectDialog dialogFragment = new StorageSelectDialog();
     dialogFragment.setOnSelectAction(this::onStorageDeviceSelected);
-    dialogFragment.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(),
+    dialogFragment.show(getActivity().getSupportFragmentManager(),
       getResources().getString(R.string.pref_storage));
   }
 
