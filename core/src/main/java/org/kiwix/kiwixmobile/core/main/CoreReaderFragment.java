@@ -110,6 +110,7 @@ import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen;
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
@@ -345,6 +346,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       handleIntentActions(getActivity().getIntent());
     }
   }
+
 
   private void initTabCallback() {
     tabCallback = new ItemTouchHelper.Callback() {
@@ -1582,4 +1584,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     String zimPositions, int currentTab);
 
   public abstract void restoreViewStateOnInvalidJSON();
+
+
+
 }

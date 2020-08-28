@@ -46,8 +46,6 @@ import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
-import org.kiwix.kiwixmobile.core.utils.titleToUrl
-import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -295,13 +293,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   protected fun handleDrawerOnNavigation() {
     closeNavigationDrawer()
     disableDrawer()
-  }
-
-  fun openSearchItem(searchItemTitle: String, shouldOpenInNewTab: Boolean) {
-    val url = zimReaderContainer.titleToUrl(searchItemTitle)
-    if (url != null) {
-      openPage(zimReaderContainer.urlSuffixToParsableUrl(url), "", shouldOpenInNewTab)
-    }
   }
 
   fun findInPage(searchString: String) {

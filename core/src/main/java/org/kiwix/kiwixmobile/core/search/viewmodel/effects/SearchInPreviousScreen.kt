@@ -21,12 +21,13 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResult
+import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 
 data class SearchInPreviousScreen(private val searchString: String) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
+    activity.setNavigationResult(searchString, FIND_IN_PAGE_SEARCH_STRING)
     activity.popNavigationBackstack()
-    (activity as CoreMainActivity).findInPage(searchString)
   }
 
   companion object {
