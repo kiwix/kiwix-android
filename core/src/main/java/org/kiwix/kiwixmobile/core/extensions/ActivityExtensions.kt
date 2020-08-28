@@ -106,7 +106,7 @@ object ActivityExtensions {
 
   private fun Activity.asCoreMainActivity() = (this as CoreMainActivity)
 
-  fun <T> Activity.getObservableNavigationResult(key: String = "result") =
+  private fun <T> Activity.getObservableNavigationResult(key: String = "result") =
     asCoreMainActivity().navController.currentBackStackEntry?.savedStateHandle
       ?.getLiveData<T>(key)
 
