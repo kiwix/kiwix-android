@@ -36,9 +36,7 @@ object ServerUtils {
           ip += formatLocalAddress(inetAddress)
       }
       // To remove extra characters from IP for Android Pie
-      if (ip.length > 14) {
-        ip = formatIpForAndroidPie(ip)
-      }
+      ip = formatIpForAndroidPie(ip)
     } catch (e: SocketException) {
       e.printStackTrace()
       ip += "Something Wrong! $e\n"
@@ -52,10 +50,12 @@ object ServerUtils {
   @Suppress("MagicNumber")
   private fun formatIpForAndroidPie(ip: String): String {
     var result: String = ip
-    for (i in 15..17) {
-      if (i < ip.length && ip[i] == '.') {
-        result = ip.substring(0, i - 2)
-        break
+    if (ip.length > 14) {
+      for (i in 14 until ip.length) {
+        if (ip[i] == '.') {
+          result = ip.substring(0, i - 2)
+          break
+        }
       }
     }
     return result
