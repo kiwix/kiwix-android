@@ -53,7 +53,7 @@ object ServerUtils {
   private fun formatIpForAndroidPie(ip: String): String {
     var result: String = ip
     for (i in 15..17) {
-      if (ip[i] == '.') {
+      if (i < ip.length && ip[i] == '.') {
         result = ip.substring(0, i - 2)
         break
       }
