@@ -40,7 +40,6 @@ import androidx.lifecycle.Observer
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
@@ -109,7 +108,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       }
       loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(this))
     }
-    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
 
   private fun loadPageFromNavigationArguments() {
