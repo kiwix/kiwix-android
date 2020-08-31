@@ -258,10 +258,10 @@ class KiwixTextToSpeech internal constructor(
           val line: Int = currentPiece.toInt()
           if (line >= pieces.size && !paused) {
             stop()
-            return
+          } else {
+            tts.speak(pieces[line], QUEUE_ADD, params as HashMap<String, String>?)
+            currentPiece.getAndIncrement()
           }
-          tts.speak(pieces[line], QUEUE_ADD, params as HashMap<String, String>?)
-          currentPiece.getAndIncrement()
         }
 
         override fun onError(s: String) {
