@@ -443,11 +443,8 @@ class AddNoteDialog : DialogFragment() {
 
   override fun onStart() {
     super.onStart()
-    val dialog = dialog
-    if (dialog != null) {
-      val width = ViewGroup.LayoutParams.MATCH_PARENT
-      val height = ViewGroup.LayoutParams.MATCH_PARENT
-      dialog.window?.setLayout(width, height)
+    dialog?.let {
+      it.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
   }
 
