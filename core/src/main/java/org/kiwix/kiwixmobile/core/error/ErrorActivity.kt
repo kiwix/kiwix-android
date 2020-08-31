@@ -101,92 +101,80 @@ open class ErrorActivity : BaseActivity() {
             file
           )
         addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        this.putExtra(android.content.Intent.EXTRA_STREAM, path)
+        putExtra(android.content.Intent.EXTRA_STREAM, path)
       }
     }
   }
 
   private fun buildBody(): String {
-    return """
-      $initialBody
+    return """ 
+    $initialBody
       
-      ${if (allowCrash.isChecked && exception != null) exceptionDetails() else ""}
-      ${if (allowZims.isChecked) zimFiles() else ""}
-      ${if (allowLanguage.isChecked) languageLocale() else ""}
-      ${if (allowDeviceDetails.isChecked) deviceDetails() else ""}
-      ${if (allowFileSystemDetails.isChecked) systemDetails() else ""}
-       """.trimIndent()
+    ${if (allowCrash.isChecked && exception != null) exceptionDetails() else ""}
+    ${if (allowZims.isChecked) zimFiles() else ""}
+    ${if (allowLanguage.isChecked) languageLocale() else ""}
+    ${if (allowDeviceDetails.isChecked) deviceDetails() else ""}
+    ${if (allowFileSystemDetails.isChecked) systemDetails() else ""}
+    """.trimIndent()
   }
 
-  private fun exceptionDetails(): String {
-    return """
-      Exception Details:
-      ${toStackTraceString(exception!!)}
-      """.trimIndent()
-  }
+  private fun exceptionDetails(): String =
+    """
+    Exception Details:
+    ${toStackTraceString(exception!!)}
+    """.trimIndent()
 
   private fun zimFiles(): String {
     val allZimFiles = bookDao.getBooks().joinToString {
       """
       ${it.book.getTitle()}:
       Articles: [${it.book.getArticleCount()}]
-    Parcelable.Creator: [${it.book.getCreator()}]
+      Creator: [${it.book.getCreator()}]
       """.trimIndent()
     }
-    val currentZimFile = zimReaderContainer.zimCanonicalPath
     return """
         Current Zim File:
-        $currentZimFile
+        ${zimReaderContainer.zimCanonicalPath}
         All Zim Files in DB:
         $allZimFiles
         
         """.trimIndent()
   }
 
-  private fun languageLocale(): String {
-    return """
-      Current Locale:
-      ${getCurrentLocale(applicationContext)}
-      
-    """.trimIndent()
-  }
+  private fun languageLocale(): String = """
+    Current Locale:
+    ${getCurrentLocale(applicationContext)}
+    
+  """.trimIndent()
 
-  private fun deviceDetails(): String {
-    return """
-      BluetoothClass.Device Details:
-      Device:[${Build.DEVICE}]
-      Model:[${Build.MODEL}]
-      Manufacturer:[${Build.MANUFACTURER}]
-      Time:[${Build.TIME}]
-      Android Version:[${Build.VERSION.RELEASE}]
-      App Version:[$versionName $versionCode]
-      
-    """.trimIndent()
-  }
+  private fun deviceDetails(): String = """
+    BluetoothClass.Device Details:
+    Device:[${Build.DEVICE}]
+    Model:[${Build.MODEL}]
+    Manufacturer:[${Build.MANUFACTURER}]
+    Time:[${Build.TIME}]
+    Android Version:[${Build.VERSION.RELEASE}]
+    App Version:[$versionName $versionCode]
+    
+  """.trimIndent()
 
-  private fun systemDetails(): String {
-    return """
-      Mount Points
-      ${mountPointProducer.produce().joinToString {
-      """
-        $it
-        """.trimIndent()
-    }}
-      External Directories
-      ${externalFileDetails()}
-    """.trimIndent()
-  }
+  private fun systemDetails(): String = """
+    Mount Points
+    ${mountPointProducer.produce().joinToString {
+    "$it\n"
+  }}
+    External Directories
+    ${externalFileDetails()}
+  """.trimIndent()
 
-  private fun externalFileDetails(): String {
-    var details = ""
-    for (externalFilesDir in ContextCompat.getExternalFilesDirs(this, null)) {
-      details += """
-          ${if (externalFilesDir != null) externalFilesDir.path else "null"}
-
-          """.trimIndent()
-    }
-    return details
-  }
+  private fun externalFileDetails(): String = """
+    ${ContextCompat.getExternalFilesDirs(this, null).joinToString {
+    if (it != null)
+      it.path
+    else
+      "null"
+  }}
+  """.trimIndent()
 
   private fun safeContains(extras: Bundle): Boolean {
     return try {
@@ -213,13 +201,11 @@ open class ErrorActivity : BaseActivity() {
     get() = packageManager
       .getPackageInfo(packageName, ZERO).versionName
 
-  private fun toStackTraceString(exception: Throwable): String {
-    return {
-      StringWriter().apply {
-        exception.printStackTrace(PrintWriter(this))
-      }
-    }.toString()
-  }
+  private fun toStackTraceString(exception: Throwable): String = {
+    StringWriter().apply {
+      exception.printStackTrace(PrintWriter(this))
+    }
+  }.toString()
 
   open fun restartApp() {
     startActivity(packageManager.getLaunchIntentForPackage(packageName))
