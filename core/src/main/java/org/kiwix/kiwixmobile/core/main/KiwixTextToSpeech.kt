@@ -236,9 +236,8 @@ class KiwixTextToSpeech internal constructor(
     }
 
     fun start() {
-      paused = (if (!paused) {
-        return
-      } else false)
+      if (!paused) return
+      paused = false
       val params = HashMap<String, String>()
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
