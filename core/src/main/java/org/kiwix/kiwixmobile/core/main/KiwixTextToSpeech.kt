@@ -124,9 +124,7 @@ class KiwixTextToSpeech internal constructor(
         tts.language = locale
         if (getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)) {
           context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
-          return
-        }
-        if (requestAudioFocus()) {
+        } else if (requestAudioFocus()) {
           loadURL(webView)
         }
       }
