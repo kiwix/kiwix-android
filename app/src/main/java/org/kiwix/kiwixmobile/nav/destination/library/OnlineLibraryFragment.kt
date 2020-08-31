@@ -28,6 +28,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_library.libraryList
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -67,6 +68,11 @@ class OnlineLibraryFragment : LibraryFragment(), FragmentActivityExtensions {
       R.id.select_language -> activity?.start<LanguageActivity>()
     }
     return super.onOptionsItemSelected(item)
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    libraryList.adapter = null
   }
 
   override fun onCreateView(
