@@ -90,6 +90,9 @@ class AddNoteDialog : DialogFragment() {
 
   @Inject
   lateinit var alertDialogShower: AlertDialogShower
+  private val saveItem by lazy { toolbar.menu.findItem(R.id.save_note) }
+  private val shareItem by lazy { toolbar.menu.findItem(R.id.share_note) }
+  private val deleteItem by lazy { toolbar.menu.findItem(R.id.delete_note) }
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     coreComponent
@@ -187,9 +190,6 @@ class AddNoteDialog : DialogFragment() {
 
   private fun disableMenuItems() {
     if (toolbar.menu != null) {
-      val saveItem = toolbar.menu.findItem(R.id.save_note)
-      val shareItem = toolbar.menu.findItem(R.id.share_note)
-      val deleteItem = toolbar.menu.findItem(R.id.delete_note)
       saveItem.isEnabled = false
       shareItem.isEnabled = false
       deleteItem.isEnabled = false
@@ -203,7 +203,6 @@ class AddNoteDialog : DialogFragment() {
 
   private fun enableSaveNoteMenuItem() {
     if (toolbar.menu != null) {
-      val saveItem = toolbar.menu.findItem(R.id.save_note)
       saveItem.isEnabled = true
       saveItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -213,7 +212,6 @@ class AddNoteDialog : DialogFragment() {
 
   private fun enableDeleteNoteMenuItem() {
     if (toolbar.menu != null) {
-      val deleteItem = toolbar.menu.findItem(R.id.delete_note)
       deleteItem.isEnabled = true
       deleteItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -223,7 +221,6 @@ class AddNoteDialog : DialogFragment() {
 
   private fun enableShareNoteMenuItem() {
     if (toolbar.menu != null) {
-      val shareItem = toolbar.menu.findItem(R.id.share_note)
       shareItem.isEnabled = true
       shareItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -247,7 +244,6 @@ class AddNoteDialog : DialogFragment() {
         R.id.share_note -> shareNote()
         R.id.save_note -> saveNote(add_note_edit_text.text.toString())
         R.id.delete_note -> deleteNote()
-
       }
       true
     }
