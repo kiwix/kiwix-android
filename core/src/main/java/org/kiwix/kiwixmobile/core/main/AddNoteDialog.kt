@@ -50,9 +50,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.StringBuilder
 import javax.inject.Inject
 
 /**
@@ -389,20 +387,8 @@ class AddNoteDialog : DialogFragment() {
 
   private fun writeNote(noteFile: File) {
     noteFileExists = true
-    val contents = StringBuilder()
-    try {
-      noteFile.bufferedReader().use { bufferReader ->
-        var line: String?
-        while (bufferReader.readLine().also { line = it } != null) {
-          contents.append(line)
-          contents.append(System.getProperty("line.separator"))
-        }
-      }
-    } catch (e: IOException) {
-      e.printStackTrace()
-      Log.d(TAG, "Error reading line with BufferedReader")
-    }
-    add_note_edit_text.setText("$contents") // Display the note content
+    val contents = noteFile.readText()
+    add_note_edit_text.setText(contents) // Display the note content
     add_note_edit_text.setSelection(add_note_edit_text.text.length - 1)
     enableShareNoteMenuItem() // As note content exists which can be shared
     enableDeleteNoteMenuItem()
