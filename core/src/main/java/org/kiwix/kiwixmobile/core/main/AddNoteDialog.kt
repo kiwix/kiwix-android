@@ -396,9 +396,8 @@ class AddNoteDialog : DialogFragment() {
       saveNote(add_note_edit_text.text.toString())
     }
     val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
-    var noteFileUri: Uri? = null
     if (noteFile.exists()) {
-      noteFileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      val noteFileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         // From Nougat 7 (API 24) access to files is shared temporarily with other apps
         // Need to use FileProvider for the same
         FileProvider.getUriForFile(
@@ -408,10 +407,6 @@ class AddNoteDialog : DialogFragment() {
       } else {
         Uri.fromFile(noteFile)
       }
-    } else {
-      context.toast(R.string.note_share_error_file_missing, Toast.LENGTH_SHORT)
-    }
-    if (noteFileUri != null) {
       val noteFileShareIntent = Intent(Intent.ACTION_SEND)
       noteFileShareIntent.type = "application/octet-stream"
       noteFileShareIntent.putExtra(Intent.EXTRA_STREAM, noteFileUri)
@@ -423,6 +418,8 @@ class AddNoteDialog : DialogFragment() {
       if (noteFileShareIntent.resolveActivity(requireActivity().packageManager) != null) {
         startActivity(shareChooser)
       }
+    } else {
+      context.toast(R.string.note_share_error_file_missing, Toast.LENGTH_SHORT)
     }
   }
 
