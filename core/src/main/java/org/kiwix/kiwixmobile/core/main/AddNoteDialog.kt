@@ -244,15 +244,10 @@ class AddNoteDialog : DialogFragment() {
     }
     toolbar.setOnMenuItemClickListener { item: MenuItem ->
       when (item.itemId) {
-        R.id.share_note -> { // Opens app-chooser for sharing the note text file
-          shareNote()
-        }
-        R.id.save_note -> { // Saves the note as a text file
-          saveNote(add_note_edit_text.text.toString())
-        }
-        R.id.delete_note -> {
-          deleteNote()
-        }
+        R.id.share_note -> shareNote()
+        R.id.save_note -> saveNote(add_note_edit_text.text.toString())
+        R.id.delete_note -> deleteNote()
+
       }
       true
     }
