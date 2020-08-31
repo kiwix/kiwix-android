@@ -175,7 +175,7 @@ class AddNoteDialog : DialogFragment() {
 
   private fun exitAddNoteDialog() {
     if (noteEdited) {
-      alertDialogShower?.show(
+      alertDialogShower.show(
         KiwixDialog.NotesDiscardConfirmation,
         ::dismissAddNoteDialog
       )
