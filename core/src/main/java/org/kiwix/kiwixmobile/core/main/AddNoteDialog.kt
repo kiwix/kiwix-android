@@ -90,8 +90,8 @@ class AddNoteDialog : DialogFragment() {
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
 
-  @JvmField @Inject
-  var alertDialogShower: AlertDialogShower? = null
+  @Inject
+  lateinit var alertDialogShower: AlertDialogShower
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     coreComponent
