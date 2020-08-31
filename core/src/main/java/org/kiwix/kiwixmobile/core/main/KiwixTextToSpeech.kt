@@ -278,15 +278,14 @@ class KiwixTextToSpeech internal constructor(
 
   private inner class TTSJavaScriptInterface {
     @JavascriptInterface fun speakAloud(content: String) {
-      val splitted = content.split("[\\n.;]".toRegex()).toTypedArray()
-      val pieces = splitted.filter(String::isNotBlank)
+      val pieces = content.split("[\\n.;]".toRegex())
+        .filter(String::isNotBlank)
+        .map(String::trim)
       if (pieces.isNotEmpty()) {
         onSpeakingListener.onSpeakingStarted()
-      } else {
-        return
+        currentTTSTask = TTSTask(pieces)
+        currentTTSTask?.start()
       }
-      currentTTSTask = TTSTask(pieces)
-      currentTTSTask?.start()
     }
   }
 }
