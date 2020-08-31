@@ -155,4 +155,7 @@
   <string name="go_to_settings" fuzzy="true">Gå til indstillinger</string>
   <string name="no_bookmarks">Ingen bogmærker</string>
   <string name="reader">Læser</string>
+  <string name="open_library">Åbn bibliotek</string>
+  <string name="open_drawer">Åbn skuffe</string>
+  <string name="close_drawer">Luk skuffe</string>
 </resources>
