@@ -71,7 +71,7 @@ open class LibraryFragment : BaseFragment() {
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
 
-  protected val zimManageViewModel by lazy {
+  private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
 

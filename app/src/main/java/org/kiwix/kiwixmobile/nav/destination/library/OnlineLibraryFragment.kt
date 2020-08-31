@@ -28,29 +28,38 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.language.LanguageActivity
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
+import javax.inject.Inject
 
-class OnlineLibraryFragment : LibraryFragment(), FragmentActivityExtensions {
+class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
+
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
   }
 
+  private val zimManageViewModel by lazy {
+    requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
+  }
+
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super<LibraryFragment>.onCreateOptionsMenu(menu, inflater)
+    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.menu_zim_manager, menu)
     val searchItem = menu.findItem(R.id.action_search)
     val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
     getZimItem?.isVisible = false
-
     (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
       SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
     )
