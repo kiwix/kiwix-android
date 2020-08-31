@@ -223,8 +223,7 @@ class KiwixTextToSpeech internal constructor(
     fun onSpeakingEnded()
   }
 
-  inner class TTSTask
-    (private val pieces: List<String>) {
+  inner class TTSTask(private val pieces: List<String>) {
     private val currentPiece =
       AtomicInteger(0)
     @JvmField var paused = true
