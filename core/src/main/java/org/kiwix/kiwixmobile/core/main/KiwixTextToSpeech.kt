@@ -161,12 +161,10 @@ class KiwixTextToSpeech internal constructor(
 
   fun stop() {
     tts.let {
-      {
-        if (it.stop() == SUCCESS) {
-          currentTTSTask = null
-          it.setOnUtteranceProgressListener(null)
-          onSpeakingListener.onSpeakingEnded()
-        }
+      if (it.stop() == SUCCESS) {
+        currentTTSTask = null
+        it.setOnUtteranceProgressListener(null)
+        onSpeakingListener.onSpeakingEnded()
       }
     }
   }
