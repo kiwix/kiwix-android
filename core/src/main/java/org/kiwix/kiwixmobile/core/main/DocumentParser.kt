@@ -47,15 +47,15 @@ public class DocumentParser(private var listener: DocumentParser.SectionsListene
     @JavascriptInterface
     public fun parse(sectionTitle: String, element: String, id: String) {
 
-      if (element == "H1") {
+      if (element == "H1")
         title = sectionTitle.trim()
-        return
+      else {
+        sections.add(DocumentSection().apply {
+          this.id = id
+          title = sectionTitle.trim()
+          level = element.takeLast(1).toIntOrNull() ?: 0
+        })
       }
-      sections.add(DocumentSection().apply {
-        this.id = id
-        title = sectionTitle.trim()
-        level = element.takeLast(element.length - 1).toIntOrNull() ?: 0
-      })
     }
 
     @JavascriptInterface
