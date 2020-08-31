@@ -342,9 +342,7 @@ class AddNoteDialog : DialogFragment() {
 
         // Save note text-file code:
         try {
-          val fileOutputStream = FileOutputStream(noteFile)
-          fileOutputStream.write(noteText.toByteArray())
-          fileOutputStream.close()
+          noteFile.writeText(noteText)
           context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
           noteEdited = false // As no unsaved changes remain
           enableDeleteNoteMenuItem()
