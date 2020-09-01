@@ -238,11 +238,12 @@ class KiwixTextToSpeech internal constructor(
       paused = false
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
-      val params = mapOf(Engine.KEY_PARAM_UTTERANCE_ID to "kiwixLastMessage")
+      val params =
+        mapOf(Engine.KEY_PARAM_UTTERANCE_ID to "kiwixLastMessage") as HashMap<String, String>?
       if (currentPiece.get() < pieces.size) {
         tts.speak(
           pieces[currentPiece.getAndIncrement()], QUEUE_ADD,
-          params as HashMap<String, String>?
+          params
         )
       } else {
         stop()
