@@ -22,17 +22,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.item_help.item_help_description
+import kotlinx.android.synthetic.main.item_help.item_help_title
+import kotlinx.android.synthetic.main.item_help.item_help_toggle_expand
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.collapse
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.expand
-import kotlinx.android.synthetic.main.item_help.view.item_help_description
-import kotlinx.android.synthetic.main.item_help.view.item_help_title
-import kotlinx.android.synthetic.main.item_help.view.item_help_toggle_expand
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 
 internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
   RecyclerView.Adapter<HelpAdapter.Item>() {
-  private var titles: Array<String> = titleDescriptionMap.keys.toTypedArray()
-  private var descriptions: Array<String> = titleDescriptionMap.values.toTypedArray()
+  private var helpItems: ArrayList<HelpItem> = ArrayList()
+
+  init {
+    titleDescriptionMap.forEach { (key, value) ->
+      helpItems.add(HelpItem(key, value))
+    }
+  }
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
@@ -46,28 +52,32 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
     holder: Item,
     position: Int
   ) {
-    holder.itemView.item_help_description.text = descriptions[position]
-    holder.itemView.item_help_title.text = titles[position]
+    holder.bind(helpItems[position])
   }
 
-  override fun getItemCount(): Int = titles.size
+  override fun getItemCount(): Int = helpItems.size
 
   internal inner class Item(itemView: View) :
-    RecyclerView.ViewHolder(itemView) {
-    init {
-      itemView.item_help_title.setOnClickListener { toggleDescriptionVisibility() }
-      itemView.item_help_toggle_expand.setOnClickListener { toggleDescriptionVisibility() }
-    }
+    BaseViewHolder<HelpItem>(itemView) {
 
     @SuppressWarnings("MagicNumber")
     fun toggleDescriptionVisibility() {
-      if (itemView.item_help_description.visibility == View.GONE) {
-        ObjectAnimator.ofFloat(itemView.item_help_toggle_expand, "rotation", 0f, 180f).start()
-        itemView.item_help_description.expand()
+      if (item_help_description.visibility == View.GONE) {
+        ObjectAnimator.ofFloat(item_help_toggle_expand, "rotation", 0f, 180f).start()
+        item_help_description.expand()
       } else {
-        ObjectAnimator.ofFloat(itemView.item_help_toggle_expand, "rotation", 180f, 360f).start()
-        itemView.item_help_description.collapse()
+        ObjectAnimator.ofFloat(item_help_toggle_expand, "rotation", 180f, 360f).start()
+        item_help_description.collapse()
       }
+    }
+
+    override fun bind(item: HelpItem) {
+      item_help_title.setOnClickListener { toggleDescriptionVisibility() }
+      item_help_toggle_expand.setOnClickListener { toggleDescriptionVisibility() }
+      item_help_description.text = item.description
+      item_help_title.text = item.title
     }
   }
 }
+
+class HelpItem(val title: String, val description: String)
