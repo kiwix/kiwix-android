@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.help
 
 import android.animation.ObjectAnimator
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +28,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.collapse
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.expand
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 
 internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
   RecyclerView.Adapter<HelpAdapter.Item>() {
@@ -38,8 +38,7 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
     parent: ViewGroup,
     viewType: Int
   ): Item = Item(
-    LayoutInflater.from(parent.context)
-      .inflate(R.layout.item_help, parent, false)
+    parent.inflate(R.layout.item_help, false)
   )
 
   override fun onBindViewHolder(
@@ -73,5 +72,4 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
     }
   }
 }
-
 class HelpItem(val title: String, val description: String)
