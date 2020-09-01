@@ -32,13 +32,7 @@ import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 
 internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
   RecyclerView.Adapter<HelpAdapter.Item>() {
-  private var helpItems: ArrayList<HelpItem> = ArrayList()
-
-  init {
-    titleDescriptionMap.forEach { (key, value) ->
-      helpItems.add(HelpItem(key, value))
-    }
-  }
+  private var helpItems = titleDescriptionMap.map { (key, value) -> HelpItem(key, value) }
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
