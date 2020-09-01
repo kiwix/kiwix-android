@@ -21,17 +21,13 @@ import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.collapse
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.expand
 import kotlinx.android.synthetic.main.item_help.view.item_help_description
 import kotlinx.android.synthetic.main.item_help.view.item_help_title
 import kotlinx.android.synthetic.main.item_help.view.item_help_toggle_expand
-import org.kiwix.kiwixmobile.core.R2
 
 internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
   RecyclerView.Adapter<HelpAdapter.Item>() {
@@ -58,11 +54,7 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
 
   internal inner class Item(itemView: View) :
     RecyclerView.ViewHolder(itemView) {
-    @BindView(R2.id.item_help_description)
-    lateinit var description: TextView
-
     init {
-      ButterKnife.bind(this, itemView)
       itemView.item_help_title.setOnClickListener { toggleDescriptionVisibility() }
       itemView.item_help_toggle_expand.setOnClickListener { toggleDescriptionVisibility() }
     }
