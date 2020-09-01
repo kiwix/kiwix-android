@@ -96,10 +96,7 @@ class LocalFileTransferActivity : BaseActivity(),
     val filesIntent = intent
     val fileUriArrayList: ArrayList<Uri>? =
       filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
-    val isFileSender = fileUriArrayList?.isNotEmpty() == true
-    val filesForTransfer: List<FileItem>? = if (isFileSender)
-      fileUriArrayList?.map(::FileItem)
-    else emptyList()
+    val fileForTransfer = fileUriArrayList?.map(::FileItem) ?: emptyList()
 
     val toolbar: Toolbar =
       findViewById(R.id.toolbar)
@@ -114,11 +111,10 @@ class LocalFileTransferActivity : BaseActivity(),
     list_peer_devices.layoutManager = LinearLayoutManager(this)
     list_peer_devices.setHasFixedSize(true)
 
-    if (isFileSender) {
-      filesForTransfer?.let(::displayFileTransferProgress)
+    if (fileUriArrayList?.isNotEmpty() == true) {
+      displayFileTransferProgress(fileForTransfer)
     }
-
-    filesForTransfer?.let(wifiDirectManager::startWifiDirectManager)
+    wifiDirectManager.startWifiDirectManager(fileForTransfer)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
