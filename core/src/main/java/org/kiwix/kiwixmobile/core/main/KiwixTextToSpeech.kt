@@ -59,7 +59,7 @@ class KiwixTextToSpeech internal constructor(
   private val focusLock: Any = Any()
   private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
   @JvmField var currentTTSTask: TTSTask? = null
-  private lateinit var tts: TextToSpeech
+  private val tts: TextToSpeech by lazy { initTTS(onInitSucceedListener) }
 
   /**
    * Returns whether the TTS is initialized.
@@ -70,11 +70,10 @@ class KiwixTextToSpeech internal constructor(
 
   init {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech")
-    initTTS(onInitSucceedListener)
   }
 
-  private fun initTTS(onInitSucceedListener: OnInitSucceedListener) {
-    tts = TextToSpeech(instance, OnInitListener { status: Int ->
+  private fun initTTS(onInitSucceedListener: OnInitSucceedListener): TextToSpeech =
+    TextToSpeech(instance, OnInitListener { status: Int ->
       if (status == SUCCESS) {
         Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
         this.isInitialized = true
@@ -84,7 +83,6 @@ class KiwixTextToSpeech internal constructor(
         context.toast(R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT)
       }
     })
-  }
 
   /**
    * Reads the currently selected text in the WebView.
