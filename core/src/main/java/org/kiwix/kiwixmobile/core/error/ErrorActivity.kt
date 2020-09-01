@@ -106,17 +106,15 @@ open class ErrorActivity : BaseActivity() {
     }
   }
 
-  private fun buildBody(): String {
-    return """ 
-    $initialBody
-      
-    ${if (allowCrash.isChecked && exception != null) exceptionDetails() else ""}
-    ${if (allowZims.isChecked) zimFiles() else ""}
-    ${if (allowLanguage.isChecked) languageLocale() else ""}
-    ${if (allowDeviceDetails.isChecked) deviceDetails() else ""}
-    ${if (allowFileSystemDetails.isChecked) systemDetails() else ""}
-    """.trimIndent()
-  }
+  private fun buildBody(): String = """ 
+  $initialBody
+    
+  ${if (allowCrash.isChecked && exception != null) exceptionDetails() else ""}
+  ${if (allowZims.isChecked) zimFiles() else ""}
+  ${if (allowLanguage.isChecked) languageLocale() else ""}
+  ${if (allowDeviceDetails.isChecked) deviceDetails() else ""}
+  ${if (allowFileSystemDetails.isChecked) systemDetails() else ""}
+  """.trimIndent()
 
   private fun exceptionDetails(): String =
     """
@@ -201,11 +199,10 @@ open class ErrorActivity : BaseActivity() {
     get() = packageManager
       .getPackageInfo(packageName, ZERO).versionName
 
-  private fun toStackTraceString(exception: Throwable): String = {
+  private fun toStackTraceString(exception: Throwable): String =
     StringWriter().apply {
       exception.printStackTrace(PrintWriter(this))
-    }
-  }.toString()
+    }.toString()
 
   open fun restartApp() {
     startActivity(packageManager.getLaunchIntentForPackage(packageName))
