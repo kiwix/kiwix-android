@@ -154,12 +154,10 @@ class KiwixTextToSpeech internal constructor(
   }
 
   fun stop() {
-    tts.let {
-      if (it.stop() == SUCCESS) {
-        currentTTSTask = null
-        it.setOnUtteranceProgressListener(null)
-        onSpeakingListener.onSpeakingEnded()
-      }
+    if (tts.stop() == SUCCESS) {
+      currentTTSTask = null
+      tts.setOnUtteranceProgressListener(null)
+      onSpeakingListener.onSpeakingEnded()
     }
   }
 
@@ -230,7 +228,9 @@ class KiwixTextToSpeech internal constructor(
     }
 
     fun start() {
-      if (!paused) return
+      if (!paused) {
+        return
+      }
       paused = false
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
