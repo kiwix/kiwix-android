@@ -158,21 +158,13 @@ open class ErrorActivity : BaseActivity() {
 
   private fun systemDetails(): String = """
     Mount Points
-    ${mountPointProducer.produce().joinToString {
-    "$it\n"
-  }}
+    ${mountPointProducer.produce().joinToString { "$it\n" }}
     External Directories
     ${externalFileDetails()}
   """.trimIndent()
 
-  private fun externalFileDetails(): String = """
-    ${ContextCompat.getExternalFilesDirs(this, null).joinToString {
-    if (it != null)
-      it.path
-    else
-      "null"
-  }}
-  """.trimIndent()
+  private fun externalFileDetails(): String =
+    ContextCompat.getExternalFilesDirs(this, null).joinToString("\n") { it?.path ?: "null" }
 
   private fun safeContains(extras: Bundle): Boolean {
     return try {
