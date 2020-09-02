@@ -251,7 +251,7 @@ class KiwixTextToSpeech internal constructor(
           if (line >= pieces.size && !paused) {
             stop()
           } else {
-            tts.speak(pieces[line], QUEUE_ADD, params as HashMap<String, String>?)
+            tts.speak(pieces[line], QUEUE_ADD, params)
             currentPiece.getAndIncrement()
           }
         }
