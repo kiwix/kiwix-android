@@ -37,9 +37,7 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ): Item = Item(
-    parent.inflate(R.layout.item_help, false)
-  )
+  ): Item = Item(parent.inflate(R.layout.item_help, false))
 
   override fun onBindViewHolder(
     holder: Item,
