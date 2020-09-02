@@ -90,9 +90,13 @@ class AddNoteDialog : DialogFragment() {
 
   @Inject
   lateinit var alertDialogShower: AlertDialogShower
+
   private val saveItem by lazy { toolbar.menu.findItem(R.id.save_note) }
+
   private val shareItem by lazy { toolbar.menu.findItem(R.id.share_note) }
+
   private val deleteItem by lazy { toolbar.menu.findItem(R.id.delete_note) }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     coreComponent
@@ -108,7 +112,6 @@ class AddNoteDialog : DialogFragment() {
       articleTitle = (activity as WebViewProvider?)?.getCurrentWebView()?.title
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
-      val zimNoteDirectoryName = zimNoteDirectoryName
       articleNoteFileName = getArticleNotefileName()
       zimNotesDirectory = "$NOTES_DIRECTORY$zimNoteDirectoryName/"
     } else {
@@ -168,10 +171,7 @@ class AddNoteDialog : DialogFragment() {
 
   private fun exitAddNoteDialog() {
     if (noteEdited) {
-      alertDialogShower.show(
-        KiwixDialog.NotesDiscardConfirmation,
-        ::dismissAddNoteDialog
-      )
+      alertDialogShower.show(KiwixDialog.NotesDiscardConfirmation, ::dismissAddNoteDialog)
     } else {
       // Closing unedited note dialog straightaway
       dismissAddNoteDialog()
@@ -397,19 +397,23 @@ class AddNoteDialog : DialogFragment() {
       } else {
         Uri.fromFile(noteFile)
       }
-      val noteFileShareIntent = Intent(Intent.ACTION_SEND)
-      noteFileShareIntent.type = "application/octet-stream"
-      noteFileShareIntent.putExtra(Intent.EXTRA_STREAM, noteFileUri)
-      noteFileShareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-      val shareChooser = Intent.createChooser(
-        noteFileShareIntent,
-        getString(R.string.note_share_app_chooser_title)
-      )
-      if (noteFileShareIntent.resolveActivity(requireActivity().packageManager) != null) {
-        startActivity(shareChooser)
-      }
+      sendNoteFileShareIntent(noteFileUri)
     } else {
       context.toast(R.string.note_share_error_file_missing, Toast.LENGTH_SHORT)
+    }
+  }
+
+  private fun sendNoteFileShareIntent(noteFileUri: Uri?) {
+    val noteFileShareIntent = Intent(Intent.ACTION_SEND)
+    noteFileShareIntent.type = "application/octet-stream"
+    noteFileShareIntent.putExtra(Intent.EXTRA_STREAM, noteFileUri)
+    noteFileShareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+    val shareChooser = Intent.createChooser(
+      noteFileShareIntent,
+      getString(R.string.note_share_app_chooser_title)
+    )
+    if (noteFileShareIntent.resolveActivity(requireActivity().packageManager) != null) {
+      startActivity(shareChooser)
     }
   }
 
