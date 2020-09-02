@@ -93,7 +93,7 @@ class SettingsRobot : BaseRobot() {
 
   fun invokeContributorsDialog() {
     clickRecyclerViewItems(R.string.pref_credits_title)
-    isVisible(Text("Contributors"))
+    isVisible(Text("OK"))
     pressBack()
   }
 

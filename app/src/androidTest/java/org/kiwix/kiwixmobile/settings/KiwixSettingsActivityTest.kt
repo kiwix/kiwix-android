@@ -33,14 +33,7 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
       invokeStorageDialog()
       invokeHistoryDeletionDialog()
       invokeNightModeDialog()
+      invokeContributorsDialog()
     }
   }
-
-  // @Test
-  // fun testCreditsDialog() {
-  //   settingsRobo {
-  //     invokeContributorsDialog()
-  //   }
-  // }
-
 }
