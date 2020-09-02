@@ -25,36 +25,13 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   override var activityRule = activityTestRule<KiwixSettingsActivity>()
 
   @Test
-  fun testToggling() {
+  fun testSettingsActivity() {
     settingsRobo {
-      toggleButtons()
-    }
-  }
-
-  @Test
-  fun testLanguageDialog() {
-    settingsRobo {
+      checkRemainingTextViews()
       invokeLanguageDialog()
-    }
-  }
-
-  @Test
-  fun testStorageDialog() {
-    settingsRobo {
+      toggleButtons()
       invokeStorageDialog()
-    }
-  }
-
-  @Test
-  fun testHistoryDialog() {
-    settingsRobo {
       invokeHistoryDeletionDialog()
-    }
-  }
-
-  @Test
-  fun testNightModeDialog() {
-    settingsRobo {
       invokeNightModeDialog()
     }
   }
@@ -66,10 +43,4 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   //   }
   // }
 
-  @Test
-  fun testVersionTextView() {
-    settingsRobo {
-      checkRemainingTextViews()
-    }
-  }
 }
