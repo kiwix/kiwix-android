@@ -150,22 +150,12 @@ class AddNoteDialog : DialogFragment() {
     return (if (noteFileName.isNotEmpty()) noteFileName else articleTitle)!!
   }
 
-  private fun getTextAfterLastSlashWithoutExtension(path: String): String {
-    /* That's about exactly what it does.
-     *
-     * From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
-     * From "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html", returns "Main_Page"
-     * For null input or on being unable to find required text, returns null
-     * */
-    val rightmostSlash = path.lastIndexOf('/')
-    val rightmostDot = path.lastIndexOf('.')
-    return if (rightmostSlash > -1 && rightmostDot > -1) {
-      path.substring(
-        rightmostSlash + 1, if (rightmostDot > rightmostSlash) rightmostDot else path.length
-      )
-    } else ""
-    // If couldn't find a dot and/or slash in the url
-  }
+  /* From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
+   * From "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html", returns "Main_Page"
+   * For null input or on being unable to find required text, returns null
+    */
+  private fun getTextAfterLastSlashWithoutExtension(path: String): String =
+    path.substringAfterLast('/', "").substringBeforeLast('.', "")
 
   // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
