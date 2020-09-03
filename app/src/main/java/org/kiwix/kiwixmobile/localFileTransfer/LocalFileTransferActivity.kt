@@ -111,9 +111,7 @@ class LocalFileTransferActivity : BaseActivity(),
     list_peer_devices.layoutManager = LinearLayoutManager(this)
     list_peer_devices.setHasFixedSize(true)
 
-    if (fileUriArrayList?.isNotEmpty() == true) {
-      displayFileTransferProgress(fileForTransfer)
-    }
+    displayFileTransferProgress(fileForTransfer)
     wifiDirectManager.startWifiDirectManager(fileForTransfer)
   }
 
