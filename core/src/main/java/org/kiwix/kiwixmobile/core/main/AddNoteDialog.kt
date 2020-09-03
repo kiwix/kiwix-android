@@ -26,8 +26,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -47,6 +45,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.SimpleTextWatcher
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import java.io.File
@@ -244,30 +243,10 @@ class AddNoteDialog : DialogFragment() {
 
     // Show the previously saved note if it exists
     displayNote()
-    add_note_edit_text.addTextChangedListener(object : TextWatcher {
-      @SuppressWarnings("EmptyFunctionBlock")
-      override fun beforeTextChanged(
-        s: CharSequence,
-        start: Int,
-        count: Int,
-        after: Int
-      ) {
-      }
-
-      override fun onTextChanged(
-        s: CharSequence,
-        start: Int,
-        before: Int,
-        count: Int
-      ) {
-        noteEdited = true
-        enableSaveNoteMenuItem()
-        enableShareNoteMenuItem()
-      }
-
-      @SuppressWarnings("EmptyFunctionBlock")
-      override fun afterTextChanged(s: Editable) {
-      }
+    add_note_edit_text.addTextChangedListener(SimpleTextWatcher { _, _, _, _ ->
+      noteEdited = true
+      enableSaveNoteMenuItem()
+      enableShareNoteMenuItem()
     })
     if (!noteFileExists) {
       // Prepare for input in case of empty/new note
