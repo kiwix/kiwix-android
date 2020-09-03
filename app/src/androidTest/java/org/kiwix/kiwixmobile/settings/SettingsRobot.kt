@@ -65,41 +65,55 @@ class SettingsRobot : BaseRobot() {
     clickRecyclerViewItems(R.string.pref_wifi_only)
   }
 
-  fun invokeLanguageDialog() {
+  fun clickLanguagePreference() {
     clickRecyclerViewItems(R.string.device_default)
+  }
+
+  fun assertLanguagePrefDialogDisplayed() {
     assertDisplayed(R.string.pref_language_title)
-    pressBack()
   }
 
-  fun invokeStorageDialog() {
+  fun clickStoragePreference() {
     clickRecyclerViewItems(R.string.internal_storage, R.string.external_storage)
+  }
+
+  fun assertStorageDialogDisplayed() {
     assertDisplayed(R.string.pref_storage)
-    pressBack()
   }
 
-  fun invokeHistoryDeletionDialog() {
+  fun clickClearHistoryPreference() {
     clickRecyclerViewItems(R.string.pref_clear_all_history_title)
-    assertDisplayed(R.string.clear_all_history_dialog_title)
-    pressBack()
   }
 
-  fun invokeNightModeDialog() {
+  fun assertHistoryDialogDisplayed() {
+    assertDisplayed(R.string.clear_all_history_dialog_title)
+  }
+
+  fun clickNightModePreference() {
     clickRecyclerViewItems(R.string.pref_night_mode)
+  }
+
+  fun assertNightModeDialogDisplayed() {
     for (nightModeString in nightModeStrings()) {
       assertDisplayed(nightModeString)
     }
-    pressBack()
   }
 
-  fun invokeContributorsDialog() {
+  fun clickCredits() {
     clickRecyclerViewItems(R.string.pref_credits_title)
+  }
+
+  fun assertContributorsDialogDisplayed() {
     isVisible(Text("OK"))
-    pressBack()
   }
 
   fun checkRemainingTextViews() {
     clickRecyclerViewItems(R.string.pref_info_version)
     clickRecyclerViewItems(R.string.pref_text_zoom_title)
+  }
+
+  fun dismissDialog() {
+    pressBack()
   }
 
   private fun nightModeStrings(): Array<String> =

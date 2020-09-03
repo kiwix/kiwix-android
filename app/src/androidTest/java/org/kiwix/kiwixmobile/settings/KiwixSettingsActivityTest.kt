@@ -28,12 +28,21 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   fun testSettingsActivity() {
     settingsRobo {
       checkRemainingTextViews()
-      invokeLanguageDialog()
+      clickLanguagePreference()
+      assertLanguagePrefDialogDisplayed()
+      dismissDialog()
       toggleButtons()
-      invokeStorageDialog()
-      invokeHistoryDeletionDialog()
-      invokeNightModeDialog()
-      invokeContributorsDialog()
+      clickStoragePreference()
+      assertStorageDialogDisplayed()
+      dismissDialog()
+      clickClearHistoryPreference()
+      assertHistoryDialogDisplayed()
+      dismissDialog()
+      clickNightModePreference()
+      assertNightModeDialogDisplayed()
+      dismissDialog()
+      clickCredits()
+      assertContributorsDialogDisplayed()
     }
   }
 }
