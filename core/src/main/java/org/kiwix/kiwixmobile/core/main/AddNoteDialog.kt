@@ -360,13 +360,13 @@ class AddNoteDialog : DialogFragment() {
 
     val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
     if (noteFile.exists()) {
-      writeNote(noteFile)
+      readNoteFromFile(noteFile)
     }
 
     // No action in case the note file for the currently open article doesn't exist
   }
 
-  private fun writeNote(noteFile: File) {
+  private fun readNoteFromFile(noteFile: File) {
     noteFileExists = true
     val contents = noteFile.readText()
     add_note_edit_text.setText(contents) // Display the note content
