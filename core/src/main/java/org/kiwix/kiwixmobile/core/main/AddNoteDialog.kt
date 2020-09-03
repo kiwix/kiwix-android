@@ -137,8 +137,8 @@ class AddNoteDialog : DialogFragment() {
 
   private val zimNoteDirectoryName: String
     get() {
-      val noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName!!)
-      return (if (noteDirectoryName.isNotEmpty()) noteDirectoryName else zimFileTitle)!!
+      val noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName ?: "")
+      return (if (noteDirectoryName.isNotEmpty()) noteDirectoryName else zimFileTitle) ?: ""
     }
 
   private fun getArticleNotefileName(): String {
@@ -415,7 +415,6 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun dismissAddNoteDialog() {
-    val dialog = dialog
     dialog?.dismiss()
     closeKeyboard()
   }
