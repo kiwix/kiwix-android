@@ -116,11 +116,11 @@ class SettingsRobot : BaseRobot() {
     isVisible(Text("OK"))
   }
 
-  fun checkZoomTextView() {
+  fun assertZoomTextViewPresent() {
     clickRecyclerViewItems(R.string.pref_text_zoom_title)
   }
 
-  fun checkVersionTextView() {
+  fun assertVersionTextViewPresent() {
     clickRecyclerViewItems(R.string.pref_info_version)
   }
 

@@ -27,8 +27,8 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   @Test
   fun testSettingsActivity() {
     settingsRobo {
-      checkZoomTextView()
-      checkVersionTextView()
+      assertZoomTextViewPresent()
+      assertVersionTextViewPresent()
       clickLanguagePreference()
       assertLanguagePrefDialogDisplayed()
       dismissDialog()
@@ -47,6 +47,7 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
       dismissDialog()
       clickCredits()
       assertContributorsDialogDisplayed()
+      dismissDialog()
     }
   }
 }
