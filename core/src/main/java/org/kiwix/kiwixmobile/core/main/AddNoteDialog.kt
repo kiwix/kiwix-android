@@ -397,23 +397,20 @@ class AddNoteDialog : DialogFragment() {
       } else {
         Uri.fromFile(noteFile)
       }
-      sendNoteFileShareIntent(noteFileUri)
+      val noteFileShareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "application/octet-stream"
+        putExtra(Intent.EXTRA_STREAM, noteFileUri)
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+      }
+      val shareChooser = Intent.createChooser(
+        noteFileShareIntent,
+        getString(R.string.note_share_app_chooser_title)
+      )
+      if (noteFileShareIntent.resolveActivity(requireActivity().packageManager) != null) {
+        startActivity(shareChooser)
+      }
     } else {
       context.toast(R.string.note_share_error_file_missing, Toast.LENGTH_SHORT)
-    }
-  }
-
-  private fun sendNoteFileShareIntent(noteFileUri: Uri?) {
-    val noteFileShareIntent = Intent(Intent.ACTION_SEND)
-    noteFileShareIntent.type = "application/octet-stream"
-    noteFileShareIntent.putExtra(Intent.EXTRA_STREAM, noteFileUri)
-    noteFileShareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-    val shareChooser = Intent.createChooser(
-      noteFileShareIntent,
-      getString(R.string.note_share_app_chooser_title)
-    )
-    if (noteFileShareIntent.resolveActivity(requireActivity().packageManager) != null) {
-      startActivity(shareChooser)
     }
   }
 
