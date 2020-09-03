@@ -27,11 +27,15 @@ class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
   @Test
   fun testSettingsActivity() {
     settingsRobo {
-      checkRemainingTextViews()
+      checkZoomTextView()
+      checkVersionTextView()
       clickLanguagePreference()
       assertLanguagePrefDialogDisplayed()
       dismissDialog()
-      toggleButtons()
+      toggleBackToTopPref()
+      toggleOpenNewTabInBackground()
+      toggleExternalLinkWarningPref()
+      toggleWifiDownloadsOnlyPref()
       clickStoragePreference()
       assertStorageDialogDisplayed()
       dismissDialog()

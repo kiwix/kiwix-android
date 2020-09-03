@@ -58,10 +58,19 @@ class SettingsRobot : BaseRobot() {
     )
   }
 
-  fun toggleButtons() {
+  fun toggleBackToTopPref() {
     clickRecyclerViewItems(R.string.pref_back_to_top)
+  }
+
+  fun toggleOpenNewTabInBackground() {
     clickRecyclerViewItems(R.string.pref_newtab_background_title)
+  }
+
+  fun toggleExternalLinkWarningPref() {
     clickRecyclerViewItems(R.string.pref_external_link_popup_title)
+  }
+
+  fun toggleWifiDownloadsOnlyPref() {
     clickRecyclerViewItems(R.string.pref_wifi_only)
   }
 
@@ -107,9 +116,12 @@ class SettingsRobot : BaseRobot() {
     isVisible(Text("OK"))
   }
 
-  fun checkRemainingTextViews() {
-    clickRecyclerViewItems(R.string.pref_info_version)
+  fun checkZoomTextView() {
     clickRecyclerViewItems(R.string.pref_text_zoom_title)
+  }
+
+  fun checkVersionTextView() {
+    clickRecyclerViewItems(R.string.pref_info_version)
   }
 
   fun dismissDialog() {
