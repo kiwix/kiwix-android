@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.settings
 
-import android.view.View
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
@@ -29,7 +28,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
@@ -45,10 +43,8 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
 class SettingsRobot : BaseRobot() {
 
   private fun clickRecyclerViewItems(@StringRes vararg stringIds: Int) {
-    val matchers: Array<Matcher<View>?> = arrayOfNulls(stringIds.size)
-    for (i in stringIds.indices) {
-      matchers[i] = withText(stringIds[i])
-    }
+    val matchers = stringIds.indices.map { withText(stringIds[it]) }.toTypedArray()
+
     onView(
       withClassName(Matchers.`is`(RecyclerView::class.java.name))
     ).perform(
