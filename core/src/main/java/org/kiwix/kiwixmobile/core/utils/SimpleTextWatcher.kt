@@ -29,10 +29,10 @@ class SimpleTextWatcher(
   }
 
   @SuppressWarnings("EmptyFunctionBlock")
-  override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+  override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
   }
 
-  override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-    onTextWatcherChangeAction.invoke(p0, p1, p2, p3)
+  override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    onTextWatcherChangeAction.invoke(s, start, before, count)
   }
 }
