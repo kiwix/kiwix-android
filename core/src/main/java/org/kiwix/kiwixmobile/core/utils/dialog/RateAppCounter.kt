@@ -19,29 +19,24 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class RateAppCounter internal constructor(context: Context) {
-  private var visitCounter: SharedPreferences
-
-  init {
-    visitCounter = context.getSharedPreferences(NO_THANKS_CLICKED, 0)
-  }
+  private var visitCounter: SharedPreferences = context.getSharedPreferences(NO_THANKS_CLICKED, 0)
 
   var noThanksState: Boolean
     get() = visitCounter.getBoolean(NO_THANKS_CLICKED, false)
     set(value) {
-      visitCounter.edit().apply {
+      visitCounter.edit {
         putBoolean(NO_THANKS_CLICKED, value)
-        apply()
       }
     }
 
   var count: Int
     get() = visitCounter.getInt("count", 0)
     set(count) {
-      visitCounter.edit().apply {
+      visitCounter.edit {
         putInt("count", count)
-        apply()
       }
     }
 
