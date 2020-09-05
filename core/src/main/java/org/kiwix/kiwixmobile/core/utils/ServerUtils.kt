@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.core.utils
 
+import android.util.Log
+import org.kiwix.kiwixmobile.core.main.AddNoteDialog.TAG
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.net.SocketException
@@ -37,9 +39,12 @@ object ServerUtils {
       }
       // To remove extra characters from IP for Android Pie
       ip = formatIpForAndroidPie(ip)
-    } catch (e: SocketException) {
-      e.printStackTrace()
-      ip += "Something Wrong! $e\n"
+    } catch (socketException: SocketException) {
+      Log.e(TAG, "$socketException")
+      ip += "Something Wrong! $socketException\n"
+    } catch (invalidIpException: IllegalArgumentException) {
+      Log.e(TAG, "$invalidIpException")
+      ip += "Something Wrong! $invalidIpException\n"
     }
     return ip
   }
@@ -48,17 +53,13 @@ object ServerUtils {
     (inetAddress.hostAddress + "\n").takeIf { inetAddress.isSiteLocalAddress } ?: ""
 
   @Suppress("MagicNumber")
-  private fun formatIpForAndroidPie(ip: String): String {
-    var result: String = ip
-    if (ip.length > 14) {
-      for (i in 14 until ip.length) {
-        if (ip[i] == '.') {
-          result = ip.substring(0, i - 2)
-          break
-        }
-      }
-    }
-    return result
+  fun formatIpForAndroidPie(ip: String): String {
+    // regex from OneCricketeer @ https://stackoverflow.com/a/15875500/14053602
+    val ipRegex =
+      "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+        .toRegex()
+    val ipMatch = ipRegex.find(ip, 0) ?: throw IllegalArgumentException()
+    return ipMatch.value
   }
 
   @JvmStatic fun getSocketAddress(): String =
