@@ -44,14 +44,8 @@ internal class ServerUtilsTest {
   @Test
   internal fun `formatIpForAndroidPie should return full ip on given ip`() {
     assertThat(
-      ServerUtils.formatIpForAndroidPie(
-        """
-      192.168.232.2
-    """.trimIndent()
-      )
-    ).isEqualTo(
-      "192.168.232.2"
-    )
+      ServerUtils.formatIpForAndroidPie("192.168.232.2")
+    ).isEqualTo("192.168.232.2")
   }
 
   @Test(expected = IllegalArgumentException::class)
