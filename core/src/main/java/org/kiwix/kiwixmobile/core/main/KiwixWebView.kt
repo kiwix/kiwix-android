@@ -45,11 +45,12 @@ import java.io.IOException
 import javax.inject.Inject
 
 private const val INITIAL_SCALE = 100
+
 @SuppressLint("ViewConstructor")
 @SuppressWarnings("LongParameterList")
 open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   context: Context,
-  callback: WebViewCallback,
+  private val callback: WebViewCallback,
   attrs: AttributeSet?,
   nonVideoView: ViewGroup?,
   videoView: ViewGroup?,
@@ -61,8 +62,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
 
-  private val callback: WebViewCallback
-
   private val compositeDisposable = CompositeDisposable()
 
   private fun setWindowVisibility(systemUiVisibility: Int) {
@@ -73,21 +72,21 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     if (BuildConfig.DEBUG) {
       WebView.setWebContentsDebuggingEnabled(true)
     }
-    this.callback = callback
     coreComponent.inject(this)
     // Set the user agent to the current locale so it can be read with navigator.userAgent
-    val settings = settings
-    settings.userAgentString = "${getCurrentLocale(context)}"
-    settings.domStorageEnabled = true
-    settings.javaScriptEnabled = true
-    settings.loadWithOverviewMode = true
-    settings.useWideViewPort = true
-    setInitialScale(INITIAL_SCALE)
-    settings.builtInZoomControls = true
-    settings.displayZoomControls = false
-    clearCache(true)
-    settings.allowUniversalAccessFromFileURLs = true
-    setWebViewClient(webViewClient)
+    settings.apply {
+      userAgentString = "${getCurrentLocale(context)}"
+      domStorageEnabled = true
+      javaScriptEnabled = true
+      loadWithOverviewMode = true
+      useWideViewPort = true
+      setInitialScale(INITIAL_SCALE)
+      builtInZoomControls = true
+      displayZoomControls = false
+      clearCache(true)
+      allowUniversalAccessFromFileURLs = true
+      setWebViewClient(webViewClient)
+    }
     val client = KiwixWebChromeClient(callback, nonVideoView, videoView, this)
     client.setOnToggledFullscreen { fullscreen ->
       setWindowVisibility(
@@ -138,12 +137,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     compositeDisposable.clear()
   }
 
-  override fun onScrollChanged(
-    l: Int,
-    t: Int,
-    oldl: Int,
-    oldt: Int
-  ) {
+  override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
     super.onScrollChanged(l, t, oldl, oldt)
     val windowHeight = if (measuredHeight > 0) measuredHeight else 1
     val pages = contentHeight / windowHeight
@@ -185,17 +179,17 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
           i++
         }
         val source = Uri.parse(src)
-        lateinit var toastText: String
-        toastText = try {
+        try {
           val input = zimReaderContainer.load("$source").data
           storageDir.writeText(input.readBytes().toString())
           val imageSaved = instance.getString(R.string.save_media_saved)
-          String.format(imageSaved, newUrl)
+          val toastText = String.format(imageSaved, newUrl)
+          instance.toast(toastText)
         } catch (e: IOException) {
           Log.w("kiwix", "Couldn't save image", e)
-          instance.getString(R.string.save_media_error)
+          val toastText = instance.getString(R.string.save_media_error)
+          instance.toast(toastText)
         }
-        instance.toast(toastText)
       }
     }
   }
