@@ -33,14 +33,15 @@ class RateAppCounter internal constructor(context: Context) {
     }
 
   var count: Int
-    get() = visitCounter.getInt("count", 0)
+    get() = visitCounter.getInt(COUNT, 0)
     set(count) {
       visitCounter.edit {
-        putInt("count", count)
+        putInt(COUNT, count)
       }
     }
 
   companion object {
     private const val NO_THANKS_CLICKED = "clickedNoThanks"
+    private const val COUNT = "count"
   }
 }
