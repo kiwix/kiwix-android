@@ -149,7 +149,7 @@ class AddNoteDialog : DialogFragment() {
     } else {
       noteFileName = getTextAfterLastSlashWithoutExtension(articleUrl)
     }
-    return (if (noteFileName.isNotEmpty()) noteFileName else articleTitle)!!
+    return (if (noteFileName.isNotEmpty()) noteFileName else articleTitle) ?: ""
   }
 
   /* From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
