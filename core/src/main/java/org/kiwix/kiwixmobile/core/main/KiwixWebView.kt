@@ -174,8 +174,9 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         }
         val source = Uri.parse(src)
         try {
-          val input = zimReaderContainer.load("$source").data
-          storageDir.writeText(input.readBytes().toString())
+          zimReaderContainer.load("$source").data.use {
+            it.copyTo(storageDir.outputStream())
+          }
           val toastText = instance.getString(R.string.save_media_saved, newUrl)
           instance.toast(toastText)
         } catch (e: IOException) {
