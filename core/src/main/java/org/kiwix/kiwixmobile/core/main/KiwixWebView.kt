@@ -148,17 +148,11 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
   internal class SaveHandler(private val zimReaderContainer: ZimReaderContainer) :
     Handler() {
-    private fun getDecodedFileName(url: String?, src: String?): String {
-      var fileName = ""
-      if (url != null) {
-        fileName = url.substringAfterLast("/")
-      }
-      // If url is not a valid file name use src if it isn't null
-      if (!fileName.contains(".") && src != null) {
-        fileName = src.substringAfterLast("/")
-      }
-      return fileName.substringAfterLast("%3A")
-    }
+    private fun getDecodedFileName(url: String?, src: String?): String =
+      url?.substringAfterLast("/", "")
+        ?.takeIf { it.contains(".") }
+        ?: src?.substringAfterLast("/", "")
+          ?.substringAfterLast("%3A") ?: ""
 
     override fun handleMessage(msg: Message) {
       val url = msg.data["url"] as? String
