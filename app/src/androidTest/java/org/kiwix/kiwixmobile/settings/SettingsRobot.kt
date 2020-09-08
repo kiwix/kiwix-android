@@ -43,7 +43,7 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
 class SettingsRobot : BaseRobot() {
 
   private fun clickRecyclerViewItems(@StringRes vararg stringIds: Int) {
-    val matchers = stringIds.indices.map { withText(stringIds[it]) }.toTypedArray()
+    val matchers = stringIds.map { return@map withText(it) }.toTypedArray()
 
     onView(
       withClassName(Matchers.`is`(RecyclerView::class.java.name))
