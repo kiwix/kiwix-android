@@ -22,20 +22,21 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 
 class RateAppCounter internal constructor(context: Context) {
-  private var visitCounter: SharedPreferences = context.getSharedPreferences(NO_THANKS_CLICKED, 0)
+  private var ratingsPreferences: SharedPreferences =
+    context.getSharedPreferences(NO_THANKS_CLICKED, 0)
 
   var noThanksState: Boolean
-    get() = visitCounter.getBoolean(NO_THANKS_CLICKED, false)
+    get() = ratingsPreferences.getBoolean(NO_THANKS_CLICKED, false)
     set(value) {
-      visitCounter.edit {
+      ratingsPreferences.edit {
         putBoolean(NO_THANKS_CLICKED, value)
       }
     }
 
   var count: Int
-    get() = visitCounter.getInt(COUNT, 0)
+    get() = ratingsPreferences.getInt(COUNT, 0)
     set(count) {
-      visitCounter.edit {
+      ratingsPreferences.edit {
         putInt(COUNT, count)
       }
     }
