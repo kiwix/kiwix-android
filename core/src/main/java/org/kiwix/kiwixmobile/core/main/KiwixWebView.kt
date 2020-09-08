@@ -183,13 +183,11 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         try {
           val input = zimReaderContainer.load("$source").data
           storageDir.writeText(input.readBytes().toString())
-          val imageSaved = instance.getString(R.string.save_media_saved)
-          val toastText = String.format(imageSaved, newUrl)
+          val toastText = instance.getString(R.string.save_media_saved, newUrl)
           instance.toast(toastText)
         } catch (e: IOException) {
           Log.w("kiwix", "Couldn't save image", e)
-          val toastText = instance.getString(R.string.save_media_error)
-          instance.toast(toastText)
+          instance.toast(R.string.save_media_error)
         }
       }
     }
