@@ -51,10 +51,10 @@ private const val INITIAL_SCALE = 100
 open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   context: Context,
   private val callback: WebViewCallback,
-  attrs: AttributeSet?,
-  nonVideoView: ViewGroup?,
-  videoView: ViewGroup?,
-  webViewClient: CoreWebViewClient?
+  attrs: AttributeSet,
+  nonVideoView: ViewGroup,
+  videoView: ViewGroup,
+  webViewClient: CoreWebViewClient
 ) : VideoEnabledWebView(context, attrs) {
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
