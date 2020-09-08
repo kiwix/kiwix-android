@@ -43,13 +43,11 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
 class SettingsRobot : BaseRobot() {
 
   private fun clickRecyclerViewItems(@StringRes vararg stringIds: Int) {
-    val matchers = stringIds.map { return@map withText(it) }.toTypedArray()
-
     onView(
       withClassName(Matchers.`is`(RecyclerView::class.java.name))
     ).perform(
       actionOnItem<RecyclerView.ViewHolder>(
-        hasDescendant(Matchers.anyOf(*matchers)), ViewActions.click()
+        hasDescendant(Matchers.anyOf(*stringIds.matcher())), ViewActions.click()
       )
     )
   }
@@ -126,4 +124,6 @@ class SettingsRobot : BaseRobot() {
 
   private fun nightModeStrings(): Array<String> =
     context.resources.getStringArray(R.array.pref_night_modes_entries)
+
+  private fun IntArray.matcher() = this.map(::withText).toTypedArray()
 }
