@@ -80,7 +80,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
 
-
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
       LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick),
