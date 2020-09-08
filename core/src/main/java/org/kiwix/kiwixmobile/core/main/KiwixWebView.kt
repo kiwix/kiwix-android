@@ -87,13 +87,14 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       allowUniversalAccessFromFileURLs = true
       setWebViewClient(webViewClient)
     }
-    val client = KiwixWebChromeClient(callback, nonVideoView, videoView, this)
-    client.setOnToggledFullscreen { fullscreen ->
-      setWindowVisibility(
-        if (fullscreen) View.SYSTEM_UI_FLAG_LOW_PROFILE else View.SYSTEM_UI_FLAG_VISIBLE
-      )
+    KiwixWebChromeClient(callback, nonVideoView, videoView, this).apply {
+      setOnToggledFullscreen { fullscreen ->
+        setWindowVisibility(
+          if (fullscreen) View.SYSTEM_UI_FLAG_LOW_PROFILE else View.SYSTEM_UI_FLAG_VISIBLE
+        )
+      }
+      webChromeClient = this
     }
-    webChromeClient = client
   }
 
   override fun performLongClick(): Boolean {
