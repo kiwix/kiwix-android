@@ -22,6 +22,11 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 
 class RateAppCounter internal constructor(context: Context) {
+  companion object {
+    private const val NO_THANKS_CLICKED = "clickedNoThanks"
+    private const val COUNT = "count"
+  }
+
   private var ratingsPreferences: SharedPreferences =
     context.getSharedPreferences(NO_THANKS_CLICKED, 0)
 
@@ -40,9 +45,4 @@ class RateAppCounter internal constructor(context: Context) {
         putInt(COUNT, count)
       }
     }
-
-  companion object {
-    private const val NO_THANKS_CLICKED = "clickedNoThanks"
-    private const val COUNT = "count"
-  }
 }
