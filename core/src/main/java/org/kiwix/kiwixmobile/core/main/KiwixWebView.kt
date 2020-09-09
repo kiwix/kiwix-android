@@ -153,6 +153,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         ?: src?.substringAfterLast("/", "")
           ?.substringAfterLast("%3A", "") ?: ""
 
+    @SuppressWarnings("NestedBlockDepth")
     override fun handleMessage(msg: Message) {
       val url = msg.data["url"] as? String
       val src = msg.data["src"] as? String
