@@ -35,13 +35,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryErrorText
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryList
 import kotlinx.android.synthetic.main.fragment_destination_download.librarySwipeRefresh
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -57,7 +57,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.LanguageActivity
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
@@ -198,7 +197,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     .show(requireFragmentManager(), getString(R.string.pref_storage))
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.kiwixActivityComponent.inject(this)
+    baseActivity.cachedComponent.inject(this)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -239,8 +238,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     setHasOptionsMenu(true)
     val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
     val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val swipeRefreshLibrary = root.findViewById<SwipeRefreshLayout>(R.id.librarySwipeRefresh)
-    val libList = root.findViewById<RecyclerView>(R.id.libraryList)
     val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
@@ -248,9 +245,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       setTitle(R.string.download)
     }
     activity.setupDrawerToggle(toolbar)
+    return root
+  }
 
-    swipeRefreshLibrary.setOnRefreshListener(::refreshFragment)
-    libList.run {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    librarySwipeRefresh.setOnRefreshListener(::refreshFragment)
+    libraryList.run {
       adapter = libraryAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
@@ -260,6 +261,5 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       viewLifecycleOwner, Observer(::onRefreshStateChange)
     )
     zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
-    return root
   }
 }
