@@ -151,7 +151,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       url?.substringAfterLast("/", "")
         ?.takeIf { it.contains(".") }
         ?: src?.substringAfterLast("/", "")
-          ?.substringAfterLast("%3A") ?: ""
+          ?.substringAfterLast("%3A", "") ?: ""
 
     override fun handleMessage(msg: Message) {
       val url = msg.data["url"] as? String
