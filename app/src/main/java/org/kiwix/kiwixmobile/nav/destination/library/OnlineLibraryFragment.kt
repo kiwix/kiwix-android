@@ -155,12 +155,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
     sharedPreferenceUtil.putPrefStorage(storageDevice.name)
-    sharedPreferenceUtil.putPrefStorageTitle(
-      getString(
-        if (storageDevice.isInternal) R.string.internal_storage
-        else R.string.external_storage
-      )
-    )
   }
 
   private fun onBookItemClick(item: LibraryListItem.BookItem) {

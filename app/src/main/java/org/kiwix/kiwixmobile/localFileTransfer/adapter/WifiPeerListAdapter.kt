@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.local_file_transfer.adapter
+package org.kiwix.kiwixmobile.localFileTransfer.adapter
 
 import android.net.wifi.p2p.WifiP2pDevice
 import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
