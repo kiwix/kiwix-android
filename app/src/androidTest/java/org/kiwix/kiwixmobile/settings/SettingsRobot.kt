@@ -31,7 +31,10 @@ import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertD
 import org.hamcrest.Matchers
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
+import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.array
+import org.kiwix.kiwixmobile.core.R.string
 
 /**
  * Authored by Ayush Shrivastava on 25/8/20
@@ -42,58 +45,62 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
 
 class SettingsRobot : BaseRobot() {
 
+  init {
+    isVisible(ViewId(R.id.toolbar))
+  }
+
   private fun clickRecyclerViewItems(@StringRes vararg stringIds: Int) {
     onView(
       withClassName(Matchers.`is`(RecyclerView::class.java.name))
     ).perform(
       actionOnItem<RecyclerView.ViewHolder>(
-        hasDescendant(Matchers.anyOf(*stringIds.matcher())), ViewActions.click()
+        hasDescendant(Matchers.anyOf(*stringIds.matchers())), ViewActions.click()
       )
     )
   }
 
   fun toggleBackToTopPref() {
-    clickRecyclerViewItems(R.string.pref_back_to_top)
+    clickRecyclerViewItems(string.pref_back_to_top)
   }
 
   fun toggleOpenNewTabInBackground() {
-    clickRecyclerViewItems(R.string.pref_newtab_background_title)
+    clickRecyclerViewItems(string.pref_newtab_background_title)
   }
 
   fun toggleExternalLinkWarningPref() {
-    clickRecyclerViewItems(R.string.pref_external_link_popup_title)
+    clickRecyclerViewItems(string.pref_external_link_popup_title)
   }
 
   fun toggleWifiDownloadsOnlyPref() {
-    clickRecyclerViewItems(R.string.pref_wifi_only)
+    clickRecyclerViewItems(string.pref_wifi_only)
   }
 
   fun clickLanguagePreference() {
-    clickRecyclerViewItems(R.string.device_default)
+    clickRecyclerViewItems(string.device_default)
   }
 
   fun assertLanguagePrefDialogDisplayed() {
-    assertDisplayed(R.string.pref_language_title)
+    assertDisplayed(string.pref_language_title)
   }
 
   fun clickStoragePreference() {
-    clickRecyclerViewItems(R.string.internal_storage, R.string.external_storage)
+    clickRecyclerViewItems(string.internal_storage, string.external_storage)
   }
 
   fun assertStorageDialogDisplayed() {
-    assertDisplayed(R.string.pref_storage)
+    assertDisplayed(string.pref_storage)
   }
 
   fun clickClearHistoryPreference() {
-    clickRecyclerViewItems(R.string.pref_clear_all_history_title)
+    clickRecyclerViewItems(string.pref_clear_all_history_title)
   }
 
   fun assertHistoryDialogDisplayed() {
-    assertDisplayed(R.string.clear_all_history_dialog_title)
+    assertDisplayed(string.clear_all_history_dialog_title)
   }
 
   fun clickNightModePreference() {
-    clickRecyclerViewItems(R.string.pref_night_mode)
+    clickRecyclerViewItems(string.pref_night_mode)
   }
 
   fun assertNightModeDialogDisplayed() {
@@ -103,7 +110,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun clickCredits() {
-    clickRecyclerViewItems(R.string.pref_credits_title)
+    clickRecyclerViewItems(string.pref_credits_title)
   }
 
   fun assertContributorsDialogDisplayed() {
@@ -111,11 +118,11 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun assertZoomTextViewPresent() {
-    clickRecyclerViewItems(R.string.pref_text_zoom_title)
+    clickRecyclerViewItems(string.pref_text_zoom_title)
   }
 
   fun assertVersionTextViewPresent() {
-    clickRecyclerViewItems(R.string.pref_info_version)
+    clickRecyclerViewItems(string.pref_info_version)
   }
 
   fun dismissDialog() {
@@ -123,7 +130,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   private fun nightModeStrings(): Array<String> =
-    context.resources.getStringArray(R.array.pref_night_modes_entries)
+    context.resources.getStringArray(array.pref_night_modes_entries)
 
-  private fun IntArray.matcher() = this.map(::withText).toTypedArray()
+  private fun IntArray.matchers() = map(::withText).toTypedArray()
 }
