@@ -25,6 +25,7 @@ import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResult
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
@@ -44,8 +45,11 @@ internal class OpenSearchItemTest {
     } returns intent
     OpenSearchItem(searchListItem, false).invokeWith(activity)
     verify {
+      activity.setNavigationResult(
+        SearchItemToOpen(searchListItem.value, false),
+        TAG_FILE_SEARCHED
+      )
       activity.popNavigationBackstack()
-      activity.openSearchItem(searchListItem.value, false)
     }
   }
 
@@ -61,8 +65,11 @@ internal class OpenSearchItemTest {
     } returns intent
     OpenSearchItem(searchListItem, true).invokeWith(activity)
     verify {
+      activity.setNavigationResult(
+        SearchItemToOpen(searchListItem.value, true),
+        TAG_FILE_SEARCHED
+      )
       activity.popNavigationBackstack()
-      activity.openSearchItem(searchListItem.value, true)
     }
   }
 }
