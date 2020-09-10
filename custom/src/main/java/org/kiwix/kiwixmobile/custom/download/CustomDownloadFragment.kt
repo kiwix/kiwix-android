@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -68,20 +67,9 @@ class CustomDownloadFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? {
     super.onCreate(savedInstanceState)
-    val root = inflater.inflate(R.layout.activity_custom_download, container, false)
-    return root
+    return inflater.inflate(R.layout.activity_custom_download, container, false)
   }
 
-  /**
-   * Called immediately after [.onCreateView]
-   * has returned, but before any saved state has been restored in to the view.
-   * This gives subclasses a chance to initialize themselves once
-   * they know their view hierarchy has been completely created.  The fragment's
-   * view hierarchy is not however attached to its parent at this point.
-   * @param view The View returned by [.onCreateView].
-   * @param savedInstanceState If non-null, this fragment is being re-constructed
-   * from a previous saved state as given here.
-   */
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
