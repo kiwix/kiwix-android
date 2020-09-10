@@ -16,21 +16,23 @@
  *
  */
 
-package org.kiwix.kiwixmobile.local_file_transfer.adapter
+package org.kiwix.kiwixmobile.core.utils
 
-import android.net.wifi.p2p.WifiP2pDevice
-import android.view.View
-import kotlinx.android.synthetic.main.row_peer_device.row_device_name
-import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import android.text.Editable
+import android.text.TextWatcher
 
-class WifiP2pViewHolder(
-  override val containerView: View,
-  private val onItemClickAction: (WifiP2pDevice) -> Unit
-) : BaseViewHolder<WifiP2pDevice>(containerView) {
-  override fun bind(item: WifiP2pDevice) {
-    row_device_name.text = item.deviceName
-    containerView.setOnClickListener {
-      onItemClickAction.invoke(item)
-    }
+class SimpleTextWatcher(
+  private val onTextWatcherChangeAction: (CharSequence?, Int, Int, Int) -> Unit
+) : TextWatcher {
+  @SuppressWarnings("EmptyFunctionBlock")
+  override fun afterTextChanged(p0: Editable?) {
+  }
+
+  @SuppressWarnings("EmptyFunctionBlock")
+  override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+  }
+
+  override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    onTextWatcherChangeAction.invoke(s, start, before, count)
   }
 }

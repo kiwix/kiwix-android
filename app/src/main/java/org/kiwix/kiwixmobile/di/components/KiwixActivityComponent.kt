@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.di.modules.KiwixActivityModule
 import org.kiwix.kiwixmobile.intro.IntroActivity
 import org.kiwix.kiwixmobile.intro.IntroModule
 import org.kiwix.kiwixmobile.language.LanguageActivity
-import org.kiwix.kiwixmobile.local_file_transfer.LocalFileTransferActivity
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.splash.KiwixSplashActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
 @ActivityScope
 @Subcomponent(
@@ -47,7 +46,6 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
   ]
 )
 interface KiwixActivityComponent : CoreActivityComponent {
-  fun inject(libraryFragment: LibraryFragment)
   fun inject(readerFragment: KiwixReaderFragment)
   fun inject(localLibraryFragment: LocalLibraryFragment)
   fun inject(deleteFiles: DeleteFiles)

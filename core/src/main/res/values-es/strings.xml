@@ -258,4 +258,6 @@
   <string name="diagnostic_report_message">Envíe todos los detalles siguientes para que podamos diagnosticar el problema.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
+  <string name="tab_restored">Pestaña restaurada</string>
+  <string name="close_drawer">Cerrar cajón</string>
 </resources>
