@@ -36,10 +36,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
@@ -133,8 +133,9 @@ class CustomReaderFragment : CoreReaderFragment() {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
           activity?.finish()
+          // val acct = requireActivity() as AppCompatActivity
           // trans?.apply { add(R.id.custom_drawer_container, fragment).commit() }
-          with(activity as AppCompatActivity) { navigate(R.id.customDownloadFragment) }
+          findNavController().navigate(R.id.customDownloadFragment)
         }
       }
     )

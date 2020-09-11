@@ -89,6 +89,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.inject.Inject;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
@@ -753,10 +754,15 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private KiwixWebView initalizeWebView(String url) {
-    AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
-    KiwixWebView webView = createWebView(attrs);
-    loadUrl(url, webView);
-    return webView;
+    //if(requireContext() != null) {
+    AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
+      KiwixWebView webView = createWebView(attrs);
+      loadUrl(url, webView);
+      return webView;
+    //} else{
+    //  Log.e("KIWIX", "initalizeWebView: CONTEXXT NOT FOUND, NULL");
+    //  return null;
+    //}
   }
 
   @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {

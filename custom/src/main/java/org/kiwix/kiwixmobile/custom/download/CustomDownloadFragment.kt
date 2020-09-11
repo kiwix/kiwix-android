@@ -67,11 +67,7 @@ class CustomDownloadFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? {
     super.onCreate(savedInstanceState)
-    return inflater.inflate(R.layout.activity_custom_download, container, false)
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+    val root = inflater.inflate(R.layout.activity_custom_download, container, false)
     val activity = requireActivity() as CoreMainActivity
     downloadViewModel.state.observe(viewLifecycleOwner, Observer(::render))
     compositeDisposable.add(
@@ -80,6 +76,11 @@ class CustomDownloadFragment : BaseFragment() {
         Throwable::printStackTrace
       )
     )
+    return root
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     cd_download_button.setOnClickListener { downloadViewModel.actions.offer(ClickedDownload) }
     cd_retry_button.setOnClickListener { downloadViewModel.actions.offer(ClickedRetry) }
   }
