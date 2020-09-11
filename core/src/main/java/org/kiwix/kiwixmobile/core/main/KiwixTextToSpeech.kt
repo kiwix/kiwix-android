@@ -136,17 +136,16 @@ class KiwixTextToSpeech internal constructor(
     // We use JavaScript to get the content of the page conveniently, earlier making some
     // changes in the page
     webView.loadUrl(
-      """
-        javascript:body = document.getElementsByTagName('body')[0].cloneNode(true);
+      "javascript:" +
+        "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
         // Remove some elements that are shouldn't be read (table of contents,
         // references numbers, thumbnail captions, duplicated title, etc.)
-        "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, 
-        "    title, .navbox');
-        "Array.prototype.forEach.call(toRemove, function(elem) {
-        "    elem.parentElement.removeChild(elem);
-        "});
-        "tts.speakAloud(body.innerText);
-        """
+        "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
+        "    title, .navbox');" +
+        "Array.prototype.forEach.call(toRemove, function(elem) {" +
+        "    elem.parentElement.removeChild(elem);" +
+        "});" +
+        "tts.speakAloud(body.innerText);"
     )
   }
 
@@ -229,10 +228,11 @@ class KiwixTextToSpeech internal constructor(
         return
       }
       paused = false
+      val params =
+        HashMap<String, String>()
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
-      val params =
-        mapOf(Engine.KEY_PARAM_UTTERANCE_ID to "kiwixLastMessage") as HashMap<String, String>?
+      params[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "kiwixLastMessage"
       if (currentPiece.get() < pieces.size) {
         tts.speak(
           pieces[currentPiece.getAndIncrement()], QUEUE_ADD,
