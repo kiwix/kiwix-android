@@ -132,9 +132,6 @@ class CustomReaderFragment : CoreReaderFragment() {
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
-          activity?.finish()
-          // val acct = requireActivity() as AppCompatActivity
-          // trans?.apply { add(R.id.custom_drawer_container, fragment).commit() }
           findNavController().navigate(R.id.customDownloadFragment)
         }
       }

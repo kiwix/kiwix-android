@@ -28,9 +28,6 @@
       android:name="pageUrl"
       android:defaultValue=""
       app:argType="string" />
-    <action
-      android:id="@+id/action_customReaderFragment_to_customDownloadFragment"
-      app:destination="@id/customDownloadFragment" />
   </fragment>
   <fragment
     android:id="@+id/historyFragment"

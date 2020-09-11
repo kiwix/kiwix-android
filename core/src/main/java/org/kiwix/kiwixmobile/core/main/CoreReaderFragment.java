@@ -755,7 +755,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private KiwixWebView initalizeWebView(String url) {
     //if(requireContext() != null) {
-    AttributeSet attrs = StyleUtils.getAttributes(getActivity(), R.xml.webview);
+    AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
       KiwixWebView webView = createWebView(attrs);
       loadUrl(url, webView);
       return webView;
