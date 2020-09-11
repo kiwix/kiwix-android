@@ -89,7 +89,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import javax.inject.Inject;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
@@ -160,20 +159,10 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @BindView(R2.id.toolbar)
   protected Toolbar toolbar;
-  @BindView(R2.id.activity_main_back_to_top_fab)
-  FloatingActionButton backToTopButton;
-  @BindView(R2.id.activity_main_button_stop_tts)
-  Button stopTTSButton;
-  @BindView(R2.id.activity_main_button_pause_tts)
-  Button pauseTTSButton;
-  @BindView(R2.id.activity_main_tts_controls)
-  Group TTSControls;
   @BindView(R2.id.fragment_main_app_bar)
   protected AppBarLayout toolbarContainer;
   @BindView(R2.id.main_fragment_progress_view)
   protected ContentLoadingProgressBar progressBar;
-  @BindView(R2.id.activity_main_fullscreen_button)
-  ImageButton exitFullscreenButton;
   @BindView(R2.id.navigation_fragment_main_drawer_layout)
   protected DrawerLayout drawerLayout;
   protected NavigationView tableDrawerRightContainer;
@@ -181,31 +170,16 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected FrameLayout contentFrame;
   @BindView(R2.id.bottom_toolbar)
   protected BottomAppBar bottomToolbar;
-  @BindView(R2.id.bottom_toolbar_bookmark)
-  ImageView bottomToolbarBookmark;
-  @BindView(R2.id.bottom_toolbar_arrow_back)
-  ImageView bottomToolbarArrowBack;
-  @BindView(R2.id.bottom_toolbar_arrow_forward)
-  ImageView bottomToolbarArrowForward;
-  @BindView(R2.id.tab_switcher_recycler_view)
-  RecyclerView tabRecyclerView;
   @BindView(R2.id.activity_main_tab_switcher)
   protected View tabSwitcherRoot;
   @BindView(R2.id.tab_switcher_close_all_tabs)
   protected FloatingActionButton closeAllTabsButton;
-  @BindView(R2.id.snackbar_root)
-  CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   protected ViewGroup videoView;
   @BindView(R2.id.go_to_library_button_no_open_book)
   protected Button noOpenBookButton;
-  @BindView(R2.id.no_open_book_text)
-  TextView noOpenBookText;
   @BindView(R2.id.activity_main_root)
   protected View activityMainRoot;
-
-  @Inject
-  StorageObserver storageObserver;
   @Inject
   protected SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
@@ -222,11 +196,37 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected DialogShower alertDialogShower;
   @Inject
   protected NightModeViewPainter painter;
+  protected int currentWebViewIndex = 0;
+  protected ActionBar actionBar;
+  protected MainMenu mainMenu;
+  @BindView(R2.id.activity_main_back_to_top_fab)
+  FloatingActionButton backToTopButton;
+  @BindView(R2.id.activity_main_button_stop_tts)
+  Button stopTTSButton;
+  @BindView(R2.id.activity_main_button_pause_tts)
+  Button pauseTTSButton;
+  @BindView(R2.id.activity_main_tts_controls)
+  Group TTSControls;
+  @BindView(R2.id.activity_main_fullscreen_button)
+  ImageButton exitFullscreenButton;
+  @BindView(R2.id.bottom_toolbar_bookmark)
+  ImageView bottomToolbarBookmark;
+  @BindView(R2.id.bottom_toolbar_arrow_back)
+  ImageView bottomToolbarArrowBack;
+  @BindView(R2.id.bottom_toolbar_arrow_forward)
+  ImageView bottomToolbarArrowForward;
+  @BindView(R2.id.tab_switcher_recycler_view)
+  RecyclerView tabRecyclerView;
+  @BindView(R2.id.snackbar_root)
+  CoordinatorLayout snackbarRoot;
+  @BindView(R2.id.no_open_book_text)
+  TextView noOpenBookText;
+  @Inject
+  StorageObserver storageObserver;
   @Inject
   MainRepositoryActions repositoryActions;
   @Inject
   ExternalLinkOpener externalLinkOpener;
-
   private CountDownTimer hideBackToTopTimer;
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
@@ -236,16 +236,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   private KiwixTextToSpeech tts;
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
-  protected int currentWebViewIndex = 0;
   private File file;
   private ActionMode actionMode = null;
   private KiwixWebView tempWebViewForUndo;
   private File tempZimFileForUndo;
   private boolean isFirstRun;
-  protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
-  protected MainMenu mainMenu;
   private ItemTouchHelper.Callback tabCallback;
   private Disposable bookmarkingDisposable;
   private boolean isBookmarked;
@@ -453,8 +450,10 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
+
       @Override
-      public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
+      public void sectionsLoaded(String title,
+        List<? extends TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -754,15 +753,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private KiwixWebView initalizeWebView(String url) {
-    //if(requireContext() != null) {
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
-      KiwixWebView webView = createWebView(attrs);
-      loadUrl(url, webView);
-      return webView;
-    //} else{
-    //  Log.e("KIWIX", "initalizeWebView: CONTEXXT NOT FOUND, NULL");
-    //  return null;
-    //}
+    KiwixWebView webView = createWebView(attrs);
+    loadUrl(url, webView);
+    return webView;
   }
 
   @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {
@@ -836,18 +830,20 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   protected void selectTab(int position) {
     currentWebViewIndex = position;
-    contentFrame.removeAllViews();
-    KiwixWebView webView = safelyGetWebView(position);
-    if (webView.getParent() != null) {
-      ((ViewGroup) webView.getParent()).removeView(webView);
-    }
-    contentFrame.addView(webView);
-    tabsAdapter.setSelected(currentWebViewIndex);
-    updateBottomToolbarVisibility();
-    loadPrefs();
-    updateUrlProcessor();
-    updateTableOfContents();
-    updateTitle();
+    //if (contentFrame != null)
+      contentFrame.removeAllViews();
+      KiwixWebView webView = safelyGetWebView(position);
+      if (webView.getParent() != null) {
+        ((ViewGroup) webView.getParent()).removeView(webView);
+      }
+      contentFrame.addView(webView);
+      tabsAdapter.setSelected(currentWebViewIndex);
+      updateBottomToolbarVisibility();
+      loadPrefs();
+      updateUrlProcessor();
+      updateTableOfContents();
+      updateTitle();
+    //}
   }
 
   protected KiwixWebView safelyGetWebView(int position) {
@@ -1313,7 +1309,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void setUpWebViewWithTextToSpeech() {
-    tts.initWebView(getCurrentWebView());
+    if (tts != null) tts.initWebView(getCurrentWebView());
   }
 
   @OnClick(R2.id.activity_main_back_to_top_fab)
