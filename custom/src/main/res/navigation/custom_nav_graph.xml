@@ -40,5 +40,6 @@
   <fragment
     android:id="@+id/customDownloadFragment"
     android:name="org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment"
-    android:label="CustomDownloadFragment" />
+    android:label="CustomDownloadFragment" >
+  </fragment>
 </navigation>

@@ -28,6 +28,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -40,10 +41,10 @@ import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -140,10 +141,24 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun onBackPressed(activity: AppCompatActivity): Super {
     val result = super.onBackPressed(activity)
-    if (zimReaderContainer.mainPage == getCurrentWebView().url.substringAfter(CONTENT_PREFIX)) {
-      return ShouldCall
+    // if (getCurrentWebView().url != null) {
+    if (result == ShouldCall && getCurrentWebView().canGoBack()) {
+      getCurrentWebView().goBack()
+      Log.e("KIWIXXX", "onBackPressed: SHOULD NOT CALL!!!")
+    } else {
+      Log.e("KIWIXXX", "onBackPressed:  KILLING!!!")
+      getActivity()?.finish()
     }
-    return result
+    //   if (zimReaderContainer.mainPage == getCurrentWebView().url.substringAfter(CONTENT_PREFIX)) {
+    //     return ShouldCall
+    //   }
+    // } else {
+    //   Log.e("KIWIXXX", "onBackPressed: KILLING!!!!!!")
+    //   // findNavController().popBackStack()
+    //   // onDestroy()
+    //   activity.finish()
+    // }
+    return ShouldNotCall
   }
 
   override fun onRequestPermissionsResult(

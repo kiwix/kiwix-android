@@ -624,7 +624,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull @Override public Super onBackPressed(@NotNull AppCompatActivity activity) {
-    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+    if (tabSwitcherRoot !=null && tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
       hideTabSwitcher();
@@ -632,7 +632,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       closeFullScreen();
     } else if (compatCallback.isActive) {
       compatCallback.finish();
-    } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+    } else if (drawerLayout!=null && drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
     } else {
       return Super.ShouldCall;
@@ -830,7 +830,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   protected void selectTab(int position) {
     currentWebViewIndex = position;
-    //if (contentFrame != null)
+    if (contentFrame != null) {
       contentFrame.removeAllViews();
       KiwixWebView webView = safelyGetWebView(position);
       if (webView.getParent() != null) {
@@ -843,7 +843,10 @@ public abstract class CoreReaderFragment extends BaseFragment
       updateUrlProcessor();
       updateTableOfContents();
       updateTitle();
-    //}
+    }  else{
+      onBackPressed((AppCompatActivity) getActivity());
+      //onBackPressed(act as App)
+    }
   }
 
   protected KiwixWebView safelyGetWebView(int position) {
