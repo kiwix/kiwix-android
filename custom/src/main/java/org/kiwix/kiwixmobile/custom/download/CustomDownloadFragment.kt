@@ -25,7 +25,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_custom_download.cd_view_animator
+import kotlinx.android.synthetic.main.fragment_custom_download.cd_view_animator
 import kotlinx.android.synthetic.main.layout_custom_download_error.cd_error_text
 import kotlinx.android.synthetic.main.layout_custom_download_error.cd_retry_button
 import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_download_state
@@ -67,7 +67,7 @@ class CustomDownloadFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? {
     super.onCreate(savedInstanceState)
-    val root = inflater.inflate(R.layout.activity_custom_download, container, false)
+    val root = inflater.inflate(R.layout.fragment_custom_download, container, false)
     val activity = requireActivity() as CoreMainActivity
     downloadViewModel.state.observe(viewLifecycleOwner, Observer(::render))
     compositeDisposable.add(
