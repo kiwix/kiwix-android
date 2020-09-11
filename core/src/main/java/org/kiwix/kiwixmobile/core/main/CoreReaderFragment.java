@@ -112,13 +112,13 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils;
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -450,10 +450,8 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
-
-      @Override
-      public void sectionsLoaded(String title,
-        List<? extends TableDrawerAdapter.DocumentSection> sections) {
+      @Override public void sectionsLoaded(String title,
+        List<TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -624,7 +622,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull @Override public Super onBackPressed(@NotNull AppCompatActivity activity) {
-    if (tabSwitcherRoot !=null && tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+    if (tabSwitcherRoot != null && tabSwitcherRoot.getVisibility() == View.VISIBLE) {
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
       hideTabSwitcher();
@@ -632,7 +630,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       closeFullScreen();
     } else if (compatCallback.isActive) {
       compatCallback.finish();
-    } else if (drawerLayout!=null && drawerLayout.isDrawerOpen(GravityCompat.END)) {
+    } else if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
     } else {
       return Super.ShouldCall;
@@ -843,7 +841,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       updateUrlProcessor();
       updateTableOfContents();
       updateTitle();
-    }  else{
+    } else {
       onBackPressed((AppCompatActivity) getActivity());
       //onBackPressed(act as App)
     }
@@ -1661,7 +1659,8 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
       }
       selectTab(currentTab);
-      webViewList.get(currentTab).loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
+      webViewList.get(currentTab)
+        .loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
       getCurrentWebView().setScrollY(positions.getInt(currentTab));
     } catch (JSONException e) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
