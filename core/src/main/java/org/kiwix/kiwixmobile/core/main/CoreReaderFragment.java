@@ -559,7 +559,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   protected void hideTabSwitcher() {
-    if (actionBar != null) {
+    if (actionBar != null && toolbar != null) {
       actionBar.setDisplayShowTitleEnabled(true);
       ((CoreMainActivity) requireActivity()).setupDrawerToggle(toolbar);
 
