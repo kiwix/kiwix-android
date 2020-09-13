@@ -266,7 +266,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `CreatedWithIntent offers SearchIntentProcessing`() {
+    fun `CreatedWithIntent offers SearchArgumentProcessing`() {
       val bundle = mockk<Bundle>()
       actionResultsInEffects(
         CreatedWithArguments(bundle),
@@ -275,7 +275,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `ReceivedPromptForSpeechInput offers SearchIntentProcessing`() {
+    fun `ReceivedPromptForSpeechInput offers StartSpeechInput`() {
       actionResultsInEffects(
         ReceivedPromptForSpeechInput,
         StartSpeechInput(viewModel.actions)

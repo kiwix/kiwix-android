@@ -10,11 +10,6 @@
     android:orientation="vertical">
 
     <include layout="@layout/layout_toolbar" />
-<!--    <RelativeLayout-->
-<!--      android:layout_width="match_parent"-->
-<!--      android:layout_height="?android:attr/actionBarSize">-->
-
-<!--    </RelativeLayout>-->
 
     <ViewAnimator
       android:id="@+id/searchViewAnimator"

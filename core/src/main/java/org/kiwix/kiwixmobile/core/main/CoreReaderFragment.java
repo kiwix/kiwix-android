@@ -346,7 +346,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-
   private void initTabCallback() {
     tabCallback = new ItemTouchHelper.Callback() {
       @Override
@@ -440,7 +439,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
 
       @Override
-      public void sectionsLoaded(String title, List<? extends TableDrawerAdapter.DocumentSection> sections) {
+      public void sectionsLoaded(String title,
+        List<? extends TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -1226,10 +1226,8 @@ public abstract class CoreReaderFragment extends BaseFragment
       case Intent.ACTION_VIEW:
         if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
           saveTabStates();
-          String searchString = "";
-          if (intent.getData() != null) {
-            searchString = intent.getData().getLastPathSegment();
-          }
+          String searchString =
+            intent.getData() == null ? "" : intent.getData().getLastPathSegment();
           openSearch(searchString, false, false);
         }
         break;
@@ -1242,10 +1240,8 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void goToSearchWithText(Intent intent) {
     saveTabStates();
-    String searchString = "";
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      searchString = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
-    }
+    String searchString = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? intent.getStringExtra(
+      Intent.EXTRA_PROCESS_TEXT) : "";
     openSearch(searchString, false, false);
   }
 
@@ -1588,7 +1584,4 @@ public abstract class CoreReaderFragment extends BaseFragment
     String zimPositions, int currentTab);
 
   public abstract void restoreViewStateOnInvalidJSON();
-
-
-
 }

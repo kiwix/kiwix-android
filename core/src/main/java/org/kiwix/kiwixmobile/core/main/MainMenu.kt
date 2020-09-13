@@ -159,8 +159,8 @@ class MainMenu(
   }
 
   fun tryExpandSearch(zimFileReader: ZimFileReader?) {
-    if (search.isVisible) {
-      zimFileReader?.apply { navigateToSearch() }
+    if (search.isVisible && zimFileReader != null) {
+      navigateToSearch()
     }
   }
 

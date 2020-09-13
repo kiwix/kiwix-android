@@ -32,8 +32,4 @@ fun ZimReaderContainer.urlSuffixToParsableUrl(suffixUrl: String): String =
   redirectOrOriginal(contentUrl(suffixUrl))
 
 fun ZimReaderContainer.titleToUrl(title: String): String? =
-  if (title.startsWith("A/")) {
-    title
-  } else {
-    getPageUrlFromTitle(title)
-  }
+  if (title.startsWith("A/")) title else getPageUrlFromTitle(title)

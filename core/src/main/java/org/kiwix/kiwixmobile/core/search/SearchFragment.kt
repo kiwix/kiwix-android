@@ -32,8 +32,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_search.searchViewAnimator
-import kotlinx.android.synthetic.main.activity_search.search_list
+import kotlinx.android.synthetic.main.fragment_search.searchViewAnimator
+import kotlinx.android.synthetic.main.fragment_search.search_list
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -90,7 +90,7 @@ class SearchFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val root = inflater.inflate(R.layout.activity_search, container, false)
+    val root = inflater.inflate(R.layout.fragment_search, container, false)
     setHasOptionsMenu(true)
     return root
   }

@@ -100,11 +100,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
-    zimReaderContainer.titleToUrl(item.pageTitle)?.apply {
+    zimReaderContainer.titleToUrl(item.pageTitle)?.let {
       if (item.shouldOpenInNewTab) {
         createNewTab()
       }
-      loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(this))
+      loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(it))
     }
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
