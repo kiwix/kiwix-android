@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 
@@ -122,8 +124,8 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onNewIntent(intent)
     when (intent.action) {
       Intent.ACTION_SEND_MULTIPLE -> {
-        setIntent(intent)
-        navigate(R.id.localFileTransferFragment)
+        val uris: ArrayList<Uri>? = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+        navigate(R.id.localFileTransferFragment, bundleOf(URIS_KEY to uris?.toTypedArray()))
       }
     }
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {

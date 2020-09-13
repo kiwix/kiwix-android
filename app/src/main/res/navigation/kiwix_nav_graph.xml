@@ -48,6 +48,9 @@
     <action
       android:id="@+id/action_navigation_library_to_navigation_downloads"
       app:destination="@id/downloadsFragment" />
+    <action
+      android:id="@+id/action_libraryFragment_to_localFileTransferFragment"
+      app:destination="@id/localFileTransferFragment" />
   </fragment>
 
   <fragment
@@ -90,5 +93,9 @@
   <fragment
     android:id="@+id/localFileTransferFragment"
     android:name="org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment"
-    android:label="LocalFileTransferFragment" />
+    android:label="LocalFileTransferFragment">
+    <argument
+      android:name="uris"
+      app:argType="android.net.Uri[]" />
+  </fragment>
 </navigation>

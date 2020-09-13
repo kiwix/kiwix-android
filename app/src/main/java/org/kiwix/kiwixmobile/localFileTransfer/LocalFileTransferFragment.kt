@@ -73,6 +73,9 @@ import javax.inject.Inject
  * 2) After handshake, starting the files transfer using [SenderDeviceAsyncTask] on the sender
  * device and [ReceiverDeviceAsyncTask] files receiving device
  */
+
+const val URIS_KEY = "uris"
+
 @SuppressLint("GoogleAppIndexingApiWarning", "Registered")
 class LocalFileTransferFragment : BaseFragment(),
   WifiDirectManager.Callbacks {
@@ -102,10 +105,12 @@ class LocalFileTransferFragment : BaseFragment(),
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setHasOptionsMenu(true)
-    val filesIntent = requireActivity().intent
     val activity = requireActivity() as CoreMainActivity
     val fileUriArrayList: ArrayList<Uri>? =
-      filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+      if (arguments == null) arrayListOf()
+      else LocalFileTransferFragmentArgs.fromBundle(requireArguments())
+        .uris.toCollection(ArrayList())
+
     val fileForTransfer = fileUriArrayList?.map(::FileItem) ?: emptyList()
 
     val toolbar: Toolbar =
