@@ -144,6 +144,8 @@ object FileUtils {
         }
     } catch (ignore: SecurityException) {
       null
+    } catch (ignore: NullPointerException) {
+      null
     }
   }
 

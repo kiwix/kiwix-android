@@ -31,6 +31,7 @@
   <string name="hotspot_failed_title">Hotspot gagal dihidupkan</string>
   <string name="hotspot_failed_message">Tampaknya hotspot Anda telah hidup. Silakan memutuskan koneksi hotspot wifi Anda untuk lanjut.</string>
   <string name="go_to_wifi_settings_label">Ke pengaturan WIFI</string>
+  <string name="no_books_selected_toast_message">Silakan pilih buku terlebih dahulu</string>
   <string name="server_failed_message">Server tidak dapat dihidupkan. Silakan menyalakan hotspot Anda.</string>
   <string name="server_failed_toast_message">Server tidak dapat dinyalakan.</string>
   <string name="server_started_successfully_toast_message">Server berhasil dinyalakan.</string>
@@ -41,6 +42,8 @@
   <string name="wifi_dialog_title">Koneksi Wifi telah terdeteksi</string>
   <string name="wifi_dialog_body">Untuk dapat melihat buku dengan alat elektronik lainnya, pastikan semua alat elektronik Anda terhubung ke jaringan Wifi yang sama.</string>
   <string name="hotspot_dialog_neutral_button">LANJUT</string>
+  <string name="start_server_label">Nyalakan server</string>
+  <string name="stop_server_label">Matikan server</string>
   <string name="server_started_message">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
   <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
   <string name="zim_not_opened">Zim file tidak dapat dibuka</string>

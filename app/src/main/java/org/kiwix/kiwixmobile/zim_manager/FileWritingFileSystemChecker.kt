@@ -21,27 +21,45 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.util.Log
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
+import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 import java.io.RandomAccessFile
 
 class FileWritingFileSystemChecker : FileSystemChecker {
   override fun checkFilesystemSupports4GbFiles(path: String): FileSystemCapability {
-    with(File("$path/large_file_test.txt")) {
+    val resultFile = File("$path/.file_writing_result")
+    if (resultFile.exists()) {
+      when (val capability = readCapability(resultFile)) {
+        CAN_WRITE_4GB,
+        CANNOT_WRITE_4GB -> return capability
+      }
+    }
+    return with(File("$path/large_file_test.txt"), {
       deleteIfExists()
       try {
         RandomAccessFile(this.path, "rw").use {
           it.setLength(Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
-          return@checkFilesystemSupports4GbFiles CAN_WRITE_4GB
+          CAN_WRITE_4GB.alsoSaveTo(resultFile)
         }
       } catch (e: Exception) {
         e.printStackTrace()
         Log.d("Fat32Checker", e.message)
-        return@checkFilesystemSupports4GbFiles CANNOT_WRITE_4GB
+        CANNOT_WRITE_4GB.alsoSaveTo(resultFile)
       } finally {
         deleteIfExists()
       }
-    }
+    })
   }
+
+  private fun readCapability(resultFile: File) =
+    try {
+      FileSystemCapability.valueOf(resultFile.readText())
+    } catch (illegalArgumentException: IllegalArgumentException) {
+      INCONCLUSIVE
+    }
+
+  private fun FileSystemCapability.alsoSaveTo(resultFile: File) =
+    also { resultFile.writeText(name) }
 }
 
 private fun File.deleteIfExists() {
