@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.local_file_transfer;
+package org.kiwix.kiwixmobile.localFileTransfer;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -29,6 +29,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 
 /**
@@ -119,7 +120,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
         // Send total number of files which will be transferred
         objectOutputStream.writeObject("" + wifiDirectManager.getTotalFilesForTransfer());
 
-        ArrayList<FileItem> fileItemArrayList = wifiDirectManager.getFilesForTransfer();
+        List<FileItem> fileItemArrayList = wifiDirectManager.getFilesForTransfer();
         for (FileItem fileItem : fileItemArrayList) { // Send the names of each of those files, in order
           objectOutputStream.writeObject(fileItem.getFileName());
           Log.d(TAG, "Sending " + fileItem.getFileUri().toString());

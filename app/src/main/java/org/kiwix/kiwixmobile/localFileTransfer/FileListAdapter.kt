@@ -17,7 +17,7 @@
  */
 @file:Suppress("PackageNaming")
 
-package org.kiwix.kiwixmobile.local_file_transfer
+package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.view.View
 import android.view.ViewGroup
@@ -26,21 +26,20 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_transfer_list.image_view_file_transferred
 import kotlinx.android.synthetic.main.item_transfer_list.progress_bar_transferring_file
 import kotlinx.android.synthetic.main.item_transfer_list.text_view_file_item_name
-import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.SENDING
-import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.SENT
-import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
-import org.kiwix.kiwixmobile.local_file_transfer.FileListAdapter.FileViewHolder
-import java.util.ArrayList
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
+import org.kiwix.kiwixmobile.localFileTransfer.FileListAdapter.FileViewHolder
 
 /**
  * Helper class, part of the local file sharing module.
  *
  * Defines the Adapter for the list of file-items displayed in {TransferProgressFragment}
  */
-class FileListAdapter(private val fileItems: ArrayList<FileItem>) :
+class FileListAdapter(private val fileItems: List<FileItem>) :
   RecyclerView.Adapter<FileViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder =

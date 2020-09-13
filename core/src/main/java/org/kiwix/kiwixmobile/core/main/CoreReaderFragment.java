@@ -110,7 +110,6 @@ import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen;
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
@@ -395,7 +394,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
-    View root = inflater.inflate(R.layout.fragment_main, container, false);
+    View root = inflater.inflate(R.layout.fragment_reader, container, false);
     unbinder = ButterKnife.bind(this, root);
     return root;
   }
@@ -439,8 +438,9 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
+
       @Override
-      public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
+      public void sectionsLoaded(String title, List<? extends TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -717,6 +717,10 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabCallback = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
+    webViewList.clear();
+    actionBar = null;
+    mainMenu = null;
+    tabRecyclerView.setAdapter(null);
     tableDrawerAdapter.setTableClickListener(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
