@@ -5,6 +5,7 @@
 * FarsiNevis
 * Fatemi127
 * Reza1615
+* Sunfyre
 -->
 <resources>
   <string name="menu_help">راهنما</string>
@@ -70,6 +71,7 @@
   <string name="delete_zims_toast">پرونده‌ها با موفقیت حذف شدند</string>
   <string name="no_files_here">هیچ پرونده‌ای در این‌جا نیست</string>
   <string name="download_no_space" fuzzy="true">فضای ناکافی برای بارگیری پرونده</string>
+  <string name="download">بارگیری</string>
   <string name="space_available">فضای موجود:</string>
   <string name="zim_simple">ساده</string>
   <string name="zim_no_pic">هیچ عکسی نیست</string>
@@ -161,4 +163,5 @@
   <string name="auto">خودکار</string>
   <string name="send_report">ارسال گزارش تشخیصی</string>
   <string name="diagnostic_report">گزارش تشخیصی</string>
+  <string name="open_library">کتابخانهٔ آزاد</string>
 </resources>

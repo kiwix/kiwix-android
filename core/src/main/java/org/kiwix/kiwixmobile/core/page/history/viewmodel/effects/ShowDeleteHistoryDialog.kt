@@ -25,9 +25,9 @@ import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
-import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteAllHistory
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog.DeleteSelectedHistory
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllHistory
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedHistory
 import javax.inject.Inject
 
 data class ShowDeleteHistoryDialog(

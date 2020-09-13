@@ -35,7 +35,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
-import org.json.JSONArray
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
@@ -53,12 +52,8 @@ import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
 
@@ -97,7 +92,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
       } else {
-        manageExternalLaunchAndRestoringViewState(args.zimFileUri)
+        manageExternalLaunchAndRestoringViewState()
       }
     }
     requireArguments().clear()
@@ -221,52 +216,25 @@ class KiwixReaderFragment : CoreReaderFragment() {
     return ShouldNotCall
   }
 
-  private fun manageExternalLaunchAndRestoringViewState(zimFileUri: String) {
-    val settings = getSharedPrefSettings()
-    val zimFile = settings?.getString(TAG_CURRENT_FILE, null)
-    if (zimFileUri.isNotEmpty() || (zimFile != null && File(zimFile).exists())) {
-      Log.d(
-        TAG_KIWIX,
-        "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
-      )
-      webViewList.clear()
-      restoreTabStates(zimFileUri)
-    } else {
-      Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
-      exitBook()
-    }
+  override fun restoreViewStateOnInvalidJSON() {
+    Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
+    exitBook()
   }
 
-  private fun restoreTabStates(zimFileUri: String) {
+  override fun restoreViewStateOnValidJSON(
+    zimArticles: String,
+    zimPositions: String,
+    currentTab: Int
+  ) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
-    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
-    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
-
-    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
 
     if (zimFile != null) {
       openZimFile(File(zimFile))
     } else {
       getCurrentWebView().snack(R.string.zim_not_opened)
     }
-    try {
-      val urls = JSONArray(zimArticles)
-      val positions = JSONArray(zimPositions)
-      var i = 0
-      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-      getCurrentWebView().scrollY = positions.getInt(i)
-      i++
-      while (i < urls.length()) {
-        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)))
-        safelyGetWebView(i).scrollY = positions.getInt(i)
-        i++
-      }
-      selectTab(currentTab)
-    } catch (e: Exception) {
-      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
-      // TODO: Show to user
-    }
+    restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
   override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
@@ -290,11 +258,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     requireActivity().bottom_nav_view.visibility = VISIBLE
     setFragmentContainerBottomMarginToSizeOfNavBar()
   }
-
-  private fun getSharedPrefSettings() =
-    activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-
-  override fun getIconResId() = R.mipmap.ic_launcher
 
   override fun createNewTab() {
     newMainPageTab()

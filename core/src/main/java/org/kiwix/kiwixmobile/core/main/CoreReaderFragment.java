@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -94,6 +93,7 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
@@ -112,13 +112,13 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 import org.kiwix.kiwixmobile.core.search.SearchActivity;
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen;
-import org.kiwix.kiwixmobile.core.utils.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.StyleUtils;
+import org.kiwix.kiwixmobile.core.utils.UpdateUtils;
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -240,8 +240,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   private ActionMode actionMode = null;
   private KiwixWebView tempWebViewForUndo;
   private File tempZimFileForUndo;
-  private RateAppCounter visitCounterPref;
-  private int tempVisitCount;
   private boolean isFirstRun;
   protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
@@ -338,8 +336,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     tableDrawerRight =
       tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
 
-    checkForRateDialog();
-
     addFileReader();
     setupTabsAdapter();
     setTableDrawerInfo();
@@ -412,7 +408,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
-    View root = inflater.inflate(R.layout.fragment_main, container, false);
+    View root = inflater.inflate(R.layout.fragment_reader, container, false);
     unbinder = ButterKnife.bind(this, root);
     return root;
   }
@@ -456,8 +452,9 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
+
       @Override
-      public void sectionsLoaded(String title, List<TableDrawerAdapter.DocumentSection> sections) {
+      public void sectionsLoaded(String title, List<? extends TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -644,59 +641,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     return Super.ShouldNotCall;
   }
 
-  private void checkForRateDialog() {
-    isFirstRun = sharedPreferenceUtil.getPrefIsFirstRun();
-    visitCounterPref = new RateAppCounter(getActivity());
-    tempVisitCount = visitCounterPref.getCount();
-    ++tempVisitCount;
-    visitCounterPref.setCount(tempVisitCount);
-
-    if (tempVisitCount >= 10
-      && !visitCounterPref.getNoThanksState()
-      && NetworkUtils.isNetworkAvailable(getActivity()) && !BuildConfig.DEBUG) {
-      showRateDialog();
-    }
-  }
-
-  private void showRateDialog() {
-    alertDialogShower.show(new KiwixDialog.ShowRate(getIconResId()),
-      () -> {
-        visitCounterPref.setNoThanksState(true);
-        goToRateApp();
-        return Unit.INSTANCE;
-      },
-      () -> {
-        visitCounterPref.setNoThanksState(true);
-        return Unit.INSTANCE;
-      },
-      () -> {
-        tempVisitCount = 0;
-        visitCounterPref.setCount(tempVisitCount);
-        return Unit.INSTANCE;
-      }
-    );
-  }
-
-  protected abstract int getIconResId();
-
-  private void goToRateApp() {
-    Uri kiwixLocalMarketUri = Uri.parse("market://details?id=" + getActivity().getPackageName());
-    Uri kiwixBrowserMarketUri =
-      Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName());
-
-    Intent goToMarket = new Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri);
-
-    goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-      Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
-      Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-
-    try {
-      startActivity(goToMarket);
-    } catch (ActivityNotFoundException e) {
-      startActivity(new Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri));
-    }
-  }
-
   private void updateTitle() {
     if (isAdded()) {
       actionBar.setTitle(getValidTitle(zimReaderContainer.getZimFileTitle()));
@@ -785,9 +729,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabCallback = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
+    webViewList.clear();
+    actionBar = null;
+    mainMenu = null;
+    tabRecyclerView.setAdapter(null);
     tableDrawerAdapter.setTableClickListener(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
+    webViewList.clear();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
     tts.shutdown();
@@ -1673,4 +1622,56 @@ public abstract class CoreReaderFragment extends BaseFragment
   private boolean checkNull(View view) {
     return view != null;
   }
+
+  private boolean isInvalidJson(String jsonString) {
+    return jsonString == null || jsonString.equals("[]");
+  }
+
+  protected void manageExternalLaunchAndRestoringViewState() {
+    SharedPreferences settings =
+      requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0);
+    String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
+    String zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null);
+    int currentTab = safelyGetCurrentTab(settings);
+    if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
+      restoreViewStateOnInvalidJSON();
+    } else {
+      restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab);
+    }
+  }
+
+  private int safelyGetCurrentTab(SharedPreferences settings) {
+    return Math.max(settings.getInt(TAG_CURRENT_TAB, 0), 0);
+  }
+
+  protected void restoreTabs(@Nullable String zimArticles, @Nullable String zimPositions,
+    int currentTab) {
+    try {
+      JSONArray urls = new JSONArray(zimArticles);
+      JSONArray positions = new JSONArray(zimPositions);
+      int i = 0;
+      // tabs are already restored if the webViewList includes more tabs than the default
+      if (webViewList.size() == 1) {
+        getCurrentWebView().setScrollY(positions.getInt(0));
+        i++;
+        while (i < urls.length()) {
+          newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)));
+          safelyGetWebView(i).setScrollY(positions.getInt(i));
+          i++;
+        }
+      }
+      selectTab(currentTab);
+      webViewList.get(currentTab)
+        .loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
+      getCurrentWebView().setScrollY(positions.getInt(currentTab));
+    } catch (JSONException e) {
+      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
+      ContextExtensionsKt.toast(getActivity(), "Could not restore tabs.", Toast.LENGTH_LONG);
+    }
+  }
+
+  protected abstract void restoreViewStateOnValidJSON(String zimArticles,
+    String zimPositions, int currentTab);
+
+  public abstract void restoreViewStateOnInvalidJSON();
 }

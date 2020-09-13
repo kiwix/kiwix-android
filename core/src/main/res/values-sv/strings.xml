@@ -41,7 +41,7 @@
   <string name="hotspot_details_message">Information om din lokala surfpunkt. \nSSID : %1$s \nLösen : %2$s</string>
   <string name="server_textview_default_message">Välj filerna du vill vara värd för på servern</string>
   <string name="progress_dialog_starting_server">Startar server</string>
-  <string name="hotspot_dialog_title" fuzzy="true">Aktivera din WiFi-surfpunkt</string>
+  <string name="hotspot_dialog_title">Instruktioner för att hantera böcker</string>
   <string name="wifi_dialog_title">WiFi-förbindelse upptäckt</string>
   <string name="wifi_dialog_body">För att kunna se böcker på andra enheter, måste säkerställas att alla enheter är anslutna till samma WiFi-nätverk.</string>
   <string name="hotspot_dialog_message">För att denna funktion ska fungera måste du först aktivera din WiFi-surfpunkt manuellt eller se till att värdens enhet och mottagarens enhet är på samma nätverk.</string>
@@ -110,6 +110,7 @@
   <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned.</string>
+  <string name="download">Ladda ned</string>
   <string name="space_available">Tillgängligt utrymme:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Inga bilder</string>
@@ -262,4 +263,5 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text-zoomning</string>
   <string name="search_open_in_new_tab">Öppna i ny flik</string>
+  <string name="tab_restored">Fliken återställdes</string>
 </resources>

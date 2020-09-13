@@ -46,8 +46,8 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
-import org.kiwix.kiwixmobile.core.utils.DialogShower;
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog;
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
@@ -203,7 +203,6 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   private void clearAllHistoryDialog() {
     alertDialogShower.show(KiwixDialog.ClearAllHistory.INSTANCE, () -> {
       presenter.clearHistory();
-      CoreSettingsActivity.allHistoryCleared = true;
       Snackbar.make(getView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
       return Unit.INSTANCE;
     });
@@ -268,7 +267,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   public void openFolderSelect() {
     StorageSelectDialog dialogFragment = new StorageSelectDialog();
     dialogFragment.setOnSelectAction(this::onStorageDeviceSelected);
-    dialogFragment.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(),
+    dialogFragment.show(getActivity().getSupportFragmentManager(),
       getResources().getString(R.string.pref_storage));
   }
 
@@ -278,13 +277,9 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     );
     sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
     if (storageDevice.isInternal()) {
-      findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.internal_storage));
-      sharedPreferenceUtil.putPrefStorageTitle(
-        getResources().getString(R.string.internal_storage));
+      findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
     } else {
-      findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.external_storage));
-      sharedPreferenceUtil.putPrefStorageTitle(
-        getResources().getString(R.string.external_storage));
+      findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
     }
     return Unit.INSTANCE;
   }

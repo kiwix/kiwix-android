@@ -39,7 +39,7 @@ class SaveLanguagesAndFinishTest {
     SaveLanguagesAndFinish(languages, languageDao).invokeWith(activity)
     verify {
       languageDao.insert(languages)
-      activity.finish()
+      activity.onBackPressed()
     }
     resetSchedulers()
   }

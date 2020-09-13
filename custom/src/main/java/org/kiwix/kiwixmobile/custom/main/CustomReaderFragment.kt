@@ -36,7 +36,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
@@ -45,14 +44,9 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
-import org.kiwix.kiwixmobile.core.utils.DialogShower
-import org.kiwix.kiwixmobile.core.utils.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
-import org.kiwix.kiwixmobile.core.utils.UpdateUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -95,20 +89,21 @@ class CustomReaderFragment : CoreReaderFragment() {
       loadUrlWithCurrentWebview(pageUrl)
     } else {
       openObbOrZim()
-      restoreLastOpenedTab()
+      manageExternalLaunchAndRestoringViewState()
     }
     requireArguments().clear()
   }
 
-  private fun restoreLastOpenedTab() {
-    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
-    val currentTab = settings.getInt(TAG_CURRENT_TAB, 0)
-    val urls = JSONArray(zimArticles)
-    val zimPositions = JSONArray(settings.getString(TAG_CURRENT_POSITIONS, null))
-    selectTab(currentTab)
-    loadUrlWithCurrentWebview(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)))
-    getCurrentWebView().scrollY = zimPositions.getInt(currentTab)
+  override fun restoreViewStateOnInvalidJSON() {
+    openHomeScreen()
+  }
+
+  override fun restoreViewStateOnValidJSON(
+    zimArticles: String,
+    zimPositions: String,
+    currentTab: Int
+  ) {
+    restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
   override fun setDrawerLockMode(lockMode: Int) {
@@ -174,7 +169,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     })
   }
 
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
   private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
     grantResults[0] == PackageManager.PERMISSION_DENIED &&
       !ActivityCompat.shouldShowRequestPermissionRationale(
@@ -187,8 +181,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     menu.findItem(R.id.menu_help)?.isVisible = false
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
-
-  override fun getIconResId() = R.mipmap.ic_launcher
 
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()

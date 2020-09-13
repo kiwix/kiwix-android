@@ -91,7 +91,7 @@
   <string name="got_it">Wszystko jasne</string>
   <string name="did_you_know">Czy wiesz, że?</string>
   <string name="undo">Cofnij</string>
-  <string name="tab_closed">Karta zamknięta</string>
+  <string name="tab_closed">Zakładka zamknięta</string>
   <string name="bookmark_added">Dodano zakładkę</string>
   <string name="rate_dialog_title">Prosimy nas ocenić</string>
   <string name="rate_dialog_msg_1">Jeśli podoba ci się korzystanie z</string>
@@ -109,12 +109,13 @@
   <string name="speech_prompt_text">Mów by wyszukać %s</string>
   <string name="speech_not_supported">Przepraszamy! Twoje urządzenie nie obsługuje wprowadzania głosowego</string>
   <string name="local_zims">Urządzenie</string>
-  <string name="remote_zims">Dostępny</string>
+  <string name="remote_zims">Dostępne</string>
   <string name="library">Biblioteka</string>
   <string name="delete_zim_body">Następujące pliki zim zostaną usunięte:\n\n%s</string>
   <string name="delete_zims_toast">Plik został usunięty</string>
   <string name="no_files_here">Tu nie ma plików</string>
   <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
+  <string name="download">Pobierz</string>
   <string name="space_available">Dostępne miejsce:</string>
   <string name="zim_simple">Prosty</string>
   <string name="zim_no_pic">Brak obrazka</string>
@@ -137,7 +138,7 @@
   <string name="tts_resume">Podsumuj</string>
   <string name="stop">stop</string>
   <string name="internal_storage">Wewnętrzny</string>
-  <string name="external_storage">Zewnętrzne</string>
+  <string name="external_storage">Zewnętrzny</string>
   <string name="yes">Tak</string>
   <string name="no">Nie</string>
   <string name="confirm_stop_download_title">Zatrzymać pobieranie?</string>
@@ -150,10 +151,10 @@
   <string name="next">Następny</string>
   <string name="previous">Poprzednia</string>
   <string name="wifi_only_title">Zezwolić na pobieranie zawartości przez sieć komórkową?</string>
-  <string name="wifi_only_msg">eśli wybierzesz „Tak”, nie będziesz ostrzegany w przyszłości. Jednak zawsze możesz to zmienić w Ustawieniach</string>
-  <string name="pref_wifi_only">Pobierz zawartość tylko poprzez WiFi</string>
+  <string name="wifi_only_msg">Jeśli wybierzesz „Tak”, nie będziesz ostrzegany w przyszłości. Jednak zawsze możesz to zmienić w Ustawieniach</string>
+  <string name="pref_wifi_only">Pobierz zasób tylko poprzez WiFi</string>
   <string name="time_day">dzień</string>
-  <string name="time_hour">h</string>
+  <string name="time_hour">g</string>
   <string name="time_minute">min</string>
   <string name="time_second">s</string>
   <string name="time_left">do lewej</string>
@@ -176,8 +177,8 @@
   <string name="crash_checkbox_device">Szczegóły urządzenia</string>
   <string name="crash_button_confirm">WYŚLIJ SZCZEGÓŁY</string>
   <string name="shortcut_disabled_message">Skrót niedostępny</string>
-  <string name="new_tab_shortcut_label">Nowa karta</string>
-  <string name="get_content_shortcut_label">Pobierz zawartość</string>
+  <string name="new_tab_shortcut_label">Nowa zakładka</string>
+  <string name="get_content_shortcut_label">Pobierz zasób</string>
   <string name="fav_icon">Favicon</string>
   <string name="articleCount">%s artykułów</string>
   <string name="get_started">Rozpocznij</string>
@@ -252,6 +253,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Usuwa wszystkie notatki ze wszystkich artykułów</string>
   <string name="pref_clear_all_notes_title">Wyczyść wszystkie notatki</string>
+  <string name="pref_text_zoom_summary">Zmień rozmiar tekstu co 25%.</string>
   <string name="tag_pic">Fotka</string>
   <string name="tag_vid">Wideo</string>
   <string name="tag_text_only">Tylko tekst</string>
@@ -263,8 +265,10 @@
   <string name="no_bookmarks">Brak zakładek</string>
   <string name="no_history">Nie ma Historii</string>
   <string name="device_default">Domyślne urządzenie</string>
-  <string name="delete_history" fuzzy="true">Usunąć historię?</string>
-  <string name="delete_bookmarks" fuzzy="true">Usunąć zakładki?</string>
+  <string name="delete_history">Usunąć całą historię?</string>
+  <string name="delete_selected_history">Usunąć wybraną historię?</string>
+  <string name="delete_bookmarks">Usunąć wszystkie zakładki?</string>
+  <string name="delete_selected_bookmarks">Usunąć wybrane zakładki?</string>
   <string name="on">Włącz</string>
   <string name="off">Wyłącz</string>
   <string name="auto">Automatycznie</string>
@@ -274,4 +278,11 @@
   <string name="diagnostic_report_message">Prześlij wszystkie poniższe informacje, abyśmy mogli zdiagnozować problem</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Powiększ tekst</string>
+  <string name="search_open_in_new_tab">Otwórz w nowej karcie</string>
+  <string name="reader">Czytnik</string>
+  <string name="no_open_book">Brak otwartych książek</string>
+  <string name="open_library">Otwórz bibliotekę</string>
+  <string name="tab_restored">Odtworzono zakładkę</string>
+  <string name="open_drawer">Otwórz szufladę</string>
+  <string name="close_drawer">Zamknij szufladę</string>
 </resources>

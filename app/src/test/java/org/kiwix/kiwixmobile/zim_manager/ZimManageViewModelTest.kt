@@ -418,6 +418,7 @@ class ZimManageViewModelTest {
 
   @Nested
   inner class SideEffects {
+
     @Test
     fun `RequestMultiSelection offers StartMultiSelection and selects a book`() {
       val bookToSelect = bookOnDisk(databaseId = 0L)

@@ -19,8 +19,9 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.os.Bundle
-import android.os.Environment
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE
@@ -33,13 +34,13 @@ class KiwixPrefsFragment : CorePrefsFragment() {
   }
 
   override fun setStorage() {
-    if (Environment.isExternalStorageEmulated()) {
-      findPreference<Preference>(PREF_STORAGE)?.title =
-        sharedPreferenceUtil.getPrefStorageTitle("Internal")
-    } else {
-      findPreference<Preference>(PREF_STORAGE)?.title =
-        sharedPreferenceUtil.getPrefStorageTitle("External")
-    }
+    findPreference<Preference>(PREF_STORAGE)?.title = getString(
+      if (sharedPreferenceUtil.prefStorage == internalStorage()) R.string.internal_storage
+      else R.string.external_storage
+    )
     findPreference<Preference>(PREF_STORAGE)?.summary = storageCalculator.calculateAvailableSpace()
   }
+
+  private fun internalStorage(): String? =
+    ContextCompat.getExternalFilesDirs(requireContext(), null).firstOrNull()?.path
 }

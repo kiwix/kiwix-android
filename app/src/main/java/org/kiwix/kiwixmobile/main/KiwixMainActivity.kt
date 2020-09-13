@@ -26,8 +26,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
@@ -37,15 +37,12 @@ import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.utils.REQUEST_PREFERENCES
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
-import org.kiwix.kiwixmobile.webserver.ZimHostActivity
+
+const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
@@ -55,16 +52,18 @@ class KiwixMainActivity : CoreMainActivity() {
   override val drawerContainerLayout: DrawerLayout by lazy { navigation_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
+  override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val helpFragmentResId: Int = R.id.helpFragment
   override val topLevelDestinations =
-    setOf(R.id.navigation_downloads, R.id.navigation_library, R.id.navigation_reader)
+    setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
   }
 
   private val finishActionModeOnDestinationChange =
-    NavController.OnDestinationChangedListener { controller, destination, arguments ->
+    NavController.OnDestinationChangedListener { _, _, _ ->
       actionMode?.finish()
     }
 
@@ -81,21 +80,22 @@ class KiwixMainActivity : CoreMainActivity() {
     bottom_nav_view.setupWithNavController(navController)
   }
 
-  override fun onPostCreate(savedInstanceState: Bundle?) {
-    super.onPostCreate(savedInstanceState)
+  override fun configureActivityBasedOn(destination: NavDestination) {
+    super.configureActivityBasedOn(destination)
+    bottom_nav_view.isVisible = destination.id in topLevelDestinations
+  }
+
+  override fun onStart() {
+    super.onStart()
     navController.addOnDestinationChangedListener { _, destination, _ ->
       bottom_nav_view.isVisible = destination.id in topLevelDestinations
       if (destination.id !in topLevelDestinations) {
         handleDrawerOnNavigation()
       }
     }
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (drawerToggle.isDrawerIndicatorEnabled) {
-      return drawerToggle.onOptionsItemSelected(item)
+    if (sharedPreferenceUtil.showIntro()) {
+      navigate(R.id.introFragment)
     }
-    return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
   }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {
@@ -133,20 +133,23 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.menu_host_books -> start<ZimHostActivity>()
+      R.id.menu_host_books -> openZimHostFragment()
       else -> return super.onNavigationItemSelected(item)
     }
     return true
   }
 
-  override fun openSettingsActivity() {
-    startActivityForResult(intent<KiwixSettingsActivity>(), REQUEST_PREFERENCES)
+  private fun openZimHostFragment() {
+    disableDrawer()
+    navigate(R.id.zimHostFragment)
   }
 
   override fun openPage(pageUrl: String, zimFilePath: String) {
     navigate(
-      R.id.navigation_reader,
+      R.id.readerFragment,
       bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
     )
   }
+
+  override fun getIconResId() = R.mipmap.ic_launcher
 }

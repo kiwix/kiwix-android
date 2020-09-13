@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:fitsSystemWindows="true"
+  tools:context=".help.HelpFragment">
+
+  <include layout="@layout/layout_standard_app_bar" />
+
+  <ImageView
+    android:id="@+id/activity_help_feedback_image_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/send_feedback"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:src="@drawable/ic_feedback_blue_24dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+
+  <TextView
+    android:id="@+id/activity_help_feedback_text_view"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:drawablePadding="@dimen/activity_horizontal_margin"
+    android:text="@string/send_feedback"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    app:layout_constraintBottom_toBottomOf="@id/activity_help_feedback_image_view"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/activity_help_feedback_image_view"
+    app:layout_constraintTop_toTopOf="@id/activity_help_feedback_image_view" />
+
+  <View
+    android:id="@+id/activity_help_feedback_divider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="?android:attr/listDivider"
+    app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_image_view" />
+
+  <ImageView
+    android:id="@+id/activity_help_diagnostic_image_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/send_feedback"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:src="@drawable/ic_feedback_orange_24dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/activity_help_feedback_divider" />
+
+  <TextView
+    android:id="@+id/activity_help_diagnostic_text_view"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:drawablePadding="@dimen/activity_horizontal_margin"
+    android:text="@string/send_report"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    app:layout_constraintBottom_toBottomOf="@id/activity_help_diagnostic_image_view"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/activity_help_diagnostic_image_view"
+    app:layout_constraintTop_toTopOf="@id/activity_help_diagnostic_image_view" />
+
+  <View
+    android:id="@+id/diagnostic_clickable_area"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintBottom_toBottomOf="@id/activity_help_diagnostic_image_view"
+    app:layout_constraintEnd_toEndOf="@id/activity_help_diagnostic_text_view"
+    app:layout_constraintStart_toStartOf="@id/activity_help_diagnostic_image_view"
+    app:layout_constraintTop_toTopOf="@id/activity_help_diagnostic_image_view" />
+
+  <View
+    android:id="@+id/activity_help_diagnostic_divider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="?android:attr/listDivider"
+    app:layout_constraintTop_toBottomOf="@id/activity_help_diagnostic_image_view" />
+
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/activity_help_recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/activity_help_diagnostic_divider" />
+</androidx.constraintlayout.widget.ConstraintLayout>

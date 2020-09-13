@@ -24,7 +24,7 @@
     <item name="backgroundTint">@color/black</item>
   </style>
 
-  <style name="Widget.KiwixTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
+  <style name="Widget.KiwixTheme.Toolbar.PrimarySurface" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
     <item name="android:background">@color/black</item>
   </style>
 
@@ -32,9 +32,10 @@
     <item name="android:background">@color/black</item>
   </style>
 
-  <style name="ThemeOverlay.KiwixTheme.Launcher" parent="">
+  <style name="KiwixTheme.Launcher">
     <item name="android:windowBackground">@drawable/launch_screen</item>
   </style>
+
 
   <style name="Widget.KiwixTheme.TabLayout" parent="Widget.MaterialComponents.TabLayout">
     <item name="android:background">@color/black</item>
@@ -46,6 +47,7 @@
     <item name="android:textAlignment" tools:ignore="NewApi">center</item>
     <item name="android:textColor">?textSecondary</item>
   </style>
+
 
   <style name="list_item_title" parent="TextAppearance.KiwixTheme.Subtitle1" />
 
@@ -63,6 +65,10 @@
     <item name="android:theme">@style/ThemeOverlay.KiwixTheme.Switch</item>
     <item name="android:textAppearance">@style/TextAppearance.KiwixTheme.Body2</item>
     <item name="android:textColor">?colorOnPrimary</item>
+  </style>
+
+  <style name="kiwix_blue_button" parent="Widget.MaterialComponents.Button">
+    <item name="backgroundTint">@color/denim_blue800</item>
   </style>
 
   <style name="snackbar_button" parent="Widget.MaterialComponents.Button.TextButton">

@@ -50,7 +50,6 @@ public class SharedPreferenceUtil {
   private static final String PREF_BACK_TO_TOP = "pref_backtotop";
   private static final String PREF_FULLSCREEN = "pref_fullscreen";
   private static final String PREF_NEW_TAB_BACKGROUND = "pref_newtab_background";
-  private static final String PREF_STORAGE_TITLE = "pref_selected_title";
   private static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
   private static final String PREF_IS_FIRST_RUN = "isFirstRun";
   private static final String PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book";
@@ -115,10 +114,6 @@ public class SharedPreferenceUtil {
       : CoreApp.getInstance().getFilesDir().getPath(); // workaround for emulators
   }
 
-  public String getPrefStorageTitle(String defaultTitle) {
-    return sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle);
-  }
-
   public void putPrefLanguage(String language) {
     sharedPreferences.edit().putString(PREF_LANG, language).apply();
   }
@@ -129,10 +124,6 @@ public class SharedPreferenceUtil {
 
   public void putPrefWifiOnly(boolean wifiOnly) {
     sharedPreferences.edit().putBoolean(PREF_WIFI_ONLY, wifiOnly).apply();
-  }
-
-  public void putPrefStorageTitle(String storageTitle) {
-    sharedPreferences.edit().putString(PREF_STORAGE_TITLE, storageTitle).apply();
   }
 
   public void putPrefStorage(String storage) {
