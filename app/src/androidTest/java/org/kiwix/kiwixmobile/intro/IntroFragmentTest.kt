@@ -18,10 +18,12 @@
 package org.kiwix.kiwixmobile.intro
 
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.TestUtils
 
 class IntroFragmentTest : BaseActivityTest<KiwixMainActivity>() {
 
@@ -30,6 +32,7 @@ class IntroFragmentTest : BaseActivityTest<KiwixMainActivity>() {
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {
     runOnUiThread { activityRule.activity.navigate(R.id.introFragment) }
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     intro {
       swipeLeft()
     } clickGetStarted { }
