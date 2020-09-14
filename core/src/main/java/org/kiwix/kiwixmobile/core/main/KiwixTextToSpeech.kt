@@ -38,7 +38,6 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.iSO3ToLocale
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import java.util.HashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -136,16 +135,14 @@ class KiwixTextToSpeech internal constructor(
     // We use JavaScript to get the content of the page conveniently, earlier making some
     // changes in the page
     webView.loadUrl(
-      "javascript:" +
-        "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
-        // Remove some elements that are shouldn't be read (table of contents,
-        // references numbers, thumbnail captions, duplicated title, etc.)
-        "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
-        "    title, .navbox');" +
-        "Array.prototype.forEach.call(toRemove, function(elem) {" +
-        "    elem.parentElement.removeChild(elem);" +
-        "});" +
-        "tts.speakAloud(body.innerText);"
+      """
+        javascript:
+        body = document.getElementsByTagName('body')[0].cloneNode(true);
+        toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption,     title, .navbox');
+        Array.prototype.forEach.call(toRemove, function(elem) {    
+          elem.parentElement.removeChild(elem);});
+        tts.speakAloud(body.innerText);
+        """.trimIndent()
     )
   }
 
@@ -229,7 +226,7 @@ class KiwixTextToSpeech internal constructor(
       }
       paused = false
       val params =
-        HashMap<String, String>()
+        hashMapOf<String, String>()
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
       params[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "kiwixLastMessage"
