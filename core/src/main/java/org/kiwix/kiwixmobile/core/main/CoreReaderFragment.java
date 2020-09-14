@@ -845,9 +845,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       updateUrlProcessor();
       updateTableOfContents();
       updateTitle();
-    } else {
-      onBackPressed((AppCompatActivity) getActivity());
-      //onBackPressed(act as App)
     }
   }
 
