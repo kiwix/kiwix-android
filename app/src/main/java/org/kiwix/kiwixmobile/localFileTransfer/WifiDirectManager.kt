@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.local_file_transfer
+package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -45,8 +45,8 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.FileTransferConfirmation
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.local_file_transfer.FileItem.FileStatus
-import org.kiwix.kiwixmobile.local_file_transfer.KiwixWifiP2pBroadcastReceiver.P2pEventListener
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus
+import org.kiwix.kiwixmobile.localFileTransfer.KiwixWifiP2pBroadcastReceiver.P2pEventListener
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -93,15 +93,16 @@ class WifiDirectManager @Inject constructor(
 
   // IP address of the file receiving device
   private lateinit var fileReceiverDeviceAddress: InetAddress
-  private lateinit var filesForTransfer: ArrayList<FileItem>
+  private lateinit var filesForTransfer: List<FileItem>
 
   // Whether the device is the file sender or not
   var isFileSender = false
     private set
+
   private var hasSenderStartedConnection = false
 
   /* Initialisations for using the WiFi P2P API */
-  fun startWifiDirectManager(filesForTransfer: ArrayList<FileItem>) {
+  fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
     manager = activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
@@ -355,7 +356,7 @@ class WifiDirectManager @Inject constructor(
     fun onUserDeviceDetailsAvailable(userDevice: WifiP2pDevice?)
     fun onConnectionToPeersLost()
     fun updateListOfAvailablePeers(peers: WifiP2pDeviceList)
-    fun onFilesForTransferAvailable(filesForTransfer: ArrayList<FileItem>)
+    fun onFilesForTransferAvailable(filesForTransfer: List<FileItem>)
     fun onFileStatusChanged(itemIndex: Int)
     fun onFileTransferComplete()
   }

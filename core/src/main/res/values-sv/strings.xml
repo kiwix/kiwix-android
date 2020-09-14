@@ -263,4 +263,5 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text-zoomning</string>
   <string name="search_open_in_new_tab">Öppna i ny flik</string>
+  <string name="tab_restored">Fliken återställdes</string>
 </resources>

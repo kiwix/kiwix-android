@@ -18,10 +18,10 @@
 
 @file:Suppress("PackageNaming")
 
-package org.kiwix.kiwixmobile.local_file_transfer
+package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.Uri
-import org.kiwix.kiwixmobile.local_file_transfer.WifiDirectManager.Companion.getFileName
+import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getFileName
 
 /**
  * Helper class, part of the local file sharing module.

@@ -133,7 +133,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".local_file_transfer.LocalFileTransferActivity"
+      android:name=".localFileTransfer.LocalFileTransferActivity"
       android:label="Send to nearby device"
       android:screenOrientation="portrait">
       <intent-filter>

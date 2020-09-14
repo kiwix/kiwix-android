@@ -406,7 +406,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Nullable @Override public View onCreateView(@NonNull LayoutInflater inflater,
     @Nullable ViewGroup container,
     @Nullable Bundle savedInstanceState) {
-    View root = inflater.inflate(R.layout.fragment_main, container, false);
+    View root = inflater.inflate(R.layout.fragment_reader, container, false);
     unbinder = ButterKnife.bind(this, root);
     return root;
   }
@@ -451,7 +451,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override public void sectionsLoaded(String title,
-        List<TableDrawerAdapter.DocumentSection> sections) {
+        List<? extends TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -726,6 +726,10 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabCallback = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
+    webViewList.clear();
+    actionBar = null;
+    mainMenu = null;
+    tabRecyclerView.setAdapter(null);
     tableDrawerAdapter.setTableClickListener(null);
     tableDrawerAdapter = null;
     unbinder.unbind();

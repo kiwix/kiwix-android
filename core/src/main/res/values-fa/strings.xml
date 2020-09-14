@@ -5,6 +5,7 @@
 * FarsiNevis
 * Fatemi127
 * Reza1615
+* Sunfyre
 -->
 <resources>
   <string name="menu_help">راهنما</string>
@@ -162,4 +163,5 @@
   <string name="auto">خودکار</string>
   <string name="send_report">ارسال گزارش تشخیصی</string>
   <string name="diagnostic_report">گزارش تشخیصی</string>
+  <string name="open_library">کتابخانهٔ آزاد</string>
 </resources>
