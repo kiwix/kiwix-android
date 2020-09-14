@@ -84,7 +84,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       displayZoomControls = false
       allowUniversalAccessFromFileURLs = true
     }
-
     setInitialScale(INITIAL_SCALE)
     clearCache(true)
     setWebViewClient(webViewClient)
