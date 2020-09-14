@@ -22,7 +22,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
-import android.net.Uri
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.os.Build
@@ -106,18 +105,15 @@ class LocalFileTransferFragment : BaseFragment(),
     super.onViewCreated(view, savedInstanceState)
     setHasOptionsMenu(true)
     val activity = requireActivity() as CoreMainActivity
-    val fileUriArrayList: ArrayList<Uri>? =
-      if (arguments == null) arrayListOf()
-      else LocalFileTransferFragmentArgs.fromBundle(requireArguments())
-        .uris.toCollection(ArrayList())
-
-    val fileForTransfer = fileUriArrayList?.map(::FileItem) ?: emptyList()
+    val fileForTransfer =
+      LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris.map(::FileItem)
 
     val toolbar: Toolbar =
       view.findViewById(R.id.toolbar)
     activity.setSupportActionBar(toolbar)
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     toolbar.setNavigationOnClickListener { activity.popNavigationBackstack() }
+    wifiDirectManager.callbacks = this
     wifiPeerListAdapter = WifiPeerListAdapter(
       WifiP2pDelegate(wifiDirectManager::sendToDevice)
     )
@@ -373,9 +369,9 @@ class LocalFileTransferFragment : BaseFragment(),
     }
   }
 
-  override fun onDestroy() {
+  override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
-    super.onDestroy()
+    super.onDestroyView()
   }
 
   companion object {

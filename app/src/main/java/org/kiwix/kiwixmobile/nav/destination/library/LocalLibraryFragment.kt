@@ -190,12 +190,12 @@ class LocalLibraryFragment : BaseFragment() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.get_zim_nearby_device -> navigateToLocalLibraryFragment()
+      R.id.get_zim_nearby_device -> navigateToLocalFileTransferFragment()
     }
     return super.onOptionsItemSelected(item)
   }
 
-  private fun navigateToLocalLibraryFragment() {
+  private fun navigateToLocalFileTransferFragment() {
     val booksOnDisk =
       booksOnDiskAdapter.items.filterIsInstance<BooksOnDiskListItem.BookOnDisk>().map {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

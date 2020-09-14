@@ -63,7 +63,7 @@ class WifiDirectManager @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
-  protected var callbacks: Callbacks? = null
+  var callbacks: Callbacks? = null
 
   /* Helper methods */
   /* Variables related to the WiFi P2P API */
@@ -188,8 +188,9 @@ class WifiDirectManager @Inject constructor(
   }
 
   /* From WifiP2pManager.PeerListListener callback-interface */
-  override fun onPeersAvailable(peers: WifiP2pDeviceList) =
-    callbacks?.updateListOfAvailablePeers(peers)!!
+  override fun onPeersAvailable(peers: WifiP2pDeviceList) {
+    callbacks?.updateListOfAvailablePeers(peers)
+  }
 
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   override fun onConnectionInfoAvailable(groupInfo: WifiP2pInfo) {
