@@ -80,13 +80,14 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       javaScriptEnabled = true
       loadWithOverviewMode = true
       useWideViewPort = true
-      setInitialScale(INITIAL_SCALE)
       builtInZoomControls = true
       displayZoomControls = false
-      clearCache(true)
       allowUniversalAccessFromFileURLs = true
-      setWebViewClient(webViewClient)
     }
+
+    setInitialScale(INITIAL_SCALE)
+    clearCache(true)
+    setWebViewClient(webViewClient)
     webChromeClient = KiwixWebChromeClient(callback, nonVideoView, videoView, this).apply {
       setOnToggledFullscreen { fullscreen ->
         setWindowVisibility(
