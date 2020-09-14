@@ -28,7 +28,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -141,14 +140,9 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun onBackPressed(activity: AppCompatActivity): Super {
     val result = super.onBackPressed(activity)
-    // if (getCurrentWebView().url != null) {
     if (zimReaderContainer.mainPage == getCurrentWebView().url.substringAfter(CONTENT_PREFIX)) {
-      Log.e("KIWIX", "onBackPressed: Inside the if block, Returning should callllllllll" )
       return ShouldCall
     }
-    Log.e("KIWIX", "kILIING: Inside KIllllllllll" )
-    requireActivity().finish()
-    // }
     return result
   }
 
