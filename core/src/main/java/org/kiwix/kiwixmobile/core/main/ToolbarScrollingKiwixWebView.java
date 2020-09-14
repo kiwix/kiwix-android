@@ -51,7 +51,9 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
     this.toolbarView = toolbarView;
     this.bottomBarView = bottomBarView;
     this.sharedPreferenceUtil = sharedPreferenceUtil;
-    fixInitalScrollingIssue();
+    if (toolbarView != null) {
+      fixInitalScrollingIssue();
+    }
   }
 
   /**
