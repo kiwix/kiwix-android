@@ -39,7 +39,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 object ActivityExtensions {
 
-  private val Activity.thisAsCoreMainActivity: CoreMainActivity get() = this as CoreMainActivity
+  private val Activity.coreMainActivity: CoreMainActivity get() = this as CoreMainActivity
 
   fun AppCompatActivity.startActionMode(
     menuId: Int,
@@ -85,29 +85,29 @@ object ActivityExtensions {
       .get(T::class.java)
 
   fun Activity.navigate(action: NavDirections) {
-    thisAsCoreMainActivity.navigate(action)
+    coreMainActivity.navigate(action)
   }
 
   val Activity.cachedComponent: CoreActivityComponent
-    get() = thisAsCoreMainActivity.cachedComponent
+    get() = coreMainActivity.cachedComponent
 
   fun Activity.setupDrawerToggle(toolbar: Toolbar) =
-    thisAsCoreMainActivity.setupDrawerToggle(toolbar)
+    coreMainActivity.setupDrawerToggle(toolbar)
 
   fun Activity.navigate(fragmentId: Int) {
-    thisAsCoreMainActivity.navigate(fragmentId)
+    coreMainActivity.navigate(fragmentId)
   }
 
   fun Activity.navigate(fragmentId: Int, bundle: Bundle) {
-    thisAsCoreMainActivity.navigate(fragmentId, bundle)
+    coreMainActivity.navigate(fragmentId, bundle)
   }
 
   fun Activity.popNavigationBackstack() {
-    thisAsCoreMainActivity.navController.popBackStack()
+    coreMainActivity.navController.popBackStack()
   }
 
   private fun <T> Activity.getObservableNavigationResult(key: String = "result") =
-    thisAsCoreMainActivity.navController.currentBackStackEntry?.savedStateHandle
+    coreMainActivity.navController.currentBackStackEntry?.savedStateHandle
       ?.getLiveData<T>(key)
 
   fun <T> Activity.observeNavigationResult(
@@ -117,15 +117,15 @@ object ActivityExtensions {
   ) {
     getObservableNavigationResult<T>(key)?.observe(owner) {
       observer.onChanged(it)
-      thisAsCoreMainActivity.consumeObservable<T>(key)
+      coreMainActivity.consumeObservable<T>(key)
     }
   }
 
   fun <T> Activity.consumeObservable(key: String = "result") =
-    thisAsCoreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
+    coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
 
   fun <T> Activity.setNavigationResult(result: T, key: String = "result") {
-    thisAsCoreMainActivity.navController.previousBackStackEntry?.savedStateHandle?.set(
+    coreMainActivity.navController.previousBackStackEntry?.savedStateHandle?.set(
       key,
       result
     )

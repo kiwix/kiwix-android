@@ -266,7 +266,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `CreatedWithIntent offers SearchArgumentProcessing`() {
+    fun `CreatedWithArguments offers SearchArgumentProcessing`() {
       val bundle = mockk<Bundle>()
       actionResultsInEffects(
         CreatedWithArguments(bundle),

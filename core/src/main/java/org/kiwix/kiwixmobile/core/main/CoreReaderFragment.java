@@ -1240,8 +1240,9 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void goToSearchWithText(Intent intent) {
     saveTabStates();
-    String searchString = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? intent.getStringExtra(
-      Intent.EXTRA_PROCESS_TEXT) : "";
+    String searchString = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+      ? intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
+      : "";
     openSearch(searchString, false, false);
   }
 
