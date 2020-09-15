@@ -24,7 +24,9 @@ import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResult
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 
 internal class SearchInPreviousScreenTest {
 
@@ -35,8 +37,8 @@ internal class SearchInPreviousScreenTest {
     val activity = mockk<CoreMainActivity>(relaxed = true)
     SearchInPreviousScreen(searchString).invokeWith(activity)
     verify {
+      activity.setNavigationResult(searchString, FIND_IN_PAGE_SEARCH_STRING)
       activity.popNavigationBackstack()
-      activity.findInPage(searchString)
     }
   }
 }
