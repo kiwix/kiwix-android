@@ -151,14 +151,14 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       url?.substringAfterLast("/", "")
         ?.takeIf { it.contains(".") }
         ?: src?.substringAfterLast("/", "")
-          ?.substringAfterLast("%3A", "") ?: ""
+          ?.substringAfterLast("%3A") ?: ""
 
     @SuppressWarnings("NestedBlockDepth")
     override fun handleMessage(msg: Message) {
       val url = msg.data["url"] as? String
       val src = msg.data["src"] as? String
       if (url != null || src != null) {
-        val fileName = getDecodedFileName(url, src)
+        var fileName = getDecodedFileName(url, src)
         val dotIndex = fileName.lastIndexOf('.')
         var root =
           Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
@@ -166,19 +166,26 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
           root = instance.externalMediaDirs[0]
         }
         var storageDir = File(root, fileName)
-        var newUrl = fileName
-        var i = 2
-        while (storageDir.exists()) {
-          newUrl = fileName.substring(0, dotIndex) + "_" + i + fileName.substring(dotIndex)
-          storageDir = File(root, newUrl)
-          i++
-        }
+        sequence {
+          yieldAll(generateSequence(1) { it + 1 })
+        }.map {
+          fileName = fileName.replace(".", "_$it")
+          storageDir = File(root, fileName)
+          return@map storageDir
+        }.first { !it.exists() }
+        // generateSequence(1) { it + 1 }
+        //   .map {
+        //     newUrl = fileName.substring(0, dotIndex) + "_" + it + fileName.substring(dotIndex)
+        //     storageDir = File(root, newUrl)
+        //     return@map storageDir
+        //   }
+        //   .first { !it.exists() }
         val source = Uri.parse(src)
         try {
           zimReaderContainer.load("$source").data.use { inputStream ->
             storageDir.outputStream().use { inputStream.copyTo(it) }
           }
-          instance.toast(instance.getString(R.string.save_media_saved, newUrl))
+          instance.toast(instance.getString(R.string.save_media_saved, fileName))
         } catch (e: IOException) {
           Log.w("kiwix", "Couldn't save image", e)
           instance.toast(R.string.save_media_error)
