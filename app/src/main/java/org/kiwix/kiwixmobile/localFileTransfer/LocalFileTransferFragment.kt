@@ -371,6 +371,7 @@ class LocalFileTransferFragment : BaseFragment(),
 
   override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
+    wifiDirectManager.callbacks = null
     super.onDestroyView()
   }
 

@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.intro
 
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
-import org.junit.Ignore
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
@@ -29,7 +28,6 @@ class IntroFragmentTest : BaseActivityTest<KiwixMainActivity>() {
   override var activityRule = activityTestRule<KiwixMainActivity>()
 
   @Test
-  @Ignore("Testing if this breaks most other tests")
   fun viewIsSwipeableAndNavigatesToMain() {
     runOnUiThread { activityRule.activity.navigate(R.id.introFragment) }
     intro(IntroRobot::swipeLeft) clickGetStarted { }
