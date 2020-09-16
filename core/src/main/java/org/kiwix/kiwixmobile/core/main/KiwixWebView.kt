@@ -158,34 +158,27 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val url = msg.data["url"] as? String
       val src = msg.data["src"] as? String
       if (url != null || src != null) {
-        var fileName = getDecodedFileName(url, src)
-        val dotIndex = fileName.lastIndexOf('.')
+        val fileName = getDecodedFileName(url, src)
         var root =
           Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         if (instance.externalMediaDirs.isNotEmpty()) {
           root = instance.externalMediaDirs[0]
         }
-        var storageDir = File(root, fileName)
-        sequence {
-          yieldAll(generateSequence(1) { it + 1 })
-        }.map {
-          fileName = fileName.replace(".", "_$it")
-          storageDir = File(root, fileName)
-          return@map storageDir
+        val fileToSave = sequence {
+          yield(File(root, fileName))
+          yieldAll(generateSequence(1) { it + 1 }.map {
+            File(
+              root,
+              fileName.replace(".", "_$it.")
+            )
+          })
         }.first { !it.exists() }
-        // generateSequence(1) { it + 1 }
-        //   .map {
-        //     newUrl = fileName.substring(0, dotIndex) + "_" + it + fileName.substring(dotIndex)
-        //     storageDir = File(root, newUrl)
-        //     return@map storageDir
-        //   }
-        //   .first { !it.exists() }
         val source = Uri.parse(src)
         try {
           zimReaderContainer.load("$source").data.use { inputStream ->
-            storageDir.outputStream().use { inputStream.copyTo(it) }
+            fileToSave.outputStream().use { inputStream.copyTo(it) }
           }
-          instance.toast(instance.getString(R.string.save_media_saved, fileName))
+          instance.toast(instance.getString(R.string.save_media_saved, fileToSave.name))
         } catch (e: IOException) {
           Log.w("kiwix", "Couldn't save image", e)
           instance.toast(R.string.save_media_error)
