@@ -133,7 +133,7 @@
   <string name="tts_not_enabled">Text to speech is not enabled for this ZIM file</string>
   <string name="texttospeech_initialization_failed">Initialization of Text to Speech failed. Please try again</string>
   <string name="texttospeech_error">Unexpected error in Text to Speech. Please try again</string>
-  <string name="search_error">Unexpected error while searching. Please try again</string>
+
   <string name="next">Next</string>
   <string name="previous">Previous</string>
   <string name="wifi_only_title">Allow downloading content via mobile network?</string>

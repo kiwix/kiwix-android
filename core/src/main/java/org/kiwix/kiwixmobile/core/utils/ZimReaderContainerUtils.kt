@@ -16,19 +16,20 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects
+package org.kiwix.kiwixmobile.core.utils
 
-import io.mockk.mockk
-import io.mockk.verify
-import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import android.net.Uri
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 
-internal class FinishActivityTest {
+private fun ZimReaderContainer.redirectOrOriginal(contentUrl: String): String =
+  if (isRedirect(contentUrl)) getRedirect(contentUrl) else contentUrl
 
-  @Test
-  fun `invoke with finishes activity`() {
-    val activity = mockk<CoreMainActivity>(relaxed = true)
-    FinishActivity.invokeWith(activity)
-    verify { activity.finish() }
-  }
-}
+private fun contentUrl(articleUrl: String): String =
+  Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString()
+
+fun ZimReaderContainer.urlSuffixToParsableUrl(suffixUrl: String): String =
+  redirectOrOriginal(contentUrl(suffixUrl))
+
+fun ZimReaderContainer.titleToUrl(title: String): String? =
+  if (title.startsWith("A/")) title else getPageUrlFromTitle(title)

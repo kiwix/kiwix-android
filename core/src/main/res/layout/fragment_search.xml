@@ -9,12 +9,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="?android:attr/actionBarSize">
-
-      <include layout="@layout/layout_toolbar" />
-    </RelativeLayout>
+    <include layout="@layout/layout_toolbar" />
 
     <ViewAnimator
       android:id="@+id/searchViewAnimator"

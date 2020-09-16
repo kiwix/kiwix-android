@@ -142,7 +142,7 @@
   <string name="tts_not_enabled">轉換為語音的文字無法用在 ZIM 檔案上</string>
   <string name="texttospeech_initialization_failed">文字轉語音的初始化失敗，請重試</string>
   <string name="texttospeech_error">文字轉語音出現意外錯誤，請重試</string>
-  <string name="search_error">搜尋時出現意外錯誤，請重試</string>
+
   <string name="next">下一個</string>
   <string name="previous">上一個</string>
   <string name="wifi_only_title">允許透過移動網路來下載內容？</string>

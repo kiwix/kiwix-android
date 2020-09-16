@@ -26,6 +26,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -39,22 +40,29 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
+const val SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
+const val FIND_IN_PAGE_SEARCH_STRING = "findInPageSearchString"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
 const val KIWIX_INTERNAL_ERROR = 10
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
+  abstract val searchFragmentResId: Int
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
   @Inject lateinit var rateDialogHandler: RateDialogHandler
-  protected var drawerToggle: ActionBarDrawerToggle? = null
-
+  @Inject lateinit var zimReaderContainer: ZimReaderContainer
+  private var drawerToggle: ActionBarDrawerToggle? = null
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
@@ -175,8 +183,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
       R.id.menu_settings -> openSettings()
       R.id.menu_help -> openHelpFragment()
-      R.id.menu_history -> openHistoryActivity()
-      R.id.menu_bookmarks_list -> openBookmarksActivity()
+      R.id.menu_history -> openHistory()
+      R.id.menu_bookmarks_list -> openBookmarks()
       else -> return false
     }
     return true
@@ -247,11 +255,37 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navigate(settingsFragmentResId)
   }
 
-  private fun openHistoryActivity() {
+  private fun openHistory() {
     navigate(historyFragmentResId)
   }
 
-  private fun openBookmarksActivity() {
+  fun openSearch(
+    searchString: String = "",
+    isOpenedFromTabView: Boolean = false,
+    isVoice: Boolean = false
+  ) {
+    navigate(
+      searchFragmentResId,
+      bundleOf(
+        NAV_ARG_SEARCH_STRING to searchString,
+        TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
+        EXTRA_IS_WIDGET_VOICE to isVoice
+      )
+    )
+  }
+
+  fun openPage(pageUrl: String, zimFilePath: String = "", shouldOpenInNewTab: Boolean = false) {
+    navigate(
+      readerFragmentResId,
+      bundleOf(
+        PAGE_URL_KEY to pageUrl,
+        ZIM_FILE_URI_KEY to zimFilePath,
+        SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
+      )
+    )
+  }
+
+  private fun openBookmarks() {
     navigate(bookmarksFragmentResId)
     handleDrawerOnNavigation()
   }
@@ -261,7 +295,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     disableDrawer()
   }
 
-  abstract fun openPage(pageUrl: String, zimFilePath: String = "")
+  fun findInPage(searchString: String) {
+    navigate(readerFragmentResId, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
+  }
 
   protected abstract fun getIconResId(): Int
+  abstract val readerFragmentResId: Int
 }
