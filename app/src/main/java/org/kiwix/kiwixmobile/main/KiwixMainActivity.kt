@@ -39,8 +39,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
-import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 
@@ -50,12 +48,14 @@ class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
 
   override val cachedComponent by lazy { kiwixActivityComponent }
+  override val searchFragmentResId: Int = R.id.searchFragment
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
   override val drawerContainerLayout: DrawerLayout by lazy { navigation_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val readerFragmentResId: Int = R.id.readerFragment
   override val helpFragmentResId: Int = R.id.helpFragment
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
@@ -144,13 +144,6 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun openZimHostFragment() {
     disableDrawer()
     navigate(R.id.zimHostFragment)
-  }
-
-  override fun openPage(pageUrl: String, zimFilePath: String) {
-    navigate(
-      R.id.readerFragment,
-      bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
-    )
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher

@@ -27,14 +27,29 @@
       android:name="zimFileUri"
       android:defaultValue=""
       app:argType="string" />
-
+    <argument
+      android:name="findInPageSearchString"
+      android:defaultValue=""
+      app:argType="string" />
     <argument
       android:name="pageUrl"
       android:defaultValue=""
       app:argType="string" />
+    <argument
+      android:name="shouldOpenInNewTab"
+      android:defaultValue="false"
+      app:argType="boolean" />
+    <argument
+      android:name="searchItemTitle"
+      android:defaultValue=""
+      app:argType="string" />
+
     <action
       android:id="@+id/action_navigation_reader_to_navigation_library"
       app:destination="@id/libraryFragment" />
+    <action
+      android:id="@+id/action_readerFragment_to_searchFragment"
+      app:destination="@id/searchFragment" />
   </fragment>
 
   <fragment
@@ -90,6 +105,15 @@
     android:id="@+id/kiwixSettingsFragment"
     android:name="org.kiwix.kiwixmobile.settings.KiwixSettingsFragment"
     android:label="KiwixSettingsFragment" />
+  <fragment
+    android:id="@+id/searchFragment"
+    android:name="org.kiwix.kiwixmobile.core.search.SearchFragment"
+    android:label="SearchFragment">
+    <action
+      android:id="@+id/action_searchFragment_to_readerFragment"
+      app:destination="@id/readerFragment"
+      app:popUpTo="@id/readerFragment" />
+  </fragment>
   <fragment
     android:id="@+id/localFileTransferFragment"
     android:name="org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment"

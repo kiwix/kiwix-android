@@ -35,7 +35,7 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithArguments
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
@@ -48,12 +48,12 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
 import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.FinishActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessing
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchArgumentProcessing
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
@@ -93,14 +93,14 @@ class SearchViewModel @Inject constructor(
 
   private fun actionMapper() = actions.map {
     when (it) {
-      ExitedSearch -> effects.offer(FinishActivity)
+      ExitedSearch -> effects.offer(PopFragmentBackstack)
       is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
       is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
       is OnItemLongClick -> showDeleteDialog(it)
       is Filter -> filter.offer(it.term)
       ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
       is ConfirmedDelete -> deleteItemAndShowToast(it)
-      is CreatedWithIntent -> effects.offer(SearchIntentProcessing(it.intent, actions))
+      is CreatedWithArguments -> effects.offer(SearchArgumentProcessing(it.arguments, actions))
       ReceivedPromptForSpeechInput -> effects.offer(StartSpeechInput(actions))
       StartSpeechInputFailed -> effects.offer(ShowToast(R.string.speech_not_supported))
       is ActivityResultReceived ->
