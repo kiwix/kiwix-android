@@ -30,18 +30,12 @@ inline fun <reified T : ViewModel> Fragment.viewModel(
   viewModelFactory: ViewModelProvider.Factory
 ) = ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
 
-fun Fragment.toast(
-  stringId: Int,
-  length: Int = Toast.LENGTH_LONG
-) {
+fun Fragment.toast(stringId: Int, length: Int = Toast.LENGTH_LONG) {
   requireActivity().toast(stringId, length)
 }
 
 fun Fragment.closeKeyboard() {
   val inputMethodManager =
     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-  inputMethodManager.toggleSoftInput(
-    InputMethodManager.HIDE_IMPLICIT_ONLY,
-    0
-  )
+  inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 }
