@@ -1186,6 +1186,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     updateBottomToolbarVisibility();
     updateNightMode();
+    setUpTTS();
   }
 
   private void openFullScreenIfEnabled() {
@@ -1495,9 +1496,12 @@ public abstract class CoreReaderFragment extends BaseFragment
   public void onPause() {
     super.onPause();
     saveTabStates();
+    tts.shutdown();
+    tts = null;
     Log.d(TAG_KIWIX,
       "onPause Save current zim file to preferences: " + zimReaderContainer.getZimCanonicalPath());
   }
+
 
   @Override
   public void webViewUrlLoading() {
