@@ -105,26 +105,41 @@ class LocalFileTransferFragment : BaseFragment(),
     super.onViewCreated(view, savedInstanceState)
     setHasOptionsMenu(true)
     val activity = requireActivity() as CoreMainActivity
-    val fileForTransfer =
-      LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris.map(::FileItem)
+    val filesForTransfer = getFilesForTransfer()
 
-    val toolbar: Toolbar =
-      view.findViewById(R.id.toolbar)
-    activity.setSupportActionBar(toolbar)
-    toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
-    toolbar.setNavigationOnClickListener { activity.popNavigationBackstack() }
-    wifiDirectManager.callbacks = this
+    setupToolbar(view, activity)
+
     wifiPeerListAdapter = WifiPeerListAdapter(
       WifiP2pDelegate(wifiDirectManager::sendToDevice)
     )
 
+    setupPeerDevicesList(activity)
+
+    displayFileTransferProgress(filesForTransfer)
+
+    wifiDirectManager.callbacks = this
+    wifiDirectManager.startWifiDirectManager(filesForTransfer)
+  }
+
+  private fun setupPeerDevicesList(activity: CoreMainActivity) {
     list_peer_devices.adapter = wifiPeerListAdapter
     list_peer_devices.layoutManager = LinearLayoutManager(activity)
     list_peer_devices.setHasFixedSize(true)
-
-    displayFileTransferProgress(fileForTransfer)
-    wifiDirectManager.startWifiDirectManager(fileForTransfer)
   }
+
+  private fun setupToolbar(
+    view: View,
+    activity: CoreMainActivity
+  ) {
+    val toolbar: Toolbar = view.findViewById(R.id.toolbar)
+    activity.setSupportActionBar(toolbar)
+    toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+    toolbar.setNavigationOnClickListener { activity.popNavigationBackstack() }
+  }
+
+  private fun getFilesForTransfer() =
+    LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris?.map(::FileItem)
+      ?: emptyList()
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == R.id.menu_item_search_devices) {

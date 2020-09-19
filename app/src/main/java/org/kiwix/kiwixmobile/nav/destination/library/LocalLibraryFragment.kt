@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -33,8 +31,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -58,7 +54,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
@@ -196,22 +191,7 @@ class LocalLibraryFragment : BaseFragment() {
   }
 
   private fun navigateToLocalFileTransferFragment() {
-    val booksOnDisk =
-      booksOnDiskAdapter.items.filterIsInstance<BooksOnDiskListItem.BookOnDisk>().map {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-          FileProvider.getUriForFile(
-            requireActivity(),
-            requireActivity().packageName + ".fileprovider",
-            it.file
-          )
-        } else {
-          Uri.fromFile(it.file)
-        }
-      }
-    requireActivity().navigate(
-      R.id.localFileTransferFragment,
-      bundleOf(URIS_KEY to booksOnDisk.toTypedArray())
-    )
+    requireActivity().navigate(R.id.localFileTransferFragment)
   }
 
   override fun onCreateView(
