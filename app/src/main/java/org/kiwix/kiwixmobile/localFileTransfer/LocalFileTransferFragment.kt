@@ -127,10 +127,7 @@ class LocalFileTransferFragment : BaseFragment(),
     list_peer_devices.setHasFixedSize(true)
   }
 
-  private fun setupToolbar(
-    view: View,
-    activity: CoreMainActivity
-  ) {
+  private fun setupToolbar(view: View, activity: CoreMainActivity) {
     val toolbar: Toolbar = view.findViewById(R.id.toolbar)
     activity.setSupportActionBar(toolbar)
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
