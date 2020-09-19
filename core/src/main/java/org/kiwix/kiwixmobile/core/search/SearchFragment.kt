@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -118,9 +119,10 @@ class SearchFragment : BaseFragment() {
     }
   }
 
-  override fun onDestroy() {
+  override fun onDestroyView() {
+    super.onDestroyView()
     compositeDisposable.clear()
-    super.onDestroy()
+    closeKeyboard()
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
