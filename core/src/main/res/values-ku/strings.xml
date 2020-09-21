@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Balyozxane
 * Bikarhêner
 * George Animal
 * Ghybu
@@ -16,13 +17,40 @@
   <string name="menu_exit_full_screen">Ji dîmendera tije derkeve</string>
   <string name="menu_read_aloud">Bi dengê bilind bixwîne</string>
   <string name="menu_read_aloud_stop">Xwendina dengê bilind rawestîne</string>
+  <string name="menu_support_kiwix">Piştgiriya Kiwix-ê Bike</string>
+  <string name="menu_host_books">Kitêban Bihewîne</string>
   <string name="save_media">Medyayê Tomar Bike</string>
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
   <string name="save_media_saved">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
   <string name="search_label">Lê bigere</string>
   <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
+  <string name="hotspot_service_channel_name">Kanala Xizmetê ya Hotspotê</string>
+  <string name="hotspot_failed_title">Bi ser neket ku hotspotê bide destpêkirin</string>
+  <string name="hotspot_failed_message">Wisa dixuye ku hotspot-a te jixwe vekirî ye. Ji kerema xwe ji bo dewamkirinê wîfiya hotspot-a xwe bigire.</string>
+  <string name="go_to_wifi_settings_label">Here mîhengên WÎFÎyê</string>
+  <string name="hotspot_running">Xebitandina Hotspotê</string>
+  <string name="no_books_selected_toast_message">Ji kerema xwe pêşî kitêban bibijêre</string>
+  <string name="server_failed_message">Server dest pê nebû. Ji kerema xwe hotspot-a xwe bigire</string>
+  <string name="server_failed_toast_message">Nikare serverê bide destpêkirin.</string>
+  <string name="server_started_successfully_toast_message">Server bi serkeftinî dest pê kir.</string>
+  <string name="server_stopped_successfully_toast_message">Server bi serkeftinî hate sekinandin.</string>
+  <string name="hotspot_turned_on">Hotspot hate vekirin</string>
+  <string name="hotspot_details_message">Li jêr detayên hotspota te ya lokal hene.\nSSID : %1$s \nPass : %2$s</string>
+  <string name="server_textview_default_message">Dosyeyên ku tu dixwazî li ser serverê bihewînî - bikî mêvan bibijêre</string>
+  <string name="progress_dialog_starting_server">Serverê dide destpêkirin</string>
+  <string name="hotspot_dialog_title">Talîmatên ji bo hewandina kitêban</string>
+  <string name="wifi_dialog_title">Girêdana WîFî-yê hate tesbîtkirin</string>
+  <string name="wifi_dialog_body">Ji bo ku kitêban li ser cîhazên din bibînî, ji kerema xwe jê emîn bibe ku hemû cîhaz girêdayî eynî Tora Wîfiyê ne.</string>
+  <string name="hotspot_dialog_message">Ji bo ku ev taybetmendî bixebite divê tu pêşî hotspot-a Wîfiyê bi destan vekî an jê piştrast bî ku cîhaza hewandinê û cîhaza wergir (receiver) girêdayî eynî tora Wîfiyê bin.</string>
+  <string name="hotspot_dialog_neutral_button">HATE DEWAMKIRIN</string>
+  <string name="hotspot_channel_description">Nûkirinên derbarê halê hotspot/server-a te.</string>
+  <string name="hotspot_notification_content_title">Hotspota Kiwix-ê.</string>
+  <string name="start_server_label">Serverê bide destpêkirin</string>
+  <string name="stop_server_label">Serverê bide sekinandin</string>
+  <string name="server_started_message">Vê adresa IPyê di geroka xwe de binivîsîne ji bo ku xwe bigihînî servera %s</string>
   <string name="error_file_not_found">Çewtîː Peldanka ZIM\'ê ya bijartî nehate dîtin.</string>
+  <string name="zim_not_opened">Nikare dosyeya zim-ê veke</string>
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
   <string name="pref_display_title">Nîşan bide</string>
@@ -45,8 +73,12 @@
   <string name="pref_clear_all_history_title">Raboriyê paqij bike</string>
   <string name="pref_clear_all_history_summary">Lêgerînên dawî û raboriya hilpekînan paqij bike</string>
   <string name="all_history_cleared">Hemû Raborî Hat Paqijkirin</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Hemû Raboriyê Paqij Bike</string>
+  <string name="pref_clear_all_bookmarks_title">Bijareyan paqij bike</string>
+  <string name="clear_all_history_dialog_title">Hemû Dîrokê Paqij Bike</string>
+  <string name="share">Parve bike</string>
+  <string name="selected_file_cab_app_chooser_title">Dosyeyên ZIMê parve bike bi:</string>
   <string name="delete">Jê bibe</string>
+  <string name="cancel">Betal bike</string>
   <string name="delete_specific_search_toast">Lêgerîna dawî hat rakirin</string>
   <string name="hint_contents_drawer_message">Tu dikarî çepê veguherîne ku ji bo naveroka vê gotarê binêre</string>
   <string name="got_it">Min fêm kir</string>
@@ -72,9 +104,11 @@
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
+  <string name="delete_zim_body">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n%s</string>
   <string name="delete_zims_toast">Pel hat jêbirin</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
-  <string name="download_no_space" fuzzy="true">Ji bo daxistina vê peldankê cihê ku hewce dike, tune ye.</string>
+  <string name="download_no_space">Ji bo daxistinê cihê ku hewce dike, tune ye.</string>
+  <string name="download">Daxîne</string>
   <string name="space_available">Cihê berdestː</string>
   <string name="zim_simple">Basît</string>
   <string name="zim_no_pic">Wêne Tune ye</string>
@@ -82,17 +116,17 @@
   <string name="no_network_connection">Girêdana torê tune ye</string>
   <string name="help_2">Kiwix çi dike?</string>
   <string name="help_3">Kiwix xwînereke naverokên offline (derhêl) e. Mîna gerokan tev dide lê li cihê ku bigihije rûpelên torê yên online (liserhêl), naverokê ji peldankekî formata ZIM-ê dixwîne.</string>
-  <string name="help_4" fuzzy="true">Kiwix herçiqas di bingehê de ji bo peydekirina Wikipedia-ya derhêl hatiye sêwirandin jî, naverokên din jî dixwîne.</string>
+  <string name="help_4">Kiwix herçiqas di bingehê de ji bo peydekirina Wikipedia-ya derhêl hatiye sêwirandin jî, naverokên din jî dixwîne.</string>
   <string name="help_5">Naverok li kû derê ye?</string>
   <string name="help_6">Naveroka me di malpera me de tê hewandin.</string>
   <string name="help_7">Wekî peldankên ZIMê hene. Li wir gelek hene:</string>
   <string name="help_8">• Wikipedia ji bo her zimanî di bikaranînê de ye</string>
   <string name="help_9">• Mîna Wikileaks an jî Wikisource naverokên din jî hene</string>
-  <string name="help_10" fuzzy="true">Tu dikarî peldankên ZIMê yên ku te bijartiye ji nav sepanê daxînî yan jî berî ku peldankên ZIMê li SD card-ê neqil bikî, yên ku tu dixwazî bibijêrî û ji kompûtereke sermaseyê daxînî.</string>
+  <string name="help_10">Tu dikarî peldankên ZIMê yên ku te bijartiye ji nav sepanê daxînî yan jî berî ku peldankên ZIMê li SD card-ê neqil bikî, yên ku tu dixwazî bibijêrî û ji kompûtereke sermaseyê daxînî.</string>
   <string name="help_11">Peldankên ZIMê yên ku yên ji nava sepanê hatine daxistin, di nav pelbendekî bi navê Kiwix-ê de ne ya ku li nav cîhaza depokirinê ya derveyî ye.</string>
   <string name="pref_storage">Depokirin</string>
   <string name="pref_current_folder">Peldanka niha</string>
-  <string name="delete_zim_failed" fuzzy="true">Mixabin nebû ku em vê peldankê jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
+  <string name="delete_zim_failed">Mixabin nebû ku em hin peldankan jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
   <string name="tts_pause">rawestîne</string>
   <string name="tts_resume">dewam bike</string>
   <string name="stop">rawestîne</string>
@@ -104,6 +138,9 @@
   <string name="confirm_stop_download_msg">Tu ji daxwaza xwe ya rawestandina vê daxistinê bawer î?</string>
   <string name="download_change_storage">Hilbijêra amûra depokirinê</string>
   <string name="tts_not_enabled">Ji bo vê peldanka ZIM-ê xwendina nivîsê ne ya sepandinê ye</string>
+  <string name="texttospeech_initialization_failed">Destpêkirina Nivîsê-kirin-Xeberdanê bi ser neket. Ji kerema xwe cardin biceribîne</string>
+  <string name="texttospeech_error">Çewtiyeke nehêvîkirî rû da di Nivîsê-kirin-Xeberdanê (Text to Speech) de. Ji kerema xwe cardin biceribîne</string>
+  <string name="search_error">Çewtiyeke nehêvîkirî di lêgerînê de derket holê. Ji kerema xwe cardin biceribîne</string>
   <string name="next">Pêşve</string>
   <string name="previous">Yê berê</string>
   <string name="wifi_only_title">Bira ji tora mobîlê destûra daxistina naverokê bê dayîn?</string>
@@ -114,12 +151,27 @@
   <string name="time_minute">dq</string>
   <string name="time_second">sn</string>
   <string name="time_left">çep</string>
+  <string name="time_today">Îro</string>
+  <string name="time_yesterday">Do</string>
   <string name="pref_external_link_popup_title">Dema ku têketina girêdanên derveyî hişyariyê bide</string>
   <string name="pref_external_link_popup_summary">Bi popup-ê hişyarî bide gava ku bi girêdanên online û di bihayên zêde de nexebite.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Tevlîkirina Girêdana Derveyî</string>
+  <string name="external_link_popup_dialog_title">Tevlîkirina Girêdana Derveyî</string>
   <string name="external_link_popup_dialog_message">Tu girêdanekî derveyî tevlî dikî. Ev tişt dibe ku ji ber neqla daneyê bibe sedema mesrefan an jî dema ku tu derhêl (offline) bî, nexebite. Gelo tu dixwazî dewam bikî?</string>
   <string name="do_not_ask_anymore">Zêdetir nepirse</string>
   <string name="your_languages">Zimanên bijartîː</string>
   <string name="other_languages">Zimanên din:</string>
+  <string name="no_items_msg">Ti hêmanekî berdest tine</string>
+  <string name="crash_title">Baş e... Ev Şermker e</string>
+  <string name="crash_description">Wisa dixuye ku em hilweşiyan. \n\nGelo tu dixwazî alî me bikî ku em vê problemê çareser bikin bi şandina agahiyên li jêr?</string>
+  <string name="crash_checkbox_language">Mîhengên Te yên Zimanî</string>
+  <string name="crash_checkbox_zimfiles">Lîsteyeke Dosyeyên Te yên Zim-ê</string>
+  <string name="crash_checkbox_exception">Detayên Hilweşînê</string>
+  <string name="crash_checkbox_logs">Tomarên Sepanê</string>
+  <string name="crash_checkbox_device">Detayên Amûrê</string>
+  <string name="crash_button_confirm">DETAYAN BIŞÎNE</string>
+  <string name="shortcut_disabled_message">Kurterê ne berdest e</string>
+  <string name="new_tab_shortcut_label">Hilpekîna nû</string>
+  <string name="get_content_shortcut_label">Naverokê bîne</string>
+  <string name="fav_icon">Favîkon</string>
   <string name="no_bookmarks">Bijare Tune ne</string>
 </resources>
