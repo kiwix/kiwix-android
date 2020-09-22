@@ -22,6 +22,7 @@
   <string name="hotspot_failed_title">Failed to start hotspot</string>
   <string name="hotspot_failed_message">It seems like your hotspot is already turned on. Please disable your wifi hotspot to continue.</string>
   <string name="go_to_wifi_settings_label">Go to WIFI settings</string>
+  <string name="connection_refused_please_try_again">Connection refused. Please try again</string>
   <string name="hotspot_running" tools:keep="@string/hotspot_running">Running Hotspot</string>
   <string name="no_books_selected_toast_message" tools:keep="@string/no_books_selected_toast_message">Please select books first</string>
   <string name="server_failed_message" tools:keep="@string/server_failed_message">Couldn’t start server. Please turn on your hotspot</string>
