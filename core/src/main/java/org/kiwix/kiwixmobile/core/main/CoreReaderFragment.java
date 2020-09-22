@@ -740,7 +740,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     unbinder.unbind();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
-    if (tts != null){
+    if (tts != null) {
     tts.shutdown();
     tts = null;
     }
@@ -1190,7 +1190,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     updateBottomToolbarVisibility();
     updateNightMode();
-    if (tts == null){
+    if (tts == null) {
       setUpTTS();
     }
   }
@@ -1502,7 +1502,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   public void onPause() {
     super.onPause();
     saveTabStates();
-    if (tts != null){
+    if (tts != null) {
       tts.stop();
     }
     Log.d(TAG_KIWIX,
