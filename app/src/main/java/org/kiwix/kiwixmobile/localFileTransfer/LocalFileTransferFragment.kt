@@ -106,8 +106,8 @@ class LocalFileTransferFragment : BaseFragment(),
     setHasOptionsMenu(true)
     val activity = requireActivity() as CoreMainActivity
     val filesForTransfer = getFilesForTransfer()
-
-    setupToolbar(view, activity)
+    val isReceiver = filesForTransfer.isEmpty()
+    setupToolbar(view, activity, isReceiver)
 
     wifiPeerListAdapter = WifiPeerListAdapter(
       WifiP2pDelegate(wifiDirectManager::sendToDevice)
@@ -127,9 +127,12 @@ class LocalFileTransferFragment : BaseFragment(),
     list_peer_devices.setHasFixedSize(true)
   }
 
-  private fun setupToolbar(view: View, activity: CoreMainActivity) {
+  private fun setupToolbar(view: View, activity: CoreMainActivity, isReceiver: Boolean) {
     val toolbar: Toolbar = view.findViewById(R.id.toolbar)
     activity.setSupportActionBar(toolbar)
+    toolbar.title =
+      if (isReceiver) getString(R.string.receive_files_title)
+      else getString(R.string.send_files_title)
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     toolbar.setNavigationOnClickListener { activity.popNavigationBackstack() }
   }
