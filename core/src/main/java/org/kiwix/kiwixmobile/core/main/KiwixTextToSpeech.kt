@@ -169,7 +169,8 @@ class KiwixTextToSpeech internal constructor(
   fun pauseOrResume() {
     currentTTSTask?.let {
       if (it.paused) {
-        requestAudioFocus()
+        if (!requestAudioFocus()) return@pauseOrResume
+        it.start()
       } else {
         it.pause()
       }
