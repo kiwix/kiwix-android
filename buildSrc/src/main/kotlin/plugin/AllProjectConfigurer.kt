@@ -161,9 +161,9 @@ class AllProjectConfigurer {
       implementation(Libs.constraintlayout)
       implementation(Libs.multidex)
       // navigation
-      implementation(Libs.navigation_kotlin_fragment)
-      implementation(Libs.navigation_kotlin_ui)
-      androidTestImplementation(Libs.navigation_kotlin_testing)
+      implementation(Libs.navigation_fragment_ktx)
+      implementation(Libs.navigation_ui_ktx)
+      androidTestImplementation(Libs.navigation_testing)
       implementation(Libs.okhttp)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)

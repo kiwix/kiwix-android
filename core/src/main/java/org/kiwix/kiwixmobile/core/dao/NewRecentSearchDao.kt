@@ -19,14 +19,20 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
 import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import javax.inject.Inject
 
-class NewRecentSearchDao @Inject constructor(private val box: Box<RecentSearchEntity>) {
-  fun recentSearches(zimId: String?) = box.asFlowable(
+class NewRecentSearchDao @Inject constructor(
+  private val box: Box<RecentSearchEntity>,
+  private val flowBuilder: FlowBuilder
+) {
+  @OptIn(ExperimentalCoroutinesApi::class)
+  fun recentSearches(zimId: String?) = flowBuilder.buildCallbackFlow(
     box.query {
       equal(RecentSearchEntity_.zimId, zimId ?: "")
       orderDesc(RecentSearchEntity_.id)
