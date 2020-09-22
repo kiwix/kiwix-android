@@ -147,7 +147,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (tabSwitcherRoot.visibility == View.VISIBLE) {
         tabSwitcherRoot.visibility = GONE
         startAnimation(tabSwitcherRoot, anim.slide_up)
-        progressBar.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
         progressBar.progress = 0
         contentFrame.visibility = View.VISIBLE
       }
