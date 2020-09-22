@@ -42,6 +42,7 @@ import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -259,15 +260,6 @@ class AddNoteDialog : DialogFragment() {
     val inputMethodManager =
       requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-  }
-
-  private fun closeKeyboard() {
-    val inputMethodManager =
-      requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.toggleSoftInput(
-      InputMethodManager.HIDE_IMPLICIT_ONLY,
-      0
-    )
   }
 
   private fun saveNote(noteText: String) {

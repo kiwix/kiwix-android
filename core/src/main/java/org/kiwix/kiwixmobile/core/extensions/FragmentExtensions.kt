@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -28,9 +30,12 @@ inline fun <reified T : ViewModel> Fragment.viewModel(
   viewModelFactory: ViewModelProvider.Factory
 ) = ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
 
-fun Fragment.toast(
-  stringId: Int,
-  length: Int = Toast.LENGTH_LONG
-) {
+fun Fragment.toast(stringId: Int, length: Int = Toast.LENGTH_LONG) {
   requireActivity().toast(stringId, length)
+}
+
+fun Fragment.closeKeyboard() {
+  val inputMethodManager =
+    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+  inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 }
