@@ -61,8 +61,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val searchFragmentResId: Int
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
   @Inject lateinit var rateDialogHandler: RateDialogHandler
-  @Inject lateinit var zimReaderContainer: ZimReaderContainer
   private var drawerToggle: ActionBarDrawerToggle? = null
+  @Inject lateinit var zimReaderContainer: ZimReaderContainer
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
