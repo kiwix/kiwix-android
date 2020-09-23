@@ -18,11 +18,8 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Context
-import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
-import android.os.Build
-import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.Engine
 import android.speech.tts.TextToSpeech.LANG_MISSING_DATA
@@ -105,10 +102,7 @@ class KiwixTextToSpeech internal constructor(
     } else {
       val locale = iSO3ToLocale(zimReaderContainer.language)
       if ("mul" == zimReaderContainer.language) {
-        Log.d(
-          TAG_KIWIX, "TextToSpeech: disabled " +
-            zimReaderContainer.language
-        )
+        Log.d(TAG_KIWIX, "TextToSpeech: disabled " + zimReaderContainer.language)
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
@@ -163,13 +157,8 @@ class KiwixTextToSpeech internal constructor(
       AudioManager.AUDIOFOCUS_GAIN
     )
     Log.d(TAG_KIWIX, "Audio Focus Requested")
-    abandonAudioFocus()
     synchronized(focusLock) {
-      if (audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-        abandonAudioFocus()
-        return@requestAudioFocus true
-      }
-      return@requestAudioFocus false
+      return@requestAudioFocus audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
   }
 
@@ -193,12 +182,14 @@ class KiwixTextToSpeech internal constructor(
   }
 
   /**
-   * Releases the resources used by the engine.
+   * Releases the resources and [OnAudioFocusChangeListener] used by the engine.
    *
    * @see android.speech.tts.TextToSpeech.shutdown
+   * {@link https://developer.android.com/guide/topics/media-apps/audio-focus#audio-focus-change }
    */
   fun shutdown() {
     tts.shutdown()
+    abandonAudioFocus()
   }
 
   /**
