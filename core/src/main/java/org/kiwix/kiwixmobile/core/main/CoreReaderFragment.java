@@ -124,6 +124,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static org.kiwix.kiwixmobile.core.ServiceWorkerInitialiserKt.UNREGISTER_SERVICE_WORKER_JS;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
 import static org.kiwix.kiwixmobile.core.page.history.HistoryFragmentKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
@@ -729,6 +730,11 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabCallback = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
+    for (KiwixWebView kiwixWebView : webViewList) {
+      kiwixWebView.evaluateJavascript(UNREGISTER_SERVICE_WORKER_JS,
+        value -> Log.e("SERVICE_WORKER_UNREGISTER", value));
+      kiwixWebView.loadUrl("javascript:"+UNREGISTER_SERVICE_WORKER_JS);
+    }
     webViewList.clear();
     actionBar = null;
     mainMenu = null;

@@ -26,6 +26,29 @@ import androidx.webkit.WebViewFeature
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import javax.inject.Inject
 
+const val UNREGISTER_SERVICE_WORKER_JS =
+  """
+    console.log('Commencing deregistration');
+    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+      if (!registrations.length) {
+        console.log('No serviceWorker registrations found.')
+        return
+      }
+      for(let registration of registrations) {
+      alert('Attempting to unregister Service Worker' + registration.index);
+        registration.unregister().then(function (boolean) {
+          console.log(
+            (boolean ? 'Successfully unregistered' : 'Failed to unregister'), 'ServiceWorkerRegistration\n' +
+            (registration.installing ? '  .installing.scriptURL = ' + registration.installing.scriptURL + '\n' : '') +
+            (registration.waiting ? '  .waiting.scriptURL = ' + registration.waiting.scriptURL + '\n' : '') +
+            (registration.active ? '  .active.scriptURL = ' + registration.active.scriptURL + '\n' : '') +
+            '  .scope: ' + registration.scope + '\n'
+          )
+        })
+      }
+    }).catch(function(err) { console.error(err); });
+  """
+
 class ServiceWorkerInitialiser @Inject constructor(zimReaderContainer: ZimReaderContainer) {
   init {
     if (WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE)) {
