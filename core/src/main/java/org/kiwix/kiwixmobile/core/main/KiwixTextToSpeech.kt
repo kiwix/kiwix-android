@@ -18,8 +18,11 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Context
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
+import android.os.Build
+import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.Engine
 import android.speech.tts.TextToSpeech.LANG_MISSING_DATA
@@ -160,10 +163,18 @@ class KiwixTextToSpeech internal constructor(
       AudioManager.AUDIOFOCUS_GAIN
     )
     Log.d(TAG_KIWIX, "Audio Focus Requested")
+    abandonAudioFocus()
     synchronized(focusLock) {
-      return@requestAudioFocus audioFocusRequest ==
-        AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+      if (audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+        abandonAudioFocus()
+        return@requestAudioFocus true
+      }
+      return@requestAudioFocus false
     }
+  }
+
+  private fun abandonAudioFocus() {
+    am.abandonAudioFocus(onAudioFocusChangeListener)
   }
 
   fun pauseOrResume() {
