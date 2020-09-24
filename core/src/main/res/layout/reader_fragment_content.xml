@@ -63,7 +63,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:layout_anchor="@id/bottom_toolbar"
-      app:layout_dodgeInsetEdges="bottom"
+      android:layout_gravity="top"
       >
 
       <Button
