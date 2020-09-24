@@ -5,8 +5,6 @@
     <ID>EmptyFunctionBlock:None.kt$None${ }</ID>
     <ID>EmptyFunctionBlock:SimplePageChangeListener.kt$SimplePageChangeListener${ }</ID>
     <ID>EmptyFunctionBlock:ZimHostActivity.kt$ZimHostActivity.&lt;no name provided&gt;${}</ID>
-    <ID>ForbiddenComment:KiwixReaderFragment.kt$KiwixReaderFragment$// TODO: Show to user</ID>
-    <ID>ForbiddenComment:ReaderFragment.kt$ReaderFragment$// TODO: Show to user</ID>
     <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( booksOnFileSystem: List&lt;BookOnDisk&gt;, activeDownloads: List&lt;DownloadModel&gt;, allLanguages: List&lt;Language&gt;, libraryNetworkEntity: LibraryNetworkEntity, filter: String, fileSystemState: FileSystemState )</ID>
     <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( private val downloadDao: FetchDownloadDao, private val bookDao: NewBookDao, private val languageDao: NewLanguagesDao, private val storageObserver: StorageObserver, private val kiwixService: KiwixService, private val context: Application, private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver, private val bookUtils: BookUtils, private val fat32Checker: Fat32Checker, private val defaultLanguageProvider: DefaultLanguageProvider, private val dataSource: DataSource )</ID>
     <ID>MagicNumber:LibraryListItem.kt$LibraryListItem.LibraryDownloadItem$1000L</ID>
@@ -25,31 +23,20 @@
     <ID>PackageNaming:HotspotStateReceiver.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
     <ID>PackageNaming:LibraryAdapter.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
     <ID>PackageNaming:LibraryDelegate.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
-    <ID>PackageNaming:LibraryFragment.kt$package org.kiwix.kiwixmobile.zim_manager.library_view</ID>
     <ID>PackageNaming:LibraryListItem.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
     <ID>PackageNaming:LibraryViewHolder.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
     <ID>PackageNaming:MountFileSystemChecker.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:NavigateToDownloads.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:NetworkState.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:None.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:OpenFile.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:OpenFileWithNavigation.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:SectionsPagerAdapter.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:ShareFiles.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
     <ID>PackageNaming:SimplePageChangeListener.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:StartMultiSelection.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:WifiDirectManager.kt$package org.kiwix.kiwixmobile.localFileTransfer</ID>
-    <ID>PackageNaming:WifiP2pDelegate.kt$package org.kiwix.kiwixmobile.localFileTransfer.adapter</ID>
-    <ID>PackageNaming:WifiP2pViewHolder.kt$package org.kiwix.kiwixmobile.localFileTransfer.adapter</ID>
-    <ID>PackageNaming:WifiPeerListAdapter.kt$package org.kiwix.kiwixmobile.localFileTransfer.adapter</ID>
-    <ID>PackageNaming:ZimFileSelectFragment.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view</ID>
-    <ID>PackageNaming:ZimManageActivity.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:ZimManageViewModel.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>ReturnCount:Fat32Checker.kt$Fat32Checker$private fun canCreate4GbFile(storage: String): Boolean</ID>
     <ID>ReturnCount:LanguageActivity.kt$LanguageActivity$override fun onOptionsItemSelected(item: MenuItem): Boolean</ID>
     <ID>TooGenericExceptionCaught:FileWritingFileSystemChecker.kt$FileWritingFileSystemChecker$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:KiwixReaderFragment.kt$KiwixReaderFragment$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:ReaderFragment.kt$ReaderFragment$e: Exception</ID>
     <ID>TooGenericExceptionThrown:ActivityExtensions.kt$throw RuntimeException( """ applicationContext is ${applicationContext::class.java.simpleName} application is ${application::class.java.simpleName} """.trimIndent() )</ID>
     <ID>TooGenericExceptionThrown:LibraryViewHolder.kt$LibraryViewHolder.LibraryBookViewHolder$throw RuntimeException("impossible invalid state: ${item.fileSystemState}")</ID>
     <ID>TooGenericExceptionThrown:ZimManageViewModel.kt$ZimManageViewModel$throw RuntimeException("Impossible state")</ID>

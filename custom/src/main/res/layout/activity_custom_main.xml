@@ -27,7 +27,7 @@
 
   <fragment
     android:id="@+id/custom_nav_controller"
-    android:name="androidx.navigation.fragment.NavHostFragment"
+    android:name="org.kiwix.kiwixmobile.core.main.NavigationHostFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:defaultNavHost="true"

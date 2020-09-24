@@ -124,6 +124,8 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall;
+import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
 import static org.kiwix.kiwixmobile.core.page.history.HistoryFragmentKt.USER_CLEARED_HISTORY;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
@@ -259,13 +261,13 @@ public abstract class CoreReaderFragment extends BaseFragment
       getActivity().getMenuInflater().inflate(R.menu.menu_webview_action, menu);
       configureWebViewSelectionHandler(menu);
     }
-    return Super.ShouldCall;
+    return ShouldCall;
   }
 
   @NotNull @Override public Super onActionModeFinished(@NotNull ActionMode actionMode,
     @NotNull AppCompatActivity activity) {
     this.actionMode = null;
-    return Super.ShouldCall;
+    return ShouldCall;
   }
 
   protected void configureWebViewSelectionHandler(Menu menu) {
@@ -454,7 +456,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
 
       @Override
-      public void sectionsLoaded(String title, List<? extends TableDrawerAdapter.DocumentSection> sections) {
+      public void sectionsLoaded(String title,
+        List<? extends TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -629,16 +632,21 @@ public abstract class CoreReaderFragment extends BaseFragment
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
       hideTabSwitcher();
+      return ShouldNotCall;
     } else if (isInFullScreenMode()) {
       closeFullScreen();
+      return ShouldNotCall;
     } else if (compatCallback.isActive) {
       compatCallback.finish();
+      return ShouldNotCall;
     } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
-    } else {
-      return Super.ShouldCall;
+      return ShouldNotCall;
+    } else if (getCurrentWebView().canGoBack()) {
+      getCurrentWebView().goBack();
+      return ShouldNotCall;
     }
-    return Super.ShouldNotCall;
+    return ShouldCall;
   }
 
   private void updateTitle() {
@@ -1264,7 +1272,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     @NotNull AppCompatActivity activity) {
     handleNotificationIntent(intent);
     handleIntentActions(intent);
-    return Super.ShouldCall;
+    return ShouldCall;
   }
 
   private void contentsDrawerHint() {
