@@ -221,6 +221,7 @@
   <string name="notes_deletion_successful">Raderade hela anteckningsmappen</string>
   <string name="notes_deletion_unsuccessful">Vissa filer raderades inte</string>
   <string name="books_count">%d bok/böcker</string>
+  <string name="severe_loss_error">Allvarligt fel! Testa att starta om WiFi P2P</string>
   <string name="connection_failed">Anslutning misslyckades</string>
   <string name="permission_refused_storage">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
   <string name="request_enable_wifi">Aktivera WiFi P2P i systeminställningar</string>
