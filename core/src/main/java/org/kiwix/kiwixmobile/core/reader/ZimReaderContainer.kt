@@ -48,16 +48,49 @@ class ZimReaderContainer @Inject constructor(
   fun getRandomArticleUrl() = zimFileReader?.getRandomArticleUrl()
   fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
   fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
-  fun load(url: String, requestHeaders: Map<String, String>) =
-    WebResourceResponse(
-      zimFileReader?.readMimeType(url),
-      Charsets.UTF_8.name(),
-      zimFileReader?.load(url)
-    ).apply {
-      if (requestHeaders.keys.contains("Range")) {
-        setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_PARTIAL, "PARTIAL")
+  fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse {
+    val data = zimFileReader?.load(url)
+    // advertise we support range requests
+    // note that the actual seeking into the InputStream is done automatically
+    // … but the headers are not set.
+    // Content-Length is also set automatically
+    var headers = mapOf("Accept-Ranges" to "bytes");
+    var isPartial = false;
+    if (requestHeaders.keys.contains("Range")) {
+      isPartial = true;
+      data?.reset() // seek to zero (might not be necessary)
+      val fullSize = data?.available()?.toLong()  // using zimFileReader.fileSize isn't equivalent
+      val lastByte = fullSize!!.minus(1);
+
+      if (requestHeaders.getValue("Range").startsWith("bytes=0-")) {
+        // if 0-, seek to zero and return the rest (we should handle 0-x as well)
+        headers = headers.plus("Content-Range" to "bytes 0-$lastByte/$fullSize")
+        headers = headers.plus("Connection" to "close")
+      } else {
+        // assume x- (from x to end)
+        val rangeVal = requestHeaders.getValue("Range").split("=")[1]
+        val startOffset = rangeVal.split("-")[0].toLong()
+        headers = headers.plus("Content-Range" to "bytes $startOffset-$lastByte/$fullSize")
       }
     }
+    if (isPartial)
+      return WebResourceResponse(
+        zimFileReader?.readMimeType(url),
+        Charsets.UTF_8.name(),
+        HttpURLConnection.HTTP_PARTIAL,
+        "Partial Content",
+        headers,
+        data
+      )
+    return WebResourceResponse(
+      zimFileReader?.readMimeType(url),
+      Charsets.UTF_8.name(),
+      HttpURLConnection.HTTP_OK,
+      "OK",
+      headers,
+      data
+    )
+  }
 
   fun copyReader(): ZimFileReader? = zimFile?.let(zimFileReaderFactory::create)
 
