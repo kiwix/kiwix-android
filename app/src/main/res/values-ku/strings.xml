@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Bikarhêner
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Sîstema te ya dosyeyê piştgiriyê nade dosyeyên zêdetirî 4GByê</string>
+</resources>
