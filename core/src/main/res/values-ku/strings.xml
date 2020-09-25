@@ -241,12 +241,12 @@
   <string name="nearby_devices">CÎHAZÊN NÊZ</string>
   <string name="no_devices_found">Ti cîhazek nehate tesbîtkirin. Ji bo cardin biceribînî pêlî ser bûtona lêgerînê bike.</string>
   <string name="files_for_transfer">DOSYEYÊN JI BO TRANSFERKIRINÊ</string>
-  <string name="preparing_files">Dosyeyan hazir dike ji bo transferkirinê...</string>
-  <string name="performing_handshake">Destdanhev tê bicihanîn...</string>
+  <string name="preparing_files">Dosyeyan hazir dike ji bo transferkirinê…</string>
+  <string name="performing_handshake">Destdanhev tê bicihanîn…</string>
   <string name="status">Rewş</string>
   <string name="pref_clear_all_notes_summary">Hemû notan ji hemû gotaran bibe</string>
   <string name="pref_clear_all_notes_title">Temamiya notan paqij bike</string>
-  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25% biguherîne.</string>
+  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25\% biguherîne.</string>
   <string name="tag_pic">Wêne</string>
   <string name="tag_vid">Vîdeo</string>
   <string name="tag_text_only">Tenê Nivîs</string>
