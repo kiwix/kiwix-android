@@ -162,8 +162,6 @@ class KiwixTextToSpeech internal constructor(
     }
   }
 
-  private fun abandonAudioFocus() = am.abandonAudioFocus(onAudioFocusChangeListener)
-
   fun pauseOrResume() {
     currentTTSTask?.let {
       if (it.paused) {
@@ -187,7 +185,7 @@ class KiwixTextToSpeech internal constructor(
    */
   fun shutdown() {
     tts.shutdown()
-    abandonAudioFocus()
+    am.abandonAudioFocus(onAudioFocusChangeListener)
   }
 
   /**
