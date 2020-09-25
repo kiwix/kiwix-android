@@ -37,16 +37,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -138,14 +135,6 @@ class CustomReaderFragment : CoreReaderFragment() {
         }
       }
     )
-  }
-
-  override fun onBackPressed(activity: AppCompatActivity): Super {
-    val result = super.onBackPressed(activity)
-    if (zimReaderContainer.mainPage == getCurrentWebView().url.substringAfter(CONTENT_PREFIX)) {
-      return ShouldCall
-    }
-    return result
   }
 
   override fun onRequestPermissionsResult(

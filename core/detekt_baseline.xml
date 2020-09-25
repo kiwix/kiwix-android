@@ -36,7 +36,7 @@
     <ID>PackageNaming:KiloByte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:KiwixTag.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:Language.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
+    <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:SelectionMode.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File&gt;</ID>

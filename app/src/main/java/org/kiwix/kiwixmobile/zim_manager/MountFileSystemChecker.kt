@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.zim_manager
 
+import org.kiwix.kiwixmobile.core.zim_manager.MountInfo
+import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.INCONCLUSIVE

@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.core.zim_manager
 
 import java.io.File
 import javax.inject.Inject

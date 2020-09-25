@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.main
+package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
 import android.view.ActionMode
@@ -26,8 +26,6 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
-import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.main.WebViewProvider
 
 class NavigationHostFragment : NavHostFragment(), WebViewProvider, FragmentActivityExtensions {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
