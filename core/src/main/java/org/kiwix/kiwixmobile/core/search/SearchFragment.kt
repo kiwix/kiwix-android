@@ -17,40 +17,43 @@
  */
 package org.kiwix.kiwixmobile.core.search
 
-import android.R.anim
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_search.searchViewAnimator
-import kotlinx.android.synthetic.main.activity_search.search_list
-import kotlinx.android.synthetic.main.layout_toolbar.toolbar
+import kotlinx.android.synthetic.main.fragment_search.searchViewAnimator
+import kotlinx.android.synthetic.main.fragment_search.search_list
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.coreActivityComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
+import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchAdapter
 import org.kiwix.kiwixmobile.core.search.adapter.SearchDelegate.RecentSearchDelegate
 import org.kiwix.kiwixmobile.core.search.adapter.SearchDelegate.ZimSearchResultDelegate
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.State
@@ -59,9 +62,10 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
-class SearchActivity : BaseActivity() {
+const val NAV_ARG_SEARCH_STRING = "searchString"
 
-  val activityComponent by lazy { coreActivityComponent }
+class SearchFragment : BaseFragment() {
+
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private lateinit var searchView: SearchView
@@ -78,37 +82,53 @@ class SearchActivity : BaseActivity() {
     )
   }
 
-  override fun injection(coreComponent: CoreComponent) {
-    activityComponent.inject(this)
+  override fun inject(baseActivity: BaseActivity) {
+    baseActivity.cachedComponent.inject(this)
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_search)
-    setSupportActionBar(toolbar)
-    supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_action_back)
-    supportActionBar!!.setHomeButtonEnabled(true)
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    val root = inflater.inflate(R.layout.fragment_search, container, false)
+    setHasOptionsMenu(true)
+    return root
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    setupToolbar(view)
     search_list.run {
       adapter = searchAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    compositeDisposable.add(searchViewModel.effects.subscribe { it.invokeWith(this) })
+    compositeDisposable.add(searchViewModel.effects.subscribe {
+      it.invokeWith(requireActivity() as CoreMainActivity)
+    })
   }
 
-  override fun onDestroy() {
+  private fun setupToolbar(view: View) {
+    with(requireActivity() as CoreMainActivity) {
+      setSupportActionBar(view.findViewById(R.id.toolbar))
+      supportActionBar?.apply {
+        setHomeButtonEnabled(true)
+        title = getString(R.string.menu_search_in_text)
+      }
+    }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
     compositeDisposable.clear()
-    super.onDestroy()
+    closeKeyboard()
   }
 
-  override fun finish() {
-    super.finish()
-    overridePendingTransition(anim.fade_in, anim.fade_out)
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_search, menu)
-    val searchMenuItem = menu.findItem(id.menu_search)
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super.onCreateOptionsMenu(menu, inflater)
+    inflater.inflate(R.menu.menu_search, menu)
+    val searchMenuItem = menu.findItem(R.id.menu_search)
     searchMenuItem.expandActionView()
     searchView = searchMenuItem.actionView as SearchView
     searchView.setOnQueryTextListener(SimpleTextListener {
@@ -129,8 +149,7 @@ class SearchActivity : BaseActivity() {
     }
 
     searchViewModel.state.observe(this, Observer(::render))
-    searchViewModel.actions.offer(CreatedWithIntent(intent))
-    return true
+    searchViewModel.actions.offer(Action.CreatedWithArguments(arguments))
   }
 
   private fun render(state: State) {

@@ -33,7 +33,6 @@
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.MONKEY" />
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
@@ -130,22 +129,6 @@
       <intent-filter>
         <action android:name="org.kiwix.kiwixmobile.core.main.CoreMainActivity" />
         <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
-    </activity>
-    <activity
-      android:name=".localFileTransfer.LocalFileTransferActivity"
-      android:label="Send to nearby device"
-      android:screenOrientation="portrait">
-      <intent-filter>
-        <action android:name="android.intent.action.SEND_MULTIPLE" />
-        <category android:name="android.intent.category.DEFAULT" />
-
-        <data android:mimeType="application/octet-stream" />
-        <data android:pathPattern=".*\\.zim" />
-        <data android:pathPattern=".*\\..*\\.zim" />
-        <data android:pathPattern=".*\\..*\\..*\\.zim" />
-        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim" />
-        <data android:host="*" />
       </intent-filter>
     </activity>
 

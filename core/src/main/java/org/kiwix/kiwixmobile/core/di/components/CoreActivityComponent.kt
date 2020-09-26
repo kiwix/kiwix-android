@@ -29,14 +29,14 @@ import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
-import org.kiwix.kiwixmobile.core.search.SearchActivity
+import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 
 @ActivityScope
 @Subcomponent(modules = [ActivityModule::class])
 interface CoreActivityComponent {
-  fun inject(searchActivity: SearchActivity)
+  fun inject(searchFragment: SearchFragment)
   fun inject(showDeleteSearchDialog: ShowDeleteSearchDialog)
   fun inject(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog)
   fun inject(showDeleteHistoryDialog: ShowDeleteHistoryDialog)

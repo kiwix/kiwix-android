@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -29,7 +28,6 @@ import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 
@@ -42,8 +40,10 @@ class CustomMainActivity : CoreMainActivity() {
   }
   override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
+  override val searchFragmentResId: Int = R.id.searchFragment
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.customSettingsFragment
+  override val readerFragmentResId: Int = R.id.customReaderFragment
   override val historyFragmentResId: Int = R.id.historyFragment
   override val helpFragmentResId: Int = R.id.helpFragment
   override val cachedComponent by lazy { customActivityComponent }
@@ -79,11 +79,6 @@ class CustomMainActivity : CoreMainActivity() {
     }
     drawer_nav_view.menu.findItem(R.id.menu_host_books)
       .isVisible = false
-  }
-
-  override fun openPage(pageUrl: String, zimFilePath: String) {
-    val bundle = bundleOf(PAGE_URL_KEY to pageUrl, ZIM_FILE_URI_KEY to zimFilePath)
-    navigate(R.id.customReaderFragment, bundle)
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher
