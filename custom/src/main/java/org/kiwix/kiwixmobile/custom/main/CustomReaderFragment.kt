@@ -50,7 +50,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
@@ -60,8 +59,6 @@ import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import java.util.Locale
 import javax.inject.Inject
-
-const val PAGE_URL_KEY = "pageUrl"
 
 class CustomReaderFragment : CoreReaderFragment() {
 
