@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_margin="@dimen/card_margin"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+  android:layout_margin="@dimen/card_margin">
 
   <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
@@ -33,13 +32,15 @@
     <TextView
       android:id="@+id/libraryBookTitle"
       style="@style/list_item_title"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/favicon_margin_right"
       android:layout_marginTop="@dimen/item_library_margin_top"
+      android:layout_marginEnd="@dimen/activity_horizontal_margin"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@+id/libraryBookFavicon"
       app:layout_constraintTop_toTopOf="parent"
-      tools:text="Title" />
+      tools:text="Title Title Title Title Title Title  Title Title Title  Title Title Title Title Title Title Title Title Title Title Title " />
 
     <TextView
       android:id="@+id/libraryBookDescription"
@@ -47,80 +48,56 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/activity_horizontal_margin"
-      android:textColor="?textSecondary"
-      android:maxLines="2"
       android:ellipsize="end"
+      android:maxLines="2"
+      android:textColor="?textSecondary"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="@+id/libraryBookTitle"
       app:layout_constraintTop_toBottomOf="@+id/libraryBookTitle"
-      tools:text="Description a really really really really really really really really really really long descricption" />
+      tools:text="Description a really really really really really really really really really really long descricption elipsisisisss" />
+
 
     <TextView
       android:id="@+id/libraryBookSize"
-      style="@style/list_item_body"
+      style="@style/list_item_body.detail"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="?textTertiary"
+      app:layout_constraintEnd_toStartOf="@id/libraryBookDate"
+      app:layout_constraintHorizontal_chainStyle="spread_inside"
       app:layout_constraintStart_toStartOf="@+id/libraryBookTitle"
       app:layout_constraintTop_toBottomOf="@+id/libraryBookDescription"
-      tools:text="File Size" />
-
-    <TextView
-      android:id="@+id/libraryBookCreator"
-      style="@style/list_item_body"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:textColor="?textTertiary"
-      android:gravity="start"
-      android:layout_marginRight="10dp"
-      android:layout_marginEnd="10dp"
-      app:layout_constraintStart_toStartOf="@+id/libraryBookSize"
-      app:layout_constraintTop_toBottomOf="@+id/libraryBookSize"
-      app:layout_constraintEnd_toStartOf="@id/libraryBookDate"
-      tools:text="Author" />
-
-    <TextView
-      android:id="@+id/libraryBookPublisher"
-      style="@style/list_item_body"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="?textTertiary"
-      app:layout_constraintStart_toStartOf="@+id/libraryBookCreator"
-      app:layout_constraintTop_toBottomOf="@+id/libraryBookCreator"
-      tools:text="Publisher" />
-
+      tools:text="File Size File Size File Size File Size File Size File Size  File Size  File Size  File Size " />
 
     <TextView
       android:id="@+id/libraryBookDate"
-      style="@style/list_item_body"
+      style="@style/list_item_body.detail.end"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="?textTertiary"
-      android:layout_marginEnd="@dimen/activity_horizontal_margin"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/libraryBookSize"
-      tools:text="Date" />
+      app:layout_constraintStart_toEndOf="@id/libraryBookSize"
+      app:layout_constraintTop_toTopOf="@id/libraryBookSize"
+      tools:text="Date Date Date Date Date  " />
+
+    <TextView
+      android:id="@+id/libraryBookCreator"
+      style="@style/list_item_body.detail"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toStartOf="@id/libraryBookLanguage"
+      app:layout_constraintHorizontal_chainStyle="spread_inside"
+      app:layout_constraintStart_toStartOf="@+id/libraryBookTitle"
+      app:layout_constraintTop_toBottomOf="@+id/libraryBookSize"
+      tools:text="Author" />
 
     <TextView
       android:id="@+id/libraryBookLanguage"
-      style="@style/list_item_body"
+      style="@style/list_item_body.detail.end"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textColor="?textTertiary"
-      android:layout_marginStart="50dp"
-      app:layout_constraintEnd_toEndOf="@+id/libraryBookDate"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/libraryBookCreator"
       app:layout_constraintTop_toBottomOf="@+id/libraryBookDate"
       tools:text="Language" />
-
-    <TextView
-      android:id="@+id/libraryBookFileName"
-      style="@style/list_item_body"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="?textTertiary"
-      app:layout_constraintEnd_toEndOf="@+id/libraryBookLanguage"
-      app:layout_constraintTop_toBottomOf="@+id/libraryBookLanguage"
-      tools:text="File Name" />
 
     <org.kiwix.kiwixmobile.core.zim_manager.TagsView
       android:id="@+id/tags"
@@ -128,7 +105,7 @@
       android:layout_height="wrap_content"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="@+id/libraryBookTitle"
-      app:layout_constraintTop_toBottomOf="@id/libraryBookPublisher" />
+      app:layout_constraintTop_toBottomOf="@id/libraryBookCreator" />
 
 
     <View
@@ -137,12 +114,11 @@
       android:layout_height="0dp"
       android:alpha=".5"
       android:background="@color/pure_gray"
-      app:layout_constraintBottom_toBottomOf="@id/constraint_layout"
-      app:layout_constraintEnd_toEndOf="@id/constraint_layout"
-      app:layout_constraintStart_toStartOf="@id/constraint_layout"
-      app:layout_constraintTop_toTopOf="@id/constraint_layout"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
       tools:visibility="gone" />
-
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

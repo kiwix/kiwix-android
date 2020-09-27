@@ -42,7 +42,6 @@ import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
@@ -175,7 +174,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (tabSwitcherRoot.visibility == View.VISIBLE) {
         tabSwitcherRoot.visibility = GONE
         startAnimation(tabSwitcherRoot, anim.slide_up)
-        progressBar.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
         progressBar.progress = 0
         contentFrame.visibility = View.VISIBLE
       }
@@ -232,16 +231,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     if (zimReaderContainer.zimFile == null) {
       exitBook()
     }
-  }
-
-  override fun onBackPressed(activity: AppCompatActivity): Super {
-    val callType = super.onBackPressed(activity)
-    if (callType == ShouldCall && getCurrentWebView().canGoBack()) {
-      getCurrentWebView().goBack()
-    } else if (callType == ShouldCall) {
-      getActivity()?.finish()
-    }
-    return ShouldNotCall
   }
 
   override fun restoreViewStateOnInvalidJSON() {

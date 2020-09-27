@@ -38,7 +38,7 @@ import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
-import org.kiwix.kiwixmobile.zim_manager.MountPointProducer
+import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import java.io.PrintWriter
 import java.io.StringWriter
 import javax.inject.Inject

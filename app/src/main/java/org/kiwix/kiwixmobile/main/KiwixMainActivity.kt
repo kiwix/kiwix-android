@@ -32,7 +32,6 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.drawer_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.navigation_container
-import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -101,21 +100,6 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onSupportActionModeStarted(mode)
     actionMode = mode
   }
-
-  override fun onBackPressed() {
-    if (readerDrawerIsOpen()) {
-      closeReaderDrawer()
-      return
-    }
-    super.onBackPressed()
-  }
-
-  private fun closeReaderDrawer() {
-    drawerContainerLayout.closeDrawer(reader_drawer_nav_view)
-  }
-
-  private fun readerDrawerIsOpen() =
-    drawerContainerLayout.isDrawerOpen(reader_drawer_nav_view)
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)

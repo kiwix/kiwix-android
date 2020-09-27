@@ -32,6 +32,7 @@
   <string name="go_to_wifi_settings_label">Ravêrê eyaranê Wi-Fi</string>
   <string name="hotspot_running">Hotspoto gureyneyino</string>
   <string name="no_books_selected_toast_message">Veror kıtaba weçinê</string>
+  <string name="server_failed_message">Server nêserniyayo. Kerem ke hotspot ake</string>
   <string name="server_failed_toast_message">Server ser nêkewiyayo</string>
   <string name="server_started_successfully_toast_message">Server hewl ser kewiyayo</string>
   <string name="server_stopped_successfully_toast_message">Server hewl vındarnayo</string>
@@ -39,6 +40,7 @@
   <string name="hotspot_details_message">Cêr de lokal detayê hotspoti deyaye.\nSSID: %1$s\nRavêrdış: %2$s</string>
   <string name="progress_dialog_starting_server">Server gureyneyino</string>
   <string name="hotspot_dialog_title">Telimatê meymandariya kıtaban</string>
+  <string name="wifi_dialog_title">Gırey Wi-fi tesbit biya</string>
   <string name="hotspot_dialog_message" fuzzy="true">Serva gureynayışê vêri WIFI hotspoti menuel akerê</string>
   <string name="hotspot_dialog_neutral_button">RAVÊR Şİ</string>
   <string name="hotspot_channel_description">Heqa Hotspot/server eleqeyın rocaney .</string>
@@ -67,6 +69,7 @@
   <string name="clear_recent_and_tabs_history_dialog">Şıma qayılê tabanê aktivan reset kerê u cıgeyrayışê xo yê verêni pak kerê?</string>
   <string name="delete_recent_search_item">No item wa esterıyo?</string>
   <string name="pref_clear_all_history_title">verore cı besterne</string>
+  <string name="pref_clear_all_history_summary">Cıgeyrayışê peyêni u Verocê tavaya bıesterne</string>
   <string name="all_history_cleared">Tarix pêro biyo pak</string>
   <string name="pref_clear_all_bookmarks_title">Bookmarka pak kerê</string>
   <string name="clear_all_history_dialog_title">Verori pêro wa pak kerê?</string>
@@ -181,12 +184,27 @@
   <string name="note">Note</string>
   <string name="wiki_article_title">Serekê Meqaley Wiki</string>
   <string name="ext_storage_permission_rationale_add_note">Serva nota resayışê depoyê ganşyoı</string>
+  <string name="note_delete_unsuccessful">Not nêesteriyê</string>
+  <string name="note_save_successful">Not biya qeyd</string>
+  <string name="note_save_error_storage_not_writable">Not qeyd bıyayış de xeta veciye: Depokerdışo nênusteyino</string>
+  <string name="note_share_error_file_missing">Dosyay note çıniya</string>
+  <string name="note_share_app_chooser_title">Dosyay note pê neya vılayne</string>
+  <string name="delete_notes_confirmation_msg">Notu pêro wa bıesteriyê?</string>
+  <string name="ext_storage_permission_not_granted">Xeta:Mısadey depoyi nêdeyayo</string>
   <string name="books_count">%d book(s)</string>
+  <string name="discovery_initiated">Kaşır serneyayo</string>
+  <string name="discovery_failed">Kaşır nêşayo</string>
+  <string name="connection_failed">Gıreyin nêbiya</string>
+  <string name="transfer_to">%s ya wa dosya transfer vo?</string>
+  <string name="file_transfer_complete">Transferê dosya biyo temam</string>
   <string name="your_device">Cihazê Şıma:</string>
   <string name="nearby_devices">NEZDI CİHAZİ</string>
   <string name="files_for_transfer">TRANSFERÊ DOSYAYAN</string>
   <string name="preparing_files">Keno ke dosyaya transfer kero…</string>
+  <string name="performing_handshake">Dest dano destan…</string>
   <string name="status">Weziyet</string>
+  <string name="pref_clear_all_notes_summary">Meqaleya pêroyın de nota pêroyın pak ke</string>
+  <string name="pref_clear_all_notes_title">Nota pêroyın pak ke</string>
   <string name="tag_pic">Resım</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Teyna metin</string>
@@ -197,9 +215,14 @@
   <string name="no_bookmarks">Nişani çıniyê</string>
   <string name="no_history">Veror Çıniyo</string>
   <string name="device_default">Hesabyayey Cihazi</string>
-  <string name="delete_history" fuzzy="true">Veror wa Bıesterneyo?</string>
-  <string name="delete_bookmarks" fuzzy="true">Bookmarki wa Bıesterneyo?</string>
+  <string name="delete_history">Veror pêro wa bıesterneyo?</string>
+  <string name="delete_selected_history">Weçinaye veror wa bıesteriyo?</string>
+  <string name="delete_bookmarks">İşareti pêro wa bıesteriyo?</string>
   <string name="on">Akerde</string>
   <string name="off">Racınaye</string>
   <string name="auto">Otomatik</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">Nazdiyiya metini</string>
+  <string name="search_open_in_new_tab">Taba newiye de ake</string>
+  <string name="reader">Wanayoğ</string>
 </resources>
