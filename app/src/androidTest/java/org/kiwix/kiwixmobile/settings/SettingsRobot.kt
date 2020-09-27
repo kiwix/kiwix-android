@@ -24,7 +24,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
-import androidx.test.espresso.matcher.ViewMatchers.withClassName
+import androidx.test.espresso.matcher.ViewMatchers.withResourceName
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
@@ -48,7 +48,7 @@ class SettingsRobot : BaseRobot() {
 
   private fun clickRecyclerViewItems(@StringRes vararg stringIds: Int) {
     onView(
-      withClassName(Matchers.`is`(RecyclerView::class.java.name))
+      withResourceName("recycler_view")
     ).perform(
       actionOnItem<RecyclerView.ViewHolder>(
         hasDescendant(Matchers.anyOf(*stringIds.matchers())), ViewActions.click()
