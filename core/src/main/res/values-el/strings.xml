@@ -2,6 +2,7 @@
 <!-- Authors:
 * Fitoschido
 * Geraki
+* Giorgos456
 * Glavkos
 * Nikosgranturismogt
 * Norhorn
@@ -143,4 +144,5 @@
   <string name="delete_bookmarks">Διαγραφή όλων των σελιδοδεικτών;</string>
   <string name="delete_selected_bookmarks">Διαγραφή επιλεγμένων σελιδοδεικτών;</string>
   <string name="pref_text_zoom_title">Μεγέθυνση κειμένου</string>
+  <string name="reader">Αναγνώστης</string>
 </resources>

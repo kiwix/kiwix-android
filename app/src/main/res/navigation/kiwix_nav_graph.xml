@@ -27,14 +27,29 @@
       android:name="zimFileUri"
       android:defaultValue=""
       app:argType="string" />
-
+    <argument
+      android:name="findInPageSearchString"
+      android:defaultValue=""
+      app:argType="string" />
     <argument
       android:name="pageUrl"
       android:defaultValue=""
       app:argType="string" />
+    <argument
+      android:name="shouldOpenInNewTab"
+      android:defaultValue="false"
+      app:argType="boolean" />
+    <argument
+      android:name="searchItemTitle"
+      android:defaultValue=""
+      app:argType="string" />
+
     <action
       android:id="@+id/action_navigation_reader_to_navigation_library"
       app:destination="@id/libraryFragment" />
+    <action
+      android:id="@+id/action_readerFragment_to_searchFragment"
+      app:destination="@id/searchFragment" />
   </fragment>
 
   <fragment
@@ -43,11 +58,14 @@
     android:label="Library">
     <action
       android:id="@+id/action_navigation_library_to_navigation_reader"
-      app:popUpTo="@id/readerFragment"
-      app:destination="@id/readerFragment" />
+      app:destination="@id/readerFragment"
+      app:popUpTo="@id/readerFragment" />
     <action
       android:id="@+id/action_navigation_library_to_navigation_downloads"
       app:destination="@id/downloadsFragment" />
+    <action
+      android:id="@+id/action_libraryFragment_to_localFileTransferFragment"
+      app:destination="@id/localFileTransferFragment" />
   </fragment>
 
   <fragment
@@ -61,11 +79,11 @@
   <fragment
     android:id="@+id/introFragment"
     android:name="org.kiwix.kiwixmobile.intro.IntroFragment"
-    android:label="IntroFragment" >
+    android:label="IntroFragment">
     <action
       android:id="@+id/action_introFragment_to_libraryFragment"
-      app:popUpTo="@id/libraryFragment"
-      app:destination="@id/libraryFragment" />
+      app:destination="@id/libraryFragment"
+      app:popUpTo="@id/libraryFragment" />
   </fragment>
   <fragment
     android:id="@+id/historyFragment"
@@ -87,4 +105,23 @@
     android:id="@+id/kiwixSettingsFragment"
     android:name="org.kiwix.kiwixmobile.settings.KiwixSettingsFragment"
     android:label="KiwixSettingsFragment" />
+  <fragment
+    android:id="@+id/searchFragment"
+    android:name="org.kiwix.kiwixmobile.core.search.SearchFragment"
+    android:label="SearchFragment">
+    <action
+      android:id="@+id/action_searchFragment_to_readerFragment"
+      app:destination="@id/readerFragment"
+      app:popUpTo="@id/readerFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/localFileTransferFragment"
+    android:name="org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment"
+    android:label="LocalFileTransferFragment">
+    <argument
+      android:name="uris"
+      app:argType="android.net.Uri[]"
+      app:nullable="true"
+      android:defaultValue="@null" />
+  </fragment>
 </navigation>

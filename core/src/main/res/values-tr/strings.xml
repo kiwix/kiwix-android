@@ -149,7 +149,7 @@
   <string name="tts_not_enabled">Bu ZIM dosyası için metin okuma uygulanabilir değil</string>
   <string name="texttospeech_initialization_failed">Metinden Konuşmaya başlatılamadı. Lütfen tekrar deneyin</string>
   <string name="texttospeech_error">Metinden Konuşmaya beklenmeyen hata. Lütfen tekrar deneyin</string>
-  <string name="search_error">Arama sırasında beklenmeyen bir hata. Lütfen tekrar deneyin</string>
+
   <string name="next">Sonraki</string>
   <string name="previous">Önceki</string>
   <string name="wifi_only_title">İçeriğin mobil ağ kullanılarak indirilmesine izin verilsin mi?</string>

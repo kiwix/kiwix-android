@@ -24,11 +24,7 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.isVisible
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.intent
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.kiwixmobile.core.search.SearchActivity
-import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
-import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 const val REQUEST_FILE_SEARCH = 1236
 
@@ -103,7 +99,7 @@ class MainMenu(
 
     showWebViewOptions(urlIsValid)
     zimFileReader?.let {
-      onFileOpened(it, urlIsValid)
+      onFileOpened(urlIsValid)
     }
     updateTabIcon(webViews.size)
   }
@@ -117,9 +113,9 @@ class MainMenu(
       else -> false
     }
 
-  fun onFileOpened(zimFileReader: ZimFileReader, urlIsValid: Boolean) {
+  fun onFileOpened(urlIsValid: Boolean) {
     setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen)
-    search.setOnMenuItemClickListener { navigateToSearch(zimFileReader) }
+    search.setOnMenuItemClickListener { navigateToSearch() }
   }
 
   fun hideBookSpecificMenuItems() {
@@ -145,15 +141,8 @@ class MainMenu(
     tabSwitcherTextView?.text = if (tabs > 99) ":D" else "$tabs"
   }
 
-  private fun navigateToSearch(zimFileReader: ZimFileReader): Boolean {
-    activity.startActivityForResult(
-      activity.intent<SearchActivity> {
-        putExtra(EXTRA_ZIM_FILE, zimFileReader.zimFile.absolutePath)
-        putExtra(TAG_FROM_TAB_SWITCHER, isInTabSwitcher)
-      },
-      REQUEST_FILE_SEARCH
-    )
-    activity.overridePendingTransition(0, 0)
+  private fun navigateToSearch(): Boolean {
+    (activity as CoreMainActivity).openSearch(isOpenedFromTabView = isInTabSwitcher)
     return true
   }
 
@@ -170,8 +159,8 @@ class MainMenu(
   }
 
   fun tryExpandSearch(zimFileReader: ZimFileReader?) {
-    if (search.isVisible) {
-      zimFileReader?.let(::navigateToSearch)
+    if (search.isVisible && zimFileReader != null) {
+      navigateToSearch()
     }
   }
 

@@ -276,13 +276,9 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     );
     sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
     if (storageDevice.isInternal()) {
-      findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.internal_storage));
-      sharedPreferenceUtil.putPrefStorageTitle(
-        getResources().getString(R.string.internal_storage));
+      findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
     } else {
-      findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.external_storage));
-      sharedPreferenceUtil.putPrefStorageTitle(
-        getResources().getString(R.string.external_storage));
+      findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
     }
     return Unit.INSTANCE;
   }

@@ -138,7 +138,7 @@
   <string name="tts_not_enabled">Sa sintetizatzione vocale no est abilitada pro custu documentu ZIM</string>
   <string name="texttospeech_initialization_failed">Initzializatzione de sa sintetizatzione de sa boghe fallida. Pro praghere torra a proare.</string>
   <string name="texttospeech_error">B\'at àpidu un\'errore ispensadu cun sa sintetizatzione de sa boghe. Pro praghere torra a proare.</string>
-  <string name="search_error">B\'at àpidu un\'errore ispensadu cun sa chirca. Pro praghere torra a proare.</string>
+
   <string name="next">Imbeniente</string>
   <string name="previous">Antepostu</string>
   <string name="wifi_only_title">Permìtere s\'iscarrigamentu de cuntenutu pro mèdiu de retza mòbile?</string>

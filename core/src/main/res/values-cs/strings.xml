@@ -147,7 +147,7 @@
   <string name="tts_not_enabled">Výstup textu na řeč není u tohoto ZIM souboru umožněn</string>
   <string name="texttospeech_initialization_failed">Inicializace převodu textu na řeč selhala. Prosím zkuste to znovu.</string>
   <string name="texttospeech_error">Neočekávaná chyba při převodu textu na řeč. Prosím zkuste to znovu.</string>
-  <string name="search_error">Neočekávaná chyba při vyhledávání. Prosím zkuste to znovu.</string>
+
   <string name="next">Další</string>
   <string name="previous">Předchozí</string>
   <string name="wifi_only_title">Povolit stahování obsahu přes mobilní připojení?</string>
