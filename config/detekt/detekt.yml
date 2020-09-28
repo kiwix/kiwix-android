@@ -79,14 +79,15 @@ complexity:
     threshold: 60
   LongParameterList:
     active: true
-    threshold: 6
+    functionThreshold: 6
+    constructorThreshold: 7
     ignoreDefaultParameters: false
   MethodOverloading:
     active: false
     threshold: 6
   NestedBlockDepth:
     active: true
-    threshold: 4
+    threshold: 5
   StringLiteralDuplication:
     active: false
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
