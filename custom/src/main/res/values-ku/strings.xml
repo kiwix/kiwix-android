@@ -3,5 +3,7 @@
 * Bikarhêner
 -->
 <resources>
+  <string name="retry">Dîsa hewl bide</string>
   <string name="download">Daxîne</string>
+  <string name="invalid_installation">Sazkirina Nederbasdar. Ji Kerema Xwe Zim-ê Daxîne.\n Jê piştrast be ku WîFî vekirî ye û bi qasî têra xwe cih heye</string>
 </resources>
