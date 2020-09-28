@@ -22,7 +22,7 @@ import android.annotation.TargetApi
 import android.content.Intent
 import android.os.Build.VERSION_CODES
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 data class SearchIntentProcessing(
   private val intent: Intent?,
-  private val actions: PublishProcessor<Action>
+  private val actions: Channel<Action>
 ) : SideEffect<Unit> {
   @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {

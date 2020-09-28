@@ -16,25 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.viewmodel
+package org.kiwix.kiwixmobile.core.dao
 
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import io.objectbox.query.Query
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.flow.callbackFlow
+import javax.inject.Inject
 
-enum class SearchOrigin {
-  FromWebView,
-  FromTabView
-}
-
-sealed class State {
-  abstract val searchString: String
-  abstract val searchOrigin: SearchOrigin
-
-  data class Results(
-    override val searchString: String,
-    val values: List<SearchListItem>,
-    override val searchOrigin: SearchOrigin
-  ) : State()
-
-  data class NoResults(override val searchString: String, override val searchOrigin: SearchOrigin) :
-    State()
+class FlowBuilder @Inject constructor() {
+  @OptIn(ExperimentalCoroutinesApi::class)
+  fun <T> buildCallbackFlow(query: Query<T>) =
+    callbackFlow<List<T>> {
+      val subscription = query.subscribe()
+        .observer { sendBlocking(it) }
+      awaitClose(subscription::cancel)
+    }
 }

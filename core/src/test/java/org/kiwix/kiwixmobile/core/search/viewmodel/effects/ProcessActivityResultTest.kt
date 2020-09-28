@@ -27,7 +27,7 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
@@ -37,7 +37,7 @@ internal class ProcessActivityResultTest {
 
   private val activity: AppCompatActivity = mockk()
   private val data = mockk<Intent>()
-  private val actions = mockk<PublishProcessor<Action>>(relaxed = true)
+  private val actions = mockk<Channel<Action>>(relaxed = true)
   private val successfulResult = ProcessActivityResult(
     StartSpeechInput.REQ_CODE_SPEECH_INPUT,
     Activity.RESULT_OK,

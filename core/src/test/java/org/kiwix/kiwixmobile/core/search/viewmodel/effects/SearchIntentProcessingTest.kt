@@ -26,7 +26,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifySequence
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
@@ -35,13 +35,13 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeec
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
-import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
-import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
+import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 internal class SearchIntentProcessingTest {
 
-  private val actions: PublishProcessor<Action> = mockk(relaxed = true)
+  private val actions: Channel<Action> = mockk(relaxed = true)
 
   private val activity: AppCompatActivity = mockk()
 
