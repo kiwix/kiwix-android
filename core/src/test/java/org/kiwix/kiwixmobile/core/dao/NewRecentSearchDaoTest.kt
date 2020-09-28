@@ -24,11 +24,8 @@ import io.mockk.verify
 import io.objectbox.Box
 import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runBlockingTest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
@@ -133,14 +130,4 @@ internal class NewRecentSearchDaoTest {
     newRecentSearchDao.migrationInsert(mutableListOf(recentSearch))
     verify { box.put(listOf(recentSearchEntity(searchTerm = term, zimId = id))) }
   }
-}
-
-private suspend fun <T> Flow<T>.assertValue(function: (T) -> Boolean) {
-  val value = toList().last()
-  val result = function(value)
-  assertThat(result).isTrue()
-}
-
-suspend inline fun <T> Flow<T>.assertValues(expectedValues: List<T>) {
-  assertThat(toList()).containsExactlyElementsOf(expectedValues)
 }
