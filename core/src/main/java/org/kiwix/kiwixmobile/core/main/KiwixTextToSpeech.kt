@@ -102,10 +102,7 @@ class KiwixTextToSpeech internal constructor(
     } else {
       val locale = iSO3ToLocale(zimReaderContainer.language)
       if ("mul" == zimReaderContainer.language) {
-        Log.d(
-          TAG_KIWIX, "TextToSpeech: disabled " +
-            zimReaderContainer.language
-        )
+        Log.d(TAG_KIWIX, "TextToSpeech: disabled " + zimReaderContainer.language)
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
@@ -161,15 +158,15 @@ class KiwixTextToSpeech internal constructor(
     )
     Log.d(TAG_KIWIX, "Audio Focus Requested")
     synchronized(focusLock) {
-      return@requestAudioFocus audioFocusRequest ==
-        AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+      return@requestAudioFocus audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
   }
 
   fun pauseOrResume() {
     currentTTSTask?.let {
       if (it.paused) {
-        requestAudioFocus()
+        if (!requestAudioFocus()) return@pauseOrResume
+        it.start()
       } else {
         it.pause()
       }
@@ -181,12 +178,14 @@ class KiwixTextToSpeech internal constructor(
   }
 
   /**
-   * Releases the resources used by the engine.
+   * Releases the resources and [OnAudioFocusChangeListener] used by the engine.
    *
    * @see android.speech.tts.TextToSpeech.shutdown
+   * {@link https://developer.android.com/guide/topics/media-apps/audio-focus#audio-focus-change }
    */
   fun shutdown() {
     tts.shutdown()
+    am.abandonAudioFocus(onAudioFocusChangeListener)
   }
 
   /**

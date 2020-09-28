@@ -687,19 +687,21 @@ public abstract class CoreReaderFragment extends BaseFragment
         });
       }
     }, focusChange -> {
-      Log.d(TAG_KIWIX, "Focus change: " + focusChange);
-      if (tts.currentTTSTask == null) {
-        tts.stop();
-        return;
-      }
-      switch (focusChange) {
-        case (AudioManager.AUDIOFOCUS_LOSS):
-          if (!tts.currentTTSTask.paused) tts.pauseOrResume();
-          pauseTTSButton.setText(R.string.tts_resume);
-          break;
-        case (AudioManager.AUDIOFOCUS_GAIN):
-          pauseTTSButton.setText(R.string.tts_pause);
-          break;
+      if (tts != null) {
+        Log.d(TAG_KIWIX, "Focus change: " + focusChange);
+        if (tts.currentTTSTask == null) {
+          tts.stop();
+          return;
+        }
+        switch (focusChange) {
+          case (AudioManager.AUDIOFOCUS_LOSS):
+            if (!tts.currentTTSTask.paused) tts.pauseOrResume();
+            pauseTTSButton.setText(R.string.tts_resume);
+            break;
+          case (AudioManager.AUDIOFOCUS_GAIN):
+            pauseTTSButton.setText(R.string.tts_pause);
+            break;
+        }
       }
     }, zimReaderContainer);
   }
@@ -746,8 +748,10 @@ public abstract class CoreReaderFragment extends BaseFragment
     unbinder.unbind();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
-    tts.shutdown();
-    tts = null;
+    if (tts != null) {
+      tts.shutdown();
+      tts = null;
+    }
   }
 
   private void updateTableOfContents() {
@@ -1194,6 +1198,9 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     updateBottomToolbarVisibility();
     updateNightMode();
+    if (tts == null) {
+      setUpTTS();
+    }
   }
 
   private void openFullScreenIfEnabled() {
@@ -1503,9 +1510,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   public void onPause() {
     super.onPause();
     saveTabStates();
+    if (tts != null) {
+      tts.stop();
+    }
     Log.d(TAG_KIWIX,
       "onPause Save current zim file to preferences: " + zimReaderContainer.getZimCanonicalPath());
   }
+
 
   @Override
   public void webViewUrlLoading() {

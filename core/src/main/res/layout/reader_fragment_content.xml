@@ -59,6 +59,49 @@
         tools:progress="70" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top"
+      app:layout_anchor="@id/bottom_toolbar">
+
+      <Button
+        android:id="@+id/activity_main_button_pause_tts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0.6"
+        android:text="@string/tts_pause"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/activity_main_button_stop_tts"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <Button
+        android:id="@+id/activity_main_button_stop_tts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0.6"
+        android:text="@string/stop"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/activity_main_button_pause_tts"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+      <androidx.constraintlayout.widget.Group
+        android:id="@+id/activity_main_tts_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="activity_main_button_pause_tts,activity_main_button_stop_tts"
+        tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <include layout="@layout/bottom_toolbar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -71,6 +114,8 @@
       app:layout_anchor="@id/bottom_toolbar"
       app:layout_dodgeInsetEdges="bottom"
       tools:visibility="visible" />
+
+
   </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
 
   <ImageButton
@@ -87,38 +132,6 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:visibility="visible" />
 
-  <Button
-    android:id="@+id/activity_main_button_pause_tts"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:alpha="0.6"
-    android:text="@string/tts_pause"
-    android:textStyle="bold"
-    android:visibility="gone"
-    app:layout_constraintBottom_toTopOf="parent"
-    app:layout_constraintEnd_toStartOf="@id/activity_main_button_stop_tts"
-    app:layout_constraintHorizontal_chainStyle="packed"
-    app:layout_constraintStart_toStartOf="parent" />
-
-  <Button
-    android:id="@+id/activity_main_button_stop_tts"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:alpha="0.6"
-    android:text="@string/stop"
-    android:textStyle="bold"
-    android:visibility="gone"
-    app:layout_constraintBottom_toTopOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@id/activity_main_button_pause_tts" />
-
-  <androidx.constraintlayout.widget.Group
-    android:id="@+id/activity_main_tts_controls"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:visibility="gone"
-    app:constraint_referenced_ids="activity_main_button_pause_tts,activity_main_button_stop_tts"
-    tools:visibility="visible" />
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/snackbar_root"
