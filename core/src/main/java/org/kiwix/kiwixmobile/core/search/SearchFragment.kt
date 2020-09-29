@@ -27,19 +27,22 @@ import android.view.MenuItem.OnActionExpandListener
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
+import androidx.core.view.isVisible
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_search.searchViewAnimator
+import kotlinx.android.synthetic.main.fragment_search.searchLoadingIndicator
+import kotlinx.android.synthetic.main.fragment_search.searchNoResults
 import kotlinx.android.synthetic.main.fragment_search.search_list
+import kotlinx.coroutines.flow.collect
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
+import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchAdapter
@@ -55,10 +58,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
-import org.kiwix.kiwixmobile.core.search.viewmodel.State
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
@@ -72,7 +73,6 @@ class SearchFragment : BaseFragment() {
   private lateinit var searchInTextMenuItem: MenuItem
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
-  private val compositeDisposable = CompositeDisposable()
   private val searchAdapter: SearchAdapter by lazy {
     SearchAdapter(
       RecentSearchDelegate(::onItemClick, ::onItemClickNewTab) {
@@ -104,9 +104,9 @@ class SearchFragment : BaseFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    compositeDisposable.add(searchViewModel.effects.subscribe {
-      it.invokeWith(requireActivity() as CoreMainActivity)
-    })
+    lifecycleScope.launchWhenCreated {
+      searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
+    }
   }
 
   private fun setupToolbar(view: View) {
@@ -121,7 +121,6 @@ class SearchFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    compositeDisposable.clear()
     closeKeyboard()
   }
 
@@ -147,28 +146,18 @@ class SearchFragment : BaseFragment() {
       searchViewModel.actions.offer(ClickedSearchInText)
       true
     }
-
-    searchViewModel.state.observe(this, Observer(::render))
+    lifecycleScope.launchWhenCreated {
+      searchViewModel.state.collect { render(it) }
+    }
     searchViewModel.actions.offer(Action.CreatedWithArguments(arguments))
   }
 
-  private fun render(state: State) {
+  private fun render(state: SearchState) {
     searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
-    when (state) {
-      is Results -> {
-        searchViewAnimator.setDistinctDisplayedChild(0)
-        searchAdapter.items = state.values
-        render(state.searchString)
-      }
-      is NoResults -> {
-        searchViewAnimator.setDistinctDisplayedChild(1)
-        render(state.searchString)
-      }
-    }
-  }
-
-  private fun render(searchString: String) {
-    searchInTextMenuItem.isEnabled = searchString.isNotBlank()
+    searchInTextMenuItem.isEnabled = state.searchTerm.isNotBlank()
+    searchLoadingIndicator.isShowing(state.isLoading)
+    searchNoResults.isVisible = state.visibleResults.isEmpty()
+    searchAdapter.items = state.visibleResults
   }
 
   private fun onItemClick(it: SearchListItem) {
@@ -182,5 +171,13 @@ class SearchFragment : BaseFragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     searchViewModel.actions.offer(ActivityResultReceived(requestCode, resultCode, data))
+  }
+}
+
+private fun ContentLoadingProgressBar.isShowing(show: Boolean) {
+  if (show) {
+    show()
+  } else {
+    hide()
   }
 }

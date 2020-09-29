@@ -18,33 +18,49 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import javax.inject.Inject
 
 interface SearchResultGenerator {
-  fun generateSearchResults(searchTerm: String): List<SearchListItem>
+  suspend fun generateSearchResults(
+    searchTerm: String,
+    zimFileReader: ZimFileReader?
+  ): List<SearchListItem>
 }
 
-class ZimSearchResultGenerator @Inject constructor(
-  private val zimReaderContainer: ZimReaderContainer
-) : SearchResultGenerator {
-  override fun generateSearchResults(searchTerm: String) =
-    if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm, zimReaderContainer.copyReader())
-    else emptyList()
+class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
 
-  private fun readResultsFromZim(
-    it: String,
+  override suspend fun generateSearchResults(searchTerm: String, zimFileReader: ZimFileReader?) =
+    withContext(Dispatchers.IO) {
+      if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm, zimFileReader)
+      else emptyList()
+    }
+
+  private suspend fun readResultsFromZim(
+    searchTerm: String,
     reader: ZimFileReader?
   ) =
-    reader?.searchSuggestions(it, 200).run { suggestionResults(reader) }
+    reader.also { yield() }
+      ?.searchSuggestions(searchTerm, 200)
+      .also { yield() }
+      .run { suggestionResults(reader) }
 
-  private fun suggestionResults(reader: ZimFileReader?) = generateSequence {
-    reader?.getNextSuggestion()?.let { ZimSearchResultListItem(it.title) }
+  private suspend fun suggestionResults(reader: ZimFileReader?) = createList {
+    yield()
+    reader?.getNextSuggestion()
+      ?.let { ZimSearchResultListItem(it.title) }
   }
     .distinct()
     .toList()
-    .also { reader?.dispose() }
+
+  private suspend fun <T> createList(readSearchResult: suspend () -> T?): List<T> {
+    return mutableListOf<T>().apply {
+      while (true) readSearchResult()?.let(::add) ?: break
+    }
+  }
 }

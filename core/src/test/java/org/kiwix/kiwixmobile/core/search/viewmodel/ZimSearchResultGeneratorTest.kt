@@ -21,33 +21,26 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 internal class ZimSearchResultGeneratorTest {
 
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
-  private val zimReaderContainer: ZimReaderContainer = mockk()
   private val zimFileReader: ZimFileReader = mockk()
 
   private val zimSearchResultGenerator: ZimSearchResultGenerator =
-    ZimSearchResultGenerator(zimReaderContainer)
-
-  @BeforeEach
-  internal fun setUp() {
-    every { zimReaderContainer.copyReader() } returns zimFileReader
-  }
+    ZimSearchResultGenerator()
 
   @Test
   internal fun `empty search term returns empty list`() {
-    assertThat(zimSearchResultGenerator.generateSearchResults(""))
-      .isEqualTo(emptyList<ZimSearchResultListItem>())
+    runBlocking {
+      assertThat(zimSearchResultGenerator.generateSearchResults("", zimFileReader))
+        .isEqualTo(emptyList<ZimSearchResultListItem>())
+    }
   }
 
   @Test
@@ -58,11 +51,12 @@ internal class ZimSearchResultGeneratorTest {
     every { zimFileReader.searchSuggestions(" ", 200) } returns true
     every { zimFileReader.getNextSuggestion() } returnsMany listOf(item, item, null)
     every { item.title } returns validTitle
-    assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm))
-      .isEqualTo(listOf(ZimSearchResultListItem(validTitle)))
-    verify {
-      zimFileReader.searchSuggestions(searchTerm, 200)
-      zimFileReader.dispose()
+    runBlocking {
+      assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimFileReader))
+        .isEqualTo(listOf(ZimSearchResultListItem(validTitle)))
+      verify {
+        zimFileReader.searchSuggestions(searchTerm, 200)
+      }
     }
   }
 }

@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 inline fun <reified T : ViewModel> Fragment.viewModel(
   viewModelFactory: ViewModelProvider.Factory
@@ -39,3 +40,5 @@ fun Fragment.closeKeyboard() {
     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
   inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 }
+
+val Fragment.coreMainActivity get() = activity as CoreMainActivity

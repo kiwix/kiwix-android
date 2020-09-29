@@ -23,6 +23,7 @@ import dagger.Provides
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.FlowBuilder
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
@@ -57,8 +58,10 @@ open class DatabaseModule {
   @Provides @Singleton fun providesNewBookmarksDao(boxStore: BoxStore): NewBookmarksDao =
     NewBookmarksDao(boxStore.boxFor())
 
-  @Provides @Singleton fun providesNewRecentSearchDao(boxStore: BoxStore): NewRecentSearchDao =
-    NewRecentSearchDao(boxStore.boxFor())
+  @Provides @Singleton fun providesNewRecentSearchDao(
+    boxStore: BoxStore,
+    flowBuilder: FlowBuilder
+  ): NewRecentSearchDao = NewRecentSearchDao(boxStore.boxFor(), flowBuilder)
 
   @Provides @Singleton fun providesFetchDownloadDao(
     boxStore: BoxStore,

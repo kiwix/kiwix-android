@@ -32,7 +32,7 @@ class ServiceWorkerInitialiser @Inject constructor(zimReaderContainer: ZimReader
       ServiceWorkerControllerCompat.getInstance()
         .setServiceWorkerClient(object : ServiceWorkerClientCompat() {
           override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? =
-            zimReaderContainer.load(request.url.toString())
+            zimReaderContainer.load(request.url.toString(), request.requestHeaders)
         })
     }
   }

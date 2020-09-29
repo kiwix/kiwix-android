@@ -26,7 +26,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
@@ -35,7 +35,7 @@ import java.util.Locale
 
 internal class StartSpeechInputTest {
 
-  private val actions = mockk<PublishProcessor<Action>>(relaxed = true)
+  private val actions = mockk<Channel<Action>>(relaxed = true)
 
   @Test
   fun `when invoke with throws exception offer StartSpeechInputFailed action`() {

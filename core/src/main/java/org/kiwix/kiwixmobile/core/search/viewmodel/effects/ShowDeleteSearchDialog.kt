@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 data class ShowDeleteSearchDialog(
   private val searchListItem: SearchListItem,
-  private val actions: PublishProcessor<Action>
+  private val actions: Channel<Action>
 ) : SideEffect<Unit> {
 
   @Inject lateinit var dialogShower: DialogShower
