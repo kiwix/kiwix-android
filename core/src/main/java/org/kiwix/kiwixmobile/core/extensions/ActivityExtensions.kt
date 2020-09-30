@@ -27,15 +27,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.navigation.NavDirections
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 object ActivityExtensions {
+
+  private val Activity.coreMainActivity: CoreMainActivity get() = this as CoreMainActivity
 
   fun AppCompatActivity.startActionMode(
     menuId: Int,
@@ -81,23 +85,49 @@ object ActivityExtensions {
       .get(T::class.java)
 
   fun Activity.navigate(action: NavDirections) {
-    (this as CoreMainActivity).navigate(action)
+    coreMainActivity.navigate(action)
   }
 
   val Activity.cachedComponent: CoreActivityComponent
-    get() = (this as CoreMainActivity).cachedComponent
+    get() = coreMainActivity.cachedComponent
 
   fun Activity.setupDrawerToggle(toolbar: Toolbar) =
-    (this as CoreMainActivity).setupDrawerToggle(toolbar)
+    coreMainActivity.setupDrawerToggle(toolbar)
 
   fun Activity.navigate(fragmentId: Int) {
-    (this as CoreMainActivity).navigate(fragmentId)
+    coreMainActivity.navigate(fragmentId)
   }
 
   fun Activity.navigate(fragmentId: Int, bundle: Bundle) {
-    (this as CoreMainActivity).navigate(fragmentId, bundle)
+    coreMainActivity.navigate(fragmentId, bundle)
   }
 
-  val Activity.coreActivityComponent
-    get() = CoreApp.coreComponent.activityComponentBuilder().activity(this).build()
+  fun Activity.popNavigationBackstack() {
+    coreMainActivity.navController.popBackStack()
+  }
+
+  private fun <T> Activity.getObservableNavigationResult(key: String = "result") =
+    coreMainActivity.navController.currentBackStackEntry?.savedStateHandle
+      ?.getLiveData<T>(key)
+
+  fun <T> Activity.observeNavigationResult(
+    key: String,
+    owner: LifecycleOwner,
+    observer: Observer<T>
+  ) {
+    getObservableNavigationResult<T>(key)?.observe(owner) {
+      observer.onChanged(it)
+      coreMainActivity.consumeObservable<T>(key)
+    }
+  }
+
+  fun <T> Activity.consumeObservable(key: String = "result") =
+    coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.remove<T>(key)
+
+  fun <T> Activity.setNavigationResult(result: T, key: String = "result") {
+    coreMainActivity.navController.previousBackStackEntry?.savedStateHandle?.set(
+      key,
+      result
+    )
+  }
 }

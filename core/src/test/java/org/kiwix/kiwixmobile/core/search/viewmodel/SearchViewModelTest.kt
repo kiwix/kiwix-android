@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import android.content.Intent
+import android.os.Bundle
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -53,7 +53,7 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultL
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithArguments
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
@@ -64,12 +64,12 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.FinishActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchArgumentProcessing
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessing
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
@@ -143,9 +143,10 @@ internal class SearchViewModelTest {
 
   @Nested
   inner class ActionMapping {
+
     @Test
-    fun `ExitedSearch offers Finish`() = runBlockingTest {
-      actionResultsInEffects(ExitedSearch, FinishActivity)
+    fun `ExitedSearch offers PopFragmentBackstack`() = runBlockingTest {
+      actionResultsInEffects(ExitedSearch, PopFragmentBackstack)
     }
 
     @Test
@@ -193,16 +194,16 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `CreatedWithIntent offers SearchIntentProcessing`() = runBlockingTest {
-      val intent = mockk<Intent>()
+    fun `CreatedWithArguments offers SearchArgumentProcessing`() = runBlockingTest {
+      val bundle = mockk<Bundle>()
       actionResultsInEffects(
-        CreatedWithIntent(intent),
-        SearchIntentProcessing(intent, viewModel.actions)
+        CreatedWithArguments(bundle),
+        SearchArgumentProcessing(bundle, viewModel.actions)
       )
     }
 
     @Test
-    fun `ReceivedPromptForSpeechInput offers SearchIntentProcessing`() = runBlockingTest {
+    fun `ReceivedPromptForSpeechInput offers StartSpeechInput`() = runBlockingTest {
       actionResultsInEffects(
         ReceivedPromptForSpeechInput,
         StartSpeechInput(viewModel.actions)

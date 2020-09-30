@@ -33,7 +33,7 @@ data class SaveLanguagesAndFinish(
     Flowable.fromCallable { languageDao.insert(languages) }
       .subscribeOn(Schedulers.io())
       .subscribe({
-        activity.finish()
+        activity.onBackPressed()
       }, Throwable::printStackTrace)
   }
 }

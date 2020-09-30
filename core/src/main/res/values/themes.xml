@@ -76,7 +76,7 @@
     <item name="materialCardViewStyle">@style/Widget.KiwixTheme.CardView</item>
     <item name="bottomNavigationStyle">@style/Widget.KiwixTheme.BottomNavigationView</item>
     <item name="bottomAppBarStyle">@style/Widget.KiwixTheme.BottomAppBar</item>
-    <item name="toolbarStyle">@style/Widget.KiwixTheme.Toolbar</item>
+    <item name="toolbarStyle">@style/Widget.KiwixTheme.Toolbar.PrimarySurface</item>
     <item name="tabStyle">@style/Widget.KiwixTheme.TabLayout</item>
     <item name="appBarLayoutStyle">@style/Widget.KiwixTheme.AppBar</item>
   </style>

@@ -27,26 +27,30 @@ import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
-import android.widget.Button
-import android.widget.TextView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_zim_host.recyclerViewZimHost
+import kotlinx.android.synthetic.main.activity_zim_host.serverTextView
+import kotlinx.android.synthetic.main.activity_zim_host.startServerButton
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.toast
-import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER
@@ -54,7 +58,7 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_S
 import java.util.ArrayList
 import javax.inject.Inject
 
-class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
+class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   @Inject
   internal lateinit var presenter: ZimHostContract.Presenter
 
@@ -63,17 +67,16 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   @Inject
   internal lateinit var alertDialogShower: AlertDialogShower
-  private lateinit var recyclerViewZimHost: RecyclerView
-  private lateinit var toolbar: Toolbar
-  private lateinit var startServerButton: Button
-  private lateinit var serverTextView: TextView
+
+  @Inject
+  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
   private lateinit var booksAdapter: BooksOnDiskAdapter
   private lateinit var bookDelegate: BookOnDiskDelegate.BookDelegate
   private var hotspotService: HotspotService? = null
   private var ip: String? = null
   private var serviceConnection: ServiceConnection? = null
   private var progressDialog: ProgressDialog? = null
-  private val tag = "ZimHostActivity"
 
   private val selectedBooksPath: ArrayList<String>
     get() {
@@ -93,14 +96,19 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
         as ArrayList<String>
     }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_zim_host)
-    recyclerViewZimHost = findViewById(R.id.recyclerViewZimHost)
-    toolbar = findViewById(R.id.toolbar)
-    startServerButton = findViewById(R.id.startServerButton)
-    serverTextView = findViewById(R.id.serverTextView)
-    setUpToolbar()
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View = inflater.inflate(R.layout.activity_zim_host, container, false)
+
+  override fun inject(baseActivity: BaseActivity) {
+    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    setUpToolbar(view)
 
     bookDelegate =
       BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, multiSelectAction = ::select)
@@ -114,20 +122,17 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     presenter.attachView(this)
 
     serviceConnection = object : ServiceConnection {
+      override fun onServiceDisconnected(name: ComponentName?) {
+        /*do nothing*/
+      }
 
       override fun onServiceConnected(className: ComponentName, service: IBinder) {
         hotspotService = (service as HotspotService.HotspotBinder).service
-        hotspotService!!.registerCallBack(this@ZimHostActivity)
+        hotspotService!!.registerCallBack(this@ZimHostFragment)
       }
-
-      override fun onServiceDisconnected(arg0: ComponentName) {}
     }
 
     startServerButton.setOnClickListener { startStopServer() }
-  }
-
-  override fun injection(coreComponent: CoreComponent) {
-    kiwixActivityComponent.inject(this)
   }
 
   private fun startStopServer() {
@@ -146,15 +151,15 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   private fun startKiwixHotspot() {
     progressDialog = ProgressDialog.show(
-      this,
+      requireActivity(),
       getString(R.string.progress_dialog_starting_server), "",
       true
     )
-    startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
+    requireActivity().startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
   }
 
   private fun stopServer() {
-    startService(createHotspotIntent(ACTION_STOP_SERVER))
+    requireActivity().startService(createHotspotIntent(ACTION_STOP_SERVER))
   }
 
   private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
@@ -179,16 +184,15 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun bindService() {
-    bindService(
-      Intent(this, HotspotService::class.java), serviceConnection,
+    requireActivity().bindService(
+      Intent(requireActivity(), HotspotService::class.java), serviceConnection,
       Context.BIND_AUTO_CREATE
     )
   }
 
   private fun unbindService() {
     hotspotService?.let {
-      unbindService(serviceConnection)
-      it.registerCallBack(null)
+      requireActivity().unbindService(serviceConnection)
     }
   }
 
@@ -227,18 +231,19 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
     booksAdapter.notifyDataSetChanged()
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
+  override fun onDestroyView() {
+    super.onDestroyView()
+    recyclerViewZimHost.adapter = null
+    hotspotService?.registerCallBack(null)
     presenter.detachView()
   }
 
-  private fun setUpToolbar() {
-    setSupportActionBar(toolbar)
-    supportActionBar!!.title = getString(R.string.menu_host_books)
-    supportActionBar!!.setHomeButtonEnabled(true)
-    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-    toolbar.setNavigationOnClickListener { onBackPressed() }
+  private fun setUpToolbar(view: View) {
+    val activity = requireActivity() as AppCompatActivity
+    activity.setSupportActionBar(view.findViewById(R.id.toolbar))
+    activity.supportActionBar!!.title = getString(R.string.menu_host_books)
+    activity.supportActionBar!!.setHomeButtonEnabled(true)
+    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
   }
 
   // Advice user to turn on hotspot manually for API<26
@@ -266,7 +271,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun createHotspotIntent(action: String): Intent =
-    Intent(this, HotspotService::class.java).setAction(action)
+    Intent(requireActivity(), HotspotService::class.java).setAction(action)
 
   override fun onServerStarted(ip: String) {
     this.ip = ip
@@ -297,7 +302,7 @@ class ZimHostActivity : BaseActivity(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onIpAddressValid() {
     progressDialog!!.dismiss()
-    startService(
+    requireActivity().startService(
       createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
         SELECTED_ZIM_PATHS_KEY, selectedBooksPath
       )

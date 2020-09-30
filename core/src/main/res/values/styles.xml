@@ -24,7 +24,7 @@
     <item name="backgroundTint">@color/black</item>
   </style>
 
-  <style name="Widget.KiwixTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
+  <style name="Widget.KiwixTheme.Toolbar.PrimarySurface" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
     <item name="android:background">@color/black</item>
   </style>
 
@@ -32,7 +32,7 @@
     <item name="android:background">@color/black</item>
   </style>
 
-  <style name="ThemeOverlay.KiwixTheme.Launcher" parent="">
+  <style name="KiwixTheme.Launcher">
     <item name="android:windowBackground">@drawable/launch_screen</item>
   </style>
 
@@ -47,6 +47,7 @@
     <item name="android:textAlignment" tools:ignore="NewApi">center</item>
     <item name="android:textColor">?textSecondary</item>
   </style>
+
 
   <style name="list_item_title" parent="TextAppearance.KiwixTheme.Subtitle1" />
 

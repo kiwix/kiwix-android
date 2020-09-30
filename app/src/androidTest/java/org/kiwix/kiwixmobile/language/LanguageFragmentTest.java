@@ -22,6 +22,7 @@ import android.Manifest;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import org.junit.After;
@@ -31,6 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -42,6 +44,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -49,8 +52,11 @@ import static org.kiwix.kiwixmobile.testutils.Matcher.childAtPosition;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 
 @RunWith(AndroidJUnit4.class)
-public class LanguageActivityTest {
+public class LanguageFragmentTest {
 
+  @Rule
+  public ActivityTestRule<KiwixMainActivity> activityTestRule =
+    new ActivityTestRule<>(KiwixMainActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -65,8 +71,8 @@ public class LanguageActivityTest {
 
   @Test
   @Ignore("Covert to kotlin/robot")
-  public void testLanguageActivity() {
-    onView(withText("Online")).perform(click());
+  public void testLanguageFragment() {
+    clickOn(R.string.download);
     // Open the Language Activity
     onView(withContentDescription("Choose a language")).perform(click());
 

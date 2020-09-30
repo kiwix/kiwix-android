@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true"
-  tools:context=".help.HelpActivity">
+  tools:context=".help.HelpFragment">
 
   <include layout="@layout/layout_standard_app_bar" />
 

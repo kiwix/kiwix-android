@@ -18,21 +18,20 @@
 
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 
 data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
   SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val selectedFileShareIntent = Intent()
-    selectedFileShareIntent.action = Intent.ACTION_SEND_MULTIPLE
-    selectedFileShareIntent.type = "application/octet-stream"
     val selectedFileContentURIs = selectedBooks.mapNotNull {
       if (Build.VERSION.SDK_INT >= 24) {
         FileProvider.getUriForFile(
@@ -44,17 +43,9 @@ data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
         Uri.fromFile(it.file)
       }
     }
-    selectedFileShareIntent.putParcelableArrayListExtra(
-      Intent.EXTRA_STREAM,
-      ArrayList(selectedFileContentURIs)
+    activity.navigate(
+      R.id.localFileTransferFragment,
+      bundleOf(URIS_KEY to selectedFileContentURIs.toTypedArray())
     )
-    selectedFileShareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-    val shareChooserIntent = Intent.createChooser(
-      selectedFileShareIntent,
-      activity.getString(R.string.selected_file_cab_app_chooser_title)
-    )
-    if (shareChooserIntent.resolveActivity(activity.packageManager) != null) {
-      activity.startActivity(shareChooserIntent) // Open the app chooser dialog
-    }
   }
 }

@@ -16,17 +16,17 @@
  *
  */
 
-package org.kiwix.kiwixmobile.settings
+package org.kiwix.kiwixmobile.custom.settings
 
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
-import org.kiwix.kiwixmobile.kiwixActivityComponent
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.settings.CoreSettingsFragment
+import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 
-class KiwixSettingsActivity : CoreSettingsActivity() {
+class CustomSettingsFragment : CoreSettingsFragment() {
 
-  override fun injection(coreComponent: CoreComponent) {
-    kiwixActivityComponent.inject(this)
+  override fun createPreferenceFragment() = CustomPrefsFragment()
+
+  override fun inject(baseActivity: BaseActivity) {
+    (baseActivity as CustomMainActivity).cachedComponent.inject(this)
   }
-
-  override fun createPreferenceFragment() = KiwixPrefsFragment()
 }

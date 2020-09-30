@@ -18,24 +18,30 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import android.app.Activity
-import android.content.Intent
+import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.parcel.Parcelize
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResult
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 
 data class OpenSearchItem(
   private val searchListItem: SearchListItem,
   private val openInNewTab: Boolean = false
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.setResult(
-      Activity.RESULT_OK,
-      Intent().putExtra(TAG_FILE_SEARCHED, searchListItem.value)
-        .putExtra(TAG_FILE_SEARCHED_NEW_TAB, openInNewTab)
+    activity.setNavigationResult(
+      SearchItemToOpen(searchListItem.value, openInNewTab),
+      TAG_FILE_SEARCHED
     )
-    activity.finish()
+    activity.popNavigationBackstack()
   }
 }
+
+@Parcelize
+data class SearchItemToOpen(
+  val pageTitle: String,
+  val shouldOpenInNewTab: Boolean
+) : Parcelable
