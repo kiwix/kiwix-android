@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.base
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
 import butterknife.Unbinder
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -45,7 +44,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
   override fun setContentView(@LayoutRes layoutResID: Int) {
     super.setContentView(layoutResID)
-    unbinder = ButterKnife.bind(this)
+    // unbinder = ButterKnife.bind(this)
   }
 
   override fun onDestroy() {
