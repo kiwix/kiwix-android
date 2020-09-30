@@ -41,7 +41,11 @@ class HelpFragmentTest : BaseActivityTest<KiwixMainActivity>() {
       clickOnWhereIsContent()
       assertWhereIsContentIsExpanded()
       clickOnWhereIsContent()
+      clickOnSendDiagnosticReport()
+      assertIsDiagnosticScreenTitleVisible()
+      pressBack()
       clickOnSendFeedback()
+      pressBack()
     }
   }
 }

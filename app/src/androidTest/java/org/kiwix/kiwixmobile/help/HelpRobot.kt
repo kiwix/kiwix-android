@@ -17,14 +17,17 @@
  */
 package org.kiwix.kiwixmobile.help
 
+import applyWithViewHierarchyPrinting
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
 
-fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
+fun help(func: HelpRobot.() -> Unit) = HelpRobot().applyWithViewHierarchyPrinting(func)
 
 class HelpRobot : BaseRobot() {
 
@@ -68,6 +71,14 @@ class HelpRobot : BaseRobot() {
 
   fun clickOnSendFeedback() {
     clickOn(ViewId(id.activity_help_feedback_text_view))
+  }
+
+  fun clickOnSendDiagnosticReport() {
+    clickOn(ViewId(R.id.activity_help_diagnostic_text_view))
+  }
+
+  fun assertIsDiagnosticScreenTitleVisible() {
+    assertDisplayed(R.id.textView2)
   }
 
   private fun helpTextFormat(vararg stringIds: Int) =
