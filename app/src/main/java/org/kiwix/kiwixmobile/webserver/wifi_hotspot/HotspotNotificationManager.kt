@@ -61,8 +61,6 @@ class HotspotNotificationManager @Inject constructor(
       .setGraph(R.navigation.kiwix_nav_graph)
       .setDestination(R.id.zimHostFragment)
       .createPendingIntent()
-    // val contentIntent =
-    //   PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     hotspotNotificationChannel()
     val stopIntent = Intent(context, HotspotService::class.java).setAction(
       HotspotService.ACTION_STOP_SERVER
