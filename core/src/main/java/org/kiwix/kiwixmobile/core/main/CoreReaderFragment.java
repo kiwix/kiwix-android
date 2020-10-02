@@ -439,10 +439,8 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
-
-      @Override
-      public void sectionsLoaded(String title,
-        List<? extends TableDrawerAdapter.DocumentSection> sections) {
+      @Override public void sectionsLoaded(@NotNull String title,
+        @NotNull List<TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -452,8 +450,7 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
       }
 
-      @Override
-      public void clearSections() {
+      @Override public void clearSections() {
         documentSections.clear();
         if (tableDrawerAdapter != null) {
           tableDrawerAdapter.notifyDataSetChanged();
@@ -505,22 +502,20 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private TableDrawerAdapter setupTableDrawerAdapter() {
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
-    tableDrawerAdapter.setTableClickListener(new TableDrawerAdapter.TableClickListener() {
-      @Override
-      public void onHeaderClick(View view) {
-        getCurrentWebView().setScrollY(0);
-        drawerLayout.closeDrawer(GravityCompat.END);
-      }
+    TableDrawerAdapter tableDrawerAdapter =
+      new TableDrawerAdapter(new TableDrawerAdapter.TableClickListener() {
+        @Override public void onHeaderClick(@NotNull View view) {
+          getCurrentWebView().setScrollY(0);
+          drawerLayout.closeDrawer(GravityCompat.END);
+        }
 
-      @Override
-      public void onSectionClick(View view, int position) {
-        loadUrlWithCurrentWebview("javascript:document.getElementById('"
-          + documentSections.get(position).id
-          + "').scrollIntoView();");
-        drawerLayout.closeDrawers();
-      }
-    });
+        @Override public void onSectionClick(@NotNull View view, int position) {
+          loadUrlWithCurrentWebview("javascript:document.getElementById('"
+            + documentSections.get(position).getId()
+            + "').scrollIntoView();");
+          drawerLayout.closeDrawers();
+        }
+      });
     return tableDrawerAdapter;
   }
 
@@ -730,7 +725,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     actionBar = null;
     mainMenu = null;
     tabRecyclerView.setAdapter(null);
-    tableDrawerAdapter.setTableClickListener(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
     webViewList.clear();
@@ -1427,7 +1421,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     Log.d(TAG_KIWIX,
       "onPause Save current zim file to preferences: " + zimReaderContainer.getZimCanonicalPath());
   }
-
 
   @Override
   public void webViewUrlLoading() {
