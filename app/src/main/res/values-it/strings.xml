@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Beta16
+-->
+<resources>
+  <string name="send_files_title">Invia file</string>
+  <string name="receive_files_title">Ricevi file</string>
+</resources>
