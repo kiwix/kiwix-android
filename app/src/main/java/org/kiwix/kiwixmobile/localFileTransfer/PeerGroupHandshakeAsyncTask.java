@@ -163,15 +163,14 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
   @Override
   protected void onPostExecute(InetAddress inetAddress) {
-    if (inetAddress != null){
+    if (inetAddress != null) {
       wifiDirectManager.setClientAddress(inetAddress);
-    }else{
+    } else {
       if (BuildConfig.DEBUG) {
-        Log.d(TAG, "Starting handshake again");
+        Log.d(TAG, "InetAddress is null");
       }
-      wifiDirectManager.displayToast(R.string.connection_refused,"", Toast.LENGTH_LONG);
-      PeerGroupHandshakeAsyncTask peerGroupHandshakeAsyncTask = new PeerGroupHandshakeAsyncTask(wifiDirectManager);
-      peerGroupHandshakeAsyncTask.execute();
+      wifiDirectManager.displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG);
+      wifiDirectManager.onFileTransferAsyncTaskComplete(false);
     }
   }
 }
