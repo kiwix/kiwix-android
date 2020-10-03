@@ -30,12 +30,17 @@ open class OnSwipeTouchListener @SuppressLint("SyntheticAccessor")
 constructor(ctx: Context?) : OnTouchListener {
   private val gestureDetector: GestureDetector
 
+  init {
+    gestureDetector = GestureDetector(ctx, GestureListener())
+  }
+
   companion object {
     private const val SWIPE_THRESHOLD = 100
     private const val SWIPE_VELOCITY_THRESHOLD = 100
   }
 
-  @SuppressLint("ClickableViewAccessibility") override fun onTouch(
+  @SuppressLint("ClickableViewAccessibility")
+  override fun onTouch(
     v: View,
     event: MotionEvent
   ): Boolean = gestureDetector.onTouchEvent(event)
@@ -48,6 +53,7 @@ constructor(ctx: Context?) : OnTouchListener {
       return super.onSingleTapUp(e)
     }
 
+    @SuppressWarnings("TooGenericExceptionCaught")
     override fun onFling(
       e1: MotionEvent,
       e2: MotionEvent,
@@ -69,8 +75,8 @@ constructor(ctx: Context?) : OnTouchListener {
             }
             result = true
           }
-        } else if (abs(diffY) > Companion.SWIPE_THRESHOLD
-          && abs(velocityY) > Companion.SWIPE_VELOCITY_THRESHOLD
+        } else if (abs(diffY) > Companion.SWIPE_THRESHOLD &&
+          abs(velocityY) > Companion.SWIPE_VELOCITY_THRESHOLD
         ) {
           if (diffY > 0) {
             onSwipeBottom()
@@ -88,11 +94,11 @@ constructor(ctx: Context?) : OnTouchListener {
 
   open fun onSwipeRight() {}
   open fun onSwipeLeft() {}
-  fun onSwipeTop() {}
+
+  @SuppressWarnings("EmptyFunctionBlock")
+  fun onSwipeTop() {
+  }
+
   open fun onSwipeBottom() {}
   open fun onTap(e: MotionEvent?) {}
-
-  init {
-    gestureDetector = GestureDetector(ctx, GestureListener())
-  }
 }
