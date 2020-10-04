@@ -32,7 +32,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import com.cprcrack.videowebview.VideoEnabledWebView
 import io.reactivex.disposables.CompositeDisposable
-import org.kiwix.kiwixmobile.core.BuildConfig
+import kiwix.org.kiwixlib.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
@@ -46,6 +46,7 @@ import javax.inject.Inject
 
 private const val INITIAL_SCALE = 100
 
+@Suppress("LeakingThis")
 @SuppressLint("ViewConstructor")
 @SuppressWarnings("LongParameterList")
 open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
@@ -57,7 +58,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   webViewClient: CoreWebViewClient
 ) : VideoEnabledWebView(context, attrs) {
   @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  open lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
@@ -87,7 +88,10 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     setInitialScale(INITIAL_SCALE)
     clearCache(true)
     setWebViewClient(webViewClient)
-    webChromeClient = KiwixWebChromeClient(callback, nonVideoView, videoView, this).apply {
+    webChromeClient = KiwixWebChromeClient(
+      callback, nonVideoView,
+      videoView, this
+    ).apply {
       setOnToggledFullscreen { fullscreen ->
         setWindowVisibility(
           if (fullscreen) View.SYSTEM_UI_FLAG_LOW_PROFILE else View.SYSTEM_UI_FLAG_VISIBLE

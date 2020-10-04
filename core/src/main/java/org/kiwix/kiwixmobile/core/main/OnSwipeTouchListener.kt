@@ -15,86 +15,85 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.main
 
-package org.kiwix.kiwixmobile.core.main;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnTouchListener
+import kotlin.math.abs
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
+open class OnSwipeTouchListener @SuppressLint("SyntheticAccessor")
+constructor(ctx: Context?) : OnTouchListener {
+  private val gestureDetector: GestureDetector
 
-public class OnSwipeTouchListener implements View.OnTouchListener {
-  private final GestureDetector gestureDetector;
-
-  @SuppressLint("SyntheticAccessor")
-  public OnSwipeTouchListener(Context ctx) {
-    gestureDetector = new GestureDetector(ctx, new GestureListener());
+  init {
+    gestureDetector = GestureDetector(ctx, GestureListener())
   }
 
-  @Override
+  companion object {
+    private const val SWIPE_THRESHOLD = 100
+    private const val SWIPE_VELOCITY_THRESHOLD = 100
+  }
+
   @SuppressLint("ClickableViewAccessibility")
-  public boolean onTouch(View v, MotionEvent event) {
-    return gestureDetector.onTouchEvent(event);
-  }
+  override fun onTouch(
+    v: View,
+    event: MotionEvent
+  ): Boolean = gestureDetector.onTouchEvent(event)
 
-  private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
-    private static final int SWIPE_THRESHOLD = 100;
-    private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+  private inner class GestureListener : SimpleOnGestureListener() {
+    override fun onDown(e: MotionEvent): Boolean = true
 
-    @Override
-    public boolean onDown(MotionEvent e) {
-      return true;
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+      onTap(e)
+      return super.onSingleTapUp(e)
     }
 
-    @Override public boolean onSingleTapUp(MotionEvent e) {
-      onTap(e);
-      return super.onSingleTapUp(e);
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-      boolean result = false;
+    override fun onFling(
+      e1: MotionEvent,
+      e2: MotionEvent,
+      velocityX: Float,
+      velocityY: Float
+    ): Boolean {
+      var result = false
       try {
-        float diffY = e2.getY() - e1.getY();
-        float diffX = e2.getX() - e1.getX();
-        if (Math.abs(diffX) > Math.abs(diffY)) {
-          if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+        val diffY = e2.y - e1.y
+        val diffX = e2.x - e1.x
+        if (abs(diffX) > abs(diffY)) {
+          if (abs(diffX) > Companion.SWIPE_THRESHOLD &&
+            abs(velocityX) > Companion.SWIPE_VELOCITY_THRESHOLD
+          ) {
             if (diffX > 0) {
-              onSwipeRight();
+              onSwipeRight()
             } else {
-              onSwipeLeft();
+              onSwipeLeft()
             }
-            result = true;
+            result = true
           }
-        } else if (Math.abs(diffY) > SWIPE_THRESHOLD
-          && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+        } else if (abs(diffY) > Companion.SWIPE_THRESHOLD
+          && abs(velocityY) > Companion.SWIPE_VELOCITY_THRESHOLD
+        ) {
           if (diffY > 0) {
-            onSwipeBottom();
+            onSwipeBottom()
           } else {
-            onSwipeTop();
+            onSwipeTop()
           }
-          result = true;
+          result = true
         }
-      } catch (Exception exception) {
-        exception.printStackTrace();
+      } catch (exception: Exception) {
+        exception.printStackTrace()
       }
-      return result;
+      return result
     }
   }
 
-  public void onSwipeRight() {
-  }
-
-  public void onSwipeLeft() {
-  }
-
-  public void onSwipeTop() {
-  }
-
-  public void onSwipeBottom() {
-  }
-
-  public void onTap(MotionEvent e) {
-  }
+  open fun onSwipeRight() {}
+  open fun onSwipeLeft() {}
+  fun onSwipeTop() {}
+  open fun onSwipeBottom() {}
+  open fun onTap(e: MotionEvent?) {}
 }

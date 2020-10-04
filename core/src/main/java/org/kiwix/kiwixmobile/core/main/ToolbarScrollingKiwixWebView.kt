@@ -15,123 +15,124 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.main
 
-package org.kiwix.kiwixmobile.core.main;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import org.kiwix.kiwixmobile.core.utils.DimenUtils;
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
+@SuppressLint("ViewConstructor")
+class ToolbarScrollingKiwixWebView(
+  context: Context?,
+  callback: WebViewCallback?,
+  attrs: AttributeSet?,
+  nonVideoView: ViewGroup?,
+  videoView: ViewGroup?,
+  webViewClient: CoreWebViewClient?,
+  private val toolbarView: View,
+  private val bottomBarView: View,
+  override var sharedPreferenceUtil: SharedPreferenceUtil
+) : KiwixWebView(context!!, callback!!, attrs!!, nonVideoView!!, videoView!!, webViewClient!!) {
 
-@SuppressLint("ViewConstructor") public class ToolbarScrollingKiwixWebView extends KiwixWebView {
-
-  private final int toolbarHeight = DimenUtils.getToolbarHeight(getContext());
-  private final View toolbarView;
-  private final View bottomBarView;
-  private View parentNavigationBar = null;
-  private final SharedPreferenceUtil sharedPreferenceUtil;
-  private float startY;
-
-  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
-    ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient, View toolbarView,
-    View bottomBarView, View parentNavigationBar, SharedPreferenceUtil sharedPreferenceUtil) {
-    this(context, callback, attrs, nonVideoView, videoView, webViewClient, toolbarView,
-      bottomBarView, sharedPreferenceUtil);
-    this.parentNavigationBar = parentNavigationBar;
+  init {
+    fixInitalScrollingIssue()
   }
 
-  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
-    ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient, View toolbarView,
-    View bottomBarView, SharedPreferenceUtil sharedPreferenceUtil) {
-    super(context, callback, attrs, nonVideoView, videoView, webViewClient);
-    this.toolbarView = toolbarView;
-    this.bottomBarView = bottomBarView;
-    this.sharedPreferenceUtil = sharedPreferenceUtil;
-    fixInitalScrollingIssue();
+  private val toolbarHeight = getContext().getToolbarHeight()
+  private var parentNavigationBar: View? = null
+  private var startY = 0f
+
+  constructor(
+    context: Context?,
+    callback: WebViewCallback?,
+    attrs: AttributeSet?,
+    nonVideoView: ViewGroup?,
+    videoView: ViewGroup?,
+    webViewClient: CoreWebViewClient?,
+    toolbarView: View,
+    bottomBarView: View,
+    parentNavigationBar: View?,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ) : this(
+    context, callback, attrs, nonVideoView, videoView, webViewClient, toolbarView,
+    bottomBarView, sharedPreferenceUtil
+  ) {
+    this.parentNavigationBar = parentNavigationBar
   }
 
   /**
    * The webview needs to be scrolled with 0 to not be slightly hidden on startup.
    * See https://github.com/kiwix/kiwix-android/issues/2304 for issue description.
    */
-  private void fixInitalScrollingIssue() {
-    moveToolbar(0);
+  private fun fixInitalScrollingIssue() {
+    moveToolbar(0)
   }
 
-  private boolean moveToolbar(int scrollDelta) {
-    float newTranslation;
-    float originalTranslation = toolbarView.getTranslationY();
-    if (scrollDelta > 0) {
+  private fun moveToolbar(scrollDelta: Int): Boolean {
+    val newTranslation: Float
+    val originalTranslation = toolbarView.translationY
+    newTranslation = if (scrollDelta > 0) {
       // scroll down
-      newTranslation = Math.max(-toolbarHeight, originalTranslation - scrollDelta);
+      (-toolbarHeight.toFloat()).coerceAtLeast(originalTranslation - scrollDelta)
     } else {
       // scroll up
-      newTranslation = Math.min(0, originalTranslation - scrollDelta);
+      0f.coerceAtMost(originalTranslation - scrollDelta)
     }
-
-    toolbarView.setTranslationY(newTranslation);
-    bottomBarView.setTranslationY(
-      newTranslation * -1 * (bottomBarView.getHeight() / (float) (toolbarHeight)));
+    toolbarView.translationY = newTranslation
+    bottomBarView.translationY =
+      newTranslation * -1 * (bottomBarView.height / toolbarHeight.toFloat())
     if (parentNavigationBar != null) {
-      parentNavigationBar.setTranslationY(
-        newTranslation * -1 * (parentNavigationBar.getHeight() / (float) (toolbarHeight)));
+      parentNavigationBar!!.translationY =
+        newTranslation * -1 * (parentNavigationBar!!.height / toolbarHeight.toFloat())
     }
-    this.setTranslationY(newTranslation + toolbarHeight);
-    return toolbarHeight + newTranslation != 0 && newTranslation != 0;
+    this.translationY = newTranslation + toolbarHeight
+    return toolbarHeight + newTranslation != 0f && newTranslation != 0f
   }
 
   @SuppressLint("ClickableViewAccessibility")
-  @Override
-  public boolean onTouchEvent(MotionEvent event) {
-    int transY = (int) toolbarView.getTranslationY();
-
-    switch (event.getActionMasked()) {
-      case MotionEvent.ACTION_DOWN:
-        startY = event.getRawY();
-        break;
-      case MotionEvent.ACTION_MOVE:
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    val transY = toolbarView.translationY.toInt()
+    when (event.actionMasked) {
+      MotionEvent.ACTION_DOWN -> startY = event.rawY
+      MotionEvent.ACTION_MOVE -> {
         // If we are in fullscreen don't scroll bar
-        if (sharedPreferenceUtil.getPrefFullScreen()) {
-          return super.onTouchEvent(event);
+        if (sharedPreferenceUtil.prefFullScreen) {
+          return super.onTouchEvent(event)
         }
         // Filter out zooms since we don't want to affect the toolbar when zooming
-        if (event.getPointerCount() == 1) {
-          int diffY = (int) (event.getRawY() - startY);
-          startY = event.getRawY();
+        if (event.pointerCount == 1) {
+          val diffY = (event.rawY - startY).toInt()
+          startY = event.rawY
           if (moveToolbar(-diffY)) {
-            event.offsetLocation(0, -diffY);
-            return super.onTouchEvent(event);
+            event.offsetLocation(0f, -diffY.toFloat())
+            return super.onTouchEvent(event)
           }
         }
-        break;
-      // If the toolbar is half-visible,
-      // either open or close it entirely depending on how far it is visible
-      case MotionEvent.ACTION_UP:
-      case MotionEvent.ACTION_CANCEL:
+      }
+      MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
         if (transY != 0 && transY > -toolbarHeight) {
-          if (transY > (-toolbarHeight) / 2) {
-            ensureToolbarDisplayed();
+          if (transY > -toolbarHeight / 2) {
+            ensureToolbarDisplayed()
           } else {
-            ensureToolbarHidden();
+            ensureToolbarHidden()
           }
         }
-        break;
-      default:
-        // Do nothing for all the other things
-        break;
+      else -> {
+      }
     }
-    return super.onTouchEvent(event);
+    return super.onTouchEvent(event)
   }
 
-  public void ensureToolbarDisplayed() {
-    moveToolbar(-toolbarHeight);
+  private fun ensureToolbarDisplayed() {
+    moveToolbar(-toolbarHeight)
   }
 
-  private void ensureToolbarHidden() {
-    moveToolbar(toolbarHeight);
+  private fun ensureToolbarHidden() {
+    moveToolbar(toolbarHeight)
   }
 }
