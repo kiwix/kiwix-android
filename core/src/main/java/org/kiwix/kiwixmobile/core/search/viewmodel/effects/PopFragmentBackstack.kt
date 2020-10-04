@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 
 object PopFragmentBackstack : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    (activity as CoreMainActivity).navController.popBackStack()
+    activity.popNavigationBackstack()
   }
 }

@@ -35,10 +35,6 @@
       android:value="true" />
 
     <activity
-      android:name=".search.SearchActivity"
-      android:windowSoftInputMode="adjustResize" />
-
-    <activity
       android:name=".error.ErrorActivity"
       android:process=":error_activity" />
 
@@ -52,11 +48,6 @@
         android:resource="@xml/provider_paths" />
     </provider>
 
-    <activity android:name=".help.HelpActivity">
-      <meta-data
-        android:name="android.support.PARENT_ACTIVITY"
-        android:value=".main.CoreMainActivity" />
-    </activity>
     <activity android:name=".error.DiagnosticReportActivity" />
 
   </application>

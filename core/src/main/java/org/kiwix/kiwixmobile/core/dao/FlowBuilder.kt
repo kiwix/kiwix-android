@@ -16,13 +16,21 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects
+package org.kiwix.kiwixmobile.core.dao
 
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
+import io.objectbox.query.Query
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.flow.callbackFlow
+import javax.inject.Inject
 
-object FinishActivity : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    activity.finish()
-  }
+class FlowBuilder @Inject constructor() {
+  @OptIn(ExperimentalCoroutinesApi::class)
+  fun <T> buildCallbackFlow(query: Query<T>) =
+    callbackFlow<List<T>> {
+      val subscription = query.subscribe()
+        .observer { sendBlocking(it) }
+      awaitClose(subscription::cancel)
+    }
 }

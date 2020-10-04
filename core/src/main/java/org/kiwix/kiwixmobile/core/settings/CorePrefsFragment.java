@@ -20,14 +20,13 @@ package org.kiwix.kiwixmobile.core.settings;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.NavController;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -46,12 +45,12 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.NightModeConfig;
 import org.kiwix.kiwixmobile.core.R;
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog;
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
 
@@ -150,9 +149,10 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   }
 
   private void restartActivity() {
-    getActivity().setResult(RESULT_RESTART);
-    getActivity().finish();
-    getActivity().startActivity(new Intent(getActivity(), getActivity().getClass()));
+    final CoreMainActivity activity = (CoreMainActivity) getActivity();
+    final NavController navController = activity.getNavController();
+    navController.popBackStack();
+    navController.navigate(activity.getSettingsFragmentResId());
   }
 
   @NotNull private String selectedLanguage(List<String> languageCodeList, String langPref) {
@@ -196,14 +196,12 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     if (key.equals(PREF_NIGHT_MODE)) {
       sharedPreferenceUtil.updateNightMode();
-      restartActivity();
     }
   }
 
   private void clearAllHistoryDialog() {
     alertDialogShower.show(KiwixDialog.ClearAllHistory.INSTANCE, () -> {
       presenter.clearHistory();
-      CoreSettingsActivity.allHistoryCleared = true;
       Snackbar.make(getView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show();
       return Unit.INSTANCE;
     });

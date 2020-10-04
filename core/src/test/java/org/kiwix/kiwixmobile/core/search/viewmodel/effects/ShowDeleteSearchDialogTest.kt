@@ -22,9 +22,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.search.SearchActivity
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
@@ -35,12 +35,12 @@ internal class ShowDeleteSearchDialogTest {
 
   @Test
   fun `invoke with shows dialog that offers ConfirmedDelete action`() {
-    val actions = mockk<PublishProcessor<Action>>(relaxed = true)
+    val actions = mockk<Channel<Action>>(relaxed = true)
     val searchListItem = RecentSearchListItem("")
-    val activity = mockk<SearchActivity>()
+    val activity = mockk<CoreMainActivity>()
     val showDeleteSearchDialog = ShowDeleteSearchDialog(searchListItem, actions)
     val dialogShower = mockk<DialogShower>()
-    every { activity.activityComponent.inject(showDeleteSearchDialog) } answers {
+    every { activity.cachedComponent.inject(showDeleteSearchDialog) } answers {
       showDeleteSearchDialog.dialogShower = dialogShower
       Unit
     }

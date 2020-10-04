@@ -44,13 +44,12 @@ import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
-import org.kiwix.kiwixmobile.core.help.HelpActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.search.SearchActivity
+import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
-import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
+import org.kiwix.kiwixmobile.core.settings.CoreSettingsFragment
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Singleton
@@ -104,8 +103,7 @@ interface CoreComponent {
   fun inject(storageSelectDialog: StorageSelectDialog)
 
   fun inject(errorActivity: ErrorActivity)
-  fun inject(searchActivity: SearchActivity)
+  fun inject(searchFragment: SearchFragment)
 
-  fun inject(helpActivity: HelpActivity)
-  fun inject(settingsActivity: CoreSettingsActivity)
+  fun inject(settingsFragment: CoreSettingsFragment)
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+  <string name="send_files_title">The title of an activity used for sending files.</string>
+  <string name="receive_files_title">The titles of an activity used for receiving files.</string>
+</resources>

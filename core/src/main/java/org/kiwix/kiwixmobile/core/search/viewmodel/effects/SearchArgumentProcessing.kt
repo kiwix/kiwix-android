@@ -19,41 +19,36 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import android.annotation.TargetApi
-import android.content.Intent
 import android.os.Build.VERSION_CODES
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
-import org.kiwix.kiwixmobile.core.utils.EXTRA_SEARCH
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
-data class SearchIntentProcessing(
-  private val intent: Intent?,
-  private val actions: PublishProcessor<Action>
+data class SearchArgumentProcessing(
+  private val bundle: Bundle?,
+  private val actions: Channel<Action>
 ) : SideEffect<Unit> {
   @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {
-    intent?.let {
+    bundle?.let {
       actions.offer(
         ScreenWasStartedFrom(
-          if (it.getBooleanExtra(TAG_FROM_TAB_SWITCHER, false)) FromTabView
+          if (it.getBoolean(TAG_FROM_TAB_SWITCHER, false)) FromTabView
           else FromWebView
         )
       )
-      if (it.hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
-        actions.offer(Filter(it.getStringExtra(Intent.EXTRA_PROCESS_TEXT)))
-      }
-      if (intent.hasExtra(EXTRA_SEARCH)) {
-        actions.offer(Filter(intent.getStringExtra(EXTRA_SEARCH)))
-      }
-      if (intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false)) {
+      actions.offer(Filter(it.getString(NAV_ARG_SEARCH_STRING, "")))
+      if (it.getBoolean(EXTRA_IS_WIDGET_VOICE, false)) {
         actions.offer(ReceivedPromptForSpeechInput)
       }
     }

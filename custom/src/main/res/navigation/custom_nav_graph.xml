@@ -28,6 +28,14 @@
       android:name="pageUrl"
       android:defaultValue=""
       app:argType="string" />
+    <argument
+      android:name="findInPageSearchString"
+      android:defaultValue=""
+      app:argType="string" />
+    <argument
+      android:name="shouldOpenInNewTab"
+      android:defaultValue="false"
+      app:argType="boolean" />
   </fragment>
   <fragment
     android:id="@+id/historyFragment"
@@ -37,4 +45,16 @@
     android:id="@+id/bookmarksFragment"
     android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
     android:label="BookmarksFragment" />
+  <fragment
+    android:id="@+id/helpFragment"
+    android:name="org.kiwix.kiwixmobile.core.help.HelpFragment"
+    android:label="HelpFragment" />
+  <fragment
+    android:id="@+id/customSettingsFragment"
+    android:name="org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment"
+    android:label="CustomSettingsFragment" />
+  <fragment
+    android:id="@+id/searchFragment"
+    android:name="org.kiwix.kiwixmobile.core.search.SearchFragment"
+    android:label="SearchFragment" />
 </navigation>

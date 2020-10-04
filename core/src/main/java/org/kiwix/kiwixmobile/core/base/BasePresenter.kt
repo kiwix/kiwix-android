@@ -34,8 +34,6 @@ abstract class BasePresenter<T : View<*>?> : Presenter<T> {
 
   override fun detachView() {
     view = null
-    if (!compositeDisposable.isDisposed) {
-      compositeDisposable.dispose()
-    }
+    compositeDisposable.clear()
   }
 }

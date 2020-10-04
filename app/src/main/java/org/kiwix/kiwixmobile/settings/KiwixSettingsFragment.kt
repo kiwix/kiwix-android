@@ -15,27 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.help
 
-import androidx.test.rule.ActivityTestRule
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.help.HelpActivity
+package org.kiwix.kiwixmobile.settings
 
-class HelpActivityTest : BaseActivityTest<HelpActivity>() {
+import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.settings.CoreSettingsFragment
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
-  override var activityRule: ActivityTestRule<HelpActivity> = activityTestRule()
+class KiwixSettingsFragment : CoreSettingsFragment() {
 
-  @Test
-  fun verifyHelpActivity() {
-    help {
-      clickOnWhatDoesKiwixDo()
-      assertWhatDoesKiwixDoIsExpanded()
-      clickOnWhatDoesKiwixDo()
-      clickOnWhereIsContent()
-      assertWhereIsContentIsExpanded()
-      clickOnWhereIsContent()
-      clickOnSendFeedback()
-    }
+  override fun createPreferenceFragment() = KiwixPrefsFragment()
+
+  override fun inject(baseActivity: BaseActivity) {
+    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
   }
 }

@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.utils.ServerUtils;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 
-import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS_KEY;
+import static org.kiwix.kiwixmobile.webserver.ZimHostFragment.SELECTED_ZIM_PATHS_KEY;
 import static org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID;
 
 /**

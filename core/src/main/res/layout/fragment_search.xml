@@ -1,0 +1,40 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:animateLayoutChanges="true"
+  android:fitsSystemWindows="true"
+  android:orientation="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/search_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+  </LinearLayout>
+
+  <TextView
+    android:id="@+id/searchNoResults"
+    style="@style/no_content_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:text="@string/no_results" />
+
+  <androidx.core.widget.ContentLoadingProgressBar
+    android:id="@+id/searchLoadingIndicator"
+    style="?android:attr/progressBarStyleLarge"
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

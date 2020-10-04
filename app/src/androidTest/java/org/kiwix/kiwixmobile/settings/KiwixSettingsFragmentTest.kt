@@ -17,12 +17,30 @@
  */
 package org.kiwix.kiwixmobile.settings
 
+import android.Manifest
+import androidx.test.rule.ActivityTestRule
+import androidx.test.rule.GrantPermissionRule
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.utils.StandardActions
 
-class KiwixSettingsActivityTest : BaseActivityTest<KiwixSettingsActivity>() {
+class KiwixSettingsFragmentTest {
+  @Rule @JvmField var activityTestRule = ActivityTestRule(
+    KiwixMainActivity::class.java
+  )
 
-  override var activityRule = activityTestRule<KiwixSettingsActivity>()
+  @Rule @JvmField var readPermissionRule: GrantPermissionRule =
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
+
+  @Rule @JvmField var writePermissionRule: GrantPermissionRule =
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+  @Before fun setup() {
+    StandardActions.openDrawer()
+    StandardActions.enterSettings()
+  }
 
   @Test
   fun testSettingsActivity() {

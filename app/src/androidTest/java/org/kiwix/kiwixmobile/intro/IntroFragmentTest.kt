@@ -15,18 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.intro
 
-package org.kiwix.kiwixmobile.custom.settings
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
+import org.junit.Test
+import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.settings.CoreSettingsActivity
-import org.kiwix.kiwixmobile.custom.customActivityComponent
+class IntroFragmentTest : BaseActivityTest<KiwixMainActivity>() {
 
-class CustomSettingsActivity : CoreSettingsActivity() {
+  override var activityRule = activityTestRule<KiwixMainActivity>()
 
-  override fun injection(coreComponent: CoreComponent) {
-    customActivityComponent.inject(this)
+  @Test
+  fun viewIsSwipeableAndNavigatesToMain() {
+    runOnUiThread { activityRule.activity.navigate(R.id.introFragment) }
+    intro(IntroRobot::swipeLeft) clickGetStarted { }
   }
-
-  override fun createPreferenceFragment() = CustomPrefsFragment()
 }

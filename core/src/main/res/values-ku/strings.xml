@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Authors:
+<?xml version="1.0" encoding="utf-8"?><!-- Authors:
 * Balyozxane
 * Bikarhêner
 * George Animal
@@ -140,7 +139,6 @@
   <string name="tts_not_enabled">Ji bo vê peldanka ZIM-ê xwendina nivîsê ne ya sepandinê ye</string>
   <string name="texttospeech_initialization_failed">Destpêkirina Nivîsê-kirin-Xeberdanê bi ser neket. Ji kerema xwe cardin biceribîne</string>
   <string name="texttospeech_error">Çewtiyeke nehêvîkirî rû da di Nivîsê-kirin-Xeberdanê (Text to Speech) de. Ji kerema xwe cardin biceribîne</string>
-  <string name="search_error">Çewtiyeke nehêvîkirî di lêgerînê de derket holê. Ji kerema xwe cardin biceribîne</string>
   <string name="next">Pêşve</string>
   <string name="previous">Yê berê</string>
   <string name="wifi_only_title">Bira ji tora mobîlê destûra daxistina naverokê bê dayîn?</string>

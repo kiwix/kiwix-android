@@ -34,6 +34,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
@@ -41,6 +42,8 @@ import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
@@ -49,11 +52,16 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
+import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
+import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -77,11 +85,31 @@ class KiwixReaderFragment : CoreReaderFragment() {
     activity.setupDrawerToggle(toolbar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
     openPageInBookFromNavigationArguments()
+
+    requireActivity().observeNavigationResult<String>(
+      FIND_IN_PAGE_SEARCH_STRING,
+      viewLifecycleOwner,
+      Observer(this::findInPage)
+    )
+    requireActivity().observeNavigationResult<SearchItemToOpen>(
+      TAG_FILE_SEARCHED,
+      viewLifecycleOwner,
+      Observer(::openSearchItem)
+    )
+  }
+
+  private fun openSearchItem(item: SearchItemToOpen) {
+    zimReaderContainer.titleToUrl(item.pageTitle)?.let {
+      if (item.shouldOpenInNewTab) {
+        createNewTab()
+      }
+      loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(it))
+    }
+    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
 
   private fun openPageInBookFromNavigationArguments() {
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
-
     if (args.pageUrl.isNotEmpty()) {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)

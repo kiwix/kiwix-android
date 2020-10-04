@@ -20,22 +20,27 @@ package org.kiwix.kiwixmobile.core.help
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DividerItemDecoration
-import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_image_view
-import kotlinx.android.synthetic.main.activity_help.activity_help_feedback_text_view
-import kotlinx.android.synthetic.main.activity_help.activity_help_recycler_view
-import kotlinx.android.synthetic.main.activity_help.diagnostic_clickable_area
+import kotlinx.android.synthetic.main.fragment_help.activity_help_feedback_image_view
+import kotlinx.android.synthetic.main.fragment_help.activity_help_feedback_text_view
+import kotlinx.android.synthetic.main.fragment_help.activity_help_recycler_view
+import kotlinx.android.synthetic.main.fragment_help.diagnostic_clickable_area
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.CONTACT_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 
-class HelpActivity : BaseActivity() {
+class HelpFragment : BaseFragment() {
   private val titleDescriptionMap by lazy {
     listOf(
       R.string.help_2 to R.array.description_help_2,
@@ -46,38 +51,45 @@ class HelpActivity : BaseActivity() {
     }
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_help)
+  override fun inject(baseActivity: BaseActivity) {
+    (baseActivity as CoreMainActivity).cachedComponent.inject(this)
+  }
 
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    val activity = requireActivity() as AppCompatActivity
     activity_help_feedback_text_view.setOnClickListener { sendFeedback() }
     activity_help_feedback_image_view.setOnClickListener { sendFeedback() }
     diagnostic_clickable_area.setOnClickListener { sendDiagnosticReport() }
-    setSupportActionBar(toolbar)
-    toolbar.setNavigationOnClickListener { onBackPressed() }
-    supportActionBar?.let {
+    activity.setSupportActionBar(toolbar)
+    toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+    activity.supportActionBar?.let {
       it.setDisplayHomeAsUpEnabled(true)
       it.setTitle(R.string.menu_help)
     }
     activity_help_recycler_view.addItemDecoration(
-      DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+      DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     )
     activity_help_recycler_view.adapter = HelpAdapter(titleDescriptionMap)
   }
 
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View = inflater.inflate(R.layout.fragment_help, container, false)
+
   private fun sendDiagnosticReport() {
-    start<DiagnosticReportActivity>()
+    requireActivity().start<DiagnosticReportActivity>()
   }
 
   private fun sendFeedback() {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = ("mailto:${Uri.encode(CONTACT_EMAIL_ADDRESS)}" +
-      "?subject=${Uri.encode("Feedback in ${getCurrentLocale(this).displayLanguage}")}")
+      "?subject=${Uri.encode(
+        "Feedback in ${getCurrentLocale(requireActivity()).displayLanguage}"
+      )}")
       .toUri()
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"))
-  }
-
-  override fun injection(coreComponent: CoreComponent) {
-    coreComponent.inject(this)
   }
 }

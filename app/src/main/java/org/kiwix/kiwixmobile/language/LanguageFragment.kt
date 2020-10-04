@@ -19,8 +19,12 @@
 package org.kiwix.kiwixmobile.language
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,11 +34,12 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_language.language_progressbar
 import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
-import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
@@ -48,10 +53,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import javax.inject.Inject
 
-class LanguageActivity : BaseActivity() {
-  override fun injection(coreComponent: CoreComponent) {
-    kiwixActivityComponent.inject(this)
-  }
+class LanguageFragment : BaseFragment() {
 
   private val languageViewModel by lazy { viewModel<LanguageViewModel>(viewModelFactory) }
 
@@ -65,12 +67,16 @@ class LanguageActivity : BaseActivity() {
       HeaderDelegate()
     )
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_language)
-    setSupportActionBar(findViewById(R.id.toolbar))
+  override fun inject(baseActivity: BaseActivity) {
+    baseActivity.cachedComponent.inject(this)
+  }
 
-    supportActionBar?.let {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    val activity = requireActivity() as CoreMainActivity
+    activity.setSupportActionBar(view.findViewById(R.id.toolbar))
+
+    activity.supportActionBar?.let {
       it.setDisplayHomeAsUpEnabled(true)
       it.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
       it.setTitle(R.string.select_languages)
@@ -80,15 +86,24 @@ class LanguageActivity : BaseActivity() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    languageViewModel.state.observe(this, Observer(::render))
+    languageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
     compositeDisposable.add(
       languageViewModel.effects.subscribe(
         {
-          it.invokeWith(this)
+          it.invokeWith(activity)
         },
         Throwable::printStackTrace
       )
     )
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    setHasOptionsMenu(true)
+    return inflater.inflate(R.layout.activity_language, container, false)
   }
 
   override fun onDestroy() {
@@ -105,26 +120,22 @@ class LanguageActivity : BaseActivity() {
     Saving -> Unit
   }
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_language, menu)
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super.onCreateOptionsMenu(menu, inflater)
+    inflater.inflate(R.menu.menu_language, menu)
     val search = menu.findItem(R.id.menu_language_search)
     (search.actionView as SearchView).setOnQueryTextListener(SimpleTextListener {
       languageViewModel.actions.offer(Filter(it))
     })
-    return true
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      android.R.id.home -> {
-        onBackPressed()
-        return true
-      }
+    return when (item.itemId) {
       R.id.menu_language_save -> {
         languageViewModel.actions.offer(Action.SaveAll)
-        return true
+        true
       }
+      else -> super.onOptionsItemSelected(item)
     }
-    return super.onOptionsItemSelected(item)
   }
 }

@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,19 +15,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.intro
 
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+package org.kiwix.kiwixmobile.core.search.viewmodel
 
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
+import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
-  override var activityRule = activityTestRule<IntroActivity>()
-
-  @Test
-  fun viewIsSwipeableAndNavigatesToMain() {
-    intro {
-      swipeLeft()
-    } clickGetStarted { }
+data class SearchState(
+  val searchTerm: String,
+  val searchResultsWithTerm: SearchResultsWithTerm,
+  val recentResults: List<SearchListItem.RecentSearchListItem>,
+  val searchOrigin: SearchOrigin
+) {
+  val visibleResults = when {
+    searchTerm.isNotEmpty() -> searchResultsWithTerm.results
+    else -> recentResults
   }
+
+  val isLoading = searchTerm != searchResultsWithTerm.searchTerm
+}
+
+enum class SearchOrigin {
+  FromWebView,
+  FromTabView
 }
