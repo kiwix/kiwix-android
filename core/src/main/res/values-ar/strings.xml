@@ -142,11 +142,10 @@
   <string name="tts_not_enabled">لم يتم تمكين النص إلى الكلام لملف زيم (ZIM) هذا</string>
   <string name="texttospeech_initialization_failed">فشل تهيئة النص إلى كلام. حاول مرةً أخرى</string>
   <string name="texttospeech_error">خطأٌ غير متوقع في تحويل النص إلى كلام. حاول مرةً أخرى</string>
-
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
-  <string name="wifi_only_msg">إذا اخترت \“نعم\”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
+  <string name="wifi_only_msg">إذا اخترت “نعم”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
   <string name="pref_wifi_only">تنزيل المحتوى عبر واي فاي فقط</string>
   <string name="time_day">يوم</string>
   <string name="time_hour">ساعة</string>

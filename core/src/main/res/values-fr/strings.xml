@@ -150,7 +150,6 @@
   <string name="tts_not_enabled">La synthèse vocale n’est pas activée pour ce fichier ZIM</string>
   <string name="texttospeech_initialization_failed">L’initialisation de Texte en Paroles a échoué. Veuillez réessayer</string>
   <string name="texttospeech_error">Erreur inattendue dans Texte en Paroles. Veuillez réessayer</string>
-
   <string name="next">Suivant</string>
   <string name="previous">Précédent</string>
   <string name="wifi_only_title">Permettre le téléchargement de contenu via le réseau mobile ?</string>

@@ -135,7 +135,6 @@
   <string name="tts_not_enabled">El testu a voz nun ta activáu pa esti ficheru ZIM</string>
   <string name="texttospeech_initialization_failed">Falló aniciar el Testu a Charra. Tenta nuevamente</string>
   <string name="texttospeech_error">Fallu inesperáu nel Testu a Charra. Tenta nuevamente</string>
-
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir la descarga de conteníu pela rede móvil?</string>
