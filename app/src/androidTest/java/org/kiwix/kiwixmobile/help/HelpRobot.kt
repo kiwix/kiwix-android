@@ -70,7 +70,7 @@ class HelpRobot : BaseRobot() {
   }
 
   fun clickOnSendFeedback() {
-    clickOn(ViewId(R.id.activity_help_feedback_text_view))
+    clickOn(ViewId(id.activity_help_feedback_text_view))
   }
 
   fun clickOnSendDiagnosticReport() {
