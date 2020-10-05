@@ -70,11 +70,15 @@ class HelpRobot : BaseRobot() {
   }
 
   fun clickOnSendFeedback() {
-    clickOn(ViewId(id.activity_help_feedback_text_view))
+    clickOn(ViewId(R.id.activity_help_feedback_text_view))
   }
 
   fun clickOnSendDiagnosticReport() {
     clickOn(ViewId(R.id.activity_help_diagnostic_text_view))
+  }
+
+  fun assertEmailTitleIsVisible() {
+    isVisible(Text("Feedback in English"))
   }
 
   fun assertIsDiagnosticScreenTitleVisible() {

@@ -45,6 +45,8 @@ class HelpFragmentTest : BaseActivityTest<KiwixMainActivity>() {
       assertIsDiagnosticScreenTitleVisible()
       pressBack()
       clickOnSendFeedback()
+      assertEmailTitleIsVisible()
+      pressBack()
       pressBack()
     }
   }
