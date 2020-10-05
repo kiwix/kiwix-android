@@ -29,7 +29,6 @@ import androidx.navigation.NavDeepLinkBuilder
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.HOTSPOT_SERVICE_CHANNEL_ID
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.main.NAVIGATE_TO_ZIM_HOST_FRAGMENT
 import javax.inject.Inject
 
 class HotspotNotificationManager @Inject constructor(
@@ -51,10 +50,6 @@ class HotspotNotificationManager @Inject constructor(
   }
 
   fun buildForegroundNotification(): Notification {
-    val targetIntent = Intent(context, KiwixMainActivity::class.java).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      action = NAVIGATE_TO_ZIM_HOST_FRAGMENT
-    }
     val contentIntent = NavDeepLinkBuilder(context).setComponentName(
       KiwixMainActivity::class.java
     )
