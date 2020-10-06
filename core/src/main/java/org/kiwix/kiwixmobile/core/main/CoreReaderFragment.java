@@ -504,12 +504,12 @@ public abstract class CoreReaderFragment extends BaseFragment
   private TableDrawerAdapter setupTableDrawerAdapter() {
     TableDrawerAdapter tableDrawerAdapter =
       new TableDrawerAdapter(new TableDrawerAdapter.TableClickListener() {
-        @Override public void onHeaderClick(@NotNull View view) {
+        @Override public void onHeaderClick(View view) {
           getCurrentWebView().setScrollY(0);
           drawerLayout.closeDrawer(GravityCompat.END);
         }
 
-        @Override public void onSectionClick(@NotNull View view, int position) {
+        @Override public void onSectionClick(View view, int position) {
           loadUrlWithCurrentWebview("javascript:document.getElementById('"
             + documentSections.get(position).getId()
             + "').scrollIntoView();");

@@ -19,16 +19,15 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.graphics.Typeface
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.section_list.titleText
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R2
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import java.lang.IllegalStateException
 
 class TableDrawerAdapter constructor(private val listener: TableClickListener) :
   Adapter<ViewHolder>() {
@@ -52,10 +51,11 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     else 1
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TableDrawerViewHolder {
-    val res = R.layout.section_list
-    val context = parent.context
-    val view = LayoutInflater.from(context).inflate(res, parent, false)
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int
+  ): ViewHolder {
+    val view = parent.inflate(R.layout.section_list, false)
     if (viewType == 0) return HeaderTableDrawerViewHolder(view)
     return SectionTableDrawerViewHolder(view)
   }
@@ -63,40 +63,23 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
   override fun getItemCount(): Int = sections.size + 1
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val vh = holder as TableDrawerAdapter.TableDrawerViewHolder
-    val context = holder.itemView.context
-    vh.itemView.isActivated = holder.adapterPosition == selectedPosition
-    when (position) {
-      0 -> {
-        vh.textViewTitle.typeface = Typeface.DEFAULT_BOLD
-
-        vh.itemView.setOnClickListener { v: View ->
-          updateSelection(holder.getAdapterPosition())
+    when (holder) {
+      is HeaderTableDrawerViewHolder -> {
+        holder.bind(title)
+        holder.itemView.setOnClickListener { v: View ->
+          updateSelection(position)
           listener.onHeaderClick(v)
         }
-
-        if (title.isNotEmpty()) vh.textViewTitle.text = title
-        else {
-          var empty = context.getString(R.string.no_section_info)
-          if (context is WebViewProvider) {
-            empty =
-              context.getCurrentWebView()?.title ?: context.getString(R.string.no_section_info)
-          }
-          vh.textViewTitle.text = empty
+      }
+      is SectionTableDrawerViewHolder -> {
+        holder.bind(sections[position - 1])
+        holder.itemView.setOnClickListener { v: View? ->
+          updateSelection(position)
+          listener.onSectionClick(v, selectedPosition - 1)
         }
       }
       else -> {
-        val sectionPosition = position - 1
-        val documentSection: DocumentSection = sections[sectionPosition]
-        vh.textViewTitle.text = documentSection.title
-        val density = context.resources.displayMetrics.density
-        val padding = ((documentSection.level - 1) * PADDING_ * density).toInt()
-        vh.textViewTitle.setPadding(padding, 0, 0, 0)
-        vh.textViewTitle.text = sections[sectionPosition].title
-        vh.itemView.setOnClickListener { v: View? ->
-          updateSelection(vh.adapterPosition)
-          listener.onSectionClick(v!!, sectionPosition)
-        }
+        throw IllegalStateException("Unknown ViewHolder $holder found")
       }
     }
   }
@@ -109,27 +92,43 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     notifyItemChanged(oldPosition)
   }
 
-  open inner class TableDrawerViewHolder(v: View) : ViewHolder(v) {
-    @BindView(R2.id.titleText)
-    lateinit var textViewTitle: TextView
+  interface TableClickListener {
+    fun onHeaderClick(view: View?)
+    fun onSectionClick(view: View?, position: Int)
+  }
 
-    init {
-      ButterKnife.bind(this, v)
+  class HeaderTableDrawerViewHolder(view: View) :
+    BaseViewHolder<String>(view) {
+
+    override fun bind(item: String) {
+      val context = itemView.context
+      titleText.typeface = Typeface.DEFAULT_BOLD
+      if (item.isNotEmpty()) titleText.text = item
+      else {
+        if (context is WebViewProvider) {
+          titleText.text =
+            context.getCurrentWebView()?.title ?: context.getString(R.string.no_section_info)
+        } else titleText.text = context.getString(R.string.no_section_info)
+      }
     }
   }
 
-  inner class HeaderTableDrawerViewHolder(v: View) : TableDrawerViewHolder(v)
-
-  inner class SectionTableDrawerViewHolder(v: View) : TableDrawerViewHolder(v)
-
-  interface TableClickListener {
-    fun onHeaderClick(view: View)
-    fun onSectionClick(view: View, position: Int)
+  class SectionTableDrawerViewHolder(view: View) :
+    BaseViewHolder<TableDrawerAdapter.DocumentSection>(view) {
+    override fun bind(
+      item: TableDrawerAdapter.DocumentSection
+    ) {
+      val context = itemView.context
+      val density = context.resources.displayMetrics.density
+      val padding = ((item.level - 1) * TableDrawerAdapter.PADDING_ * density).toInt()
+      titleText.setPadding(padding, 0, 0, 0)
+      titleText.text = item.title
+    }
   }
 
   data class DocumentSection(var title: String, var id: String, var level: Int)
 
   companion object {
-    private const val PADDING_ = 16
+    const val PADDING_ = 16
   }
 }
