@@ -33,11 +33,9 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
   Adapter<ViewHolder>() {
 
   private var title: String = ""
-  private var selectedPosition: Int = 0
   private val sections: MutableList<DocumentSection> = mutableListOf()
 
   fun setSections(sections: List<DocumentSection>) {
-    selectedPosition = 0
     this.sections.clear()
     this.sections.addAll(sections)
   }
@@ -56,8 +54,11 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     viewType: Int
   ): ViewHolder {
     val view = parent.inflate(R.layout.section_list, false)
-    if (viewType == 0) return HeaderTableDrawerViewHolder(view)
-    return SectionTableDrawerViewHolder(view)
+    return if (viewType == 0) {
+      HeaderTableDrawerViewHolder(view)
+    } else {
+      SectionTableDrawerViewHolder(view)
+    }
   }
 
   override fun getItemCount(): Int = sections.size + 1
@@ -66,30 +67,18 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     when (holder) {
       is HeaderTableDrawerViewHolder -> {
         holder.bind(title)
-        holder.itemView.setOnClickListener { v: View ->
-          updateSelection(position)
-          listener.onHeaderClick(v)
-        }
+        holder.itemView.setOnClickListener(listener::onHeaderClick)
       }
       is SectionTableDrawerViewHolder -> {
         holder.bind(sections[position - 1])
-        holder.itemView.setOnClickListener { v: View? ->
-          updateSelection(position)
-          listener.onSectionClick(v, selectedPosition - 1)
+        holder.itemView.setOnClickListener {
+          listener.onSectionClick(it, position - 1)
         }
       }
       else -> {
         throw IllegalStateException("Unknown ViewHolder $holder found")
       }
     }
-  }
-
-  private fun updateSelection(position: Int) {
-    if (selectedPosition == position) return
-    val oldPosition = selectedPosition
-    selectedPosition = position
-    notifyItemChanged(selectedPosition)
-    notifyItemChanged(oldPosition)
   }
 
   interface TableClickListener {
@@ -119,15 +108,13 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     ) {
       val context = itemView.context
       val density = context.resources.displayMetrics.density
-      val padding = ((item.level - 1) * TableDrawerAdapter.PADDING_ * density).toInt()
+      val padding =
+        ((item.level - 1) * context.resources.getDimension(R.dimen.title_text_padding) * density)
+          .toInt()
       titleText.setPadding(padding, 0, 0, 0)
       titleText.text = item.title
     }
   }
 
   data class DocumentSection(var title: String, var id: String, var level: Int)
-
-  companion object {
-    const val PADDING_ = 16
-  }
 }
