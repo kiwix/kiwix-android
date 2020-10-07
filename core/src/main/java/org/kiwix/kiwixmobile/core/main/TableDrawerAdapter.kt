@@ -70,9 +70,10 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
         holder.itemView.setOnClickListener(listener::onHeaderClick)
       }
       is SectionTableDrawerViewHolder -> {
-        holder.bind(sections[position - 1])
+        val titleAdjustedPosition = position - 1
+        holder.bind(sections[titleAdjustedPosition])
         holder.itemView.setOnClickListener {
-          listener.onSectionClick(it, position - 1)
+          listener.onSectionClick(it, titleAdjustedPosition)
         }
       }
       else -> {
@@ -107,10 +108,8 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
       item: TableDrawerAdapter.DocumentSection
     ) {
       val context = itemView.context
-      val density = context.resources.displayMetrics.density
       val padding =
-        ((item.level - 1) * context.resources.getDimension(R.dimen.title_text_padding) * density)
-          .toInt()
+        ((item.level - 1) * context.resources.getDimension(R.dimen.title_text_padding)).toInt()
       titleText.setPadding(padding, 0, 0, 0)
       titleText.text = item.title
     }
