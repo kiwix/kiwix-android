@@ -47,7 +47,7 @@
     android:label="BookmarksFragment" />
   <fragment
     android:id="@+id/helpFragment"
-    android:name="org.kiwix.kiwixmobile.core.help.HelpFragment"
+    android:name="org.kiwix.kiwixmobile.custom.help.CustomHelpFragment"
     android:label="HelpFragment" />
   <fragment
     android:id="@+id/customSettingsFragment"
