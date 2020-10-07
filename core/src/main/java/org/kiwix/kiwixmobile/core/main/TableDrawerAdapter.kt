@@ -103,12 +103,11 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     override fun bind(item: String) {
       val context = itemView.context
       titleText.typeface = Typeface.DEFAULT_BOLD
-      if (item.isNotEmpty()) titleText.text = item
-      else {
-        if (context is WebViewProvider) {
-          titleText.text =
-            context.getCurrentWebView()?.title ?: context.getString(R.string.no_section_info)
-        } else titleText.text = context.getString(R.string.no_section_info)
+      titleText.text = when {
+        item.isNotEmpty() -> item
+        context is WebViewProvider -> context.getCurrentWebView()?.title
+          ?: context.getString(R.string.no_section_info)
+        else -> context.getString(R.string.no_section_info)
       }
     }
   }
