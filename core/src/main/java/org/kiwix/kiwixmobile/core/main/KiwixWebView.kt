@@ -172,7 +172,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         }.first { !it.exists() }
         val source = Uri.parse(src)
         try {
-          zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
+          zimReaderContainer.load("$source").data.use { inputStream ->
             fileToSave.outputStream().use { inputStream.copyTo(it) }
           }
           instance.toast(instance.getString(R.string.save_media_saved, fileToSave.name))
