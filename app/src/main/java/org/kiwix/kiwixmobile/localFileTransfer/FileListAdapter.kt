@@ -61,8 +61,15 @@ class FileListAdapter(private val fileItems: List<FileItem>) :
         // Icon for TO_BE_SENT is assigned by default in the item layout
         progress_bar_transferring_file.visibility = View.GONE
         when (item.fileStatus) {
-          SENT -> image_view_file_transferred.setImageResource(R.drawable.ic_baseline_check_24px)
-          ERROR -> image_view_file_transferred.setImageResource(R.drawable.ic_baseline_error_24px)
+          SENDING -> progress_bar_transferring_file.visibility = View.VISIBLE
+          SENT -> {
+            image_view_file_transferred.setImageResource(R.drawable.ic_baseline_check_24px)
+            progress_bar_transferring_file.visibility = View.GONE
+          }
+          ERROR -> {
+            image_view_file_transferred.setImageResource(R.drawable.ic_baseline_error_24px)
+            progress_bar_transferring_file.visibility = View.GONE
+          }
           else -> {
           }
         }
