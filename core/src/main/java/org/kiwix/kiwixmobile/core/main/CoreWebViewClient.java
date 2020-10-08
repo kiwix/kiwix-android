@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -142,14 +141,14 @@ public class CoreWebViewClient extends WebViewClient {
     }
   }
 
-
-  @Nullable @Override
-  public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-    final String url = convertLegacyUrl(request.getUrl().toString());
+  @Nullable
+  @Override
+  public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+    url = convertLegacyUrl(url);
     if (url.startsWith(CONTENT_PREFIX)) {
-      return zimReaderContainer.load(url, request.getRequestHeaders());
+      return zimReaderContainer.load(url);
     } else {
-      return super.shouldInterceptRequest(view, request);
+      return super.shouldInterceptRequest(view, url);
     }
   }
 }
