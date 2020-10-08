@@ -27,16 +27,16 @@ import kotlin.collections.ArrayList
 
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 
-public class DocumentParser(private var listener: DocumentParser.SectionsListener) {
+class DocumentParser(private var listener: DocumentParser.SectionsListener) {
 
   private var title: String = ""
   private var sections = ArrayList<TableDrawerAdapter.DocumentSection>()
 
-  public fun initInterface(webView: WebView) {
+  fun initInterface(webView: WebView) {
     webView.addJavascriptInterface(ParserCallback(), "DocumentParser")
   }
 
-  public interface SectionsListener {
+  interface SectionsListener {
     fun sectionsLoaded(title: String, sections: List<DocumentSection>)
 
     fun clearSections()
@@ -44,29 +44,28 @@ public class DocumentParser(private var listener: DocumentParser.SectionsListene
 
   inner class ParserCallback {
 
-    @JavascriptInterface
-    public fun parse(sectionTitle: String, element: String, id: String) {
+    @JavascriptInterface fun parse(sectionTitle: String, element: String, id: String) {
 
       if (element == "H1")
         title = sectionTitle.trim()
       else {
-        sections.add(DocumentSection().apply {
-          this.id = id
-          title = sectionTitle.trim()
-          level = element.takeLast(1).toIntOrNull() ?: 0
-        })
+        sections.add(
+          DocumentSection(
+            id = id,
+            title = sectionTitle,
+            level = element.takeLast(1).toIntOrNull() ?: 0
+          )
+        )
       }
     }
 
-    @JavascriptInterface
-    public fun start() {
+    @JavascriptInterface fun start() {
       title = ""
       sections = ArrayList()
       Handler(Looper.getMainLooper()).post(Runnable(listener::clearSections))
     }
 
-    @JavascriptInterface
-    public fun stop() {
+    @JavascriptInterface fun stop() {
       val listToBeSentToMainThread: List<DocumentSection> = ArrayList(sections)
       Handler(Looper.getMainLooper()).post {
         listener.sectionsLoaded(
