@@ -75,7 +75,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private lateinit var bookDelegate: BookOnDiskDelegate.BookDelegate
   private var hotspotService: HotspotService? = null
   private var ip: String? = null
-  private var serviceConnection: ServiceConnection? = null
+  private lateinit var serviceConnection: ServiceConnection
   private var progressDialog: ProgressDialog? = null
 
   private val selectedBooksPath: ArrayList<String>
