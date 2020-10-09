@@ -31,6 +31,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
@@ -261,6 +262,18 @@ class KiwixReaderFragment : CoreReaderFragment() {
       toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
       sharedPreferenceUtil
     )
+  }
+
+  override fun onToggledFullscreen(isFullScreen: Boolean) {
+    if (isFullScreen) {
+      requireActivity().bottom_nav_view.visibility = GONE
+      setParentFragmentsBottomMarginTo(0)
+      getCurrentWebView().translationY = 0f
+    } else {
+      requireActivity().bottom_nav_view.visibility = VISIBLE
+      val fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN
+      activity?.window?.clearFlags(fullScreenFlag)
+    }
   }
 
   override fun openFullScreen() {

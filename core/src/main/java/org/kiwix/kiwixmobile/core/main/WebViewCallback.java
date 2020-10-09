@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.main;
 
 import android.content.Intent;
+import org.jetbrains.annotations.NotNull;
 
 public interface WebViewCallback {
   void webViewUrlLoading();
@@ -36,5 +37,5 @@ public interface WebViewCallback {
 
   void webViewLongClick(String url);
 
-  void onToggledFullscreen(Boolean isFullScreen);
+  void onToggledFullscreen(@NotNull Boolean isFullScreen);
 }

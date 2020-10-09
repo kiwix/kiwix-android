@@ -751,16 +751,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  @Override public void onToggledFullscreen(Boolean isFullScreen) {
-    if (BuildConfig.DEBUG) {
-      Log.d(TAG, "onToggledFullscreen: "+ isFullScreen);
-    }
-    if (isFullScreen){
-      openFullScreen();
-    }else {
-      closeFullScreen();
-    }
-  }
 
   private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
@@ -982,6 +972,10 @@ public abstract class CoreReaderFragment extends BaseFragment
     CoreMainActivity parentActivity = (CoreMainActivity) requireActivity();
     parentActivity.navigate(parentActivity.getBookmarksFragmentResId());
     return true;
+  }
+
+  @Override public void onToggledFullscreen(@NotNull Boolean isFullScreen) {
+
   }
 
   protected void openFullScreen() {
