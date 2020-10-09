@@ -274,4 +274,6 @@
   <string name="tab_restored">Јазичето е повратено</string>
   <string name="open_drawer">Отвори фиока</string>
   <string name="close_drawer">Затвори фиока</string>
+  <string name="how_to_update_content">Како се подновува содржината?</string>
+  <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>
 </resources>

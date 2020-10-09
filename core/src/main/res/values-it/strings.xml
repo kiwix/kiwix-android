@@ -105,4 +105,5 @@
   <string name="delete_history">Cancellare tutta la cronologia?</string>
   <string name="delete_bookmarks">Cancellare tutti i segnalibri?</string>
   <string name="search_open_in_new_tab">Apri in una nuova scheda</string>
+  <string name="how_to_update_content">Come aggiornare il contenuto?</string>
 </resources>
