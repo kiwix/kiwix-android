@@ -40,6 +40,9 @@ internal class StorageViewHolder(
     )
     file_size.text = storageCalculator.calculateAvailableSpace(item.file) + " / " +
       storageCalculator.calculateTotalSpace(item.file)
-    containerView.setOnClickListener { onClickAction.invoke(item) }
+    file_name.setOnClickListener {
+      onClickAction.invoke(item)
+      file_name.toggle()
+    }
   }
 }
