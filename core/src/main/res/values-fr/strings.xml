@@ -13,6 +13,7 @@
 * Thibaut120094
 * Urhixidur
 * Verdy p
+* WikiLucas00
 * Wladek92
 * Yasten
 -->
@@ -287,4 +288,6 @@
   <string name="tab_restored">Onglet restauré</string>
   <string name="open_drawer">Ouvrir le tiroir</string>
   <string name="close_drawer">Fermer le tiroir</string>
+  <string name="how_to_update_content">Comment actualiser le contenu ?</string>
+  <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section téléchargement.</string>
 </resources>
