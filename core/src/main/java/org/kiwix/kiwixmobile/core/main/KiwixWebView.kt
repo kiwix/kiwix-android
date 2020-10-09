@@ -92,6 +92,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         setWindowVisibility(
           if (fullscreen) View.SYSTEM_UI_FLAG_LOW_PROFILE else View.SYSTEM_UI_FLAG_VISIBLE
         )
+        callback.onToggledFullscreen(fullscreen)
       }
     }
   }

@@ -35,4 +35,6 @@ public interface WebViewCallback {
   void webViewPageChanged(int page, int maxPages);
 
   void webViewLongClick(String url);
+
+  void onToggledFullscreen(Boolean isFullScreen);
 }

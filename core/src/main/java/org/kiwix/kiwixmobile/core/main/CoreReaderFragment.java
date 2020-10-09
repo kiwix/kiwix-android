@@ -119,6 +119,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
+import static android.content.ContentValues.TAG;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall;
@@ -747,6 +748,17 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected void loadUrl(String url, KiwixWebView webview) {
     if (url != null && !url.endsWith("null")) {
       webview.loadUrl(url);
+    }
+  }
+
+  @Override public void onToggledFullscreen(Boolean isFullScreen) {
+    if (BuildConfig.DEBUG) {
+      Log.d(TAG, "onToggledFullscreen: "+ isFullScreen);
+    }
+    if (isFullScreen){
+      openFullScreen();
+    }else {
+      closeFullScreen();
     }
   }
 
