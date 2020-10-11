@@ -17,98 +17,57 @@
  */
 package org.kiwix.kiwixmobile.main
 
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
-import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu
-import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
-import org.hamcrest.CoreMatchers
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.utils.StandardActions
+import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
-@LargeTest
-@RunWith(AndroidJUnit4::class)
-class MainActivityTest : BaseActivityTest<KiwixMainActivity>() {
-
+class MainActivityTest {
   @Rule
-  override var activityRule: ActivityTestRule<KiwixMainActivity> =
-    ActivityTestRule(KiwixMainActivity::class.java)
-
-  @Before
-  fun setup() {
-    clickOn(R.string.reader)
-  }
+  @JvmField
+  var activityTestRule = ActivityTestRule(KiwixMainActivity::class.java)
 
   @Test
-  fun navigateHelp() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    StandardActions.openDrawer()
-    clickOn(R.string.menu_help)
-  }
-
-  @Test
-  fun navigateSettings() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    StandardActions.openDrawer()
-    StandardActions.enterSettings()
-  }
-
-  @Test
-  fun navigateBookmarks() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    StandardActions.openDrawer()
-    clickMenu(TestUtils.getResourceString(R.string.bookmarks))
-  }
-
-  @Test
-  fun navigateDeviceContent() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickOn(R.string.library)
-  }
-
-  @Test
-  fun navigateOnlineContent() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickOn(R.string.download)
-  }
-
-  @Test
-  fun navigateZimHostActivity() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    StandardActions.openDrawer()
-    clickMenu(TestUtils.getResourceString(R.string.menu_host_books))
-  }
-
-  @Test
-  fun navigateLocalFileTransfer() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickOn(R.string.library)
-    clickMenu(
-      TestUtils.getResourceString(R.string.get_content_from_nearby_device)
-    )
-  }
-
-  @Test
-  fun navigateLanguage() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickOn(R.string.download)
-    clickMenu(TestUtils.getResourceString(R.string.pref_language_chooser))
-  }
-
-  @Test
-  fun navigateSupport() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    StandardActions.openDrawer()
-    clickMenu(TestUtils.getResourceString(R.string.menu_support_kiwix))
+  fun test() {
+    kiwixMainRobo {
+      clickReaderOnBottomNav()
+      assertReaderScreenDisplayed()
+      clickLibraryOnBottomNav()
+      assertLibraryScreenDisplayed()
+      clickFileTransferIcon()
+      assertFileTransferScreenDisplayed()
+      pressBack()
+      clickDownloadOnBottomNav()
+      assertDownloadScreenDisplayed()
+      clickOnGlobeIcon()
+      assertLanguagesScreenDisplayed()
+      pressBack()
+      clickLibraryOnBottomNav()
+      openDrawer()
+      clickBookmarksOnNavDrawer()
+      assertBookmarksScreenDisplayed()
+      pressBack()
+      openDrawer()
+      clickHistoryOnSideNav()
+      assertHistoryScreenDisplayed()
+      pressBack()
+      openDrawer()
+      clickHostBooksOnSideNav()
+      assertHostBooksScreenDisplayed()
+      pressBack()
+      openDrawer()
+      clickSettingsOnSideNav()
+      assertSettingsScreenDisplayed()
+      pressBack()
+      openDrawer()
+      clickHelpOnSideNav()
+      assertHelpScreenDisplayed()
+      pressBack()
+      openDrawer()
+      clickSupportKiwixOnSideNav()
+      assertExternalLinkDialogDisplayed()
+      pressBack()
+      pressBack()
+    }
   }
 }

@@ -17,14 +17,107 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
+import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 
-fun main(func: MainRobot.() -> Unit) = MainRobot().apply(func)
+fun kiwixMainRobo(func: MainRobot.() -> Unit) = MainRobot().apply(func)
 
 class MainRobot : BaseRobot() {
+
   init {
     isVisible(ViewId(R.id.navigation_container))
+  }
+
+  fun clickReaderOnBottomNav() {
+    clickOn(R.id.readerFragment)
+  }
+
+  fun assertReaderScreenDisplayed() {
+    assertDisplayed(R.string.reader)
+  }
+
+  fun clickLibraryOnBottomNav() {
+    clickOn(R.id.libraryFragment)
+  }
+
+  fun assertLibraryScreenDisplayed() {
+    assertDisplayed(R.string.library)
+  }
+
+  fun clickFileTransferIcon() {
+    clickMenu(getResourceString(R.string.get_content_from_nearby_device))
+  }
+
+  fun assertFileTransferScreenDisplayed() {
+    assertDisplayed("Receive Files")
+  }
+
+  fun clickDownloadOnBottomNav() {
+    clickOn(R.id.downloadsFragment)
+  }
+
+  fun assertDownloadScreenDisplayed() {
+    assertDisplayed(R.string.download)
+  }
+
+  fun clickOnGlobeIcon() {
+    clickMenu(getResourceString(R.string.pref_language_chooser))
+  }
+
+  fun assertLanguagesScreenDisplayed() {
+    assertDisplayed(R.string.select_languages)
+  }
+
+  fun clickBookmarksOnNavDrawer() {
+    clickMenu(getResourceString(R.string.bookmarks))
+  }
+
+  fun assertBookmarksScreenDisplayed() {
+    assertDisplayed(R.string.bookmarks_from_current_book)
+  }
+
+  fun clickHistoryOnSideNav() {
+    clickMenu(getResourceString(R.string.history))
+  }
+
+  fun assertHistoryScreenDisplayed() {
+    assertDisplayed(R.string.history_from_current_book)
+  }
+
+  fun clickHostBooksOnSideNav() {
+    clickMenu(getResourceString(R.string.menu_host_books))
+  }
+
+  fun assertHostBooksScreenDisplayed() {
+    assertDisplayed(R.string.menu_host_books)
+  }
+
+  fun clickSettingsOnSideNav() {
+    clickMenu(getResourceString(R.string.menu_settings))
+  }
+
+  fun assertSettingsScreenDisplayed() {
+    assertDisplayed(R.string.menu_settings)
+  }
+
+  fun clickHelpOnSideNav() {
+    clickMenu(getResourceString(R.string.menu_help))
+  }
+
+  fun assertHelpScreenDisplayed() {
+    assertDisplayed(R.string.menu_help)
+  }
+
+  fun clickSupportKiwixOnSideNav() {
+    clickMenu(getResourceString(R.string.menu_support_kiwix))
+  }
+
+  fun assertExternalLinkDialogDisplayed() {
+    assertDisplayed(R.string.external_link_popup_dialog_title)
   }
 }
