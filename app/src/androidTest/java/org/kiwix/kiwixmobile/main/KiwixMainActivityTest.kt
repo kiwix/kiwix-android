@@ -22,7 +22,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
-class MainActivityTest {
+class KiwixMainActivityTest {
   @Rule
   @JvmField
   var activityTestRule = ActivityTestRule(KiwixMainActivity::class.java)

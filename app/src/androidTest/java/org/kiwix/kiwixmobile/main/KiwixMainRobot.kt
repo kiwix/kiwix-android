@@ -25,9 +25,9 @@ import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 
-fun kiwixMainRobo(func: MainRobot.() -> Unit) = MainRobot().apply(func)
+fun kiwixMainRobo(func: KiwixMainRobot.() -> Unit) = KiwixMainRobot().apply(func)
 
-class MainRobot : BaseRobot() {
+class KiwixMainRobot : BaseRobot() {
 
   init {
     isVisible(ViewId(R.id.navigation_container))
