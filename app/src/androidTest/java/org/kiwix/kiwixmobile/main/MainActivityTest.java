@@ -96,4 +96,33 @@ public class MainActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     clickOn(R.string.download);
   }
+
+  @Test
+  public void navigateZimHostActivity() {
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    openDrawer();
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_host_books));
+  }
+
+  @Test
+  public void navigateLocalFileTransfer() {
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    clickOn(R.string.library);
+    BaristaMenuClickInteractions.clickMenu(
+      getResourceString(R.string.get_content_from_nearby_device));
+  }
+
+  @Test
+  public void navigateLanguage() {
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    clickOn(R.string.download);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.pref_language_chooser));
+  }
+
+  @Test
+  public void navigateSupport() {
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    openDrawer();
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_support_kiwix));
+  }
 }
