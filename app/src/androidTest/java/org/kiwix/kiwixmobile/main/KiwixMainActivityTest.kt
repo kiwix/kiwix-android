@@ -28,7 +28,7 @@ class KiwixMainActivityTest {
   var activityTestRule = ActivityTestRule(KiwixMainActivity::class.java)
 
   @Test
-  fun test() {
+  fun testKiwixMainActivity() {
     kiwixMainRobo {
       clickReaderOnBottomNav()
       assertReaderScreenDisplayed()

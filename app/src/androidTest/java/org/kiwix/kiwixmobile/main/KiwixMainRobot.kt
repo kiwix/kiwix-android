@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import applyWithViewHierarchyPrinting
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu
@@ -25,7 +26,8 @@ import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 
-fun kiwixMainRobo(func: KiwixMainRobot.() -> Unit) = KiwixMainRobot().apply(func)
+fun kiwixMainRobo(func: KiwixMainRobot.() -> Unit) =
+  KiwixMainRobot().applyWithViewHierarchyPrinting(func)
 
 class KiwixMainRobot : BaseRobot() {
 
