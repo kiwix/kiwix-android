@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
@@ -8,16 +9,20 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:textSize="18sp" />
+    android:textSize="18sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
     android:id="@+id/file_size"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignParentEnd="true"
-    android:layout_toEndOf="@id/file_name"
+    android:layout_marginStart="2dp"
     android:gravity="end"
     android:padding="10dp"
-    android:textSize="18sp" />
+    android:textSize="18sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/file_name"
+    app:layout_constraintTop_toTopOf="@id/file_name" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

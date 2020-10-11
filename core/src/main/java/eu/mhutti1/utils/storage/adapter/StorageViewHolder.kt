@@ -39,7 +39,7 @@ internal class StorageViewHolder(
       else R.string.external_storage
     )
     file_size.text = storageCalculator.calculateAvailableSpace(item.file) + " / " +
-      storageCalculator.calculateTotalSpace(item.file)
+      storageCalculator.calculateTotalSpace(item.file) + "  "
     file_name.setOnClickListener {
       onClickAction.invoke(item)
       file_name.toggle()
