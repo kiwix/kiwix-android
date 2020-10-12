@@ -16,9 +16,9 @@ object Versions {
 
   const val androidx_test_espresso: String = "3.2.0" // available: "3.3.0"
 
-  const val com_squareup_retrofit2: String = "2.5.0" // available: "2.9.0"
+  const val com_squareup_retrofit2: String = "2.9.0"
 
-  const val com_squareup_okhttp3: String = "3.6.0" // available: "4.9.0"
+  const val com_squareup_okhttp3: String = "4.9.0"
 
   const val org_jetbrains_kotlin: String = "1.3.72" // available: "1.4.10"
 
