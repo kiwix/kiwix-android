@@ -125,8 +125,6 @@ import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.S
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_ARTICLES;
@@ -408,14 +406,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED),
         openInNewTab);
       selectTab(webViewList.size() - 1);
-    }
-    if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
-      newMainPageTab();
-      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_URL));
-    }
-    if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
-      newMainPageTab();
-      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
     }
     handleNotificationIntent(intent);
   }
