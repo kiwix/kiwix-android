@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.main;
 
 import android.content.Intent;
+import org.jetbrains.annotations.NotNull;
 
 public interface WebViewCallback {
   void webViewUrlLoading();
@@ -35,4 +36,6 @@ public interface WebViewCallback {
   void webViewPageChanged(int page, int maxPages);
 
   void webViewLongClick(String url);
+
+  void onFullscreenVideoToggled(boolean isFullScreen);
 }

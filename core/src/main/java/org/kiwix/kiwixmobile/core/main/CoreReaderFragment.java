@@ -119,6 +119,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
+import static android.content.ContentValues.TAG;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall;
@@ -740,6 +741,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
+
   private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
@@ -960,6 +962,11 @@ public abstract class CoreReaderFragment extends BaseFragment
     CoreMainActivity parentActivity = (CoreMainActivity) requireActivity();
     parentActivity.navigate(parentActivity.getBookmarksFragmentResId());
     return true;
+  }
+
+
+  @Override public void onFullscreenVideoToggled(boolean isFullScreen) {
+    // does nothing because custom doesn't have a nav bar
   }
 
   protected void openFullScreen() {
