@@ -975,7 +975,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @Override public void onFullscreenVideoToggled(@NotNull Boolean isFullScreen) {
-
+    // does nothing because custom doesn't have a nav bar
   }
 
   protected void openFullScreen() {
