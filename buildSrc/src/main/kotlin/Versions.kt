@@ -36,11 +36,11 @@ object Versions {
 
   const val org_jacoco: String = "0.7.9"
 
-  const val io_mockk: String = "1.10.0"
+  const val io_mockk: String = "1.10.0" // available: "1.10.2"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "4.0.1"
+  const val com_android_tools_build_gradle: String = "4.0.1" // available: "4.0.2"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
@@ -50,9 +50,9 @@ object Versions {
 
   const val ink_page_indicator: String = "1.3.0"
 
-  const val leakcanary_android: String = "2.4"
+  const val leakcanary_android: String = "2.4" // available: "2.5"
 
-  const val constraintlayout: String = "1.1.3" // available: "2.0.1"
+  const val constraintlayout: String = "1.1.3" // available: "2.0.2"
 
   const val collection_ktx: String = "1.1.0"
 
@@ -60,7 +60,7 @@ object Versions {
 
   const val junit_jupiter: String = "5.6.2" // available: "5.7.0"
 
-  const val xfetch2okhttp: String = "3.1.4" // available: "3.1.5"
+  const val xfetch2okhttp: String = "3.1.5"
 
   const val assertj_core: String = "3.16.1" // available: "3.17.2"
 
@@ -68,7 +68,7 @@ object Versions {
 
   const val fragment_ktx: String = "1.2.5"
 
-  const val lint_gradle: String = "27.0.1"
+  const val lint_gradle: String = "27.0.1" // available: "27.0.2"
 
   const val testing_ktx: String = "1.1.2"
 
@@ -84,7 +84,7 @@ object Versions {
 
   const val rxandroid: String = "2.1.1"
 
-  const val core_ktx: String = "1.3.1"
+  const val core_ktx: String = "1.3.1" // available: "1.3.2"
 
   const val kiwixlib: String = "9.4.0"
 
@@ -92,19 +92,19 @@ object Versions {
 
   const val multidex: String = "2.0.1"
 
-  const val barista: String = "2.7.1" // available: "3.6.0"
+  const val barista: String = "2.7.1" // available: "3.7.0"
 
-  const val xfetch2: String = "3.1.4" // available: "3.1.5"
+  const val xfetch2: String = "3.1.5"
 
   const val jsr305: String = "3.0.2"
 
   const val ktlint: String = "0.36.0" // available: "0.39.0"
 
-  const val rxjava: String = "2.2.19"
+  const val rxjava: String = "2.2.19" // available: "2.2.20"
 
   const val webkit: String = "1.2.0" // available: "1.3.0"
 
-  const val aapt2: String = "4.0.1-6197926"
+  const val aapt2: String = "4.0.1-6197926" // available: "4.0.2-6197926"
 
   const val junit: String = "1.1.1" // available: "1.1.2"
 
