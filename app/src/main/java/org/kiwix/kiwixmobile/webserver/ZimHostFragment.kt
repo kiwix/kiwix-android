@@ -18,11 +18,14 @@
 
 package org.kiwix.kiwixmobile.webserver
 
+import android.Manifest
 import android.app.ProgressDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
@@ -32,6 +35,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_zim_host.recyclerViewZimHost
 import kotlinx.android.synthetic.main.activity_zim_host.serverTextView
 import kotlinx.android.synthetic.main.activity_zim_host.startServerButton
@@ -132,8 +137,48 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       }
     }
 
-    startServerButton.setOnClickListener { startStopServer() }
+    startServerButton.setOnClickListener {
+      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+        if (checkCoarseLocationAccessPermission()) {
+          startStopServer()
+        }
+      } else {
+        startStopServer()
+      }
+    }
   }
+
+  private fun checkCoarseLocationAccessPermission(): Boolean =
+    if (ContextCompat.checkSelfPermission(
+        requireActivity(),
+        Manifest.permission.ACCESS_COARSE_LOCATION
+      ) == PackageManager.PERMISSION_DENIED
+    ) {
+      when {
+        ActivityCompat.shouldShowRequestPermissionRationale(
+          requireActivity(),
+          Manifest.permission.ACCESS_COARSE_LOCATION
+        ) -> {
+          alertDialogShower.show(
+            KiwixDialog.LocationPermissionRationaleOnHostZimFile,
+            {
+              ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                PERMISSION_REQUEST_CODE_COARSE_LOCATION
+              )
+            })
+        }
+        else -> {
+          ActivityCompat.requestPermissions(
+            requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+            PERMISSION_REQUEST_CODE_COARSE_LOCATION
+          )
+        }
+      }
+      false
+    } else {
+      true
+    }
 
   private fun startStopServer() {
     when {
@@ -316,5 +361,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   companion object {
     const val SELECTED_ZIM_PATHS_KEY = "selected_zim_paths"
+    private const val PERMISSION_REQUEST_CODE_COARSE_LOCATION = 10
   }
 }

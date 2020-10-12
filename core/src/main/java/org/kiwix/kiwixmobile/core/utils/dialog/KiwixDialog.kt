@@ -47,6 +47,13 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object LocationPermissionRationaleOnHostZimFile : KiwixDialog(
+    null,
+    R.string.permission_rationale_location_on_host_zim_file,
+    android.R.string.yes,
+    android.R.string.cancel
+  )
+
   object StoragePermissionRationale : KiwixDialog(
     null,
     R.string.request_storage,
