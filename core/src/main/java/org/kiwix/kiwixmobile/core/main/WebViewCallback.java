@@ -37,5 +37,5 @@ public interface WebViewCallback {
 
   void webViewLongClick(String url);
 
-  void onToggledFullscreen(@NotNull Boolean isFullScreen);
+  void onFullscreenVideoToggled(Boolean isFullScreen);
 }

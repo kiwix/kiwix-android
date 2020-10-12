@@ -264,29 +264,33 @@ class KiwixReaderFragment : CoreReaderFragment() {
     )
   }
 
-  override fun onToggledFullscreen(isFullScreen: Boolean) {
+  override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
     if (isFullScreen) {
-      requireActivity().bottom_nav_view.visibility = GONE
-      setParentFragmentsBottomMarginTo(0)
-      getCurrentWebView().translationY = 0f
+      hideNavBar()
     } else {
-      requireActivity().bottom_nav_view.visibility = VISIBLE
-      val fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN
-      activity?.window?.clearFlags(fullScreenFlag)
+      showNavBar()
     }
   }
 
   override fun openFullScreen() {
     super.openFullScreen()
+    hideNavBar()
+  }
+
+  override fun closeFullScreen() {
+    super.closeFullScreen()
+    showNavBar()
+    setFragmentContainerBottomMarginToSizeOfNavBar()
+  }
+
+  private fun hideNavBar() {
     requireActivity().bottom_nav_view.visibility = GONE
     setParentFragmentsBottomMarginTo(0)
     getCurrentWebView().translationY = 0f
   }
 
-  override fun closeFullScreen() {
-    super.closeFullScreen()
+  private fun showNavBar() {
     requireActivity().bottom_nav_view.visibility = VISIBLE
-    setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
   override fun createNewTab() {

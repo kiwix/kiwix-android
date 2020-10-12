@@ -974,7 +974,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     return true;
   }
 
-  @Override public void onToggledFullscreen(@NotNull Boolean isFullScreen) {
+  @Override public void onFullscreenVideoToggled(@NotNull Boolean isFullScreen) {
 
   }
 
