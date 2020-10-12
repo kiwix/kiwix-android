@@ -33,6 +33,7 @@
   <string name="hotspot_failed_title">הפעלת נקודת חיבור לא עבדה</string>
   <string name="hotspot_failed_message">נראה שנקודת החיבור כבר מופעלת אצלך. נא לכבות את נקודת החיבור שלך כדי להמשיך.</string>
   <string name="go_to_wifi_settings_label">לעבור להגדרות וייפיי</string>
+  <string name="connection_refused">החיבור סורב.</string>
   <string name="hotspot_running">נקודת החיבור פועלת</string>
   <string name="no_books_selected_toast_message">נא לבחור ספרים קודם</string>
   <string name="server_failed_message">לא היה אפשר להתחיל את השרת. נא להפעיל את נקודת החיבור שלך</string>

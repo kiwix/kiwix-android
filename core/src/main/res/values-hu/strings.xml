@@ -6,6 +6,7 @@
 * Csega
 * Dj
 * Fitoschido
+* Hanna Tardos
 * Kelson
 * Macofe
 * Tacsipacsi
@@ -28,6 +29,7 @@
   <string name="search_label">Keresés</string>
   <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
+  <string name="connection_refused">Csatlakozás elutasítva.</string>
   <string name="error_file_not_found">Hiba: A kijelölt ZIM-fájl nem található.</string>
   <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
   <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
