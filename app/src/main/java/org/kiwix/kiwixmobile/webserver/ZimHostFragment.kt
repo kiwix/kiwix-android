@@ -138,11 +138,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
 
     startServerButton.setOnClickListener {
-      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-        if (checkCoarseLocationAccessPermission()) {
-          startStopServer()
-        }
-      } else {
+      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P || checkCoarseLocationAccessPermission()) {
         startStopServer()
       }
     }
@@ -154,31 +150,42 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         Manifest.permission.ACCESS_COARSE_LOCATION
       ) == PackageManager.PERMISSION_DENIED
     ) {
-      when {
-        ActivityCompat.shouldShowRequestPermissionRationale(
+      if (ActivityCompat.shouldShowRequestPermissionRationale(
           requireActivity(),
           Manifest.permission.ACCESS_COARSE_LOCATION
-        ) -> {
-          alertDialogShower.show(
-            KiwixDialog.LocationPermissionRationaleOnHostZimFile,
-            {
-              ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                PERMISSION_REQUEST_CODE_COARSE_LOCATION
-              )
-            })
-        }
-        else -> {
-          ActivityCompat.requestPermissions(
-            requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            PERMISSION_REQUEST_CODE_COARSE_LOCATION
-          )
-        }
+        )
+      ) {
+        alertDialogShower.show(
+          KiwixDialog.LocationPermissionRationaleOnHostZimFile,
+          ::askCoarseLocationPermission
+        )
+      } else {
+        askCoarseLocationPermission()
       }
       false
     } else {
       true
     }
+
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      if (requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION) {
+        startStopServer()
+      }
+    }
+  }
+
+  private fun askCoarseLocationPermission() {
+    ActivityCompat.requestPermissions(
+      requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+      PERMISSION_REQUEST_CODE_COARSE_LOCATION
+    )
+  }
 
   private fun startStopServer() {
     when {
