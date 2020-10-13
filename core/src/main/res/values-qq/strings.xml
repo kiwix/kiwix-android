@@ -61,4 +61,5 @@
   <string name="no_open_book">Tell the user that they have not opened a book.</string>
   <string name="open_library">The action of opening the library destination, used on a button.</string>
   <string name="tab_restored">Tell the user that a tab has been restored.</string>
+  <string name="permission_rationale_location_on_host_zim_file">Tell the user Location permission required for hosting zim file.</string>
 </resources>
