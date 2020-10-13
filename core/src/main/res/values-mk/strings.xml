@@ -26,6 +26,7 @@
   <string name="hotspot_failed_title">Не успеав да ја покренам пристапната точка</string>
   <string name="hotspot_failed_message">Се чини дека точката за безжичен пристап е веќе вклучена. Исклучете ја за да продолжите.</string>
   <string name="go_to_wifi_settings_label">Оди во поставките за безжичен пристап</string>
+  <string name="connection_refused">Поврзувањето е одбиено.</string>
   <string name="hotspot_running">Активна пристапна точка</string>
   <string name="no_books_selected_toast_message">Најпрвин одберете книги</string>
   <string name="server_failed_message">Не можев да го покренам опслужувачот. Вклучете ја пристапната точка</string>
