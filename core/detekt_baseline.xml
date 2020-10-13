@@ -11,7 +11,6 @@
     <ID>LongParameterList:Repository.kt$Repository$( @param:IO private val io: Scheduler, @param:MainThread private val mainThread: Scheduler, private val bookDao: NewBookDao, private val bookmarksDao: NewBookmarksDao, private val historyDao: HistoryDao, private val languageDao: NewLanguagesDao, private val recentSearchDao: NewRecentSearchDao, private val zimReaderContainer: ZimReaderContainer )</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
-    <ID>MagicNumber:CoreSplashActivity.kt$CoreSplashActivity$10</ID>
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
     <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
     <ID>MagicNumber:FetchDownloadNotificationManager.kt$FetchDownloadNotificationManager$100</ID>
@@ -36,7 +35,7 @@
     <ID>PackageNaming:KiloByte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:KiwixTag.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:Language.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
+    <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:SelectionMode.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File&gt;</ID>

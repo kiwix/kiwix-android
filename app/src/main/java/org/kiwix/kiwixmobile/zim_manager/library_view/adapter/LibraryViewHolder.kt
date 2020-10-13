@@ -34,22 +34,18 @@ import kotlinx.android.synthetic.main.item_library.libraryBookCreator
 import kotlinx.android.synthetic.main.item_library.libraryBookDate
 import kotlinx.android.synthetic.main.item_library.libraryBookDescription
 import kotlinx.android.synthetic.main.item_library.libraryBookFavicon
-import kotlinx.android.synthetic.main.item_library.libraryBookFileName
 import kotlinx.android.synthetic.main.item_library.libraryBookLanguage
-import kotlinx.android.synthetic.main.item_library.libraryBookPublisher
 import kotlinx.android.synthetic.main.item_library.libraryBookSize
 import kotlinx.android.synthetic.main.item_library.libraryBookTitle
 import kotlinx.android.synthetic.main.item_library.tags
 import kotlinx.android.synthetic.main.item_library.unableToDownload
 import kotlinx.android.synthetic.main.library_divider.divider_text
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
@@ -69,11 +65,9 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       libraryBookTitle.setTextAndVisibility(item.book.title)
       libraryBookDescription.setTextAndVisibility(item.book.description)
       libraryBookCreator.setTextAndVisibility(item.book.creator)
-      libraryBookPublisher.setTextAndVisibility(item.book.publisher)
       libraryBookDate.setTextAndVisibility(item.book.date)
       libraryBookSize.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
       libraryBookLanguage.text = bookUtils.getLanguage(item.book.getLanguage())
-      libraryBookFileName.text = NetworkUtils.parseURL(CoreApp.instance, item.book.url)
       libraryBookFavicon.setBitmap(Base64String(item.book.favicon))
 
       containerView.setOnClickListener { clickAction.invoke(item) }

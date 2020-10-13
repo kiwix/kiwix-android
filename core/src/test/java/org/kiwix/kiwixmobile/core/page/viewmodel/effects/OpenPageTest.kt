@@ -18,28 +18,23 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
-import android.content.Intent
-import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.verify
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.PageImpl
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_FILE
-import org.kiwix.kiwixmobile.core.utils.EXTRA_CHOSE_X_URL
 
 internal class OpenPageTest {
-  val page = PageImpl()
+  private val page = PageImpl()
   private val zimReaderContainer: ZimReaderContainer = mockk()
-  val activity: CoreMainActivity = mockk(relaxed = true)
-  val intent: Intent = mockk()
+  val activity: CoreMainActivity = mockk()
 
-  init {
-    mockkConstructor(Intent::class)
-    every { anyConstructed<Intent>().putExtra(EXTRA_CHOSE_X_URL, page.url) } returns intent
+  @BeforeEach
+  internal fun setUp() {
+    every { activity.navController.popBackStack() } returns true
   }
 
   @Test
@@ -49,13 +44,11 @@ internal class OpenPageTest {
     verify {
       activity.openPage(page.url)
     }
-    confirmVerified(intent)
   }
 
   @Test
   fun `invokeWith navigates to page with historyUrl and zimFilePath`() {
     every { zimReaderContainer.zimCanonicalPath } returns "notZimFilePath"
-    every { intent.putExtra(EXTRA_CHOSE_X_FILE, page.zimFilePath) } returns intent
     OpenPage(page, zimReaderContainer).invokeWith(activity)
     verify {
       activity.openPage(page.url, page.zimFilePath!!)

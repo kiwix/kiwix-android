@@ -31,6 +31,7 @@
   <string name="hotspot_failed_title">開啟熱點失敗</string>
   <string name="hotspot_failed_message">看起來似乎是您的熱點已開啟，請停用您的 WiFi 熱點來繼續。</string>
   <string name="go_to_wifi_settings_label">前往 WIFI 設定</string>
+  <string name="connection_refused">連線被拒絕。</string>
   <string name="hotspot_running">運行熱點</string>
   <string name="no_books_selected_toast_message">請先選擇書籍</string>
   <string name="server_failed_message">無法開啟伺服器，請啟動您的熱點</string>
@@ -142,7 +143,6 @@
   <string name="tts_not_enabled">轉換為語音的文字無法用在 ZIM 檔案上</string>
   <string name="texttospeech_initialization_failed">文字轉語音的初始化失敗，請重試</string>
   <string name="texttospeech_error">文字轉語音出現意外錯誤，請重試</string>
-
   <string name="next">下一個</string>
   <string name="previous">上一個</string>
   <string name="wifi_only_title">允許透過移動網路來下載內容？</string>
@@ -280,4 +280,6 @@
   <string name="tab_restored">分頁已恢復</string>
   <string name="open_drawer">開啟抽屜</string>
   <string name="close_drawer">關閉抽屜</string>
+  <string name="how_to_update_content">如何更新內容？</string>
+  <string name="update_content_description">要更新內容（zim 檔案）的話，您需要下載這個相似內容的完整最新版本。您可以透過下載段落來進行。</string>
 </resources>

@@ -40,12 +40,15 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.CONTACT_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 
-class HelpFragment : BaseFragment() {
+abstract class HelpFragment : BaseFragment() {
+
+  protected open fun rawTitleDescriptionMap() = listOf(
+    R.string.help_2 to R.array.description_help_2,
+    R.string.help_5 to R.array.description_help_5
+  )
+
   private val titleDescriptionMap by lazy {
-    listOf(
-      R.string.help_2 to R.array.description_help_2,
-      R.string.help_5 to R.array.description_help_5
-    ).associate { (title, description) ->
+    rawTitleDescriptionMap().associate { (title, description) ->
       getString(title) to resources.getStringArray(description)
         .joinToString(separator = "\n")
     }

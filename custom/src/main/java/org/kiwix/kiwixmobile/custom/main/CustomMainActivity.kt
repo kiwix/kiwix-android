@@ -24,8 +24,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.custom_drawer_container
-import kotlinx.android.synthetic.main.activity_main.drawer_nav_view
+import kotlinx.android.synthetic.main.activity_custom_main.custom_drawer_container
+import kotlinx.android.synthetic.main.activity_custom_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.custom.R
@@ -56,7 +56,7 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    setContentView(R.layout.activity_custom_main)
     if (savedInstanceState != null) {
       return
     }

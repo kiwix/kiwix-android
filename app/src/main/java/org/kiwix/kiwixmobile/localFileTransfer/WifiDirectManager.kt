@@ -276,7 +276,7 @@ class WifiDirectManager @Inject constructor(
           if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
         senderDeviceAsyncTask = SenderDeviceAsyncTask(this, activity).also {
-          it.execute()
+          it.execute(*filesForTransfer.toTypedArray())
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)

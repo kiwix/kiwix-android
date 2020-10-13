@@ -42,7 +42,6 @@ public class CoreWebViewClient extends WebViewClient {
   protected final WebViewCallback callback;
   protected final ZimReaderContainer zimReaderContainer;
   private static String[] LEGACY_CONTENT_PREFIXES = new String[] {
-    "zim://content/",
     Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString()
   };
   private String urlWithAnchor;

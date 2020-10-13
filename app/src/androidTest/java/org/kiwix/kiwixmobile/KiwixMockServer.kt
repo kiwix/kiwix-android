@@ -38,11 +38,9 @@ class KiwixMockServer {
     mockWebServer.shutdown()
   }
 
-  fun map(
-    vararg pathsToResponses: Pair<String, Any>
-  ) {
+  fun map(vararg pathsToResponses: Pair<String, Any>) {
     val mapOfPathsToResponses = mapOf(*pathsToResponses)
-    mockWebServer.setDispatcher(object : Dispatcher() {
+    mockWebServer.dispatcher = object : Dispatcher() {
       override fun dispatch(request: RecordedRequest) =
         mapOfPathsToResponses[request.path]?.let(::successfulResponse)
           ?: forcedResponse?.let { return@let it }
@@ -50,7 +48,7 @@ class KiwixMockServer {
             "No response mapped for ${request.path}" +
               "\nmapped $mapOfPathsToResponses\nqueued $forcedResponse"
           )
-    })
+    }
   }
 
   private fun successfulResponse(bodyObject: Any) = MockResponse().apply {

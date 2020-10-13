@@ -26,7 +26,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifySequence
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
@@ -41,7 +41,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 internal class SearchIntentProcessingTest {
 
-  private val actions: PublishProcessor<Action> = mockk(relaxed = true)
+  private val actions: Channel<Action> = mockk(relaxed = true)
 
   private val activity: AppCompatActivity = mockk()
 

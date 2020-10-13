@@ -142,7 +142,6 @@
   <string name="tts_not_enabled">Text till tal är inte aktiverat för denna ZIM-fil</string>
   <string name="texttospeech_initialization_failed">Misslyckades att initialisera text-till-tal. Var god försök igen</string>
   <string name="texttospeech_error">Oväntat fel uppstod för text-till-tal. Var god försök igen</string>
-
   <string name="next">Nästa</string>
   <string name="previous">Föregående</string>
   <string name="wifi_only_title">Tillåt att ladda ned innehåll med mobildata?</string>
@@ -221,6 +220,7 @@
   <string name="notes_deletion_successful">Raderade hela anteckningsmappen</string>
   <string name="notes_deletion_unsuccessful">Vissa filer raderades inte</string>
   <string name="books_count">%d bok/böcker</string>
+  <string name="severe_loss_error">Allvarligt fel! Testa att starta om WiFi P2P</string>
   <string name="connection_failed">Anslutning misslyckades</string>
   <string name="permission_refused_storage">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
   <string name="request_enable_wifi">Aktivera WiFi P2P i systeminställningar</string>

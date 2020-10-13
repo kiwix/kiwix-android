@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.localFileTransfer;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -30,6 +31,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.core.BuildConfig;
 
 /**
@@ -161,6 +163,14 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
   @Override
   protected void onPostExecute(InetAddress inetAddress) {
-    wifiDirectManager.setClientAddress(inetAddress);
+    if (inetAddress != null) {
+      wifiDirectManager.setClientAddress(inetAddress);
+    } else {
+      if (BuildConfig.DEBUG) {
+        Log.d(TAG, "InetAddress is null");
+      }
+      wifiDirectManager.displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG);
+      wifiDirectManager.onFileTransferAsyncTaskComplete(false);
+    }
   }
 }

@@ -26,6 +26,7 @@
   <string name="hotspot_failed_title">Не успеав да ја покренам пристапната точка</string>
   <string name="hotspot_failed_message">Се чини дека точката за безжичен пристап е веќе вклучена. Исклучете ја за да продолжите.</string>
   <string name="go_to_wifi_settings_label">Оди во поставките за безжичен пристап</string>
+  <string name="connection_refused">Поврзувањето е одбиено.</string>
   <string name="hotspot_running">Активна пристапна точка</string>
   <string name="no_books_selected_toast_message">Најпрвин одберете книги</string>
   <string name="server_failed_message">Не можев да го покренам опслужувачот. Вклучете ја пристапната точка</string>
@@ -137,7 +138,6 @@
   <string name="tts_not_enabled">Претворањето текст во говор не е овозможено за оваа ZIM-податотека</string>
   <string name="texttospeech_initialization_failed">Не успеав да го покренам „Текст во говор“. Обидете се повторно.</string>
   <string name="texttospeech_error">Се јави неочекувана грешка во „Текст во говор“. Обидете се повторно.</string>
-
   <string name="next">Следно</string>
   <string name="previous">Претходно</string>
   <string name="wifi_only_title">Дозволувате преземање на содржини преку мобилна мрежа?</string>
@@ -275,4 +275,6 @@
   <string name="tab_restored">Јазичето е повратено</string>
   <string name="open_drawer">Отвори фиока</string>
   <string name="close_drawer">Затвори фиока</string>
+  <string name="how_to_update_content">Како се подновува содржината?</string>
+  <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>
 </resources>

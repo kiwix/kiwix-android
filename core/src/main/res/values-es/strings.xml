@@ -10,6 +10,7 @@
 * Macofe
 * Macondo
 * MarcoAurelio
+* Mpayansilva
 * Ncr
 * VegaDark
 -->
@@ -141,7 +142,6 @@
   <string name="confirm_stop_download_msg">¿Seguro que quieres detener esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
   <string name="tts_not_enabled">Texto a voz no está activado para este archivo ZIM</string>
-
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir descargar contenido mediante la red móvil?</string>
@@ -260,4 +260,5 @@
   <string name="pref_text_zoom_title">Zoom de texto</string>
   <string name="tab_restored">Pestaña restaurada</string>
   <string name="close_drawer">Cerrar cajón</string>
+  <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
 </resources>

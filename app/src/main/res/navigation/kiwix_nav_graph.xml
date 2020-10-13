@@ -99,7 +99,7 @@
     android:label="HistoryFragment" />
   <fragment
     android:id="@+id/helpFragment"
-    android:name="org.kiwix.kiwixmobile.core.help.HelpFragment"
+    android:name="org.kiwix.kiwixmobile.help.KiwixHelpFragment"
     android:label="HelpFragment" />
   <fragment
     android:id="@+id/kiwixSettingsFragment"
@@ -120,8 +120,8 @@
     android:label="LocalFileTransferFragment">
     <argument
       android:name="uris"
+      android:defaultValue="@null"
       app:argType="android.net.Uri[]"
-      app:nullable="true"
-      android:defaultValue="@null" />
+      app:nullable="true" />
   </fragment>
 </navigation>

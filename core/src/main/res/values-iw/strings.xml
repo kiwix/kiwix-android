@@ -33,6 +33,7 @@
   <string name="hotspot_failed_title">הפעלת נקודת חיבור לא עבדה</string>
   <string name="hotspot_failed_message">נראה שנקודת החיבור כבר מופעלת אצלך. נא לכבות את נקודת החיבור שלך כדי להמשיך.</string>
   <string name="go_to_wifi_settings_label">לעבור להגדרות וייפיי</string>
+  <string name="connection_refused">החיבור סורב.</string>
   <string name="hotspot_running">נקודת החיבור פועלת</string>
   <string name="no_books_selected_toast_message">נא לבחור ספרים קודם</string>
   <string name="server_failed_message">לא היה אפשר להתחיל את השרת. נא להפעיל את נקודת החיבור שלך</string>
@@ -43,9 +44,10 @@
   <string name="hotspot_details_message">להלן הפרטים של נקודת החיבור המקומית שלך.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">נא לבחור את הקבצים שברצונך לארח בשרת</string>
   <string name="progress_dialog_starting_server">הרצת השרת</string>
-  <string name="hotspot_dialog_title" fuzzy="true">הפעלת נקודת חיבור הווייפיי שלך</string>
+  <string name="hotspot_dialog_title">הנחיות לאירוח ספרים</string>
   <string name="wifi_dialog_title">חיבור WiFi אותר</string>
-  <string name="hotspot_dialog_message" fuzzy="true">כדי שהאפשרות הזאת תעבוד, צריך קודם להפעיל את נקודת חיבור הווייפיי שלך ידנית.</string>
+  <string name="wifi_dialog_body">כדי לצפות בספרים במכשירים אחרים, נא לוודא שכל המכשירים מחוברים לאותה הרשת האלחוטית.</string>
+  <string name="hotspot_dialog_message">כדי שהאפשרות הזאת תוכל לפעול עליך להפעיל את הנקודה החמה ידנית או לוודא שמכשירי האירוח והקבלה הם באותה רשת אלחוטית.</string>
   <string name="hotspot_dialog_neutral_button">להמשיך</string>
   <string name="hotspot_channel_description">עדכונים על מצב נקודת החיבור והשרת שלך.</string>
   <string name="hotspot_notification_content_title">נקודת חיבור של קיוויקס</string>
@@ -143,7 +145,6 @@
   <string name="tts_not_enabled">טקסט לדיבור אינו זמין עבור קובץ ZIM זה</string>
   <string name="texttospeech_initialization_failed">האתחול של טקסט לדיבור נכשל. נא לנסות שוב</string>
   <string name="texttospeech_error">שגיאה בלתי־צפויה בטקסט לדיבור. נא לנסות שוב</string>
-
   <string name="next">הבא</string>
   <string name="previous">הקודם</string>
   <string name="wifi_only_title">לאפשר הורדת תוכן דרך רשת סלולרית?</string>
@@ -249,6 +250,7 @@
   <string name="status">מצב</string>
   <string name="pref_clear_all_notes_summary">ניקוי כל ההערות בכל הערכים</string>
   <string name="pref_clear_all_notes_title">ניקוי כל ההערות</string>
+  <string name="pref_text_zoom_summary">לשנות את גודל הטקסט בקפיצות של 25%.</string>
   <string name="tag_pic">תמונה</string>
   <string name="tag_vid">סרטון</string>
   <string name="tag_text_only">רק טקסט</string>
@@ -271,5 +273,15 @@
   <string name="crash_checkbox_file_system">פרטי מערכת קבצים</string>
   <string name="diagnostic_report">דוח אבחון</string>
   <string name="diagnostic_report_message">נא לשלוח את כל הפרטים הבאים כדי שנוכל לאבחן את התקלה</string>
+  <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">תקריב טקסט</string>
+  <string name="search_open_in_new_tab">פתיחה בלשונית חדשה</string>
+  <string name="reader">מציג</string>
+  <string name="no_open_book">אין ספר פתוח</string>
+  <string name="open_library">ספרייה פתוחה</string>
+  <string name="tab_restored">הלשונית שוחזרה</string>
+  <string name="open_drawer">פתיחת מגירה</string>
+  <string name="close_drawer">סגירת מגירה</string>
+  <string name="how_to_update_content">איך לעדכן תוכן?</string>
+  <string name="update_content_description">כדי לעדכן תוכן (קובץ zim) עליך להוריד את הגרסה המלאה העדכנית ביותר של אותו התוכן בדיוק. ניתן לעשות זאת דרך סעיף ההורדה.</string>
 </resources>

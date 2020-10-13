@@ -32,6 +32,7 @@
   <string name="hotspot_failed_title">Falha ao iniciar o ponto de acesso</string>
   <string name="hotspot_failed_message">Parece que seu ponto de acesso já está ativado. Desative seu ponto de acesso wi-fi para continuar.</string>
   <string name="go_to_wifi_settings_label">Vá para configurações de wi-fi</string>
+  <string name="connection_refused">Conexão recusada.</string>
   <string name="hotspot_running">Rede wi-fi em execução</string>
   <string name="no_books_selected_toast_message">Selecione primeiro os livros</string>
   <string name="server_failed_message">Não foi possível iniciar o servidor. Por favor, ligue seu ponto de acesso</string>
@@ -143,7 +144,6 @@
   <string name="tts_not_enabled">Texto para fala não está habilitado para este arquivo ZIM</string>
   <string name="texttospeech_initialization_failed">Falha na inicialização da leitura de texto. Por favor, tente novamente</string>
   <string name="texttospeech_error">Erro inesperado na leitura de texto. Por favor, tente novamente</string>
-
   <string name="next">Próximo</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir o download de conteúdo via rede móvel?</string>
@@ -281,4 +281,6 @@
   <string name="tab_restored">Guia restaurada</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>
+  <string name="how_to_update_content">Como atualizar o conteúdo?</string>
+  <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
 </resources>

@@ -13,6 +13,7 @@
 * MuratTheTurkish
 * Rapsar
 * Sayginer
+* Stonecy
 * Trockya
 -->
 <resources>
@@ -38,6 +39,7 @@
   <string name="hotspot_failed_title">Sıcak nokta başlatılamadı</string>
   <string name="hotspot_failed_message">Etkin noktanız zaten açıkmış gibi görünüyor. Devam etmek için lütfen wifi erişim noktanızı devre dışı bırakın.</string>
   <string name="go_to_wifi_settings_label">WIFI ayarlarına gidin</string>
+  <string name="connection_refused">Bağlantı reddedildi.</string>
   <string name="hotspot_running">Sıcak Noktayı Çalıştırılıyor</string>
   <string name="no_books_selected_toast_message">Lütfen önce kitapları seçin</string>
   <string name="server_failed_message">Sunucu başlatılamadı. Lütfen etkin noktanızı açın</string>
@@ -149,7 +151,6 @@
   <string name="tts_not_enabled">Bu ZIM dosyası için metin okuma uygulanabilir değil</string>
   <string name="texttospeech_initialization_failed">Metinden Konuşmaya başlatılamadı. Lütfen tekrar deneyin</string>
   <string name="texttospeech_error">Metinden Konuşmaya beklenmeyen hata. Lütfen tekrar deneyin</string>
-
   <string name="next">Sonraki</string>
   <string name="previous">Önceki</string>
   <string name="wifi_only_title">İçeriğin mobil ağ kullanılarak indirilmesine izin verilsin mi?</string>
@@ -287,4 +288,6 @@
   <string name="tab_restored">Sekme geri getirildi</string>
   <string name="open_drawer">Çekmeceyi Aç</string>
   <string name="close_drawer">Çekmeceyi Kapat</string>
+  <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
+  <string name="update_content_description">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
 </resources>

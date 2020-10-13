@@ -53,6 +53,20 @@
 
   <style name="list_item_body" parent="TextAppearance.KiwixTheme.Subtitle2" />
 
+  <style name="list_item_body.detail">
+    <item name="android:maxLines">1</item>
+    <item name="android:textColor">?textTertiary</item>
+    <item name="android:paddingEnd">5dp</item>
+    <item name="android:ellipsize">end</item>
+    <item name="layout_constrainedWidth">true</item>
+  </style>
+
+  <style name="list_item_body.detail.end">
+    <item name="android:layout_marginEnd">@dimen/activity_horizontal_margin</item>
+
+    <item name="android:gravity">end</item>
+  </style>
+
   <style name="no_content_text" parent="TextAppearance.KiwixTheme.Headline5" />
 
   <style name="switch_style">

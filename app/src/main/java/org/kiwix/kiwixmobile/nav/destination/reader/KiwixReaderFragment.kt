@@ -42,7 +42,6 @@ import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
@@ -175,7 +174,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (tabSwitcherRoot.visibility == View.VISIBLE) {
         tabSwitcherRoot.visibility = GONE
         startAnimation(tabSwitcherRoot, anim.slide_up)
-        progressBar.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
         progressBar.progress = 0
         contentFrame.visibility = View.VISIBLE
       }
@@ -234,16 +233,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun onBackPressed(activity: AppCompatActivity): Super {
-    val callType = super.onBackPressed(activity)
-    if (callType == ShouldCall && getCurrentWebView().canGoBack()) {
-      getCurrentWebView().goBack()
-    } else if (callType == ShouldCall) {
-      getActivity()?.finish()
-    }
-    return ShouldNotCall
-  }
-
   override fun restoreViewStateOnInvalidJSON() {
     Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
     exitBook()
@@ -274,17 +263,33 @@ class KiwixReaderFragment : CoreReaderFragment() {
     )
   }
 
+  override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
+    if (isFullScreen) {
+      hideNavBar()
+    } else {
+      showNavBar()
+    }
+  }
+
   override fun openFullScreen() {
     super.openFullScreen()
+    hideNavBar()
+  }
+
+  override fun closeFullScreen() {
+    super.closeFullScreen()
+    showNavBar()
+    setFragmentContainerBottomMarginToSizeOfNavBar()
+  }
+
+  private fun hideNavBar() {
     requireActivity().bottom_nav_view.visibility = GONE
     setParentFragmentsBottomMarginTo(0)
     getCurrentWebView().translationY = 0f
   }
 
-  override fun closeFullScreen() {
-    super.closeFullScreen()
+  private fun showNavBar() {
     requireActivity().bottom_nav_view.visibility = VISIBLE
-    setFragmentContainerBottomMarginToSizeOfNavBar()
   }
 
   override fun createNewTab() {

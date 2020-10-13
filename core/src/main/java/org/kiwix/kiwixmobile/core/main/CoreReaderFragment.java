@@ -119,12 +119,13 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
+import static android.content.ContentValues.TAG;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall;
+import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_ARTICLES;
@@ -210,6 +211,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   MainRepositoryActions repositoryActions;
   @Inject
   ExternalLinkOpener externalLinkOpener;
+
   private CountDownTimer hideBackToTopTimer;
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
@@ -243,13 +245,13 @@ public abstract class CoreReaderFragment extends BaseFragment
       getActivity().getMenuInflater().inflate(R.menu.menu_webview_action, menu);
       configureWebViewSelectionHandler(menu);
     }
-    return Super.ShouldCall;
+    return ShouldCall;
   }
 
   @NotNull @Override public Super onActionModeFinished(@NotNull ActionMode actionMode,
     @NotNull AppCompatActivity activity) {
     this.actionMode = null;
-    return Super.ShouldCall;
+    return ShouldCall;
   }
 
   protected void configureWebViewSelectionHandler(Menu menu) {
@@ -406,14 +408,6 @@ public abstract class CoreReaderFragment extends BaseFragment
         openInNewTab);
       selectTab(webViewList.size() - 1);
     }
-    if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
-      newMainPageTab();
-      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_URL));
-    }
-    if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
-      newMainPageTab();
-      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
-    }
     handleNotificationIntent(intent);
   }
 
@@ -436,10 +430,8 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void setupDocumentParser() {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
-
-      @Override
-      public void sectionsLoaded(String title,
-        List<? extends TableDrawerAdapter.DocumentSection> sections) {
+      @Override public void sectionsLoaded(@NotNull String title,
+        @NotNull List<TableDrawerAdapter.DocumentSection> sections) {
         if (isAdded()) {
           documentSections.addAll(sections);
           tableDrawerAdapter.setTitle(title);
@@ -449,8 +441,7 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
       }
 
-      @Override
-      public void clearSections() {
+      @Override public void clearSections() {
         documentSections.clear();
         if (tableDrawerAdapter != null) {
           tableDrawerAdapter.notifyDataSetChanged();
@@ -502,22 +493,20 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private TableDrawerAdapter setupTableDrawerAdapter() {
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
-    tableDrawerAdapter.setTableClickListener(new TableDrawerAdapter.TableClickListener() {
-      @Override
-      public void onHeaderClick(View view) {
-        getCurrentWebView().setScrollY(0);
-        drawerLayout.closeDrawer(GravityCompat.END);
-      }
+    TableDrawerAdapter tableDrawerAdapter =
+      new TableDrawerAdapter(new TableDrawerAdapter.TableClickListener() {
+        @Override public void onHeaderClick(View view) {
+          getCurrentWebView().setScrollY(0);
+          drawerLayout.closeDrawer(GravityCompat.END);
+        }
 
-      @Override
-      public void onSectionClick(View view, int position) {
-        loadUrlWithCurrentWebview("javascript:document.getElementById('"
-          + documentSections.get(position).id
-          + "').scrollIntoView();");
-        drawerLayout.closeDrawers();
-      }
-    });
+        @Override public void onSectionClick(View view, int position) {
+          loadUrlWithCurrentWebview("javascript:document.getElementById('"
+            + documentSections.get(position).getId()
+            + "').scrollIntoView();");
+          drawerLayout.closeDrawers();
+        }
+      });
     return tableDrawerAdapter;
   }
 
@@ -616,16 +605,21 @@ public abstract class CoreReaderFragment extends BaseFragment
       selectTab(currentWebViewIndex < webViewList.size() ? currentWebViewIndex
         : webViewList.size() - 1);
       hideTabSwitcher();
+      return ShouldNotCall;
     } else if (isInFullScreenMode()) {
       closeFullScreen();
+      return ShouldNotCall;
     } else if (compatCallback.isActive) {
       compatCallback.finish();
+      return ShouldNotCall;
     } else if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
-    } else {
-      return Super.ShouldCall;
+      return ShouldNotCall;
+    } else if (getCurrentWebView().canGoBack()) {
+      getCurrentWebView().goBack();
+      return ShouldNotCall;
     }
-    return Super.ShouldNotCall;
+    return ShouldCall;
   }
 
   private void updateTitle() {
@@ -666,19 +660,21 @@ public abstract class CoreReaderFragment extends BaseFragment
         });
       }
     }, focusChange -> {
-      Log.d(TAG_KIWIX, "Focus change: " + focusChange);
-      if (tts.currentTTSTask == null) {
-        tts.stop();
-        return;
-      }
-      switch (focusChange) {
-        case (AudioManager.AUDIOFOCUS_LOSS):
-          if (!tts.currentTTSTask.paused) tts.pauseOrResume();
-          pauseTTSButton.setText(R.string.tts_resume);
-          break;
-        case (AudioManager.AUDIOFOCUS_GAIN):
-          pauseTTSButton.setText(R.string.tts_pause);
-          break;
+      if (tts != null) {
+        Log.d(TAG_KIWIX, "Focus change: " + focusChange);
+        if (tts.currentTTSTask == null) {
+          tts.stop();
+          return;
+        }
+        switch (focusChange) {
+          case (AudioManager.AUDIOFOCUS_LOSS):
+            if (!tts.currentTTSTask.paused) tts.pauseOrResume();
+            pauseTTSButton.setText(R.string.tts_resume);
+            break;
+          case (AudioManager.AUDIOFOCUS_GAIN):
+            pauseTTSButton.setText(R.string.tts_pause);
+            break;
+        }
       }
     }, zimReaderContainer);
   }
@@ -720,14 +716,15 @@ public abstract class CoreReaderFragment extends BaseFragment
     actionBar = null;
     mainMenu = null;
     tabRecyclerView.setAdapter(null);
-    tableDrawerAdapter.setTableClickListener(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
     webViewList.clear();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(getActivity());
-    tts.shutdown();
-    tts = null;
+    if (tts != null) {
+      tts.shutdown();
+      tts = null;
+    }
   }
 
   private void updateTableOfContents() {
@@ -743,6 +740,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       webview.loadUrl(url);
     }
   }
+
 
   private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
@@ -968,6 +966,11 @@ public abstract class CoreReaderFragment extends BaseFragment
     return true;
   }
 
+
+  @Override public void onFullscreenVideoToggled(boolean isFullScreen) {
+    // does nothing because custom doesn't have a nav bar
+  }
+
   protected void openFullScreen() {
     toolbarContainer.setVisibility(View.GONE);
     bottomToolbar.setVisibility(View.GONE);
@@ -1176,6 +1179,9 @@ public abstract class CoreReaderFragment extends BaseFragment
 
     updateBottomToolbarVisibility();
     updateNightMode();
+    if (tts == null) {
+      setUpTTS();
+    }
   }
 
   private void openFullScreenIfEnabled() {
@@ -1251,7 +1257,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     @NotNull AppCompatActivity activity) {
     handleNotificationIntent(intent);
     handleIntentActions(intent);
-    return Super.ShouldCall;
+    return ShouldCall;
   }
 
   private void contentsDrawerHint() {
@@ -1408,6 +1414,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   public void onPause() {
     super.onPause();
     saveTabStates();
+    if (tts != null) {
+      tts.stop();
+    }
     Log.d(TAG_KIWIX,
       "onPause Save current zim file to preferences: " + zimReaderContainer.getZimCanonicalPath());
   }

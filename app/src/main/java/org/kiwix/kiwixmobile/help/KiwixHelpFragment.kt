@@ -16,25 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.viewmodel
+package org.kiwix.kiwixmobile.help
 
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.help.HelpFragment
 
-enum class SearchOrigin {
-  FromWebView,
-  FromTabView
-}
-
-sealed class State {
-  abstract val searchString: String
-  abstract val searchOrigin: SearchOrigin
-
-  data class Results(
-    override val searchString: String,
-    val values: List<SearchListItem>,
-    override val searchOrigin: SearchOrigin
-  ) : State()
-
-  data class NoResults(override val searchString: String, override val searchOrigin: SearchOrigin) :
-    State()
+class KiwixHelpFragment : HelpFragment() {
+  override fun rawTitleDescriptionMap() = super.rawTitleDescriptionMap() +
+    (R.string.how_to_update_content to R.array.update_content_description)
 }

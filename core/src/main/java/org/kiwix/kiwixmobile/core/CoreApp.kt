@@ -65,8 +65,8 @@ abstract class CoreApp : Application() {
    * The init of this class does the work of initializing,
    * simply injecting it is all that there is to be done
    */
-  @Inject
-  lateinit var serviceWorkerInitialiser: ServiceWorkerInitialiser
+  // @Inject
+  // lateinit var serviceWorkerInitialiser: ServiceWorkerInitialiser
 
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
