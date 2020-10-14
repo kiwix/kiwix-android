@@ -21,19 +21,23 @@ package eu.mhutti1.utils.storage.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.android.synthetic.main.device_item.file_name
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 class StorageDelegate(
   private val storageCalculator: StorageCalculator,
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val onClickAction: (StorageDevice) -> Unit
 ) : AdapterDelegate<StorageDevice> {
   override fun createViewHolder(parent: ViewGroup): ViewHolder =
     StorageViewHolder(
       parent.inflate(R.layout.device_item, false),
       storageCalculator,
+      sharedPreferenceUtil,
       onClickAction
     )
 

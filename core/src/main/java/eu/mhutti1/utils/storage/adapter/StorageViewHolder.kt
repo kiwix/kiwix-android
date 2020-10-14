@@ -21,28 +21,33 @@ package eu.mhutti1.utils.storage.adapter
 import android.annotation.SuppressLint
 import android.view.View
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.android.synthetic.main.device_item.clickOverlay
 import kotlinx.android.synthetic.main.device_item.file_name
 import kotlinx.android.synthetic.main.device_item.file_size
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 @SuppressLint("SetTextI18n")
 internal class StorageViewHolder(
   override val containerView: View,
   private val storageCalculator: StorageCalculator,
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val onClickAction: (StorageDevice) -> Unit
 ) : BaseViewHolder<StorageDevice>(containerView) {
+
   override fun bind(item: StorageDevice) {
     file_name.setText(
       if (item.isInternal) R.string.internal_storage
       else R.string.external_storage
     )
+
+    file_name.isChecked = sharedPreferenceUtil.prefStorage == item.name
     file_size.text = storageCalculator.calculateAvailableSpace(item.file) + " / " +
       storageCalculator.calculateTotalSpace(item.file) + "  "
-    file_name.setOnClickListener {
+    clickOverlay.setOnClickListener {
       onClickAction.invoke(item)
-      file_name.toggle()
     }
   }
 }
