@@ -23,8 +23,6 @@ import Libs
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
-import org.gradle.kotlin.dsl.KotlinClosure1
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
@@ -73,21 +71,17 @@ class AllProjectConfigurer {
 
       testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
-        unitTests.apply {
-          isReturnDefaultValues = true
-          all(KotlinClosure1<Any, Test>({
-            (this as Test).also { testTask ->
-              testTask.useJUnitPlatform()
-              testTask.testLogging {
-                setEvents(setOf("passed", "skipped", "failed", "standardOut", "standardError"))
-                outputs.upToDateWhen { false }
-                showStandardStreams = true
-              }
-              testTask.extensions
-                .getByType(JacocoTaskExtension::class.java)
-                .isIncludeNoLocationClasses = true
-            }
-          }, this))
+        unitTests.isReturnDefaultValues = true
+        unitTests.all {
+          it.useJUnitPlatform()
+          it.testLogging {
+            setEvents(setOf("passed", "skipped", "failed", "standardOut", "standardError"))
+            showStandardStreams = true
+          }
+          it.outputs.upToDateWhen { false }
+          it.extensions
+            .getByType(JacocoTaskExtension::class.java)
+            .isIncludeNoLocationClasses = true
         }
       }
 
@@ -103,7 +97,8 @@ class AllProjectConfigurer {
           //TODO stop ignoring below this
           "CheckResult",
           "LabelFor",
-          "LogConditional"
+          "LogConditional",
+          "DuplicateStrings"
         )
 
         warning(
@@ -112,7 +107,8 @@ class AllProjectConfigurer {
           "MissingTranslation",
           "IconDensities",
           "ContentDescription",
-          "IconDipSize"
+          "IconDipSize",
+          "NonConstantResourceId"
         )
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
