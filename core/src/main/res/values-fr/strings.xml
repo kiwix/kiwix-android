@@ -40,6 +40,7 @@
   <string name="hotspot_failed_title">Échec de démarrage du point d’accès</string>
   <string name="hotspot_failed_message">il semble que votre point d’accès soit déjà activé. Veuillez d’abord désactiver votre point d’accès WiFi  pour continuer.</string>
   <string name="go_to_wifi_settings_label">Aller aux paramètres WiFi</string>
+  <string name="connection_refused">Connexion refusée.</string>
   <string name="hotspot_running">Point d’accès WiFi actif</string>
   <string name="no_books_selected_toast_message">Veuillez d’abord choisir les livres</string>
   <string name="server_failed_message">Impossible de démarrer le serveur. Veuillez activer votre point d’accès WiFi</string>
