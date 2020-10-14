@@ -716,6 +716,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     actionBar = null;
     mainMenu = null;
     tabRecyclerView.setAdapter(null);
+    tableDrawerRight.setAdapter(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
     webViewList.clear();
