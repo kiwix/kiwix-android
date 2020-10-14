@@ -48,8 +48,8 @@ class StorageSelectDialog : DialogFragment() {
 
   private val storageAdapter: StorageAdapter by lazy {
     StorageAdapter(
-      StorageDelegate(storageCalculator, sharedPreferenceUtil) { storageDevice ->
-        onSelectAction?.invoke(storageDevice)
+      StorageDelegate(storageCalculator, sharedPreferenceUtil) {
+        onSelectAction?.invoke(it)
         dismiss()
       }
     )

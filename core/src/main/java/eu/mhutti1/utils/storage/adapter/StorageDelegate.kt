@@ -21,7 +21,6 @@ package eu.mhutti1.utils.storage.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import eu.mhutti1.utils.storage.StorageDevice
-import kotlinx.android.synthetic.main.device_item.file_name
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
