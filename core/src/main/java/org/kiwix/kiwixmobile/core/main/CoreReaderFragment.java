@@ -488,7 +488,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void addFileReader() {
-    documentParserJs = new FileReader().readFile("js/documentParser.js", getActivity());
+    documentParserJs = AssetUtils.readAssetAsText(requireActivity(), "js/documentParser.js");
     documentSections = new ArrayList<>();
   }
 

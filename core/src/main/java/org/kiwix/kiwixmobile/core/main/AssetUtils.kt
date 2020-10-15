@@ -15,18 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+@file:JvmName("AssetUtils")
+
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Context
 import java.io.BufferedReader
 import java.io.IOException
 
-class FileReader {
-  fun readFile(filePath: String?, context: Context): String = try {
-    context.assets.open(filePath)
-      .bufferedReader()
-      .use(BufferedReader::readText)
-  } catch (e: IOException) {
-    "".also { e.printStackTrace() }
-  }
+fun Context.readAssetAsText(assetPath: String): String = try {
+  assets.open(assetPath)
+    .bufferedReader()
+    .use(BufferedReader::readText)
+} catch (e: IOException) {
+  "".also { e.printStackTrace() }
 }
