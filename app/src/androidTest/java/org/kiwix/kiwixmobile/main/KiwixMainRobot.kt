@@ -18,10 +18,9 @@
 package org.kiwix.kiwixmobile.main
 
 import applyWithViewHierarchyPrinting
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
@@ -36,19 +35,20 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun clickReaderOnBottomNav() {
-    clickOn(R.id.readerFragment)
+    // clickOn(R.id.readerFragment)
+    clickOn(ViewId(R.id.readerFragment))
   }
 
   fun assertReaderScreenDisplayed() {
-    assertDisplayed(R.string.reader)
+    isVisible(Text(getResourceString(R.string.reader)))
   }
 
   fun clickLibraryOnBottomNav() {
-    clickOn(R.id.libraryFragment)
+    clickOn((ViewId(R.id.libraryFragment)))
   }
 
   fun assertLibraryScreenDisplayed() {
-    assertDisplayed(R.string.library)
+    isVisible(Text(getResourceString(R.string.library)))
   }
 
   fun clickFileTransferIcon() {
@@ -56,15 +56,15 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun assertFileTransferScreenDisplayed() {
-    assertDisplayed("Receive Files")
+    isVisible(Text("Receive Files"))
   }
 
   fun clickDownloadOnBottomNav() {
-    clickOn(R.id.downloadsFragment)
+    clickOn((ViewId(R.id.downloadsFragment)))
   }
 
   fun assertDownloadScreenDisplayed() {
-    assertDisplayed(R.string.download)
+    isVisible(Text(getResourceString(R.string.download)))
   }
 
   fun clickOnGlobeIcon() {
@@ -72,7 +72,7 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun assertLanguagesScreenDisplayed() {
-    assertDisplayed(R.string.select_languages)
+    isVisible(Text(getResourceString(R.string.select_languages)))
   }
 
   fun clickBookmarksOnNavDrawer() {
@@ -80,7 +80,7 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun assertBookmarksScreenDisplayed() {
-    assertDisplayed(R.string.bookmarks_from_current_book)
+    isVisible(Text(getResourceString(R.string.bookmarks_from_current_book)))
   }
 
   fun clickHistoryOnSideNav() {
@@ -88,7 +88,7 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun assertHistoryScreenDisplayed() {
-    assertDisplayed(R.string.history_from_current_book)
+    isVisible(Text(getResourceString(R.string.history_from_current_book)))
   }
 
   fun clickHostBooksOnSideNav() {
@@ -96,7 +96,7 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun assertHostBooksScreenDisplayed() {
-    assertDisplayed(R.string.menu_host_books)
+    isVisible(Text(getResourceString(R.string.menu_host_books)))
   }
 
   fun clickSettingsOnSideNav() {
@@ -104,7 +104,7 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun assertSettingsScreenDisplayed() {
-    assertDisplayed(R.string.menu_settings)
+    isVisible(Text(getResourceString(R.string.menu_settings)))
   }
 
   fun clickHelpOnSideNav() {
@@ -112,7 +112,7 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun assertHelpScreenDisplayed() {
-    assertDisplayed(R.string.menu_help)
+    isVisible(Text(getResourceString(R.string.menu_help)))
   }
 
   fun clickSupportKiwixOnSideNav() {
@@ -120,6 +120,6 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun assertExternalLinkDialogDisplayed() {
-    assertDisplayed(R.string.external_link_popup_dialog_title)
+    isVisible(Text(getResourceString(R.string.external_link_popup_dialog_title)))
   }
 }
