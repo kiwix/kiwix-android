@@ -36,19 +36,19 @@ import kotlinx.android.synthetic.main.storage_select_dialog.title
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class StorageSelectDialog : DialogFragment() {
-
   var onSelectAction: ((StorageDevice) -> Unit)? = null
 
   @Inject lateinit var storageCalculator: StorageCalculator
-
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var aTitle: String? = null
 
   private val storageAdapter: StorageAdapter by lazy {
     StorageAdapter(
-      StorageDelegate(storageCalculator) {
+      StorageDelegate(storageCalculator, sharedPreferenceUtil) {
         onSelectAction?.invoke(it)
         dismiss()
       }
@@ -70,6 +70,7 @@ class StorageSelectDialog : DialogFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
+
     Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())

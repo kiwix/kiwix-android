@@ -10,6 +10,7 @@
 * Macofe
 * Macondo
 * MarcoAurelio
+* Mpayansilva
 * Ncr
 * VegaDark
 -->
@@ -111,6 +112,7 @@
   <string name="delete_zims_toast">Archivo eliminado</string>
   <string name="no_files_here">Ningún archivo aquí</string>
   <string name="download_no_space">No queda espacio suficiente para la descarga.</string>
+  <string name="download">Descargar</string>
   <string name="space_available">Espacio disponible:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Ninguna imagen</string>
@@ -140,7 +142,6 @@
   <string name="confirm_stop_download_msg">¿Seguro que quieres detener esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
   <string name="tts_not_enabled">Texto a voz no está activado para este archivo ZIM</string>
-  <string name="search_error">Error inesperado durante la búsqueda. Vuelve a intentarlo</string>
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir descargar contenido mediante la red móvil?</string>
@@ -257,4 +258,7 @@
   <string name="diagnostic_report_message">Envíe todos los detalles siguientes para que podamos diagnosticar el problema.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
+  <string name="tab_restored">Pestaña restaurada</string>
+  <string name="close_drawer">Cerrar cajón</string>
+  <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
 </resources>

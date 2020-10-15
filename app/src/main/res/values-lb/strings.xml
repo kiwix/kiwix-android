@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Robby
+-->
+<resources>
+  <string name="send_files_title">Fichiere schécken</string>
+  <string name="receive_files_title">Fichiere kréien</string>
+</resources>

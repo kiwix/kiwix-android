@@ -2,6 +2,7 @@
 <!-- Authors:
 * 1233qwer1234qwer4
 * DraconicDark
+* Elliot
 * FF11
 * Killarnee
 * Metalhead64
@@ -20,7 +21,7 @@
   <string name="menu_exit_full_screen">Vollbild beenden</string>
   <string name="menu_read_aloud">Vorlesen</string>
   <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
-  <string name="menu_support_kiwix">Spenden</string>
+  <string name="menu_support_kiwix">Kiwix unterstützen</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
   <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
@@ -109,6 +110,7 @@
   <string name="delete_zims_toast">Dateien erfolgreich gelöscht</string>
   <string name="no_files_here">Hier gibt es keine Dateien</string>
   <string name="download_no_space">Unzureichender Speicherplatz für einen Download.</string>
+  <string name="download">Herunterladen</string>
   <string name="space_available">Verfügbarer Speicher:</string>
   <string name="zim_simple">Einfach</string>
   <string name="zim_no_pic">Keine Bilder</string>
@@ -140,7 +142,6 @@
   <string name="tts_not_enabled">Text-to-Speech ist für diese ZIM-Datei nicht aktiviert</string>
   <string name="texttospeech_initialization_failed">Die Initialisierung von Text-to-Speech ist fehlgeschlagen. Bitte versuchen Sie es noch einmal</string>
   <string name="texttospeech_error">Unerwarteter Fehler bei Text-to-Speech. Bitte versuchen Sie es noch einmal</string>
-  <string name="search_error">Unerwarteter Fehler beim Suchen. Bitte versuchen Sie es noch einmal</string>
   <string name="next">Nächste</string>
   <string name="previous">Vorherige</string>
   <string name="wifi_only_title">Herunterladen des Inhalts über das mobile Netzwerk erlauben?</string>

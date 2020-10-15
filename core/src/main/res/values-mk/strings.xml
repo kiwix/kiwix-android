@@ -26,6 +26,7 @@
   <string name="hotspot_failed_title">Не успеав да ја покренам пристапната точка</string>
   <string name="hotspot_failed_message">Се чини дека точката за безжичен пристап е веќе вклучена. Исклучете ја за да продолжите.</string>
   <string name="go_to_wifi_settings_label">Оди во поставките за безжичен пристап</string>
+  <string name="connection_refused">Поврзувањето е одбиено.</string>
   <string name="hotspot_running">Активна пристапна точка</string>
   <string name="no_books_selected_toast_message">Најпрвин одберете книги</string>
   <string name="server_failed_message">Не можев да го покренам опслужувачот. Вклучете ја пристапната точка</string>
@@ -105,6 +106,7 @@
   <string name="delete_zims_toast">Податотеката е успешно избришана</string>
   <string name="no_files_here">Нема податотеки</string>
   <string name="download_no_space">Нема доволно место за преземање.</string>
+  <string name="download">Преземи</string>
   <string name="space_available">Достапен простор:</string>
   <string name="zim_simple">Просто</string>
   <string name="zim_no_pic">Без слики</string>
@@ -136,7 +138,6 @@
   <string name="tts_not_enabled">Претворањето текст во говор не е овозможено за оваа ZIM-податотека</string>
   <string name="texttospeech_initialization_failed">Не успеав да го покренам „Текст во говор“. Обидете се повторно.</string>
   <string name="texttospeech_error">Се јави неочекувана грешка во „Текст во говор“. Обидете се повторно.</string>
-  <string name="search_error">Се јави неочекувана грешка при пребарувањето. Обидете се повторно.</string>
   <string name="next">Следно</string>
   <string name="previous">Претходно</string>
   <string name="wifi_only_title">Дозволувате преземање на содржини преку мобилна мрежа?</string>
@@ -268,4 +269,12 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Приближување на текст</string>
   <string name="search_open_in_new_tab">Отвори во ново јазиче</string>
+  <string name="reader">Читач</string>
+  <string name="no_open_book">Нема отворена книга</string>
+  <string name="open_library">Отворена библиотека</string>
+  <string name="tab_restored">Јазичето е повратено</string>
+  <string name="open_drawer">Отвори фиока</string>
+  <string name="close_drawer">Затвори фиока</string>
+  <string name="how_to_update_content">Како се подновува содржината?</string>
+  <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>
 </resources>

@@ -43,9 +43,11 @@
   <string name="hotspot_details_message">فيما يلي تفاصيل الهوت-سبوت الخاص بك.\nSSID: %1$s \nPass: %2$s</string>
   <string name="server_textview_default_message">حدد الملفات التي ترغب في استضافتها على الخادم</string>
   <string name="progress_dialog_starting_server">جار بدء الخادم</string>
-  <string name="hotspot_dialog_title" fuzzy="true">قم بتشغيل هوت-سبوت الواي فاي الخاص بك</string>
-  <string name="hotspot_dialog_message" fuzzy="true">لكي تعمل هذه الميزة، يجب عليك أولًا تشغيل هوت-سبوت الواي فاي يدويًا.</string>
-  <string name="hotspot_dialog_neutral_button" fuzzy="true">نعم، لقد شغلته</string>
+  <string name="hotspot_dialog_title">تعليمات استضافة الكتب</string>
+  <string name="wifi_dialog_title">تم الكشف عن اتصال واي فاي</string>
+  <string name="wifi_dialog_body">لعرض الكتب على أجهزةٍ أخرى، يُرجى التأكد من أنَّ جميع الأجهزة متصلة بنفس شبكة الواي فاي.</string>
+  <string name="hotspot_dialog_message">لكي تعمل هذه الميزة، يجب عليك أولًا تشغيل هوت-سبوت الواي فاي يدويًا أو التأكد من أنَّ الجهاز المُضيف وجهاز الاستقبال على نفس شبكة الواي فاي</string>
+  <string name="hotspot_dialog_neutral_button">نُفذ</string>
   <string name="hotspot_channel_description">تحديثات حول حالة الهوت-سبوت/الخادم الخاص بك.</string>
   <string name="hotspot_notification_content_title">هوت-سبوت كيوكيس</string>
   <string name="start_server_label">بدء الخادم</string>
@@ -110,6 +112,7 @@
   <string name="delete_zims_toast">حُذف الملف</string>
   <string name="no_files_here">لا توجد ملفات هنا</string>
   <string name="download_no_space">لا توجد مساحة كافية للتنزيل.</string>
+  <string name="download">تنزيل</string>
   <string name="space_available">المساحة المتاحة:</string>
   <string name="zim_simple">بسيط</string>
   <string name="zim_no_pic">لا توجد صور</string>
@@ -141,11 +144,10 @@
   <string name="tts_not_enabled">لم يتم تمكين النص إلى الكلام لملف زيم (ZIM) هذا</string>
   <string name="texttospeech_initialization_failed">فشل تهيئة النص إلى كلام. حاول مرةً أخرى</string>
   <string name="texttospeech_error">خطأٌ غير متوقع في تحويل النص إلى كلام. حاول مرةً أخرى</string>
-  <string name="search_error">خطأٌ غير متوقع أثناء البحث. حاول مرةً أخرى</string>
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
-  <string name="wifi_only_msg">إذا اخترت \“نعم\”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
+  <string name="wifi_only_msg">إذا اخترت “نعم”، فلن يتم تحذيرك في المستقبل. مع ذلك، يمكنك دائمًا تغيير هذا في الإعدادات.</string>
   <string name="pref_wifi_only">تنزيل المحتوى عبر واي فاي فقط</string>
   <string name="time_day">يوم</string>
   <string name="time_hour">ساعة</string>
@@ -247,21 +249,38 @@
   <string name="status">الحالة</string>
   <string name="pref_clear_all_notes_summary">مسح جميع الملاحظات على جميع المقالات</string>
   <string name="pref_clear_all_notes_title">مسح جميع الملاحظات</string>
+  <string name="pref_text_zoom_summary">تغيير حجم النص بزيادة مقدارها 25%.</string>
   <string name="tag_pic">صورة</string>
   <string name="tag_vid">فيديو</string>
   <string name="tag_text_only">نص فقط</string>
   <string name="tag_short_text">نص قصير</string>
   <string name="storage_permission_denied">إِذن التّخزين قد رُفِض</string>
   <string name="grant_read_storage_permission">يتطلب هذا التطبيق القدرة على قراءة وظيفة التخزين. يُرجَى منح الإذن في إعداداتك</string>
-  <string name="go_to_settings" fuzzy="true">اذهب للإعدادات</string>
+  <string name="go_to_settings">اذهب لإعدادات الهوت-سبوت</string>
   <string name="no_results">لا نتائج</string>
   <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
   <string name="no_history">لا تاريخ</string>
   <string name="device_default">الجهاز الافتراضي</string>
-  <string name="delete_history" fuzzy="true">حذف التاريخ؟</string>
-  <string name="delete_bookmarks" fuzzy="true">أزل العلامات المرجعية؟</string>
+  <string name="delete_history">حذف كل التاريخ؟</string>
+  <string name="delete_selected_history">حذف تاريخ محدد؟</string>
+  <string name="delete_bookmarks">حذف جميع العلامات المرجعية؟</string>
+  <string name="delete_selected_bookmarks">حذف علامات مرجعية محددة؟</string>
   <string name="on">تشغيل</string>
   <string name="off">تعطيل</string>
   <string name="auto">تلقائي</string>
+  <string name="send_report">إرسال تقرير التشخيص</string>
   <string name="crash_checkbox_file_system">تفاصيل نظام الملفات</string>
+  <string name="diagnostic_report">تقرير التشخيص</string>
+  <string name="diagnostic_report_message">يرجى إرسال جميع التفاصيل التالية حتى نتمكن من تشخيص المشكلة</string>
+  <string name="percentage">%d%%</string>
+  <string name="pref_text_zoom_title">تكبير النص</string>
+  <string name="search_open_in_new_tab">افتح في تبويبٍ جديد</string>
+  <string name="reader">قارئ</string>
+  <string name="no_open_book">لا كتب مفتوحة</string>
+  <string name="open_library">افتح المكتبة</string>
+  <string name="tab_restored">استُعيدت علامة التبويب</string>
+  <string name="open_drawer">افتح الدرج</string>
+  <string name="close_drawer">أغلق الدرج</string>
+  <string name="how_to_update_content">كيفية تحديث المحتوى؟</string>
+  <string name="update_content_description">لتحديث احتوى (ملف zim)، تحتاج إلى تنزيل أحدث إصدارٍ كاملٍ من المحتوى نفسه. يمكنك القيام بذلك عبر قسم التنزيل.</string>
 </resources>

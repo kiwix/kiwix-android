@@ -22,7 +22,7 @@ import android.app.Activity
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
@@ -31,7 +31,7 @@ data class ProcessActivityResult(
   private val requestCode: Int,
   private val resultCode: Int,
   private val data: Intent?,
-  private val actions: PublishProcessor<Action>
+  private val actions: Channel<Action>
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     if (requestCode == StartSpeechInput.REQ_CODE_SPEECH_INPUT &&

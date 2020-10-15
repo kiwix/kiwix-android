@@ -18,29 +18,42 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import android.content.Intent
-import com.jraska.livedata.test
+import android.os.Bundle
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.TestScheduler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithIntent
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithArguments
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
@@ -49,180 +62,95 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
-import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromTabView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.NoResults
-import org.kiwix.kiwixmobile.core.search.viewmodel.State.Results
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchArgumentProcessing
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchIntentProcessing
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
-import org.kiwix.sharedFunctions.InstantExecutorExtension
-import org.kiwix.sharedFunctions.resetSchedulers
-import org.kiwix.sharedFunctions.setScheduler
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
-@ExtendWith(InstantExecutorExtension::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModelTest {
   private val recentSearchDao: NewRecentSearchDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
+  private val zimFileReader: ZimFileReader = mockk()
+  private val testDispatcher = TestCoroutineDispatcher()
 
   lateinit var viewModel: SearchViewModel
 
-  private val testScheduler = TestScheduler()
-
-  init {
-    setScheduler(testScheduler)
-  }
-
   @AfterAll
   fun teardown() {
-    resetSchedulers()
+    Dispatchers.resetMain()
   }
 
-  private val recentsFromDb: PublishProcessor<List<RecentSearchListItem>> =
-    PublishProcessor.create()
+  private lateinit var recentsFromDb: Channel<List<RecentSearchListItem>>
 
   @BeforeEach
   fun init() {
+    Dispatchers.resetMain()
+    Dispatchers.setMain(testDispatcher)
     clearAllMocks()
+    recentsFromDb = Channel(kotlinx.coroutines.channels.Channel.UNLIMITED)
+    every { zimReaderContainer.copyReader() } returns zimFileReader
+    coEvery {
+      searchResultGenerator.generateSearchResults("", zimFileReader)
+    } returns emptyList()
     every { zimReaderContainer.id } returns "id"
-    every { recentSearchDao.recentSearches("id") } returns recentsFromDb
+    every { recentSearchDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
     viewModel = SearchViewModel(recentSearchDao, zimReaderContainer, searchResultGenerator)
   }
 
   @Nested
   inner class StateTests {
     @Test
-    fun `initial state is Initialising`() {
-      viewModel.state.test().assertValue(NoResults("", FromWebView))
+    fun `initial state is Initialising`() = runBlockingTest {
+      viewModel.state.test(this).assertValue(
+        SearchState("", SearchResultsWithTerm("", emptyList()), emptyList(), FromWebView)
+      ).finish()
     }
 
     @Test
-    fun `non empty search term with search results shows Results`() {
+    fun `SearchState combines sources from inputs`() = runBlockingTest {
       val item = ZimSearchResultListItem("")
       val searchTerm = "searchTerm"
       val searchOrigin = FromWebView
-      emissionOf(
-        searchTerm = searchTerm,
-        searchResults = listOf(item),
-        databaseResults = listOf(RecentSearchListItem("")),
-        searchOrigin = searchOrigin
-      )
-      resultsIn(Results(searchTerm, listOf(item), searchOrigin))
-    }
-
-    @Test
-    fun `non empty search string with no search results is NoResults`() {
-      emissionOf(
-        searchTerm = "a",
-        searchResults = emptyList(),
-        databaseResults = listOf(RecentSearchListItem("")),
-        searchOrigin = FromWebView
-      )
-      resultsIn(NoResults("a", FromWebView))
-    }
-
-    @Test
-    fun `empty search string with database results shows Results`() {
-      val item = RecentSearchListItem("")
-      emissionOf(
-        searchTerm = "",
-        searchResults = listOf(ZimSearchResultListItem("")),
-        databaseResults = listOf(item),
-        searchOrigin = FromWebView
-      )
-      resultsIn(Results("", listOf(item), FromWebView))
-    }
-
-    @Test
-    fun `empty search string with no database results is NoResults`() {
-      emissionOf(
-        searchTerm = "",
-        searchResults = listOf(ZimSearchResultListItem("")),
-        databaseResults = emptyList(),
-        searchOrigin = FromWebView
-      )
-      resultsIn(NoResults("", FromWebView))
-    }
-
-    @Test
-    fun `duplicate search terms are ignored`() {
-      val searchString = "a"
-      val item = ZimSearchResultListItem("")
-      emissionOf(
-        searchTerm = searchString,
-        searchResults = listOf(item),
-        databaseResults = emptyList(),
-        searchOrigin = FromWebView
-      )
-      viewModel.actions.offer(Filter(searchString))
-      viewModel.state.test()
-        .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(
-          Results(searchString, listOf(item), FromWebView)
+      viewModel.state.test(this)
+        .also {
+          emissionOf(
+            searchTerm = searchTerm,
+            searchResults = listOf(item),
+            databaseResults = listOf(RecentSearchListItem("")),
+            searchOrigin = searchOrigin
+          )
+        }
+        .assertValue(
+          SearchState(
+            searchTerm,
+            SearchResultsWithTerm(searchTerm, listOf(item)),
+            listOf(RecentSearchListItem("")),
+            searchOrigin
+          )
         )
-    }
-
-    @Test
-    fun `only latest search term is used`() {
-      val item = ZimSearchResultListItem("")
-      emissionOf(
-        searchTerm = "a",
-        searchResults = listOf(item),
-        databaseResults = emptyList(),
-        searchOrigin = FromWebView
-      )
-      emissionOf(
-        searchTerm = "b",
-        searchResults = listOf(item),
-        databaseResults = emptyList(),
-        searchOrigin = FromWebView
-      )
-      viewModel.state.test()
-        .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-        .assertValueHistory(Results("b", listOf(item), FromWebView))
-    }
-
-    @Test
-    fun `webView search origin leads to webView in NoResults`() {
-      emissionOf(
-        searchTerm = "",
-        searchResults = listOf(ZimSearchResultListItem("")),
-        databaseResults = emptyList(),
-        searchOrigin = FromWebView
-      )
-      resultsIn(NoResults("", FromWebView))
-    }
-
-    @Test
-    fun `tabView search origin leads to tabView in Results`() {
-      emissionOf(
-        searchTerm = "",
-        searchResults = listOf(ZimSearchResultListItem("")),
-        databaseResults = emptyList(),
-        searchOrigin = FromTabView
-      )
-      resultsIn(NoResults("", FromTabView))
+        .finish()
     }
   }
 
   @Nested
   inner class ActionMapping {
+
     @Test
-    fun `ExitedSearch offers Finish`() {
+    fun `ExitedSearch offers PopFragmentBackstack`() = runBlockingTest {
       actionResultsInEffects(ExitedSearch, PopFragmentBackstack)
     }
 
     @Test
-    fun `OnItemClick offers Saves and Opens`() {
+    fun `OnItemClick offers Saves and Opens`() = runBlockingTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         OnItemClick(searchListItem),
@@ -232,7 +160,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `OnOpenInNewTabClick offers Saves and Opens in new tab`() {
+    fun `OnOpenInNewTabClick offers Saves and Opens in new tab`() = runBlockingTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         OnOpenInNewTabClick(searchListItem),
@@ -242,7 +170,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `OnItemLongClick offers Saves and Opens`() {
+    fun `OnItemLongClick offers Saves and Opens`() = runBlockingTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         OnItemLongClick(searchListItem),
@@ -251,12 +179,12 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `ClickedSearchInText offers SearchInPreviousScreen`() {
+    fun `ClickedSearchInText offers SearchInPreviousScreen`() = runBlockingTest {
       actionResultsInEffects(ClickedSearchInText, SearchInPreviousScreen(""))
     }
 
     @Test
-    fun `ConfirmedDelete offers Delete and Toast`() {
+    fun `ConfirmedDelete offers Delete and Toast`() = runBlockingTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         ConfirmedDelete(searchListItem),
@@ -266,16 +194,16 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `CreatedWithIntent offers SearchIntentProcessing`() {
-      val intent = mockk<Intent>()
+    fun `CreatedWithArguments offers SearchArgumentProcessing`() = runBlockingTest {
+      val bundle = mockk<Bundle>()
       actionResultsInEffects(
-        CreatedWithIntent(intent),
-        SearchIntentProcessing(intent, viewModel.actions)
+        CreatedWithArguments(bundle),
+        SearchArgumentProcessing(bundle, viewModel.actions)
       )
     }
 
     @Test
-    fun `ReceivedPromptForSpeechInput offers SearchIntentProcessing`() {
+    fun `ReceivedPromptForSpeechInput offers StartSpeechInput`() = runBlockingTest {
       actionResultsInEffects(
         ReceivedPromptForSpeechInput,
         StartSpeechInput(viewModel.actions)
@@ -283,7 +211,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `StartSpeechInputFailed offers ShowToast`() {
+    fun `StartSpeechInputFailed offers ShowToast`() = runBlockingTest {
       actionResultsInEffects(
         StartSpeechInputFailed,
         ShowToast(string.speech_not_supported)
@@ -291,40 +219,71 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `ActivityResultReceived offers ProcessActivityResult`() {
+    fun `ActivityResultReceived offers ProcessActivityResult`() = runBlockingTest {
       actionResultsInEffects(
         ActivityResultReceived(0, 1, null),
         ProcessActivityResult(0, 1, null, viewModel.actions)
       )
     }
 
-    private fun actionResultsInEffects(
+    private fun TestCoroutineScope.actionResultsInEffects(
       action: Action,
       vararg effects: SideEffect<*>
     ) {
       viewModel.effects
-        .test()
+        .test(this)
         .also { viewModel.actions.offer(action) }
         .assertValues(*effects)
+        .finish()
     }
   }
 
-  private fun resultsIn(st: State) {
-    viewModel.state.test()
-      .also { testScheduler.advanceTimeBy(100, MILLISECONDS) }
-      .assertValue(st)
-  }
-
-  private fun emissionOf(
+  private fun TestCoroutineScope.emissionOf(
     searchTerm: String,
     searchResults: List<ZimSearchResultListItem>,
     databaseResults: List<RecentSearchListItem>,
     searchOrigin: SearchOrigin
   ) {
-    every { searchResultGenerator.generateSearchResults(searchTerm) } returns searchResults
+
+    coEvery {
+      searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
+    } returns searchResults
     viewModel.actions.offer(Filter(searchTerm))
     recentsFromDb.offer(databaseResults)
     viewModel.actions.offer(ScreenWasStartedFrom(searchOrigin))
-    testScheduler.advanceTimeBy(500, MILLISECONDS)
+    advanceTimeBy(500)
+  }
+}
+
+fun <T> Flow<T>.test(scope: CoroutineScope) = TestObserver(scope, this)
+
+class TestObserver<T>(
+  scope: CoroutineScope,
+  flow: Flow<T>
+) {
+  private val values = mutableListOf<T>()
+  private val job: Job = scope.launch {
+    flow.collect {
+      values.add(it)
+    }
+  }
+
+  fun assertValues(vararg values: T): TestObserver<T> {
+    assertThat(values.toList()).containsExactlyElementsOf(this.values)
+    return this
+  }
+
+  fun assertValue(value: T): TestObserver<T> {
+    assertThat(values.last()).isEqualTo(value)
+    return this
+  }
+
+  fun finish() {
+    job.cancel()
+  }
+
+  fun assertValue(value: (T) -> Boolean): TestObserver<T> {
+    assertThat(values.last()).satisfies { value(it) }
+    return this
   }
 }

@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.custom.settings
 
 import android.os.Bundle
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_LANG
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_WIFI_ONLY
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_LANG
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_WIFI_ONLY
 import org.kiwix.kiwixmobile.custom.BuildConfig
 
 class CustomPrefsFragment : CorePrefsFragment() {

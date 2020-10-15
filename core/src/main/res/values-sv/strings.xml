@@ -110,6 +110,7 @@
   <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned.</string>
+  <string name="download">Ladda ned</string>
   <string name="space_available">Tillgängligt utrymme:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Inga bilder</string>
@@ -141,7 +142,6 @@
   <string name="tts_not_enabled">Text till tal är inte aktiverat för denna ZIM-fil</string>
   <string name="texttospeech_initialization_failed">Misslyckades att initialisera text-till-tal. Var god försök igen</string>
   <string name="texttospeech_error">Oväntat fel uppstod för text-till-tal. Var god försök igen</string>
-  <string name="search_error">Oväntat fel uppstod under sökning. Var god försök igen</string>
   <string name="next">Nästa</string>
   <string name="previous">Föregående</string>
   <string name="wifi_only_title">Tillåt att ladda ned innehåll med mobildata?</string>
@@ -220,6 +220,7 @@
   <string name="notes_deletion_successful">Raderade hela anteckningsmappen</string>
   <string name="notes_deletion_unsuccessful">Vissa filer raderades inte</string>
   <string name="books_count">%d bok/böcker</string>
+  <string name="severe_loss_error">Allvarligt fel! Testa att starta om WiFi P2P</string>
   <string name="connection_failed">Anslutning misslyckades</string>
   <string name="permission_refused_storage">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
   <string name="request_enable_wifi">Aktivera WiFi P2P i systeminställningar</string>
@@ -262,4 +263,5 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text-zoomning</string>
   <string name="search_open_in_new_tab">Öppna i ny flik</string>
+  <string name="tab_restored">Fliken återställdes</string>
 </resources>

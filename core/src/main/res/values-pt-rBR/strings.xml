@@ -32,6 +32,7 @@
   <string name="hotspot_failed_title">Falha ao iniciar o ponto de acesso</string>
   <string name="hotspot_failed_message">Parece que seu ponto de acesso já está ativado. Desative seu ponto de acesso wi-fi para continuar.</string>
   <string name="go_to_wifi_settings_label">Vá para configurações de wi-fi</string>
+  <string name="connection_refused">Conexão recusada.</string>
   <string name="hotspot_running">Rede wi-fi em execução</string>
   <string name="no_books_selected_toast_message">Selecione primeiro os livros</string>
   <string name="server_failed_message">Não foi possível iniciar o servidor. Por favor, ligue seu ponto de acesso</string>
@@ -111,6 +112,7 @@
   <string name="delete_zims_toast">Arquivo apagado</string>
   <string name="no_files_here">Nenhum arquivo aqui</string>
   <string name="download_no_space">Espaço insuficiente para baixar o download.</string>
+  <string name="download">Baixar</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sem Imagens</string>
@@ -142,7 +144,6 @@
   <string name="tts_not_enabled">Texto para fala não está habilitado para este arquivo ZIM</string>
   <string name="texttospeech_initialization_failed">Falha na inicialização da leitura de texto. Por favor, tente novamente</string>
   <string name="texttospeech_error">Erro inesperado na leitura de texto. Por favor, tente novamente</string>
-  <string name="search_error">Erro inesperado durante a pesquisa. Por favor, tente novamente</string>
   <string name="next">Próximo</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir o download de conteúdo via rede móvel?</string>
@@ -274,4 +275,12 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zoom de texto</string>
   <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
+  <string name="reader">Leitor</string>
+  <string name="no_open_book">Sem livro aberto</string>
+  <string name="open_library">Biblioteca aberta</string>
+  <string name="tab_restored">Guia restaurada</string>
+  <string name="open_drawer">Abrir gaveta</string>
+  <string name="close_drawer">Fechar gaveta</string>
+  <string name="how_to_update_content">Como atualizar o conteúdo?</string>
+  <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
 </resources>

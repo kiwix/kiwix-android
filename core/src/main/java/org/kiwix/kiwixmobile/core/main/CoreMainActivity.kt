@@ -19,44 +19,78 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Process
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
-import org.kiwix.kiwixmobile.core.help.HelpActivity
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
+import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
 const val PAGE_URL_KEY = "pageUrl"
+const val SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
+const val FIND_IN_PAGE_SEARCH_STRING = "findInPageSearchString"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
+const val KIWIX_INTERNAL_ERROR = 10
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
+  abstract val searchFragmentResId: Int
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
-  protected lateinit var drawerToggle: ActionBarDrawerToggle
-
+  @Inject lateinit var rateDialogHandler: RateDialogHandler
+  private var drawerToggle: ActionBarDrawerToggle? = null
+  @Inject lateinit var zimReaderContainer: ZimReaderContainer
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
   abstract val bookmarksFragmentResId: Int
+  abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
+  abstract val helpFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    setTheme(R.style.KiwixTheme)
+    super.onCreate(savedInstanceState)
+    if (!BuildConfig.DEBUG) {
+      val appContext = applicationContext
+      Thread.setDefaultUncaughtExceptionHandler { paramThread: Thread?,
+        paramThrowable: Throwable? ->
+        val intent = Intent(appContext, ErrorActivity::class.java)
+        val extras = Bundle()
+        extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)
+        intent.putExtras(extras)
+        appContext.startActivity(intent)
+        finish()
+        Process.killProcess(Process.myPid())
+        exitProcess(KIWIX_INTERNAL_ERROR)
+      }
+    }
+  }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
@@ -65,6 +99,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
+    rateDialogHandler.checkForRateDialog(getIconResId())
     navController.addOnDestinationChangedListener { _, destination, _ ->
       configureActivityBasedOn(destination)
     }
@@ -85,6 +120,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     activeFragments().forEach {
       it.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (drawerToggle?.isDrawerIndicatorEnabled == true) {
+      return drawerToggle?.onOptionsItemSelected(item) == true
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   override fun onActionModeStarted(mode: ActionMode) {
@@ -124,26 +166,33 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         R.string.open_drawer,
         R.string.close_drawer
       )
-    drawerContainerLayout.addDrawerListener(drawerToggle)
-    drawerToggle.syncState()
+    drawerToggle?.let {
+      drawerContainerLayout.addDrawerListener(it)
+      it.syncState()
+    }
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
   }
 
   open fun disableDrawer() {
-    drawerToggle.isDrawerIndicatorEnabled = false
+    drawerToggle?.isDrawerIndicatorEnabled = false
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
   }
 
   open fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
-      R.id.menu_settings -> openSettingsActivity()
-      R.id.menu_help -> start<HelpActivity>()
-      R.id.menu_history -> openHistoryActivity()
-      R.id.menu_bookmarks_list -> openBookmarksActivity()
+      R.id.menu_settings -> openSettings()
+      R.id.menu_help -> openHelpFragment()
+      R.id.menu_history -> openHistory()
+      R.id.menu_bookmarks_list -> openBookmarks()
       else -> return false
     }
     return true
+  }
+
+  private fun openHelpFragment() {
+    navigate(helpFragmentResId)
+    handleDrawerOnNavigation()
   }
 
   private fun navigationDrawerIsOpen(): Boolean =
@@ -201,13 +250,42 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigate(fragmentId, bundle)
   }
 
-  abstract fun openSettingsActivity()
+  private fun openSettings() {
+    handleDrawerOnNavigation()
+    navigate(settingsFragmentResId)
+  }
 
-  private fun openHistoryActivity() {
+  private fun openHistory() {
     navigate(historyFragmentResId)
   }
 
-  private fun openBookmarksActivity() {
+  fun openSearch(
+    searchString: String = "",
+    isOpenedFromTabView: Boolean = false,
+    isVoice: Boolean = false
+  ) {
+    navigate(
+      searchFragmentResId,
+      bundleOf(
+        NAV_ARG_SEARCH_STRING to searchString,
+        TAG_FROM_TAB_SWITCHER to isOpenedFromTabView,
+        EXTRA_IS_WIDGET_VOICE to isVoice
+      )
+    )
+  }
+
+  fun openPage(pageUrl: String, zimFilePath: String = "", shouldOpenInNewTab: Boolean = false) {
+    navigate(
+      readerFragmentResId,
+      bundleOf(
+        PAGE_URL_KEY to pageUrl,
+        ZIM_FILE_URI_KEY to zimFilePath,
+        SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
+      )
+    )
+  }
+
+  private fun openBookmarks() {
     navigate(bookmarksFragmentResId)
     handleDrawerOnNavigation()
   }
@@ -217,5 +295,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     disableDrawer()
   }
 
-  abstract fun openPage(pageUrl: String, zimFilePath: String = "")
+  fun findInPage(searchString: String) {
+    navigate(readerFragmentResId, bundleOf(FIND_IN_PAGE_SEARCH_STRING to searchString))
+  }
+
+  protected abstract fun getIconResId(): Int
+  abstract val readerFragmentResId: Int
 }

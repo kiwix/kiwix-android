@@ -1,3 +1,16 @@
+3.4.1
+NEW: Overhauled navigation
+NEW: Updated translations
+NEW: Support resizing Kiwix
+NEW: Open search in ne wtab
+BUGFIX: Search speed increased and loading state added
+BUGFIX: Memory leaks patched
+BUGFIX: More consistent labelling drives internal/external
+BUGFIX: Cache results of a conclusive file system detection
+BUGFIX: Overlapping lables in Library
+BUGFIX: Accessibility improvements
++ Lots Lots Lots More
+
 3.4.0
 Beta release of navigation
 Full release notes to follow in 3.4.1

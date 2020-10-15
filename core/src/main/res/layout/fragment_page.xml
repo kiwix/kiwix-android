@@ -11,11 +11,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toTopOf="parent"
-    tools:showIn="@layout/activity_help">
+    tools:showIn="@layout/fragment_help">
 
-    <include layout="@layout/layout_toolbar" />
 
-    <Switch
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:popupTheme="@style/KiwixTheme"
+      app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+      tools:showIn="@layout/fragment_search" />
+
+    <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/page_switch"
       style="@style/switch_style" />
 

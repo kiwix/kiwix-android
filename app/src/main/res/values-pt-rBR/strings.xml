@@ -6,4 +6,6 @@
   <string name="file_system_does_not_support_4gb">Seu sistema de arquivos não suporta arquivos com mais de 4 GB</string>
   <string name="detecting_file_system">Detectando se o sistema de arquivos pode criar arquivos de 4 GB</string>
   <string name="cannot_open_file">Falha ao abrir arquivo\nTente procurar esse arquivo na guia Dispositivo da sua biblioteca</string>
+  <string name="send_files_title">Enviar arquivos</string>
+  <string name="receive_files_title">Receber arquivos</string>
 </resources>

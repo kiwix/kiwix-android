@@ -114,6 +114,7 @@
   <string name="delete_zims_toast">파일이 삭제되었습니다</string>
   <string name="no_files_here">여기에 파일이 없습니다</string>
   <string name="download_no_space">다운로드할 공간이 충분하지 않습니다.</string>
+  <string name="download">다운로드</string>
   <string name="space_available">사용 가능한 공간:</string>
   <string name="zim_simple">간단히</string>
   <string name="zim_no_pic">그림 없음</string>
@@ -145,7 +146,6 @@
   <string name="tts_not_enabled">이 ZIM 파일에 대해 TTS가 활성화되어 있지 않습니다</string>
   <string name="texttospeech_initialization_failed">텍스트–음성 초기화가 실패했습니다. 다시 시도해 주세요</string>
   <string name="texttospeech_error">텍스트–음성 변환 과정 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요</string>
-  <string name="search_error">검색 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주십시오</string>
   <string name="next">다음</string>
   <string name="previous">이전</string>
   <string name="wifi_only_title">모바일 네트워크를 통해 내용을 다운로드할 수 있도록 하겠습니까?</string>

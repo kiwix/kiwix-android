@@ -35,9 +35,9 @@
     android:paddingBottom="1dp"
     android:visibility="gone"
     app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="1.0"
     app:layout_constraintStart_toEndOf="@id/text_view_file_item_name"
-    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
   <ImageView
@@ -51,11 +51,11 @@
     android:paddingTop="1dp"
     android:paddingEnd="5dp"
     android:paddingBottom="1dp"
+    android:src="@drawable/ic_baseline_wait_24px"
     app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="1.0"
     app:layout_constraintStart_toEndOf="@id/text_view_file_item_name"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_baseline_wait_24px" />
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

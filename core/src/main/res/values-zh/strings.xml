@@ -38,6 +38,7 @@
   <string name="hotspot_failed_title">未能启动热点</string>
   <string name="hotspot_failed_message">你的热点好像已经打开了。请先关闭 Wi-Fi 热点再继续。</string>
   <string name="go_to_wifi_settings_label">转到WIFI设置</string>
+  <string name="connection_refused">拒绝连接</string>
   <string name="hotspot_running">运行热点</string>
   <string name="no_books_selected_toast_message">请先选择书籍</string>
   <string name="server_failed_message">未能启动服务器。请打开热点。</string>
@@ -200,4 +201,5 @@
   <string name="delete_bookmarks">要删除所有书签吗？</string>
   <string name="delete_selected_bookmarks">要删除所选的书签吗？</string>
   <string name="search_open_in_new_tab">在新标签页打开</string>
+  <string name="reader">读者</string>
 </resources>

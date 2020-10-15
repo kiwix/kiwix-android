@@ -96,6 +96,7 @@
   <string name="delete_zims_toast">Dateiä erfolgriich glöscht</string>
   <string name="no_files_here">Hie hets ke Dateiä</string>
   <string name="download_no_space">Nid gnüegend Spiicherplatz um abezladä.</string>
+  <string name="download">Abelade</string>
   <string name="space_available">Verfüegbaare Spiicherplatz:</string>
   <string name="zim_simple">Eifach</string>
   <string name="zim_no_pic">Ke Bilder</string>
@@ -117,7 +118,6 @@
   <string name="tts_not_enabled">Texscht zu Spraac isch nid iigschtellt für diä ZIM Datei</string>
   <string name="texttospeech_initialization_failed">Initialisierig vo Texscht zu Spraach fäugschlagä. Bitte no einisch probierä</string>
   <string name="texttospeech_error">Unerwartätä Fähler i Texscht zu Spraach. Bitte no einisch probierä</string>
-  <string name="search_error">Unerwartätä Fähler bim Sueche. Bitte no einisch probierä</string>
   <string name="next">Nächschti</string>
   <string name="previous">Vorhärigi</string>
   <string name="time_today">Hüt</string>

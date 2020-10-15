@@ -22,6 +22,7 @@
   <string name="hotspot_failed_title">Failed to start hotspot</string>
   <string name="hotspot_failed_message">It seems like your hotspot is already turned on. Please disable your wifi hotspot to continue.</string>
   <string name="go_to_wifi_settings_label">Go to WIFI settings</string>
+  <string name="connection_refused">Connection refused.</string>
   <string name="hotspot_running" tools:keep="@string/hotspot_running">Running Hotspot</string>
   <string name="no_books_selected_toast_message" tools:keep="@string/no_books_selected_toast_message">Please select books first</string>
   <string name="server_failed_message" tools:keep="@string/server_failed_message">Couldn’t start server. Please turn on your hotspot</string>
@@ -133,7 +134,7 @@
   <string name="tts_not_enabled">Text to speech is not enabled for this ZIM file</string>
   <string name="texttospeech_initialization_failed">Initialization of Text to Speech failed. Please try again</string>
   <string name="texttospeech_error">Unexpected error in Text to Speech. Please try again</string>
-  <string name="search_error">Unexpected error while searching. Please try again</string>
+
   <string name="next">Next</string>
   <string name="previous">Previous</string>
   <string name="wifi_only_title">Allow downloading content via mobile network?</string>
@@ -229,6 +230,7 @@
   <string name="severe_loss_error" tools:keep="@string/severe_loss_error">Severe error! Try Disable/Re-enable WiFi P2P</string>
   <string name="connection_failed" tools:keep="@string/connection_failed">Connection failed</string>
   <string name="permission_rationale_location">Location permission is required by Android to allow the app to detect peer devices</string>
+  <string name="permission_rationale_location_on_host_zim_file">Location permission is required by Android to allow the app to Host Zim files</string>
   <string name="permission_refused_location" tools:keep="@string/permission_refused_location">Cannot locate peer devices without location permissions</string>
   <string name="permission_refused_storage" tools:keep="@string/permission_refused_storage">Cannot access zim files without storage permission</string>
   <string name="request_enable_location">Enable location to allow detection of peers</string>
@@ -283,6 +285,8 @@
   <string name="tab_restored">Tab restored</string>
   <string name="open_drawer">Open Drawer</string>
   <string name="close_drawer">Close Drawer</string>
+  <string name="how_to_update_content">How to update content?</string>
+  <string name="update_content_description">To update content (a zim file) you need to download the full latest version of this very same content. You can do that via the download section.</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>

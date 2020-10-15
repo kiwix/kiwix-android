@@ -108,6 +108,7 @@
   <string name="delete_zims_toast">Filă ștearsă cu succes</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
   <string name="download_no_space">Spațiu insuficient pentru a descarca.</string>
+  <string name="download">Descarcă</string>
   <string name="space_available">Spațiu disponibil:</string>
   <string name="zim_simple">Simplu</string>
   <string name="zim_no_pic">Fără imagini</string>
@@ -139,7 +140,6 @@
   <string name="tts_not_enabled">Text la vorbire nu este disponibil pentru acest fișier ZIM</string>
   <string name="texttospeech_initialization_failed">Inițializarea Text în Vorbire a eșuat. Vă rugăm să încercați din nou</string>
   <string name="texttospeech_error">Eroare neașteptată la Text în Vorbire. Vă rugăm încercați din nou</string>
-  <string name="search_error">Eroare neașteptată în timpul căutării. Vă rugăm să încercați din nou</string>
   <string name="next">Următoarea</string>
   <string name="previous">Precedenta</string>
   <string name="wifi_only_title">Permite descărcarea conținutului prin intermediul unei rețele mobile?</string>

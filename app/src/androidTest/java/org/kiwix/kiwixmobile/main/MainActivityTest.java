@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -31,7 +32,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.core.R;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
@@ -52,7 +58,10 @@ public class MainActivityTest {
 
   @Before
   public void setup() {
-    clickOn(R.string.reader);
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(allOf(withText(R.string.reader),
+      withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
   }
 
   @Test

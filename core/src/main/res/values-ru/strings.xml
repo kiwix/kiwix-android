@@ -120,6 +120,7 @@
   <string name="delete_zims_toast">Файл успешно удалён</string>
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space">Недостаточно места для загрузки.</string>
+  <string name="download">Скачать</string>
   <string name="space_available">Доступно Места:</string>
   <string name="zim_simple">Простой</string>
   <string name="zim_no_pic">Без картинок</string>
@@ -151,7 +152,6 @@
   <string name="tts_not_enabled">Перевод текста в речь не доступен для этого ZIM файла</string>
   <string name="texttospeech_initialization_failed">Не удалось инициализировать текст в речь. Пожалуйста, попробуйте еще раз</string>
   <string name="texttospeech_error">Непредвиденная ошибка при переводе текста в речь. Пожалуйста, попробуйте ещё раз.</string>
-  <string name="search_error">Неожиданная ошибка при поиске. Пожалуйста, попробуйте еще раз</string>
   <string name="next">Далее</string>
   <string name="previous">Предыдущий</string>
   <string name="wifi_only_title">Разрешить загрузку контента через мобильную сеть?</string>
@@ -283,4 +283,10 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Масштаб Текста</string>
   <string name="search_open_in_new_tab">Открыть в новой вкладке</string>
+  <string name="reader">Просмотрщик</string>
+  <string name="no_open_book">Нет открытых книг</string>
+  <string name="open_library">Открыть библиотеку</string>
+  <string name="tab_restored">Вкладка восстановлена</string>
+  <string name="open_drawer">Открыть редактор</string>
+  <string name="close_drawer">Закрыть редактор</string>
 </resources>

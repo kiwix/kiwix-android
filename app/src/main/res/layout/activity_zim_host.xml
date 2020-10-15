@@ -5,9 +5,9 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true"
-  tools:context=".webserver.ZimHostActivity">
+  tools:context=".webserver.ZimHostFragment">
 
-  <include layout="@layout/layout_standard_app_bar" />
+  <include layout="@layout/layout_toolbar" />
 
   <TextView
     android:id="@+id/serverTextView"
@@ -17,7 +17,7 @@
     android:layout_marginTop="16dp"
     android:text="@string/server_textview_default_message"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerViewZimHost"
@@ -40,7 +40,7 @@
     android:layout_marginEnd="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginBottom="8dp"
-    android:background="@color/startServerGreen"
+    android:backgroundTint="@color/startServerGreen"
     android:text="@string/start_server_label"
     android:textColor="@color/white"
     app:layout_constraintBottom_toBottomOf="parent"
