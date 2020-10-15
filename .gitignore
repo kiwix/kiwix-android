@@ -65,4 +65,4 @@ captures/
 !/.idea/encodings.xml
 !/.idea/copyright/
 !/.idea/kotlinCodeInsightSettings.xml
-app/jacoco.exec
+**/jacoco.exec
