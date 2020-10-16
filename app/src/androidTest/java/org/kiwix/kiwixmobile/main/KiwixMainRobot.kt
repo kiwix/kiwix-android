@@ -74,7 +74,7 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun clickBookmarksOnNavDrawer() {
-    clickOn(Text((getResourceString(R.string.bookmarks))))
+    clickOn(Text(getResourceString(R.string.bookmarks)))
   }
 
   fun assertBookmarksScreenDisplayed() {
