@@ -46,10 +46,13 @@ class KiwixMainActivityTest {
       openDrawer()
       clickBookmarksOnNavDrawer()
       // assertBookmarksScreenDisplayed()
+      waitFor(200) // This is necessary unless we are making an assertion as clicking on sideNav
+      // and pressBack occur in no time which most of the times does not lead the expected Frag to open
       pressBack()
       openDrawer()
       clickHistoryOnSideNav()
       // assertHistoryScreenDisplayed()
+      waitFor(200)
       pressBack()
       openDrawer()
       clickHostBooksOnSideNav()
