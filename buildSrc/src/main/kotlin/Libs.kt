@@ -103,12 +103,6 @@ object Libs {
       Versions.org_jetbrains_kotlin
 
   /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_stdlib_jdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" +
-      Versions.org_jetbrains_kotlin
-
-  /**
    * https://developer.android.com/topic/libraries/architecture/index.html
    */
   const val navigation_fragment_ktx: String = "androidx.navigation:navigation-fragment-ktx:" +

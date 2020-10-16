@@ -150,7 +150,6 @@ class AllProjectConfigurer {
 
   fun configureDependencies(target: Project) {
     target.dependencies {
-      implementation(Libs.kotlin_stdlib_jdk7)
       implementation(Libs.appcompat)
       implementation(Libs.material)
       implementation(Libs.constraintlayout)
