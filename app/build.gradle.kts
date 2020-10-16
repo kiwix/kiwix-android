@@ -1,3 +1,5 @@
+import com.github.triplet.gradle.androidpublisher.ReleaseStatus
+import com.github.triplet.gradle.androidpublisher.ResolutionStrategy
 import plugin.KiwixConfigurationPlugin
 
 plugins {
@@ -9,12 +11,12 @@ plugins.apply(KiwixConfigurationPlugin::class)
 apply(from = rootProject.file("jacoco.gradle"))
 
 ext {
-  set("versionMajor", 3)
-  set("versionMinor", 3)
-  set("versionPatch", 4)
+  // set("versionMajor", 3)
+  // set("versionMinor", 3)
+  // set("versionPatch", 4)
 }
 
-fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext["versionPatch"]}"
+fun generateVersionName() = "test"
 
 /*
 * max version code: 21-0-0-00-00-00
@@ -29,10 +31,10 @@ fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext
 */
 
 fun generateVersionCode() =
-  20 * 10000 +
+  20 * 10000 /*+
     ((ext["versionMajor"] as Int) * 10000) +
     ((ext["versionMinor"] as Int) * 100) +
-    ext["versionPatch"] as Int
+    ext["versionPatch"] as Int*/
 
 val apkPrefix get() = System.getenv("TAG") ?: "dev"
 
@@ -72,11 +74,11 @@ android {
 }
 
 play {
-  isEnabled = true
-  serviceAccountCredentials = file("../google.json")
-  track = "alpha"
-  releaseStatus = "draft"
-  resolutionStrategy = "fail"
+  enabled.set(true)
+  serviceAccountCredentials.set(file("../google.json"))
+  track.set("alpha")
+  releaseStatus.set(ReleaseStatus.DRAFT)
+  resolutionStrategy.set(ResolutionStrategy.FAIL)
 }
 
 dependencies {
