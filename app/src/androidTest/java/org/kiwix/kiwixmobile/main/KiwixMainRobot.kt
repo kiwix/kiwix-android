@@ -23,6 +23,7 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
+import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun kiwixMainRobo(func: KiwixMainRobot.() -> Unit) =
   KiwixMainRobot().applyWithViewHierarchyPrinting(func)
@@ -45,32 +46,42 @@ class KiwixMainRobot : BaseRobot() {
     clickOn(ViewId(R.id.libraryFragment))
   }
 
-  fun assertLibraryScreenDisplayed() {
-    isVisible(Text(getResourceString(R.string.library)))
-  }
+  fun library(func: LibraryRobot.() -> Unit) =
+    LibraryRobot().applyWithViewHierarchyPrinting(func)
 
-  fun clickFileTransferIcon() {
-    clickOn(ViewId(R.id.get_zim_nearby_device))
-  }
+  inner class LibraryRobot : BaseRobot() {
+    init {
+      isVisible(Text(getResourceString(R.string.library)))
+    }
 
-  fun assertFileTransferScreenDisplayed() {
-    isVisible(Text("Receive Files"))
+    fun clickFileTransferIcon() {
+      clickOn(ViewId(R.id.get_zim_nearby_device))
+    }
+
+    fun assertFileTransferScreenDisplayed() {
+      isVisible(Text("Receive Files"))
+    }
   }
 
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
   }
 
-  fun assertDownloadScreenDisplayed() {
-    isVisible(Text(getResourceString(R.string.download)))
-  }
+  fun download(func: DownloadRobot.() -> Unit) =
+    DownloadRobot().applyWithViewHierarchyPrinting(func)
 
-  fun clickOnGlobeIcon() {
-    clickOn(ViewId(R.id.select_language))
-  }
+  inner class DownloadRobot : BaseRobot() {
+    init {
+      isVisible(Text(getResourceString(R.string.download)))
+    }
 
-  fun assertLanguagesScreenDisplayed() {
-    isVisible(Text(getResourceString(R.string.select_languages)))
+    fun clickOnGlobeIcon() {
+      clickOn(ViewId(R.id.select_language))
+    }
+
+    fun assertLanguagesScreenDisplayed() {
+      isVisible(Text(getResourceString(R.string.select_languages)))
+    }
   }
 
   fun clickBookmarksOnNavDrawer() {
@@ -119,5 +130,10 @@ class KiwixMainRobot : BaseRobot() {
 
   fun assertExternalLinkDialogDisplayed() {
     isVisible(Text(getResourceString(R.string.external_link_popup_dialog_title)))
+  }
+
+  fun navigate() {
+    pressBack()
+    openDrawer()
   }
 }
