@@ -46,5 +46,7 @@ jobs:
 
 
       - name: Upload coverage to Codecov
-        run: |
-          bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
+      - uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          verbose: true

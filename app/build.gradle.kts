@@ -10,32 +10,6 @@ plugins.apply(KiwixConfigurationPlugin::class)
 
 apply(from = rootProject.file("jacoco.gradle"))
 
-ext {
-  // set("versionMajor", 3)
-  // set("versionMinor", 4)
-  // set("versionPatch", 1)
-}
-
-fun generateVersionName() = "test"
-
-/*
-* max version code: 21-0-0-00-00-00
-* our template    : UU-D-A-ZZ-YY-XX
-* where:
-* X = patch version
-* Y = minor version
-* Z = major version (+ 20 to distinguish from previous, non semantic, versions of the app)
-* A = number representing ABI split
-* D = number representing density split
-* U = unused
-*/
-
-fun generateVersionCode() =
-  20 * 10000 /*+
-    ((ext["versionMajor"] as Int) * 10000) +
-    ((ext["versionMinor"] as Int) * 100) +
-    ext["versionPatch"] as Int*/
-
 val apkPrefix get() = System.getenv("TAG") ?: "dev"
 
 android {
@@ -44,8 +18,8 @@ android {
     base.archivesBaseName = apkPrefix
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
-    versionCode = generateVersionCode()
-    versionName = generateVersionName()
+    versionCode = Config.generatedVersionCode
+    versionName = Config.generatedVersionName
   }
 
   lintOptions {
