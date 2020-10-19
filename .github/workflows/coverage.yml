@@ -17,7 +17,7 @@ jobs:
       matrix:
         api-level: [21, 21] 
       fail-fast: false
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
       - name: checkout
         uses: actions/checkout@v1
@@ -38,8 +38,12 @@ jobs:
           name: ${{ matrix.api-level }}
           path: screencap.png
 
+      - name: create unit coverage 2
+        run: ./gradlew jacocoTestCustomExampleDebugUnitTestReport
+
       - name: create unit coverage
-        run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
+        run: ./gradlew jacocoTestDebugUnitTestReport
+
 
       - name: Upload coverage to Codecov
         run: |
