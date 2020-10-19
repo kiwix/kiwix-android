@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.main
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
@@ -88,16 +89,34 @@ class KiwixMainRobot : BaseRobot() {
     clickOn(Text(getResourceString(R.string.bookmarks)))
   }
 
-  fun assertBookmarksScreenDisplayed() {
-    isVisible(Text(getResourceString(R.string.bookmarks_from_current_book)))
+  fun bookmarks(func: BookmarksRobot.() -> Unit) =
+    BookmarksRobot().applyWithViewHierarchyPrinting(func)
+
+  inner class BookmarksRobot : BaseRobot() {
+    /** Pushed back robot rules due to lack of info to assert the correct screen */
+    fun clickOnTrashIcon() {
+      clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
+    }
+
+    fun assertDeleteBookmarksDialogDisplayed() {
+      isVisible(Text(getResourceString(R.string.delete_bookmarks)))
+    }
   }
 
   fun clickHistoryOnSideNav() {
     clickOn(Text(getResourceString(R.string.history)))
   }
 
-  fun assertHistoryScreenDisplayed() {
-    isVisible(Text(getResourceString(R.string.history_from_current_book)))
+  fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
+  inner class HistoryRobot : BaseRobot() {
+    /** Pushed back robot rules due to lack of info to assert the correct screen */
+    fun clickOnTrashIcon() {
+      clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
+    }
+
+    fun assertDeleteHistoryDialogDisplayed() {
+      isVisible(Text(getResourceString(R.string.delete_history)))
+    }
   }
 
   fun clickHostBooksOnSideNav() {
