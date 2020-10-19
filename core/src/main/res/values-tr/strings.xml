@@ -234,6 +234,7 @@
   <string name="severe_loss_error">Ağır hata! WiFi P2P\'yi Devre Dışı Bırak/Yeniden Etkinleştir\'i deneyin</string>
   <string name="connection_failed">Bağlantı kurulamadı</string>
   <string name="permission_rationale_location">Uygulamanın eş aygıtları algılamasına izin vermek için Android tarafından konum izni gerekir</string>
+  <string name="permission_rationale_location_on_host_zim_file">Uygulamanın Zim dosyalarını barındırmasına izin vermek için Android tarafından konum izni gereklidir</string>
   <string name="permission_refused_location">Konum izinleri olmadan eş aygıtlar bulunamıyor</string>
   <string name="permission_refused_storage">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
   <string name="request_enable_location">Eşlerin algılanmasına izin vermek için konumu etkinleştir</string>
