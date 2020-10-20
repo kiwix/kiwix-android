@@ -4,6 +4,7 @@
   <Whitelist>
     <ID>EmptyFunctionBlock:BooksOnDiskViewHolder.kt$BookOnDiskViewHolder.BookViewHolder${ }</ID>
     <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided&gt;${}</ID>
+    <ID>EmptyFunctionBlock:OnSwipeTouchListener.kt$OnSwipeTouchListener${}</ID>
     <ID>ForbiddenComment:JNIInitialiser.kt$JNIInitialiser$// TODO: Consider surfacing to user</ID>
     <ID>LongParameterList:KiwixDialog.kt$KiwixDialog$( val title: Int?, val message: Int?, val positiveMessage: Int, val negativeMessage: Int?, val cancelable: Boolean = true, val icon: Int? = null, val neutralMessage: Int? = null, val getView: (() -&gt; View)? = null )</ID>
     <ID>LongParameterList:MainMenu.kt$MainMenu$( private val activity: Activity, zimFileReader: ZimFileReader?, menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, disableReadAloud: Boolean = false, disableTabs: Boolean = false, private val menuClickListener: MenuClickListener )</ID>
@@ -19,6 +20,7 @@
     <ID>MagicNumber:JNIInitialiser.kt$JNIInitialiser$1024</ID>
     <ID>MagicNumber:KiloByte.kt$KiloByte$1024.0</ID>
     <ID>MagicNumber:MainMenu.kt$MainMenu$99</ID>
+    <ID>MagicNumber:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$100</ID>
     <ID>MagicNumber:SearchResultGenerator.kt$ZimSearchResultGenerator$200</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
@@ -26,6 +28,7 @@
     <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
     <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
     <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$loadICUData</ID>
+    <ID>NestedBlockDepth:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$onFling</ID>
     <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$canWrite</ID>
     <ID>PackageNaming:ArticleCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:BookOnDiskDelegate.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
@@ -44,6 +47,7 @@
     <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
     <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
     <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$exception: Exception</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
     <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
     <ID>TooGenericExceptionThrown:ContextExtensions.kt$throw RuntimeException("invalid attribute $attributeRes")</ID>
