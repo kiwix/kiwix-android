@@ -119,14 +119,13 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
+import static android.content.ContentValues.TAG;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_TITLE;
-import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTRA_CHOSE_X_URL;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_CURRENT_ARTICLES;
@@ -408,14 +407,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       searchForTitle(intent.getStringExtra(TAG_FILE_SEARCHED),
         openInNewTab);
       selectTab(webViewList.size() - 1);
-    }
-    if (intent.hasExtra(EXTRA_CHOSE_X_URL)) {
-      newMainPageTab();
-      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_URL));
-    }
-    if (intent.hasExtra(EXTRA_CHOSE_X_TITLE)) {
-      newMainPageTab();
-      loadUrlWithCurrentWebview(intent.getStringExtra(EXTRA_CHOSE_X_TITLE));
     }
     handleNotificationIntent(intent);
   }
@@ -725,6 +716,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     actionBar = null;
     mainMenu = null;
     tabRecyclerView.setAdapter(null);
+    tableDrawerRight.setAdapter(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
     webViewList.clear();
@@ -749,6 +741,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       webview.loadUrl(url);
     }
   }
+
 
   private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
@@ -970,6 +963,11 @@ public abstract class CoreReaderFragment extends BaseFragment
     CoreMainActivity parentActivity = (CoreMainActivity) requireActivity();
     parentActivity.navigate(parentActivity.getBookmarksFragmentResId());
     return true;
+  }
+
+
+  @Override public void onFullscreenVideoToggled(boolean isFullScreen) {
+    // does nothing because custom doesn't have a nav bar
   }
 
   protected void openFullScreen() {

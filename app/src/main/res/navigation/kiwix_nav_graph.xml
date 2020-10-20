@@ -18,8 +18,10 @@
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   app:startDestination="@id/libraryFragment">
   <fragment
+    tools:layout="@layout/fragment_reader"
     android:id="@+id/readerFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment"
     android:label="Reader">
@@ -53,6 +55,7 @@
   </fragment>
 
   <fragment
+    tools:layout="@layout/fragment_destination_library"
     android:id="@+id/libraryFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment"
     android:label="Library">
@@ -69,14 +72,17 @@
   </fragment>
 
   <fragment
+    tools:layout="@layout/fragment_destination_download"
     android:id="@+id/downloadsFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
     android:label="Downloads" />
   <fragment
+    tools:layout="@layout/fragment_page"
     android:id="@+id/bookmarksFragment"
     android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
     android:label="BookmarksFragment" />
   <fragment
+    tools:layout="@layout/fragment_intro"
     android:id="@+id/introFragment"
     android:name="org.kiwix.kiwixmobile.intro.IntroFragment"
     android:label="IntroFragment">
@@ -86,26 +92,32 @@
       app:popUpTo="@id/libraryFragment" />
   </fragment>
   <fragment
+    tools:layout="@layout/fragment_page"
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
     android:label="HistoryFragment" />
   <fragment
+    tools:layout="@layout/activity_language"
     android:id="@+id/languageFragment"
     android:name="org.kiwix.kiwixmobile.language.LanguageFragment"
     android:label="LanguageFragment" />
   <fragment
+    tools:layout="@layout/activity_zim_host"
     android:id="@+id/zimHostFragment"
     android:name="org.kiwix.kiwixmobile.webserver.ZimHostFragment"
     android:label="HistoryFragment" />
   <fragment
+    tools:layout="@layout/fragment_help"
     android:id="@+id/helpFragment"
     android:name="org.kiwix.kiwixmobile.help.KiwixHelpFragment"
     android:label="HelpFragment" />
   <fragment
+    tools:layout="@layout/settings"
     android:id="@+id/kiwixSettingsFragment"
     android:name="org.kiwix.kiwixmobile.settings.KiwixSettingsFragment"
     android:label="KiwixSettingsFragment" />
   <fragment
+    tools:layout="@layout/fragment_search"
     android:id="@+id/searchFragment"
     android:name="org.kiwix.kiwixmobile.core.search.SearchFragment"
     android:label="SearchFragment">
@@ -115,6 +127,7 @@
       app:popUpTo="@id/readerFragment" />
   </fragment>
   <fragment
+    tools:layout="@layout/fragment_local_file_transfer"
     android:id="@+id/localFileTransferFragment"
     android:name="org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment"
     android:label="LocalFileTransferFragment">

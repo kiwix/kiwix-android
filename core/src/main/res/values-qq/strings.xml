@@ -47,6 +47,7 @@
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
   <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
   <string name="save">{{Identical|Save}}</string>
+  <string name="permission_rationale_location_on_host_zim_file">Tell the user Location permission required for hosting zim file.</string>
   <string name="pref_text_zoom_summary">Tell the user that this preference changes the text size in 25% increments.</string>
   <string name="go_to_settings">This is used in the start server dialog and leads the user to mobile hotspot settings when pressed</string>
   <string name="no_bookmarks">This means \"there are no bookmarks\"</string>

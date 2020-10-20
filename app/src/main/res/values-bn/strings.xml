@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Al Riaz Uddin Ripon
+-->
+<resources>
+  <string name="send_files_title">ফাইলসমূহ পাঠান</string>
+  <string name="receive_files_title">ফাইলসমূহ গ্রহণ করুন</string>
+</resources>

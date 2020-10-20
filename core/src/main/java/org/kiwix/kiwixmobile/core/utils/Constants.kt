@@ -23,14 +23,6 @@ const val CONTACT_EMAIL_ADDRESS = "android@kiwix.org"
 // Request stuff
 const val REQUEST_STORAGE_PERMISSION = 1
 const val REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE = 3
-const val REQUEST_HISTORY_ITEM_CHOSEN = 99
-const val REQUEST_FILE_SELECT = 1234
-const val REQUEST_PREFERENCES = 1235
-const val BOOKMARK_CHOSEN_REQUEST = 1
-
-// Result stuff
-const val RESULT_RESTART = 1236
-const val RESULT_HISTORY_CLEARED = 1239
 
 // Tags
 const val TAG_FILE_SEARCHED = "searchedarticle"
@@ -42,12 +34,6 @@ const val TAG_CURRENT_TAB = "currenttab"
 const val TAG_FROM_TAB_SWITCHER = "fromtabswitcher"
 
 // Extras
-const val EXTRA_ZIM_FILE = "zimFile"
-const val EXTRA_CHOSE_X_URL = "choseXURL"
-const val EXTRA_CHOSE_X_TITLE = "choseXTitle"
-const val EXTRA_CHOSE_X_FILE = "choseXFile"
-const val EXTRA_SEARCH = "search"
 const val EXTRA_IS_WIDGET_VOICE = "isWidgetVoice"
 const val HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService"
-const val EXTRA_WEBVIEWS_LIST = "webviewsList"
 const val OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base"
