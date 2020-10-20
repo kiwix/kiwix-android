@@ -227,6 +227,7 @@
   <string name="severe_loss_error">Erro grave! Tente desativar/reativar WiFi P2P</string>
   <string name="connection_failed">Falha na conexão</string>
   <string name="permission_rationale_location">A permissão de localização é necessária pelo Android para permitir que o aplicativo detecte dispositivos de mesmo nível</string>
+  <string name="permission_rationale_location_on_host_zim_file">A permissão de localização é exigida pelo Android para permitir que o aplicativo hospede arquivos Zim</string>
   <string name="permission_refused_location">Não é possível localizar dispositivos pares sem permissões de localização</string>
   <string name="permission_refused_storage">Não é possível acessar arquivos zim sem permissão de armazenamento</string>
   <string name="request_enable_location">Ativar local para permitir a detecção de pares</string>
