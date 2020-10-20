@@ -30,37 +30,36 @@ class KiwixMainActivityTest {
   @Test
   fun testKiwixMainActivity() {
     kiwixMainRobo {
-      clickReaderOnBottomNav()
-      assertReaderScreenDisplayed()
-      clickLibraryOnBottomNav()
-      library {
-        clickFileTransferIcon()
-        assertFileTransferScreenDisplayed()
-        pressBack()
+      clickReaderOnBottomNav {
+        assertReaderScreenDisplayed()
       }
-      clickDownloadOnBottomNav()
-      download {
-        clickOnGlobeIcon()
-        assertLanguagesScreenDisplayed()
-        pressBack()
+      clickLibraryOnBottomNav {
+        library {
+          clickFileTransferIcon()
+          assertFileTransferScreenDisplayed()
+        }
       }
-      clickLibraryOnBottomNav()
+      clickDownloadOnBottomNav {
+        download {
+          clickOnGlobeIcon()
+          assertLanguagesScreenDisplayed()
+        }
+      }
       openDrawer()
-      clickBookmarksOnNavDrawer()
-      bookmarks {
-        clickOnTrashIcon()
-        assertDeleteBookmarksDialogDisplayed()
-        pressBack()
+      clickBookmarksOnNavDrawer {
+        bookmarks {
+          clickOnTrashIcon()
+          assertDeleteBookmarksDialogDisplayed()
+        }
       }
-
-      navigate()
-      clickHistoryOnSideNav()
-      history {
-        clickOnTrashIcon()
-        assertDeleteHistoryDialogDisplayed()
-        pressBack()
+      openDrawer()
+      clickHistoryOnSideNav {
+        history {
+          clickOnTrashIcon()
+          assertDeleteHistoryDialogDisplayed()
+        }
       }
-      navigate()
+      openDrawer()
       clickHostBooksOnSideNav()
       assertHostBooksScreenDisplayed()
       navigate()

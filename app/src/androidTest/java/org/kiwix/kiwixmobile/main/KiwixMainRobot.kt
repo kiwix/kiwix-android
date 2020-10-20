@@ -35,20 +35,27 @@ class KiwixMainRobot : BaseRobot() {
     isVisible(ViewId(R.id.navigation_container))
   }
 
-  fun clickReaderOnBottomNav() {
+  // fun clickReaderOnBottomNav() {
+  //   clickOn(ViewId(R.id.readerFragment))
+  // }
+
+  fun clickReaderOnBottomNav(func: LibraryRobot.() -> Unit) {
     clickOn(ViewId(R.id.readerFragment))
+    // library(func)
   }
 
   fun assertReaderScreenDisplayed() {
     isVisible(Text(getResourceString(R.string.reader)))
   }
 
-  fun clickLibraryOnBottomNav() {
-    clickOn(ViewId(R.id.libraryFragment))
-  }
-
   fun library(func: LibraryRobot.() -> Unit) =
     LibraryRobot().applyWithViewHierarchyPrinting(func)
+
+  fun clickLibraryOnBottomNav(func: LibraryRobot.() -> Unit) {
+    clickOn(ViewId(R.id.libraryFragment))
+    library(func)
+    pressBack()
+  }
 
   inner class LibraryRobot : BaseRobot() {
     init {
@@ -64,8 +71,10 @@ class KiwixMainRobot : BaseRobot() {
     }
   }
 
-  fun clickDownloadOnBottomNav() {
+  fun clickDownloadOnBottomNav(func: DownloadRobot.() -> Unit) {
     clickOn(ViewId(R.id.downloadsFragment))
+    download(func)
+    pressBack()
   }
 
   fun download(func: DownloadRobot.() -> Unit) =
@@ -85,8 +94,11 @@ class KiwixMainRobot : BaseRobot() {
     }
   }
 
-  fun clickBookmarksOnNavDrawer() {
+  fun clickBookmarksOnNavDrawer(func: BookmarksRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.bookmarks)))
+    bookmarks(func)
+    pressBack()
+    pressBack()
   }
 
   fun bookmarks(func: BookmarksRobot.() -> Unit) =
@@ -103,8 +115,11 @@ class KiwixMainRobot : BaseRobot() {
     }
   }
 
-  fun clickHistoryOnSideNav() {
+  fun clickHistoryOnSideNav(func: HistoryRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.history)))
+    history(func)
+    pressBack()
+    pressBack()
   }
 
   fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
