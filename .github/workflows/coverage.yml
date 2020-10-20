@@ -38,15 +38,10 @@ jobs:
           name: ${{ matrix.api-level }}
           path: screencap.png
 
-      - name: create unit coverage 2
-        run: ./gradlew jacocoTestCustomExampleDebugUnitTestReport
-
       - name: create unit coverage
-        run: ./gradlew jacocoTestDebugUnitTestReport
-
+        run: ./gradlew jacocoTestCustomExampleDebugUnitTestReport jacocoTestDebugUnitTestReport
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           fail_ci_if_error: true
-          verbose: true
