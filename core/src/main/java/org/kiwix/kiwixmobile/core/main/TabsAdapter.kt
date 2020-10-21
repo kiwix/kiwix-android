@@ -64,18 +64,18 @@ class TabsAdapter internal constructor(
     val margin16 = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
     val contentImage = ImageView(context)
       .apply {
-        id = 1
+        id = R.id.tabsAdapterContentImageView
         scaleType = ImageView.ScaleType.FIT_XY
       }
     val close = ImageView(context)
       .apply {
-        id = 2
+        id = R.id.tabsAdapterCloseImageView
         setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
         tint(context.getAttribute(R.attr.colorOnSurface))
       }
     val cardView = MaterialCardView(context)
       .apply {
-        id = 3
+        id = R.id.tabsAdapterCardView
         useCompatPadding = true
         addView(
           contentImage,
@@ -87,7 +87,7 @@ class TabsAdapter internal constructor(
       }
     val textView = TextView(context)
       .apply {
-        id = 4
+        id = R.id.tabsAdapterTextView
         maxLines = 1
         ellipsize = TextUtils.TruncateAt.END
       }
