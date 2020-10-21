@@ -27,11 +27,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
+import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.tint
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowHeight
@@ -44,6 +44,11 @@ class TabsAdapter internal constructor(
   private val webViews: List<KiwixWebView>,
   private val painter: NightModeViewPainter
 ) : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
+
+  init {
+    setHasStableIds(true)
+  }
+
   private var listener: TabClickListener? = null
   var selected = 0
   @SuppressLint("ResourceType") override fun onCreateViewHolder(
@@ -57,7 +62,7 @@ class TabsAdapter internal constructor(
     contentImage.scaleType = ImageView.ScaleType.FIT_XY
     val close = ImageView(context)
     close.id = 2
-    close.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_clear_white_24dp))
+    close.setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
     close.tint(context.getAttribute(R.attr.colorOnSurface))
     val cardView = MaterialCardView(context)
     cardView.id = 3
@@ -163,8 +168,4 @@ class TabsAdapter internal constructor(
 
   class ViewHolder(view: View, val content: ImageView, val title: TextView, val close: ImageView) :
     RecyclerView.ViewHolder(view)
-
-  init {
-    setHasStableIds(true)
-  }
 }
