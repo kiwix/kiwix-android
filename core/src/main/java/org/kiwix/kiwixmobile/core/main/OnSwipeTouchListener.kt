@@ -29,6 +29,11 @@ import kotlin.math.abs
 
 open class OnSwipeTouchListener constructor(context: Context) : OnTouchListener {
   private val gestureDetector: GestureDetector
+
+  init {
+    gestureDetector = GestureDetector(context, GestureListener())
+  }
+
   @SuppressLint("ClickableViewAccessibility") override fun onTouch(
     view: View,
     event: MotionEvent
@@ -52,7 +57,6 @@ open class OnSwipeTouchListener constructor(context: Context) : OnTouchListener 
       velocityX: Float,
       velocityY: Float
     ): Boolean {
-      var result = false
       try {
         val diffY = e2.y - e1.y
         val diffX = e2.x - e1.x
@@ -63,7 +67,7 @@ open class OnSwipeTouchListener constructor(context: Context) : OnTouchListener 
             } else {
               onSwipeLeft()
             }
-            result = true
+            return true
           }
         } else if (abs(diffY) > swipeThreshold && abs(velocityY) > swipeVelocityThreshold) {
           if (diffY > 0) {
@@ -71,12 +75,12 @@ open class OnSwipeTouchListener constructor(context: Context) : OnTouchListener 
           } else {
             onSwipeTop()
           }
-          result = true
+          return true
         }
       } catch (exception: Exception) {
         Log.e(tag, "Exception in onFling", exception)
       }
-      return result
+      return false
     }
   }
 
@@ -85,8 +89,4 @@ open class OnSwipeTouchListener constructor(context: Context) : OnTouchListener 
   fun onSwipeTop() {}
   open fun onSwipeBottom() {}
   open fun onTap(e: MotionEvent?) {}
-
-  init {
-    gestureDetector = GestureDetector(context, GestureListener())
-  }
 }

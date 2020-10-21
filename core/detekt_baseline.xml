@@ -46,6 +46,7 @@
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun hasPart(file: File): Boolean</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
     <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
+    <ID>ReturnCount:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
     <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
     <ID>TooGenericExceptionCaught:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$exception: Exception</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
