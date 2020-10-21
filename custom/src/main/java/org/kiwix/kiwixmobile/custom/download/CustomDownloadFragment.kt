@@ -88,7 +88,7 @@ class CustomDownloadFragment : BaseFragment() {
   override fun onDestroy() {
     super.onDestroy()
     compositeDisposable.clear()
-    activity?.onBackPressed()
+    activity?.finish()
   }
 
   private fun render(state: State) {

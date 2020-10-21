@@ -24,6 +24,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import javax.annotation.Nullable;
 import org.kiwix.kiwixmobile.core.utils.DimenUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 
@@ -45,7 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
   }
 
   public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs,
-    ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient, View toolbarView,
+    @Nullable ViewGroup nonVideoView, ViewGroup videoView, CoreWebViewClient webViewClient, View toolbarView,
     View bottomBarView, SharedPreferenceUtil sharedPreferenceUtil) {
     super(context, callback, attrs, nonVideoView, videoView, webViewClient);
     this.toolbarView = toolbarView;

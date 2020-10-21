@@ -750,11 +750,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {
+    if(activityMainRoot != null)
     return new ToolbarScrollingKiwixWebView(
       getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
       new CoreWebViewClient(this, zimReaderContainer),
       toolbarContainer, bottomToolbar,
       sharedPreferenceUtil);
+    else return null;
   }
 
   protected KiwixWebView newMainPageTab() {
@@ -767,6 +769,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     selectTab(webViewList.size() - 1);
     tabsAdapter.notifyDataSetChanged();
     setUpWebViewWithTextToSpeech();
+    if(webView != null)
     documentParser.initInterface(webView);
     return webView;
   }
@@ -1356,7 +1359,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   protected boolean urlIsValid() {
+    if (getCurrentWebView() != null)
     return getCurrentWebView().getUrl() != null;
+  else return false;
   }
 
   private void updateUrlProcessor() {
@@ -1397,11 +1402,12 @@ public abstract class CoreReaderFragment extends BaseFragment
     JSONArray urls = new JSONArray();
     JSONArray positions = new JSONArray();
     for (KiwixWebView view : webViewList) {
-      if (view.getUrl() == null) continue;
-      urls.put(view.getUrl());
-      positions.put(view.getScrollY());
+      if (view != null) {
+        if (view.getUrl() == null) continue;
+        urls.put(view.getUrl());
+        positions.put(view.getScrollY());
+      }
     }
-
     editor.putString(TAG_CURRENT_FILE, zimReaderContainer.getZimCanonicalPath());
     editor.putString(TAG_CURRENT_ARTICLES, urls.toString());
     editor.putString(TAG_CURRENT_POSITIONS, positions.toString());
