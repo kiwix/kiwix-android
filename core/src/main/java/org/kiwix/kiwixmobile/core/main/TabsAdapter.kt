@@ -27,6 +27,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.constraintlayout.widget.ConstraintSet.BOTTOM
+import androidx.constraintlayout.widget.ConstraintSet.END
+import androidx.constraintlayout.widget.ConstraintSet.PARENT_ID
+import androidx.constraintlayout.widget.ConstraintSet.START
+import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import org.kiwix.kiwixmobile.core.R
@@ -58,79 +63,68 @@ class TabsAdapter internal constructor(
     val context = parent.context
     val margin16 = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
     val contentImage = ImageView(context)
-    contentImage.id = 1
-    contentImage.scaleType = ImageView.ScaleType.FIT_XY
+      .apply {
+        id = 1
+        scaleType = ImageView.ScaleType.FIT_XY
+      }
     val close = ImageView(context)
-    close.id = 2
-    close.setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
-    close.tint(context.getAttribute(R.attr.colorOnSurface))
+      .apply {
+        id = 2
+        setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
+        tint(context.getAttribute(R.attr.colorOnSurface))
+      }
     val cardView = MaterialCardView(context)
-    cardView.id = 3
-    cardView.useCompatPadding = true
-    cardView.addView(
-      contentImage,
-      FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.MATCH_PARENT,
-        FrameLayout.LayoutParams.MATCH_PARENT
-      )
-    )
-    val constraintLayout = ConstraintLayout(context)
-    constraintLayout.isFocusableInTouchMode = true
-    constraintLayout.addView(
-      cardView,
-      ConstraintLayout.LayoutParams(
-        activity.getWindowWidth() / 2,
-        -activity.getToolbarHeight() / 2 + activity.getWindowHeight() / 2
-      )
-    )
-    constraintLayout.addView(
-      close, ConstraintLayout.LayoutParams(
-        margin16,
-        margin16
-      )
-    )
-    constraintLayout.layoutParams = RecyclerView.LayoutParams(
-      RecyclerView.LayoutParams.WRAP_CONTENT,
-      RecyclerView.LayoutParams.MATCH_PARENT
-    )
+      .apply {
+        id = 3
+        useCompatPadding = true
+        addView(
+          contentImage,
+          FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+        )
+      }
     val textView = TextView(context)
-    textView.id = 4
-    textView.maxLines = 1
-    textView.ellipsize = TextUtils.TruncateAt.END
-    constraintLayout.addView(
-      textView,
-      ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-    )
-    val constraintSet = ConstraintSet()
-    constraintSet.clone(constraintLayout)
-    constraintSet.connect(
-      cardView.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID,
-      ConstraintSet.TOP
-    )
-    constraintSet.connect(
-      cardView.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID,
-      ConstraintSet.BOTTOM
-    )
-    constraintSet.connect(
-      cardView.id, ConstraintSet.START, ConstraintSet.PARENT_ID,
-      ConstraintSet.START, margin16
-    )
-    constraintSet.connect(
-      cardView.id, ConstraintSet.END, ConstraintSet.PARENT_ID,
-      ConstraintSet.END, margin16
-    )
-    constraintSet.connect(close.id, ConstraintSet.END, cardView.id, ConstraintSet.END)
-    constraintSet.connect(close.id, ConstraintSet.BOTTOM, cardView.id, ConstraintSet.TOP)
-    constraintSet.connect(
-      textView.id, ConstraintSet.BOTTOM, cardView.id,
-      ConstraintSet.TOP
-    )
-    constraintSet.connect(
-      textView.id, ConstraintSet.START, cardView.id,
-      ConstraintSet.START, margin16 / 8
-    )
-    constraintSet.connect(textView.id, ConstraintSet.END, close.id, ConstraintSet.START)
-    constraintSet.applyTo(constraintLayout)
+      .apply {
+        id = 4
+        maxLines = 1
+        ellipsize = TextUtils.TruncateAt.END
+      }
+    val constraintLayout = ConstraintLayout(context)
+      .apply {
+        isFocusableInTouchMode = true
+        addView(
+          cardView,
+          ConstraintLayout.LayoutParams(
+            activity.getWindowWidth() / 2,
+            -activity.getToolbarHeight() / 2 + activity.getWindowHeight() / 2
+          )
+        )
+        addView(close, ConstraintLayout.LayoutParams(margin16, margin16))
+        layoutParams = RecyclerView.LayoutParams(
+          RecyclerView.LayoutParams.WRAP_CONTENT,
+          RecyclerView.LayoutParams.MATCH_PARENT
+        )
+        addView(
+          textView,
+          ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+        )
+      }
+    ConstraintSet()
+      .apply {
+        clone(constraintLayout)
+        connect(cardView.id, TOP, PARENT_ID, TOP)
+        connect(cardView.id, BOTTOM, PARENT_ID, BOTTOM)
+        connect(cardView.id, START, PARENT_ID, START, margin16)
+        connect(cardView.id, END, PARENT_ID, END, margin16)
+        connect(close.id, END, cardView.id, END)
+        connect(close.id, BOTTOM, cardView.id, TOP)
+        connect(textView.id, BOTTOM, cardView.id, TOP)
+        connect(textView.id, START, cardView.id, START, margin16 / 8)
+        connect(textView.id, END, close.id, START)
+        applyTo(constraintLayout)
+      }
     return ViewHolder(constraintLayout, contentImage, textView, close)
   }
 
@@ -138,15 +132,19 @@ class TabsAdapter internal constructor(
     val webView = webViews[position]
     webView.parent?.let { (it as ViewGroup).removeView(webView) }
     val webViewTitle = webView.title.fromHtml().toString()
-    holder.title.text = webViewTitle
-    holder.close.setOnClickListener { v: View -> listener?.onCloseTab(v, holder.adapterPosition) }
-    holder.content.setImageBitmap(
-      getBitmapFromView(webView, activity.getWindowWidth(), activity.getWindowHeight())
-    )
-    holder.content.setOnClickListener { v: View ->
-      selected = holder.adapterPosition
-      listener?.onSelectTab(v, selected)
-      notifyDataSetChanged()
+    holder.apply {
+      title.text = webViewTitle
+      close.setOnClickListener { v: View -> listener?.onCloseTab(v, adapterPosition) }
+      content.apply {
+        setImageBitmap(
+          getBitmapFromView(webView, activity.getWindowWidth(), activity.getWindowHeight())
+        )
+        setOnClickListener { v: View ->
+          selected = adapterPosition
+          listener?.onSelectTab(v, selected)
+          notifyDataSetChanged()
+        }
+      }
     }
     if (webViewTitle != activity.getString(R.string.menu_home)) {
       painter.update(holder.content)
