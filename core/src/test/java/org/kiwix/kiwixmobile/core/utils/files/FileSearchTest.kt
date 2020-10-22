@@ -141,7 +141,7 @@ class FileSearchTest {
       val cursor = mockk<Cursor>()
       every {
         contentResolver.query(
-          null,
+          any(),
           arrayOf(MediaColumns.DATA),
           MediaColumns.DATA + " like ? or " + MediaColumns.DATA + " like ? ",
           arrayOf("%." + "zim", "%." + "zimaa"),
