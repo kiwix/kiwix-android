@@ -82,12 +82,9 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
 
   // Set the WebView to search.  Must be non null, and set before calling startActionMode.
   fun setWebView(webView: WebView?) {
-    if (null == webView) {
-      throw AssertionError(
-        "WebView supplied to CompatFindActionModeCallback cannot be null"
-      )
+    this.webView = requireNotNull(webView) {
+      "WebView supplied to CompatFindActionModeCallback cannot be null"
     }
-    this.webView = webView
     findResultsTextView.visibility = View.VISIBLE
     this.webView?.setFindListener { activeMatchOrdinal: Int, numberOfMatches: Int, _: Boolean ->
       val result: String = when {
@@ -109,23 +106,19 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
   // If true, find the next match further down in the document.
   // If false, find the previous match, up in the document.
   private fun findNext(next: Boolean) {
-    if (webView == null) {
-      throw AssertionError("No WebView for CompatFindActionModeCallback::findNext")
-    }
-    webView?.findNext(next)
+    requireNotNull(webView) {
+      "No WebView for CompatFindActionModeCallback::findNext"
+    }.findNext(next)
   }
 
   // Highlight all the instances of the string from mEditText in mWebView.
   fun findAll() {
-    if (webView == null) {
-      throw AssertionError("No WebView for CompatFindActionModeCallback::findAll")
+    requireNotNull(webView) {
+      "No WebView for CompatFindActionModeCallback::findAll"
     }
-    val find: CharSequence? = editText.text
-    if (find == null || find.isEmpty()) {
-      webView?.clearMatches()
-      webView?.findAllAsync("")
-    } else {
-      webView?.findAllAsync("$find")
+    val textToFind: CharSequence? = editText.text
+    if (textToFind?.isNotEmpty() == true) {
+      webView?.findAllAsync("$textToFind")
 
       // Enable word highlighting with reflection
       try {
@@ -139,6 +132,9 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
       } catch (exception: Exception) {
         Log.e(tag, "Exception in findAll", exception)
       }
+    } else {
+      webView?.clearMatches()
+      webView?.findAllAsync("")
     }
   }
 
@@ -176,10 +172,8 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
   override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
 
   override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-    if (webView == null) {
-      throw AssertionError(
-        "No WebView for CompatFindActionModeCallback::onActionItemClicked"
-      )
+    requireNotNull(webView) {
+      "No WebView for CompatFindActionModeCallback::onActionItemClicked"
     }
     input.hideSoftInputFromWindow(webView?.windowToken, 0)
     when (item.itemId) {
