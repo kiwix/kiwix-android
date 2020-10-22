@@ -87,7 +87,7 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
     }
     findResultsTextView.visibility = View.VISIBLE
     this.webView?.setFindListener { activeMatchOrdinal: Int, numberOfMatches: Int, _: Boolean ->
-      val result: String = when {
+      findResultsTextView.text = when {
         editText.text.toString().isEmpty() -> {
           ""
         }
@@ -98,7 +98,6 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
           (activeMatchOrdinal + 1).toString() + "/" + numberOfMatches
         }
       }
-      findResultsTextView.text = result
     }
   }
 
