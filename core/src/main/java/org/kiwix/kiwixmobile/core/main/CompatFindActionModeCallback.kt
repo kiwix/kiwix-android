@@ -88,15 +88,9 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
     findResultsTextView.visibility = View.VISIBLE
     this.webView?.setFindListener { activeMatchOrdinal: Int, numberOfMatches: Int, _: Boolean ->
       findResultsTextView.text = when {
-        editText.text.toString().isEmpty() -> {
-          ""
-        }
-        numberOfMatches == 0 -> {
-          "0/0"
-        }
-        else -> {
-          (activeMatchOrdinal + 1).toString() + "/" + numberOfMatches
-        }
+        editText.text.toString().isEmpty() -> ""
+        numberOfMatches == 0 -> "0/0"
+        else -> "${(activeMatchOrdinal + 1)}/$numberOfMatches"
       }
     }
   }
