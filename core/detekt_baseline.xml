@@ -6,6 +6,7 @@
     <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided&gt;${}</ID>
     <ID>EmptyFunctionBlock:OnSwipeTouchListener.kt$OnSwipeTouchListener${}</ID>
     <ID>ForbiddenComment:JNIInitialiser.kt$JNIInitialiser$// TODO: Consider surfacing to user</ID>
+    <ID>LongMethod:TabsAdapter.kt$TabsAdapter$onCreateViewHolder</ID>
     <ID>LongParameterList:KiwixDialog.kt$KiwixDialog$( val title: Int?, val message: Int?, val positiveMessage: Int, val negativeMessage: Int?, val cancelable: Boolean = true, val icon: Int? = null, val neutralMessage: Int? = null, val getView: (() -&gt; View)? = null )</ID>
     <ID>LongParameterList:MainMenu.kt$MainMenu$( private val activity: Activity, zimFileReader: ZimFileReader?, menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, disableReadAloud: Boolean = false, disableTabs: Boolean = false, private val menuClickListener: MenuClickListener )</ID>
     <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
@@ -25,6 +26,9 @@
     <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
+    <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$3</ID>
+    <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$4</ID>
+    <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$8</ID>
     <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
     <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
     <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$loadICUData</ID>
