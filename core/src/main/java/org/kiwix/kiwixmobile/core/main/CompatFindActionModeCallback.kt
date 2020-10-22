@@ -38,22 +38,19 @@ import org.kiwix.kiwixmobile.core.R
 class CompatFindActionModeCallback internal constructor(context: Context) :
   ActionMode.Callback, TextWatcher, View.OnClickListener {
   private val tag = "CompatFindActionMode"
-  @JvmField var isActive: Boolean
+  @JvmField var isActive: Boolean = false
 
   @SuppressLint("InflateParams")
   private val customView: View = LayoutInflater.from(context).inflate(R.layout.webview_search, null)
-  private val editText: EditText
-  private val findResultsTextView: TextView
+  private val editText: EditText = customView.findViewById(R.id.edit)
+  private val findResultsTextView: TextView = customView.findViewById(R.id.find_results)
   private var webView: WebView? = null
-  private val input: InputMethodManager
+  private val input: InputMethodManager =
+    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
   private var actionMode: ActionMode? = null
 
   init {
-    editText = customView.findViewById(R.id.edit)
     editText.setOnClickListener(this)
-    findResultsTextView = customView.findViewById(R.id.find_results)
-    input = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    isActive = false
     setText("")
   }
 
