@@ -169,15 +169,9 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
     }
     input.hideSoftInputFromWindow(webView?.windowToken, 0)
     when (item.itemId) {
-      R.id.find_prev -> {
-        findNext(false)
-      }
-      R.id.find_next -> {
-        findNext(true)
-      }
-      else -> {
-        return false
-      }
+      R.id.find_prev -> findNext(false)
+      R.id.find_next -> findNext(true)
+      else -> return false
     }
     return true
   }
