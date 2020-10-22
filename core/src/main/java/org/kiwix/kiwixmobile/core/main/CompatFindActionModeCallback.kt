@@ -90,7 +90,7 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
       findResultsTextView.text = when {
         editText.text.toString().isEmpty() -> ""
         numberOfMatches == 0 -> "0/0"
-        else -> "${(activeMatchOrdinal + 1)}/$numberOfMatches"
+        else -> "${activeMatchOrdinal + 1}/$numberOfMatches"
       }
     }
   }
