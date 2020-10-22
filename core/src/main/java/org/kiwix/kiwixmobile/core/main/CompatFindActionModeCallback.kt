@@ -122,13 +122,12 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
 
       // Enable word highlighting with reflection
       try {
-        for (ms in WebView::class.java.declaredMethods) {
-          if (ms.name == "setFindIsUp") {
-            ms.isAccessible = true
-            ms.invoke(webView, true)
-            break
+        WebView::class.java.declaredMethods
+          .firstOrNull { it.name == "setFindIsUp" }
+          ?.apply {
+            isAccessible = true
+            invoke(webView, true)
           }
-        }
       } catch (exception: Exception) {
         Log.e(tag, "Exception in findAll", exception)
       }
