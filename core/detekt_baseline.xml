@@ -12,6 +12,7 @@
     <ID>LongParameterList:Repository.kt$Repository$( @param:IO private val io: Scheduler, @param:MainThread private val mainThread: Scheduler, private val bookDao: NewBookDao, private val bookmarksDao: NewBookmarksDao, private val historyDao: HistoryDao, private val languageDao: NewLanguagesDao, private val recentSearchDao: NewRecentSearchDao, private val zimReaderContainer: ZimReaderContainer )</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
+    <ID>MagicNumber:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$100</ID>
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
     <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
     <ID>MagicNumber:FetchDownloadNotificationManager.kt$FetchDownloadNotificationManager$100</ID>
@@ -25,6 +26,7 @@
     <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
+    <ID>NestedBlockDepth:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$findAll</ID>
     <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
     <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
     <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$loadICUData</ID>
@@ -47,6 +49,7 @@
     <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
     <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
     <ID>ReturnCount:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
+    <ID>TooGenericExceptionCaught:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
     <ID>TooGenericExceptionCaught:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$exception: Exception</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
