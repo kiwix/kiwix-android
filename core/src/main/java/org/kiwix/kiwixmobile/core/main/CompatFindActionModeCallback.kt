@@ -117,9 +117,9 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
       try {
         WebView::class.java.declaredMethods
           .firstOrNull { it.name == "setFindIsUp" }
-          ?.apply {
-            isAccessible = true
-            invoke(webView, true)
+          ?.let { method ->
+            method.isAccessible = true
+            method.invoke(webView, true)
           }
       } catch (exception: Exception) {
         Log.e(tag, "Exception in findAll", exception)
