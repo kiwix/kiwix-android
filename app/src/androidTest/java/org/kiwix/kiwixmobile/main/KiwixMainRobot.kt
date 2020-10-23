@@ -23,6 +23,8 @@ import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.language.LanguageRobot
+import org.kiwix.kiwixmobile.language.language
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
@@ -35,20 +37,17 @@ class KiwixMainRobot : BaseRobot() {
     isVisible(ViewId(R.id.navigation_container))
   }
 
-  // fun clickReaderOnBottomNav() {
-  //   clickOn(ViewId(R.id.readerFragment))
-  // }
-
   fun clickReaderOnBottomNav(func: LibraryRobot.() -> Unit) {
     clickOn(ViewId(R.id.readerFragment))
-    // library(func)
+    isVisible(Text(getResourceString(R.string.reader)))
+    library(func)
   }
 
   fun assertReaderScreenDisplayed() {
     isVisible(Text(getResourceString(R.string.reader)))
   }
 
-  fun library(func: LibraryRobot.() -> Unit) =
+  private fun library(func: LibraryRobot.() -> Unit) =
     LibraryRobot().applyWithViewHierarchyPrinting(func)
 
   fun clickLibraryOnBottomNav(func: LibraryRobot.() -> Unit) {
@@ -62,11 +61,8 @@ class KiwixMainRobot : BaseRobot() {
       isVisible(Text(getResourceString(R.string.library)))
     }
 
-    fun clickFileTransferIcon() {
+    fun clickFileTransferIcon(func: KiwixMainRobot.() -> Unit) {
       clickOn(ViewId(R.id.get_zim_nearby_device))
-    }
-
-    fun assertFileTransferScreenDisplayed() {
       isVisible(Text("Receive Files"))
     }
   }
@@ -77,7 +73,7 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  fun download(func: DownloadRobot.() -> Unit) =
+  private fun download(func: DownloadRobot.() -> Unit) =
     DownloadRobot().applyWithViewHierarchyPrinting(func)
 
   inner class DownloadRobot : BaseRobot() {
@@ -85,12 +81,10 @@ class KiwixMainRobot : BaseRobot() {
       isVisible(Text(getResourceString(R.string.download)))
     }
 
-    fun clickOnGlobeIcon() {
+    fun clickOnGlobeIcon(func: LanguageRobot.() -> Unit) {
       clickOn(ViewId(R.id.select_language))
-    }
-
-    fun assertLanguagesScreenDisplayed() {
       isVisible(Text(getResourceString(R.string.select_languages)))
+      language(func)
     }
   }
 
@@ -101,7 +95,7 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  fun bookmarks(func: BookmarksRobot.() -> Unit) =
+  private fun bookmarks(func: BookmarksRobot.() -> Unit) =
     BookmarksRobot().applyWithViewHierarchyPrinting(func)
 
   inner class BookmarksRobot : BaseRobot() {
@@ -122,7 +116,9 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
+  private fun history(func: HistoryRobot.() -> Unit) =
+    HistoryRobot().applyWithViewHierarchyPrinting(func)
+
   inner class HistoryRobot : BaseRobot() {
     /** Pushed back robot rules due to lack of info to assert the correct screen */
     fun clickOnTrashIcon() {
@@ -134,16 +130,16 @@ class KiwixMainRobot : BaseRobot() {
     }
   }
 
-  fun clickHostBooksOnSideNav() {
+  fun clickHostBooksOnSideNav(func: KiwixMainRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.menu_host_books)))
-  }
-
-  fun assertHostBooksScreenDisplayed() {
     isVisible(Text(getResourceString(R.string.menu_host_books)))
+    pressBack()
   }
 
-  fun clickSettingsOnSideNav() {
+  fun clickSettingsOnSideNav(func: KiwixMainRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.menu_settings)))
+    isVisible(Text(getResourceString(R.string.menu_settings)))
+    pressBack()
   }
 
   fun assertSettingsScreenDisplayed() {
