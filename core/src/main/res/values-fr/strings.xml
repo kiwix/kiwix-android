@@ -235,6 +235,7 @@
   <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair WiFi</string>
   <string name="connection_failed">La connexion a échoué</string>
   <string name="permission_rationale_location">L’autorisation de géolocalisation est requise par Android pour permettre à l’application de détecter des appareils à proximité.</string>
+  <string name="permission_rationale_location_on_host_zim_file">La permission d’emplacement est nécessaire sur Android pour autoriser l’appli à héberger des fichiers Zim</string>
   <string name="permission_refused_location">Impossible de trouver des appareils proches sans les autorisations de géolocalisation</string>
   <string name="permission_refused_storage">Impossible d’accéder aux fichiers ZIM sans autorisation d’accès au stockage</string>
   <string name="request_enable_location">Activer la géolocalisation pour permettre la détection d’appareils proches</string>
