@@ -13,6 +13,7 @@
 * Thibaut120094
 * Urhixidur
 * Verdy p
+* WikiLucas00
 * Wladek92
 * Yasten
 -->
@@ -39,6 +40,7 @@
   <string name="hotspot_failed_title">Échec de démarrage du point d’accès</string>
   <string name="hotspot_failed_message">il semble que votre point d’accès soit déjà activé. Veuillez d’abord désactiver votre point d’accès WiFi  pour continuer.</string>
   <string name="go_to_wifi_settings_label">Aller aux paramètres WiFi</string>
+  <string name="connection_refused">Connexion refusée.</string>
   <string name="hotspot_running">Point d’accès WiFi actif</string>
   <string name="no_books_selected_toast_message">Veuillez d’abord choisir les livres</string>
   <string name="server_failed_message">Impossible de démarrer le serveur. Veuillez activer votre point d’accès WiFi</string>
@@ -233,6 +235,7 @@
   <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair WiFi</string>
   <string name="connection_failed">La connexion a échoué</string>
   <string name="permission_rationale_location">L’autorisation de géolocalisation est requise par Android pour permettre à l’application de détecter des appareils à proximité.</string>
+  <string name="permission_rationale_location_on_host_zim_file">La permission d’emplacement est nécessaire sur Android pour autoriser l’appli à héberger des fichiers Zim</string>
   <string name="permission_refused_location">Impossible de trouver des appareils proches sans les autorisations de géolocalisation</string>
   <string name="permission_refused_storage">Impossible d’accéder aux fichiers ZIM sans autorisation d’accès au stockage</string>
   <string name="request_enable_location">Activer la géolocalisation pour permettre la détection d’appareils proches</string>
@@ -287,4 +290,6 @@
   <string name="tab_restored">Onglet restauré</string>
   <string name="open_drawer">Ouvrir le tiroir</string>
   <string name="close_drawer">Fermer le tiroir</string>
+  <string name="how_to_update_content">Comment actualiser le contenu ?</string>
+  <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section téléchargement.</string>
 </resources>

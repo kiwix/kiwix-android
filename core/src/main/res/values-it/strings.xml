@@ -6,6 +6,7 @@
 * G.garatti
 * Gianfranco
 * Matteocng
+* Mpayansilva
 * Nivit
 * Purodha
 -->
@@ -26,6 +27,7 @@
   <string name="search_label">Ricerca</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
   <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
+  <string name="connection_refused">Collegamento negato.</string>
   <string name="hotspot_dialog_title">Istruzioni per ospitare libri</string>
   <string name="hotspot_dialog_neutral_button">PROCEDI</string>
   <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato.</string>
@@ -105,4 +107,5 @@
   <string name="delete_history">Cancellare tutta la cronologia?</string>
   <string name="delete_bookmarks">Cancellare tutti i segnalibri?</string>
   <string name="search_open_in_new_tab">Apri in una nuova scheda</string>
+  <string name="how_to_update_content">Come aggiornare il contenuto?</string>
 </resources>

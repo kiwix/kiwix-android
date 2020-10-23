@@ -3,11 +3,13 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
   android:fitsSystemWindows="true">
 
   <include layout="@layout/layout_standard_app_bar" />
 
   <androidx.recyclerview.widget.RecyclerView
+    tools:listitem="@layout/item_language"
     android:id="@+id/language_recycler_view"
     android:layout_width="0dp"
     android:layout_height="0dp"

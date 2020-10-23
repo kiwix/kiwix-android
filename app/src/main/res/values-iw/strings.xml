@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Amire80
+* YaronSh
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">מערכת הקבצים שלך אינה תומכת בקבצים גדולים מ־4GB</string>
   <string name="detecting_file_system">בדיקה אם מערכת הקבצים שלך יכולה ליצור קבצים גדולים מ־4GB</string>
   <string name="cannot_open_file">פתיחת הקובץ נכשלה\nנא לנסות לחפש את הקובץ הזה בלשונית \"מכשיר\" בספרייה שלך</string>
+  <string name="send_files_title">שליחת קבצים</string>
+  <string name="receive_files_title">קבלת קבצים</string>
 </resources>

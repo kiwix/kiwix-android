@@ -39,6 +39,7 @@
   <string name="hotspot_failed_title">Sıcak nokta başlatılamadı</string>
   <string name="hotspot_failed_message">Etkin noktanız zaten açıkmış gibi görünüyor. Devam etmek için lütfen wifi erişim noktanızı devre dışı bırakın.</string>
   <string name="go_to_wifi_settings_label">WIFI ayarlarına gidin</string>
+  <string name="connection_refused">Bağlantı reddedildi.</string>
   <string name="hotspot_running">Sıcak Noktayı Çalıştırılıyor</string>
   <string name="no_books_selected_toast_message">Lütfen önce kitapları seçin</string>
   <string name="server_failed_message">Sunucu başlatılamadı. Lütfen etkin noktanızı açın</string>
@@ -233,6 +234,7 @@
   <string name="severe_loss_error">Ağır hata! WiFi P2P\'yi Devre Dışı Bırak/Yeniden Etkinleştir\'i deneyin</string>
   <string name="connection_failed">Bağlantı kurulamadı</string>
   <string name="permission_rationale_location">Uygulamanın eş aygıtları algılamasına izin vermek için Android tarafından konum izni gerekir</string>
+  <string name="permission_rationale_location_on_host_zim_file">Uygulamanın Zim dosyalarını barındırmasına izin vermek için Android tarafından konum izni gereklidir</string>
   <string name="permission_refused_location">Konum izinleri olmadan eş aygıtlar bulunamıyor</string>
   <string name="permission_refused_storage">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
   <string name="request_enable_location">Eşlerin algılanmasına izin vermek için konumu etkinleştir</string>
@@ -287,4 +289,6 @@
   <string name="tab_restored">Sekme geri getirildi</string>
   <string name="open_drawer">Çekmeceyi Aç</string>
   <string name="close_drawer">Çekmeceyi Kapat</string>
+  <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
+  <string name="update_content_description">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
 </resources>

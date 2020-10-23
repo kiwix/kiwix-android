@@ -32,6 +32,7 @@
   <string name="hotspot_failed_title">Falha ao iniciar o ponto de acesso</string>
   <string name="hotspot_failed_message">Parece que seu ponto de acesso já está ativado. Desative seu ponto de acesso wi-fi para continuar.</string>
   <string name="go_to_wifi_settings_label">Vá para configurações de wi-fi</string>
+  <string name="connection_refused">Conexão recusada.</string>
   <string name="hotspot_running">Rede wi-fi em execução</string>
   <string name="no_books_selected_toast_message">Selecione primeiro os livros</string>
   <string name="server_failed_message">Não foi possível iniciar o servidor. Por favor, ligue seu ponto de acesso</string>
@@ -226,6 +227,7 @@
   <string name="severe_loss_error">Erro grave! Tente desativar/reativar WiFi P2P</string>
   <string name="connection_failed">Falha na conexão</string>
   <string name="permission_rationale_location">A permissão de localização é necessária pelo Android para permitir que o aplicativo detecte dispositivos de mesmo nível</string>
+  <string name="permission_rationale_location_on_host_zim_file">A permissão de localização é exigida pelo Android para permitir que o aplicativo hospede arquivos Zim</string>
   <string name="permission_refused_location">Não é possível localizar dispositivos pares sem permissões de localização</string>
   <string name="permission_refused_storage">Não é possível acessar arquivos zim sem permissão de armazenamento</string>
   <string name="request_enable_location">Ativar local para permitir a detecção de pares</string>
@@ -280,4 +282,6 @@
   <string name="tab_restored">Guia restaurada</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>
+  <string name="how_to_update_content">Como atualizar o conteúdo?</string>
+  <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
 </resources>

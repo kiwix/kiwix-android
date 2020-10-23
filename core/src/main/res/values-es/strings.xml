@@ -10,6 +10,7 @@
 * Macofe
 * Macondo
 * MarcoAurelio
+* Mpayansilva
 * Ncr
 * VegaDark
 -->
@@ -259,4 +260,5 @@
   <string name="pref_text_zoom_title">Zoom de texto</string>
   <string name="tab_restored">Pestaña restaurada</string>
   <string name="close_drawer">Cerrar cajón</string>
+  <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
 </resources>

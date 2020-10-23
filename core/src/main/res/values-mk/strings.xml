@@ -26,6 +26,7 @@
   <string name="hotspot_failed_title">Не успеав да ја покренам пристапната точка</string>
   <string name="hotspot_failed_message">Се чини дека точката за безжичен пристап е веќе вклучена. Исклучете ја за да продолжите.</string>
   <string name="go_to_wifi_settings_label">Оди во поставките за безжичен пристап</string>
+  <string name="connection_refused">Поврзувањето е одбиено.</string>
   <string name="hotspot_running">Активна пристапна точка</string>
   <string name="no_books_selected_toast_message">Најпрвин одберете книги</string>
   <string name="server_failed_message">Не можев да го покренам опслужувачот. Вклучете ја пристапната точка</string>
@@ -220,6 +221,7 @@
   <string name="severe_loss_error">Голема грешка! Исклучете го и пак вклучете го поврзувањето на уреди со безжичен пристап</string>
   <string name="connection_failed">Врската е прекината</string>
   <string name="permission_rationale_location">Андроид бара дозвола за местоположба за да му даде на прилогот да пронаоѓа уреди за сврзување</string>
+  <string name="permission_rationale_location_on_host_zim_file">Андроид бара дозвола за местоположба за да му даде на прилогот да вдомува ZIM-податотеки</string>
   <string name="permission_refused_location">Не можам да пронаоѓам уреди за сврзување без дозвола за местоположба</string>
   <string name="permission_refused_storage">Не можам да дојдам до ZIM-податотеките без дозвола за складирање</string>
   <string name="request_enable_location">Овозможете местоположба за да можам да пронаоѓам уреди за сврзување</string>
@@ -274,4 +276,6 @@
   <string name="tab_restored">Јазичето е повратено</string>
   <string name="open_drawer">Отвори фиока</string>
   <string name="close_drawer">Затвори фиока</string>
+  <string name="how_to_update_content">Како се подновува содржината?</string>
+  <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>
 </resources>

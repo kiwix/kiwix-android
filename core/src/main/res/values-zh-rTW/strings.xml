@@ -31,6 +31,7 @@
   <string name="hotspot_failed_title">開啟熱點失敗</string>
   <string name="hotspot_failed_message">看起來似乎是您的熱點已開啟，請停用您的 WiFi 熱點來繼續。</string>
   <string name="go_to_wifi_settings_label">前往 WIFI 設定</string>
+  <string name="connection_refused">連線被拒絕。</string>
   <string name="hotspot_running">運行熱點</string>
   <string name="no_books_selected_toast_message">請先選擇書籍</string>
   <string name="server_failed_message">無法開啟伺服器，請啟動您的熱點</string>
@@ -225,6 +226,7 @@
   <string name="severe_loss_error">嚴重錯誤！請嘗試停用/重新啟用 WiFi P2P</string>
   <string name="connection_failed">連線失敗</string>
   <string name="permission_rationale_location">Android 需要位置權限來允許應用程式去偵測端點設備</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android 需要位置權限來允許應用程式去托管 Zim 檔案</string>
   <string name="permission_refused_location">沒有位置權限無法定位端點設備</string>
   <string name="permission_refused_storage">沒有儲存權限無法存取 zim 檔案</string>
   <string name="request_enable_location">啟動位置來允許偵測端點</string>
@@ -279,4 +281,6 @@
   <string name="tab_restored">分頁已恢復</string>
   <string name="open_drawer">開啟抽屜</string>
   <string name="close_drawer">關閉抽屜</string>
+  <string name="how_to_update_content">如何更新內容？</string>
+  <string name="update_content_description">要更新內容（zim 檔案）的話，您需要下載這個相似內容的完整最新版本。您可以透過下載段落來進行。</string>
 </resources>
