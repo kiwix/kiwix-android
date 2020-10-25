@@ -82,14 +82,14 @@ class KiwixReaderFragment : CoreReaderFragment() {
       )
     }
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    activity.setupDrawerToggle(toolbar)
+    activity.setupDrawerToggle(toolBar)
     setFragmentContainerBottomMarginToSizeOfNavBar()
     openPageInBookFromNavigationArguments()
 
     requireActivity().observeNavigationResult<String>(
       FIND_IN_PAGE_SEARCH_STRING,
       viewLifecycleOwner,
-      Observer(this::findInPage)
+      Observer(::findInPage)
     )
     requireActivity().observeNavigationResult<SearchItemToOpen>(
       TAG_FILE_SEARCHED,
@@ -103,7 +103,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (item.shouldOpenInNewTab) {
         createNewTab()
       }
-      loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(it))
+      loadUrlWithCurrentWebView(zimReaderContainer.urlSuffixToParsableUrl(it))
     }
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
@@ -114,7 +114,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
       }
-      loadUrlWithCurrentWebview(args.pageUrl)
+      loadUrlWithCurrentWebView(args.pageUrl)
     } else {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
@@ -145,7 +145,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun exitBook() {
     showNoBookOpenViews()
     bottomToolbar.visibility = GONE
-    actionBar.title = getString(R.string.reader)
+    actionBar?.title = getString(R.string.reader)
     contentFrame.visibility = GONE
     mainMenu?.hideBookSpecificMenuItems()
     closeZimBook()
@@ -165,8 +165,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun hideTabSwitcher() {
     if (actionBar != null) {
-      actionBar.setDisplayShowTitleEnabled(true)
-      activity?.setupDrawerToggle(toolbar)
+      actionBar?.setDisplayShowTitleEnabled(true)
+      activity?.setupDrawerToggle(toolBar)
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
@@ -178,9 +178,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         progressBar.progress = 0
         contentFrame.visibility = View.VISIBLE
       }
-      if (mainMenu != null) {
-        mainMenu.showWebViewOptions(true)
-      }
+      mainMenu?.showWebViewOptions(true)
       if (webViewList.isEmpty()) {
         exitBook()
       } else {

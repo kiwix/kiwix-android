@@ -26,7 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 fun View.snack(
   stringId: Int,
   actionStringId: Int? = null,
-  actionClick: (() -> Unit)? = null,
+  actionClick: (() -> Any)? = null,
   @ColorInt actionTextColor: Int = Color.WHITE
 ) {
   Snackbar.make(

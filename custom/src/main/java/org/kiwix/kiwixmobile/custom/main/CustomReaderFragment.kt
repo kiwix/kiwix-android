@@ -58,8 +58,6 @@ import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import java.util.Locale
 import javax.inject.Inject
 
-const val PAGE_URL_KEY = "pageUrl"
-
 class CustomReaderFragment : CoreReaderFragment() {
 
   override fun inject(baseActivity: BaseActivity) {
@@ -82,14 +80,14 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
     with(activity as AppCompatActivity) {
       supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-      setupDrawerToggle(toolbar)
+      setupDrawerToggle(toolBar)
     }
     loadPageFromNavigationArguments()
 
     requireActivity().observeNavigationResult<String>(
       FIND_IN_PAGE_SEARCH_STRING,
       viewLifecycleOwner,
-      Observer(this::findInPage)
+      Observer(::findInPage)
     )
     requireActivity().observeNavigationResult<SearchItemToOpen>(
       TAG_FILE_SEARCHED,
@@ -103,14 +101,14 @@ class CustomReaderFragment : CoreReaderFragment() {
       if (item.shouldOpenInNewTab) {
         createNewTab()
       }
-      loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(this))
+      loadUrlWithCurrentWebView(zimReaderContainer.urlSuffixToParsableUrl(this))
     }
   }
 
   private fun loadPageFromNavigationArguments() {
     val args = CustomReaderFragmentArgs.fromBundle(requireArguments())
     if (args.pageUrl.isNotEmpty()) {
-      loadUrlWithCurrentWebview(args.pageUrl)
+      loadUrlWithCurrentWebView(args.pageUrl)
     } else {
       openObbOrZim()
       manageExternalLaunchAndRestoringViewState()
