@@ -9,7 +9,6 @@ buildscript {
 
   dependencies {
     classpath(Libs.objectbox_gradle_plugin)
-    classpath(Libs.butterknife_gradle_plugin)
   }
 }
 plugins {
@@ -17,7 +16,6 @@ plugins {
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
-apply(plugin = "com.jakewharton.butterknife")
 
 android {
   buildTypes {
