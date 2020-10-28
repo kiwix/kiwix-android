@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -34,6 +35,7 @@ import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_prog
 import kotlinx.android.synthetic.main.layout_custom_download_required.cd_download_button
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
 import org.kiwix.kiwixmobile.core.extensions.viewModel
@@ -48,7 +50,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import javax.inject.Inject
 
-class CustomDownloadFragment : BaseFragment() {
+class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   private val downloadViewModel by lazy {
     viewModel<CustomDownloadViewModel>(viewModelFactory)
@@ -88,7 +90,11 @@ class CustomDownloadFragment : BaseFragment() {
   override fun onDestroy() {
     super.onDestroy()
     compositeDisposable.clear()
-    activity?.finish()
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
+    getActivity()?.finish()
+    return FragmentActivityExtensions.Super.ShouldNotCall
   }
 
   private fun render(state: State) {
