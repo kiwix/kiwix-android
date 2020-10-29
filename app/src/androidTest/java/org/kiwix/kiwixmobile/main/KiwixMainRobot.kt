@@ -19,12 +19,19 @@ package org.kiwix.kiwixmobile.main
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.language.LanguageRobot
-import org.kiwix.kiwixmobile.language.language
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
+import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
+import org.kiwix.kiwixmobile.nav.destination.LibraryRobot
+import org.kiwix.kiwixmobile.nav.destination.OnlineLibraryRobot
+import org.kiwix.kiwixmobile.nav.destination.library
+import org.kiwix.kiwixmobile.nav.destination.onlineLibrary
+import org.kiwix.kiwixmobile.page.bookmarks.BookmarksRobot
+import org.kiwix.kiwixmobile.page.bookmarks.bookmarks
+import org.kiwix.kiwixmobile.page.history.HistoryRobot
+import org.kiwix.kiwixmobile.page.history.history
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
@@ -43,49 +50,21 @@ class KiwixMainRobot : BaseRobot() {
     library(func)
   }
 
-  fun assertReaderScreenDisplayed() {
-    isVisible(Text(getResourceString(R.string.reader)))
-  }
-
-  private fun library(func: LibraryRobot.() -> Unit) =
-    LibraryRobot().applyWithViewHierarchyPrinting(func)
-
   fun clickLibraryOnBottomNav(func: LibraryRobot.() -> Unit) {
     clickOn(ViewId(R.id.libraryFragment))
     library(func)
     pressBack()
   }
 
-  inner class LibraryRobot : BaseRobot() {
-    init {
-      isVisible(Text(getResourceString(R.string.library)))
-    }
-
-    fun clickFileTransferIcon(func: KiwixMainRobot.() -> Unit) {
-      clickOn(ViewId(R.id.get_zim_nearby_device))
-      isVisible(Text("Receive Files"))
-    }
+  fun clickFileTransferIcon(func: LocalFileTransferRobot.() -> Unit) {
+    clickOn(ViewId(R.id.get_zim_nearby_device))
+    localFileTransfer(func)
   }
 
-  fun clickDownloadOnBottomNav(func: DownloadRobot.() -> Unit) {
+  fun clickDownloadOnBottomNav(func: OnlineLibraryRobot.() -> Unit) {
     clickOn(ViewId(R.id.downloadsFragment))
-    download(func)
+    onlineLibrary(func)
     pressBack()
-  }
-
-  private fun download(func: DownloadRobot.() -> Unit) =
-    DownloadRobot().applyWithViewHierarchyPrinting(func)
-
-  inner class DownloadRobot : BaseRobot() {
-    init {
-      isVisible(Text(getResourceString(R.string.download)))
-    }
-
-    fun clickOnGlobeIcon(func: LanguageRobot.() -> Unit) {
-      clickOn(ViewId(R.id.select_language))
-      isVisible(Text(getResourceString(R.string.select_languages)))
-      language(func)
-    }
   }
 
   fun clickBookmarksOnNavDrawer(func: BookmarksRobot.() -> Unit) {
@@ -95,19 +74,19 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  private fun bookmarks(func: BookmarksRobot.() -> Unit) =
-    BookmarksRobot().applyWithViewHierarchyPrinting(func)
+  // private fun bookmarks(func: BookmarksRobot.() -> Unit) =
+  //   BookmarksRobot().applyWithViewHierarchyPrinting(func)
 
-  inner class BookmarksRobot : BaseRobot() {
-    /** Pushed back robot rules due to lack of info to assert the correct screen */
-    fun clickOnTrashIcon() {
-      clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
-    }
-
-    fun assertDeleteBookmarksDialogDisplayed() {
-      isVisible(Text(getResourceString(R.string.delete_bookmarks)))
-    }
-  }
+  // inner class BookmarksRobot : BaseRobot() {
+  // /** Pushed back robot rules due to lack of info to assert the correct screen */
+  // fun clickOnTrashIcon() {
+  //   clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
+  // }
+  //
+  // fun assertDeleteBookmarksDialogDisplayed() {
+  //   isVisible(Text(getResourceString(R.string.delete_bookmarks)))
+  // }
+  // }
 
   fun clickHistoryOnSideNav(func: HistoryRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.history)))
@@ -116,19 +95,16 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  private fun history(func: HistoryRobot.() -> Unit) =
-    HistoryRobot().applyWithViewHierarchyPrinting(func)
-
-  inner class HistoryRobot : BaseRobot() {
-    /** Pushed back robot rules due to lack of info to assert the correct screen */
-    fun clickOnTrashIcon() {
-      clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
-    }
-
-    fun assertDeleteHistoryDialogDisplayed() {
-      isVisible(Text(getResourceString(R.string.delete_history)))
-    }
-  }
+  // inner class HistoryRobot : BaseRobot() {
+  // /** Pushed back robot rules due to lack of info to assert the correct screen */
+  // fun clickOnTrashIcon() {
+  //   clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
+  // }
+  //
+  // fun assertDeleteHistoryDialogDisplayed() {
+  //   isVisible(Text(getResourceString(R.string.delete_history)))
+  // }
+  // }
 
   fun clickHostBooksOnSideNav(func: KiwixMainRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.menu_host_books)))

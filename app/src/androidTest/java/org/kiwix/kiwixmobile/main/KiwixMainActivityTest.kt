@@ -55,7 +55,7 @@ class KiwixMainActivityTest {
       openDrawer()
       clickSettingsOnSideNav { }
       // assertSettingsScreenDisplayed()
-      navigate()
+      openDrawer()
       clickHelpOnSideNav()
       assertHelpScreenDisplayed()
       navigate()
