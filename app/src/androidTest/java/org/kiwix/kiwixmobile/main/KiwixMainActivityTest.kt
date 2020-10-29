@@ -54,7 +54,6 @@ class KiwixMainActivityTest {
       clickHostBooksOnSideNav { }
       openDrawer()
       clickSettingsOnSideNav { }
-      // assertSettingsScreenDisplayed()
       openDrawer()
       clickHelpOnSideNav()
       assertHelpScreenDisplayed()

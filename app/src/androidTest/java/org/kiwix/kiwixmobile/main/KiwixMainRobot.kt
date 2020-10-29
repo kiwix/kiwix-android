@@ -74,37 +74,12 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  // private fun bookmarks(func: BookmarksRobot.() -> Unit) =
-  //   BookmarksRobot().applyWithViewHierarchyPrinting(func)
-
-  // inner class BookmarksRobot : BaseRobot() {
-  // /** Pushed back robot rules due to lack of info to assert the correct screen */
-  // fun clickOnTrashIcon() {
-  //   clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
-  // }
-  //
-  // fun assertDeleteBookmarksDialogDisplayed() {
-  //   isVisible(Text(getResourceString(R.string.delete_bookmarks)))
-  // }
-  // }
-
   fun clickHistoryOnSideNav(func: HistoryRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.history)))
     history(func)
     pressBack()
     pressBack()
   }
-
-  // inner class HistoryRobot : BaseRobot() {
-  // /** Pushed back robot rules due to lack of info to assert the correct screen */
-  // fun clickOnTrashIcon() {
-  //   clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
-  // }
-  //
-  // fun assertDeleteHistoryDialogDisplayed() {
-  //   isVisible(Text(getResourceString(R.string.delete_history)))
-  // }
-  // }
 
   fun clickHostBooksOnSideNav(func: KiwixMainRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.menu_host_books)))
@@ -116,10 +91,6 @@ class KiwixMainRobot : BaseRobot() {
     clickOn(Text(getResourceString(R.string.menu_settings)))
     isVisible(Text(getResourceString(R.string.menu_settings)))
     pressBack()
-  }
-
-  fun assertSettingsScreenDisplayed() {
-    isVisible(Text(getResourceString(R.string.menu_settings)))
   }
 
   fun clickHelpOnSideNav() {
