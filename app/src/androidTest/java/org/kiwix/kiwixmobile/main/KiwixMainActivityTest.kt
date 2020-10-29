@@ -51,13 +51,15 @@ class KiwixMainActivityTest {
         assertDeleteHistoryDialogDisplayed()
       }
       openDrawer()
-      clickHostBooksOnSideNav { }
+      clickHostBooksOnSideNav {
+      }
       openDrawer()
-      clickSettingsOnSideNav { }
+      clickSettingsOnSideNav {
+      }
       openDrawer()
-      clickHelpOnSideNav()
-      assertHelpScreenDisplayed()
-      navigate()
+      clickHelpOnSideNav {
+      }
+      openDrawer()
       clickSupportKiwixOnSideNav()
       assertExternalLinkDialogDisplayed()
       pressBack()

@@ -22,6 +22,8 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.help.HelpRobot
+import org.kiwix.kiwixmobile.help.help
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 import org.kiwix.kiwixmobile.nav.destination.LibraryRobot
@@ -32,8 +34,8 @@ import org.kiwix.kiwixmobile.page.bookmarks.BookmarksRobot
 import org.kiwix.kiwixmobile.page.bookmarks.bookmarks
 import org.kiwix.kiwixmobile.page.history.HistoryRobot
 import org.kiwix.kiwixmobile.page.history.history
+import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
-import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun kiwixMainRobo(func: KiwixMainRobot.() -> Unit) =
   KiwixMainRobot().applyWithViewHierarchyPrinting(func)
@@ -87,18 +89,16 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  fun clickSettingsOnSideNav(func: KiwixMainRobot.() -> Unit) {
+  fun clickSettingsOnSideNav(func: SettingsRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.menu_settings)))
     isVisible(Text(getResourceString(R.string.menu_settings)))
     pressBack()
   }
 
-  fun clickHelpOnSideNav() {
+  fun clickHelpOnSideNav(func: HelpRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.menu_help)))
-  }
-
-  fun assertHelpScreenDisplayed() {
-    isVisible(Text(getResourceString(R.string.menu_help)))
+    help(func)
+    pressBack()
   }
 
   fun clickSupportKiwixOnSideNav() {
@@ -107,10 +107,5 @@ class KiwixMainRobot : BaseRobot() {
 
   fun assertExternalLinkDialogDisplayed() {
     isVisible(Text(getResourceString(R.string.external_link_popup_dialog_title)))
-  }
-
-  fun navigate() {
-    pressBack()
-    openDrawer()
   }
 }
