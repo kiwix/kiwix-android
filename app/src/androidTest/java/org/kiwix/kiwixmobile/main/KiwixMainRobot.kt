@@ -30,12 +30,17 @@ import org.kiwix.kiwixmobile.nav.destination.LibraryRobot
 import org.kiwix.kiwixmobile.nav.destination.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.nav.destination.library
 import org.kiwix.kiwixmobile.nav.destination.onlineLibrary
+import org.kiwix.kiwixmobile.nav.destination.reader.ReaderRobot
+import org.kiwix.kiwixmobile.nav.destination.reader.reader
 import org.kiwix.kiwixmobile.page.bookmarks.BookmarksRobot
 import org.kiwix.kiwixmobile.page.bookmarks.bookmarks
 import org.kiwix.kiwixmobile.page.history.HistoryRobot
 import org.kiwix.kiwixmobile.page.history.history
 import org.kiwix.kiwixmobile.settings.SettingsRobot
+import org.kiwix.kiwixmobile.settings.settingsRobo
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
+import org.kiwix.kiwixmobile.webserver.ZimHostRobot
+import org.kiwix.kiwixmobile.webserver.zimHost
 
 fun kiwixMainRobo(func: KiwixMainRobot.() -> Unit) =
   KiwixMainRobot().applyWithViewHierarchyPrinting(func)
@@ -46,10 +51,9 @@ class KiwixMainRobot : BaseRobot() {
     isVisible(ViewId(R.id.navigation_container))
   }
 
-  fun clickReaderOnBottomNav(func: LibraryRobot.() -> Unit) {
+  fun clickReaderOnBottomNav(func: ReaderRobot.() -> Unit) {
     clickOn(ViewId(R.id.readerFragment))
-    isVisible(Text(getResourceString(R.string.reader)))
-    library(func)
+    reader(func)
   }
 
   fun clickLibraryOnBottomNav(func: LibraryRobot.() -> Unit) {
@@ -83,15 +87,15 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  fun clickHostBooksOnSideNav(func: KiwixMainRobot.() -> Unit) {
+  fun clickHostBooksOnSideNav(func: ZimHostRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.menu_host_books)))
-    isVisible(Text(getResourceString(R.string.menu_host_books)))
+    zimHost(func)
     pressBack()
   }
 
   fun clickSettingsOnSideNav(func: SettingsRobot.() -> Unit) {
     clickOn(Text(getResourceString(R.string.menu_settings)))
-    isVisible(Text(getResourceString(R.string.menu_settings)))
+    settingsRobo(func)
     pressBack()
   }
 

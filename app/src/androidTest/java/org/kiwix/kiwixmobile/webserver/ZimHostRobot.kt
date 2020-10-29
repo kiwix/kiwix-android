@@ -16,36 +16,22 @@
  *
  */
 
-package org.kiwix.kiwixmobile.page.bookmarks
+package org.kiwix.kiwixmobile.webserver
 
 import applyWithViewHierarchyPrinting
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
-import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
+import org.kiwix.kiwixmobile.testutils.TestUtils
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
  */
 
-fun bookmarks(func: BookmarksRobot.() -> Unit) =
-  BookmarksRobot().applyWithViewHierarchyPrinting(func)
+fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
 
-class BookmarksRobot : BaseRobot() {
-  /** Pushed back robot rules due to lack of info to assert the correct screen */
+class ZimHostRobot : BaseRobot() {
   init {
-    assertDisplayed(R.string.bookmarks_from_current_book)
-    // isVisible(Findable.StringId.TextId(R.string.bookmarks_from_current_book))
-  }
-
-  fun clickOnTrashIcon() {
-    clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
-  }
-
-  fun assertDeleteBookmarksDialogDisplayed() {
-    isVisible(Text(getResourceString(R.string.delete_bookmarks)))
+    isVisible(Findable.Text(TestUtils.getResourceString(R.string.menu_host_books)))
   }
 }

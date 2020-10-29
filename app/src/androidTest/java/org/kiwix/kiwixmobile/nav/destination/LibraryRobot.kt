@@ -35,7 +35,7 @@ fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarc
 
 class LibraryRobot : BaseRobot() {
   init {
-    isVisible(Text(getResourceString(R.string.library)))
+    isVisible(ViewId(R.id.get_zim_nearby_device))
   }
 }
 
@@ -53,4 +53,3 @@ class OnlineLibraryRobot : BaseRobot() {
     language(func)
   }
 }
-
