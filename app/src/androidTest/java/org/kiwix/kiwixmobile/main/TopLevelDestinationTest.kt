@@ -22,14 +22,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
-class KiwixMainActivityTest {
+class TopLevelDestinationTest {
   @Rule
   @JvmField
   var activityTestRule = ActivityTestRule(KiwixMainActivity::class.java)
 
   @Test
-  fun testKiwixMainActivity() {
-    kiwixMainRobo {
+  fun testTopLevelDestination() {
+    kiwixMain {
       clickReaderOnBottomNav {
       }
       clickLibraryOnBottomNav {

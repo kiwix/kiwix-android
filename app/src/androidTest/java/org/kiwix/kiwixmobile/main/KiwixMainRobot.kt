@@ -26,10 +26,10 @@ import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.help.help
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
-import org.kiwix.kiwixmobile.nav.destination.LibraryRobot
-import org.kiwix.kiwixmobile.nav.destination.OnlineLibraryRobot
-import org.kiwix.kiwixmobile.nav.destination.library
-import org.kiwix.kiwixmobile.nav.destination.onlineLibrary
+import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
+import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
+import org.kiwix.kiwixmobile.nav.destination.library.library
+import org.kiwix.kiwixmobile.nav.destination.library.onlineLibrary
 import org.kiwix.kiwixmobile.nav.destination.reader.ReaderRobot
 import org.kiwix.kiwixmobile.nav.destination.reader.reader
 import org.kiwix.kiwixmobile.page.bookmarks.BookmarksRobot
@@ -42,7 +42,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
 
-fun kiwixMainRobo(func: KiwixMainRobot.() -> Unit) =
+fun kiwixMain(func: KiwixMainRobot.() -> Unit) =
   KiwixMainRobot().applyWithViewHierarchyPrinting(func)
 
 class KiwixMainRobot : BaseRobot() {

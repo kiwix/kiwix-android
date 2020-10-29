@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.LONG_WAIT
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.main.KiwixMainRobot
-import org.kiwix.kiwixmobile.main.kiwixMainRobo
+import org.kiwix.kiwixmobile.main.kiwixMain
 
 fun intro(func: IntroRobot.() -> Unit) = IntroRobot().applyWithViewHierarchyPrinting(func)
 
@@ -51,6 +51,6 @@ class IntroRobot : BaseRobot() {
 
   infix fun clickGetStarted(func: KiwixMainRobot.() -> Unit): KiwixMainRobot {
     clickOn(getStarted)
-    return kiwixMainRobo(func)
+    return kiwixMain(func)
   }
 }
