@@ -67,6 +67,7 @@ import java.io.File
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
 class KiwixReaderFragment : CoreReaderFragment() {
+  private var isFullScreen: Boolean = false
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -231,6 +232,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
     if (zimReaderContainer.zimFile == null) {
       exitBook()
     }
+    if (isFullScreen) {
+      hideNavBar()
+    }
   }
 
   override fun restoreViewStateOnInvalidJSON() {
@@ -264,6 +268,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
+    this.isFullScreen = isFullScreen
     if (isFullScreen) {
       hideNavBar()
     } else {
