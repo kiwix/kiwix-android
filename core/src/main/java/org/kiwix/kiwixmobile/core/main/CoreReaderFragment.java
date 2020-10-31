@@ -716,6 +716,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     actionBar = null;
     mainMenu = null;
     tabRecyclerView.setAdapter(null);
+    tableDrawerRight.setAdapter(null);
     tableDrawerAdapter = null;
     unbinder.unbind();
     webViewList.clear();
@@ -1412,9 +1413,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   public void onPause() {
     super.onPause();
     saveTabStates();
-    if (tts != null) {
-      tts.stop();
-    }
     Log.d(TAG_KIWIX,
       "onPause Save current zim file to preferences: " + zimReaderContainer.getZimCanonicalPath());
   }

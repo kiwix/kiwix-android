@@ -136,6 +136,7 @@
     app:layout_constraintTop_toBottomOf="@id/view_file_list_boundary" />
 
   <androidx.recyclerview.widget.RecyclerView
+    tools:listitem="@layout/item_transfer_list"
     android:id="@+id/recycler_view_transfer_files"
     android:layout_width="match_parent"
     android:layout_height="0dp"
