@@ -57,7 +57,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   webViewClient: CoreWebViewClient
 ) : VideoEnabledWebView(context, attrs) {
   @Inject
-  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  open lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer

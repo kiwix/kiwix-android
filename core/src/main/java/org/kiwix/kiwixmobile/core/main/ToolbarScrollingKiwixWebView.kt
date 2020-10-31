@@ -36,7 +36,7 @@ class ToolbarScrollingKiwixWebView(
   webViewClient: CoreWebViewClient?,
   private val toolbarView: View,
   private val bottomBarView: View,
-  private override val sharedPreferenceUtil: SharedPreferenceUtil
+  override var sharedPreferenceUtil: SharedPreferenceUtil
 ) : KiwixWebView(context!!, callback!!, attrs!!, nonVideoView!!, videoView!!, webViewClient!!) {
   private val toolbarHeight = getContext().getToolbarHeight()
   private var parentNavigationBar: View? = null
@@ -122,7 +122,7 @@ class ToolbarScrollingKiwixWebView(
     return super.onTouchEvent(event)
   }
 
-  fun ensureToolbarDisplayed() {
+  private fun ensureToolbarDisplayed() {
     moveToolbar(-toolbarHeight)
   }
 
