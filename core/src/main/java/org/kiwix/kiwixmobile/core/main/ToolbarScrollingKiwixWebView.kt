@@ -97,6 +97,7 @@ class ToolbarScrollingKiwixWebView(
     when (event.actionMasked) {
       MotionEvent.ACTION_DOWN -> startY = event.rawY
       MotionEvent.ACTION_MOVE -> {
+
         // If we are in fullscreen don't scroll bar
         if (sharedPreferenceUtil.prefFullScreen) {
           return super.onTouchEvent(event)
@@ -111,13 +112,14 @@ class ToolbarScrollingKiwixWebView(
           }
         }
       }
-      MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> if (transY != 0 && transY > -toolbarHeight) {
-        if (transY > -toolbarHeight / 2) {
-          ensureToolbarDisplayed()
-        } else {
-          ensureToolbarHidden()
+      MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
+        if (transY != 0 && transY > -toolbarHeight) {
+          if (transY > -toolbarHeight / 2) {
+            ensureToolbarDisplayed()
+          } else {
+            ensureToolbarHidden()
+          }
         }
-      }
     }
     return super.onTouchEvent(event)
   }
