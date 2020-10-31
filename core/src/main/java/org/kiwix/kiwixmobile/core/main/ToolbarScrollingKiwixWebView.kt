@@ -118,8 +118,6 @@ class ToolbarScrollingKiwixWebView(
           ensureToolbarHidden()
         }
       }
-      else -> {
-      }
     }
     return super.onTouchEvent(event)
   }
