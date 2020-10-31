@@ -256,7 +256,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
     return ToolbarScrollingKiwixWebView(
-      activity, this, attrs, activityMainRoot as ViewGroup, videoView,
+      requireContext(), this, attrs, activityMainRoot as ViewGroup, videoView,
       CoreWebViewClient(this, zimReaderContainer),
       toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
       sharedPreferenceUtil

@@ -28,27 +28,27 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 @SuppressLint("ViewConstructor")
 class ToolbarScrollingKiwixWebView(
-  context: Context?,
-  callback: WebViewCallback?,
-  attrs: AttributeSet?,
-  nonVideoView: ViewGroup?,
-  videoView: ViewGroup?,
-  webViewClient: CoreWebViewClient?,
+  context: Context,
+  callback: WebViewCallback,
+  attrs: AttributeSet,
+  nonVideoView: ViewGroup,
+  videoView: ViewGroup,
+  webViewClient: CoreWebViewClient,
   private val toolbarView: View,
   private val bottomBarView: View,
   override var sharedPreferenceUtil: SharedPreferenceUtil
-) : KiwixWebView(context!!, callback!!, attrs!!, nonVideoView!!, videoView!!, webViewClient!!) {
+) : KiwixWebView(context, callback, attrs, nonVideoView, videoView, webViewClient) {
   private val toolbarHeight = getContext().getToolbarHeight()
   private var parentNavigationBar: View? = null
   private var startY = 0f
 
   constructor(
-    context: Context?,
-    callback: WebViewCallback?,
-    attrs: AttributeSet?,
-    nonVideoView: ViewGroup?,
-    videoView: ViewGroup?,
-    webViewClient: CoreWebViewClient?,
+    context: Context,
+    callback: WebViewCallback,
+    attrs: AttributeSet,
+    nonVideoView: ViewGroup,
+    videoView: ViewGroup,
+    webViewClient: CoreWebViewClient,
     toolbarView: View,
     bottomBarView: View,
     parentNavigationBar: View?,
@@ -60,6 +60,10 @@ class ToolbarScrollingKiwixWebView(
     this.parentNavigationBar = parentNavigationBar
   }
 
+  init {
+    fixInitalScrollingIssue()
+  }
+
   /**
    * The webview needs to be scrolled with 0 to not be slightly hidden on startup.
    * See https://github.com/kiwix/kiwix-android/issues/2304 for issue description.
@@ -69,9 +73,8 @@ class ToolbarScrollingKiwixWebView(
   }
 
   private fun moveToolbar(scrollDelta: Int): Boolean {
-    val newTranslation: Float
     val originalTranslation = toolbarView.translationY
-    newTranslation = if (scrollDelta > 0) {
+    val newTranslation = if (scrollDelta > 0) {
       // scroll down
       Math.max(-toolbarHeight.toFloat(), originalTranslation - scrollDelta)
     } else {
@@ -81,9 +84,8 @@ class ToolbarScrollingKiwixWebView(
     toolbarView.translationY = newTranslation
     bottomBarView.translationY =
       newTranslation * -1 * (bottomBarView.height / toolbarHeight.toFloat())
-    if (parentNavigationBar != null) {
-      parentNavigationBar!!.translationY =
-        newTranslation * -1 * (parentNavigationBar!!.height / toolbarHeight.toFloat())
+    parentNavigationBar?.let {
+      it.translationY = newTranslation * -1 * (it.height / toolbarHeight.toFloat())
     }
     this.translationY = newTranslation + toolbarHeight
     return toolbarHeight + newTranslation != 0f && newTranslation != 0f
@@ -128,9 +130,5 @@ class ToolbarScrollingKiwixWebView(
 
   private fun ensureToolbarHidden() {
     moveToolbar(toolbarHeight)
-  }
-
-  init {
-    fixInitalScrollingIssue()
   }
 }
