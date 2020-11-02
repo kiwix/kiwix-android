@@ -11,8 +11,8 @@
     <ID>LongParameterList:MainMenu.kt$MainMenu$( private val activity: Activity, zimFileReader: ZimFileReader?, menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, disableReadAloud: Boolean = false, disableTabs: Boolean = false, private val menuClickListener: MenuClickListener )</ID>
     <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
     <ID>LongParameterList:Repository.kt$Repository$( @param:IO private val io: Scheduler, @param:MainThread private val mainThread: Scheduler, private val bookDao: NewBookDao, private val bookmarksDao: NewBookmarksDao, private val historyDao: HistoryDao, private val languageDao: NewLanguagesDao, private val recentSearchDao: NewRecentSearchDao, private val zimReaderContainer: ZimReaderContainer )</ID>
-    <ID>LongParameterList:ToolbarScrollingKiwixWebView.kt$ToolbarScrollingKiwixWebView$( context: Context, callback: WebViewCallback, attrs: AttributeSet, nonVideoView: ViewGroup, videoView: ViewGroup, webViewClient: CoreWebViewClient, private val toolbarView: View, private val bottomBarView: View, override var sharedPreferenceUtil: SharedPreferenceUtil )</ID>
-    <ID>LongParameterList:ToolbarScrollingKiwixWebView.kt$ToolbarScrollingKiwixWebView$( context: Context, callback: WebViewCallback, attrs: AttributeSet, nonVideoView: ViewGroup, videoView: ViewGroup, webViewClient: CoreWebViewClient, toolbarView: View, bottomBarView: View, parentNavigationBar: View?, sharedPreferenceUtil: SharedPreferenceUtil )</ID>
+    <ID>LongParameterList:ToolbarScrollingKiwixWebView.kt$ToolbarScrollingKiwixWebView$( context: Context, callback: WebViewCallback, attrs: AttributeSet, nonVideoView: ViewGroup, videoView: ViewGroup, webViewClient: CoreWebViewClient, private val toolbarView: View, private val bottomBarView: View, sharedPreferenceUtil: SharedPreferenceUtil, private val parentNavigationBar: View? )</ID>
+    <ID>LongParameterList:ToolbarScrollingKiwixWebView.kt$ToolbarScrollingKiwixWebView$( context: Context, callback: WebViewCallback, attrs: AttributeSet, nonVideoView: ViewGroup, videoView: ViewGroup, webViewClient: CoreWebViewClient, toolbarView: View, bottomBarView: View, sharedPreferenceUtil: SharedPreferenceUtil )</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
@@ -28,8 +28,6 @@
     <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
-    <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$3</ID>
-    <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$4</ID>
     <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$8</ID>
     <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
     <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
