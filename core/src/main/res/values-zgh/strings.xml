@@ -16,7 +16,7 @@
   <string name="go_to_wifi_settings_label">ⴷⴷⵓ ⵖⵔ ⵜⵉⵙⵖⴰⵍ ⵏ ⵓⵡⵉⴼⵉ</string>
   <string name="pref_display_title">ⵙⴽⵏ</string>
   <string name="pref_info_title">ⵓⵎⵍⴰⵏ</string>
-  <string name="pref_info_version">ⵜⴰⵡⵉⵍⴰ</string>
+  <string name="pref_info_version">ⵜⴰⵍⵇⵇⵎⵜ</string>
   <string name="pref_back_to_top">ⴰⵖⵓⵍ ⵙ ⵓⴼⵍⵍⴰ</string>
   <string name="pref_language_title">ⵜⵓⵜⵍⴰⵢⵜ</string>
   <string name="pref_language_chooser">ⵙⵜⵉ ⵜⵓⵜⵍⴰⵢⵜ</string>
@@ -46,7 +46,7 @@
   <string name="tts_pause">ⵙⴱⴷⴷ</string>
   <string name="stop">ⵙⴱⴱⴷ</string>
   <string name="internal_storage">ⴰⴳⵏⵙⴰⵏ</string>
-  <string name="external_storage">ⴱⵕⵕⴰ</string>
+  <string name="external_storage">ⴰⴱⵕⵕⴰⵏⵉ</string>
   <string name="yes">ⵢⴰⵀ</string>
   <string name="no">ⵓⵀⵓ</string>
   <string name="confirm_stop_download_title">ⵙⴱⴷⴷ ⴰⴳⴰⵎ?</string>
@@ -57,7 +57,7 @@
   <string name="time_left">ⴰⵥⵍⵎⴰⴹ</string>
   <string name="time_today">ⴰⵙⵙⴰ</string>
   <string name="time_yesterday">ⴰⵙⵙⵏⵏⴰⴹ</string>
-  <string name="do_not_ask_anymore">ⴰⴷ ⵙⵍ ⵓⵔ ⵜⵙⵇⵙⴰⴷ</string>
+  <string name="do_not_ask_anymore">ⵓⵙⴰⵔ ⵜⵙⵇⵙⴰⴷ</string>
   <string name="your_languages">ⵜⵓⵜⵍⴰⵜⵉⵏ ⵉⵜⵜⵓⵙⵜⵢⵏ:</string>
   <string name="other_languages">ⵜⵓⵜⵍⴰⵢⵉⵏ ⵢⴰⴹⵏⵉⵏ:</string>
   <string name="new_tab_shortcut_label">ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ</string>
