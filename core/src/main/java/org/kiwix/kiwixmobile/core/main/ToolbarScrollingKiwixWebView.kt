@@ -25,6 +25,8 @@ import android.view.View
 import android.view.ViewGroup
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import kotlin.math.max
+import kotlin.math.min
 
 @SuppressLint("ViewConstructor")
 class ToolbarScrollingKiwixWebView(
@@ -36,8 +38,16 @@ class ToolbarScrollingKiwixWebView(
   webViewClient: CoreWebViewClient,
   private val toolbarView: View,
   private val bottomBarView: View,
-  override var sharedPreferenceUtil: SharedPreferenceUtil
-) : KiwixWebView(context, callback, attrs, nonVideoView, videoView, webViewClient) {
+  sharedPreferenceUtil: SharedPreferenceUtil
+) : KiwixWebView(
+  context,
+  callback,
+  attrs,
+  nonVideoView,
+  videoView,
+  webViewClient,
+  sharedPreferenceUtil
+) {
   private val toolbarHeight = getContext().getToolbarHeight()
   private var parentNavigationBar: View? = null
   private var startY = 0f
@@ -74,13 +84,13 @@ class ToolbarScrollingKiwixWebView(
 
   private fun moveToolbar(scrollDelta: Int): Boolean {
     val originalTranslation = toolbarView.translationY
-    val newTranslation = if (scrollDelta > 0) {
-      // scroll down
-      Math.max(-toolbarHeight.toFloat(), originalTranslation - scrollDelta)
-    } else {
-      // scroll up
-      Math.min(0f, originalTranslation - scrollDelta)
-    }
+    val newTranslation = if (scrollDelta > 0)
+    // scroll down
+      max(-toolbarHeight.toFloat(), originalTranslation - scrollDelta)
+    else
+    // scroll up
+      min(0f, originalTranslation - scrollDelta)
+
     toolbarView.translationY = newTranslation
     bottomBarView.translationY =
       newTranslation * -1 * (bottomBarView.height / toolbarHeight.toFloat())
@@ -112,6 +122,8 @@ class ToolbarScrollingKiwixWebView(
           }
         }
       }
+      // If the toolbar is half-visible,
+      // either open or close it entirely depending on how far it is visible
       MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
         if (transY != 0 && transY > -toolbarHeight) {
           if (transY > -toolbarHeight / 2) {
