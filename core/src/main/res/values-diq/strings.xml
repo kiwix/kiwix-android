@@ -30,6 +30,7 @@
   <string name="hotspot_service_channel_name">Kanalê xızmeti Hotspot</string>
   <string name="hotspot_failed_title">Serkewtışê hotspoti nêbiyo</string>
   <string name="go_to_wifi_settings_label">Ravêrê eyaranê Wi-Fi</string>
+  <string name="connection_refused">Gırebiyayış biyo red</string>
   <string name="hotspot_running">Hotspoto gureyneyino</string>
   <string name="no_books_selected_toast_message">Veror kıtaba weçinê</string>
   <string name="server_failed_message">Server nêserniyayo. Kerem ke hotspot ake</string>
@@ -38,10 +39,11 @@
   <string name="server_stopped_successfully_toast_message">Server hewl vındarnayo</string>
   <string name="hotspot_turned_on">Hotspot abiya</string>
   <string name="hotspot_details_message">Cêr de lokal detayê hotspoti deyaye.\nSSID: %1$s\nRavêrdış: %2$s</string>
+  <string name="server_textview_default_message">Server de depo kerde dosyayan weçinê</string>
   <string name="progress_dialog_starting_server">Server gureyneyino</string>
   <string name="hotspot_dialog_title">Telimatê meymandariya kıtaban</string>
   <string name="wifi_dialog_title">Gırey Wi-fi tesbit biya</string>
-  <string name="hotspot_dialog_message" fuzzy="true">Serva gureynayışê vêri WIFI hotspoti menuel akerê</string>
+  <string name="hotspot_dialog_message">Seba ena xısusiyeti gureynayışi rê gani veri hotspotê WIFI peydeatana akerê ya zi esas cihaz u gırote cihazi eyni torra Wi-Fi gırebiyayışê cı kontrol kerê.</string>
   <string name="hotspot_dialog_neutral_button">RAVÊR Şİ</string>
   <string name="hotspot_channel_description">Heqa Hotspot/server eleqeyın rocaney .</string>
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
@@ -197,6 +199,7 @@
   <string name="connection_failed">Gıreyin nêbiya</string>
   <string name="transfer_to">%s ya wa dosya transfer vo?</string>
   <string name="file_transfer_complete">Transferê dosya biyo temam</string>
+  <string name="search_for_peers">Zey pêyan cıgeyre</string>
   <string name="your_device">Cihazê Şıma:</string>
   <string name="nearby_devices">NEZDI CİHAZİ</string>
   <string name="files_for_transfer">TRANSFERÊ DOSYAYAN</string>
@@ -218,11 +221,21 @@
   <string name="delete_history">Veror pêro wa bıesterneyo?</string>
   <string name="delete_selected_history">Weçinaye veror wa bıesteriyo?</string>
   <string name="delete_bookmarks">İşareti pêro wa bıesteriyo?</string>
+  <string name="delete_selected_bookmarks">Weçineyaye nışani wa bıesteriyê?</string>
   <string name="on">Akerde</string>
   <string name="off">Racınaye</string>
   <string name="auto">Otomatik</string>
+  <string name="send_report">Rapora teşhisi bırışê</string>
+  <string name="crash_checkbox_file_system">Detayê Sistemê Dosya</string>
+  <string name="diagnostic_report">Rapora Teşhisi</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Nazdiyiya metini</string>
   <string name="search_open_in_new_tab">Taba newiye de ake</string>
   <string name="reader">Wanayoğ</string>
+  <string name="no_open_book">Akerde kıtab çıniyo</string>
+  <string name="open_library">Kıtabxaney akerê</string>
+  <string name="tab_restored">Tab peyser ard</string>
+  <string name="open_drawer">Antergey akerê</string>
+  <string name="close_drawer">Antergey bıqefelne</string>
+  <string name="how_to_update_content">Zerrek seni rocane beno?</string>
 </resources>
