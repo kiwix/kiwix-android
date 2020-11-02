@@ -258,8 +258,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
     return ToolbarScrollingKiwixWebView(
       requireContext(), this, attrs, activityMainRoot as ViewGroup, videoView,
       CoreWebViewClient(this, zimReaderContainer),
-      toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
-      sharedPreferenceUtil
+      toolbarContainer, bottomToolbar, sharedPreferenceUtil = sharedPreferenceUtil,
+      parentNavigationBar = requireActivity().bottom_nav_view
     )
   }
 

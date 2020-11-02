@@ -38,7 +38,8 @@ class ToolbarScrollingKiwixWebView(
   webViewClient: CoreWebViewClient,
   private val toolbarView: View,
   private val bottomBarView: View,
-  sharedPreferenceUtil: SharedPreferenceUtil
+  sharedPreferenceUtil: SharedPreferenceUtil,
+  private val parentNavigationBar: View?
 ) : KiwixWebView(
   context,
   callback,
@@ -49,7 +50,7 @@ class ToolbarScrollingKiwixWebView(
   sharedPreferenceUtil
 ) {
   private val toolbarHeight = getContext().getToolbarHeight()
-  private var parentNavigationBar: View? = null
+
   private var startY = 0f
 
   constructor(
@@ -61,14 +62,11 @@ class ToolbarScrollingKiwixWebView(
     webViewClient: CoreWebViewClient,
     toolbarView: View,
     bottomBarView: View,
-    parentNavigationBar: View?,
     sharedPreferenceUtil: SharedPreferenceUtil
   ) : this(
     context, callback, attrs, nonVideoView, videoView, webViewClient, toolbarView,
-    bottomBarView, sharedPreferenceUtil
-  ) {
-    this.parentNavigationBar = parentNavigationBar
-  }
+    bottomBarView, sharedPreferenceUtil, null
+  )
 
   init {
     fixInitalScrollingIssue()
