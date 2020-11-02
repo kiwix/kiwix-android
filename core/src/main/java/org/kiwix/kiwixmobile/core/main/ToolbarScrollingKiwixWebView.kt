@@ -29,7 +29,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 @SuppressLint("ViewConstructor")
-class ToolbarScrollingKiwixWebView(
+class ToolbarScrollingKiwixWebView @JvmOverloads constructor(
   context: Context,
   callback: WebViewCallback,
   attrs: AttributeSet,
@@ -39,7 +39,7 @@ class ToolbarScrollingKiwixWebView(
   private val toolbarView: View,
   private val bottomBarView: View,
   sharedPreferenceUtil: SharedPreferenceUtil,
-  private val parentNavigationBar: View?
+  private val parentNavigationBar: View? = null
 ) : KiwixWebView(
   context,
   callback,
@@ -52,21 +52,6 @@ class ToolbarScrollingKiwixWebView(
   private val toolbarHeight = context.getToolbarHeight()
 
   private var startY = 0f
-
-  constructor(
-    context: Context,
-    callback: WebViewCallback,
-    attrs: AttributeSet,
-    nonVideoView: ViewGroup,
-    videoView: ViewGroup,
-    webViewClient: CoreWebViewClient,
-    toolbarView: View,
-    bottomBarView: View,
-    sharedPreferenceUtil: SharedPreferenceUtil
-  ) : this(
-    context, callback, attrs, nonVideoView, videoView, webViewClient, toolbarView,
-    bottomBarView, sharedPreferenceUtil, null
-  )
 
   init {
     fixInitalScrollingIssue()
