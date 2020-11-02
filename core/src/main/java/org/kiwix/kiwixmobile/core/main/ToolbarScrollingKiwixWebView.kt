@@ -49,7 +49,7 @@ class ToolbarScrollingKiwixWebView(
   webViewClient,
   sharedPreferenceUtil
 ) {
-  private val toolbarHeight = getContext().getToolbarHeight()
+  private val toolbarHeight = context.getToolbarHeight()
 
   private var startY = 0f
 
