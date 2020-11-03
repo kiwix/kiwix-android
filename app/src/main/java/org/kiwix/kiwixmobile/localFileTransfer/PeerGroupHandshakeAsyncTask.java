@@ -44,7 +44,7 @@ import org.kiwix.kiwixmobile.core.BuildConfig;
  *
  * After obtaining the IP address, the sender also shares metadata regarding the file transfer
  * (no. of files & their names) with the receiver. Finally, the onPostExecute() of the sender
- * initiates the file transfer through {@link SenderDeviceAsyncTask} on the sender and using
+ * initiates the file transfer through {@link SenderDevice} on the sender and using
  * {@link ReceiverDeviceAsyncTask} on the receiver.
  */
 class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {

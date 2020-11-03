@@ -74,7 +74,7 @@ import javax.inject.Inject
  *
  * File transfer involves two phases:
  * 1) Handshake with the selected peer device, using [PeerGroupHandshakeAsyncTask]
- * 2) After handshake, starting the files transfer using [SenderDeviceAsyncTask] on the sender
+ * 2) After handshake, starting the files transfer using [SenderDevice] on the sender
  * device and [ReceiverDeviceAsyncTask] files receiving device
  */
 

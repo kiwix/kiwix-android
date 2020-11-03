@@ -39,6 +39,10 @@ import android.os.Build.VERSION_CODES
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -87,7 +91,7 @@ class WifiDirectManager @Inject constructor(
   private lateinit var groupInfo: WifiP2pInfo
   private lateinit var senderSelectedPeerDevice: WifiP2pDevice
   private var peerGroupHandshakeAsyncTask: PeerGroupHandshakeAsyncTask? = null
-  private var senderDeviceAsyncTask: SenderDeviceAsyncTask? = null
+  private var senderDevice: SenderDevice? = null
   private var receiverDeviceAsyncTask: ReceiverDeviceAsyncTask? = null
   private lateinit var selectedPeerDeviceInetAddress: InetAddress
 
@@ -275,8 +279,15 @@ class WifiDirectManager @Inject constructor(
         fileReceiverDeviceAddress =
           if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
-        senderDeviceAsyncTask = SenderDeviceAsyncTask(this, activity).also {
-          it.execute(*filesForTransfer.toTypedArray())
+        senderDevice = SenderDevice(this, activity).also {
+          CoroutineScope(Dispatchers.IO).launch {
+            val hasSend = it.send(filesForTransfer.toTypedArray())
+            withContext(Dispatchers.Main) {
+              if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete")
+              onFileTransferAsyncTaskComplete(hasSend)
+            }
+
+          }
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
@@ -304,7 +315,7 @@ class WifiDirectManager @Inject constructor(
     }
 
   fun stopWifiDirectManager() {
-    cancelAsyncTasks(peerGroupHandshakeAsyncTask, senderDeviceAsyncTask, receiverDeviceAsyncTask)
+    cancelAsyncTasks(peerGroupHandshakeAsyncTask, receiverDeviceAsyncTask)
     if (isFileSender) {
       closeChannel()
     } else {
