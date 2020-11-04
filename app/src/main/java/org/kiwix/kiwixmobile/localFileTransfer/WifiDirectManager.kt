@@ -33,7 +33,6 @@ import android.net.wifi.p2p.WifiP2pManager.Channel
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener
-import android.os.AsyncTask
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Looper
@@ -41,8 +40,8 @@ import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -57,6 +56,7 @@ import java.io.OutputStream
 import java.net.InetAddress
 import java.util.ArrayList
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Manager for the Wifi-P2p API, used in the local file transfer module
@@ -66,7 +66,7 @@ class WifiDirectManager @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower
-) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
+) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener, CoroutineScope {
   var callbacks: Callbacks? = null
 
   /* Helper methods */
@@ -104,9 +104,14 @@ class WifiDirectManager @Inject constructor(
     private set
 
   private var hasSenderStartedConnection = false
+  private lateinit var job: Job
+
+  override val coroutineContext: CoroutineContext
+    get() = job + Dispatchers.Main
 
   /* Initialisations for using the WiFi P2P API */
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
+    job = Job()
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
     manager = activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
@@ -249,14 +254,12 @@ class WifiDirectManager @Inject constructor(
     }
     peerGroupHandshakeAsyncTask = PeerGroupHandshakeAsyncTask(this)
       .also {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(context = coroutineContext).launch {
           val inetAddress = it.peer()
           inetAddress?.let(::setClientAddress) ?: if (BuildConfig.DEBUG) {
             Log.d(TAG, "InetAddress is null")
-            withContext(Dispatchers.Main) {
-              displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG)
-              onFileTransferAsyncTaskComplete(false)
-            }
+            displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG)
+            onFileTransferAsyncTaskComplete(false)
           }
         }
       }
@@ -276,7 +279,7 @@ class WifiDirectManager @Inject constructor(
 
   fun getFileReceiverDeviceAddress() = fileReceiverDeviceAddress
 
-  fun setClientAddress(clientAddress: InetAddress) {
+  private fun setClientAddress(clientAddress: InetAddress) {
 
     // If control reaches here, means handshake was successful
     selectedPeerDeviceInetAddress = clientAddress
@@ -291,18 +294,16 @@ class WifiDirectManager @Inject constructor(
           if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
         senderDevice = SenderDevice(this, activity).also {
-          CoroutineScope(Dispatchers.IO).launch {
+          CoroutineScope(context = coroutineContext).launch {
             val hasSend = it.send(filesForTransfer.toTypedArray())
-            withContext(Dispatchers.Main) {
-              if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete")
-              onFileTransferAsyncTaskComplete(hasSend)
-            }
+            if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete")
+            onFileTransferAsyncTaskComplete(hasSend)
           }
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
         receiverDevice = ReceiverDevice(this).also {
-          CoroutineScope(Dispatchers.Main).launch {
+          CoroutineScope(context = coroutineContext).launch {
             val isReceived = it.receive()
             if (BuildConfig.DEBUG) Log.d(TAG, "ReceiverDeviceAsyncTask complete")
             onFileTransferAsyncTaskComplete(isReceived)
@@ -323,13 +324,11 @@ class WifiDirectManager @Inject constructor(
     }
   }
 
-  private fun cancelAsyncTasks(vararg tasks: AsyncTask<*, *, *>?) =
-    tasks.forEach {
-      it?.cancel(true)
-    }
+  private fun cancelCoroutines() =
+    job.cancel()
 
   fun stopWifiDirectManager() {
-    cancelAsyncTasks()
+    cancelCoroutines()
     if (isFileSender) {
       closeChannel()
     } else {
