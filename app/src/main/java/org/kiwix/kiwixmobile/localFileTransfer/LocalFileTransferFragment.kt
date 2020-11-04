@@ -94,6 +94,7 @@ class LocalFileTransferFragment : BaseFragment(),
 
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
+  private lateinit var coroutineObserver: CoroutineObserver
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -109,6 +110,9 @@ class LocalFileTransferFragment : BaseFragment(),
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setHasOptionsMenu(true)
+    coroutineObserver = CoroutineObserver()
+    lifecycle.addObserver(coroutineObserver)
+    coroutineObserver.onCreate()
     val activity = requireActivity() as CoreMainActivity
     val filesForTransfer = getFilesForTransfer()
     val isReceiver = filesForTransfer.isEmpty()
@@ -345,6 +349,7 @@ class LocalFileTransferFragment : BaseFragment(),
   override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
+    coroutineObserver.onDestroy()
     super.onDestroyView()
   }
 
