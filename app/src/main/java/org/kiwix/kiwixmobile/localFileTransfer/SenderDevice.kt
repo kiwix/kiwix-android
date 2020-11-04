@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -104,9 +105,9 @@ internal class SenderDevice(
   }
 
   @SuppressWarnings("MagicNumber")
-  private fun delayForSlowReceiverDevicesToSetupServer(): Boolean {
+  private suspend fun delayForSlowReceiverDevicesToSetupServer(): Boolean {
     try { // Delay trying to connect with receiver, to allow slow receiver devices to setup server
-      Thread.sleep(3000)
+      delay(3000)
     } catch (e: InterruptedException) {
       Log.e(TAG, e.message)
       return false
