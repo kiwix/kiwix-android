@@ -17,10 +17,11 @@
  */
 package org.kiwix.kiwixmobile.localFileTransfer
 
-import android.os.AsyncTask
 import android.util.Log
-import android.widget.Toast
-import org.kiwix.kiwixmobile.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import java.io.InputStream
 import java.io.ObjectInputStream
@@ -45,75 +46,68 @@ import java.util.ArrayList
  * initiates the file transfer through [SenderDevice] on the sender and using
  * [ReceiverDevice] on the receiver.
  */
-internal class PeerGroupHandshakeAsyncTask(private val wifiDirectManager: WifiDirectManager) :
-  AsyncTask<Void?, Void?, InetAddress?>() {
+internal class PeerGroupHandshakeAsyncTask(private val wifiDirectManager: WifiDirectManager) {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
-  override fun doInBackground(vararg voids: Void?): InetAddress? {
-    if (BuildConfig.DEBUG) {
-      Log.d(TAG, "Handshake in progress")
-    }
-    if (wifiDirectManager.isGroupFormed && wifiDirectManager.isGroupOwner && !isCancelled) {
-      try {
-        ServerSocket(PEER_HANDSHAKE_PORT)
-          .use { serverSocket ->
-            serverSocket.reuseAddress = true
-            val server = serverSocket.accept()
-            val objectInputStream =
-              ObjectInputStream(server.getInputStream())
-            val `object` = objectInputStream.readObject()
+  suspend fun peer(): InetAddress? = withContext(Dispatchers.IO) {
+    val job = async {
+      if (BuildConfig.DEBUG) {
+        Log.d(TAG, "Handshake in progress")
+      }
+      if (wifiDirectManager.isGroupFormed && wifiDirectManager.isGroupOwner && this.isActive) {
+        try {
+          ServerSocket(PEER_HANDSHAKE_PORT)
+            .use { serverSocket ->
+              serverSocket.reuseAddress = true
+              val server = serverSocket.accept()
+              val objectInputStream = ObjectInputStream(server.getInputStream())
+              val kiwixHandShakeMessage = objectInputStream.readObject()
 
-            // Verify that the peer trying to communicate is a kiwix app intending to transfer files
-            return@doInBackground if (isKiwixHandshake(`object`) && !isCancelled) {
-              if (BuildConfig.DEBUG) {
-                Log.d(
-                  TAG,
-                  "Client IP address: " + server.inetAddress
-                )
+              // Verify that the peer trying to communicate is a kiwix app intending to transfer files
+              return@async if (isKiwixHandshake(kiwixHandShakeMessage) && this.isActive) {
+                if (BuildConfig.DEBUG) {
+                  Log.d(TAG, "Client IP address: " + server.inetAddress)
+                }
+                exchangeFileTransferMetadata(server.getOutputStream(), server.getInputStream())
+                server.inetAddress
+              } else {
+                // Selected device is not accepting wifi direct connections through the kiwix app
+                null
               }
-              exchangeFileTransferMetadata(server.getOutputStream(), server.getInputStream())
-              server.inetAddress
-            } else { // Selected device is not accepting wifi direct connections through the kiwix app
-              null
             }
-          }
-      } catch (ex: Exception) {
-        ex.printStackTrace()
-        return null
-      }
-    } else if (wifiDirectManager.isGroupFormed && !isCancelled) { //&& !groupInfo.isGroupOwner
-      try {
-        Socket().use { client ->
-          client.reuseAddress = true
-          client.connect(
-            InetSocketAddress(
-              wifiDirectManager.groupOwnerAddress.hostAddress,
-              PEER_HANDSHAKE_PORT
-            ), 15000
-          )
-          val objectOutputStream =
-            ObjectOutputStream(client.getOutputStream())
-          objectOutputStream.writeObject(
-            HANDSHAKE_MESSAGE
-          ) // Send message for the peer device to verify
-          exchangeFileTransferMetadata(client.getOutputStream(), client.getInputStream())
-          return@doInBackground wifiDirectManager.groupOwnerAddress
+        } catch (ex: Exception) {
+          ex.printStackTrace()
+          return@async null
         }
-      } catch (ex: Exception) {
-        ex.printStackTrace()
-        return null
+      } else if (wifiDirectManager.isGroupFormed && this.isActive) { // && !groupInfo.isGroupOwner
+        try {
+          Socket().use { client ->
+            client.reuseAddress = true
+            client.connect(
+              InetSocketAddress(
+                wifiDirectManager.groupOwnerAddress.hostAddress,
+                PEER_HANDSHAKE_PORT
+              ), 15000
+            )
+            val objectOutputStream = ObjectOutputStream(client.getOutputStream())
+            // Send message for the peer device to verify
+            objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
+            exchangeFileTransferMetadata(client.getOutputStream(), client.getInputStream())
+            return@async wifiDirectManager.groupOwnerAddress
+          }
+        } catch (ex: Exception) {
+          ex.printStackTrace()
+          return@async null
+        }
       }
+      return@async null
     }
-    return null
+    return@withContext job.await()
   }
 
-  private fun isKiwixHandshake(`object`: Any): Boolean {
-    return HANDSHAKE_MESSAGE == `object`
-  }
+  private fun isKiwixHandshake(handshakeMessage: Any): Boolean =
+    HANDSHAKE_MESSAGE == handshakeMessage
 
-  private fun exchangeFileTransferMetadata(
-    outputStream: OutputStream,
-    inputStream: InputStream
-  ) {
+  private fun exchangeFileTransferMetadata(outputStream: OutputStream, inputStream: InputStream) {
     if (wifiDirectManager.isFileSender) {
       try {
         ObjectOutputStream(outputStream).use { objectOutputStream ->
@@ -123,10 +117,7 @@ internal class PeerGroupHandshakeAsyncTask(private val wifiDirectManager: WifiDi
             wifiDirectManager.getFilesForTransfer()
           for (fileItem in fileItemArrayList) { // Send the names of each of those files, in order
             objectOutputStream.writeObject(fileItem.fileName)
-            Log.d(
-              TAG,
-              "Sending " + fileItem.fileUri.toString()
-            )
+            Log.d(TAG, "Sending " + fileItem.fileUri.toString())
           }
         }
       } catch (e: Exception) {
@@ -136,22 +127,16 @@ internal class PeerGroupHandshakeAsyncTask(private val wifiDirectManager: WifiDi
       try {
         ObjectInputStream(inputStream).use { objectInputStream ->
           // Read the number of files
-          val totalFilesObject = Integer.parseInt(objectInputStream.readObject().toString())
+          val totalFilesObject = objectInputStream.readObject().toString()
           if (totalFilesObject.javaClass == String::class.java) {
-            val total: Int = totalFilesObject
-            if (BuildConfig.DEBUG) Log.d(
-              TAG,
-              "Metadata: $total files"
-            )
+            val total: Int = totalFilesObject.toInt()
+            if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
             val fileItems = ArrayList<FileItem>()
             for (i in 0 until total) { // Read names of each of those files, in order
               val fileNameObject = objectInputStream.readObject()
               if (fileNameObject.javaClass == String::class.java) {
                 fileItems.add(FileItem((fileNameObject as String)))
-                if (BuildConfig.DEBUG) Log.d(
-                  TAG,
-                  "Expecting $fileNameObject"
-                )
+                if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileNameObject")
               }
             }
             wifiDirectManager.setFilesForTransfer(fileItems)
@@ -160,25 +145,6 @@ internal class PeerGroupHandshakeAsyncTask(private val wifiDirectManager: WifiDi
       } catch (e: Exception) {
         e.printStackTrace()
       }
-    }
-  }
-
-  override fun onCancelled() {
-    Log.d(
-      TAG,
-      "PeerGroupHandshakeAsyncTask cancelled"
-    )
-  }
-
-  override fun onPostExecute(inetAddress: InetAddress?) {
-    if (inetAddress != null) {
-      wifiDirectManager.setClientAddress(inetAddress)
-    } else {
-      if (BuildConfig.DEBUG) {
-        Log.d(TAG, "InetAddress is null")
-      }
-      wifiDirectManager.displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG)
-      wifiDirectManager.onFileTransferAsyncTaskComplete(false)
     }
   }
 

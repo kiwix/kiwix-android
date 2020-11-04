@@ -248,7 +248,19 @@ class WifiDirectManager @Inject constructor(
       Log.d(TAG, "Starting handshake")
     }
     peerGroupHandshakeAsyncTask = PeerGroupHandshakeAsyncTask(this)
-      .also { it.execute() }
+      .also {
+        CoroutineScope(Dispatchers.Main).launch {
+          val inetAddress = it.peer()
+          inetAddress?.let(::setClientAddress) ?: if (BuildConfig.DEBUG) {
+            Log.d(TAG, "InetAddress is null")
+            withContext(Dispatchers.Main) {
+              displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG)
+              onFileTransferAsyncTaskComplete(false)
+
+            }
+          }
+        }
+      }
   }
 
   val totalFilesForTransfer: Int
@@ -319,7 +331,7 @@ class WifiDirectManager @Inject constructor(
     }
 
   fun stopWifiDirectManager() {
-    cancelAsyncTasks(peerGroupHandshakeAsyncTask)
+    cancelAsyncTasks()
     if (isFileSender) {
       closeChannel()
     } else {
