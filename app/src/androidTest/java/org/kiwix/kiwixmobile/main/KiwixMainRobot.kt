@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.page.history.HistoryRobot
 import org.kiwix.kiwixmobile.page.history.history
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.settings.settingsRobo
+import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
 
@@ -72,10 +73,15 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
+  fun inNavDrawer(navDrawerAction: () -> Unit) {
+    openDrawer()
+    navDrawerAction.invoke()
+    pressBack()
+  }
+
   fun clickBookmarksOnNavDrawer(func: BookmarksRobot.() -> Unit) {
     clickOn(TextId(R.string.bookmarks))
     bookmarks(func)
-    pressBack()
     pressBack()
   }
 
@@ -83,25 +89,21 @@ class KiwixMainRobot : BaseRobot() {
     clickOn(TextId(R.string.history))
     history(func)
     pressBack()
-    pressBack()
   }
 
   fun clickHostBooksOnSideNav(func: ZimHostRobot.() -> Unit) {
     clickOn(TextId(R.string.menu_host_books))
     zimHost(func)
-    pressBack()
   }
 
   fun clickSettingsOnSideNav(func: SettingsRobot.() -> Unit) {
     clickOn(TextId(R.string.menu_settings))
     settingsRobo(func)
-    pressBack()
   }
 
   fun clickHelpOnSideNav(func: HelpRobot.() -> Unit) {
     clickOn(TextId(R.string.menu_help))
     help(func)
-    pressBack()
   }
 
   fun clickSupportKiwixOnSideNav() {

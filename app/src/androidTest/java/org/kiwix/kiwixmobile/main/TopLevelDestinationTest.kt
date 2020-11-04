@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.main
 import androidx.test.rule.ActivityTestRule
 import org.junit.Rule
 import org.junit.Test
-import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 class TopLevelDestinationTest {
   @Rule
@@ -40,30 +39,34 @@ class TopLevelDestinationTest {
         clickOnGlobeIcon {
         }
       }
-      openDrawer()
-
-      clickBookmarksOnNavDrawer {
-        clickOnTrashIcon()
-        assertDeleteBookmarksDialogDisplayed()
+      inNavDrawer {
+        clickBookmarksOnNavDrawer {
+          clickOnTrashIcon()
+          assertDeleteBookmarksDialogDisplayed()
+        }
       }
-      openDrawer()
-      clickHistoryOnSideNav {
-        clickOnTrashIcon()
-        assertDeleteHistoryDialogDisplayed()
+      inNavDrawer {
+        clickHistoryOnSideNav {
+          clickOnTrashIcon()
+          assertDeleteHistoryDialogDisplayed()
+        }
       }
-      openDrawer()
-      clickHostBooksOnSideNav {
+      inNavDrawer {
+        clickHostBooksOnSideNav {
+        }
       }
-      openDrawer()
-      clickSettingsOnSideNav {
+      inNavDrawer {
+        clickSettingsOnSideNav {
+        }
       }
-      openDrawer()
-      clickHelpOnSideNav {
+      inNavDrawer {
+        clickHelpOnSideNav {
+        }
       }
-      openDrawer()
-      clickSupportKiwixOnSideNav()
-      assertExternalLinkDialogDisplayed()
-      pressBack()
+      inNavDrawer {
+        clickSupportKiwixOnSideNav()
+        assertExternalLinkDialogDisplayed()
+      }
       pressBack()
     }
   }
