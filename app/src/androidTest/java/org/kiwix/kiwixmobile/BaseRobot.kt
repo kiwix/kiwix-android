@@ -75,7 +75,7 @@ abstract class BaseRobot(
     clickOn(ContentDesc(textId), LONG_WAIT)
   }
 
-  internal fun waitFor(milliseconds: Long) {
+  protected fun waitFor(milliseconds: Long) {
     waitFor(Text("WILL_NEVER_EXIST"), milliseconds)
   }
 

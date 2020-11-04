@@ -41,6 +41,7 @@ class TopLevelDestinationTest {
         }
       }
       openDrawer()
+
       clickBookmarksOnNavDrawer {
         clickOnTrashIcon()
         assertDeleteBookmarksDialogDisplayed()

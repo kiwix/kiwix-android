@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.main
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.Text
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.help.HelpRobot
@@ -38,7 +38,6 @@ import org.kiwix.kiwixmobile.page.history.HistoryRobot
 import org.kiwix.kiwixmobile.page.history.history
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.settings.settingsRobo
-import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
 
@@ -74,42 +73,42 @@ class KiwixMainRobot : BaseRobot() {
   }
 
   fun clickBookmarksOnNavDrawer(func: BookmarksRobot.() -> Unit) {
-    clickOn(Text(getResourceString(R.string.bookmarks)))
+    clickOn(TextId(R.string.bookmarks))
     bookmarks(func)
     pressBack()
     pressBack()
   }
 
   fun clickHistoryOnSideNav(func: HistoryRobot.() -> Unit) {
-    clickOn(Text(getResourceString(R.string.history)))
+    clickOn(TextId(R.string.history))
     history(func)
     pressBack()
     pressBack()
   }
 
   fun clickHostBooksOnSideNav(func: ZimHostRobot.() -> Unit) {
-    clickOn(Text(getResourceString(R.string.menu_host_books)))
+    clickOn(TextId(R.string.menu_host_books))
     zimHost(func)
     pressBack()
   }
 
   fun clickSettingsOnSideNav(func: SettingsRobot.() -> Unit) {
-    clickOn(Text(getResourceString(R.string.menu_settings)))
+    clickOn(TextId(R.string.menu_settings))
     settingsRobo(func)
     pressBack()
   }
 
   fun clickHelpOnSideNav(func: HelpRobot.() -> Unit) {
-    clickOn(Text(getResourceString(R.string.menu_help)))
+    clickOn(TextId(R.string.menu_help))
     help(func)
     pressBack()
   }
 
   fun clickSupportKiwixOnSideNav() {
-    clickOn(Text(getResourceString(R.string.menu_support_kiwix)))
+    clickOn(TextId(R.string.menu_support_kiwix))
   }
 
   fun assertExternalLinkDialogDisplayed() {
-    isVisible(Text(getResourceString(R.string.external_link_popup_dialog_title)))
+    isVisible(TextId(R.string.external_link_popup_dialog_title))
   }
 }

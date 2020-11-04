@@ -22,9 +22,6 @@ import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.language.LanguageRobot
-import org.kiwix.kiwixmobile.language.language
-import org.kiwix.kiwixmobile.testutils.TestUtils
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -35,20 +32,5 @@ fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarc
 class LibraryRobot : BaseRobot() {
   init {
     isVisible(Findable.ViewId(R.id.get_zim_nearby_device))
-  }
-}
-
-fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
-  OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
-
-class OnlineLibraryRobot : BaseRobot() {
-  init {
-    isVisible(Findable.Text(TestUtils.getResourceString(R.string.download)))
-  }
-
-  fun clickOnGlobeIcon(func: LanguageRobot.() -> Unit) {
-    clickOn(Findable.ViewId(R.id.select_language))
-    isVisible(Findable.Text(TestUtils.getResourceString(R.string.select_languages)))
-    language(func)
   }
 }

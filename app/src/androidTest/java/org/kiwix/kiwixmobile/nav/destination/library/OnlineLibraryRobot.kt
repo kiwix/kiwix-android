@@ -16,32 +16,31 @@
  *
  */
 
-package org.kiwix.kiwixmobile.page.bookmarks
+package org.kiwix.kiwixmobile.nav.destination.library
 
 import applyWithViewHierarchyPrinting
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
+import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.language.LanguageRobot
+import org.kiwix.kiwixmobile.language.language
 
 /**
- * Authored by Ayush Shrivastava on 29/10/20
+ * Authored by Ayush Shrivastava on 4/11/20
  */
 
-fun bookmarks(func: BookmarksRobot.() -> Unit) =
-  BookmarksRobot().applyWithViewHierarchyPrinting(func)
+fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
+  OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
 
-class BookmarksRobot : BaseRobot() {
+class OnlineLibraryRobot : BaseRobot() {
   init {
-    assertDisplayed(R.string.bookmarks_from_current_book)
+    isVisible(Findable.ViewId(R.id.libraryList))
   }
 
-  fun clickOnTrashIcon() {
-    clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
-  }
-
-  fun assertDeleteBookmarksDialogDisplayed() {
-    isVisible(TextId(R.string.delete_bookmarks))
+  fun clickOnGlobeIcon(func: LanguageRobot.() -> Unit) {
+    clickOn(Findable.ViewId(R.id.select_language))
+    isVisible(TextId(R.string.select_languages))
+    language(func)
   }
 }

@@ -20,9 +20,8 @@ package org.kiwix.kiwixmobile.webserver
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.testutils.TestUtils
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -32,6 +31,6 @@ fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarc
 
 class ZimHostRobot : BaseRobot() {
   init {
-    isVisible(Findable.Text(TestUtils.getResourceString(R.string.menu_host_books)))
+    isVisible(TextId(R.string.menu_host_books))
   }
 }
