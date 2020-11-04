@@ -25,10 +25,6 @@ import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
 
-/**
- * Authored by Ayush Shrivastava on 29/10/20
- */
-
 fun bookmarks(func: BookmarksRobot.() -> Unit) =
   BookmarksRobot().applyWithViewHierarchyPrinting(func)
 

@@ -25,10 +25,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 
-/**
- * Authored by Ayush Shrivastava on 29/10/20
- */
-
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class LibraryRobot : BaseRobot() {

@@ -39,34 +39,22 @@ class TopLevelDestinationTest {
         clickOnGlobeIcon {
         }
       }
-      inNavDrawer {
-        clickBookmarksOnNavDrawer {
-          clickOnTrashIcon()
-          assertDeleteBookmarksDialogDisplayed()
-        }
+      clickBookmarksOnNavDrawer {
+        clickOnTrashIcon()
+        assertDeleteBookmarksDialogDisplayed()
       }
-      inNavDrawer {
-        clickHistoryOnSideNav {
-          clickOnTrashIcon()
-          assertDeleteHistoryDialogDisplayed()
-        }
+      clickHistoryOnSideNav {
+        clickOnTrashIcon()
+        assertDeleteHistoryDialogDisplayed()
       }
-      inNavDrawer {
-        clickHostBooksOnSideNav {
-        }
+      clickHostBooksOnSideNav {
       }
-      inNavDrawer {
-        clickSettingsOnSideNav {
-        }
+      clickSettingsOnSideNav {
       }
-      inNavDrawer {
-        clickHelpOnSideNav {
-        }
+      clickHelpOnSideNav {
       }
-      inNavDrawer {
-        clickSupportKiwixOnSideNav()
-        assertExternalLinkDialogDisplayed()
-      }
+      clickSupportKiwixOnSideNav()
+      assertExternalLinkDialogDisplayed()
       pressBack()
     }
   }

@@ -66,41 +66,53 @@ class KiwixMainRobot : BaseRobot() {
     pressBack()
   }
 
-  fun inNavDrawer(navDrawerAction: () -> Unit) {
+  private fun inNavDrawer(navDrawerAction: () -> Unit) {
     openDrawer()
     navDrawerAction.invoke()
     pressBack()
   }
 
   fun clickBookmarksOnNavDrawer(func: BookmarksRobot.() -> Unit) {
-    clickOn(TextId(R.string.bookmarks))
-    bookmarks(func)
-    pressBack()
+    inNavDrawer {
+      clickOn(TextId(R.string.bookmarks))
+      bookmarks(func)
+      pressBack()
+    }
   }
 
   fun clickHistoryOnSideNav(func: HistoryRobot.() -> Unit) {
-    clickOn(TextId(R.string.history))
-    history(func)
-    pressBack()
+    inNavDrawer {
+      clickOn(TextId(R.string.history))
+      history(func)
+      pressBack()
+    }
   }
 
   fun clickHostBooksOnSideNav(func: ZimHostRobot.() -> Unit) {
-    clickOn(TextId(R.string.menu_host_books))
-    zimHost(func)
+    inNavDrawer {
+      clickOn(TextId(R.string.menu_host_books))
+      zimHost(func)
+    }
   }
 
   fun clickSettingsOnSideNav(func: SettingsRobot.() -> Unit) {
-    clickOn(TextId(R.string.menu_settings))
-    settingsRobo(func)
+    inNavDrawer {
+      clickOn(TextId(R.string.menu_settings))
+      settingsRobo(func)
+    }
   }
 
   fun clickHelpOnSideNav(func: HelpRobot.() -> Unit) {
-    clickOn(TextId(R.string.menu_help))
-    help(func)
+    inNavDrawer {
+      clickOn(TextId(R.string.menu_help))
+      help(func)
+    }
   }
 
   fun clickSupportKiwixOnSideNav() {
-    clickOn(TextId(R.string.menu_support_kiwix))
+    inNavDrawer {
+      clickOn(TextId(R.string.menu_support_kiwix))
+    }
   }
 
   fun assertExternalLinkDialogDisplayed() {

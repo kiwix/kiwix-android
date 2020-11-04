@@ -25,10 +25,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.language.LanguageRobot
 import org.kiwix.kiwixmobile.language.language
 
-/**
- * Authored by Ayush Shrivastava on 4/11/20
- */
-
 fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
   OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
 
