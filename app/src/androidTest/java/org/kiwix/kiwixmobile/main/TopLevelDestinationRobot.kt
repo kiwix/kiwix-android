@@ -40,10 +40,10 @@ import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
 
-fun kiwixMain(func: KiwixMainRobot.() -> Unit) =
-  KiwixMainRobot().applyWithViewHierarchyPrinting(func)
+fun topLevel(func: TopLevelDestinationRobot.() -> Unit) =
+  TopLevelDestinationRobot().applyWithViewHierarchyPrinting(func)
 
-class KiwixMainRobot : BaseRobot() {
+class TopLevelDestinationRobot : BaseRobot() {
 
   init {
     isVisible(ViewId(R.id.navigation_container))

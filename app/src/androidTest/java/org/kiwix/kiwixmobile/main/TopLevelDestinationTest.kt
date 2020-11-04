@@ -28,7 +28,7 @@ class TopLevelDestinationTest {
 
   @Test
   fun testTopLevelDestination() {
-    kiwixMain {
+    topLevel {
       clickReaderOnBottomNav {
       }
       clickLibraryOnBottomNav {
