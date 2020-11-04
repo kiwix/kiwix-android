@@ -256,7 +256,6 @@ class WifiDirectManager @Inject constructor(
             withContext(Dispatchers.Main) {
               displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG)
               onFileTransferAsyncTaskComplete(false)
-
             }
           }
         }
@@ -298,7 +297,6 @@ class WifiDirectManager @Inject constructor(
               if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete")
               onFileTransferAsyncTaskComplete(hasSend)
             }
-
           }
         }
       } else {

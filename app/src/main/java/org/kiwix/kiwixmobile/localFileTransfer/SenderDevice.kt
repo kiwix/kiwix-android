@@ -21,9 +21,7 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
@@ -54,44 +52,41 @@ internal class SenderDevice(
   private val contentResolver: ContentResolver = activity.contentResolver
   private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   suspend fun send(fileItems: Array<out FileItem?>) = withContext(ioDispatcher) {
-    val job = async {
-      if (!delayForSlowReceiverDevicesToSetupServer()) {
-        return@async false
-      }
-      val hostAddress =
-        wifiDirectManager.getFileReceiverDeviceAddress().hostAddress
-      var isTransferErrorFree = true
-      var fileIndex = 0
-      while (fileIndex < fileItems.size && this.isActive) {
-        val fileItem = fileItems[fileIndex]
-        try {
-          Socket().use { socket ->
-            Log.d("gouri", "${Thread.currentThread().name} thread")
-            contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
-              socket.bind(null)
-              socket.connect(
-                InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
-                TIME_OUT
-              )
-              Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
-              publishProgress(fileIndex, FileItem.FileStatus.SENDING.ordinal)
-              val socketOutputStream = socket.getOutputStream()
-              copyToOutputStream(fileInputStream!!, socketOutputStream)
-              if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written")
-              publishProgress(fileIndex, FileItem.FileStatus.SENT.ordinal)
-            }
-          }
-        } catch (e: IOException) {
-          Log.e(TAG, e.message)
-          e.printStackTrace()
-          isTransferErrorFree = false
-          publishProgress(fileIndex, FileItem.FileStatus.ERROR.ordinal)
-        }
-        fileIndex++
-      }
-      return@async isTransferErrorFree
+    if (!delayForSlowReceiverDevicesToSetupServer()) {
+      return@withContext false
     }
-    return@withContext job.await()
+    val hostAddress =
+      wifiDirectManager.getFileReceiverDeviceAddress().hostAddress
+    var isTransferErrorFree = true
+    var fileIndex = 0
+    while (fileIndex < fileItems.size && this.isActive) {
+      val fileItem = fileItems[fileIndex]
+      try {
+        Socket().use { socket ->
+          Log.d("gouri", "${Thread.currentThread().name} thread")
+          contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
+            socket.bind(null)
+            socket.connect(
+              InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
+              TIME_OUT
+            )
+            Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
+            publishProgress(fileIndex, FileItem.FileStatus.SENDING.ordinal)
+            val socketOutputStream = socket.getOutputStream()
+            copyToOutputStream(fileInputStream!!, socketOutputStream)
+            if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written")
+            publishProgress(fileIndex, FileItem.FileStatus.SENT.ordinal)
+          }
+        }
+      } catch (e: IOException) {
+        Log.e(TAG, e.message)
+        e.printStackTrace()
+        isTransferErrorFree = false
+        publishProgress(fileIndex, FileItem.FileStatus.ERROR.ordinal)
+      }
+      fileIndex++
+    }
+    return@withContext isTransferErrorFree
   }
 
   private suspend fun publishProgress(vararg values: Int?) {

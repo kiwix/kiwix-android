@@ -20,12 +20,10 @@ package org.kiwix.kiwixmobile.localFileTransfer
 import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R2.id.async
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.copyToOutputStream
 import java.io.File
 import java.io.FileOutputStream
