@@ -75,7 +75,7 @@ import javax.inject.Inject
  * File transfer involves two phases:
  * 1) Handshake with the selected peer device, using [PeerGroupHandshakeAsyncTask]
  * 2) After handshake, starting the files transfer using [SenderDevice] on the sender
- * device and [ReceiverDeviceAsyncTask] files receiving device
+ * device and [ReceiverDevice] files receiving device
  */
 
 const val URIS_KEY = "uris"

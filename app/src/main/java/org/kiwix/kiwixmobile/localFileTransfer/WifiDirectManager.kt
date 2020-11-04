@@ -92,7 +92,7 @@ class WifiDirectManager @Inject constructor(
   private lateinit var senderSelectedPeerDevice: WifiP2pDevice
   private var peerGroupHandshakeAsyncTask: PeerGroupHandshakeAsyncTask? = null
   private var senderDevice: SenderDevice? = null
-  private var receiverDeviceAsyncTask: ReceiverDeviceAsyncTask? = null
+  private var receiverDevice: ReceiverDevice? = null
   private lateinit var selectedPeerDeviceInetAddress: InetAddress
 
   // IP address of the file receiving device
@@ -291,8 +291,12 @@ class WifiDirectManager @Inject constructor(
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
-        receiverDeviceAsyncTask = ReceiverDeviceAsyncTask(this).also {
-          it.execute()
+        receiverDevice = ReceiverDevice(this).also {
+          CoroutineScope(Dispatchers.Main).launch {
+            val isReceived = it.receive()
+            if (BuildConfig.DEBUG) Log.d(TAG, "ReceiverDeviceAsyncTask complete")
+            onFileTransferAsyncTaskComplete(isReceived)
+          }
         }
       }
     }
@@ -315,7 +319,7 @@ class WifiDirectManager @Inject constructor(
     }
 
   fun stopWifiDirectManager() {
-    cancelAsyncTasks(peerGroupHandshakeAsyncTask, receiverDeviceAsyncTask)
+    cancelAsyncTasks(peerGroupHandshakeAsyncTask)
     if (isFileSender) {
       closeChannel()
     } else {
