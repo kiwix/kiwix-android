@@ -24,8 +24,6 @@ import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.help.help
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
-import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.nav.destination.library.library
@@ -60,11 +58,6 @@ class KiwixMainRobot : BaseRobot() {
     clickOn(ViewId(R.id.libraryFragment))
     library(func)
     pressBack()
-  }
-
-  fun clickFileTransferIcon(func: LocalFileTransferRobot.() -> Unit) {
-    clickOn(ViewId(R.id.get_zim_nearby_device))
-    localFileTransfer(func)
   }
 
   fun clickDownloadOnBottomNav(func: OnlineLibraryRobot.() -> Unit) {

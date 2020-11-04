@@ -20,8 +20,10 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable
+import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
+import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -31,6 +33,11 @@ fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarc
 
 class LibraryRobot : BaseRobot() {
   init {
-    isVisible(Findable.ViewId(R.id.get_zim_nearby_device))
+    isVisible(ViewId(R.id.get_zim_nearby_device))
+  }
+
+  fun clickFileTransferIcon(func: LocalFileTransferRobot.() -> Unit) {
+    clickOn(ViewId(R.id.get_zim_nearby_device))
+    localFileTransfer(func)
   }
 }

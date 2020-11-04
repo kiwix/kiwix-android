@@ -19,10 +19,11 @@
 package org.kiwix.kiwixmobile.page.history
 
 import applyWithViewHierarchyPrinting
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable
+import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.testutils.TestUtils
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -31,12 +32,15 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
 
 class HistoryRobot : BaseRobot() {
-  /** Pushed back robot rules due to lack of info to assert the correct screen */
+  init {
+    assertDisplayed(R.string.history_from_current_book)
+  }
+
   fun clickOnTrashIcon() {
-    clickOn(Findable.StringId.ContentDesc(R.string.pref_clear_all_bookmarks_title))
+    clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
   }
 
   fun assertDeleteHistoryDialogDisplayed() {
-    isVisible(Findable.Text(TestUtils.getResourceString(R.string.delete_history)))
+    isVisible(TextId(R.string.delete_history))
   }
 }

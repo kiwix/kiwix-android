@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.reader
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
+import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 
 /**
@@ -31,6 +31,6 @@ fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyP
 
 class ReaderRobot : BaseRobot() {
   init {
-    isVisible(TextId(R.string.reader))
+    isVisible(ViewId(R.id.activity_main_root))
   }
 }

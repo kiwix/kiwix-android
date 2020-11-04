@@ -20,7 +20,8 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
+import org.kiwix.kiwixmobile.R
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -32,6 +33,6 @@ fun localFileTransfer(func: LocalFileTransferRobot.() -> Unit) =
 class LocalFileTransferRobot : BaseRobot() {
 
   init {
-    isVisible(Findable.Text("Receive Files"))
+    isVisible(TextId(R.string.receive_files_title))
   }
 }

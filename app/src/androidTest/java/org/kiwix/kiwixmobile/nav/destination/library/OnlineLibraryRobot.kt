@@ -20,8 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
+import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.language.LanguageRobot
 import org.kiwix.kiwixmobile.language.language
@@ -35,12 +34,11 @@ fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
 
 class OnlineLibraryRobot : BaseRobot() {
   init {
-    isVisible(Findable.ViewId(R.id.libraryList))
+    isVisible(ViewId(R.id.libraryList))
   }
 
   fun clickOnGlobeIcon(func: LanguageRobot.() -> Unit) {
-    clickOn(Findable.ViewId(R.id.select_language))
-    isVisible(TextId(R.string.select_languages))
+    clickOn(ViewId(R.id.select_language))
     language(func)
   }
 }
