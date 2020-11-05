@@ -246,7 +246,7 @@ class WifiDirectManager @Inject constructor(
     peerGroupHandshake = PeerGroupHandshake(this)
       .also {
         lifecycleCoroutineScope.launch {
-          val inetAddress = it.peer()
+          val inetAddress = it.handshake()
           inetAddress?.let(::setClientAddress) ?: if (BuildConfig.DEBUG) {
             Log.d(TAG, "InetAddress is null")
             displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG)

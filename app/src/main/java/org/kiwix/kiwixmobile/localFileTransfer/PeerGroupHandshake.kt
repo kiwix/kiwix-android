@@ -47,7 +47,7 @@ import java.util.ArrayList
  */
 internal class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManager) {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
-  suspend fun peer(): InetAddress? = withContext(Dispatchers.IO) {
+  suspend fun handshake(): InetAddress? = withContext(Dispatchers.IO) {
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Handshake in progress")
     }
