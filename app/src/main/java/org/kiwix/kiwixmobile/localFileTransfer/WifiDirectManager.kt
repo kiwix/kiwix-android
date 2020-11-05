@@ -60,7 +60,7 @@ import javax.inject.Inject
  */
 @SuppressWarnings("MissingPermission", "ProtectedMemberInFinalClass")
 class WifiDirectManager @Inject constructor(
-   val activity: Activity,
+  val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
@@ -248,12 +248,12 @@ class WifiDirectManager @Inject constructor(
         lifecycleCoroutineScope.launch {
           val inetAddress = it.handshake()
           inetAddress?.let(::setClientAddress)
-            ?: activity.applicationContext.toast(R.string.error_during_handshaking)
-          if (BuildConfig.DEBUG) {
-            Log.d(TAG, "InetAddress is null")
-            activity.toast(R.string.connection_refused)
-            onFileTransferAsyncTaskComplete(false)
-          }
+            ?: if (BuildConfig.DEBUG) {
+              Log.d(TAG, "InetAddress is null")
+              onFileTransferAsyncTaskComplete(false)
+            } else {
+              activity.toast(R.string.connection_refused)
+            }
         }
       }
   }
