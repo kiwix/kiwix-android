@@ -59,9 +59,7 @@ internal class SenderDevice(
     val hostAddress =
       wifiDirectManager.getFileReceiverDeviceAddress().hostAddress
     var isTransferErrorFree = true
-    var fileIndex = 0
-    while (fileIndex < fileItems.size && this.isActive) {
-      val fileItem = fileItems[fileIndex]
+    fileItems.forEachIndexed { fileIndex, fileItem ->
       try {
         Socket().use { socket ->
           Log.d("gouri", "${Thread.currentThread().name} thread")
@@ -85,7 +83,6 @@ internal class SenderDevice(
         isTransferErrorFree = false
         publishProgress(fileIndex, FileItem.FileStatus.ERROR)
       }
-      fileIndex++
     }
     return@withContext isTransferErrorFree
   }
