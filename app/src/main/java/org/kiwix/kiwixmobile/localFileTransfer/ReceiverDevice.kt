@@ -58,7 +58,7 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
               if (BuildConfig.DEBUG) {
                 Log.d(TAG, "Sender device connected for " + fileItems[fileItemIndex].fileName)
               }
-              publishProgress(fileItemIndex, FileItem.FileStatus.SENDING.ordinal)
+              publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
               val clientNoteFileLocation = File(zimStorageRootPath + incomingFileName)
               val dirs = File(clientNoteFileLocation.parent)
               if (!dirs.exists() && !dirs.mkdirs()) {
@@ -72,12 +72,12 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
                 client.getInputStream(),
                 FileOutputStream(clientNoteFileLocation)
               )
-              publishProgress(fileItemIndex, FileItem.FileStatus.SENT.ordinal)
+              publishProgress(fileItemIndex, FileItem.FileStatus.SENT)
             }
           } catch (e: IOException) {
             Log.e(TAG, e.message)
             isTransferErrorFree = false
-            publishProgress(fileItemIndex, FileItem.FileStatus.ERROR.ordinal)
+            publishProgress(fileItemIndex, FileItem.FileStatus.ERROR)
           }
           fileItemIndex++
         }
@@ -89,10 +89,8 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
     }
   }
 
-  private suspend fun publishProgress(vararg values: Int?) {
+  private suspend fun publishProgress(fileIndex: Int?, fileStatus: FileItem.FileStatus?) {
     withContext(Dispatchers.Main) {
-      val fileIndex = values[0]
-      val fileStatus = FileItem.FileStatus.values()[values[1] ?: -1]
       if (fileIndex != null && fileStatus != null) {
         wifiDirectManager.changeStatus(fileIndex, fileStatus)
       }
