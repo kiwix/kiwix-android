@@ -24,6 +24,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.copyToOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -93,8 +94,9 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
     withContext(Dispatchers.Main) {
       wifiDirectManager.changeStatus(fileIndex, fileStatus)
       if (fileStatus == FileItem.FileStatus.ERROR) {
-        wifiDirectManager.displayToast(
-          R.string.error_transferring, incomingFileName!!,
+        val activity = wifiDirectManager.activity
+        activity.toast(
+          activity.getString(R.string.error_transferring, incomingFileName!!),
           Toast.LENGTH_SHORT
         )
       }

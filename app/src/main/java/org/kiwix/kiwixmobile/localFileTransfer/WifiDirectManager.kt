@@ -60,7 +60,7 @@ import javax.inject.Inject
  */
 @SuppressWarnings("MissingPermission", "ProtectedMemberInFinalClass")
 class WifiDirectManager @Inject constructor(
-  private val activity: Activity,
+   val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
@@ -247,9 +247,11 @@ class WifiDirectManager @Inject constructor(
       .also {
         lifecycleCoroutineScope.launch {
           val inetAddress = it.handshake()
-          inetAddress?.let(::setClientAddress) ?: if (BuildConfig.DEBUG) {
+          inetAddress?.let(::setClientAddress)
+            ?: activity.applicationContext.toast(R.string.error_during_handshaking)
+          if (BuildConfig.DEBUG) {
             Log.d(TAG, "InetAddress is null")
-            displayToast(R.string.connection_refused, "", Toast.LENGTH_LONG)
+            activity.toast(R.string.connection_refused)
             onFileTransferAsyncTaskComplete(false)
           }
         }
@@ -265,8 +267,7 @@ class WifiDirectManager @Inject constructor(
     filesForTransfer = fileItems
   }
 
-  val zimStorageRootPath
-    get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
+  val zimStorageRootPath get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
 
   fun getFileReceiverDeviceAddress() = fileReceiverDeviceAddress
 
@@ -307,9 +308,10 @@ class WifiDirectManager @Inject constructor(
     filesForTransfer[itemIndex].fileStatus = status
     callbacks?.onFileStatusChanged(itemIndex)
     if (status == FileStatus.ERROR) {
-      displayToast(
-        R.string.error_transferring, filesForTransfer[itemIndex].fileName,
-        Toast.LENGTH_SHORT
+      activity.toast(
+        activity.getString(
+          R.string.error_transferring, filesForTransfer[itemIndex].fileName
+        )
       )
     }
   }
@@ -351,9 +353,6 @@ class WifiDirectManager @Inject constructor(
       else -> "Unknown error code - $reason"
     }
   }
-
-  fun displayToast(stringResourceId: Int, templateValue: String, duration: Int) =
-    activity.toast(activity.getString(stringResourceId, templateValue), duration)
 
   private fun onFileTransferAsyncTaskComplete(wereAllFilesTransferred: Boolean) {
     if (wereAllFilesTransferred) {
