@@ -72,31 +72,27 @@ internal class SenderDevice(
               TIME_OUT
             )
             Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
-            publishProgress(fileIndex, FileItem.FileStatus.SENDING.ordinal)
+            publishProgress(fileIndex, FileItem.FileStatus.SENDING)
             val socketOutputStream = socket.getOutputStream()
             copyToOutputStream(fileInputStream!!, socketOutputStream)
             if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written")
-            publishProgress(fileIndex, FileItem.FileStatus.SENT.ordinal)
+            publishProgress(fileIndex, FileItem.FileStatus.SENT)
           }
         }
       } catch (e: IOException) {
         Log.e(TAG, e.message)
         e.printStackTrace()
         isTransferErrorFree = false
-        publishProgress(fileIndex, FileItem.FileStatus.ERROR.ordinal)
+        publishProgress(fileIndex, FileItem.FileStatus.ERROR)
       }
       fileIndex++
     }
     return@withContext isTransferErrorFree
   }
 
-  private suspend fun publishProgress(vararg values: Int?) {
+  private suspend fun publishProgress(fileIndex: Int, fileStatus: FileItem.FileStatus) {
     withContext(Dispatchers.Main) {
-      val fileIndex = values[0]
-      val fileStatus = values[1]
-      if (fileIndex != null && fileStatus != null) {
-        wifiDirectManager.changeStatus(fileIndex, FileItem.FileStatus.values()[fileStatus])
-      }
+      wifiDirectManager.changeStatus(fileIndex, fileStatus)
     }
   }
 
