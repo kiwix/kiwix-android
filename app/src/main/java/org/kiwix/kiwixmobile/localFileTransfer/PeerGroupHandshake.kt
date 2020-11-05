@@ -109,9 +109,9 @@ internal class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManag
         ObjectOutputStream(outputStream).use { objectOutputStream ->
           // Send total number of files which will be transferred
           objectOutputStream.writeObject("" + wifiDirectManager.totalFilesForTransfer)
-          val fileItemArrayList =
-            wifiDirectManager.getFilesForTransfer()
-          for (fileItem in fileItemArrayList) { // Send the names of each of those files, in order
+          val fileItemArrayList = wifiDirectManager.getFilesForTransfer()
+          // Send the names of each of those files, in order
+          fileItemArrayList.forEach { fileItem ->
             objectOutputStream.writeObject(fileItem.fileName)
             Log.d(TAG, "Sending " + fileItem.fileUri.toString())
           }
@@ -128,11 +128,11 @@ internal class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManag
             val total: Int = totalFilesObject.toInt()
             if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
             val fileItems = ArrayList<FileItem>()
-            for (i in 0 until total) { // Read names of each of those files, in order
-              val fileNameObject = objectInputStream.readObject()
-              if (fileNameObject.javaClass == String::class.java) {
-                fileItems.add(FileItem((fileNameObject as String)))
-                if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileNameObject")
+            // Read names of each of those files, in order
+            repeat(total) {
+              (objectInputStream.readObject() as? String)?.let { fileName ->
+                fileItems.add(FileItem(fileName))
+                if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
               }
             }
             wifiDirectManager.setFilesForTransfer(fileItems)

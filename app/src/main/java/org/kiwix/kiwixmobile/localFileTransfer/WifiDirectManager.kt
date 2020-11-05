@@ -136,10 +136,7 @@ class WifiDirectManager @Inject constructor(
       }
 
       override fun onFailure(reason: Int) {
-        Log.d(
-          TAG, "${activity.getString(R.string.discovery_failed)}: " +
-            getErrorMessage(reason)
-        )
+        Log.d(TAG, "${activity.getString(R.string.discovery_failed)}: " + getErrorMessage(reason))
         activity.toast(R.string.discovery_failed, Toast.LENGTH_SHORT)
       }
     })
@@ -274,7 +271,6 @@ class WifiDirectManager @Inject constructor(
   fun getFileReceiverDeviceAddress() = fileReceiverDeviceAddress
 
   private fun setClientAddress(clientAddress: InetAddress) {
-
     // If control reaches here, means handshake was successful
     selectedPeerDeviceInetAddress = clientAddress
     startFileTransfer()
