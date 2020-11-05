@@ -29,6 +29,7 @@
   <string name="hotspot_failed_title">Bi ser neket ku hotspotê bide destpêkirin</string>
   <string name="hotspot_failed_message">Wisa dixuye ku hotspot-a te jixwe vekirî ye. Ji kerema xwe ji bo dewamkirinê wîfiya hotspot-a xwe bigire.</string>
   <string name="go_to_wifi_settings_label">Here mîhengên WÎFÎyê</string>
+  <string name="connection_refused">Girêdan hate redkirin.</string>
   <string name="hotspot_running">Xebitandina Hotspotê</string>
   <string name="no_books_selected_toast_message">Ji kerema xwe pêşî kitêban bibijêre</string>
   <string name="server_failed_message">Server dest pê nebû. Ji kerema xwe hotspot-a xwe bigire</string>
@@ -223,6 +224,7 @@
   <string name="severe_loss_error">Çewtiya dijwar! WiFi P2P-yê neçalak bike/dîsa aktîv bike</string>
   <string name="connection_failed">Girêdan têk çû</string>
   <string name="permission_rationale_location">Destûra lokasyonê lazim e ji aliyê Androîdê ve ji bo destûr bidin sepanê ku karibe cîhazên din ên wekhev tesbît bike.</string>
+  <string name="permission_rationale_location_on_host_zim_file">Ji bo sepan karibe dosyeyên Zim-ê bihewîne destûra lokasyonê ji aliyê Androîdê ve lazim e.</string>
   <string name="permission_refused_location">Nikare cîhazên wekhev tesbît bike bêyî destûrên lokasyonê</string>
   <string name="permission_refused_storage">Nikare bigihe pelên zim-ê bêyî destûra depoyê</string>
   <string name="request_enable_location">Lokasyonê aktîv bike ji bo destûr vidî tesbîtkirina hevcinsan</string>
@@ -245,7 +247,7 @@
   <string name="status">Rewş</string>
   <string name="pref_clear_all_notes_summary">Hemû notan ji hemû gotaran bibe</string>
   <string name="pref_clear_all_notes_title">Temamiya notan paqij bike</string>
-  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25\% biguherîne.</string>
+  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25% biguherîne.</string>
   <string name="tag_pic">Wêne</string>
   <string name="tag_vid">Vîdeo</string>
   <string name="tag_text_only">Tenê Nivîs</string>
@@ -277,4 +279,6 @@
   <string name="tab_restored">Hilpekîn hate zivirandin</string>
   <string name="open_drawer">Çaviyê veke</string>
   <string name="close_drawer">Çaviyê bigire</string>
+  <string name="how_to_update_content">Naverok çawa tê rojanekirin?</string>
+  <string name="update_content_description">Ji bo rojanekirina naverokê (dosyeyeke zim-ê) divê tu fullversiyona dawîn a eynî naverokê daxînî. Tu vê yekê bi riya beşa daxistinê dikarî pêk bînî.</string>
 </resources>
