@@ -74,7 +74,7 @@ import javax.inject.Inject
  * app. Two devices are connected to each other using WiFi Direct, followed by file transfer.
  *
  * File transfer involves two phases:
- * 1) Handshake with the selected peer device, using [PeerGroupHandshakeAsyncTask]
+ * 1) Handshake with the selected peer device, using [PeerGroupHandshake]
  * 2) After handshake, starting the files transfer using [SenderDevice] on the sender
  * device and [ReceiverDevice] files receiving device
  */

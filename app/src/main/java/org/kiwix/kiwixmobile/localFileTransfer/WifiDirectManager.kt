@@ -39,7 +39,6 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -55,7 +54,6 @@ import java.io.OutputStream
 import java.net.InetAddress
 import java.util.ArrayList
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Manager for the Wifi-P2p API, used in the local file transfer module
@@ -89,7 +87,7 @@ class WifiDirectManager @Inject constructor(
   // Corresponds to P2P group formed between the two devices
   private lateinit var groupInfo: WifiP2pInfo
   private lateinit var senderSelectedPeerDevice: WifiP2pDevice
-  private var peerGroupHandshakeAsyncTask: PeerGroupHandshakeAsyncTask? = null
+  private var peerGroupHandshake: PeerGroupHandshake? = null
   private var senderDevice: SenderDevice? = null
   private var receiverDevice: ReceiverDevice? = null
   private lateinit var selectedPeerDeviceInetAddress: InetAddress
@@ -248,7 +246,7 @@ class WifiDirectManager @Inject constructor(
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake")
     }
-    peerGroupHandshakeAsyncTask = PeerGroupHandshakeAsyncTask(this)
+    peerGroupHandshake = PeerGroupHandshake(this)
       .also {
         lifecycleCoroutineScope.launch {
           val inetAddress = it.peer()

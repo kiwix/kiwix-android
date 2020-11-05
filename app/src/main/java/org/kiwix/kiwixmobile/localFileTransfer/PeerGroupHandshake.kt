@@ -45,7 +45,7 @@ import java.util.ArrayList
  * initiates the file transfer through [SenderDevice] on the sender and using
  * [ReceiverDevice] on the receiver.
  */
-internal class PeerGroupHandshakeAsyncTask(private val wifiDirectManager: WifiDirectManager) {
+internal class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManager) {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
   suspend fun peer(): InetAddress? = withContext(Dispatchers.IO) {
     if (BuildConfig.DEBUG) {
