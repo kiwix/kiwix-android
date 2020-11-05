@@ -108,10 +108,9 @@ internal class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManag
       try {
         ObjectOutputStream(outputStream).use { objectOutputStream ->
           // Send total number of files which will be transferred
-          objectOutputStream.writeObject("" + wifiDirectManager.totalFilesForTransfer)
-          val fileItemArrayList = wifiDirectManager.getFilesForTransfer()
+          objectOutputStream.writeObject(wifiDirectManager.totalFilesForTransfer)
           // Send the names of each of those files, in order
-          fileItemArrayList.forEach { fileItem ->
+          wifiDirectManager.getFilesForTransfer().forEach { fileItem ->
             objectOutputStream.writeObject(fileItem.fileName)
             Log.d(TAG, "Sending " + fileItem.fileUri.toString())
           }

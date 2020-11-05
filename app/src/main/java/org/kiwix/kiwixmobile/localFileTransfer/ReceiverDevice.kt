@@ -89,11 +89,9 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
     }
   }
 
-  private suspend fun publishProgress(fileIndex: Int?, fileStatus: FileItem.FileStatus?) {
+  private suspend fun publishProgress(fileIndex: Int, fileStatus: FileItem.FileStatus) {
     withContext(Dispatchers.Main) {
-      if (fileIndex != null && fileStatus != null) {
-        wifiDirectManager.changeStatus(fileIndex, fileStatus)
-      }
+      wifiDirectManager.changeStatus(fileIndex, fileStatus)
       if (fileStatus == FileItem.FileStatus.ERROR) {
         wifiDirectManager.displayToast(
           R.string.error_transferring, incomingFileName!!,

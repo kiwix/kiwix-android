@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.localFileTransfer
 import android.app.Activity
 import android.content.ContentResolver
 import android.util.Log
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -103,7 +104,7 @@ internal class SenderDevice(
   private suspend fun delayForSlowReceiverDevicesToSetupServer(): Boolean {
     try { // Delay trying to connect with receiver, to allow slow receiver devices to setup server
       delay(3000)
-    } catch (e: InterruptedException) {
+    } catch (e: CancellationException) {
       Log.e(TAG, e.message)
       return false
     }
