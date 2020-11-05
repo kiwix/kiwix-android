@@ -43,6 +43,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_local_file_transfer.list_peer_devices
 import kotlinx.android.synthetic.main.fragment_local_file_transfer.progress_bar_searching_peers
@@ -94,7 +95,6 @@ class LocalFileTransferFragment : BaseFragment(),
 
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
-  private lateinit var coroutineObserver: CoroutineObserver
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -110,9 +110,6 @@ class LocalFileTransferFragment : BaseFragment(),
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setHasOptionsMenu(true)
-    coroutineObserver = CoroutineObserver()
-    lifecycle.addObserver(coroutineObserver)
-    coroutineObserver.onCreate()
     val activity = requireActivity() as CoreMainActivity
     val filesForTransfer = getFilesForTransfer()
     val isReceiver = filesForTransfer.isEmpty()
@@ -125,6 +122,7 @@ class LocalFileTransferFragment : BaseFragment(),
     displayFileTransferProgress(filesForTransfer)
 
     wifiDirectManager.callbacks = this
+    wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
   }
 
@@ -349,7 +347,6 @@ class LocalFileTransferFragment : BaseFragment(),
   override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
-    coroutineObserver.onDestroy()
     super.onDestroyView()
   }
 
