@@ -52,7 +52,7 @@ internal class SenderDevice(
 ) {
   private val contentResolver: ContentResolver = activity.contentResolver
   private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-  suspend fun send(fileItems: Array<out FileItem?>) = withContext(ioDispatcher) {
+  suspend fun send(fileItems: List<FileItem?>) = withContext(ioDispatcher) {
     if (!delayForSlowReceiverDevicesToSetupServer()) {
       return@withContext false
     }

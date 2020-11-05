@@ -285,7 +285,7 @@ class WifiDirectManager @Inject constructor(
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
         senderDevice = SenderDevice(this, activity).also {
           lifecycleCoroutineScope.launch {
-            val hasSend = it.send(filesForTransfer.toTypedArray())
+            val hasSend = it.send(filesForTransfer)
             if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete")
             onFileTransferAsyncTaskComplete(hasSend)
           }
