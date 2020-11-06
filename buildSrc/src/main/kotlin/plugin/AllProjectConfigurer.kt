@@ -103,7 +103,8 @@ class AllProjectConfigurer {
           //TODO stop ignoring below this
           "CheckResult",
           "LabelFor",
-          "LogConditional"
+          "LogConditional",
+          "ConvertToWebp"
         )
 
         warning(
