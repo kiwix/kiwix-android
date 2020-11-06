@@ -29,9 +29,7 @@ class ReceiverHandShake {
     try {
       ObjectInputStream(inputStream).use { objectInputStream ->
         // Read the number of files
-        val totalFilesObject = objectInputStream.readObject().toString()
-        if (totalFilesObject.javaClass == String::class.java) {
-          val total: Int = totalFilesObject.toInt()
+        (objectInputStream.readObject() as? Int)?.let { total ->
           if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
           // Read names of each of those files, in order
           val fileItems = sequence {
