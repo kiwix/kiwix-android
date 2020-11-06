@@ -51,35 +51,36 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
         val fileItems = wifiDirectManager.getFilesForTransfer()
         var isTransferErrorFree = true
         if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size + " files")
-
-        fileItems.forEachIndexed { fileItemIndex, incomingFileName ->
-          if (isActive) {
-            try {
-              serverSocket.accept().use { client ->
-                if (BuildConfig.DEBUG) {
-                  Log.d(TAG, "Sender device connected for " + fileItems[fileItemIndex].fileName)
-                }
-                publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
-                val clientNoteFileLocation = File(zimStorageRootPath + incomingFileName)
-                val dirs = File(clientNoteFileLocation.parent)
-                if (!dirs.exists() && !dirs.mkdirs()) {
-                  Log.d(TAG, "ERROR: Required parent directories couldn't be created")
-                  isTransferErrorFree = false
-                }
-                val fileCreated = clientNoteFileLocation.createNewFile()
-                if (BuildConfig.DEBUG) Log.d(TAG, "File creation: $fileCreated")
-                copyToOutputStream(
-                  client.getInputStream(),
-                  FileOutputStream(clientNoteFileLocation)
-                )
-                publishProgress(fileItemIndex, FileItem.FileStatus.SENT)
+        var fileItemIndex = 0
+        while (fileItemIndex < fileItems.size && this.isActive) {
+          incomingFileName = fileItems[fileItemIndex].fileName
+          try {
+            serverSocket.accept().use { client ->
+              if (BuildConfig.DEBUG) {
+                Log.d(TAG, "Sender device connected for " + fileItems[fileItemIndex].fileName)
               }
-            } catch (e: IOException) {
-              Log.e(TAG, e.message)
-              isTransferErrorFree = false
-              publishProgress(fileItemIndex, FileItem.FileStatus.ERROR)
+              publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
+              val clientNoteFileLocation = File(zimStorageRootPath + incomingFileName)
+              val dirs = File(clientNoteFileLocation.parent)
+              if (!dirs.exists() && !dirs.mkdirs()) {
+                Log.d(TAG, "ERROR: Required parent directories couldn't be created")
+                isTransferErrorFree = false
+                fileItemIndex++
+              }
+              val fileCreated = clientNoteFileLocation.createNewFile()
+              if (BuildConfig.DEBUG) Log.d(TAG, "File creation: $fileCreated")
+              copyToOutputStream(
+                client.getInputStream(),
+                FileOutputStream(clientNoteFileLocation)
+              )
+              publishProgress(fileItemIndex, FileItem.FileStatus.SENT)
             }
+          } catch (e: IOException) {
+            Log.e(TAG, e.message)
+            isTransferErrorFree = false
+            publishProgress(fileItemIndex, FileItem.FileStatus.ERROR)
           }
+          fileItemIndex++
         }
         return@withContext isTransferErrorFree
       }
