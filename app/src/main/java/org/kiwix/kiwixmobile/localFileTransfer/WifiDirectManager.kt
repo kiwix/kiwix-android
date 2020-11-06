@@ -103,7 +103,6 @@ class WifiDirectManager @Inject constructor(
 
   /* Initialisations for using the WiFi P2P API */
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
-    // job = Job()
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
     manager = activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
@@ -134,7 +133,7 @@ class WifiDirectManager @Inject constructor(
       }
 
       override fun onFailure(reason: Int) {
-        Log.d(TAG, "${activity.getString(R.string.discovery_failed)}: " + getErrorMessage(reason))
+        Log.d(TAG, "${activity.getString(R.string.discovery_failed)}: ${getErrorMessage(reason)}")
         activity.toast(R.string.discovery_failed, Toast.LENGTH_SHORT)
       }
     })
@@ -284,9 +283,10 @@ class WifiDirectManager @Inject constructor(
         val senderDevice = SenderDevice(this, activity)
         lifecycleCoroutineScope.launch {
           val isFileSendSuccessfully = senderDevice.send(filesForTransfer)
-          if (isFileSendSuccessfully)
-            if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete")
           onFileTransferAsyncTaskComplete(isFileSendSuccessfully)
+          if (BuildConfig.DEBUG) {
+            Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
+          }
 
         }
       } else {
@@ -294,9 +294,10 @@ class WifiDirectManager @Inject constructor(
         val receiverDevice = ReceiverDevice(this)
         lifecycleCoroutineScope.launch {
           val isReceivedFileSuccessFully = receiverDevice.receive()
-          if (isReceivedFileSuccessFully)
-            if (BuildConfig.DEBUG) Log.d(TAG, "ReceiverDeviceAsyncTask complete")
           onFileTransferAsyncTaskComplete(isReceivedFileSuccessFully)
+          if (BuildConfig.DEBUG) {
+            Log.d(TAG, "ReceiverDevice completed $isReceivedFileSuccessFully")
+          }
         }
       }
     }
