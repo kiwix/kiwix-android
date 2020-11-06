@@ -244,18 +244,17 @@ class WifiDirectManager @Inject constructor(
       Log.d(TAG, "Starting handshake")
     }
     peerGroupHandshake = PeerGroupHandshake(this)
-      .also {
-        lifecycleCoroutineScope.launch {
-          val inetAddress = it.handshake()
-          inetAddress?.let(::setClientAddress)
-            ?: if (BuildConfig.DEBUG) {
-              Log.d(TAG, "InetAddress is null")
-              onFileTransferAsyncTaskComplete(false)
-            } else {
-              activity.toast(R.string.connection_refused)
-            }
+
+    lifecycleCoroutineScope.launch {
+      val inetAddress = peerGroupHandshake?.handshake()
+      inetAddress?.let(::setClientAddress)
+        ?: if (BuildConfig.DEBUG) {
+          Log.d(TAG, "InetAddress is null")
+          onFileTransferAsyncTaskComplete(false)
+        } else {
+          activity.toast(R.string.connection_refused)
         }
-      }
+    }
   }
 
   val totalFilesForTransfer: Int
@@ -284,20 +283,24 @@ class WifiDirectManager @Inject constructor(
         fileReceiverDeviceAddress =
           if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
-        senderDevice = SenderDevice(this, activity).also {
-          lifecycleCoroutineScope.launch {
-            val hasSend = it.send(filesForTransfer)
-            if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete")
-            onFileTransferAsyncTaskComplete(hasSend)
+        senderDevice = SenderDevice(this, activity)
+        lifecycleCoroutineScope.launch {
+          val isFileSendSuccessfully = senderDevice?.send(filesForTransfer)
+          isFileSendSuccessfully?.let {
+            if (it)
+              if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete")
+            onFileTransferAsyncTaskComplete(isFileSendSuccessfully)
           }
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
-        receiverDevice = ReceiverDevice(this).also {
-          lifecycleCoroutineScope.launch {
-            val isReceived = it.receive()
-            if (BuildConfig.DEBUG) Log.d(TAG, "ReceiverDeviceAsyncTask complete")
-            onFileTransferAsyncTaskComplete(isReceived)
+        receiverDevice = ReceiverDevice(this)
+        lifecycleCoroutineScope.launch {
+          val isReceivedFileSuccessFully = receiverDevice?.receive()
+          isReceivedFileSuccessFully?.let {
+            if (it)
+              if (BuildConfig.DEBUG) Log.d(TAG, "ReceiverDeviceAsyncTask complete")
+            onFileTransferAsyncTaskComplete(isReceivedFileSuccessFully)
           }
         }
       }
