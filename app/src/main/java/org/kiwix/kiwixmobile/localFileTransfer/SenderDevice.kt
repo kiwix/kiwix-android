@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.localFileTransfer
 import android.app.Activity
 import android.content.ContentResolver
 import android.util.Log
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -53,35 +52,35 @@ internal class SenderDevice(
   private val contentResolver: ContentResolver = activity.contentResolver
   private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   suspend fun send(fileItems: List<FileItem?>) = withContext(ioDispatcher) {
-    if (!delayForSlowReceiverDevicesToSetupServer()) {
-      return@withContext false
-    }
+    delayForSlowReceiverDevicesToSetupServer()
     val hostAddress =
       wifiDirectManager.getFileReceiverDeviceAddress().hostAddress
     var isTransferErrorFree = true
     fileItems.forEachIndexed { fileIndex, fileItem ->
-      try {
-        Socket().use { socket ->
-          Log.d("gouri", "${Thread.currentThread().name} thread")
-          contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
-            socket.bind(null)
-            socket.connect(
-              InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
-              TIME_OUT
-            )
-            Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
-            publishProgress(fileIndex, FileItem.FileStatus.SENDING)
-            val socketOutputStream = socket.getOutputStream()
-            copyToOutputStream(fileInputStream!!, socketOutputStream)
-            if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written")
-            publishProgress(fileIndex, FileItem.FileStatus.SENT)
+      if (isActive) { //checks if coroutine is live
+        try {
+          Socket().use { socket ->
+            Log.d("gouri", "${Thread.currentThread().name} thread")
+            contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
+              socket.bind(null)
+              socket.connect(
+                InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
+                TIME_OUT
+              )
+              Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
+              publishProgress(fileIndex, FileItem.FileStatus.SENDING)
+              val socketOutputStream = socket.getOutputStream()
+              copyToOutputStream(fileInputStream!!, socketOutputStream)
+              if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written")
+              publishProgress(fileIndex, FileItem.FileStatus.SENT)
+            }
           }
+        } catch (e: IOException) {
+          Log.e(TAG, e.message)
+          e.printStackTrace()
+          isTransferErrorFree = false
+          publishProgress(fileIndex, FileItem.FileStatus.ERROR)
         }
-      } catch (e: IOException) {
-        Log.e(TAG, e.message)
-        e.printStackTrace()
-        isTransferErrorFree = false
-        publishProgress(fileIndex, FileItem.FileStatus.ERROR)
       }
     }
     return@withContext isTransferErrorFree
@@ -94,14 +93,9 @@ internal class SenderDevice(
   }
 
   @SuppressWarnings("MagicNumber")
-  private suspend fun delayForSlowReceiverDevicesToSetupServer(): Boolean {
-    try { // Delay trying to connect with receiver, to allow slow receiver devices to setup server
-      delay(3000)
-    } catch (e: CancellationException) {
-      Log.e(TAG, e.message)
-      return false
-    }
-    return true
+  private suspend fun delayForSlowReceiverDevicesToSetupServer() {
+    // Delay trying to connect with receiver, to allow slow receiver devices to setup server
+    delay(3000)
   }
 
   companion object {

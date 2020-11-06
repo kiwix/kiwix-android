@@ -32,14 +32,12 @@ class ReceiverHandShake {
         (objectInputStream.readObject() as? Int)?.let { total ->
           if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
           // Read names of each of those files, in order
-          val fileItems = sequence {
-            yieldAll(generateSequence(1) { it + 1 }.map {
-              (objectInputStream.readObject() as? String)?.let { fileName ->
-                if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
-                FileItem(fileName = fileName)
-              }
-            })
-          }.take(total)
+          val fileItems = (0 until total).map {
+            (objectInputStream.readObject() as? String)?.let { fileName ->
+              if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
+              FileItem(fileName = fileName)
+            }
+          }
           val arrayListOfFileItems = ArrayList(fileItems.toList().filterNotNull())
           wifiDirectManager.setFilesForTransfer(arrayListOfFileItems)
         }
