@@ -30,7 +30,6 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
-import java.util.ArrayList
 
 /**
  * Helper class for the local file sharing module.
@@ -105,43 +104,9 @@ internal class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManag
 
   private fun exchangeFileTransferMetadata(outputStream: OutputStream, inputStream: InputStream) {
     if (wifiDirectManager.isFileSender) {
-      try {
-        ObjectOutputStream(outputStream).use { objectOutputStream ->
-          // Send total number of files which will be transferred
-          objectOutputStream.writeObject(wifiDirectManager.totalFilesForTransfer)
-          // Send the names of each of those files, in order
-          wifiDirectManager.getFilesForTransfer().forEach { fileItem ->
-            objectOutputStream.writeObject(fileItem.fileName)
-            Log.d(TAG, "Sending " + fileItem.fileUri.toString())
-          }
-        }
-      } catch (e: Exception) {
-        e.printStackTrace()
-      }
+      SenderHandShake().handShake(wifiDirectManager, outputStream)
     } else { // Device is not the file sender
-      try {
-        ObjectInputStream(inputStream).use { objectInputStream ->
-          // Read the number of files
-          val totalFilesObject = objectInputStream.readObject().toString()
-          if (totalFilesObject.javaClass == String::class.java) {
-            val total: Int = totalFilesObject.toInt()
-            if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
-            // Read names of each of those files, in order
-            val fileItems = sequence {
-              yieldAll(generateSequence(1) { it + 1 }.map {
-                (objectInputStream.readObject() as? String)?.let { fileName ->
-                  if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
-                  FileItem(fileName = fileName)
-                }
-              })
-            }.take(total)
-            val arrayListOfFileItems = ArrayList(fileItems.toList().filterNotNull())
-            wifiDirectManager.setFilesForTransfer(arrayListOfFileItems)
-          }
-        }
-      } catch (e: Exception) {
-        e.printStackTrace()
-      }
+      ReceiverHandShake().handShake(wifiDirectManager, inputStream)
     }
   }
 
