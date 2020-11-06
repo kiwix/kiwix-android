@@ -126,15 +126,17 @@ internal class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManag
           if (totalFilesObject.javaClass == String::class.java) {
             val total: Int = totalFilesObject.toInt()
             if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
-            val fileItems = ArrayList<FileItem>()
             // Read names of each of those files, in order
-            repeat(total) {
-              (objectInputStream.readObject() as? String)?.let { fileName ->
-                fileItems.add(FileItem(fileName))
-                if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
-              }
-            }
-            wifiDirectManager.setFilesForTransfer(fileItems)
+            val fileItems = sequence {
+              yieldAll(generateSequence(1) { it + 1 }.map {
+                (objectInputStream.readObject() as? String)?.let { fileName ->
+                  if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
+                  FileItem(fileName = fileName)
+                }
+              })
+            }.take(total)
+            val arrayListOfFileItems = ArrayList(fileItems.toList().filterNotNull())
+            wifiDirectManager.setFilesForTransfer(arrayListOfFileItems)
           }
         }
       } catch (e: Exception) {
