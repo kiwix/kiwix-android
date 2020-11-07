@@ -261,7 +261,7 @@ class WifiDirectManager @Inject constructor(
 
   fun getFilesForTransfer() = filesForTransfer
 
-  fun setFilesForTransfer(fileItems: ArrayList<FileItem>) {
+  fun setFilesForTransfer(fileItems: List<FileItem>) {
     filesForTransfer = fileItems
   }
 
