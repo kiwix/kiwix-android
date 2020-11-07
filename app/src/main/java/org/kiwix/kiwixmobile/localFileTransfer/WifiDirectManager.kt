@@ -243,14 +243,16 @@ class WifiDirectManager @Inject constructor(
     val peerGroupHandshake = PeerGroupHandshake(this)
 
     lifecycleCoroutineScope.launch {
-      val inetAddress = peerGroupHandshake?.handshake()
-      inetAddress?.let(::setClientAddress)
-        ?: if (BuildConfig.DEBUG) {
+      val inetAddress = peerGroupHandshake.handshake()
+      if (inetAddress != null) {
+        setClientAddress(inetAddress)
+      } else {
+        if (BuildConfig.DEBUG) {
           Log.d(TAG, "InetAddress is null")
-          onFileTransferAsyncTaskComplete(false)
-        } else {
-          activity.toast(R.string.connection_refused)
         }
+        onFileTransferAsyncTaskComplete(false)
+        activity.toast(R.string.connection_refused)
+      }
     }
   }
 
