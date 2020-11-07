@@ -43,49 +43,51 @@ import java.net.ServerSocket
  */
 internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) {
   private var incomingFileName: String? = null
-  suspend fun receive() = withContext(Dispatchers.IO) {
-    try {
-      ServerSocket(WifiDirectManager.FILE_TRANSFER_PORT).use { serverSocket ->
-        Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.FILE_TRANSFER_PORT)
-        val zimStorageRootPath = wifiDirectManager.zimStorageRootPath
-        val fileItems = wifiDirectManager.getFilesForTransfer()
-        var isTransferErrorFree = true
-        if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size + " files")
-        fileItems.forEachIndexed { fileItemIndex, fileItem ->
-          if (isActive) {
-            incomingFileName = fileItem.fileName
-            try {
-              serverSocket.accept().use { client ->
-                if (BuildConfig.DEBUG) {
-                  Log.d(TAG, "Sender device connected for " + fileItems[fileItemIndex].fileName)
+  suspend fun receive(): Boolean {
+    return try {
+      withContext(Dispatchers.IO) {
+        ServerSocket(WifiDirectManager.FILE_TRANSFER_PORT).use { serverSocket ->
+          Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.FILE_TRANSFER_PORT)
+          val zimStorageRootPath = wifiDirectManager.zimStorageRootPath
+          val fileItems = wifiDirectManager.getFilesForTransfer()
+          var isTransferErrorFree = true
+          if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size + " files")
+          fileItems.forEachIndexed { fileItemIndex, fileItem ->
+            if (isActive) {
+              incomingFileName = fileItem.fileName
+              try {
+                serverSocket.accept().use { client ->
+                  if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "Sender device connected for " + fileItems[fileItemIndex].fileName)
+                  }
+                  publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
+                  val clientNoteFileLocation = File(zimStorageRootPath + incomingFileName)
+                  val dirs = File(clientNoteFileLocation.parent)
+                  if (!dirs.exists() && !dirs.mkdirs()) {
+                    Log.d(TAG, "ERROR: Required parent directories couldn't be created")
+                    isTransferErrorFree = false
+                  }
+                  val fileCreated = clientNoteFileLocation.createNewFile()
+                  if (BuildConfig.DEBUG) Log.d(TAG, "File creation: $fileCreated")
+                  copyToOutputStream(
+                    client.getInputStream(),
+                    FileOutputStream(clientNoteFileLocation)
+                  )
+                  publishProgress(fileItemIndex, FileItem.FileStatus.SENT)
                 }
-                publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
-                val clientNoteFileLocation = File(zimStorageRootPath + incomingFileName)
-                val dirs = File(clientNoteFileLocation.parent)
-                if (!dirs.exists() && !dirs.mkdirs()) {
-                  Log.d(TAG, "ERROR: Required parent directories couldn't be created")
-                  isTransferErrorFree = false
-                }
-                val fileCreated = clientNoteFileLocation.createNewFile()
-                if (BuildConfig.DEBUG) Log.d(TAG, "File creation: $fileCreated")
-                copyToOutputStream(
-                  client.getInputStream(),
-                  FileOutputStream(clientNoteFileLocation)
-                )
-                publishProgress(fileItemIndex, FileItem.FileStatus.SENT)
+              } catch (e: IOException) {
+                Log.e(TAG, e.message)
+                isTransferErrorFree = false
+                publishProgress(fileItemIndex, FileItem.FileStatus.ERROR)
               }
-            } catch (e: IOException) {
-              Log.e(TAG, e.message)
-              isTransferErrorFree = false
-              publishProgress(fileItemIndex, FileItem.FileStatus.ERROR)
             }
           }
+          isTransferErrorFree
         }
-        return@withContext isTransferErrorFree
       }
     } catch (e: IOException) {
       Log.e(TAG, e.message)
-      return@withContext false // Returned when an error was encountered during transfer
+      false // Returned when an error was encountered during transfer
     }
   }
 

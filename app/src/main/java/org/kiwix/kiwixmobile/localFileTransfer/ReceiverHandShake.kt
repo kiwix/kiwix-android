@@ -38,7 +38,6 @@ class ReceiverHandShake {
               FileItem(fileName = fileName)
             }
           }
-          val arrayListOfFileItems = ArrayList(fileItems.toList().filterNotNull())
           wifiDirectManager.setFilesForTransfer(fileItems.toList() as List<FileItem>)
         }
       }
