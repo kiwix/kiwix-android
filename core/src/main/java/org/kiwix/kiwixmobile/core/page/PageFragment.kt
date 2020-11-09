@@ -123,7 +123,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
-      title = title
+      title = this@PageFragment.title
     }
     no_page.text = noItemsString
 
