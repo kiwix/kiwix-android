@@ -16,7 +16,7 @@ class BookmarksFragment : PageFragment() {
     PageAdapter(PageItemDelegate(this))
   }
 
-  override val title: String by lazy { getString(R.string.bookmarks) }
+  override val screenTitle: String by lazy { getString(R.string.bookmarks) }
   override val noItemsString: String by lazy { getString(R.string.no_bookmarks) }
   override val switchString: String by lazy { getString(R.string.bookmarks_from_current_book) }
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showBookmarksAllBooks }
