@@ -19,13 +19,46 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import java.io.InputStream
 import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
+import java.net.InetAddress
+import java.net.InetSocketAddress
+import java.net.Socket
 import java.util.ArrayList
 
-class ReceiverHandShake {
-  fun handShake(wifiDirectManager: WifiDirectManager, inputStream: InputStream) {
+class ReceiverHandShake(private val wifiDirectManager: WifiDirectManager) :
+  PeerGroupHandshake(wifiDirectManager) {
+  override suspend fun handshake(): InetAddress? = withContext(Dispatchers.IO) {
+    if (wifiDirectManager.isGroupFormed && this.isActive) { // && !groupInfo.isGroupOwner
+      try {
+        Socket().use { client ->
+          client.reuseAddress = true
+          client.connect(
+            InetSocketAddress(
+              wifiDirectManager.groupOwnerAddress.hostAddress,
+              PEER_HANDSHAKE_PORT
+            ), 15000
+          )
+          val objectOutputStream = ObjectOutputStream(client.getOutputStream())
+          // Send message for the peer device to verify
+          objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
+          exchangeFileTransferMetaData(client.getInputStream())
+          return@withContext wifiDirectManager.groupOwnerAddress
+        }
+      } catch (ex: Exception) {
+        ex.printStackTrace()
+        return@withContext null
+      }
+    }
+    return@withContext null
+  }
+
+  private fun exchangeFileTransferMetaData(inputStream: InputStream) {
     try {
       ObjectInputStream(inputStream).use { objectInputStream ->
         // Read the number of files

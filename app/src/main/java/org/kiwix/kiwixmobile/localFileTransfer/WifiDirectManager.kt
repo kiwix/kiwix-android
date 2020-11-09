@@ -39,6 +39,7 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -240,10 +241,16 @@ class WifiDirectManager @Inject constructor(
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake")
     }
-    val peerGroupHandshake = PeerGroupHandshake(this)
 
     lifecycleCoroutineScope.launch {
-      val inetAddress = peerGroupHandshake.handshake()
+      var inetAddress: InetAddress? = null
+      if (isGroupFormed && isGroupOwner && this.isActive) {
+        val senderHandShake = SenderHandShake(this@WifiDirectManager)
+        inetAddress = senderHandShake.handshake()
+      } else if (isGroupFormed && this.isActive) {
+        val receiverHandShake = ReceiverHandShake(this@WifiDirectManager)
+        inetAddress = receiverHandShake.handshake()
+      }
       if (inetAddress != null) {
         setClientAddress(inetAddress)
       } else {

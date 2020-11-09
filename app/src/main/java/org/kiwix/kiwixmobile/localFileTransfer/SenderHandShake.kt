@@ -19,11 +19,58 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.BuildConfig
+import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.OutputStream
+import java.net.InetAddress
+import java.net.InetSocketAddress
+import java.net.ServerSocket
+import java.net.Socket
 
-class SenderHandShake {
-  fun handShake(wifiDirectManager: WifiDirectManager, outputStream: OutputStream) {
+private const val TAG = "SenderHandShake"
+
+class SenderHandShake(private val wifiDirectManager: WifiDirectManager) :
+  PeerGroupHandshake(wifiDirectManager) {
+  override suspend fun handshake(): InetAddress? = withContext(Dispatchers.IO) {
+    if (wifiDirectManager.isGroupFormed && this.isActive) {
+      if (BuildConfig.DEBUG) {
+        Log.d(TAG, "Handshake in progress")
+      }
+      try {
+        ServerSocket(PEER_HANDSHAKE_PORT)
+          .use { serverSocket ->
+            serverSocket.reuseAddress = true
+            val server = serverSocket.accept()
+            val objectInputStream = ObjectInputStream(server.getInputStream())
+            val kiwixHandShakeMessage = objectInputStream.readObject()
+
+            // Verify that the peer trying to communicate is a kiwix app intending to transfer files
+            return@withContext if (isKiwixHandshake(kiwixHandShakeMessage) && this.isActive) {
+              if (BuildConfig.DEBUG) {
+                Log.d(TAG, "Client IP address: " + server.inetAddress)
+              }
+              exchangeFileTransferMetaData(server.getOutputStream())
+              server.inetAddress
+            } else {
+              // Selected device is not accepting wifi direct connections through the kiwix app
+              null
+            }
+          }
+      } catch (ex: Exception) {
+        ex.printStackTrace()
+        return@withContext null
+      }
+    }
+    return@withContext null
+  }
+
+  private fun exchangeFileTransferMetaData(
+    outputStream: OutputStream
+  ) {
     try {
       ObjectOutputStream(outputStream).use { objectOutputStream ->
         // Send total number of files which will be transferred
