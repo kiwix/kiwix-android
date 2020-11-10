@@ -39,7 +39,6 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -53,7 +52,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.InetAddress
-import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -241,16 +239,10 @@ class WifiDirectManager @Inject constructor(
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake")
     }
+    val peerGroupHandshake = PeerGroupHandshake(this)
 
     lifecycleCoroutineScope.launch {
-      var inetAddress: InetAddress? = null
-      if (isGroupFormed && isGroupOwner && this.isActive) {
-        val senderHandShake = SenderHandShake(this@WifiDirectManager)
-        inetAddress = senderHandShake.handshake()
-      } else if (isGroupFormed && this.isActive) {
-        val receiverHandShake = ReceiverHandShake(this@WifiDirectManager)
-        inetAddress = receiverHandShake.handshake()
-      }
+      val inetAddress = peerGroupHandshake.handshake()
       if (inetAddress != null) {
         setClientAddress(inetAddress)
       } else {
@@ -296,7 +288,6 @@ class WifiDirectManager @Inject constructor(
           if (BuildConfig.DEBUG) {
             Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
           }
-
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)

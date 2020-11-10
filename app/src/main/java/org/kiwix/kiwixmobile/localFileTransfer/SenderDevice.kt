@@ -57,7 +57,7 @@ internal class SenderDevice(
       wifiDirectManager.getFileReceiverDeviceAddress().hostAddress
     var isTransferErrorFree = true
     fileItems.forEachIndexed { fileIndex, fileItem ->
-      if (isActive) { //checks if coroutine is live
+      if (isActive) { // checks if coroutine is live
         try {
           Socket().use { socket ->
             Log.d("gouri", "${Thread.currentThread().name} thread")

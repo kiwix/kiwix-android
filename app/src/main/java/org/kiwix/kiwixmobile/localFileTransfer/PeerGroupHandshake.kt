@@ -44,23 +44,74 @@ import java.net.Socket
  * initiates the file transfer through [SenderDevice] on the sender and using
  * [ReceiverDevice] on the receiver.
  */
-abstract class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManager) {
-  val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
-  abstract suspend fun handshake(): InetAddress?
+internal class PeerGroupHandshake(private val wifiDirectManager: WifiDirectManager) {
+  private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
+  suspend fun handshake(): InetAddress? = withContext(Dispatchers.IO) {
+    if (BuildConfig.DEBUG) {
+      Log.d(TAG, "Handshake in progress")
+    }
+    if (wifiDirectManager.isGroupFormed && wifiDirectManager.isGroupOwner && this.isActive) {
+      try {
+        ServerSocket(PEER_HANDSHAKE_PORT)
+          .use { serverSocket ->
+            serverSocket.reuseAddress = true
+            val server = serverSocket.accept()
+            val objectInputStream = ObjectInputStream(server.getInputStream())
+            val kiwixHandShakeMessage = objectInputStream.readObject()
 
-  fun isKiwixHandshake(handshakeMessage: Any): Boolean =
+            // Verify that the peer trying to communicate is a kiwix app intending to transfer files
+            return@withContext if (isKiwixHandshake(kiwixHandShakeMessage) && this.isActive) {
+              if (BuildConfig.DEBUG) {
+                Log.d(TAG, "Client IP address: " + server.inetAddress)
+              }
+              exchangeFileTransferMetadata(server.getOutputStream(), server.getInputStream())
+              server.inetAddress
+            } else {
+              // Selected device is not accepting wifi direct connections through the kiwix app
+              null
+            }
+          }
+      } catch (ex: Exception) {
+        ex.printStackTrace()
+        return@withContext null
+      }
+    } else if (wifiDirectManager.isGroupFormed && this.isActive) { // && !groupInfo.isGroupOwner
+      try {
+        Socket().use { client ->
+          client.reuseAddress = true
+          client.connect(
+            InetSocketAddress(
+              wifiDirectManager.groupOwnerAddress.hostAddress,
+              PEER_HANDSHAKE_PORT
+            ), 15000
+          )
+          val objectOutputStream = ObjectOutputStream(client.getOutputStream())
+          // Send message for the peer device to verify
+          objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
+          exchangeFileTransferMetadata(client.getOutputStream(), client.getInputStream())
+          return@withContext wifiDirectManager.groupOwnerAddress
+        }
+      } catch (ex: Exception) {
+        ex.printStackTrace()
+        return@withContext null
+      }
+    }
+    return@withContext null
+  }
+
+  private fun isKiwixHandshake(handshakeMessage: Any): Boolean =
     HANDSHAKE_MESSAGE == handshakeMessage
-  //
-  // private fun exchangeFileTransferMetadata(outputStream: OutputStream, inputStream: InputStream) {
-  //   if (wifiDirectManager.isFileSender) {
-  //     SenderHandShake().exchangeFileTransferMetaData(wifiDirectManager, outputStream)
-  //   } else { // Device is not the file sender
-  //     ReceiverHandShake().handShake(wifiDirectManager, inputStream)
-  //   }
-  // }
+
+  private fun exchangeFileTransferMetadata(outputStream: OutputStream, inputStream: InputStream) {
+    if (wifiDirectManager.isFileSender) {
+      SenderHandShake().handShake(wifiDirectManager, outputStream)
+    } else { // Device is not the file sender
+      ReceiverHandShake().handShake(wifiDirectManager, inputStream)
+    }
+  }
 
   companion object {
     private const val TAG = "PeerGrpHndshakeAsyncTsk"
-    const val PEER_HANDSHAKE_PORT = 8009
+    private const val PEER_HANDSHAKE_PORT = 8009
   }
 }
