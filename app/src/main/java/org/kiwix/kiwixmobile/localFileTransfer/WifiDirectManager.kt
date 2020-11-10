@@ -52,7 +52,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.InetAddress
-import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -240,10 +239,10 @@ class WifiDirectManager @Inject constructor(
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake")
     }
-    val peerGroupHandshake = PeerGroupHandshake(this)
+    val senderHandShake = SenderHandShake()
 
     lifecycleCoroutineScope.launch {
-      val inetAddress = peerGroupHandshake.handshake()
+      val inetAddress = senderHandShake.handshake(this@WifiDirectManager)
       if (inetAddress != null) {
         setClientAddress(inetAddress)
       } else {
