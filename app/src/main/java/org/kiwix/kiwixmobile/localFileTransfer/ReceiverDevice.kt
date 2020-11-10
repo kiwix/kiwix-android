@@ -51,8 +51,9 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
           val fileItems = wifiDirectManager.getFilesForTransfer()
           var isTransferErrorFree = true
           if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size + " files")
-          fileItems.forEachIndexed { fileItemIndex, fileItem ->
-            if (isActive) {
+          fileItems.asSequence()
+            .takeWhile { isActive }
+            .forEachIndexed { fileItemIndex, fileItem ->
               try {
                 serverSocket.accept().use { client ->
                   if (BuildConfig.DEBUG) {
@@ -79,7 +80,6 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
                 publishProgress(fileItemIndex, fileItem.fileName, FileItem.FileStatus.ERROR)
               }
             }
-          }
           isTransferErrorFree
         }
       }
