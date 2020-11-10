@@ -60,7 +60,6 @@ internal class SenderDevice(
       if (isActive) { // checks if coroutine is live
         try {
           Socket().use { socket ->
-            Log.d("gouri", "${Thread.currentThread().name} thread")
             contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
               socket.bind(null)
               socket.connect(

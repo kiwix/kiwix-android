@@ -42,7 +42,6 @@ import java.net.ServerSocket
  * many times as the no. of files).
  */
 internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) {
-  private var incomingFileName: String? = null
   suspend fun receive(): Boolean {
     return try {
       withContext(Dispatchers.IO) {
@@ -54,14 +53,13 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
           if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size + " files")
           fileItems.forEachIndexed { fileItemIndex, fileItem ->
             if (isActive) {
-              incomingFileName = fileItem.fileName
               try {
                 serverSocket.accept().use { client ->
                   if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "Sender device connected for " + fileItems[fileItemIndex].fileName)
+                    Log.d(TAG, "Sender device connected for ${fileItem.fileName}")
                   }
-                  publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
-                  val clientNoteFileLocation = File(zimStorageRootPath + incomingFileName)
+                  publishProgress(fileItemIndex, fileItem.fileName, FileItem.FileStatus.SENDING)
+                  val clientNoteFileLocation = File(zimStorageRootPath + fileItem.fileName)
                   val dirs = File(clientNoteFileLocation.parent)
                   if (!dirs.exists() && !dirs.mkdirs()) {
                     Log.d(TAG, "ERROR: Required parent directories couldn't be created")
@@ -73,12 +71,12 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
                     client.getInputStream(),
                     FileOutputStream(clientNoteFileLocation)
                   )
-                  publishProgress(fileItemIndex, FileItem.FileStatus.SENT)
+                  publishProgress(fileItemIndex, fileItem.fileName, FileItem.FileStatus.SENT)
                 }
               } catch (e: IOException) {
                 Log.e(TAG, e.message)
                 isTransferErrorFree = false
-                publishProgress(fileItemIndex, FileItem.FileStatus.ERROR)
+                publishProgress(fileItemIndex, fileItem.fileName, FileItem.FileStatus.ERROR)
               }
             }
           }
@@ -91,13 +89,17 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
     }
   }
 
-  private suspend fun publishProgress(fileIndex: Int, fileStatus: FileItem.FileStatus) {
+  private suspend fun publishProgress(
+    fileIndex: Int,
+    fileName: String,
+    fileStatus: FileItem.FileStatus
+  ) {
     withContext(Dispatchers.Main) {
       wifiDirectManager.changeStatus(fileIndex, fileStatus)
       if (fileStatus == FileItem.FileStatus.ERROR) {
         val activity = wifiDirectManager.activity
         activity.toast(
-          activity.getString(R.string.error_transferring, incomingFileName!!),
+          activity.getString(R.string.error_transferring, fileName),
           Toast.LENGTH_SHORT
         )
       }

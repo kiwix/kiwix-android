@@ -32,7 +32,7 @@ import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
 
-class SenderHandShake() :
+class SenderHandShake :
   PeerGroupHandshake {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
   override suspend fun handshake(wifiDirectManager: WifiDirectManager): InetAddress? =
@@ -123,13 +123,13 @@ class SenderHandShake() :
           (objectInputStream.readObject() as? Int)?.let { total ->
             if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
             // Read names of each of those files, in order
-            val fileItems = (0 until total).map {
+            val fileItems = (0 until total).mapNotNull {
               (objectInputStream.readObject() as? String)?.let { fileName ->
                 if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
                 FileItem(fileName = fileName)
               }
             }
-            wifiDirectManager.setFilesForTransfer(fileItems.toList() as List<FileItem>)
+            wifiDirectManager.setFilesForTransfer(fileItems.toList())
           }
         }
       } catch (e: Exception) {
