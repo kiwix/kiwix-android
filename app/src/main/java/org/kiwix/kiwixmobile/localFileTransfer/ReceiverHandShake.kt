@@ -22,6 +22,7 @@ import android.util.Log
 import org.kiwix.kiwixmobile.core.BuildConfig
 import java.io.InputStream
 import java.io.ObjectInputStream
+import java.util.ArrayList
 
 class ReceiverHandShake {
   fun handShake(wifiDirectManager: WifiDirectManager, inputStream: InputStream) {
