@@ -17,8 +17,8 @@
  */
 package org.kiwix.kiwixmobile.localFileTransfer
 
-
 import java.net.InetAddress
+
 /**
  * Helper class for the local file sharing module.
  *
