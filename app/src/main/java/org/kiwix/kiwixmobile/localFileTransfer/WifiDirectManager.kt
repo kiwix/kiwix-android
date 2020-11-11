@@ -244,12 +244,10 @@ class WifiDirectManager @Inject constructor(
     val receiverHandShake = ReceiverHandShake(this)
 
     lifecycleCoroutineScope.launch {
-      if (isFileSender) {
-        inetAddress = senderHandShake.handshake()
-        senderHandShake.exchangeFileTransferMetadata()
+      inetAddress = if (isFileSender) {
+        senderHandShake.handshake()
       } else {
-        inetAddress = receiverHandShake.handshake()
-        receiverHandShake.exchangeFileTransferMetadata()
+        receiverHandShake.handshake()
       }
       if (inetAddress != null) {
         setClientAddress(inetAddress!!)

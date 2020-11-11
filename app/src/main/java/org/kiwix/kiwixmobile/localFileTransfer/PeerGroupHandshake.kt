@@ -45,8 +45,6 @@ import java.net.Socket
  * [ReceiverDevice] on the receiver.
  */
 abstract class PeerGroupHandshake(var wifiDirectManager: WifiDirectManager) {
-  lateinit var outputStream: OutputStream
-  lateinit var inputStream: InputStream
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
   suspend fun handshake(): InetAddress? =
     withContext(Dispatchers.IO) {
@@ -67,9 +65,7 @@ abstract class PeerGroupHandshake(var wifiDirectManager: WifiDirectManager) {
                 if (BuildConfig.DEBUG) {
                   Log.d(TAG, "Client IP address: " + server.inetAddress)
                 }
-                outputStream = server.getOutputStream()
-                inputStream = server.getInputStream()
-                exchangeFileTransferMetadata()
+                exchangeFileTransferMetadata(server.getInputStream(), server.getOutputStream())
                 server.inetAddress
               } else {
                 // Selected device is not accepting wifi direct connections through the kiwix app
@@ -93,9 +89,7 @@ abstract class PeerGroupHandshake(var wifiDirectManager: WifiDirectManager) {
             val objectOutputStream = ObjectOutputStream(client.getOutputStream())
             // Send message for the peer device to verify
             objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
-            inputStream = client.getInputStream()
-            outputStream = client.getOutputStream()
-            exchangeFileTransferMetadata()
+            exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
             return@withContext wifiDirectManager.groupOwnerAddress
           }
         } catch (ex: Exception) {
@@ -111,7 +105,7 @@ abstract class PeerGroupHandshake(var wifiDirectManager: WifiDirectManager) {
     private const val PEER_HANDSHAKE_PORT = 8009
   }
 
-  abstract fun exchangeFileTransferMetadata()
+  abstract fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream)
 
   private fun isKiwixHandshake(handshakeMessage: Any): Boolean =
     HANDSHAKE_MESSAGE == handshakeMessage

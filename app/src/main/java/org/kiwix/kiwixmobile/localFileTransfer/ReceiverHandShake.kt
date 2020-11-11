@@ -32,7 +32,7 @@ class ReceiverHandShake(wifiDirectManager: WifiDirectManager) :
     private const val TAG = "ReceiverHandshake"
   }
 
-  override fun exchangeFileTransferMetadata() {
+  override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream) {
     try {
       ObjectInputStream(inputStream).use { objectInputStream ->
         // Read the number of files

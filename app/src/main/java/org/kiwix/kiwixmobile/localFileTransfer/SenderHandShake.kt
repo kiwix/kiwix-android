@@ -35,7 +35,7 @@ import java.net.Socket
 class SenderHandShake(wifiDirectManager: WifiDirectManager) :
   PeerGroupHandshake(wifiDirectManager) {
 
-  override fun exchangeFileTransferMetadata() {
+  override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream) {
     try {
       ObjectOutputStream(outputStream).use { objectOutputStream ->
         // Send total number of files which will be transferred
