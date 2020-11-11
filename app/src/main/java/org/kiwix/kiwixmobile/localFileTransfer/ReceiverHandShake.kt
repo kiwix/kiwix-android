@@ -22,10 +22,17 @@ import android.util.Log
 import org.kiwix.kiwixmobile.core.BuildConfig
 import java.io.InputStream
 import java.io.ObjectInputStream
+import java.io.OutputStream
 import java.util.ArrayList
 
-class ReceiverHandShake {
-  fun handShake(wifiDirectManager: WifiDirectManager, inputStream: InputStream) {
+class ReceiverHandShake(wifiDirectManager: WifiDirectManager) :
+  PeerGroupHandshake(wifiDirectManager) {
+
+  companion object {
+    private const val TAG = "ReceiverHandshake"
+  }
+
+  override fun exchangeFileTransferMetadata() {
     try {
       ObjectInputStream(inputStream).use { objectInputStream ->
         // Read the number of files
@@ -44,9 +51,5 @@ class ReceiverHandShake {
     } catch (e: Exception) {
       e.printStackTrace()
     }
-  }
-
-  companion object {
-    private const val TAG = "ReceiverHandshake"
   }
 }

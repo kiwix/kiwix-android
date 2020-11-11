@@ -239,12 +239,20 @@ class WifiDirectManager @Inject constructor(
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake")
     }
-    val senderHandShake = SenderHandShake()
+    var inetAddress: InetAddress?
+    val senderHandShake = SenderHandShake(this)
+    val receiverHandShake = ReceiverHandShake(this)
 
     lifecycleCoroutineScope.launch {
-      val inetAddress = senderHandShake.handshake(this@WifiDirectManager)
+      if (isFileSender) {
+        inetAddress = senderHandShake.handshake()
+        senderHandShake.exchangeFileTransferMetadata()
+      } else {
+        inetAddress = receiverHandShake.handshake()
+        receiverHandShake.exchangeFileTransferMetadata()
+      }
       if (inetAddress != null) {
-        setClientAddress(inetAddress)
+        setClientAddress(inetAddress!!)
       } else {
         if (BuildConfig.DEBUG) {
           Log.d(TAG, "InetAddress is null")
