@@ -40,9 +40,7 @@ import java.net.Socket
  * is the wifi direct group owner, it doesn't have the IP address of the peer device by default).
  *
  * After obtaining the IP address, the sender also shares metadata regarding the file transfer
- * (no. of files & their names) with the receiver. Finally, the onPostExecute() of the sender
- * initiates the file transfer through [SenderDevice] on the sender and using
- * [ReceiverDevice] on the receiver.
+ * (no. of files & their names) with the receiver.
  */
 abstract class PeerGroupHandshake(var wifiDirectManager: WifiDirectManager) {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
