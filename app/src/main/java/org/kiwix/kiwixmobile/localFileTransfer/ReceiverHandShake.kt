@@ -45,7 +45,7 @@ class ReceiverHandShake(private val wifiDirectManager: WifiDirectManager, groupI
               FileItem(fileName = fileName)
             }
           }
-          wifiDirectManager.setFilesForTransfer(fileItems.toList())
+          wifiDirectManager.setFilesForTransfer(fileItems)
         }
       }
     } catch (e: Exception) {

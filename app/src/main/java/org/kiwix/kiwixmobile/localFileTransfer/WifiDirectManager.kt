@@ -219,11 +219,11 @@ class WifiDirectManager @Inject constructor(
       Log.d(TAG, "Starting handshake")
     }
     lifecycleCoroutineScope.launch {
-      val peerGroupHandshake = if (isFileSender) {
+      val peerGroupHandshake = if (isFileSender)
         SenderHandShake(this@WifiDirectManager, groupInfo)
-      } else {
+      else
         ReceiverHandShake(this@WifiDirectManager, groupInfo)
-      }
+
       val inetAddress = peerGroupHandshake.handshake()
       if (inetAddress != null) {
         startFileTransfer(groupInfo, inetAddress)
@@ -248,7 +248,7 @@ class WifiDirectManager @Inject constructor(
 
   val zimStorageRootPath get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
 
-  private fun startFileTransfer(groupInfo: WifiP2pInfo, inetAddress: InetAddress) {
+  private suspend fun startFileTransfer(groupInfo: WifiP2pInfo, inetAddress: InetAddress) {
     if (groupInfo.groupFormed) {
       if (isFileSender) {
         Log.d(LocalFileTransferFragment.TAG, "Starting file transfer")
@@ -256,22 +256,18 @@ class WifiDirectManager @Inject constructor(
           if (groupInfo.isGroupOwner) inetAddress else groupInfo.groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
         val senderDevice = SenderDevice(activity, this, fileReceiverDeviceAddress)
-        lifecycleCoroutineScope.launch {
-          val isFileSendSuccessfully = senderDevice.send(filesForTransfer)
-          onFileTransferAsyncTaskComplete(isFileSendSuccessfully)
-          if (BuildConfig.DEBUG) {
-            Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
-          }
+        val isFileSendSuccessfully = senderDevice.send(filesForTransfer)
+        onFileTransferAsyncTaskComplete(isFileSendSuccessfully)
+        if (BuildConfig.DEBUG) {
+          Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
         val receiverDevice = ReceiverDevice(this)
-        lifecycleCoroutineScope.launch {
-          val isReceivedFileSuccessFully = receiverDevice.receive()
-          onFileTransferAsyncTaskComplete(isReceivedFileSuccessFully)
-          if (BuildConfig.DEBUG) {
-            Log.d(TAG, "ReceiverDevice completed $isReceivedFileSuccessFully")
-          }
+        val isReceivedFileSuccessFully = receiverDevice.receive()
+        onFileTransferAsyncTaskComplete(isReceivedFileSuccessFully)
+        if (BuildConfig.DEBUG) {
+          Log.d(TAG, "ReceiverDevice completed $isReceivedFileSuccessFully")
         }
       }
     }

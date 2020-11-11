@@ -47,14 +47,13 @@ import java.net.Socket
 private const val TIME_OUT = 15000
 
 internal class SenderDevice(
-  activity: Activity,
+  var activity: Activity,
   private val wifiDirectManager: WifiDirectManager,
-  val fileReceiverDeviceAddress: InetAddress
+  private val fileReceiverDeviceAddress: InetAddress
 ) {
-  private val contentResolver: ContentResolver = activity.contentResolver
-  private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-  suspend fun send(fileItems: List<FileItem?>) = withContext(ioDispatcher) {
-    delayForSlowReceiverDevicesToSetupServer()
+  suspend fun send(fileItems: List<FileItem?>) = withContext(Dispatchers.IO) {
+    // Delay trying to connect with receiver, to allow slow receiver devices to setup server
+    delay(FOR_SLOW_RECEIVER)
     val hostAddress =
       fileReceiverDeviceAddress.hostAddress
     var isTransferErrorFree = true
@@ -63,7 +62,7 @@ internal class SenderDevice(
       .forEachIndexed { fileIndex, fileItem ->
         try {
           Socket().use { socket ->
-            contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
+            activity.contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
               socket.bind(null)
               socket.connect(
                 InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
@@ -85,7 +84,7 @@ internal class SenderDevice(
         }
       }
 
-    return@withContext isTransferErrorFree
+    isTransferErrorFree
   }
 
   private suspend fun publishProgress(fileIndex: Int, fileStatus: FileItem.FileStatus) {
@@ -94,13 +93,8 @@ internal class SenderDevice(
     }
   }
 
-  @SuppressWarnings("MagicNumber")
-  private suspend fun delayForSlowReceiverDevicesToSetupServer() {
-    // Delay trying to connect with receiver, to allow slow receiver devices to setup server
-    delay(3000)
-  }
-
   companion object {
     private const val TAG = "SenderDeviceAsyncTask"
+    private const val FOR_SLOW_RECEIVER: Long = 3000
   }
 }
