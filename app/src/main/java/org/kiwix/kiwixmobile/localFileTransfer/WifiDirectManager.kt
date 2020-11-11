@@ -240,11 +240,12 @@ class WifiDirectManager @Inject constructor(
     }
     var inetAddress: InetAddress?
     lifecycleCoroutineScope.launch {
-      inetAddress = if (isFileSender) {
-        SenderHandShake(this@WifiDirectManager).handshake()
+      val peerGroupHandshake = if (isFileSender) {
+        SenderHandShake(this@WifiDirectManager)
       } else {
-        ReceiverHandShake(this@WifiDirectManager).handshake()
+        ReceiverHandShake(this@WifiDirectManager)
       }
+      inetAddress = peerGroupHandshake.handshake()
       if (inetAddress != null) {
         setClientAddress(inetAddress!!)
       } else {

@@ -12,7 +12,7 @@
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$60</ID>
-    <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$exchangeFileTransferMetadata</ID>
+    <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$exchangeFileTransferMetadata</ID>
     <ID>PackageNaming:AvailableSpaceCalculator.kt$package org.kiwix.kiwixmobile.zim_manager.library_view</ID>
     <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:DefaultLanguageProvider.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
@@ -38,8 +38,9 @@
     <ID>PackageNaming:ZimManageViewModel.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>ReturnCount:Fat32Checker.kt$Fat32Checker$private fun canCreate4GbFile(storage: String): Boolean</ID>
     <ID>TooGenericExceptionCaught:FileWritingFileSystemChecker.kt$FileWritingFileSystemChecker$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:PeerGroupHandshake.kt$PeerGroupHandshake$e: Exception</ID>
     <ID>TooGenericExceptionCaught:PeerGroupHandshake.kt$PeerGroupHandshake$ex: Exception</ID>
+    <ID>TooGenericExceptionCaught:ReceiverHandShake.kt$ReceiverHandShake$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:SenderHandShake.kt$SenderHandShake$e: Exception</ID>
     <ID>TooGenericExceptionThrown:ActivityExtensions.kt$throw RuntimeException( """ applicationContext is ${applicationContext::class.java.simpleName} application is ${application::class.java.simpleName} """.trimIndent() )</ID>
     <ID>TooGenericExceptionThrown:LibraryViewHolder.kt$LibraryViewHolder.LibraryBookViewHolder$throw RuntimeException("impossible invalid state: ${item.fileSystemState}")</ID>
     <ID>TooGenericExceptionThrown:ZimManageViewModel.kt$ZimManageViewModel$throw RuntimeException("Impossible state")</ID>
