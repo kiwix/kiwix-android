@@ -6,4 +6,6 @@
   <string name="file_system_does_not_support_4gb">Sîstema te ya dosyeyê piştgiriyê nade dosyeyên zêdetirî 4GByê</string>
   <string name="detecting_file_system">Tesbît dike ku sîstema dosyeyê dikare dosyeyên 4GBî çêbike an na</string>
   <string name="cannot_open_file">Vekirina dosyeyê têk çû\nJi kerema xwe biceribîne ku vê dosyeyê di Hilpekîna Cîhazê ya Kitêbxaneya xwe de vekî</string>
+  <string name="send_files_title">Dosyeyan Bişîne</string>
+  <string name="receive_files_title">Dosyeyan Werbigire</string>
 </resources>

@@ -84,6 +84,7 @@ open class ErrorActivity : BaseActivity() {
   }
 
   private fun emailIntent(): Intent {
+    val emailBody = buildBody()
     return Intent(Intent.ACTION_SEND).apply {
       type = "vnd.android.cursor.dir/email"
       putExtra(
@@ -91,9 +92,10 @@ open class ErrorActivity : BaseActivity() {
         arrayOf("android-crash-feedback@kiwix.org")
       )
       putExtra(Intent.EXTRA_SUBJECT, subject)
-      putExtra(Intent.EXTRA_TEXT, buildBody())
+      putExtra(Intent.EXTRA_TEXT, emailBody)
       if (allowLogs.isChecked) {
         val file = fileLogger.writeLogFile(this@ErrorActivity)
+        file.appendText(emailBody)
         val path =
           FileProvider.getUriForFile(
             this@ErrorActivity,
@@ -113,7 +115,8 @@ open class ErrorActivity : BaseActivity() {
   ${if (allowZims.isChecked) zimFiles() else ""}
   ${if (allowLanguage.isChecked) languageLocale() else ""}
   ${if (allowDeviceDetails.isChecked) deviceDetails() else ""}
-  ${if (allowFileSystemDetails.isChecked) systemDetails() else ""}
+  ${if (allowFileSystemDetails.isChecked) systemDetails() else ""} 
+  
   """.trimIndent()
 
   private fun exceptionDetails(): String =

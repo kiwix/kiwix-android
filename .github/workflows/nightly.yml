@@ -57,7 +57,7 @@ jobs:
           chmod 600 ssh_key
 
       - name: Set date variable
-        run: echo ::set-env name=DATE::$(echo $(date +%Y-%m-%d))
+        run: echo "DATE=$(echo $(date +%Y-%m-%d))" >> $GITHUB_ENV
 
       - name: release debug to kiwix.download.org
         env:

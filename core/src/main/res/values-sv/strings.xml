@@ -263,5 +263,12 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text-zoomning</string>
   <string name="search_open_in_new_tab">Öppna i ny flik</string>
+  <string name="reader">Läsare</string>
+  <string name="no_open_book">Inga öppnade böcker</string>
+  <string name="open_library">Öppna bibliotek</string>
   <string name="tab_restored">Fliken återställdes</string>
+  <string name="open_drawer">Öppna sidomeny</string>
+  <string name="close_drawer">Stäng sidomeny</string>
+  <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
+  <string name="update_content_description">För att uppdatera innehåll (en zim-fil) behöver du ladda ned den fullständig senaste versionen samma innehåll. Du kan göra det via nedladdningsavsnittet.</string>
 </resources>

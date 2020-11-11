@@ -97,7 +97,8 @@ class AllProjectConfigurer {
           "CheckResult",
           "LabelFor",
           "LogConditional",
-          "DuplicateStrings"
+          "DuplicateStrings",
+          "ConvertToWebp"
         )
 
         warning(
