@@ -94,8 +94,7 @@ class WifiDirectManager @Inject constructor(
   private lateinit var filesForTransfer: List<FileItem>
 
   // Whether the device is the file sender or not
-  var isFileSender = false
-    private set
+  private var isFileSender = false
 
   private var hasSenderStartedConnection = false
   lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
@@ -240,14 +239,11 @@ class WifiDirectManager @Inject constructor(
       Log.d(TAG, "Starting handshake")
     }
     var inetAddress: InetAddress?
-    val senderHandShake = SenderHandShake(this)
-    val receiverHandShake = ReceiverHandShake(this)
-
     lifecycleCoroutineScope.launch {
       inetAddress = if (isFileSender) {
-        senderHandShake.handshake()
+        SenderHandShake(this@WifiDirectManager).handshake()
       } else {
-        receiverHandShake.handshake()
+        ReceiverHandShake(this@WifiDirectManager).handshake()
       }
       if (inetAddress != null) {
         setClientAddress(inetAddress!!)

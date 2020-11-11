@@ -23,7 +23,6 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.OutputStream
-import java.util.ArrayList
 
 class ReceiverHandShake(wifiDirectManager: WifiDirectManager) :
   PeerGroupHandshake(wifiDirectManager) {
@@ -39,7 +38,7 @@ class ReceiverHandShake(wifiDirectManager: WifiDirectManager) :
         (objectInputStream.readObject() as? Int)?.let { total ->
           if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
           // Read names of each of those files, in order
-          val fileItems = (0 until total).map {
+          val fileItems = (0 until total).mapNotNull {
             (objectInputStream.readObject() as? String)?.let { fileName ->
               if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
               FileItem(fileName = fileName)
