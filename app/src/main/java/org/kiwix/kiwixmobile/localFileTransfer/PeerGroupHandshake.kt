@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import android.net.wifi.p2p.WifiP2pInfo
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
@@ -42,14 +43,14 @@ import java.net.Socket
  * After obtaining the IP address, the sender also shares metadata regarding the file transfer
  * (no. of files & their names) with the receiver.
  */
-abstract class PeerGroupHandshake(var wifiDirectManager: WifiDirectManager) {
+abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
   suspend fun handshake(): InetAddress? =
     withContext(Dispatchers.IO) {
       if (BuildConfig.DEBUG) {
         Log.d(TAG, "Handshake in progress")
       }
-      if (wifiDirectManager.isGroupFormed && wifiDirectManager.isGroupOwner && this.isActive) {
+      if (groupInfo.groupFormed && groupInfo.isGroupOwner && this.isActive) {
         try {
           ServerSocket(PEER_HANDSHAKE_PORT)
             .use { serverSocket ->
@@ -74,13 +75,13 @@ abstract class PeerGroupHandshake(var wifiDirectManager: WifiDirectManager) {
           ex.printStackTrace()
           return@withContext null
         }
-      } else if (wifiDirectManager.isGroupFormed && this.isActive) { // && !groupInfo.isGroupOwner
+      } else if (groupInfo.groupFormed && this.isActive) { // && !groupInfo.isGroupOwner
         try {
           Socket().use { client ->
             client.reuseAddress = true
             client.connect(
               InetSocketAddress(
-                wifiDirectManager.groupOwnerAddress.hostAddress,
+                groupInfo.groupOwnerAddress.hostAddress,
                 PEER_HANDSHAKE_PORT
               ), 15000
             )
@@ -88,7 +89,7 @@ abstract class PeerGroupHandshake(var wifiDirectManager: WifiDirectManager) {
             // Send message for the peer device to verify
             objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
             exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
-            return@withContext wifiDirectManager.groupOwnerAddress
+            return@withContext groupInfo.groupOwnerAddress
           }
         } catch (ex: Exception) {
           ex.printStackTrace()

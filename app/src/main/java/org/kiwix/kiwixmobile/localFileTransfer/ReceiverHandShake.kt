@@ -18,14 +18,15 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import android.net.wifi.p2p.WifiP2pInfo
 import android.util.Log
 import org.kiwix.kiwixmobile.core.BuildConfig
 import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.OutputStream
 
-class ReceiverHandShake(wifiDirectManager: WifiDirectManager) :
-  PeerGroupHandshake(wifiDirectManager) {
+class ReceiverHandShake(private val wifiDirectManager: WifiDirectManager, groupInfo: WifiP2pInfo) :
+  PeerGroupHandshake(groupInfo) {
 
   companion object {
     private const val TAG = "ReceiverHandshake"
@@ -44,7 +45,7 @@ class ReceiverHandShake(wifiDirectManager: WifiDirectManager) :
               FileItem(fileName = fileName)
             }
           }
-          wifiDirectManager.setFilesForTransfer(fileItems.toList() as List<FileItem>)
+          wifiDirectManager.setFilesForTransfer(fileItems.toList())
         }
       }
     } catch (e: Exception) {

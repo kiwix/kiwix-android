@@ -228,9 +228,9 @@ class WifiDirectManager @Inject constructor(
     }
     lifecycleCoroutineScope.launch {
       val peerGroupHandshake = if (isFileSender) {
-        SenderHandShake(this@WifiDirectManager)
+        SenderHandShake(this@WifiDirectManager, groupInfo)
       } else {
-        ReceiverHandShake(this@WifiDirectManager)
+        ReceiverHandShake(this@WifiDirectManager, groupInfo)
       }
       val inetAddress = peerGroupHandshake.handshake()
       if (inetAddress != null) {
