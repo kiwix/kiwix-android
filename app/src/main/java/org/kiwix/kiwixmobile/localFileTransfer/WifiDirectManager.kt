@@ -83,8 +83,6 @@ class WifiDirectManager @Inject constructor(
   // For receiving the broadcasts given by above filter
   private lateinit var receiver: BroadcastReceiver
 
-  // Corresponds to P2P group formed between the two devices
-  private lateinit var groupInfo: WifiP2pInfo
   private lateinit var senderSelectedPeerDevice: WifiP2pDevice
 
   private lateinit var selectedPeerDeviceInetAddress: InetAddress
@@ -190,18 +188,8 @@ class WifiDirectManager @Inject constructor(
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   override fun onConnectionInfoAvailable(groupInfo: WifiP2pInfo) {
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
-    this.groupInfo = groupInfo
-    performHandshakeWithSelectedPeerDevice()
+    performHandshakeWith(groupInfo)
   }
-
-  val isGroupFormed: Boolean
-    get() = groupInfo.groupFormed
-
-  val isGroupOwner: Boolean
-    get() = groupInfo.isGroupOwner
-
-  val groupOwnerAddress: InetAddress
-    get() = groupInfo.groupOwnerAddress
 
   fun sendToDevice(senderSelectedPeerDevice: WifiP2pDevice) {
     /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
@@ -234,20 +222,19 @@ class WifiDirectManager @Inject constructor(
     })
   }
 
-  private fun performHandshakeWithSelectedPeerDevice() {
+  private fun performHandshakeWith(groupInfo: WifiP2pInfo) {
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake")
     }
-    var inetAddress: InetAddress?
     lifecycleCoroutineScope.launch {
       val peerGroupHandshake = if (isFileSender) {
         SenderHandShake(this@WifiDirectManager)
       } else {
         ReceiverHandShake(this@WifiDirectManager)
       }
-      inetAddress = peerGroupHandshake.handshake()
+      val inetAddress = peerGroupHandshake.handshake()
       if (inetAddress != null) {
-        setClientAddress(inetAddress!!)
+        setClientAddress(inetAddress, groupInfo)
       } else {
         if (BuildConfig.DEBUG) {
           Log.d(TAG, "InetAddress is null")
@@ -271,18 +258,18 @@ class WifiDirectManager @Inject constructor(
 
   fun getFileReceiverDeviceAddress() = fileReceiverDeviceAddress
 
-  private fun setClientAddress(clientAddress: InetAddress) {
+  private fun setClientAddress(clientAddress: InetAddress, groupInfo: WifiP2pInfo) {
     // If control reaches here, means handshake was successful
     selectedPeerDeviceInetAddress = clientAddress
-    startFileTransfer()
+    startFileTransfer(groupInfo)
   }
 
-  private fun startFileTransfer() {
-    if (isGroupFormed) {
+  private fun startFileTransfer(groupInfo: WifiP2pInfo) {
+    if (groupInfo.groupFormed) {
       if (isFileSender) {
         Log.d(LocalFileTransferFragment.TAG, "Starting file transfer")
         fileReceiverDeviceAddress =
-          if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
+          if (groupInfo.isGroupOwner) selectedPeerDeviceInetAddress else groupInfo.groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
         val senderDevice = SenderDevice(this, activity)
         lifecycleCoroutineScope.launch {
