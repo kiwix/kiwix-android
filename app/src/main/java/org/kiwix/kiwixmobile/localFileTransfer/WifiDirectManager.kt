@@ -82,13 +82,6 @@ class WifiDirectManager @Inject constructor(
 
   // For receiving the broadcasts given by above filter
   private lateinit var receiver: BroadcastReceiver
-
-  private lateinit var senderSelectedPeerDevice: WifiP2pDevice
-
-  private lateinit var selectedPeerDeviceInetAddress: InetAddress
-
-  // IP address of the file receiving device
-  private lateinit var fileReceiverDeviceAddress: InetAddress
   private lateinit var filesForTransfer: List<FileItem>
 
   // Whether the device is the file sender or not
@@ -194,17 +187,16 @@ class WifiDirectManager @Inject constructor(
   fun sendToDevice(senderSelectedPeerDevice: WifiP2pDevice) {
     /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
     if (isFileSender && !hasSenderStartedConnection) {
-      this.senderSelectedPeerDevice = senderSelectedPeerDevice
       alertDialogShower.show(
         FileTransferConfirmation(senderSelectedPeerDevice.deviceName), {
           hasSenderStartedConnection = true
-          connect()
+          connect(senderSelectedPeerDevice)
           activity.toast(R.string.performing_handshake, Toast.LENGTH_LONG)
         })
     }
   }
 
-  private fun connect() {
+  private fun connect(senderSelectedPeerDevice: WifiP2pDevice) {
     val config = WifiP2pConfig().apply {
       deviceAddress = senderSelectedPeerDevice.deviceAddress
       wps.setup = WpsInfo.PBC
@@ -234,7 +226,7 @@ class WifiDirectManager @Inject constructor(
       }
       val inetAddress = peerGroupHandshake.handshake()
       if (inetAddress != null) {
-        setClientAddress(inetAddress, groupInfo)
+        startFileTransfer(groupInfo, inetAddress)
       } else {
         if (BuildConfig.DEBUG) {
           Log.d(TAG, "InetAddress is null")
@@ -256,22 +248,14 @@ class WifiDirectManager @Inject constructor(
 
   val zimStorageRootPath get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
 
-  fun getFileReceiverDeviceAddress() = fileReceiverDeviceAddress
-
-  private fun setClientAddress(clientAddress: InetAddress, groupInfo: WifiP2pInfo) {
-    // If control reaches here, means handshake was successful
-    selectedPeerDeviceInetAddress = clientAddress
-    startFileTransfer(groupInfo)
-  }
-
-  private fun startFileTransfer(groupInfo: WifiP2pInfo) {
+  private fun startFileTransfer(groupInfo: WifiP2pInfo, inetAddress: InetAddress) {
     if (groupInfo.groupFormed) {
       if (isFileSender) {
         Log.d(LocalFileTransferFragment.TAG, "Starting file transfer")
-        fileReceiverDeviceAddress =
-          if (groupInfo.isGroupOwner) selectedPeerDeviceInetAddress else groupInfo.groupOwnerAddress
+        val fileReceiverDeviceAddress =
+          if (groupInfo.isGroupOwner) inetAddress else groupInfo.groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
-        val senderDevice = SenderDevice(this, activity)
+        val senderDevice = SenderDevice(activity, this, fileReceiverDeviceAddress)
         lifecycleCoroutineScope.launch {
           val isFileSendSuccessfully = senderDevice.send(filesForTransfer)
           onFileTransferAsyncTaskComplete(isFileSendSuccessfully)

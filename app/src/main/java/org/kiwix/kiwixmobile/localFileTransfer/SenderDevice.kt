@@ -28,6 +28,7 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.copyToOutputStream
 import java.io.IOException
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
 
@@ -46,15 +47,16 @@ import java.net.Socket
 private const val TIME_OUT = 15000
 
 internal class SenderDevice(
+  activity: Activity,
   private val wifiDirectManager: WifiDirectManager,
-  activity: Activity
+  val fileReceiverDeviceAddress: InetAddress
 ) {
   private val contentResolver: ContentResolver = activity.contentResolver
   private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
   suspend fun send(fileItems: List<FileItem?>) = withContext(ioDispatcher) {
     delayForSlowReceiverDevicesToSetupServer()
     val hostAddress =
-      wifiDirectManager.getFileReceiverDeviceAddress().hostAddress
+      fileReceiverDeviceAddress.hostAddress
     var isTransferErrorFree = true
     fileItems.asSequence()
       .takeWhile { isActive } // checks if coroutine is live
