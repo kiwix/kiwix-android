@@ -49,18 +49,18 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Handshake in progress")
     }
-    return@withContext when {
+    when {
       groupInfo.groupFormed && groupInfo.isGroupOwner && isActive -> {
-        groupOwnerReadHandShakeAndExchangeMetaData()
-      }
-      groupInfo.groupFormed && isActive -> {  // && !groupInfo.isGroupOwner
         readHandShakeAndExchangeMetaData()
+      }
+      groupInfo.groupFormed && isActive -> {// && !groupInfo.isGroupOwner
+        writeHandShakeAndExchangeMetaData()
       }
       else -> return@withContext null
     }
   }
 
-  private fun readHandShakeAndExchangeMetaData(): InetAddress? {
+  private fun writeHandShakeAndExchangeMetaData(): InetAddress? {
     try {
       Socket().use { client ->
         client.reuseAddress = true
@@ -74,7 +74,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
         // Send message for the peer device to verify
         objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
         exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
-        return@use groupInfo.groupOwnerAddress
+        groupInfo.groupOwnerAddress
       }
     } catch (ex: Exception) {
       ex.printStackTrace()
@@ -82,7 +82,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
     return null
   }
 
-  private fun groupOwnerReadHandShakeAndExchangeMetaData(): InetAddress? {
+  private fun readHandShakeAndExchangeMetaData(): InetAddress? {
     try {
       ServerSocket(PEER_HANDSHAKE_PORT)
         .use { serverSocket ->
@@ -92,7 +92,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
           val kiwixHandShakeMessage = objectInputStream.readObject()
 
           // Verify that the peer trying to communicate is a kiwix app intending to transfer files
-          return@groupOwnerReadHandShakeAndExchangeMetaData if (isKiwixHandshake(
+          return@readHandShakeAndExchangeMetaData if (isKiwixHandshake(
               kiwixHandShakeMessage
             )
           ) {
