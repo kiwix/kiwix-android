@@ -52,7 +52,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
     when {
       groupInfo.groupFormed && groupInfo.isGroupOwner && isActive ->
         readHandshakeAndExchangeMetaData()
-      groupInfo.groupFormed && isActive ->  // && !groupInfo.isGroupOwner
+      groupInfo.groupFormed && isActive -> // && !groupInfo.isGroupOwner
         writeHandshakeAndExchangeMetaData()
       else -> null
     }
