@@ -45,12 +45,50 @@ import java.net.Socket
  */
 abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
-  suspend fun handshake(): InetAddress? =
-    withContext(Dispatchers.IO) {
-      if (BuildConfig.DEBUG) {
-        Log.d(TAG, "Handshake in progress")
+  suspend fun handshake(): InetAddress? {
+    if (BuildConfig.DEBUG) {
+      Log.d(TAG, "Handshake in progress")
+    }
+    return when {
+      groupInfo.groupFormed && groupInfo.isGroupOwner -> {
+        return groupOwnerReadHandShakeAndExchangeMetaData()
       }
-      if (groupInfo.groupFormed && groupInfo.isGroupOwner && this.isActive) {
+      groupInfo.groupFormed -> {  // && !groupInfo.isGroupOwner
+        readHandShakeAndExchangeMetaData()
+      }
+      else -> return null
+    }
+  }
+
+  private suspend fun readHandShakeAndExchangeMetaData(): InetAddress? =
+    withContext(Dispatchers.IO) {
+      if (isActive) {
+        try {
+          Socket().use { client ->
+            client.reuseAddress = true
+            client.connect(
+              InetSocketAddress(
+                groupInfo.groupOwnerAddress.hostAddress,
+                PEER_HANDSHAKE_PORT
+              ), 15000
+            )
+            val objectOutputStream = ObjectOutputStream(client.getOutputStream())
+            // Send message for the peer device to verify
+            objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
+            exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
+            return@withContext groupInfo.groupOwnerAddress
+          }
+        } catch (ex: Exception) {
+          ex.printStackTrace()
+          return@withContext null
+        }
+      }
+      return@withContext null
+    }
+
+  private suspend fun groupOwnerReadHandShakeAndExchangeMetaData(): InetAddress? =
+    withContext(Dispatchers.IO) {
+      if (isActive) {
         try {
           ServerSocket(PEER_HANDSHAKE_PORT)
             .use { serverSocket ->
@@ -71,26 +109,6 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
                 null
               }
             }
-        } catch (ex: Exception) {
-          ex.printStackTrace()
-          return@withContext null
-        }
-      } else if (groupInfo.groupFormed && this.isActive) { // && !groupInfo.isGroupOwner
-        try {
-          Socket().use { client ->
-            client.reuseAddress = true
-            client.connect(
-              InetSocketAddress(
-                groupInfo.groupOwnerAddress.hostAddress,
-                PEER_HANDSHAKE_PORT
-              ), 15000
-            )
-            val objectOutputStream = ObjectOutputStream(client.getOutputStream())
-            // Send message for the peer device to verify
-            objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
-            exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
-            return@withContext groupInfo.groupOwnerAddress
-          }
         } catch (ex: Exception) {
           ex.printStackTrace()
           return@withContext null

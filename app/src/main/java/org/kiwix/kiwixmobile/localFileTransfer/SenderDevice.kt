@@ -18,9 +18,7 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.app.Activity
-import android.content.ContentResolver
 import android.util.Log
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
