@@ -51,17 +51,17 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
     }
     when {
       groupInfo.groupFormed && groupInfo.isGroupOwner && isActive -> {
-        readHandShakeAndExchangeMetaData()
+        readHandshakeAndExchangeMetaData()
       }
-      groupInfo.groupFormed && isActive -> {// && !groupInfo.isGroupOwner
-        writeHandShakeAndExchangeMetaData()
+      groupInfo.groupFormed && isActive -> { // && !groupInfo.isGroupOwner
+        writeHandshakeAndExchangeMetaData()
       }
-      else -> return@withContext null
+      else -> null
     }
   }
 
-  private fun writeHandShakeAndExchangeMetaData(): InetAddress? {
-    try {
+  private fun writeHandshakeAndExchangeMetaData(): InetAddress? {
+    return try {
       Socket().use { client ->
         client.reuseAddress = true
         client.connect(
@@ -74,15 +74,15 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
         // Send message for the peer device to verify
         objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
         exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
-        return@writeHandShakeAndExchangeMetaData groupInfo.groupOwnerAddress
+        groupInfo.groupOwnerAddress
       }
     } catch (ex: Exception) {
       ex.printStackTrace()
-      return null
+      null
     }
   }
 
-  private fun readHandShakeAndExchangeMetaData(): InetAddress? {
+  private fun readHandshakeAndExchangeMetaData(): InetAddress? {
     try {
       ServerSocket(PEER_HANDSHAKE_PORT)
         .use { serverSocket ->
@@ -92,7 +92,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
           val kiwixHandShakeMessage = objectInputStream.readObject()
 
           // Verify that the peer trying to communicate is a kiwix app intending to transfer files
-          return@readHandShakeAndExchangeMetaData if (isKiwixHandshake(
+          return@readHandshakeAndExchangeMetaData if (isKiwixHandshake(
               kiwixHandShakeMessage
             )
           ) {

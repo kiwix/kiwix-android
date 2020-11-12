@@ -12,6 +12,7 @@
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$60</ID>
+    <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$readHandshakeAndExchangeMetaData</ID>
     <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$exchangeFileTransferMetadata</ID>
     <ID>PackageNaming:AvailableSpaceCalculator.kt$package org.kiwix.kiwixmobile.zim_manager.library_view</ID>
     <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
