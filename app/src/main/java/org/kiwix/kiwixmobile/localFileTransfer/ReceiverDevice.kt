@@ -96,6 +96,6 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
   }
 
   companion object {
-    private const val TAG = "ReceiverDeviceAsyncTask"
+    private const val TAG = "ReceiverDevice"
   }
 }

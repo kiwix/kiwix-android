@@ -91,7 +91,7 @@ internal class SenderDevice(
   }
 
   companion object {
-    private const val TAG = "SenderDeviceAsyncTask"
+    private const val TAG = "SenderDevice"
     private const val FOR_SLOW_RECEIVER: Long = 3000
   }
 }
