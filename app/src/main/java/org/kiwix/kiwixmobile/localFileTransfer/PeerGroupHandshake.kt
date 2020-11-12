@@ -103,7 +103,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
         }
     } catch (ex: Exception) {
       ex.printStackTrace()
-      return null
+      null
     }
   }
 
