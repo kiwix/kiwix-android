@@ -45,15 +45,14 @@ import java.net.Socket
 private const val TIME_OUT = 15000
 
 internal class SenderDevice(
-  val activity: Activity,
+  private val activity: Activity,
   private val wifiDirectManager: WifiDirectManager,
   private val fileReceiverDeviceAddress: InetAddress
 ) {
   suspend fun send(fileItems: List<FileItem?>) = withContext(Dispatchers.IO) {
     // Delay trying to connect with receiver, to allow slow receiver devices to setup server
     delay(FOR_SLOW_RECEIVER)
-    val hostAddress =
-      fileReceiverDeviceAddress.hostAddress
+    val hostAddress = fileReceiverDeviceAddress.hostAddress
     var isTransferErrorFree = true
     fileItems.asSequence()
       .takeWhile { isActive } // checks if coroutine is live

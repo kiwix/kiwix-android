@@ -74,12 +74,12 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
         // Send message for the peer device to verify
         objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
         exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
-        groupInfo.groupOwnerAddress
+        return@writeHandShakeAndExchangeMetaData groupInfo.groupOwnerAddress
       }
     } catch (ex: Exception) {
       ex.printStackTrace()
+      return null
     }
-    return null
   }
 
   private fun readHandShakeAndExchangeMetaData(): InetAddress? {
@@ -108,8 +108,8 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
         }
     } catch (ex: Exception) {
       ex.printStackTrace()
+      return null
     }
-    return null
   }
 
   companion object {

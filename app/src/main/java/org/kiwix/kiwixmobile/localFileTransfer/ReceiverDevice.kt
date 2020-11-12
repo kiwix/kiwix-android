@@ -18,13 +18,10 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.util.Log
-import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.copyToOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -59,7 +56,7 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
                   if (BuildConfig.DEBUG) {
                     Log.d(TAG, "Sender device connected for ${fileItem.fileName}")
                   }
-                  publishProgress(fileItemIndex, fileItem.fileName, FileItem.FileStatus.SENDING)
+                  publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
                   val clientNoteFileLocation = File(zimStorageRootPath + fileItem.fileName)
                   val dirs = File(clientNoteFileLocation.parent)
                   if (!dirs.exists() && !dirs.mkdirs()) {
@@ -72,12 +69,12 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
                     client.getInputStream(),
                     FileOutputStream(clientNoteFileLocation)
                   )
-                  publishProgress(fileItemIndex, fileItem.fileName, FileItem.FileStatus.SENT)
+                  publishProgress(fileItemIndex, FileItem.FileStatus.SENT)
                 }
               } catch (e: IOException) {
                 Log.e(TAG, e.message)
                 isTransferErrorFree = false
-                publishProgress(fileItemIndex, fileItem.fileName, FileItem.FileStatus.ERROR)
+                publishProgress(fileItemIndex, FileItem.FileStatus.ERROR)
               }
             }
           isTransferErrorFree
@@ -91,18 +88,10 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
 
   private suspend fun publishProgress(
     fileIndex: Int,
-    fileName: String,
     fileStatus: FileItem.FileStatus
   ) {
     withContext(Dispatchers.Main) {
       wifiDirectManager.changeStatus(fileIndex, fileStatus)
-      if (fileStatus == FileItem.FileStatus.ERROR) {
-        val activity = wifiDirectManager.activity
-        activity.toast(
-          activity.getString(R.string.error_transferring, fileName),
-          Toast.LENGTH_SHORT
-        )
-      }
     }
   }
 
