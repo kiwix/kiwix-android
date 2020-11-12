@@ -92,7 +92,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
           val kiwixHandShakeMessage = objectInputStream.readObject()
 
           // Verify that the peer trying to communicate is a kiwix app intending to transfer files
-          return@readHandshakeAndExchangeMetaData if (isKiwixHandshake(
+          if (isKiwixHandshake(
               kiwixHandShakeMessage
             )
           ) {
@@ -110,6 +110,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
       ex.printStackTrace()
       return null
     }
+    return null
   }
 
   companion object {
