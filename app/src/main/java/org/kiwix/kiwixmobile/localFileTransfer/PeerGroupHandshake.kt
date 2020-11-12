@@ -50,12 +50,10 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
       Log.d(TAG, "Handshake in progress")
     }
     when {
-      groupInfo.groupFormed && groupInfo.isGroupOwner && isActive -> {
+      groupInfo.groupFormed && groupInfo.isGroupOwner && isActive ->
         readHandshakeAndExchangeMetaData()
-      }
-      groupInfo.groupFormed && isActive -> { // && !groupInfo.isGroupOwner
+      groupInfo.groupFormed && isActive ->  // && !groupInfo.isGroupOwner
         writeHandshakeAndExchangeMetaData()
-      }
       else -> null
     }
   }
@@ -83,7 +81,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
   }
 
   private fun readHandshakeAndExchangeMetaData(): InetAddress? {
-    try {
+    return try {
       ServerSocket(PEER_HANDSHAKE_PORT)
         .use { serverSocket ->
           serverSocket.reuseAddress = true
@@ -92,10 +90,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
           val kiwixHandShakeMessage = objectInputStream.readObject()
 
           // Verify that the peer trying to communicate is a kiwix app intending to transfer files
-          if (isKiwixHandshake(
-              kiwixHandShakeMessage
-            )
-          ) {
+          if (isKiwixHandshake(kiwixHandShakeMessage)) {
             if (BuildConfig.DEBUG) {
               Log.d(TAG, "Client IP address: " + server.inetAddress)
             }
@@ -110,7 +105,6 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
       ex.printStackTrace()
       return null
     }
-    return null
   }
 
   companion object {
