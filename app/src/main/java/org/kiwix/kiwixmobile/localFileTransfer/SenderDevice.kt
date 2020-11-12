@@ -45,7 +45,7 @@ import java.net.Socket
 private const val TIME_OUT = 15000
 
 internal class SenderDevice(
-  var activity: Activity,
+  val activity: Activity,
   private val wifiDirectManager: WifiDirectManager,
   private val fileReceiverDeviceAddress: InetAddress
 ) {

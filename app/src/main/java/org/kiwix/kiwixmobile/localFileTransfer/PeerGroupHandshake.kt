@@ -45,77 +45,72 @@ import java.net.Socket
  */
 abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
-  suspend fun handshake(): InetAddress? {
+  suspend fun handshake(): InetAddress? = withContext(Dispatchers.IO) {
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Handshake in progress")
     }
-    return when {
-      groupInfo.groupFormed && groupInfo.isGroupOwner -> {
-        return groupOwnerReadHandShakeAndExchangeMetaData()
+    return@withContext when {
+      groupInfo.groupFormed && groupInfo.isGroupOwner && isActive -> {
+        groupOwnerReadHandShakeAndExchangeMetaData()
       }
-      groupInfo.groupFormed -> {  // && !groupInfo.isGroupOwner
+      groupInfo.groupFormed && isActive -> {  // && !groupInfo.isGroupOwner
         readHandShakeAndExchangeMetaData()
       }
-      else -> return null
+      else -> return@withContext null
     }
   }
 
-  private suspend fun readHandShakeAndExchangeMetaData(): InetAddress? =
-    withContext(Dispatchers.IO) {
-      if (isActive) {
-        try {
-          Socket().use { client ->
-            client.reuseAddress = true
-            client.connect(
-              InetSocketAddress(
-                groupInfo.groupOwnerAddress.hostAddress,
-                PEER_HANDSHAKE_PORT
-              ), 15000
+  private fun readHandShakeAndExchangeMetaData(): InetAddress? {
+    try {
+      Socket().use { client ->
+        client.reuseAddress = true
+        client.connect(
+          InetSocketAddress(
+            groupInfo.groupOwnerAddress.hostAddress,
+            PEER_HANDSHAKE_PORT
+          ), 15000
+        )
+        val objectOutputStream = ObjectOutputStream(client.getOutputStream())
+        // Send message for the peer device to verify
+        objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
+        exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
+        return@use groupInfo.groupOwnerAddress
+      }
+    } catch (ex: Exception) {
+      ex.printStackTrace()
+    }
+    return null
+  }
+
+  private fun groupOwnerReadHandShakeAndExchangeMetaData(): InetAddress? {
+    try {
+      ServerSocket(PEER_HANDSHAKE_PORT)
+        .use { serverSocket ->
+          serverSocket.reuseAddress = true
+          val server = serverSocket.accept()
+          val objectInputStream = ObjectInputStream(server.getInputStream())
+          val kiwixHandShakeMessage = objectInputStream.readObject()
+
+          // Verify that the peer trying to communicate is a kiwix app intending to transfer files
+          return@groupOwnerReadHandShakeAndExchangeMetaData if (isKiwixHandshake(
+              kiwixHandShakeMessage
             )
-            val objectOutputStream = ObjectOutputStream(client.getOutputStream())
-            // Send message for the peer device to verify
-            objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
-            exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
-            return@withContext groupInfo.groupOwnerAddress
-          }
-        } catch (ex: Exception) {
-          ex.printStackTrace()
-          return@withContext null
-        }
-      }
-      return@withContext null
-    }
-
-  private suspend fun groupOwnerReadHandShakeAndExchangeMetaData(): InetAddress? =
-    withContext(Dispatchers.IO) {
-      if (isActive) {
-        try {
-          ServerSocket(PEER_HANDSHAKE_PORT)
-            .use { serverSocket ->
-              serverSocket.reuseAddress = true
-              val server = serverSocket.accept()
-              val objectInputStream = ObjectInputStream(server.getInputStream())
-              val kiwixHandShakeMessage = objectInputStream.readObject()
-
-              // Verify that the peer trying to communicate is a kiwix app intending to transfer files
-              return@withContext if (isKiwixHandshake(kiwixHandShakeMessage) && this.isActive) {
-                if (BuildConfig.DEBUG) {
-                  Log.d(TAG, "Client IP address: " + server.inetAddress)
-                }
-                exchangeFileTransferMetadata(server.getInputStream(), server.getOutputStream())
-                server.inetAddress
-              } else {
-                // Selected device is not accepting wifi direct connections through the kiwix app
-                null
-              }
+          ) {
+            if (BuildConfig.DEBUG) {
+              Log.d(TAG, "Client IP address: " + server.inetAddress)
             }
-        } catch (ex: Exception) {
-          ex.printStackTrace()
-          return@withContext null
+            exchangeFileTransferMetadata(server.getInputStream(), server.getOutputStream())
+            server.inetAddress
+          } else {
+            // Selected device is not accepting wifi direct connections through the kiwix app
+            null
+          }
         }
-      }
-      return@withContext null
+    } catch (ex: Exception) {
+      ex.printStackTrace()
     }
+    return null
+  }
 
   companion object {
     private const val TAG = "PeerGroupHandshake"

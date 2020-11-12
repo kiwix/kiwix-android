@@ -59,7 +59,7 @@ import javax.inject.Inject
  */
 @SuppressWarnings("MissingPermission", "ProtectedMemberInFinalClass")
 class WifiDirectManager @Inject constructor(
-  val activity: Activity,
+  private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
