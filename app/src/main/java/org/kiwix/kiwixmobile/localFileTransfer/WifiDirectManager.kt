@@ -35,7 +35,7 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import android.os.Looper
+import android.os.Looper.getMainLooper
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -75,7 +75,6 @@ class WifiDirectManager @Inject constructor(
   private var shouldRetry = true
 
   // Overall manager of Wifi p2p connections for the module
-  // private lateinit var manager: WifiP2pManager
   private val manager: WifiP2pManager? by lazy(LazyThreadSafetyMode.NONE) {
     activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
   }
@@ -97,6 +96,7 @@ class WifiDirectManager @Inject constructor(
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
+    channel = manager?.initialize(activity, getMainLooper(), null)
     registerWifiDirectBroadcastReceiver()
   }
 
@@ -168,7 +168,7 @@ class WifiDirectManager @Inject constructor(
       Log.d(TAG, "Channel lost, trying again")
       callbacks?.onConnectionToPeersLost()
       shouldRetry = false
-      manager?.initialize(activity, Looper.getMainLooper(), this)
+      manager?.initialize(activity, getMainLooper(), this)
     } else {
       activity.toast(R.string.severe_loss_error, Toast.LENGTH_LONG)
     }
