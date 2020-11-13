@@ -16,6 +16,14 @@ jobs:
       - name: Static Analysis
         run: ./gradlew ktlintCheck detekt app:lintDebug custom:lintCustomexampleDebug
 
+      - name: Upload Static Analysis Report
+        uses: actions/upload-artifact@v2.2.0
+        with:
+          name: Static Analysis Report
+          path: |
+            **/reports/
+
+
   build:
 
     runs-on: ubuntu-latest
