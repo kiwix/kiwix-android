@@ -43,6 +43,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_local_file_transfer.list_peer_devices
 import kotlinx.android.synthetic.main.fragment_local_file_transfer.progress_bar_searching_peers
@@ -73,9 +74,9 @@ import javax.inject.Inject
  * app. Two devices are connected to each other using WiFi Direct, followed by file transfer.
  *
  * File transfer involves two phases:
- * 1) Handshake with the selected peer device, using [PeerGroupHandshakeAsyncTask]
- * 2) After handshake, starting the files transfer using [SenderDeviceAsyncTask] on the sender
- * device and [ReceiverDeviceAsyncTask] files receiving device
+ * 1) Handshake with the selected peer device, using [PeerGroupHandshake]
+ * 2) After handshake, starting the files transfer using [SenderDevice] on the sender
+ * device and [ReceiverDevice] files receiving device
  */
 
 const val URIS_KEY = "uris"
@@ -121,6 +122,7 @@ class LocalFileTransferFragment : BaseFragment(),
     displayFileTransferProgress(filesForTransfer)
 
     wifiDirectManager.callbacks = this
+    wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
   }
 

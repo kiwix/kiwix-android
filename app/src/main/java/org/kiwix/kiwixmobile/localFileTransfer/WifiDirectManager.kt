@@ -33,12 +33,13 @@ import android.net.wifi.p2p.WifiP2pManager.Channel
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener
-import android.os.AsyncTask
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -51,7 +52,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.InetAddress
-import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -82,24 +82,13 @@ class WifiDirectManager @Inject constructor(
 
   // For receiving the broadcasts given by above filter
   private lateinit var receiver: BroadcastReceiver
-
-  // Corresponds to P2P group formed between the two devices
-  private lateinit var groupInfo: WifiP2pInfo
-  private lateinit var senderSelectedPeerDevice: WifiP2pDevice
-  private var peerGroupHandshakeAsyncTask: PeerGroupHandshakeAsyncTask? = null
-  private var senderDeviceAsyncTask: SenderDeviceAsyncTask? = null
-  private var receiverDeviceAsyncTask: ReceiverDeviceAsyncTask? = null
-  private lateinit var selectedPeerDeviceInetAddress: InetAddress
-
-  // IP address of the file receiving device
-  private lateinit var fileReceiverDeviceAddress: InetAddress
   private lateinit var filesForTransfer: List<FileItem>
 
   // Whether the device is the file sender or not
-  var isFileSender = false
-    private set
+  private var isFileSender = false
 
   private var hasSenderStartedConnection = false
+  lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
 
   /* Initialisations for using the WiFi P2P API */
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
@@ -133,10 +122,7 @@ class WifiDirectManager @Inject constructor(
       }
 
       override fun onFailure(reason: Int) {
-        Log.d(
-          TAG, "${activity.getString(R.string.discovery_failed)}: " +
-            getErrorMessage(reason)
-        )
+        Log.d(TAG, "${activity.getString(R.string.discovery_failed)}: ${getErrorMessage(reason)}")
         activity.toast(R.string.discovery_failed, Toast.LENGTH_SHORT)
       }
     })
@@ -195,33 +181,22 @@ class WifiDirectManager @Inject constructor(
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   override fun onConnectionInfoAvailable(groupInfo: WifiP2pInfo) {
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
-    this.groupInfo = groupInfo
-    performHandshakeWithSelectedPeerDevice()
+    performHandshakeWith(groupInfo)
   }
-
-  val isGroupFormed: Boolean
-    get() = groupInfo.groupFormed
-
-  val isGroupOwner: Boolean
-    get() = groupInfo.isGroupOwner
-
-  val groupOwnerAddress: InetAddress
-    get() = groupInfo.groupOwnerAddress
 
   fun sendToDevice(senderSelectedPeerDevice: WifiP2pDevice) {
     /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
     if (isFileSender && !hasSenderStartedConnection) {
-      this.senderSelectedPeerDevice = senderSelectedPeerDevice
       alertDialogShower.show(
         FileTransferConfirmation(senderSelectedPeerDevice.deviceName), {
           hasSenderStartedConnection = true
-          connect()
+          connect(senderSelectedPeerDevice)
           activity.toast(R.string.performing_handshake, Toast.LENGTH_LONG)
         })
     }
   }
 
-  private fun connect() {
+  private fun connect(senderSelectedPeerDevice: WifiP2pDevice) {
     val config = WifiP2pConfig().apply {
       deviceAddress = senderSelectedPeerDevice.deviceAddress
       wps.setup = WpsInfo.PBC
@@ -239,12 +214,27 @@ class WifiDirectManager @Inject constructor(
     })
   }
 
-  private fun performHandshakeWithSelectedPeerDevice() {
+  private fun performHandshakeWith(groupInfo: WifiP2pInfo) {
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake")
     }
-    peerGroupHandshakeAsyncTask = PeerGroupHandshakeAsyncTask(this)
-      .also { it.execute() }
+    lifecycleCoroutineScope.launch {
+      val peerGroupHandshake = if (isFileSender)
+        SenderHandShake(this@WifiDirectManager, groupInfo)
+      else
+        ReceiverHandShake(this@WifiDirectManager, groupInfo)
+
+      val inetAddress = peerGroupHandshake.handshake()
+      if (inetAddress != null) {
+        startFileTransfer(groupInfo, inetAddress)
+      } else {
+        if (BuildConfig.DEBUG) {
+          Log.d(TAG, "InetAddress is null")
+        }
+        onFileTransferAsyncTaskComplete(false)
+        activity.toast(R.string.connection_refused)
+      }
+    }
   }
 
   val totalFilesForTransfer: Int
@@ -252,36 +242,32 @@ class WifiDirectManager @Inject constructor(
 
   fun getFilesForTransfer() = filesForTransfer
 
-  fun setFilesForTransfer(fileItems: ArrayList<FileItem>) {
+  fun setFilesForTransfer(fileItems: List<FileItem>) {
     filesForTransfer = fileItems
   }
 
-  val zimStorageRootPath
-    get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
+  val zimStorageRootPath get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
 
-  fun getFileReceiverDeviceAddress() = fileReceiverDeviceAddress
-
-  fun setClientAddress(clientAddress: InetAddress) {
-
-    // If control reaches here, means handshake was successful
-    selectedPeerDeviceInetAddress = clientAddress
-    startFileTransfer()
-  }
-
-  private fun startFileTransfer() {
-    if (isGroupFormed) {
+  private suspend fun startFileTransfer(groupInfo: WifiP2pInfo, inetAddress: InetAddress) {
+    if (groupInfo.groupFormed) {
       if (isFileSender) {
         Log.d(LocalFileTransferFragment.TAG, "Starting file transfer")
-        fileReceiverDeviceAddress =
-          if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
+        val fileReceiverDeviceAddress =
+          if (groupInfo.isGroupOwner) inetAddress else groupInfo.groupOwnerAddress
         activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
-        senderDeviceAsyncTask = SenderDeviceAsyncTask(this, activity).also {
-          it.execute(*filesForTransfer.toTypedArray())
+        val senderDevice = SenderDevice(activity, this, fileReceiverDeviceAddress)
+        val isFileSendSuccessfully = senderDevice.send(filesForTransfer)
+        onFileTransferAsyncTaskComplete(isFileSendSuccessfully)
+        if (BuildConfig.DEBUG) {
+          Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
-        receiverDeviceAsyncTask = ReceiverDeviceAsyncTask(this).also {
-          it.execute()
+        val receiverDevice = ReceiverDevice(this)
+        val isReceivedFileSuccessFully = receiverDevice.receive()
+        onFileTransferAsyncTaskComplete(isReceivedFileSuccessFully)
+        if (BuildConfig.DEBUG) {
+          Log.d(TAG, "ReceiverDevice completed $isReceivedFileSuccessFully")
         }
       }
     }
@@ -291,20 +277,15 @@ class WifiDirectManager @Inject constructor(
     filesForTransfer[itemIndex].fileStatus = status
     callbacks?.onFileStatusChanged(itemIndex)
     if (status == FileStatus.ERROR) {
-      displayToast(
-        R.string.error_transferring, filesForTransfer[itemIndex].fileName,
-        Toast.LENGTH_SHORT
+      activity.toast(
+        activity.getString(
+          R.string.error_transferring, filesForTransfer[itemIndex].fileName
+        )
       )
     }
   }
 
-  private fun cancelAsyncTasks(vararg tasks: AsyncTask<*, *, *>?) =
-    tasks.forEach {
-      it?.cancel(true)
-    }
-
   fun stopWifiDirectManager() {
-    cancelAsyncTasks(peerGroupHandshakeAsyncTask, senderDeviceAsyncTask, receiverDeviceAsyncTask)
     if (isFileSender) {
       closeChannel()
     } else {
@@ -342,10 +323,7 @@ class WifiDirectManager @Inject constructor(
     }
   }
 
-  fun displayToast(stringResourceId: Int, templateValue: String, duration: Int) =
-    activity.toast(activity.getString(stringResourceId, templateValue), duration)
-
-  fun onFileTransferAsyncTaskComplete(wereAllFilesTransferred: Boolean) {
+  private fun onFileTransferAsyncTaskComplete(wereAllFilesTransferred: Boolean) {
     if (wereAllFilesTransferred) {
       activity.toast(R.string.file_transfer_complete, Toast.LENGTH_LONG)
     } else {
