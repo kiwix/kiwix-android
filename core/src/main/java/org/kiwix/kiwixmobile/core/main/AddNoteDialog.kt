@@ -264,6 +264,7 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun saveNote(noteText: String) {
+    // save note here in object box as well , Note entity, NoteViewModel
 
     /* String content of the EditText, given by noteText, is saved into the text file given by:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"

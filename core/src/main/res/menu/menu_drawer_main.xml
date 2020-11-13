@@ -18,6 +18,12 @@
       app:showAsAction="never" />
 
     <item
+      android:id="@+id/menu_notes"
+      android:icon="@drawable/ic_add_note"
+      android:title="@string/notes"
+      app:showAsAction="never" />
+
+    <item
       android:id="@+id/menu_host_books"
       android:icon="@drawable/ic_mobile_screen_share_24px"
       android:title="@string/menu_wifi_hotspot"

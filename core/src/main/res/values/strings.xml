@@ -313,4 +313,9 @@
     <item>1</item>
     <item>-1</item>
   </string-array>
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="notes">Notes</string>
+  <string name="no_notes">No Notes</string>
+  <string name="notes_from_all_books">View Notes From All Books</string>
 </resources>
