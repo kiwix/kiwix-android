@@ -94,7 +94,7 @@ class WifiDirectManager @Inject constructor(
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
-    manager = activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
+    manager = (activity.getSystemService(Context.WIFI_P2P_SERVICE)!! as WifiP2pManager)
     channel = manager.initialize(activity, Looper.getMainLooper(), null)
     registerWifiDirectBroadcastReceiver()
   }
