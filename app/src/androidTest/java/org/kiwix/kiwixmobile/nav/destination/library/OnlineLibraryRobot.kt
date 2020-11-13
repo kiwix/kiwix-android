@@ -16,15 +16,25 @@
  *
  */
 
-package org.kiwix.kiwixmobile.help
+package org.kiwix.kiwixmobile.nav.destination.library
 
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.help.HelpFragment
+import applyWithViewHierarchyPrinting
+import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.ViewId
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.language.LanguageRobot
+import org.kiwix.kiwixmobile.language.language
 
-class KiwixHelpFragment : HelpFragment() {
-  override fun rawTitleDescriptionMap() = listOf(
-    R.string.help_2 to R.array.description_help_2,
-    R.string.help_5 to R.array.description_help_5,
-    R.string.how_to_update_content to R.array.update_content_description
-  )
+fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
+  OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
+
+class OnlineLibraryRobot : BaseRobot() {
+  init {
+    isVisible(ViewId(R.id.libraryList))
+  }
+
+  fun clickOnGlobeIcon(func: LanguageRobot.() -> Unit) {
+    clickOn(ViewId(R.id.select_language))
+    language(func)
+  }
 }

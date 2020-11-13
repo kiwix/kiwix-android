@@ -27,3 +27,10 @@ jobs:
 
       - name: Build all configurations
         run: ./gradlew assemble
+
+      - name: Upload APK as Artifacts
+        uses: actions/upload-artifact@v2.2.0
+        with:
+          name: kiwix-android
+          path: |
+            **/*.apk

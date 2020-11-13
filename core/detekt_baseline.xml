@@ -11,8 +11,10 @@
     <ID>LongParameterList:MainMenu.kt$MainMenu$( private val activity: Activity, zimFileReader: ZimFileReader?, menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, disableReadAloud: Boolean = false, disableTabs: Boolean = false, private val menuClickListener: MenuClickListener )</ID>
     <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
     <ID>LongParameterList:Repository.kt$Repository$( @param:IO private val io: Scheduler, @param:MainThread private val mainThread: Scheduler, private val bookDao: NewBookDao, private val bookmarksDao: NewBookmarksDao, private val historyDao: HistoryDao, private val languageDao: NewLanguagesDao, private val recentSearchDao: NewRecentSearchDao, private val zimReaderContainer: ZimReaderContainer )</ID>
+    <ID>LongParameterList:ToolbarScrollingKiwixWebView.kt$ToolbarScrollingKiwixWebView$( context: Context, callback: WebViewCallback, attrs: AttributeSet, nonVideoView: ViewGroup, videoView: ViewGroup, webViewClient: CoreWebViewClient, private val toolbarView: View, private val bottomBarView: View, sharedPreferenceUtil: SharedPreferenceUtil, private val parentNavigationBar: View? = null )</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
+    <ID>MagicNumber:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$100</ID>
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
     <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
     <ID>MagicNumber:FetchDownloadNotificationManager.kt$FetchDownloadNotificationManager$100</ID>
@@ -26,8 +28,6 @@
     <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
-    <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$3</ID>
-    <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$4</ID>
     <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$8</ID>
     <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
     <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
@@ -51,6 +51,8 @@
     <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
     <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
     <ID>ReturnCount:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
+    <ID>ReturnCount:ToolbarScrollingKiwixWebView.kt$ToolbarScrollingKiwixWebView$@SuppressLint("ClickableViewAccessibility") override fun onTouchEvent(event: MotionEvent): Boolean</ID>
+    <ID>TooGenericExceptionCaught:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
     <ID>TooGenericExceptionCaught:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$exception: Exception</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>

@@ -1578,7 +1578,7 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
       }
       selectTab(currentTab);
-      webViewList.get(currentTab)
+      safelyGetWebView(currentTab)
         .loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
       getCurrentWebView().setScrollY(positions.getInt(currentTab));
     } catch (JSONException e) {

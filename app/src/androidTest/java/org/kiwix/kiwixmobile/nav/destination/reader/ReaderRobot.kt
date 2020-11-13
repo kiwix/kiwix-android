@@ -16,15 +16,17 @@
  *
  */
 
-package org.kiwix.kiwixmobile.help
+package org.kiwix.kiwixmobile.nav.destination.reader
 
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.help.HelpFragment
+import applyWithViewHierarchyPrinting
+import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.ViewId
+import org.kiwix.kiwixmobile.R
 
-class KiwixHelpFragment : HelpFragment() {
-  override fun rawTitleDescriptionMap() = listOf(
-    R.string.help_2 to R.array.description_help_2,
-    R.string.help_5 to R.array.description_help_5,
-    R.string.how_to_update_content to R.array.update_content_description
-  )
+fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyPrinting(func)
+
+class ReaderRobot : BaseRobot() {
+  init {
+    isVisible(ViewId(R.id.activity_main_root))
+  }
 }

@@ -16,15 +16,23 @@
  *
  */
 
-package org.kiwix.kiwixmobile.help
+package org.kiwix.kiwixmobile.localFileTransfer
 
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.help.HelpFragment
+import applyWithViewHierarchyPrinting
+import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
+import org.kiwix.kiwixmobile.R
 
-class KiwixHelpFragment : HelpFragment() {
-  override fun rawTitleDescriptionMap() = listOf(
-    R.string.help_2 to R.array.description_help_2,
-    R.string.help_5 to R.array.description_help_5,
-    R.string.how_to_update_content to R.array.update_content_description
-  )
+/**
+ * Authored by Ayush Shrivastava on 29/10/20
+ */
+
+fun localFileTransfer(func: LocalFileTransferRobot.() -> Unit) =
+  LocalFileTransferRobot().applyWithViewHierarchyPrinting(func)
+
+class LocalFileTransferRobot : BaseRobot() {
+
+  init {
+    isVisible(TextId(R.string.receive_files_title))
+  }
 }

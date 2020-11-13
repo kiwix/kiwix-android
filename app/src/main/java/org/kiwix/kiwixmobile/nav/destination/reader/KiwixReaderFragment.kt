@@ -67,6 +67,7 @@ import java.io.File
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
 class KiwixReaderFragment : CoreReaderFragment() {
+  private var isFullScreenVideo: Boolean = false
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -231,6 +232,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
     if (zimReaderContainer.zimFile == null) {
       exitBook()
     }
+    if (isFullScreenVideo) {
+      hideNavBar()
+    }
   }
 
   override fun restoreViewStateOnInvalidJSON() {
@@ -256,15 +260,16 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
     return ToolbarScrollingKiwixWebView(
-      activity, this, attrs, activityMainRoot as ViewGroup, videoView,
+      requireContext(), this, attrs, activityMainRoot as ViewGroup, videoView,
       CoreWebViewClient(this, zimReaderContainer),
-      toolbarContainer, bottomToolbar, requireActivity().bottom_nav_view,
-      sharedPreferenceUtil
+      toolbarContainer, bottomToolbar, sharedPreferenceUtil = sharedPreferenceUtil,
+      parentNavigationBar = requireActivity().bottom_nav_view
     )
   }
 
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
-    if (isFullScreen) {
+    isFullScreenVideo = isFullScreen
+    if (isFullScreenVideo) {
       hideNavBar()
     } else {
       showNavBar()
