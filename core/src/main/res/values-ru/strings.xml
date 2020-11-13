@@ -41,7 +41,8 @@
   <string name="hotspot_failed_title">Не удалось запустить точку доступа</string>
   <string name="hotspot_failed_message">Кажется, ваша точка доступа уже включена. Пожалуйста, выключите точку доступа, чтобы продолжить.</string>
   <string name="go_to_wifi_settings_label">Перейти к настройкам WIFI</string>
-  <string name="hotspot_running">Точка доступа работает</string>
+  <string name="connection_refused">В соединении отказано.</string>
+  <string name="hotspot_running">Запуск точки доступа</string>
   <string name="no_books_selected_toast_message">Пожалуйста, сначала выберете книги</string>
   <string name="server_failed_message">Невозможно запустить сервер. Пожалуйста, включите вашу точку доступа</string>
   <string name="server_failed_toast_message">Невозможно запустить сервер.</string>
@@ -150,7 +151,7 @@
   <string name="confirm_stop_download_msg">Вы уверены, что хотите остановить эту загрузку?</string>
   <string name="download_change_storage">Выбор носителя информации</string>
   <string name="tts_not_enabled">Перевод текста в речь не доступен для этого ZIM файла</string>
-  <string name="texttospeech_initialization_failed">Не удалось инициализировать текст в речь. Пожалуйста, попробуйте еще раз</string>
+  <string name="texttospeech_initialization_failed">Не удалось инициализировать сервис Text to Speech. Пожалуйста, попробуйте еще раз</string>
   <string name="texttospeech_error">Непредвиденная ошибка при переводе текста в речь. Пожалуйста, попробуйте ещё раз.</string>
   <string name="next">Далее</string>
   <string name="previous">Предыдущий</string>
@@ -214,7 +215,7 @@
   <string name="failed_state">Ошибка: %s</string>
   <string name="save">Сохранить</string>
   <string name="note">Заметка</string>
-  <string name="wiki_article_title">Заголовок Статьи Wiki</string>
+  <string name="wiki_article_title">Заголовок вики-статьи</string>
   <string name="ext_storage_permission_rationale_add_note">Разрешение на хранение необходимо для Заметок</string>
   <string name="ext_storage_write_permission_denied_add_note">Заметки не могут быть использованы без разрешения на хранение</string>
   <string name="note_save_unsuccessful">Заметка не сохранена</string>
@@ -235,6 +236,7 @@
   <string name="severe_loss_error">Серьёзная ошибка! Попробуйте выключить и снова включить WiFi P2P</string>
   <string name="connection_failed">Не удалось установить соединение</string>
   <string name="permission_rationale_location">Доступ к местонахождению требуется Android для поиска близлежащих устройств</string>
+  <string name="permission_rationale_location_on_host_zim_file">Доступ к местонахождению требуется Android для размещения файлов Zim</string>
   <string name="permission_refused_location">Невозможно обнаружить устройства без доступа к местоположению</string>
   <string name="permission_refused_storage">Невозможно получить доступ к файлам zim без разрешения на доступ к хранилищу</string>
   <string name="request_enable_location">Разрешите доступ к местоположению, чтобы позволить поиск устройств</string>
@@ -289,4 +291,6 @@
   <string name="tab_restored">Вкладка восстановлена</string>
   <string name="open_drawer">Открыть редактор</string>
   <string name="close_drawer">Закрыть редактор</string>
+  <string name="how_to_update_content">Как обновить содержимое?</string>
+  <string name="update_content_description">Чтобы обновить содержимое (файл zim), вам нужно скачать последнюю версию того же содержимого. Вы можете это сделать в разделе загрузок.</string>
 </resources>

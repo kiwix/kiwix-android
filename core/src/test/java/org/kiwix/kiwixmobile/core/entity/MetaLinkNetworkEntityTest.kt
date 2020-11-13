@@ -29,7 +29,7 @@ class MetaLinkNetworkEntityTest {
     val serializer = Persister()
     val result = serializer.read(
       MetaLinkNetworkEntity::class.java,
-      MetaLinkNetworkEntityTest::class.java.classLoader.getResourceAsStream(
+      MetaLinkNetworkEntityTest::class.java.classLoader!!.getResourceAsStream(
         "wikipedia_af_all_nopic_2016-05.zim.meta4"
       )
     )

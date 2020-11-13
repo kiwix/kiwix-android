@@ -228,6 +228,7 @@
   <string name="severe_loss_error">שגיאה חמורה! נא לנסות לכבות ולהדליק מחדש את ה־P2P בווייפיי</string>
   <string name="connection_failed">החיבור נכשל</string>
   <string name="permission_rationale_location">נדרשת הרשאת גישה באנדרואיד כדי לאפשר ליישום לזהות מכשירים עמיתים</string>
+  <string name="permission_rationale_location_on_host_zim_file">נדרש אישור לגשת למיקום על ידי Android כדי לאפשרים ליישומון לאחסן קובצי Zim</string>
   <string name="permission_refused_location">לא ניתן לאתר מגשירים עמיתים ללא הרשאות מיקום</string>
   <string name="permission_refused_storage">לא ניתן לגשת לקובצי zim ללא הרשאות אחסון</string>
   <string name="request_enable_location">נא להפעיל מיקום כדי לאפשר זיהוי עמיתים</string>

@@ -59,7 +59,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
-  abstract val title: String
+  abstract val screenTitle: String
   abstract val noItemsString: String
   abstract val switchString: String
   abstract val searchQueryHint: String
@@ -123,7 +123,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
-      title = title
+      title = screenTitle
     }
     no_page.text = noItemsString
 

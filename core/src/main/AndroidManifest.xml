@@ -18,12 +18,12 @@
     android:extractNativeLibs="false"
     android:fullBackupContent="@xml/backup_rules"
     android:hardwareAccelerated="true"
-    android:label="@string/app_name"
     android:resizeableActivity="true"
     android:supportsRtl="true"
     android:theme="@style/KiwixTheme"
     android:usesCleartextTraffic="true"
-    tools:targetApi="n">
+    android:requestLegacyExternalStorage="true"
+    tools:targetApi="q">
 
     <!-- Version < 3.0. DeX Mode and Screen Mirroring support -->
     <meta-data

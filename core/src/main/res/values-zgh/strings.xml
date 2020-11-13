@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Brahim-essaidi
+* Hakim1bal
+* YesIn
+* ⵕⴰⵊⵉ
+-->
+<resources>
+  <string name="menu_help">ⵜⵉⵡⵉⵙⵉ</string>
+  <string name="menu_home">ⴰⵙⵏⵓⴱⴳ</string>
+  <string name="menu_settings">ⵜⵉⵙⵖⴰⵍ</string>
+  <string name="menu_search_in_text">ⴰⴼ ⴳ ⵜⵙⵏⴰ ⴰ</string>
+  <string name="menu_support_kiwix">ⵜⴰⵏⵏⴰⵍⵜ ⵏ ⴽⵉⵡⵉⴽⵙ</string>
+  <string name="save_media">ⵃⴹⵓ ⵎⵉⴷⵢⴰ</string>
+  <string name="search_label">ⵔⵣⵓ</string>
+  <string name="go_to_wifi_settings_label">ⴷⴷⵓ ⵖⵔ ⵜⵉⵙⵖⴰⵍ ⵏ ⵓⵡⵉⴼⵉ</string>
+  <string name="pref_display_title">ⵙⴽⵏ</string>
+  <string name="pref_info_title">ⵓⵎⵍⴰⵏ</string>
+  <string name="pref_info_version">ⵜⴰⵍⵇⵇⵎⵜ</string>
+  <string name="pref_back_to_top">ⴰⵖⵓⵍ ⵙ ⵓⴼⵍⵍⴰ</string>
+  <string name="pref_language_title">ⵜⵓⵜⵍⴰⵢⵜ</string>
+  <string name="pref_language_chooser">ⵙⵜⵉ ⵜⵓⵜⵍⴰⵢⵜ</string>
+  <string name="delete_recent_search_item">ⴽⴽⵙ ⴰⴼⵔⴷⵉⵙ ⴰⴷ?</string>
+  <string name="pref_clear_all_history_title">ⵙⴼⴹ ⴰⵎⵣⵔⵓⵢ</string>
+  <string name="all_history_cleared">ⵉⵜⵜⵓⵙⴼⴹ ⵓⵎⵣⵔⵓⵢ ⵎⴰⵕⵕⴰ</string>
+  <string name="clear_all_history_dialog_title">ⵙⵙⴼⴹ ⴰⵎⵣⵔⵓⵢ ⵎⴰⵕⵕ?</string>
+  <string name="share">ⴱⴹⵓ</string>
+  <string name="delete">ⴽⴽⵙ</string>
+  <string name="cancel">ⵙⵔ</string>
+  <string name="did_you_know">ⵉⵙ ⵜⵙⵙⵏⴷ?</string>
+  <string name="undo">ⵙⵔ</string>
+  <string name="tab_closed">ⵉⵜⵜⵓⵔⴳⵍ ⵓⵙⴽⵙⵍ</string>
+  <string name="no_thanks">ⵓⵀⵓ, ⵜⴰⵏⵎⵎⵉⵔⵜ</string>
+  <string name="open">ⵕⵥⵎ</string>
+  <string name="search_widget_text">ⵔⵣⵓ ⴳ Kiwix</string>
+  <string name="local_zims">ⴰⵍⵍⴰⵍ</string>
+  <string name="remote_zims">ⴳ ⵉⴼⵉⵍⵉ</string>
+  <string name="library">ⵜⴰⵙⴷⵍⵉⵙⵜ</string>
+  <string name="no_files_here">ⵡⴰⵍⵓ ⵉⴼⵓⵍⵢⴰ ⴷⴰ</string>
+  <string name="download">ⴰⴳⴰⵎ</string>
+  <string name="space_available">ⴰⵏⵙⴰ ⵉⵍⵍⴰ:</string>
+  <string name="zim_no_pic">ⵡⴰⵍⵓ ⵜⵉⵡⵍⴰⴼⵉⵏ</string>
+  <string name="zim_no_vid">ⵡⴰⵍⵓ ⵉⴼⵉⴷⵢⵓⵜⵏ</string>
+  <string name="help_2">ⵎⴰⴳ ⵜⴳⴳ Kiwix?</string>
+  <string name="help_5">ⵎⴰⵏⵉ ⵜⵓⵎⴰⵢⵜ?</string>
+  <string name="tts_pause">ⵙⴱⴷⴷ</string>
+  <string name="stop">ⵙⴱⴱⴷ</string>
+  <string name="internal_storage">ⴰⴳⵏⵙⴰⵏ</string>
+  <string name="external_storage">ⴰⴱⵕⵕⴰⵏⵉ</string>
+  <string name="yes">ⵢⴰⵀ</string>
+  <string name="no">ⵓⵀⵓ</string>
+  <string name="confirm_stop_download_title">ⵙⴱⴷⴷ ⴰⴳⴰⵎ?</string>
+  <string name="time_day">ⴰⵙⵙ</string>
+  <string name="time_hour">ⵙⵔⴳ</string>
+  <string name="time_minute">ⵙⴷ</string>
+  <string name="time_second">ⵙⵏ</string>
+  <string name="time_left">ⴰⵥⵍⵎⴰⴹ</string>
+  <string name="time_today">ⴰⵙⵙⴰ</string>
+  <string name="time_yesterday">ⴰⵙⵙⵏⵏⴰⴹ</string>
+  <string name="do_not_ask_anymore">ⵓⵙⴰⵔ ⵜⵙⵇⵙⴰⴷ</string>
+  <string name="your_languages">ⵜⵓⵜⵍⴰⵜⵉⵏ ⵉⵜⵜⵓⵙⵜⵢⵏ:</string>
+  <string name="other_languages">ⵜⵓⵜⵍⴰⵢⵉⵏ ⵢⴰⴹⵏⵉⵏ:</string>
+  <string name="new_tab_shortcut_label">ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ</string>
+  <string name="download_books">ⴰⴳⵎ ⵉⴷⵍⵉⵙⵏ</string>
+  <string name="select_languages">ⵙⵜⵢ ⵜⵓⵜⵍⴰⵢⵉⵏ</string>
+  <string name="save_languages">ⵃⴹⵓ ⵜⵓⵜⵍⴰⵢⵉⵏ</string>
+  <string name="history">ⴰⵎⵣⵔⵓⵢ</string>
+  <string name="close_all_tabs">ⵔⴳⵍ ⵉⵙⴽⵙⴰⵍ ⵎⴰⵕⵕⴰ</string>
+  <string name="save">ⵃⴹⵓ</string>
+  <string name="books_count">%d ⴰⴷⵍⵉⵙ(ⵏ)</string>
+  <string name="your_device">ⴰⵍⵍⴰⵍ ⵏⵏⴽ/ⵎ:</string>
+  <string name="status">ⴰⴷⴷⴰⴷ</string>
+  <string name="tag_pic">ⵜⵡⴼⵜ</string>
+  <string name="tag_vid">ⴼⵉⴷⵢ</string>
+  <string name="tag_text_only">ⵖⴰⵙ ⴰⴹⵕⵉⵚ</string>
+  <string name="delete_history">ⴽⴽⵙ ⴰⵎⵣⵔⵓⵢ ⴰⴽⴽⵯ?</string>
+  <string name="delete_selected_history">ⴽⴽⵙ ⴰⵎⵣⵔⵓⵢ ⵉⵜⵜⵓⵙⵜⵉⵏ?</string>
+  <string name="search_open_in_new_tab">ⵕⵥⵎ ⴳ ⵓⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ</string>
+  <string name="reader">ⴰⵎⵖⵔⵉ</string>
+</resources>

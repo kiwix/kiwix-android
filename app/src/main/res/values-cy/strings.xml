@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Robin Owain
+-->
+<resources>
+  <string name="send_files_title">Danfon y Ffeiliau</string>
+  <string name="receive_files_title">Derbyn y Ffeiliau</string>
+</resources>
