@@ -33,6 +33,8 @@ import org.kiwix.kiwixlib.Pair
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
+import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -136,7 +138,10 @@ class ZimFileReader constructor(
   fun getRedirect(url: String) = "${toRedirect(url)}"
 
   fun isRedirect(url: String) =
-    url.startsWith(CONTENT_PREFIX) && url != getRedirect(url)
+    when {
+      url.endsWith(UNINITIALISER_ADDRESS) -> false
+      else -> url.startsWith(CONTENT_PREFIX) && url != getRedirect(url)
+    }
 
   private fun toRedirect(url: String) =
     "$CONTENT_PREFIX${jniKiwixReader.checkUrl(url.toUri().filePath)}".toUri()
@@ -176,11 +181,15 @@ class ZimFileReader constructor(
     Completable.fromAction {
       try {
         outputStream.use {
-          getContentAndMimeType(uri).let { (content: ByteArray, mimeType: String) ->
-            if ("text/css" == mimeType && nightModeConfig.isNightModeActive()) {
-              it.write(INVERT_IMAGES_VIDEO.toByteArray(Charsets.UTF_8))
+          if (uri.endsWith(UNINITIALISER_ADDRESS)) {
+            it.write(UNINITIALISE_HTML.toByteArray())
+          } else {
+            getContentAndMimeType(uri).let { (content: ByteArray, mimeType: String) ->
+              if ("text/css" == mimeType && nightModeConfig.isNightModeActive()) {
+                it.write(INVERT_IMAGES_VIDEO.toByteArray())
+              }
+              it.write(content)
             }
-            it.write(content)
           }
         }
       } catch (ioException: IOException) {
