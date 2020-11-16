@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.app.Activity
 import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.IntentFilter
 import android.net.Uri
 import android.net.wifi.WpsInfo
@@ -61,7 +60,8 @@ import javax.inject.Inject
 class WifiDirectManager @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower
+  private val alertDialogShower: AlertDialogShower,
+  private val manager: WifiP2pManager
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
 
@@ -74,12 +74,14 @@ class WifiDirectManager @Inject constructor(
   // Whether channel has retried connecting previously
   private var shouldRetry = true
 
+  // @Inject
+  // lateinit var manager: WifiP2pManager
   // Overall manager of Wifi p2p connections for the module
   // Initialize as Nullable WifiP2pManager to counter Kt. TypeCastException on API 27;
   // See: https://github.com/kiwix/kiwix-android/issues/2488
-  private val manager: WifiP2pManager? by lazy(LazyThreadSafetyMode.NONE) {
-    activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
-  }
+  // private val manager: WifiP2pManager? by lazy(LazyThreadSafetyMode.NONE) {
+  //   activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
+  // }
 
   // Interface to the device's underlying wifi-p2p framework
   private var channel: Channel? = null
