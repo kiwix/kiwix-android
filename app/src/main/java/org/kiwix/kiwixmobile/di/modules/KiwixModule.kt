@@ -56,12 +56,6 @@ object KiwixModule {
 
   @Provides
   @KiwixScope
-  fun providesWiFiP2pManager(context: Context): WifiP2pManager {
-    val manager: WifiP2pManager? by lazy(LazyThreadSafetyMode.NONE) {
-      context.getSystemService(
-        Context.WIFI_P2P_SERVICE
-      ) as? WifiP2pManager
-    }
-    return manager!!
-  }
+  fun providesWiFiP2pManager(context: Context): WifiP2pManager =
+    context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
 }
