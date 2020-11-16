@@ -75,6 +75,8 @@ class WifiDirectManager @Inject constructor(
   private var shouldRetry = true
 
   // Overall manager of Wifi p2p connections for the module
+  // Initialize as Nullable WifiP2pManager to counter Kt. TypeCastException on API 27;
+  // See: https://github.com/kiwix/kiwix-android/issues/2488
   private val manager: WifiP2pManager? by lazy(LazyThreadSafetyMode.NONE) {
     activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
   }
