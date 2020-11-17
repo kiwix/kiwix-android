@@ -56,6 +56,9 @@ object KiwixModule {
 
   @Provides
   @KiwixScope
+  // We are forced to use the nullable type because of a
+  // crash on our nightly builds running on an emulator API 27
+  // See: https://github.com/kiwix/kiwix-android/issues/2488
   fun providesWiFiP2pManager(context: Context): WifiP2pManager? =
     context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
 }

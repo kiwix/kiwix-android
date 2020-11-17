@@ -61,7 +61,7 @@ class WifiDirectManager @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower,
-  private val manager: WifiP2pManager? // Overall manager of Wifi p2p connections for the module
+  private val manager: WifiP2pManager?
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
 
