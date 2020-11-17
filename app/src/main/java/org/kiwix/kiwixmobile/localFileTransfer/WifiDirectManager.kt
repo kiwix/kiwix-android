@@ -34,7 +34,7 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import android.os.Looper
+import android.os.Looper.getMainLooper
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -60,7 +60,8 @@ import javax.inject.Inject
 class WifiDirectManager @Inject constructor(
   private val context: Context,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower
+  private val alertDialogShower: AlertDialogShower,
+  private val manager: WifiP2pManager?
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
 
@@ -73,11 +74,8 @@ class WifiDirectManager @Inject constructor(
   // Whether channel has retried connecting previously
   private var shouldRetry = true
 
-  // Overall manager of Wifi p2p connections for the module
-  private lateinit var manager: WifiP2pManager
-
   // Interface to the device's underlying wifi-p2p framework
-  private lateinit var channel: Channel
+  private var channel: Channel? = null
 
   // For receiving the broadcasts given by above filter
   private lateinit var receiver: BroadcastReceiver
@@ -93,8 +91,7 @@ class WifiDirectManager @Inject constructor(
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
-    manager = context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
-    channel = manager.initialize(context, Looper.getMainLooper(), null)
+    channel = manager?.initialize(context, getMainLooper(), null)
     registerWifiDirectBroadcastReceiver()
   }
 
@@ -115,7 +112,7 @@ class WifiDirectManager @Inject constructor(
   private fun unregisterWifiDirectBroadcastReceiver() = context.unregisterReceiver(receiver)
 
   fun discoverPeerDevices() {
-    manager.discoverPeers(channel, object : ActionListener {
+    manager?.discoverPeers(channel, object : ActionListener {
       override fun onSuccess() {
         context.toast(R.string.discovery_initiated, Toast.LENGTH_SHORT)
       }
@@ -140,14 +137,14 @@ class WifiDirectManager @Inject constructor(
   override fun onPeersChanged() {
     /* List of available peers has changed, so request & use the new list through
      * PeerListListener.requestPeers() callback */
-    manager.requestPeers(channel, this)
+    manager?.requestPeers(channel, this)
     Log.d(TAG, "P2P peers changed")
   }
 
   override fun onConnectionChanged(isConnected: Boolean) {
     if (isConnected) {
       // Request connection info about the wifi p2p group formed upon connection
-      manager.requestConnectionInfo(channel, this)
+      manager?.requestConnectionInfo(channel, this)
     } else {
       // Not connected after connection change -> Disconnected
       callbacks?.onConnectionToPeersLost()
@@ -166,7 +163,7 @@ class WifiDirectManager @Inject constructor(
       Log.d(TAG, "Channel lost, trying again")
       callbacks?.onConnectionToPeersLost()
       shouldRetry = false
-      manager.initialize(context, Looper.getMainLooper(), this)
+      manager?.initialize(context, getMainLooper(), this)
     } else {
       context.toast(R.string.severe_loss_error, Toast.LENGTH_LONG)
     }
@@ -200,7 +197,7 @@ class WifiDirectManager @Inject constructor(
       deviceAddress = senderSelectedPeerDevice.deviceAddress
       wps.setup = WpsInfo.PBC
     }
-    manager.connect(channel, config, object : ActionListener {
+    manager?.connect(channel, config, object : ActionListener {
       override fun onSuccess() {
         // UI updated from broadcast receiver
       }
@@ -294,7 +291,7 @@ class WifiDirectManager @Inject constructor(
   }
 
   private fun disconnect() {
-    manager.removeGroup(channel, object : ActionListener {
+    manager?.removeGroup(channel, object : ActionListener {
       override fun onFailure(reasonCode: Int) {
         Log.d(TAG, "Disconnect failed. Reason: $reasonCode")
         closeChannel()
@@ -309,7 +306,7 @@ class WifiDirectManager @Inject constructor(
 
   private fun closeChannel() {
     if (VERSION.SDK_INT >= VERSION_CODES.O_MR1) {
-      channel.close()
+      channel?.close()
     }
   }
 
