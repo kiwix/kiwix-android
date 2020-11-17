@@ -56,6 +56,6 @@ object KiwixModule {
 
   @Provides
   @KiwixScope
-  fun providesWiFiP2pManager(context: Context): WifiP2pManager =
-    context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
+  fun providesWiFiP2pManager(context: Context): WifiP2pManager? =
+    context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
 }
