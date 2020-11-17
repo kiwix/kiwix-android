@@ -28,11 +28,12 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 
 abstract class CoreSettingsFragment : BaseFragment() {
-
+  private lateinit var prefsFragment: Fragment
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    prefsFragment = createPreferenceFragment()
     requireActivity().supportFragmentManager
-      .beginTransaction().replace(R.id.content_frame, createPreferenceFragment())
+      .beginTransaction().replace(R.id.content_frame, prefsFragment)
       .commit()
     setUpToolbar()
   }
@@ -51,5 +52,13 @@ abstract class CoreSettingsFragment : BaseFragment() {
     activity.supportActionBar!!.title = getString(R.string.menu_settings)
     activity.supportActionBar!!.setHomeButtonEnabled(true)
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+  }
+
+  override fun onDestroyView() {
+    requireActivity().supportFragmentManager
+      .beginTransaction()
+      .remove(prefsFragment)
+      .commit()
+    super.onDestroyView()
   }
 }
