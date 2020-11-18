@@ -66,7 +66,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
-  abstract val readerDrawerNavView: NavigationView
+  abstract val readerTableOfContentsDrawer: NavigationView
   abstract val bookmarksFragmentResId: Int
   abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
@@ -111,9 +111,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       handleDrawerOnNavigation()
     }
     if (destination.id == readerFragmentResId) {
-      readerDrawerNavView.setLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+      readerTableOfContentsDrawer.setLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     } else {
-      readerDrawerNavView.setLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+      readerTableOfContentsDrawer.setLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
   }
 

@@ -49,7 +49,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
   override val drawerContainerLayout: DrawerLayout by lazy { navigation_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
-  override val readerDrawerNavView: NavigationView by lazy { reader_drawer_nav_view }
+  override val readerTableOfContentsDrawer: NavigationView by lazy { reader_drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
