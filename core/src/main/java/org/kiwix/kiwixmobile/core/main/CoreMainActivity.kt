@@ -113,8 +113,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       handleDrawerOnNavigation()
     }
     readerTableOfContentsDrawer.setLockMode(
-      if (destination.id == readerFragmentResId)
-        LOCK_MODE_UNLOCKED else LOCK_MODE_LOCKED_CLOSED
+      if (destination.id == readerFragmentResId) LOCK_MODE_UNLOCKED
+      else LOCK_MODE_LOCKED_CLOSED
     )
   }
 
