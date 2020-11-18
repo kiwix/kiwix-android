@@ -111,18 +111,17 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       handleDrawerOnNavigation()
     }
     if (destination.id == readerFragmentResId) {
-      // show reader nav view
-      showReaderNavView()
+      unLockReaderNavView()
     } else {
-      hideReaderNavView()
+      lockReaderNavView()
     }
   }
 
-  private fun showReaderNavView() {
+  private fun unLockReaderNavView() {
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, readerDrawerNavView)
   }
 
-  private fun hideReaderNavView() {
+  private fun lockReaderNavView() {
     drawerContainerLayout.setDrawerLockMode(
       DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
       readerDrawerNavView
