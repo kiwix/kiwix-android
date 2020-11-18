@@ -28,6 +28,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -110,11 +112,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     if (destination.id !in topLevelDestinations) {
       handleDrawerOnNavigation()
     }
-    if (destination.id == readerFragmentResId) {
-      readerTableOfContentsDrawer.setLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    } else {
-      readerTableOfContentsDrawer.setLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    }
+    readerTableOfContentsDrawer.setLockMode(
+      if (destination.id == readerFragmentResId)
+        LOCK_MODE_UNLOCKED else LOCK_MODE_LOCKED_CLOSED
+    )
   }
 
   private fun NavigationView.setLockMode(lockMode: Int) {
