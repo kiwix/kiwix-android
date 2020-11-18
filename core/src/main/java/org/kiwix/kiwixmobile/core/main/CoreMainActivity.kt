@@ -66,6 +66,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
+  abstract val readerDrawerNavView: NavigationView
   abstract val bookmarksFragmentResId: Int
   abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
@@ -109,6 +110,23 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     if (destination.id !in topLevelDestinations) {
       handleDrawerOnNavigation()
     }
+    if (destination.id == readerFragmentResId) {
+      //show reader nav view
+      showReaderNavView()
+    } else {
+      hideReaderNavView()
+    }
+  }
+
+  private fun showReaderNavView() {
+    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, readerDrawerNavView)
+  }
+
+  private fun hideReaderNavView() {
+    drawerContainerLayout.setDrawerLockMode(
+      DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+      readerDrawerNavView
+    )
   }
 
   override fun onRequestPermissionsResult(

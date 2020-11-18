@@ -32,6 +32,7 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.drawer_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.navigation_container
+import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -48,6 +49,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val navController by lazy { findNavController(R.id.nav_host_fragment) }
   override val drawerContainerLayout: DrawerLayout by lazy { navigation_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
+  override val readerDrawerNavView: NavigationView by lazy { reader_drawer_nav_view }
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment

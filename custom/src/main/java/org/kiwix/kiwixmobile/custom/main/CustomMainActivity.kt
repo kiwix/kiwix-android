@@ -24,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_custom_main.activity_main_nav_view
 import kotlinx.android.synthetic.main.activity_custom_main.custom_drawer_container
 import kotlinx.android.synthetic.main.activity_custom_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -40,6 +41,7 @@ class CustomMainActivity : CoreMainActivity() {
   }
   override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
   override val drawerNavView: NavigationView by lazy { drawer_nav_view }
+  override val readerDrawerNavView: NavigationView by lazy { activity_main_nav_view }
   override val searchFragmentResId: Int = R.id.searchFragment
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.customSettingsFragment
