@@ -111,21 +111,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       handleDrawerOnNavigation()
     }
     if (destination.id == readerFragmentResId) {
-      unLockReaderNavView()
+      readerDrawerNavView.setLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     } else {
-      lockReaderNavView()
+      readerDrawerNavView.setLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
   }
 
-  private fun unLockReaderNavView() {
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, readerDrawerNavView)
-  }
-
-  private fun lockReaderNavView() {
-    drawerContainerLayout.setDrawerLockMode(
-      DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-      readerDrawerNavView
-    )
+  private fun NavigationView.setLockMode(lockMode: Int) {
+    drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
 
   override fun onRequestPermissionsResult(
