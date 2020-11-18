@@ -111,7 +111,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       handleDrawerOnNavigation()
     }
     if (destination.id == readerFragmentResId) {
-      //show reader nav view
+      // show reader nav view
       showReaderNavView()
     } else {
       hideReaderNavView()
