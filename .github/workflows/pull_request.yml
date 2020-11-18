@@ -18,6 +18,7 @@ jobs:
 
       - name: Upload Static Analysis Report
         uses: actions/upload-artifact@v2.2.0
+        if: ${{ always() }}
         with:
           name: Static Analysis Report
           path: |
