@@ -58,7 +58,7 @@ abstract class CoreSettingsFragment : BaseFragment() {
     requireActivity().supportFragmentManager
       .beginTransaction()
       .remove(prefsFragment)
-      .commit()
+      .commitNowAllowingStateLoss()
     super.onDestroyView()
   }
 }
