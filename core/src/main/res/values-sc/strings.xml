@@ -27,6 +27,7 @@
   <string name="hotspot_failed_title">Aviamentu de s\'hotspot fallidu</string>
   <string name="hotspot_failed_message">Paret chi s\'hotspot tuo siat allutu. Pro praghere disabìlita s\'hotspot wifi tuo pro sighire.</string>
   <string name="go_to_wifi_settings_label">Bae a sas impostatziones de su WIFI</string>
+  <string name="connection_refused">Connessione negada.</string>
   <string name="hotspot_running">Hotspot ativu</string>
   <string name="no_books_selected_toast_message">In antis ischerta libros</string>
   <string name="server_failed_message">Aviamentu de su servidore fallidu. Pro praghere allughe s\'hotspot tuo</string>
@@ -221,6 +222,7 @@
   <string name="severe_loss_error">Faddina manna! Proa a Disabilitare/Torrare a abilitare su P2P WiFi</string>
   <string name="connection_failed">Connessione fallida</string>
   <string name="permission_rationale_location">Android tenet bisòngiu de su permissu de localizatzione pro rilevare dispositivos pares (peers)</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android tenet bisòngiu de su permissu de localizatzione pro permìtere a s\'aplicatzione de istrangiare documentos Zim</string>
   <string name="permission_refused_location">Impossìbile localizare dispositivos pares (peers) chene sos permissos de localizatzione</string>
   <string name="permission_refused_storage">Impossìbile tènnere atzessu a sos documentos zim chene su permissu de archiviatzione</string>
   <string name="request_enable_location">Abìlita sa localizatzione pro permìtere su rilevamentu de pares (peers)</string>
@@ -243,6 +245,7 @@
   <string name="status">Istadu</string>
   <string name="pref_clear_all_notes_summary">Iscantzella totu sas notas in totu sos artìculos</string>
   <string name="pref_clear_all_notes_title">Iscantzella totu sas notas</string>
+  <string name="pref_text_zoom_summary">Càmbia sa mannària de su testu cun ismanniamentos de su 25%.</string>
   <string name="tag_pic">Immàgine</string>
   <string name="tag_vid">Vìdeu</string>
   <string name="tag_text_only">Testu ebbia</string>
@@ -267,4 +270,13 @@
   <string name="diagnostic_report_message">Pro praghere imbia totu sos detàllios chi sighent, in manera chi amus a pòdere diagnosticare su problema</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Ismanniamentu de su testu</string>
+  <string name="search_open_in_new_tab">Aberi in un\'ischeda noa</string>
+  <string name="reader">Leghidore</string>
+  <string name="no_open_book">Perunu libru abertu</string>
+  <string name="open_library">Aberi sa biblioteca</string>
+  <string name="tab_restored">Ischeda ripristinada</string>
+  <string name="open_drawer">Aberi su pannellu</string>
+  <string name="close_drawer">Serra su pannellu</string>
+  <string name="how_to_update_content">Comente agiornare su cuntenutu?</string>
+  <string name="update_content_description">Pro agiornare su cuntenutu (unu documentu zim) tenes bisòngiu de iscarrigare s\'ùtrima versione intrea de su matessi cuntenutu. Lu podes fàghere pro mèdiu de sa setzione de iscarrigamentu.</string>
 </resources>
