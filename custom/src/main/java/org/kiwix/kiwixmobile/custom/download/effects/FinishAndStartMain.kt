@@ -19,14 +19,23 @@
 package org.kiwix.kiwixmobile.custom.download.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.custom.R
+import org.kiwix.kiwixmobile.custom.download.pressBackCallback
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import javax.inject.Inject
 
 class FinishAndStartMain @Inject constructor() : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    activity.finish()
-    activity.start<CustomMainActivity>()
+    if (pressBackCallback == 1) {
+      activity.findNavController(R.id.customDownloadFragment)
+        .navigate(R.id.action_customDownload_to_customReader)
+      activity.onBackPressed()
+    } else {
+      activity.finish()
+      activity.start<CustomMainActivity>()
+    }
   }
 }

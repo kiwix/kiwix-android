@@ -24,4 +24,5 @@ sealed class Action {
   data class DatabaseEmission(val downloads: List<DownloadItem>) : Action()
   object ClickedDownload : Action()
   object ClickedRetry : Action()
+  object PressedBack : Action()
 }

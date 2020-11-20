@@ -157,7 +157,8 @@ class CustomReaderFragment : CoreReaderFragment() {
         }
         if (pressBackCallback == 1) {
           findNavController().navigateUp()
-        } else {
+        }
+        else {
           findNavController().navigate(R.id.customDownloadFragment)
         }
       }

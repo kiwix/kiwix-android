@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
+import org.kiwix.kiwixmobile.custom.download.Action.PressedBack
 import org.kiwix.kiwixmobile.custom.download.State.DownloadComplete
 import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
 import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
@@ -97,8 +98,9 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
     pressBackCallback = 1
-    findNavController().popBackStack()
-    findNavController().navigate(R.id.customReaderFragment)
+    downloadViewModel.actions.offer(PressedBack)
+    // findNavController().popBackStack()
+    // findNavController().navigate(R.id.customReaderFragment)
     return super.onBackPressed(activity)
   }
 
