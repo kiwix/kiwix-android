@@ -119,7 +119,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
-import static android.content.ContentValues.TAG;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall;
@@ -145,20 +144,10 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @BindView(R2.id.toolbar)
   protected Toolbar toolbar;
-  @BindView(R2.id.activity_main_back_to_top_fab)
-  FloatingActionButton backToTopButton;
-  @BindView(R2.id.activity_main_button_stop_tts)
-  Button stopTTSButton;
-  @BindView(R2.id.activity_main_button_pause_tts)
-  Button pauseTTSButton;
-  @BindView(R2.id.activity_main_tts_controls)
-  Group TTSControls;
   @BindView(R2.id.fragment_main_app_bar)
   protected AppBarLayout toolbarContainer;
   @BindView(R2.id.main_fragment_progress_view)
   protected ContentLoadingProgressBar progressBar;
-  @BindView(R2.id.activity_main_fullscreen_button)
-  ImageButton exitFullscreenButton;
   @BindView(R2.id.navigation_fragment_main_drawer_layout)
   protected DrawerLayout drawerLayout;
   protected NavigationView tableDrawerRightContainer;
@@ -166,31 +155,16 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected FrameLayout contentFrame;
   @BindView(R2.id.bottom_toolbar)
   protected BottomAppBar bottomToolbar;
-  @BindView(R2.id.bottom_toolbar_bookmark)
-  ImageView bottomToolbarBookmark;
-  @BindView(R2.id.bottom_toolbar_arrow_back)
-  ImageView bottomToolbarArrowBack;
-  @BindView(R2.id.bottom_toolbar_arrow_forward)
-  ImageView bottomToolbarArrowForward;
-  @BindView(R2.id.tab_switcher_recycler_view)
-  RecyclerView tabRecyclerView;
   @BindView(R2.id.activity_main_tab_switcher)
   protected View tabSwitcherRoot;
   @BindView(R2.id.tab_switcher_close_all_tabs)
   protected FloatingActionButton closeAllTabsButton;
-  @BindView(R2.id.snackbar_root)
-  CoordinatorLayout snackbarRoot;
   @BindView(R2.id.fullscreen_video_container)
   protected ViewGroup videoView;
   @BindView(R2.id.go_to_library_button_no_open_book)
   protected Button noOpenBookButton;
-  @BindView(R2.id.no_open_book_text)
-  TextView noOpenBookText;
   @BindView(R2.id.activity_main_root)
   protected View activityMainRoot;
-
-  @Inject
-  StorageObserver storageObserver;
   @Inject
   protected SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
@@ -207,11 +181,37 @@ public abstract class CoreReaderFragment extends BaseFragment
   protected DialogShower alertDialogShower;
   @Inject
   protected NightModeViewPainter painter;
+  protected int currentWebViewIndex = 0;
+  protected ActionBar actionBar;
+  protected MainMenu mainMenu;
+  @BindView(R2.id.activity_main_back_to_top_fab)
+  FloatingActionButton backToTopButton;
+  @BindView(R2.id.activity_main_button_stop_tts)
+  Button stopTTSButton;
+  @BindView(R2.id.activity_main_button_pause_tts)
+  Button pauseTTSButton;
+  @BindView(R2.id.activity_main_tts_controls)
+  Group TTSControls;
+  @BindView(R2.id.activity_main_fullscreen_button)
+  ImageButton exitFullscreenButton;
+  @BindView(R2.id.bottom_toolbar_bookmark)
+  ImageView bottomToolbarBookmark;
+  @BindView(R2.id.bottom_toolbar_arrow_back)
+  ImageView bottomToolbarArrowBack;
+  @BindView(R2.id.bottom_toolbar_arrow_forward)
+  ImageView bottomToolbarArrowForward;
+  @BindView(R2.id.tab_switcher_recycler_view)
+  RecyclerView tabRecyclerView;
+  @BindView(R2.id.snackbar_root)
+  CoordinatorLayout snackbarRoot;
+  @BindView(R2.id.no_open_book_text)
+  TextView noOpenBookText;
+  @Inject
+  StorageObserver storageObserver;
   @Inject
   MainRepositoryActions repositoryActions;
   @Inject
   ExternalLinkOpener externalLinkOpener;
-
   private CountDownTimer hideBackToTopTimer;
   private List<TableDrawerAdapter.DocumentSection> documentSections;
   private boolean isBackToTopEnabled = false;
@@ -221,16 +221,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   private KiwixTextToSpeech tts;
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
-  protected int currentWebViewIndex = 0;
   private File file;
   private ActionMode actionMode = null;
   private KiwixWebView tempWebViewForUndo;
   private File tempZimFileForUndo;
   private boolean isFirstRun;
-  protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
-  protected MainMenu mainMenu;
   private ItemTouchHelper.Callback tabCallback;
   private Disposable bookmarkingDisposable;
   private boolean isBookmarked;
@@ -615,7 +612,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
       return ShouldNotCall;
-    } else if (getCurrentWebView().canGoBack()) {
+    } else if (getCurrentWebView() != null && getCurrentWebView().canGoBack()) {
       getCurrentWebView().goBack();
       return ShouldNotCall;
     }
@@ -742,7 +739,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-
   private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
@@ -751,13 +747,15 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {
-    if(activityMainRoot != null)
-    return new ToolbarScrollingKiwixWebView(
-      getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-      new CoreWebViewClient(this, zimReaderContainer),
-      toolbarContainer, bottomToolbar,
-      sharedPreferenceUtil);
-    else return null;
+    if (activityMainRoot != null) {
+      return new ToolbarScrollingKiwixWebView(
+        getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
+        new CoreWebViewClient(this, zimReaderContainer),
+        toolbarContainer, bottomToolbar,
+        sharedPreferenceUtil);
+    } else {
+      return null;
+    }
   }
 
   protected KiwixWebView newMainPageTab() {
@@ -770,8 +768,9 @@ public abstract class CoreReaderFragment extends BaseFragment
     selectTab(webViewList.size() - 1);
     tabsAdapter.notifyDataSetChanged();
     setUpWebViewWithTextToSpeech();
-    if(webView != null)
-    documentParser.initInterface(webView);
+    if (webView != null) {
+      documentParser.initInterface(webView);
+    }
     return webView;
   }
 
@@ -969,7 +968,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     parentActivity.navigate(parentActivity.getBookmarksFragmentResId());
     return true;
   }
-
 
   @Override public void onFullscreenVideoToggled(boolean isFullScreen) {
     // does nothing because custom doesn't have a nav bar
@@ -1360,9 +1358,11 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   protected boolean urlIsValid() {
-    if (getCurrentWebView() != null)
-    return getCurrentWebView().getUrl() != null;
-  else return false;
+    if (getCurrentWebView() != null) {
+      return getCurrentWebView().getUrl() != null;
+    } else {
+      return false;
+    }
   }
 
   private void updateUrlProcessor() {

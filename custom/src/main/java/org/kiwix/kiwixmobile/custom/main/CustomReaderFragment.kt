@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.download.pressBackCallback
 import java.util.Locale
 import javax.inject.Inject
 
@@ -153,6 +154,9 @@ class CustomReaderFragment : CoreReaderFragment() {
           ) == PERMISSION_DENIED
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
+        }
+        if (pressBackCallback == 1) {
+          findNavController().navigateUp()
         } else {
           findNavController().navigate(R.id.customDownloadFragment)
         }
