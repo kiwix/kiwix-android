@@ -326,7 +326,7 @@ object Libs {
       Versions.xfetch2okhttp
 
   /**
-   * http://assertj.org
+   * https://assertj.github.io/doc/
    */
   const val assertj_core: String = "org.assertj:assertj-core:" + Versions.assertj_core
 
