@@ -27,10 +27,10 @@ const val UNINITIALISER_ADDRESS = "A/remove_service_workers.html"
 const val UNINITIALISE_HTML = """
   <html>
     <head>
-        <title>...</title>
-        <script type="text/javascript">console.log("** INSIDE BLANK **");
+        <script type="text/javascript">
           function do_unregister() {
             if (!navigator.serviceWorker) {
+              ServiceWorkerUninitialiser.onUninitialised();
               return;
             }
             navigator.serviceWorker.getRegistrations().then(async function (registrations) {
@@ -46,23 +46,41 @@ const val UNINITIALISE_HTML = """
               }
             });
           }
-        do_unregister();
+          do_unregister();
         </script>
     </head>
-    <h1>---</h1>
+    <body>
+      <div id="loading" style="width: 100%; text-align: center">
+          <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#fff">
+              <g fill="none" fill-rule="evenodd">
+                  <g transform="translate(1 1)" stroke-width="2">
+                      <path d="M36 18c0-9.94-8.06-18-18-18" stroke="gray">
+                          <animateTransform
+                              attributeName="transform"
+                              type="rotate"
+                              from="0 18 18"
+                              to="360 18 18"
+                              dur="1s"
+                              repeatCount="indefinite"/>
+                      </path>
+                  </g>
+              </g>
+          </svg>
+      </div>
+    </body>
 </html>
 """
 
 class ServiceWorkerUninitialiser(val onUninitialisedAction: () -> Unit) {
+
+  fun initInterface(webView: WebView) {
+    webView.addJavascriptInterface(this, "ServiceWorkerUninitialiser")
+  }
 
   @JavascriptInterface
   fun onUninitialised() {
     Handler(Looper.getMainLooper()).post {
       onUninitialisedAction()
     }
-  }
-
-  fun initInterface(webView: WebView) {
-    webView.addJavascriptInterface(this, "ServiceWorkerUninitialiser")
   }
 }

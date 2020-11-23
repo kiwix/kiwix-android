@@ -139,7 +139,7 @@ class ZimFileReader constructor(
 
   fun isRedirect(url: String) =
     when {
-      url.endsWith(UNINITIALISER_ADDRESS) -> false
+      getRedirect(url).isEmpty() || url.endsWith(UNINITIALISER_ADDRESS) -> false
       else -> url.startsWith(CONTENT_PREFIX) && url != getRedirect(url)
     }
 
