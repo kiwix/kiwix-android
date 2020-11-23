@@ -746,6 +746,12 @@ public abstract class CoreReaderFragment extends BaseFragment
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
+    setUpWebViewWithTextToSpeech();
+    documentParser.initInterface(webView);
+    new ServiceWorkerUninitialiser(() -> {
+      openMainPage();
+      return Unit.INSTANCE;
+    }).initInterface(webView);
     return webView;
   }
 
@@ -761,26 +767,22 @@ public abstract class CoreReaderFragment extends BaseFragment
     return newTab(contentUrl(zimReaderContainer.getMainPage()));
   }
 
-  protected KiwixWebView newTab(String url) {
-    KiwixWebView webView = initalizeWebView(url);
-    webViewList.add(webView);
-    selectTab(webViewList.size() - 1);
-    tabsAdapter.notifyDataSetChanged();
-    setUpWebViewWithTextToSpeech();
-    documentParser.initInterface(webView);
-    new ServiceWorkerUninitialiser(() -> {
-      openMainPage();
-      return Unit.INSTANCE;
-    }).initInterface(webView);
-    return webView;
+  private KiwixWebView newTab(String url) {
+    return newTab(url, true);
   }
 
   private void newTabInBackground(String url) {
+    newTab(url, false);
+  }
+
+  private KiwixWebView newTab(String url, boolean selectTab) {
     KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
+    if(selectTab) {
+      selectTab(webViewList.size() - 1);
+    }
     tabsAdapter.notifyDataSetChanged();
-    setUpWebViewWithTextToSpeech();
-    documentParser.initInterface(webView);
+    return webView;
   }
 
   private void closeTab(int index) {
@@ -1047,7 +1049,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       if (mainMenu != null) {
         mainMenu.onFileOpened(urlIsValid());
       }
-      openUninitialiserPage();
+      openArticle(UNINITIALISER_ADDRESS);
       safeDispose();
       bookmarkingDisposable = Flowable.combineLatest(
         newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader),
@@ -1065,10 +1067,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else {
       ContextExtensionsKt.toast(getActivity(), R.string.error_file_invalid, Toast.LENGTH_LONG);
     }
-  }
-
-  private void openUninitialiserPage() {
-    openArticle(UNINITIALISER_ADDRESS);
   }
 
   private void safeDispose() {

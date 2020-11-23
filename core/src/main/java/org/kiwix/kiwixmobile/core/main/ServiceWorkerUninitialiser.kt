@@ -24,13 +24,14 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 
 const val UNINITIALISER_ADDRESS = "A/remove_service_workers.html"
+private const val UNINITIALISER_INTERFACE = "ServiceWorkerUninitialiser"
 const val UNINITIALISE_HTML = """
   <html>
     <head>
         <script type="text/javascript">
           function do_unregister() {
             if (!navigator.serviceWorker) {
-              ServiceWorkerUninitialiser.onUninitialised();
+              $UNINITIALISER_INTERFACE.onUninitialised();
               return;
             }
             navigator.serviceWorker.getRegistrations().then(async function (registrations) {
@@ -38,11 +39,11 @@ const val UNINITIALISE_HTML = """
                 console.debug('we do have ' + registrations.length + ' registration(s)');
                 var registration = registrations[0];
                 registration.unregister()
-                    .then(function (success) { ServiceWorkerUninitialiser.onUninitialised();})
+                    .then(function (success) { $UNINITIALISER_INTERFACE.onUninitialised();})
                     .catch(function (e) {alert("ERR:" + e)});
               }
               else {
-                ServiceWorkerUninitialiser.onUninitialised();
+                $UNINITIALISER_INTERFACE.onUninitialised();
               }
             });
           }
@@ -74,13 +75,11 @@ const val UNINITIALISE_HTML = """
 class ServiceWorkerUninitialiser(val onUninitialisedAction: () -> Unit) {
 
   fun initInterface(webView: WebView) {
-    webView.addJavascriptInterface(this, "ServiceWorkerUninitialiser")
+    webView.addJavascriptInterface(this, UNINITIALISER_INTERFACE)
   }
 
   @JavascriptInterface
   fun onUninitialised() {
-    Handler(Looper.getMainLooper()).post {
-      onUninitialisedAction()
-    }
+    Handler(Looper.getMainLooper()).post { onUninitialisedAction() }
   }
 }
