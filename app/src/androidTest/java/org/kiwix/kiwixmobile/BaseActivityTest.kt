@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.core.di.components.TestComponent
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 @RunWith(AndroidJUnit4::class)
-open class BaseActivityTest {
+abstract class BaseActivityTest {
   @get:Rule
   open var activityRule = ActivityTestRule(KiwixMainActivity::class.java)
 
