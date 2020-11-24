@@ -746,7 +746,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
-    setUpWebViewWithTextToSpeech();
+    setUpWithTextToSpeech(webView);
     documentParser.initInterface(webView);
     new ServiceWorkerUninitialiser(() -> {
       openMainPage();
@@ -819,7 +819,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabsAdapter.notifyDataSetChanged();
 
     Snackbar.make(snackbarRoot, R.string.tab_restored, Snackbar.LENGTH_SHORT).show();
-    setUpWebViewWithTextToSpeech();
+    setUpWithTextToSpeech(tempWebViewForUndo);
     updateBottomToolbarVisibility();
     contentFrame.addView(tempWebViewForUndo);
   }
@@ -1306,8 +1306,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     openArticle(articleUrl);
   }
 
-  private void setUpWebViewWithTextToSpeech() {
-    tts.initWebView(getCurrentWebView());
+  private void setUpWithTextToSpeech(KiwixWebView kiwixWebView) {
+    tts.initWebView(kiwixWebView);
   }
 
   @OnClick(R2.id.activity_main_back_to_top_fab)

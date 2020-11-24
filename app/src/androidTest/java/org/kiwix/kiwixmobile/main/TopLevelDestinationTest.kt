@@ -17,14 +17,20 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import androidx.test.rule.ActivityTestRule
-import org.junit.Rule
 import org.junit.Test
+import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-class TopLevelDestinationTest {
-  @Rule
-  @JvmField
-  var activityTestRule = ActivityTestRule(KiwixMainActivity::class.java)
+class TopLevelDestinationTest : BaseActivityTest() {
+
+  override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
+    }
+  }
 
   @Test
   fun testTopLevelDestination() {
