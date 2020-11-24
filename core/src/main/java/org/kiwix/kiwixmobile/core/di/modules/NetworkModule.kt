@@ -32,15 +32,19 @@ import javax.inject.Singleton
 
 private const val CONNECTION_TIMEOUT = 10L
 private const val READ_TIMEOUT = 60L
+private const val CALL_TIMEOUT = 60L
 private const val USER_AGENT = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
 private const val KIWIX_DOWNLOAD_URL = "http://mirror.download.kiwix.org/"
 
 @Module
 class NetworkModule {
   @Provides @Singleton fun provideOkHttpClient(): OkHttpClient {
-    return OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
+    return OkHttpClient().newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
       .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
       .readTimeout(READ_TIMEOUT, SECONDS)
+      .callTimeout(CALL_TIMEOUT, SECONDS)
       .addNetworkInterceptor(HttpLoggingInterceptor().apply {
         level = if (BuildConfig.DEBUG) BASIC else NONE
       })
