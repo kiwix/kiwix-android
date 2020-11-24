@@ -15,7 +15,7 @@ jobs:
   coverageReport:
     strategy:
       matrix:
-        api-level: [21, 21] 
+        api-level: [21, 21]
       fail-fast: false
     runs-on: macOS-latest
     steps:
@@ -45,3 +45,11 @@ jobs:
       - name: Upload coverage to Codecov
         run: |
           bash <(curl -s https://codecov.io/bash)
+
+      - name: Upload Coverage to GH-Actions
+        uses: actions/upload-artifact@v2.2.0
+        if: ${{ always()  }}
+        with:
+          name: Tests Coverage Report
+          path: |
+            **/reports/

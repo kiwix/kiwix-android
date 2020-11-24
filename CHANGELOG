@@ -2,7 +2,7 @@
 NEW: Overhauled navigation
 NEW: Updated translations
 NEW: Support resizing Kiwix
-NEW: Open search in ne wtab
+NEW: Open search in new tab
 BUGFIX: Search speed increased and loading state added
 BUGFIX: Memory leaks patched
 BUGFIX: More consistent labelling drives internal/external

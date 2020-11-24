@@ -28,6 +28,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -66,6 +68,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
   abstract val drawerNavView: NavigationView
+  abstract val readerTableOfContentsDrawer: NavigationView
   abstract val bookmarksFragmentResId: Int
   abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
@@ -109,6 +112,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     if (destination.id !in topLevelDestinations) {
       handleDrawerOnNavigation()
     }
+    readerTableOfContentsDrawer.setLockMode(
+      if (destination.id == readerFragmentResId) LOCK_MODE_UNLOCKED
+      else LOCK_MODE_LOCKED_CLOSED
+    )
+  }
+
+  private fun NavigationView.setLockMode(lockMode: Int) {
+    drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
 
   override fun onRequestPermissionsResult(
