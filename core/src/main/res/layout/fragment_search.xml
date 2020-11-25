@@ -1,7 +1,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  xmlns:tools="http://schemas.android.com/tools"
   android:animateLayoutChanges="true"
   android:fitsSystemWindows="true"
   android:orientation="vertical">
@@ -14,28 +14,25 @@
     <include layout="@layout/layout_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
-      tools:listitem="@layout/list_item_search"
       android:id="@+id/search_list"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="match_parent"
+      tools:listitem="@layout/list_item_search" />
 
   </LinearLayout>
 
   <TextView
     android:id="@+id/searchNoResults"
-    style="@style/no_content_text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
+    style="@style/no_content"
     android:text="@string/no_results" />
 
   <androidx.core.widget.ContentLoadingProgressBar
     android:id="@+id/searchLoadingIndicator"
     style="?android:attr/progressBarStyleLarge"
-    android:visibility="gone"
-    tools:visibility="visible"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center" />
+    android:layout_gravity="center"
+    android:visibility="gone"
+    tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
