@@ -73,7 +73,6 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.Li
 import java.util.LinkedList
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
-import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class ZimManageViewModel @Inject constructor(
@@ -218,18 +217,15 @@ class ZimManageViewModel @Inject constructor(
       connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
         CONNECTED::equals
       ),
-      BiFunction<Unit, NetworkState, Unit> { _, _ -> Unit }
+      BiFunction<Unit, NetworkState, Unit> { _, _ -> }
     )
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .subscribe(
         {
           kiwixService.library
-            .timeout(60, SECONDS)
             .retry(5)
-            .subscribe(
-              library::onNext
-            ) {
+            .subscribe(library::onNext) {
               it.printStackTrace()
               library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
             }
