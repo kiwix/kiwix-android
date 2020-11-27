@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.app.Application
+import android.net.ConnectivityManager
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,6 +45,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
@@ -86,7 +88,9 @@ class ZimManageViewModel @Inject constructor(
   private val bookUtils: BookUtils,
   private val fat32Checker: Fat32Checker,
   private val defaultLanguageProvider: DefaultLanguageProvider,
-  private val dataSource: DataSource
+  private val dataSource: DataSource,
+  private val connectivityManager: ConnectivityManager,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
@@ -104,6 +108,7 @@ class ZimManageViewModel @Inject constructor(
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
+  val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
 
   val requestFileSystemCheck = PublishProcessor.create<Unit>()
@@ -219,6 +224,20 @@ class ZimManageViewModel @Inject constructor(
       ),
       BiFunction<Unit, NetworkState, Unit> { _, _ -> }
     )
+      .switchMap {
+        if (connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI) {
+          Flowable.just(Unit)
+        } else {
+          sharedPreferenceUtil.prefWifiOnlys
+            .doOnNext {
+              if (it) {
+                shouldShowWifiOnlyDialog.postValue(true)
+              }
+            }
+            .filter { !it }
+            .map { }
+        }
+      }
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .subscribe(

@@ -45,9 +45,9 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.AvailableSpaceCalculator
@@ -94,6 +95,83 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
 
   private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
+
+  override fun inject(baseActivity: BaseActivity) {
+    baseActivity.cachedComponent.inject(this)
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View {
+    setHasOptionsMenu(true)
+    val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
+    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
+    val activity = activity as CoreMainActivity
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setTitle(R.string.download)
+    }
+    activity.setupDrawerToggle(toolbar)
+    return root
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    librarySwipeRefresh.setOnRefreshListener(::refreshFragment)
+    libraryList.run {
+      adapter = libraryAdapter
+      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+      setHasFixedSize(true)
+    }
+    zimManageViewModel.libraryItems.observe(viewLifecycleOwner, Observer(::onLibraryItemsChange))
+    zimManageViewModel.libraryListIsRefreshing.observe(
+      viewLifecycleOwner, Observer(::onRefreshStateChange)
+    )
+    zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
+    zimManageViewModel.shouldShowWifiOnlyDialog.observe(viewLifecycleOwner, Observer {
+      if (it) {
+        dialogShower.show(
+          WifiOnly,
+          { sharedPreferenceUtil.putPrefWifiOnly(false) },
+          { onRefreshStateChange(false) }
+        )
+        zimManageViewModel.shouldShowWifiOnlyDialog.value = false
+      }
+    })
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
+    inflater.inflate(R.menu.menu_zim_manager, menu)
+    val searchItem = menu.findItem(R.id.action_search)
+    val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
+    getZimItem?.isVisible = false
+
+    (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
+      SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
+    )
+    zimManageViewModel.requestFiltering.onNext("")
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.select_language -> requireActivity().navigate(R.id.languageFragment)
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    libraryList.adapter = null
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
+    getActivity()?.finish()
+    return FragmentActivityExtensions.Super.ShouldNotCall
+  }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
     librarySwipeRefresh.isRefreshing = isRefreshing!!
@@ -163,7 +241,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {
-        dialogShower.show(KiwixDialog.YesNoDialog.WifiOnly, {
+        dialogShower.show(WifiOnly, {
           sharedPreferenceUtil.putPrefWifiOnly(false)
           downloadFile(item.book)
         })
@@ -188,71 +266,4 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       onSelectAction = ::storeDeviceInPreferences
     }
     .show(requireFragmentManager(), getString(R.string.pref_storage))
-
-  override fun inject(baseActivity: BaseActivity) {
-    baseActivity.cachedComponent.inject(this)
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
-    inflater.inflate(R.menu.menu_zim_manager, menu)
-    val searchItem = menu.findItem(R.id.action_search)
-    val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
-    getZimItem?.isVisible = false
-
-    (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
-      SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
-    )
-    zimManageViewModel.requestFiltering.onNext("")
-  }
-
-  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    getActivity()?.finish()
-    return FragmentActivityExtensions.Super.ShouldNotCall
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.select_language -> requireActivity().navigate(R.id.languageFragment)
-    }
-    return super.onOptionsItemSelected(item)
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    libraryList.adapter = null
-  }
-
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View {
-    setHasOptionsMenu(true)
-    val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
-    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as CoreMainActivity
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      setTitle(R.string.download)
-    }
-    activity.setupDrawerToggle(toolbar)
-    return root
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    librarySwipeRefresh.setOnRefreshListener(::refreshFragment)
-    libraryList.run {
-      adapter = libraryAdapter
-      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-      setHasFixedSize(true)
-    }
-    zimManageViewModel.libraryItems.observe(viewLifecycleOwner, Observer(::onLibraryItemsChange))
-    zimManageViewModel.libraryListIsRefreshing.observe(
-      viewLifecycleOwner, Observer(::onRefreshStateChange)
-    )
-    zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
-  }
 }

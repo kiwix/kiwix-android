@@ -47,6 +47,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val textZooms
     get() = _textZooms.startWith(textZoom)
   private val nightModes = PublishProcessor.create<NightModeConfig.Mode>()
+  private val _prefWifiOnlys = PublishProcessor.create<Boolean>()
+  val prefWifiOnlys
+    get() = _prefWifiOnlys.startWith(prefWifiOnly)
 
   val prefWifiOnly: Boolean
     get() = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true)
@@ -92,8 +95,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
 
-  fun putPrefWifiOnly(wifiOnly: Boolean) =
+  fun putPrefWifiOnly(wifiOnly: Boolean) {
     sharedPreferences.edit { putBoolean(PREF_WIFI_ONLY, wifiOnly) }
+    _prefWifiOnlys.onNext(wifiOnly)
+  }
 
   fun putPrefStorageTitle(storageTitle: String) =
     sharedPreferences.edit { putString(PREF_STORAGE_TITLE, storageTitle) }

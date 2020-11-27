@@ -5,13 +5,12 @@
     <ID>EmptyFunctionBlock:None.kt$None${ }</ID>
     <ID>EmptyFunctionBlock:SimplePageChangeListener.kt$SimplePageChangeListener${ }</ID>
     <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( booksOnFileSystem: List&lt;BookOnDisk&gt;, activeDownloads: List&lt;DownloadModel&gt;, allLanguages: List&lt;Language&gt;, libraryNetworkEntity: LibraryNetworkEntity, filter: String, fileSystemState: FileSystemState )</ID>
-    <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( private val downloadDao: FetchDownloadDao, private val bookDao: NewBookDao, private val languageDao: NewLanguagesDao, private val storageObserver: StorageObserver, private val kiwixService: KiwixService, private val context: Application, private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver, private val bookUtils: BookUtils, private val fat32Checker: Fat32Checker, private val defaultLanguageProvider: DefaultLanguageProvider, private val dataSource: DataSource )</ID>
+    <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( private val downloadDao: FetchDownloadDao, private val bookDao: NewBookDao, private val languageDao: NewLanguagesDao, private val storageObserver: StorageObserver, private val kiwixService: KiwixService, private val context: Application, private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver, private val bookUtils: BookUtils, private val fat32Checker: Fat32Checker, private val defaultLanguageProvider: DefaultLanguageProvider, private val dataSource: DataSource, private val connectivityManager: ConnectivityManager, private val sharedPreferenceUtil: SharedPreferenceUtil )</ID>
     <ID>MagicNumber:LibraryListItem.kt$LibraryListItem.LibraryDownloadItem$1000L</ID>
     <ID>MagicNumber:PeerGroupHandshake.kt$PeerGroupHandshake$15000</ID>
     <ID>MagicNumber:ShareFiles.kt$ShareFiles$24</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
-    <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$60</ID>
     <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$readHandshakeAndExchangeMetaData</ID>
     <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$exchangeFileTransferMetadata</ID>
     <ID>PackageNaming:AvailableSpaceCalculator.kt$package org.kiwix.kiwixmobile.zim_manager.library_view</ID>
