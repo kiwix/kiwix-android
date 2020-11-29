@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.localFileTransfer
 
-import android.app.Activity
+import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -45,7 +45,7 @@ import java.net.Socket
 private const val TIME_OUT = 15000
 
 internal class SenderDevice(
-  private val activity: Activity,
+  private val context: Context,
   private val wifiDirectManager: WifiDirectManager,
   private val fileReceiverDeviceAddress: InetAddress
 ) {
@@ -59,7 +59,7 @@ internal class SenderDevice(
       .forEachIndexed { fileIndex, fileItem ->
         try {
           Socket().use { socket ->
-            activity.contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
+            context.contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
               socket.bind(null)
               socket.connect(
                 InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
