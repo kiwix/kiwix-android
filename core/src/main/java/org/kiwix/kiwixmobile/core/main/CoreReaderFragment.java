@@ -743,13 +743,15 @@ public abstract class CoreReaderFragment extends BaseFragment
   private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
-    loadUrl(url, webView);
-    setUpWithTextToSpeech(webView);
-    documentParser.initInterface(webView);
-    new ServiceWorkerUninitialiser(() -> {
-      openMainPage();
-      return Unit.INSTANCE;
-    }).initInterface(webView);
+    if (webView != null) {
+      loadUrl(url, webView);
+      setUpWithTextToSpeech(webView);
+      documentParser.initInterface(webView);
+      new ServiceWorkerUninitialiser(() -> {
+        openMainPage();
+        return Unit.INSTANCE;
+      }).initInterface(webView);
+    }
     return webView;
   }
 
@@ -780,11 +782,11 @@ public abstract class CoreReaderFragment extends BaseFragment
   private KiwixWebView newTab(String url, boolean selectTab) {
     KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
-    if(selectTab) {
+    if (selectTab) {
       selectTab(webViewList.size() - 1);
     }
     tabsAdapter.notifyDataSetChanged();
-    setUpWebViewWithTextToSpeech();
+    //setUpWebViewWithTextToSpeech();
     if (webView != null) {
       documentParser.initInterface(webView);
     }
@@ -1315,7 +1317,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void setUpWithTextToSpeech(KiwixWebView kiwixWebView) {
-    tts.initWebView(kiwixWebView);
+    if (kiwixWebView != null) tts.initWebView(kiwixWebView);
   }
 
   @OnClick(R2.id.activity_main_back_to_top_fab)
