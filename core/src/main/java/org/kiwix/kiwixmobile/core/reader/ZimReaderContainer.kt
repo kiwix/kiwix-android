@@ -24,9 +24,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ZimReaderContainer @Inject constructor(
-  private val zimFileReaderFactory: Factory
-) {
+class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: Factory) {
   var zimFileReader: ZimFileReader? = null
     set(value) {
       field?.dispose()

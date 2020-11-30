@@ -42,10 +42,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 
 abstract class HelpFragment : BaseFragment() {
 
-  protected open fun rawTitleDescriptionMap() = listOf(
-    R.string.help_2 to R.array.description_help_2,
-    R.string.help_5 to R.array.description_help_5
-  )
+  protected open fun rawTitleDescriptionMap(): List<Pair<Int, Int>> = emptyList()
 
   private val titleDescriptionMap by lazy {
     rawTitleDescriptionMap().associate { (title, description) ->
@@ -89,10 +86,9 @@ abstract class HelpFragment : BaseFragment() {
   private fun sendFeedback() {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = ("mailto:${Uri.encode(CONTACT_EMAIL_ADDRESS)}" +
-      "?subject=${Uri.encode(
-        "Feedback in ${getCurrentLocale(requireActivity()).displayLanguage}"
-      )}")
-      .toUri()
+      "?subject=${
+        Uri.encode("Feedback in ${getCurrentLocale(requireActivity()).displayLanguage}")
+      }").toUri()
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"))
   }
 }

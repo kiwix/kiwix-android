@@ -25,7 +25,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-@Root(name = "library", strict = false)
+@Root(name = "library")
 public class LibraryNetworkEntity {
 
   @ElementList(name = "book", inline = true, required = false)

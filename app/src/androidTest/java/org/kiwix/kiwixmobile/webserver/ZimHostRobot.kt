@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,9 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.downloader;
 
-public class DownloadIntent {
-  public static final String DOWNLOAD_URL_PARAMETER = "DOWNLOAD_URL_PARAMETER";
-  public static final String DOWNLOAD_ZIM_TITLE = "DOWNLOAD_ZIM_TITLE";
+package org.kiwix.kiwixmobile.webserver
+
+import applyWithViewHierarchyPrinting
+import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
+import org.kiwix.kiwixmobile.R
+
+fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
+
+class ZimHostRobot : BaseRobot() {
+  init {
+    isVisible(TextId(R.string.menu_host_books))
+  }
 }

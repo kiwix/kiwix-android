@@ -119,11 +119,11 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
-import static android.content.ContentValues.TAG;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall;
 import static org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall;
 import static org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManagerKt.DOWNLOAD_NOTIFICATION_TITLE;
+import static org.kiwix.kiwixmobile.core.main.ServiceWorkerUninitialiserKt.UNINITIALISER_ADDRESS;
 import static org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem;
 import static org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_STORAGE_PERMISSION;
@@ -742,11 +742,16 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-
   private KiwixWebView initalizeWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
     KiwixWebView webView = createWebView(attrs);
     loadUrl(url, webView);
+    setUpWithTextToSpeech(webView);
+    documentParser.initInterface(webView);
+    new ServiceWorkerUninitialiser(() -> {
+      openMainPage();
+      return Unit.INSTANCE;
+    }).initInterface(webView);
     return webView;
   }
 
@@ -762,22 +767,22 @@ public abstract class CoreReaderFragment extends BaseFragment
     return newTab(contentUrl(zimReaderContainer.getMainPage()));
   }
 
-  protected KiwixWebView newTab(String url) {
-    KiwixWebView webView = initalizeWebView(url);
-    webViewList.add(webView);
-    selectTab(webViewList.size() - 1);
-    tabsAdapter.notifyDataSetChanged();
-    setUpWebViewWithTextToSpeech();
-    documentParser.initInterface(webView);
-    return webView;
+  private KiwixWebView newTab(String url) {
+    return newTab(url, true);
   }
 
   private void newTabInBackground(String url) {
+    newTab(url, false);
+  }
+
+  private KiwixWebView newTab(String url, boolean selectTab) {
     KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
+    if(selectTab) {
+      selectTab(webViewList.size() - 1);
+    }
     tabsAdapter.notifyDataSetChanged();
-    setUpWebViewWithTextToSpeech();
-    documentParser.initInterface(webView);
+    return webView;
   }
 
   private void closeTab(int index) {
@@ -814,7 +819,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     tabsAdapter.notifyDataSetChanged();
 
     Snackbar.make(snackbarRoot, R.string.tab_restored, Snackbar.LENGTH_SHORT).show();
-    setUpWebViewWithTextToSpeech();
+    setUpWithTextToSpeech(tempWebViewForUndo);
     updateBottomToolbarVisibility();
     contentFrame.addView(tempWebViewForUndo);
   }
@@ -965,7 +970,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     return true;
   }
 
-
   @Override public void onFullscreenVideoToggled(boolean isFullScreen) {
     // does nothing because custom doesn't have a nav bar
   }
@@ -1045,7 +1049,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       if (mainMenu != null) {
         mainMenu.onFileOpened(urlIsValid());
       }
-      openMainPage();
+      openArticle(UNINITIALISER_ADDRESS);
       safeDispose();
       bookmarkingDisposable = Flowable.combineLatest(
         newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader),
@@ -1302,8 +1306,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     openArticle(articleUrl);
   }
 
-  private void setUpWebViewWithTextToSpeech() {
-    tts.initWebView(getCurrentWebView());
+  private void setUpWithTextToSpeech(KiwixWebView kiwixWebView) {
+    tts.initWebView(kiwixWebView);
   }
 
   @OnClick(R2.id.activity_main_back_to_top_fab)
@@ -1413,9 +1417,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   public void onPause() {
     super.onPause();
     saveTabStates();
-    if (tts != null) {
-      tts.stop();
-    }
     Log.d(TAG_KIWIX,
       "onPause Save current zim file to preferences: " + zimReaderContainer.getZimCanonicalPath());
   }
@@ -1581,7 +1582,7 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
       }
       selectTab(currentTab);
-      webViewList.get(currentTab)
+      safelyGetWebView(currentTab)
         .loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
       getCurrentWebView().setScrollY(positions.getInt(currentTab));
     } catch (JSONException e) {

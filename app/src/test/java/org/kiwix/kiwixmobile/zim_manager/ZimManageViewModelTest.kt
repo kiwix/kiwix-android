@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.app.Application
+import android.net.ConnectivityManager
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -43,6 +44,7 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
@@ -90,6 +92,8 @@ class ZimManageViewModelTest {
   private val fat32Checker: Fat32Checker = mockk()
   private val defaultLanguageProvider: DefaultLanguageProvider = mockk()
   private val dataSource: DataSource = mockk()
+  private val connectivityManager: ConnectivityManager = mockk()
+  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
   lateinit var viewModel: ZimManageViewModel
 
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
@@ -124,6 +128,7 @@ class ZimManageViewModelTest {
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
     every { application.registerReceiver(any(), any()) } returns mockk()
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
+    every { connectivityManager.activeNetworkInfo.type } returns ConnectivityManager.TYPE_WIFI
     viewModel = ZimManageViewModel(
       downloadDao,
       newBookDao,
@@ -135,7 +140,9 @@ class ZimManageViewModelTest {
       bookUtils,
       fat32Checker,
       defaultLanguageProvider,
-      dataSource
+      dataSource,
+      connectivityManager,
+      sharedPreferenceUtil
     )
     testScheduler.triggerActions()
   }

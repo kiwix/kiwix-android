@@ -226,6 +226,7 @@
   <string name="severe_loss_error">嚴重錯誤！請嘗試停用/重新啟用 WiFi P2P</string>
   <string name="connection_failed">連線失敗</string>
   <string name="permission_rationale_location">Android 需要位置權限來允許應用程式去偵測端點設備</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android 需要位置權限來允許應用程式去托管 Zim 檔案</string>
   <string name="permission_refused_location">沒有位置權限無法定位端點設備</string>
   <string name="permission_refused_storage">沒有儲存權限無法存取 zim 檔案</string>
   <string name="request_enable_location">啟動位置來允許偵測端點</string>

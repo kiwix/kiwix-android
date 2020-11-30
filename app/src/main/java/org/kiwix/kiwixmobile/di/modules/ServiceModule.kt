@@ -23,8 +23,8 @@ import android.app.Service
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixlib.Library
 import org.kiwix.kiwixlib.JNIKiwixServer
+import org.kiwix.kiwixlib.Library
 import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager

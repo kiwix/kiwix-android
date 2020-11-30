@@ -32,11 +32,9 @@ import kotlinx.android.synthetic.main.fragment_intro.view_pager
 import kotlinx.android.synthetic.main.item_intro_2.airplane
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
-import org.kiwix.kiwixmobile.core.Intents.internal
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
 import java.util.Timer
@@ -65,7 +63,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    get_started.setOnClickListener { startMainActivity() }
+    get_started.setOnClickListener { navigateToLibrary() }
     views = arrayOf(
       layoutInflater.inflate(R.layout.item_intro_1, view_pager, false),
       layoutInflater.inflate(R.layout.item_intro_2, view_pager, false)
@@ -110,12 +108,10 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     return super.onBackPressed(activity)
   }
 
-  private fun startMainActivity() {
+  private fun navigateToLibrary() {
     dismissAutoRotate()
-    startActivity(internal(CoreMainActivity::class.java))
     presenter.setIntroShown()
-    (requireActivity() as KiwixMainActivity).navController
-      .navigate(IntroFragmentDirections.actionIntroFragmentToLibraryFragment())
+    (requireActivity() as KiwixMainActivity).navController.popBackStack()
   }
 
   private fun updateView(position: Int) {

@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.localFileTransfer
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
@@ -33,12 +32,13 @@ import android.net.wifi.p2p.WifiP2pManager.Channel
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener
-import android.os.AsyncTask
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import android.os.Looper
+import android.os.Looper.getMainLooper
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -51,7 +51,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.InetAddress
-import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -59,9 +58,10 @@ import javax.inject.Inject
  */
 @SuppressWarnings("MissingPermission", "ProtectedMemberInFinalClass")
 class WifiDirectManager @Inject constructor(
-  private val activity: Activity,
+  private val context: Context,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower
+  private val alertDialogShower: AlertDialogShower,
+  private val manager: WifiP2pManager?
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
 
@@ -74,39 +74,24 @@ class WifiDirectManager @Inject constructor(
   // Whether channel has retried connecting previously
   private var shouldRetry = true
 
-  // Overall manager of Wifi p2p connections for the module
-  private lateinit var manager: WifiP2pManager
-
   // Interface to the device's underlying wifi-p2p framework
-  private lateinit var channel: Channel
+  private var channel: Channel? = null
 
   // For receiving the broadcasts given by above filter
   private lateinit var receiver: BroadcastReceiver
-
-  // Corresponds to P2P group formed between the two devices
-  private lateinit var groupInfo: WifiP2pInfo
-  private lateinit var senderSelectedPeerDevice: WifiP2pDevice
-  private var peerGroupHandshakeAsyncTask: PeerGroupHandshakeAsyncTask? = null
-  private var senderDeviceAsyncTask: SenderDeviceAsyncTask? = null
-  private var receiverDeviceAsyncTask: ReceiverDeviceAsyncTask? = null
-  private lateinit var selectedPeerDeviceInetAddress: InetAddress
-
-  // IP address of the file receiving device
-  private lateinit var fileReceiverDeviceAddress: InetAddress
   private lateinit var filesForTransfer: List<FileItem>
 
   // Whether the device is the file sender or not
-  var isFileSender = false
-    private set
+  private var isFileSender = false
 
   private var hasSenderStartedConnection = false
+  lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
 
   /* Initialisations for using the WiFi P2P API */
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
-    manager = activity.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
-    channel = manager.initialize(activity, Looper.getMainLooper(), null)
+    channel = manager?.initialize(context, getMainLooper(), null)
     registerWifiDirectBroadcastReceiver()
   }
 
@@ -121,23 +106,20 @@ class WifiDirectManager @Inject constructor(
       addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
       addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
     }
-    activity.registerReceiver(receiver, intentFilter)
+    context.registerReceiver(receiver, intentFilter)
   }
 
-  private fun unregisterWifiDirectBroadcastReceiver() = activity.unregisterReceiver(receiver)
+  private fun unregisterWifiDirectBroadcastReceiver() = context.unregisterReceiver(receiver)
 
   fun discoverPeerDevices() {
-    manager.discoverPeers(channel, object : ActionListener {
+    manager?.discoverPeers(channel, object : ActionListener {
       override fun onSuccess() {
-        activity.toast(R.string.discovery_initiated, Toast.LENGTH_SHORT)
+        context.toast(R.string.discovery_initiated, Toast.LENGTH_SHORT)
       }
 
       override fun onFailure(reason: Int) {
-        Log.d(
-          TAG, "${activity.getString(R.string.discovery_failed)}: " +
-            getErrorMessage(reason)
-        )
-        activity.toast(R.string.discovery_failed, Toast.LENGTH_SHORT)
+        Log.d(TAG, "${context.getString(R.string.discovery_failed)}: ${getErrorMessage(reason)}")
+        context.toast(R.string.discovery_failed, Toast.LENGTH_SHORT)
       }
     })
   }
@@ -146,7 +128,7 @@ class WifiDirectManager @Inject constructor(
   override fun onWifiP2pStateChanged(isEnabled: Boolean) {
     isWifiP2pEnabled = isEnabled
     if (!isWifiP2pEnabled) {
-      activity.toast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT)
+      context.toast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT)
       callbacks?.onConnectionToPeersLost()
     }
     Log.d(TAG, "WiFi P2P state changed - $isWifiP2pEnabled")
@@ -155,14 +137,14 @@ class WifiDirectManager @Inject constructor(
   override fun onPeersChanged() {
     /* List of available peers has changed, so request & use the new list through
      * PeerListListener.requestPeers() callback */
-    manager.requestPeers(channel, this)
+    manager?.requestPeers(channel, this)
     Log.d(TAG, "P2P peers changed")
   }
 
   override fun onConnectionChanged(isConnected: Boolean) {
     if (isConnected) {
       // Request connection info about the wifi p2p group formed upon connection
-      manager.requestConnectionInfo(channel, this)
+      manager?.requestConnectionInfo(channel, this)
     } else {
       // Not connected after connection change -> Disconnected
       callbacks?.onConnectionToPeersLost()
@@ -181,9 +163,9 @@ class WifiDirectManager @Inject constructor(
       Log.d(TAG, "Channel lost, trying again")
       callbacks?.onConnectionToPeersLost()
       shouldRetry = false
-      manager.initialize(activity, Looper.getMainLooper(), this)
+      manager?.initialize(context, getMainLooper(), this)
     } else {
-      activity.toast(R.string.severe_loss_error, Toast.LENGTH_LONG)
+      context.toast(R.string.severe_loss_error, Toast.LENGTH_LONG)
     }
   }
 
@@ -195,56 +177,60 @@ class WifiDirectManager @Inject constructor(
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   override fun onConnectionInfoAvailable(groupInfo: WifiP2pInfo) {
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
-    this.groupInfo = groupInfo
-    performHandshakeWithSelectedPeerDevice()
+    performHandshakeWith(groupInfo)
   }
-
-  val isGroupFormed: Boolean
-    get() = groupInfo.groupFormed
-
-  val isGroupOwner: Boolean
-    get() = groupInfo.isGroupOwner
-
-  val groupOwnerAddress: InetAddress
-    get() = groupInfo.groupOwnerAddress
 
   fun sendToDevice(senderSelectedPeerDevice: WifiP2pDevice) {
     /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
     if (isFileSender && !hasSenderStartedConnection) {
-      this.senderSelectedPeerDevice = senderSelectedPeerDevice
       alertDialogShower.show(
         FileTransferConfirmation(senderSelectedPeerDevice.deviceName), {
           hasSenderStartedConnection = true
-          connect()
-          activity.toast(R.string.performing_handshake, Toast.LENGTH_LONG)
+          connect(senderSelectedPeerDevice)
+          context.toast(R.string.performing_handshake, Toast.LENGTH_LONG)
         })
     }
   }
 
-  private fun connect() {
+  private fun connect(senderSelectedPeerDevice: WifiP2pDevice) {
     val config = WifiP2pConfig().apply {
       deviceAddress = senderSelectedPeerDevice.deviceAddress
       wps.setup = WpsInfo.PBC
     }
-    manager.connect(channel, config, object : ActionListener {
+    manager?.connect(channel, config, object : ActionListener {
       override fun onSuccess() {
         // UI updated from broadcast receiver
       }
 
       override fun onFailure(reason: Int) {
         val errorMessage = getErrorMessage(reason)
-        Log.d(TAG, activity.getString(R.string.connection_failed) + ": " + errorMessage)
-        activity.toast(R.string.connection_failed, Toast.LENGTH_LONG)
+        Log.d(TAG, context.getString(R.string.connection_failed) + ": " + errorMessage)
+        context.toast(R.string.connection_failed, Toast.LENGTH_LONG)
       }
     })
   }
 
-  private fun performHandshakeWithSelectedPeerDevice() {
+  private fun performHandshakeWith(groupInfo: WifiP2pInfo) {
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake")
     }
-    peerGroupHandshakeAsyncTask = PeerGroupHandshakeAsyncTask(this)
-      .also { it.execute() }
+    lifecycleCoroutineScope.launch {
+      val peerGroupHandshake = if (isFileSender)
+        SenderHandShake(this@WifiDirectManager, groupInfo)
+      else
+        ReceiverHandShake(this@WifiDirectManager, groupInfo)
+
+      val inetAddress = peerGroupHandshake.handshake()
+      if (inetAddress != null) {
+        startFileTransfer(groupInfo, inetAddress)
+      } else {
+        if (BuildConfig.DEBUG) {
+          Log.d(TAG, "InetAddress is null")
+        }
+        onFileTransferAsyncTaskComplete(false)
+        context.toast(R.string.connection_refused)
+      }
+    }
   }
 
   val totalFilesForTransfer: Int
@@ -252,36 +238,32 @@ class WifiDirectManager @Inject constructor(
 
   fun getFilesForTransfer() = filesForTransfer
 
-  fun setFilesForTransfer(fileItems: ArrayList<FileItem>) {
+  fun setFilesForTransfer(fileItems: List<FileItem>) {
     filesForTransfer = fileItems
   }
 
-  val zimStorageRootPath
-    get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
+  val zimStorageRootPath get() = sharedPreferenceUtil.prefStorage + "/Kiwix/"
 
-  fun getFileReceiverDeviceAddress() = fileReceiverDeviceAddress
-
-  fun setClientAddress(clientAddress: InetAddress) {
-
-    // If control reaches here, means handshake was successful
-    selectedPeerDeviceInetAddress = clientAddress
-    startFileTransfer()
-  }
-
-  private fun startFileTransfer() {
-    if (isGroupFormed) {
+  private suspend fun startFileTransfer(groupInfo: WifiP2pInfo, inetAddress: InetAddress) {
+    if (groupInfo.groupFormed) {
       if (isFileSender) {
         Log.d(LocalFileTransferFragment.TAG, "Starting file transfer")
-        fileReceiverDeviceAddress =
-          if (isGroupOwner) selectedPeerDeviceInetAddress else groupOwnerAddress
-        activity.toast(R.string.preparing_files, Toast.LENGTH_LONG)
-        senderDeviceAsyncTask = SenderDeviceAsyncTask(this, activity).also {
-          it.execute(*filesForTransfer.toTypedArray())
+        val fileReceiverDeviceAddress =
+          if (groupInfo.isGroupOwner) inetAddress else groupInfo.groupOwnerAddress
+        context.toast(R.string.preparing_files, Toast.LENGTH_LONG)
+        val senderDevice = SenderDevice(context, this, fileReceiverDeviceAddress)
+        val isFileSendSuccessfully = senderDevice.send(filesForTransfer)
+        onFileTransferAsyncTaskComplete(isFileSendSuccessfully)
+        if (BuildConfig.DEBUG) {
+          Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
         }
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
-        receiverDeviceAsyncTask = ReceiverDeviceAsyncTask(this).also {
-          it.execute()
+        val receiverDevice = ReceiverDevice(this)
+        val isReceivedFileSuccessFully = receiverDevice.receive()
+        onFileTransferAsyncTaskComplete(isReceivedFileSuccessFully)
+        if (BuildConfig.DEBUG) {
+          Log.d(TAG, "ReceiverDevice completed $isReceivedFileSuccessFully")
         }
       }
     }
@@ -291,20 +273,15 @@ class WifiDirectManager @Inject constructor(
     filesForTransfer[itemIndex].fileStatus = status
     callbacks?.onFileStatusChanged(itemIndex)
     if (status == FileStatus.ERROR) {
-      displayToast(
-        R.string.error_transferring, filesForTransfer[itemIndex].fileName,
-        Toast.LENGTH_SHORT
+      context.toast(
+        context.getString(
+          R.string.error_transferring, filesForTransfer[itemIndex].fileName
+        )
       )
     }
   }
 
-  private fun cancelAsyncTasks(vararg tasks: AsyncTask<*, *, *>?) =
-    tasks.forEach {
-      it?.cancel(true)
-    }
-
   fun stopWifiDirectManager() {
-    cancelAsyncTasks(peerGroupHandshakeAsyncTask, senderDeviceAsyncTask, receiverDeviceAsyncTask)
     if (isFileSender) {
       closeChannel()
     } else {
@@ -314,7 +291,7 @@ class WifiDirectManager @Inject constructor(
   }
 
   private fun disconnect() {
-    manager.removeGroup(channel, object : ActionListener {
+    manager?.removeGroup(channel, object : ActionListener {
       override fun onFailure(reasonCode: Int) {
         Log.d(TAG, "Disconnect failed. Reason: $reasonCode")
         closeChannel()
@@ -329,7 +306,7 @@ class WifiDirectManager @Inject constructor(
 
   private fun closeChannel() {
     if (VERSION.SDK_INT >= VERSION_CODES.O_MR1) {
-      channel.close()
+      channel?.close()
     }
   }
 
@@ -342,14 +319,11 @@ class WifiDirectManager @Inject constructor(
     }
   }
 
-  fun displayToast(stringResourceId: Int, templateValue: String, duration: Int) =
-    activity.toast(activity.getString(stringResourceId, templateValue), duration)
-
-  fun onFileTransferAsyncTaskComplete(wereAllFilesTransferred: Boolean) {
+  private fun onFileTransferAsyncTaskComplete(wereAllFilesTransferred: Boolean) {
     if (wereAllFilesTransferred) {
-      activity.toast(R.string.file_transfer_complete, Toast.LENGTH_LONG)
+      context.toast(R.string.file_transfer_complete, Toast.LENGTH_LONG)
     } else {
-      activity.toast(R.string.error_during_transfer, Toast.LENGTH_LONG)
+      context.toast(R.string.error_during_transfer, Toast.LENGTH_LONG)
     }
     callbacks?.onFileTransferComplete()
   }

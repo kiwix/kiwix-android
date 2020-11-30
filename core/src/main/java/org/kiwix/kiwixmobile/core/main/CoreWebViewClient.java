@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -42,6 +43,7 @@ public class CoreWebViewClient extends WebViewClient {
   protected final WebViewCallback callback;
   protected final ZimReaderContainer zimReaderContainer;
   private static String[] LEGACY_CONTENT_PREFIXES = new String[] {
+    "zim://content/",
     Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString()
   };
   private String urlWithAnchor;
@@ -66,10 +68,6 @@ public class CoreWebViewClient extends WebViewClient {
     }
     if (url.startsWith(CONTENT_PREFIX)) {
       return handleEpubAndPdf(url);
-    }
-    if (url.startsWith("file://")) {
-      // To handle home page (loaded from resources)
-      return true;
     }
     if (url.startsWith("javascript:")) {
       // Allow javascript for HTML functions and code execution (EX: night mode)
@@ -116,8 +114,7 @@ public class CoreWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
-    boolean invalidUrl =
-      url.equals(CONTENT_PREFIX + "null");
+    boolean invalidUrl = url.equals(CONTENT_PREFIX + "null");
 
     Log.d(TAG_KIWIX, "invalidUrl = " + invalidUrl);
 
@@ -142,12 +139,15 @@ public class CoreWebViewClient extends WebViewClient {
 
   @Nullable
   @Override
-  public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-    url = convertLegacyUrl(url);
+  public WebResourceResponse shouldInterceptRequest(
+    WebView view,
+    WebResourceRequest request)
+  {
+    String url = convertLegacyUrl(request.getUrl().toString());
     if (url.startsWith(CONTENT_PREFIX)) {
       return zimReaderContainer.load(url);
     } else {
-      return super.shouldInterceptRequest(view, url);
+      return super.shouldInterceptRequest(view, request);
     }
   }
 }

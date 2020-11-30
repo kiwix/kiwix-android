@@ -18,18 +18,11 @@
 package org.kiwix.kiwixmobile.help
 
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
-import androidx.test.rule.ActivityTestRule
-import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
-class HelpFragmentTest : BaseActivityTest<KiwixMainActivity>() {
-
-  @get:Rule
-  override var activityRule: ActivityTestRule<KiwixMainActivity> =
-    ActivityTestRule(KiwixMainActivity::class.java)
+class HelpFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyHelpActivity() {

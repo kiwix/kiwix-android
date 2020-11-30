@@ -18,10 +18,15 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.Manifest
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_DENIED
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.LocationManager
+import android.location.LocationManager.GPS_PROVIDER
+import android.location.LocationManager.NETWORK_PROVIDER
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.os.Build
@@ -38,6 +43,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_local_file_transfer.list_peer_devices
 import kotlinx.android.synthetic.main.fragment_local_file_transfer.progress_bar_searching_peers
@@ -68,9 +74,9 @@ import javax.inject.Inject
  * app. Two devices are connected to each other using WiFi Direct, followed by file transfer.
  *
  * File transfer involves two phases:
- * 1) Handshake with the selected peer device, using [PeerGroupHandshakeAsyncTask]
- * 2) After handshake, starting the files transfer using [SenderDeviceAsyncTask] on the sender
- * device and [ReceiverDeviceAsyncTask] files receiving device
+ * 1) Handshake with the selected peer device, using [PeerGroupHandshake]
+ * 2) After handshake, starting the files transfer using [SenderDevice] on the sender
+ * device and [ReceiverDevice] files receiving device
  */
 
 const val URIS_KEY = "uris"
@@ -109,15 +115,14 @@ class LocalFileTransferFragment : BaseFragment(),
     val isReceiver = filesForTransfer.isEmpty()
     setupToolbar(view, activity, isReceiver)
 
-    wifiPeerListAdapter = WifiPeerListAdapter(
-      WifiP2pDelegate(wifiDirectManager::sendToDevice)
-    )
+    wifiPeerListAdapter = WifiPeerListAdapter(WifiP2pDelegate(wifiDirectManager::sendToDevice))
 
     setupPeerDevicesList(activity)
 
     displayFileTransferProgress(filesForTransfer)
 
     wifiDirectManager.callbacks = this
+    wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
   }
 
@@ -145,7 +150,7 @@ class LocalFileTransferFragment : BaseFragment(),
     if (item.itemId == R.id.menu_item_search_devices) {
       /* Permissions essential for this module */
       return when {
-        !checkCoarseLocationAccessPermission() ->
+        !checkFineLocationAccessPermission() ->
           true
         !checkExternalStorageWritePermission() ->
           true
@@ -179,9 +184,7 @@ class LocalFileTransferFragment : BaseFragment(),
     // Update UI with user device's details
     if (userDevice != null) {
       text_view_device_name.text = userDevice.deviceName
-      Log.d(
-        TAG, getDeviceStatus(userDevice.status)
-      )
+      Log.d(TAG, getDeviceStatus(userDevice.status))
     }
   }
 
@@ -218,72 +221,53 @@ class LocalFileTransferFragment : BaseFragment(),
   }
 
   /* Helper methods used for checking permissions and states of services */
-  private fun checkCoarseLocationAccessPermission(): Boolean {
+  private fun checkFineLocationAccessPermission(): Boolean {
     // Required by Android to detect wifi-p2p peers
-    return if (ContextCompat.checkSelfPermission(
-        requireActivity(),
-        Manifest.permission.ACCESS_COARSE_LOCATION
-      )
-      == PackageManager.PERMISSION_DENIED
-    ) {
-      when {
-        ActivityCompat.shouldShowRequestPermissionRationale(
-          requireActivity(),
-          Manifest.permission.ACCESS_COARSE_LOCATION
-        ) -> {
+    return permissionIsGranted(ACCESS_FINE_LOCATION).also { permissionGranted ->
+      if (!permissionGranted) {
+        if (shouldShowRationale(ACCESS_FINE_LOCATION)) {
           alertDialogShower.show(
             KiwixDialog.LocationPermissionRationale,
-            {
-              ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                PERMISSION_REQUEST_CODE_COARSE_LOCATION
-              )
-            })
-        }
-        else -> {
-          ActivityCompat.requestPermissions(
-            requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            PERMISSION_REQUEST_CODE_COARSE_LOCATION
+            ::requestLocationPermission
           )
+        } else {
+          requestLocationPermission()
         }
       }
-      false
-    } else {
-      true
-      // Control reaches here: Either permission granted at install time, or at the time of request
     }
   }
 
+  private fun requestLocationPermission() {
+    requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, PERMISSION_REQUEST_FINE_LOCATION)
+  }
+
   private fun checkExternalStorageWritePermission(): Boolean { // To access and store the zims
-    return if (ContextCompat.checkSelfPermission(
-        requireActivity(),
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-      )
-      == PackageManager.PERMISSION_DENIED
-    ) {
-      if (ActivityCompat.shouldShowRequestPermissionRationale(
-          requireActivity(),
-          Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-      ) {
-        alertDialogShower.show(KiwixDialog.StoragePermissionRationale, {
-          ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS
+    return permissionIsGranted(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+      if (!permissionGranted) {
+        if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+          alertDialogShower.show(
+            KiwixDialog.StoragePermissionRationale,
+            ::requestStoragePermissionPermission
           )
-        })
-      } else {
-        ActivityCompat.requestPermissions(
-          requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-          PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS
-        )
+        } else {
+          requestStoragePermissionPermission()
+        }
       }
-      false
-    } else {
-      true
-      // Control reaches here: Either permission granted at install time, or at the time of request
     }
+  }
+
+  private fun shouldShowRationale(writeExternalStorage: String) =
+    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), writeExternalStorage)
+
+  private fun permissionIsGranted(writeExternalStorage: String) =
+    ContextCompat.checkSelfPermission(requireActivity(), writeExternalStorage) == PERMISSION_GRANTED
+
+  private fun requestStoragePermissionPermission() {
+    requestPermission(WRITE_EXTERNAL_STORAGE, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS)
+  }
+
+  private fun requestPermission(permission: String, requestCode: Int) {
+    ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), requestCode)
   }
 
   override fun onRequestPermissionsResult(
@@ -291,22 +275,16 @@ class LocalFileTransferFragment : BaseFragment(),
     permissions: Array<String>,
     grantResults: IntArray
   ) {
-    if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+    if (grantResults[0] == PERMISSION_DENIED) {
       when (requestCode) {
-        PERMISSION_REQUEST_CODE_COARSE_LOCATION -> {
+        PERMISSION_REQUEST_FINE_LOCATION -> {
           Log.e(TAG, "Location permission not granted")
-          toast(
-            R.string.permission_refused_location,
-            Toast.LENGTH_SHORT
-          )
+          toast(R.string.permission_refused_location, Toast.LENGTH_SHORT)
           requireActivity().popNavigationBackstack()
         }
         PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
           Log.e(TAG, "Storage write permission not granted")
-          toast(
-            R.string.permission_refused_storage,
-            Toast.LENGTH_SHORT
-          )
+          toast(R.string.permission_refused_storage, Toast.LENGTH_SHORT)
           requireActivity().popNavigationBackstack()
         }
         else ->
@@ -316,8 +294,7 @@ class LocalFileTransferFragment : BaseFragment(),
   }
 
   private val isLocationServiceEnabled: Boolean
-    get() = isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-      isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    get() = isProviderEnabled(GPS_PROVIDER) || isProviderEnabled(NETWORK_PROVIDER)
 
   private fun isProviderEnabled(locationProvider: String): Boolean {
     return try {
@@ -339,12 +316,7 @@ class LocalFileTransferFragment : BaseFragment(),
           REQUEST_ENABLE_LOCATION_SERVICES
         )
       },
-      {
-        toast(
-          R.string.discovery_needs_location,
-          Toast.LENGTH_SHORT
-        )
-      }
+      { toast(R.string.discovery_needs_location, Toast.LENGTH_SHORT) }
     )
   }
 
@@ -352,12 +324,8 @@ class LocalFileTransferFragment : BaseFragment(),
     alertDialogShower.show(
       KiwixDialog.EnableWifiP2pServices, {
         startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-      }, {
-        toast(
-          R.string.discovery_needs_wifi,
-          Toast.LENGTH_SHORT
-        )
-      }
+      },
+      { toast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT) }
     )
   }
 
@@ -365,22 +333,14 @@ class LocalFileTransferFragment : BaseFragment(),
     baseActivity.cachedComponent.inject(this)
   }
 
-  override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     when (requestCode) {
       REQUEST_ENABLE_LOCATION_SERVICES -> {
         if (!isLocationServiceEnabled) {
-          toast(
-            R.string.permission_refused_location,
-            Toast.LENGTH_SHORT
-          )
+          toast(R.string.permission_refused_location, Toast.LENGTH_SHORT)
         }
       }
-      else ->
-        super.onActivityResult(requestCode, resultCode, data)
+      else -> super.onActivityResult(requestCode, resultCode, data)
     }
   }
 
@@ -394,7 +354,7 @@ class LocalFileTransferFragment : BaseFragment(),
     // Not a typo, 'Log' tags have a length upper limit of 25 characters
     const val TAG = "LocalFileTransferActvty"
     const val REQUEST_ENABLE_LOCATION_SERVICES = 1
-    private const val PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1
-    private const val PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 2
+    private const val PERMISSION_REQUEST_FINE_LOCATION = 2
+    private const val PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 3
   }
 }

@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 1
 
       - name: run instrumentation tests
-        uses: ReactiveCircus/android-emulator-runner@v2.8.0
+        uses: ReactiveCircus/android-emulator-runner@v2.12.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
@@ -58,7 +58,7 @@ jobs:
           chmod 600 ssh_key
 
       - name: Set date variable
-        run: echo ::set-env name=DATE::$(echo $(date +%Y-%m-%d))
+        run: echo "DATE=$(echo $(date +%Y-%m-%d))" >> $GITHUB_ENV
 
       - name: release debug to kiwix.download.org
         env:

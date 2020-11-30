@@ -70,7 +70,7 @@ internal class ProcessActivityResultTest {
 
   @Test
   fun `invoke with sends filter action with data`() {
-    every { data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0] } returns ""
+    every { data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) } returns arrayListOf("")
     successfulResult.invokeWith(activity)
     verify { actions.offer(Filter("")) }
   }
