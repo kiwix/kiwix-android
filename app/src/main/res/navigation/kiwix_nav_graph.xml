@@ -21,10 +21,10 @@
   xmlns:tools="http://schemas.android.com/tools"
   app:startDestination="@id/libraryFragment">
   <fragment
-    tools:layout="@layout/fragment_reader"
     android:id="@+id/readerFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment"
-    android:label="Reader">
+    android:label="Reader"
+    tools:layout="@layout/fragment_reader">
     <argument
       android:name="zimFileUri"
       android:defaultValue=""
@@ -55,10 +55,10 @@
   </fragment>
 
   <fragment
-    tools:layout="@layout/fragment_destination_library"
     android:id="@+id/libraryFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment"
-    android:label="Library">
+    android:label="Library"
+    tools:layout="@layout/fragment_destination_library">
     <action
       android:id="@+id/action_navigation_library_to_navigation_reader"
       app:destination="@id/readerFragment"
@@ -72,65 +72,60 @@
   </fragment>
 
   <fragment
-    tools:layout="@layout/fragment_destination_download"
     android:id="@+id/downloadsFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
-    android:label="Downloads" />
+    android:label="Downloads"
+    tools:layout="@layout/fragment_destination_download" />
   <fragment
-    tools:layout="@layout/fragment_page"
     android:id="@+id/bookmarksFragment"
     android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
-    android:label="BookmarksFragment" />
+    android:label="BookmarksFragment"
+    tools:layout="@layout/fragment_page" />
   <fragment
-    tools:layout="@layout/fragment_intro"
     android:id="@+id/introFragment"
     android:name="org.kiwix.kiwixmobile.intro.IntroFragment"
-    android:label="IntroFragment">
-    <action
-      android:id="@+id/action_introFragment_to_libraryFragment"
-      app:destination="@id/libraryFragment"
-      app:popUpTo="@id/libraryFragment" />
-  </fragment>
+    android:label="IntroFragment"
+    tools:layout="@layout/fragment_intro" />
   <fragment
-    tools:layout="@layout/fragment_page"
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
-    android:label="HistoryFragment" />
+    android:label="HistoryFragment"
+    tools:layout="@layout/fragment_page" />
   <fragment
-    tools:layout="@layout/activity_language"
     android:id="@+id/languageFragment"
     android:name="org.kiwix.kiwixmobile.language.LanguageFragment"
-    android:label="LanguageFragment" />
+    android:label="LanguageFragment"
+    tools:layout="@layout/activity_language" />
   <fragment
-    tools:layout="@layout/activity_zim_host"
     android:id="@+id/zimHostFragment"
     android:name="org.kiwix.kiwixmobile.webserver.ZimHostFragment"
-    android:label="HistoryFragment" />
+    android:label="HistoryFragment"
+    tools:layout="@layout/activity_zim_host" />
   <fragment
-    tools:layout="@layout/fragment_help"
     android:id="@+id/helpFragment"
     android:name="org.kiwix.kiwixmobile.help.KiwixHelpFragment"
-    android:label="HelpFragment" />
+    android:label="HelpFragment"
+    tools:layout="@layout/fragment_help" />
   <fragment
-    tools:layout="@layout/settings"
     android:id="@+id/kiwixSettingsFragment"
     android:name="org.kiwix.kiwixmobile.settings.KiwixSettingsFragment"
-    android:label="KiwixSettingsFragment" />
+    android:label="KiwixSettingsFragment"
+    tools:layout="@layout/settings" />
   <fragment
-    tools:layout="@layout/fragment_search"
     android:id="@+id/searchFragment"
     android:name="org.kiwix.kiwixmobile.core.search.SearchFragment"
-    android:label="SearchFragment">
+    android:label="SearchFragment"
+    tools:layout="@layout/fragment_search">
     <action
       android:id="@+id/action_searchFragment_to_readerFragment"
       app:destination="@id/readerFragment"
       app:popUpTo="@id/readerFragment" />
   </fragment>
   <fragment
-    tools:layout="@layout/fragment_local_file_transfer"
     android:id="@+id/localFileTransferFragment"
     android:name="org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment"
-    android:label="LocalFileTransferFragment">
+    android:label="LocalFileTransferFragment"
+    tools:layout="@layout/fragment_local_file_transfer">
     <argument
       android:name="uris"
       android:defaultValue="@null"

@@ -35,6 +35,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_destination_library.file_management_no_files
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
@@ -86,11 +87,29 @@ class LocalLibraryFragment : BaseFragment() {
     BooksOnDiskAdapter(bookDelegate, BookOnDiskDelegate.LanguageDelegate)
   }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
-    actionMode = null
-    zimfilelist.adapter = null
-    disposable.clear()
+  override fun inject(baseActivity: BaseActivity) {
+    baseActivity.cachedComponent.inject(this)
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    LanguageUtils(requireActivity())
+      .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
+    val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
+    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
+    val activity = activity as CoreMainActivity
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setTitle(R.string.library)
+    }
+    activity.setupDrawerToggle(toolbar)
+    setHasOptionsMenu(true)
+
+    return root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,14 +134,44 @@ class LocalLibraryFragment : BaseFragment() {
     }
   }
 
-  private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
-    {
-      val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
-      if (effectResult is ActionMode) {
-        actionMode = effectResult
-      }
-    }, Throwable::printStackTrace
-  )
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.menu_zim_manager, menu)
+    val searchItem = menu.findItem(R.id.action_search)
+    val languageItem = menu.findItem(R.id.select_language)
+    languageItem.isVisible = false
+    searchItem.isVisible = false
+    super.onCreateOptionsMenu(menu, inflater)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.get_zim_nearby_device -> navigateToLocalFileTransferFragment()
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
+  override fun onResume() {
+    super.onResume()
+    checkPermissions()
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    actionMode = null
+    zimfilelist.adapter = null
+    disposable.clear()
+  }
+
+  private fun sideEffects() = zimManageViewModel.sideEffects
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(
+      {
+        val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
+        if (effectResult is ActionMode) {
+          actionMode = effectResult
+        }
+      }, Throwable::printStackTrace
+    )
 
   private fun render(state: FileSelectListState) {
     val items: List<BooksOnDiskListItem> = state.bookOnDiskListItems
@@ -134,11 +183,6 @@ class LocalLibraryFragment : BaseFragment() {
     actionMode?.title = String.format("%d", state.selectedBooks.size)
     file_management_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
     go_to_downloads_button_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
-  }
-
-  override fun onResume() {
-    super.onResume()
-    checkPermissions()
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
@@ -170,47 +214,7 @@ class LocalLibraryFragment : BaseFragment() {
     zimManageViewModel.fileSelectActions.offer(action)
   }
 
-  override fun inject(baseActivity: BaseActivity) {
-    baseActivity.cachedComponent.inject(this)
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.menu_zim_manager, menu)
-    val searchItem = menu.findItem(R.id.action_search)
-    val languageItem = menu.findItem(R.id.select_language)
-    languageItem.isVisible = false
-    searchItem.isVisible = false
-    super.onCreateOptionsMenu(menu, inflater)
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.get_zim_nearby_device -> navigateToLocalFileTransferFragment()
-    }
-    return super.onOptionsItemSelected(item)
-  }
-
   private fun navigateToLocalFileTransferFragment() {
     requireActivity().navigate(R.id.localFileTransferFragment)
-  }
-
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    LanguageUtils(requireActivity())
-      .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
-    val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
-    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as CoreMainActivity
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      setTitle(R.string.library)
-    }
-    activity.setupDrawerToggle(toolbar)
-    setHasOptionsMenu(true)
-    return root
   }
 }

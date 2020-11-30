@@ -29,6 +29,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
   override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
+      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
     }
   }
 
