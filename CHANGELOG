@@ -1,3 +1,13 @@
+3.4.2
+NEW: Service worker support for war2c zim files
+NEW: Updated translations
+NEW: Online Library won't be downloaded on mobile data when wifi only preference is set
+BUGFIX: Text to Speech continues in background
+BUGFIX: Video player became became unresponsive post backgrounding
+BUGFIX: Bookmarks/History weren't displaying their title
+BUGFIX: Memory leaks patched
+BUGFIX: Table of contents accessible from non Reader screens
+
 3.4.1
 NEW: Overhauled navigation
 NEW: Updated translations
