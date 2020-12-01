@@ -22,10 +22,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_custom_download.cd_view_animator
 import kotlinx.android.synthetic.main.layout_custom_download_error.cd_error_text
@@ -45,14 +43,11 @@ import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
-import org.kiwix.kiwixmobile.custom.download.Action.PressedBack
 import org.kiwix.kiwixmobile.custom.download.State.DownloadComplete
 import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
 import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import javax.inject.Inject
-
-var pressBackCallback = 0
 
 class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
@@ -94,14 +89,6 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
   override fun onDestroy() {
     super.onDestroy()
     compositeDisposable.clear()
-  }
-
-  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    pressBackCallback = 1
-    downloadViewModel.actions.offer(PressedBack)
-    // findNavController().popBackStack()
-    // findNavController().navigate(R.id.customReaderFragment)
-    return super.onBackPressed(activity)
   }
 
   private fun render(state: State) {

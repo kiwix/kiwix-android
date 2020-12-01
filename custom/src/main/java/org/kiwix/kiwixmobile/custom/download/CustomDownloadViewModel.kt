@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
 import org.kiwix.kiwixmobile.custom.download.Action.DatabaseEmission
-import org.kiwix.kiwixmobile.custom.download.Action.PressedBack
 import org.kiwix.kiwixmobile.custom.download.State.DownloadComplete
 import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
 import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
@@ -77,7 +76,7 @@ class CustomDownloadViewModel @Inject constructor(
       is DatabaseEmission -> reduceDatabaseEmission(state, action)
       ClickedRetry,
       ClickedDownload -> state.also { _effects.offer(downloadCustom) }
-      is PressedBack -> state.also { _effects.offer(finishAndStartMain) }
+      // is PressedBack -> state.also { _effects.offer(finishAndStartMain) }
     }
   }
 
