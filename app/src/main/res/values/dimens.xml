@@ -25,5 +25,6 @@
   <dimen name="favicon_margin_right">8dp</dimen>
   <dimen name="item_library_margin_top">8dp</dimen>
   <dimen name="stop_horizontal_margin">8dp</dimen>
+  <dimen name="material_design_appbar_size">48dp</dimen>
 
 </resources>

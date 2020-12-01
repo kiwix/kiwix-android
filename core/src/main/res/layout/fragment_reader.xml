@@ -31,26 +31,25 @@
 
     <TextView
       android:id="@+id/no_open_book_text"
-      style="@style/no_content_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
+      style="@style/no_content"
       android:text="@string/no_open_book"
-      android:visibility="gone"
+      android:layout_marginTop="@dimen/material_design_appbar_size"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.45" />
 
     <Button
       android:id="@+id/go_to_library_button_no_open_book"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
       android:text="@string/open_library"
       android:visibility="gone"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/no_open_book_text" />
+      app:layout_constraintEnd_toEndOf="@+id/no_open_book_text"
+      app:layout_constraintStart_toStartOf="@+id/no_open_book_text"
+      app:layout_constraintTop_toBottomOf="@id/no_open_book_text"/>
 
     <RelativeLayout
       android:id="@+id/fullscreen_video_container"
