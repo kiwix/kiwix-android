@@ -27,7 +27,7 @@
     <action
       android:id="@+id/action_customReader_to_customDownload"
       app:destination="@id/customDownloadFragment"
-      app:popUpTo="@id/customDownloadFragment"
+      app:popUpTo="@id/customReaderFragment"
       app:popUpToInclusive="true" />
 
     <argument
@@ -66,7 +66,7 @@
     <action
       android:id="@+id/action_customDownload_to_customReader"
       app:destination="@id/customReaderFragment"
-      app:popUpTo="@+id/customReaderFragment"
+      app:popUpTo="@+id/customDownloadFragment"
       app:popUpToInclusive="true" />
 
   </fragment>
