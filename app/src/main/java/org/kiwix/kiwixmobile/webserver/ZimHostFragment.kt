@@ -139,6 +139,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
     startServerButton.setOnClickListener {
       if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P || checkCoarseLocationAccessPermission()) {
+        bindService()
         startStopServer()
       }
     }
@@ -211,6 +212,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun stopServer() {
+    unbindService()
     requireActivity().startService(createHotspotIntent(ACTION_STOP_SERVER))
   }
 
