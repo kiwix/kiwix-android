@@ -82,6 +82,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private var ip: String? = null
   private lateinit var serviceConnection: ServiceConnection
   private var progressDialog: ProgressDialog? = null
+  private lateinit var booksList: List<BooksOnDiskListItem>
 
   private val selectedBooksPath: ArrayList<String>
     get() {
@@ -188,6 +189,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun startStopServer() {
+    val hostBooks = booksAdapter.items.filter(BooksOnDiskListItem::isSelected)
+    setBooksAdapter(if (!ServerUtils.isServerStarted) hostBooks else booksList)
     when {
       ServerUtils.isServerStarted -> stopServer()
       selectedBooksPath.size > 0 -> {
@@ -199,6 +202,11 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       }
       else -> toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
     }
+  }
+
+  private fun setBooksAdapter(booksList: List<BooksOnDiskListItem>) {
+    booksAdapter.items = booksList
+    booksAdapter.notifyDataSetChanged()
   }
 
   private fun startKiwixHotspot() {
@@ -215,7 +223,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
-    val booksList: List<BooksOnDiskListItem> = booksAdapter.items.map {
+    booksList = booksAdapter.items.map {
       if (it == bookOnDisk) {
         it.isSelected = !it.isSelected
       }
