@@ -17,17 +17,21 @@
  */
 package org.kiwix.kiwixmobile.core.dao.entities
 
+import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import io.objectbox.converter.PropertyConverter
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.reader.ZimSource
 
 @Entity
 data class BookmarkEntity(
   @Id var id: Long = 0,
   val zimId: String,
   var zimName: String,
-  var zimFilePath: String?,
+  @Convert(converter = ZimSourceConverter::class, dbType = String::class)
+  var zimSource: ZimSource?,
   var bookmarkUrl: String,
   var bookmarkTitle: String,
   var favicon: String?
@@ -36,25 +40,33 @@ data class BookmarkEntity(
     item.databaseId,
     item.zimId,
     item.zimName,
-    item.zimFilePath,
+    item.zimSource,
     item.bookmarkUrl,
     item.title,
     item.favicon
   )
 
-  private constructor(bookmark: Bookmark, zimFilePath: String?, favicon: String?) : this(
+  private constructor(bookmark: Bookmark, favicon: String?, zimSource: ZimSource?) : this(
     0,
     bookmark.zimId,
     bookmark.zimName,
-    zimFilePath,
+    zimSource,
     bookmark.bookmarkUrl,
     bookmark.bookmarkTitle,
     favicon
   )
 
-  constructor(bookmarkWithFavIconAndFile: Pair<Bookmark, Pair<String?, String?>>) : this(
+  constructor(bookmarkWithFavIconAndFile: Pair<Bookmark, Pair<String?, ZimSource?>>) : this(
     bookmarkWithFavIconAndFile.first,
     bookmarkWithFavIconAndFile.second.first,
     bookmarkWithFavIconAndFile.second.second
   )
+}
+
+class ZimSourceConverter : PropertyConverter<ZimSource, String> {
+
+  override fun convertToDatabaseValue(entityProperty: ZimSource?) = entityProperty?.toDatabase()
+
+  override fun convertToEntityProperty(databaseValue: String) =
+    ZimSource.fromDatabaseValue(databaseValue)
 }

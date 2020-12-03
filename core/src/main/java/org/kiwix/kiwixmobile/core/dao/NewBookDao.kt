@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.reader.ZimSource
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
@@ -31,13 +32,13 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun books() = box.asFlowable()
     .doOnNext(::removeBooksThatDoNotExist)
-    .map { books -> books.filter { it.file.exists() } }
+    .map { books -> books.filter { it.zimSource.exists() } }
     .map { it.map(::BookOnDisk) }
 
   fun getBooks() = box.all.map(::BookOnDisk)
 
   fun insert(booksOnDisk: List<BookOnDisk>) {
-    box.store.callInTx {
+    box.store.callInTx() {
       val uniqueBooks = uniqueBooksByFile(booksOnDisk)
       removeEntriesWithMatchingIds(uniqueBooks)
       box.put(uniqueBooks.distinctBy { it.book.id }.map(::BookOnDiskEntity))
@@ -47,13 +48,16 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   private fun uniqueBooksByFile(booksOnDisk: List<BookOnDisk>): List<BookOnDisk> {
     val booksWithSameFilePath = booksWithSameFilePath(booksOnDisk)
     return booksOnDisk.filter { bookOnDisk: BookOnDisk ->
-      booksWithSameFilePath.find { it.file.path == bookOnDisk.file.path } == null
+      booksWithSameFilePath.find { it.zimSource == bookOnDisk.zimSource } == null
     }
   }
 
   private fun booksWithSameFilePath(booksOnDisk: List<BookOnDisk>) =
     box.query {
-      inValues(BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray())
+      inValues(
+        BookOnDiskEntity_.zimSource,
+        booksOnDisk.map { it.zimSource.toDatabase() }.toTypedArray()
+      )
     }.find()
       .map(::BookOnDisk)
 
@@ -67,25 +71,25 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   }
 
   fun migrationInsert(books: List<Book>) {
-    insert(books.map { BookOnDisk(book = it, file = it.file) })
+    insert(books.map { BookOnDisk(book = it, zimSource = ZimSource.ZimFile(it.file)) })
   }
 
   private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
-    delete(books.filterNot { it.file.exists() })
+    delete(books.filterNot { it.zimSource.exists() })
   }
 
   private fun delete(books: List<BookOnDiskEntity>) {
     box.remove(books)
   }
 
-  fun getFavIconAndZimFile(it: Bookmark): Pair<String?, String?> {
+  fun getFavIconAndZimFile(it: Bookmark): Pair<String?, ZimSource?> {
     val bookOnDiskEntity = box.query {
       equal(BookOnDiskEntity_.bookId, it.zimId)
     }.find().getOrNull(0)
-    return bookOnDiskEntity?.let { Pair(it.favIcon, it.file.path) } ?: Pair(null, null)
+    return bookOnDiskEntity?.let { Pair(it.favIcon, it.zimSource) } ?: Pair(null, null)
   }
 
   fun bookMatching(downloadTitle: String) = box.query {
-    endsWith(BookOnDiskEntity_.file, downloadTitle)
+    endsWith(BookOnDiskEntity_.zimSource, downloadTitle)
   }.findFirst()
 }

@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.reader.ZimSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
@@ -135,7 +136,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       activity.toast(R.string.error_file_not_found)
       return
     }
-    openZimFile(File(filePath))
+    openZimFile(ZimSource.ZimFile(File(filePath)))
   }
 
   override fun loadDrawerViews() {
@@ -153,7 +154,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun closeZimBook() {
-    zimReaderContainer.setZimFile(null)
+    zimReaderContainer.setZimSource(null)
   }
 
   override fun openHomeScreen() {
@@ -217,7 +218,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
-    if (zimReaderContainer.zimFileReader == null) {
+    if (zimReaderContainer.zimReader == null) {
       mainMenu?.hideBookSpecificMenuItems()
     }
   }
@@ -229,7 +230,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer.zimFile == null) {
+    if (zimReaderContainer.zimSource == null) {
       exitBook()
     }
     if (isFullScreenVideo) {
@@ -248,10 +249,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
     currentTab: Int
   ) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
+    val zimSource = ZimSource.fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
 
-    if (zimFile != null) {
-      openZimFile(File(zimFile))
+    if (zimSource != null) {
+      openZimFile(zimSource)
     } else {
       getCurrentWebView().snack(R.string.zim_not_opened)
     }
@@ -307,8 +308,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
   ): Super {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
-      if ("file" == it.scheme) openZimFile(it.toFile())
-      else activity.toast(R.string.cannot_open_file)
+      when (it.scheme) {
+        "file" -> openZimFile(ZimSource.ZimFile(it.toFile()))
+        "content" -> openZimFile(ZimSource.ZimFileDescriptor(intent.data!!))
+        else -> activity.toast(R.string.cannot_open_file)
+      }
     }
     return ShouldCall
   }

@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 import org.kiwix.kiwixmobile.core.page.viewmodel.TestablePageState
 
 data class PageImpl(
-  override val zimFilePath: String? = "zimFilePath",
+  override val zimSource: String? = "zimFilePath",
   override val url: String = "url",
   override var isSelected: Boolean = false,
   override val id: Long = 0L,

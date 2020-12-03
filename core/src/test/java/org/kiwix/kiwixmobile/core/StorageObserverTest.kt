@@ -29,8 +29,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
+import org.kiwix.kiwixmobile.core.reader.ZimReader
+import org.kiwix.kiwixmobile.core.reader.ZimReader.Factory
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.sharedFunctions.book
@@ -47,7 +47,7 @@ class StorageObserverTest {
   private val downloadModel: DownloadModel = mockk()
   private val file: File = mockk()
   private val readerFactory: Factory = mockk()
-  private val zimFileReader: ZimFileReader = mockk()
+  private val zimReader: ZimReader = mockk()
 
   private val files: PublishProcessor<List<File>> = PublishProcessor.create()
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
@@ -68,7 +68,7 @@ class StorageObserverTest {
     every { sharedPreferenceUtil.prefStorage } returns "a"
     every { fileSearch.scan() } returns files
     every { downloadDao.downloads() } returns downloads
-    every { readerFactory.create(file) } returns zimFileReader
+    every { readerFactory.create(file) } returns zimReader
     storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory)
   }
 
@@ -85,11 +85,11 @@ class StorageObserverTest {
       "description", "language"
     )
     withNoFiltering()
-    every { zimFileReader.toBook() } returns expectedBook
+    every { zimReader.toBook() } returns expectedBook
     booksOnFileSystem().assertValues(
       listOf(bookOnDisk(book = expectedBook, file = file))
     )
-    verify { zimFileReader.dispose() }
+    verify { zimReader.dispose() }
   }
 
   private fun booksOnFileSystem() = storageObserver.booksOnFileSystem

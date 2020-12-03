@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
@@ -78,7 +78,7 @@ interface CoreComponent {
   fun activityComponentBuilder(): CoreActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
-  fun zimFileReaderFactory(): ZimFileReader.Factory
+  fun zimFileReaderFactory(): ZimReader.Factory
   fun storageObserver(): StorageObserver
   fun kiwixService(): KiwixService
   fun application(): Application

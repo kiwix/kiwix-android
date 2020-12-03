@@ -18,56 +18,50 @@
 package org.kiwix.kiwixmobile.core.reader
 
 import android.webkit.WebResourceResponse
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
-import java.io.File
+import org.kiwix.kiwixmobile.core.reader.ZimReader.Factory
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: Factory) {
-  var zimFileReader: ZimFileReader? = null
+  var zimReader: ZimReader? = null
     set(value) {
       field?.dispose()
       field = value
     }
 
-  fun setZimFile(file: File?) {
-    if (file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath) {
+  fun setZimSource(zimSource: ZimSource?) {
+    if (zimSource == zimReader?.zimSource) {
       return
     }
-    zimFileReader =
-      if (file?.exists() == true) zimFileReaderFactory.create(file)
-      else null
+    zimReader =
+      if (zimSource?.exists() == true) zimFileReaderFactory.create(zimSource) else null
   }
 
-  fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
+  fun getPageUrlFromTitle(title: String) = zimReader?.getPageUrlFrom(title)
 
-  fun getRandomArticleUrl() = zimFileReader?.getRandomArticleUrl()
-  fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
-  fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
+  fun getRandomArticleUrl() = zimReader?.getRandomArticleUrl()
+  fun isRedirect(url: String): Boolean = zimReader?.isRedirect(url) == true
+  fun getRedirect(url: String): String = zimReader?.getRedirect(url) ?: ""
   fun load(url: String) =
     WebResourceResponse(
-      zimFileReader?.readMimeType(url),
+      zimReader?.readMimeType(url),
       Charsets.UTF_8.name(),
-      zimFileReader?.load(url)
+      zimReader?.load(url)
     )
 
-  fun copyReader(): ZimFileReader? = zimFile?.let(zimFileReaderFactory::create)
+  fun copyReader(): ZimReader? = zimSource?.let(zimFileReaderFactory::create)
 
-  val zimFile get() = zimFileReader?.zimFile
-
-  val zimCanonicalPath get() = zimFileReader?.zimFile?.canonicalPath
-  val zimFileTitle get() = zimFileReader?.title
-  val mainPage get() = zimFileReader?.mainPage
-  val id get() = zimFileReader?.id
-  val fileSize get() = zimFileReader?.fileSize ?: 0
-  val creator get() = zimFileReader?.creator
-  val publisher get() = zimFileReader?.publisher
-  val name get() = zimFileReader?.name
-  val date get() = zimFileReader?.date
-  val description get() = zimFileReader?.description
-  val favicon get() = zimFileReader?.favicon
-  val language get() = zimFileReader?.language
+  val zimSource get() = zimReader?.zimSource
+  val zimFileTitle get() = zimReader?.title
+  val mainPage get() = zimReader?.mainPage
+  val id get() = zimReader?.id
+  val fileSize get() = zimReader?.fileSize ?: 0
+  val creator get() = zimReader?.creator
+  val publisher get() = zimReader?.publisher
+  val name get() = zimReader?.name
+  val date get() = zimReader?.date
+  val description get() = zimReader?.description
+  val favicon get() = zimReader?.favicon
+  val language get() = zimReader?.language
 }
-
-data class SearchResult(val title: String?)

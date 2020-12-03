@@ -44,6 +44,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.MainMenu
+import org.kiwix.kiwixmobile.core.reader.ZimSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
@@ -142,10 +143,10 @@ class CustomReaderFragment : CoreReaderFragment() {
     customFileValidator.validate(
       onFilesFound = {
         when (it) {
-          is ValidationState.HasFile -> openZimFile(it.file)
+          is ValidationState.HasFile -> openZimFile(ZimSource.ZimFile(it.file))
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            openZimFile(it.obbFile)
+            openZimFile(ZimSource.ZimFile(it.obbFile))
           }
         }
       },

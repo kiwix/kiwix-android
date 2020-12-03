@@ -18,10 +18,7 @@
 
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
-import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -33,15 +30,7 @@ data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
   SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     val selectedFileContentURIs = selectedBooks.mapNotNull {
-      if (Build.VERSION.SDK_INT >= 24) {
-        FileProvider.getUriForFile(
-          activity,
-          activity.packageName + ".fileprovider",
-          it.file
-        )
-      } else {
-        Uri.fromFile(it.file)
-      }
+      it.zimSource.asUri(activity)
     }
     activity.navigate(
       R.id.localFileTransferFragment,

@@ -31,8 +31,8 @@ import java.util.HashMap;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
 
-import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.CONTENT_PREFIX;
-import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.UI_URI;
+import static org.kiwix.kiwixmobile.core.reader.ZimReader.CONTENT_PREFIX;
+import static org.kiwix.kiwixmobile.core.reader.ZimReader.UI_URI;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.TAG_KIWIX;
 
 public class CoreWebViewClient extends WebViewClient {
@@ -139,10 +139,7 @@ public class CoreWebViewClient extends WebViewClient {
 
   @Nullable
   @Override
-  public WebResourceResponse shouldInterceptRequest(
-    WebView view,
-    WebResourceRequest request)
-  {
+  public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
     String url = convertLegacyUrl(request.getUrl().toString());
     if (url.startsWith(CONTENT_PREFIX)) {
       return zimReaderContainer.load(url);

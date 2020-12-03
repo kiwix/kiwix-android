@@ -89,7 +89,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         .filter(BooksOnDiskListItem::isSelected)
         .filterIsInstance<BookOnDisk>()
         .map {
-          it.file.absolutePath
+          it.zimSource.toDatabase()
         }
         .also {
           if (BuildConfig.DEBUG) {

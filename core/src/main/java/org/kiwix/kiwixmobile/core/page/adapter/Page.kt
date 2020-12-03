@@ -18,12 +18,14 @@
 
 package org.kiwix.kiwixmobile.core.page.adapter
 
+import org.kiwix.kiwixmobile.core.reader.ZimSource
+
 interface PageRelated {
   val id: Long
 }
 
 interface Page : PageRelated {
-  val zimFilePath: String?
+  val zimSource: ZimSource?
   val zimId: String
   val url: String
   val title: String
