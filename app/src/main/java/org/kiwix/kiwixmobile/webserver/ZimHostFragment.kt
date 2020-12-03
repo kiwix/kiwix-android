@@ -82,7 +82,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private var ip: String? = null
   private lateinit var serviceConnection: ServiceConnection
   private var progressDialog: ProgressDialog? = null
-  private lateinit var booksList: List<BooksOnDiskListItem>
+  private var booksList: List<BooksOnDiskListItem>? = null
 
   private val selectedBooksPath: ArrayList<String>
     get() {
@@ -204,9 +204,11 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
-  private fun setBooksAdapter(booksList: List<BooksOnDiskListItem>) {
-    booksAdapter.items = booksList
-    booksAdapter.notifyDataSetChanged()
+  private fun setBooksAdapter(booksList: List<BooksOnDiskListItem>?) {
+    booksList?.let {
+      booksAdapter.items = booksList
+      booksAdapter.notifyDataSetChanged()
+    } ?: presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
   }
 
   private fun startKiwixHotspot() {
@@ -229,8 +231,10 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       }
       it
     }
-    booksAdapter.items = booksList
-    saveHostedBooks(booksList)
+    booksList?.let {
+      booksAdapter.items = it
+      saveHostedBooks(it)
+    }
   }
 
   override fun onStart() {
