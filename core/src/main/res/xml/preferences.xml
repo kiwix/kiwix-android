@@ -74,7 +74,7 @@
 
   <PreferenceCategory
     android:key="pref_history"
-    android:title="History"
+    android:title="@string/history"
     app:iconSpaceReserved="false">
 
     <Preference
@@ -86,7 +86,7 @@
   </PreferenceCategory>
   <PreferenceCategory
     android:key="pref_notes"
-    android:title="Notes"
+    android:title="@string/pref_notes"
     app:iconSpaceReserved="false">
 
     <Preference
