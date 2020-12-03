@@ -121,6 +121,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     recycler_view.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     recycler_view.adapter = pageAdapter
     activity.setSupportActionBar(toolbar)
+    toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       title = screenTitle
