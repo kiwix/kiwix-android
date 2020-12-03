@@ -262,7 +262,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onResume() {
     super.onResume()
-    presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
+    if (!ServerUtils.isServerStarted) {
+      presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
+    }
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.getSocketAddress()
       layoutServerStarted()
