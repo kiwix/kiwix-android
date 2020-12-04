@@ -75,11 +75,12 @@ public class WebServerHelper {
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!isServerStarted) {
       int DEFAULT_PORT = 8080;
+      Log.d(TAG, "startAndroidWebServer: LibName101: { " + kiwixLibraryFactory.createKiwixLibrary() + " }");
       ServerUtils.port = DEFAULT_PORT;
       for (String path : selectedBooksPath) {
         try {
           boolean isBookAdded = kiwixLibraryFactory.createKiwixLibrary().addBook(path);
-          Log.d(TAG, "startAndroidWebServer: LibName: { " + kiwixLibraryFactory.createKiwixLibrary() + " }");
+          Log.d(TAG, "startAndroidWebServer: LibName102: { " + kiwixLibraryFactory.createKiwixLibrary() + " }");
           Log.v(TAG, "isBookAdded: " + isBookAdded + path);
         } catch (JNIKiwixException e) {
           Log.v(TAG, "Couldn't add book " + path);

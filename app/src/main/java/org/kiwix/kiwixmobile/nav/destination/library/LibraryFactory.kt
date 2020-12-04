@@ -22,6 +22,6 @@ import org.kiwix.kiwixlib.Library
 import javax.inject.Inject
 
 class LibraryFactory @Inject constructor(private val kiwixLibrary: Library) {
-
+  // private val libFactory = LibraryFactory(kiwixLibrary)
   fun createKiwixLibrary(): Library = kiwixLibrary
 }
