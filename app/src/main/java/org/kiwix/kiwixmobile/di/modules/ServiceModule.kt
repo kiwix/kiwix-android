@@ -26,6 +26,7 @@ import dagger.Provides
 import org.kiwix.kiwixlib.JNIKiwixServer
 import org.kiwix.kiwixlib.Library
 import org.kiwix.kiwixmobile.di.ServiceScope
+import org.kiwix.kiwixmobile.nav.destination.library.LibraryFactory
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver
@@ -38,10 +39,10 @@ class ServiceModule {
   @Provides
   @ServiceScope
   fun providesWebServerHelper(
-    jniKiwixLibrary: Library,
+    jniKiwixLibraryFactory: LibraryFactory,
     kiwixServer: JNIKiwixServer,
     ipAddressCallbacks: IpAddressCallbacks
-  ): WebServerHelper = WebServerHelper(jniKiwixLibrary, kiwixServer, ipAddressCallbacks)
+  ): WebServerHelper = WebServerHelper(jniKiwixLibraryFactory, kiwixServer, ipAddressCallbacks)
 
   @Provides
   @ServiceScope

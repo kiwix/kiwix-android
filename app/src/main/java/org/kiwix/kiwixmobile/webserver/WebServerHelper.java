@@ -29,6 +29,7 @@ import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixServer;
 import org.kiwix.kiwixlib.Library;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
+import org.kiwix.kiwixmobile.nav.destination.library.LibraryFactory;
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks;
 
 import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
@@ -41,14 +42,15 @@ import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
 
 public class WebServerHelper {
   private static final String TAG = "WebServerHelper";
-  private Library kiwixLibrary;
+  //private Library kiwixLibrary;
+  private LibraryFactory kiwixLibraryFactory;
   private JNIKiwixServer kiwixServer;
   private IpAddressCallbacks ipAddressCallbacks;
   private boolean isServerStarted;
 
-  @Inject public WebServerHelper(@NonNull Library kiwixLibrary,
+  @Inject public WebServerHelper(@NonNull LibraryFactory kiwixLibraryFactory,
     @NonNull JNIKiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
-    this.kiwixLibrary = kiwixLibrary;
+    this.kiwixLibraryFactory = kiwixLibraryFactory;
     this.kiwixServer = kiwixServer;
     this.ipAddressCallbacks = ipAddressCallbacks;
   }
@@ -76,7 +78,8 @@ public class WebServerHelper {
       ServerUtils.port = DEFAULT_PORT;
       for (String path : selectedBooksPath) {
         try {
-          boolean isBookAdded = kiwixLibrary.addBook(path);
+          boolean isBookAdded = kiwixLibraryFactory.createKiwixLibrary().addBook(path);
+          Log.d(TAG, "startAndroidWebServer: LibName: { " + kiwixLibraryFactory.createKiwixLibrary() + " }");
           Log.v(TAG, "isBookAdded: " + isBookAdded + path);
         } catch (JNIKiwixException e) {
           Log.v(TAG, "Couldn't add book " + path);
