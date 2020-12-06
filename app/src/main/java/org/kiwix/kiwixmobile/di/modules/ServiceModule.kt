@@ -39,10 +39,10 @@ class ServiceModule {
   @Provides
   @ServiceScope
   fun providesWebServerHelper(
-    jniKiwixLibraryFactory: LibraryFactory,
+    jniKiwixLibrary: LibraryFactory,
     kiwixServer: JNIKiwixServer,
     ipAddressCallbacks: IpAddressCallbacks
-  ): WebServerHelper = WebServerHelper(jniKiwixLibraryFactory, kiwixServer, ipAddressCallbacks)
+  ): WebServerHelper = WebServerHelper(jniKiwixLibrary, kiwixServer, ipAddressCallbacks)
 
   @Provides
   @ServiceScope
@@ -57,6 +57,11 @@ class ServiceModule {
   @ServiceScope
   fun providesJNIKiwixServer(jniKiwixLibrary: Library): JNIKiwixServer =
     JNIKiwixServer(jniKiwixLibrary)
+
+  @Provides
+  @ServiceScope
+  fun providesKiwixLibraryFactory(kiwixLibrary: Library): Library =
+    LibraryFactory(kiwixLibrary)
 
   @Provides
   @ServiceScope

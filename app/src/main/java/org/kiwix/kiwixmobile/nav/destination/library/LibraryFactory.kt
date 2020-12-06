@@ -18,10 +18,18 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import android.util.Log
 import org.kiwix.kiwixlib.Library
 import javax.inject.Inject
 
-class LibraryFactory @Inject constructor(private val kiwixLibrary: Library) {
-  // private val libFactory = LibraryFactory(kiwixLibrary)
-  fun createKiwixLibrary(): Library = kiwixLibrary
+private const val TAG = "LibraryFactory"
+
+class LibraryFactory @Inject constructor(libr: Library) : Library() {
+  private val lib = libr
+
+  fun createKiwixLibrary(): Library {
+    Log.d(TAG, "createKiwixLibrary: instance check of lib: $lib")
+    return lib
+  }
+  // works as previous one, nothing special also, ammend in this commit
 }
