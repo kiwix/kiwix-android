@@ -73,6 +73,7 @@
   <string name="delete_recent_search_item">Vê pelê jê bibe?</string>
   <string name="pref_clear_all_history_title">Raboriyê paqij bike</string>
   <string name="pref_clear_all_history_summary">Lêgerînên dawî û raboriya hilpekînan paqij bike</string>
+  <string name="pref_notes">Not</string>
   <string name="all_history_cleared">Hemû Raborî Hat Paqijkirin</string>
   <string name="pref_clear_all_bookmarks_title">Bijareyan paqij bike</string>
   <string name="clear_all_history_dialog_title">Hemû Dîrokê Paqij Bike</string>
@@ -247,7 +248,7 @@
   <string name="status">Rewş</string>
   <string name="pref_clear_all_notes_summary">Hemû notan ji hemû gotaran bibe</string>
   <string name="pref_clear_all_notes_title">Temamiya notan paqij bike</string>
-  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25\% biguherîne.</string>
+  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25% biguherîne.</string>
   <string name="tag_pic">Wêne</string>
   <string name="tag_vid">Vîdeo</string>
   <string name="tag_text_only">Tenê Nivîs</string>
