@@ -73,29 +73,30 @@ class CustomReaderFragment : CoreReaderFragment() {
       return
     }
 
-    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    if (BuildConfig.DISABLE_SIDEBAR) {
-      val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
-      toolbarToc?.isEnabled = false
-    }
-    with(activity as AppCompatActivity) {
-      supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-      setupDrawerToggle(toolbar)
-    }
-    loadPageFromNavigationArguments()
+    if (isAdded) {
+      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+      if (BuildConfig.DISABLE_SIDEBAR) {
+        val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
+        toolbarToc?.isEnabled = false
+      }
+      with(activity as AppCompatActivity) {
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        setupDrawerToggle(toolbar)
+      }
+      loadPageFromNavigationArguments()
 
-    requireActivity().observeNavigationResult<String>(
-      FIND_IN_PAGE_SEARCH_STRING,
-      viewLifecycleOwner,
-      Observer(this::findInPage)
-    )
-    requireActivity().observeNavigationResult<SearchItemToOpen>(
-      TAG_FILE_SEARCHED,
-      viewLifecycleOwner,
-      Observer(::openSearchItem)
-    )
+      requireActivity().observeNavigationResult<String>(
+        FIND_IN_PAGE_SEARCH_STRING,
+        viewLifecycleOwner,
+        Observer(this::findInPage)
+      )
+      requireActivity().observeNavigationResult<SearchItemToOpen>(
+        TAG_FILE_SEARCHED,
+        viewLifecycleOwner,
+        Observer(::openSearchItem)
+      )
+    }
   }
-
   private fun openSearchItem(item: SearchItemToOpen) {
     zimReaderContainer.titleToUrl(item.pageTitle)?.apply {
       if (item.shouldOpenInNewTab) {
@@ -155,7 +156,8 @@ class CustomReaderFragment : CoreReaderFragment() {
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
-          findNavController().navigate(actionCustomReaderToCustomDownload())
+          if (isAdded)
+            findNavController().navigate(actionCustomReaderToCustomDownload())
         }
       }
     )

@@ -741,20 +741,22 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private KiwixWebView initalizeWebView(String url) {
-    AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
-    KiwixWebView webView = createWebView(attrs);
-    if (webView != null) {
-      loadUrl(url, webView);
-      setUpWithTextToSpeech(webView);
-      documentParser.initInterface(webView);
-      new ServiceWorkerUninitialiser(() -> {
-        openMainPage();
-        return Unit.INSTANCE;
-      }).initInterface(webView);
+    if (isAdded()) {
+      AttributeSet attrs = StyleUtils.getAttributes(requireActivity(), R.xml.webview);
+      KiwixWebView webView = createWebView(attrs);
+      if (webView != null) {
+        loadUrl(url, webView);
+        setUpWithTextToSpeech(webView);
+        documentParser.initInterface(webView);
+        new ServiceWorkerUninitialiser(() -> {
+          openMainPage();
+          return Unit.INSTANCE;
+        }).initInterface(webView);
+      }
+      return webView;
     }
-    return webView;
+  return null;
   }
-
   @NotNull protected ToolbarScrollingKiwixWebView createWebView(AttributeSet attrs) {
     if (activityMainRoot != null) {
       return new ToolbarScrollingKiwixWebView(
