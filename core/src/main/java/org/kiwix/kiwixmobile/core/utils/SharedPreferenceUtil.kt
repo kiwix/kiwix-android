@@ -135,6 +135,11 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun updateNightMode() = nightModes.offer(nightMode)
 
+  var allBooksToHost: Set<String>
+    get() = sharedPreferences.getStringSet(PREF_ALL_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
+    set(allBooksToHost) {
+      sharedPreferences.edit { putStringSet(PREF_ALL_HOSTED_BOOKS, allBooksToHost) }
+    }
   var hostedBooks: Set<String>
     get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
     set(hostedBooks) {
@@ -163,6 +168,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
+    private const val PREF_ALL_HOSTED_BOOKS = "all_hosted_books"
     private const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_NIGHT_MODE = "pref_night_mode"
     private const val TEXT_ZOOM = "true_text_zoom"

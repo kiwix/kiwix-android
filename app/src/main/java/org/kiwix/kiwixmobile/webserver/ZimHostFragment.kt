@@ -82,7 +82,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private var ip: String? = null
   private lateinit var serviceConnection: ServiceConnection
   private var progressDialog: ProgressDialog? = null
-  private var booksList: List<BooksOnDiskListItem>? = null
+  private var allBooks: List<BooksOnDiskListItem>? = arrayListOf()
+  private var hostBooks: List<BooksOnDiskListItem>? = arrayListOf()
 
   private val selectedBooksPath: ArrayList<String>
     get() {
@@ -189,8 +190,13 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun startStopServer() {
-    val hostBooks = booksAdapter.items.filter(BooksOnDiskListItem::isSelected)
-    setBooksAdapter(if (!ServerUtils.isServerStarted) hostBooks else booksList)
+    hostBooks = booksAdapter.items.filter(BooksOnDiskListItem::isSelected)
+    hostBooks?.let(::saveHostedBooks)
+    if (!ServerUtils.isServerStarted) {
+      setBooksAdapter(hostBooks)
+    } else {
+      presenter.loadBooks(sharedPreferenceUtil.allBooksToHost)
+    }
     when {
       ServerUtils.isServerStarted -> stopServer()
       selectedBooksPath.size > 0 -> {
@@ -208,7 +214,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     booksList?.let {
       booksAdapter.items = booksList
       booksAdapter.notifyDataSetChanged()
-    } ?: presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
+    } ?: presenter.loadBooks(sharedPreferenceUtil.allBooksToHost)
   }
 
   private fun startKiwixHotspot() {
@@ -225,15 +231,15 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
-    booksList = booksAdapter.items.map {
+    allBooks = booksAdapter.items.map {
       if (it == bookOnDisk) {
         it.isSelected = !it.isSelected
       }
       it
     }
-    booksList?.let {
+    allBooks?.let {
       booksAdapter.items = it
-      saveHostedBooks(it)
+      saveAllBooks(it)
     }
   }
 
@@ -263,6 +269,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   override fun onResume() {
     super.onResume()
     if (!ServerUtils.isServerStarted) {
+      presenter.loadBooks(sharedPreferenceUtil.allBooksToHost)
+    } else {
       presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
     }
     if (ServerUtils.isServerStarted) {
@@ -275,6 +283,14 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   private fun saveHostedBooks(booksList: List<BooksOnDiskListItem>) {
     sharedPreferenceUtil.hostedBooks = booksList.asSequence()
+      .filter(BooksOnDiskListItem::isSelected)
+      .filterIsInstance<BookOnDisk>()
+      .mapNotNull { it.book.title }
+      .toSet()
+  }
+
+  private fun saveAllBooks(booksList: List<BooksOnDiskListItem>) {
+    sharedPreferenceUtil.allBooksToHost = booksList.asSequence()
       .filter(BooksOnDiskListItem::isSelected)
       .filterIsInstance<BookOnDisk>()
       .mapNotNull { it.book.title }
