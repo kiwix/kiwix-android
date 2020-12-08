@@ -25,11 +25,11 @@ import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixlib.DirectAccessInfo
 import org.kiwix.kiwixlib.JNIKiwixException
 import org.kiwix.kiwixlib.JNIKiwixInt
 import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixlib.JNIKiwixString
-import org.kiwix.kiwixlib.Pair
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -276,5 +276,5 @@ private val String.mimeType: String?
   get() = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
     MimeTypeMap.getFileExtensionFromUrl(this)
   )
-private val Pair.parcelFileDescriptor: ParcelFileDescriptor?
+private val DirectAccessInfo.parcelFileDescriptor: ParcelFileDescriptor?
   get() = ParcelFileDescriptor.open(File(filename), ParcelFileDescriptor.MODE_READ_ONLY)

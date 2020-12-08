@@ -18,8 +18,6 @@
 
 package org.kiwix.kiwixmobile.nav.destination.reader
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.AttributeSet
@@ -31,8 +29,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
@@ -40,8 +36,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
@@ -60,10 +54,8 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
-import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
@@ -128,15 +120,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun tryOpeningZimFile(zimFileUri: String) {
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, Uri.parse(zimFileUri)
-    )
-
-    if (filePath == null || !File(filePath).exists()) {
+    val zimSource = ZimSource.fromDatabaseValue(zimFileUri)
+    if (zimSource?.exists() == true) {
+      openZimFile(zimSource)
+    } else {
       activity.toast(R.string.error_file_not_found)
-      return
     }
-    openZimFile(ZimSource.ZimFile(File(filePath)))
   }
 
   override fun loadDrawerViews() {
@@ -223,11 +212,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun onCreateOptionsMenu(
-    menu: Menu,
-    activity: AppCompatActivity
-  ): Super = ShouldCall
-
   override fun onResume() {
     super.onResume()
     if (zimReaderContainer.zimSource == null) {
@@ -300,20 +284,5 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  override fun onNewIntent(
-    intent: Intent,
-    activity: AppCompatActivity
-  ): Super {
-    super.onNewIntent(activity.intent, activity)
-    intent.data?.let {
-      when (it.scheme) {
-        "file" -> openZimFile(ZimSource.ZimFile(it.toFile()))
-        "content" -> openZimFile(ZimSource.ZimFileDescriptor(intent.data!!))
-        else -> activity.toast(R.string.cannot_open_file)
-      }
-    }
-    return ShouldCall
   }
 }
