@@ -27,10 +27,9 @@
   <string name="pref_info_title">{{Identical|Information}}</string>
   <string name="pref_info_version">{{Identical|Version}}</string>
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
-  <string name="history">{{Identical|History}}</string>
-  <string name="pref_notes">{{Identical|Notes}}</string>
   <string name="pref_language_title">{{Identical|Language}}</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
+  <string name="pref_notes">{{Identical|Notes}}</string>
   <string name="delete">{{Identical|Delete}}</string>
   <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>
@@ -47,6 +46,7 @@
   <string name="previous">{{Identical|Previous}}</string>
   <string name="time_left">This is the past participle of the verb “to leave” (meaning “quitted” or “exited”). This is used in a context of “X minutes left” to finish a download.</string>
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
+  <string name="history">{{Identical|History}}</string>
   <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
   <string name="save">{{Identical|Save}}</string>
   <string name="permission_rationale_location_on_host_zim_file">Tell the user Location permission required for hosting zim file.</string>

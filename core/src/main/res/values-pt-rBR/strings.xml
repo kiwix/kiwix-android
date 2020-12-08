@@ -76,6 +76,7 @@
   <string name="delete_recent_search_item">Eliminar este item?</string>
   <string name="pref_clear_all_history_title">Apagar histórico</string>
   <string name="pref_clear_all_history_summary">Limpar pesquisas recentes e histórico de guias</string>
+  <string name="pref_notes">Notas</string>
   <string name="all_history_cleared">Eliminando todo o histórico</string>
   <string name="pref_clear_all_bookmarks_title">Limpar marcadores</string>
   <string name="clear_all_history_dialog_title">Limpar todo o histórico?</string>

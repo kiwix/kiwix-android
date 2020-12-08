@@ -4,6 +4,7 @@
 * Alan ffm
 * DeRudySoulStorm
 * InternerowyGołąb
+* Kareyac
 * Kelson
 * Krzyz23
 * Macofe
@@ -79,6 +80,7 @@
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
   <string name="pref_clear_all_history_title">Wyczyść historię</string>
   <string name="pref_clear_all_history_summary">Wyczyść historię ostatnich wyszukiwań i kart</string>
+  <string name="pref_notes">Uwagi</string>
   <string name="all_history_cleared">Usunięto całą historię</string>
   <string name="pref_clear_all_bookmarks_title">Wyczyść zakładki</string>
   <string name="clear_all_history_dialog_title">Wyczyść całą historię?</string>
