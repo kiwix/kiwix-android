@@ -155,15 +155,28 @@ class ZimReader constructor(
     }
 
   private fun loadAsset(uri: String): InputStream? {
-    val infoPair = jniKiwixReader.getDirectAccessInformation(uri.filePath)
-    if (infoPair == null || !File(infoPair.filename).exists()) {
-      return loadAssetFromCache(uri)
+    return when (zimSource) {
+      is ZimSource.ZimFile -> {
+        val infoPair = jniKiwixReader.getDirectAccessInformation(uri.filePath)
+        if (infoPair == null || !File(infoPair.filename).exists()) {
+          loadAssetFromCache(uri)
+        } else {
+          AssetFileDescriptor(
+            infoPair.parcelFileDescriptor,
+            infoPair.offset,
+            jniKiwixReader.getArticleSize(uri.filePath)
+          ).createInputStream()
+        }
+      }
+      is ZimSource.ZimFileDescriptor -> {
+        val infoPair = jniKiwixReader.getDirectAccessViaFD(uri.filePath)
+        AssetFileDescriptor(
+          ParcelFileDescriptor.dup(infoPair.fd),
+          infoPair.offset,
+          jniKiwixReader.getArticleSize(uri.filePath)
+        ).createInputStream()
+      }
     }
-    return AssetFileDescriptor(
-      infoPair.parcelFileDescriptor,
-      infoPair.offset,
-      jniKiwixReader.getArticleSize(uri.filePath)
-    ).createInputStream()
   }
 
   @Throws(IOException::class)
