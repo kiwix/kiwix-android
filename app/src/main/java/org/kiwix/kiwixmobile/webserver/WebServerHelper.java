@@ -41,18 +41,19 @@ import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
 
 public class WebServerHelper {
   private static final String TAG = "WebServerHelper";
-  //private Library kiwixLibrary;
   private KiwixServer kiwixServer;
   private IpAddressCallbacks ipAddressCallbacks;
   private boolean isServerStarted;
-  @Inject public WebServerHelper(@NonNull KiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
+  private JNIKiwixServer server;
+
+  @Inject public WebServerHelper(@NonNull KiwixServer kiwixServer,
+    @NonNull IpAddressCallbacks ipAddressCallbacks) {
     this.kiwixServer = kiwixServer;
     this.ipAddressCallbacks = ipAddressCallbacks;
   }
-  private JNIKiwixServer server;
+
   public boolean startServerHelper(@NonNull ArrayList<String> selectedBooksPath) {
     String ip = ServerUtils.getIpAddress();
-    server = kiwixServer.createKiwixServer();
     if (ip.length() == 0) {
       return false;
     } else if (startAndroidWebServer(selectedBooksPath)) {
@@ -70,6 +71,7 @@ public class WebServerHelper {
 
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!isServerStarted) {
+      server = kiwixServer.createKiwixServer();
       int DEFAULT_PORT = 8080;
       Library kiwixLibrary = kiwixServer.getKiwixLibrary();
       Log.d(TAG, "startAndroidWebServer: KiwixLibFactory check: { " + kiwixLibrary + " }");
