@@ -23,10 +23,8 @@ import android.app.Service
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixlib.JNIKiwixServer
-import org.kiwix.kiwixlib.Library
 import org.kiwix.kiwixmobile.di.ServiceScope
-import org.kiwix.kiwixmobile.nav.destination.library.LibraryFactory
+import org.kiwix.kiwixmobile.webserver.KiwixServer
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotNotificationManager
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver
@@ -39,29 +37,28 @@ class ServiceModule {
   @Provides
   @ServiceScope
   fun providesWebServerHelper(
-    jniKiwixLibrary: LibraryFactory,
-    kiwixServer: JNIKiwixServer,
+    kiwixServer: KiwixServer,
     ipAddressCallbacks: IpAddressCallbacks
-  ): WebServerHelper = WebServerHelper(jniKiwixLibrary, kiwixServer, ipAddressCallbacks)
+  ): WebServerHelper = WebServerHelper(kiwixServer, ipAddressCallbacks)
 
   @Provides
   @ServiceScope
   fun providesIpAddressCallbacks(service: Service): IpAddressCallbacks =
     service as IpAddressCallbacks
 
-  @Provides
-  @ServiceScope
-  fun providesLibrary(): Library = Library()
+  // @Provides
+  // @ServiceScope
+  // fun providesLibrary(): Library = Library()
 
-  @Provides
-  @ServiceScope
-  fun providesJNIKiwixServer(jniKiwixLibrary: Library): JNIKiwixServer =
-    JNIKiwixServer(jniKiwixLibrary)
+  // @Provides
+  // @ServiceScope
+  // fun providesJNIKiwixServer(jniKiwixLibrary: Library): JNIKiwixServer =
+  //   KiwixServer(jniKiwixLibrary)
 
-  @Provides
-  @ServiceScope
-  fun providesKiwixLibraryFactory(kiwixLibrary: Library): Library =
-    LibraryFactory(kiwixLibrary)
+  // @Provides
+  // @ServiceScope
+  // fun providesKiwixLibraryFactory(): Library =
+  //   LibraryFactory()
 
   @Provides
   @ServiceScope

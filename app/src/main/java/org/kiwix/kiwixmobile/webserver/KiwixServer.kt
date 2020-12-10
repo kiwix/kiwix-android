@@ -16,11 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library
+package org.kiwix.kiwixmobile.webserver
 
-import org.kiwix.kiwixlib.Library
+import org.kiwix.kiwixlib.JNIKiwixServer
+import org.kiwix.kiwixmobile.nav.destination.library.LibraryFactory
 import javax.inject.Inject
 
-class LibraryFactory @Inject constructor() : Library() {
-  fun createKiwixLibrary(): Library = Library()
+class KiwixServer @Inject constructor(kiwixLibraryFactory: LibraryFactory) {
+  val kiwixLibrary = kiwixLibraryFactory.createKiwixLibrary()
+
+  fun createKiwixServer(): JNIKiwixServer? = JNIKiwixServer(kiwixLibrary)
 }

@@ -29,8 +29,6 @@ import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixServer;
 import org.kiwix.kiwixlib.Library;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
-import org.kiwix.kiwixmobile.di.components.ServiceComponent;
-import org.kiwix.kiwixmobile.nav.destination.library.LibraryFactory;
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks;
 
 import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
@@ -44,20 +42,17 @@ import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
 public class WebServerHelper {
   private static final String TAG = "WebServerHelper";
   //private Library kiwixLibrary;
-  private LibraryFactory kiwixLibraryFactory;
-  private JNIKiwixServer kiwixServer;
+  private KiwixServer kiwixServer;
   private IpAddressCallbacks ipAddressCallbacks;
   private boolean isServerStarted;
-private ServiceComponent serviceComponent;
-  @Inject public WebServerHelper(@NonNull LibraryFactory kiwixLibraryFactory,
-    @NonNull JNIKiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
-    this.kiwixLibraryFactory = kiwixLibraryFactory;
+  @Inject public WebServerHelper(@NonNull KiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
     this.kiwixServer = kiwixServer;
     this.ipAddressCallbacks = ipAddressCallbacks;
   }
-
+  private JNIKiwixServer server;
   public boolean startServerHelper(@NonNull ArrayList<String> selectedBooksPath) {
     String ip = ServerUtils.getIpAddress();
+    server = kiwixServer.createKiwixServer();
     if (ip.length() == 0) {
       return false;
     } else if (startAndroidWebServer(selectedBooksPath)) {
@@ -68,7 +63,7 @@ private ServiceComponent serviceComponent;
 
   public void stopAndroidWebServer() {
     if (isServerStarted) {
-      kiwixServer.stop();
+      server.stop();
       updateServerState(false);
     }
   }
@@ -76,23 +71,24 @@ private ServiceComponent serviceComponent;
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!isServerStarted) {
       int DEFAULT_PORT = 8080;
-      Log.d(TAG, "startAndroidWebServer: KiwixLibFactory check: { " + kiwixLibraryFactory + " }");
+      Library kiwixLibrary = kiwixServer.getKiwixLibrary();
+      Log.d(TAG, "startAndroidWebServer: KiwixLibFactory check: { " + kiwixLibrary + " }");
       Log.d(TAG,
-        "startAndroidWebServer: LibName101: { " + kiwixLibraryFactory + " }");
+        "startAndroidWebServer: LibName101: { " + kiwixLibrary + " }");
       ServerUtils.port = DEFAULT_PORT;
       for (String path : selectedBooksPath) {
         try {
-          boolean isBookAdded = kiwixLibraryFactory.addBook(path);
+          boolean isBookAdded = kiwixLibrary.addBook(path);
           Log.d(TAG, "startAndroidWebServer: LibName102: { "
-            + kiwixLibraryFactory
+            + kiwixLibrary
             + " }");
           Log.v(TAG, "isBookAdded: " + isBookAdded + path);
         } catch (JNIKiwixException e) {
           Log.v(TAG, "Couldn't add book " + path);
         }
       }
-      kiwixServer.setPort(ServerUtils.port);
-      updateServerState(kiwixServer.start());
+      server.setPort(ServerUtils.port);
+      updateServerState(server.start());
       Log.v(TAG, "Server status" + isServerStarted);
     }
     return isServerStarted;
