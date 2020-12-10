@@ -25,7 +25,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixServer;
 import org.kiwix.kiwixlib.Library;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
@@ -71,27 +70,29 @@ public class WebServerHelper {
 
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!isServerStarted) {
-      server = kiwixServer.createKiwixServer();
       int DEFAULT_PORT = 8080;
-      Library kiwixLibrary = kiwixServer.getKiwixLibrary();
-      Log.d(TAG, "startAndroidWebServer: KiwixLibFactory check: { " + kiwixLibrary + " }");
-      Log.d(TAG,
-        "startAndroidWebServer: LibName101: { " + kiwixLibrary + " }");
+      //Library kiwixLibrary = kiwixServer.getKiwixLibrary();
+      Log.d(TAG, "startAndroidWebServer: KiwixServer instance check: { " + kiwixServer + " }");
+      //Log.d(TAG,
+      //  "startAndroidWebServer: library instance check in WSH: { " + kiwixLibrary + " }");
       ServerUtils.port = DEFAULT_PORT;
-      for (String path : selectedBooksPath) {
-        try {
-          boolean isBookAdded = kiwixLibrary.addBook(path);
-          Log.d(TAG, "startAndroidWebServer: LibName102: { "
-            + kiwixLibrary
-            + " }");
-          Log.v(TAG, "isBookAdded: " + isBookAdded + path);
-        } catch (JNIKiwixException e) {
-          Log.v(TAG, "Couldn't add book " + path);
-        }
-      }
+      //for (String path : selectedBooksPath) {
+      //  try {
+      //    boolean isBookAdded = kiwixLibrary.addBook(path);
+      //    Log.d(TAG, "startAndroidWebServer: LibName102: { "
+      //      + kiwixLibrary
+      //      + " }");
+      //    Log.v(TAG, "isBookAdded: " + isBookAdded + path);
+      //  } catch (JNIKiwixException e) {
+      //    Log.v(TAG, "Couldn't add book " + path);
+      //  }
+      //}
+      server = kiwixServer.createKiwixServer(selectedBooksPath);
+      //server = kiwixServer.createKiwixServer();
       server.setPort(ServerUtils.port);
       updateServerState(server.start());
-      Log.v(TAG, "Server status" + isServerStarted);
+      Log.d(TAG, "startAndroidWebServer: checking server instance:{ " + server + " }");
+      Log.d(TAG, "Server status" + isServerStarted);
     }
     return isServerStarted;
   }
