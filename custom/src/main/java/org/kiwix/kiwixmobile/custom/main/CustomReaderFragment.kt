@@ -97,6 +97,7 @@ class CustomReaderFragment : CoreReaderFragment() {
       )
     }
   }
+
   private fun openSearchItem(item: SearchItemToOpen) {
     zimReaderContainer.titleToUrl(item.pageTitle)?.apply {
       if (item.shouldOpenInNewTab) {
@@ -156,8 +157,7 @@ class CustomReaderFragment : CoreReaderFragment() {
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
-          if (isAdded)
-            findNavController().navigate(actionCustomReaderToCustomDownload())
+          findNavController().navigate(actionCustomReaderToCustomDownload())
         }
       }
     )

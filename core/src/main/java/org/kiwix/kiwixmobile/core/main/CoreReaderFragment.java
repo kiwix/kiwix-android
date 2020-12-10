@@ -788,10 +788,6 @@ public abstract class CoreReaderFragment extends BaseFragment
       selectTab(webViewList.size() - 1);
     }
     tabsAdapter.notifyDataSetChanged();
-    //setUpWebViewWithTextToSpeech();
-    if (webView != null) {
-      documentParser.initInterface(webView);
-    }
     return webView;
   }
 

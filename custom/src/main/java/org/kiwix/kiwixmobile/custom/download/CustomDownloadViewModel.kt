@@ -76,7 +76,6 @@ class CustomDownloadViewModel @Inject constructor(
       is DatabaseEmission -> reduceDatabaseEmission(state, action)
       ClickedRetry,
       ClickedDownload -> state.also { _effects.offer(downloadCustom) }
-      // is PressedBack -> state.also { _effects.offer(finishAndStartMain) }
     }
   }
 
