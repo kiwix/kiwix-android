@@ -33,15 +33,13 @@ class KiwixServer @Inject constructor(kiwixLibraryFactory: LibraryFactory) {
 
   fun createKiwixServer(selectedBooksPath: ArrayList<String>): JNIKiwixServer? {
     kiwixLibrary = libFactory.createKiwixLibrary()
-    // kiwixLibrary.addBook(selectedBooksPath)
     for (path in selectedBooksPath) {
       try {
         var isBookAdded: Boolean = kiwixLibrary.addBook(path)
       } catch (e: JNIKiwixException) {
-        Log.v(TAG, "Couldn't add book $path")
+        Log.v(TAG, "Couldn't add book with path:{ $path }")
       }
     }
-    Log.d(TAG, "createKiwixServer: Library instance check in JNIKiwixServer: $kiwixLibrary ")
     return JNIKiwixServer(kiwixLibrary)
   }
 }

@@ -46,20 +46,6 @@ class ServiceModule {
   fun providesIpAddressCallbacks(service: Service): IpAddressCallbacks =
     service as IpAddressCallbacks
 
-  // @Provides
-  // @ServiceScope
-  // fun providesLibrary(): Library = Library()
-
-  // @Provides
-  // @ServiceScope
-  // fun providesJNIKiwixServer(jniKiwixLibrary: Library): JNIKiwixServer =
-  //   KiwixServer(jniKiwixLibrary)
-
-  // @Provides
-  // @ServiceScope
-  // fun providesKiwixLibraryFactory(): Library =
-  //   LibraryFactory()
-
   @Provides
   @ServiceScope
   fun providesHotspotNotificationManager(
