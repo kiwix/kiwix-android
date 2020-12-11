@@ -17,6 +17,15 @@
   ~
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-</selector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+  android:opacity="opaque">
+  <!-- The background color, preferably the same as your normal theme -->
+  <item android:drawable="@color/alabaster_white" />
+  <item
+    android:bottom="24dp"
+    android:drawable="@mipmap/ic_launcher"
+    android:gravity="center"
+    android:left="24dp"
+    android:right="24dp"
+    android:top="24dp" />
+</layer-list>
