@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.webserver
 import android.util.Log
 import org.kiwix.kiwixlib.JNIKiwixException
 import org.kiwix.kiwixlib.JNIKiwixServer
-import org.kiwix.kiwixlib.Library
 import org.kiwix.kiwixmobile.nav.destination.library.LibraryFactory
 import javax.inject.Inject
 
@@ -29,13 +28,12 @@ private const val TAG = "KiwixServer"
 
 class KiwixServer @Inject constructor(kiwixLibraryFactory: LibraryFactory) {
   private val libFactory = kiwixLibraryFactory
-  private lateinit var kiwixLibrary: Library
 
   fun createKiwixServer(selectedBooksPath: ArrayList<String>): JNIKiwixServer? {
-    kiwixLibrary = libFactory.createKiwixLibrary()
-    for (path in selectedBooksPath) {
+    val kiwixLibrary = libFactory.createKiwixLibrary()
+    selectedBooksPath.forEach { path ->
       try {
-        var isBookAdded: Boolean = kiwixLibrary.addBook(path)
+        kiwixLibrary.addBook(path)
       } catch (e: JNIKiwixException) {
         Log.v(TAG, "Couldn't add book with path:{ $path }")
       }
