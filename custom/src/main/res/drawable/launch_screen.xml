@@ -22,7 +22,8 @@
   <!-- The background color, preferably the same as your normal theme -->
   <item android:drawable="@color/alabaster_white" />
   <item>
-    <bitmap android:src="@mipmap/ic_launcher"
-      android:gravity="center"/>
+    <bitmap
+      android:gravity="center"
+      android:src="@mipmap/ic_launcher" />
   </item>
 </layer-list>
