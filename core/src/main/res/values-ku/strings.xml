@@ -52,7 +52,7 @@
   <string name="server_started_message">Vê adresa IPyê di geroka xwe de binivîsîne ji bo ku xwe bigihînî servera %s</string>
   <string name="error_file_not_found">Çewtîː Peldanka ZIM\'ê ya bijartî nehate dîtin.</string>
   <string name="zim_not_opened">Nikare dosyeya zim-ê veke</string>
-  <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIM\'ê ya derbasdar e.</string>
+  <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIMê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
   <string name="pref_display_title">Nîşan bide</string>
   <string name="pref_info_title">Agahî</string>
