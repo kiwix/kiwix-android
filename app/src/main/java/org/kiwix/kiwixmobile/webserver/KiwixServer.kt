@@ -21,16 +21,15 @@ package org.kiwix.kiwixmobile.webserver
 import android.util.Log
 import org.kiwix.kiwixlib.JNIKiwixException
 import org.kiwix.kiwixlib.JNIKiwixServer
-import org.kiwix.kiwixmobile.nav.destination.library.LibraryFactory
+import org.kiwix.kiwixlib.Library
 import javax.inject.Inject
 
 private const val TAG = "KiwixServer"
 
-class KiwixServer @Inject constructor(kiwixLibraryFactory: LibraryFactory) {
-  private val libFactory = kiwixLibraryFactory
+class KiwixServer @Inject constructor() {
 
   fun createKiwixServer(selectedBooksPath: ArrayList<String>): JNIKiwixServer? {
-    val kiwixLibrary = libFactory.createKiwixLibrary()
+    val kiwixLibrary = Library()
     selectedBooksPath.forEach { path ->
       try {
         kiwixLibrary.addBook(path)
