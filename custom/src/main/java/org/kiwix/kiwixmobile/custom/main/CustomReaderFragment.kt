@@ -66,7 +66,7 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   @Inject lateinit var customFileValidator: CustomFileValidator
   @Inject lateinit var dialogShower: DialogShower
-
+  private var navFromReaderToDownload: Boolean = true
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
@@ -157,7 +157,10 @@ class CustomReaderFragment : CoreReaderFragment() {
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
-          findNavController().navigate(actionCustomReaderToCustomDownload())
+          if (navFromReaderToDownload) {
+            findNavController().navigate(actionCustomReaderToCustomDownload())
+            navFromReaderToDownload = false
+          }
         }
       }
     )
