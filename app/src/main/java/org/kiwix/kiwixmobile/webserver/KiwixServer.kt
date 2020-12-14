@@ -28,7 +28,7 @@ private const val TAG = "KiwixServer"
 
 class KiwixServer @Inject constructor(private val jniKiwixServer: JNIKiwixServer) {
 
-  class Factory {
+  class Factory @Inject constructor() {
     fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer {
       val kiwixLibrary = Library()
       selectedBooksPath.forEach { path ->

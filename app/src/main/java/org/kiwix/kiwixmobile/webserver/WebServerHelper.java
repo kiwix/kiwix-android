@@ -40,13 +40,14 @@ import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
 public class WebServerHelper {
   private static final String TAG = "WebServerHelper";
   private KiwixServer kiwixServer;
+  private KiwixServer.Factory kiwixServerFactory;
   private IpAddressCallbacks ipAddressCallbacks;
   private boolean isServerStarted;
   private JNIKiwixServer server;
 
-  @Inject public WebServerHelper(@NonNull KiwixServer kiwixServer,
+  @Inject public WebServerHelper(@NonNull KiwixServer.Factory kiwixServerFactory,
     @NonNull IpAddressCallbacks ipAddressCallbacks) {
-    this.kiwixServer = kiwixServer;
+    this.kiwixServerFactory = kiwixServerFactory;
     this.ipAddressCallbacks = ipAddressCallbacks;
   }
 
@@ -71,8 +72,7 @@ public class WebServerHelper {
     if (!isServerStarted) {
       int DEFAULT_PORT = 8080;
       ServerUtils.port = DEFAULT_PORT;
-      KiwixServer.Factory factory = new KiwixServer.Factory();
-      kiwixServer = factory.createKiwixServer(selectedBooksPath);
+      kiwixServer = kiwixServerFactory.createKiwixServer(selectedBooksPath);
       updateServerState(kiwixServer.startServer(ServerUtils.port));
       Log.d(TAG, "Server status" + isServerStarted);
     }

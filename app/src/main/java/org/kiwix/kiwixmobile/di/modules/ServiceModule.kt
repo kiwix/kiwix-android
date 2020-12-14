@@ -39,9 +39,9 @@ class ServiceModule {
   @Provides
   @ServiceScope
   fun providesWebServerHelper(
-    kiwixServer: KiwixServer,
+    kiwixServerFactory: KiwixServer.Factory,
     ipAddressCallbacks: IpAddressCallbacks
-  ): WebServerHelper = WebServerHelper(kiwixServer, ipAddressCallbacks)
+  ): WebServerHelper = WebServerHelper(kiwixServerFactory, ipAddressCallbacks)
 
   @Provides
   @ServiceScope
