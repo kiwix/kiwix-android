@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.reader
 
 import android.webkit.WebResourceResponse
 import org.kiwix.kiwixmobile.core.reader.ZimReader.Factory
+import java.net.HttpURLConnection
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,12 +44,26 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   fun getRandomArticleUrl() = zimReader?.getRandomArticleUrl()
   fun isRedirect(url: String): Boolean = zimReader?.isRedirect(url) == true
   fun getRedirect(url: String): String = zimReader?.getRedirect(url) ?: ""
-  fun load(url: String) =
-    WebResourceResponse(
-      zimReader?.readMimeType(url),
-      Charsets.UTF_8.name(),
-      zimReader?.load(url)
-    )
+  fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse {
+    val data = zimReader?.load(url)
+    return WebResourceResponse(zimReader?.readMimeType(url), Charsets.UTF_8.name(), data)
+      .apply {
+        val headers = mutableMapOf("Accept-Ranges" to "bytes")
+        if ("Range" in requestHeaders.keys) {
+          setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_PARTIAL, "Partial Content")
+          val fullSize = data?.available()?.toLong() ?: 0L
+          val lastByte = fullSize - 1
+          val byteRanges = requestHeaders.getValue("Range").substringAfter("=").split("-")
+          headers["Content-Range"] = "bytes ${byteRanges[0]}-$lastByte/$fullSize"
+          if (byteRanges.size == 1) {
+            headers["Connection"] = "close"
+          }
+        } else {
+          setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_OK, "OK")
+        }
+        responseHeaders = headers
+      }
+  }
 
   fun copyReader(): ZimReader? = zimSource?.let(zimFileReaderFactory::create)
 

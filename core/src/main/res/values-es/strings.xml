@@ -12,6 +12,7 @@
 * MarcoAurelio
 * Mpayansilva
 * Ncr
+* Rodney Araujo
 * VegaDark
 -->
 <resources>
@@ -76,6 +77,7 @@
   <string name="delete_recent_search_item">¿Borrar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpiar el historial</string>
   <string name="pref_clear_all_history_summary">Borrar las búsquedas recientes y el historial de pestañas</string>
+  <string name="pref_notes">Notas</string>
   <string name="all_history_cleared">Borrado todo el historial</string>
   <string name="pref_clear_all_bookmarks_title">Borrar marcadores</string>
   <string name="clear_all_history_dialog_title">Borrar todo el historial?</string>
