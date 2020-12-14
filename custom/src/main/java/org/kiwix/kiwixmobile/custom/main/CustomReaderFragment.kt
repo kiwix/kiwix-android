@@ -39,6 +39,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
@@ -54,7 +55,6 @@ import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import org.kiwix.kiwixmobile.custom.main.CustomReaderFragmentDirections.actionCustomReaderToCustomDownload
 import java.util.Locale
 import javax.inject.Inject
 
@@ -66,7 +66,6 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   @Inject lateinit var customFileValidator: CustomFileValidator
   @Inject lateinit var dialogShower: DialogShower
-  private var navFromReaderToDownload: Boolean = true
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
@@ -96,6 +95,11 @@ class CustomReaderFragment : CoreReaderFragment() {
         Observer(::openSearchItem)
       )
     }
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
+    requireActivity().finish()
+    return super.onBackPressed(activity)
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
@@ -157,10 +161,7 @@ class CustomReaderFragment : CoreReaderFragment() {
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
-          if (navFromReaderToDownload) {
-            findNavController().navigate(actionCustomReaderToCustomDownload())
-            navFromReaderToDownload = false
-          }
+          findNavController().navigate(R.id.customDownloadFragment)
         }
       }
     )
