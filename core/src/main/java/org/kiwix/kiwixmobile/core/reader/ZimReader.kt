@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
-import java.io.FileDescriptor
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -156,37 +155,17 @@ class ZimReader constructor(
     }
 
   private fun loadAsset(uri: String): InputStream? {
-    return when (zimSource) {
-      is ZimSource.ZimFile -> {
-        val infoPair = jniKiwixReader.getDirectAccessInformation(uri.filePath)
-        if (infoPair == null || !File(infoPair.filename).exists()) {
-          loadAssetFromCache(uri)
-        } else {
-          AssetFileDescriptor(
-            infoPair.parcelFileDescriptor,
-            infoPair.offset,
-            jniKiwixReader.getArticleSize(uri.filePath)
-          ).createInputStream()
-        }
-      }
-      is ZimSource.ZimFileDescriptor -> {
-        val infoPair = jniKiwixReader.getDirectAccessViaFD(uri.filePath)
-        AssetFileDescriptor(
-          ParcelFileDescriptor.adoptFd(infoPair.fd.fd),
-          infoPair.offset,
-          jniKiwixReader.getArticleSize(uri.filePath)
-        ).createInputStream()
-      }
+    val infoPair = jniKiwixReader.getDirectAccessInformation(uri.filePath)
+    return if (infoPair == null || !File(infoPair.filename).exists()) {
+      loadAssetFromCache(uri)
+    } else {
+      AssetFileDescriptor(
+        infoPair.parcelFileDescriptor,
+        infoPair.offset,
+        jniKiwixReader.getArticleSize(uri.filePath)
+      ).createInputStream()
     }
   }
-
-  private inline val FileDescriptor.fd: Int
-    get() = runCatching {
-      javaClass.getDeclaredField("descriptor").apply { isAccessible = true }.getInt(this)
-    }.getOrElse {
-      it.printStackTrace()
-      -1
-    }
 
   @Throws(IOException::class)
   private fun loadAssetFromCache(uri: String): FileInputStream {
