@@ -43,7 +43,6 @@ public class WebServerHelper {
   private KiwixServer.Factory kiwixServerFactory;
   private IpAddressCallbacks ipAddressCallbacks;
   private boolean isServerStarted;
-  private JNIKiwixServer server;
 
   @Inject public WebServerHelper(@NonNull KiwixServer.Factory kiwixServerFactory,
     @NonNull IpAddressCallbacks ipAddressCallbacks) {

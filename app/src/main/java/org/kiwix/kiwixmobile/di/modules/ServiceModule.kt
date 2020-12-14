@@ -23,8 +23,6 @@ import android.app.Service
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixlib.JNIKiwixServer
-import org.kiwix.kiwixlib.Library
 import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.KiwixServer
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
@@ -47,15 +45,6 @@ class ServiceModule {
   @ServiceScope
   fun providesIpAddressCallbacks(service: Service): IpAddressCallbacks =
     service as IpAddressCallbacks
-
-  @Provides
-  @ServiceScope
-  fun providesLibrary(): Library = Library()
-
-  @Provides
-  @ServiceScope
-  fun providesJNIKiwixServer(jniKiwixLibrary: Library): JNIKiwixServer =
-    JNIKiwixServer(jniKiwixLibrary)
 
   @Provides
   @ServiceScope
