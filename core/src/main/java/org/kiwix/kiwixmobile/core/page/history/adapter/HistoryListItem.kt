@@ -20,7 +20,8 @@ package org.kiwix.kiwixmobile.core.page.history.adapter
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReader
+import org.kiwix.kiwixmobile.core.reader.ZimSource
 
 sealed class HistoryListItem : PageRelated {
 
@@ -28,7 +29,8 @@ sealed class HistoryListItem : PageRelated {
     val databaseId: Long = 0L,
     override val zimId: String,
     val zimName: String,
-    override val zimFilePath: String,
+
+    override val zimSource: ZimSource,
     override val favicon: String?,
     val historyUrl: String,
     override val title: String,
@@ -44,12 +46,12 @@ sealed class HistoryListItem : PageRelated {
       title: String,
       dateString: String,
       timeStamp: Long,
-      zimFileReader: ZimFileReader
+      zimReader: ZimReader
     ) : this(
-      zimId = zimFileReader.id,
-      zimName = zimFileReader.name,
-      zimFilePath = zimFileReader.zimFile.canonicalPath,
-      favicon = zimFileReader.favicon,
+      zimId = zimReader.id,
+      zimName = zimReader.name,
+      zimSource = zimReader.zimSource,
+      favicon = zimReader.favicon,
       historyUrl = url,
       title = title,
       dateString = dateString,
@@ -60,7 +62,7 @@ sealed class HistoryListItem : PageRelated {
       historyEntity.id,
       historyEntity.zimId,
       historyEntity.zimName,
-      historyEntity.zimFilePath,
+      historyEntity.zimSource,
       historyEntity.favicon,
       historyEntity.historyUrl,
       historyEntity.historyTitle,

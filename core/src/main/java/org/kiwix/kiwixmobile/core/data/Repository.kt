@@ -102,7 +102,7 @@ class Repository @Inject internal constructor(
   override fun getBookmarks() = bookmarksDao.bookmarks() as Flowable<List<BookmarkItem>>
 
   override fun getCurrentZimBookmarksUrl() =
-    Single.just(bookmarksDao.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))
+    Single.just(bookmarksDao.getCurrentZimBookmarksUrl(zimReaderContainer.zimReader))
       .subscribeOn(io)
       .observeOn(mainThread)
 

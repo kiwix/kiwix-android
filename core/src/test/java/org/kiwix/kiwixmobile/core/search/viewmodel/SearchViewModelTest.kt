@@ -46,7 +46,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
@@ -79,7 +79,7 @@ internal class SearchViewModelTest {
   private val recentSearchDao: NewRecentSearchDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
-  private val zimFileReader: ZimFileReader = mockk()
+  private val zimReader: ZimReader = mockk()
   private val testDispatcher = TestCoroutineDispatcher()
 
   lateinit var viewModel: SearchViewModel
@@ -97,9 +97,9 @@ internal class SearchViewModelTest {
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
     recentsFromDb = Channel(kotlinx.coroutines.channels.Channel.UNLIMITED)
-    every { zimReaderContainer.copyReader() } returns zimFileReader
+    every { zimReaderContainer.copyReader() } returns zimReader
     coEvery {
-      searchResultGenerator.generateSearchResults("", zimFileReader)
+      searchResultGenerator.generateSearchResults("", zimReader)
     } returns emptyList()
     every { zimReaderContainer.id } returns "id"
     every { recentSearchDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
@@ -246,7 +246,7 @@ internal class SearchViewModelTest {
   ) {
 
     coEvery {
-      searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
+      searchResultGenerator.generateSearchResults(searchTerm, zimReader)
     } returns searchResults
     viewModel.actions.offer(Filter(searchTerm))
     recentsFromDb.offer(databaseResults)

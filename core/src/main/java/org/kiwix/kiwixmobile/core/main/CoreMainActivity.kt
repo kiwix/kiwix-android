@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimSource
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -285,12 +286,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     )
   }
 
-  fun openPage(pageUrl: String, zimFilePath: String = "", shouldOpenInNewTab: Boolean = false) {
+  fun openPage(pageUrl: String, zimSource: ZimSource? = null, shouldOpenInNewTab: Boolean = false) {
     navigate(
       readerFragmentResId,
       bundleOf(
         PAGE_URL_KEY to pageUrl,
-        ZIM_FILE_URI_KEY to zimFilePath,
+        ZIM_FILE_URI_KEY to zimSource?.toDatabase(),
         SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
       )
     )

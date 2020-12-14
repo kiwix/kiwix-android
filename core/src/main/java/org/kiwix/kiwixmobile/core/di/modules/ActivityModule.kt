@@ -58,7 +58,7 @@ abstract class ActivityModule {
         disableTabs: Boolean
       ): MainMenu = MainMenu(
         activity,
-        zimReaderContainer.zimFileReader,
+        zimReaderContainer.zimReader,
         menu,
         webViews,
         urlIsValid,

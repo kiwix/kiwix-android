@@ -108,7 +108,7 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.zimSource.path))
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
       every { queryBuilder.build() } returns query
@@ -126,11 +126,11 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.zimSource.path))
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
       every { queryBuilder.build() } returns query
-      every { query.find() } returns listOf(bookOnDiskEntity(file = distinctBook.file))
+      every { query.find() } returns listOf(bookOnDiskEntity(file = distinctBook.zimSource))
       slot.captured.call()
       verify { box.put(listOf()) }
     }
@@ -144,7 +144,7 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.zimSource.path))
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk()
       every { queryBuilder.build() } returns query
@@ -171,7 +171,7 @@ internal class NewBookDaoTest {
     every { box.store.callInTx(capture(slot)) } returns Unit
     newBookDao.migrationInsert(listOf(book))
     slot.captured.call()
-    verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, file = book.file)))) }
+    verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, zimSource = book.file)))) }
   }
 
   @Test
@@ -187,7 +187,7 @@ internal class NewBookDaoTest {
     val bookOnDiskEntity: BookOnDiskEntity = bookOnDiskEntity()
     expectGetFavIconAndZimFileWith(bookmark, listOf(bookOnDiskEntity))
     assertThat(newBookDao.getFavIconAndZimFile(bookmark))
-      .isEqualTo(Pair(bookOnDiskEntity.favIcon, bookOnDiskEntity.file.path))
+      .isEqualTo(Pair(bookOnDiskEntity.favIcon, bookOnDiskEntity.zimSource.path))
   }
 
   private fun expectGetFavIconAndZimFileWith(

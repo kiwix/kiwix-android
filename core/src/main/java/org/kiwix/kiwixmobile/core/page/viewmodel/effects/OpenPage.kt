@@ -32,8 +32,8 @@ data class OpenPage(
   override fun invokeWith(activity: AppCompatActivity) {
     activity as CoreMainActivity
     activity.popNavigationBackstack()
-    if (page.zimFilePath != zimReaderContainer.zimCanonicalPath) {
-      activity.openPage(page.url, page.zimFilePath!!)
+    if (page.zimSource != zimReaderContainer.zimSource) {
+      activity.openPage(page.url, page.zimSource!!)
     } else {
       activity.openPage(page.url)
     }

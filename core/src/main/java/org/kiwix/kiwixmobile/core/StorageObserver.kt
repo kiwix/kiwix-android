@@ -23,7 +23,8 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReader
+import org.kiwix.kiwixmobile.core.reader.ZimSource.ZimFile
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
@@ -32,7 +33,7 @@ import javax.inject.Inject
 class StorageObserver @Inject constructor(
   private val downloadDao: FetchDownloadDao,
   private val fileSearch: FileSearch,
-  private val zimReaderFactory: ZimFileReader.Factory
+  private val zimReaderFactory: ZimReader.Factory
 ) {
 
   val booksOnFileSystem: Flowable<List<BookOnDisk>>
@@ -49,6 +50,6 @@ class StorageObserver @Inject constructor(
     downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
   private fun convertToBookOnDisk(file: File) =
-    zimReaderFactory.create(file)
-      ?.let { zimFileReader -> BookOnDisk(file, zimFileReader).also { zimFileReader.dispose() } }
+    zimReaderFactory.create(ZimFile(file))
+      ?.let { zimFileReader -> BookOnDisk(zimFileReader).also { zimFileReader.dispose() } }
 }

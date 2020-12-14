@@ -83,8 +83,6 @@ import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.processors.BehaviorProcessor;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,8 +106,9 @@ import org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewExtensionsKt;
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions;
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem;
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader;
+import org.kiwix.kiwixmobile.core.reader.ZimReader;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.reader.ZimSource;
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener;
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
@@ -222,10 +221,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
   protected int currentWebViewIndex = 0;
-  private File file;
+  private ZimSource zimSource;
   private ActionMode actionMode = null;
   private KiwixWebView tempWebViewForUndo;
-  private File tempZimFileForUndo;
+  private ZimSource tempZimSourceForUndo;
   private boolean isFirstRun;
   protected ActionBar actionBar;
   private TableDrawerAdapter tableDrawerAdapter;
@@ -311,7 +310,7 @@ public abstract class CoreReaderFragment extends BaseFragment
         titleTextView.getHitRect(hitRect);
         if (hitRect.contains((int) e.getX(), (int) e.getY())) {
           if (mainMenu != null) {
-            mainMenu.tryExpandSearch(zimReaderContainer.getZimFileReader());
+            mainMenu.tryExpandSearch(zimReaderContainer.getZimReader());
           }
         }
       }
@@ -421,7 +420,7 @@ public abstract class CoreReaderFragment extends BaseFragment
           final BookOnDiskEntity bookMatchingTitle =
             newBookDao.bookMatching(intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE));
           if (bookMatchingTitle != null) {
-            openZimFile(bookMatchingTitle.getFile());
+            openZimFile(bookMatchingTitle.getZimSource());
           }
         },
         300);
@@ -778,7 +777,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private KiwixWebView newTab(String url, boolean selectTab) {
     KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
-    if(selectTab) {
+    if (selectTab) {
       selectTab(webViewList.size() - 1);
     }
     tabsAdapter.notifyDataSetChanged();
@@ -786,7 +785,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void closeTab(int index) {
-    tempZimFileForUndo = zimReaderContainer.getZimFile();
+    tempZimSourceForUndo = zimReaderContainer.getZimSource();
     tempWebViewForUndo = webViewList.get(index);
     webViewList.remove(index);
     if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
@@ -814,7 +813,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (webViewList.isEmpty()) {
       reopenBook();
     }
-    zimReaderContainer.setZimFile(tempZimFileForUndo);
+    zimReaderContainer.setZimSource(tempZimSourceForUndo);
     webViewList.add(index, tempWebViewForUndo);
     tabsAdapter.notifyDataSetChanged();
 
@@ -1008,17 +1007,17 @@ public abstract class CoreReaderFragment extends BaseFragment
     externalLinkOpener.openExternalUrl(intent);
   }
 
-  protected void openZimFile(@NonNull File file) {
+  protected void openZimFile(@NonNull ZimSource zimSource) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      if (file.exists()) {
-        openAndSetInContainer(file);
+      if (zimSource.exists()) {
+        openAndSetInContainer(zimSource);
         updateTitle();
       } else {
-        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
+        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimSource.toString());
         ContextExtensionsKt.toast(getActivity(), R.string.error_file_not_found, Toast.LENGTH_LONG);
       }
     } else {
-      this.file = file;
+      this.zimSource = zimSource;
       requestExternalStoragePermission();
     }
   }
@@ -1035,24 +1034,21 @@ public abstract class CoreReaderFragment extends BaseFragment
     );
   }
 
-  private void openAndSetInContainer(File file) {
-    try {
-      if (isNotPreviouslyOpenZim(file.getCanonicalPath())) {
-        webViewList.clear();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+  private void openAndSetInContainer(ZimSource zimSource) {
+    ZimReader zimReader = zimReaderContainer.getZimReader();
+    if (zimReader == null || zimReader.getZimSource() != zimSource) {
+      webViewList.clear();
     }
-    zimReaderContainer.setZimFile(file);
-    final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-    if (zimFileReader != null) {
+    zimReaderContainer.setZimSource(zimSource);
+    zimReader = zimReaderContainer.getZimReader();
+    if (zimReader != null) {
       if (mainMenu != null) {
         mainMenu.onFileOpened(urlIsValid());
       }
       openArticle(UNINITIALISER_ADDRESS);
       safeDispose();
       bookmarkingDisposable = Flowable.combineLatest(
-        newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader),
+        newBookmarksDao.bookmarkUrlsForCurrentBook(zimReader),
         webUrlsProcessor,
         (bookmarkUrls, currentUrl) -> bookmarkUrls.contains(currentUrl)
       ).observeOn(AndroidSchedulers.mainThread())
@@ -1075,18 +1071,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  private boolean isNotPreviouslyOpenZim(String canonicalPath) {
-    return canonicalPath != null && !canonicalPath.equals(zimReaderContainer.getZimCanonicalPath());
-  }
-
   @Override
   public void onRequestPermissionsResult(int requestCode,
     @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          if (file != null) {
-            openZimFile(file);
+          if (zimSource != null) {
+            openZimFile(zimSource);
           }
         } else {
           Snackbar.make(snackbarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
@@ -1153,10 +1145,10 @@ public abstract class CoreReaderFragment extends BaseFragment
         repositoryActions.deleteBookmark(articleUrl);
         ViewExtensionsKt.snack(snackbarRoot, R.string.bookmark_removed);
       } else {
-        final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-        if (zimFileReader != null) {
+        final ZimReader zimReader = zimReaderContainer.getZimReader();
+        if (zimReader != null) {
           repositoryActions.saveBookmark(
-            new BookmarkItem(getCurrentWebView().getTitle(), articleUrl, zimFileReader)
+            new BookmarkItem(getCurrentWebView().getTitle(), articleUrl, zimReader)
           );
           ViewExtensionsKt.snack(
             snackbarRoot,
@@ -1284,7 +1276,7 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @NotNull
   protected String contentUrl(String articleUrl) {
-    return Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString();
+    return Uri.parse(ZimReader.CONTENT_PREFIX + articleUrl).toString();
   }
 
   @NotNull
@@ -1405,7 +1397,8 @@ public abstract class CoreReaderFragment extends BaseFragment
       positions.put(view.getScrollY());
     }
 
-    editor.putString(TAG_CURRENT_FILE, zimReaderContainer.getZimCanonicalPath());
+    ZimSource zimSource = zimReaderContainer.getZimSource();
+    editor.putString(TAG_CURRENT_FILE, zimSource != null ? zimSource.toDatabase() : null);
     editor.putString(TAG_CURRENT_ARTICLES, urls.toString());
     editor.putString(TAG_CURRENT_POSITIONS, positions.toString());
     editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex);
@@ -1417,8 +1410,10 @@ public abstract class CoreReaderFragment extends BaseFragment
   public void onPause() {
     super.onPause();
     saveTabStates();
+    ZimSource zimSource = zimReaderContainer.getZimSource();
     Log.d(TAG_KIWIX,
-      "onPause Save current zim file to preferences: " + zimReaderContainer.getZimCanonicalPath());
+      "onPause Save current zim file to preferences: " + (zimSource != null ? zimSource.toDatabase()
+        : "nothing"));
   }
 
   @Override
@@ -1438,8 +1433,8 @@ public abstract class CoreReaderFragment extends BaseFragment
       updateUrlProcessor();
       updateBottomToolbarArrowsAlpha();
       String url = getCurrentWebView().getUrl();
-      final ZimFileReader zimFileReader = zimReaderContainer.getZimFileReader();
-      if (hasValidFileAndUrl(url, zimFileReader)) {
+      final ZimReader zimReader = zimReaderContainer.getZimReader();
+      if (hasValidFileAndUrl(url, zimReader)) {
         final long timeStamp = System.currentTimeMillis();
         SimpleDateFormat sdf =
           new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(getActivity()));
@@ -1448,7 +1443,7 @@ public abstract class CoreReaderFragment extends BaseFragment
           getCurrentWebView().getTitle(),
           sdf.format(new Date(timeStamp)),
           timeStamp,
-          zimFileReader
+          zimReader
         );
         repositoryActions.saveHistory(history);
       }
@@ -1458,8 +1453,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     }
   }
 
-  protected boolean hasValidFileAndUrl(String url, ZimFileReader zimFileReader) {
-    return url != null && zimFileReader != null;
+  protected boolean hasValidFileAndUrl(String url, ZimReader zimReader) {
+    return url != null && zimReader != null;
   }
 
   @Override
@@ -1507,13 +1502,13 @@ public abstract class CoreReaderFragment extends BaseFragment
   @Override
   public void webViewLongClick(final String url) {
     boolean handleEvent = false;
-    if (url.startsWith(ZimFileReader.CONTENT_PREFIX)) {
+    if (url.startsWith(ZimReader.CONTENT_PREFIX)) {
       // This is my web site, so do not override; let my WebView load the page
       handleEvent = true;
     } else if (url.startsWith("file://")) {
       // To handle help page (loaded from resources)
       handleEvent = true;
-    } else if (url.startsWith(ZimFileReader.UI_URI.toString())) {
+    } else if (url.startsWith(ZimReader.UI_URI.toString())) {
       handleEvent = true;
     }
 

@@ -24,13 +24,13 @@ import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReader
 import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 
 internal class ZimSearchResultGeneratorTest {
 
-  private val zimFileReader: ZimFileReader = mockk()
+  private val zimReader: ZimReader = mockk()
 
   private val zimSearchResultGenerator: ZimSearchResultGenerator =
     ZimSearchResultGenerator()
@@ -38,7 +38,7 @@ internal class ZimSearchResultGeneratorTest {
   @Test
   internal fun `empty search term returns empty list`() {
     runBlocking {
-      assertThat(zimSearchResultGenerator.generateSearchResults("", zimFileReader))
+      assertThat(zimSearchResultGenerator.generateSearchResults("", zimReader))
         .isEqualTo(emptyList<ZimSearchResultListItem>())
     }
   }
@@ -48,14 +48,14 @@ internal class ZimSearchResultGeneratorTest {
     val validTitle = "title"
     val searchTerm = " "
     val item = mockk<SearchSuggestion>()
-    every { zimFileReader.searchSuggestions(" ", 200) } returns true
-    every { zimFileReader.getNextSuggestion() } returnsMany listOf(item, item, null)
+    every { zimReader.searchSuggestions(" ", 200) } returns true
+    every { zimReader.getNextSuggestion() } returnsMany listOf(item, item, null)
     every { item.title } returns validTitle
     runBlocking {
-      assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimFileReader))
+      assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimReader))
         .isEqualTo(listOf(ZimSearchResultListItem(validTitle)))
       verify {
-        zimFileReader.searchSuggestions(searchTerm, 200)
+        zimReader.searchSuggestions(searchTerm, 200)
       }
     }
   }

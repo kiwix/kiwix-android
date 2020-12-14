@@ -51,7 +51,7 @@ internal class OpenPageTest {
     every { zimReaderContainer.zimCanonicalPath } returns "notZimFilePath"
     OpenPage(page, zimReaderContainer).invokeWith(activity)
     verify {
-      activity.openPage(page.url, page.zimFilePath!!)
+      activity.openPage(page.url, page.zimSource!!)
     }
   }
 }

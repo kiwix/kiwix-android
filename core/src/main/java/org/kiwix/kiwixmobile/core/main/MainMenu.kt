@@ -24,13 +24,13 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.isVisible
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReader
 
 const val REQUEST_FILE_SEARCH = 1236
 
 class MainMenu(
   private val activity: Activity,
-  zimFileReader: ZimFileReader?,
+  zimReader: ZimReader?,
   menu: Menu,
   webViews: MutableList<KiwixWebView>,
   urlIsValid: Boolean,
@@ -98,7 +98,7 @@ class MainMenu(
     fullscreen.menuItemClickListener { menuClickListener.onFullscreenMenuClicked() }
 
     showWebViewOptions(urlIsValid)
-    zimFileReader?.let {
+    zimReader?.let {
       onFileOpened(urlIsValid)
     }
     updateTabIcon(webViews.size)
@@ -158,8 +158,8 @@ class MainMenu(
     menuItems.forEach { it?.isVisible = visibility }
   }
 
-  fun tryExpandSearch(zimFileReader: ZimFileReader?) {
-    if (search.isVisible && zimFileReader != null) {
+  fun tryExpandSearch(zimReader: ZimReader?) {
+    if (search.isVisible && zimReader != null) {
       navigateToSearch()
     }
   }

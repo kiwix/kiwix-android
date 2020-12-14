@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReader
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import javax.inject.Inject
@@ -29,28 +29,28 @@ import javax.inject.Inject
 interface SearchResultGenerator {
   suspend fun generateSearchResults(
     searchTerm: String,
-    zimFileReader: ZimFileReader?
+    zimReader: ZimReader?
   ): List<SearchListItem>
 }
 
 class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
 
-  override suspend fun generateSearchResults(searchTerm: String, zimFileReader: ZimFileReader?) =
+  override suspend fun generateSearchResults(searchTerm: String, zimReader: ZimReader?) =
     withContext(Dispatchers.IO) {
-      if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm, zimFileReader)
+      if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm, zimReader)
       else emptyList()
     }
 
   private suspend fun readResultsFromZim(
     searchTerm: String,
-    reader: ZimFileReader?
+    reader: ZimReader?
   ) =
     reader.also { yield() }
       ?.searchSuggestions(searchTerm, 200)
       .also { yield() }
       .run { suggestionResults(reader) }
 
-  private suspend fun suggestionResults(reader: ZimFileReader?) = createList {
+  private suspend fun suggestionResults(reader: ZimReader?) = createList {
     yield()
     reader?.getNextSuggestion()
       ?.let { ZimSearchResultListItem(it.title) }

@@ -23,14 +23,15 @@ import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.converter.PropertyConverter
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.reader.ZimSource
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 
 @Entity
 data class BookOnDiskEntity(
   @Id var id: Long = 0,
-  @Convert(converter = StringToFileConverter::class, dbType = String::class)
-  val file: File = File(""),
+  @Convert(converter = ZimSourceConverter::class, dbType = String::class)
+  val zimSource: ZimSource,
   val bookId: String,
   val title: String,
   val description: String?,
@@ -48,7 +49,7 @@ data class BookOnDiskEntity(
 ) {
   constructor(bookOnDisk: BookOnDisk) : this(
     0,
-    bookOnDisk.file,
+    bookOnDisk.zimSource,
     bookOnDisk.book.getId(),
     bookOnDisk.book.getTitle(),
     bookOnDisk.book.getDescription(),
