@@ -26,17 +26,26 @@ import javax.inject.Inject
 
 private const val TAG = "KiwixServer"
 
-class KiwixServer @Inject constructor() {
+class KiwixServer @Inject constructor(private val jniKiwixServer: JNIKiwixServer) {
 
-  fun createKiwixServer(selectedBooksPath: ArrayList<String>): JNIKiwixServer? {
-    val kiwixLibrary = Library()
-    selectedBooksPath.forEach { path ->
-      try {
-        kiwixLibrary.addBook(path)
-      } catch (e: JNIKiwixException) {
-        Log.v(TAG, "Couldn't add book with path:{ $path }")
+  class Factory {
+    fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer {
+      val kiwixLibrary = Library()
+      selectedBooksPath.forEach { path ->
+        try {
+          kiwixLibrary.addBook(path)
+        } catch (e: JNIKiwixException) {
+          Log.v(TAG, "Couldn't add book with path:{ $path }")
+        }
       }
+      return KiwixServer(JNIKiwixServer(kiwixLibrary))
     }
-    return JNIKiwixServer(kiwixLibrary)
   }
+
+  fun startServer(port: Int): Boolean {
+    jniKiwixServer.setPort(port)
+    return jniKiwixServer.start()
+  }
+
+  fun stopServer() = jniKiwixServer.stop()
 }

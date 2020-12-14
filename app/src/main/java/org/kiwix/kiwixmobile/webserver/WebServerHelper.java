@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwixServer;
-import org.kiwix.kiwixlib.Library;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks;
 
@@ -63,7 +62,7 @@ public class WebServerHelper {
 
   public void stopAndroidWebServer() {
     if (isServerStarted) {
-      server.stop();
+      kiwixServer.stopServer();
       updateServerState(false);
     }
   }
@@ -72,9 +71,9 @@ public class WebServerHelper {
     if (!isServerStarted) {
       int DEFAULT_PORT = 8080;
       ServerUtils.port = DEFAULT_PORT;
-      server = kiwixServer.createKiwixServer(selectedBooksPath);
-      server.setPort(ServerUtils.port);
-      updateServerState(server.start());
+      KiwixServer.Factory factory = new KiwixServer.Factory();
+      kiwixServer = factory.createKiwixServer(selectedBooksPath);
+      updateServerState(kiwixServer.startServer(ServerUtils.port));
       Log.d(TAG, "Server status" + isServerStarted);
     }
     return isServerStarted;
