@@ -139,13 +139,10 @@ public class CoreWebViewClient extends WebViewClient {
 
   @Nullable
   @Override
-  public WebResourceResponse shouldInterceptRequest(
-    WebView view,
-    WebResourceRequest request)
-  {
+  public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
     String url = convertLegacyUrl(request.getUrl().toString());
     if (url.startsWith(CONTENT_PREFIX)) {
-      return zimReaderContainer.load(url);
+      return zimReaderContainer.load(url, request.getRequestHeaders());
     } else {
       return super.shouldInterceptRequest(view, request);
     }

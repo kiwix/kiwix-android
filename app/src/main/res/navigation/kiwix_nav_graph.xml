@@ -69,6 +69,11 @@
     <action
       android:id="@+id/action_libraryFragment_to_localFileTransferFragment"
       app:destination="@id/localFileTransferFragment" />
+    <action
+      android:id="@+id/action_libraryFragment_to_introfragment"
+      app:destination="@id/introFragment"
+      app:popUpTo="@id/libraryFragment"
+      app:popUpToInclusive="true" />
   </fragment>
 
   <fragment
@@ -85,7 +90,13 @@
     android:id="@+id/introFragment"
     android:name="org.kiwix.kiwixmobile.intro.IntroFragment"
     android:label="IntroFragment"
-    tools:layout="@layout/fragment_intro" />
+    tools:layout="@layout/fragment_intro">
+    <action
+      android:id="@+id/action_introfragment_to_libraryFragment"
+      app:destination="@id/libraryFragment"
+      app:popUpTo="@id/introFragment"
+      app:popUpToInclusive="true" />
+  </fragment>
   <fragment
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"

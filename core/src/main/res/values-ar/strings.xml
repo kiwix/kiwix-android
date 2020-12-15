@@ -33,6 +33,7 @@
   <string name="hotspot_failed_title">فشل بدء الهوت-سبوت</string>
   <string name="hotspot_failed_message">يبدو أن الهوت-سبوت مفعلٌ بالفعل. يرجى تعطيل هوت-سبوت الواي فاي للمتابعة.</string>
   <string name="go_to_wifi_settings_label">انتقل إلى إعدادات الواي فاي</string>
+  <string name="connection_refused">الاتصال مرفوض.</string>
   <string name="hotspot_running">تشغيل الهوت-سبوت</string>
   <string name="no_books_selected_toast_message">يُرجى اختيار الكتب أولًا</string>
   <string name="server_failed_message">لا يمكن بدء الخادم. يُرجى تشغيل الهوت-سبوت الخاص بك</string>
@@ -76,6 +77,7 @@
   <string name="delete_recent_search_item">حذف هذا العنصر؟</string>
   <string name="pref_clear_all_history_title">إفراغ التاريخ</string>
   <string name="pref_clear_all_history_summary">إفراغ عمليات البحث الحديثة وعلامات التبويب</string>
+  <string name="pref_notes">ملاحظات</string>
   <string name="all_history_cleared">أُفرغ سجل التاريخ</string>
   <string name="pref_clear_all_bookmarks_title">حذف الإشارات المرجعية</string>
   <string name="clear_all_history_dialog_title">مسح كل التاريخ</string>
@@ -227,6 +229,7 @@
   <string name="severe_loss_error">خطأ شديد! حاول تعطيل/إعادة تمكين الواي فاي P2P</string>
   <string name="connection_failed">فشل الاتصال</string>
   <string name="permission_rationale_location">مطلوب إذن للموقع بواسطة أندرويد للسماح للتطبيق باكتشاف الأجهزة المقترنة</string>
+  <string name="permission_rationale_location_on_host_zim_file">مطلوب إذن للموقع بواسطة أندرويد للسماح للتطبيق باكتشاف ملفات زيم (Zim) المستضافة</string>
   <string name="permission_refused_location">لا يمكن تحديد موقع الأجهزة المقترنة دون أذونات الموقع</string>
   <string name="permission_refused_storage">لا يمكن الوصول إلى ملفات زيم (ZIM) دون إذن وحدة تخزين</string>
   <string name="request_enable_location">تمكين الموقع للسماح باكتشاف الأجهزة المقترنة</string>

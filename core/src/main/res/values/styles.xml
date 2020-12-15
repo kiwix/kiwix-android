@@ -62,7 +62,6 @@
     <item name="android:gravity">end</item>
   </style>
 
-  <style name="no_content_text" parent="TextAppearance.KiwixTheme.Headline5" />
 
   <style name="switch_style">
     <item name="android:layout_width">wrap_content</item>
@@ -102,6 +101,13 @@
 
   <style name="ThemeOverlay.KiwixTheme.ProgressBar" parent="">
     <item name="colorAccent">@color/denim_blue400</item>
+  </style>
+
+  <style name="no_content" parent="TextAppearance.KiwixTheme.Headline6">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center</item>
+    <item name="android:visibility">gone</item>
   </style>
 
 </resources>

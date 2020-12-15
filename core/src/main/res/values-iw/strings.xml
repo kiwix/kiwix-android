@@ -9,6 +9,7 @@
 * Tuvalevsku
 * YaronSh
 * יאיר מן
+* ישראל קלר
 -->
 <resources>
   <string name="menu_help">עזרה</string>
@@ -77,6 +78,7 @@
   <string name="delete_recent_search_item">למחוק את הפריט הזה?</string>
   <string name="pref_clear_all_history_title">ניקוי ההיסטוריה</string>
   <string name="pref_clear_all_history_summary">ניקוי מילות חיפוש קודמות והיסטוריית כרטיסיות</string>
+  <string name="pref_notes">הערות</string>
   <string name="all_history_cleared">כל ההיסטוריה נמחקה</string>
   <string name="pref_clear_all_bookmarks_title">ניקוי סימניות</string>
   <string name="clear_all_history_dialog_title">לנקות את כל ההיסטוריה?</string>

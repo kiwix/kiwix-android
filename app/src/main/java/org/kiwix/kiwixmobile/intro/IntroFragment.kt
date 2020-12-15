@@ -23,8 +23,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.fragment_intro.get_started
 import kotlinx.android.synthetic.main.fragment_intro.tab_indicator
@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
 import java.util.Timer
 import java.util.TimerTask
@@ -103,15 +102,10 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     views = emptyArray()
   }
 
-  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    activity.finish()
-    return super.onBackPressed(activity)
-  }
-
   private fun navigateToLibrary() {
     dismissAutoRotate()
     presenter.setIntroShown()
-    (requireActivity() as KiwixMainActivity).navController.popBackStack()
+    findNavController().navigate(IntroFragmentDirections.actionIntrofragmentToLibraryFragment())
   }
 
   private fun updateView(position: Int) {
