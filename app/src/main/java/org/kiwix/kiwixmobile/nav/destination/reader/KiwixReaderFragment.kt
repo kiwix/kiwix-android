@@ -251,7 +251,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
 
     if (zimFile != null) {
-      openZimFile(File(zimFile))
+      if (zimReaderContainer.zimFile == null) {
+        openZimFile(File(zimFile))
+      }
     } else {
       getCurrentWebView().snack(R.string.zim_not_opened)
     }

@@ -778,7 +778,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private KiwixWebView newTab(String url, boolean selectTab) {
     KiwixWebView webView = initalizeWebView(url);
     webViewList.add(webView);
-    if(selectTab) {
+    if (selectTab) {
       selectTab(webViewList.size() - 1);
     }
     tabsAdapter.notifyDataSetChanged();
@@ -964,7 +964,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   @SuppressWarnings("SameReturnValue")
   @OnLongClick(R2.id.bottom_toolbar_bookmark)
   boolean goToBookmarks() {
-    saveTabStates();
     CoreMainActivity parentActivity = (CoreMainActivity) requireActivity();
     parentActivity.navigate(parentActivity.getBookmarksFragmentResId());
     return true;
@@ -1205,7 +1204,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void goToSearch(boolean isVoice) {
-    saveTabStates();
     openSearch("", false, isVoice);
   }
 
@@ -1235,7 +1233,6 @@ public abstract class CoreReaderFragment extends BaseFragment
         break;
       case Intent.ACTION_VIEW:
         if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
-          saveTabStates();
           String searchString =
             intent.getData() == null ? "" : intent.getData().getLastPathSegment();
           openSearch(searchString, false, false);
@@ -1249,7 +1246,6 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void goToSearchWithText(Intent intent) {
-    saveTabStates();
     String searchString = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
       ? intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
       : "";
@@ -1570,21 +1566,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
-      int i = 0;
-      // tabs are already restored if the webViewList includes more tabs than the default
-      if (webViewList.size() == 1) {
-        getCurrentWebView().setScrollY(positions.getInt(0));
-        i++;
-        while (i < urls.length()) {
-          newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)));
-          safelyGetWebView(i).setScrollY(positions.getInt(i));
-          i++;
-        }
+      webViewList.clear();
+      currentWebViewIndex=0;
+      tabsAdapter.notifyItemRemoved(0);
+      tabsAdapter.notifyDataSetChanged();
+      for (int i = 0; i < urls.length(); i++) {
+        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)), i == currentTab)
+          .setScrollY(positions.getInt(i));
       }
-      selectTab(currentTab);
-      safelyGetWebView(currentTab)
-        .loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(currentTab)));
-      getCurrentWebView().setScrollY(positions.getInt(currentTab));
     } catch (JSONException e) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
       ContextExtensionsKt.toast(getActivity(), "Could not restore tabs.", Toast.LENGTH_LONG);
