@@ -1,3 +1,11 @@
+3.4.3
+NEW: Updated translations
+BUGFIX: Video seek was not working
+BUGFIX: Back button in history and bookmarks toolbar always took to library
+BUGFIX: Books hosted from android client were not updating on browser dynamically
+BUGFIX: Creating multiple tabs was causing `loading` in previously opened tabs
+BUGFIX: Messages displayed when no books are present were inconsistent typographically
+
 3.4.2
 NEW: Service worker support for war2c zim files
 NEW: Updated translations
