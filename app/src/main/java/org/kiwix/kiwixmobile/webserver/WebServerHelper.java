@@ -25,9 +25,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixServer;
-import org.kiwix.kiwixlib.Library;
 import org.kiwix.kiwixmobile.core.utils.ServerUtils;
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks;
 
@@ -41,15 +39,14 @@ import static org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP;
 
 public class WebServerHelper {
   private static final String TAG = "WebServerHelper";
-  private Library kiwixLibrary;
-  private JNIKiwixServer kiwixServer;
+  private KiwixServer kiwixServer;
+  private KiwixServer.Factory kiwixServerFactory;
   private IpAddressCallbacks ipAddressCallbacks;
   private boolean isServerStarted;
 
-  @Inject public WebServerHelper(@NonNull Library kiwixLibrary,
-    @NonNull JNIKiwixServer kiwixServer, @NonNull IpAddressCallbacks ipAddressCallbacks) {
-    this.kiwixLibrary = kiwixLibrary;
-    this.kiwixServer = kiwixServer;
+  @Inject public WebServerHelper(@NonNull KiwixServer.Factory kiwixServerFactory,
+    @NonNull IpAddressCallbacks ipAddressCallbacks) {
+    this.kiwixServerFactory = kiwixServerFactory;
     this.ipAddressCallbacks = ipAddressCallbacks;
   }
 
@@ -65,7 +62,7 @@ public class WebServerHelper {
 
   public void stopAndroidWebServer() {
     if (isServerStarted) {
-      kiwixServer.stop();
+      kiwixServer.stopServer();
       updateServerState(false);
     }
   }
@@ -74,17 +71,9 @@ public class WebServerHelper {
     if (!isServerStarted) {
       int DEFAULT_PORT = 8080;
       ServerUtils.port = DEFAULT_PORT;
-      for (String path : selectedBooksPath) {
-        try {
-          boolean isBookAdded = kiwixLibrary.addBook(path);
-          Log.v(TAG, "isBookAdded: " + isBookAdded + path);
-        } catch (JNIKiwixException e) {
-          Log.v(TAG, "Couldn't add book " + path);
-        }
-      }
-      kiwixServer.setPort(ServerUtils.port);
-      updateServerState(kiwixServer.start());
-      Log.v(TAG, "Server status" + isServerStarted);
+      kiwixServer = kiwixServerFactory.createKiwixServer(selectedBooksPath);
+      updateServerState(kiwixServer.startServer(ServerUtils.port));
+      Log.d(TAG, "Server status" + isServerStarted);
     }
     return isServerStarted;
   }
