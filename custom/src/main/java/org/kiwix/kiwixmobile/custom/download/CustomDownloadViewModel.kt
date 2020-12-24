@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
 import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadCustom
-import org.kiwix.kiwixmobile.custom.download.effects.FinishAndStartMain
+import org.kiwix.kiwixmobile.custom.download.effects.NavigateToCustomReader
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import javax.inject.Inject
 
@@ -42,7 +42,7 @@ class CustomDownloadViewModel @Inject constructor(
   downloadDao: FetchDownloadDao,
   setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace,
   private val downloadCustom: DownloadCustom,
-  private val finishAndStartMain: FinishAndStartMain
+  private val navigateToCustomReader: NavigateToCustomReader
 ) : ViewModel() {
 
   val state = MutableLiveData<State>().apply { value = DownloadRequired }
@@ -91,7 +91,7 @@ class CustomDownloadViewModel @Inject constructor(
         else
           DownloadInProgress(action.downloads)
       else
-        DownloadComplete.also { _effects.offer(finishAndStartMain) }
+        DownloadComplete.also { _effects.offer(navigateToCustomReader) }
     DownloadComplete -> state
   }
 }
