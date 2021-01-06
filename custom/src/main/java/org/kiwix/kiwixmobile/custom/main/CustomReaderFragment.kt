@@ -37,10 +37,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.MainMenu
@@ -54,11 +55,8 @@ import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
 import java.util.Locale
 import javax.inject.Inject
-
-const val PAGE_URL_KEY = "pageUrl"
 
 class CustomReaderFragment : CoreReaderFragment() {
 
@@ -68,34 +66,40 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   @Inject lateinit var customFileValidator: CustomFileValidator
   @Inject lateinit var dialogShower: DialogShower
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
       return
     }
 
-    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    if (BuildConfig.DISABLE_SIDEBAR) {
-      val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
-      toolbarToc?.isEnabled = false
-    }
-    with(activity as AppCompatActivity) {
-      supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-      setupDrawerToggle(toolbar)
-    }
-    loadPageFromNavigationArguments()
+    if (isAdded) {
+      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+      if (BuildConfig.DISABLE_SIDEBAR) {
+        val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
+        toolbarToc?.isEnabled = false
+      }
+      with(activity as AppCompatActivity) {
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        setupDrawerToggle(toolbar)
+      }
+      loadPageFromNavigationArguments()
 
-    requireActivity().observeNavigationResult<String>(
-      FIND_IN_PAGE_SEARCH_STRING,
-      viewLifecycleOwner,
-      Observer(this::findInPage)
-    )
-    requireActivity().observeNavigationResult<SearchItemToOpen>(
-      TAG_FILE_SEARCHED,
-      viewLifecycleOwner,
-      Observer(::openSearchItem)
-    )
+      requireActivity().observeNavigationResult<String>(
+        FIND_IN_PAGE_SEARCH_STRING,
+        viewLifecycleOwner,
+        Observer(this::findInPage)
+      )
+      requireActivity().observeNavigationResult<SearchItemToOpen>(
+        TAG_FILE_SEARCHED,
+        viewLifecycleOwner,
+        Observer(::openSearchItem)
+      )
+    }
+  }
+
+  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
+    requireActivity().finish()
+    return super.onBackPressed(activity)
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
@@ -157,8 +161,7 @@ class CustomReaderFragment : CoreReaderFragment() {
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
-          activity?.finish()
-          activity?.start<CustomDownloadActivity>()
+          findNavController().navigate(R.id.customDownloadFragment)
         }
       }
     )

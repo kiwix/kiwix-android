@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadFailed
 import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadCustom
-import org.kiwix.kiwixmobile.custom.download.effects.FinishAndStartMain
+import org.kiwix.kiwixmobile.custom.download.effects.NavigateToCustomReader
 import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.downloadItem
@@ -50,7 +50,7 @@ internal class CustomDownloadViewModelTest {
   private val fetchDownloadDao: FetchDownloadDao = mockk()
   private val setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace = mockk()
   private val downloadCustom: DownloadCustom = mockk()
-  private val finishAndStartMain: FinishAndStartMain = mockk()
+  private val navigateToCustomReader: NavigateToCustomReader = mockk()
 
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
   private lateinit var customDownloadViewModel: CustomDownloadViewModel
@@ -63,7 +63,7 @@ internal class CustomDownloadViewModelTest {
       fetchDownloadDao,
       setPreferredStorageWithMostSpace,
       downloadCustom,
-      finishAndStartMain
+      navigateToCustomReader
     )
   }
 
@@ -137,7 +137,7 @@ internal class CustomDownloadViewModelTest {
         DatabaseEmission(listOf()),
         DownloadComplete
       )
-      sideEffects.assertValues(setPreferredStorageWithMostSpace, finishAndStartMain)
+      sideEffects.assertValues(setPreferredStorageWithMostSpace, navigateToCustomReader)
     }
 
     @Test
