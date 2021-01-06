@@ -240,4 +240,10 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun createNewTab() {
     newMainPageTab()
   }
+
+  override fun openExternalUrl(intent: Intent?) {
+    if (!BuildConfig.DISABLE_EXTERNAL_LINKS) {
+      super.openExternalUrl(intent)
+    }
+  }
 }

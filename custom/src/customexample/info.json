@@ -4,6 +4,7 @@
   "enforced_lang": "en",
   "disable_sidebar": false,
   "disable_tabs": false,
-  "disable_read_aloud": false
+  "disable_read_aloud": false,
+  "disable_external_links": false
 }
 
