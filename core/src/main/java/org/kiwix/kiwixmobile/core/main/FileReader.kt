@@ -21,11 +21,12 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.content.Context
 import java.io.BufferedReader
+import java.io.IOException
 
 fun Context.readFile(filePath: String): String = try {
   this.assets.open(filePath)
     .bufferedReader()
     .use(BufferedReader::readText)
-} catch (e: Exception) {
+} catch (e: IOException) {
   "".also { e.printStackTrace() }
 }
