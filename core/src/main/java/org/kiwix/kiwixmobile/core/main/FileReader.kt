@@ -16,6 +16,7 @@
  *
  */
 @file:JvmName("FileReaderUtils")
+
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Context
