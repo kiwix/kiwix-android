@@ -84,6 +84,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.processors.BehaviorProcessor;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -486,7 +487,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private void addFileReader() {
-    documentParserJs = new FileReader().readFile("js/documentParser.js", getActivity());
+    documentParserJs = FileReaderUtils.readFile(getActivity(), "js/documentParser.js");
     documentSections = new ArrayList<>();
   }
 
