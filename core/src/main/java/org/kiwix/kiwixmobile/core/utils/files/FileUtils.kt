@@ -26,6 +26,7 @@ import android.util.Log
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
+import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
 import java.util.ArrayList
@@ -219,4 +220,12 @@ object FileUtils {
       File("$fileName.part").exists() -> "$fileName.part"
       else -> "${fileName}aa"
     }
+
+  @JvmStatic fun Context.readFile(filePath: String): String = try {
+    assets.open(filePath)
+      .bufferedReader()
+      .use(BufferedReader::readText)
+  } catch (e: IOException) {
+    "".also { e.printStackTrace() }
+  }
 }
