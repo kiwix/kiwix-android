@@ -1548,6 +1548,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     SharedPreferences settings =
       requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0);
     String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
+    String zimFile = settings.getString(TAG_CURRENT_FILE, null);
     String zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null);
     int currentTab = safelyGetCurrentTab(settings);
     if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {

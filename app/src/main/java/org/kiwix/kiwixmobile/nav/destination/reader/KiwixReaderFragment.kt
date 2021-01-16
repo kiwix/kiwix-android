@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
+import org.kiwix.kiwixmobile.kiwixActivityComponent
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -73,7 +74,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private var isFullScreenVideo: Boolean = false
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.cachedComponent.inject(this)
+    baseActivity.kiwixActivityComponent.inject(this)
   }
 
   // override fun onCreateView(
