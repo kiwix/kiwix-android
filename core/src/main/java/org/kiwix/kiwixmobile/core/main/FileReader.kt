@@ -22,8 +22,8 @@ import java.io.BufferedReader
 import java.io.IOException
 
 class FileReader {
-  fun readFile(filePath: String, context: Context): String = try {
-    context.assets.open(filePath)
+  fun Context.readFile(filePath: String): String = try {
+    assets.open(filePath)
       .bufferedReader()
       .use(BufferedReader::readText)
   } catch (e: IOException) {

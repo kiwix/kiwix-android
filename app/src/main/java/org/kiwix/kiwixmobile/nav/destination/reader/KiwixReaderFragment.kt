@@ -25,6 +25,7 @@ import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue.complexToDimensionPixelSize
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -33,6 +34,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
@@ -55,6 +57,7 @@ import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
+import org.kiwix.kiwixmobile.core.utils.EXTRA_ZIM_FILE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
@@ -72,6 +75,16 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
   }
+
+  // override fun onCreateView(
+  //   inflater: LayoutInflater,
+  //   container: ViewGroup?,
+  //   savedInstanceState: Bundle?
+  // ): View? {
+  //   val view = super.onCreateView(inflater, container, savedInstanceState)
+  //   openPageInBookFromNavigationArguments()
+  //   return view
+  // }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -110,7 +123,25 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun openPageInBookFromNavigationArguments() {
+    val data = uriFromIntent()
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
+
+    if (data != null) {
+      val filePath = FileUtils.getLocalFilePathByUri(requireActivity().applicationContext, data)
+
+      if (filePath == null || !File(filePath).exists()) {
+        getCurrentWebView().snack(R.string.error_file_not_found)
+        return
+      }
+
+      Log.d(
+        TAG_KIWIX, "Kiwix started from a file manager. Intent filePath: " +
+          filePath +
+          " -> open this zim file and load menu_main page"
+      )
+      openZimFile(File(filePath))
+    }
+
     if (args.pageUrl.isNotEmpty()) {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
@@ -137,6 +168,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
     openZimFile(File(filePath))
   }
+
+  private fun uriFromIntent() =
+    activity?.intent?.data ?: activity?.intent?.getStringExtra(EXTRA_ZIM_FILE)?.let {
+      File(FileUtils.getFileName(it)).toUri()
+    }
 
   override fun loadDrawerViews() {
     drawerLayout = requireActivity().findViewById(R.id.navigation_container)
