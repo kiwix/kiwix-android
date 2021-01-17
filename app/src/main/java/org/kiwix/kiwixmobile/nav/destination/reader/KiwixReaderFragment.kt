@@ -278,7 +278,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
     exitBook()
   }
-
+  private val TAG = "KiwixReaderFragment"
   override fun restoreViewStateOnValidJSON(
     zimArticles: String,
     zimPositions: String,
@@ -287,10 +287,15 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
 
-    if (zimFile != null) {
-      if (zimReaderContainer.zimFile == null) {
+    if (zimFile != null && File(zimFile).exists()) {
+      // if (zimReaderContainer.zimFile != null) {
         openZimFile(File(zimFile))
-      }
+      Log.d(
+        TAG,
+        "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
+      )
+      // Log.d(TAG, "restoreViewStateOnValidJSON: started kiwix from the point where it all left offf")
+      // }
     } else {
       getCurrentWebView().snack(R.string.zim_not_opened)
     }

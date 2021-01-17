@@ -1544,17 +1544,19 @@ public abstract class CoreReaderFragment extends BaseFragment
     return jsonString == null || jsonString.equals("[]");
   }
 
+  private static final String TAG = "CRF";
   protected void manageExternalLaunchAndRestoringViewState() {
     SharedPreferences settings =
       requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0);
     String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
-    String zimFile = settings.getString(TAG_CURRENT_FILE, null);
     String zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null);
     int currentTab = safelyGetCurrentTab(settings);
     if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
       restoreViewStateOnInvalidJSON();
+      Log.d(TAG, "manageExternalLaunchAndRestoringViewState: Restoring IN-validJson pe view");
     } else {
       restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab);
+      Log.d(TAG, "manageExternalLaunchAndRestoringViewState: Restoring validJson pe view");
     }
   }
 
@@ -1567,14 +1569,16 @@ public abstract class CoreReaderFragment extends BaseFragment
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
-      webViewList.clear();
-      currentWebViewIndex=0;
-      tabsAdapter.notifyItemRemoved(0);
-      tabsAdapter.notifyDataSetChanged();
-      for (int i = 0; i < urls.length(); i++) {
-        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)), i == currentTab)
-          .setScrollY(positions.getInt(i));
+      int i = 0;
+      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)));
+      getCurrentWebView().setScrollY(positions.getInt(i));
+      i++;
+      while (i < urls.length()) {
+        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)));
+        getCurrentWebView().setScrollY(positions.getInt(i));
+        i++;
       }
+      selectTab(currentTab);
     } catch (JSONException e) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
       ContextExtensionsKt.toast(getActivity(), "Could not restore tabs.", Toast.LENGTH_LONG);
