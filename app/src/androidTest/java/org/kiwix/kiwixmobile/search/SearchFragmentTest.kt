@@ -17,18 +17,13 @@
  */
 package org.kiwix.kiwixmobile.search
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 
-@LargeTest
-@RunWith(AndroidJUnit4::class)
 class SearchFragmentTest : BaseActivityTest() {
   @Before fun setUp() {
     UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.searchFragment) }
