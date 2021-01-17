@@ -18,65 +18,28 @@
 
 package org.kiwix.kiwixmobile.search;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.BaseActivityTest;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.main.KiwixMainActivity;
 
-import static androidx.test.InstrumentationRegistry.getInstrumentation;
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_SHOW_INTRO;
+import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SearchFragmentTest {
-
-  @Rule
-  public ActivityTestRule<KiwixMainActivity> mActivityTestRule = new ActivityTestRule<>(
-    KiwixMainActivity.class);
-  @Rule
-  public GrantPermissionRule readPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
-  @Rule
-  public GrantPermissionRule writePermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-  private Context context;
-
+public class SearchFragmentTest extends BaseActivityTest {
   @Before
-  public void setUp() {
-    Intents.init();
-    context = getInstrumentation().getTargetContext();
+  public void setUp() throws Throwable {
+    UiThreadStatement.runOnUiThread(
+      () -> getActivityRule().getActivity().navigate(R.id.searchFragment));
   }
 
   @Test
   public void SearchFragmentSimple() {
-    shouldShowIntro(false);
-    onView(allOf(withText(R.string.reader),
-      withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
-    onView(withId(R.id.menu_search));
-  }
-
-  private void shouldShowIntro(boolean value) {
-    SharedPreferences.Editor preferencesEditor =
-      PreferenceManager.getDefaultSharedPreferences(context).edit();
-    preferencesEditor.putBoolean(PREF_SHOW_INTRO, value).apply();
+    assertDisplayed(R.string.menu_search_in_text);
   }
 }
