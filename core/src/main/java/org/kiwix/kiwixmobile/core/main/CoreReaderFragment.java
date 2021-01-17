@@ -1544,7 +1544,6 @@ public abstract class CoreReaderFragment extends BaseFragment
     return jsonString == null || jsonString.equals("[]");
   }
 
-  private static final String TAG = "CRF";
   protected void manageExternalLaunchAndRestoringViewState() {
     SharedPreferences settings =
       requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0);
