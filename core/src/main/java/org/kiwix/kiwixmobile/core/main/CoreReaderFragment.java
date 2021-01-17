@@ -1553,10 +1553,8 @@ public abstract class CoreReaderFragment extends BaseFragment
     int currentTab = safelyGetCurrentTab(settings);
     if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
       restoreViewStateOnInvalidJSON();
-      Log.d(TAG, "manageExternalLaunchAndRestoringViewState: Restoring IN-validJson pe view");
     } else {
       restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab);
-      Log.d(TAG, "manageExternalLaunchAndRestoringViewState: Restoring validJson pe view");
     }
   }
 

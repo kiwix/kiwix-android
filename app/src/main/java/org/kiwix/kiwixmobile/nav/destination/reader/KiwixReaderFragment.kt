@@ -25,7 +25,6 @@ import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue.complexToDimensionPixelSize
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -65,7 +64,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
-import org.kiwix.kiwixmobile.kiwixActivityComponent
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -74,18 +72,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private var isFullScreenVideo: Boolean = false
 
   override fun inject(baseActivity: BaseActivity) {
-    baseActivity.kiwixActivityComponent.inject(this)
+    baseActivity.cachedComponent.inject(this)
   }
-
-  // override fun onCreateView(
-  //   inflater: LayoutInflater,
-  //   container: ViewGroup?,
-  //   savedInstanceState: Bundle?
-  // ): View? {
-  //   val view = super.onCreateView(inflater, container, savedInstanceState)
-  //   openPageInBookFromNavigationArguments()
-  //   return view
-  // }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -278,7 +266,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
     exitBook()
   }
-  private val TAG = "KiwixReaderFragment"
+
   override fun restoreViewStateOnValidJSON(
     zimArticles: String,
     zimPositions: String,
@@ -288,14 +276,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
 
     if (zimFile != null && File(zimFile).exists()) {
-      // if (zimReaderContainer.zimFile != null) {
+      if (zimReaderContainer.zimFile == null) {
         openZimFile(File(zimFile))
-      Log.d(
-        TAG,
-        "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
-      )
-      // Log.d(TAG, "restoreViewStateOnValidJSON: started kiwix from the point where it all left offf")
-      // }
+        Log.d(
+          TAG_KIWIX,
+          "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
+        )
+      }
     } else {
       getCurrentWebView().snack(R.string.zim_not_opened)
     }
