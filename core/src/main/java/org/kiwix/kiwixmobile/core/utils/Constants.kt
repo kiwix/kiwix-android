@@ -34,7 +34,6 @@ const val TAG_CURRENT_TAB = "currenttab"
 const val TAG_FROM_TAB_SWITCHER = "fromtabswitcher"
 
 // Extras
-const val EXTRA_ZIM_FILE = "zimFile"
 const val EXTRA_IS_WIDGET_VOICE = "isWidgetVoice"
 const val HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService"
 const val OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base"
