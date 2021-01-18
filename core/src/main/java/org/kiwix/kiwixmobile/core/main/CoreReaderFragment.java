@@ -1568,6 +1568,9 @@ public abstract class CoreReaderFragment extends BaseFragment
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
+      currentWebViewIndex = 0;
+      tabsAdapter.notifyItemRemoved(0);
+      tabsAdapter.notifyDataSetChanged();
       int cursor = 0;
       getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(cursor)));
       getCurrentWebView().setScrollY(positions.getInt(cursor));
