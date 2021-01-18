@@ -256,7 +256,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         openZimFile(File(zimFile))
         Log.d(
           TAG_KIWIX,
-          "Kiwix normal start, zimFile loaded last time -> Open last used zimFile $zimFile"
+          "Kiwix normal start, Opened last used zimFile: -> $zimFile"
         )
       }
     } else {

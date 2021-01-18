@@ -1566,14 +1566,14 @@ public abstract class CoreReaderFragment extends BaseFragment
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
-      int i = 0;
-      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(i)));
-      getCurrentWebView().setScrollY(positions.getInt(i));
-      i++;
-      while (i < urls.length()) {
-        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)));
-        getCurrentWebView().setScrollY(positions.getInt(i));
-        i++;
+      int cursor = 0;
+      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(cursor)));
+      getCurrentWebView().setScrollY(positions.getInt(cursor));
+      cursor++;
+      while (cursor < urls.length()) {
+        newTab(UpdateUtils.reformatProviderUrl(urls.getString(cursor)));
+        getCurrentWebView().setScrollY(positions.getInt(cursor));
+        cursor++;
       }
       selectTab(currentTab);
     } catch (JSONException e) {
