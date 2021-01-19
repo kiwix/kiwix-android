@@ -1574,19 +1574,26 @@ public abstract class CoreReaderFragment extends BaseFragment
     return Math.max(settings.getInt(TAG_CURRENT_TAB, 0), 0);
   }
 
+  /* This method restores tabs state in new launches, do not modify it
+     unless it is explicitly mentioned in the issue you're fixing */
   protected void restoreTabs(@Nullable String zimArticles, @Nullable String zimPositions,
     int currentTab) {
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
-      webViewList.clear();
-      currentWebViewIndex=0;
+      currentWebViewIndex = 0;
       tabsAdapter.notifyItemRemoved(0);
       tabsAdapter.notifyDataSetChanged();
-      for (int i = 0; i < urls.length(); i++) {
-        newTab(UpdateUtils.reformatProviderUrl(urls.getString(i)), i == currentTab)
-          .setScrollY(positions.getInt(i));
+      int cursor = 0;
+      getCurrentWebView().loadUrl(UpdateUtils.reformatProviderUrl(urls.getString(cursor)));
+      getCurrentWebView().setScrollY(positions.getInt(cursor));
+      cursor++;
+      while (cursor < urls.length()) {
+        newTab(UpdateUtils.reformatProviderUrl(urls.getString(cursor)));
+        getCurrentWebView().setScrollY(positions.getInt(cursor));
+        cursor++;
       }
+      selectTab(currentTab);
     } catch (JSONException e) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
       ContextExtensionsKt.toast(getActivity(), "Could not restore tabs.", Toast.LENGTH_LONG);

@@ -38,7 +38,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.kiwixActivityComponent
-import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
+import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 
@@ -95,7 +95,7 @@ class KiwixMainActivity : CoreMainActivity() {
       }
     }
     if (sharedPreferenceUtil.showIntro()) {
-      navigate(LocalLibraryFragmentDirections.actionLibraryFragmentToIntrofragment())
+      navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
     }
   }
 

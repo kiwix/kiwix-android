@@ -19,7 +19,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  app:startDestination="@id/libraryFragment">
+  app:startDestination="@id/readerFragment">
   <fragment
     android:id="@+id/readerFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment"
@@ -52,6 +52,11 @@
     <action
       android:id="@+id/action_readerFragment_to_searchFragment"
       app:destination="@id/searchFragment" />
+    <action
+      android:id="@+id/action_readerFragment_to_introFragment"
+      app:destination="@id/introFragment"
+      app:popUpTo="@id/readerFragment"
+      app:popUpToInclusive="true" />
   </fragment>
 
   <fragment
@@ -69,11 +74,6 @@
     <action
       android:id="@+id/action_libraryFragment_to_localFileTransferFragment"
       app:destination="@id/localFileTransferFragment" />
-    <action
-      android:id="@+id/action_libraryFragment_to_introfragment"
-      app:destination="@id/introFragment"
-      app:popUpTo="@id/libraryFragment"
-      app:popUpToInclusive="true" />
   </fragment>
 
   <fragment
