@@ -59,7 +59,7 @@ object Versions {
 
   const val junit_jupiter: String = "5.7.0"
 
-  const val xfetch2okhttp: String = "3.1.5"
+  const val xfetch2okhttp: String = "3.1.6"
 
   const val assertj_core: String = "3.18.1"
 
@@ -93,7 +93,7 @@ object Versions {
 
   const val barista: String = "2.7.1" // available: "3.7.0"
 
-  const val xfetch2: String = "3.1.5"
+  const val xfetch2: String = "3.1.6"
 
   const val jsr305: String = "3.0.2"
 
