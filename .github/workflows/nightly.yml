@@ -1,9 +1,9 @@
 name: Nightly
 
-on:
-  schedule:
-    # every night at midnight
-    - cron:  '0 0 * * *'
+on: [pull_request]
+#   schedule:
+#     # every night at midnight
+#     - cron:  '0 0 * * *'
 
 jobs:
 
