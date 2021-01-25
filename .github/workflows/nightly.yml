@@ -44,6 +44,9 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Install NDK
+        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;22.0.7026061" --sdk_root=${ANDROID_SDK_ROOT}
+
       - name: run unit tests
         run: ./gradlew testDebugUnitTest testCustomExampleDebugUnitTest
 
