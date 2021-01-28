@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* ArenaL5
 * Athena in Wonderland
 * Elisardojm
 * Fitoschido
@@ -45,7 +46,7 @@
   <string name="pref_clear_all_history_title">Limpar o historial</string>
   <string name="pref_clear_all_history_summary">Borrar as procuras recentes e o historial de lapelas</string>
   <string name="all_history_cleared">Borrado todo o historial</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Borrar todo o historial</string>
+  <string name="clear_all_history_dialog_title">Borrar todo o historial?</string>
   <string name="delete">Borrar</string>
   <string name="delete_specific_search_toast">Procuras recentes eliminadas</string>
   <string name="hint_contents_drawer_message">Podes deslizar á esquerda para ver os contidos deste artigo</string>
@@ -74,7 +75,7 @@
   <string name="library">Biblioteca</string>
   <string name="delete_zims_toast">Ficheiro eliminado</string>
   <string name="no_files_here">Ningún ficheiro aquí</string>
-  <string name="download_no_space" fuzzy="true">Espacio insuficiente para descargar este ficheiro.</string>
+  <string name="download_no_space">Espacio insuficiente para descargar.</string>
   <string name="space_available">Espazo dispoñible:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sen imaxes</string>
@@ -82,17 +83,17 @@
   <string name="no_network_connection">Ningunha conexión de rede</string>
   <string name="help_2">Que fai Kiwix?</string>
   <string name="help_3">Kiwix é un lector de contido desconectado. Actúa como un navegador web, pero en vez de acceder a páxinas web en liña, le o contido dun ficheiro en formato ZIM.</string>
-  <string name="help_4" fuzzy="true">Se ben Kiwix deseñouse orixinalmente para proporcionar Wikipedia sen conexión, tamén pode ler outros contidos.</string>
+  <string name="help_4">Se ben Kiwix deseñouse orixinalmente para proporcionar Wikipedia sen conexión, tamén pode ler outros contidos.</string>
   <string name="help_5">Onde esta o contido?</string>
   <string name="help_6">O noso contido está aloxado no sitio web de Kiwix.</string>
   <string name="help_7">Están dispoñibles como ficheiros ZIM. Hai unha chea deles:</string>
   <string name="help_8">• Wikipedia está dispoñible para cada lingua por separado</string>
   <string name="help_9">• Outros contidos, como Wikileaks ou Wikisource tamén están dispoñibles</string>
-  <string name="help_10" fuzzy="true">Pode descargar os ficheiros ZIM elixidos na aplicación, ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
+  <string name="help_10">Pode descargar os ficheiros ZIM elixidos na aplicación, ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
   <string name="help_11">Os ficheiros ZIM descargados na aplicación atópanse no directorio de almacenamento externo, nunha carpeta chamada Kiwix.</string>
   <string name="pref_storage">Almacenamento</string>
   <string name="pref_current_folder">Carpeta actual</string>
-  <string name="delete_zim_failed" fuzzy="true">Non podemos eliminar este ficheiro. Debería probar cun administrador de ficheiros.</string>
+  <string name="delete_zim_failed">Sentímolo pero non podemos eliminar algúns ficheiros. Debería probar cun administrador de ficheiros.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">deter</string>
@@ -116,7 +117,7 @@
   <string name="time_left">esquerda</string>
   <string name="pref_external_link_popup_title">Avisar cando introducir ligazóns externas</string>
   <string name="pref_external_link_popup_summary">Mostra as previsualizacións de páxinas para avisar sobre os custos adicionais ou cando non funciona en ligazóns desconectadas.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Introducindo ligazón externa</string>
+  <string name="external_link_popup_dialog_title">Introducindo ligazón externa!</string>
   <string name="external_link_popup_dialog_message">Estás introducindo unha ligazón externa. Isto pode xerar gastos por transferencia de datos ou simplemente non funcionará cando está desconectado. Aínda quere continuar?</string>
   <string name="do_not_ask_anymore">Non preguntar máis</string>
   <string name="your_languages">Linguas escollidas:</string>
