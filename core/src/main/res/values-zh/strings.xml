@@ -5,6 +5,7 @@
 * Akagisoy
 * Arthur2e5
 * Josephine W.
+* LClightcat
 * Liuxinyu970226
 * Shuiwater
 * SomeyaMako
@@ -114,6 +115,7 @@
   <string name="delete_zims_toast">文件已删除</string>
   <string name="no_files_here">没有文件</string>
   <string name="download_no_space">缺少下载所需的空间。</string>
+  <string name="download">下载</string>
   <string name="space_available">可用空间：</string>
   <string name="zim_simple">简单</string>
   <string name="zim_no_pic">没有图片</string>
@@ -143,6 +145,8 @@
   <string name="confirm_stop_download_msg">您确定要停止此次下载么？</string>
   <string name="download_change_storage">存储设备选择器</string>
   <string name="tts_not_enabled">文字转换语音功能未对该ZIM文件启用</string>
+  <string name="texttospeech_initialization_failed">文字到语音的初始化失败。请再试一次</string>
+  <string name="texttospeech_error">文本到语音的转换过程中出现了未知错误。请再试一次</string>
   <string name="next">下一页</string>
   <string name="previous">上一页</string>
   <string name="wifi_only_title">允许通过移动网络下载内容？</string>
@@ -162,32 +166,48 @@
   <string name="do_not_ask_anymore">不要再次询问</string>
   <string name="your_languages">选择的语言：</string>
   <string name="other_languages">其他语言：</string>
+  <string name="no_items_msg">没有可用的项目</string>
   <string name="crash_title">这太尴尬了</string>
   <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>
   <string name="crash_checkbox_language">您的语言设置</string>
+  <string name="crash_checkbox_zimfiles">Zim文件列表</string>
   <string name="crash_checkbox_exception">崩溃详情</string>
   <string name="crash_checkbox_logs">应用程序日志</string>
   <string name="crash_checkbox_device">设备细节</string>
   <string name="crash_button_confirm">发送详情</string>
+  <string name="shortcut_disabled_message">快捷方式不可用</string>
   <string name="new_tab_shortcut_label">新建标签页</string>
   <string name="get_content_shortcut_label">获取内容</string>
+  <string name="fav_icon">网站图像</string>
   <string name="articleCount">%s个条目</string>
   <string name="get_started">入门</string>
   <string name="download_books">下载书籍</string>
   <string name="welcome_to_the_family">欢迎到来</string>
+  <string name="save_books_offline">保存供离线使用</string>
   <string name="download_books_message">随时随地下载书籍并阅读。</string>
+  <string name="unable_to_add_to_bookmarks">无法添加到书签</string>
   <string name="go_to_previous_page">楼上</string>
   <string name="go_to_next_page">下一楼</string>
+  <string name="table_of_contents">目录</string>
   <string name="select_languages">选择的语言</string>
   <string name="send_feedback">发送反馈</string>
   <string name="expand">展开</string>
   <string name="history">历史</string>
+  <string name="history_from_current_book">查看所有书籍的历史记录</string>
+  <string name="search_history">搜索历史</string>
+  <string name="selected_items">%1$d已选择</string>
+  <string name="bookmarks_from_current_book">查看所有书籍中的标签</string>
+  <string name="search_bookmarks">搜索书签</string>
+  <string name="switch_tabs">切换选项卡</string>
   <string name="close_all_tabs">关闭所有标签</string>
+  <string name="pending_state">待处理</string>
   <string name="running_state">进行中</string>
   <string name="complete">完成</string>
   <string name="paused_state">暂停</string>
+  <string name="failed_state">失败：%s</string>
   <string name="save">保存</string>
   <string name="note">请注意</string>
+  <string name="wiki_article_title">Wiki文章标题</string>
   <string name="confirmation_alert_dialog_message">丢弃没保存的更改？</string>
   <string name="delete_notes_confirmation_msg">删除所有笔记？</string>
   <string name="nearby_devices">附近的设备</string>
