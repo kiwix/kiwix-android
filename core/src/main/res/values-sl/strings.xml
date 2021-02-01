@@ -130,7 +130,7 @@
   <string name="do_not_ask_anymore">Ne sprašuj več</string>
   <string name="your_languages">Izbrani jeziki:</string>
   <string name="other_languages">Drugi jeziki:</string>
-  <string name="no_items_msg">Ni na voljo nobenih elementov</string>
+  <string name="no_items_msg">Na voljo ni noben predmet</string>
   <string name="crash_title">No… To je neprijetno</string>
   <string name="crash_description">Izgleda, da smo se zrušili.</string>
   <string name="crash_checkbox_language">Jezikovne nastavitve</string>
