@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
@@ -159,8 +160,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val src = msg.data["src"] as? String
       if (url != null || src != null) {
         val fileName = getDecodedFileName(url, src)
-        var root =
-          Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        var root = instance.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         if (instance.externalMediaDirs.isNotEmpty()) {
           root = instance.externalMediaDirs[0]
         }
@@ -179,6 +179,15 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         } catch (e: IOException) {
           Log.w("kiwix", "Couldn't save image", e)
           instance.toast(R.string.save_media_error)
+        }
+
+        MediaScannerConnection.scanFile(
+          instance.applicationContext,
+          arrayOf(root.toString()),
+          null
+        ) { path, uri ->
+          // Log.i("ExternalStorage", "Scanned $path:")
+          // Log.i("ExternalStorage", "-> uri=$uri")
         }
       }
     }
