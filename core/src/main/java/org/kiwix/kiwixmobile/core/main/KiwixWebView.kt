@@ -181,13 +181,12 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
           instance.toast(R.string.save_media_error)
         }
 
+        // Passes the saved media to media scanner service which adds the file to media content provider
         MediaScannerConnection.scanFile(
           instance.applicationContext,
           arrayOf(root.toString()),
           null
-        ) { path, uri ->
-          // Log.i("ExternalStorage", "Scanned $path:")
-          // Log.i("ExternalStorage", "-> uri=$uri")
+        ) { _, _ ->
         }
       }
     }
