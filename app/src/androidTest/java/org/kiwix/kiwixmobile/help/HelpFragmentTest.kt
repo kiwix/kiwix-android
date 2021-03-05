@@ -34,6 +34,9 @@ class HelpFragmentTest : BaseActivityTest() {
       clickOnWhereIsContent()
       assertWhereIsContentIsExpanded()
       clickOnWhereIsContent()
+      clickOnHowToUpdateContent()
+      assertHowToUpdateContentIsExpanded()
+      clickOnHowToUpdateContent()
       clickOnSendFeedback()
     }
   }

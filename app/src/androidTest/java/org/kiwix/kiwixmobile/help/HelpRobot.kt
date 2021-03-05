@@ -66,6 +66,14 @@ class HelpRobot : BaseRobot() {
     )
   }
 
+  fun clickOnHowToUpdateContent() {
+    clickOn(TextId(string.how_to_update_content))
+  }
+
+  fun assertHowToUpdateContentIsExpanded() {
+    isVisible(TextId(string.update_content_description))
+  }
+
   fun clickOnSendFeedback() {
     clickOn(ViewId(id.activity_help_feedback_text_view))
   }
