@@ -19,12 +19,14 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
-import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Message
+import android.provider.MediaStore
 import android.util.AttributeSet
 import android.util.Log
 import android.view.ContextMenu
@@ -160,10 +162,12 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val src = msg.data["src"] as? String
       if (url != null || src != null) {
         val fileName = getDecodedFileName(url, src)
-        var root = instance.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        if (instance.externalMediaDirs.isNotEmpty()) {
-          root = instance.externalMediaDirs[0]
-        }
+        val root = File(instance.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Kiwix")
+        if (!root.exists())
+          root.mkdirs()
+        // if (instance.externalMediaDirs.isNotEmpty()) {
+        //   root = instance.externalMediaDirs[0]
+        // }
         val fileToSave = sequence {
           yield(File(root, fileName))
           yieldAll(generateSequence(1) { it + 1 }.map {
@@ -175,19 +179,51 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
           zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
             fileToSave.outputStream().use { inputStream.copyTo(it) }
           }
+          addImageToMediaStore(fileToSave)
           instance.toast(instance.getString(R.string.save_media_saved, fileToSave.name))
         } catch (e: IOException) {
           Log.w("kiwix", "Couldn't save image", e)
           instance.toast(R.string.save_media_error)
         }
+      }
+    }
 
-        // Passes the saved media to media scanner service which adds the file to media content provider
-        MediaScannerConnection.scanFile(
-          instance.applicationContext,
-          arrayOf(root.toString()),
-          null
-        ) { _, _ ->
+    private fun addImageToMediaStore(fileToSave: File) {
+      val exists: Boolean
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        instance.contentResolver.query(
+          MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+          arrayOf(MediaStore.Images.Media.DISPLAY_NAME),
+          "${MediaStore.Images.Media.DISPLAY_NAME} = '${fileToSave.name}' ",
+          null,
+          MediaStore.Images.ImageColumns.DATE_ADDED + " DESC"
+        ).let {
+          exists = it?.count ?: 0 >= 1
+          it?.close()
         }
+        if (!exists) {
+          val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
+            put(MediaStore.Images.Media.DISPLAY_NAME, fileToSave.name)
+            put(MediaStore.Images.Media.RELATIVE_PATH, fileToSave.path)
+            put(MediaStore.Images.Media.IS_PENDING, false)
+          }
+          instance.contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+          )!!
+        }
+      } else {
+        val contentValues = ContentValues().apply {
+          put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
+          put(MediaStore.Images.Media.MIME_TYPE, "image/*")
+          put(MediaStore.Images.Media.DISPLAY_NAME, fileToSave.name)
+          put(MediaStore.Images.Media.DATA, fileToSave.path)
+        }
+        instance.contentResolver.insert(
+          MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+          contentValues
+        )
       }
     }
   }
