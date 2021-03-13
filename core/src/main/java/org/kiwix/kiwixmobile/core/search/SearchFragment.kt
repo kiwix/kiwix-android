@@ -122,6 +122,7 @@ class SearchFragment : BaseFragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     closeKeyboard()
+    activity?.intent?.action = null
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
