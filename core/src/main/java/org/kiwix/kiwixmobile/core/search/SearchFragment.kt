@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.search
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -26,11 +27,13 @@ import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_search.searchLoadingIndicator
@@ -40,6 +43,7 @@ import kotlinx.coroutines.flow.collect
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
@@ -66,7 +70,7 @@ import javax.inject.Inject
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
 
-class SearchFragment : BaseFragment() {
+class SearchFragment : BaseFragment(), FragmentActivityExtensions {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -128,11 +132,12 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun goBack() {
-    activity?.popNavigationBackstack()
+    val readerFragmentResId = (activity as CoreMainActivity).readerFragmentResId
+    findNavController().popBackStack(readerFragmentResId, false)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super.onCreateOptionsMenu(menu, inflater)
+    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.menu_search, menu)
     val searchMenuItem = menu.findItem(R.id.menu_search)
     searchMenuItem.expandActionView()
