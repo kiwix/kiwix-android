@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.viewModel
@@ -123,6 +124,11 @@ class SearchFragment : BaseFragment() {
     super.onDestroyView()
     closeKeyboard()
     activity?.intent?.action = null
+    goBack()
+  }
+
+  private fun goBack() {
+    activity?.popNavigationBackstack()
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
