@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.core.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -27,7 +26,7 @@ import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.widget.ContentLoadingProgressBar
@@ -45,7 +44,6 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.viewModel
@@ -112,6 +110,17 @@ class SearchFragment : BaseFragment(), FragmentActivityExtensions {
     lifecycleScope.launchWhenCreated {
       searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
     }
+    handleBackPress()
+  }
+
+  private fun handleBackPress() {
+    activity?.onBackPressedDispatcher?.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          goBack()
+        }
+      })
   }
 
   private fun setupToolbar(view: View) {
@@ -128,7 +137,6 @@ class SearchFragment : BaseFragment(), FragmentActivityExtensions {
     super.onDestroyView()
     closeKeyboard()
     activity?.intent?.action = null
-    goBack()
   }
 
   private fun goBack() {
