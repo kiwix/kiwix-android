@@ -42,7 +42,6 @@ import kotlinx.coroutines.flow.collect
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
@@ -68,7 +67,7 @@ import javax.inject.Inject
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
 
-class SearchFragment : BaseFragment(), FragmentActivityExtensions {
+class SearchFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -145,7 +144,7 @@ class SearchFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
+    super.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.menu_search, menu)
     val searchMenuItem = menu.findItem(R.id.menu_search)
     searchMenuItem.expandActionView()
