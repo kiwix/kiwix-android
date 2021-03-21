@@ -26,11 +26,13 @@ import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_search.searchLoadingIndicator
@@ -107,6 +109,17 @@ class SearchFragment : BaseFragment() {
     lifecycleScope.launchWhenCreated {
       searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
     }
+    handleBackPress()
+  }
+
+  private fun handleBackPress() {
+    activity?.onBackPressedDispatcher?.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          goBack()
+        }
+      })
   }
 
   private fun setupToolbar(view: View) {
@@ -122,6 +135,12 @@ class SearchFragment : BaseFragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     closeKeyboard()
+    activity?.intent?.action = null
+  }
+
+  private fun goBack() {
+    val readerFragmentResId = (activity as CoreMainActivity).readerFragmentResId
+    findNavController().popBackStack(readerFragmentResId, false)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -153,6 +172,7 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun render(state: SearchState) {
+    searchView.setQuery(state.searchTerm, false)
     searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem.isEnabled = state.searchTerm.isNotBlank()
     searchLoadingIndicator.isShowing(state.isLoading)
