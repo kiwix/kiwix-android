@@ -1228,6 +1228,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     switch (intent.getAction()) {
       case Intent.ACTION_PROCESS_TEXT: {
         goToSearchWithText(intent);
+        intent.setAction(null);
         break;
       }
       case CoreSearchWidget.TEXT_CLICKED:
