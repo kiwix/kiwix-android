@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.zim_manager
 
 import android.app.Application
 import android.net.ConnectivityManager
-import android.net.wifi.p2p.WifiP2pDevice.CONNECTED
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,6 +52,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORM
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
+import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
