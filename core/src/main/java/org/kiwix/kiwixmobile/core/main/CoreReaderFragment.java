@@ -1228,7 +1228,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     switch (intent.getAction()) {
       case Intent.ACTION_PROCESS_TEXT: {
         goToSearchWithText(intent);
-        intent.setAction(null);
+        removeIntentAction(intent);// see https://github.com/kiwix/kiwix-android/issues/2607
         break;
       }
       case CoreSearchWidget.TEXT_CLICKED:
@@ -1248,6 +1248,10 @@ public abstract class CoreReaderFragment extends BaseFragment
         }
         break;
     }
+  }
+
+  private void removeIntentAction(Intent intent) {
+    intent.setAction(null);
   }
 
   private void openSearch(String searchString, Boolean isOpenedFromTabView, Boolean isVoice) {
