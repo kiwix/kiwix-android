@@ -22,8 +22,8 @@ import android.app.Application
 import android.net.ConnectivityManager
 import android.net.wifi.p2p.WifiP2pDevice.CONNECTED
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -91,7 +91,7 @@ class ZimManageViewModel @Inject constructor(
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil
-) : AndroidViewModel(context) {
+) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
     data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
@@ -227,7 +227,6 @@ class ZimManageViewModel @Inject constructor(
       connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
         CONNECTED::equals
       ),
-      // PublishProcessor.create(),
       BiFunction<Unit, NetworkState, Unit> { _, _ -> }
     )
       .switchMap {
