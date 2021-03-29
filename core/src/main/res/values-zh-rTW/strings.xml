@@ -20,7 +20,7 @@
   <string name="menu_read_aloud">朗讀</string>
   <string name="menu_read_aloud_stop">停止朗讀</string>
   <string name="menu_support_kiwix">支持 Kiwix</string>
-  <string name="menu_host_books">託管書籍</string>
+  <string name="menu_wifi_hotspot">託管書籍</string>
   <string name="save_media">儲存媒體</string>
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>
   <string name="save_media_saved">已將媒體以 %1$s 儲存到 Android/media/org.kiwix…/</string>

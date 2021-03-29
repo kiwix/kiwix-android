@@ -20,7 +20,7 @@
     <item
       android:id="@+id/menu_host_books"
       android:icon="@drawable/ic_mobile_screen_share_24px"
-      android:title="@string/menu_host_books"
+      android:title="@string/menu_wifi_hotspot"
       app:showAsAction="never" />
   </group>
 

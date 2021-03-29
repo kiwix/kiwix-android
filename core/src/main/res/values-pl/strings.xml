@@ -26,7 +26,7 @@
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
   <string name="menu_support_kiwix">Wspieraj Kiwix</string>
-  <string name="menu_host_books">Host Książek</string>
+  <string name="menu_wifi_hotspot">Host Książek</string>
   <string name="save_media">Zapisz plik multimedialny jako…</string>
   <string name="save_media_error">Wystąpił błąd podczas próby zapisania multimediów!</string>
   <string name="save_media_saved">Zapisano plik multimedialny jako %s w folderze Android/media/org.kiwix…/</string>

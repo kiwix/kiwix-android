@@ -293,7 +293,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private fun setUpToolbar(view: View) {
     val activity = requireActivity() as AppCompatActivity
     activity.setSupportActionBar(view.findViewById(R.id.toolbar))
-    activity.supportActionBar!!.title = getString(R.string.menu_host_books)
+    activity.supportActionBar!!.title = getString(R.string.menu_wifi_hotspot)
     activity.supportActionBar!!.setHomeButtonEnabled(true)
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
   }

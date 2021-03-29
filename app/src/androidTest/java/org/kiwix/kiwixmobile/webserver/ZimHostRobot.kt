@@ -27,6 +27,6 @@ fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarc
 
 class ZimHostRobot : BaseRobot() {
   init {
-    isVisible(TextId(R.string.menu_host_books))
+    isVisible(TextId(R.string.menu_wifi_hotspot))
   }
 }
