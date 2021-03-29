@@ -15,30 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.zim_manager.library_view;
+package org.kiwix.kiwixmobile.zim_manager.library_view
 
-import java.util.LinkedList;
-import org.kiwix.kiwixmobile.core.base.BaseContract;
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.core.base.BaseContract
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import java.util.LinkedList
 
 /**
  * Created by EladKeyshawn on 06/04/2017.
  */
-
-public interface LibraryViewCallback extends BaseContract.View {
-
-  void showBooks(LinkedList<Book> books);
-
-  void displayNoNetworkConnection();
-
-  void displayNoItemsFound();
-
-  void displayNoItemsAvailable();
-
-  void displayScanningContent();
-
-  void stopScanningContent();
-
-  void downloadFile(LibraryNetworkEntity.Book book);
+interface LibraryViewCallback : BaseContract.View<Any?> {
+  fun showBooks(books: LinkedList<LibraryNetworkEntity.Book?>?)
+  fun displayNoNetworkConnection()
+  fun displayNoItemsFound()
+  fun displayNoItemsAvailable()
+  fun displayScanningContent()
+  fun stopScanningContent()
+  fun downloadFile(book: LibraryNetworkEntity.Book?)
 }
