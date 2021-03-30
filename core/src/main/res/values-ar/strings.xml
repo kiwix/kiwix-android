@@ -22,7 +22,7 @@
   <string name="menu_read_aloud">اقرأ بصوت عالٍ</string>
   <string name="menu_read_aloud_stop">توقف عن القراءة بصوت عالٍ</string>
   <string name="menu_support_kiwix">دعم كيويكس</string>
-  <string name="menu_host_books">كتب المضيف</string>
+  <string name="menu_wifi_hotspot">كتب المضيف</string>
   <string name="save_media">حفظ الوسائط</string>
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
   <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>

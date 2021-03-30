@@ -18,7 +18,7 @@
   <string name="menu_read_aloud">Citește cu voce tare</string>
   <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
   <string name="menu_support_kiwix">Susține Kiwix</string>
-  <string name="menu_host_books">Găzduiește Cărți</string>
+  <string name="menu_wifi_hotspot">Găzduiește Cărți</string>
   <string name="save_media">Salvează Media</string>
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
   <string name="save_media_saved">Media salvată %s în Android/media/org.kiwix…/</string>

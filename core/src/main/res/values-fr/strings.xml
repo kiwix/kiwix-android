@@ -29,7 +29,7 @@
   <string name="menu_read_aloud">Lire à haute voix</string>
   <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
   <string name="menu_support_kiwix">Soutenir Kiwix</string>
-  <string name="menu_host_books">Diffuser des contenus</string>
+  <string name="menu_wifi_hotspot">Diffuser des contenus</string>
   <string name="save_media">Enregistrer le média</string>
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
   <string name="save_media_saved">Média enregistré sous %s dans le dossier Android/media/org.kiwix…/</string>
