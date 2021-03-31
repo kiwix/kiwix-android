@@ -247,17 +247,21 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         })
         return
       }
-      else -> availableSpaceCalculator.hasAvailableSpaceFor(item,
-        { downloadFile(item.book) },
-        {
-          libraryList.snack(
-            getString(R.string.download_no_space) +
-              "\n" + getString(R.string.space_available) + " " +
-              it,
-            R.string.download_change_storage,
-            ::showStorageSelectDialog
-          )
-        })
+      else -> if (sharedPreferenceUtil.showStorageOption) {
+          showStorageSelectDialog()
+        } else {
+          availableSpaceCalculator.hasAvailableSpaceFor(item,
+            { downloadFile(item.book) },
+            {
+              libraryList.snack(
+                getString(R.string.download_no_space) +
+                  "\n" + getString(R.string.space_available) + " " +
+                  it,
+                R.string.download_change_storage,
+                ::showStorageSelectDialog
+              )
+            })
+        }
     }
   }
 
