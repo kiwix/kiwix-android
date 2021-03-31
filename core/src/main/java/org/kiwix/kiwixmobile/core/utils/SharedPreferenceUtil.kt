@@ -129,6 +129,11 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {
       putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
     }
+  var showStorageOption: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SHOW_STORAGE_OPTION, false)
+    set(prefShowStorageOption) = sharedPreferences.edit {
+      putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
+    }
 
   val nightMode: NightModeConfig.Mode
     get() = from(
