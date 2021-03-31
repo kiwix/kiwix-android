@@ -170,6 +170,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     private const val PREF_STORAGE_TITLE = "pref_selected_title"
     private const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
+    private const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
