@@ -25,12 +25,13 @@ import java.util.LinkedList
 /**
  * Created by EladKeyshawn on 06/04/2017.
  */
-interface LibraryViewCallback : BaseContract.View<Any?> {
-  fun showBooks(books: LinkedList<LibraryNetworkEntity.Book?>?)
+
+interface LibraryViewCallback : BaseContract.View<Any> {
+  fun showBooks(books: LinkedList<LibraryNetworkEntity.Book>)
   fun displayNoNetworkConnection()
   fun displayNoItemsFound()
   fun displayNoItemsAvailable()
   fun displayScanningContent()
   fun stopScanningContent()
-  fun downloadFile(book: LibraryNetworkEntity.Book?)
+  fun downloadFile(book: LibraryNetworkEntity.Book)
 }
