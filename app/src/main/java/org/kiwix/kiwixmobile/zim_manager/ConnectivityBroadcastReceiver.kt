@@ -43,4 +43,8 @@ class ConnectivityBroadcastReceiver @Inject constructor(
   ) {
     _networkStates.onNext(connectivityManager.networkState)
   }
+
+  fun stopNetworkState() {
+    _networkStates.onComplete()
+  }
 }

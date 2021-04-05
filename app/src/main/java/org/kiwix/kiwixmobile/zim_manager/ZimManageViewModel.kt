@@ -116,10 +116,10 @@ class ZimManageViewModel @Inject constructor(
   val requestDownloadLibrary = BehaviorProcessor.createDefault(Unit)
   val requestFiltering = BehaviorProcessor.createDefault("")
 
-  private val compositeDisposable = CompositeDisposable()
+  private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
 
   init {
-    compositeDisposable.addAll(*disposables())
+    compositeDisposable?.addAll(*disposables())
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
@@ -129,8 +129,13 @@ class ZimManageViewModel @Inject constructor(
   }
 
   override fun onCleared() {
-    compositeDisposable.clear()
+    compositeDisposable?.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
+    connectivityBroadcastReceiver.stopNetworkState()
+    requestFileSystemCheck.onComplete()
+    fileSelectActions.onComplete()
+    requestDownloadLibrary.onComplete()
+    compositeDisposable = null
     super.onCleared()
   }
 
