@@ -18,7 +18,7 @@
   <string name="menu_read_aloud">Bi dengê bilind bixwîne</string>
   <string name="menu_read_aloud_stop">Xwendina dengê bilind rawestîne</string>
   <string name="menu_support_kiwix">Piştgiriya Kiwix-ê Bike</string>
-  <string name="menu_host_books">Kitêban Bihewîne</string>
+  <string name="menu_wifi_hotspot">Kitêban Bihewîne</string>
   <string name="save_media">Medyayê Tomar Bike</string>
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
   <string name="save_media_saved">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>

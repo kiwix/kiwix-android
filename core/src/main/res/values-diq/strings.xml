@@ -20,7 +20,7 @@
   <string name="menu_read_aloud">Be veng ra bıwane</string>
   <string name="menu_read_aloud_stop">Bevengrawendış caverde</string>
   <string name="menu_support_kiwix">Kiwix\'i desteg</string>
-  <string name="menu_host_books">Kıtabê esasi</string>
+  <string name="menu_wifi_hotspot">Kıtabê esasi</string>
   <string name="save_media">Medyay bışevekne</string>
   <string name="save_media_error">Medya qeyd kerdış de yew xeta ameyê meydan!</string>
   <string name="save_media_saved">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>

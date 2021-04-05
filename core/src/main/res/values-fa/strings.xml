@@ -19,7 +19,7 @@
   <string name="menu_read_aloud">با صدای بلند بخوان</string>
   <string name="menu_read_aloud_stop">خواندن با صدای بلند را متوقف کن</string>
   <string name="menu_support_kiwix">پشتیبانی از کیویکس</string>
-  <string name="menu_host_books">کتاب‌های میزبان</string>
+  <string name="menu_wifi_hotspot">کتاب‌های میزبان</string>
   <string name="save_media">ذخیرهٔ رسانه</string>
   <string name="save_media_error">خطایی در حین ذخیره‌سازی این رسانه رخ داد!</string>
   <string name="save_media_saved">رسانه با نام %s در Android/media/org.kiwix…/ ذخیره شد</string>

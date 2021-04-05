@@ -28,7 +28,7 @@
   <string name="menu_read_aloud">朗读</string>
   <string name="menu_read_aloud_stop">停止朗读</string>
   <string name="menu_support_kiwix">支持Kiwix</string>
-  <string name="menu_host_books">成为服务器共享书籍</string>
+  <string name="menu_wifi_hotspot">成为服务器共享书籍</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
   <string name="save_media_saved">已将媒体作为%s保存至Android/media/org.kiwix…/</string>

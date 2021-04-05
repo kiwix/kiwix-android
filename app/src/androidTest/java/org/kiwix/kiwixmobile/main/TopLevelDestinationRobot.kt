@@ -90,7 +90,7 @@ class TopLevelDestinationRobot : BaseRobot() {
 
   fun clickHostBooksOnSideNav(func: ZimHostRobot.() -> Unit) {
     inNavDrawer {
-      clickOn(TextId(R.string.menu_host_books))
+      clickOn(TextId(R.string.menu_wifi_hotspot))
       zimHost(func)
     }
   }

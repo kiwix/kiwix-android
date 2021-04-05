@@ -25,7 +25,7 @@
   <string name="menu_read_aloud">Číst nahlas</string>
   <string name="menu_read_aloud_stop">Zastavit čtení nahlas</string>
   <string name="menu_support_kiwix">Podpořte Kiwix</string>
-  <string name="menu_host_books">Hostujte Knihy</string>
+  <string name="menu_wifi_hotspot">Hostujte Knihy</string>
   <string name="save_media">Uložit médium jako…</string>
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
   <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix…/</string>
