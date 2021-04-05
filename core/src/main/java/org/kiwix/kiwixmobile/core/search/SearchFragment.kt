@@ -150,7 +150,9 @@ class SearchFragment : BaseFragment() {
     searchMenuItem.expandActionView()
     searchView = searchMenuItem.actionView as SearchView
     searchView.setOnQueryTextListener(SimpleTextListener {
-      searchViewModel.actions.offer(Filter(it))
+      if (it.isNotEmpty()) {
+        searchViewModel.actions.offer(Filter(it))
+      }
     })
     searchMenuItem.setOnActionExpandListener(object : OnActionExpandListener {
       override fun onMenuItemActionExpand(item: MenuItem) = false
