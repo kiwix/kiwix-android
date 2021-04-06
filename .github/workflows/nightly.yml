@@ -36,7 +36,7 @@ jobs:
           path: screencap.png
 
   unit_test_and_release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
 
       - name: checkout
