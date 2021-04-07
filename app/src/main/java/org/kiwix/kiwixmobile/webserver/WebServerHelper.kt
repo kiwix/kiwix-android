@@ -77,7 +77,7 @@ class WebServerHelper @Inject constructor(
   //If no ip is found after 15 seconds, dismisses the progress dialog
   fun pollForValidIpAddress() {
     Flowable.interval(1, TimeUnit.SECONDS)
-      .map { __: Long? -> getIp() }
+      .map { getIp() }
       .filter { s: String? -> s !== INVALID_IP }
       .timeout(15, TimeUnit.SECONDS)
       .take(1)
