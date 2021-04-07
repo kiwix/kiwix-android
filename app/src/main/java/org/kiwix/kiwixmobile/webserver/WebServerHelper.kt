@@ -73,8 +73,8 @@ class WebServerHelper @Inject constructor(
     ServerUtils.isServerStarted = isStarted
   }
 
-  //Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
-  //If no ip is found after 15 seconds, dismisses the progress dialog
+  // Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
+  // If no ip is found after 15 seconds, dismisses the progress dialog
   fun pollForValidIpAddress() {
     Flowable.interval(1, TimeUnit.SECONDS)
       .map { getIp() }
