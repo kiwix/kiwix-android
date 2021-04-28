@@ -13,7 +13,7 @@
   <string name="menu_help">Pomoč</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
-  <string name="menu_search_in_text">Najdi na strani</string>
+  <string name="menu_search_in_text">Poišči na strani</string>
   <string name="bookmarks">Zaznamki</string>
   <string name="menu_random_article">Naključni članek</string>
   <string name="menu_full_screen">Celozaslonski način</string>
@@ -54,7 +54,7 @@
   <string name="share">Deli</string>
   <string name="selected_file_cab_app_chooser_title">Deli ZIM datoteke z:</string>
   <string name="delete">Odstrani</string>
-  <string name="delete_specific_search_toast">Nedavno iskanje je bilo odstranjeno</string>
+  <string name="delete_specific_search_toast">Zadnje iskanje je bilo odstranjeno</string>
   <string name="hint_contents_drawer_message">Za ogled vsebine tega članka lahko povlecite v levo</string>
   <string name="got_it">Razumem</string>
   <string name="did_you_know">Ali ste vedeli?</string>
@@ -83,7 +83,7 @@
   <string name="no_files_here">Ni datotek tukaj</string>
   <string name="download_no_space" fuzzy="true">Premalo prostora za prenos te datoteke.</string>
   <string name="space_available">Prostor na voljo:</string>
-  <string name="zim_simple">Enostavno</string>
+  <string name="zim_simple">Preprosto</string>
   <string name="zim_no_pic">Ni slik</string>
   <string name="zim_no_vid">Ni videoposnetkov</string>
   <string name="no_network_connection">Ni omrežne povezave</string>
@@ -130,7 +130,7 @@
   <string name="do_not_ask_anymore">Ne sprašuj več</string>
   <string name="your_languages">Izbrani jeziki:</string>
   <string name="other_languages">Drugi jeziki:</string>
-  <string name="no_items_msg">Ni na voljo nobenih elementov</string>
+  <string name="no_items_msg">Na voljo ni noben predmet</string>
   <string name="crash_title">No… To je neprijetno</string>
   <string name="crash_description">Izgleda, da smo se zrušili.</string>
   <string name="crash_checkbox_language">Jezikovne nastavitve</string>
@@ -144,7 +144,7 @@
   <string name="get_content_shortcut_label">Pridobi vsebino</string>
   <string name="fav_icon">Zaznamka</string>
   <string name="articleCount">%s člankov</string>
-  <string name="get_started">Prični</string>
+  <string name="get_started">Začni</string>
   <string name="download_books">Prenesi knjige</string>
   <string name="humankind_knowledge">Znanje človeške vrste, na vašem telefonu.</string>
   <string name="welcome_to_the_family">Dobrodošli v družini</string>
@@ -154,7 +154,7 @@
   <string name="go_to_previous_page">Pojdi na prejšnjo stran</string>
   <string name="go_to_next_page">Pojdi na naslednjo stran</string>
   <string name="table_of_contents">Kazalo vsebine</string>
-  <string name="select_languages">Izberi jezike</string>
+  <string name="select_languages">Izberite jezike</string>
   <string name="save_languages">Shrani jezike</string>
   <string name="send_feedback">Sporočite svoje mnenje</string>
   <string name="expand">Razširi</string>
@@ -174,7 +174,7 @@
   <string name="save">Shrani</string>
   <string name="note">Beležka</string>
   <string name="wiki_article_title">Naslov članka Wiki</string>
-  <string name="ext_storage_permission_rationale_add_note">Dostop za shranjevanje se zahteva za Beležke</string>
+  <string name="ext_storage_permission_rationale_add_note">Za Beležke se zahteva dostop do pomnilnika</string>
   <string name="ext_storage_write_permission_denied_add_note">Beležke ni mogoče uporabiti brez dostopa do prostora za shranjevanje</string>
   <string name="note_save_unsuccessful">Shranjevanje beležke ni uspelo</string>
   <string name="note_save_successful">Beležka je shranjena</string>

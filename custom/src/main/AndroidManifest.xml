@@ -52,7 +52,6 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-    <activity android:name=".download.CustomDownloadActivity" />
 
     <receiver android:name=".main.CustomSearchWidget">
       <intent-filter>

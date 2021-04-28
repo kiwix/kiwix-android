@@ -25,11 +25,11 @@ jobs:
           fetch-depth: 1
 
       - name: create instrumentation coverage
-        uses: ReactiveCircus/android-emulator-runner@v2.12.0
+        uses: ReactiveCircus/android-emulator-runner@v2.14.3
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
-          ndk: 21.3.6528147
+          ndk: 21.4.7075529
           script: bash contrib/instrumentation.sh
 
       - name: Upload screenshot result

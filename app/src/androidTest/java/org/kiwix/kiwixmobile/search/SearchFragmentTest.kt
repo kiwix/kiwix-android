@@ -15,18 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.search
 
-import android.content.Context
-import java.io.BufferedReader
-import java.io.IOException
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import org.junit.Before
+import org.junit.Test
+import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.R
 
-class FileReader {
-  fun readFile(filePath: String, context: Context): String = try {
-    context.assets.open(filePath)
-      .bufferedReader()
-      .use(BufferedReader::readText)
-  } catch (e: IOException) {
-    "".also { e.printStackTrace() }
+class SearchFragmentTest : BaseActivityTest() {
+  @Before fun setUp() {
+    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.searchFragment) }
+  }
+
+  @Test fun searchFragmentSimple() {
+    assertDisplayed(R.string.menu_search_in_text)
   }
 }

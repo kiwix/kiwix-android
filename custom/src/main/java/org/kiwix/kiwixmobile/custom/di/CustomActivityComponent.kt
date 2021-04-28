@@ -23,7 +23,7 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.custom.download.CustomDownloadActivity
+import org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment
@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment
 interface CustomActivityComponent : CoreActivityComponent {
   fun inject(customMainActivity: CustomMainActivity)
   fun inject(customSettingsFragment: CustomSettingsFragment)
-  fun inject(customDownloadActivity: CustomDownloadActivity)
+  fun inject(customDownloadFragment: CustomDownloadFragment)
   fun inject(customReaderFragment: CustomReaderFragment)
 
   @Subcomponent.Builder

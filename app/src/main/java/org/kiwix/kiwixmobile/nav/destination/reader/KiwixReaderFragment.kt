@@ -111,6 +111,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   private fun openPageInBookFromNavigationArguments() {
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
+
     if (args.pageUrl.isNotEmpty()) {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
@@ -250,9 +251,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
 
-    if (zimFile != null) {
+    if (zimFile != null && File(zimFile).exists()) {
       if (zimReaderContainer.zimFile == null) {
         openZimFile(File(zimFile))
+        Log.d(
+          TAG_KIWIX,
+          "Kiwix normal start, Opened last used zimFile: -> $zimFile"
+        )
       }
     } else {
       getCurrentWebView().snack(R.string.zim_not_opened)

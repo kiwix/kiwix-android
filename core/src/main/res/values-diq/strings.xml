@@ -20,7 +20,7 @@
   <string name="menu_read_aloud">Be veng ra bıwane</string>
   <string name="menu_read_aloud_stop">Bevengrawendış caverde</string>
   <string name="menu_support_kiwix">Kiwix\'i desteg</string>
-  <string name="menu_host_books">Kıtabê esasi</string>
+  <string name="menu_wifi_hotspot">Kıtabê esasi</string>
   <string name="save_media">Medyay bışevekne</string>
   <string name="save_media_error">Medya qeyd kerdış de yew xeta ameyê meydan!</string>
   <string name="save_media_saved">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>
@@ -81,7 +81,7 @@
   <string name="clear_all_history_dialog_title">Verori pêro wa pak kerê?</string>
   <string name="share">Vıla ke</string>
   <string name="selected_file_cab_app_chooser_title">Dosyayanê ZIM\'i pê :</string>
-  <string name="delete">Bestere</string>
+  <string name="delete">Bıesternê</string>
   <string name="cancel">Bıtexelne</string>
   <string name="delete_specific_search_toast">Cıgeyrayışo peyên wedariya</string>
   <string name="hint_contents_drawer_message">Zerrey nê meqaley vinayışi rê peta hetê çepiya xuz kerê</string>

@@ -158,6 +158,7 @@ class CompatFindActionModeCallback internal constructor(context: Context) :
     actionMode = null
     isActive = false
     webView?.clearMatches()
+    webView = null
     input.hideSoftInputFromWindow(webView?.windowToken, 0)
   }
 

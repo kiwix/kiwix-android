@@ -20,7 +20,7 @@
   <string name="menu_read_aloud">Läs upp</string>
   <string name="menu_read_aloud_stop">Sluta läsa upp</string>
   <string name="menu_support_kiwix">Stöd Kiwix</string>
-  <string name="menu_host_books">Värdböcker</string>
+  <string name="menu_wifi_hotspot">Värdböcker</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
   <string name="save_media_saved">Sparade media som %s i Android/media/org.kiwix…/</string>

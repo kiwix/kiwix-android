@@ -10,14 +10,14 @@
 * The RedBurn
 * Verdy p
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="all">
   <string name="menu_help">{{Identical|Help}}</string>
   <string name="menu_home">{{Identical|Home}}</string>
   <string name="menu_settings">{{Identical|Settings}}</string>
   <string name="bookmarks">{{Identical|Bookmark}}</string>
   <string name="menu_random_article">{{Identical|Random article}}</string>
   <string name="menu_full_screen">{{Identical|Full screen}}</string>
-  <string name="menu_host_books">Il s\'agit de la fonctionnalité hotspot - l\'anglais \"host books\" n\'est pas particulièrement satisfaisant à la base.</string>
+  <string name="menu_wifi_hotspot">* English : it maps to some \"hotspot\" feature in order to serve collections of contents (aka books) over a local network area.\n* French : il s’agit de la fonctionnalité \'\'hotspot\'\' : l’anglais \'\'host books\'\' n’est pas particulièrement satisfaisant à la base.</string>
   <string name="search_label">{{Identical|Search}}</string>
   <string name="hotspot_details_message">Do not change:\n* &lt;code&gt;%1$s&lt;/code&gt; (replaced by the “SSID” value identifying the WiFi hotspot identity for users)\n* &lt;code&gt;%2$s&lt;/code&gt; (replaced by the password or code configured in the hotspot to authorize the association and network connection)</string>
   <string name="hotspot_dialog_title">This the title displayed when a user clicks wants to start the server in the host books section</string>

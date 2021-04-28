@@ -21,7 +21,7 @@
   <string name="menu_read_aloud">Читати вголос</string>
   <string name="menu_read_aloud_stop">Зупинити читання вголос</string>
   <string name="menu_support_kiwix">Підтримати Kiwix</string>
-  <string name="menu_host_books">Розташувати книги</string>
+  <string name="menu_wifi_hotspot">Розташувати книги</string>
   <string name="save_media">Зберегти медіафайл</string>
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
   <string name="save_media_saved">Медіафайл збережено як %s до Android/media/org.kiwix…/</string>

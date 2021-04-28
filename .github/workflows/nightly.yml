@@ -21,11 +21,11 @@ jobs:
           fetch-depth: 1
 
       - name: run instrumentation tests
-        uses: ReactiveCircus/android-emulator-runner@v2.12.0
+        uses: ReactiveCircus/android-emulator-runner@v2.14.3
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
-          ndk: 21.3.6528147
+          ndk: 21.4.7075529
           script: bash contrib/instrumentation_nightly.sh
 
       - name: Upload screenshot result
@@ -36,13 +36,16 @@ jobs:
           path: screencap.png
 
   unit_test_and_release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
 
       - name: checkout
         uses: actions/checkout@v1
         with:
           fetch-depth: 1
+
+      - name: Install NDK
+        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;22.0.7026061" --sdk_root=${ANDROID_SDK_ROOT}
 
       - name: run unit tests
         run: ./gradlew testDebugUnitTest testCustomExampleDebugUnitTest

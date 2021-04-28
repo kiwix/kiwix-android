@@ -132,8 +132,8 @@ class ZimFileReader constructor(
   }.also { Log.d(TAG, "getting mimetype for $uri = $it") }
 
   private fun mimeTypeFromReader(it: String) =
-    // Truncate mime-type (everything after the first space
-    jniKiwixReader.getMimeType(it.filePath)?.replace("^([^ ]+).*$", "$1")
+    // Truncate mime-type (everything after the first space and semi-colon(if exists)
+    jniKiwixReader.getMimeType(it.filePath)?.replace("^([^ ]+).*$", "$1")?.substringBefore(";")
 
   fun getRedirect(url: String) = "${toRedirect(url)}"
 

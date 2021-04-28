@@ -19,10 +19,13 @@
 package org.kiwix.kiwixmobile.custom.download
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_custom_download.cd_view_animator
+import kotlinx.android.synthetic.main.fragment_custom_download.cd_view_animator
 import kotlinx.android.synthetic.main.layout_custom_download_error.cd_error_text
 import kotlinx.android.synthetic.main.layout_custom_download_error.cd_retry_button
 import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_download_state
@@ -30,10 +33,12 @@ import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_eta
 import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_progress
 import kotlinx.android.synthetic.main.layout_custom_download_required.cd_download_button
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
+import org.kiwix.kiwixmobile.core.extensions.viewModel
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
@@ -44,10 +49,7 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import javax.inject.Inject
 
-class CustomDownloadActivity : BaseActivity() {
-  override fun injection(coreComponent: CoreComponent) {
-    customActivityComponent.inject(this)
-  }
+class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   private val downloadViewModel by lazy {
     viewModel<CustomDownloadViewModel>(viewModelFactory)
@@ -56,17 +58,30 @@ class CustomDownloadActivity : BaseActivity() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private val compositeDisposable = CompositeDisposable()
+  override fun inject(baseActivity: BaseActivity) {
+    baseActivity.customActivityComponent.inject(this)
+  }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_custom_download)
-    downloadViewModel.state.observe(this, Observer(::render))
+    val root = inflater.inflate(R.layout.fragment_custom_download, container, false)
+    val activity = requireActivity() as CoreMainActivity
+    downloadViewModel.state.observe(viewLifecycleOwner, Observer(::render))
     compositeDisposable.add(
       downloadViewModel.effects.subscribe(
-        { it.invokeWith(this) },
+        { it.invokeWith(activity) },
         Throwable::printStackTrace
       )
     )
+    return root
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     cd_download_button.setOnClickListener { downloadViewModel.actions.offer(ClickedDownload) }
     cd_retry_button.setOnClickListener { downloadViewModel.actions.offer(ClickedRetry) }
   }
@@ -74,6 +89,7 @@ class CustomDownloadActivity : BaseActivity() {
   override fun onDestroy() {
     super.onDestroy()
     compositeDisposable.clear()
+    activity?.finish()
   }
 
   private fun render(state: State) {
@@ -85,7 +101,7 @@ class CustomDownloadActivity : BaseActivity() {
       }
       is DownloadFailed -> {
         cd_view_animator.setDistinctDisplayedChild(2)
-        cd_error_text.text = state.downloadState.toReadableState(this)
+        cd_error_text.text = context?.let(state.downloadState::toReadableState)
       }
       DownloadComplete -> cd_view_animator.setDistinctDisplayedChild(3)
     }
@@ -94,6 +110,6 @@ class CustomDownloadActivity : BaseActivity() {
   private fun render(downloadItem: DownloadItem) {
     cd_progress.progress = downloadItem.progress
     cd_eta.text = downloadItem.readableEta
-    cd_download_state.text = downloadItem.downloadState.toReadableState(this)
+    cd_download_state.text = context?.let(downloadItem.downloadState::toReadableState)
   }
 }
