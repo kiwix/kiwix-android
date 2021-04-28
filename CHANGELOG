@@ -1,3 +1,12 @@
+3.4.4
+NEW: The Download of Zim in now more stable
+NEW: Updated translations
+BUGFIX: In Search menu item recreates multiple times
+BUGFIX: Clicking the search result doesn't go anywhere
+BUGFIX: Search text don't appear in the search field
+BUGFIX: Back Press doesn't work in SearchFragment
+BUGFIX: Memory leaks patched
+
 3.4.3
 NEW: Updated translations
 BUGFIX: Video seek was not working
