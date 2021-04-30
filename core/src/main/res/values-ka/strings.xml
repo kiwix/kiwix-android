@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* David1010
+* Macofe
+* Otogi
+-->
 <resources>
   <string name="menu_help">დახმარება</string>
   <string name="menu_home">მთავარი</string>
@@ -11,10 +16,10 @@
   <string name="menu_read_aloud">ხმამაღლა კითხვა</string>
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
   <string name="save_media">მედიის შენახვა როგორც…</string>
-  <string name="save_media_error">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
+  <string name="save_media_error" fuzzy="true">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
   <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$s</string>
   <string name="search_label">ძიება</string>
-  <string name="choose_file">აირჩიეთ ZIM-ფაილი (*.zim)</string>
+  <string name="choose_file" fuzzy="true">აირჩიეთ ZIM-ფაილი (*.zim)</string>
   <string name="open_in_new_tab">ბმული ახალ ჩანართში გაიხსნას?</string>
   <string name="error_file_not_found">შეცდომა: არჩეული ZIM ფაილი ვერ მოიძებნა.</string>
   <string name="error_file_invalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი.</string>
@@ -35,16 +40,5 @@
   <string name="no_thanks">არა, გმადლობთ</string>
   <string name="rate_dialog_neutral">მოგვიანებით</string>
   <string name="library">ბიბლიოთეკა</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks" fuzzy="true">სანიშნები არ არის!</string>
 </resources>

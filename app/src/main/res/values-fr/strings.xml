@@ -5,8 +5,8 @@
 * Verdy p
 -->
 <resources>
-  <string name="file_system_does_not_support_4gb">Votre système de fichiers ne prend pas en charge les fichiers de 4 Go ou plus.</string>
-  <string name="detecting_file_system">Détecte si le système de fichiers peut créer des fichiers de 4 Go ou plus</string>
+  <string name="file_system_does_not_support_4gb">Votre système de fichiers ne prend pas en charge les fichiers de 4 Go ou plus.</string>
+  <string name="detecting_file_system">Détecte si le système de fichiers peut créer des fichiers de 4 Go ou plus</string>
   <string name="cannot_open_file">Échec de l’ouverture du fichier.\nEssayez de chercher ce fichier dans l’onglet Appareils de votre Bibliothèque.</string>
   <string name="send_files_title">Envoyer des fichiers</string>
   <string name="receive_files_title">Recevoir des fichiers</string>

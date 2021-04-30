@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* Olavur
+-->
 <resources>
   <string name="menu_help">Hjálp</string>
   <string name="menu_home">Heim</string>
-  <string name="menu_settings">Innstillingar</string>
-  <string name="menu_search_in_text">Finn í teksti</string>
+  <string name="menu_settings">Stillingar</string>
+  <string name="menu_search_in_text">Finn á síðu</string>
   <string name="bookmarks">Bókamerki</string>
   <string name="menu_random_article">Tilvildarlig grein</string>
   <string name="menu_full_screen">Fullan skerm</string>
@@ -15,16 +19,4 @@
   <string name="pref_language_title">Mál</string>
   <string name="pref_language_chooser">Vel eitt mál</string>
   <string name="library">Bókasavn</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

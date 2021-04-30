@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Leli Forte
+* Macofe
+-->
 <resources>
   <string name="menu_help">Għajnuna</string>
   <string name="menu_home">Daħla</string>
@@ -8,7 +12,7 @@
   <string name="menu_random_article">Artiklu kwalunkwe</string>
   <string name="menu_full_screen">Skrin sħiħ</string>
   <string name="menu_exit_full_screen">Oħroġ mill-modalità ta\' skrin sħiħ</string>
-  <string name="save_media_error">Sar żball meta kont qed tipprova tissejvja l-fajl multimedjali!</string>
+  <string name="save_media_error" fuzzy="true">Sar żball meta kont qed tipprova tissejvja l-fajl multimedjali!</string>
   <string name="search_label">Fittex</string>
   <string name="pref_display_title">Viżwal</string>
   <string name="pref_info_title">Informazzjoni</string>
@@ -16,16 +20,4 @@
   <string name="pref_language_title">Lingwa</string>
   <string name="pref_language_chooser">Agħżel lingwa</string>
   <string name="library">Librerija</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

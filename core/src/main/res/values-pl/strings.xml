@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Alan ffm
 * DeRudySoulStorm
 * InternerowyGołąb
@@ -37,6 +36,7 @@
   <string name="hotspot_failed_title">Nie udało się uruchomić hotspotu</string>
   <string name="hotspot_failed_message">Wygląda na to, że Twój punkt dostępu jest już włączony. Wyłącz hotspot Wi-Fi, aby kontynuować.</string>
   <string name="go_to_wifi_settings_label">Przejdź do ustawień WIFI</string>
+  <string name="connection_refused">Połączenie odrzucone.</string>
   <string name="hotspot_running">Uruchamianie Hotspot</string>
   <string name="no_books_selected_toast_message">Proszę wybrać najpierw książki</string>
   <string name="server_failed_message">Nie można uruchomić serwera. Włącz hotspot</string>
@@ -232,6 +232,7 @@
   <string name="severe_loss_error">Poważny błąd! Spróbuj wyłączyć/ponownie włączyć WiFi P2P</string>
   <string name="connection_failed">Połączenie nie powiodło się</string>
   <string name="permission_rationale_location">Uprawnienie lokalizacja jest wymagane przez system Android, aby umożliwić aplikacji do wykrywania urządzeń</string>
+  <string name="permission_rationale_location_on_host_zim_file">Aby aplikacja mogła hostować pliki Zim, wymagana jest zgoda na lokalizację</string>
   <string name="permission_refused_location">Nie można zlokalizować urządzeń bez uprawnień do lokalizacji</string>
   <string name="permission_refused_storage">Nie można uzyskać dostępu do plików zim bez uprawnień do przechowywania</string>
   <string name="request_enable_location">Włączyć lokalizację, aby umożliwić wykrywanie równorzędnych elementów</string>
@@ -286,4 +287,6 @@
   <string name="tab_restored">Odtworzono zakładkę</string>
   <string name="open_drawer">Otwórz szufladę</string>
   <string name="close_drawer">Zamknij szufladę</string>
+  <string name="how_to_update_content">Jak zaktualizować zawartość?</string>
+  <string name="update_content_description">Aby zaktualizować zawartość (plik zim), musisz pobrać pełną najnowszą wersję tej samej zawartości. Możesz to zrobić w sekcji pobierania.</string>
 </resources>

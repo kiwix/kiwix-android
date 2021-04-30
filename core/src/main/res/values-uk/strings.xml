@@ -8,6 +8,7 @@
 * Piramidion
 * Vlad5250
 * Ypryima
+* Ата
 -->
 <resources>
   <string name="menu_help">Довідка</string>
@@ -32,6 +33,7 @@
   <string name="hotspot_failed_title">Не вдалося запустити точку доступу</string>
   <string name="hotspot_failed_message">Здається, вашу точка доступу вже ввімкнено. Будь ласка, вимкніть точку доступу, аби продовжити.</string>
   <string name="go_to_wifi_settings_label">Перейти до налаштувань WIFI</string>
+  <string name="connection_refused">У з\'єднанні відмовлено.</string>
   <string name="hotspot_running">Точка доступу працює</string>
   <string name="no_books_selected_toast_message">Будь ласка, спершу виберіть книги</string>
   <string name="server_failed_message">Неможливо запустити сервер. Будь ласка, ввімкніть вашу точку доступу</string>
@@ -75,6 +77,7 @@
   <string name="delete_recent_search_item">Вилучити цей елемент?</string>
   <string name="pref_clear_all_history_title">Очистити історію</string>
   <string name="pref_clear_all_history_summary">Очистити останню історію пошуку й відкритих вкладок</string>
+  <string name="pref_notes">Примітки</string>
   <string name="all_history_cleared">Всю історію очищено</string>
   <string name="pref_clear_all_bookmarks_title">Видалити закладки</string>
   <string name="clear_all_history_dialog_title">Очистити всю історію?</string>
@@ -187,7 +190,7 @@
   <string name="go_to_next_page">Перейти до наступної сторінки</string>
   <string name="table_of_contents">Зміст</string>
   <string name="select_languages">Оберіть мови</string>
-  <string name="save_languages">Зберігти мови</string>
+  <string name="save_languages">Зберегти мови</string>
   <string name="send_feedback">Надіслати відгук</string>
   <string name="expand">Розгорнути</string>
   <string name="history">Історія</string>
@@ -226,6 +229,7 @@
   <string name="severe_loss_error">Серйозна помилка! Попробуйте вимкнути і наново вмикнути WiFi P2P</string>
   <string name="connection_failed">З\'єднання не вдалося</string>
   <string name="permission_rationale_location">Android-у потрібний дозвіл на отримання місцезнахождення для пошуку сусідніх пристроїв</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android\'у потрібен локальний дозвіл на отримання місцезнахождення для розміщення файлів Zim</string>
   <string name="permission_refused_location">Неможливо знайти сусідні пристрої без дозволу на доступ до місцезнаходження</string>
   <string name="permission_refused_storage">Неможливо отримати доступ до файлів zim без дозволу на доступ до сховища</string>
   <string name="request_enable_location">Вмикнути місцезнаходження для вможливлення пошуку сусідніх пристроїв</string>
@@ -274,4 +278,12 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Збільшити текст</string>
   <string name="search_open_in_new_tab">Відкрити у новій вкладці</string>
+  <string name="reader">Читач</string>
+  <string name="no_open_book">Немає відкритих книг</string>
+  <string name="open_library">Відкрити бібліотеку</string>
+  <string name="tab_restored">Вкладку відновлено</string>
+  <string name="open_drawer">Відкрити редактор</string>
+  <string name="close_drawer">Закрити редактор</string>
+  <string name="how_to_update_content">Як оновити вміст?</string>
+  <string name="update_content_description">Щоб оновити вміст (zim-файл), вам треба завантажити повну найсвіжішу версію цього самого вмісту. Ви можете зробити це у розділі завантажень.</string>
 </resources>

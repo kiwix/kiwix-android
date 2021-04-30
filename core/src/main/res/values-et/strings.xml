@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+-->
 <resources>
   <string name="menu_help">Abi</string>
   <string name="menu_home">Koduleht</string>
@@ -15,16 +18,4 @@
   <string name="pref_language_title">Keel</string>
   <string name="pref_language_chooser">Vali keel</string>
   <string name="library">Raamatukogu</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

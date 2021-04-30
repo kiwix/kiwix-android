@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Eduardo Addad de Oliveira
+* Eduardoaddad
 * Felipe L. Ewald
 * Freeedusoft
 * HenriqueCrang
@@ -21,7 +21,7 @@
   <string name="menu_read_aloud">Ler em voz alta</string>
   <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
   <string name="menu_support_kiwix">Suporte Kiwix</string>
-  <string name="menu_wifi_hotspot">Hospedagem de livro</string>
+  <string name="menu_wifi_hotspot">Hotspot de Wi-Fi</string>
   <string name="save_media">Salvar mídia</string>
   <string name="save_media_error">Ocorreu um erro ao tentar salvar a mídia!</string>
   <string name="save_media_saved">Midia salva como  %s para Android/media/org.kiwix…/</string>

@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* NehalDaveND
+-->
 <resources>
   <string name="menu_help">साहाय्यम्</string>
   <string name="menu_home">गृहम्</string>
@@ -11,10 +14,10 @@
   <string name="menu_read_aloud">उच्चैः पठ्यताम्</string>
   <string name="menu_read_aloud_stop">उच्चैः पठनं स्थगयतु</string>
   <string name="save_media">सञ्चिकाम् अमुकनाम्ना रक्ष</string>
-  <string name="save_media_error">सञ्चिकायाः रक्षणकाले दोषः समुद्भूतः !</string>
-  <string name="save_media_saved">सञ्चिका %1$s -रूपेण स्वचित्राणां समुच्चये रक्ष्यताम्</string>
+  <string name="save_media_error" fuzzy="true">सञ्चिकायाः रक्षणकाले दोषः समुद्भूतः !</string>
+  <string name="save_media_saved" fuzzy="true">सञ्चिका %1$s -रूपेण स्वचित्राणां समुच्चये रक्ष्यताम्</string>
   <string name="search_label">अन्विष्यताम्</string>
-  <string name="choose_file">एतस्याः ZIM पूर्वलिखितसञ्चिकायाः चयनं करोतु (*.zim)</string>
+  <string name="choose_file" fuzzy="true">एतस्याः ZIM पूर्वलिखितसञ्चिकायाः चयनं करोतु (*.zim)</string>
   <string name="open_in_new_tab">एतत् परिसन्धिं नवीन-टेब्-मध्ये उद्घाटयतु</string>
   <string name="error_file_not_found">दोषः : चितसञ्चिका ZIM न प्राप्ता ।</string>
   <string name="error_file_invalid">दोषः : चितसञ्चिका योग्या ZIM-सञ्चिका नस्ति ।</string>
@@ -28,7 +31,7 @@
   <string name="pref_back_to_top_summary">साक्षात् उपरि गन्तु पृष्ठस्य अन्ते सारणकुड्मलं (scroll button) दर्श्यताम्</string>
   <string name="pref_language_title">भाषा</string>
   <string name="pref_language_chooser">भाषां चिनोतु</string>
-  <string name="no_section_info">पाठस्य शीर्षकं न प्राप्तम्</string>
+  <string name="no_section_info" fuzzy="true">पाठस्य शीर्षकं न प्राप्तम्</string>
   <string name="rate_dialog_title">कृपया अस्माकं मूलाङ्कनं कुरु</string>
   <string name="rate_dialog_msg_1">यदि त्वया उपयोगन लाभः स्वीकृतः</string>
   <string name="rate_dialog_msg_2">, कृपया क्षणमात्रं मूल्याङ्कनं कुरु. तव प्रतिस्पन्दार्थं कृतज्ञता !</string>
@@ -38,16 +41,5 @@
   <string name="pref_newtab_background_title">पृष्ठे नवीनं प्लवनम् उद्घाट्यताम्</string>
   <string name="pref_newtab_background_summary">यदा नवीनप्लवनम् आरप्स्यते, तदा पृष्ठभागे एव भविष्यति</string>
   <string name="library">ग्रन्थालयः</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks" fuzzy="true">पृष्ठस्मारकं नास्ति!</string>
 </resources>

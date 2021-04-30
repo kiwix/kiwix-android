@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Jagwar
+-->
 <resources>
   <string name="menu_help">Fanoroana</string>
   <string name="menu_home">Fandraisana</string>
@@ -11,10 +14,10 @@
   <string name="menu_read_aloud">Vakiana ho heno</string>
   <string name="menu_read_aloud_stop">Hijanona tsy hamaky ho heno</string>
   <string name="save_media">Hitahiry ny media ho…</string>
-  <string name="save_media_error">Nisy hadisoana nitranga tam-pitahirizana ny haino aman-jery!</string>
-  <string name="save_media_saved">Haino aman-jery voatahiry ao amin\'ny %1$s ao amin\'ny petra-tsarinao</string>
+  <string name="save_media_error" fuzzy="true">Nisy hadisoana nitranga tam-pitahirizana ny haino aman-jery!</string>
+  <string name="save_media_saved" fuzzy="true">Haino aman-jery voatahiry ao amin\'ny %1$s ao amin\'ny petra-tsarinao</string>
   <string name="search_label">Hikaroka</string>
-  <string name="choose_file">Hisafidy rakitra misy votoatiny (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Hisafidy rakitra misy votoatiny (*.zim)</string>
   <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
   <string name="error_file_not_found">Hadisoana: Tsy nahita ilay rakitra ZIM voafidinao.</string>
   <string name="error_file_invalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao.</string>
@@ -30,8 +33,8 @@
   <string name="pref_language_chooser">Hifidy tenim-pirenena</string>
   <string name="tts_lang_not_supported">Tsy zaka ny fiteny ampiasaina ato amin\'ity pejy ity, na tsy napetraka ny angona mety aminy. Mety tsy ho voavaky tsara ny lahatsoratra.</string>
   <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an\'ity karazan-drakitra ity</string>
-  <string name="no_section_info">Tsy misy loham-botoatiny hita</string>
-  <string name="request_storage">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>
+  <string name="no_section_info" fuzzy="true">Tsy misy loham-botoatiny hita</string>
+  <string name="request_storage" fuzzy="true">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>
   <string name="bookmark_added">Mari-boky nampiana</string>
   <string name="rate_dialog_title">Omeo naoty izahay azafady</string>
   <string name="rate_dialog_msg_1">Raha tianao ny mampiasa</string>
@@ -42,16 +45,5 @@
   <string name="pref_newtab_background_title">Hanokatra vakizoro any aoriana</string>
   <string name="pref_newtab_background_summary">Rehefa manokatra vakizoro dia hosokafany any aoriana</string>
   <string name="library">Tahirim-boky</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks" fuzzy="true">Tsy misy marika</string>
 </resources>

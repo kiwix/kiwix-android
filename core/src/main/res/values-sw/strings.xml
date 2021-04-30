@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Edwingudfriend
+* Kipala
+* Mpmayenge
+* Yasen igra
+-->
 <resources>
   <string name="menu_help">Msaada</string>
   <string name="menu_home">Mwanzo</string>
@@ -11,10 +17,10 @@
   <string name="menu_read_aloud">Soma kwa sauti</string>
   <string name="menu_read_aloud_stop">Simama kusoma kwa sauti</string>
   <string name="save_media">Hifadhi midia kama…</string>
-  <string name="save_media_error">Kosa lilitokea wakati wa kuhifadhi midia!</string>
-  <string name="save_media_saved">Midia imehifadhiwa kwa jina la %1$s katika kabrasha yako ya picha</string>
+  <string name="save_media_error" fuzzy="true">Kosa lilitokea wakati wa kuhifadhi midia!</string>
+  <string name="save_media_saved" fuzzy="true">Midia imehifadhiwa kwa jina la %1$s katika kabrasha yako ya picha</string>
   <string name="search_label">Tafuta</string>
-  <string name="choose_file">Chagua Faili ya Makala ya ZIM (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Chagua Faili ya Makala ya ZIM (*.zim)</string>
   <string name="open_in_new_tab">Fungua kiungo kwenye kivinjari kipya</string>
   <string name="error_file_not_found">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana.</string>
   <string name="error_file_invalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
@@ -40,16 +46,7 @@
   <string name="no">Hapana</string>
   <string name="next">Ijayo</string>
   <string name="other_languages">Lugha zingine:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks">Hakuna maalamisho</string>
+  <string name="on">Wazi</string>
+  <string name="off">Zima</string>
 </resources>

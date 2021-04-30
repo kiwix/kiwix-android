@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="menu_help">Auxilie</string>
   <string name="menu_home">Principal</string>
@@ -13,16 +13,4 @@
   <string name="pref_back_to_top">Retro a supra</string>
   <string name="pref_back_to_top_summary">Monstra un taste in li fin del págine por saltar a supra.</string>
   <string name="pref_language_title">Lingue</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

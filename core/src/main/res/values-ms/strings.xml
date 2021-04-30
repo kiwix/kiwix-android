@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Anakmalaysia
+* Tofeiku
+-->
 <resources>
   <string name="menu_help">Bantuan</string>
   <string name="menu_home">Laman utama</string>
@@ -10,12 +14,26 @@
   <string name="menu_exit_full_screen">Keluar dari skrin penuh</string>
   <string name="menu_read_aloud">Bacakan</string>
   <string name="menu_read_aloud_stop">Berhenti bacakan</string>
+  <string name="menu_support_kiwix">Sokong Kiwix</string>
   <string name="save_media">Simpan media sebagai…</string>
-  <string name="save_media_error">Ralat berlaku ketika cubaan menyimpan media!</string>
-  <string name="save_media_saved">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
+  <string name="save_media_error" fuzzy="true">Ralat berlaku ketika cubaan menyimpan media!</string>
+  <string name="save_media_saved" fuzzy="true">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
   <string name="search_label">Cari</string>
-  <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Pilih Fail Kandungan ZIM (*.zim)</string>
   <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
+  <string name="hotspot_service_channel_name">Saluran Perkhidmatan Kawasan Khas</string>
+  <string name="hotspot_failed_title">Kawasan khas gagal dihidupkan</string>
+  <string name="go_to_wifi_settings_label">Pergi ke tetapan WIFI</string>
+  <string name="hotspot_running">Menjalankan Kawasan Khas</string>
+  <string name="no_books_selected_toast_message">Sila pilih buku terlebih dahulu</string>
+  <string name="server_failed_toast_message">Pelayan tidak dapat dimulakan.</string>
+  <string name="server_started_successfully_toast_message">Pelayan berjaya dimulakan.</string>
+  <string name="hotspot_turned_on">Kawasan khas dihidupkan</string>
+  <string name="progress_dialog_starting_server">Memulakan pelayan</string>
+  <string name="wifi_dialog_title">Sambungan WIFI dikesan</string>
+  <string name="hotspot_dialog_neutral_button">TERUSKAN</string>
+  <string name="start_server_label">Mula pelayan</string>
+  <string name="stop_server_label">Hentikan pelayan</string>
   <string name="error_file_not_found">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
   <string name="error_file_invalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>
   <string name="error_article_url_not_found">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
@@ -28,21 +46,74 @@
   <string name="pref_back_to_top_summary">Paparkan butang di kaki halaman untuk menskrol kembali ke atas</string>
   <string name="pref_language_title">Bahasa</string>
   <string name="pref_language_chooser">Pilih bahasa</string>
+  <string name="pref_credits">Penyumbang dan Lesen</string>
   <string name="tts_lang_not_supported">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
   <string name="no_reader_application_installed">Tidak terjumpa aplikasi yang dipasang untuk jenis fail ini</string>
-  <string name="no_section_info">Tiada judul kandungan ditemui</string>
-  <string name="request_storage">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>
+  <string name="no_section_info" fuzzy="true">Tiada judul kandungan ditemui</string>
+  <string name="request_storage" fuzzy="true">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>
+  <string name="pref_notes">Catatan</string>
+  <string name="share">Kongsi</string>
+  <string name="delete">Hapuskan</string>
+  <string name="cancel">Batalkan</string>
+  <string name="got_it">Faham</string>
+  <string name="did_you_know">Tahukah anda?</string>
+  <string name="undo">Nyahbuat</string>
+  <string name="rate_dialog_neutral">Nanti</string>
+  <string name="open">Buka</string>
+  <string name="pref_extras">Tambahan</string>
+  <string name="local_zims">Peranti</string>
+  <string name="remote_zims">Dalam talian</string>
   <string name="library">Perpustakaan</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_files_here">Tiada fail di sini</string>
+  <string name="download">Muat turun</string>
+  <string name="zim_no_pic">Tiada Gambar</string>
+  <string name="zim_no_vid">Tiada Video</string>
+  <string name="help_5">Di mana kandungan tersebut?</string>
+  <string name="yes">Ya</string>
+  <string name="no">Tidak</string>
+  <string name="confirm_stop_download_title">Hentikan muat turun?</string>
+  <string name="time_day">hari</string>
+  <string name="time_hour">j</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
+  <string name="time_today">Hari ini</string>
+  <string name="time_yesterday">Kelmarin</string>
+  <string name="your_languages">Bahasa terpilih:</string>
+  <string name="other_languages">Bahasa lain:</string>
+  <string name="crash_checkbox_device">Butiran Peranti</string>
+  <string name="crash_button_confirm">HANTAR BUTIRAN</string>
+  <string name="get_content_shortcut_label">Dapatkan kandungan</string>
+  <string name="articleCount">%s rencana</string>
+  <string name="download_books">Muat turun buku</string>
+  <string name="welcome_to_the_family">Selamat datang ke keluarga</string>
+  <string name="save_books_offline">Simpan buku luar talian</string>
+  <string name="table_of_contents">Jadual isi kandungan</string>
+  <string name="select_languages">Pilih bahasa</string>
+  <string name="save_languages">Simpan bahasa</string>
+  <string name="send_feedback">Hantar maklum balas</string>
+  <string name="expand">Kembangkan</string>
+  <string name="history">Sejarah</string>
+  <string name="history_from_current_book">Lihat Sejarah Dari Semua Buku</string>
+  <string name="search_history">Sejarah carian</string>
+  <string name="selected_items">%1$d dipilih</string>
+  <string name="complete">Selesai</string>
+  <string name="save">Simpan</string>
+  <string name="note">Catatan</string>
+  <string name="wiki_article_title">Judul Rencana Wiki</string>
+  <string name="note_save_successful">Catatan disimpan</string>
+  <string name="note_share_error_file_missing">Fail catatan tidak wujud</string>
+  <string name="note_share_app_chooser_title">Kongsi fail nota dengan:</string>
+  <string name="notes_deletion_unsuccessful">Beberapa file tidak terhapus</string>
+  <string name="books_count">%d buku</string>
+  <string name="your_device">Peranti Anda:</string>
+  <string name="nearby_devices">PERANTI BERHAMPIRAN</string>
+  <string name="status">Status</string>
+  <string name="tag_pic">Gambar</string>
+  <string name="tag_vid">Vid</string>
+  <string name="tag_text_only">Teks Sahaja</string>
+  <string name="tag_short_text">Teks Pendek</string>
+  <string name="no_bookmarks" fuzzy="true">Tiada bookmark!</string>
+  <string name="crash_checkbox_file_system">Butiran Sistem Fail</string>
+  <string name="reader">Pembaca</string>
+  <string name="how_to_update_content">Bagaimana kemas kini kandungan?</string>
 </resources>

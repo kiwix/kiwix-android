@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Anzeljg
 * Dbc334
 * Eleassar
@@ -26,7 +25,7 @@
   <string name="save_media_saved">Shrani medij kot %s na Android/media/org.kiwix…/</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
-  <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
+  <string name="open_in_new_tab">Odprem povezavo na novem zavihku?</string>
   <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
   <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
   <string name="error_article_url_not_found">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
@@ -45,7 +44,7 @@
   <string name="no_reader_application_installed">Za to vrsto datoteke ni bilo mogoče najti nameščene aplikacije</string>
   <string name="no_section_info">Ni najdene vsebine glave</string>
   <string name="request_storage">Za dostop do vsebine brez povezave potrebujemo dostop do vašega pomnilnika</string>
-  <string name="clear_recent_and_tabs_history_dialog">Ali ste prepričani, da želite izbrisati vašo zgodovino iskanja in ponastaviti vse aktivne zavihke?</string>
+  <string name="clear_recent_and_tabs_history_dialog">Ali svojo zgodovino iskanja res želite izbrisati in ponastaviti vse aktivne zavihke?</string>
   <string name="delete_recent_search_item">Izbriši ta element?</string>
   <string name="pref_clear_all_history_title">Izbriši zgodovino</string>
   <string name="pref_clear_all_history_summary">Počisti zgodovino nedavnih iskanj in zavihkov</string>
@@ -72,7 +71,7 @@
   <string name="pref_newtab_background_title">Odprite nov zavihek v ozadju</string>
   <string name="pref_newtab_background_summary">Ko odprete nov zavihek, se odpre v ozadju</string>
   <string name="pref_extras">Pripomočki</string>
-  <string name="new_tab_snack_bar">Članek odprt v novem zavihku</string>
+  <string name="new_tab_snack_bar">Članek odprt na novem zavihku</string>
   <string name="search_widget_text">Iskanje Kiwix</string>
   <string name="speech_prompt_text">Govori za iskanje %s</string>
   <string name="speech_not_supported">Žal vaša naprava ne podpira vnosa govora</string>
@@ -108,7 +107,7 @@
   <string name="yes">Da</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Ustavi prenos?</string>
-  <string name="confirm_stop_download_msg">Ali ste prepričani, da želite ustaviti ta prenos?</string>
+  <string name="confirm_stop_download_msg">Ali ta prenos res želite ustaviti?</string>
   <string name="download_change_storage">Izbirnik naprave za shranjevanje</string>
   <string name="tts_not_enabled">Tvorjenje govora iz besedil za to ZIM datoteko ni omogočeno</string>
   <string name="next">Naprej</string>
@@ -134,7 +133,7 @@
   <string name="crash_title">No… To je neprijetno</string>
   <string name="crash_description">Izgleda, da smo se zrušili.</string>
   <string name="crash_checkbox_language">Jezikovne nastavitve</string>
-  <string name="crash_checkbox_zimfiles">Seznam tvojih Zim datotek</string>
+  <string name="crash_checkbox_zimfiles">Seznam vaših datotek Zim</string>
   <string name="crash_checkbox_exception">Podrobnosti o sesutju</string>
   <string name="crash_checkbox_logs">Dnevniki aplikacije</string>
   <string name="crash_checkbox_device">Podrobnosti o napravi</string>

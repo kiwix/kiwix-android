@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* ಮಲ್ನಾಡಾಚ್ ಕೊಂಕ್ಣೊ
+-->
 <resources>
   <string name="menu_help">ಸಹಾಯ</string>
   <string name="menu_home">ಮುಖ್ಯಪುಟ</string>
@@ -8,6 +12,7 @@
   <string name="menu_random_article">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
   <string name="menu_full_screen">ಪೂರ್ಣಪರದೆ</string>
   <string name="menu_exit_full_screen">ಪೂರ್ಣ ತೆರೆಯನ್ನು ನಿರ್ಗಮಿಸಿ</string>
+  <string name="menu_wifi_hotspot">ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್</string>
   <string name="search_label">ಅನ್ವೇಷಿಸಿ</string>
   <string name="pref_display_title">ಪ್ರದರ್ಶಿಸು</string>
   <string name="pref_info_title">ಮಾಹಿತಿ</string>
@@ -15,16 +20,4 @@
   <string name="pref_language_title">ಭಾಷೆ</string>
   <string name="pref_language_chooser">ಭಾಷೆ ಆಯ್ದುಕೊಳ್ಳಿ</string>
   <string name="library">ಗ್ರಂಥಾಲಯ</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

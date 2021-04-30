@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Crox
+-->
 <resources>
   <string name="menu_help">Agid</string>
   <string name="menu_home">Pagina da partenza</string>
@@ -9,7 +12,7 @@
   <string name="menu_full_screen">Maletg entir</string>
   <string name="menu_exit_full_screen">Ord il maletg entir</string>
   <string name="search_label">Tschertgar</string>
-  <string name="choose_file">Selecziunar ina datoteca da cuntegn ZIM (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Selecziunar ina datoteca da cuntegn ZIM (*.zim)</string>
   <string name="open_in_new_tab">Avrir il link en in nov tab?</string>
   <string name="error_file_not_found">Errur: la datoteca ZIM selecziunada è betg vegnida chattada.</string>
   <string name="error_file_invalid">Errur: la datoteca selecziunada è betg ina datoteca ZIM valida.</string>
@@ -23,16 +26,4 @@
   <string name="pref_back_to_top_summary">Mussar in buttun a la fin da la pagina per ir enavos a l\'entschatta</string>
   <string name="pref_language_title">Lingua</string>
   <string name="library">Biblioteca</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

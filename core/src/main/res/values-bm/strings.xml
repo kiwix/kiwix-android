@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Boukary
+* Macofe
+-->
 <resources>
   <string name="menu_help">Dɛmɛ</string>
   <string name="menu_home">Soba</string>
@@ -9,7 +13,7 @@
   <string name="menu_full_screen">Ekaran fa</string>
   <string name="menu_exit_full_screen">Bɔ ekaran falen na</string>
   <string name="search_label">Ɲinini kɛ</string>
-  <string name="choose_file">I mago bɛ fisiye min na ZIMU kɔnɔ, o suganti yan.</string>
+  <string name="choose_file" fuzzy="true">I mago bɛ fisiye min na ZIMU kɔnɔ, o suganti yan.</string>
   <string name="error_file_not_found">Fili: Fisiye sugantilen ma se ka ye fan si.</string>
   <string name="error_file_invalid">Fili: fisiye sugantilen tɛ fisiye yamaruyalen ye.</string>
   <string name="error_article_url_not_found">Fili: Kunnafoni (Url: %1$s)  sariziyeli tigɛra sira la.</string>
@@ -19,16 +23,4 @@
   <string name="pref_night_mode_summary">Kunnafoni minnu ɲɛ cogoya yɛlɛmanen don, olu jira.</string>
   <string name="pref_language_title">Kan</string>
   <string name="library">Gafeso</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

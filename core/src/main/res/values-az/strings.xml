@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* AZISS
+* Dağlı95
+* Macofe
+* Verman1
+-->
 <resources>
   <string name="menu_help">Kömək</string>
   <string name="menu_home">Ana səhifə</string>
@@ -9,7 +15,7 @@
   <string name="menu_full_screen">Tam ekran</string>
   <string name="menu_exit_full_screen">Tam ekran rejimini bağla</string>
   <string name="search_label">Axtar</string>
-  <string name="choose_file">ZIM məzmunlu fayl seç (*.zim)</string>
+  <string name="choose_file" fuzzy="true">ZIM məzmunlu fayl seç (*.zim)</string>
   <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>
   <string name="error_file_not_found">Xəta: Seçilmiş ZIM fayl mövcud deyil.</string>
   <string name="error_file_invalid">Xəta: Seçilmiş ZIM faylı yararlı deyil.</string>
@@ -23,7 +29,7 @@
   <string name="pref_back_to_top_summary">Səhifənin sonunda göstərilən və səhifənin əvvəlinə qaytaran düymə.</string>
   <string name="pref_language_title">Dil</string>
   <string name="pref_language_chooser">Dili seçin</string>
-  <string name="no_section_info">Məzmunun heç bir başlıqı tapılmadı.</string>
+  <string name="no_section_info" fuzzy="true">Məzmunun heç bir başlıqı tapılmadı.</string>
   <string name="rate_dialog_title">Xahiş edirik bizi dəyərləndirin</string>
   <string name="rate_dialog_msg_1">Əgər, istifadədən xoşlandınızsa</string>
   <string name="rate_dialog_msg_2">xahiş edirik, dəyərləndirmək üçün bir az vaxt ayırın. Dəstəklədiyiniz üçün təşəkkür edirik!</string>
@@ -31,16 +37,6 @@
   <string name="no_thanks">Yox, sağ olun</string>
   <string name="rate_dialog_neutral">Daha sonra</string>
   <string name="library">Kitabxana</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="note_delete_successful">Qeyd silinməsi yerinə yetirildi</string>
+  <string name="note_delete_unsuccessful">Qeyd silinmədi</string>
 </resources>

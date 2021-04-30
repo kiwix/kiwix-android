@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Kusavica
+* Lexected
+* Mikulas1
+* Yardom78
+-->
 <resources>
   <string name="menu_help">Pomocník</string>
   <string name="menu_home">Domov</string>
@@ -11,10 +17,10 @@
   <string name="menu_read_aloud">Čítať nahlas</string>
   <string name="menu_read_aloud_stop">Zastaviť čítanie nahlas</string>
   <string name="save_media">Uložiť médiá ako…</string>
-  <string name="save_media_error">Pri ukladaní došlo k chybe!</string>
-  <string name="save_media_saved">Médiá uložené ako %1$s v priečinku Obrázky</string>
+  <string name="save_media_error" fuzzy="true">Pri ukladaní došlo k chybe!</string>
+  <string name="save_media_saved" fuzzy="true">Médiá uložené ako %1$s v priečinku Obrázky</string>
   <string name="search_label">Hľadať</string>
-  <string name="choose_file">Vyberte súbor so ZIM obsahom (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Vyberte súbor so ZIM obsahom (*.zim)</string>
   <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
   <string name="error_file_not_found">Chyba: Vybraný súbor ZIM sa nenašiel.</string>
   <string name="error_file_invalid">Chyba: Vybraný súbor nie je platný ZIM súbor.</string>
@@ -30,8 +36,8 @@
   <string name="pref_language_chooser">Zvoliť jazyk</string>
   <string name="tts_lang_not_supported">Jazyk tejto stránky buď nie je podporovaný, alebo neboli nainštalované príslušné jazykové balíčky. Článok nemusí byť správne prečítaný.</string>
   <string name="no_reader_application_installed">Nebola nájdená nainštalovaná aplikácia pre tento typ súboru</string>
-  <string name="no_section_info">Neboly nájdené hlavičky obsahu (content headers)</string>
-  <string name="request_storage">Na prístup k súborom typu ZIM potrebujeme prístup k vášmu úložisku</string>
+  <string name="no_section_info" fuzzy="true">Neboly nájdené hlavičky obsahu (content headers)</string>
+  <string name="request_storage" fuzzy="true">Na prístup k súborom typu ZIM potrebujeme prístup k vášmu úložisku</string>
   <string name="bookmark_added">Záložka bola pridaná</string>
   <string name="rate_dialog_title">Prosím, ohodnoťte nás</string>
   <string name="rate_dialog_msg_1">Ak sa vám náš produkt páči</string>
@@ -42,16 +48,5 @@
   <string name="pref_newtab_background_title">Otvoriť novú kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Pri otvorení novej karty bude karta otvorená na pozadí</string>
   <string name="library">Knižnica</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks" fuzzy="true">Žiadne záložky!</string>
 </resources>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * EukeneFL
 * Fitoschido
 * Joseba
 * Macofe
 * Mikel Ibaiba
 * Subi
+* Xabier Armendaritz
 -->
 <resources>
   <string name="menu_help">Laguntza</string>
@@ -21,10 +21,10 @@
   <string name="menu_read_aloud_stop">Ozen irakurtzeari utzi</string>
   <string name="save_media">Media gorde</string>
   <string name="save_media_error">Akats bat gertatu da media gordetzen zen bitartean!</string>
-  <string name="save_media_saved">Media %s to Android/media/org.kiwix…/ bezala gordeta</string>
+  <string name="save_media_saved">Multimedia %s gisa gorde da, Android/media/org.kiwix…/ dosierrean</string>
   <string name="search_label">Bilatu</string>
   <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>
-  <string name="open_in_new_tab">Ireki lotura fitxa berri batean?</string>
+  <string name="open_in_new_tab">Ireki esteka fitxa berri batean?</string>
   <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
