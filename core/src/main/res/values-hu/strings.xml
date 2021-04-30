@@ -23,6 +23,7 @@
   <string name="menu_exit_full_screen">Kilépés a teljes képernyős nézetből</string>
   <string name="menu_read_aloud">Hangosan felolvas</string>
   <string name="menu_read_aloud_stop">Felolvasás megállítása</string>
+  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Média mentése</string>
   <string name="save_media_error">Hiba történt a média mentése közben!</string>
   <string name="save_media_saved">Média elmentve %s néven ide: Android/media/org.kiwix…/</string>

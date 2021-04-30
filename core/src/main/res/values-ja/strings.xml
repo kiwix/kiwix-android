@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Omotecho
+* S2KTS
+* Shirayuki
+* SkyDaisy9
+* Tmv
+-->
 <resources>
   <string name="menu_help">ヘルプ</string>
   <string name="menu_home">ホーム</string>
@@ -12,6 +19,7 @@
   <string name="save_media_error">メディアを保存しようとした際にエラーが発生しました!</string>
   <string name="search_label">検索</string>
   <string name="open_in_new_tab">リンクを新しいタブで開きますか?</string>
+  <string name="no_books_selected_toast_message">まずブックを選択してください</string>
   <string name="error_file_not_found">エラー: 選択した ZIM ファイルが見つかりませんでした。</string>
   <string name="error_file_invalid">エラー: 選択したファイルは有効な ZIM ファイルではありません。</string>
   <string name="error_article_url_not_found">エラー: 記事 (URL: %1$s) を読み込めませんでした。</string>
@@ -27,16 +35,6 @@
   <string name="library">ライブラリ</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
   <string name="other_languages">その他の言語:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="pref_text_zoom_summary">テキストサイズを 25% 増やす</string>
+  <string name="search_open_in_new_tab">新しいタブで開く</string>
 </resources>

@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* Ләйсән
+-->
 <resources>
   <string name="menu_help">Ярҙам</string>
   <string name="menu_home">Төп Бит</string>
@@ -17,16 +21,4 @@
   <string name="rate_dialog_positive">Баһаларға!</string>
   <string name="no_thanks">Юҡ, рәхмәт</string>
   <string name="library">Китапхана</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

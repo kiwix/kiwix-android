@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* פוילישער
+-->
 <resources>
   <string name="menu_help">הילף</string>
   <string name="menu_home">היים</string>
@@ -31,16 +34,5 @@
   <string name="delete_zims_toast">טעקע אויסגעמעקט</string>
   <string name="no_files_here">קיין טעקעס דא</string>
   <string name="yes">יא</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="tag_short_text">קורצער טעקסט</string>
 </resources>

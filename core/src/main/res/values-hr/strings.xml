@@ -1,31 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Bugoslav
+* DVrandecic (WMF)
+* Macofe
+* Neptune, the Mystic
+* Teoo3
+-->
 <resources>
   <string name="menu_help">Pomoć</string>
-  <string name="menu_home">Početna stranica</string>
+  <string name="menu_home">Glavna stranica</string>
   <string name="menu_settings">Postavke</string>
-  <string name="menu_search_in_text">Nađi u tekstu</string>
+  <string name="menu_search_in_text">Traži na stranici</string>
   <string name="bookmarks">Bilješke</string>
   <string name="menu_random_article">Slučajni članak</string>
   <string name="menu_full_screen">Preko cijelog zaslona</string>
   <string name="menu_exit_full_screen">Izađi iz prikaza preko cijelog zaslona</string>
   <string name="menu_read_aloud">Pročitaj naglas</string>
   <string name="search_label">Traži</string>
+  <string name="server_stopped_successfully_toast_message">Poslužitelj je uspješno zaustavljen.</string>
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>
   <string name="pref_info_version">Verzija</string>
   <string name="pref_language_title">Jezik</string>
   <string name="pref_language_chooser">Odaberite jezik</string>
   <string name="library">Knjižnica</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="wifi_only_msg">Аko izaberete „Da”, više nećete primati obavijesti. Međutim, tu opciju uvijek možete promijeniti u postavkama.</string>
+  <string name="go_to_settings" fuzzy="true">Otiđi u postavke</string>
+  <string name="no_results">Nema rezultata</string>
+  <string name="delete_history">Izbrisati cijelu povijest?</string>
+  <string name="delete_bookmarks" fuzzy="true">Izbrisati oznake?</string>
 </resources>

@@ -1,4 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Aefgh39622
+* B20180
+* Bluegram
+* Just Sayori
+* Macofe
+* Patsagorn Y.
+-->
 <resources>
   <string name="menu_help">วิธีใช้</string>
   <string name="menu_home">หน้าแรก</string>
@@ -8,19 +16,27 @@
   <string name="menu_random_article">สุ่มบทความ</string>
   <string name="menu_full_screen">เต็มหน้าจอ</string>
   <string name="menu_exit_full_screen">ออกจากโหมดเต็มหน้าจอ</string>
+  <string name="menu_support_kiwix">สนับสนุน Kiwix</string>
+  <string name="save_media">บันทึกสื่อ</string>
+  <string name="save_media_error">เกิดข้อผิดพลาดเมื่อพยายามบันทึกสื่อ!</string>
   <string name="search_label">ค้นหา</string>
   <string name="choose_file">เลือกไฟล์เนื้อหา (*.zim)</string>
+  <string name="open_in_new_tab">ต้องการเปิดลิงก์ในแท็บใหม่หรือไม่</string>
   <string name="error_file_not_found">ข้อผิดพลาด:ไม่พบไฟล์ ZIM ที่เลือก</string>
   <string name="error_file_invalid">ข้อผิดพลาด:ไฟล์ที่เลือกไม่ได้เป็นไฟล์ ZIM ที่ถูกต้อง</string>
   <string name="error_article_url_not_found">ข้อผิดพลาด:ไม่สามารถดาวน์โหลดบทความได้ (URL:%1$s)</string>
   <string name="pref_display_title">แสดงผล</string>
   <string name="pref_info_title">ข้อมูล</string>
   <string name="pref_info_version">รุ่น</string>
+  <string name="pref_night_mode">โหมดกลางคืน</string>
+  <string name="pref_night_mode_summary">แสดงบทความด้วยสีที่สลับกัน</string>
+  <string name="pref_back_to_top">กลับไปด้านบน</string>
   <string name="pref_language_title">ภาษา</string>
+  <string name="pref_language_chooser">เลือกภาษา</string>
   <string name="clear_recent_and_tabs_history_dialog">คุณแน่ใจหรือไม่ว่าต้องการที่จะลบประวัติการค้นหาทั้งหมดและรีเซ็ตแท็บที่ใช้งานอยู่ทั้งหมด?</string>
   <string name="delete_recent_search_item">ลบสิ่งนี้เลยหรือไม่?</string>
   <string name="all_history_cleared">ลบประวัติทั้งหมดแล้ว</string>
-  <string name="clear_all_history_dialog_title">ลบประวัติทั้งหมด</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">ลบประวัติทั้งหมด</string>
   <string name="delete">ลบ</string>
   <string name="delete_specific_search_toast">ลบการค้นหาล่าสุดแล้ว</string>
   <string name="got_it">เข้าใจแล้ว</string>
@@ -31,28 +47,15 @@
   <string name="rate_dialog_neutral">ทีหลัง</string>
   <string name="bookmark_removed">ลบบุ๊คมาร์คแล้ว</string>
   <string name="library">รายการ</string>
-  <string name="delete_zims_toast">ไฟล์ถูกลบ</string>
-  <string name="download_no_space">พื้นที่ไม่เพียงพอในการดาวน์โหลดไฟล์นี้</string>
-  <string name="help_10">คุณสามารถดาวน์โหลดไฟล์ ZIM ที่คุณเลือกในแอพหรือเลือกไฟล์ที่คุณต้องการและดาวน์โหลดจากคอมพิวเตอร์เดสก์ท็อปอย่างระมัดระวังก่อนที่จะถ่ายโอนไฟล์ ZIM ไปยังเอสดีการ์ดของคุณ</string>
+  <string name="download_no_space" fuzzy="true">พื้นที่ไม่เพียงพอในการดาวน์โหลดไฟล์นี้</string>
+  <string name="help_10" fuzzy="true">คุณสามารถดาวน์โหลดไฟล์ ZIM ที่คุณเลือกในแอพหรือเลือกไฟล์ที่คุณต้องการและดาวน์โหลดจากคอมพิวเตอร์เดสก์ท็อปอย่างระมัดระวังก่อนที่จะถ่ายโอนไฟล์ ZIM ไปยังเอสดีการ์ดของคุณ</string>
   <string name="help_11">การดาวน์โหลดไฟล์ ZIM ในแอพจะอยู่ในไดเรกทอรีจัดเก็บข้อมูลภายนอกในโฟลเดอร์ชื่อ Kiwix</string>
-  <string name="delete_zim_failed">ขออภัยเราไม่สามารถลบไฟล์นี้ คุณควรลองใช้โปรแกรมจัดการไฟล์แทน</string>
+  <string name="delete_zim_failed" fuzzy="true">ขออภัยเราไม่สามารถลบไฟล์นี้ คุณควรลองใช้โปรแกรมจัดการไฟล์แทน</string>
   <string name="external_storage">ภายนอก</string>
   <string name="confirm_stop_download_title">หยุดดาวน์โหลดหรือไม่?</string>
   <string name="confirm_stop_download_msg">คุณแน่ใจหรือไม่ว่าต้องการหยุดดาวน์โหลดนี้?</string>
   <string name="download_change_storage">ตัวเลือกอุปกรณ์จัดเก็บข้อมูล</string>
-  <string name="external_link_popup_dialog_title">กำลังเข้าสู่ลิงค์ภายนอก</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">กำลังเข้าสู่ลิงค์ภายนอก</string>
   <string name="external_link_popup_dialog_message">คุณกำลังป้อนลิงก์ภายนอก ซึ่งอาจทำให้มีค่าใช้จ่ายเพิ่มเติมสำหรับการถ่ายโอนข้อมูลหรือจะไม่ทำงานเมื่อคุณออฟไลน์ คุณต้องการดำเนินการต่อหรือไม่?</string>
   <string name="do_not_ask_anymore">อย่าถามอีก</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

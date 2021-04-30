@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Alex00728
 * CYAN
 * Codenstory
@@ -25,7 +24,7 @@
   <string name="menu_read_aloud">소리내어 읽기</string>
   <string name="menu_read_aloud_stop">그만 소리내어 읽기</string>
   <string name="menu_support_kiwix">Kiwix 지원하기</string>
-  <string name="menu_wifi_hotspot">호스트북</string>
+  <string name="menu_wifi_hotspot">와이파이 핫스팟</string>
   <string name="save_media">미디어 저장</string>
   <string name="save_media_error">미디어 저장을 시도할 때 오류가 발생하였습니다!</string>
   <string name="save_media_saved">미디어(%s)를 Android/media/org.kiwix…/에 저장했습니다</string>

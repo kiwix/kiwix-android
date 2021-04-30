@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* Obaid Raza
+-->
 <resources>
   <string name="menu_help">معاونت</string>
   <string name="menu_home">صفحہ اول</string>
@@ -14,17 +18,24 @@
   <string name="pref_info_version">ورژن</string>
   <string name="pref_language_title">زبان</string>
   <string name="pref_language_chooser">ایک زبان کا انتخاب کریں</string>
-  <string name="library">مکتبہ</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="delete">حذف</string>
+  <string name="cancel">منسوخ</string>
+  <string name="delete_specific_search_toast">حالیہ تلاش شدہ حذف</string>
+  <string name="did_you_know">کیا آپ جانتے ہیں؟</string>
+  <string name="undo">واپس</string>
+  <string name="tab_closed">ٹیب بند</string>
+  <string name="bookmark_added">بک مارک شامل</string>
+  <string name="rate_dialog_title">براہ کرم ہمیں ریٹ کریں</string>
+  <string name="rate_dialog_msg_1">اگر آپ کو استعمال میں تسلی ہوئی ہے</string>
+  <string name="rate_dialog_msg_2">، براہ کرم پھر ہمیں۔ ریٹ کریں۔ آپ کی مدد کا شکریہ!</string>
+  <string name="rate_dialog_positive">ریٹ!</string>
+  <string name="no_thanks">نہیں، شکریہ</string>
+  <string name="rate_dialog_neutral">بعد میں</string>
+  <string name="open">کھولیں</string>
+  <string name="bookmark_removed">بک مارک حذف</string>
+  <string name="pref_newtab_background_title">پس منظر میں نئی ٹیب کھولیں</string>
+  <string name="pref_newtab_background_summary">اگر کوئی نئی ٹیب کھولنی ہو تو پس منظر میں کھولیں</string>
+  <string name="pref_extras">اضافی</string>
+  <string name="new_tab_snack_bar">مضمون نئی ٹیب میں کھولیں</string>
+  <string name="search_widget_text">کیوکس میں تلاش</string>
 </resources>

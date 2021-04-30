@@ -1,25 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Karmwiki
+* McDutchie
+* Softinterlingua
+-->
 <resources>
   <string name="menu_help">Adjuta</string>
   <string name="menu_home">Initio</string>
   <string name="menu_settings">Preferentias</string>
-  <string name="menu_search_in_text">Cercar in texto</string>
+  <string name="menu_search_in_text">Cercar in pagina</string>
   <string name="bookmarks">Marcapaginas</string>
   <string name="menu_random_article">Articulo aleatori</string>
   <string name="menu_full_screen">Schermo complete</string>
   <string name="menu_exit_full_screen">Exir del schermo complete</string>
   <string name="menu_read_aloud">Leger a voce alte</string>
   <string name="menu_read_aloud_stop">Cessar de leger a voce alte</string>
-  <string name="save_media">Salveguardar multimedia como…</string>
+  <string name="save_media">Salveguardar multimedia</string>
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
-  <string name="save_media_saved">File multimedial salveguardate como %1$s in tu dossier de imagines</string>
+  <string name="save_media_saved">File multimedial salveguardate como %s in Android/media/org.kiwix…/</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
   <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
+  <string name="start_server_label">Initiar servitor</string>
+  <string name="stop_server_label">Stoppar servitor</string>
   <string name="error_file_not_found">Error: Le file ZIM seligite non poteva esser trovate.</string>
   <string name="error_file_invalid">Error: Le file seligite non es un file ZIM valide.</string>
   <string name="error_article_url_not_found">Error: Le cargamento del articulo (Url: %1$s) ha fallite.</string>
   <string name="pref_display_title">Visualisation</string>
+  <string name="pref_info_title">Information</string>
+  <string name="pref_info_version">Version</string>
   <string name="pref_night_mode">Modo nocturne</string>
   <string name="pref_night_mode_summary">Monstrar articulos in colores invertite</string>
   <string name="pref_back_to_top">Initio del pagina</string>
@@ -28,18 +37,21 @@
   <string name="pref_language_chooser">Selige un lingua</string>
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
   <string name="library">Bibliotheca</string>
+  <string name="delete_zim_body">Le sequente file(s) zim essera delite:\n\n%s</string>
+  <string name="help_5">Ubi es le contento?</string>
+  <string name="delete_zim_failed">Alcun files non ha potite esser delite. Tenta usar un gestor de files pro deler los.</string>
+  <string name="confirm_stop_download_title">Stoppar le discarga?</string>
+  <string name="next">Sequente</string>
+  <string name="previous">Precedente</string>
+  <string name="time_today">Hodie</string>
   <string name="do_not_ask_anymore">Non demandar plus</string>
   <string name="your_languages">Linguas eligite:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="other_languages">Altere linguas:</string>
+  <string name="no_items_msg">Nulle articulos disponibile</string>
+  <string name="crash_checkbox_language">Tu configurationes de lingua</string>
+  <string name="crash_checkbox_zimfiles">Un lista de tu files Zim</string>
+  <string name="new_tab_shortcut_label">Nove scheda</string>
+  <string name="on">Si</string>
+  <string name="off">No</string>
+  <string name="auto">Auto</string>
 </resources>

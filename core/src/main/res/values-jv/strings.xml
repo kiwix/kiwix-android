@@ -1,13 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* NoiX180
+* Sumbukompor
+-->
 <resources>
   <string name="menu_help">Pitulung</string>
-  <string name="menu_home">Latar</string>
+  <string name="menu_home">Pendhapa</string>
   <string name="menu_settings">Pilihan</string>
   <string name="menu_search_in_text">Temukna nèng teks</string>
   <string name="bookmarks">Tenger wacan</string>
   <string name="menu_random_article">Waton artikel</string>
   <string name="menu_full_screen">Layar wutuh</string>
-  <string name="menu_exit_full_screen">Metu saka modé layar kebak</string>
+  <string name="menu_exit_full_screen">Metu saka layar kebak</string>
   <string name="search_label">Golèk</string>
   <string name="pref_display_title">Pajangan</string>
   <string name="pref_info_title">Informasi</string>
@@ -15,16 +20,4 @@
   <string name="pref_language_title">Basa</string>
   <string name="pref_language_chooser">Pilih basa</string>
   <string name="library">Perpustakan</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

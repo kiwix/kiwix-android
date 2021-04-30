@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Kanags
+* Kelson
+-->
 <resources>
   <string name="menu_help">உதவி</string>
   <string name="menu_home">முகப்பு</string>
@@ -9,10 +13,10 @@
   <string name="menu_full_screen">முழு திரை</string>
   <string name="menu_exit_full_screen">முழு திரையிலிருந்து வெளியேறுக</string>
   <string name="save_media">ஊடகப்பொருளை இவ்வாறு சேமித்து வை</string>
-  <string name="save_media_error">ஊடகப்பொருளை சேமிக்கும் முயற்சியில் ஒரு பிழை நேர்ந்துவிட்டது!</string>
-  <string name="save_media_saved">தங்களுடைய படங்களின் கொப்புறைக்குள், ஊடகப்பொருளை இவ்வாறு %1$s சேமிக்கவும்</string>
+  <string name="save_media_error" fuzzy="true">ஊடகப்பொருளை சேமிக்கும் முயற்சியில் ஒரு பிழை நேர்ந்துவிட்டது!</string>
+  <string name="save_media_saved" fuzzy="true">தங்களுடைய படங்களின் கொப்புறைக்குள், ஊடகப்பொருளை இவ்வாறு %1$s சேமிக்கவும்</string>
   <string name="search_label">தேடு</string>
-  <string name="choose_file">ZIM கோப்பை தேர்வு செய் (*.zim)</string>
+  <string name="choose_file" fuzzy="true">ZIM கோப்பை தேர்வு செய் (*.zim)</string>
   <string name="open_in_new_tab">இணைப்பை புதிய தாவலில் திறக்கவேண்டுமா?</string>
   <string name="error_file_not_found">பிழை: தேர்வு செய்யப்பட்ட ZIM கோப்பு காணப்படவில்லை</string>
   <string name="error_file_invalid">பிழை: தேர்வு செய்யப்பட்ட கோப்பு, ஏற்புடைய ZIM கோப்பு அல்ல</string>
@@ -27,16 +31,4 @@
   <string name="pref_language_title">மொழி</string>
   <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
   <string name="library">நூலகம்</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

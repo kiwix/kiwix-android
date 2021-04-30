@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Tofeiku
+-->
+<resources>
+  <string name="send_files_title">Hantar Fail</string>
+  <string name="receive_files_title">Terima Fail</string>
+</resources>

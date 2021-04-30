@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Klaras
+* Spotter
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Váš souborový systém nepodporuje soubory větší než 4GB</string>
   <string name="detecting_file_system">Zjišťování, zda souborový systém dokáže vytvořit 4GB soubory</string>
   <string name="cannot_open_file">Nepodařilo se otevřít soubor\nZkuste prosím tento soubor vyhledat na kartě Zařízení ve Vaší knihovně</string>
+  <string name="send_files_title">Odeslat soubory</string>
+  <string name="receive_files_title">Příjem souborů</string>
 </resources>

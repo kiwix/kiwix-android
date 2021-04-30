@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Fwolff
+* Joris Darlington Quarshie
+* Macofe
+* Naudefj
+-->
 <resources>
   <string name="menu_help">Hulp</string>
   <string name="menu_home">Tuisblad</string>
@@ -8,8 +14,14 @@
   <string name="menu_random_article">Lukrake artikel</string>
   <string name="menu_full_screen">Volle skerm</string>
   <string name="menu_exit_full_screen">Verlaat volskerm-modus</string>
+  <string name="menu_read_aloud">Lees hardop</string>
+  <string name="menu_read_aloud_stop">Hou op om hardop te lees</string>
+  <string name="menu_support_kiwix">Ondersteun Kiwix</string>
+  <string name="save_media">Stoor media</string>
+  <string name="save_media_error">Kon nie die mediuma red nie!</string>
+  <string name="save_media_saved">Medium gestoor as %s op Android/media/org.kiwix…/</string>
   <string name="search_label">Soek</string>
-  <string name="choose_file">Kies \'n ZIM-inhoudslêer (*.zim)</string>
+  <string name="choose_file">Kies \'n inhoudslêer (*.zim)</string>
   <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
   <string name="error_file_not_found">Fout: die geselekteerde ZIM-lêer kon nie gevind word nie.</string>
   <string name="error_file_invalid">Fout: die geselekteerde lêer is nie \'n geldige ZIM-lêer nie.</string>
@@ -24,16 +36,7 @@
   <string name="pref_language_title">Taal</string>
   <string name="pref_language_chooser">Kies \'n taal</string>
   <string name="library">Biblioteek</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="wifi_only_msg">As u \'Ja\' kies, sal u nie in die toekoms gewaarsku word nie. U kan dit egter altyd in Instellings verander</string>
+  <string name="history_from_current_book">Kyk na geskiedenis uit alle boeke</string>
+  <string name="no_history">Geen geskiedenis nie</string>
 </resources>

@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* හරිත
+* 1100100
+-->
 <resources>
   <string name="menu_help">උදව්</string>
   <string name="menu_home">මුල් පිටුව</string>
@@ -11,10 +16,10 @@
   <string name="menu_read_aloud">හඬනගා කියවන්න</string>
   <string name="menu_read_aloud_stop">හඬනගා කියවීම නවත්වන්න</string>
   <string name="save_media">මාධ්‍යය සුරකින්න…</string>
-  <string name="save_media_error">මාධ්‍යය ආරක්ෂණය කිරීමට යාමේදී හටගන්නා ලදී!</string>
-  <string name="save_media_saved">ඔබගේ පින්තුර ගොනුවෙහි %1$s ලෙස, මාධ්‍යය සුරක්ෂිත කරන ලදී</string>
+  <string name="save_media_error" fuzzy="true">මාධ්‍යය ආරක්ෂණය කිරීමට යාමේදී හටගන්නා ලදී!</string>
+  <string name="save_media_saved" fuzzy="true">ඔබගේ පින්තුර ගොනුවෙහි %1$s ලෙස, මාධ්‍යය සුරක්ෂිත කරන ලදී</string>
   <string name="search_label">ගවේෂණය</string>
-  <string name="choose_file">ZIM වර්ගයේ ගොනුවක් තෝරාගන්න (*.zim)</string>
+  <string name="choose_file" fuzzy="true">ZIM වර්ගයේ ගොනුවක් තෝරාගන්න (*.zim)</string>
   <string name="open_in_new_tab">සබැඳිය නව තීරුවක විවෘත කරන්න?</string>
   <string name="error_file_not_found">දෝෂය: තෝරාගත් ZIM ගොනුව සොයා ගැනීමට නොහැකි විය.</string>
   <string name="error_file_invalid">දෝෂය: තෝරාගත් ගොනුව වලංගු ZIM ගොනුවක් නොවේ.</string>
@@ -29,16 +34,4 @@
   <string name="pref_language_title">භාෂාව</string>
   <string name="pref_language_chooser">භාෂාවක් තෝරාගන්න</string>
   <string name="library">පුස්තකාලය</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

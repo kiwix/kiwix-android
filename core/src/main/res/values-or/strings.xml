@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Jnanaranjan Sahu
+* Macofe
+* Psubhashish
+-->
 <resources>
   <string name="menu_help">ସହଯୋଗ</string>
   <string name="menu_home">ମୂଳ ଜାଗା</string>
@@ -6,15 +11,15 @@
   <string name="menu_search_in_text">ଲେଖାରେ ଖୋଜିବେ</string>
   <string name="bookmarks">ବୁକମାର୍କ</string>
   <string name="menu_random_article">ଯାହିତାହି ପ୍ରସଙ୍ଗ</string>
-  <string name="menu_full_screen">ପୁରା ସ୍କ୍ରିନ</string>
-  <string name="menu_exit_full_screen">ପୁରା ସ୍କ୍ରିନ ସ୍ଥିତିରୁ ବାହାରି ଆସନ୍ତୁ</string>
+  <string name="menu_full_screen">ପୂରା ସ୍କ୍ରିନ</string>
+  <string name="menu_exit_full_screen">ପୂରା ସ୍କ୍ରିନ ସ୍ଥିତିରୁ ବାହାରି ଆସନ୍ତୁ</string>
   <string name="menu_read_aloud">ପଢିବେ</string>
   <string name="menu_read_aloud_stop">ପଢିବା ବନ୍ଦ କରିବେ</string>
   <string name="save_media">ମେଡ଼ିଅକୁ ସାଇତିବେ</string>
-  <string name="save_media_error">ମିଡ଼ିଆ ସାଇତିଲା ବେଳେ ଅସୁବିଧା ହେଲା!</string>
+  <string name="save_media_error" fuzzy="true">ମିଡ଼ିଆ ସାଇତିଲା ବେଳେ ଅସୁବିଧା ହେଲା!</string>
   <string name="save_media_saved">ମେଡ଼ିଆକୁ %1$s ଭାବେ ଆପଣଙ୍କ ଛବି ଫୋଲ୍ଡରରେ ରଖାଗଲା</string>
   <string name="search_label">ଖୋଜିବେ</string>
-  <string name="choose_file">ଜିମ ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>
+  <string name="choose_file" fuzzy="true">ଜିମ ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>
   <string name="open_in_new_tab">ନୂଆ ଟ୍ୟାବରେ ଲିଙ୍କଟି ଖୋଲିବେ?</string>
   <string name="error_file_not_found">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ ।</string>
   <string name="error_file_invalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ ।</string>
@@ -29,16 +34,4 @@
   <string name="pref_language_title">ଭାଷା</string>
   <string name="pref_language_chooser">ଭାଷା ଚୟନ କରନ୍ତୁ</string>
   <string name="library">ପାଠାଗାର</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

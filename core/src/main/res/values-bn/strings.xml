@@ -4,6 +4,7 @@
 * Bodhisattwa
 * Sohom Datta
 * Titodutta
+* Yahya
 * আজিজ
 * আফতাবুজ্জামান
 * এম আবু সাঈদ
@@ -25,6 +26,9 @@
   <string name="search_label">অনুসন্ধান</string>
   <string name="choose_file">একটি বিষয়বস্তুর ফাইল নির্বাচন করুন (*.zim)</string>
   <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
+  <string name="hotspot_failed_title">হটস্পট চালু করা যায় নি</string>
+  <string name="hotspot_failed_message">মনে হচ্ছে হটস্পট আগে থেকেই চালু করা। চালিয়ে যেতে দয়া করে ওয়াইফাই হটস্পট বন্ধ করুন।</string>
+  <string name="go_to_wifi_settings_label">ওয়াইফাই সেটিংসে যান</string>
   <string name="connection_refused">সংযোগ প্রত্যাখান করা হয়েছে।</string>
   <string name="error_file_not_found">ত্রুটি: নির্বাচিত ZIM ফাইলটি খুঁজে পাওয়া যায় নি।</string>
   <string name="error_file_invalid">ত্রুটি: নির্বাচিত ফাইলটি বৈধ ZIM ফাইল নয়।</string>
@@ -80,6 +84,7 @@
   <string name="delete_zims_toast">ফাইল অপসারণ করা হয়েছে</string>
   <string name="no_files_here">এখানে কোন ফাইল নেই</string>
   <string name="download_no_space" fuzzy="true">এই ফাইল ডাউনলোড করার মত যথেষ্ট স্থান নেই</string>
+  <string name="download">ডাউনলোড</string>
   <string name="space_available">উপলব্ধ খালিস্থান:</string>
   <string name="zim_simple">সরল</string>
   <string name="zim_no_pic">ছবি নেই</string>
@@ -126,6 +131,7 @@
   <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
   <string name="new_tab_shortcut_label">নতুন ট্যাব</string>
   <string name="pending_state">মুলতুবী</string>
+  <string name="save">সংরক্ষণ</string>
   <string name="note">টীকা</string>
   <string name="books_count">%dটি বই</string>
   <string name="tag_text_only">শুধুমাত্র পাঠ্য</string>
