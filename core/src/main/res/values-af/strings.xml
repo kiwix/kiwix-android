@@ -36,7 +36,7 @@
   <string name="pref_language_title">Taal</string>
   <string name="pref_language_chooser">Kies \'n taal</string>
   <string name="library">Biblioteek</string>
-  <string name="wifi_only_msg">As u \'Ja\' kies, sal u nie in die toekoms gewaarsku word nie. U kan dit egter altyd in Instellings verander</string>
+  <string name="wifi_only_msg">As u \‘Ja\’ kies, sal u nie in die toekoms gewaarsku word nie. U kan dit egter altyd in Instellings verander</string>
   <string name="history_from_current_book">Kyk na geskiedenis uit alle boeke</string>
   <string name="no_history">Geen geskiedenis nie</string>
 </resources>
