@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.core.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -197,7 +196,6 @@ class SearchFragment : BaseFragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     searchViewModel.actions.offer(ActivityResultReceived(requestCode, resultCode, data))
-    Log.d("GPDEBUG", "render: on activity result")
   }
 }
 
