@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.search
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -170,11 +171,14 @@ class SearchFragment : BaseFragment() {
     lifecycleScope.launchWhenCreated {
       searchViewModel.state.collect { render(it) }
     }
+    val searchStringFromArguments = arguments?.getString(NAV_ARG_SEARCH_STRING)
+    if (searchStringFromArguments != null) {
+      searchView.setQuery(searchStringFromArguments, false)
+    }
     searchViewModel.actions.offer(Action.CreatedWithArguments(arguments))
   }
 
   private fun render(state: SearchState) {
-    searchView.setQuery(state.searchTerm, false)
     searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem.isEnabled = state.searchTerm.isNotBlank()
     searchLoadingIndicator.isShowing(state.isLoading)
@@ -193,6 +197,7 @@ class SearchFragment : BaseFragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     searchViewModel.actions.offer(ActivityResultReceived(requestCode, resultCode, data))
+    Log.d("GPDEBUG", "render: on activity result")
   }
 }
 
