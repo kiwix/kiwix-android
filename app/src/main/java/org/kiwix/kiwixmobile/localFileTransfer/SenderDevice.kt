@@ -74,7 +74,9 @@ internal class SenderDevice(
             }
           }
         } catch (e: IOException) {
-          Log.e(TAG, e.message)
+          e.message?.let { message ->
+            Log.e(TAG, message)
+          }
           e.printStackTrace()
           isTransferErrorFree = false
           publishProgress(fileIndex, FileItem.FileStatus.ERROR)
