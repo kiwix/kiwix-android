@@ -1219,9 +1219,7 @@ public abstract class CoreReaderFragment extends BaseFragment
   private void handleIntentActions(Intent intent) {
     Log.d(TAG_KIWIX, "action" + getActivity().getIntent().getAction());
     if (intent.getAction() != null) {
-      if (zimReaderContainer.getId() != null) {
-        startIntentBasedOnAction(intent);
-      }
+      startIntentBasedOnAction(intent);
     }
   }
 
