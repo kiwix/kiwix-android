@@ -38,12 +38,9 @@ data class ProcessActivityResult(
       resultCode == Activity.RESULT_OK &&
       data != null
     ) {
-      val extraResults = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-      if (extraResults != null) {
-        val firstResults = extraResults.firstOrNull()
-        if (firstResults != null) {
-          actions.offer(Filter(firstResults))
-        }
+      val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+      if (results != null && results.first() != null) {
+        actions.offer(Filter(results.first()))
       }
     }
   }
