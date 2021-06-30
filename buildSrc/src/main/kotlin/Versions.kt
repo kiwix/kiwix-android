@@ -33,7 +33,7 @@ object Versions {
 
   const val io_objectbox: String = "2.8.1"
 
-  const val org_jacoco: String = "0.7.9"
+  const val org_jacoco: String = "0.8.7"
 
   const val io_mockk: String = "1.10.2"
 
