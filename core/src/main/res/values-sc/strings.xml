@@ -70,6 +70,7 @@
   <string name="delete_recent_search_item">Iscantzellare custu elementu?</string>
   <string name="pref_clear_all_history_title">Iscantzella sa cronologia</string>
   <string name="pref_clear_all_history_summary">Iscantzella sa cronologia de sas chircas e de sas ischedas reghentes</string>
+  <string name="pref_notes">Notas</string>
   <string name="all_history_cleared">Cronologia iscantzellada de su totu</string>
   <string name="pref_clear_all_bookmarks_title">Isbòida sos sinnalibros</string>
   <string name="clear_all_history_dialog_title">Iscantzellare totu sa cronologia?</string>
