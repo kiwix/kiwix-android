@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Ajeje Brazorf
 * Beta16
 * CloeRiva
 * Einreiher
@@ -53,6 +54,7 @@
   <string name="pref_notes">Note</string>
   <string name="all_history_cleared">Tutta la cronologia è stata cancellata</string>
   <string name="clear_all_history_dialog_title">Cancellare tutta la cronologia?</string>
+  <string name="share">Condividi</string>
   <string name="delete">Cancella</string>
   <string name="cancel">Annulla</string>
   <string name="delete_specific_search_toast">Ricerca recente rimossa</string>
@@ -71,17 +73,23 @@
   <string name="pref_newtab_background_title">Apri nuova scheda in background</string>
   <string name="pref_newtab_background_summary">Quando si apre una nuova scheda verrà aperta in background</string>
   <string name="local_zims">Dispositivo</string>
+  <string name="remote_zims">Connesso</string>
   <string name="library">Libreria</string>
   <string name="delete_zims_toast">File cancellato</string>
   <string name="no_files_here">Nessun file qui</string>
   <string name="download_no_space">Lo spazio è insufficiente per scaricare.</string>
   <string name="download">Scarica</string>
   <string name="space_available">Spazio disponibile:</string>
+  <string name="zim_simple">Semplice</string>
+  <string name="zim_no_pic">Nessuna immagine</string>
+  <string name="zim_no_vid">Nessun video</string>
+  <string name="help_2">Cosa fa Kiwix?</string>
   <string name="help_10">Puoi sia scaricare i tuoi file ZIM in-app selezionati o selezionare attentamente quello/i che desideri e scaricarli attraverso il Desktop di un computer prima di trasferire i file ZIM sulla tua memoria SD.</string>
   <string name="help_11">I file ZIM scaricati nell\'applicazione sono localizzati nella directory di archiviazione esterna in una cartella chiamata Kiwix.</string>
   <string name="pref_current_folder">Cartella attuale</string>
   <string name="delete_zim_failed">Non siamo stati in grado di eliminare alcuni file. Dovresti provare ad usare un gestore di file.</string>
   <string name="tts_pause">pausa</string>
+  <string name="tts_resume">riprendi</string>
   <string name="external_storage">Esterno</string>
   <string name="yes">Sì</string>
   <string name="no">No</string>
@@ -92,13 +100,18 @@
   <string name="previous">Precedente</string>
   <string name="pref_wifi_only">Scarica contenuto solo tramite WiFi</string>
   <string name="time_day">giorno</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
+  <string name="time_today">Oggi</string>
   <string name="time_yesterday">Ieri</string>
   <string name="your_languages">Lingue selezionate:</string>
   <string name="other_languages">Altre lingue:</string>
   <string name="crash_checkbox_device">Dettagli dispositivo</string>
   <string name="new_tab_shortcut_label">Nuova scheda</string>
+  <string name="fav_icon">Favicon</string>
   <string name="articleCount">%s voci</string>
   <string name="table_of_contents">Indice</string>
+  <string name="save">Salva</string>
   <string name="nearby_devices">DISPOSITIVI VICINI</string>
   <string name="status">Stato</string>
   <string name="tag_short_text">Testo breve</string>
@@ -107,6 +120,10 @@
   <string name="no_bookmarks">Nessun segnalibro</string>
   <string name="delete_history">Cancellare tutta la cronologia?</string>
   <string name="delete_bookmarks">Cancellare tutti i segnalibri?</string>
+  <string name="on">Attivata</string>
+  <string name="off">Disattivata</string>
+  <string name="auto">Automatica</string>
   <string name="search_open_in_new_tab">Apri in una nuova scheda</string>
+  <string name="reader">Lettore</string>
   <string name="how_to_update_content">Come aggiornare il contenuto?</string>
 </resources>
