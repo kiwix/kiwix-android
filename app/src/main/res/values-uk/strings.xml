@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Movses
+* Ата
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Ваша файлова система не підтримує файли більше 4 Гб</string>
   <string name="detecting_file_system">Визначаємо, чи файлова система дозволяє створити файли розміром 4 Гб</string>
   <string name="cannot_open_file">Не вдається відкрити файл\nБудь ласка, перегляньте цей файл на вкладці пристроїв у бібліотеці</string>
+  <string name="send_files_title">Надіслати файли</string>
+  <string name="receive_files_title">Отримати файли</string>
 </resources>
