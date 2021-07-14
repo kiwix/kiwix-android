@@ -43,7 +43,9 @@ class FileWritingFileSystemChecker : FileSystemChecker {
         }
       } catch (e: Exception) {
         e.printStackTrace()
-        Log.d("Fat32Checker", e.message)
+        e.message?.let { message ->
+          Log.d("Fat32Checker", message)
+        }
         CANNOT_WRITE_4GB.alsoSaveTo(resultFile)
       } finally {
         deleteIfExists()

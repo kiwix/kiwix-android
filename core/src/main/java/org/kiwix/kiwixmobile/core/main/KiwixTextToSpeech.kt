@@ -84,7 +84,7 @@ class KiwixTextToSpeech internal constructor(
    * Reads the currently selected text in the WebView.
    */
   fun readSelection(webView: WebView) {
-    webView.loadUrl("javascript:tts.speakAloud(window.getSelection().toString());", null)
+    webView.loadUrl("javascript:tts.speakAloud(window.getSelection().toString());")
   }
 
   /**
