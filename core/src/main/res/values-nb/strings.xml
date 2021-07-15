@@ -5,7 +5,7 @@
 * Jon Harald Søby
 * SuperPotato
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="menu_help">Hjelp</string>
   <string name="menu_home">Hjem</string>
   <string name="menu_settings">Innstillinger</string>
@@ -16,9 +16,9 @@
   <string name="menu_exit_full_screen">Avslutt fullskjerm</string>
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
-  <string name="save_media" tools:ignore="Typos">Lagre media som…</string>
+  <string name="save_media">Lagre media som…</string>
   <string name="save_media_error" fuzzy="true">En feil oppstod under lagring av mediet!</string>
-  <string name="save_media_saved" fuzzy="true" tools:ignore="Typos">Lagret media som %1$s i din bildemappe.</string>
+  <string name="save_media_saved" fuzzy="true">Lagret media som %1$s i din bildemappe.</string>
   <string name="search_label">Søk</string>
   <string name="choose_file" fuzzy="true">Velg en ZIM-innholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
