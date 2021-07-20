@@ -38,9 +38,10 @@ data class ProcessActivityResult(
       resultCode == Activity.RESULT_OK &&
       data != null
     ) {
-      val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-      if (results != null && results.first() != null) {
-        actions.offer(Filter(results.first()))
+      data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.apply {
+        first()?.let {
+          actions.offer(Filter(it))
+        }
       }
     }
   }
