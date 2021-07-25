@@ -43,6 +43,7 @@
   <string name="start_server_label" tools:keep="@string/start_server_label">Start server</string>
   <string name="stop_server_label" tools:keep="@string/stop_server_label">Stop server</string>
   <string name="server_started_message" tools:keep="@string/server_started_message">Enter this ip address into your browser to access the server %s</string>
+  <string name="share_host_address">Share URL via other applications</string>
   <string name="error_file_not_found">Error: The selected ZIM file could not be found.</string>
   <string name="zim_not_opened">Unable to open zim file</string>
   <string name="error_file_invalid">Error: The selected file is not a valid ZIM file.</string>
