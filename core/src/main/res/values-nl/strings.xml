@@ -5,6 +5,7 @@
 * Festina90
 * Jeleniccz
 * Mainframe98
+* McDutchie
 * PonkoSasuke
 * Romaine
 * Siebrand
@@ -21,10 +22,10 @@
   <string name="menu_read_aloud">Voorlezen</string>
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
   <string name="save_media">Media opslaan als…</string>
-  <string name="save_media_error" fuzzy="true">Er is een fout opgetreden bij het opslaan van de media!</string>
-  <string name="save_media_saved" fuzzy="true">Het bestand is opgeslagen als %1$s in uw afbeeldingenmap</string>
+  <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
+  <string name="save_media_saved">Het bestand is opgeslagen als %s in Android/media/org.kiwix…/</string>
   <string name="search_label">Zoeken</string>
-  <string name="choose_file" fuzzy="true">Selecteer een ZIM inhoudsbestand (*.zim)</string>
+  <string name="choose_file">Selecteer een inhoudsbestand (*.zim)</string>
   <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
   <string name="error_file_not_found">Fout: het geselecteerde ZIM-bestand kon niet gevonden worden.</string>
   <string name="error_file_invalid">Fout: het geselecteerde bestand is geen geldig ZIM-bestand.</string>
@@ -40,8 +41,8 @@
   <string name="pref_language_chooser">Taal kiezen</string>
   <string name="tts_lang_not_supported">De taak van deze pagina wordt niet ondersteund, of de juiste taalgegevens zijn niet geïnstalleerd. De pagina kan niet correct gelezen worden.</string>
   <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
-  <string name="no_section_info" fuzzy="true">Geen inhoudsheaders gevonden</string>
-  <string name="request_storage" fuzzy="true">Om toegang te krijgen tot ZIM-bestanden is toegang tot uw opslag nodig</string>
+  <string name="no_section_info">Geen inhoudskoppen gevonden</string>
+  <string name="request_storage">Om offline inhoud aan te spreken is toegang tot uw opslag nodig</string>
   <string name="delete_recent_search_item">Dit item verwijderen?</string>
   <string name="delete">Verwijderen</string>
   <string name="cancel">Annuleren</string>
