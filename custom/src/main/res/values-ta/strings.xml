@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Gurulenin
+-->
+<resources>
+  <string name="retry">மறு முயற்சி செய்</string>
+  <string name="download">பதிவிறக்கு</string>
+  <string name="invalid_installation">தவறான நிறுவல். தயவு செய்து Zim கோப்பினை பதிவிறக்கவும்.\nவைஃபை இயக்கப்பட்டிருப்பதையும் உங்களிடம் போதுமான சேமிப்பு உள்ளதையும் உறுதி செய்யவும்</string>
+</resources>

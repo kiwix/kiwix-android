@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Gurulenin
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">உங்கள் கோப்பு முறைமை 4 ஜிபிக்கு மேல் கோப்புகளை ஆதரிக்காது</string>
+  <string name="detecting_file_system">கோப்பு முறைமை 4 ஜிபி கோப்புகளை உருவாக்க முடியுமா என்பதைக் கண்டறிதல்</string>
+  <string name="cannot_open_file">கோப்பைத் திறப்பதில் தோல்வி! N! தயவுசெய்து உங்கள் கோப்பகத்தை உங்கள் நூலகத்தின் சாதன தாவலில் தேட முயற்சிக்கவும்</string>
+  <string name="send_files_title">கோப்புகளை அனுப்பவும்</string>
+  <string name="receive_files_title">கோப்புகளைப் பெறுக</string>
+</resources>
