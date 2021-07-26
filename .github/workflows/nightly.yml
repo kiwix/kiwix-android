@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 1
 
       - name: run instrumentation tests
-        uses: ReactiveCircus/android-emulator-runner@v2.14.3
+        uses: ReactiveCircus/android-emulator-runner@v2.19.1
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
