@@ -40,7 +40,7 @@ jobs:
 
       - name: Publish app to download.kiwix.org
         env:
-          UNIVERSAL_RELEASE_AAB: app/build/outputs/apk/release/**.aab
+          UNIVERSAL_RELEASE_AAB: app/build/outputs/bundle/release/**.aab
         run: |
           cp $UNIVERSAL_RELEASE_AAB kiwix-${TAG}.aab
           scp -vrp -i ssh_key -o StrictHostKeyChecking=no kiwix-${TAG}.aab ci@download.kiwix.org:/data/download/release/kiwix-android/
@@ -48,7 +48,7 @@ jobs:
       - name: Publish to github releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "app/build/outputs/apk/release/**"
+          artifacts: "app/build/outputs/bundle/release/**"
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
           prerelease: true
