@@ -230,7 +230,7 @@ class ZimManageViewModel @Inject constructor(
       BiFunction<Unit, NetworkState, Unit> { _, _ -> }
     )
       .switchMap {
-        if (connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI) {
+        if (connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI) {
           Flowable.just(Unit)
         } else {
           sharedPreferenceUtil.prefWifiOnlys
