@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.UpdateAllNotesPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
@@ -32,7 +32,7 @@ class NotesViewModel @Inject constructor(
   notesDao: NewNoteDao,
   zimReaderContainer: ZimReaderContainer,
   sharedPrefs: SharedPreferenceUtil
-) : PageViewModel<NoteItem, NotesState>(notesDao, sharedPrefs, zimReaderContainer) {
+) : PageViewModel<NoteListItem, NotesState>(notesDao, sharedPrefs, zimReaderContainer) {
   override fun initialState(): NotesState =
     NotesState(emptyList(), sharedPreferenceUtil.showNotesAllBooks, zimReaderContainer.id)
 
@@ -40,7 +40,7 @@ class NotesViewModel @Inject constructor(
     state.copy(searchTerm = action.searchTerm)
 
   override fun updatePages(state: NotesState, action: Action.UpdatePages): NotesState =
-    state.copy(pageItems = action.pages.filterIsInstance<NoteItem>())
+    state.copy(pageItems = action.pages.filterIsInstance<NoteListItem>())
 
   override fun offerUpdateToShowAllToggle(
     action: Action.UserClickedShowAllToggle,
@@ -50,7 +50,7 @@ class NotesViewModel @Inject constructor(
     return state.copy(showAll = action.isChecked)
   }
 
-  override fun copyWithNewItems(state: NotesState, newItems: List<NoteItem>): NotesState =
+  override fun copyWithNewItems(state: NotesState, newItems: List<NoteListItem>): NotesState =
     state.copy(pageItems = newItems)
 
   override fun deselectAllPages(state: NotesState): NotesState =

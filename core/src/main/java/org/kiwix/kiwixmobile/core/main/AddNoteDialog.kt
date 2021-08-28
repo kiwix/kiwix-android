@@ -41,8 +41,10 @@ import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleTextWatcher
@@ -66,8 +68,10 @@ const val DISABLE_ICON_ITEM_ALPHA = 130
 const val ENABLE_ICON_ITEM_ALPHA = 255
 
 class AddNoteDialog : DialogFragment() {
+  private var zimId: String? = null
   private var zimFileName: String? = null
   private var zimFileTitle: String? = null
+  private var zimFavicon: String? = null
   private var articleTitle: String? = null
 
   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
@@ -90,6 +94,9 @@ class AddNoteDialog : DialogFragment() {
   @Inject
   lateinit var alertDialogShower: AlertDialogShower
 
+  @Inject
+  lateinit var mainRepositoryActions: MainRepositoryActions
+
   private val saveItem by lazy { toolbar.menu.findItem(R.id.save_note) }
 
   private val shareItem by lazy { toolbar.menu.findItem(R.id.share_note) }
@@ -105,7 +112,9 @@ class AddNoteDialog : DialogFragment() {
       .inject(this)
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
+    zimId = zimReaderContainer.id
     zimFileName = zimReaderContainer.zimCanonicalPath
+    zimFavicon = zimReaderContainer.favicon
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer.zimFileTitle
       articleTitle = (activity as WebViewProvider?)?.getCurrentWebView()?.title
@@ -264,8 +273,6 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun saveNote(noteText: String) {
-    // save note here in object box as well , Note entity, NoteViewModel
-
     /* String content of the EditText, given by noteText, is saved into the text file given by:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * */
@@ -296,6 +303,7 @@ class AddNoteDialog : DialogFragment() {
         // Save note text-file code:
         try {
           noteFile.writeText(noteText)
+          addNoteToDao(noteText, noteFile.canonicalPath)
           context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
           noteEdited = false // As no unsaved changes remain
           enableDeleteNoteMenuItem()
@@ -309,6 +317,25 @@ class AddNoteDialog : DialogFragment() {
       }
     } else {
       context.toast(R.string.note_save_error_storage_not_writable, Toast.LENGTH_LONG)
+    }
+  }
+
+  private fun addNoteToDao(noteText: String, noteFilePath: String?) {
+    // adding only if saving file is success
+    noteFilePath?.let { filePath ->
+      if (filePath.isNotEmpty()) {
+        val noteToSave = NoteListItem(
+          NotesEntity(
+            zimId = zimId.orEmpty(),
+            zimFilePath = zimFileName,
+            noteTitle = zimFileTitle,
+            noteFilePath = noteFilePath,
+            noteBody = noteText,
+            favicon = zimFavicon
+          )
+        )
+        mainRepositoryActions.saveNote(noteToSave)
+      }
     }
   }
 

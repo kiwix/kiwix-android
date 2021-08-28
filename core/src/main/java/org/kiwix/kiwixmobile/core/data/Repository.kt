@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
@@ -33,6 +34,7 @@ import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -52,6 +54,7 @@ class Repository @Inject internal constructor(
   private val bookDao: NewBookDao,
   private val bookmarksDao: NewBookmarksDao,
   private val historyDao: HistoryDao,
+  private val notesDao: NewNoteDao,
   private val languageDao: NewLanguagesDao,
   private val recentSearchDao: NewRecentSearchDao,
   private val zimReaderContainer: ZimReaderContainer
@@ -118,4 +121,21 @@ class Repository @Inject internal constructor(
   override fun deleteBookmark(bookmarkUrl: String): Completable? =
     Completable.fromAction { bookmarksDao.deleteBookmark(bookmarkUrl) }
       .subscribeOn(io)
+
+  override fun saveNote(noteListItem: NoteListItem): Completable? =
+    Completable.fromAction { notesDao.saveNote(noteListItem) }
+      .subscribeOn(io)
+
+  override fun deleteNote(noteList: MutableList<NoteListItem>): Completable =
+    Completable.fromAction { notesDao.deletePages(noteList) }
+      .subscribeOn(io)
+
+  // this does note removes notes from storage only the list
+  override fun clearNotes(): Completable = Completable.fromAction {
+    notesDao.deleteAllNotes()
+  }
+
+  // override fun notesOnDiskAsListItems(): Flowable<MutableList<NoteListItem>> {
+  //   TODO("Not yet implemented")
+  // }
 }

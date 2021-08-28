@@ -25,10 +25,8 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.page.adapter.Page
 
-class OpenNote(
-) : SideEffect<Unit> {
+class OpenNote() : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity as CoreMainActivity
     activity.popNavigationBackstack()

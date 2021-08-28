@@ -20,25 +20,24 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 @Entity
 data class NotesEntity(
   @Id var id: Long = 0,
   val zimId: String,
-  var zimName: String,
   var zimFilePath: String?,
-  var noteTitle: String,
+  var noteTitle: String?,
   var noteBody: String,
+  var noteFilePath: String,
   var favicon: String?
 ) {
-  constructor(item: NoteItem) : this(
-    item.databaseId,
-    item.zimId,
-    item.zimName,
-    item.zimFilePath,
-    item.noteBody,
-    item.title,
-    item.favicon
+  constructor(item: NoteListItem) : this(
+    zimId = item.zimId,
+    zimFilePath = item.zimFilePath,
+    noteTitle = item.title,
+    noteBody = item.noteBody,
+    noteFilePath = item.noteFilePath,
+    favicon = item.favicon
   )
 }

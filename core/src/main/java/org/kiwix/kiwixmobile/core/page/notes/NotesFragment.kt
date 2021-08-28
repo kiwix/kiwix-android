@@ -30,19 +30,20 @@ import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 class NotesFragment : PageFragment() {
   override val pageViewModel by lazy { viewModel<NotesViewModel>(viewModelFactory) }
 
+  override val screenTitle: String
+    get() = getString(R.string.notes)
+
   override val pageAdapter: PageAdapter by lazy {
     PageAdapter(PageDelegate.PageItemDelegate(this))
   }
 
-  override val title: String by lazy { getString(R.string.notes) }
   override val noItemsString: String by lazy { getString(R.string.no_notes) }
   override val switchString: String by lazy { getString(R.string.notes_from_all_books) }
-  override val switchIsChecked: Boolean by lazy(sharedPreferenceUtil::showNotesAllBooks)
+  override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showNotesAllBooks }
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
   }
 
-  override val searchQueryHint: String by lazy { getString(R.string.search_bookmarks) }
+  override val searchQueryHint: String by lazy { getString(R.string.search_notes) }
 }
-

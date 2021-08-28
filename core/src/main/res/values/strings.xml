@@ -318,4 +318,5 @@
   <string name="notes">Notes</string>
   <string name="no_notes">No Notes</string>
   <string name="notes_from_all_books">View Notes From All Books</string>
+  <string name="search_notes">Search Notes</string>
 </resources>

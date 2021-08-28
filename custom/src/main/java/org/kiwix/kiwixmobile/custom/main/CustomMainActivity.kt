@@ -47,6 +47,7 @@ class CustomMainActivity : CoreMainActivity() {
   override val settingsFragmentResId: Int = R.id.customSettingsFragment
   override val readerFragmentResId: Int = R.id.customReaderFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val notesFragmentResId: Int = R.id.notesFragment
   override val helpFragmentResId: Int = R.id.helpFragment
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinations =

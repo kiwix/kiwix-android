@@ -24,25 +24,29 @@ import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import javax.inject.Inject
 
 class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
   fun notes(): Flowable<List<Page>> = box.asFlowable(box.query {
     order(NotesEntity_.noteTitle)
-  }).map { it.map(::NoteItem) }
+  }).map { it.map(::NoteListItem) }
 
   override fun pages(): Flowable<List<Page>> = notes()
 
   override fun deletePages(pagesToDelete: List<Page>) {
-    deleteNote(pagesToDelete as List<NoteItem>)
+    deleteNote(pagesToDelete as List<NoteListItem>)
   }
 
-  fun saveNote(noteItem: NoteItem) {
+  fun saveNote(noteItem: NoteListItem) {
     box.put(NotesEntity(noteItem))
   }
 
-  private fun deleteNote(noteList: List<NoteItem>) {
+  private fun deleteNote(noteList: List<NoteListItem>) {
     box.remove(noteList.map(::NotesEntity))
+  }
+
+  fun deleteAllNotes() {
+    box.removeAll()
   }
 }

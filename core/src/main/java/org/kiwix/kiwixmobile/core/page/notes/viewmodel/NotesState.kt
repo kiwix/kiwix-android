@@ -19,17 +19,17 @@
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
-import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class NotesState(
-  override val pageItems: List<NoteItem>,
+  override val pageItems: List<NoteListItem>,
   override val showAll: Boolean,
   override val currentZimId: String?,
   override val searchTerm: String = ""
-) : PageState<NoteItem>() {
+) : PageState<NoteListItem>() {
   override val visiblePageItems: List<PageRelated> = filteredPageItems
 
-  override fun copyWithNewItems(newItems: List<NoteItem>): PageState<NoteItem> =
+  override fun copyWithNewItems(newItems: List<NoteListItem>): PageState<NoteListItem> =
     copy(pageItems = newItems)
 }
