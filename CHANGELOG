@@ -1,3 +1,10 @@
+3.4.5
+NEW: Now supports Android 11
+NEW: Inside Hotspot Now socket address is better visible
+BUGFIX: Some zim-it files doesn't read anymore
+BUGFIX: Improve search functionality
++ More
+
 3.4.4
 NEW: The Download of Zim in now more stable
 NEW: Updated translations
