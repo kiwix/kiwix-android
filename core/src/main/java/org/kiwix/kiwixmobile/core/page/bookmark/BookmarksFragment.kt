@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.core.page.bookmark
 
-import android.view.View
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
@@ -16,7 +15,6 @@ class BookmarksFragment : PageFragment() {
   override val pageAdapter: PageAdapter by lazy {
     PageAdapter(PageItemDelegate(this))
   }
-  override val switchVisibility: Int = View.VISIBLE
 
   override val screenTitle: String by lazy { getString(R.string.bookmarks) }
   override val noItemsString: String by lazy { getString(R.string.no_bookmarks) }

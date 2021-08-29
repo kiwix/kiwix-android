@@ -66,7 +66,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val switchString: String
   abstract val searchQueryHint: String
   abstract val pageAdapter: PageAdapter
-  abstract val switchVisibility: Int
   abstract val switchIsChecked: Boolean
 
   private val actionModeCallback: ActionMode.Callback =
@@ -134,7 +133,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     no_page.text = noItemsString
 
     page_switch.text = switchString
-    page_switch.visibility = switchVisibility
     page_switch.isChecked = switchIsChecked
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
     page_switch.setOnCheckedChangeListener { _, isChecked ->

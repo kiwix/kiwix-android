@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch;
 public class RecentSearchDao {
 
   private static final int NUM_RECENT_RESULTS = 5;
-  private final KiwixDatabase mDb;
+  private KiwixDatabase mDb;
 
   @Inject
   public RecentSearchDao(KiwixDatabase kiwixDatabase) {

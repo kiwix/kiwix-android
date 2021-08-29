@@ -28,7 +28,7 @@ public class TestingUtils {
 
   private static TestingUtils.IdleListener callback;
 
-  private static final Set<Class> resources = new HashSet<>();
+  private static Set<Class> resources = new HashSet<>();
 
   public static void bindResource(Class bindClass) {
     if (callback != null) {
