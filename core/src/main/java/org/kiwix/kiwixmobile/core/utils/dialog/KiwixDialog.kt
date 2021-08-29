@@ -257,6 +257,27 @@ sealed class KiwixDialog(
     positiveMessage = R.string.delete,
     negativeMessage = R.string.cancel
   )
+
+  object DeleteAllNotes : KiwixDialog(
+    R.string.delete_notes_confirmation_msg,
+    R.string.delete_note_dialog_message,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object DeleteSelectedNotes : KiwixDialog(
+    R.string.delete_selected_notes,
+    R.string.delete_note_dialog_message,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object ShowNoteDialog : KiwixDialog(
+    R.string.choose_your_action,
+    null,
+    positiveMessage = R.string.open_article,
+    negativeMessage = R.string.open_note
+  )
 }
 
 interface HasBodyFormatArgs {

@@ -41,7 +41,6 @@ import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -71,6 +70,7 @@ class AddNoteDialog : DialogFragment() {
   private var zimId: String? = null
   private var zimFileName: String? = null
   private var zimFileTitle: String? = null
+  private var zimFileUrl: String? = null
   private var zimFavicon: String? = null
   private var articleTitle: String? = null
 
@@ -112,18 +112,19 @@ class AddNoteDialog : DialogFragment() {
       .inject(this)
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
-    zimId = zimReaderContainer.id
     zimFileName = zimReaderContainer.zimCanonicalPath
-    zimFavicon = zimReaderContainer.favicon
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer.zimFileTitle
-      articleTitle = (activity as WebViewProvider?)?.getCurrentWebView()?.title
+      zimFavicon = zimReaderContainer.favicon
+      zimId = zimReaderContainer.id
+
+      val webView = (activity as WebViewProvider?)?.getCurrentWebView()
+      articleTitle = webView?.title
+      zimFileUrl = webView?.url
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
-      articleNoteFileName = getArticleNotefileName()
+      articleNoteFileName = getArticleNoteFileName()
       zimNotesDirectory = "$NOTES_DIRECTORY$zimNoteDirectoryName/"
-    } else {
-      onFailureToCreateAddNoteDialog()
     }
   }
 
@@ -149,9 +150,13 @@ class AddNoteDialog : DialogFragment() {
       return (if (noteDirectoryName.isNotEmpty()) noteDirectoryName else zimFileTitle) ?: ""
     }
 
-  private fun getArticleNotefileName(): String {
+  private fun getArticleNoteFileName(): String {
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
-    val articleUrl = (activity as WebViewProvider?)?.getCurrentWebView()?.url
+    val articleUrl = if (arguments != null) {
+      arguments?.getString(ARTICLE_URL)
+    } else {
+      (activity as WebViewProvider?)?.getCurrentWebView()?.url
+    }
     var noteFileName = ""
     if (articleUrl == null) {
       onFailureToCreateAddNoteDialog()
@@ -303,16 +308,17 @@ class AddNoteDialog : DialogFragment() {
         // Save note text-file code:
         try {
           noteFile.writeText(noteText)
-          addNoteToDao(noteText, noteFile.canonicalPath)
           context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
           noteEdited = false // As no unsaved changes remain
           enableDeleteNoteMenuItem()
+          // adding only if saving file is success
+          addNoteToDao(noteFile.canonicalPath, zimFileTitle.orEmpty())
         } catch (e: IOException) {
           e.printStackTrace()
             .also { context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG) }
         }
       } else {
-        context.toast(R.string.note_save_successful, Toast.LENGTH_LONG)
+        context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
         Log.d(TAG, "Required folder doesn't exist")
       }
     } else {
@@ -320,21 +326,23 @@ class AddNoteDialog : DialogFragment() {
     }
   }
 
-  private fun addNoteToDao(noteText: String, noteFilePath: String?) {
-    // adding only if saving file is success
+  private fun addNoteToDao(noteFilePath: String?, title: String) {
     noteFilePath?.let { filePath ->
-      if (filePath.isNotEmpty()) {
-        val noteToSave = NoteListItem(
-          NotesEntity(
-            zimId = zimId.orEmpty(),
-            zimFilePath = zimFileName,
-            noteTitle = zimFileTitle,
+      if (filePath.isNotEmpty() && zimFileUrl.orEmpty().isNotEmpty()) {
+        val zimReader = zimReaderContainer.zimFileReader
+        if (zimReader != null) {
+          val noteToSave = NoteListItem(
+            title = title,
+            url = zimFileUrl.orEmpty(),
             noteFilePath = noteFilePath,
-            noteBody = noteText,
-            favicon = zimFavicon
+            zimFileReader = zimReader
           )
-        )
-        mainRepositoryActions.saveNote(noteToSave)
+          mainRepositoryActions.saveNote(noteToSave)
+        } else {
+          Log.d(TAG, "zim reader found null")
+        }
+      } else {
+        Log.d(TAG, "Cannot process with empty zim url or noteFilePath")
       }
     }
   }
@@ -346,6 +354,7 @@ class AddNoteDialog : DialogFragment() {
     val noteDeleted = noteFile.delete()
     if (noteDeleted) {
       add_note_edit_text.text.clear()
+      mainRepositoryActions.deleteNote(articleNoteFileName)
       disableMenuItems()
       context.toast(R.string.note_delete_successful, Toast.LENGTH_LONG)
     } else {
@@ -358,10 +367,19 @@ class AddNoteDialog : DialogFragment() {
    * is displayed in the EditText field (note content area)
    */
   private fun displayNote() {
-
-    val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
-    if (noteFile.exists()) {
-      readNoteFromFile(noteFile)
+    var noteFilePath: String? = ""
+    noteFilePath = if (arguments != null) {
+      arguments?.getString(NOTE_FILE_PATH)
+    } else {
+      "$zimNotesDirectory$articleNoteFileName.txt"
+    }
+    if (noteFilePath != null && noteFilePath.isNotEmpty()) {
+      val noteFile = File(noteFilePath)
+      if (noteFile.exists()) {
+        readNoteFromFile(noteFile)
+      } else {
+        onFailureToCreateAddNoteDialog()
+      }
     }
 
     // No action in case the note file for the currently open article doesn't exist
@@ -431,5 +449,7 @@ class AddNoteDialog : DialogFragment() {
     @JvmField val NOTES_DIRECTORY =
       instance.getExternalFilesDir("").toString() + "/Kiwix/Notes/"
     const val TAG = "AddNoteDialog"
+    const val NOTE_FILE_PATH = "NoteFilePath"
+    const val ARTICLE_URL = "ArticleUrl"
   }
 }

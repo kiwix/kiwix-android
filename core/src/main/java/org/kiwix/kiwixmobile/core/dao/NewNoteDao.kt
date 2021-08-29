@@ -34,16 +34,21 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
 
   override fun pages(): Flowable<List<Page>> = notes()
 
-  override fun deletePages(pagesToDelete: List<Page>) {
-    deleteNote(pagesToDelete as List<NoteListItem>)
-  }
+  override fun deletePages(pagesToDelete: List<Page>) =
+    deleteNotes(pagesToDelete as List<NoteListItem>)
 
   fun saveNote(noteItem: NoteListItem) {
     box.put(NotesEntity(noteItem))
   }
 
-  private fun deleteNote(noteList: List<NoteListItem>) {
+  fun deleteNotes(noteList: List<NoteListItem>) {
     box.remove(noteList.map(::NotesEntity))
+  }
+
+  fun deleteNote(noteUniqueKey: String) {
+    box.query {
+      equal(NotesEntity_.noteTitle, noteUniqueKey)
+    }.remove()
   }
 
   fun deleteAllNotes() {

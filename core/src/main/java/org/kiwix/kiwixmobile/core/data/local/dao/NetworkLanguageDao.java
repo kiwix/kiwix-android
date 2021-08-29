@@ -28,7 +28,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language;
 
 @Deprecated
 public class NetworkLanguageDao {
-  private KiwixDatabase mDb;
+  private final KiwixDatabase mDb;
 
   @Inject
   public NetworkLanguageDao(KiwixDatabase kiwixDatabase) {

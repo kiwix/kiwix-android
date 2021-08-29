@@ -126,16 +126,15 @@ class Repository @Inject internal constructor(
     Completable.fromAction { notesDao.saveNote(noteListItem) }
       .subscribeOn(io)
 
-  override fun deleteNote(noteList: MutableList<NoteListItem>): Completable =
-    Completable.fromAction { notesDao.deletePages(noteList) }
+  override fun deleteNotes(noteList: MutableList<NoteListItem>) =
+    Completable.fromAction { notesDao.deleteNotes(noteList) }
       .subscribeOn(io)
 
-  // this does note removes notes from storage only the list
-  override fun clearNotes(): Completable = Completable.fromAction {
-    notesDao.deleteAllNotes()
-  }
+  override fun deleteNote(noteUniqueKey: String): Completable? =
+    Completable.fromAction { notesDao.deleteNote(noteUniqueKey) }
+      .subscribeOn(io)
 
-  // override fun notesOnDiskAsListItems(): Flowable<MutableList<NoteListItem>> {
-  //   TODO("Not yet implemented")
-  // }
+  // this does note removes notes from storage only the list : remove txt files as well?
+  override fun clearNotes(): Completable =
+    Completable.fromAction(notesDao::deleteAllNotes).subscribeOn(io)
 }

@@ -18,12 +18,15 @@
 
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
-import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
+import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDialog
+import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowOpenNoteDialog
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.UpdateAllNotesPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
+import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModelClickListener
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -32,7 +35,13 @@ class NotesViewModel @Inject constructor(
   notesDao: NewNoteDao,
   zimReaderContainer: ZimReaderContainer,
   sharedPrefs: SharedPreferenceUtil
-) : PageViewModel<NoteListItem, NotesState>(notesDao, sharedPrefs, zimReaderContainer) {
+) : PageViewModel<NoteListItem, NotesState>(notesDao, sharedPrefs, zimReaderContainer),
+  PageViewModelClickListener {
+
+  init {
+    setOnItemClickListener(this)
+  }
+
   override fun initialState(): NotesState =
     NotesState(emptyList(), sharedPreferenceUtil.showNotesAllBooks, zimReaderContainer.id)
 
@@ -56,8 +65,9 @@ class NotesViewModel @Inject constructor(
   override fun deselectAllPages(state: NotesState): NotesState =
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
-  override fun createDeletePageDialogEffect(state: NotesState): SideEffect<*> {
-    TODO("Not yet implemented")
-    // implement delete note or something like that
-  }
+  override fun createDeletePageDialogEffect(state: NotesState) =
+    ShowDeleteNotesDialog(effects, state, pageDao)
+
+  override fun onItemClick(page: Page) =
+    ShowOpenNoteDialog(effects, page, zimReaderContainer)
 }

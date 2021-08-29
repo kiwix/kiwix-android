@@ -18,15 +18,21 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
+import org.kiwix.kiwixmobile.core.main.AddNoteDialog.Companion.NOTE_FILE_PATH
+import org.kiwix.kiwixmobile.core.main.AddNoteDialog.Companion.ARTICLE_URL
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
-class OpenNote() : SideEffect<Unit> {
+class OpenNote(
+  private val noteFilePath: String,
+  private val zimFileUrl: String
+) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity as CoreMainActivity
     activity.popNavigationBackstack()
@@ -42,6 +48,10 @@ class OpenNote() : SideEffect<Unit> {
 
     if (previousInstance == null) {
       val dialogFragment = AddNoteDialog()
+      val bundle = Bundle()
+      bundle.putString(NOTE_FILE_PATH, noteFilePath)
+      bundle.putString(ARTICLE_URL, zimFileUrl)
+      dialogFragment.arguments = bundle
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG)
     }
   }

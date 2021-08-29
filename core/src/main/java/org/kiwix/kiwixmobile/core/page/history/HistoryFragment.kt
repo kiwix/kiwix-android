@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.core.page.history
 
+import android.view.View
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
@@ -18,6 +19,7 @@ class HistoryFragment : PageFragment() {
   override val pageAdapter by lazy {
     PageAdapter(PageItemDelegate(this), HistoryDateDelegate())
   }
+  override val switchVisibility: Int = View.VISIBLE
 
   override val noItemsString: String by lazy { getString(R.string.no_history) }
   override val switchString: String by lazy { getString(R.string.history_from_current_book) }

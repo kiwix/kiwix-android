@@ -20,13 +20,13 @@ package org.kiwix.kiwixmobile.core.downloader;
 public class Chunk {
 
   public boolean isDownloaded = false;
-  private String rangeHeader;
-  private String fileName;
-  private String url;
-  private long contentLength;
-  private int notificationID;
-  private long startByte;
-  private long endByte;
+  private final String rangeHeader;
+  private final String fileName;
+  private final String url;
+  private final long contentLength;
+  private final int notificationID;
+  private final long startByte;
+  private final long endByte;
 
   public Chunk(String rangeHeader, String fileName, String url, long contentLength,
     int notificationID, long startByte, long endByte) {

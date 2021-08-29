@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.notes
 
+import android.view.View
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
@@ -31,15 +32,16 @@ class NotesFragment : PageFragment() {
   override val pageViewModel by lazy { viewModel<NotesViewModel>(viewModelFactory) }
 
   override val screenTitle: String
-    get() = getString(R.string.notes)
+    get() = getString(R.string.pref_notes)
 
   override val pageAdapter: PageAdapter by lazy {
     PageAdapter(PageDelegate.PageItemDelegate(this))
   }
+  override val switchVisibility: Int = View.GONE
 
   override val noItemsString: String by lazy { getString(R.string.no_notes) }
   override val switchString: String by lazy { getString(R.string.notes_from_all_books) }
-  override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showNotesAllBooks }
+  override val switchIsChecked: Boolean by lazy(sharedPreferenceUtil::showNotesAllBooks)
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)

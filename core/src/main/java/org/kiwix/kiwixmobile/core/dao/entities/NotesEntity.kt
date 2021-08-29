@@ -24,19 +24,21 @@ import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 @Entity
 data class NotesEntity(
-  @Id var id: Long = 0,
+  @Id var id: Long = 0L,
   val zimId: String,
   var zimFilePath: String?,
-  var noteTitle: String?,
-  var noteBody: String,
+  val zimUrl: String,
+  // @Unique(onConflict = ConflictStrategy.REPLACE) add resolve conflict dependency update required
+  var noteTitle: String,
   var noteFilePath: String,
   var favicon: String?
 ) {
   constructor(item: NoteListItem) : this(
+    id = item.databaseId,
     zimId = item.zimId,
     zimFilePath = item.zimFilePath,
+    zimUrl = item.zimUrl,
     noteTitle = item.title,
-    noteBody = item.noteBody,
     noteFilePath = item.noteFilePath,
     favicon = item.favicon
   )

@@ -179,7 +179,7 @@ public class KiwixDatabase extends SquidDatabase {
   public void migrateBookmarksVersion6() {
     String[] ids = context.fileList();
     for (String id : ids) {
-      if (id.length() == 40 && id.substring(id.length() - 4).equals(".txt")) {
+      if (id.length() == 40 && id.endsWith(".txt")) {
         try {
           String idName = id.substring(0, id.length() - 4);
           InputStream stream = context.openFileInput(id);

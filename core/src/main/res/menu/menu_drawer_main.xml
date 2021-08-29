@@ -20,7 +20,7 @@
     <item
       android:id="@+id/menu_notes"
       android:icon="@drawable/ic_add_note"
-      android:title="@string/notes"
+      android:title="@string/pref_notes"
       app:showAsAction="never" />
 
     <item
