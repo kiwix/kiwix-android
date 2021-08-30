@@ -2,6 +2,7 @@
 <!-- Authors:
 * Alexander Yukal
 * Avd2ev
+* DDPAT
 * DevilishSkull
 * Diman Russkov
 * Facenapalm
@@ -62,6 +63,7 @@
   <string name="start_server_label">Запустить сервер</string>
   <string name="stop_server_label">Остановить сервер</string>
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
+  <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="zim_not_opened">Невозможно открыть файл zim</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>

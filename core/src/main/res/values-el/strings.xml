@@ -20,6 +20,7 @@
   <string name="menu_read_aloud">Διάβασε δυνατά</string>
   <string name="menu_read_aloud_stop">Σταμάτα να διαβάζεις δυνατά</string>
   <string name="menu_support_kiwix">Υποστήριξη Kiwix</string>
+  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Αποθήκευση μέσων</string>
   <string name="save_media_error">Προέκυψε σφάλμα κατά την προσπάθεια αποθήκευσης του αρχείου πολυμέσων!</string>
   <string name="save_media_saved">Αποθήκευση αρχείων πολυμέσων ως το %1$s  στο Android/media/org.kiwix…/</string>
@@ -71,8 +72,10 @@
   <string name="pref_clear_all_history_summary">Εκκαθάριση ιστορικού πρόσφατων αναζητήσεων και ετικετών</string>
   <string name="pref_notes">Σημειώσεις</string>
   <string name="all_history_cleared">Όλο το ιστορικό καθαρίστηκε</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Εκκαθάριση όλου του ιστορικού</string>
+  <string name="clear_all_history_dialog_title">Εκκαθάριση όλου του ιστορικού;</string>
+  <string name="share">Κοινοποίηση</string>
   <string name="delete">Διαγραφή</string>
+  <string name="cancel">Ακύρωση</string>
   <string name="delete_specific_search_toast">Η πρόσφατη αναζήτηση αφαιρέθηκε</string>
   <string name="got_it">Κατάλαβα</string>
   <string name="did_you_know">Γνωρίζατε ότι;</string>

@@ -49,6 +49,7 @@
   <string name="start_server_label">Pornește server</string>
   <string name="stop_server_label">Oprește server</string>
   <string name="server_started_message">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
+  <string name="share_host_address">Distribuie URL prin alte aplicaţii</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
   <string name="zim_not_opened">Imposibil de deschis fișierul zim</string>
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>

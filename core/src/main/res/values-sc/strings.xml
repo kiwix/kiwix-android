@@ -47,6 +47,7 @@
   <string name="start_server_label">Avia su servidore</string>
   <string name="stop_server_label">Firma su servidore</string>
   <string name="server_started_message">Inserta custu indiritzu ip in su navigadore tuo pro intrare in su servidore %s</string>
+  <string name="share_host_address">Cumpartzi s\'URL cun àteras aplicatziones</string>
   <string name="error_file_not_found">Errore: su documentu ZIM ischertadu no est istadu agatadu.</string>
   <string name="zim_not_opened">Impossìbile abèrrere su documentu zim</string>
   <string name="error_file_invalid">Errore: su documentu ischertadu no est unu documentu ZIM vàlidu.</string>
