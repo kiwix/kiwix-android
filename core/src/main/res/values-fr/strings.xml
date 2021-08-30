@@ -60,6 +60,7 @@
   <string name="start_server_label">Démarrer le serveur</string>
   <string name="stop_server_label">Arrêter le serveur</string>
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
+  <string name="share_host_address">Partager l’URL avec d’autres applications</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
   <string name="zim_not_opened">Impossible d’ouvrir le fichier zim</string>
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
