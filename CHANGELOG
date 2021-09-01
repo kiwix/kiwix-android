@@ -1,3 +1,11 @@
+3.4.5
+NEW: Supports Android 11
+NEW: Hotspot socket address better visible, clickable and shareable
+BUGFIX: Some zim-it files doesn't read anymore
+BUGFIX: "Search in Kiwix" is just redirecting to Kiwix
+BUGFIX: Laggy input in search box
++ More
+
 3.4.4
 NEW: The Download of Zim in now more stable
 NEW: Updated translations
