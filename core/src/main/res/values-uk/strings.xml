@@ -254,7 +254,7 @@
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистити всі нотатки в усіх статтях</string>
   <string name="pref_clear_all_notes_title">Очистити всі нотатки</string>
-  <string name="pref_text_zoom_summary">Змінити розмір тексту з 25\%-відсотковим кроком.</string>
+  <string name="pref_text_zoom_summary">Змінити розмір тексту з 25%-відсотковим кроком.</string>
   <string name="tag_pic">Зображення</string>
   <string name="tag_vid">Відео</string>
   <string name="tag_text_only">Тільки текст</string>
