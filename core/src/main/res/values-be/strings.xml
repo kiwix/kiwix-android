@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Mechanizatar
+-->
 <resources>
   <string name="menu_help">Даведка</string>
   <string name="menu_home">Дадому</string>
@@ -11,10 +14,10 @@
   <string name="menu_read_aloud">Чытаць уголас</string>
   <string name="menu_read_aloud_stop">Спыніць чытанне ўголас</string>
   <string name="save_media">Захаваць медыя як…</string>
-  <string name="save_media_error">Узнікла памылка пры захаванні медыя-файла!</string>
-  <string name="save_media_saved">Медыя захавана як %1$s у тэчцы вашых выяваў</string>
+  <string name="save_media_error" fuzzy="true">Узнікла памылка пры захаванні медыя-файла!</string>
+  <string name="save_media_saved" fuzzy="true">Медыя захавана як %1$s у тэчцы вашых выяваў</string>
   <string name="search_label">Пошук</string>
-  <string name="choose_file">Абярыце ZIM-файл (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Абярыце ZIM-файл (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новым вакенцы?</string>
   <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены.</string>
   <string name="error_file_invalid">Памылка: абраны файл не з\'яўляецца слушным ZIM-файлам.</string>
@@ -30,8 +33,8 @@
   <string name="pref_language_chooser">Абярыце мову</string>
   <string name="tts_lang_not_supported">Мова гэтай старонкі не падтрымліваецца або адпаведныя звесткі мовы не былі ўсталяваныя. Артыкул можа быць няправільна прачытаны.</string>
   <string name="no_reader_application_installed">Не ўдалося знайсці ўсталяваную праграму для гэтага тыпу файлаў</string>
-  <string name="no_section_info">Ня знойдзеныя загалоўкі кантэнту</string>
-  <string name="request_storage">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
+  <string name="no_section_info" fuzzy="true">Ня знойдзеныя загалоўкі кантэнту</string>
+  <string name="request_storage" fuzzy="true">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
   <string name="bookmark_added">Закладка дададзеная</string>
   <string name="rate_dialog_title">Калі ласка, ацаніце нас</string>
   <string name="rate_dialog_msg_1">Калі вам падабаецца</string>
@@ -42,16 +45,5 @@
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
   <string name="library">Бібліятэка</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks" fuzzy="true">Няма закладак!</string>
 </resources>

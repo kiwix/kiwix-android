@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Ahmed-Najib-Biabani-Ibrahimkhel
+* Amjad Khan
+-->
 <resources>
   <string name="menu_help">مرسته</string>
   <string name="menu_home">کور</string>
@@ -11,10 +15,10 @@
   <string name="menu_read_aloud">په جگ غږ لوستل</string>
   <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
   <string name="save_media">رسنۍ ساتل لکه…</string>
-  <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
-  <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
+  <string name="save_media_error" fuzzy="true">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
+  <string name="save_media_saved" fuzzy="true">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
   <string name="search_label">پلټل</string>
-  <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
+  <string name="choose_file" fuzzy="true">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
   <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
   <string name="error_file_not_found">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه.</string>
   <string name="error_file_invalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده.</string>
@@ -30,8 +34,8 @@
   <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
   <string name="tts_lang_not_supported">د همدې مخ د ژبې ملاتړ نه کېږي، يا کېدای شي د کاروړ ژب اومتوک نه وي نصب شوی. دا ليکنه به په سمه توگه د لوستلو وړ نه وي.</string>
   <string name="no_reader_application_installed">د دې ډول دوتنې لپاره يو نصب شوی کاريال و نه موندل شو</string>
-  <string name="no_section_info">هېڅ نيوليک سرليکونه نشته</string>
-  <string name="request_storage">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
+  <string name="no_section_info" fuzzy="true">هېڅ نيوليک سرليکونه نشته</string>
+  <string name="request_storage" fuzzy="true">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
   <string name="undo">پريښودل</string>
   <string name="tab_closed">ټب تړل شوی</string>
   <string name="bookmark_added">کتاب نښه ورگډه شوه</string>
@@ -63,16 +67,5 @@
   <string name="time_minute">مين</string>
   <string name="time_second">س</string>
   <string name="time_left">کيڼ</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks" fuzzy="true">بې کتاب نښو!</string>
 </resources>

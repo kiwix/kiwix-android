@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Tofeiku
+-->
+<resources>
+  <string name="retry">Cuba lagi</string>
+  <string name="download">Muat turun</string>
+</resources>

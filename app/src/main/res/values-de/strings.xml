@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* FF-11
 * Susann Schweden
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Ihr Dateisystem unterstützt keine Dateien über 4GB</string>
   <string name="detecting_file_system">Untersuche, ob das Dateisystem Dateien mit 4GB erstellen kann</string>
   <string name="cannot_open_file">Konnte Datei nicht öffnen\nBitte versuchen Sie, in der Geräteregisterkarte Ihrer Bibliothek nach dieser Datei zu suchen</string>
+  <string name="send_files_title">Dateien senden</string>
+  <string name="receive_files_title">Dateien empfangen</string>
 </resources>

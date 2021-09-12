@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* Wisdom
+-->
 <resources>
   <string name="menu_help">Тусламж</string>
   <string name="menu_home">Нүүр</string>
@@ -10,7 +14,7 @@
   <string name="menu_exit_full_screen">Бүтэн дэлгэцээр үзүүлэхийг болиулах</string>
   <string name="save_media">медиаг өөр төрлөөр хадгалах</string>
   <string name="search_label">Хайлт</string>
-  <string name="choose_file">ZIM  агуулгын файлыг сонгох (*.zim)</string>
+  <string name="choose_file" fuzzy="true">ZIM  агуулгын файлыг сонгох (*.zim)</string>
   <string name="open_in_new_tab">Холбоосыг өөр табд нээ</string>
   <string name="error_file_not_found">Алдаа: Сонгосон ZIM файл олдсонгүй.</string>
   <string name="error_file_invalid">Алдаа: Сонгосон ZIM файл алдаатай байна.</string>
@@ -18,22 +22,11 @@
   <string name="pref_display_title">Үзүүлэх</string>
   <string name="pref_info_title">Мэдээлэл</string>
   <string name="pref_info_version">Хувилбар</string>
+  <string name="pref_night_mode">Night mode</string>
   <string name="pref_night_mode_summary">Нийтлэлийн үсгийн өнгийг эсрэгээр харуулах</string>
   <string name="pref_back_to_top">Хамгийн дээр оч</string>
   <string name="pref_back_to_top_summary">Товчийг хуудасны сүүлд байршуулж дээш оч</string>
   <string name="pref_language_title">Хэл</string>
   <string name="pref_language_chooser">Хэлээ сонгоно уу</string>
   <string name="library">Сан</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

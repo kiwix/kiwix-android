@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
+* An13sa
 * EukeneFL
 * Fitoschido
 * Joseba
 * Macofe
 * Mikel Ibaiba
 * Subi
+* Xabier Armendaritz
 -->
 <resources>
   <string name="menu_help">Laguntza</string>
@@ -19,12 +20,13 @@
   <string name="menu_exit_full_screen">Irten pantaila osotik</string>
   <string name="menu_read_aloud">Irakurri ozenki</string>
   <string name="menu_read_aloud_stop">Ozen irakurtzeari utzi</string>
+  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Media gorde</string>
   <string name="save_media_error">Akats bat gertatu da media gordetzen zen bitartean!</string>
-  <string name="save_media_saved">Media %s to Android/media/org.kiwix…/ bezala gordeta</string>
+  <string name="save_media_saved">Multimedia %s gisa gorde da, Android/media/org.kiwix…/ dosierrean</string>
   <string name="search_label">Bilatu</string>
   <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>
-  <string name="open_in_new_tab">Ireki lotura fitxa berri batean?</string>
+  <string name="open_in_new_tab">Ireki esteka fitxa berri batean?</string>
   <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
@@ -47,9 +49,12 @@
   <string name="delete_recent_search_item">Elementu hau ezabatu?</string>
   <string name="pref_clear_all_history_title">Historia garbitu</string>
   <string name="pref_clear_all_history_summary">Azkeneko bilaketak garbitu eta historialeko erlaitzak</string>
+  <string name="pref_notes">Oharrak</string>
   <string name="all_history_cleared">Historial osoa garbitu da.</string>
   <string name="clear_all_history_dialog_title">Historial osoa ezabatu?</string>
+  <string name="share">Partekatu</string>
   <string name="delete">Ezabatu</string>
+  <string name="cancel">Utzi</string>
   <string name="delete_specific_search_toast">Azkeneko bilaketa ezabatuta</string>
   <string name="hint_contents_drawer_message">Ezkerrerantz eginez artikulu honen edukia ikusi dezakezu.</string>
   <string name="got_it">Ulertu dut</string>
@@ -77,7 +82,8 @@
   <string name="library">Liburutegia</string>
   <string name="delete_zims_toast">Fitxategi ezabatua</string>
   <string name="no_files_here">Artxiborik ez hemen</string>
-  <string name="download_no_space" fuzzy="true">Ez dago espaziorik artxibo hau jaisteko.</string>
+  <string name="download_no_space">Ez dago espaziorik jaisteko.</string>
+  <string name="download">Jaitsi</string>
   <string name="space_available">Libre dagoen espazioa:</string>
   <string name="zim_simple">Arrunta</string>
   <string name="zim_no_pic">Ez dago argazkirik</string>
@@ -85,17 +91,17 @@
   <string name="no_network_connection">Ez dago konexiorik</string>
   <string name="help_2">Zer egiten du Kiwix-ek?</string>
   <string name="help_3">Kiwix konexio gabeko eduki irakurlea da. Nabigatzaile baten moduan erabiltzen da, baina sarean dauden web orrialdeetan sartu beharrean, ZIM formatoko edukia irakurtzen du.</string>
-  <string name="help_4" fuzzy="true">Nahiz eta, Kiwix, berez, Wikipedia konexiorik gabe erabiltzeko sortu, beste edukiak ere eskeintzen ditu.</string>
+  <string name="help_4">Nahiz eta Kiwix Wikipedia konexiorik gabe erabiltzeko sortu, beste edukiak ere eskaintzen ditu.</string>
   <string name="help_5">Non dago edukia?</string>
   <string name="help_6">Kiwik webgunean dago gure edukia.</string>
   <string name="help_7">ZIM artxibo gisa prest daude. Asko daude:</string>
   <string name="help_8">• Wikipedia hizkuntza bakoitzean erabili daiteke.</string>
   <string name="help_9">• Beste edukiak Wikileaks edo Wikisource gisa baliogarriak dira ere.</string>
-  <string name="help_10" fuzzy="true">ZIM artxiboak in-app-aren bidez jaitsi ditzakezu edo aukeratu deskargatu nahi dituzunak eta ordengailuan egin, ZIM artxiboak SD-ra aldatu baino lehen.</string>
+  <string name="help_10">ZIM artxiboak in-app-aren bidez jaitsi ditzakezu edo aukeratu deskargatu nahi dituzunak eta ordenagailuan egin, ZIM artxiboak SD txartelera aldatu baino lehen.</string>
   <string name="help_11">In-app-eko jaitsitako ZIM artxiboak kanpoko memorian daude, Kiwix deritzon karpeta batean.</string>
   <string name="pref_storage">Biltegia</string>
   <string name="pref_current_folder">Oraingo Artxiboa</string>
-  <string name="delete_zim_failed" fuzzy="true">Barkatu, ezin izan dugu artxibo hau ezabatu. Artxibo kudeatzailea erabiltzen saiatu dezakezu.</string>
+  <string name="delete_zim_failed">Barkatu, ezin izan ditugu artxibo hauek ezabatu. Artxibo kudeatzailea erabiltzen saiatu dezakezu.</string>
   <string name="tts_pause">pausatua</string>
   <string name="tts_resume">jarraitu</string>
   <string name="stop">Gelditu</string>
@@ -117,12 +123,26 @@
   <string name="time_minute">min</string>
   <string name="time_second">k</string>
   <string name="time_left">joanda</string>
+  <string name="time_today">Gaur</string>
+  <string name="time_yesterday">Atzo</string>
   <string name="pref_external_link_popup_title">Kanpo esteketara sartzerakoan ohartarazi</string>
   <string name="pref_external_link_popup_summary">Gaitu popup-a gastu gehigarriez edo konexiorik gabe funtzionatzen ez duten estekez abisatzeko</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Kanpo estekara sartzen</string>
+  <string name="external_link_popup_dialog_title">Kanpo estekara sartzen!</string>
   <string name="external_link_popup_dialog_message">Kanpo-esteka batera sartzen ari zara. Honek datu transferentziarako gastu gehigarrietara eraman dezake edo besterik gabe, ez du funtzionatuko konexiorik ez dagoenean. Jarraitu nahi duzu?</string>
   <string name="do_not_ask_anymore">Ez galdetu berriz</string>
   <string name="your_languages">Hautatutako hizkuntzak:</string>
   <string name="other_languages">Beste hizkuntzak:</string>
+  <string name="go_to_previous_page">Aurreko orria joan</string>
+  <string name="go_to_next_page">Hurrengo orrira joan</string>
+  <string name="table_of_contents">Eduki-taula</string>
+  <string name="select_languages">Hizkuntzak aukeratu</string>
+  <string name="history">Historia</string>
+  <string name="save">Gorde</string>
+  <string name="note">Oharra</string>
+  <string name="status">Egoera</string>
   <string name="no_bookmarks">Lastermarkarik ez</string>
+  <string name="on">Piztuta</string>
+  <string name="off">Itzalita</string>
+  <string name="auto">Auto</string>
+  <string name="reader">Irakurgailua</string>
 </resources>

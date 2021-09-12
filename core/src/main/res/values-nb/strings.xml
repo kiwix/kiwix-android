@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Chameleon222
+* E1d1eb90
+* Jon Harald Søby
+* SuperPotato
+-->
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Hjelp</string>
   <string name="menu_home">Hjem</string>
@@ -11,10 +17,10 @@
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
   <string name="save_media" tools:ignore="Typos">Lagre media som…</string>
-  <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
-  <string name="save_media_saved" tools:ignore="Typos">Lagret media som %1$s i din bildemappe.</string>
+  <string name="save_media_error" fuzzy="true">En feil oppstod under lagring av mediet!</string>
+  <string name="save_media_saved" fuzzy="true" tools:ignore="Typos">Lagret media som %1$s i din bildemappe.</string>
   <string name="search_label">Søk</string>
-  <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Velg en ZIM-innholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet</string>
   <string name="error_file_invalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil</string>
@@ -30,8 +36,8 @@
   <string name="pref_language_chooser">Velg et språk</string>
   <string name="tts_lang_not_supported">Dette språket er ikke tilgjengelig for siden eller så er ikke dette språket installert. Denne artikkelen kan kanskje ikke bli riktig lest av.</string>
   <string name="no_reader_application_installed">Kunne ikke finne en installert app for denne typen fil</string>
-  <string name="no_section_info">Ingen innholdstitteler funnet.</string>
-  <string name="request_storage">For å få åpnet ZIM-filer trenger vi tilgang til lagringsplassen din</string>
+  <string name="no_section_info" fuzzy="true">Ingen innholdstitteler funnet.</string>
+  <string name="request_storage" fuzzy="true">For å få åpnet ZIM-filer trenger vi tilgang til lagringsplassen din</string>
   <string name="bookmark_added">Bokmerke lagt til</string>
   <string name="rate_dialog_title">Vennligst Ranger Oss</string>
   <string name="rate_dialog_msg_1">Om du liker å bruke</string>
@@ -42,16 +48,5 @@
   <string name="pref_newtab_background_title">Åpne ny fane i bakgrunnen</string>
   <string name="pref_newtab_background_summary">Når en ny fane åpnes vil den åpnes i bakgrunnen</string>
   <string name="library">Bibliotek</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks" fuzzy="true">Ingen bokmerker!</string>
 </resources>

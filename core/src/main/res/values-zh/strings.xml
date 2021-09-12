@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * A Chinese Wikipedian
-* Abijeet Patro
 * Akagisoy
 * Arthur2e5
+* GuoPC
 * Josephine W.
 * LClightcat
 * Liuxinyu970226
@@ -58,6 +58,7 @@
   <string name="hotspot_notification_content_title">Kiwix 热点</string>
   <string name="start_server_label">启动服务器</string>
   <string name="stop_server_label">中止服务器</string>
+  <string name="share_host_address">通过其他应用程序分享URL</string>
   <string name="error_file_not_found">错误：找不到选定的ZIM文件。</string>
   <string name="zim_not_opened">无法打开 zim 文件</string>
   <string name="error_file_invalid">错误：选定的文件不是有效ZIM文件。</string>

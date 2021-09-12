@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* Papuass
+-->
 <resources>
   <string name="menu_help">Palīdzība</string>
   <string name="menu_home">Sākums</string>
@@ -16,7 +20,9 @@
   <string name="pref_language_title">Valoda</string>
   <string name="pref_language_chooser">Izvēlies valodu</string>
   <string name="delete_recent_search_item">Dzēst šo vienumu?</string>
-  <string name="clear_all_history_dialog_title">Notīrīt visu vēsturi</string>
+  <string name="pref_notes">Piezīmes</string>
+  <string name="pref_clear_all_bookmarks_title">Notīrīt grāmatzīmes</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Notīrīt visu vēsturi</string>
   <string name="delete">Dzēst</string>
   <string name="got_it">Sapratu</string>
   <string name="did_you_know">Vai tu zināji?</string>
@@ -24,19 +30,9 @@
   <string name="open">Atvērt</string>
   <string name="search_widget_text">Meklēt Kiwix</string>
   <string name="library">Bibliotēka</string>
-  <string name="delete_zims_toast">Fails dzēsts</string>
   <string name="tts_resume">turpināt</string>
   <string name="no">Nē</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="note">Piezīme</string>
+  <string name="delete_notes_confirmation_msg">Dzēst visas piezīmes?</string>
+  <string name="tag_short_text">Īss teksts</string>
 </resources>

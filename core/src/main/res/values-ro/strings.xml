@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Fitoschido
 * MSClaudiu
 * Minisarm
@@ -29,6 +28,7 @@
   <string name="hotspot_failed_title">Nu a reușit să pornească hotspot</string>
   <string name="hotspot_failed_message">Se pare că hotspot-ul tău este deja pornit. Vă rugăm să opriți wifi-ul hotspot pentru a continua.</string>
   <string name="go_to_wifi_settings_label">Mergi la setările WIFI</string>
+  <string name="connection_refused">Conectare refuzată.</string>
   <string name="hotspot_running">Hotspot Pornit</string>
   <string name="no_books_selected_toast_message">Vă rugăm să selectați cărțile mai întâi</string>
   <string name="server_failed_message">Nu am putut porni serverul. Vă rugăm porniți hotspot</string>
@@ -49,6 +49,7 @@
   <string name="start_server_label">Pornește server</string>
   <string name="stop_server_label">Oprește server</string>
   <string name="server_started_message">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
+  <string name="share_host_address">Distribuie URL prin alte aplicaţii</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
   <string name="zim_not_opened">Imposibil de deschis fișierul zim</string>
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
@@ -72,6 +73,7 @@
   <string name="delete_recent_search_item">Șterge acest item?</string>
   <string name="pref_clear_all_history_title">Curăță istoricul</string>
   <string name="pref_clear_all_history_summary">Curăță căutările recente și istoricul filelor</string>
+  <string name="pref_notes">Note</string>
   <string name="all_history_cleared">Tot istoricul curățat</string>
   <string name="pref_clear_all_bookmarks_title">Șterge semnele de carte</string>
   <string name="clear_all_history_dialog_title">Șterge tot istoricul</string>
@@ -223,6 +225,7 @@
   <string name="severe_loss_error">Eroare majoră! Încercați Dezactivarea/Reactivarea WiFi P2P</string>
   <string name="connection_failed">Conexiune eșuată</string>
   <string name="permission_rationale_location">Android are nevoie de permisiunea de geolocalizare pentru a permite aplicației să detecteze dispozitivele din apropiere.</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android necesită permisiunea de localizare pentru a permite aplicației să găzduiască fișiere Zim</string>
   <string name="permission_refused_location">Nu se pot găsi dispozitive din apropiere fără permisiuni de geolocalizare</string>
   <string name="permission_refused_storage">Nu puteți accesa fișiere zim fără permisiunea de stocare</string>
   <string name="request_enable_location">Activați geolocalizarea pentru a permite detectarea dispozitivelor din apropiere</string>
@@ -245,6 +248,7 @@
   <string name="status">Starea</string>
   <string name="pref_clear_all_notes_summary">Șterge toate notele la toate articolele</string>
   <string name="pref_clear_all_notes_title">Ștergeți toate notele</string>
+  <string name="pref_text_zoom_summary">Schimbați dimensiunea textului cu trepte de 25%.</string>
   <string name="tag_pic">Foto</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Doar Text</string>
@@ -256,8 +260,10 @@
   <string name="no_bookmarks">Nici un semn de carte</string>
   <string name="no_history">Fără Istorie</string>
   <string name="device_default">Dispozitiv prestabilit</string>
-  <string name="delete_history" fuzzy="true">Șterge istoricul?</string>
-  <string name="delete_bookmarks" fuzzy="true">Ștergeți semnele de carte?</string>
+  <string name="delete_history">Șterge Tot Istoricul?</string>
+  <string name="delete_selected_history">Șterge Istoricul Selectat?</string>
+  <string name="delete_bookmarks">Ștergeți Toate Semnele de Carte?</string>
+  <string name="delete_selected_bookmarks">Ștergeți Semnele de Carte Selectate?</string>
   <string name="on">Pornit</string>
   <string name="off">Oprit</string>
   <string name="auto">Auto</string>
@@ -267,4 +273,13 @@
   <string name="diagnostic_report_message">Vă rugăm să trimiteți toate următoarele detalii, astfel încât să putem diagnostica problema</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Mărește text</string>
+  <string name="search_open_in_new_tab">Deschide filă nouă</string>
+  <string name="reader">Cititor</string>
+  <string name="no_open_book">Fără carte deschisă</string>
+  <string name="open_library">Deschide biblioteca</string>
+  <string name="tab_restored">Filă redeschisă</string>
+  <string name="open_drawer">Deschide Sertar</string>
+  <string name="close_drawer">Închide Sertar</string>
+  <string name="how_to_update_content">Cum să actualizezi conținut?</string>
+  <string name="update_content_description">Pentru a actualiza conținutul (un fișier zim) trebuie să descărcați cea mai recentă versiune completă a acestui conținut. Puteți face acest lucru prin secțiunea de descărcare.</string>
 </resources>

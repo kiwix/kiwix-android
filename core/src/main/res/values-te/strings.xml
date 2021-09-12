@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Veeven
+* WP MANIKHANTA
+* రహ్మానుద్దీన్
+-->
 <resources>
   <string name="menu_help">సహాయం</string>
   <string name="menu_home">ముంగిలి</string>
@@ -11,10 +16,10 @@
   <string name="menu_read_aloud">బయటకి చదువు</string>
   <string name="menu_read_aloud_stop">బయటకి చదవడం ఆపివేయి</string>
   <string name="save_media">మీడియాని ఇలా భద్రపరచండి…</string>
-  <string name="save_media_error">మీడియాను భద్రపరచడంలో తప్పు జరిగింది.</string>
-  <string name="save_media_saved">మీడియాని మీ బొమ్మల సంచయంలోని %1$s వద్ద భద్రపరచాము</string>
+  <string name="save_media_error" fuzzy="true">మీడియాను భద్రపరచడంలో తప్పు జరిగింది.</string>
+  <string name="save_media_saved" fuzzy="true">మీడియాని మీ బొమ్మల సంచయంలోని %1$s వద్ద భద్రపరచాము</string>
   <string name="search_label">వెతుకు</string>
-  <string name="choose_file">ZIM విషయ దస్త్రాన్ని ఎంచుకోండి (*.zim)</string>
+  <string name="choose_file" fuzzy="true">ZIM విషయ దస్త్రాన్ని ఎంచుకోండి (*.zim)</string>
   <string name="open_in_new_tab">లంకెను కొత్త ట్యాబులో తెరువాలా?</string>
   <string name="error_file_not_found">దోషం‌ :‌ మీరు ఎంపిక చేసిన ZIM దస్త్రం దొరకలేదు.</string>
   <string name="error_file_invalid">దోషం : మీరు ఎంపిక చేసిన దస్త్రం సరియైన ZIM దస్త్రం కాదు.</string>
@@ -30,8 +35,8 @@
   <string name="pref_language_chooser">భాషను ఎంచుకోండి</string>
   <string name="tts_lang_not_supported">ఈ పేజి నందు ఈ భాష సహకరించదు లేదా తగిన భాష ఇన్స్టాల్ చేయలేదు.బహుస ఈ పేజి ని చదువలేరు.</string>
   <string name="no_reader_application_installed">ఈ దస్త్రం చూపడానికి సహకరించే ఎప్ప్ ఇన్స్టాల్ చేయలేదు.</string>
-  <string name="no_section_info">వ్యాస శీరిక్ష కనుగోనలేదు</string>
-  <string name="request_storage">ZIM Filesలో పోందుపరచడానికి మేము మీ నిల్వ లను పోందుపరచాలి</string>
+  <string name="no_section_info" fuzzy="true">వ్యాస శీరిక్ష కనుగోనలేదు</string>
+  <string name="request_storage" fuzzy="true">ZIM Filesలో పోందుపరచడానికి మేము మీ నిల్వ లను పోందుపరచాలి</string>
   <string name="bookmark_added">పుస్తకగుర్తులు జతచేయబడింది</string>
   <string name="rate_dialog_title">దయచేసి మమల్ని నక్షత్రాలతో వెలకట్టండి</string>
   <string name="rate_dialog_msg_1">మీరు ఒకవేళ ఉపయోగిస్తు ఆనందిస్తున్నారా</string>
@@ -42,16 +47,7 @@
   <string name="pref_newtab_background_title">కొత్త ట్యబ్ ను వెనుకస్థలంలో తెరవండి</string>
   <string name="pref_newtab_background_summary">ఎప్పుడైతే కొత్త ట్యాబ్ ను తెరుస్తారో అప్పుడు అది వెనుకస్థలంలో తెరుచుకుంటుంది.</string>
   <string name="library">గ్రంథాలయము</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks" fuzzy="true">పుస్తకగుర్తులు లేవు!</string>
+  <string name="percentage">%d%%</string>
+  <string name="search_open_in_new_tab">కొత్త ట్యాబులో తెరువు</string>
 </resources>

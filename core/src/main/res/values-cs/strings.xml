@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Chmee2
 * DemonioCZ
 * Dvorapa
@@ -10,6 +9,7 @@
 * Matěj Suchánek
 * Meliganai
 * Mininis11
+* Spotter
 * Tchoř
 * Walter Klosse
 -->
@@ -36,6 +36,7 @@
   <string name="hotspot_failed_title">Spuštění hotspotu se nezdařilo</string>
   <string name="hotspot_failed_message">Zdá se, že Váš hotspot je již zapnutý. Vypněte prosím svůj wifi hotspot, abyste mohli pokračovat.</string>
   <string name="go_to_wifi_settings_label">Jít na nastavení WIFI</string>
+  <string name="connection_refused">Spojení odmítnuto.</string>
   <string name="hotspot_running">Spouštím Hotspot</string>
   <string name="no_books_selected_toast_message">Vyberte prosím nejprve knihy</string>
   <string name="server_failed_message">Nemohu spustit server. Zapněte prosím svůj hotspot</string>
@@ -79,6 +80,7 @@
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
   <string name="pref_clear_all_history_title">Smazat historii</string>
   <string name="pref_clear_all_history_summary">Smazat nedávná hledání a historii karet</string>
+  <string name="pref_notes">Poznámky</string>
   <string name="all_history_cleared">Všechna historie odstraněna</string>
   <string name="pref_clear_all_bookmarks_title">Vymazat záložky</string>
   <string name="clear_all_history_dialog_title">Smazat celou historii?</string>
@@ -230,6 +232,7 @@
   <string name="severe_loss_error">Závažná chyba! Zkuste vypnout/znovu zapnout WiFi P2P</string>
   <string name="connection_failed">Spojení selhalo</string>
   <string name="permission_rationale_location">Systém Android vyžaduje povolení polohy, aby aplikace mohla detekovat zařízení v okolí</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android vyžaduje povolení umístění, aby aplikace mohla hostovat soubory Zim</string>
   <string name="permission_refused_location">Nelze nalézt zařízení v okolí bez přístupu k poloze</string>
   <string name="permission_refused_storage">Nelze získat přístup k souborům zim bez povolení přístupu do úložiště</string>
   <string name="request_enable_location">Povolit přístup k poloze a umožnit vyhledávání zařízení</string>
@@ -252,6 +255,7 @@
   <string name="status">Stav</string>
   <string name="pref_clear_all_notes_summary">Vymazat všechny poznámky ke všem článkům</string>
   <string name="pref_clear_all_notes_title">Vymazat všechny poznámky</string>
+  <string name="pref_text_zoom_summary">Změnit velikost textu s přírůstkem 25%.</string>
   <string name="tag_pic">Obrázek</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Pouze text</string>
@@ -263,8 +267,10 @@
   <string name="no_bookmarks">Žádné záložky</string>
   <string name="no_history">Žádná historie</string>
   <string name="device_default">Výchozí zařízení</string>
-  <string name="delete_history" fuzzy="true">Smazat historii?</string>
-  <string name="delete_bookmarks" fuzzy="true">Smazat záložky?</string>
+  <string name="delete_history">Smazat celou historii?</string>
+  <string name="delete_selected_history">Smazat vybranou historii?</string>
+  <string name="delete_bookmarks">Smazat všechny záložky?</string>
+  <string name="delete_selected_bookmarks">Smazat vybrané záložky?</string>
   <string name="on">Zapnout</string>
   <string name="off">Vypnout</string>
   <string name="auto">Automaticky</string>
@@ -274,10 +280,13 @@
   <string name="diagnostic_report_message">Zašlete prosím všechny následující podrobnosti, abychom mohli problém diagnostikovat</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Zvětšit text</string>
+  <string name="search_open_in_new_tab">Otevřít v nové záložce</string>
   <string name="reader">Čtenář</string>
   <string name="no_open_book">Žádná otevřená kniha</string>
   <string name="open_library">Otevři knihovnu</string>
   <string name="tab_restored">Karta byla obnovena</string>
   <string name="open_drawer">Otevři náčrtník</string>
   <string name="close_drawer">Zavřít náčtník</string>
+  <string name="how_to_update_content">Jak aktualizovat obsah?</string>
+  <string name="update_content_description">Chcete-li aktualizovat obsah (soubor zim), musíte si stáhnout úplnou nejnovější verzi tohoto stejného obsahu. Můžete to udělat v sekci stahování.</string>
 </resources>

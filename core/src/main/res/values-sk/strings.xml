@@ -1,57 +1,121 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Kusavica
+* Lexected
+* Mikulas1
+* Yardom78
+-->
 <resources>
   <string name="menu_help">Pomocník</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavenia</string>
-  <string name="menu_search_in_text">Nájsť v texte</string>
+  <string name="menu_search_in_text">Nájsť na stránke</string>
   <string name="bookmarks">Záložky</string>
   <string name="menu_random_article">Náhodný článok</string>
   <string name="menu_full_screen">Celá obrazovka</string>
   <string name="menu_exit_full_screen">Ukončiť režim celej obrazovky</string>
   <string name="menu_read_aloud">Čítať nahlas</string>
   <string name="menu_read_aloud_stop">Zastaviť čítanie nahlas</string>
-  <string name="save_media">Uložiť médiá ako…</string>
+  <string name="menu_support_kiwix">Podporiť Kiwix</string>
+  <string name="menu_wifi_hotspot">WiFi hotspot</string>
+  <string name="save_media">Uložiť médiá</string>
   <string name="save_media_error">Pri ukladaní došlo k chybe!</string>
-  <string name="save_media_saved">Médiá uložené ako %1$s v priečinku Obrázky</string>
+  <string name="save_media_saved">Médiá uložené ako %s do Android/media/org.kiwix…/</string>
   <string name="search_label">Hľadať</string>
-  <string name="choose_file">Vyberte súbor so ZIM obsahom (*.zim)</string>
+  <string name="choose_file">Vyberte súbor (*.zim)</string>
   <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
+  <string name="hotspot_service_channel_name">Servisný kanál hotspot</string>
+  <string name="hotspot_failed_title">Spustenie hotspotu sa nepodarilo</string>
+  <string name="hotspot_failed_message">Vyzerá to, že Váš hotspot je už zapnutý. Pre pokračovanie vypnite Váš wifi hotspot prosím.</string>
+  <string name="go_to_wifi_settings_label">Ísť na nastavenie Wifi</string>
+  <string name="connection_refused">Spojenie odmietnuté.</string>
+  <string name="hotspot_running">Spúšťanie hotspotu</string>
+  <string name="no_books_selected_toast_message">Najprv vyberte knihy prosím</string>
+  <string name="server_failed_message">Nepodarilo sa spustiť server. Zapnite Váš hotspot prosím</string>
+  <string name="server_failed_toast_message">Nepodarilo sa spustiť server.</string>
+  <string name="server_started_successfully_toast_message">Server bol úspešne spustený.</string>
+  <string name="server_stopped_successfully_toast_message">Server bol úspešne zastavený.</string>
+  <string name="hotspot_turned_on">Hotspot zapnutý</string>
+  <string name="hotspot_details_message">Nasledovné údaje sú detaily o Vašom lokálnom hotspote.\nSSID : %1$s \nPass : %2$s</string>
+  <string name="server_textview_default_message">Vyberte súbory, ktoré chcete hosťovať na serveri</string>
+  <string name="progress_dialog_starting_server">Spúšťanie serveru</string>
+  <string name="hotspot_dialog_title">Inštrukcie pre  hosťovanie kníh</string>
+  <string name="wifi_dialog_title">Zistené pripojenie WiFi</string>
+  <string name="wifi_dialog_body">Pre zobrazenie kníh na iných zariadeniach sa uistite, že sú všetky zariadenia pripojené k tej istej WiFi sieti.</string>
+  <string name="hotspot_dialog_message">Na to, aby táto funkcia pracovala musíte najprv ručne zapnúť Váš WIFI hotspot, alebo sa uistite, že hostiteľské zariadenie a zariadenie príjemcu sú pripojené na tú istú WiFi sieť.</string>
+  <string name="hotspot_dialog_neutral_button">POKRAČOVAŤ</string>
+  <string name="hotspot_channel_description">Aktualizácie o stave Vášho hotspotu/servera.</string>
+  <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
+  <string name="start_server_label">Spustiť server</string>
+  <string name="stop_server_label">Zastaviť server</string>
+  <string name="server_started_message">Zadajte túto ip adresu to vášho prehliadača pre prístup na server %s</string>
+  <string name="share_host_address">Zdieľať URL cez iné aplikácie</string>
   <string name="error_file_not_found">Chyba: Vybraný súbor ZIM sa nenašiel.</string>
+  <string name="zim_not_opened">Nepodarilo sa otvoriť súbor zim</string>
   <string name="error_file_invalid">Chyba: Vybraný súbor nie je platný ZIM súbor.</string>
   <string name="error_article_url_not_found">Chyba: Načítavanie článku (Url: %1$s) sa nepodarilo.</string>
   <string name="pref_display_title">Zobrazenie</string>
   <string name="pref_info_title">Informácie</string>
   <string name="pref_info_version">Verzia</string>
   <string name="pref_night_mode">Nočný režim</string>
-  <string name="pref_night_mode_summary">Zobraziť články s otočenými farbami</string>
+  <string name="pref_night_mode_summary">Zobraziť články s obrátenými farbami</string>
   <string name="pref_back_to_top">Späť na začiatok</string>
   <string name="pref_back_to_top_summary">Zobraziť tlačidlo na konci stránky pre prechod na začiatok.</string>
   <string name="pref_language_title">Jazyk</string>
   <string name="pref_language_chooser">Zvoliť jazyk</string>
+  <string name="pref_credits">Prispievatelia a licencie</string>
+  <string name="pref_credits_title">Zásluhy</string>
   <string name="tts_lang_not_supported">Jazyk tejto stránky buď nie je podporovaný, alebo neboli nainštalované príslušné jazykové balíčky. Článok nemusí byť správne prečítaný.</string>
   <string name="no_reader_application_installed">Nebola nájdená nainštalovaná aplikácia pre tento typ súboru</string>
-  <string name="no_section_info">Neboly nájdené hlavičky obsahu (content headers)</string>
-  <string name="request_storage">Na prístup k súborom typu ZIM potrebujeme prístup k vášmu úložisku</string>
+  <string name="no_section_info">Neboli nájdené hlavičky obsahu</string>
+  <string name="request_storage">Na prístup k offline obsahu potrebujeme prístup k vášmu úložisku</string>
+  <string name="clear_recent_and_tabs_history_dialog">Ste si istý/á, že chcete vymazať históriu vyhľadávania a vynulovať všetky svoje aktívne karty?</string>
+  <string name="delete_recent_search_item">Zmazať túto položku?</string>
+  <string name="pref_clear_all_history_title">Vymazať históriu</string>
+  <string name="pref_clear_all_history_summary">Vymazať nedávne vyhľadávanie a históriu kariet</string>
+  <string name="pref_notes">Poznámky</string>
+  <string name="all_history_cleared">Celá história vymazaná</string>
+  <string name="pref_clear_all_bookmarks_title">Vymazať záložky</string>
+  <string name="clear_all_history_dialog_title">Vymazať celú históriu?</string>
+  <string name="share">Zdieľať</string>
+  <string name="selected_file_cab_app_chooser_title">Zdieľať súbory ZIM s:</string>
+  <string name="delete">Vymazať</string>
+  <string name="cancel">Zrušiť</string>
+  <string name="delete_specific_search_toast">Nedávne vyhľadávanie odstránené</string>
+  <string name="hint_contents_drawer_message">Pre zobrazenie obsahu tohto článku potiahnite prstom doľava</string>
+  <string name="got_it">Rozumiem</string>
+  <string name="did_you_know">Vedeli ste?</string>
+  <string name="undo">Vrátiť</string>
+  <string name="tab_closed">Karta zatvorená</string>
   <string name="bookmark_added">Záložka bola pridaná</string>
   <string name="rate_dialog_title">Prosím, ohodnoťte nás</string>
   <string name="rate_dialog_msg_1">Ak sa vám náš produkt páči</string>
   <string name="rate_dialog_msg_2">, prosím, obetujte chvíľu vášho času a ohodnoťte ho. Vďaka za vašu podporu!</string>
-  <string name="rate_dialog_positive">Ohodnotiť</string>
+  <string name="rate_dialog_positive">Ohodnotiť!</string>
   <string name="no_thanks">Nie, vďaka</string>
   <string name="rate_dialog_neutral">Neskôr</string>
+  <string name="open">Otvoriť</string>
+  <string name="bookmark_removed">Záložka odstránená</string>
   <string name="pref_newtab_background_title">Otvoriť novú kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Pri otvorení novej karty bude karta otvorená na pozadí</string>
+  <string name="pref_extras">Extra</string>
+  <string name="new_tab_snack_bar">Článok otvorený na novej karte</string>
+  <string name="search_widget_text">Prehľadať Kiwix</string>
+  <string name="speech_prompt_text">Hovoriť pre vyhľadanie %s</string>
+  <string name="speech_not_supported">Prepáčte, Vaše zariadenie nepodporuje hlasový vstup</string>
+  <string name="local_zims">Zariadenie</string>
+  <string name="remote_zims">Online</string>
   <string name="library">Knižnica</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="delete_zim_body">Nasledovné súbory zim budú vymazané:\n\n%s</string>
+  <string name="delete_zims_toast">Súbory úspešne vymazané</string>
+  <string name="no_files_here">Nie sú tu žiadne súbory</string>
+  <string name="download_no_space">Nedostatočný priestor na stiahnutie.</string>
+  <string name="download">Stiahnuť</string>
+  <string name="space_available">Dostupné miesto:</string>
+  <string name="zim_simple">Jednoduché</string>
+  <string name="zim_no_pic">Žiadne obrázky</string>
+  <string name="zim_no_vid">Žiadne videá</string>
+  <string name="no_network_connection">Žiadne pripojenie k sieti</string>
+  <string name="help_2">Čo Kiwix robí?</string>
+  <string name="no_bookmarks">Žiadne záložky</string>
 </resources>

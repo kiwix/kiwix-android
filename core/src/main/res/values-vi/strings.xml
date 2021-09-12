@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Baonguyen21022003
 * Dinhxuanduyet
 * Fitoschido
@@ -25,6 +24,7 @@
   <string name="search_label">Tìm kiếm</string>
   <string name="choose_file">Chọn một Tập tin Nội dung (*.zim)</string>
   <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
+  <string name="share_host_address">Chia sẻ URL thông qua phần mềm khác</string>
   <string name="error_file_not_found">Lỗi: Không tìm thấy tập tin ZIM đã chọn</string>
   <string name="error_file_invalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
   <string name="error_article_url_not_found">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>

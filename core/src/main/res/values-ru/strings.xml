@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Alexander Yukal
 * Avd2ev
+* DDPAT
 * DevilishSkull
 * Diman Russkov
 * Facenapalm
@@ -15,6 +15,7 @@
 * Okras
 * Pacha Tchernof
 * Putnik
+* Rivka Silinsky
 * Smavrina
 * Teretalexev
 -->
@@ -30,7 +31,7 @@
   <string name="menu_read_aloud">Читать вслух</string>
   <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
   <string name="menu_support_kiwix">Поддержать Kiwix</string>
-  <string name="menu_wifi_hotspot">Разместить книги</string>
+  <string name="menu_wifi_hotspot">Точка доступа WIFI</string>
   <string name="save_media">Сохранить Медиа-файлы</string>
   <string name="save_media_error">Произошла ошибка при сохранении медиафайла!</string>
   <string name="save_media_saved">Медиафайл сохранён как %s в Android/media/org.kiwix…/</string>
@@ -62,6 +63,7 @@
   <string name="start_server_label">Запустить сервер</string>
   <string name="stop_server_label">Остановить сервер</string>
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
+  <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="zim_not_opened">Невозможно открыть файл zim</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>

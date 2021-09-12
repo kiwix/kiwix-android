@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Amire80
 * Ghsuvr
 * Guycn2
@@ -55,6 +54,7 @@
   <string name="start_server_label">הרצת השרת</string>
   <string name="stop_server_label">כיבוי השרת</string>
   <string name="server_started_message">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
+  <string name="share_host_address">שיתוף URL דרך יישומים אחרים</string>
   <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
   <string name="zim_not_opened">לא ניתן לפתוח את קובץ ה־zim</string>
   <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין.</string>
@@ -182,7 +182,7 @@
   <string name="articleCount">%s ערכים</string>
   <string name="get_started">איך מתחילים</string>
   <string name="download_books">הורדת ספרים</string>
-  <string name="humankind_knowledge">Humankind\'s knowledge, on your phone.</string>
+  <string name="humankind_knowledge">הידע של האנושות, בטלפון שלך.</string>
   <string name="welcome_to_the_family">ברוכים הבאים למשפחה!</string>
   <string name="save_books_offline">תשמרו ספרים לקריאה ללא חיבור לרשת</string>
   <string name="download_books_message">תורידו ספרים ותקראו אותם בכל מקום.</string>

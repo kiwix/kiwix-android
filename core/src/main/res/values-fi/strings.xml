@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
+* MITO
 * Macofe
 * Nike
 * Pyscowicz
@@ -165,6 +165,7 @@
   <string name="running_state">Käynnissä</string>
   <string name="paused_state">Pysäytetty</string>
   <string name="save">Tallenna</string>
+  <string name="note">Huomautus</string>
   <string name="wiki_article_title">Wikiartikkelin otsikko</string>
   <string name="confirmation_alert_dialog_message">Hylkää tallentamattomat muutokset?</string>
   <string name="notes_deletion_unsuccessful">Joitakin tiedostoja ei poistettu</string>

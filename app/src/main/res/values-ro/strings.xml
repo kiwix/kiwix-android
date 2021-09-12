@@ -6,4 +6,6 @@
   <string name="file_system_does_not_support_4gb">Sistemul dvs. de fișiere nu acceptă fișiere de peste 4 GB</string>
   <string name="detecting_file_system">Detectare dacă sistemul de fișiere poate crea fișiere de 4GB</string>
   <string name="cannot_open_file">Deschiderea fișierului a eșuat\nÎncercați să căutați acest fișier în fila Dispozitiv din biblioteca dvs.</string>
+  <string name="send_files_title">Trimite Fișiere</string>
+  <string name="receive_files_title">Primește Fișiere</string>
 </resources>

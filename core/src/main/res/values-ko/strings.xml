@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Alex00728
+* Apzp79
 * CYAN
 * Codenstory
 * Ellif
@@ -23,19 +23,20 @@
   <string name="menu_full_screen">전체 화면</string>
   <string name="menu_exit_full_screen">전체 화면에서 나가기</string>
   <string name="menu_read_aloud">소리내어 읽기</string>
-  <string name="menu_read_aloud_stop">그만 소리내어 읽기</string>
+  <string name="menu_read_aloud_stop">소리내어 읽기 중단하기</string>
   <string name="menu_support_kiwix">Kiwix 지원하기</string>
-  <string name="menu_wifi_hotspot">호스트북</string>
+  <string name="menu_wifi_hotspot">와이파이 핫스팟</string>
   <string name="save_media">미디어 저장</string>
-  <string name="save_media_error">미디어 저장을 시도할 때 오류가 발생하였습니다!</string>
+  <string name="save_media_error">미디어 저장 중, 오류가 발생하였습니다!</string>
   <string name="save_media_saved">미디어(%s)를 Android/media/org.kiwix…/에 저장했습니다</string>
   <string name="search_label">검색</string>
   <string name="choose_file">내용 파일 (*.zim) 선택</string>
-  <string name="open_in_new_tab">새 탭으로 링크를 여시겠습니까?</string>
+  <string name="open_in_new_tab">새 탭에서 링크를 여시겠습니까?</string>
   <string name="hotspot_service_channel_name">핫스팟 서비스 채널</string>
-  <string name="hotspot_failed_title">핫스팟 시작을 실패했습니다</string>
+  <string name="hotspot_failed_title">핫스팟 시작에 실패했습니다</string>
   <string name="hotspot_failed_message">핫스팟이 이미 켜져있는 것 같습니다. 계속하려면 와이파이 핫스팟을 비활성화해 주십시오.</string>
   <string name="go_to_wifi_settings_label">와이파이 설정으로 이동</string>
+  <string name="connection_refused">연결 거절됨.</string>
   <string name="hotspot_running">핫스팟이 작동 중입니다</string>
   <string name="no_books_selected_toast_message">책을 먼저 선택해 주십시오</string>
   <string name="server_failed_message">서버를 시작하지 못했습니다. 핫스팟을 켜 주십시오</string>
@@ -44,13 +45,13 @@
   <string name="server_stopped_successfully_toast_message">서버가 성공적으로 중단되었습니다.</string>
   <string name="hotspot_turned_on">핫스팟이 켜져 있습니다</string>
   <string name="hotspot_details_message">다음은 로컬 핫스팟의 상세 정보입니다.\nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">서버에 호스팅할 파일을 선택하십시오</string>
+  <string name="server_textview_default_message">서버에 호스팅 할 파일을 선택하십시오</string>
   <string name="progress_dialog_starting_server">서버 시작 중</string>
   <string name="hotspot_dialog_title">도서 호스팅 지침</string>
   <string name="wifi_dialog_title">WiFi 연결 감지됨</string>
-  <string name="hotspot_dialog_message">이 기능이 동작하려면 WIFI 핫스팟을 수동으로 활성화하거나 호스트 장치와 수신 장치가 동일 WiFi 네트워크에 있어야 합니다</string>
+  <string name="hotspot_dialog_message">이 기능이 작동하려면, 와이파이 핫스팟을 수동으로 활성화하거나 호스트 장치와 수신 장치가 동일 와이파이 네트워크에 있어야 합니다</string>
   <string name="hotspot_dialog_neutral_button">계속</string>
-  <string name="hotspot_channel_description">당신의 핫스팟/서버 상태에 대한 업데이트</string>
+  <string name="hotspot_channel_description">당신의 핫스팟/서버 상태의 업데이트</string>
   <string name="hotspot_notification_content_title">Kiwix 핫스팟</string>
   <string name="start_server_label">서버 시작</string>
   <string name="stop_server_label">서버 정지</string>
@@ -71,22 +72,22 @@
   <string name="pref_credits">기여자 및 라이선스</string>
   <string name="pref_credits_title">제작진</string>
   <string name="tts_lang_not_supported">이 문서의 언어가 지원되지 않거나 적절한 언어 데이터가 설치되지 않았습니다. 이 글을 올바르게 읽지 못할 수 있습니다.</string>
-  <string name="no_reader_application_installed">이 형식의 파일을 위해 설치된 응용 프로그램을 찾을 수 없습니다</string>
+  <string name="no_reader_application_installed">이 파일 형식을 지원하는 응용 프로그램을 찾을 수 없습니다</string>
   <string name="no_section_info">콘텐츠 헤더를 찾을 수 없습니다</string>
-  <string name="request_storage">오프라인 콘텐츠에 접근하려면 저장소에 대한 접근 권한이 필요합니다</string>
-  <string name="clear_recent_and_tabs_history_dialog">검색 기록을 삭제하고 열려있는 모든 탭을 초기화하시겠습니까?</string>
-  <string name="delete_recent_search_item">이 항목을 지우시겠습니까?</string>
-  <string name="pref_clear_all_history_title">역사 지우기</string>
-  <string name="pref_clear_all_history_summary">최근 검색 및 탭 역사 지우기</string>
-  <string name="all_history_cleared">모든 역사를 삭제했습니다</string>
+  <string name="request_storage">오프라인 콘텐츠에 접근하려면 저장소 접근 권한이 필요합니다</string>
+  <string name="clear_recent_and_tabs_history_dialog">검색 기록을 삭제하고 열려있는 모든 탭을 초기화하겠습니까?</string>
+  <string name="delete_recent_search_item">이 항목을 지우겠습니까?</string>
+  <string name="pref_clear_all_history_title">기록 지우기</string>
+  <string name="pref_clear_all_history_summary">최근 검색 및 탭 기록 지우기</string>
+  <string name="all_history_cleared">모든 기록을 삭제했습니다</string>
   <string name="pref_clear_all_bookmarks_title">북마크 삭제</string>
-  <string name="clear_all_history_dialog_title">모든 역사를 지우시겠습니까?</string>
+  <string name="clear_all_history_dialog_title">모든 기록을 지우겠습니까?</string>
   <string name="share">공유</string>
   <string name="selected_file_cab_app_chooser_title">ZIM 파일을 다음과 공유:</string>
   <string name="delete">삭제</string>
   <string name="cancel">취소</string>
-  <string name="delete_specific_search_toast">최근의 검색이 제거되었습니다</string>
-  <string name="hint_contents_drawer_message">왼쪽으로 밀면 이 문서의 내용을 볼 수 있습니다</string>
+  <string name="delete_specific_search_toast">최근 검색이 지워졌습니다</string>
+  <string name="hint_contents_drawer_message">왼쪽으로 밀어 이 문서의 내용을 볼 수 있습니다</string>
   <string name="got_it">알겠습니다</string>
   <string name="did_you_know">알고 계십니까?</string>
   <string name="undo">실행 취소</string>
@@ -94,7 +95,7 @@
   <string name="bookmark_added">북마크가 추가됨</string>
   <string name="rate_dialog_title">평가해 주세요</string>
   <string name="rate_dialog_msg_1">즐겁게 사용하고 있다면</string>
-  <string name="rate_dialog_msg_2">, 잠시 시간을 내어주셔서 평가 해주시길 부탁드립니다. 지원해주셔서 감사합니다!</string>
+  <string name="rate_dialog_msg_2">, 잠시 시간을 내어 평가해 주세요. 여러분의 응원 감사합니다!</string>
   <string name="rate_dialog_positive">평가해 주세요!</string>
   <string name="no_thanks">아니오, 괜찮습니다</string>
   <string name="rate_dialog_neutral">나중에</string>
@@ -103,7 +104,7 @@
   <string name="pref_newtab_background_title">새 탭을 백그라운드로 열기</string>
   <string name="pref_newtab_background_summary">새 탭을 열 때 백그라운드에서 열립니다</string>
   <string name="pref_extras">기타</string>
-  <string name="new_tab_snack_bar">새 탭에서 열린 문서</string>
+  <string name="new_tab_snack_bar">새 탭에 열린 문서</string>
   <string name="search_widget_text">Kiwix 검색</string>
   <string name="speech_prompt_text">%s을(를) 찾으려면 말하세요</string>
   <string name="speech_not_supported">죄송합니다! 당신의 기기가 음성 입력을 지원하지 않습니다</string>
@@ -121,7 +122,7 @@
   <string name="zim_no_vid">동영상 없음</string>
   <string name="no_network_connection">네트워크 연결 없음</string>
   <string name="help_2">Kiwix의 역할이 무엇입니까?</string>
-  <string name="help_3">Kiwix는 오프라인 콘텐츠 리더입니다. 브라우저와 매우 비슷하게 동작하지만 온라인 웹 페이지에 접근하는 대신 ZIM 포맷의 파일로부터 내용을 읽습니다.</string>
+  <string name="help_3">Kiwix는 오프라인 콘텐츠 리더입니다. 브라우저와 매우 비슷하게 동작하지만 온라인 웹 페이지에 접근하지 않고, ZIM 포맷 파일에서 내용을 읽습니다.</string>
   <string name="help_4">Kiwix는 본래 오프라인 상태에서 위키백과를 제공하도록 설계되었습니다만, 다른 콘텐츠도 읽을 수 있습니다.</string>
   <string name="help_5">내용이 어디에 있습니까?</string>
   <string name="help_6">저희 콘텐츠는 Kiwix 웹사이트에서 호스팅됩니다.</string>
@@ -140,8 +141,8 @@
   <string name="external_storage">외부 장치</string>
   <string name="yes">예</string>
   <string name="no">아니오</string>
-  <string name="confirm_stop_download_title">다운로드를 중단하시겠습니까?</string>
-  <string name="confirm_stop_download_msg">이 다운로드를 중단하시겠습니까?</string>
+  <string name="confirm_stop_download_title">다운로드를 중단하겠습니까?</string>
+  <string name="confirm_stop_download_msg">이 다운로드를 중단하겠습니까?</string>
   <string name="download_change_storage">기억 장치 선택기</string>
   <string name="tts_not_enabled">이 ZIM 파일에 대해 TTS가 활성화되어 있지 않습니다</string>
   <string name="texttospeech_initialization_failed">텍스트–음성 초기화가 실패했습니다. 다시 시도해 주세요</string>

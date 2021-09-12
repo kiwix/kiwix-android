@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* KartikMistry
+* Macofe
+-->
 <resources>
   <string name="menu_help">મદદ</string>
   <string name="menu_home">ઘર</string>
@@ -9,7 +13,7 @@
   <string name="menu_full_screen">આખી સ્ક્રિન</string>
   <string name="menu_exit_full_screen">પૂર્ણ સ્ક્રીનથી બહાર નીકળો</string>
   <string name="search_label">શોધો</string>
-  <string name="choose_file">ZIM માહિતી ફાઇલ (*.zim) પસંદ કરો</string>
+  <string name="choose_file" fuzzy="true">ZIM માહિતી ફાઇલ (*.zim) પસંદ કરો</string>
   <string name="open_in_new_tab">કડી નવી ટેબમાં ખોલશો?</string>
   <string name="error_file_not_found">ક્ષતિ: પસંદ કરેલ ZIM ફાઇલ મળી શકી નહી.</string>
   <string name="error_file_invalid">ક્ષતિ: પસંદ કરેલ ફાઇલ યોગ્ય ZIM ફાઇલ નથી.</string>
@@ -23,16 +27,4 @@
   <string name="pref_language_title">ભાષા</string>
   <string name="pref_language_chooser">ભાષા પસંદ કરો</string>
   <string name="library">લાઇબ્રેરી</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

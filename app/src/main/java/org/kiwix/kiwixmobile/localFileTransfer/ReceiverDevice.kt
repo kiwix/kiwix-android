@@ -72,7 +72,9 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
                   publishProgress(fileItemIndex, FileItem.FileStatus.SENT)
                 }
               } catch (e: IOException) {
-                Log.e(TAG, e.message)
+                e.message?.let {
+                  Log.e(TAG, "Unable to accomplish the operation we were trying to do", e)
+                }
                 isTransferErrorFree = false
                 publishProgress(fileItemIndex, FileItem.FileStatus.ERROR)
               }
@@ -81,7 +83,9 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
         }
       }
     } catch (e: IOException) {
-      Log.e(TAG, e.message)
+      e.message?.let {
+        Log.e(TAG, "Unable to accomplish the operation we were trying to do", e)
+      }
       false // Returned when an error was encountered during transfer
     }
   }

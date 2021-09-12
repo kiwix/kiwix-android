@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Bjankuloski06
 -->
 <resources>
@@ -15,7 +14,7 @@
   <string name="menu_read_aloud">Прочитај на глас</string>
   <string name="menu_read_aloud_stop">Запри читање на глас</string>
   <string name="menu_support_kiwix">Поддржете го Кивикс</string>
-  <string name="menu_wifi_hotspot">Книги на домаќинот</string>
+  <string name="menu_wifi_hotspot">Безжично жариште</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
   <string name="save_media_saved">Податотеката е зачувана како %s во Android/media/org.kiwix…/</string>
@@ -47,6 +46,7 @@
   <string name="start_server_label">Покрени го опслужувачот</string>
   <string name="stop_server_label">Запри го опслужувачот</string>
   <string name="server_started_message">Внесете ја оваа IP-адреса во прелистувачот за да пристапите на опслужувачот %s</string>
+  <string name="share_host_address">Сподели URL преку други прилози</string>
   <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека.</string>
   <string name="zim_not_opened">Не можам да ја отворам ZIM-податотеката</string>
   <string name="error_file_invalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>

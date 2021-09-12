@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Unamane
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">O seu sistema de ficheiros não suporta ficheiros acima de 4GB</string>
+  <string name="detecting_file_system">A detetar se o sistema pode criar ficheiros de 4GB</string>
+  <string name="cannot_open_file">Falha ao abrir o ficheiro\nTente procurar este ficheiro no separador Dispositivo da sua biblioteca</string>
+  <string name="send_files_title">Enviar ficheiros</string>
+  <string name="receive_files_title">Receber ficheiros</string>
+</resources>

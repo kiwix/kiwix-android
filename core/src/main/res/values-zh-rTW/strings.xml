@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Kly
 * LNDDYL
 * Liuxinyu970226
@@ -52,6 +51,7 @@
   <string name="start_server_label">開啟伺服器</string>
   <string name="stop_server_label">停止伺服器</string>
   <string name="server_started_message">在您的瀏覽器輸入 IP 位址來存取伺服器%s</string>
+  <string name="share_host_address">透過別種應用程式分享 URL</string>
   <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。</string>
   <string name="zim_not_opened">無法打開 zim 檔案</string>
   <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。</string>

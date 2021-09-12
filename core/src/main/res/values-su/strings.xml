@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Macofe
+* Uchup19
+-->
 <resources>
   <string name="menu_help">Pitulung</string>
   <string name="menu_home">Tepas</string>
@@ -17,31 +21,19 @@
   <string name="pref_info_version">Vérsi</string>
   <string name="pref_language_title">Basa</string>
   <string name="all_history_cleared">Sakum Jujutan Dibersihkeun</string>
-  <string name="clear_all_history_dialog_title">Bersihkeun Sakum Markah</string>
+  <string name="clear_all_history_dialog_title" fuzzy="true">Bersihkeun Sakum Markah</string>
   <string name="delete">Pupus</string>
   <string name="did_you_know">Nyaho teu anjeun?</string>
   <string name="bookmark_added">Markah ditambahkeun</string>
   <string name="open">Buka</string>
   <string name="bookmark_removed">Markah dipupus</string>
   <string name="library">Pabukon</string>
-  <string name="delete_zims_toast">Berkas geus dipupus</string>
   <string name="no_files_here">Euweuh berkas di dieu</string>
-  <string name="download_no_space">Rohang teu nyukupan pikeun ngundeur ieu berkas.</string>
+  <string name="download_no_space" fuzzy="true">Rohang teu nyukupan pikeun ngundeur ieu berkas.</string>
   <string name="no_network_connection">Euweuh sambungan jaringan</string>
-  <string name="delete_zim_failed">Hampura kami teu bisa mupus ieu berkas. Anjeun alusna mah nyobaan maké ménéjer berkas.</string>
+  <string name="delete_zim_failed" fuzzy="true">Hampura kami teu bisa mupus ieu berkas. Anjeun alusna mah nyobaan maké ménéjer berkas.</string>
   <string name="no">Teu</string>
   <string name="confirm_stop_download_title">Eureunkeun undeuran?</string>
   <string name="download_change_storage">Pamilih parangkat panyimpenan</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="no_bookmarks">Euweuh markah</string>
 </resources>

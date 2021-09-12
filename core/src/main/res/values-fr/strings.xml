@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Abijeet Patro
 * Alno
 * Derugon
 * Djiboun
@@ -61,6 +60,7 @@
   <string name="start_server_label">Démarrer le serveur</string>
   <string name="stop_server_label">Arrêter le serveur</string>
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
+  <string name="share_host_address">Partager l’URL avec d’autres applications</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
   <string name="zim_not_opened">Impossible d’ouvrir le fichier zim</string>
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
@@ -134,7 +134,7 @@
   <string name="help_6">Notre contenu est hébergé sur le site web de Kiwix.</string>
   <string name="help_7">Ils sont disponibles sous forme de fichiers ZIM. Il y en a beaucoup :</string>
   <string name="help_8">• Wikipédia est disponible séparément pour chaque langue</string>
-  <string name="help_9">• D’autres contenus comme Wikileaks ou Wikisource sont aussi disponibles</string>
+  <string name="help_9">• D’autres contenus comme Wikileaks ou Wikisource sont également disponibles</string>
   <string name="help_10">Vous pouvez soit télécharger vos fichiers ZIM sélectionnés dans l’application, soit sélectionner soigneusement ceux que vous voulez télécharger depuis un ordinateur de bureau, avant de transférer les fichiers ZIM sur votre carte SD.</string>
   <string name="help_11">Les fichiers ZIM téléchargés dans l’application sont situés dans le répertoire de stockage externe dans un répertoire appelé Kiwix.</string>
   <string name="pref_storage">Stockage</string>
@@ -233,7 +233,7 @@
   <string name="books_count">%d livre(s)</string>
   <string name="discovery_initiated">Découverte lancée</string>
   <string name="discovery_failed">La découverte a échoué</string>
-  <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair WiFi</string>
+  <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair en WiFi</string>
   <string name="connection_failed">La connexion a échoué</string>
   <string name="permission_rationale_location">L’autorisation de géolocalisation est requise par Android pour permettre à l’application de détecter des appareils à proximité.</string>
   <string name="permission_rationale_location_on_host_zim_file">La permission d’emplacement est nécessaire sur Android pour autoriser l’appli à héberger des fichiers Zim</string>
@@ -242,7 +242,7 @@
   <string name="request_enable_location">Activer la géolocalisation pour permettre la détection d’appareils proches</string>
   <string name="discovery_needs_location">Impossible de découvrir des pairs sans service de géolocalisation</string>
   <string name="request_enable_wifi">Activer le pair-à-pair WiFi dans les paramètres système</string>
-  <string name="discovery_needs_wifi">Impossible de découvrir des pairs dans WiFi activé</string>
+  <string name="discovery_needs_wifi">Impossible de découvrir des pairs sans WiFi activé</string>
   <string name="transfer_to">Transférer les fichiers vers %s ?</string>
   <string name="device_not_cooperating">L’appareil sélectionné ne coopère pas pour le transfert</string>
   <string name="file_transfer_complete">Transfert de fichier bien terminé</string>

@@ -1,45 +1,102 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Karmwiki
+* McDutchie
+* Softinterlingua
+-->
 <resources>
   <string name="menu_help">Adjuta</string>
   <string name="menu_home">Initio</string>
   <string name="menu_settings">Preferentias</string>
-  <string name="menu_search_in_text">Cercar in texto</string>
+  <string name="menu_search_in_text">Cercar in pagina</string>
   <string name="bookmarks">Marcapaginas</string>
   <string name="menu_random_article">Articulo aleatori</string>
   <string name="menu_full_screen">Schermo complete</string>
   <string name="menu_exit_full_screen">Exir del schermo complete</string>
   <string name="menu_read_aloud">Leger a voce alte</string>
   <string name="menu_read_aloud_stop">Cessar de leger a voce alte</string>
-  <string name="save_media">Salveguardar multimedia como…</string>
+  <string name="menu_support_kiwix">Supportar Kiwix</string>
+  <string name="menu_wifi_hotspot">Puncto de accesso a WiFi</string>
+  <string name="save_media">Salveguardar multimedia</string>
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
-  <string name="save_media_saved">File multimedial salveguardate como %1$s in tu dossier de imagines</string>
+  <string name="save_media_saved">File multimedial salveguardate como %s in Android/media/org.kiwix…/</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
   <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
+  <string name="hotspot_service_channel_name">Canal de servicio del puncto de accesso</string>
+  <string name="hotspot_failed_title">Non poteva initiar le puncto de accesso</string>
+  <string name="hotspot_failed_message">Pare que tu puncto de accesso a WiFi es jam active. Per favor disactiva lo pro continuar.</string>
+  <string name="go_to_wifi_settings_label">Ir al parametros WiFi</string>
+  <string name="connection_refused">Connexion refusate.</string>
+  <string name="hotspot_running">Puncto de accesso WiFi active</string>
+  <string name="no_books_selected_toast_message">Per favor selige libros primo</string>
+  <string name="server_failed_message">Non poteva initiar le servitor. Per favor activa tu puncto de accesso</string>
+  <string name="server_failed_toast_message">Non poteva initiar le servitor.</string>
+  <string name="server_started_successfully_toast_message">Le servitor ha essite initiate.</string>
+  <string name="server_stopped_successfully_toast_message">Le servitor ha essite arrestate.</string>
+  <string name="hotspot_turned_on">Puncto de accesso activate</string>
+  <string name="hotspot_details_message">Ecce le detalios de tu puncto de accesso local. \nSSID: %1$s \nContrasigno: %2$s</string>
+  <string name="server_textview_default_message">Selige le files que tu vole albergar sur le servitor</string>
+  <string name="progress_dialog_starting_server">Le servitor se initia</string>
+  <string name="hotspot_dialog_title">Instructiones pro albergar libros</string>
+  <string name="wifi_dialog_title">Connexion WiFi detegite</string>
+  <string name="wifi_dialog_body">Pro leger libros sur altere apparatos, assecura te que tote le apparatos es connectite al mesme rete WiFi.</string>
+  <string name="hotspot_dialog_message">Pro permitter iste function, tu debe primo activar manualmente tu puncto de accesso WiFi, assecurante que le apparato hospite e le apparato receptor es sur le mesme rete WiFi.</string>
+  <string name="hotspot_dialog_neutral_button">CONTINUAR</string>
+  <string name="hotspot_channel_description">Actualitates sur le stato de tu puncto de accesso/servitor.</string>
+  <string name="hotspot_notification_content_title">Puncto de accesso a Kiwix</string>
+  <string name="start_server_label">Initiar servitor</string>
+  <string name="stop_server_label">Stoppar servitor</string>
+  <string name="server_started_message">Entra iste adresse IP in tu navigator pro acceder al servitor %s</string>
+  <string name="share_host_address">Condivider le URL via altere applicationes</string>
   <string name="error_file_not_found">Error: Le file ZIM seligite non poteva esser trovate.</string>
+  <string name="zim_not_opened">Impossibile aperir le file .zim</string>
   <string name="error_file_invalid">Error: Le file seligite non es un file ZIM valide.</string>
   <string name="error_article_url_not_found">Error: Le cargamento del articulo (Url: %1$s) ha fallite.</string>
   <string name="pref_display_title">Visualisation</string>
+  <string name="pref_info_title">Information</string>
+  <string name="pref_info_version">Version</string>
   <string name="pref_night_mode">Modo nocturne</string>
   <string name="pref_night_mode_summary">Monstrar articulos in colores invertite</string>
   <string name="pref_back_to_top">Initio del pagina</string>
   <string name="pref_back_to_top_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
   <string name="pref_language_title">Lingua</string>
   <string name="pref_language_chooser">Selige un lingua</string>
+  <string name="pref_credits">Contributores e licentias</string>
+  <string name="pref_credits_title">Creditos</string>
+  <string name="tts_lang_not_supported">Le lingua de iste pagina non es supportate, o le datos linguistic correcte non ha essite installate. Pote esser que le pagina non appare correctemente.</string>
+  <string name="no_reader_application_installed">Non poteva trovar un application installate pro iste typo de file</string>
+  <string name="no_section_info">Nulle capites de contento trovate</string>
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Es tu secur de voler deler tu historia de recerca e reinitialisar tote le schedas active?</string>
+  <string name="delete_recent_search_item">Deler iste elemento?</string>
+  <string name="pref_clear_all_history_title">Rader historia</string>
+  <string name="pref_clear_all_history_summary">Rader le recercas recente e le historia de schedas</string>
+  <string name="pref_notes">Notas</string>
+  <string name="all_history_cleared">Tote le historia ha essite radite</string>
+  <string name="pref_clear_all_bookmarks_title">Rader marcapaginas</string>
+  <string name="clear_all_history_dialog_title">Rader tote le historia?</string>
+  <string name="share">Condivider</string>
+  <string name="selected_file_cab_app_chooser_title">Condivider files ZIM con:</string>
+  <string name="delete">Deler</string>
+  <string name="cancel">Cancellar</string>
+  <string name="delete_specific_search_toast">Recerca recente removite</string>
   <string name="library">Bibliotheca</string>
+  <string name="delete_zim_body">Le sequente file(s) zim essera delite:\n\n%s</string>
+  <string name="help_5">Ubi es le contento?</string>
+  <string name="delete_zim_failed">Alcun files non ha potite esser delite. Tenta usar un gestor de files pro deler los.</string>
+  <string name="confirm_stop_download_title">Stoppar le discarga?</string>
+  <string name="next">Sequente</string>
+  <string name="previous">Precedente</string>
+  <string name="time_today">Hodie</string>
   <string name="do_not_ask_anymore">Non demandar plus</string>
   <string name="your_languages">Linguas eligite:</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
+  <string name="other_languages">Altere linguas:</string>
+  <string name="no_items_msg">Nulle articulos disponibile</string>
+  <string name="crash_checkbox_language">Tu configurationes de lingua</string>
+  <string name="crash_checkbox_zimfiles">Un lista de tu files Zim</string>
+  <string name="new_tab_shortcut_label">Nove scheda</string>
+  <string name="on">Si</string>
+  <string name="off">No</string>
+  <string name="auto">Auto</string>
 </resources>

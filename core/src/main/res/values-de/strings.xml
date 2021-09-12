@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 1233qwer1234qwer4
+* Distel135
 * DraconicDark
 * Elliot
+* FF-11
 * FF11
+* Falwye
 * Killarnee
 * Metalhead64
 * Pittigrilli
@@ -23,6 +26,7 @@
   <string name="menu_read_aloud">Vorlesen</string>
   <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
   <string name="menu_support_kiwix">Kiwix unterstützen</string>
+  <string name="menu_wifi_hotspot">WLAN Hotspot</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
   <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
@@ -33,6 +37,7 @@
   <string name="hotspot_failed_title">Hotspot konnte nicht gestartet werden</string>
   <string name="hotspot_failed_message">Es scheint, Ihr Hotspot ist bereits aktiviert. Bitte deaktivieren Sie Ihren Wi-Fi Hotspot, um weiterzumachen.</string>
   <string name="go_to_wifi_settings_label">Gehen Sie zu den Wi-Fi Einstellungen</string>
+  <string name="connection_refused">Verbindung abgelehnt.</string>
   <string name="hotspot_running">Aktiver Hotspot</string>
   <string name="no_books_selected_toast_message">Bitte zuerst Bücher aussuchen</string>
   <string name="server_failed_message">Konnte den Server nicht starten. Bitte aktivieren Sie Ihren Hotspot</string>
@@ -43,6 +48,7 @@
   <string name="hotspot_details_message">Angaben zu Ihrem lokalen Hotspot.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Wählen Sie die Dateien aus, die Sie auf dem Server hosten möchten</string>
   <string name="progress_dialog_starting_server">Starte den Server</string>
+  <string name="hotspot_dialog_title">Anleitung zum Hosten von Büchern</string>
   <string name="wifi_dialog_title">Wi-Fi-Verbindung festgestellt</string>
   <string name="wifi_dialog_body">Um Bücher auf anderen Einheiten anzusehen, stellen Sie bitte sicher, dass alle Einheiten mit dem gleichen WiFi-Netzwerk verbunden sind.</string>
   <string name="hotspot_dialog_message">Damit diese Funktion läuft, müssen Sie zuerst den Hotspot manuell aktivieren oder sicherstellen, dass Host und Empfangsgerät im gleichen Wi-Fi-Netzwerk angemeldet sind</string>
@@ -227,6 +233,7 @@
   <string name="severe_loss_error">Schwerer Fehler! Versuchen Sie, Wi-Fi P2P auszuschalten und wieder einzuschalten</string>
   <string name="connection_failed">Verbindung fehlgeschlagen</string>
   <string name="permission_rationale_location">Android benötigt eine Standorterlaubnis, damit die App Peer-Geräte erkennen kann.</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android benötigt eine Standorterlaubnis, damit die App Zim-Dateien hosten kann</string>
   <string name="permission_refused_location">Ohne Standortberechtigungen können Peer-Geräte nicht lokalisiert werden</string>
   <string name="permission_refused_storage">Ohne Speichererlaubnis ist kein Zugriff auf ZIM-Dateien möglich</string>
   <string name="request_enable_location">Standort aktivieren, um Peer-Geräte zu finden</string>
@@ -249,6 +256,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
+  <string name="pref_text_zoom_summary">Schriftgröße in 25\%-Schritten ändern.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nur Text</string>
@@ -273,4 +281,12 @@
   <string name="diagnostic_report_message">Bitte übermittle alle nachfolgend aufgeführte Details, damit wir das Problem feststellen können</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Text Zoom</string>
+  <string name="search_open_in_new_tab">In neuer Registerkarte öffnen</string>
+  <string name="reader">Leser</string>
+  <string name="no_open_book">Kein geöffnetes Buch</string>
+  <string name="open_library">Bibliothek öffnen</string>
+  <string name="tab_restored">Registerkarte wiederhergestellt</string>
+  <string name="open_drawer">Schublade öffnen</string>
+  <string name="close_drawer">Schublade schließen</string>
+  <string name="how_to_update_content">Wie erneuert man Inhalte?</string>
 </resources>

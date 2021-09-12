@@ -15,12 +15,28 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginTop="16dp"
+    android:layout_marginEnd="50dp"
+    android:autoLink="web"
     android:text="@string/server_textview_default_message"
+    app:layout_constraintEnd_toStartOf="@id/shareServerUrlIcon"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
+  <ImageView
+    android:id="@+id/shareServerUrlIcon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    android:layout_marginEnd="16dp"
+    android:contentDescription="@string/share_host_address"
+    android:src="@drawable/ic_share_35dp"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="@id/serverTextView"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@id/serverTextView"
+    tools:visibility="visible" />
+
   <androidx.recyclerview.widget.RecyclerView
-    tools:listitem="@layout/item_book"
     android:id="@+id/recyclerViewZimHost"
     android:layout_width="0dp"
     android:layout_height="0dp"
@@ -30,7 +46,8 @@
     app:layout_constraintBottom_toTopOf="@+id/startServerButton"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/serverTextView" />
+    app:layout_constraintTop_toBottomOf="@+id/serverTextView"
+    tools:listitem="@layout/item_book" />
 
   <Button
     android:id="@+id/startServerButton"

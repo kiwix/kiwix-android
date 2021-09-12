@@ -3,11 +3,13 @@
 * Andriykopanytsia
 * Asokolov
 * Base
+* DDPAT
 * Lxlalexlxl
 * Movses
 * Piramidion
 * Vlad5250
 * Ypryima
+* Ата
 -->
 <resources>
   <string name="menu_help">Довідка</string>
@@ -32,6 +34,7 @@
   <string name="hotspot_failed_title">Не вдалося запустити точку доступу</string>
   <string name="hotspot_failed_message">Здається, вашу точка доступу вже ввімкнено. Будь ласка, вимкніть точку доступу, аби продовжити.</string>
   <string name="go_to_wifi_settings_label">Перейти до налаштувань WIFI</string>
+  <string name="connection_refused">У з\'єднанні відмовлено.</string>
   <string name="hotspot_running">Точка доступу працює</string>
   <string name="no_books_selected_toast_message">Будь ласка, спершу виберіть книги</string>
   <string name="server_failed_message">Неможливо запустити сервер. Будь ласка, ввімкніть вашу точку доступу</string>
@@ -52,6 +55,7 @@
   <string name="start_server_label">Запустити сервер</string>
   <string name="stop_server_label">Зупинити сервер</string>
   <string name="server_started_message">Уведіть цю IP адресу у ваш браузер, аби отримати доступ до серверу %s</string>
+  <string name="share_host_address">Поділіться URL-адресою за допомогою інших програм</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
   <string name="zim_not_opened">Неможливо відкрити файл zim</string>
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
@@ -75,6 +79,7 @@
   <string name="delete_recent_search_item">Вилучити цей елемент?</string>
   <string name="pref_clear_all_history_title">Очистити історію</string>
   <string name="pref_clear_all_history_summary">Очистити останню історію пошуку й відкритих вкладок</string>
+  <string name="pref_notes">Примітки</string>
   <string name="all_history_cleared">Всю історію очищено</string>
   <string name="pref_clear_all_bookmarks_title">Видалити закладки</string>
   <string name="clear_all_history_dialog_title">Очистити всю історію?</string>
@@ -107,7 +112,7 @@
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Бібліотека</string>
-  <string name="delete_zim_body">Наступні zim файли буде видалено:\n\n%s</string>
+  <string name="delete_zim_body">Такі zim файли буде видалено:\n\n%s</string>
   <string name="delete_zims_toast">Файл вилучено</string>
   <string name="no_files_here">Тут немає файлів</string>
   <string name="download_no_space">Недостатньо простору для завантаження.</string>
@@ -163,7 +168,7 @@
   <string name="your_languages">Вибір мови:</string>
   <string name="other_languages">Інші мови:</string>
   <string name="no_items_msg">Немає елементів</string>
-  <string name="crash_title">Хммм… Як ніяково</string>
+  <string name="crash_title">Хммм… Це збентежує</string>
   <string name="crash_description">Схоже, наша програма впала.\n\nЧи не бажаєте допомогти нам виправити цю проблему, надавши наступну інформацію?</string>
   <string name="crash_checkbox_language">Ваші налаштування мави</string>
   <string name="crash_checkbox_zimfiles">Перелік Ваших Zim Файлів</string>
@@ -187,14 +192,14 @@
   <string name="go_to_next_page">Перейти до наступної сторінки</string>
   <string name="table_of_contents">Зміст</string>
   <string name="select_languages">Оберіть мови</string>
-  <string name="save_languages">Зберігти мови</string>
+  <string name="save_languages">Зберегти мови</string>
   <string name="send_feedback">Надіслати відгук</string>
   <string name="expand">Розгорнути</string>
   <string name="history">Історія</string>
   <string name="history_from_current_book">Подивитися історію з усіх книг</string>
   <string name="search_history">Історія пошуку</string>
   <string name="selected_items">%1$d вибрано</string>
-  <string name="bookmarks_from_current_book">Показати Закладки В Усіх Книгах</string>
+  <string name="bookmarks_from_current_book">Перегляд закладок із усіх книг</string>
   <string name="search_bookmarks">Шукати у закладках</string>
   <string name="switch_tabs">Перемкнути вкладки</string>
   <string name="close_all_tabs">Закрити усі вкладки</string>
@@ -205,8 +210,8 @@
   <string name="failed_state">Помилка: %s</string>
   <string name="save">Зберегти</string>
   <string name="note">Примітка</string>
-  <string name="wiki_article_title">Заголовок Статті Wiki</string>
-  <string name="ext_storage_permission_rationale_add_note">Потрібний дозвіл на зберігання для Нотаток</string>
+  <string name="wiki_article_title">Заголовок статті вікі</string>
+  <string name="ext_storage_permission_rationale_add_note">Потрібний дозвіл на зберігання для нотаток</string>
   <string name="ext_storage_write_permission_denied_add_note">Нотатки не можуть бути використані без дозволу на зберігання</string>
   <string name="note_save_unsuccessful">Нотатку не збережено</string>
   <string name="note_delete_successful">Нотатку успішно видалено</string>
@@ -226,6 +231,7 @@
   <string name="severe_loss_error">Серйозна помилка! Попробуйте вимкнути і наново вмикнути WiFi P2P</string>
   <string name="connection_failed">З\'єднання не вдалося</string>
   <string name="permission_rationale_location">Android-у потрібний дозвіл на отримання місцезнахождення для пошуку сусідніх пристроїв</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android\'у потрібен локальний дозвіл на отримання місцезнахождення для розміщення файлів Zim</string>
   <string name="permission_refused_location">Неможливо знайти сусідні пристрої без дозволу на доступ до місцезнаходження</string>
   <string name="permission_refused_storage">Неможливо отримати доступ до файлів zim без дозволу на доступ до сховища</string>
   <string name="request_enable_location">Вмикнути місцезнаходження для вможливлення пошуку сусідніх пристроїв</string>
@@ -243,12 +249,12 @@
   <string name="nearby_devices">ПРИСТРОЇ ПОРУЧ</string>
   <string name="no_devices_found">Пристрої не знайдено. Натисніть кнопку Пошук, щоб спробувати ще раз.</string>
   <string name="files_for_transfer">ФАЙЛИ ДЛЯ ПЕРЕДАЧІ</string>
-  <string name="preparing_files">Підготовка файлів для передачі....</string>
-  <string name="performing_handshake">Відбувається “рукостискання”…</string>
+  <string name="preparing_files">Підготовка файлів для передачі….</string>
+  <string name="performing_handshake">Відбувається «рукостискання»…</string>
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистити всі нотатки в усіх статтях</string>
   <string name="pref_clear_all_notes_title">Очистити всі нотатки</string>
-  <string name="pref_text_zoom_summary">Змінити розмір тексту з 25-відсотковим кроком.</string>
+  <string name="pref_text_zoom_summary">Змінити розмір тексту з 25\%-відсотковим кроком.</string>
   <string name="tag_pic">Зображення</string>
   <string name="tag_vid">Відео</string>
   <string name="tag_text_only">Тільки текст</string>
@@ -274,4 +280,12 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Збільшити текст</string>
   <string name="search_open_in_new_tab">Відкрити у новій вкладці</string>
+  <string name="reader">Читач</string>
+  <string name="no_open_book">Немає відкритих книг</string>
+  <string name="open_library">Відкрити бібліотеку</string>
+  <string name="tab_restored">Вкладку відновлено</string>
+  <string name="open_drawer">Відкрити редактор</string>
+  <string name="close_drawer">Закрити редактор</string>
+  <string name="how_to_update_content">Як оновити вміст?</string>
+  <string name="update_content_description">Щоб оновити вміст (zim-файл), вам треба завантажити повну найсвіжішу версію цього самого вмісту. Ви можете зробити це у розділі завантажень.</string>
 </resources>

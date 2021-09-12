@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Abshirdheere
+-->
 <resources>
   <string name="menu_help">Caawinaad</string>
   <string name="menu_home">Bogga Hore</string>
@@ -11,10 +14,10 @@
   <string name="menu_read_aloud">Aqri kuwa kale</string>
   <string name="menu_read_aloud_stop">Iska jooji aqrinta kuwa kale</string>
   <string name="save_media">Kaydi galka muuqaalka ah si</string>
-  <string name="save_media_error">Waxaa dhacay qalad markii la doonayay in la kaydiyo!</string>
-  <string name="save_media_saved">U kaydi qaab ah %1$s galka sawirka gaarka kuu ah</string>
+  <string name="save_media_error" fuzzy="true">Waxaa dhacay qalad markii la doonayay in la kaydiyo!</string>
+  <string name="save_media_saved" fuzzy="true">U kaydi qaab ah %1$s galka sawirka gaarka kuu ah</string>
   <string name="search_label">Raadi</string>
-  <string name="choose_file">Dooro galka ZIM ee ka samaysan (*.zim)</string>
+  <string name="choose_file" fuzzy="true">Dooro galka ZIM ee ka samaysan (*.zim)</string>
   <string name="open_in_new_tab">Fur webka qaab cusub</string>
   <string name="error_file_not_found">Qalad: Galka ZIM ee aad dooratay lama helin.</string>
   <string name="error_file_invalid">Qalad: Galka ZIM ee aad dooratay maaha mid shaqaynaya.</string>
@@ -29,16 +32,4 @@
   <string name="pref_language_title">Luqad</string>
   <string name="pref_language_chooser">Dooro luqad</string>
   <string name="library">Maktabad</string>
-  <string-array name="description_help_2">
-    <item>@string/help_3</item>
-    <item>@string/help_4</item>
-  </string-array>
-  <string-array name="description_help_5">
-    <item>@string/help_6</item>
-    <item>@string/help_7</item>
-    <item>@string/help_8</item>
-    <item>@string/help_9</item>
-    <item>@string/help_10</item>
-    <item>@string/help_11</item>
-  </string-array>
 </resources>

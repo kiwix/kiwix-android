@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 1917 Ekim Devrimi
-* Abijeet Patro
 * Alidemirtas
 * BaRaN6161 TURK
 * Captantrips
@@ -60,6 +59,7 @@
   <string name="start_server_label">Sunucuyu Başlat</string>
   <string name="stop_server_label">Sunucuyu durdur</string>
   <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
+  <string name="share_host_address">URL\'yi diğer uygulamalar aracılığıyla paylaşın</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı.</string>
   <string name="zim_not_opened">Zim dosyası açılamıyor</string>
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
