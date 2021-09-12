@@ -40,6 +40,9 @@ jobs:
 
       - name: Publish app to download.kiwix.org
         env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           UNIVERSAL_RELEASE_APK: app/build/outputs/apk/release/*universal*.apk
         run: |
           ./gradlew publishReleaseApk
