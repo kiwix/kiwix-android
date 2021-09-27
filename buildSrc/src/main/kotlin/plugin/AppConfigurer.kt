@@ -62,12 +62,22 @@ class AppConfigurer {
           isUniversalApk = true
         }
       }
+
+      /*
+       * Leads the version code with a one digit number corresponding
+       * to the architecture (arm64-v8a, armeabi-v7a, x86_64, x86,
+       * ...). If no number/architecture is found, then add "7". This is
+       * should happen only for bundle (it is necessary for the Play
+       * Store upgrade process that the version code is higher than
+       * for APKs).
+      */
       applicationVariants.all {
         outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
-          val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 0
+          val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 7
           output.versionCodeOverride = (abiVersionCode * 1_000_000) + output.versionCode
         }
       }
+
       aaptOptions {
         cruncherEnabled = true
       }
