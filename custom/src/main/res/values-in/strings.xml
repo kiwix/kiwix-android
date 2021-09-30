@@ -4,6 +4,5 @@
 -->
 <resources>
   <string name="retry">Coba lagi</string>
-  <string name="download">Unduh</string>
   <string name="invalid_installation">Instalasi tidak berlaku. Silakan unduh Zim.\nPastikan Wifi menyala dan Anda memiliki cukup tempat penyimpanan data</string>
 </resources>
