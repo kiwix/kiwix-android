@@ -3,5 +3,4 @@
 * Robby
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="all">
-  <string name="download">The title of the fragment/place where books are downloaded.</string>
 </resources>

@@ -4,6 +4,5 @@
 -->
 <resources>
   <string name="retry">Пробај пак</string>
-  <string name="download">Преземи</string>
   <string name="invalid_installation">Неважечка воспоставка. Преземете ZIM.\n Проверете дали ви е вклучена безжичната врска и дали имате доволно складиштен простор</string>
 </resources>
