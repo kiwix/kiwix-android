@@ -144,7 +144,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       }
     })
 
-    // hides keyboard when scrolled and removes focus from the searchView
+    // hides keyboard when scrolled
     libraryList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
