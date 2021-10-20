@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,21 +24,25 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
-object Matcher {
-  fun childAtPosition(
-    parentMatcher: Matcher<View?>,
-    position: Int
-  ): Matcher<View> {
-    return object : TypeSafeMatcher<View>() {
-      override fun describeTo(description: Description) {
-        description.appendText("Child at position $position in parent ")
-        parentMatcher.describeTo(description)
-      }
+class Matcher {
+  companion object {
+    @JvmStatic
+    fun childAtPosition(
+      parentMatcher: Matcher<View?>,
+      position: Int
+    ): Matcher<View> {
+      return object : TypeSafeMatcher<View>() {
+        override fun describeTo(description: Description) {
+          description.appendText("Child at position $position in parent ")
+          parentMatcher.describeTo(description)
+        }
 
-      public override fun matchesSafely(view: View): Boolean {
-        val parent = view.parent
-        return (parent is ViewGroup && parentMatcher.matches(parent) &&
-          view == parent.getChildAt(position))
+        public override fun matchesSafely(view: View): Boolean {
+          val parent = view.parent
+          return parent is ViewGroup && parentMatcher.matches(parent) && view == parent.getChildAt(
+              position
+            )
+        }
       }
     }
   }
