@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -28,7 +27,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -44,6 +42,7 @@ import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -143,9 +142,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
         if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-          val imm =
-            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-          imm.hideSoftInputFromWindow(recyclerView.windowToken, 0)
+          closeKeyboard()
         }
       }
     })
