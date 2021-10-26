@@ -15,11 +15,11 @@
   ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
   ~
   -->
-<!-- changes for API 23 and lower -->
-<vector android:height="100dp"
+
+<vector android:height="200dp"
   android:viewportHeight="1256"
   android:viewportWidth="1256"
-  android:width="100dp"
+  android:width="200dp"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools">
     <path android:fillColor="#010101"
