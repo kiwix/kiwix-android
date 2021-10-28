@@ -36,6 +36,7 @@ import androidx.navigation.NavController;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import com.google.android.material.snackbar.Snackbar;
 import eu.mhutti1.utils.storage.StorageDevice;
@@ -70,6 +71,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   public static final String PREF_CREDITS = "pref_credits";
   public static final String PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION =
     "pref_manage_external_storage";
+  public static final String PREF_PERMISSION = "pref_permissions";
   private static final int ZOOM_OFFSET = 2;
   private static final int ZOOM_SCALE = 25;
   private static final String INTERNAL_TEXT_ZOOM = "text_zoom";
@@ -186,6 +188,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   private void setMangeExternalStoragePermission() {
     Preference permissionPref = findPreference(PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION);
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+      showPermissionPreference();
       boolean externalStorageManager = Environment.isExternalStorageManager();
       if (externalStorageManager) {
         permissionPref.setSummary(R.string.allowed);
@@ -198,6 +201,10 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
             return true;
         });
     }
+  }
+  private void showPermissionPreference() {
+    PreferenceCategory preferenceCategory = findPreference(PREF_PERMISSION);
+    preferenceCategory.setVisible(true);
   }
 
   private int getVersionCode() {

@@ -99,6 +99,7 @@
   <PreferenceCategory
     android:key="pref_permissions"
     android:title="@string/pref_permission"
+    app:isPreferenceVisible="false"
     app:iconSpaceReserved="false">
 
     <Preference
