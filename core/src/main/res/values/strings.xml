@@ -68,6 +68,7 @@
   <string name="pref_clear_all_history_title">Clear history</string>
   <string name="pref_clear_all_history_summary">Clear recent searches and tabs history</string>
   <string name="pref_notes">Notes</string>
+  <string name="pref_permission">Permissions</string>
   <string name="all_history_cleared">All History Cleared</string>
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
   <string name="clear_all_history_dialog_title">Clear All History?</string>
@@ -255,6 +256,7 @@
   <string name="status" tools:keep="@string/status">Status</string>
   <string name="pref_clear_all_notes_summary">Clears all notes on all articles</string>
   <string name="pref_clear_all_notes_title">Clear all notes</string>
+  <string name="pref_manage_external_storage_title">MANAGE_EXTERNAL_STORAGE</string>
   <string name="pref_text_zoom_summary">Change text size with 25\% increments.</string>
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
@@ -291,6 +293,8 @@
   <string name="update_content_description">To update content (a zim file) you need to download the full latest version of this very same content. You can do that via the download section.</string>
   <string name="all_files_permission_needed">All Files Permission Needed</string>
   <string name="all_files_permission_needed_message">In order to access all the zim files across device we need to have All Files Permission</string>
+  <string name="allowed">Allowed</string>
+  <string name="not_allowed">Not allowed</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>
