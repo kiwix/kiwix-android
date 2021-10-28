@@ -104,7 +104,7 @@
 
     <Preference
       android:key="pref_manage_external_storage"
-      android:title="@string/pref_manage_external_storage_title"
+      android:title="@string/pref_allow_to_read_or_write_zim_files_on_sd_card"
       app:iconSpaceReserved="false" />
 
   </PreferenceCategory>
