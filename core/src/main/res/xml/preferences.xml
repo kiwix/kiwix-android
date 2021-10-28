@@ -97,6 +97,17 @@
 
   </PreferenceCategory>
   <PreferenceCategory
+    android:key="pref_permissions"
+    android:title="@string/pref_permission"
+    app:iconSpaceReserved="false">
+
+    <Preference
+      android:key="pref_manage_external_storage"
+      android:title="@string/pref_manage_external_storage_title"
+      app:iconSpaceReserved="false" />
+
+  </PreferenceCategory>
+  <PreferenceCategory
     android:key="pref_language"
     android:title="@string/pref_language_title"
     app:iconSpaceReserved="false">
