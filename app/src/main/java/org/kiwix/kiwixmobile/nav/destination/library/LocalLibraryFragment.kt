@@ -20,7 +20,9 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -62,6 +64,12 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import javax.inject.Inject
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import androidx.annotation.RequiresApi
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 
@@ -69,6 +77,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject lateinit var dialogShower: DialogShower
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
@@ -202,7 +211,25 @@ class LocalLibraryFragment : BaseFragment() {
         REQUEST_STORAGE_PERMISSION
       )
     } else {
-      requestFileSystemCheck()
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Environment.isExternalStorageManager()) {
+          // We already have permission!!
+          requestFileSystemCheck()
+        } else {
+          if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
+            // We should only ask for first time, If the users wants to revoke settings
+            // then they can directly toggle this feature from settings screen
+            sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
+            // Show Dialog and  Go to settings to give permission
+            dialogShower.show(
+              KiwixDialog.ManageExternalFilesPermissionDialog,
+              ::navigateToSettings
+            )
+          }
+        }
+      } else {
+        requestFileSystemCheck()
+      }
     }
   }
 
@@ -216,5 +243,14 @@ class LocalLibraryFragment : BaseFragment() {
 
   private fun navigateToLocalFileTransferFragment() {
     requireActivity().navigate(R.id.localFileTransferFragment)
+  }
+
+  @RequiresApi(Build.VERSION_CODES.R)
+  private fun navigateToSettings() {
+    val intent = Intent().apply {
+      action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+      data = Uri.fromParts("package", requireActivity().packageName, null)
+    }
+    startActivity(intent)
   }
 }

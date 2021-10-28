@@ -289,6 +289,8 @@
   <string name="close_drawer">Close Drawer</string>
   <string name="how_to_update_content">How to update content?</string>
   <string name="update_content_description">To update content (a zim file) you need to download the full latest version of this very same content. You can do that via the download section.</string>
+  <string name="all_files_permission_needed">All Files Permission Needed</string>
+  <string name="all_files_permission_needed_message">In order to access all the zim files across device we need to have All Files Permission</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>
