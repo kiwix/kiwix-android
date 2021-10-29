@@ -40,6 +40,7 @@ import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryErrorText
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryList
 import kotlinx.android.synthetic.main.fragment_destination_download.librarySwipeRefresh
+import org.kiwix.kiwixmobile.core.utils.CloseKeyboardOnScroll
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -49,7 +50,6 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
@@ -142,16 +142,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         zimManageViewModel.shouldShowWifiOnlyDialog.value = false
       }
     })
-
     // hides keyboard when scrolled
-    libraryList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-        super.onScrollStateChanged(recyclerView, newState)
-        if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-          closeKeyboard()
-        }
-      }
-    })
+    CloseKeyboardOnScroll.classImplement(libraryList)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
