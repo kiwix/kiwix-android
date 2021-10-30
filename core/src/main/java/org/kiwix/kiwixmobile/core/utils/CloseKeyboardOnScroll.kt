@@ -18,9 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
-import android.content.Context
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.RecyclerView
 
 class CloseKeyboardOnScroll(
@@ -35,21 +32,4 @@ class CloseKeyboardOnScroll(
     ) // implement the callback by passing recyclerview and  newState
     super.onScrollStateChanged(recyclerView, newState)
   }
-
-  companion object {
-    fun classImplement(recyclerView: RecyclerView) {
-      // This is called when scroll list changes and callback will be called here
-      recyclerView.addOnScrollListener(CloseKeyboardOnScroll { _, newState ->
-        // Then check here if new state is scroll then implement the hide method
-        if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-          recyclerView.hideKeyboard()
-        }
-      })
-    }
-  }
-}
-
-fun View.hideKeyboard() {
-  val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-  imm.hideSoftInputFromWindow(windowToken, 0)
 }

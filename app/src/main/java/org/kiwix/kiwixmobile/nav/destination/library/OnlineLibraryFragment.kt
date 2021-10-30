@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
@@ -143,7 +144,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       }
     })
     // hides keyboard when scrolled
-    CloseKeyboardOnScroll.classImplement(libraryList)
+    libraryList.addOnScrollListener(CloseKeyboardOnScroll { _, newState ->
+      if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+        libraryList.closeKeyboard()
+      }
+    })
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
