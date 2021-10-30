@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.fragment_page.no_page
 import kotlinx.android.synthetic.main.fragment_page.page_switch
 import kotlinx.android.synthetic.main.fragment_page.recycler_view
 import kotlinx.android.synthetic.main.layout_toolbar.toolbar
-import org.kiwix.kiwixmobile.core.utils.CloseKeyboardOnScroll
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -139,7 +139,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
 
     // hides keyboard when scrolled
-    recycler_view.addOnScrollListener(CloseKeyboardOnScroll { _, newState ->
+    recycler_view.addOnScrollListener(SimpleRecyclerViewScrollListener { _, newState ->
       if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
         recycler_view.closeKeyboard()
       }
