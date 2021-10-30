@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.utils.CloseKeyboardOnScroll
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -138,7 +139,11 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
 
     // hides keyboard when scrolled
-    CloseKeyboardOnScroll.classImplement(recycler_view)
+    recycler_view.addOnScrollListener(CloseKeyboardOnScroll { _, newState ->
+      if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+        recycler_view.closeKeyboard()
+      }
+    })
   }
 
   override fun onCreateView(
