@@ -40,7 +40,7 @@ import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryErrorText
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryList
 import kotlinx.android.synthetic.main.fragment_destination_download.librarySwipeRefresh
-import org.kiwix.kiwixmobile.core.utils.CloseKeyboardOnScroll
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -144,7 +144,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       }
     })
     // hides keyboard when scrolled
-    libraryList.addOnScrollListener(CloseKeyboardOnScroll { _, newState ->
+    libraryList.addOnScrollListener(SimpleRecyclerViewScrollListener { _, newState ->
       if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
         libraryList.closeKeyboard()
       }

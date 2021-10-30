@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import androidx.recyclerview.widget.RecyclerView
 
-class CloseKeyboardOnScroll(
+class SimpleRecyclerViewScrollListener(
   private val onLayoutScrollListener: (RecyclerView, Int) -> Unit // here we are calling callback
 ) :
   RecyclerView.OnScrollListener() {
