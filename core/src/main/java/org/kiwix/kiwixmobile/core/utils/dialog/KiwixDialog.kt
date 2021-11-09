@@ -84,6 +84,14 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
+  object ManageExternalFilesPermissionDialog : KiwixDialog(
+    R.string.all_files_permission_needed,
+    R.string.all_files_permission_needed_message,
+    R.string.yes,
+    R.string.no,
+    cancelable = false
+  )
+
   data class ShowHotspotDetails(override val args: List<Any>) : KiwixDialog(
     R.string.hotspot_turned_on,
     R.string.hotspot_details_message,
