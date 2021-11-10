@@ -37,4 +37,3 @@ fun Activity.navigateToSettings() {
   }
   startActivity(intent)
 }
-

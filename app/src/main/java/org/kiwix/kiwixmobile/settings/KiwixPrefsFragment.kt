@@ -77,6 +77,6 @@ class KiwixPrefsFragment : CorePrefsFragment() {
 
   companion object {
     const val PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION =
-      "pref_manage_external_storage";
+      "pref_manage_external_storage"
   }
 }
