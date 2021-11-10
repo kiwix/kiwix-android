@@ -33,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,9 +52,12 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -64,12 +68,6 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import javax.inject.Inject
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
-import androidx.annotation.RequiresApi
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 
@@ -223,7 +221,9 @@ class LocalLibraryFragment : BaseFragment() {
             // Show Dialog and  Go to settings to give permission
             dialogShower.show(
               KiwixDialog.ManageExternalFilesPermissionDialog,
-              ::navigateToSettings
+              {
+                this.activity?.let(FragmentActivity::navigateToSettings)
+              }
             )
           }
         }
@@ -243,14 +243,5 @@ class LocalLibraryFragment : BaseFragment() {
 
   private fun navigateToLocalFileTransferFragment() {
     requireActivity().navigate(R.id.localFileTransferFragment)
-  }
-
-  @RequiresApi(Build.VERSION_CODES.R)
-  private fun navigateToSettings() {
-    val intent = Intent().apply {
-      action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-      data = Uri.fromParts("package", requireActivity().packageName, null)
-    }
-    startActivity(intent)
   }
 }
