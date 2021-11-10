@@ -32,7 +32,7 @@ class CustomPrefsFragment : CorePrefsFragment() {
     } else {
       preferenceScreen.removePreference(findPreference("pref_language"))
     }
-    preferenceScreen.removePreference(findPreference(PREF_WIFI_ONLY))
+    preferenceScreen.removePreferenceRecursively(PREF_WIFI_ONLY)
   }
 
   override fun setStorage() {
