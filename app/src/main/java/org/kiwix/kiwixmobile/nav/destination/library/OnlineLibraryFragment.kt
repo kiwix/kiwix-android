@@ -274,5 +274,5 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     .apply {
       onSelectAction = ::storeDeviceInPreferences
     }
-    .show(parentFragmentManager, getString(R.string.pref_storage))
+    .show(requireFragmentManager(), getString(R.string.pref_storage))
 }

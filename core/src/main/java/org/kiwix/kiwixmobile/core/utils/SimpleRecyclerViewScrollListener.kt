@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.utils
 import androidx.recyclerview.widget.RecyclerView
 
 class SimpleRecyclerViewScrollListener(
-  private val onLayoutScrollListener: (RecyclerView, Int) -> Unit // here we are calling callback
+  private val onLayoutScrollListener: (RecyclerView, Int) -> Unit
 ) :
   RecyclerView.OnScrollListener() {
   override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -29,10 +29,6 @@ class SimpleRecyclerViewScrollListener(
     onLayoutScrollListener(
       recyclerView,
       newState
-    ) // implement the callback by passing recyclerview and  newState
-    super.onScrollStateChanged(recyclerView, newState)
+    )
   }
 }
-
-
-
