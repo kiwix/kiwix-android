@@ -20,23 +20,16 @@ package org.kiwix.kiwixmobile.core.settings;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import com.google.android.material.snackbar.Snackbar;
 import eu.mhutti1.utils.storage.StorageDevice;
@@ -69,8 +62,6 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   public static final String PREF_CLEAR_ALL_HISTORY = "pref_clear_all_history";
   public static final String PREF_CLEAR_ALL_NOTES = "pref_clear_all_notes";
   public static final String PREF_CREDITS = "pref_credits";
-  public static final String PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION =
-    "pref_manage_external_storage";
   public static final String PREF_PERMISSION = "pref_permissions";
   private static final int ZOOM_OFFSET = 2;
   private static final int ZOOM_SCALE = 25;
@@ -97,7 +88,6 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     setStorage();
     setUpSettings();
     setupZoom();
-    setMangeExternalStoragePermission();
     new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater(),
       sharedPreferenceUtil);
   }
@@ -185,27 +175,8 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     versionPref.setSummary(getVersionName() + " Build: " + getVersionCode());
   }
 
-  private void setMangeExternalStoragePermission() {
-    Preference permissionPref = findPreference(PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION);
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-      showPermissionPreference();
-      boolean externalStorageManager = Environment.isExternalStorageManager();
-      if (externalStorageManager) {
-        permissionPref.setSummary(R.string.allowed);
-      } else {
-        permissionPref.setSummary(R.string.not_allowed);
-      }
-      permissionPref.setOnPreferenceClickListener(
-        preference -> {
-            navigateToSettings();
-            return true;
-        });
-    }
-  }
-  private void showPermissionPreference() {
-    PreferenceCategory preferenceCategory = findPreference(PREF_PERMISSION);
-    preferenceCategory.setVisible(true);
-  }
+
+
 
   private int getVersionCode() {
     try {
@@ -316,13 +287,4 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     return Unit.INSTANCE;
   }
 
-  // TODO: 28/10/21 Refactor the code. We are using it twice.
-  @RequiresApi(Build.VERSION_CODES.R)
-  private void navigateToSettings() {
-    Intent intent = new Intent();
-    intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-    Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-    intent.setData(uri);
-    startActivity(intent);
-  }
 }

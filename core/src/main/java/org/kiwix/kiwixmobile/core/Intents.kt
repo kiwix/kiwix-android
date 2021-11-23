@@ -20,8 +20,20 @@ package org.kiwix.kiwixmobile.core
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import androidx.annotation.RequiresApi
 
 object Intents {
   @JvmStatic fun <T : Activity> internal(clazz: Class<T>): Intent =
     Intent(clazz.canonicalName).setPackage(CoreApp.instance.packageName)
+}
+@RequiresApi(Build.VERSION_CODES.R)
+fun Activity.navigateToSettings() {
+  val intent = Intent().apply {
+    action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+    data = Uri.fromParts("package", packageName, null)
+  }
+  startActivity(intent)
 }
