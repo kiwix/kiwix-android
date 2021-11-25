@@ -21,9 +21,6 @@
   android:opacity="opaque">
   <!-- The background color, preferably the same as your normal theme -->
   <item android:drawable="@color/mine_shaft_gray900" />
-  <item>
-    <bitmap
-      android:gravity="center"
-      android:src="@drawable/kiwix_icon_with_title" />
-  </item>
+  <item android:drawable="@drawable/kiwix_icon"
+    android:gravity="center"/>
 </layer-list>

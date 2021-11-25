@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,24 +16,19 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core
+package org.kiwix.kiwixmobile.core.utils
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.provider.Settings
-import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.RecyclerView
 
-object Intents {
-  @JvmStatic fun <T : Activity> internal(clazz: Class<T>): Intent =
-    Intent(clazz.canonicalName).setPackage(CoreApp.instance.packageName)
-}
-@RequiresApi(Build.VERSION_CODES.R)
-fun Activity.navigateToSettings() {
-  val intent = Intent().apply {
-    action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-    data = Uri.fromParts("package", packageName, null)
+class SimpleRecyclerViewScrollListener(
+  private val onLayoutScrollListener: (RecyclerView, Int) -> Unit
+) :
+  RecyclerView.OnScrollListener() {
+  override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+    super.onScrollStateChanged(recyclerView, newState)
+    onLayoutScrollListener(
+      recyclerView,
+      newState
+    )
   }
-  startActivity(intent)
 }
