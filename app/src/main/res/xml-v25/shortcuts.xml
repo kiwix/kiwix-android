@@ -13,7 +13,7 @@
   </shortcut>
 
   <shortcut
-    android:enabled="true"
+    android:enabled="false"
     android:icon="@drawable/ic_shortcut_get_content"
     android:shortcutDisabledMessage="@string/shortcut_disabled_message"
     android:shortcutId="get_content"
