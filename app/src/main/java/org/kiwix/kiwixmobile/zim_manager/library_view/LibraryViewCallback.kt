@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,30 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.zim_manager.library_view;
 
-import java.util.LinkedList;
-import org.kiwix.kiwixmobile.core.base.BaseContract;
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
+package org.kiwix.kiwixmobile.zimManager.libraryView
+
+import org.kiwix.kiwixmobile.core.base.BaseContract
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import java.util.LinkedList
 
 /**
  * Created by EladKeyshawn on 06/04/2017.
  */
-
-public interface LibraryViewCallback extends BaseContract.View {
-
-  void showBooks(LinkedList<Book> books);
-
-  void displayNoNetworkConnection();
-
-  void displayNoItemsFound();
-
-  void displayNoItemsAvailable();
-
-  void displayScanningContent();
-
-  void stopScanningContent();
-
-  void downloadFile(LibraryNetworkEntity.Book book);
+@Suppress("LongParameterList")
+interface LibraryViewCallback : BaseContract.View<Any?> {
+  fun showBooks(books: LinkedList<Book?>?)
+  fun displayNoNetworkConnection()
+  fun displayNoItemsFound()
+  fun displayNoItemsAvailable()
+  fun displayScanningContent()
+  fun stopScanningContent()
+  fun downloadFile(book: LibraryNetworkEntity.Book?)
 }
