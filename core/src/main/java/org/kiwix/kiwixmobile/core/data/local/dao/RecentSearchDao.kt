@@ -31,20 +31,15 @@ class RecentSearchDao @Inject constructor(private val mDb: KiwixDatabase) {
   /**
    * Returns a distinct enumeration of the `NUM_RECENT_RESULTS` most recent searches.
    */
-  val recentSearches: List<RecentSearch>
-    get() {
-      val result: MutableList<RecentSearch> = ArrayList()
-      mDb.query(
-        RecentSearch::class.java, Query.select()
-      ).use { searchCursor ->
-        while (searchCursor.moveToNext()) {
-          result.add(RecentSearch(searchCursor))
-        }
+  fun getRecentSearches(): MutableList<RecentSearch> {
+    val result: MutableList<RecentSearch> = ArrayList()
+    mDb.query(
+      RecentSearch::class.java, Query.select()
+    ).use { searchCursor ->
+      while (searchCursor.moveToNext()) {
+        result.add(RecentSearch(searchCursor))
       }
-      return result
     }
-
-  companion object {
-    private const val NUM_RECENT_RESULTS = 5
+    return result
   }
 }
