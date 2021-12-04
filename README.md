@@ -17,12 +17,12 @@ Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
 pieces in Java).
 
 [![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Adevelop+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ANightly+branch%3Adevelop)
+[![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
 [![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://kiwixoffline.slack.com)
-[![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
 
 ## Build Instructions
 
