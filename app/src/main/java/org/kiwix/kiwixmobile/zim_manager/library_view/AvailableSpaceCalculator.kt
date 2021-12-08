@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager.libraryView
+package org.kiwix.kiwixmobile.zim_manager.library_view
 
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.Kb

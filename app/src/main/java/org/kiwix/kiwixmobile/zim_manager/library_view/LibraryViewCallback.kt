@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager.libraryView
+package org.kiwix.kiwixmobile.zim_manager.library_view
 
 import org.kiwix.kiwixmobile.core.base.BaseContract
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity

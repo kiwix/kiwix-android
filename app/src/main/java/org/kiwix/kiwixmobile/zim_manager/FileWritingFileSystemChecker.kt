@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager
+package org.kiwix.kiwixmobile.zim_manager
 
 import android.util.Log
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
@@ -38,7 +38,7 @@ class FileWritingFileSystemChecker : FileSystemChecker {
       deleteIfExists()
       try {
         RandomAccessFile(this.path, "rw").use {
-          it.setLength(org.kiwix.kiwixmobile.zimManager.Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
+          it.setLength(org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
           CAN_WRITE_4GB.alsoSaveTo(resultFile)
         }
       } catch (e: Exception) {

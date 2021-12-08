@@ -27,7 +27,6 @@ import dagger.Provides
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.di.KiwixScope
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zim_manager.FileWritingFileSystemChecker
 import org.kiwix.kiwixmobile.zim_manager.MountFileSystemChecker
 
@@ -48,8 +47,8 @@ object KiwixModule {
   internal fun provideFat32Checker(
     sharedPreferenceUtil: SharedPreferenceUtil,
     mountPointProducer: MountPointProducer
-  ): org.kiwix.kiwixmobile.zimManager.Fat32Checker =
-    org.kiwix.kiwixmobile.zimManager.Fat32Checker(
+  ): org.kiwix.kiwixmobile.zim_manager.Fat32Checker =
+    org.kiwix.kiwixmobile.zim_manager.Fat32Checker(
       sharedPreferenceUtil,
       listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker())
     )

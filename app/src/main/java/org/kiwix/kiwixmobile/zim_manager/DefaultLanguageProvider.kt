@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2021 Kiwix <android.kiwix.org>
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,15 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
+package org.kiwix.kiwixmobile.zim_manager
 
-import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
-import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
+import android.content.Context
+import org.kiwix.kiwixmobile.core.zim_manager.Language
+import javax.inject.Inject
 
-class LibraryAdapter(
-  vararg delegates: AdapterDelegate<LibraryListItem>
-) : BaseDelegateAdapter<LibraryListItem>(
-  *delegates
-) {
-  override fun getIdFor(item: LibraryListItem) = item.id
+class DefaultLanguageProvider @Inject constructor(private val context: Context) {
+  fun provide() = Language(
+    context.resources.configuration.locale.isO3Language,
+    true,
+    1
+  )
 }

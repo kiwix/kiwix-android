@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager
+package org.kiwix.kiwixmobile.zim_manager
 
 import org.kiwix.kiwixmobile.core.zim_manager.MountInfo
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer

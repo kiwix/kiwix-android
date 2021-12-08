@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
+package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import android.view.ViewGroup
 import org.kiwix.kiwixmobile.R

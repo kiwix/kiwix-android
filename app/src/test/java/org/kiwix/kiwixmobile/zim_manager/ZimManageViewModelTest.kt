@@ -50,9 +50,9 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULT
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
@@ -87,10 +87,10 @@ class ZimManageViewModelTest {
   private val storageObserver: StorageObserver = mockk()
   private val kiwixService: KiwixService = mockk()
   private val application: Application = mockk()
-  private val connectivityBroadcastReceiver: org.kiwix.kiwixmobile.zimManager.ConnectivityBroadcastReceiver = mockk()
+  private val connectivityBroadcastReceiver: org.kiwix.kiwixmobile.zim_manager.ConnectivityBroadcastReceiver = mockk()
   private val bookUtils: BookUtils = mockk()
-  private val fat32Checker: org.kiwix.kiwixmobile.zimManager.Fat32Checker = mockk()
-  private val defaultLanguageProvider: org.kiwix.kiwixmobile.zimManager.DefaultLanguageProvider = mockk()
+  private val fat32Checker: org.kiwix.kiwixmobile.zim_manager.Fat32Checker = mockk()
+  private val defaultLanguageProvider: org.kiwix.kiwixmobile.zim_manager.DefaultLanguageProvider = mockk()
   private val dataSource: DataSource = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
@@ -396,7 +396,7 @@ class ZimManageViewModelTest {
     val bookOver4Gb = book(
       id = "0",
       url = "",
-      size = "${org.kiwix.kiwixmobile.zimManager.Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
+      size = "${org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
     )
     every { kiwixService.library } returns Single.just(
       libraryNetworkEntity(

@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager
+package org.kiwix.kiwixmobile.zim_manager
 
 import android.content.Context
 import android.content.Intent
@@ -35,7 +35,7 @@ class ConnectivityBroadcastReceiver @Inject constructor(
   override val action: String = ConnectivityManager.CONNECTIVITY_ACTION
 
   private val _networkStates = BehaviorProcessor.createDefault(connectivityManager.networkState)
-  val networkStates: Flowable<org.kiwix.kiwixmobile.zimManager.NetworkState> = _networkStates
+  val networkStates: Flowable<org.kiwix.kiwixmobile.zim_manager.NetworkState> = _networkStates
 
   override fun onIntentWithActionReceived(
     context: Context,

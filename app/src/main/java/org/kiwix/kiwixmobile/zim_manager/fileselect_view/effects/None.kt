@@ -16,26 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager
+package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
 
-class SimplePageChangeListener constructor(
-  private val onPageSelectedAction: (Int) -> Unit,
-  private val onPageScrollStateChanged: ((Int) -> Unit)? = null
-) : OnPageChangeListener {
-  override fun onPageScrolled(
-    position: Int,
-    positionOffset: Float,
-    positionOffsetPixels: Int
-  ) {
-  }
-
-  override fun onPageSelected(position: Int) {
-    onPageSelectedAction.invoke(position)
-  }
-
-  override fun onPageScrollStateChanged(state: Int) {
-    onPageScrollStateChanged?.invoke(state)
+object None : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
   }
 }

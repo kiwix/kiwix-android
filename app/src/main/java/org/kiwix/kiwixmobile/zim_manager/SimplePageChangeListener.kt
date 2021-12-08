@@ -16,15 +16,26 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager.fileselect_view.effects
+package org.kiwix.kiwixmobile.zim_manager
 
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
-import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
-object NavigateToDownloads : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-    activity.navigate(LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationDownloads())
+class SimplePageChangeListener constructor(
+  private val onPageSelectedAction: (Int) -> Unit,
+  private val onPageScrollStateChanged: ((Int) -> Unit)? = null
+) : OnPageChangeListener {
+  override fun onPageScrolled(
+    position: Int,
+    positionOffset: Float,
+    positionOffsetPixels: Int
+  ) {
+  }
+
+  override fun onPageSelected(position: Int) {
+    onPageSelectedAction.invoke(position)
+  }
+
+  override fun onPageScrollStateChanged(state: Int) {
+    onPageScrollStateChanged?.invoke(state)
   }
 }
