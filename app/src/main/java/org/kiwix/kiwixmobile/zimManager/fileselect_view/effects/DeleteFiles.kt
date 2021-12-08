@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
+package org.kiwix.kiwixmobile.zimManager.fileselect_view.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.R

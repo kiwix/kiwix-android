@@ -16,16 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.zimManager.fileselect_view.effects
 
-import android.content.Context
-import org.kiwix.kiwixmobile.core.zim_manager.Language
-import javax.inject.Inject
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
 
-class DefaultLanguageProvider @Inject constructor(private val context: Context) {
-  fun provide() = Language(
-    context.resources.configuration.locale.isO3Language,
-    true,
-    1
-  )
+object None : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+  }
 }

@@ -15,21 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+package org.kiwix.kiwixmobile.zimManager
 
-data class FileSelectListState(
-  val bookOnDiskListItems: List<BooksOnDiskListItem>,
-  val selectionMode: SelectionMode = NORMAL
-) {
-  val selectedBooks by lazy {
-    bookOnDiskListItems.filter(
-      BooksOnDiskListItem::isSelected
-    )
-      .filterIsInstance(BookOnDisk::class.java)
-  }
+import android.content.Context
+import org.kiwix.kiwixmobile.core.zim_manager.Language
+import javax.inject.Inject
+
+class DefaultLanguageProvider @Inject constructor(private val context: Context) {
+  fun provide() = Language(
+    context.resources.configuration.locale.isO3Language,
+    true,
+    1
+  )
 }

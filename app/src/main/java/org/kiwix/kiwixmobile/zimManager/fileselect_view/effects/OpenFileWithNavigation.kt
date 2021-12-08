@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,36 +16,28 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
+package org.kiwix.kiwixmobile.zimManager.fileselect_view.effects
 
-import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
+import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
 
-data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
+data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.BookOnDisk) :
   SideEffect<Unit> {
+
   override fun invokeWith(activity: AppCompatActivity) {
-    val selectedFileContentURIs = selectedBooks.mapNotNull {
-      if (Build.VERSION.SDK_INT >= 24) {
-        FileProvider.getUriForFile(
-          activity,
-          activity.packageName + ".fileprovider",
-          it.file
-        )
-      } else {
-        Uri.fromFile(it.file)
-      }
+    val file = bookOnDisk.file
+    if (!file.canRead()) {
+      activity.toast(R.string.error_file_not_found)
+    } else {
+      activity.navigate(
+        actionNavigationLibraryToNavigationReader().apply { zimFileUri = file.toUri().toString() }
+      )
     }
-    activity.navigate(
-      R.id.localFileTransferFragment,
-      bundleOf(URIS_KEY to selectedFileContentURIs.toTypedArray())
-    )
   }
 }

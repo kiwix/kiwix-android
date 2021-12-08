@@ -16,15 +16,15 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
+package org.kiwix.kiwixmobile.zimManager.fileselect_view.effects
 
-import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
-import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
+import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
 
-class LibraryAdapter(
-  vararg delegates: AdapterDelegate<LibraryListItem>
-) : BaseDelegateAdapter<LibraryListItem>(
-  *delegates
-) {
-  override fun getIdFor(item: LibraryListItem) = item.id
+object NavigateToDownloads : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+    activity.navigate(LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationDownloads())
+  }
 }

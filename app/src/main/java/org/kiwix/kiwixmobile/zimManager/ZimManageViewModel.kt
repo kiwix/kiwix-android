@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.zimManager
 
 import android.app.Application
 import android.net.ConnectivityManager
@@ -51,7 +51,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULT
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
@@ -84,10 +84,10 @@ class ZimManageViewModel @Inject constructor(
   private val storageObserver: StorageObserver,
   private val kiwixService: KiwixService,
   private val context: Application,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
+  private val connectivityBroadcastReceiver: org.kiwix.kiwixmobile.zimManager.ConnectivityBroadcastReceiver,
   private val bookUtils: BookUtils,
-  private val fat32Checker: Fat32Checker,
-  private val defaultLanguageProvider: DefaultLanguageProvider,
+  private val fat32Checker: org.kiwix.kiwixmobile.zimManager.Fat32Checker,
+  private val defaultLanguageProvider: org.kiwix.kiwixmobile.zimManager.DefaultLanguageProvider,
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil

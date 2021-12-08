@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.zimManager
 
 import android.util.Log
 import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
@@ -38,7 +38,7 @@ class FileWritingFileSystemChecker : FileSystemChecker {
       deleteIfExists()
       try {
         RandomAccessFile(this.path, "rw").use {
-          it.setLength(Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
+          it.setLength(org.kiwix.kiwixmobile.zimManager.Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
           CAN_WRITE_4GB.alsoSaveTo(resultFile)
         }
       } catch (e: Exception) {

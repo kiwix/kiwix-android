@@ -16,26 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.zimManager
 
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-
-class SimplePageChangeListener constructor(
-  private val onPageSelectedAction: (Int) -> Unit,
-  private val onPageScrollStateChanged: ((Int) -> Unit)? = null
-) : OnPageChangeListener {
-  override fun onPageScrolled(
-    position: Int,
-    positionOffset: Float,
-    positionOffsetPixels: Int
-  ) {
-  }
-
-  override fun onPageSelected(position: Int) {
-    onPageSelectedAction.invoke(position)
-  }
-
-  override fun onPageScrollStateChanged(state: Int) {
-    onPageScrollStateChanged?.invoke(state)
-  }
+enum class NetworkState {
+  CONNECTED,
+  NOT_CONNECTED
 }

@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2019 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,26 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.zimManager
 
-interface FileSystemChecker {
-  fun checkFilesystemSupports4GbFiles(path: String): FileSystemCapability
-}
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
-enum class FileSystemCapability {
-  CAN_WRITE_4GB,
-  CANNOT_WRITE_4GB,
-  INCONCLUSIVE
+class SimplePageChangeListener constructor(
+  private val onPageSelectedAction: (Int) -> Unit,
+  private val onPageScrollStateChanged: ((Int) -> Unit)? = null
+) : OnPageChangeListener {
+  override fun onPageScrolled(
+    position: Int,
+    positionOffset: Float,
+    positionOffsetPixels: Int
+  ) {
+  }
+
+  override fun onPageSelected(position: Int) {
+    onPageSelectedAction.invoke(position)
+  }
+
+  override fun onPageScrollStateChanged(state: Int) {
+    onPageScrollStateChanged?.invoke(state)
+  }
 }

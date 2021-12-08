@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.zim_manager
+package org.kiwix.kiwixmobile.zimManager
 
 import android.os.FileObserver
 import io.reactivex.Flowable
@@ -23,20 +23,20 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
-import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CANNOT_WRITE_4GB
-import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.CAN_WRITE_4GB
-import org.kiwix.kiwixmobile.zim_manager.FileSystemCapability.INCONCLUSIVE
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
+import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CANNOT_WRITE_4GB
+import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
+import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 
 class Fat32Checker constructor(
   sharedPreferenceUtil: SharedPreferenceUtil,
-  private val fileSystemCheckers: List<FileSystemChecker>
+  private val fileSystemCheckers: List<org.kiwix.kiwixmobile.zimManager.FileSystemChecker>
 ) {
-  val fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
+  val fileSystemStates: BehaviorProcessor<org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState> = BehaviorProcessor.create()
   private var fileObserver: FileObserver? = null
   private val requestCheckSystemFileType = BehaviorProcessor.createDefault(Unit)
 
@@ -70,7 +70,7 @@ class Fat32Checker constructor(
 
   private fun toFileSystemState(it: String) =
     when {
-      File(it).freeSpace > FOUR_GIGABYTES_IN_BYTES ->
+      File(it).freeSpace > org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_BYTES ->
         if (canCreate4GbFile(it)) CanWrite4GbFile
         else CannotWrite4GbFile
       else -> NotEnoughSpaceFor4GbFile
@@ -95,9 +95,9 @@ class Fat32Checker constructor(
   }
 
   sealed class FileSystemState {
-    object NotEnoughSpaceFor4GbFile : FileSystemState()
-    object CanWrite4GbFile : FileSystemState()
-    object CannotWrite4GbFile : FileSystemState()
-    object Unknown : FileSystemState()
+    object NotEnoughSpaceFor4GbFile : org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState()
+    object CanWrite4GbFile : org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState()
+    object CannotWrite4GbFile : org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState()
+    object Unknown : org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState()
   }
 }

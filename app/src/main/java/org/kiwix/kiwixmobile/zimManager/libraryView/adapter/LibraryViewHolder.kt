@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
+package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import android.view.Gravity
 import android.view.View
@@ -47,8 +47,8 @@ import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.LibraryDownloadItem

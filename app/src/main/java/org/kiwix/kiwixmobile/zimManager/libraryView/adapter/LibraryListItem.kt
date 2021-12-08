@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
+package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import androidx.annotation.StringRes
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
@@ -25,12 +25,11 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.Unknown
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
 
 sealed class LibraryListItem {
   abstract val id: Long

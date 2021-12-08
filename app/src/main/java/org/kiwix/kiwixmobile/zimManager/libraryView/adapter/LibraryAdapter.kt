@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2021 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,12 +16,15 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
+package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
-import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
+import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
-object None : SideEffect<Unit> {
-  override fun invokeWith(activity: AppCompatActivity) {
-  }
+class LibraryAdapter(
+  vararg delegates: AdapterDelegate<LibraryListItem>
+) : BaseDelegateAdapter<LibraryListItem>(
+  *delegates
+) {
+  override fun getIdFor(item: LibraryListItem) = item.id
 }
