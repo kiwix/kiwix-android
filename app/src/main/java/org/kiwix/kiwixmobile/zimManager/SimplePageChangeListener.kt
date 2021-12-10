@@ -16,15 +16,26 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.zimManager
 
-import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
-val ConnectivityManager.networkState: NetworkState
-  get() = if (activeNetworkInfo?.isConnected == true)
-    CONNECTED
-  else
-    NOT_CONNECTED
+class SimplePageChangeListener constructor(
+  private val onPageSelectedAction: (Int) -> Unit,
+  private val onPageScrollStateChanged: ((Int) -> Unit)? = null
+) : OnPageChangeListener {
+  override fun onPageScrolled(
+    position: Int,
+    positionOffset: Float,
+    positionOffsetPixels: Int
+  ) {
+  }
+
+  override fun onPageSelected(position: Int) {
+    onPageSelectedAction.invoke(position)
+  }
+
+  override fun onPageScrollStateChanged(state: Int) {
+    onPageScrollStateChanged?.invoke(state)
+  }
+}

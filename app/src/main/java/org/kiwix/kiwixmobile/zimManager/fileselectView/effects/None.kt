@@ -16,15 +16,12 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
-import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
+import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.base.SideEffect
 
-val ConnectivityManager.networkState: NetworkState
-  get() = if (activeNetworkInfo?.isConnected == true)
-    CONNECTED
-  else
-    NOT_CONNECTED
+object None : SideEffect<Unit> {
+  override fun invokeWith(activity: AppCompatActivity) {
+  }
+}

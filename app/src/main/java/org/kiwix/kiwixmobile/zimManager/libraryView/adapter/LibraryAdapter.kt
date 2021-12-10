@@ -16,15 +16,15 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
-import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
+import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
+import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
-val ConnectivityManager.networkState: NetworkState
-  get() = if (activeNetworkInfo?.isConnected == true)
-    CONNECTED
-  else
-    NOT_CONNECTED
+class LibraryAdapter(
+  vararg delegates: AdapterDelegate<LibraryListItem>
+) : BaseDelegateAdapter<LibraryListItem>(
+  *delegates
+) {
+  override fun getIdFor(item: LibraryListItem) = item.id
+}

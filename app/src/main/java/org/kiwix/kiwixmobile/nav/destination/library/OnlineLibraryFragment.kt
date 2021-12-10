@@ -60,12 +60,12 @@ import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
-import org.kiwix.kiwixmobile.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zim_manager.library_view.AvailableSpaceCalculator
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.NetworkState
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryAdapter
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryDelegate
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
 
 class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {

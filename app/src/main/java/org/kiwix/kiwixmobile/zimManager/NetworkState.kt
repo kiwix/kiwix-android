@@ -16,15 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.zimManager
 
-import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
-
-val ConnectivityManager.networkState: NetworkState
-  get() = if (activeNetworkInfo?.isConnected == true)
-    CONNECTED
-  else
-    NOT_CONNECTED
+enum class NetworkState {
+  CONNECTED,
+  NOT_CONNECTED
+}

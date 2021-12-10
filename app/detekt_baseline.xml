@@ -14,29 +14,39 @@
     <ID>NestedBlockDepth:LocalLibraryFragment.kt$LocalLibraryFragment$checkPermissions</ID>
     <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$readHandshakeAndExchangeMetaData</ID>
     <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$exchangeFileTransferMetadata</ID>
-    <ID>PackageNaming:AvailableSpaceCalculator.kt$package org.kiwix.kiwixmobile.zim_manager.library_view</ID>
-    <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
-    <ID>PackageNaming:DefaultLanguageProvider.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
-    <ID>PackageNaming:DeleteFiles.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:Fat32Checker.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
-    <ID>PackageNaming:FileSelectListState.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view</ID>
-    <ID>PackageNaming:FileSystemChecker.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
-    <ID>PackageNaming:FileWritingFileSystemChecker.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
+    <ID>PackageNaming:AvailableSpaceCalculator.kt$package
+      org.kiwix.kiwixmobile.zimManager.libraryView</ID>
+    <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.zimManager</ID>
+    <ID>PackageNaming:DefaultLanguageProvider.kt$package org.kiwix.kiwixmobile.zimManager</ID>
+    <ID>PackageNaming:DeleteFiles.kt$package
+      org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
+    <ID>PackageNaming:Fat32Checker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
+    <ID>PackageNaming:FileSelectListState.kt$package
+      org.kiwix.kiwixmobile.zimManager.fileselectView</ID>
+    <ID>PackageNaming:FileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
+    <ID>PackageNaming:FileWritingFileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
     <ID>PackageNaming:HotspotNotificationManager.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
     <ID>PackageNaming:HotspotStateReceiver.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:LibraryAdapter.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
-    <ID>PackageNaming:LibraryDelegate.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
-    <ID>PackageNaming:LibraryListItem.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
-    <ID>PackageNaming:LibraryViewHolder.kt$package org.kiwix.kiwixmobile.zim_manager.library_view.adapter</ID>
-    <ID>PackageNaming:MountFileSystemChecker.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
-    <ID>PackageNaming:NavigateToDownloads.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:NetworkState.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
-    <ID>PackageNaming:None.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:OpenFileWithNavigation.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:ShareFiles.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:SimplePageChangeListener.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
-    <ID>PackageNaming:StartMultiSelection.kt$package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects</ID>
-    <ID>PackageNaming:ZimManageViewModel.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
+    <ID>PackageNaming:LibraryAdapter.kt$package
+      org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
+    <ID>PackageNaming:LibraryDelegate.kt$package
+      org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
+    <ID>PackageNaming:LibraryListItem.kt$package
+      org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
+    <ID>PackageNaming:LibraryViewHolder.kt$package
+      org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
+    <ID>PackageNaming:MountFileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
+    <ID>PackageNaming:NavigateToDownloads.kt$package
+      org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
+    <ID>PackageNaming:NetworkState.kt$package org.kiwix.kiwixmobile.zimManager</ID>
+    <ID>PackageNaming:None.kt$package org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
+    <ID>PackageNaming:OpenFileWithNavigation.kt$package
+      org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
+    <ID>PackageNaming:ShareFiles.kt$package org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
+    <ID>PackageNaming:SimplePageChangeListener.kt$package org.kiwix.kiwixmobile.zimManager</ID>
+    <ID>PackageNaming:StartMultiSelection.kt$package
+      org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
+    <ID>PackageNaming:ZimManageViewModel.kt$package org.kiwix.kiwixmobile.zimManager</ID>
     <ID>ReturnCount:Fat32Checker.kt$Fat32Checker$private fun canCreate4GbFile(storage: String): Boolean</ID>
     <ID>TooGenericExceptionCaught:FileWritingFileSystemChecker.kt$FileWritingFileSystemChecker$e: Exception</ID>
     <ID>TooGenericExceptionCaught:PeerGroupHandshake.kt$PeerGroupHandshake$ex: Exception</ID>

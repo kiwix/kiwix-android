@@ -15,16 +15,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.zimManager.libraryView
 
-package org.kiwix.kiwixmobile
+import org.kiwix.kiwixmobile.core.base.BaseContract
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import java.util.LinkedList
 
-import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
-
-val ConnectivityManager.networkState: NetworkState
-  get() = if (activeNetworkInfo?.isConnected == true)
-    CONNECTED
-  else
-    NOT_CONNECTED
+/**
+ * Created by EladKeyshawn on 06/04/2017.
+ */
+@Suppress("LongParameterList")
+interface LibraryViewCallback : BaseContract.View<Any?> {
+  fun showBooks(books: LinkedList<LibraryNetworkEntity.Book?>?)
+  fun displayNoNetworkConnection()
+  fun displayNoItemsFound()
+  fun displayNoItemsAvailable()
+  fun displayScanningContent()
+  fun stopScanningContent()
+  fun downloadFile(book: LibraryNetworkEntity.Book?)
+}

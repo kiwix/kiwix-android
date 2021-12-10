@@ -35,7 +35,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
+import org.kiwix.kiwixmobile.zimManager.SimplePageChangeListener
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject

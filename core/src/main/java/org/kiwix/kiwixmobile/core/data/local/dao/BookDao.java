@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.core.data.local.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
@@ -40,7 +41,8 @@ public class BookDao {
     this.kiwixDatabase = kiwixDatabase;
   }
 
-  private void setBookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
+  private void setBookDetails(
+    Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
     book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
     book.title = bookCursor.get(BookDatabaseEntity.TITLE);
     book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
@@ -56,7 +58,7 @@ public class BookDao {
     book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
   }
 
-  public ArrayList<Book> getBooks() {
+  public ArrayList<LibraryNetworkEntity.Book> getBooks() {
     ArrayList<Book> books = new ArrayList<>();
     try (SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(BookDatabaseEntity.class,
       Query.select())) {

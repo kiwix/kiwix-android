@@ -16,15 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.zimManager
 
-import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
+import android.content.Context
+import org.kiwix.kiwixmobile.core.zim_manager.Language
+import javax.inject.Inject
 
-val ConnectivityManager.networkState: NetworkState
-  get() = if (activeNetworkInfo?.isConnected == true)
-    CONNECTED
-  else
-    NOT_CONNECTED
+class DefaultLanguageProvider @Inject constructor(private val context: Context) {
+  fun provide() = Language(
+    context.resources.configuration.locale.isO3Language,
+    true,
+    1
+  )
+}
