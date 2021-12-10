@@ -169,6 +169,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     when (item.itemId) {
       R.id.select_language -> requireActivity().navigate(R.id.languageFragment)
     }
+    closeKeyboard()
     return super.onOptionsItemSelected(item)
   }
 
