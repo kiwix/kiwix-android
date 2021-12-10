@@ -28,7 +28,7 @@ internal class SettingsPresenter @Inject constructor(private val dataSource: Dat
   BasePresenter<View?>(), Presenter {
   override fun clearHistory() {
     dataSource.clearHistory()
-      .subscribe({
+      ?.subscribe({
         // TODO
       }, { e ->
         Log.e("SettingsPresenter", e.message, e)

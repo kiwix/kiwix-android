@@ -31,16 +31,16 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
 
   fun saveHistory(history: HistoryItem) {
     dataSource.saveHistory(history)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
+      ?.subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
   }
 
   fun saveBookmark(bookmark: BookmarkItem) {
     dataSource.saveBookmark(bookmark)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
+      ?.subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
   }
 
   fun deleteBookmark(bookmarkUrl: String) {
     dataSource.deleteBookmark(bookmarkUrl)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
+      ?.subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
   }
 }
