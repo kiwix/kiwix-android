@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 
 /**
  * Created by mhutti1 on 07/04/17.
@@ -119,10 +120,10 @@ public class TestUtils {
     return new BoundedMatcher<Object, Object>(Object.class) {
       @Override
       public boolean matchesSafely(Object myObj) {
-        if (!(myObj instanceof Book)) {
+        if (!(myObj instanceof LibraryNetworkEntity.Book)) {
           return false;
         }
-        Book book = (Book) myObj;
+        LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) myObj;
         if (book.getUrl() != null) {
           return book.getUrl().contains(content);
         } else {
