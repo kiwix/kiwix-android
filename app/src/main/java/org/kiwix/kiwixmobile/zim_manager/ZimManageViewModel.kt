@@ -270,7 +270,7 @@ class ZimManageViewModel @Inject constructor(
   ) = Flowable.combineLatest(
     booksFromDao,
     downloads,
-    languages.filter { it.isNotEmpty() },
+    languages.filter(List<Language>::isNotEmpty),
     library,
     Flowable.merge(
       Flowable.just(""),
@@ -300,7 +300,7 @@ class ZimManageViewModel @Inject constructor(
       BiFunction(::combineToLanguageList)
     )
     .map { it.sortedBy(Language::language) }
-    .filter { it.isNotEmpty() }
+    .filter(List<Language>::isNotEmpty)
     .subscribe(
       languageDao::insert,
       Throwable::printStackTrace
@@ -437,7 +437,7 @@ class ZimManageViewModel @Inject constructor(
       )
       .onBackpressureDrop()
       .doOnNext { deviceListIsRefreshing.postValue(false) }
-      .filter { it.isNotEmpty() }
+      .filter(List<BookOnDisk>::isNotEmpty)
       .map { it.distinctBy { bookOnDisk -> bookOnDisk.book.id } }
       .subscribe(
         bookDao::insert,
@@ -465,8 +465,12 @@ class ZimManageViewModel @Inject constructor(
       .subscribe(
         { newList ->
           fileSelectListStates.postValue(
-            fileSelectListStates.value?.let { inheritSelections(it, newList) }
-              ?: FileSelectListState(newList)
+            fileSelectListStates.value?.let {
+              inheritSelections(
+                it,
+                newList as MutableList<BooksOnDiskListItem>
+              )
+            } ?: FileSelectListState(newList)
           )
         },
         Throwable::printStackTrace

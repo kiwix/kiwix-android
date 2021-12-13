@@ -115,7 +115,7 @@ class Repository @Inject internal constructor(
     Completable.fromAction { bookmarksDao.deleteBookmarks(bookmarks) }
       .subscribeOn(io)
 
-  override fun deleteBookmark(bookmarkUrl: String): Completable? =
+  override fun deleteBookmark(bookmarkUrl: String): Completable =
     Completable.fromAction { bookmarksDao.deleteBookmark(bookmarkUrl) }
       .subscribeOn(io)
 }
