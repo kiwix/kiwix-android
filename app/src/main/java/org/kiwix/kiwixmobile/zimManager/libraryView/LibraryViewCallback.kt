@@ -18,19 +18,19 @@
 package org.kiwix.kiwixmobile.zimManager.libraryView
 
 import org.kiwix.kiwixmobile.core.base.BaseContract
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import java.util.LinkedList
 
 /**
  * Created by EladKeyshawn on 06/04/2017.
  */
-@Suppress("LongParameterList")
+
 interface LibraryViewCallback : BaseContract.View<Any?> {
-  fun showBooks(books: LinkedList<LibraryNetworkEntity.Book?>?)
+  fun showBooks(books: LinkedList<Book?>?)
   fun displayNoNetworkConnection()
   fun displayNoItemsFound()
   fun displayNoItemsAvailable()
   fun displayScanningContent()
   fun stopScanningContent()
-  fun downloadFile(book: LibraryNetworkEntity.Book?)
+  fun downloadFile(book: Book?)
 }

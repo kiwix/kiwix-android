@@ -27,7 +27,7 @@ import java.util.Random;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
 import static org.junit.Assert.assertEquals;
@@ -76,7 +76,7 @@ public class FileUtilsInstrumentationTest {
       }
     }
 
-    LibraryNetworkEntity.Book book = new LibraryNetworkEntity.Book();
+    Book book = new Book();
     book.file = new File(fileName + "bg");
 
     List<File> files = FileUtils.getAllZimParts(book);
