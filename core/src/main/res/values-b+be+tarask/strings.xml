@@ -19,6 +19,10 @@
   <string name="save_media_saved">Мэдыя-файл захаваны як %s у Android/media/org.kiwix…/</string>
   <string name="choose_file">Абярыце файл зьместу (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новай укладцы?</string>
+  <string name="hotspot_failed_message">Падобна, што ваш пункт доступу ўжо ўключаны. Каб працягнуць, адключыце пункт доступу вай-фай.</string>
+  <string name="go_to_wifi_settings_label">Перайсьці да наладаў вай-фаю</string>
+  <string name="server_failed_message">Немагчыма запусьціць сэрвэр. Калі ласка, уключыце ваш пункт доступу</string>
+  <string name="server_failed_toast_message">Немагчыма запусьціць сэрвэр.</string>
   <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены.</string>
   <string name="error_file_invalid">Памылка: абраны файл не зьяўляецца слушным ZIM-файлам.</string>
   <string name="error_article_url_not_found">Памылка: загрузка артыкула (Url: %1$s) не атрымалася.</string>

@@ -4,6 +4,5 @@
 -->
 <resources>
   <string name="retry">לנסות שוב</string>
-  <string name="download">הורדה</string>
   <string name="invalid_installation">התקנה בלתי־תקינה. נא להוריד Zim.\nיש לוודא שמופעל ויי־פיי ושיש לך מספיק נפח אחסון</string>
 </resources>

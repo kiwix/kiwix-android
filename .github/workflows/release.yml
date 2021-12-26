@@ -36,12 +36,16 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-        run: ./gradlew publishReleaseApk
+        run: ./gradlew publishReleaseBundle
 
       - name: Publish app to download.kiwix.org
         env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           UNIVERSAL_RELEASE_APK: app/build/outputs/apk/release/*universal*.apk
         run: |
+          ./gradlew assembleRelease
           cp $UNIVERSAL_RELEASE_APK kiwix-${TAG}.apk
           scp -vrp -i ssh_key -o StrictHostKeyChecking=no kiwix-${TAG}.apk ci@download.kiwix.org:/data/download/release/kiwix-android/
 

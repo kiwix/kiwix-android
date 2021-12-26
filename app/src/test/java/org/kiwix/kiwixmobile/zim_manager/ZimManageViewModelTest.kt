@@ -128,7 +128,7 @@ class ZimManageViewModelTest {
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
     every { application.registerReceiver(any(), any()) } returns mockk()
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
-    every { connectivityManager.activeNetworkInfo.type } returns ConnectivityManager.TYPE_WIFI
+    every { connectivityManager.activeNetworkInfo?.type } returns ConnectivityManager.TYPE_WIFI
     viewModel = ZimManageViewModel(
       downloadDao,
       newBookDao,

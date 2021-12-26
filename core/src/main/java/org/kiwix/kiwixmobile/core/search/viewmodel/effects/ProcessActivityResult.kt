@@ -38,7 +38,11 @@ data class ProcessActivityResult(
       resultCode == Activity.RESULT_OK &&
       data != null
     ) {
-      actions.offer(Filter(data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0]))
+      data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.apply {
+        first()?.let {
+          actions.offer(Filter(it))
+        }
+      }
     }
   }
 }

@@ -29,6 +29,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +40,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_zim_host.recyclerViewZimHost
 import kotlinx.android.synthetic.main.activity_zim_host.serverTextView
+import kotlinx.android.synthetic.main.activity_zim_host.shareServerUrlIcon
 import kotlinx.android.synthetic.main.activity_zim_host.startServerButton
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -268,15 +270,34 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun layoutServerStarted() {
-    serverTextView.text = getString(R.string.server_started_message, ip)
+    serverTextView.apply {
+      text = getString(R.string.server_started_message, ip)
+      movementMethod = LinkMovementMethod.getInstance()
+    }
+    configureUrlSharingIcon()
     startServerButton.text = getString(R.string.stop_server_label)
     startServerButton.setBackgroundColor(resources.getColor(R.color.stopServerRed))
     bookDelegate.selectionMode = SelectionMode.NORMAL
     booksAdapter.notifyDataSetChanged()
   }
 
+  private fun configureUrlSharingIcon() {
+    shareServerUrlIcon.apply {
+      visibility = View.VISIBLE
+      setOnClickListener {
+        val urlSharingIntent = Intent(Intent.ACTION_SEND)
+        urlSharingIntent.apply {
+          type = "text/plain"
+          putExtra(Intent.EXTRA_TEXT, ip)
+        }
+        startActivity(urlSharingIntent)
+      }
+    }
+  }
+
   private fun layoutServerStopped() {
     serverTextView.text = getString(R.string.server_textview_default_message)
+    shareServerUrlIcon.visibility = View.GONE
     startServerButton.text = getString(R.string.start_server_label)
     startServerButton.setBackgroundColor(resources.getColor(R.color.startServerGreen))
     bookDelegate.selectionMode = SelectionMode.MULTI

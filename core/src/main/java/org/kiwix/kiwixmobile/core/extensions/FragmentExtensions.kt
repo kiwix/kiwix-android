@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -39,6 +40,11 @@ fun Fragment.closeKeyboard() {
   val inputMethodManager =
     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
   inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+}
+
+fun View.closeKeyboard() {
+  val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+  imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
 val Fragment.coreMainActivity get() = activity as CoreMainActivity

@@ -170,11 +170,14 @@ class SearchFragment : BaseFragment() {
     lifecycleScope.launchWhenCreated {
       searchViewModel.state.collect { render(it) }
     }
+    val searchStringFromArguments = arguments?.getString(NAV_ARG_SEARCH_STRING)
+    if (searchStringFromArguments != null) {
+      searchView.setQuery(searchStringFromArguments, false)
+    }
     searchViewModel.actions.offer(Action.CreatedWithArguments(arguments))
   }
 
   private fun render(state: SearchState) {
-    searchView.setQuery(state.searchTerm, false)
     searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem.isEnabled = state.searchTerm.isNotBlank()
     searchLoadingIndicator.isShowing(state.isLoading)

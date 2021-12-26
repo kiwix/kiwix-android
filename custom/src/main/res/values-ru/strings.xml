@@ -4,6 +4,5 @@
 -->
 <resources>
   <string name="retry">Повторить</string>
-  <string name="download">Скачать</string>
   <string name="invalid_installation">Проблема с установкой. Пожалуйста скачайте Zim.\n Проверьте, что WiFi включён и в хранилище достаточно места</string>
 </resources>

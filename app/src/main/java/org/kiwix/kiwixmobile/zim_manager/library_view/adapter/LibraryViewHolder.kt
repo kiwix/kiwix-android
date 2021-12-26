@@ -116,11 +116,13 @@ private fun View.centreToast(@StringRes id: Int) {
   val midX = locationXAndY[0] + width / 2
   val midY = locationXAndY[1] + height / 2
   Toast.makeText(context, id, Toast.LENGTH_LONG).apply {
-    view.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
-    setGravity(
-      Gravity.TOP or Gravity.START,
-      midX - view.measuredWidth / 2,
-      midY - view.measuredHeight
-    )
+    view?.let { view ->
+      view.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
+      setGravity(
+        Gravity.TOP or Gravity.START,
+        midX - view.measuredWidth / 2,
+        midY - view.measuredHeight
+      )
+    }
   }.show()
 }

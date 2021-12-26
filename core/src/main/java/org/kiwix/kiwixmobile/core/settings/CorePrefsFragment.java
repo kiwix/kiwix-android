@@ -62,6 +62,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   public static final String PREF_CLEAR_ALL_HISTORY = "pref_clear_all_history";
   public static final String PREF_CLEAR_ALL_NOTES = "pref_clear_all_notes";
   public static final String PREF_CREDITS = "pref_credits";
+  public static final String PREF_PERMISSION = "pref_permissions";
   private static final int ZOOM_OFFSET = 2;
   private static final int ZOOM_SCALE = 25;
   private static final String INTERNAL_TEXT_ZOOM = "text_zoom";
@@ -174,6 +175,9 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     versionPref.setSummary(getVersionName() + " Build: " + getVersionCode());
   }
 
+
+
+
   private int getVersionCode() {
     try {
       return getActivity().getPackageManager()
@@ -282,4 +286,5 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     }
     return Unit.INSTANCE;
   }
+
 }
