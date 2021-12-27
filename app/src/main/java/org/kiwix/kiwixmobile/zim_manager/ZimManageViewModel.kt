@@ -467,7 +467,7 @@ class ZimManageViewModel @Inject constructor(
           fileSelectListStates.value?.let {
             inheritSelections(
               it,
-              newList as MutableList<BooksOnDiskListItem>
+              newList.toMutableList()
             )
           } ?: FileSelectListState(newList)
         )
