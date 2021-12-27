@@ -30,20 +30,6 @@ class KiwixIdlingResource : IdlingResource, IdleListener {
   private var idle = true
   private var resourceCallback: ResourceCallback? = null
 
-  companion object {
-    private var kiwixIdlingResource: KiwixIdlingResource? = null
-
-    @JvmStatic
-    fun getInstance(): KiwixIdlingResource? {
-      if (kiwixIdlingResource == null) {
-        kiwixIdlingResource = KiwixIdlingResource()
-      }
-      kiwixIdlingResource!!.idle = true
-      TestingUtils.registerIdleCallback(kiwixIdlingResource)
-      return kiwixIdlingResource
-    }
-  }
-
   override fun getName(): String = "Standard Kiwix Idling Resource"
 
   override fun isIdleNow(): Boolean = idle
@@ -59,7 +45,21 @@ class KiwixIdlingResource : IdlingResource, IdleListener {
   override fun finishTask() {
     idle = true
     if (resourceCallback != null) {
-      resourceCallback!!.onTransitionToIdle()
+      resourceCallback?.onTransitionToIdle()
+    }
+  }
+
+  companion object {
+    private var kiwixIdlingResource: KiwixIdlingResource? = null
+
+    @JvmStatic
+    fun getInstance(): KiwixIdlingResource? {
+      if (kiwixIdlingResource == null) {
+        kiwixIdlingResource = KiwixIdlingResource()
+      }
+      kiwixIdlingResource!!.idle = true
+      TestingUtils.registerIdleCallback(kiwixIdlingResource)
+      return kiwixIdlingResource
     }
   }
 }
