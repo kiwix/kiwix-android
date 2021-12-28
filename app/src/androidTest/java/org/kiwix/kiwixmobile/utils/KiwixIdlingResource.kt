@@ -56,8 +56,8 @@ class KiwixIdlingResource : IdlingResource, IdleListener {
     fun getInstance(): KiwixIdlingResource? {
       if (kiwixIdlingResource == null) {
         kiwixIdlingResource = KiwixIdlingResource()
+        kiwixIdlingResource!!.idle = true
       }
-      kiwixIdlingResource!!.idle = true
       TestingUtils.registerIdleCallback(kiwixIdlingResource)
       return kiwixIdlingResource
     }
