@@ -44,6 +44,6 @@ interface DataSource {
 
   fun saveBookmark(bookmark: BookmarkItem): Completable
   fun deleteBookmarks(bookmarks: List<BookmarkItem>): Completable
-  fun deleteBookmark(bookmarkUrl: String): Completable
+  fun deleteBookmark(bookmarkUrl: String): Completable?
   fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>>
 }
