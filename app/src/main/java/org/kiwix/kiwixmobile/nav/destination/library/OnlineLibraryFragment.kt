@@ -167,7 +167,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.select_language -> requireActivity().navigate(R.id.languageFragment)
+      R.id.select_language -> {
+        requireActivity().navigate(R.id.languageFragment)
+        closeKeyboard()
+      }
     }
     return super.onOptionsItemSelected(item)
   }
