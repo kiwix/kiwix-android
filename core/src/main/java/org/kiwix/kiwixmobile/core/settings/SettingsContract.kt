@@ -15,17 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.settings
 
-package org.kiwix.kiwixmobile.core.settings;
+import org.kiwix.kiwixmobile.core.base.BaseContract
 
-import org.kiwix.kiwixmobile.core.base.BaseContract;
-
-interface SettingsContract {
-  interface View extends BaseContract.View<Presenter> {
-
-  }
-
-  interface Presenter extends BaseContract.Presenter<View> {
-    void clearHistory();
+internal interface SettingsContract {
+  interface View : BaseContract.View<Presenter?>
+  interface Presenter : BaseContract.Presenter<View?> {
+    fun clearHistory()
   }
 }
