@@ -42,5 +42,6 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
   fun deleteBookmark(bookmarkUrl: String) {
     dataSource.deleteBookmark(bookmarkUrl)
       ?.subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
+      ?: Log.e(TAG, "Unable to delete bookmark")
   }
 }
