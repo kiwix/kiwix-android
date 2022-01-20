@@ -1045,7 +1045,9 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   private void openAndSetInContainer(File file) {
     try {
-      if (isNotPreviouslyOpenZim(file.getCanonicalPath())) {
+      if (!isNotPreviouslyOpenZim(file.getCanonicalPath())) {
+        return;
+      }else{
         webViewList.clear();
       }
     } catch (IOException e) {
