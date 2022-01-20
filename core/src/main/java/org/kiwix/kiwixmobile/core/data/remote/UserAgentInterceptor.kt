@@ -15,28 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.data.remote;
+package org.kiwix.kiwixmobile.core.data.remote
 
-import java.io.IOException;
-import okhttp3.Interceptor;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.Interceptor
+import okhttp3.Request
+import okhttp3.Response
+import java.io.IOException
 
 /**
  * Created by mhutti1 on 20/04/17.
  */
-
-public class UserAgentInterceptor implements Interceptor {
-  public final String useragent;
-
-  public UserAgentInterceptor(String useragent) {
-    this.useragent = useragent;
-  }
-
-  @Override
-  public Response intercept(Chain chain) throws IOException {
-    Request originalRequest = chain.request();
-    Request newUserAgent = originalRequest.newBuilder().header("User-Agent", useragent).build();
-    return chain.proceed(newUserAgent);
+class UserAgentInterceptor(val useragent: String) : Interceptor {
+  @kotlin.jvm.Throws(IOException::class)
+  override fun intercept(chain: Interceptor.Chain): Response {
+    val originalRequest: Request = chain.request()
+    val newUserAgent = originalRequest.newBuilder().header("User-Agent", useragent).build()
+    return chain.proceed(newUserAgent)
   }
 }
