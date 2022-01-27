@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Yardom78
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Váš súborový systém nepodporuje súbory väčšie než 4GB</string>
+  <string name="detecting_file_system">Zisťovanie či súborový systém môže vytvoriť súbory veľké 4GB</string>
+  <string name="cannot_open_file">Nepodarilo sa otvoriť súbor\nProsím skúste tento súbor nájsť na karte zariadenia vo vašej knižnici</string>
+  <string name="send_files_title">Poslať súbory</string>
+  <string name="receive_files_title">Prijať súbory</string>
+</resources>

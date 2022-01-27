@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* Natalilake
 * Papuass
 -->
 <resources>
@@ -12,6 +13,7 @@
   <string name="menu_random_article">Nejaušs raksts</string>
   <string name="menu_full_screen">Pilnekrāna režīms</string>
   <string name="menu_exit_full_screen">Iziet no pilnekrāna</string>
+  <string name="menu_support_kiwix">Atbalstiet Kiwix</string>
   <string name="search_label">Meklēt</string>
   <string name="pref_display_title">Displejs</string>
   <string name="pref_info_title">Informācija</string>

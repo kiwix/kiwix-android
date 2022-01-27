@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Ajeje Brazorf
 * Amire80
 * Fitoschido
+* Fs00
 * Kelson
 * Liuxinyu970226
 * Robby
@@ -19,10 +21,12 @@
   <string name="menu_full_screen">{{Identical|Full screen}}</string>
   <string name="menu_wifi_hotspot">* English : it maps to some \"hotspot\" feature in order to serve collections of contents (aka books) over a local network area.\n* French : il s’agit de la fonctionnalité \'\'hotspot\'\' : l’anglais \'\'host books\'\' n’est pas particulièrement satisfaisant à la base.</string>
   <string name="search_label">{{Identical|Search}}</string>
+  <string name="hotspot_service_channel_name">Name of the notification channel used for the hotspot persistent notification.\nCan be found in Android notification settings for Kiwix app.</string>
   <string name="hotspot_details_message">Do not change:\n* &lt;code&gt;%1$s&lt;/code&gt; (replaced by the “SSID” value identifying the WiFi hotspot identity for users)\n* &lt;code&gt;%2$s&lt;/code&gt; (replaced by the password or code configured in the hotspot to authorize the association and network connection)</string>
   <string name="hotspot_dialog_title">This the title displayed when a user clicks wants to start the server in the host books section</string>
   <string name="hotspot_dialog_message">This is used in the dialog while starting a server to host books to tell the user how exactly to proceed</string>
   <string name="hotspot_dialog_neutral_button">This is used in the start server dialog on pressing which the server starts if user has followed the prior guidelines</string>
+  <string name="hotspot_channel_description">Description of the notification channel used for the hotspot persistent notification.\nCan be found in Android notification settings for Kiwix app, inside the \"Hotspot Service Channel\" details screen.</string>
   <string name="pref_display_title">{{Identical|Display}}</string>
   <string name="pref_info_title">{{Identical|Information}}</string>
   <string name="pref_info_version">{{Identical|Version}}</string>
@@ -37,6 +41,7 @@
   <string name="no_thanks">{{Identical|No thanks}}</string>
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>
   <string name="open">{{Identical|Open}}</string>
+  <string name="speech_prompt_text">The placeholder refers to the app name (\"Kiwix\")</string>
   <string name="library">Displayed in application menu</string>
   <string name="download">The title of the fragment/place where books are downloaded.</string>
   <string name="stop">{{Identical|Stop}}</string>
@@ -44,11 +49,15 @@
   <string name="yes">{{Identical|Yes}}</string>
   <string name="no">{{Identical|No}}</string>
   <string name="previous">{{Identical|Previous}}</string>
+  <string name="time_day">{{Identical|Day}}</string>
   <string name="time_left">This is the past participle of the verb “to leave” (meaning “quitted” or “exited”). This is used in a context of “X minutes left” to finish a download.</string>
+  <string name="time_today">{{Identical|Today}}</string>
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
   <string name="history">{{Identical|History}}</string>
   <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
   <string name="save">{{Identical|Save}}</string>
+  <string name="note">{{Identical|Note}}</string>
+  <string name="books_count">{{Identical|Book}}</string>
   <string name="permission_rationale_location_on_host_zim_file">Tell the user Location permission required for hosting zim file.</string>
   <string name="pref_text_zoom_summary">Tell the user that this preference changes the text size in 25% increments.</string>
   <string name="go_to_settings">This is used in the start server dialog and leads the user to mobile hotspot settings when pressed</string>
@@ -64,4 +73,6 @@
   <string name="no_open_book">Tell the user that they have not opened a book.</string>
   <string name="open_library">The action of opening the library destination, used on a button.</string>
   <string name="tab_restored">Tell the user that a tab has been restored.</string>
+  <string name="allowed">This currently appears under the \"Allow to read and write ZIM files on SD card\" preference title</string>
+  <string name="not_allowed">This currently appears under the \"Allow to read and write ZIM files on SD card\" preference title</string>
 </resources>

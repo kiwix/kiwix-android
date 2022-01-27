@@ -2,9 +2,11 @@
 <!-- Authors:
 * Ark74
 * Carlespera
+* DDPAT
 * Ejegg
 * Fitoschido
 * Geryescalier
+* Jakeukalane
 * Johny Weissmuller Jr
 * Macofe
 * Macondo
@@ -157,7 +159,7 @@
   <string name="time_yesterday">Ayer</string>
   <string name="pref_external_link_popup_title">Advertir al seguir enlaces externos</string>
   <string name="pref_external_link_popup_summary">Mostrar advertencia sobre costos adicionales o no funcionamiento en enlaces sin conexión.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Acceso a enlace externo</string>
+  <string name="external_link_popup_dialog_title">Acceso a enlace externo!</string>
   <string name="external_link_popup_dialog_message">Estás a punto de seguir un enlace externo. Ello podría generarte gastos por transferencia de datos o sencillamente no funcionará si no tienes conexión. ¿Quieres continuar?</string>
   <string name="do_not_ask_anymore">No preguntar de nuevo</string>
   <string name="your_languages">Idiomas seleccionados:</string>
@@ -203,7 +205,7 @@
   <string name="paused_state">En pausa</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
-  <string name="wiki_article_title">Título del artículo de la Wiki</string>
+  <string name="wiki_article_title">Título del artículo de la wiki</string>
   <string name="ext_storage_permission_rationale_add_note">Se necesitan permisos de almacenamiento para notas</string>
   <string name="ext_storage_write_permission_denied_add_note">No se pueden utilizar las notas sin acceso al almacenamiento</string>
   <string name="note_save_unsuccessful">No se pudo guardar la nota</string>

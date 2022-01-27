@@ -19,5 +19,6 @@
   <string name="pref_info_version">ಆವೃತ್ತಿ</string>
   <string name="pref_language_title">ಭಾಷೆ</string>
   <string name="pref_language_chooser">ಭಾಷೆ ಆಯ್ದುಕೊಳ್ಳಿ</string>
+  <string name="delete">ಅಳಿಸು</string>
   <string name="library">ಗ್ರಂಥಾಲಯ</string>
 </resources>

@@ -13,6 +13,7 @@
 * Stephane
 * Susann Schweden
 * Symposiarch
+* Umlaut
 -->
 <resources>
   <string name="menu_help">Hilfe</string>
@@ -58,6 +59,7 @@
   <string name="start_server_label">Server starten</string>
   <string name="stop_server_label">Server anhalten</string>
   <string name="server_started_message">Geben Sie diese IP-Adresse in Ihren Browser ein, um auf den Server %s zuzugreifen</string>
+  <string name="share_host_address">URL mit anderen Applikationen teilen</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
   <string name="zim_not_opened">Konnte die ZIM-Datei nicht öffnen</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
@@ -82,6 +84,7 @@
   <string name="pref_clear_all_history_title">Verlauf löschen</string>
   <string name="pref_clear_all_history_summary">Letzte Suchanfragen und Registerkartenverlauf löschen</string>
   <string name="pref_notes">Anmerkungen</string>
+  <string name="pref_permission">Berechtigungen</string>
   <string name="all_history_cleared">Gesamter Verlauf gelöscht</string>
   <string name="pref_clear_all_bookmarks_title">Lesezeichen löschen</string>
   <string name="clear_all_history_dialog_title">Gesamten Verlauf löschen?</string>
@@ -256,7 +259,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
-  <string name="pref_text_zoom_summary">Schriftgröße in 25\%-Schritten ändern.</string>
+  <string name="pref_text_zoom_summary">Schriftgröße in 25%-Schritten ändern.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nur Text</string>
@@ -289,4 +292,6 @@
   <string name="open_drawer">Schublade öffnen</string>
   <string name="close_drawer">Schublade schließen</string>
   <string name="how_to_update_content">Wie erneuert man Inhalte?</string>
+  <string name="allowed">Erlaubt</string>
+  <string name="not_allowed">Nicht erlaubt</string>
 </resources>

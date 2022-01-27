@@ -57,6 +57,7 @@
   <string name="start_server_label">Uruchom serwer</string>
   <string name="stop_server_label">Zatrzymaj serwer</string>
   <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
+  <string name="share_host_address">Udostępnij adres URL za pośrednictwem innych aplikacji</string>
   <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
   <string name="zim_not_opened">Nie można otworzyć pliku zim</string>
   <string name="error_file_invalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>

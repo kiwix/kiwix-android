@@ -3,6 +3,7 @@
 * 1917 Ekim Devrimi
 * Alidemirtas
 * BaRaN6161 TURK
+* Can
 * Captantrips
 * Grkn gll
 * Hedda
@@ -27,21 +28,21 @@
   <string name="menu_read_aloud">Yüksek sesle oku</string>
   <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
   <string name="menu_support_kiwix">Kiwix\'i destekle</string>
-  <string name="menu_wifi_hotspot">Ana Kitaplar</string>
+  <string name="menu_wifi_hotspot">WiFi erişim paylaşımı alanı</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
-  <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Medyayı %s olarak şuraya kaydet: Android/media/org.kiwix…/</string>
   <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
   <string name="hotspot_service_channel_name">Hotspot Hizmet Kanalı</string>
-  <string name="hotspot_failed_title">Sıcak nokta başlatılamadı</string>
+  <string name="hotspot_failed_title">Erişim paylaşım alanı başlatılamadı</string>
   <string name="hotspot_failed_message">Etkin noktanız zaten açıkmış gibi görünüyor. Devam etmek için lütfen wifi erişim noktanızı devre dışı bırakın.</string>
   <string name="go_to_wifi_settings_label">WIFI ayarlarına gidin</string>
   <string name="connection_refused">Bağlantı reddedildi.</string>
-  <string name="hotspot_running">Sıcak Noktayı Çalıştırılıyor</string>
+  <string name="hotspot_running">WiFi Erişim Paylaşım Alanı Çalıştırılıyor</string>
   <string name="no_books_selected_toast_message">Lütfen önce kitapları seçin</string>
-  <string name="server_failed_message">Sunucu başlatılamadı. Lütfen etkin noktanızı açın</string>
+  <string name="server_failed_message">Sunucu başlatılamadı. Lütfen WiFi erişim paylaşım alanınızı açın</string>
   <string name="server_failed_toast_message">Sunucu başlatılamadı.</string>
   <string name="server_started_successfully_toast_message">Sunucu başarıyla başladı.</string>
   <string name="server_stopped_successfully_toast_message">Sunucu başarıyla durduruldu.</string>
@@ -84,6 +85,7 @@
   <string name="pref_clear_all_history_title">Geçmişi temizle</string>
   <string name="pref_clear_all_history_summary">Son aramalar ve sekmeler geçmişini temizle</string>
   <string name="pref_notes">Notlar</string>
+  <string name="pref_permission">İzinler</string>
   <string name="all_history_cleared">Tüm geçmiş temizlendi</string>
   <string name="pref_clear_all_bookmarks_title">Yer imlerini temizle</string>
   <string name="clear_all_history_dialog_title">Tüm Geçmişi Silinsin mi?</string>
@@ -258,6 +260,7 @@
   <string name="status">Durum</string>
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">SD karttaki ZIM dosyalarını okumaya ve yazmaya izin ver</string>
   <string name="pref_text_zoom_summary">Metin boyutunu %25\'lik artışlarla değiştirin.</string>
   <string name="tag_pic">Resim</string>
   <string name="tag_vid">Video</string>
@@ -292,4 +295,8 @@
   <string name="close_drawer">Çekmeceyi Kapat</string>
   <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
   <string name="update_content_description">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
+  <string name="all_files_permission_needed">Tüm Dosyalar İzni Gereklidir</string>
+  <string name="all_files_permission_needed_message">Cihaz içindeki tüm zim dosyalara erişmek için Tüm Dosyalar İzni\'ne ihtiyacımız var</string>
+  <string name="allowed">İzin verildi</string>
+  <string name="not_allowed">İzin verilmedi</string>
 </resources>
