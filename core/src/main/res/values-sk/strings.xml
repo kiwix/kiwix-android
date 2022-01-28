@@ -163,7 +163,7 @@
   <string name="your_languages">Vybrané jazyky:</string>
   <string name="other_languages">Iné jazyky:</string>
   <string name="no_items_msg">Žiadne dostupné položky</string>
-  <string name="crash_title">Hm...Toto je trápne</string>
+  <string name="crash_title">Hm…Toto je trápne</string>
   <string name="crash_description">Vyzerá to tak, že sme aplikácia zlyhala.\n\nNevadilo by Vám pomôcť nám opraviť tento problém tým, že nám zašlete nasledovné informácie?</string>
   <string name="crash_checkbox_language">Vaše jazykové nastavenia</string>
   <string name="crash_checkbox_zimfiles">Zoznam Vašich súborov ZIM</string>
@@ -244,8 +244,8 @@
   <string name="nearby_devices">BLÍZKE ZARIADENIA</string>
   <string name="no_devices_found">Nenašli sa žiadne zariadenia. Kliknite na tlačítko hľadania a skúste znova.</string>
   <string name="files_for_transfer">SÚBORY NA PRENOS</string>
-  <string name="preparing_files">Pripravovanie súborov na prenos...</string>
-  <string name="performing_handshake">Prebieha párovanie...</string>
+  <string name="preparing_files">Pripravovanie súborov na prenos…</string>
+  <string name="performing_handshake">Prebieha párovanie…</string>
   <string name="status">Stav</string>
   <string name="pref_clear_all_notes_summary">Vymazať všetky poznámky na všetkých článkoch</string>
   <string name="pref_clear_all_notes_title">Vymazať všetky poznámky</string>
