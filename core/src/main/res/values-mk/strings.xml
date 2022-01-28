@@ -71,6 +71,7 @@
   <string name="pref_clear_all_history_title">Исчисти историја</string>
   <string name="pref_clear_all_history_summary">Исчисти скорешни пребарувања и јазичиња</string>
   <string name="pref_notes">Белешки</string>
+  <string name="pref_permission">Дозволи</string>
   <string name="all_history_cleared">Сета историја е исчистена</string>
   <string name="pref_clear_all_bookmarks_title">Исчисти обележувачи</string>
   <string name="clear_all_history_dialog_title">Да ја исчистам сета историја</string>
@@ -245,6 +246,7 @@
   <string name="status">Состојба</string>
   <string name="pref_clear_all_notes_summary">Ги чисти сите белешки на сите статии</string>
   <string name="pref_clear_all_notes_title">Исчисти ги сите белешки</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Дозволи читање и запишување на ZIM-податотеки на SD-картичка</string>
   <string name="pref_text_zoom_summary">Промени големина на текст во стапки од 25 %.</string>
   <string name="tag_pic">Слика</string>
   <string name="tag_vid">Видео</string>
@@ -279,4 +281,8 @@
   <string name="close_drawer">Затвори фиока</string>
   <string name="how_to_update_content">Како се подновува содржината?</string>
   <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>
+  <string name="all_files_permission_needed">Дозвола за сите податотеки</string>
+  <string name="all_files_permission_needed_message">За да имате пристап до сите ZIM-податотеки на уредот, ќе треба да ја имате дозволата за сите податотеки</string>
+  <string name="allowed">Дозволено</string>
+  <string name="not_allowed">Не е дозволено</string>
 </resources>

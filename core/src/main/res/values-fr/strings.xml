@@ -85,6 +85,7 @@
   <string name="pref_clear_all_history_title">Effacer l’historique</string>
   <string name="pref_clear_all_history_summary">Effacer les recherches récentes et l’historique des onglets</string>
   <string name="pref_notes">Notes</string>
+  <string name="pref_permission">Droits</string>
   <string name="all_history_cleared">Tout l’historique est effacé</string>
   <string name="pref_clear_all_bookmarks_title">Supprimer les marque-pages</string>
   <string name="clear_all_history_dialog_title">Effacer tout l’historique ?</string>
@@ -259,6 +260,7 @@
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Permettre de lire et écrire des fichiers ZIM sur la carte SD</string>
   <string name="pref_text_zoom_summary">Modifier la taille du texte par incrément de 25 %.</string>
   <string name="tag_pic">Image</string>
   <string name="tag_vid">Vidéo</string>
@@ -293,4 +295,8 @@
   <string name="close_drawer">Fermer le tiroir</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>
+  <string name="all_files_permission_needed">Tous les droits sur les fichiers nécessaires</string>
+  <string name="all_files_permission_needed_message">Afin d’accéder à tous les fichiers zim sur l’appareil, nous devons avoir tous les droits sur les fichiers</string>
+  <string name="allowed">Autorisé</string>
+  <string name="not_allowed">Non autorisé</string>
 </resources>

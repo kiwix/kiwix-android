@@ -77,6 +77,7 @@
   <string name="pref_clear_all_history_title">Apagar histórico</string>
   <string name="pref_clear_all_history_summary">Limpar pesquisas recentes e histórico de guias</string>
   <string name="pref_notes">Notas</string>
+  <string name="pref_permission">Permissões</string>
   <string name="all_history_cleared">Eliminando todo o histórico</string>
   <string name="pref_clear_all_bookmarks_title">Limpar marcadores</string>
   <string name="clear_all_history_dialog_title">Limpar todo o histórico?</string>
@@ -285,4 +286,6 @@
   <string name="close_drawer">Fechar gaveta</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>
   <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
+  <string name="allowed">Permitido</string>
+  <string name="not_allowed">Não permitido</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Yahya
+* Dr Lotus Black
 -->
 <resources>
+  <string name="retry">ပြန်လုပ်</string>
 </resources>

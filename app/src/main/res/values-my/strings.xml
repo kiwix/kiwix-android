@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Dr Lotus Black
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">4GB ထက်ပိုသောဖိုင်များကို သင်၏ဖိုင်စနစ်က မထောက်ပံ့ပါ</string>
+  <string name="detecting_file_system">ဖိုင်စနစ်က 4GB ဖန်တီးနိုင်ပါက ခြေရာခံမိရန်</string>
+  <string name="send_files_title">ဖိုင်များပို့ရန်</string>
+  <string name="receive_files_title">ဖိုင်များလက်ခံရန်</string>
+</resources>

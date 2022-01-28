@@ -51,6 +51,7 @@
   <string name="start_server_label">Serveri serkewtış</string>
   <string name="stop_server_label">Serveri vındardış</string>
   <string name="server_started_message">Seba resayışê serverê %s re browseri rê ena adresê ip cı kerê</string>
+  <string name="share_host_address">URL\'yi be aplikasyonanê binan ra bare ke</string>
   <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye.</string>
   <string name="zim_not_opened">Dosyay Zimi nêabiyena</string>
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>

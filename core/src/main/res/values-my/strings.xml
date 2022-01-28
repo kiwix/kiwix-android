@@ -3,6 +3,7 @@
 * Dr Lotus Black
 * Lionslayer
 * Ninjastrikers
+* SawJaemin
 * Teitei
 -->
 <resources>
@@ -22,6 +23,13 @@
   <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
+  <string name="server_failed_toast_message">ဆာဗာ မစတင်နိုင်ခဲ့ပါ။</string>
+  <string name="server_started_successfully_toast_message">ဆာဗာ အောင်မြင်စွာ စတင်ခဲ့သည်။</string>
+  <string name="server_stopped_successfully_toast_message">ဆာဗာ အောင်မြင်စွာ ရပ်တန့်ခဲ့သည်။</string>
+  <string name="progress_dialog_starting_server">ဆာဗာ စတင်ခြင်း</string>
+  <string name="wifi_dialog_title">ဝိုင်ဖိုင် ကွန်နက်ရှင် ခြေရာခံမိသည်</string>
+  <string name="start_server_label">ဆာဗာ စတင်ရန်</string>
+  <string name="stop_server_label">ဆာဗာ ရပ်တန့်ရန်</string>
   <string name="error_file_not_found">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
   <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
   <string name="error_article_url_not_found">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
@@ -39,11 +47,13 @@
   <string name="delete_recent_search_item">ဤဟာကို ဖျက်မည်လား</string>
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
   <string name="pref_notes">မှတ်စုများ</string>
+  <string name="pref_permission">ခွင့်ပြုချက်များ</string>
   <string name="all_history_cleared">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>
   <string name="pref_clear_all_bookmarks_title">မှတ်သားထားသော စာအုပ်များကိုဖျက်ပါ</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">မှတ်တမ်းများအားလုံး ရှင်းလင်းရန်</string>
   <string name="share">မျှဝေ</string>
   <string name="delete">ဖျက်</string>
+  <string name="cancel">မလုပ်တော့ပါ</string>
   <string name="delete_specific_search_toast">မကြာမီက ရှာဖွေမှုကို ဖယ်ရှားပြီးပြီ</string>
   <string name="got_it">ရပြီဟေ့</string>
   <string name="did_you_know">သင်သိပါသလား</string>
@@ -59,6 +69,7 @@
   <string name="delete_zims_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
   <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
   <string name="download_no_space" fuzzy="true">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
+  <string name="download">ဒေါင်းလုဒ်</string>
   <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>
   <string name="zim_simple">ရိုးရိုး</string>
   <string name="zim_no_pic">ပုံများ မရှိပါ</string>
@@ -68,10 +79,14 @@
   <string name="pref_storage">သိုလှောင်ခန်း</string>
   <string name="pref_current_folder">လက်ရှိ ဖိုလ်ဒါ</string>
   <string name="tts_pause">ခေတ္တရပ်</string>
+  <string name="tts_resume">ခေတ္တရပ်နားရာမှ ပြန်လုပ်ရန်</string>
   <string name="stop">ရပ်</string>
+  <string name="internal_storage">အတွင်းပိုင်း</string>
   <string name="external_storage">ပြင်ပ</string>
   <string name="yes">ဟုတ်ကဲ့</string>
   <string name="no">မလုပ်ပါ</string>
+  <string name="confirm_stop_download_title">ဒေါင့်လုဒ် ရပ်တန့်မှာလား</string>
+  <string name="confirm_stop_download_msg">ဤဒေါင်းလုဒ်ကို ရပ်တန့်ချင်သည်မှာ သေချာပါသလား</string>
   <string name="next">ရှေ့</string>
   <string name="previous">ယခင်</string>
   <string name="wifi_only_title">မိုလ်ဘိုင်းကွန်ရက်မှ အကြောင်းအရာကို ဒေါင်းလုတ်ဆွဲရန် ခွင့်ပြုမည်လော?</string>
@@ -88,13 +103,28 @@
   <string name="other_languages">အခြားဘာသာစကားများ</string>
   <string name="crash_checkbox_language">သင်၏ ဘာသာစကား အပြင်အဆင်များ</string>
   <string name="articleCount">%s ဆောင်းပါးများ</string>
+  <string name="get_started">စတင်ပါ</string>
   <string name="go_to_previous_page">ယခင်စာမျက်နှာသို့သွားရန်</string>
   <string name="go_to_next_page">နောက်စာမျက်နှာသို့သွားရန်</string>
   <string name="table_of_contents">မာတိကာ</string>
   <string name="expand">ချဲ့ရန်</string>
   <string name="history">ရာဇဝင်</string>
   <string name="bookmarks_from_current_book">စာအုပ်များအားလုံးမှ မှတ်သားထားသော စာအုပ်များကိုကြည့်ရန်</string>
+  <string name="pending_state">ဆိုင်းငံ့နေသည်</string>
+  <string name="running_state">လုပ်ဆောင်နေဆဲ</string>
+  <string name="complete">ပြီးဆုံးသည်</string>
+  <string name="paused_state">ခေတ္တရပ်ပြီး</string>
+  <string name="save">သိမ်းရန်</string>
+  <string name="note">မှတ်စု</string>
+  <string name="wiki_article_title">ဝီကီဆောင်းပါးခေါင်းစဉ်</string>
+  <string name="connection_failed">ကွန်နက်ရှင် မအောင်မြင်ပါ</string>
+  <string name="nearby_devices">အနီးအနား စက်ပစ္စည်းများ</string>
   <string name="no_results">ရလဒ်များ မရှိပါ</string>
   <string name="no_bookmarks">စာညှပ်မှတ်ထားခြင်း မရှိ!</string>
   <string name="no_history">ရာဇဝင် မရှိ</string>
+  <string name="on">ဖွင့်</string>
+  <string name="off">ပိတ်</string>
+  <string name="auto">အလိုအလျောက်</string>
+  <string name="allowed">ခွင့်ပြုပြီး</string>
+  <string name="not_allowed">ခွင့်မပြုပါ</string>
 </resources>
