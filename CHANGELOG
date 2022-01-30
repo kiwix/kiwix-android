@@ -1,3 +1,11 @@
+3.4.6
+* FIX: Added MANAGE_EXTERNAL_STORAGE permission for Android 11 and later
+* FIX: Hide "Download over wifi settings" on custom apps
+* FIX: Hide SD card access setting on custom apps
+* FIX: Launch screen icon updated
+* FIX: Broken "Get content" launcher icon
+* NEW: Better hide virtual keyboard in library
+
 3.4.5
 NEW: Supports Android 11
 NEW: Hotspot socket address better visible, clickable and shareable
