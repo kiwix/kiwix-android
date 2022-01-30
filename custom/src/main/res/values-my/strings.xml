@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* ToJack
+* Dr Lotus Black
 -->
 <resources>
-  <string name="download">Боркунӣ</string>
+  <string name="retry">ပြန်လုပ်</string>
 </resources>

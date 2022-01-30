@@ -20,7 +20,9 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -31,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,9 +52,12 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -69,6 +75,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject lateinit var dialogShower: DialogShower
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
@@ -202,7 +209,27 @@ class LocalLibraryFragment : BaseFragment() {
         REQUEST_STORAGE_PERMISSION
       )
     } else {
-      requestFileSystemCheck()
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Environment.isExternalStorageManager()) {
+          // We already have permission!!
+          requestFileSystemCheck()
+        } else {
+          if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
+            // We should only ask for first time, If the users wants to revoke settings
+            // then they can directly toggle this feature from settings screen
+            sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
+            // Show Dialog and  Go to settings to give permission
+            dialogShower.show(
+              KiwixDialog.ManageExternalFilesPermissionDialog,
+              {
+                this.activity?.let(FragmentActivity::navigateToSettings)
+              }
+            )
+          }
+        }
+      } else {
+        requestFileSystemCheck()
+      }
     }
   }
 

@@ -73,12 +73,13 @@
   <string name="tts_lang_not_supported">השפה של הדף הזה אינה נתמכת, או שלא הותקנו נתוני שפה מתאימים. ייתכן שהערך לא יהיה קריא.</string>
   <string name="no_reader_application_installed">לא נמצאה אפליקציה מותקנת עבור סוג הקובץ הזה</string>
   <string name="no_section_info">לא נמצאו כותרות תוכן</string>
-  <string name="request_storage">על מנת לגשת לתכנים לא-מקוונים אנחנו צריכים לגשת לאחסון שלך</string>
+  <string name="request_storage">כדי לגשת לתכנים לא־מקוונים אנחנו צריכים גישה לאחסון שלך</string>
   <string name="clear_recent_and_tabs_history_dialog">למחוק את היסטוריית החיפוש ולאפס את כל הלשוניות הפעילות?</string>
   <string name="delete_recent_search_item">למחוק את הפריט הזה?</string>
   <string name="pref_clear_all_history_title">ניקוי ההיסטוריה</string>
   <string name="pref_clear_all_history_summary">ניקוי מילות חיפוש קודמות והיסטוריית כרטיסיות</string>
   <string name="pref_notes">הערות</string>
+  <string name="pref_permission">הרשאות</string>
   <string name="all_history_cleared">כל ההיסטוריה נמחקה</string>
   <string name="pref_clear_all_bookmarks_title">ניקוי סימניות</string>
   <string name="clear_all_history_dialog_title">לנקות את כל ההיסטוריה?</string>
@@ -253,6 +254,7 @@
   <string name="status">מצב</string>
   <string name="pref_clear_all_notes_summary">ניקוי כל ההערות בכל הערכים</string>
   <string name="pref_clear_all_notes_title">ניקוי כל ההערות</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">לאפשר לקרוא ולכתוב קובצי ZIM על כרטיס SD</string>
   <string name="pref_text_zoom_summary">לשנות את גודל הטקסט בקפיצות של 25%.</string>
   <string name="tag_pic">תמונה</string>
   <string name="tag_vid">סרטון</string>
@@ -287,4 +289,8 @@
   <string name="close_drawer">סגירת מגירה</string>
   <string name="how_to_update_content">איך לעדכן תוכן?</string>
   <string name="update_content_description">כדי לעדכן תוכן (קובץ zim) עליך להוריד את הגרסה המלאה העדכנית ביותר של אותו התוכן בדיוק. ניתן לעשות זאת דרך סעיף ההורדה.</string>
+  <string name="all_files_permission_needed">דרושים כל הרשאות הקבצים</string>
+  <string name="all_files_permission_needed_message">כדי לגשת לכל קובצי ה־zim במכשיר, אנחנו זקוקים להרשאת כל הקבצים</string>
+  <string name="allowed">מותר</string>
+  <string name="not_allowed">אסור</string>
 </resources>

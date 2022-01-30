@@ -49,11 +49,13 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -141,6 +143,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         zimManageViewModel.shouldShowWifiOnlyDialog.value = false
       }
     })
+
+    // hides keyboard when scrolled
+    libraryList.addOnScrollListener(SimpleRecyclerViewScrollListener { _, newState ->
+      if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+        libraryList.closeKeyboard()
+      }
+    })
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -158,7 +167,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.select_language -> requireActivity().navigate(R.id.languageFragment)
+      R.id.select_language -> {
+        requireActivity().navigate(R.id.languageFragment)
+        closeKeyboard()
+      }
     }
     return super.onOptionsItemSelected(item)
   }

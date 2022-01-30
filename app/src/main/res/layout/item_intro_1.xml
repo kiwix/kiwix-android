@@ -11,7 +11,7 @@
     app:layout_constraintHeight_max="160dp"
     app:layout_constraintWidth_max="160dp"
     android:scaleType="fitCenter"
-    android:src="@drawable/kiwix_icon_with_title"
+    android:src="@drawable/kiwix_icon"
     app:layout_constraintBottom_toTopOf="@id/heading"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

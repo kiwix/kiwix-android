@@ -71,6 +71,9 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_kiwix_main)
+    if (intent.action == "GET_CONTENT") {
+      navigate(R.id.downloadsFragment)
+    }
 
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
     drawer_nav_view.setupWithNavController(navController)

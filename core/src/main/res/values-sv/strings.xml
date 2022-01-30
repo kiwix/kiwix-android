@@ -75,6 +75,7 @@
   <string name="pref_clear_all_history_title">Rensa historik</string>
   <string name="pref_clear_all_history_summary">Rensa senaste sökningar och flikhistorik</string>
   <string name="pref_notes">Anteckningar</string>
+  <string name="pref_permission">Behörigheter</string>
   <string name="all_history_cleared">All historik rensades</string>
   <string name="pref_clear_all_bookmarks_title">Rensa bokmärken</string>
   <string name="clear_all_history_dialog_title">Rensa all historik?</string>
@@ -283,4 +284,6 @@
   <string name="close_drawer">Stäng sidomeny</string>
   <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
   <string name="update_content_description">För att uppdatera innehåll (en zim-fil) behöver du ladda ned den fullständig senaste versionen samma innehåll. Du kan göra det via nedladdningsavsnittet.</string>
+  <string name="allowed">Tillåten</string>
+  <string name="not_allowed">Inte tillåtet</string>
 </resources>

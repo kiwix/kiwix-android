@@ -40,6 +40,7 @@
   <string name="pref_credits">Auteuren a Lizenzen</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="pref_notes">Notizen</string>
+  <string name="pref_permission">Autorisatiounen</string>
   <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
   <string name="delete">Läschen</string>
   <string name="cancel">Ofbriechen</string>
@@ -124,4 +125,6 @@
   <string name="reader">Lieser</string>
   <string name="open_drawer">Tirang opmaachen</string>
   <string name="close_drawer">Tirang zoumaachen</string>
+  <string name="allowed">Erlaabt</string>
+  <string name="not_allowed">Net erlaabt</string>
 </resources>

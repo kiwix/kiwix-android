@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Besnik b
+-->
+<resources>
+  <string name="retry">Riprovo</string>
+  <string name="invalid_installation">Instalim i Pavlefshëm. Ju lutemi, Shkarkoni Zim-in.\n Sigurohuni se WiFi është i hapur dhe se keni hapësirë të mjaftueshme</string>
+</resources>

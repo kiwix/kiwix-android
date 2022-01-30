@@ -4,6 +4,5 @@
 -->
 <resources>
   <string name="retry">Tentar nuevamente</string>
-  <string name="download">Descargar</string>
   <string name="invalid_installation">Instalación inválida. Descarga Zim.\n Comprueba que la WiFi ta activada y que tienes espaciu bastante</string>
 </resources>
