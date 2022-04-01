@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -25,7 +26,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -346,6 +346,7 @@ class AddNoteDialog : DialogFragment() {
     enableDeleteNoteMenuItem()
   }
 
+  @SuppressLint("QueryPermissionsNeeded")
   private fun shareNote() {
 
     /* The note text file corresponding to the currently open article, given at:
@@ -399,7 +400,7 @@ class AddNoteDialog : DialogFragment() {
 
   companion object {
     @JvmField val NOTES_DIRECTORY =
-      Environment.getExternalStorageDirectory().toString() + "/Kiwix/Notes/"
+      instance.getExternalFilesDir("").toString() + "/Kiwix/Notes/"
     const val TAG = "AddNoteDialog"
   }
 }

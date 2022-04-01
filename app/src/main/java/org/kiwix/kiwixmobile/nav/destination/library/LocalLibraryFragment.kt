@@ -214,6 +214,7 @@ class LocalLibraryFragment : BaseFragment() {
           // We already have permission!!
           requestFileSystemCheck()
         } else {
+          sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
           if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
             // We should only ask for first time, If the users wants to revoke settings
             // then they can directly toggle this feature from settings screen

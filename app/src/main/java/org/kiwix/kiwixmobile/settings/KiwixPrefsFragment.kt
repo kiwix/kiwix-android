@@ -18,16 +18,16 @@
 
 package org.kiwix.kiwixmobile.settings
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
+import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_STORAGE
 
@@ -54,15 +54,26 @@ class KiwixPrefsFragment : CorePrefsFragment() {
     val permissionPref = findPreference<Preference>(PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       showPermissionPreference()
-      val externalStorageManager = Environment.isExternalStorageManager()
-      if (externalStorageManager) {
+
+      val isPermission = ContextCompat.checkSelfPermission(
+        requireActivity(),
+        Manifest.permission.READ_EXTERNAL_STORAGE
+      ) == PackageManager.PERMISSION_GRANTED
+
+      if (isPermission) {
         permissionPref!!.setSummary(org.kiwix.kiwixmobile.core.R.string.allowed)
       } else {
         permissionPref!!.setSummary(org.kiwix.kiwixmobile.core.R.string.not_allowed)
       }
       permissionPref.onPreferenceClickListener =
         Preference.OnPreferenceClickListener {
-          activity?.let(FragmentActivity::navigateToSettings)
+          if (!isPermission) {
+            requestPermissions(
+              arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+              REQUEST_STORAGE_PERMISSION
+            )
+          }
+          // activity?.let(FragmentActivity::navigateToSettings)
           true
         }
     }
