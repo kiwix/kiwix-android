@@ -26,6 +26,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -400,7 +401,7 @@ class AddNoteDialog : DialogFragment() {
 
   companion object {
     @JvmField val NOTES_DIRECTORY =
-      instance.getExternalFilesDir("").toString() + "/Kiwix/Notes/"
+      Environment.getExternalStorageDirectory().toString() + "/Kiwix/Notes/"
     const val TAG = "AddNoteDialog"
   }
 }
