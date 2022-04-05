@@ -6,7 +6,8 @@
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-  <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+  <uses-permission
+    android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
     tools:ignore="ScopedStorage" />
 
   <queries>
@@ -24,6 +25,7 @@
     android:icon="@mipmap/ic_launcher"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
+    android:usesCleartextTraffic="true"
     tools:targetApi="m">
 
     <activity
