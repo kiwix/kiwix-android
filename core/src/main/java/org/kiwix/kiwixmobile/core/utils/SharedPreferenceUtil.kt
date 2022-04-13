@@ -76,11 +76,14 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
       return when {
-        storage == null -> defaultStorage().also(::putPrefStorage)
-        !File(storage).exists() -> defaultStorage()
+        storage == null -> getActualPath(defaultStorage()).also(::putPrefStorage)
+        !File(storage).exists() -> getActualPath(defaultStorage())
         else -> storage
       }
     }
+
+  val storagePosition: Int
+    get() = sharedPreferences.getInt(STORAGE_POSITION, 0)
 
   private fun defaultStorage(): String =
     getExternalFilesDirs(context, null)[0]?.path
@@ -106,6 +109,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
     _prefStorages.onNext(storage)
+  }
+
+  fun putStoragePosition(pos: Int) {
+    sharedPreferences.edit { putInt(STORAGE_POSITION, pos) }
   }
 
   fun putPrefFullScreen(fullScreen: Boolean) =
@@ -160,10 +167,22 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       _textZooms.offer(textZoom)
     }
 
+  fun getActualPath(path: String): String {
+    var s = path
+    val separator = "/Android"
+    val sepPos = path.indexOf(separator)
+    if (sepPos == -1) {
+    } else {
+      s = path.substring(0, sepPos)
+    }
+    return s
+  }
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
     const val PREF_STORAGE = "pref_select_folder"
+    const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"

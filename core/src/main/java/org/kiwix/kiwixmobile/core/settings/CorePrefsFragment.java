@@ -20,12 +20,17 @@ package org.kiwix.kiwixmobile.core.settings;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.navigation.NavController;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
@@ -51,6 +56,10 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
 
+import static android.app.Activity.RESULT_OK;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTERNAL_SELECT_POSITION;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.INTERNAL_SELECT_POSITION;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_SELECT_FOLDER_PERMISSION;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
 
@@ -175,9 +184,6 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     versionPref.setSummary(getVersionName() + " Build: " + getVersionCode());
   }
 
-
-
-
   private int getVersionCode() {
     try {
       return getActivity().getPackageManager()
@@ -278,13 +284,52 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     findPreference(PREF_STORAGE).setSummary(
       storageCalculator.calculateAvailableSpace(storageDevice.getFile())
     );
-    sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
+
     if (storageDevice.isInternal()) {
+      sharedPreferenceUtil.putPrefStorage(
+        sharedPreferenceUtil.getActualPath(storageDevice.getName()));
       findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
+      sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION);
     } else {
-      findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+      setFolder();
     }
     return Unit.INSTANCE;
   }
 
+  private void setFolder() {
+    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+    intent.putExtra("android.content.extra.SHOW_ADVANCED", true);
+    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION);
+  }
+
+  @SuppressLint("WrongConstant") @Override
+  public void onActivityResult(int requestCode, int resultCode,
+    @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == RESULT_OK) {
+      Uri uri = data.getData();
+      int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+      getActivity().grantUriPermission(getActivity().getPackageName(), uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+      getActivity().getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+      DocumentFile dfile = DocumentFile.fromTreeUri(getActivity(), uri);
+      String meraPath =
+        dfile.getUri().getPath().substring(dfile.getUri().getPath().lastIndexOf(":") + 1);
+
+      String path = getActivity().getExternalFilesDirs("")[1].toString();
+      String separator = "/Android";
+      int sepPos = path.indexOf(separator);
+      if (sepPos == -1) {
+
+      } else {
+        path = path.substring(0, sepPos);
+      }
+      path = path + File.separator + meraPath;
+      sharedPreferenceUtil.putPrefStorage(path);
+      findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+      sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
+    }
+  }
 }

@@ -41,7 +41,7 @@ class KiwixPrefsFragment : CorePrefsFragment() {
 
   override fun setStorage() {
     findPreference<Preference>(PREF_STORAGE)?.title = getString(
-      if (sharedPreferenceUtil.prefStorage == internalStorage()) R.string.internal_storage
+      if (sharedPreferenceUtil.prefStorage == internalStorage()?.let(sharedPreferenceUtil::getActualPath)) R.string.internal_storage
       else R.string.external_storage
     )
     findPreference<Preference>(PREF_STORAGE)?.summary = storageCalculator.calculateAvailableSpace()

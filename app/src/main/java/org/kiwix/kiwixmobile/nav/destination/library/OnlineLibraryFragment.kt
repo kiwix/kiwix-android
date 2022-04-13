@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -31,6 +33,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,7 +56,10 @@ import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
+import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -66,6 +72,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
+import java.io.File
 import javax.inject.Inject
 
 class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
@@ -243,7 +250,52 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
-    sharedPreferenceUtil.putPrefStorage(storageDevice.name)
+    if (storageDevice.isInternal) {
+      sharedPreferenceUtil.putPrefStorage(
+        sharedPreferenceUtil.getActualPath(storageDevice.name)
+      )
+      sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
+    } else {
+      setFolder()
+    }
+  }
+
+  private fun setFolder() {
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+    intent.putExtra("android.content.extra.SHOW_ADVANCED", true)
+    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION)
+  }
+
+  @SuppressLint("WrongConstant") override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == Activity.RESULT_OK) {
+      val uri = data!!.data
+      val takeFlags = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION
+        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+      requireActivity().grantUriPermission(
+        requireActivity().packageName, uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      )
+      requireActivity().contentResolver.takePersistableUriPermission(uri!!, takeFlags)
+      val dfile = DocumentFile.fromTreeUri(requireActivity(), uri)
+      val meraPath = dfile!!.uri.path!!.substring(
+        dfile.uri.path!!.lastIndexOf(":") + 1
+      )
+      var path = "${requireActivity().getExternalFilesDirs("")[1]}"
+      val separator = "/Android"
+      val sepPos = path.indexOf(separator)
+      if (sepPos == -1) {
+      } else {
+        path = path.substring(0, sepPos)
+      }
+      path = path + File.separator + meraPath
+      sharedPreferenceUtil.putPrefStorage(path)
+      sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+    }
   }
 
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
