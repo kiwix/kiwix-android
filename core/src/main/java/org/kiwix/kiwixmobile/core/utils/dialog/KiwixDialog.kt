@@ -185,6 +185,14 @@ sealed class KiwixDialog(
     getView = customGetView
   )
 
+  data class SelectFolder(val customGetView: (() -> View)?) : KiwixDialog(
+    R.string.select_folder,
+    null,
+    android.R.string.ok,
+    null,
+    getView = customGetView
+  )
+
   object NotesDiscardConfirmation : KiwixDialog(
     null,
     R.string.confirmation_alert_dialog_message,

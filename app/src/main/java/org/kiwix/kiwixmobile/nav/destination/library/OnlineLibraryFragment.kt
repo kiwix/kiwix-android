@@ -22,6 +22,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -33,7 +34,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,14 +65,15 @@ import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
-import java.io.File
 import javax.inject.Inject
 
 class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
@@ -249,6 +250,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     downloader.download(book)
   }
 
+  @SuppressLint("InflateParams")
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
     if (storageDevice.isInternal) {
       sharedPreferenceUtil.putPrefStorage(
@@ -256,13 +258,24 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
     } else {
-      setFolder()
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
+        dialogShower.show(SelectFolder { view }, ::selectFolder)
+      } else {
+        sharedPreferenceUtil.putPrefStorage(storageDevice.name)
+        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+      }
     }
   }
 
-  private fun setFolder() {
+  private fun selectFolder() {
     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-    intent.putExtra("android.content.extra.SHOW_ADVANCED", true)
+    intent.addFlags(
+      Intent.FLAG_GRANT_READ_URI_PERMISSION
+        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+    )
     startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION)
   }
 
@@ -273,27 +286,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   ) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == Activity.RESULT_OK) {
-      val uri = data!!.data
-      val takeFlags = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION
-        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-      requireActivity().grantUriPermission(
-        requireActivity().packageName, uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      sharedPreferenceUtil.putPrefStorage(
+        getPathFromUri(requireActivity(), data!!)
       )
-      requireActivity().contentResolver.takePersistableUriPermission(uri!!, takeFlags)
-      val dfile = DocumentFile.fromTreeUri(requireActivity(), uri)
-      val meraPath = dfile!!.uri.path!!.substring(
-        dfile.uri.path!!.lastIndexOf(":") + 1
-      )
-      var path = "${requireActivity().getExternalFilesDirs("")[1]}"
-      val separator = "/Android"
-      val sepPos = path.indexOf(separator)
-      if (sepPos == -1) {
-      } else {
-        path = path.substring(0, sepPos)
-      }
-      path = path + File.separator + meraPath
-      sharedPreferenceUtil.putPrefStorage(path)
       sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
     }
   }

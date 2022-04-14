@@ -27,6 +27,7 @@ import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.Companion.from
+import org.kiwix.kiwixmobile.core.R
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -77,7 +78,12 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
       return when {
         storage == null -> getActualPath(defaultStorage()).also(::putPrefStorage)
-        !File(storage).exists() -> getActualPath(defaultStorage())
+          .also {
+            putStoragePosition(0)
+          }
+        !File(storage).exists() -> getActualPath(defaultStorage()).also {
+          putStoragePosition(0)
+        }
         else -> storage
       }
     }
@@ -169,10 +175,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun getActualPath(path: String): String {
     var s = path
-    val separator = "/Android"
+    val separator = context.getString(R.string.android_directory_seperator)
     val sepPos = path.indexOf(separator)
-    if (sepPos == -1) {
-    } else {
+    if (sepPos != -1) {
       s = path.substring(0, sepPos)
     }
     return s

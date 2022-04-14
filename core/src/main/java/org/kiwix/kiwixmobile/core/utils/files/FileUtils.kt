@@ -17,19 +17,23 @@
  */
 package org.kiwix.kiwixmobile.core.utils.files
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
+import androidx.documentfile.provider.DocumentFile
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
-import java.util.ArrayList
 
 object FileUtils {
 
@@ -227,5 +231,30 @@ object FileUtils {
       .use(BufferedReader::readText)
   } catch (e: IOException) {
     "".also { e.printStackTrace() }
+  }
+
+  @SuppressLint("WrongConstant")
+  @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String {
+    val uri: Uri? = data.data
+    val takeFlags: Int = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION
+      or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+    activity.grantUriPermission(
+      activity.packageName, uri,
+      Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+    )
+    activity.contentResolver.takePersistableUriPermission(uri!!, takeFlags)
+
+    val dFile = DocumentFile.fromTreeUri(activity, uri)
+    val originalPath = dFile!!.uri.path!!.substring(
+      dFile.uri.path!!.lastIndexOf(":") + 1
+    )
+
+    var path = "${activity.getExternalFilesDirs("")[1]}"
+    val separator: String = activity.getString(R.string.android_directory_seperator)
+    val sepPos = path.indexOf(separator)
+    if (sepPos != -1) {
+      path = path.substring(0, sepPos)
+    }
+    return path + File.separator + originalPath
   }
 }

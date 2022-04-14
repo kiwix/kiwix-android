@@ -23,14 +23,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.webkit.WebView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.documentfile.provider.DocumentFile;
 import androidx.navigation.NavController;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
@@ -55,8 +54,10 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTERNAL_SELECT_POSITION;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.INTERNAL_SELECT_POSITION;
 import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_SELECT_FOLDER_PERMISSION;
@@ -291,14 +292,28 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
       findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION);
     } else {
-      setFolder();
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(getActivity()).inflate(R.layout.select_folder_dialog, null);
+        alertDialogShower.show(new KiwixDialog.SelectFolder(() -> view), () -> {
+          selectFolder();
+          return Unit.INSTANCE;
+        });
+      } else {
+        sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
+        findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
+      }
     }
     return Unit.INSTANCE;
   }
 
-  private void setFolder() {
-    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-    intent.putExtra("android.content.extra.SHOW_ADVANCED", true);
+  private void selectFolder() {
+    Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
+    intent.addFlags(
+      Intent.FLAG_GRANT_READ_URI_PERMISSION
+        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
     startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION);
   }
 
@@ -307,27 +322,8 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     @Nullable Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == RESULT_OK) {
-      Uri uri = data.getData();
-      int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-      getActivity().grantUriPermission(getActivity().getPackageName(), uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-      getActivity().getContentResolver().takePersistableUriPermission(uri, takeFlags);
-
-      DocumentFile dfile = DocumentFile.fromTreeUri(getActivity(), uri);
-      String meraPath =
-        dfile.getUri().getPath().substring(dfile.getUri().getPath().lastIndexOf(":") + 1);
-
-      String path = getActivity().getExternalFilesDirs("")[1].toString();
-      String separator = "/Android";
-      int sepPos = path.indexOf(separator);
-      if (sepPos == -1) {
-
-      } else {
-        path = path.substring(0, sepPos);
-      }
-      path = path + File.separator + meraPath;
-      sharedPreferenceUtil.putPrefStorage(path);
+      sharedPreferenceUtil.putPrefStorage(
+        FileUtils.getPathFromUri(requireActivity(), data));
       findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
       sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
     }
