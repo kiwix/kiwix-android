@@ -7,6 +7,7 @@
 * Reke
 * Weather Top Wizard
 * Wehwei
+* Winston Sung
 -->
 <resources>
   <string name="menu_help">說明</string>
@@ -188,7 +189,7 @@
   <string name="unable_to_add_to_bookmarks">無法新增書籤</string>
   <string name="go_to_previous_page">前往上一頁</string>
   <string name="go_to_next_page">前往下一頁</string>
-  <string name="table_of_contents">目錄</string>
+  <string name="table_of_contents">目次</string>
   <string name="select_languages">選擇語言</string>
   <string name="save_languages">儲存語言</string>
   <string name="send_feedback">送出回饋意見</string>

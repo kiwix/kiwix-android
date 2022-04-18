@@ -51,6 +51,7 @@
   <string name="start_server_label">Starta server</string>
   <string name="stop_server_label">Stoppa server</string>
   <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
+  <string name="share_host_address">Dela webbadress med andra appar</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas.</string>
   <string name="zim_not_opened">Kunde inte öppna zip-fil</string>
   <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
@@ -250,6 +251,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Rensar alla anteckningar på alla artiklar</string>
   <string name="pref_clear_all_notes_title">Rensa alla anteckningar</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Tillåt att läsa och skriva ZIM-filer till SD-kortet</string>
   <string name="pref_text_zoom_summary">Ändra textstorlek med steg på 25%.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
@@ -284,6 +286,8 @@
   <string name="close_drawer">Stäng sidomeny</string>
   <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
   <string name="update_content_description">För att uppdatera innehåll (en zim-fil) behöver du ladda ned den fullständig senaste versionen samma innehåll. Du kan göra det via nedladdningsavsnittet.</string>
+  <string name="all_files_permission_needed">Behörighet för alla filer behövs</string>
+  <string name="all_files_permission_needed_message">För att kunna komma åt alla ZIM-filer på enheten behöver vi behörighet för alla filer</string>
   <string name="allowed">Tillåten</string>
   <string name="not_allowed">Inte tillåtet</string>
 </resources>

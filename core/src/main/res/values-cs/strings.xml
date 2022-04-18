@@ -57,6 +57,7 @@
   <string name="start_server_label">Spustit server</string>
   <string name="stop_server_label">Zastavit server</string>
   <string name="server_started_message">Vložte tuto IP adresu do svého prohlížeče pro přístup na server %s</string>
+  <string name="share_host_address">Sdílet URL přes jiné aplikace</string>
   <string name="error_file_not_found">Chyba: Nelze najít vybraný soubor ZIM.</string>
   <string name="zim_not_opened">Nelze otevřít soubor zim</string>
   <string name="error_file_invalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>
@@ -81,6 +82,7 @@
   <string name="pref_clear_all_history_title">Smazat historii</string>
   <string name="pref_clear_all_history_summary">Smazat nedávná hledání a historii karet</string>
   <string name="pref_notes">Poznámky</string>
+  <string name="pref_permission">Oprávnění</string>
   <string name="all_history_cleared">Všechna historie odstraněna</string>
   <string name="pref_clear_all_bookmarks_title">Vymazat záložky</string>
   <string name="clear_all_history_dialog_title">Smazat celou historii?</string>
@@ -255,6 +257,7 @@
   <string name="status">Stav</string>
   <string name="pref_clear_all_notes_summary">Vymazat všechny poznámky ke všem článkům</string>
   <string name="pref_clear_all_notes_title">Vymazat všechny poznámky</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Povolit číst a zapisovat soubory ZIM na kartu SD</string>
   <string name="pref_text_zoom_summary">Změnit velikost textu s přírůstkem 25%.</string>
   <string name="tag_pic">Obrázek</string>
   <string name="tag_vid">Video</string>
@@ -289,4 +292,8 @@
   <string name="close_drawer">Zavřít náčtník</string>
   <string name="how_to_update_content">Jak aktualizovat obsah?</string>
   <string name="update_content_description">Chcete-li aktualizovat obsah (soubor zim), musíte si stáhnout úplnou nejnovější verzi tohoto stejného obsahu. Můžete to udělat v sekci stahování.</string>
+  <string name="all_files_permission_needed">Potřebné povolení pro všechny soubory</string>
+  <string name="all_files_permission_needed_message">Pro přístup k souborům ZIM musíme mít povolenou funkci Povolení pro všechny soubory</string>
+  <string name="allowed">Povoleno</string>
+  <string name="not_allowed">Není povoleno</string>
 </resources>
