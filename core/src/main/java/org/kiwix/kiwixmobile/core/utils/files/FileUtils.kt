@@ -23,12 +23,14 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
 import java.util.ArrayList
 
 object FileUtils {
@@ -98,6 +100,11 @@ object FileUtils {
 
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
+        }
+        return try {
+          "${getSdCardMainPath(context)}/${documentId[1]}"
+        } catch (e: Exception) {
+          null
         }
       } else if ("com.android.providers.downloads.documents" == uri.authority)
         return try {
@@ -227,5 +234,22 @@ object FileUtils {
       .use(BufferedReader::readText)
   } catch (e: IOException) {
     "".also { e.printStackTrace() }
+  }
+
+  @JvmStatic fun isValidFile(filePath: String): Boolean {
+    if (filePath.endsWith(".zim") || filePath.endsWith(".zimaa")) {
+      return true
+    }
+    return false
+  }
+
+  @JvmStatic fun getSdCardMainPath(context: Context): String {
+    var path = "${context.getExternalFilesDirs("")[1]}"
+    val separator: String = context.getString(R.string.android_directory_seperator)
+    val sepPos = path.indexOf(separator)
+    if (sepPos != -1) {
+      path = path.substring(0, sepPos)
+    }
+    return path
   }
 }
