@@ -70,10 +70,10 @@
   <string name="pref_info_version">Version</string>
   <string name="pref_night_mode">Mode nocturne</string>
   <string name="pref_night_mode_summary">Afficher les articles en couleurs inversées</string>
-  <string name="pref_back_to_top">Retourner au début</string>
+  <string name="pref_back_to_top">Retour en haut</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir au début</string>
   <string name="pref_language_title">Langue</string>
-  <string name="pref_language_chooser">Choisir une langue</string>
+  <string name="pref_language_chooser">Choisissez une langue</string>
   <string name="pref_credits">Contributeurs et licences</string>
   <string name="pref_credits_title">Remerciements</string>
   <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge ou les données linguistiques appropriées n’ont pas été installées. L’article risque d’être difficile à lire.</string>
@@ -174,7 +174,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Hé bien… c’est embarrassant.</string>
+  <string name="crash_title">Hé bien... c’est embarrassant.</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -255,8 +255,8 @@
   <string name="nearby_devices">APPAREILS À PROXIMITÉ</string>
   <string name="no_devices_found">Aucun appareil détecté. Tapez le bouton Rechercher pour essayer à nouveau.</string>
   <string name="files_for_transfer">FICHIERS À TRANSFÉRER</string>
-  <string name="preparing_files">Préparation des fichiers pour le transfert…</string>
-  <string name="performing_handshake">Établissement de liaison en cours…</string>
+  <string name="preparing_files">Préparation des fichiers pour le transfert...</string>
+  <string name="performing_handshake">Négociation de la liaison...</string>
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>
@@ -295,7 +295,7 @@
   <string name="close_drawer">Fermer le tiroir</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>
-  <string name="all_files_permission_needed">Tous les droits sur les fichiers nécessaires</string>
+  <string name="all_files_permission_needed">Tous les droits sur les fichiers sont nécessaires</string>
   <string name="all_files_permission_needed_message">Afin d’accéder à tous les fichiers zim sur l’appareil, nous devons avoir tous les droits sur les fichiers</string>
   <string name="allowed">Autorisé</string>
   <string name="not_allowed">Non autorisé</string>

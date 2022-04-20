@@ -109,7 +109,7 @@
   <string name="no_items_msg">ھیچ بڕگەیەک بەردەست نییە</string>
   <string name="crash_checkbox_language">ڕێکخستنەکانی زمانەکەت</string>
   <string name="crash_checkbox_logs">لۆگەکانی ئەپلیکەیشن</string>
-  <string name="shortcut_disabled_message">ناوبڕ بەردەست نییە</string>
+  <string name="shortcut_disabled_message">قەدبڕ بەردەست نییە</string>
   <string name="new_tab_shortcut_label">تابی نوێ</string>
   <string name="articleCount">%s وتار</string>
   <string name="get_started">دەست پێ بکە</string>
