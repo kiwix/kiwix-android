@@ -18,12 +18,18 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.intro.IntroRobot
+import org.kiwix.kiwixmobile.intro.intro
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
@@ -38,6 +44,9 @@ class KiwixSettingsFragmentTest {
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
   @Before fun setup() {
+    //Go to IntroFragment
+    UiThreadStatement.runOnUiThread { activityTestRule.activity.navigate(R.id.introFragment) }
+    intro(IntroRobot::swipeLeft) clickGetStarted { }
     StandardActions.openDrawer()
     StandardActions.enterSettings()
   }
@@ -55,6 +64,8 @@ class KiwixSettingsFragmentTest {
       toggleExternalLinkWarningPref()
       toggleWifiDownloadsOnlyPref()
       clickStoragePreference()
+      //Let's pause here for a moment because calculating storage takes some time
+      BaristaSleepInteractions.sleep(TEST_PAUSE_MS.toLong())
       assertStorageDialogDisplayed()
       dismissDialog()
       clickClearHistoryPreference()
