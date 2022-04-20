@@ -44,7 +44,7 @@ class KiwixSettingsFragmentTest {
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
   @Before fun setup() {
-    //Go to IntroFragment
+    // Go to IntroFragment
     UiThreadStatement.runOnUiThread { activityTestRule.activity.navigate(R.id.introFragment) }
     intro(IntroRobot::swipeLeft) clickGetStarted { }
     StandardActions.openDrawer()
@@ -64,7 +64,7 @@ class KiwixSettingsFragmentTest {
       toggleExternalLinkWarningPref()
       toggleWifiDownloadsOnlyPref()
       clickStoragePreference()
-      //Let's pause here for a moment because calculating storage takes some time
+      // Let's pause here for a moment because calculating storage takes some time
       BaristaSleepInteractions.sleep(TEST_PAUSE_MS.toLong())
       assertStorageDialogDisplayed()
       dismissDialog()
