@@ -15,12 +15,12 @@ jobs:
   coverageReport:
     strategy:
       matrix:
-        api-level: [21, 21, 30]
+        api-level: [21, 21,29, 30]
       fail-fast: false
     runs-on: macOS-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
         with:
           fetch-depth: 1
 
