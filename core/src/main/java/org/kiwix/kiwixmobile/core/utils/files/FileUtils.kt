@@ -253,7 +253,9 @@ object FileUtils {
           dFile.uri.path!!.lastIndexOf(":") + 1
         )
         val path = "${activity.getExternalFilesDirs("")[1]}"
-        return@getPathFromUri path.substringBefore(activity.getString(R.string.android_directory_seperator))
+        return@getPathFromUri path.substringBefore(
+          activity.getString(R.string.android_directory_seperator)
+        )
           .plus(File.separator).plus(originalPath)
       }
       activity.toast(activity.resources.getString(R.string.error_occurred), Toast.LENGTH_SHORT)
