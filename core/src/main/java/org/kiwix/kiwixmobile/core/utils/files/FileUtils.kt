@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
+import org.kiwix.kiwixmobile.core.extensions.getStringBefore
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -103,7 +104,7 @@ object FileUtils {
         }
         return try {
           "${getSdCardMainPath(context)}/${documentId[1]}"
-        } catch (e: Exception) {
+        } catch (ignore: Exception) {
           null
         }
       } else if ("com.android.providers.downloads.documents" == uri.authority)
@@ -243,13 +244,7 @@ object FileUtils {
     return false
   }
 
-  @JvmStatic fun getSdCardMainPath(context: Context): String {
-    var path = "${context.getExternalFilesDirs("")[1]}"
-    val separator: String = context.getString(R.string.android_directory_seperator)
-    val sepPos = path.indexOf(separator)
-    if (sepPos != -1) {
-      path = path.substring(0, sepPos)
-    }
-    return path
-  }
+  @JvmStatic fun getSdCardMainPath(context: Context): String =
+    "${context.getExternalFilesDirs("")[1]}"
+      .getStringBefore(context.getString(R.string.android_directory_seperator))
 }

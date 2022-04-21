@@ -32,6 +32,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -163,7 +164,7 @@ class LocalLibraryFragment : BaseFragment() {
         FILE_SELECT_CODE
       )
     } catch (ex: ActivityNotFoundException) {
-      ex.printStackTrace()
+      activity.toast(resources.getString(R.string.no_app_found_to_open), Toast.LENGTH_SHORT)
     }
   }
 

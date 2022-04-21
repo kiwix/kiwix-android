@@ -6,4 +6,5 @@
   <string name="cannot_open_file">Failed to open file\nPlease try looking for this file in the Device Tab of your Library</string>
   <string name="send_files_title">Send Files</string>
   <string name="receive_files_title">Receive Files</string>
+  <string name="no_app_found_to_open" translatable="false">No app found to select zim file!</string>
 </resources>
