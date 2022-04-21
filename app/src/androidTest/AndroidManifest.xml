@@ -3,7 +3,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.kiwix.kiwixmobile">
   <application
-    android:usesCleartextTraffic="true"/>
+    android:usesCleartextTraffic="true"
+    android:networkSecurityConfig="@xml/network_security_config/>
 
   <uses-sdk tools:overrideLibrary="android_libs.ub_uiautomator" />
 </manifest>
