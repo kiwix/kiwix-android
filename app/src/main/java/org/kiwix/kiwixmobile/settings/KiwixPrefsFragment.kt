@@ -42,7 +42,7 @@ class KiwixPrefsFragment : CorePrefsFragment() {
   override fun setStorage() {
     findPreference<Preference>(PREF_STORAGE)?.title = getString(
       if (sharedPreferenceUtil.prefStorage == internalStorage()?.let
-          (sharedPreferenceUtil::getActualPath)
+          (sharedPreferenceUtil::getPublicDirectoryPath)
       ) R.string.internal_storage
       else R.string.external_storage
     )

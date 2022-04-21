@@ -24,7 +24,7 @@
   <ImageView
     android:id="@+id/img"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
     android:layout_marginTop="15dp"
     android:contentDescription="@string/app_name"
     android:src="@drawable/select_folder_preview_image1"
@@ -34,7 +34,7 @@
 
   <ImageView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="8dp"
     android:contentDescription="@string/app_name"

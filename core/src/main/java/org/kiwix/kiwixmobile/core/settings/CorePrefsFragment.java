@@ -288,7 +288,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
 
     if (storageDevice.isInternal()) {
       sharedPreferenceUtil.putPrefStorage(
-        sharedPreferenceUtil.getActualPath(storageDevice.getName()));
+        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.getName()));
       findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION);
     } else {

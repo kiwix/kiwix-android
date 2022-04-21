@@ -45,6 +45,7 @@ dependencies {
   // SquiDB
   implementation(Libs.squidb)
   implementation(Libs.squidb_annotations)
+  implementation("androidx.documentfile:documentfile:1.0.1")
   add("kapt", Libs.squidb_processor)
 
   // Document File

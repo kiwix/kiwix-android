@@ -31,6 +31,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -54,6 +55,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -254,7 +256,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
     if (storageDevice.isInternal) {
       sharedPreferenceUtil.putPrefStorage(
-        sharedPreferenceUtil.getActualPath(storageDevice.name)
+        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
       )
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
     } else {
@@ -286,10 +288,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   ) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == Activity.RESULT_OK) {
-      sharedPreferenceUtil.putPrefStorage(
-        getPathFromUri(requireActivity(), data!!)
-      )
-      sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+      data?.let {
+        getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
+        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+      } ?: run {
+        activity.toast(resources.getString(R.string.error_occurred), Toast.LENGTH_SHORT)
+      }
     }
   }
 

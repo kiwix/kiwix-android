@@ -77,11 +77,11 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
       return when {
-        storage == null -> getActualPath(defaultStorage()).also(::putPrefStorage)
-          .also {
-            putStoragePosition(0)
-          }
-        !File(storage).exists() -> getActualPath(defaultStorage()).also {
+        storage == null -> getPublicDirectoryPath(defaultStorage()).also {
+          putPrefStorage(it)
+          putStoragePosition(0)
+        }
+        !File(storage).exists() -> getPublicDirectoryPath(defaultStorage()).also {
           putStoragePosition(0)
         }
         else -> storage
@@ -173,15 +173,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       _textZooms.offer(textZoom)
     }
 
-  fun getActualPath(path: String): String {
-    var s = path
-    val separator = context.getString(R.string.android_directory_seperator)
-    val sepPos = path.indexOf(separator)
-    if (sepPos != -1) {
-      s = path.substring(0, sepPos)
-    }
-    return s
-  }
+  fun getPublicDirectoryPath(path: String): String =
+    path.substringBefore(context.getString(R.string.android_directory_seperator))
 
   companion object {
     // Prefs

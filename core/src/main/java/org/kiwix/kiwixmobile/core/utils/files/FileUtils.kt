@@ -26,11 +26,13 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
+import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
+import org.kiwix.kiwixmobile.core.extensions.toast
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -234,27 +236,30 @@ object FileUtils {
   }
 
   @SuppressLint("WrongConstant")
-  @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String {
+  @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String? {
     val uri: Uri? = data.data
     val takeFlags: Int = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION
       or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-    activity.grantUriPermission(
-      activity.packageName, uri,
-      Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-    )
-    activity.contentResolver.takePersistableUriPermission(uri!!, takeFlags)
+    uri?.let {
+      activity.grantUriPermission(
+        activity.packageName, uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      )
+      activity.contentResolver.takePersistableUriPermission(uri, takeFlags)
 
-    val dFile = DocumentFile.fromTreeUri(activity, uri)
-    val originalPath = dFile!!.uri.path!!.substring(
-      dFile.uri.path!!.lastIndexOf(":") + 1
-    )
-
-    var path = "${activity.getExternalFilesDirs("")[1]}"
-    val separator: String = activity.getString(R.string.android_directory_seperator)
-    val sepPos = path.indexOf(separator)
-    if (sepPos != -1) {
-      path = path.substring(0, sepPos)
+      val dFile = DocumentFile.fromTreeUri(activity, uri)
+      if (dFile != null) {
+        val originalPath = dFile.uri.path!!.substring(
+          dFile.uri.path!!.lastIndexOf(":") + 1
+        )
+        val path = "${activity.getExternalFilesDirs("")[1]}"
+        return@getPathFromUri path.substringBefore(activity.getString(R.string.android_directory_seperator))
+          .plus(File.separator).plus(originalPath)
+      }
+      activity.toast(activity.resources.getString(R.string.error_occurred), Toast.LENGTH_SHORT)
+    } ?: run {
+      activity.toast(activity.resources.getString(R.string.error_occurred), Toast.LENGTH_SHORT)
     }
-    return path + File.separator + originalPath
+    return null
   }
 }
