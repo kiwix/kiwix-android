@@ -3,7 +3,7 @@
 * Alno
 * Derugon
 * Djiboun
-* Eneelk
+* Eneelktransfer_to
 * Fitoschido
 * Gomoko
 * Kelson
@@ -16,7 +16,7 @@
 * Wladek92
 * Yasten
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Aide</string>
   <string name="menu_home">Accueil</string>
   <string name="menu_settings">Options</string>
@@ -113,12 +113,12 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Article ouvert dans un nouvel onglet</string>
   <string name="search_widget_text">Rechercher dans Kiwix</string>
-  <string name="speech_prompt_text">Parler pour rechercher %s</string>
+  <string name="speech_prompt_text">Parler pour rechercher \%s</string>
   <string name="speech_not_supported">Désolé ! Votre appareil ne prend pas en charge la saisie vocale</string>
   <string name="local_zims">Appareil</string>
   <string name="remote_zims">En ligne</string>
   <string name="library">Bibliothèque</string>
-  <string name="delete_zim_body">Le ou les fichiers zim suivants seront supprimés :\n\n%s</string>
+  <string name="delete_zim_body">Le ou les fichiers zim suivants seront supprimés :\n\n\%s</string>
   <string name="delete_zims_toast">Les fichiers ont bien été supprimés</string>
   <string name="no_files_here">Aucun fichier ici</string>
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
@@ -174,7 +174,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Hé bien... c’est embarrassant.</string>
+  <string name="crash_title">Hé bien… c’est embarrassant.</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -213,7 +213,7 @@
   <string name="running_state">En cours</string>
   <string name="complete">Terminer</string>
   <string name="paused_state">En pause</string>
-  <string name="failed_state">Échec : %s</string>
+  <string name="failed_state">Échec : \%s</string>
   <string name="save">Enregistrer</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Titre de l’article du Wiki</string>
@@ -231,7 +231,7 @@
   <string name="ext_storage_permission_not_granted">Erreur : permissions de stockage non accordées</string>
   <string name="notes_deletion_successful">Dossier entier de notes supprimé</string>
   <string name="notes_deletion_unsuccessful">Certains fichiers n’ont pas été supprimés</string>
-  <string name="books_count">%d livre(s)</string>
+  <string name="books_count">\%d livre(s)</string>
   <string name="discovery_initiated">Découverte lancée</string>
   <string name="discovery_failed">La découverte a échoué</string>
   <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair en WiFi</string>
@@ -244,19 +244,19 @@
   <string name="discovery_needs_location">Impossible de découvrir des pairs sans service de géolocalisation</string>
   <string name="request_enable_wifi">Activer le pair-à-pair WiFi dans les paramètres système</string>
   <string name="discovery_needs_wifi">Impossible de découvrir des pairs sans WiFi activé</string>
-  <string name="transfer_to">Transférer les fichiers vers %s ?</string>
+  <string name="transfer_to">Transférer les fichiers vers \%s ?</string>
   <string name="device_not_cooperating">L’appareil sélectionné ne coopère pas pour le transfert</string>
   <string name="file_transfer_complete">Transfert de fichier bien terminé</string>
   <string name="error_during_transfer">Une erreur est survenue durant le transfert</string>
-  <string name="error_transferring">Erreur durant le transfert du fichier %s</string>
+  <string name="error_transferring">Erreur durant le transfert du fichier \%s</string>
   <string name="get_content_from_nearby_device">Obtenir des contenus depuis un appareil à proximité</string>
   <string name="search_for_peers">Rechercher des appareils pairs</string>
   <string name="your_device">Votre appareil :</string>
   <string name="nearby_devices">APPAREILS À PROXIMITÉ</string>
   <string name="no_devices_found">Aucun appareil détecté. Tapez le bouton Rechercher pour essayer à nouveau.</string>
   <string name="files_for_transfer">FICHIERS À TRANSFÉRER</string>
-  <string name="preparing_files">Préparation des fichiers pour le transfert...</string>
-  <string name="performing_handshake">Négociation de la liaison...</string>
+  <string name="preparing_files">Préparation des fichiers pour le transfert…</string>
+  <string name="performing_handshake">Négociation de la liaison…</string>
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>

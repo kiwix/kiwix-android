@@ -68,12 +68,12 @@
   <string name="pref_newtab_background_summary">لەکاتی کردنەوەی تابێکی نوێ لە پشتینەدا دەکرێتەوە</string>
   <string name="new_tab_snack_bar">وتارەکە لە تابێکی نوێ کرایەوە</string>
   <string name="search_widget_text">بگەڕێ لە کیویکس</string>
-  <string name="speech_prompt_text">قسەبکە بۆ گەڕان %s</string>
+  <string name="speech_prompt_text">قسەبکە بۆ گەڕان \%s</string>
   <string name="speech_not_supported">ببورە! ئامێرەکەت پشتگیری قسە ناکات</string>
   <string name="local_zims">ئامێر</string>
   <string name="remote_zims">سەرھێڵ</string>
   <string name="library">کتێبخانە</string>
-  <string name="delete_zim_body" fuzzy="true">لابردنی %s</string>
+  <string name="delete_zim_body" fuzzy="true">لابردنی \%s</string>
   <string name="delete_zims_toast">پەڕگە سڕدرایەوە</string>
   <string name="no_files_here">ھیچ پەڕگەیەک لێرە نییە</string>
   <string name="download">داگرتن</string>
@@ -133,7 +133,7 @@
   <string name="running_state">لەژێر کاردا</string>
   <string name="complete">تەواو</string>
   <string name="paused_state">ڕاگیرا</string>
-  <string name="failed_state">شکستی ھێنا: %s</string>
+  <string name="failed_state">شکستی ھێنا: %\s</string>
   <string name="save">پاشەکەوت</string>
   <string name="note">تێبینی</string>
   <string name="wiki_article_title">ناونیشانی وتاری ویکی</string>
@@ -145,9 +145,9 @@
   <string name="notes_deletion_unsuccessful">ھەندێک پەڕگە نەسڕدرانەوە</string>
   <string name="discovery_failed">دۆزینەوە شکستی ھێنا</string>
   <string name="connection_failed">پەیوەستکردن شکستی ھێنا</string>
-  <string name="transfer_to">گواستنەوەی پەڕگەکان بۆ %s</string>
+  <string name="transfer_to">گواستنەوەی پەڕگەکان بۆ %\s</string>
   <string name="file_transfer_complete">گواستنەوەی پەڕگە تەواو</string>
-  <string name="error_transferring">ھەڵەی گواستنەوەی پەڕگە %s</string>
+  <string name="error_transferring">ھەڵەی گواستنەوەی پەڕگە \%s</string>
   <string name="your_device">ئامێرەکەت:</string>
   <string name="files_for_transfer">پەڕگەکان بۆ گواستنەوە</string>
   <string name="status">ڕەوش</string>

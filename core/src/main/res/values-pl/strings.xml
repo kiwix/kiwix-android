@@ -109,12 +109,12 @@
   <string name="pref_extras">Dodatki</string>
   <string name="new_tab_snack_bar">Artykuł otworzony w nowej karcie</string>
   <string name="search_widget_text">Szukaj w Kiwix</string>
-  <string name="speech_prompt_text">Mów by wyszukać %s</string>
+  <string name="speech_prompt_text">Mów by wyszukać \%s</string>
   <string name="speech_not_supported">Przepraszamy! Twoje urządzenie nie obsługuje wprowadzania głosowego</string>
   <string name="local_zims">Urządzenie</string>
   <string name="remote_zims">Dostępne</string>
   <string name="library">Biblioteka</string>
-  <string name="delete_zim_body">Następujące pliki zim zostaną usunięte:\n\n%s</string>
+  <string name="delete_zim_body">Następujące pliki zim zostaną usunięte:\n\n\%s</string>
   <string name="delete_zims_toast">Plik został usunięty</string>
   <string name="no_files_here">Tu nie ma plików</string>
   <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
@@ -209,7 +209,7 @@
   <string name="running_state">W trakcie</string>
   <string name="complete">Zakończono</string>
   <string name="paused_state">Wstrzymano</string>
-  <string name="failed_state">Błąd: %s</string>
+  <string name="failed_state">Błąd: \%s</string>
   <string name="save">Zapisz</string>
   <string name="note">Uwaga</string>
   <string name="wiki_article_title">Tytuł Artykułu Wiki</string>
@@ -227,7 +227,7 @@
   <string name="ext_storage_permission_not_granted">Błąd: Nie przyznano uprawnień do przechowywania</string>
   <string name="notes_deletion_successful">Usunięto cały folder notatek</string>
   <string name="notes_deletion_unsuccessful">Niektóre pliki nie zostały usunięte</string>
-  <string name="books_count">%d książka(książek)</string>
+  <string name="books_count">\%d książka(książek)</string>
   <string name="discovery_initiated">Rozpoczęto odnajdowanie</string>
   <string name="discovery_failed">Odnajdowanie nie powiodło się</string>
   <string name="severe_loss_error">Poważny błąd! Spróbuj wyłączyć/ponownie włączyć WiFi P2P</string>
@@ -240,11 +240,11 @@
   <string name="discovery_needs_location">Nie można wykryć elementów równorzędnych bez usług lokalizacji</string>
   <string name="request_enable_wifi">Włącz WiFi P2P w ustawieniach systemu</string>
   <string name="discovery_needs_wifi">Nie można wykryć urządzeń równorzędnych bez włączonego WiFi</string>
-  <string name="transfer_to">Przesłać pliki do %s?</string>
+  <string name="transfer_to">Przesłać pliki do \%s?</string>
   <string name="device_not_cooperating">Wybrane urządzenie nie współpracuje przy przesyłaniu</string>
   <string name="file_transfer_complete">Przesyłanie pliku zakończone</string>
   <string name="error_during_transfer">Wystąpił błąd podczas przesyłania</string>
-  <string name="error_transferring">Błąd podczas przesyłania pliku %s</string>
+  <string name="error_transferring">Błąd podczas przesyłania pliku \%s</string>
   <string name="get_content_from_nearby_device">Pobierz zawartość z sąsiedniego urządzenia</string>
   <string name="search_for_peers">Szukaj Pirów</string>
   <string name="your_device">Twoje urządzenie:</string>

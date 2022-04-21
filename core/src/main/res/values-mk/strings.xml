@@ -99,12 +99,12 @@
   <string name="pref_extras">Дополнително</string>
   <string name="new_tab_snack_bar">Статијата е отворена во ново јазиче</string>
   <string name="search_widget_text">Пребарај по Кивикс</string>
-  <string name="speech_prompt_text">Гласовно пребарајте го %s</string>
+  <string name="speech_prompt_text">Гласовно пребарајте го \%s</string>
   <string name="speech_not_supported">Жалиме! Вашиот уред не поддржува гласовно внесување</string>
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
   <string name="library">Библиотека</string>
-  <string name="delete_zim_body">Ќе бидат избришани следниве ZIM-податотеки:\n\n%s</string>
+  <string name="delete_zim_body">Ќе бидат избришани следниве ZIM-податотеки:\n\n\%s</string>
   <string name="delete_zims_toast">Податотеката е успешно избришана</string>
   <string name="no_files_here">Нема податотеки</string>
   <string name="download_no_space">Нема доволно место за преземање.</string>
@@ -199,7 +199,7 @@
   <string name="running_state">Во тек</string>
   <string name="complete">Завршено</string>
   <string name="paused_state">Паузирано</string>
-  <string name="failed_state">Не успеа: %s</string>
+  <string name="failed_state">Не успеа: \%s</string>
   <string name="save">Зачувај</string>
   <string name="note">Белешка</string>
   <string name="wiki_article_title">Наслов на викистатијата</string>
@@ -217,7 +217,7 @@
   <string name="ext_storage_permission_not_granted">Грешка: Немате дадено дозвола за складирање</string>
   <string name="notes_deletion_successful">Избришана е цела папка со белешки</string>
   <string name="notes_deletion_unsuccessful">Некои податотеки не беа избришани</string>
-  <string name="books_count">%d книга/ги</string>
+  <string name="books_count">\%d книга/ги</string>
   <string name="discovery_initiated">Откривањето започна</string>
   <string name="discovery_failed">Откривањето не успеа</string>
   <string name="severe_loss_error">Голема грешка! Исклучете го и пак вклучете го поврзувањето на уреди со безжичен пристап</string>
@@ -230,11 +230,11 @@
   <string name="discovery_needs_location">Не можам да откривам уреди за сврзување без да е овозможена местоположбата</string>
   <string name="request_enable_wifi">Овозможете поврзување на уреди преку безжичен пристап во системските поставки</string>
   <string name="discovery_needs_wifi">Не можам да откривам уреди за поврзување без да е вклучена безжичната врска</string>
-  <string name="transfer_to">Да ги пренесам податотеките во %s?</string>
+  <string name="transfer_to">Да ги пренесам податотеките во \%s?</string>
   <string name="device_not_cooperating">Избраниот уред не соработува во преносот</string>
   <string name="file_transfer_complete">Податотечниот пренос е завршен</string>
   <string name="error_during_transfer">Се јави грешка при преносот</string>
-  <string name="error_transferring">Грешка при пренесување на податотеката %s</string>
+  <string name="error_transferring">Грешка при пренесување на податотеката \%s</string>
   <string name="get_content_from_nearby_device">Земи содржини од уред во близина</string>
   <string name="search_for_peers">Пребарај уреди за сврзување</string>
   <string name="your_device">Вашиот уред:</string>

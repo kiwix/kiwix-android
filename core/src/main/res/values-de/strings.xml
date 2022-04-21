@@ -112,12 +112,12 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artikel in neuer Registerkarte geöffnet</string>
   <string name="search_widget_text">Kiwix durchsuchen</string>
-  <string name="speech_prompt_text">Sprechen, um %s zu suchen</string>
+  <string name="speech_prompt_text">Sprechen, um \%s zu suchen</string>
   <string name="speech_not_supported">Leider unterstützt Ihr Gerät keine Spracheingabe!</string>
   <string name="local_zims">Gerät</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliothek</string>
-  <string name="delete_zim_body">Die folgende(n) ZIM-Datei(en) werden gelöscht werden: %s</string>
+  <string name="delete_zim_body">Die folgende(n) ZIM-Datei(en) werden gelöscht werden:\n\n\%s</string>
   <string name="delete_zims_toast">Dateien erfolgreich gelöscht</string>
   <string name="no_files_here">Hier gibt es keine Dateien</string>
   <string name="download_no_space">Unzureichender Speicherplatz für einen Download.</string>
@@ -212,7 +212,7 @@
   <string name="running_state">In Bearbeitung</string>
   <string name="complete">Vervollständigt</string>
   <string name="paused_state">Pausiert</string>
-  <string name="failed_state">Fehlgeschlagen: %s</string>
+  <string name="failed_state">Fehlgeschlagen: \%s</string>
   <string name="save">Speichern</string>
   <string name="note">Notiz</string>
   <string name="wiki_article_title">Wiki-Artikel-Titel</string>
@@ -230,7 +230,7 @@
   <string name="ext_storage_permission_not_granted">Fehler: Speicherberechtigungen nicht gewährt</string>
   <string name="notes_deletion_successful">Gesamter Notizen-Ordner gelöscht</string>
   <string name="notes_deletion_unsuccessful">Einige Dateien nicht gelöscht</string>
-  <string name="books_count">%d Buch/Bücher</string>
+  <string name="books_count">\%d Buch/Bücher</string>
   <string name="discovery_initiated">Erkennung eingeleitet</string>
   <string name="discovery_failed">Erkennung fehlgeschlagen</string>
   <string name="severe_loss_error">Schwerer Fehler! Versuchen Sie, Wi-Fi P2P auszuschalten und wieder einzuschalten</string>
@@ -243,11 +243,11 @@
   <string name="discovery_needs_location">Ohne standortbezogene Dienste können keine Peer-Geräte gefunden werden</string>
   <string name="request_enable_wifi">Aktivieren Sie Wi-Fi P2P in den Systemeinstellungen</string>
   <string name="discovery_needs_wifi">Kann ohne Wi-Fi ON keine Peer-Geräte finden</string>
-  <string name="transfer_to">Dateien an %s übertragen?</string>
+  <string name="transfer_to">Dateien an \%s übertragen?</string>
   <string name="device_not_cooperating">Das gewählte Gerät kooperiert nicht bei der Übertragung</string>
   <string name="file_transfer_complete">Dateiübertragung abgeschlossen</string>
   <string name="error_during_transfer">Bei der Übertragung wurde ein Fehler festgestellt</string>
-  <string name="error_transferring">Fehler beim Übertragen der Datei %s</string>
+  <string name="error_transferring">Fehler beim Übertragen der Datei \%s</string>
   <string name="get_content_from_nearby_device">Inhalte von einem Gerät in der Nähe abrufen</string>
   <string name="search_for_peers">Nach Peer-Geräten suchen</string>
   <string name="your_device">Ihr Gerät:</string>
@@ -259,7 +259,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
-  <string name="pref_text_zoom_summary">Schriftgröße in 25%-Schritten ändern.</string>
+  <string name="pref_text_zoom_summary">Schriftgröße in 25\%-Schritten ändern.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nur Text</string>

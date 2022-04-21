@@ -8,7 +8,7 @@
 * Saederup92
 * Tinamalmgren
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Hjælp</string>
   <string name="menu_home">Hjem</string>
   <string name="menu_settings">Indstillinger</string>
@@ -74,7 +74,7 @@
   <string name="pref_extras">Ekstra</string>
   <string name="new_tab_snack_bar">Artikel åbnet i nyt faneblad</string>
   <string name="search_widget_text">Søg i Kiwix</string>
-  <string name="speech_prompt_text">Tal for at søge %s</string>
+  <string name="speech_prompt_text">Tal for at søge \%s</string>
   <string name="speech_not_supported">Beklager! Din enhed understøtter ikke tale</string>
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
@@ -146,7 +146,7 @@
   <string name="close_all_tabs">Luk alle faner</string>
   <string name="running_state">I gang</string>
   <string name="save">Gem</string>
-  <string name="books_count">%d bog/bøger</string>
+  <string name="books_count">\%d bog/bøger</string>
   <string name="your_device">Din enhed:</string>
   <string name="tag_pic">Billede</string>
   <string name="tag_vid">Video</string>

@@ -73,7 +73,7 @@
   <string name="pref_extras">Екстри</string>
   <string name="new_tab_snack_bar">Публикацията отворена в нов таб</string>
   <string name="search_widget_text">Търсене в Kiwix</string>
-  <string name="speech_prompt_text">Говорете, за да търсите %s</string>
+  <string name="speech_prompt_text">Говорете, за да търсите \%s</string>
   <string name="speech_not_supported">Съжаляваме! Вашето устройство не поддържа  въвеждане чрез глас.</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>

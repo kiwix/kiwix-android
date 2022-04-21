@@ -99,12 +99,12 @@
   <string name="pref_extras">கூடுதல்கள்</string>
   <string name="new_tab_snack_bar">கட்டுரை புதிய தாவலில் திறக்கப்பட்டது</string>
   <string name="search_widget_text">கிவிக்ஸை தேடுங்கள்</string>
-  <string name="speech_prompt_text">%s ஐ தேட பேசுங்கள்</string>
+  <string name="speech_prompt_text">%\s ஐ தேட பேசுங்கள்</string>
   <string name="speech_not_supported">மன்னிக்கவும்! உங்கள் சாதனம் பேச்சு உள்ளீட்டை ஆதரிக்காது</string>
   <string name="local_zims">கருவி</string>
   <string name="remote_zims">எழிவரி</string>
   <string name="library">நூலகம்</string>
-  <string name="delete_zim_body">பின்வரும் zim கோப்பு(கள்) நீக்கப்படும் :! N !! N! %s</string>
+  <string name="delete_zim_body">பின்வரும் zim கோப்பு(கள்) நீக்கப்படும் :! N !! N! \%s</string>
   <string name="delete_zims_toast">கோப்புகள் வெற்றிகரமாக நீக்கப்பட்டன</string>
   <string name="no_files_here">இங்கே கோப்புகள் இல்லை</string>
   <string name="download_no_space">பதிவிறக்க போதுமான இடம் இல்லை.</string>
@@ -199,7 +199,7 @@
   <string name="running_state">நடைபெற்றுக் கொண்டுள்ளது</string>
   <string name="complete">நிறைவு பெற்றது</string>
   <string name="paused_state">இடைநிறுத்தப்பட்டது</string>
-  <string name="failed_state">தோல்வி: %s</string>
+  <string name="failed_state">தோல்வி: \%s</string>
   <string name="save">சேமி</string>
   <string name="note">குறிப்பு</string>
   <string name="wiki_article_title">விக்கி கட்டுரை தலைப்பு</string>
@@ -217,7 +217,7 @@
   <string name="ext_storage_permission_not_granted">பிழை: சேமிப்பக அனுமதிகள் வழங்கப்படவில்லை</string>
   <string name="notes_deletion_successful">முழு குறிப்புகள் கோப்புறை நீக்கப்பட்டது</string>
   <string name="notes_deletion_unsuccessful">சில கோப்புகள் நீக்கப்படவில்லை</string>
-  <string name="books_count">%d புத்தகம்(கள்)</string>
+  <string name="books_count">\%d புத்தகம்(கள்)</string>
   <string name="discovery_initiated">கண்டுபிடிப்பு தொடங்கப்பட்டது</string>
   <string name="discovery_failed">கண்டுபிடிப்பு தோல்வியடைந்தது</string>
   <string name="severe_loss_error">கடுமையான பிழை! வைஃபை P2P ஐ முடக்க / மீண்டும் இயக்க முயற்சிக்கவும்</string>
@@ -230,11 +230,11 @@
   <string name="discovery_needs_location">இருப்பிட சேவைகள் இல்லாமல் சகாக்களைக் கண்டறிய முடியாது</string>
   <string name="request_enable_wifi">கணினி அமைப்புகளிலிருந்து வைஃபை P2P ஐ இயக்கவும்</string>
   <string name="discovery_needs_wifi">வைஃபை-யை இயக்காமல் சகாக்களைக் கண்டறிய முடியாது</string>
-  <string name="transfer_to">கோப்புகளை %s க்கு மாற்றவா?</string>
+  <string name="transfer_to">கோப்புகளை \%s க்கு மாற்றவா?</string>
   <string name="device_not_cooperating">தேர்ந்தெடுக்கப்பட்ட சாதனம் பரிமாற்றத்திற்கு ஒத்துழைக்கவில்லை</string>
   <string name="file_transfer_complete">கோப்பு பரிமாற்றம் முடிந்தது</string>
   <string name="error_during_transfer">இடமாற்றத்தின் போது பிழை ஏற்பட்டது</string>
-  <string name="error_transferring">%s ஐ மாற்றுவதில் பிழை</string>
+  <string name="error_transferring">\%s ஐ மாற்றுவதில் பிழை</string>
   <string name="get_content_from_nearby_device">அருகிலுள்ள சாதனத்திலிருந்து உள்ளடக்கத்தைப் பெறுங்கள்</string>
   <string name="search_for_peers">சகாக்களைத் தேடவும்</string>
   <string name="your_device">உங்கள் சாதனம்:</string>

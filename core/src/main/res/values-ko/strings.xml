@@ -13,7 +13,7 @@
 * 그냥기여자
 * 아라
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">도움말</string>
   <string name="menu_home">홈</string>
   <string name="menu_settings">설정</string>
@@ -110,12 +110,12 @@
   <string name="pref_extras">기타</string>
   <string name="new_tab_snack_bar">새 탭에 열린 문서</string>
   <string name="search_widget_text">Kiwix 검색</string>
-  <string name="speech_prompt_text">%s을(를) 찾으려면 말하세요</string>
+  <string name="speech_prompt_text">\%s을(를) 찾으려면 말하세요</string>
   <string name="speech_not_supported">죄송합니다! 당신의 기기가 음성 입력을 지원하지 않습니다</string>
   <string name="local_zims">장치</string>
   <string name="remote_zims">온라인</string>
   <string name="library">라이브러리</string>
-  <string name="delete_zim_body">다음 zim 파일이 삭제됩니다:\n\n%s</string>
+  <string name="delete_zim_body">다음 zim 파일이 삭제됩니다:\n\n\%s</string>
   <string name="delete_zims_toast">파일이 삭제되었습니다</string>
   <string name="no_files_here">여기에 파일이 없습니다</string>
   <string name="download_no_space">다운로드할 공간이 충분하지 않습니다.</string>
@@ -210,7 +210,7 @@
   <string name="running_state">진행 중</string>
   <string name="complete">완료</string>
   <string name="paused_state">일시 중단됨</string>
-  <string name="failed_state">실패: %s</string>
+  <string name="failed_state">실패: \%s</string>
   <string name="save">저장</string>
   <string name="note">노트</string>
   <string name="wiki_article_title">위키 문서 제목</string>
@@ -228,7 +228,7 @@
   <string name="ext_storage_permission_not_granted">오류: 스토리지 권한이 없습니다</string>
   <string name="notes_deletion_successful">전체 노트 폴더가 삭제되었습니다.</string>
   <string name="notes_deletion_unsuccessful">일부 파일은 삭제되지 않았습니다</string>
-  <string name="books_count">책 %d권</string>
+  <string name="books_count">책 \%d권</string>
   <string name="discovery_initiated">발견을 시작했습니다</string>
   <string name="discovery_failed">발견을 실패했습니다</string>
   <string name="severe_loss_error">서버 오류! 와이파이 P2P를 비활성화/재활성화해 보십시오</string>
@@ -241,11 +241,11 @@
   <string name="discovery_needs_location">위치 서비스 없이 피어를 찾을 수 없습니다</string>
   <string name="request_enable_wifi">시스템 설정에서 와이파이 P2P 활성화</string>
   <string name="discovery_needs_wifi">와이파이가 켜져있지 않은 상태에서 피어를 찾을 수 없습니다</string>
-  <string name="transfer_to">파일을 %s(으)로 전송하시겠습니까?</string>
+  <string name="transfer_to">파일을 \%s(으)로 전송하시겠습니까?</string>
   <string name="device_not_cooperating">선택된 단말기가 이동을 위해 함께 작동할 수 없습니다</string>
   <string name="file_transfer_complete">파일 전송 완료</string>
   <string name="error_during_transfer">전송 도중에 오류가 발생했습니다</string>
-  <string name="error_transferring">파일 %s 전송 오류</string>
+  <string name="error_transferring">파일 \%s 전송 오류</string>
   <string name="get_content_from_nearby_device">주변 장치로부터 콘텐츠 가져오기</string>
   <string name="search_for_peers">친구 찾기</string>
   <string name="your_device">내 장치:</string>
