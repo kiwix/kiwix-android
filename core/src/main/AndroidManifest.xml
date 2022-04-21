@@ -23,6 +23,7 @@
     android:theme="@style/KiwixTheme"
     android:usesCleartextTraffic="true"
     android:requestLegacyExternalStorage="true"
+    android:networkSecurityConfig="@xml/network_security_config"
     tools:targetApi="q">
 
     <!-- Version < 3.0. DeX Mode and Screen Mirroring support -->
