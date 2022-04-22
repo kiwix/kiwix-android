@@ -155,9 +155,11 @@ class LocalLibraryFragment : BaseFragment() {
   }
 
   private fun showFileChooser() {
-    val intent = Intent(Intent.ACTION_GET_CONTENT)
-    intent.type = "*/*"
-    intent.addCategory(Intent.CATEGORY_OPENABLE)
+    val intent = Intent().apply {
+      action = Intent.ACTION_GET_CONTENT
+      type = "*/*"
+      addCategory(Intent.CATEGORY_OPENABLE)
+    }
     try {
       startActivityForResult(
         Intent.createChooser(intent, "Select a zim file"),
@@ -186,7 +188,7 @@ class LocalLibraryFragment : BaseFragment() {
       return
     }
     val file = File(filePath)
-    if (!FileUtils.isValidFile(file.path)) {
+    if (!FileUtils.isValidZimFile(file.path)) {
       activity.toast(R.string.error_file_invalid)
       return
     }
@@ -195,7 +197,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   private fun navigateToReaderFragment(file: File) {
     if (!file.canRead()) {
-      activity.toast(R.string.error_file_not_found)
+      activity.toast(R.string.unable_to_read_file)
     } else {
       activity?.navigate(
         LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()

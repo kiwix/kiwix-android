@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
-import org.kiwix.kiwixmobile.core.extensions.getStringBefore
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -237,14 +236,10 @@ object FileUtils {
     "".also { e.printStackTrace() }
   }
 
-  @JvmStatic fun isValidFile(filePath: String): Boolean {
-    if (filePath.endsWith(".zim") || filePath.endsWith(".zimaa")) {
-      return true
-    }
-    return false
-  }
+  @JvmStatic fun isValidZimFile(filePath: String): Boolean =
+    (filePath.endsWith(".zim") || filePath.endsWith(".zimaa"))
 
   @JvmStatic fun getSdCardMainPath(context: Context): String =
     "${context.getExternalFilesDirs("")[1]}"
-      .getStringBefore(context.getString(R.string.android_directory_seperator))
+      .substringBefore(context.getString(R.string.android_directory_seperator))
 }
