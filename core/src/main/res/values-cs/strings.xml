@@ -110,12 +110,12 @@
   <string name="pref_extras">Doplňky</string>
   <string name="new_tab_snack_bar">Článek otevřený na nové kartě</string>
   <string name="search_widget_text">Prohledat Kiwix</string>
-  <string name="speech_prompt_text">Mluvte pro vyhledání %s</string>
+  <string name="speech_prompt_text">Mluvte pro vyhledání \%s</string>
   <string name="speech_not_supported">Promiňte! Vaše zařízení nepodporuje hlasový vstup</string>
   <string name="local_zims">Zařízení</string>
   <string name="remote_zims">Online</string>
   <string name="library">Knihovna</string>
-  <string name="delete_zim_body">Následující zim soubory budou smazány:\n\n%s</string>
+  <string name="delete_zim_body">Následující zim soubory budou smazány:\n\n\%s</string>
   <string name="delete_zims_toast">Soubor byl smazán</string>
   <string name="no_files_here">Zde nejsou žádné soubory</string>
   <string name="download_no_space">Nedostatečný prostor ke stažení.</string>
@@ -210,7 +210,7 @@
   <string name="running_state">Probíhá</string>
   <string name="complete">Hotovo</string>
   <string name="paused_state">Pozastaveno</string>
-  <string name="failed_state">Selhalo: %s</string>
+  <string name="failed_state">Selhalo: \%s</string>
   <string name="save">Uložit</string>
   <string name="note">Poznámka</string>
   <string name="wiki_article_title">Název wiki článku</string>
@@ -228,7 +228,7 @@
   <string name="ext_storage_permission_not_granted">Chyba: Oprávnění k úložišti nebyla udělena</string>
   <string name="notes_deletion_successful">Celý poznámkový adresář smazán</string>
   <string name="notes_deletion_unsuccessful">Některé soubory nebyly vymazány</string>
-  <string name="books_count">%d knih</string>
+  <string name="books_count">\%d knih</string>
   <string name="discovery_initiated">Objevování započato</string>
   <string name="discovery_failed">Objevování selhalo</string>
   <string name="severe_loss_error">Závažná chyba! Zkuste vypnout/znovu zapnout WiFi P2P</string>
@@ -241,11 +241,11 @@
   <string name="discovery_needs_location">Vyhledávání blízkých zařízení není možné bez přístupu k poloze</string>
   <string name="request_enable_wifi">V nastavení systému povolte WiFi P2P</string>
   <string name="discovery_needs_wifi">Hledání zařízení není možné bez zapnuté Wi-Fi</string>
-  <string name="transfer_to">Přesunout soubory do %s?</string>
+  <string name="transfer_to">Přesunout soubory do \%s?</string>
   <string name="device_not_cooperating">Vybrané zařízení nespolupracuje při přenosu</string>
   <string name="file_transfer_complete">Přenos souborů dokončen</string>
   <string name="error_during_transfer">Nastala chyba v průběhu přenosu</string>
-  <string name="error_transferring">Chyba při přesouvání souboru %s</string>
+  <string name="error_transferring">Chyba při přesouvání souboru \%s</string>
   <string name="get_content_from_nearby_device">Získat obsah z blízkého zařízení</string>
   <string name="search_for_peers">Hledat zařízení</string>
   <string name="your_device">Vaše zařízení:</string>
@@ -258,7 +258,7 @@
   <string name="pref_clear_all_notes_summary">Vymazat všechny poznámky ke všem článkům</string>
   <string name="pref_clear_all_notes_title">Vymazat všechny poznámky</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Povolit číst a zapisovat soubory ZIM na kartu SD</string>
-  <string name="pref_text_zoom_summary">Změnit velikost textu s přírůstkem 25%.</string>
+  <string name="pref_text_zoom_summary">Změnit velikost textu s přírůstkem 25\%.</string>
   <string name="tag_pic">Obrázek</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Pouze text</string>

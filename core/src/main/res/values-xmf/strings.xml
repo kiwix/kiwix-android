@@ -73,12 +73,12 @@
   <string name="pref_extras">გეძინელი</string>
   <string name="new_tab_snack_bar">სტატია ახალ აშნაკიდას გონწყუმილი რე</string>
   <string name="search_widget_text">გორუა Kiwix</string>
-  <string name="speech_prompt_text">ქოთქვით დობგორათ %s</string>
+  <string name="speech_prompt_text">ქოთქვით დობგორათ %\s</string>
   <string name="speech_not_supported">მინავათის ვორეთ! თქანი მონწყილობას ვაუღუ რაგადით მიშაჸონაფაშ ფუნქცუა.</string>
   <string name="local_zims">მონწყილობა</string>
   <string name="remote_zims">ონლაინ</string>
   <string name="library">ბიბლიოთეკა</string>
-  <string name="delete_zim_body" fuzzy="true">დობლასათო %s?</string>
+  <string name="delete_zim_body" fuzzy="true">დობლასათო \%s?</string>
   <string name="delete_zims_toast">ფაილქ დილასუ</string>
   <string name="no_files_here">ფაილეფი ვა რე</string>
   <string name="download_no_space" fuzzy="true">თე ფაილიშ გიმახარგალო შვენა ვაბაღუ.</string>
@@ -129,7 +129,7 @@
   <string name="expand">გოფაჩუა</string>
   <string name="history">ისტორია</string>
   <string name="search_history">გორუაშ ისტორია</string>
-  <string name="failed_state">ჩილათა: %s</string>
+  <string name="failed_state">ჩილათა: \%s</string>
   <string name="save">ჩუალა</string>
   <string name="note">ხვილაფა</string>
 </resources>
