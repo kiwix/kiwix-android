@@ -115,12 +115,12 @@
   <string name="pref_extras">附加功能</string>
   <string name="new_tab_snack_bar">条目已在新标签页中打开</string>
   <string name="search_widget_text">搜索 Kiwix</string>
-  <string name="speech_prompt_text">讲话来搜索 %s</string>
+  <string name="speech_prompt_text">讲话来搜索 %\s</string>
   <string name="speech_not_supported">对不起！您的设备不支持语音输入</string>
   <string name="local_zims">设备</string>
   <string name="remote_zims">在线</string>
   <string name="library">图书馆</string>
-  <string name="delete_zim_body">以下 ZIM 文件会被删除：\n\n%s</string>
+  <string name="delete_zim_body">以下 ZIM 文件会被删除：\n\n\%s</string>
   <string name="delete_zims_toast">文件已删除</string>
   <string name="no_files_here">没有文件</string>
   <string name="download_no_space">缺少下载所需的空间。</string>
@@ -215,7 +215,7 @@
   <string name="running_state">进行中</string>
   <string name="complete">完成</string>
   <string name="paused_state">暂停</string>
-  <string name="failed_state">失败：%s</string>
+  <string name="failed_state">失败：\%s</string>
   <string name="save">保存</string>
   <string name="note">请注意</string>
   <string name="wiki_article_title">Wiki文章标题</string>
@@ -233,7 +233,7 @@
   <string name="ext_storage_permission_not_granted">错误：没有访问存储空间的权限</string>
   <string name="notes_deletion_successful">已删除整个笔记文件夹</string>
   <string name="notes_deletion_unsuccessful">有些文件未被删除</string>
-  <string name="books_count">%d 本书</string>
+  <string name="books_count">\%d 本书</string>
   <string name="connection_failed">连接失败</string>
   <string name="permission_rationale_location">为了寻找对等设备，我们需要定位权限（这是 Android 系统的要求）</string>
   <string name="permission_rationale_location_on_host_zim_file">要成为 ZIM 文件主机，我们需要定位权限（这是 Android 系统的要求）</string>
@@ -243,11 +243,11 @@
   <string name="discovery_needs_location">在没有定位服务的情况下无法寻找对等设备</string>
   <string name="request_enable_wifi">在系统设置中开启 WiFi 点对点功能</string>
   <string name="discovery_needs_wifi">在未开启 WiFi 时无法寻找对等设备</string>
-  <string name="transfer_to">要向 %s 传输文件吗？</string>
+  <string name="transfer_to">要向 \%s 传输文件吗？</string>
   <string name="device_not_cooperating">所选设备不配合文件传输工作</string>
   <string name="file_transfer_complete">文件传输完成</string>
   <string name="error_during_transfer">文件传输中遇到错误</string>
-  <string name="error_transferring">传输文件 %s 时遇到错误</string>
+  <string name="error_transferring">传输文件 \%s 时遇到错误</string>
   <string name="get_content_from_nearby_device">从附近的设备获取内容</string>
   <string name="search_for_peers">寻找对等设备</string>
   <string name="your_device">你的设备：</string>

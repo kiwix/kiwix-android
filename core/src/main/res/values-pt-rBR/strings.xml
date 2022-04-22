@@ -105,12 +105,12 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artigo aberto em nova guia</string>
   <string name="search_widget_text">Pesquisar Kiwix</string>
-  <string name="speech_prompt_text">Fale para pesquisar %s</string>
+  <string name="speech_prompt_text">Fale para pesquisar \%s</string>
   <string name="speech_not_supported">Desculpa! Seu dispositivo não suporta entrada de fala</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Online</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Os seguintes arquivos zim serão excluídos:\n\n%s</string>
+  <string name="delete_zim_body">Os seguintes arquivos zim serão excluídos:\n\n\%s</string>
   <string name="delete_zims_toast">Arquivo apagado</string>
   <string name="no_files_here">Nenhum arquivo aqui</string>
   <string name="download_no_space">Espaço insuficiente para baixar o download.</string>
@@ -205,7 +205,7 @@
   <string name="running_state">Em progresso</string>
   <string name="complete">Completo</string>
   <string name="paused_state">Pausado</string>
-  <string name="failed_state">Falhou: %s</string>
+  <string name="failed_state">Falhou: \%s</string>
   <string name="save">Salvar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título do artigo da wiki</string>
@@ -223,7 +223,7 @@
   <string name="ext_storage_permission_not_granted">Erro: permissões de armazenamento não concedidas</string>
   <string name="notes_deletion_successful">Pasta de notas inteira excluída</string>
   <string name="notes_deletion_unsuccessful">Alguns arquivos não excluídos</string>
-  <string name="books_count">%d livros</string>
+  <string name="books_count">\%d livros</string>
   <string name="discovery_initiated">Descoberta iniciada</string>
   <string name="discovery_failed">Falha na descoberta</string>
   <string name="severe_loss_error">Erro grave! Tente desativar/reativar WiFi P2P</string>
@@ -236,11 +236,11 @@
   <string name="discovery_needs_location">Não é possível descobrir pares sem serviços de localização</string>
   <string name="request_enable_wifi">Ativar WiFi P2P nas configurações do sistema</string>
   <string name="discovery_needs_wifi">Não é possível descobrir pares sem o wi-fi ativado</string>
-  <string name="transfer_to">Transferir arquivos para %s?</string>
+  <string name="transfer_to">Transferir arquivos para \%s?</string>
   <string name="device_not_cooperating">Dispositivo selecionado que não coopera para transferência</string>
   <string name="file_transfer_complete">Transferência de arquivo concluída</string>
   <string name="error_during_transfer">Foi encontrado um erro durante a transferência</string>
-  <string name="error_transferring">Erro ao transferir arquivo %s</string>
+  <string name="error_transferring">Erro ao transferir arquivo \%s</string>
   <string name="get_content_from_nearby_device">Obter conteúdo de um dispositivo próximo</string>
   <string name="search_for_peers">Pesquisar por pares</string>
   <string name="your_device">Seu dispositivo:</string>

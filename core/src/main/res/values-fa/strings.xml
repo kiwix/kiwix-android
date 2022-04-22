@@ -66,7 +66,7 @@
   <string name="open">گشودن</string>
   <string name="bookmark_removed">نشانک حذف شد</string>
   <string name="new_tab_snack_bar">مقاله در برگهٔ تازه باز شد</string>
-  <string name="speech_prompt_text">صحبت کنید برای جستجوی %s</string>
+  <string name="speech_prompt_text">صحبت کنید برای جستجوی \%s</string>
   <string name="local_zims">دستگاه</string>
   <string name="remote_zims">برخط</string>
   <string name="library">کتابخانه</string>
@@ -134,7 +134,7 @@
   <string name="search_bookmarks">جستجوی نشانک‌ها</string>
   <string name="close_all_tabs">بستن همهٔ زبانه‌ها</string>
   <string name="complete">کامل</string>
-  <string name="failed_state">با شکست مواجه شد: %s</string>
+  <string name="failed_state">با شکست مواجه شد: \%s</string>
   <string name="save">ذخیره</string>
   <string name="note">یادداشت</string>
   <string name="wiki_article_title">عنوان مقالهٔ ویکی</string>
@@ -144,8 +144,8 @@
   <string name="note_save_successful">یادداشت ذخیره شد</string>
   <string name="note_share_error_file_missing">پروندهٔ یادداشت وجود ندارد</string>
   <string name="delete_notes_confirmation_msg">همهٔ یادداشت‌ها حذف شوند؟</string>
-  <string name="books_count">%d کتاب</string>
-  <string name="transfer_to">پرونده‌ها منتقل شوند به %s؟</string>
+  <string name="books_count">\%d کتاب</string>
+  <string name="transfer_to">پرونده‌ها منتقل شوند به \%s؟</string>
   <string name="file_transfer_complete">انتقال پرونده کامل شد</string>
   <string name="your_device">وسیلهٔ شما:</string>
   <string name="nearby_devices">وسیله‌های نزدیک</string>

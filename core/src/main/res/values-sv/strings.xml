@@ -104,12 +104,12 @@
   <string name="pref_extras">Extramaterial</string>
   <string name="new_tab_snack_bar">Artikel öppnades i ny flik</string>
   <string name="search_widget_text">Sök Kiwix</string>
-  <string name="speech_prompt_text">Tala för att söka %s</string>
+  <string name="speech_prompt_text">Tala för att söka %\s</string>
   <string name="speech_not_supported">Tyvärr! Din enhet stöder inte tal-till-text.</string>
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
   <string name="library">Bibliotek</string>
-  <string name="delete_zim_body">Följande zim-fil(er) kommer att raderas:\n\n%s</string>
+  <string name="delete_zim_body">Följande zim-fil(er) kommer att raderas:\n\n\%s</string>
   <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned.</string>
@@ -204,7 +204,7 @@
   <string name="running_state">Pågående</string>
   <string name="complete">Färdig</string>
   <string name="paused_state">Pausad</string>
-  <string name="failed_state">Misslyckades: %s</string>
+  <string name="failed_state">Misslyckades: \%s</string>
   <string name="save">Spara</string>
   <string name="note">Anteckning</string>
   <string name="wiki_article_title">Wikiartikelns titel</string>
@@ -222,7 +222,7 @@
   <string name="ext_storage_permission_not_granted">Fel: Lagringsbehörigheter har inte beviljats</string>
   <string name="notes_deletion_successful">Raderade hela anteckningsmappen</string>
   <string name="notes_deletion_unsuccessful">Vissa filer raderades inte</string>
-  <string name="books_count">%d bok/böcker</string>
+  <string name="books_count">\%d bok/böcker</string>
   <string name="discovery_initiated">Inleder upptäckt</string>
   <string name="discovery_failed">Upptäckt misslyckades</string>
   <string name="severe_loss_error">Allvarligt fel! Testa att starta om WiFi P2P</string>
@@ -235,11 +235,11 @@
   <string name="discovery_needs_location">Kan inte hitta närliggande enheter utan platstjänster</string>
   <string name="request_enable_wifi">Aktivera WiFi P2P i systeminställningar</string>
   <string name="discovery_needs_wifi">Kan inte hitta närliggande enheter utan WiFi</string>
-  <string name="transfer_to">Överför filer till %s?</string>
+  <string name="transfer_to">Överför filer till \%s?</string>
   <string name="device_not_cooperating">Valda enheter samarbetar inte för överföring</string>
   <string name="file_transfer_complete">Filöverföring slutfördes</string>
   <string name="error_during_transfer">Ett fel uppstod under överförning</string>
-  <string name="error_transferring">Fel uppstod när filen %s överfördes</string>
+  <string name="error_transferring">Fel uppstod när filen \%s överfördes</string>
   <string name="get_content_from_nearby_device">Hämta innehåll från enheter i närheten</string>
   <string name="search_for_peers">Sök efter enheter</string>
   <string name="your_device">Din enhet:</string>
