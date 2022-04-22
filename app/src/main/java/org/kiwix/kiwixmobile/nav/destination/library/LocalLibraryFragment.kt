@@ -197,7 +197,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   private fun navigateToReaderFragment(file: File) {
     if (!file.canRead()) {
-      activity.toast(R.string.unable_to_read_file)
+      activity.toast(R.string.unable_to_read_zim_file)
     } else {
       activity?.navigate(
         LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
