@@ -242,25 +242,35 @@ object FileUtils {
       or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     uri?.let {
       activity.grantUriPermission(
-        activity.packageName, uri,
+        activity.packageName, it,
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
       )
-      activity.contentResolver.takePersistableUriPermission(uri, takeFlags)
+      activity.contentResolver.takePersistableUriPermission(it, takeFlags)
 
-      val dFile = DocumentFile.fromTreeUri(activity, uri)
+      val dFile = DocumentFile.fromTreeUri(activity, it)
       if (dFile != null) {
-        val originalPath = dFile.uri.path!!.substring(
-          dFile.uri.path!!.lastIndexOf(":") + 1
-        )
-        val path = "${activity.getExternalFilesDirs("")[1]}"
-        return@getPathFromUri path.substringBefore(
-          activity.getString(R.string.android_directory_seperator)
-        )
-          .plus(File.separator).plus(originalPath)
+        dFile.uri.path?.let { file ->
+          val originalPath = file.substring(
+            file.lastIndexOf(":") + 1
+          )
+          val path = "${activity.getExternalFilesDirs("")[1]}"
+          return@getPathFromUri path.substringBefore(
+            activity.getString(R.string.android_directory_seperator)
+          )
+            .plus(File.separator).plus(originalPath)
+        }
       }
-      activity.toast(activity.resources.getString(R.string.error_occurred), Toast.LENGTH_SHORT)
+      activity.toast(
+        activity.resources
+          .getString(R.string.system_unable_to_grant_permission_message),
+        Toast.LENGTH_SHORT
+      )
     } ?: run {
-      activity.toast(activity.resources.getString(R.string.error_occurred), Toast.LENGTH_SHORT)
+      activity.toast(
+        activity.resources
+          .getString(R.string.system_unable_to_grant_permission_message),
+        Toast.LENGTH_SHORT
+      )
     }
     return null
   }

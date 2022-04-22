@@ -292,7 +292,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
         sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
       } ?: run {
-        activity.toast(resources.getString(R.string.error_occurred), Toast.LENGTH_SHORT)
+        activity.toast(
+          resources
+            .getString(R.string.system_unable_to_grant_permission_message),
+          Toast.LENGTH_SHORT
+        )
       }
     }
   }
