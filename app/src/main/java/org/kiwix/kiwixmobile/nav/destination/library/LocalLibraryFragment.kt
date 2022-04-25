@@ -173,29 +173,34 @@ class LocalLibraryFragment : BaseFragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     when (requestCode) {
       FILE_SELECT_CODE -> {
-        data?.data
-          ?.let(::validateFileFromUriAndNavigateToReaderFragment)
+        data?.data?.let { uri ->
+          getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
+        }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)
     }
   }
 
-  private fun validateFileFromUriAndNavigateToReaderFragment(
+  private fun getZimFileFromUri(
     uri: Uri
-  ) {
+  ): File? {
     val filePath = FileUtils.getLocalFilePathByUri(
       requireActivity().applicationContext, uri
     )
     if (filePath == null || !File(filePath).exists()) {
       activity.toast(R.string.error_file_not_found)
-      return
+      return null
     }
     val file = File(filePath)
-    if (!FileUtils.isValidZimFile(file.path)) {
+    return if (!FileUtils.isValidZimFile(file.path)) {
       activity.toast(R.string.error_file_invalid)
-      return
+      null
+    } else {
+      file
     }
+  }
 
+  private fun navigateToReaderFragment(file: File) {
     if (!file.canRead()) {
       activity.toast(R.string.unable_to_read_zim_file)
     } else {
