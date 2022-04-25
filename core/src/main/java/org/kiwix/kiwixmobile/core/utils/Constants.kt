@@ -39,7 +39,6 @@ const val EXTRA_IS_WIDGET_VOICE = "isWidgetVoice"
 const val HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService"
 const val OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base"
 
-
 // For Storage select dialog
 const val INTERNAL_SELECT_POSITION = 0
 const val EXTERNAL_SELECT_POSITION = 1
