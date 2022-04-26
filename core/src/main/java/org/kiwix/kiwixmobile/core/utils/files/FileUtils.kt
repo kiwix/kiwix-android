@@ -237,7 +237,7 @@ object FileUtils {
   }
 
   @JvmStatic fun isValidZimFile(filePath: String): Boolean =
-    (filePath.endsWith(".zim") || filePath.endsWith(".zimaa"))
+    filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
 
   @JvmStatic fun getSdCardMainPath(context: Context): String =
     "${context.getExternalFilesDirs("")[1]}"
