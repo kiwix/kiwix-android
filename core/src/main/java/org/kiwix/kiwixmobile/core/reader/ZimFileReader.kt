@@ -127,9 +127,15 @@ class ZimFileReader constructor(
     return loadContent(uri)
   }
 
-  fun readMimeType(uri: String) = uri.filePath.let {
-    it.mimeType?.takeIf(String::isNotEmpty) ?: mimeTypeFromReader(it) ?: DEFAULT_MIME_TYPE
-  }.also { Log.d(TAG, "getting mimetype for $uri = $it") }
+  fun readMimeType(uri: String): String {
+    var mime = uri.filePath.mimeType?.takeIf(String::isNotEmpty) ?: mimeTypeFromReader(uri)
+    ?: DEFAULT_MIME_TYPE
+    val content = getContentAndMimeType(uri)
+    if (content.second != mime) {
+      mime = content.second
+    }
+    return mime.also { Log.d(TAG, "getting mimetype for $uri = $it") }
+  }
 
   private fun mimeTypeFromReader(it: String) =
     // Truncate mime-type (everything after the first space and semi-colon(if exists)
