@@ -43,7 +43,9 @@ internal class StorageViewHolder(
       else R.string.external_storage
     )
 
-    file_name.isChecked = sharedPreferenceUtil.prefStorage == item.name
+    if (adapterPosition == sharedPreferenceUtil.storagePosition) {
+      file_name.isChecked = true
+    }
     file_size.text = storageCalculator.calculateAvailableSpace(item.file) + " / " +
       storageCalculator.calculateTotalSpace(item.file) + "  "
     clickOverlay.setOnClickListener {

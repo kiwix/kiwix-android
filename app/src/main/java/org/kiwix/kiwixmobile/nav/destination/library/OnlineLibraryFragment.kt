@@ -18,8 +18,11 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -28,6 +31,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -51,15 +55,21 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
+import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.library_view.AvailableSpaceCalculator
@@ -242,8 +252,53 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     downloader.download(book)
   }
 
+  @SuppressLint("InflateParams")
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
-    sharedPreferenceUtil.putPrefStorage(storageDevice.name)
+    if (storageDevice.isInternal) {
+      sharedPreferenceUtil.putPrefStorage(
+        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
+      )
+      sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
+    } else {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
+        dialogShower.show(SelectFolder { view }, ::selectFolder)
+      } else {
+        sharedPreferenceUtil.putPrefStorage(storageDevice.name)
+        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+      }
+    }
+  }
+
+  private fun selectFolder() {
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+    intent.addFlags(
+      Intent.FLAG_GRANT_READ_URI_PERMISSION
+        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+    )
+    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION)
+  }
+
+  @SuppressLint("WrongConstant") override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == Activity.RESULT_OK) {
+      data?.let {
+        getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
+        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+      } ?: run {
+        activity.toast(
+          resources
+            .getString(R.string.system_unable_to_grant_permission_message),
+          Toast.LENGTH_SHORT
+        )
+      }
+    }
   }
 
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
