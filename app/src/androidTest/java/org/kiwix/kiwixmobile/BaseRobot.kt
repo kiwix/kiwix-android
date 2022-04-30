@@ -52,7 +52,7 @@ abstract class BaseRobot(
     uiDevice.pressBack()
   }
 
-  protected fun isVisible(findable: Findable, timeout: Long = DEFAULT_WAIT) =
+  protected fun isVisible(findable: Findable, timeout: Long = VERY_LONG_WAIT) =
     waitFor(findable, timeout) ?: throw RuntimeException(findable.errorMessage(this))
 
   protected fun UiObject2.swipeLeft() {
@@ -63,7 +63,7 @@ abstract class BaseRobot(
     customSwipe(Direction.RIGHT)
   }
 
-  protected fun clickOn(findable: Findable, timeout: Long = DEFAULT_WAIT) {
+  protected fun clickOn(findable: Findable, timeout: Long = VERY_LONG_WAIT) {
     isVisible(findable, timeout).click()
   }
 
