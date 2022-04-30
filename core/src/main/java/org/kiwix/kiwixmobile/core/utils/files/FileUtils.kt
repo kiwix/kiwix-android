@@ -36,6 +36,8 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
+import java.util.ArrayList
 
 object FileUtils {
 
@@ -104,6 +106,11 @@ object FileUtils {
 
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
+        }
+        return try {
+          "${getSdCardMainPath(context)}/${documentId[1]}"
+        } catch (ignore: Exception) {
+          null
         }
       } else if ("com.android.providers.downloads.documents" == uri.authority)
         return try {
@@ -234,6 +241,13 @@ object FileUtils {
   } catch (e: IOException) {
     "".also { e.printStackTrace() }
   }
+
+  @JvmStatic fun isValidZimFile(filePath: String): Boolean =
+    filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
+
+  @JvmStatic fun getSdCardMainPath(context: Context): String =
+    "${context.getExternalFilesDirs("")[1]}"
+      .substringBefore(context.getString(R.string.android_directory_seperator))
 
   @SuppressLint("WrongConstant")
   @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String? {

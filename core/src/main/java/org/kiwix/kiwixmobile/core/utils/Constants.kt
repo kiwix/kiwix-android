@@ -42,3 +42,5 @@ const val OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base"
 // For Storage select dialog
 const val INTERNAL_SELECT_POSITION = 0
 const val EXTERNAL_SELECT_POSITION = 1
+
+const val FILE_SELECT_CODE = 5

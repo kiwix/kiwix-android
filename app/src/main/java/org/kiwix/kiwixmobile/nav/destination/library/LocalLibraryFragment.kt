@@ -19,7 +19,10 @@
 package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -29,10 +32,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -42,6 +47,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_destination_library.file_management_no_files
 import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
+import kotlinx.android.synthetic.main.fragment_destination_library.select_file
 import kotlinx.android.synthetic.main.fragment_destination_library.zim_swiperefresh
 import kotlinx.android.synthetic.main.fragment_destination_library.zimfilelist
 import org.kiwix.kiwixmobile.R
@@ -53,11 +59,13 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToSettings
+import org.kiwix.kiwixmobile.core.utils.FILE_SELECT_CODE
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -67,6 +75,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.Re
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
+import java.io.File
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
@@ -138,6 +147,67 @@ class LocalLibraryFragment : BaseFragment() {
 
     go_to_downloads_button_no_files.setOnClickListener {
       offerAction(FileSelectActions.UserClickedDownloadBooksButton)
+    }
+
+    select_file.setOnClickListener {
+      showFileChooser()
+    }
+  }
+
+  private fun showFileChooser() {
+    val intent = Intent().apply {
+      action = Intent.ACTION_GET_CONTENT
+      type = "*/*"
+      addCategory(Intent.CATEGORY_OPENABLE)
+    }
+    try {
+      startActivityForResult(
+        Intent.createChooser(intent, "Select a zim file"),
+        FILE_SELECT_CODE
+      )
+    } catch (ex: ActivityNotFoundException) {
+      activity.toast(resources.getString(R.string.no_app_found_to_open), Toast.LENGTH_SHORT)
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    when (requestCode) {
+      FILE_SELECT_CODE -> {
+        data?.data?.let { uri ->
+          getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
+        }
+      }
+      else -> super.onActivityResult(requestCode, resultCode, data)
+    }
+  }
+
+  private fun getZimFileFromUri(
+    uri: Uri
+  ): File? {
+    val filePath = FileUtils.getLocalFilePathByUri(
+      requireActivity().applicationContext, uri
+    )
+    if (filePath == null || !File(filePath).exists()) {
+      activity.toast(R.string.error_file_not_found)
+      return null
+    }
+    val file = File(filePath)
+    return if (!FileUtils.isValidZimFile(file.path)) {
+      activity.toast(R.string.error_file_invalid)
+      null
+    } else {
+      file
+    }
+  }
+
+  private fun navigateToReaderFragment(file: File) {
+    if (!file.canRead()) {
+      activity.toast(R.string.unable_to_read_zim_file)
+    } else {
+      activity?.navigate(
+        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = file.toUri().toString() }
+      )
     }
   }
 
