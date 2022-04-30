@@ -27,6 +27,7 @@ import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.Companion.from
+import org.kiwix.kiwixmobile.core.R
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -76,11 +77,19 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
       return when {
-        storage == null -> defaultStorage().also(::putPrefStorage)
-        !File(storage).exists() -> defaultStorage()
+        storage == null -> getPublicDirectoryPath(defaultStorage()).also {
+          putPrefStorage(it)
+          putStoragePosition(0)
+        }
+        !File(storage).exists() -> getPublicDirectoryPath(defaultStorage()).also {
+          putStoragePosition(0)
+        }
         else -> storage
       }
     }
+
+  val storagePosition: Int
+    get() = sharedPreferences.getInt(STORAGE_POSITION, 0)
 
   private fun defaultStorage(): String =
     getExternalFilesDirs(context, null)[0]?.path
@@ -106,6 +115,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
     _prefStorages.onNext(storage)
+  }
+
+  fun putStoragePosition(pos: Int) {
+    sharedPreferences.edit { putInt(STORAGE_POSITION, pos) }
   }
 
   fun putPrefFullScreen(fullScreen: Boolean) =
@@ -160,10 +173,14 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       _textZooms.offer(textZoom)
     }
 
+  fun getPublicDirectoryPath(path: String): String =
+    path.substringBefore(context.getString(R.string.android_directory_seperator))
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
     const val PREF_STORAGE = "pref_select_folder"
+    const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"

@@ -47,6 +47,9 @@ dependencies {
   implementation(Libs.squidb_annotations)
   add("kapt", Libs.squidb_processor)
 
+  // Document File
+  implementation(Libs.select_folder_document_file)
+
   // Square
   implementation(Libs.converter_simplexml) {
     exclude(group = "xpp3", module = "xpp3")
