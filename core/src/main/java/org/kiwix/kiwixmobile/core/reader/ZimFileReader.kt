@@ -21,7 +21,6 @@ import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Log
-import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
@@ -127,19 +126,10 @@ class ZimFileReader constructor(
     return loadContent(uri)
   }
 
-  fun readMimeType(uri: String): String {
-    var mime = uri.filePath.mimeType?.takeIf(String::isNotEmpty) ?: mimeTypeFromReader(uri)
-    ?: DEFAULT_MIME_TYPE
-    val content = getContentAndMimeType(uri)
-    if (content.second != mime) {
-      mime = content.second
+  fun readMimeType(uri: String): String = getContentAndMimeType(uri)
+    .second.also {
+      Log.d(TAG, "getting mimetype for $uri = $it")
     }
-    return mime.also { Log.d(TAG, "getting mimetype for $uri = $it") }
-  }
-
-  private fun mimeTypeFromReader(it: String) =
-    // Truncate mime-type (everything after the first space and semi-colon(if exists)
-    jniKiwixReader.getMimeType(it.filePath)?.replace("^([^ ]+).*$", "$1")?.substringBefore(";")
 
   fun getRedirect(url: String) = "${toRedirect(url)}"
 
@@ -270,7 +260,6 @@ class ZimFileReader constructor(
       """.trimIndent()
     private val assetExtensions =
       listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv", "svg", "warc")
-    private const val DEFAULT_MIME_TYPE = "application/octet-stream"
   }
 }
 
@@ -278,9 +267,6 @@ private val Uri.filePath: String
   get() = toString().filePath
 private val String.filePath: String
   get() = substringAfter(CONTENT_PREFIX).substringBefore("#").substringBefore("?")
-private val String.mimeType: String?
-  get() = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-    MimeTypeMap.getFileExtensionFromUrl(this)
-  )
+
 private val Pair.parcelFileDescriptor: ParcelFileDescriptor?
   get() = ParcelFileDescriptor.open(File(filename), ParcelFileDescriptor.MODE_READ_ONLY)
