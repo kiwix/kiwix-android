@@ -127,7 +127,7 @@ class ZimFileReader constructor(
   }
 
   fun readMimeType(uri: String): String = getContentAndMimeType(uri)
-    .second.also {
+    .second.substringBefore(";").also {
       Log.d(TAG, "getting mimetype for $uri = $it")
     }
 
