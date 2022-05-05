@@ -18,10 +18,10 @@
 
 package org.kiwix.kiwixmobile.mimetype
 
-import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.rule.ActivityTestRule
+import org.junit.Assert
 import org.junit.Test
 import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -49,13 +49,12 @@ class MimeTypeTest : BaseActivityTest() {
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
-      val out: OutputStream = FileOutputStream(zimFile)
-      out.use { out ->
-        // Transfer bytes from in to out
-        val buf = ByteArray(1024)
-        var len: Int
-        while (inputStream.read(buf).also { len = it } > 0) {
-          out.write(buf, 0, len)
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { outputStream ->
+        val buffer = ByteArray(1024)
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          outputStream.write(buffer, 0, length)
         }
       }
     }
@@ -64,8 +63,16 @@ class MimeTypeTest : BaseActivityTest() {
       JNIKiwixReader(zimFile.canonicalPath),
       NightModeConfig(SharedPreferenceUtil(context), context)
     )
-    zimFileReader.readMimeType(zimFileReader.getRandomArticleUrl()!!).also {
-      Log.e("ZIMFILEREADER", "testMimeType: $it")
+    zimFileReader.getRandomArticleUrl()?.let {
+      val mimeType = zimFileReader.readMimeType(it)
+      if (mimeType.contains("^([^ ]+).*$") || mimeType.contains(";")) {
+        Assert.fail(
+          "Unable to get mime type from zim file. File = " +
+            " $zimFile and url of article = $it"
+        )
+      }
+    } ?: kotlin.run {
+      Assert.fail("Unable to get article from zim file $zimFile")
     }
   }
 }
