@@ -11,8 +11,9 @@
 
   <!-- Device with versions >= Pie need this permission -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
-    tools:ignore="QueryAllPackagesPermission" />
+  <queries>
+    <package android:name="com.google.android.wifi" />
+  </queries>
 
   <application
     android:allowBackup="true"
