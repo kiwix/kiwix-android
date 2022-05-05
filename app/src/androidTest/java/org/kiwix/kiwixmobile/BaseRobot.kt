@@ -81,7 +81,7 @@ abstract class BaseRobot(
 
   private fun waitFor(
     findable: Findable,
-    timeout: Long = DEFAULT_WAIT
+    timeout: Long = VERY_LONG_WAIT
   ): UiObject2? =
     uiDevice.wait(Until.findObject(findable.selector(this)), timeout)
 

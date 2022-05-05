@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.help
 
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
@@ -26,7 +26,7 @@ class HelpFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyHelpActivity() {
-    runOnUiThread { activityRule.activity.navigate(R.id.helpFragment) }
+    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.helpFragment) }
     help {
       clickOnWhatDoesKiwixDo()
       assertWhatDoesKiwixDoIsExpanded()

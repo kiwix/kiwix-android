@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.page.history.HistoryRobot
 import org.kiwix.kiwixmobile.page.history.history
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.settings.settingsRobo
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
@@ -50,6 +52,7 @@ class TopLevelDestinationRobot : BaseRobot() {
   }
 
   fun clickReaderOnBottomNav(func: ReaderRobot.() -> Unit) {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     clickOn(ViewId(R.id.readerFragment))
     reader(func)
   }
