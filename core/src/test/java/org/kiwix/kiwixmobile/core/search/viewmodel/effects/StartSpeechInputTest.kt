@@ -50,16 +50,16 @@ internal class StartSpeechInputTest {
     val activity = mockk<AppCompatActivity>()
     every { activity.getString(R.string.app_name) } returns "app"
     every { activity.getString(R.string.speech_prompt_text, "app") } returns "the app"
-    every { activity.startActivityForResult(any(), any()) } throws ActivityNotFoundException()
+    every { activity.startActivityForResult(any(), any()) } returns Unit
     mockkConstructor(Intent::class)
     StartSpeechInput(actions).invokeWith(activity)
     verify {
-      anyConstructed<Intent>().putExtra(
+      constructedWith<Intent>().putExtra(
         RecognizerIntent.EXTRA_LANGUAGE_MODEL,
         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
       )
-      anyConstructed<Intent>().putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-      anyConstructed<Intent>().putExtra(RecognizerIntent.EXTRA_PROMPT, "the app")
+      constructedWith<Intent>().putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+      constructedWith<Intent>().putExtra(RecognizerIntent.EXTRA_PROMPT, "the app")
       activity.startActivityForResult(any(), StartSpeechInput.REQ_CODE_SPEECH_INPUT)
     }
   }
