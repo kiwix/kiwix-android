@@ -1,6 +1,6 @@
 {
   "app_name": "Test Custom App",
-  "zim_url": "https://mirror.download.kiwix.org/zim/wikipedia/wikipedia_ace_all_maxi_2022-03.zim",
+  "zim_url": "https://download.kiwix.org/zim/wikipedia_fr_test.zim",
   "enforced_lang": "en",
   "disable_sidebar": false,
   "disable_tabs": false,
