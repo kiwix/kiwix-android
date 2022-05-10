@@ -48,7 +48,11 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
   fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse {
     val data = zimFileReader?.load(url)
-    return WebResourceResponse(zimFileReader?.readMimeType(url), Charsets.UTF_8.name(), data)
+    return WebResourceResponse(
+      zimFileReader?.readContentAndMimeType(url),
+      Charsets.UTF_8.name(),
+      data
+    )
       .apply {
         val headers = mutableMapOf("Accept-Ranges" to "bytes")
         if ("Range" in requestHeaders.keys) {

@@ -50,11 +50,11 @@ class MimeTypeTest : BaseActivityTest() {
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
       val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { outputStream ->
+      outputStream.use { it ->
         val buffer = ByteArray(1024)
         var length: Int
         while (inputStream.read(buffer).also { length = it } > 0) {
-          outputStream.write(buffer, 0, length)
+          it.write(buffer, 0, length)
         }
       }
     }
@@ -64,15 +64,19 @@ class MimeTypeTest : BaseActivityTest() {
       NightModeConfig(SharedPreferenceUtil(context), context)
     )
     zimFileReader.getRandomArticleUrl()?.let {
-      val mimeType = zimFileReader.readMimeType(it)
+      val mimeType = zimFileReader.readContentAndMimeType(it)
       if (mimeType.contains("^([^ ]+).*$") || mimeType.contains(";")) {
         Assert.fail(
           "Unable to get mime type from zim file. File = " +
             " $zimFile and url of article = $it"
         )
       }
+    }.also {
+      zimFileReader.dispose()
     } ?: kotlin.run {
       Assert.fail("Unable to get article from zim file $zimFile")
+    }.also {
+      zimFileReader.dispose()
     }
   }
 }
