@@ -21,7 +21,7 @@ import android.Manifest
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
-import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

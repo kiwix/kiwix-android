@@ -405,7 +405,7 @@ object Libs {
 
   const val multidex: String = "androidx.multidex:multidex:" + Versions.multidex
 
-  const val barista: String = "com.schibsted.spain:barista:" + Versions.barista
+  const val barista: String = "com.adevinta.android:barista:" + Versions.barista
 
   const val xfetch2: String = "androidx.tonyodev.fetch2:xfetch2:" + Versions.xfetch2
 

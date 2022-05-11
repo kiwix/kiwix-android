@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.main
 
-import com.schibsted.spain.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId

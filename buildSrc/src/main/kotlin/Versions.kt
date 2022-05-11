@@ -94,7 +94,7 @@ object Versions {
 
   const val multidex: String = "2.0.1"
 
-  const val barista: String = "2.7.1" // available: "3.7.0"
+  const val barista: String = "4.0.0"
 
   const val xfetch2: String = "3.1.6"
 

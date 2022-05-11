@@ -18,15 +18,15 @@
 package org.kiwix.kiwixmobile.utils;
 
 import android.util.Log;
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions;
-import com.schibsted.spain.barista.interaction.BaristaDrawerInteractions;
-import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+import com.adevinta.android.barista.interaction.BaristaClickInteractions;
+import com.adevinta.android.barista.interaction.BaristaDrawerInteractions;
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
 import org.kiwix.kiwixmobile.R;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
