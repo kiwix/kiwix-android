@@ -96,7 +96,7 @@ object Versions {
 
   const val barista: String = "4.0.0"
 
-  const val xfetch2: String = "3.1.6"
+  const val fetch: String = "3.1.6"
 
   const val jsr305: String = "3.0.2"
 

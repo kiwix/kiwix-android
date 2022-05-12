@@ -330,9 +330,6 @@ object Libs {
    */
   const val junit_jupiter: String = "org.junit.jupiter:junit-jupiter:" + Versions.junit_jupiter
 
-  const val xfetch2okhttp: String = "androidx.tonyodev.fetch2okhttp:xfetch2okhttp:" +
-    Versions.xfetch2okhttp
-
   /**
    * https://assertj.github.io/doc/
    */
@@ -407,7 +404,7 @@ object Libs {
 
   const val barista: String = "com.adevinta.android:barista:" + Versions.barista
 
-  const val xfetch2: String = "androidx.tonyodev.fetch2:xfetch2:" + Versions.xfetch2
+  const val fetch: String = "com.github.tonyofrancis:fetch:" + Versions.fetch
 
   /**
    * http://findbugs.sourceforge.net/

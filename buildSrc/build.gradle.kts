@@ -8,6 +8,7 @@ repositories {
   maven {
     setUrl("https://plugins.gradle.org/m2/")
   }
+  maven { setUrl("https://jitpack.io") }
 }
 
 dependencies {
