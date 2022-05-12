@@ -34,7 +34,7 @@ object Versions {
 
   const val androidx_test: String = "1.3.0"
 
-  const val io_objectbox: String = "2.8.1"
+  const val io_objectbox: String = "2.9.1"
 
   const val org_jacoco: String = "0.8.7"
 
