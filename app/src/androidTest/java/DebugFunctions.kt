@@ -36,13 +36,21 @@ inline fun <reified T : BaseRobot> T.applyWithViewHierarchyPrinting(
     } catch (runtimeException: RuntimeException) {
       uiDevice.takeScreenshot(File(context.filesDir, "${System.currentTimeMillis()}.png"))
       InstrumentationRegistry.getInstrumentation().runOnMainSync {
-        throw RuntimeException(
-          combineMessages(
-            runtimeException,
-            ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED).last()
-          ),
-          runtimeException
-        )
+        // During the Pause state, it can't any state or since it may not hold strong reference it
+        // may garbage collected in the low memory stage or may not return an instance of particular
+        // activity
+        val activity =
+          ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED).lastOrNull()
+        if (activity != null) {
+          throw RuntimeException(
+            combineMessages(
+              runtimeException = runtimeException,
+              activity = activity
+            ),
+            runtimeException
+          )
+        }
+        throw RuntimeException()
       }
     }
   }
