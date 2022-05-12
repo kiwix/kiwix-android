@@ -321,7 +321,7 @@ object FileUtils {
       }
       fileToSave
     } catch (e: IOException) {
-      Log.w("kiwix", "Couldn't save image", e)
+      Log.w("kiwix", "Couldn't save file", e)
       null
     }
   }

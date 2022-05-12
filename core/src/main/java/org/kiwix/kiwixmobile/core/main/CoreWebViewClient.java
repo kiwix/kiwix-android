@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebResourceRequest;
@@ -27,9 +28,12 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import java.io.File;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.CONTENT_PREFIX;
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.UI_URI;
@@ -97,11 +101,21 @@ public class CoreWebViewClient extends WebViewClient {
   private boolean handleEpubAndPdf(String url) {
     String extension = MimeTypeMap.getFileExtensionFromUrl(url);
     if (DOCUMENT_TYPES.containsKey(extension)) {
-      Intent intent = new Intent(Intent.ACTION_VIEW);
-      Uri uri = Uri.parse(url);
-      intent.setDataAndType(uri, DOCUMENT_TYPES.get(extension));
-      intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-      callback.openExternalUrl(intent);
+      File savedFile = FileUtils.downloadFileFromUrl(url, null, zimReaderContainer);
+      if (savedFile != null && savedFile.exists()) {
+        Uri uri = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+          ? FileProvider.getUriForFile(
+          CoreApp.getInstance(),
+          CoreApp.getInstance().getPackageName() + ".fileprovider", savedFile)
+          : Uri.fromFile(savedFile);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, DOCUMENT_TYPES.get(extension));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+          intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        callback.openExternalUrl(intent);
+      }
       return true;
     }
     return false;

@@ -150,11 +150,11 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val url = msg.data["url"] as? String
       val src = msg.data["src"] as? String
       if (url != null || src != null) {
-        val file = FileUtils.downloadFileFromUrl(url, src, zimReaderContainer)
-        file?.let {
+        val savedFile = FileUtils.downloadFileFromUrl(url, src, zimReaderContainer)
+        savedFile?.let {
           instance.toast(instance.getString(R.string.save_media_saved, it.name))
         } ?: run {
-          Log.w("kiwix", "Couldn't save image")
+          Log.w("kiwix", "Couldn't save file")
           instance.toast(R.string.save_media_error)
         }
       }
