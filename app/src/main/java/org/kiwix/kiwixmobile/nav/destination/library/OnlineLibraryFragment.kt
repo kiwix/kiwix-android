@@ -18,9 +18,12 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
@@ -35,6 +38,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,6 +67,7 @@ import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
+import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -107,6 +113,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
 
   private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
+
+  private val isWriteStoragePermissionAllowed
+    get() = ContextCompat.checkSelfPermission(
+      requireActivity(),
+      Manifest.permission.WRITE_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -301,30 +313,55 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
+  private fun requestExternalStoragePermission() {
+    ActivityCompat.requestPermissions(
+      requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+      REQUEST_STORAGE_PERMISSION
+    )
+  }
+
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (requestCode == REQUEST_STORAGE_PERMISSION &&
+      grantResults.isNotEmpty() &&
+      grantResults[0] != PERMISSION_GRANTED
+    ) {
+      requestExternalStoragePermission()
+    }
+  }
+
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
-    when {
-      isNotConnected -> {
-        noInternetSnackbar()
-        return
+    if (isWriteStoragePermissionAllowed) {
+      when {
+        isNotConnected -> {
+          noInternetSnackbar()
+          return
+        }
+        noWifiWithWifiOnlyPreferenceSet -> {
+          dialogShower.show(WifiOnly, {
+            sharedPreferenceUtil.putPrefWifiOnly(false)
+            downloadFile(item.book)
+          })
+          return
+        }
+        else -> availableSpaceCalculator.hasAvailableSpaceFor(item,
+          { downloadFile(item.book) },
+          {
+            libraryList.snack(
+              getString(R.string.download_no_space) +
+                "\n" + getString(R.string.space_available) + " " +
+                it,
+              R.string.download_change_storage,
+              ::showStorageSelectDialog
+            )
+          })
       }
-      noWifiWithWifiOnlyPreferenceSet -> {
-        dialogShower.show(WifiOnly, {
-          sharedPreferenceUtil.putPrefWifiOnly(false)
-          downloadFile(item.book)
-        })
-        return
-      }
-      else -> availableSpaceCalculator.hasAvailableSpaceFor(item,
-        { downloadFile(item.book) },
-        {
-          libraryList.snack(
-            getString(R.string.download_no_space) +
-              "\n" + getString(R.string.space_available) + " " +
-              it,
-            R.string.download_change_storage,
-            ::showStorageSelectDialog
-          )
-        })
+    } else {
+      requestExternalStoragePermission()
     }
   }
 
