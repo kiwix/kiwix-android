@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -70,6 +71,7 @@ import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
@@ -88,6 +90,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
   @Inject lateinit var dialogShower: DialogShower
+  @Inject lateinit var alertDialogShower: AlertDialogShower
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
@@ -306,12 +309,30 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
+  private fun checkExternalStorageWritePermission(): Boolean {
+    return hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+      if (!permissionGranted) {
+        if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+          alertDialogShower.show(
+            KiwixDialog.WriteStoragePermissionRationale,
+            ::requestExternalStoragePermission
+          )
+        } else {
+          requestExternalStoragePermission()
+        }
+      }
+    }
+  }
+
   private fun requestExternalStoragePermission() {
     ActivityCompat.requestPermissions(
       requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
       REQUEST_STORAGE_PERMISSION
     )
   }
+
+  private fun shouldShowRationale(writeExternalStorage: String) =
+    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), writeExternalStorage)
 
   override fun onRequestPermissionsResult(
     requestCode: Int,
@@ -323,8 +344,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       grantResults.isNotEmpty() &&
       grantResults[0] != PERMISSION_GRANTED
     ) {
-      context.toast(R.string.request_write_storage)
-      requestExternalStoragePermission()
+      checkExternalStorageWritePermission()
     }
   }
 
@@ -332,7 +352,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     ContextCompat.checkSelfPermission(requireActivity(), permission) == PERMISSION_GRANTED
 
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
-    if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+    if (checkExternalStorageWritePermission()) {
       when {
         isNotConnected -> {
           noInternetSnackbar()
@@ -357,8 +377,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             )
           })
       }
-    } else {
-      requestExternalStoragePermission()
     }
   }
 

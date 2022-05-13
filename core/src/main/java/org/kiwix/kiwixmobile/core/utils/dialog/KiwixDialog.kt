@@ -61,6 +61,13 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object WriteStoragePermissionRationale : KiwixDialog(
+    null,
+    R.string.request_write_storage,
+    android.R.string.yes,
+    android.R.string.cancel
+  )
+
   object EnableWifiP2pServices : KiwixDialog(
     null, R.string.request_enable_wifi, R.string.yes, android.R.string.no
   )
