@@ -16,6 +16,12 @@ object Libs {
     "androidx.documentfile:documentfile:" + Versions.document_file_version
 
   /**
+   * https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout#kts
+   */
+  const val swipe_refresh_layout =
+    "androidx.swiperefreshlayout:swiperefreshlayout:" + Versions.swipe_refresh_layout_version
+
+  /**
    * https://github.com/Kotlin/kotlinx.coroutines
    */
   const val kotlinx_coroutines_android: String =
@@ -287,9 +293,6 @@ object Libs {
    */
   const val javax_annotation_api: String = "javax.annotation:javax.annotation-api:" +
     Versions.javax_annotation_api
-
-  const val ink_page_indicator: String = "com.pacioianu.david:ink-page-indicator:" +
-    Versions.ink_page_indicator
 
   /**
    * http://github.com/square/leakcanary/

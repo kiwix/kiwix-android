@@ -25,7 +25,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent" />
 
-  <com.pixelcan.inkpageindicator.InkPageIndicator
+  <org.kiwix.kiwixmobile.intro.CustomPageIndicator
     android:id="@+id/tab_indicator"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

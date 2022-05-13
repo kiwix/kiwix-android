@@ -12,6 +12,8 @@ import org.gradle.plugin.use.PluginDependencySpec
  */
 object Versions {
 
+  const val swipe_refresh_layout_version: String = "1.1.0"
+
   const val document_file_version: String = "1.0.1"
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"
@@ -49,8 +51,6 @@ object Versions {
   const val com_github_triplet_play_gradle_plugin: String = "2.8.0" // available: "3.0.0"
 
   const val javax_annotation_api: String = "1.3.2"
-
-  const val ink_page_indicator: String = "1.3.0"
 
   const val leakcanary_android: String = "2.5"
 

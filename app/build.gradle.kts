@@ -87,5 +87,6 @@ play {
 
 dependencies {
   implementation(Libs.squidb)
-  implementation(Libs.ink_page_indicator)
+  implementation(Libs.squidb_annotations)
+  add("kapt", Libs.squidb_processor)
 }
