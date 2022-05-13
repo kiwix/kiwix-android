@@ -323,7 +323,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       grantResults.isNotEmpty() &&
       grantResults[0] != PERMISSION_GRANTED
     ) {
-      context.toast(R.string.request_storage)
+      context.toast(R.string.request_write_storage)
       requestExternalStoragePermission()
     }
   }
