@@ -62,8 +62,6 @@ object Versions {
 
   const val junit_jupiter: String = "5.7.0"
 
-  const val xfetch2okhttp: String = "3.1.6"
-
   const val assertj_core: String = "3.18.1"
 
   const val core_testing: String = "2.1.0"
