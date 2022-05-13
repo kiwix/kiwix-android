@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -103,10 +104,11 @@ public class CoreWebViewClient extends WebViewClient {
     if (DOCUMENT_TYPES.containsKey(extension)) {
       File savedFile = FileUtils.downloadFileFromUrl(url, null, zimReaderContainer);
       if (savedFile != null && savedFile.exists()) {
+        Context context = CoreApp.getInstance();
         Uri uri = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
           ? FileProvider.getUriForFile(
-          CoreApp.getInstance(),
-          CoreApp.getInstance().getPackageName() + ".fileprovider", savedFile)
+          context,
+          context.getPackageName() + ".fileprovider", savedFile)
           : Uri.fromFile(savedFile);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, DOCUMENT_TYPES.get(extension));

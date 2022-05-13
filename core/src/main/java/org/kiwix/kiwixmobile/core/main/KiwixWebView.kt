@@ -23,7 +23,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
-import android.util.Log
 import android.view.ContextMenu
 import android.view.View
 import android.view.ViewGroup
@@ -154,7 +153,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         savedFile?.let {
           instance.toast(instance.getString(R.string.save_media_saved, it.name))
         } ?: run {
-          Log.w("kiwix", "Couldn't save file")
           instance.toast(R.string.save_media_error)
         }
       }
