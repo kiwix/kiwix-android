@@ -22,7 +22,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
 import android.os.Build
@@ -113,12 +112,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
 
   private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
-
-  private val isWriteStoragePermissionAllowed
-    get() = ContextCompat.checkSelfPermission(
-      requireActivity(),
-      Manifest.permission.WRITE_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -330,12 +323,16 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       grantResults.isNotEmpty() &&
       grantResults[0] != PERMISSION_GRANTED
     ) {
+      context.toast(R.string.request_storage)
       requestExternalStoragePermission()
     }
   }
 
+  private fun hasPermission(permission: String): Boolean =
+    ContextCompat.checkSelfPermission(requireActivity(), permission) == PERMISSION_GRANTED
+
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
-    if (isWriteStoragePermissionAllowed) {
+    if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
       when {
         isNotConnected -> {
           noInternetSnackbar()
