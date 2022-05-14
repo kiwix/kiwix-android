@@ -25,6 +25,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -318,10 +319,22 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             ::requestExternalStoragePermission
           )
         } else {
-          requestExternalStoragePermission()
+          alertDialogShower.show(
+            KiwixDialog.WriteStoragePermissionRationale,
+            ::openAppSettings
+          )
         }
       }
     }
+  }
+
+  private fun openAppSettings() {
+    val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+      flags = Intent.FLAG_ACTIVITY_NEW_TASK
+      data = uri
+    }
+    startActivity(intent)
   }
 
   private fun requestExternalStoragePermission() {
@@ -342,9 +355,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     if (requestCode == REQUEST_STORAGE_PERMISSION &&
       grantResults.isNotEmpty() &&
-      grantResults[0] != PERMISSION_GRANTED
+      permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) {
-      checkExternalStorageWritePermission()
+      if (grantResults[0] != PERMISSION_GRANTED) {
+        checkExternalStorageWritePermission()
+      }
     }
   }
 
