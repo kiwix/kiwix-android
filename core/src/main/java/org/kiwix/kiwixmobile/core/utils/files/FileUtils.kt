@@ -291,7 +291,12 @@ object FileUtils {
     return null
   }
 
-  private fun getDecodedFileName(url: String?, src: String?): String =
+  /**
+   * Returns the file name from the url or src. In url it gets the file name from the last '/' and
+   * if it contains '.'. If the url is null then it'll get the file name from the last '/'.
+   * If the url and src doesn't exist it returns the empty string.
+   */
+  fun getDecodedFileName(url: String?, src: String?): String =
     url?.substringAfterLast("/", "")
       ?.takeIf { it.contains(".") }
       ?: src?.substringAfterLast("/", "")
