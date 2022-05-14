@@ -42,6 +42,13 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * Author DavidPacioianu
+ * Reference From
+ * https://github.com/DavidPacioianu/InkPageIndicator
+ * We refactor this java file to kotlin file
+ */
+
 class CustomPageIndicator @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
@@ -161,7 +168,7 @@ class CustomPageIndicator @JvmOverloads constructor(
     val top = paddingTop
     val right = width - paddingRight
     val bottom = height - paddingBottom
-    val requiredWidth = requiredWidth
+    val requiredWidth = getRequiredWidth()
     val startLeft = left + (right - left - requiredWidth) / 2 + dotRadius
     dotCenterX = FloatArray(pageCount)
     for (i in 0 until pageCount) {
@@ -180,10 +187,10 @@ class CustomPageIndicator @JvmOverloads constructor(
     } else {
       0
     }
-    if (dotCenterX != null && dotCenterX!!.isNotEmpty() &&
-      (moveAnimation == null || !moveAnimation!!.isStarted)
+    if (dotCenterX != null && dotCenterX!!.isNotEmpty()
     ) {
-      selectedDotX = dotCenterX!![currentPage]
+      if (moveAnimation == null || !moveAnimation!!.isStarted)
+        selectedDotX = dotCenterX!![currentPage]
     }
   }
 
@@ -198,13 +205,13 @@ class CustomPageIndicator @JvmOverloads constructor(
   }
 
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    val desiredHeight = desiredHeight
+    val desiredHeight = getDesiredHeight()
     val height: Int = when (MeasureSpec.getMode(heightMeasureSpec)) {
       MeasureSpec.EXACTLY -> MeasureSpec.getSize(heightMeasureSpec)
       MeasureSpec.AT_MOST -> min(desiredHeight, MeasureSpec.getSize(heightMeasureSpec))
       else -> desiredHeight
     }
-    val desiredWidth = desiredWidth
+    val desiredWidth = getDesiredWidth()
     val width: Int = when (MeasureSpec.getMode(widthMeasureSpec)) {
       MeasureSpec.EXACTLY -> MeasureSpec.getSize(widthMeasureSpec)
       MeasureSpec.AT_MOST -> min(desiredWidth, MeasureSpec.getSize(widthMeasureSpec))
@@ -214,12 +221,14 @@ class CustomPageIndicator @JvmOverloads constructor(
     calculateDotPositions(width, height)
   }
 
-  private val desiredHeight: Int
-    get() = paddingTop + dotDiameter + paddingBottom
-  private val requiredWidth: Int
-    get() = pageCount * dotDiameter + (pageCount - 1) * gap
-  private val desiredWidth: Int
-    get() = paddingLeft + requiredWidth + paddingRight
+  private fun getDesiredHeight(): Int =
+    paddingTop + dotDiameter + paddingBottom
+
+  private fun getRequiredWidth(): Int =
+    pageCount * dotDiameter + (pageCount - 1) * gap
+
+  private fun getDesiredWidth(): Int =
+    paddingLeft + getRequiredWidth() + paddingRight
 
   override fun onViewAttachedToWindow(view: View) {
     attachedToWindow = true
@@ -267,95 +276,27 @@ class CustomPageIndicator @JvmOverloads constructor(
     dotRevealFraction: Float
   ): Path {
     unselectedDotPath.rewind()
-    if ((joiningFraction == 0f || joiningFraction == INVALID_FRACTION) &&
-      dotRevealFraction == 0f && !(page == currentPage && selectedDotInPosition)
+    if ((joiningFraction == selectedFactor || joiningFraction == INVALID_FRACTION)
     ) {
-
-      // case #1 – At rest
-      unselectedDotPath.addCircle(dotCenterX!![page], dotCenterY, dotRadius, Path.Direction.CW)
+      if (dotRevealFraction == selectedFactor && !(page == currentPage && selectedDotInPosition)) {
+        // case #1 – At rest
+        unselectedDotPath.addCircle(dotCenterX!![page], dotCenterY, dotRadius, Path.Direction.CW)
+      }
     }
-    if (joiningFraction > 0f && joiningFraction <= 0.5f && retreatingJoinX1 == INVALID_FRACTION) {
-      calculateDotRightPath(centerX, nextCenterX, joiningFraction)
-    }
-    if (joiningFraction > 0.5f && joiningFraction < 1f && retreatingJoinX1 == INVALID_FRACTION) {
-
-      // case #3 – Joining neighbour, combined curved
-
-      // adjust the fraction so that it goes from 0.3 -> 1 to produce a more realistic 'join'
-      val adjustedFraction = (joiningFraction - 0.2f) * 1.25f
-
-      // start in the bottom left
-      unselectedDotPath.moveTo(centerX, dotBottomY)
-
-      // semi-circle to the top left
-      rectF[centerX - dotRadius, dotTopY, centerX + dotRadius] = dotBottomY
-      unselectedDotPath.arcTo(rectF, 90f, 180f, true)
-
-      // bezier to the middle top of the join
-      endX1 = centerX + dotRadius + gap / 2
-      endY1 = dotCenterY - adjustedFraction * dotRadius
-      controlX1 = endX1 - adjustedFraction * dotRadius
-      controlY1 = dotTopY
-      controlX2 = endX1 - (1 - adjustedFraction) * dotRadius
-      controlY2 = endY1
-      unselectedDotPath.cubicTo(
-        controlX1, controlY1,
-        controlX2, controlY2,
-        endX1, endY1
-      )
-
-      // bezier to the top right of the join
-      endX2 = nextCenterX
-      endY2 = dotTopY
-      controlX1 = endX1 + (1 - adjustedFraction) * dotRadius
-      controlY1 = endY1
-      controlX2 = endX1 + adjustedFraction * dotRadius
-      controlY2 = dotTopY
-      unselectedDotPath.cubicTo(
-        controlX1, controlY1,
-        controlX2, controlY2,
-        endX2, endY2
-      )
-
-      // semi-circle to the bottom right
-      rectF[nextCenterX - dotRadius, dotTopY, nextCenterX + dotRadius] = dotBottomY
-      unselectedDotPath.arcTo(rectF, 270f, 180f, true)
-
-      // bezier to the middle bottom of the join
-      // endX1 stays the same
-      endY1 = dotCenterY + adjustedFraction * dotRadius
-      controlX1 = endX1 + adjustedFraction * dotRadius
-      controlY1 = dotBottomY
-      controlX2 = endX1 + (1 - adjustedFraction) * dotRadius
-      controlY2 = endY1
-      unselectedDotPath.cubicTo(
-        controlX1, controlY1,
-        controlX2, controlY2,
-        endX1, endY1
-      )
-
-      // bezier back to the start point in the bottom left
-      endX2 = centerX
-      endY2 = dotBottomY
-      controlX1 = endX1 - (1 - adjustedFraction) * dotRadius
-      controlY1 = endY1
-      controlX2 = endX1 - adjustedFraction * dotRadius
-      controlY2 = endY2
-      unselectedDotPath.cubicTo(
-        controlX1, controlY1,
-        controlX2, controlY2,
-        endX2, endY2
-      )
+    unselectedDotRightPath(centerX, joiningFraction, nextCenterX)
+    if (joiningFraction > smallUnSelectedFactor &&
+      joiningFraction < unselectedFactor &&
+      retreatingJoinX1 == INVALID_FRACTION
+    ) {
+      joinNeighbour(joiningFraction, centerX, nextCenterX)
     }
     if (joiningFraction == 1f && retreatingJoinX1 == INVALID_FRACTION) {
-
       // case #4 Joining neighbour, combined straight technically we could use case 3 for this
       // situation as well but assume that this is an optimization rather than faffing around
       // with beziers just to draw a rounded rect
       rectF[centerX - dotRadius, dotTopY, nextCenterX + dotRadius] = dotBottomY
       unselectedDotPath.addRoundRect(rectF, dotRadius, dotRadius, Path.Direction.CW)
     }
-
     // case #5 is handled by #getRetreatingJoinPath()
     // this is done separately so that we can have a single retreating path spanning
     // multiple dots and therefore animate it's movement smoothly
@@ -370,86 +311,137 @@ class CustomPageIndicator @JvmOverloads constructor(
     return unselectedDotPath
   }
 
-  private fun calculateDotRightPath(
+  private fun joinNeighbour(
+    joiningFraction: Float,
     centerX: Float,
-    nextCenterX: Float,
-    joiningFraction: Float
+    nextCenterX: Float
   ) {
-    // case #2 – Joining neighbour, still separate
-
-    // start with the left dot
-    unselectedDotLeftPath.rewind()
-
-    // start at the bottom center
-    unselectedDotLeftPath.moveTo(centerX, dotBottomY)
-
-    // semi circle to the top center
+    // case #3 – Joining neighbour, combined curved
+    // adjust the fraction so that it goes from 0.3 -> 1 to produce a more realistic 'join'
+    val adjustedFraction =
+      (joiningFraction - zeroPointTwoFractionConst) * onePointTwoFiveFractionConst
+    // start in the bottom left
+    unselectedDotPath.moveTo(centerX, dotBottomY)
+    // semi-circle to the top left
     rectF[centerX - dotRadius, dotTopY, centerX + dotRadius] = dotBottomY
-    unselectedDotLeftPath.arcTo(rectF, 90f, 180f, true)
-
-    // cubic to the right middle
-    endX1 = centerX + dotRadius + joiningFraction * gap
-    endY1 = dotCenterY
-    controlX1 = centerX + halfDotRadius
+    unselectedDotPath.arcTo(rectF, startAngle, sweepAngle, true)
+    // bezier to the middle top of the join
+    endX1 = centerX + dotRadius + gap / 2
+    endY1 = dotCenterY - adjustedFraction * dotRadius
+    controlX1 = endX1 - adjustedFraction * dotRadius
     controlY1 = dotTopY
-    controlX2 = endX1
-    controlY2 = endY1 - halfDotRadius
-    unselectedDotLeftPath.cubicTo(
-      controlX1, controlY1,
-      controlX2, controlY2,
-      endX1, endY1
+    controlX2 = endX1 - (1 - adjustedFraction) * dotRadius
+    controlY2 = endY1
+    unselectedDotPath.cubicTo(
+      controlX1, controlY1, controlX2, controlY2, endX1, endY1
     )
-
-    // cubic back to the bottom center
+    // bezier to the top right of the join
+    endX2 = nextCenterX
+    endY2 = dotTopY
+    controlX1 = endX1 + (1 - adjustedFraction) * dotRadius
+    controlY1 = endY1
+    controlX2 = endX1 + adjustedFraction * dotRadius
+    controlY2 = dotTopY
+    unselectedDotPath.cubicTo(
+      controlX1, controlY1, controlX2, controlY2, endX2, endY2
+    )
+    // semi-circle to the bottom right
+    rectF[nextCenterX - dotRadius, dotTopY, nextCenterX + dotRadius] = dotBottomY
+    unselectedDotPath.arcTo(
+      rectF,
+      startAngle + sweepAngle,
+      sweepAngle,
+      true
+    )
+    // bezier to the middle bottom of the join
+    // endX1 stays the same
+    endY1 = dotCenterY + adjustedFraction * dotRadius
+    controlX1 = endX1 + adjustedFraction * dotRadius
+    controlY1 = dotBottomY
+    controlX2 = endX1 + (1 - adjustedFraction) * dotRadius
+    controlY2 = endY1
+    unselectedDotPath.cubicTo(
+      controlX1, controlY1, controlX2, controlY2, endX1, endY1
+    )
+    // bezier back to the start point in the bottom left
     endX2 = centerX
     endY2 = dotBottomY
-    controlX1 = endX1
-    controlY1 = endY1 + halfDotRadius
-    controlX2 = centerX + halfDotRadius
-    controlY2 = dotBottomY
-    unselectedDotLeftPath.cubicTo(
-      controlX1, controlY1,
-      controlX2, controlY2,
-      endX2, endY2
+    controlX1 = endX1 - (1 - adjustedFraction) * dotRadius
+    controlY1 = endY1
+    controlX2 = endX1 - adjustedFraction * dotRadius
+    controlY2 = endY2
+    unselectedDotPath.cubicTo(
+      controlX1, controlY1, controlX2, controlY2, endX2, endY2
     )
-    unselectedDotPath.addPath(unselectedDotLeftPath)
+  }
 
-    // now do the next dot to the right
-    unselectedDotRightPath.rewind()
-
-    // start at the bottom center
-    unselectedDotRightPath.moveTo(nextCenterX, dotBottomY)
-
-    // semi circle to the top center
-    rectF[nextCenterX - dotRadius, dotTopY, nextCenterX + dotRadius] = dotBottomY
-    unselectedDotRightPath.arcTo(rectF, 90f, -180f, true)
-
-    // cubic to the left middle
-    endX1 = nextCenterX - dotRadius - joiningFraction * gap
-    endY1 = dotCenterY
-    controlX1 = nextCenterX - halfDotRadius
-    controlY1 = dotTopY
-    controlX2 = endX1
-    controlY2 = endY1 - halfDotRadius
-    unselectedDotRightPath.cubicTo(
-      controlX1, controlY1,
-      controlX2, controlY2,
-      endX1, endY1
-    )
-
-    // cubic back to the bottom center
-    endX2 = nextCenterX
-    endY2 = dotBottomY
-    controlX1 = endX1
-    controlY1 = endY1 + halfDotRadius
-    controlX2 = endX2 - halfDotRadius
-    controlY2 = dotBottomY
-    unselectedDotRightPath.cubicTo(
-      controlX1, controlY1,
-      controlX2, controlY2,
-      endX2, endY2
-    )
-    unselectedDotPath.addPath(unselectedDotRightPath)
+  private fun unselectedDotRightPath(
+    centerX: Float,
+    joiningFraction: Float,
+    nextCenterX: Float
+  ) {
+    if (joiningFraction > selectedFactor &&
+      joiningFraction <= smallUnSelectedFactor &&
+      retreatingJoinX1 == INVALID_FRACTION
+    ) {
+      // case #2 – Joining neighbour, still separate
+      // start with the left dot
+      unselectedDotLeftPath.rewind()
+      // start at the bottom center
+      unselectedDotLeftPath.moveTo(centerX, dotBottomY)
+      // semi circle to the top center
+      rectF[centerX - dotRadius, dotTopY, centerX + dotRadius] = dotBottomY
+      unselectedDotLeftPath.arcTo(rectF, startAngle, sweepAngle, true)
+      // cubic to the right middle
+      endX1 = centerX + dotRadius + joiningFraction * gap
+      endY1 = dotCenterY
+      controlX1 = centerX + halfDotRadius
+      controlY1 = dotTopY
+      controlX2 = endX1
+      controlY2 = endY1 - halfDotRadius
+      unselectedDotLeftPath.cubicTo(
+        controlX1, controlY1, controlX2, controlY2, endX1, endY1
+      )
+      // cubic back to the bottom center
+      endX2 = centerX
+      endY2 = dotBottomY
+      controlX1 = endX1
+      controlY1 = endY1 + halfDotRadius
+      controlX2 = centerX + halfDotRadius
+      controlY2 = dotBottomY
+      unselectedDotLeftPath.cubicTo(
+        controlX1, controlY1, controlX2, controlY2, endX2, endY2
+      )
+      unselectedDotPath.addPath(unselectedDotLeftPath)
+      // now do the next dot to the right
+      unselectedDotRightPath.rewind()
+      // start at the bottom center
+      unselectedDotRightPath.moveTo(nextCenterX, dotBottomY)
+      // semi circle to the top center
+      rectF[nextCenterX - dotRadius, dotTopY, nextCenterX + dotRadius] = dotBottomY
+      unselectedDotRightPath.arcTo(rectF, startAngle, negativeSweepAngle, true)
+      // cubic to the left middle
+      endX1 = nextCenterX - dotRadius - joiningFraction * gap
+      endY1 = dotCenterY
+      controlX1 = nextCenterX - halfDotRadius
+      controlY1 = dotTopY
+      controlX2 = endX1
+      controlY2 = endY1 - halfDotRadius
+      unselectedDotRightPath.cubicTo(
+        controlX1, controlY1, controlX2, controlY2, endX1, endY1
+      )
+      // cubic back to the bottom center
+      endX2 = nextCenterX
+      endY2 = dotBottomY
+      controlX1 = endX1
+      controlY1 = endY1 + halfDotRadius
+      controlX2 = endX2 - halfDotRadius
+      controlY2 = dotBottomY
+      unselectedDotRightPath.cubicTo(
+        controlX1, controlY1, controlX2, controlY2, endX2, endY2
+      )
+      unselectedDotPath.addPath(unselectedDotRightPath)
+    }
   }
 
   private val retreatingJoinPath: Path
@@ -504,9 +496,9 @@ class CustomPageIndicator @JvmOverloads constructor(
     retreatAnimation = PendingRetreatAnimator(
       was, now, steps,
       if (now > was)
-        RightwardStartPredicate(moveTo - (moveTo - selectedDotX) * 0.25f)
+        RightwardStartPredicate(moveTo - (moveTo - selectedDotX) * thresholdMultiplier)
       else LeftwardStartPredicate(
-        moveTo + (selectedDotX - moveTo) * 0.25f
+        moveTo + (selectedDotX - moveTo) * thresholdMultiplier
       )
     )
     retreatAnimation!!.addListener(object : AnimatorListenerAdapter() {
@@ -535,8 +527,8 @@ class CustomPageIndicator @JvmOverloads constructor(
     })
     // slightly delay the start to give the joins a chance to run
     // unless dot isn't in position yet – then don't delay!
-    moveSelected.startDelay = if (selectedDotInPosition) animDuration / 4L else 0L
-    moveSelected.duration = animDuration * 3L / 4L
+    moveSelected.startDelay = if (selectedDotInPosition) animDuration / fourLong else zeroLong
+    moveSelected.duration = animDuration * threeLong / fourLong
     moveSelected.interpolator = interpolator
     return moveSelected
   }
@@ -728,8 +720,8 @@ class CustomPageIndicator @JvmOverloads constructor(
     var currentPage = 0
 
     constructor(superState: Parcelable?) : super(superState)
-    private constructor(`in`: Parcel) : super(`in`) {
-      currentPage = `in`.readInt()
+    private constructor(data: Parcel) : super(data) {
+      currentPage = data.readInt()
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -758,6 +750,18 @@ class CustomPageIndicator @JvmOverloads constructor(
     // constants
     private const val INVALID_FRACTION = -1f
     private const val MINIMAL_REVEAL = 0.00001f
+    private const val zeroPointTwoFractionConst: Float = 0.2f
+    private const val onePointTwoFiveFractionConst: Float = 1.25f
+    private const val unselectedFactor: Float = 1f
+    private const val smallUnSelectedFactor: Float = 0.5f
+    private const val selectedFactor: Float = 0f
+    private const val threeLong: Long = 3L
+    private const val zeroLong: Long = 0L
+    private const val fourLong: Long = 4L
+    private const val thresholdMultiplier: Float = 0.25f
+    private const val negativeSweepAngle: Float = -180f
+    private const val sweepAngle: Float = 180f
+    private const val startAngle: Float = 90f
   }
 
   init {
