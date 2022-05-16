@@ -275,7 +275,10 @@ class LocalLibraryFragment : BaseFragment() {
     ) {
       context.toast(R.string.request_storage)
       requestPermissions(
-        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+        arrayOf(
+          Manifest.permission.READ_EXTERNAL_STORAGE,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ),
         REQUEST_STORAGE_PERMISSION
       )
     } else {
