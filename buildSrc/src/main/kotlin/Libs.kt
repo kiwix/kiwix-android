@@ -164,21 +164,9 @@ object Libs {
     Versions.com_google_dagger
 
   /**
-   * https://github.com/yahoo/squidb
+   * https://jitpack.io/p/yahoo/squidb
    */
-  const val squidb: String = "com.yahoo.squidb:squidb:" + Versions.com_yahoo_squidb
-
-  /**
-   * https://github.com/yahoo/squidb
-   */
-  const val squidb_annotations: String = "com.yahoo.squidb:squidb-annotations:" +
-    Versions.com_yahoo_squidb
-
-  /**
-   * https://github.com/yahoo/squidb
-   */
-  const val squidb_processor: String = "com.yahoo.squidb:squidb-processor:" +
-    Versions.com_yahoo_squidb
+  const val squidb: String = "com.github.yahoo:squidb:" + Versions.com_yahoo_squidb
 
   /**
    * https://github.com/JakeWharton/butterknife/

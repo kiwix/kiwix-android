@@ -18,6 +18,7 @@
 
   <issue id="InvalidPackage">
     <ignore path="**simple-xml-2.7.1.jar" />
+    <ignore path="**/squidb*.jar" />
   </issue>
   <issue id="IconLocation">
     <ignore path="src/main/res/drawable/kiwix_icon_with_title.png" />
