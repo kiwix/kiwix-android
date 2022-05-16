@@ -354,7 +354,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     if (requestCode == REQUEST_STORAGE_PERMISSION &&
-      grantResults.isNotEmpty() &&
+      permissions.isNotEmpty() &&
       permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) {
       if (grantResults[0] != PERMISSION_GRANTED) {
