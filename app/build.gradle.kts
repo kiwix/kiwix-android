@@ -87,6 +87,4 @@ play {
 
 dependencies {
   implementation(Libs.squidb)
-  implementation(Libs.squidb_annotations)
-  add("kapt", Libs.squidb_processor)
 }
