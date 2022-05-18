@@ -187,7 +187,6 @@ class AllProjectConfigurer {
       implementation(Libs.fetch)
       implementation(Libs.rxandroid)
       implementation(Libs.rxjava)
-      implementation(Libs.swipe_refresh_layout)
       implementation(Libs.preference_ktx)
     }
   }

@@ -12,8 +12,6 @@ import org.gradle.plugin.use.PluginDependencySpec
  */
 object Versions {
 
-  const val swipe_refresh_layout_version: String = "1.1.0"
-
   const val document_file_version: String = "1.0.1"
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"

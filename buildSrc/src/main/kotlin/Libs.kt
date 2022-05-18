@@ -16,12 +16,6 @@ object Libs {
     "androidx.documentfile:documentfile:" + Versions.document_file_version
 
   /**
-   * https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout#kts
-   */
-  const val swipe_refresh_layout =
-    "androidx.swiperefreshlayout:swiperefreshlayout:" + Versions.swipe_refresh_layout_version
-
-  /**
    * https://github.com/Kotlin/kotlinx.coroutines
    */
   const val kotlinx_coroutines_android: String =
