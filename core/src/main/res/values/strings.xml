@@ -143,6 +143,7 @@
   <string name="next">Next</string>
   <string name="previous">Previous</string>
   <string name="wifi_only_title">Allow downloading content via mobile network?</string>
+  <string name="allow_network_access">Since you are  on mobile network we required network access or enable wifi</string>
   <string name="wifi_only_msg">If you choose “Yes” you won\'t be warned in future. However, you can always change this in Settings</string>
   <string name="pref_wifi_only">Download content only via WiFi</string>
   <string name="time_day" tools:keep="@string/time_day">day</string>
@@ -297,6 +298,7 @@
   <string name="all_files_permission_needed_message">In order to access all the zim files across device we need to have All Files Permission</string>
   <string name="allowed">Allowed</string>
   <string name="not_allowed">Not allowed</string>
+  <string name="denied_internet_permission_message">Please enable wifi to download content</string>
   <string name="android_directory_seperator" translatable="false">/Android</string>
   <string name="select_folder" translatable="false">Please select a folder for external storage.</string>
   <string name="system_unable_to_grant_permission_message" translatable="false">System unable to grant permission!</string>
