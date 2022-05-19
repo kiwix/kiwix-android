@@ -156,10 +156,18 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       if (it) {
         dialogShower.show(
           WifiOnly,
-          { sharedPreferenceUtil.putPrefWifiOnly(false) },
-          { onRefreshStateChange(false) }
+          {
+            sharedPreferenceUtil.putPrefWifiOnly(false)
+            zimManageViewModel.shouldShowWifiOnlyDialog.value = false
+          },
+          {
+            onRefreshStateChange(false)
+            context.toast(
+              resources.getString(R.string.denied_internet_permission_message),
+              Toast.LENGTH_SHORT
+            )
+          }
         )
-        zimManageViewModel.shouldShowWifiOnlyDialog.value = false
       }
     })
 
