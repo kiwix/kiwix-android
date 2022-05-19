@@ -14,17 +14,17 @@ jobs:
 
   coverageReport:
     strategy:
-      max-parallel: 2
       matrix:
-        api-level: [21, 30, 21,30]
+        api-level: [21]
       fail-fast: false
-    runs-on: macOS-latest
+    runs-on: macos-10.15
     steps:
       - name: checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
-
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
       - name: create instrumentation coverage
         uses: ReactiveCircus/android-emulator-runner@v2.23.0
         with:

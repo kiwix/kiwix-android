@@ -34,13 +34,10 @@ class IntroRobot : BaseRobot() {
   private val getStarted = ViewId(R.id.get_started)
   private val viewPager = ViewId(R.id.view_pager)
 
-  init {
+  fun swipeLeft() {
     isVisible(getStarted)
     isVisible(TextId(R.string.welcome_to_the_family))
     isVisible(TextId(R.string.humankind_knowledge))
-  }
-
-  fun swipeLeft() {
     attempt(10) {
       isVisible(viewPager).swipeLeft()
       isVisible(TextId(R.string.save_books_offline))
