@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile
 import android.R.id
 import android.app.Instrumentation
 import android.content.Context
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
@@ -81,9 +82,20 @@ abstract class BaseRobot(
 
   private fun waitFor(
     findable: Findable,
-    timeout: Long = VERY_LONG_WAIT
-  ): UiObject2? =
-    uiDevice.wait(Until.findObject(findable.selector(this)), timeout)
+    timeout: Long = VERY_LONG_WAIT,
+    retryCount: Int = 5
+  ): UiObject2? {
+    var uiObject2: UiObject2? = null
+    for (i in 0 until retryCount) {
+      try {
+        uiObject2 = uiDevice.wait(Until.findObject(findable.selector(this)), timeout)
+        break
+      } catch (noMatchingViewException: NoMatchingViewException) {
+        noMatchingViewException.printStackTrace()
+      }
+    }
+    return uiObject2
+  }
 
   private fun UiObject2.customSwipe(
     direction: Direction,
