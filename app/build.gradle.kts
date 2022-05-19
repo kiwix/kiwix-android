@@ -87,5 +87,4 @@ play {
 
 dependencies {
   implementation(Libs.squidb)
-  implementation(Libs.ink_page_indicator)
 }

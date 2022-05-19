@@ -288,9 +288,6 @@ object Libs {
   const val javax_annotation_api: String = "javax.annotation:javax.annotation-api:" +
     Versions.javax_annotation_api
 
-  const val ink_page_indicator: String = "com.pacioianu.david:ink-page-indicator:" +
-    Versions.ink_page_indicator
-
   /**
    * http://github.com/square/leakcanary/
    */
