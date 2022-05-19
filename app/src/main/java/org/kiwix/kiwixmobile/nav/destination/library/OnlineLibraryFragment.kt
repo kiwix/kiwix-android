@@ -154,7 +154,20 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
     zimManageViewModel.shouldShowWifiOnlyDialog.observe(viewLifecycleOwner, Observer {
       if (it) {
-        showAllowMobileNetworkDialog()
+        dialogShower.show(
+          WifiOnly,
+          {
+            sharedPreferenceUtil.putPrefWifiOnly(false)
+            zimManageViewModel.shouldShowWifiOnlyDialog.value = false
+          },
+          {
+            onRefreshStateChange(false)
+            context.toast(
+              resources.getString(R.string.denied_internet_permission_message),
+              Toast.LENGTH_SHORT
+            )
+          }
+        )
       }
     })
 
@@ -163,24 +176,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
         libraryList.closeKeyboard()
       }
-    })
-  }
-
-  private fun showAllowMobileNetworkDialog() {
-    dialogShower.show(WifiOnly, {
-      sharedPreferenceUtil.putPrefWifiOnly(false)
-      zimManageViewModel.shouldShowWifiOnlyDialog.value = false
-    }, {
-      dialogShower.show(
-        KiwixDialog.AllowMobileNetwork,
-        ::showAllowMobileNetworkDialog, {
-          onRefreshStateChange(false)
-          context.toast(
-            resources.getString(R.string.denied_internet_permission_message),
-            Toast.LENGTH_SHORT
-          )
-        }
-      )
     })
   }
 
