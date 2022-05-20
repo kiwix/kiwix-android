@@ -58,13 +58,16 @@ public class BookDao {
 
   public ArrayList<Book> getBooks() {
     ArrayList<Book> books = new ArrayList<>();
-    try (SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(BookDatabaseEntity.class,
-      Query.select())) {
+    try {
+      SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(BookDatabaseEntity.class,
+        Query.select());
       while (bookCursor.moveToNext()) {
         Book book = new Book();
         setBookDetails(book, bookCursor);
         books.add(book);
       }
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
     return filterBookResults(books);
   }

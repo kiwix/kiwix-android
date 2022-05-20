@@ -28,7 +28,7 @@ object Versions {
 
   const val com_google_dagger: String = "2.29.1"
 
-  const val com_yahoo_squidb: String = "2.0.0" // available: "3.2.3"
+  const val com_yahoo_squidb: String = "4.0.0-beta.2" // available: "3.2.3"
 
   const val com_jakewharton: String = "10.2.3"
 

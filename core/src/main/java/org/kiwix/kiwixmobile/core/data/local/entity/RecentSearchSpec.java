@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.data.local.entity;
 
-import com.yahoo.squidb.annotations.ColumnSpec;
 import com.yahoo.squidb.annotations.TableModelSpec;
 
 /**
@@ -25,10 +24,6 @@ import com.yahoo.squidb.annotations.TableModelSpec;
  */
 @TableModelSpec(className = "RecentSearch", tableName = "recentSearches")
 public class RecentSearchSpec {
-
-  @ColumnSpec(constraints = "NOT NULL")
   public String searchString;
-
-  @ColumnSpec(constraints = "NOT NULL")
   public String zimID;
 }

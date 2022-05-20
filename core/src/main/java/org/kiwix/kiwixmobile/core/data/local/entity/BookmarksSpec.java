@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.data.local.entity;
 
-import com.yahoo.squidb.annotations.ColumnSpec;
 import com.yahoo.squidb.annotations.TableModelSpec;
 
 /**
@@ -25,7 +24,6 @@ import com.yahoo.squidb.annotations.TableModelSpec;
  */
 @TableModelSpec(className = "Bookmark", tableName = "Bookmarks")
 public class BookmarksSpec {
-  @ColumnSpec(constraints = "NOT NULL")
   public String ZimId;
   public String ZimName;
   public String bookmarkUrl;

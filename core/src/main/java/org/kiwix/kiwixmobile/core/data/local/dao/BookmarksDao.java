@@ -42,8 +42,9 @@ public class BookmarksDao {
   public List<Bookmark> getBookmarks() {
     ArrayList<Bookmark> bookmarks = new ArrayList<>();
     Query query = Query.select();
-    try (SquidCursor<Bookmark> squidCursor = kiwixDatabase
-      .query(Bookmark.class, query.orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
+    try {
+      SquidCursor<Bookmark> squidCursor = kiwixDatabase
+        .query(Bookmark.class, query.orderBy(Bookmark.BOOKMARK_TITLE.asc()));
       while (squidCursor.moveToNext()) {
         Bookmark bookmark = new Bookmark();
         bookmark.setZimId(squidCursor.get(Bookmark.ZIM_ID));
@@ -52,22 +53,27 @@ public class BookmarksDao {
         bookmark.setBookmarkUrl(squidCursor.get(Bookmark.BOOKMARK_URL));
         bookmarks.add(bookmark);
       }
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
     return bookmarks;
   }
 
   public void processBookmark(StringOperation operation) {
-    try (SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
-      Query.select(Bookmark.ID, Bookmark.BOOKMARK_URL))) {
+    try {
+      SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
+        Query.select(Bookmark.ROWID, Bookmark.BOOKMARK_URL));
       while (bookmarkCursor.moveToNext()) {
         String url = bookmarkCursor.get(Bookmark.BOOKMARK_URL);
         url = operation.apply(url);
         if (url != null) {
           kiwixDatabase.update(Update.table(Bookmark.TABLE)
-            .where(Bookmark.ID.eq(bookmarkCursor.get(Bookmark.ID)))
+            .where(Bookmark.ROWID.eq(bookmarkCursor.get(Bookmark.ROWID)))
             .set(Bookmark.BOOKMARK_URL, url));
         }
       }
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
   }
 

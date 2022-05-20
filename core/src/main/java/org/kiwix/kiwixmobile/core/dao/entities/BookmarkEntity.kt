@@ -44,11 +44,11 @@ data class BookmarkEntity(
 
   private constructor(bookmark: Bookmark, zimFilePath: String?, favicon: String?) : this(
     0,
-    bookmark.zimId,
-    bookmark.zimName,
+    bookmark.zimId!!,
+    bookmark.zimName!!,
     zimFilePath,
-    bookmark.bookmarkUrl,
-    bookmark.bookmarkTitle,
+    bookmark.bookmarkUrl!!,
+    bookmark.bookmarkTitle!!,
     favicon
   )
 
