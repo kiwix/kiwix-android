@@ -10,8 +10,8 @@ apply(from = rootProject.file("jacoco.gradle"))
 
 ext {
   set("versionMajor", 3)
-  set("versionMinor", 4)
-  set("versionPatch", 6)
+  set("versionMinor", 5)
+  set("versionPatch", 0)
 }
 
 fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext["versionPatch"]}"
@@ -87,7 +87,4 @@ play {
 
 dependencies {
   implementation(Libs.squidb)
-  implementation(Libs.squidb_annotations)
-  implementation(Libs.ink_page_indicator)
-  add("kapt", Libs.squidb_processor)
 }

@@ -61,6 +61,13 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object WriteStoragePermissionRationale : KiwixDialog(
+    null,
+    R.string.request_write_storage,
+    android.R.string.yes,
+    android.R.string.cancel
+  )
+
   object EnableWifiP2pServices : KiwixDialog(
     null, R.string.request_enable_wifi, R.string.yes, android.R.string.no
   )
@@ -179,6 +186,14 @@ sealed class KiwixDialog(
 
   data class OpenCredits(val customGetView: (() -> View)?) : KiwixDialog(
     null,
+    null,
+    android.R.string.ok,
+    null,
+    getView = customGetView
+  )
+
+  data class SelectFolder(val customGetView: (() -> View)?) : KiwixDialog(
+    R.string.select_folder,
     null,
     android.R.string.ok,
     null,

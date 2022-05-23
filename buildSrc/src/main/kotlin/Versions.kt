@@ -11,6 +11,9 @@ import org.gradle.plugin.use.PluginDependencySpec
  * YOU are responsible for updating manually the dependency version.
  */
 object Versions {
+
+  const val document_file_version: String = "1.0.1"
+
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"
 
   const val androidx_test_espresso: String = "3.3.0"
@@ -31,11 +34,11 @@ object Versions {
 
   const val androidx_test: String = "1.3.0"
 
-  const val io_objectbox: String = "2.8.1"
+  const val io_objectbox: String = "2.9.1"
 
   const val org_jacoco: String = "0.8.7"
 
-  const val io_mockk: String = "1.10.2"
+  const val io_mockk: String = "1.12.0"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
@@ -47,8 +50,6 @@ object Versions {
 
   const val javax_annotation_api: String = "1.3.2"
 
-  const val ink_page_indicator: String = "1.3.0"
-
   const val leakcanary_android: String = "2.5"
 
   const val constraintlayout: String = "2.0.4"
@@ -58,8 +59,6 @@ object Versions {
   const val preference_ktx: String = "1.1.1"
 
   const val junit_jupiter: String = "5.7.0"
-
-  const val xfetch2okhttp: String = "3.1.6"
 
   const val assertj_core: String = "3.18.1"
 
@@ -91,9 +90,9 @@ object Versions {
 
   const val multidex: String = "2.0.1"
 
-  const val barista: String = "2.7.1" // available: "3.7.0"
+  const val barista: String = "4.0.0"
 
-  const val xfetch2: String = "3.1.6"
+  const val fetch: String = "3.1.6"
 
   const val jsr305: String = "3.0.2"
 
@@ -121,4 +120,4 @@ object Versions {
  */
 val PluginDependenciesSpec.buildSrcVersions: PluginDependencySpec
   inline get() =
-      id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)
+    id("de.fayard.buildSrcVersions").version(Versions.de_fayard_buildsrcversions_gradle_plugin)

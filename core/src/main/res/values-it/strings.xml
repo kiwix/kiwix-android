@@ -109,12 +109,12 @@
   <string name="pref_extras">Extra</string>
   <string name="new_tab_snack_bar">Voce aperta in una nuova scheda</string>
   <string name="search_widget_text">Cerca in Kiwix</string>
-  <string name="speech_prompt_text">Parla per cercare in %s</string>
+  <string name="speech_prompt_text">Parla per cercare in \%s</string>
   <string name="speech_not_supported">Il tuo dispositivo non supporta la digitazione vocale</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Connesso</string>
   <string name="library">Libreria</string>
-  <string name="delete_zim_body">I seguenti file ZIM verranno eliminati:\n\n%s</string>
+  <string name="delete_zim_body">I seguenti file ZIM verranno eliminati:\n\n\%s</string>
   <string name="delete_zims_toast">File cancellato</string>
   <string name="no_files_here">Nessun file qui</string>
   <string name="download_no_space">Lo spazio è insufficiente per effettuare il download.</string>
@@ -153,7 +153,7 @@
   <string name="next">Successivo</string>
   <string name="previous">Precedente</string>
   <string name="wifi_only_title">Vuoi scaricare il contenuto usando le reti mobili?</string>
-  <string name="wifi_only_msg">Se scegli \“Sì\”, non verrai più avvisato in futuro. Potrai comunque modificare questo comportamento nelle Impostazioni.</string>
+  <string name="wifi_only_msg">Se scegli “Sì”, non verrai più avvisato in futuro. Potrai comunque modificare questo comportamento nelle Impostazioni.</string>
   <string name="pref_wifi_only">Scarica contenuti solo tramite Wi-Fi</string>
   <string name="time_day">giorno</string>
   <string name="time_hour">h</string>
@@ -209,7 +209,7 @@
   <string name="running_state">In corso</string>
   <string name="complete">Completato</string>
   <string name="paused_state">In pausa</string>
-  <string name="failed_state">Fallito: %s</string>
+  <string name="failed_state">Fallito: \%s</string>
   <string name="save">Salva</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Titolo della voce</string>
@@ -227,7 +227,7 @@
   <string name="ext_storage_permission_not_granted">Errore: accesso allo spazio di archiviazione non consentito</string>
   <string name="notes_deletion_successful">Tutte le note sono state eliminate</string>
   <string name="notes_deletion_unsuccessful">Alcune note non sono state eliminate</string>
-  <string name="books_count">%d libro/i</string>
+  <string name="books_count">\%d libro/i</string>
   <string name="discovery_initiated">Ricerca iniziata</string>
   <string name="discovery_failed">Ricerca fallita</string>
   <string name="severe_loss_error">Errore grave rilevato! Prova a disabilitare e a riabilitare Wi-Fi Direct</string>
@@ -240,11 +240,11 @@
   <string name="discovery_needs_location">Impossibile cercare i dispositivi nelle vicinanze senza i servizi di geolocalizzazione</string>
   <string name="request_enable_wifi">Abilita Wi-Fi Direct nelle impostazioni di sistema</string>
   <string name="discovery_needs_wifi">Il Wi-Fi dev\'essere abilitato per poter cercare i dispositivi nelle vicinanze</string>
-  <string name="transfer_to">Vuoi trasferire i file a %s?</string>
+  <string name="transfer_to">Vuoi trasferire i file a \%s?</string>
   <string name="device_not_cooperating">Il dispositivo selezionato non consente il trasferimento</string>
   <string name="file_transfer_complete">Trasferimento file completato</string>
   <string name="error_during_transfer">Si è verificato un errore durante il trasferimento</string>
-  <string name="error_transferring">Errore durante il trasferimento del file %s</string>
+  <string name="error_transferring">Errore durante il trasferimento del file \%s</string>
   <string name="get_content_from_nearby_device">Ottieni contenuti da un dispositivo nelle vicinanze</string>
   <string name="search_for_peers">Cerca dispositivi nelle vicinanze</string>
   <string name="your_device">Il tuo dispositivo:</string>

@@ -1,3 +1,14 @@
+3.5.0
+* FIX: Storing Zim/Book files inside the public Kiwix Directory on internal storage.
+* FIX: Storing Zim/Book files inside the public Kiwix Directory on external storage in android 11 and above.
+* FIX: Ability to save Notes in android 10 and above.
+* FIX: Ability to open externally downloaded Zim Files.
+* FIX: MIME type fix for "*.js" titles.
+* FIX: CI/CD Pipeline fixed for android 21 & android 30.
+* FIX: Partial library migration from jcenter to jitpack & maven repo.
+* FIX: Add network permission dialog on download navigation.
+* NEW: File Selector for selecting any zim files from storage.
+
 3.4.6
 * FIX: Added MANAGE_EXTERNAL_STORAGE permission for Android 11 and later
 * FIX: Hide "Download over wifi settings" on custom apps

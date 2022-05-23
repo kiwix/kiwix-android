@@ -34,7 +34,8 @@ data class StartSpeechInput(private val actions: Channel<Action>) : SideEffect<U
   override fun invokeWith(activity: AppCompatActivity) {
     try {
       activity.startActivityForResult(
-        Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+        Intent().apply {
+          action = RecognizerIntent.ACTION_RECOGNIZE_SPEECH
           putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
           putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
           putExtra(

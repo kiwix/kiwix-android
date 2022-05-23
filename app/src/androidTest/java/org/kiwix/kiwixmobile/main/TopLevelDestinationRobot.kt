@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.main
 
 import applyWithViewHierarchyPrinting
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.page.history.HistoryRobot
 import org.kiwix.kiwixmobile.page.history.history
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.settings.settingsRobo
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
@@ -45,11 +47,9 @@ fun topLevel(func: TopLevelDestinationRobot.() -> Unit) =
 
 class TopLevelDestinationRobot : BaseRobot() {
 
-  init {
-    isVisible(ViewId(R.id.navigation_container))
-  }
-
   fun clickReaderOnBottomNav(func: ReaderRobot.() -> Unit) {
+    isVisible(ViewId(R.id.navigation_container))
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     clickOn(ViewId(R.id.readerFragment))
     reader(func)
   }

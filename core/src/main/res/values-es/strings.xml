@@ -6,8 +6,10 @@
 * Ejegg
 * Fitoschido
 * Geryescalier
+* Ice bulldog
 * Jakeukalane
 * Johny Weissmuller Jr
+* Josuert
 * Macofe
 * Macondo
 * MarcoAurelio
@@ -28,6 +30,7 @@
   <string name="menu_read_aloud">Leer en voz alta</string>
   <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
   <string name="menu_support_kiwix">Apoyar a Kiwix</string>
+  <string name="menu_wifi_hotspot">Punto de acceso WiFi</string>
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
   <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
@@ -37,7 +40,9 @@
   <string name="hotspot_service_channel_name">Canal de servicio de punto de acceso</string>
   <string name="hotspot_failed_title">Fallo al iniciar el punto de acceso</string>
   <string name="hotspot_failed_message">Parece que tu punto de acceso está activado. Inhabilita tu punto de acceso WiFi para continuar.</string>
-  <string name="go_to_wifi_settings_label">Ir a config. de wifi</string>
+  <string name="go_to_wifi_settings_label">Ir a configuración de WIFI</string>
+  <string name="connection_refused">Conexión denegada.</string>
+  <string name="hotspot_running">Ejecutando punto de acceso</string>
   <string name="no_books_selected_toast_message">Selecciona libros primero</string>
   <string name="server_failed_message">No se pudo iniciar el servidor. Conecta tu punto de acceso</string>
   <string name="server_failed_toast_message">No se pudo iniciar el servidor.</string>
@@ -50,11 +55,14 @@
   <string name="hotspot_dialog_title">Instrucciones para alojar libros</string>
   <string name="wifi_dialog_title">Detectada conexión WiFi</string>
   <string name="wifi_dialog_body">Para ver libros en otros dispositivos, asegúrate de que todos los dispositivos están conectados a la misma red WiFi.</string>
+  <string name="hotspot_dialog_message">Para que esta función funcione, primero debe encender su punto de acceso WIFI manualmente o asegurarse de que el dispositivo host y el dispositivo receptor estén en la misma red WiFi.</string>
   <string name="hotspot_dialog_neutral_button">PROCEDER</string>
   <string name="hotspot_channel_description">Actualizaciones sobre el estado de tu punto de acceso / servidor.</string>
   <string name="hotspot_notification_content_title">Punto de acceso Kiwix</string>
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Detener servidor</string>
+  <string name="server_started_message">Introduce esta dirección IP en tu navegador para acceder al servidor %s</string>
+  <string name="share_host_address">Compartir URL a través de otras aplicaciones</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
   <string name="zim_not_opened">No se pudo abrir el archivo .zim</string>
   <string name="error_file_invalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>
@@ -79,6 +87,7 @@
   <string name="pref_clear_all_history_title">Limpiar el historial</string>
   <string name="pref_clear_all_history_summary">Borrar las búsquedas recientes y el historial de pestañas</string>
   <string name="pref_notes">Notas</string>
+  <string name="pref_permission">Permisos</string>
   <string name="all_history_cleared">Borrado todo el historial</string>
   <string name="pref_clear_all_bookmarks_title">Borrar marcadores</string>
   <string name="clear_all_history_dialog_title">Borrar todo el historial?</string>
@@ -106,12 +115,12 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artículo abierto en una pestaña nueva</string>
   <string name="search_widget_text">Buscar en Kiwix</string>
-  <string name="speech_prompt_text">Habla para buscar %s</string>
+  <string name="speech_prompt_text">Habla para buscar \%s</string>
   <string name="speech_not_supported">Tu dispositivo no admite entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En línea</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Los siguientes archivos ZIM serán eliminados:\n\n%s</string>
+  <string name="delete_zim_body">Los siguientes archivos ZIM serán eliminados:\n\n\%s</string>
   <string name="delete_zims_toast">Archivo eliminado</string>
   <string name="no_files_here">Ningún archivo aquí</string>
   <string name="download_no_space">No queda espacio suficiente para la descarga.</string>
@@ -145,6 +154,8 @@
   <string name="confirm_stop_download_msg">¿Seguro que quieres detener esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
   <string name="tts_not_enabled">Texto a voz no está activado para este archivo ZIM</string>
+  <string name="texttospeech_initialization_failed">La inicialización de Texto a Voz falló. Inténtalo de nuevo</string>
+  <string name="texttospeech_error">Error inesperado en Texto a voz. Inténtalo de nuevo</string>
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir descargar contenido mediante la red móvil?</string>
@@ -175,6 +186,7 @@
   <string name="crash_button_confirm">ENVIAR DETALLES</string>
   <string name="shortcut_disabled_message">Atajo no disponible</string>
   <string name="new_tab_shortcut_label">Pestaña nueva</string>
+  <string name="get_content_shortcut_label">Obtener el contenido</string>
   <string name="fav_icon">Favicono</string>
   <string name="articleCount">%s artículos</string>
   <string name="get_started">Primeros pasos</string>
@@ -203,6 +215,7 @@
   <string name="running_state">En proceso</string>
   <string name="complete">Completado</string>
   <string name="paused_state">En pausa</string>
+  <string name="failed_state">Error: \%s</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título del artículo de la wiki</string>
@@ -220,16 +233,26 @@
   <string name="ext_storage_permission_not_granted">Error: no se concedió el permiso de almacenamiento</string>
   <string name="notes_deletion_successful">Carpeta de notas eliminada</string>
   <string name="notes_deletion_unsuccessful">No se borraron algunos artículos</string>
-  <string name="books_count">%d libros</string>
+  <string name="books_count">\%d libros</string>
+  <string name="discovery_initiated">Descubrimiento iniciado</string>
+  <string name="discovery_failed">Descubrimiento fallido</string>
   <string name="severe_loss_error">¡Error grave! Prueba inhabilitando / rehabilitando WiFi punto a punto</string>
   <string name="connection_failed">Falló la conexión</string>
   <string name="permission_rationale_location">Se requieren permisos de localización en Android para detectar dispositivos participantes</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android requiere permiso de ubicación para permitir que la aplicación aloje archivos Zim</string>
+  <string name="permission_refused_location">No se pueden ubicar dispositivos de pares sin permisos de ubicación</string>
   <string name="permission_refused_storage">No se puede acceder a archivos ZIM sin permisos de almacenamiento</string>
+  <string name="request_enable_location">Habilite la ubicación para permitir la detección de compañeros</string>
+  <string name="discovery_needs_location">No se pueden descubrir pares sin servicios de ubicación</string>
   <string name="request_enable_wifi">Habilita WiFi punto a punt en ajustes del sistema</string>
-  <string name="transfer_to">Transferir archivos a %s?</string>
+  <string name="discovery_needs_wifi">No se pueden descubrir compañeros sin WiFi ON</string>
+  <string name="transfer_to">Transferir archivos a \%s?</string>
+  <string name="device_not_cooperating">El dispositivo seleccionado no coopera para la transferencia</string>
   <string name="file_transfer_complete">Transferencia de archivo completada</string>
   <string name="error_during_transfer">Se encontró un error durante la transferencia</string>
-  <string name="error_transferring">Error al transferir el archivo %s</string>
+  <string name="error_transferring">Error al transferir el archivo \%s</string>
+  <string name="get_content_from_nearby_device">Obtener contenido de un dispositivo cercano</string>
+  <string name="search_for_peers">Buscar compañeros</string>
   <string name="your_device">Tu dispositivo:</string>
   <string name="nearby_devices">DISPOSITIVOS CERCANOS</string>
   <string name="no_devices_found">Dispositivos no detectados. Toca el botón de búsqueda para intentarlo de nuevo.</string>
@@ -239,6 +262,8 @@
   <string name="status">Estado</string>
   <string name="pref_clear_all_notes_summary">Elimina todas las notas de todos los artículos</string>
   <string name="pref_clear_all_notes_title">Borrar todas las notas</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Permitir leer y escribir archivos ZIM en la tarjeta SD</string>
+  <string name="pref_text_zoom_summary">Cambie el tamaño del texto con incrementos del 25%.</string>
   <string name="tag_pic">Foto</string>
   <string name="tag_vid">Vídeo</string>
   <string name="tag_text_only">Solo texto</string>

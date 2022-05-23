@@ -20,11 +20,15 @@ package org.kiwix.kiwixmobile.core.settings;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.webkit.WebView;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.preference.EditTextPreference;
@@ -50,7 +54,13 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower;
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog;
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
+import static android.app.Activity.RESULT_OK;
+import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.EXTERNAL_SELECT_POSITION;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.INTERNAL_SELECT_POSITION;
+import static org.kiwix.kiwixmobile.core.utils.ConstantsKt.REQUEST_SELECT_FOLDER_PERMISSION;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_NIGHT_MODE;
 import static org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.PREF_STORAGE;
 
@@ -175,9 +185,6 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     versionPref.setSummary(getVersionName() + " Build: " + getVersionCode());
   }
 
-
-
-
   private int getVersionCode() {
     try {
       return getActivity().getPackageManager()
@@ -278,13 +285,47 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     findPreference(PREF_STORAGE).setSummary(
       storageCalculator.calculateAvailableSpace(storageDevice.getFile())
     );
-    sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
+
     if (storageDevice.isInternal()) {
+      sharedPreferenceUtil.putPrefStorage(
+        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.getName()));
       findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
+      sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION);
     } else {
-      findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(getActivity()).inflate(R.layout.select_folder_dialog, null);
+        alertDialogShower.show(new KiwixDialog.SelectFolder(() -> view), () -> {
+          selectFolder();
+          return Unit.INSTANCE;
+        });
+      } else {
+        sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
+        findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
+      }
     }
     return Unit.INSTANCE;
   }
 
+  private void selectFolder() {
+    Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
+    intent.addFlags(
+      Intent.FLAG_GRANT_READ_URI_PERMISSION
+        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
+    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION);
+  }
+
+  @SuppressLint("WrongConstant") @Override
+  public void onActivityResult(int requestCode, int resultCode,
+    @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == RESULT_OK) {
+      sharedPreferenceUtil.putPrefStorage(
+        FileUtils.getPathFromUri(requireActivity(), data));
+      findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+      sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
+    }
+  }
 }

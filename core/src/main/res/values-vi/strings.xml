@@ -43,14 +43,14 @@
   <string name="no_reader_application_installed">Không tìm thấy ứng dụng đã cài đặt ứng với kiểu tập tin này</string>
   <string name="no_section_info">Không tìm thấy Đầu đề Nội dung</string>
   <string name="request_storage">Để truy cập các nội dung ngoại tuyến, chúng tôi cần được phép truy cập thiết bị lưu trữ của bạn</string>
-  <string name="clear_recent_and_tabs_history_dialog">Bạn có chắc muốn xoá hết lịch sử tìm kiếm và các tab đang mở?</string>
-  <string name="delete_recent_search_item">Xoá thứ này?</string>
+  <string name="clear_recent_and_tabs_history_dialog">Bạn có chắc muốn xóa hết lịch sử tìm kiếm và các thẻ đang mở?</string>
+  <string name="delete_recent_search_item">Xóa thứ này?</string>
   <string name="pref_clear_all_history_title">Xóa lịch sử</string>
   <string name="pref_clear_all_history_summary">Xoá các tìm kiếm gần đây và lịch sử thẻ</string>
-  <string name="all_history_cleared">Đã xoá hết lịch sử</string>
+  <string name="all_history_cleared">Đã xóa hết lịch sử</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">Xoá hết lịch sử</string>
   <string name="delete">Xóa</string>
-  <string name="delete_specific_search_toast">Các tìm kiếm gần đây đã bị xoá</string>
+  <string name="delete_specific_search_toast">Truy vấn gần đây đã bị xóa</string>
   <string name="hint_contents_drawer_message">Trượt sang trái để xem nội dung của trang này</string>
   <string name="got_it">Được rồi</string>
   <string name="did_you_know">Bạn có biết</string>
@@ -70,7 +70,7 @@
   <string name="pref_extras">Thêm</string>
   <string name="new_tab_snack_bar">Trang đã mở trong thẻ mới</string>
   <string name="search_widget_text">Tìm kiếm Kiwix</string>
-  <string name="speech_prompt_text">Nói để tìm %s</string>
+  <string name="speech_prompt_text">Nói để tìm %\s</string>
   <string name="speech_not_supported">Xin lỗi! Thiết bị của bạn không hỗ trợ nhập bằng guọng nói</string>
   <string name="local_zims">Thiết bị</string>
   <string name="remote_zims">Trực tuyến</string>

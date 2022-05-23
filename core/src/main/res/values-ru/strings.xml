@@ -9,6 +9,7 @@
 * Fitoschido
 * Gehhrr
 * Helpau
+* Ice bulldog
 * Kareyac
 * Link2xt
 * Movses
@@ -116,12 +117,12 @@
   <string name="pref_extras">Дополнительно</string>
   <string name="new_tab_snack_bar">Статья открыта в новой вкладке</string>
   <string name="search_widget_text">Поиск Kiwix</string>
-  <string name="speech_prompt_text">Говорите, чтобы искать %s</string>
+  <string name="speech_prompt_text">Говорите, чтобы искать %\s</string>
   <string name="speech_not_supported">Приносим извинения! Ваше устройство не поддерживает ввод речи.</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_zim_body">Следующие файлы zim будут удалены:\n\n%s</string>
+  <string name="delete_zim_body">Следующие файлы zim будут удалены:\n\n\%s</string>
   <string name="delete_zims_toast">Файл успешно удалён</string>
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space">Недостаточно места для загрузки.</string>
@@ -216,7 +217,7 @@
   <string name="running_state">В процессе</string>
   <string name="complete">Завершено</string>
   <string name="paused_state">Приостановлено</string>
-  <string name="failed_state">Ошибка: %s</string>
+  <string name="failed_state">Ошибка: \%s</string>
   <string name="save">Сохранить</string>
   <string name="note">Заметка</string>
   <string name="wiki_article_title">Заголовок вики-статьи</string>
@@ -234,7 +235,7 @@
   <string name="ext_storage_permission_not_granted">Ошибка: Отсутствует разрешение на хранение</string>
   <string name="notes_deletion_successful">Папка с заметками полностью удалена</string>
   <string name="notes_deletion_unsuccessful">Некоторые файлы не были удалены</string>
-  <string name="books_count">%d книг</string>
+  <string name="books_count">\%d книг</string>
   <string name="discovery_initiated">Обнаружение начато</string>
   <string name="discovery_failed">Обнаружение не удалось</string>
   <string name="severe_loss_error">Серьёзная ошибка! Попробуйте выключить и снова включить WiFi P2P</string>
@@ -247,11 +248,11 @@
   <string name="discovery_needs_location">Поиск близлежащих устройств невозможен без доступа к местоположению</string>
   <string name="request_enable_wifi">Включите WiFi P2P в настройках системы</string>
   <string name="discovery_needs_wifi">Поиск устройств невозможен без включённого WiFi</string>
-  <string name="transfer_to">Передать файлы на %s?</string>
+  <string name="transfer_to">Передать файлы на \%s?</string>
   <string name="device_not_cooperating">Выбранное устройство отказало в передаче</string>
   <string name="file_transfer_complete">Передача файла завершена</string>
   <string name="error_during_transfer">Произошла ошибка во время передачи файла</string>
-  <string name="error_transferring">Ошибка при передаче файла %s</string>
+  <string name="error_transferring">Ошибка при передаче файла \%s</string>
   <string name="get_content_from_nearby_device">Получить контент с устройства рядом</string>
   <string name="search_for_peers">Поиск устройств</string>
   <string name="your_device">Ваше устройство:</string>

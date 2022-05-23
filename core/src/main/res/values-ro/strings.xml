@@ -101,12 +101,12 @@
   <string name="pref_extras">Suplimentare</string>
   <string name="new_tab_snack_bar">Articol deschis într-o filă nouă</string>
   <string name="search_widget_text">Caută Kiwix</string>
-  <string name="speech_prompt_text">Vorbește pentru a căuta %s</string>
+  <string name="speech_prompt_text">Vorbește pentru a căuta %\s</string>
   <string name="speech_not_supported">Ne pare rău! Dispozitivul tău nu susține opțiunea de vorbire</string>
   <string name="local_zims">Dispozitiv</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliotecă</string>
-  <string name="delete_zim_body">Următoarele fișier(e) zim vor fi șterse:\n\n%s</string>
+  <string name="delete_zim_body">Următoarele fișier(e) zim vor fi șterse:\n\n\%s</string>
   <string name="delete_zims_toast">Filă ștearsă cu succes</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
   <string name="download_no_space">Spațiu insuficient pentru a descarca.</string>
@@ -201,7 +201,7 @@
   <string name="running_state">În Progres</string>
   <string name="complete">Complet</string>
   <string name="paused_state">Pauză</string>
-  <string name="failed_state">Eșuat: %s</string>
+  <string name="failed_state">Eșuat: \%s</string>
   <string name="save">Salvează</string>
   <string name="note">Notă</string>
   <string name="wiki_article_title">Titlu Articol Wiki</string>
@@ -219,7 +219,7 @@
   <string name="ext_storage_permission_not_granted">Eroare: Permisiunile de stocare nu au fost acordate</string>
   <string name="notes_deletion_successful">Se șterge folderul cu note întregi</string>
   <string name="notes_deletion_unsuccessful">Unele fișiere nu au fost șterse</string>
-  <string name="books_count">%d carte(ți)</string>
+  <string name="books_count">\%d carte(ți)</string>
   <string name="discovery_initiated">Descoperire inițiată</string>
   <string name="discovery_failed">Descoperirea a eșuat</string>
   <string name="severe_loss_error">Eroare majoră! Încercați Dezactivarea/Reactivarea WiFi P2P</string>
@@ -232,11 +232,11 @@
   <string name="discovery_needs_location">Nu se pot descoperi colegi fără serviciul de geolocalizare</string>
   <string name="request_enable_wifi">Activați WiFi P2P din setările sistemului</string>
   <string name="discovery_needs_wifi">Nu se pot descoperi colegi fără WiFi ON</string>
-  <string name="transfer_to">Transferați fișierele în %s?</string>
+  <string name="transfer_to">Transferați fișierele în \%s?</string>
   <string name="device_not_cooperating">Dispozitiv selectat care nu cooperează pentru transfer</string>
   <string name="file_transfer_complete">Transfer de fișiere completat</string>
   <string name="error_during_transfer">A apărut o eroare în timpul transferului</string>
-  <string name="error_transferring">Eroare la transferul fișierului %s</string>
+  <string name="error_transferring">Eroare la transferul fișierului \%s</string>
   <string name="get_content_from_nearby_device">Obțineți conținut de pe dispozitivul din apropiere</string>
   <string name="search_for_peers">Caută dispozitive pentru împerechere</string>
   <string name="your_device">Dispozitivul tău:</string>

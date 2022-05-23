@@ -102,12 +102,12 @@
   <string name="pref_extras">Extra</string>
   <string name="new_tab_snack_bar">Článok otvorený na novej karte</string>
   <string name="search_widget_text">Prehľadať Kiwix</string>
-  <string name="speech_prompt_text">Hovoriť pre vyhľadanie %s</string>
+  <string name="speech_prompt_text">Hovoriť pre vyhľadanie %\s</string>
   <string name="speech_not_supported">Prepáčte, Vaše zariadenie nepodporuje hlasový vstup</string>
   <string name="local_zims">Zariadenie</string>
   <string name="remote_zims">Online</string>
   <string name="library">Knižnica</string>
-  <string name="delete_zim_body">Nasledovné súbory zim budú vymazané:\n\n%s</string>
+  <string name="delete_zim_body">Nasledovné súbory zim budú vymazané:\n\n\%s</string>
   <string name="delete_zims_toast">Súbory úspešne vymazané</string>
   <string name="no_files_here">Nie sú tu žiadne súbory</string>
   <string name="download_no_space">Nedostatočný priestor na stiahnutie.</string>
@@ -202,7 +202,7 @@
   <string name="running_state">Rozpracované</string>
   <string name="complete">Dokončené</string>
   <string name="paused_state">Pozastavené</string>
-  <string name="failed_state">Zlyhalo: %s</string>
+  <string name="failed_state">Zlyhalo: \%s</string>
   <string name="save">Uložiť</string>
   <string name="note">Poznámka</string>
   <string name="wiki_article_title">Názov wiki článku</string>
@@ -220,7 +220,7 @@
   <string name="ext_storage_permission_not_granted">Chyba: Oprávnenie k úložisku nebolo udelené</string>
   <string name="notes_deletion_successful">Zmazaný celý adresár s poznámkami</string>
   <string name="notes_deletion_unsuccessful">Niektoré súbory neboli zmazané</string>
-  <string name="books_count">%d kníh</string>
+  <string name="books_count">\%d kníh</string>
   <string name="discovery_initiated">Objavovanie začaté</string>
   <string name="discovery_failed">Objavovanie zlyhalo</string>
   <string name="severe_loss_error">Závažná chyba! Skúste vypnúť/zapnúť WiFi P2P</string>
@@ -233,11 +233,11 @@
   <string name="discovery_needs_location">Bez povolenia k polohe nie je možné vyhľadať zariadenia v okolí</string>
   <string name="request_enable_wifi">Zapnite WiFi P2P v systémových nastaveniach</string>
   <string name="discovery_needs_wifi">Bez zapnutého WiFi nie je možné nájsť zariadenia v okolí</string>
-  <string name="transfer_to">Presunúť súbory do %s?</string>
+  <string name="transfer_to">Presunúť súbory do \%s?</string>
   <string name="device_not_cooperating">Vybrané zariadenie pri prenose nespolupracuje</string>
   <string name="file_transfer_complete">Prenos súborov dokončený</string>
   <string name="error_during_transfer">Pri prenose došlo k chybe</string>
-  <string name="error_transferring">Chyba pri prenose súbora %s</string>
+  <string name="error_transferring">Chyba pri prenose súbora \%s</string>
   <string name="get_content_from_nearby_device">Získať obsah z blízkeho zariadenia</string>
   <string name="search_for_peers">Hľadať zariadenia</string>
   <string name="your_device">Vaše zariadenie:</string>

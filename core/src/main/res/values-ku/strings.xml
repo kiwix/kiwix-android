@@ -101,12 +101,12 @@
   <string name="pref_extras">Xizmetên din</string>
   <string name="new_tab_snack_bar">Gotar li hilpekînekî nû vebû</string>
   <string name="search_widget_text">Li Kiwixê bigere</string>
-  <string name="speech_prompt_text">Ji bo ku li %s bigerî xeber bide</string>
+  <string name="speech_prompt_text">Ji bo ku li \%s bigerî xeber bide</string>
   <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava axaftinê</string>
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
-  <string name="delete_zim_body">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n%s</string>
+  <string name="delete_zim_body">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n\%s</string>
   <string name="delete_zims_toast">Pel hat jêbirin</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
   <string name="download_no_space">Ji bo daxistinê cihê ku hewce dike, tune ye.</string>
@@ -201,7 +201,7 @@
   <string name="running_state">Didome</string>
   <string name="complete">Temam bû</string>
   <string name="paused_state">Sekinandî ye</string>
-  <string name="failed_state">Bi ser neket: %s</string>
+  <string name="failed_state">Bi ser neket: \%s</string>
   <string name="save">Qeyd bike</string>
   <string name="note">Not</string>
   <string name="wiki_article_title">Sernavê Gotara Wîkiyê</string>
@@ -219,7 +219,7 @@
   <string name="ext_storage_permission_not_granted">Çewtî: Destûrên depoyê nehate dayîn</string>
   <string name="notes_deletion_successful">Temamiya peldankên notê hate jêbirin</string>
   <string name="notes_deletion_unsuccessful">Hin peldank nehate jêbirin</string>
-  <string name="books_count">%d kitêb</string>
+  <string name="books_count">\%d kitêb</string>
   <string name="discovery_initiated">Kişf dest pê kir</string>
   <string name="discovery_failed">Kişf bi ser neket</string>
   <string name="severe_loss_error">Çewtiya dijwar! WiFi P2P-yê neçalak bike/dîsa aktîv bike</string>
@@ -232,11 +232,11 @@
   <string name="discovery_needs_location">Bêyî xizmetên lokasyonê hevcinsan nikare tesbît bike</string>
   <string name="request_enable_wifi">Ji mîhengan Wîfî P2Pyê aktîv bike</string>
   <string name="discovery_needs_wifi">Hevcinsan nikare tesbît bike bêyî Wîfiya Vekirî</string>
-  <string name="transfer_to">Dixwazî dosyeyan transferê %s bikî?</string>
+  <string name="transfer_to">Dixwazî dosyeyan transferê \%s bikî?</string>
   <string name="device_not_cooperating">Cîhaza bijartî ji bo transferkirinê kooperasyon nake</string>
   <string name="file_transfer_complete">Transferkirina dosyeyê temam bû</string>
   <string name="error_during_transfer">Gava transferê çewtiyekê rû da</string>
-  <string name="error_transferring">Gava transferkirina %s çewtiyeke derket holê</string>
+  <string name="error_transferring">Gava transferkirina \%s çewtiyeke derket holê</string>
   <string name="get_content_from_nearby_device">Naverokê peyda bike ji cîhaza nêz</string>
   <string name="search_for_peers">Li Hevcinsan Bigere</string>
   <string name="your_device">Cîhaza Te:</string>

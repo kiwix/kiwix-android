@@ -4,6 +4,7 @@
 * Asokolov
 * Base
 * DDPAT
+* Ice bulldog
 * Lxlalexlxl
 * Movses
 * Piramidion
@@ -108,12 +109,12 @@
   <string name="pref_extras">Додаткові послуги</string>
   <string name="new_tab_snack_bar">Статтю відкрито в новій вкладці</string>
   <string name="search_widget_text">Пошук у Kiwix</string>
-  <string name="speech_prompt_text">Промовте, щоб здійснити пошук %s</string>
+  <string name="speech_prompt_text">Промовте, щоб здійснити пошук %\s</string>
   <string name="speech_not_supported">Вибачте! Ваш пристрій не підтримує голосове управління</string>
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Бібліотека</string>
-  <string name="delete_zim_body">Такі zim файли буде видалено:\n\n%s</string>
+  <string name="delete_zim_body">Такі zim файли буде видалено:\n\n\%s</string>
   <string name="delete_zims_toast">Файл вилучено</string>
   <string name="no_files_here">Тут немає файлів</string>
   <string name="download_no_space">Недостатньо простору для завантаження.</string>
@@ -208,7 +209,7 @@
   <string name="running_state">В процесі</string>
   <string name="complete">Готово</string>
   <string name="paused_state">Призупинено</string>
-  <string name="failed_state">Помилка: %s</string>
+  <string name="failed_state">Помилка: \%s</string>
   <string name="save">Зберегти</string>
   <string name="note">Примітка</string>
   <string name="wiki_article_title">Заголовок статті вікі</string>
@@ -226,7 +227,7 @@
   <string name="ext_storage_permission_not_granted">Помилка: Відсутній дозвіл на зберігання</string>
   <string name="notes_deletion_successful">Папку з нотатками повністю видалено</string>
   <string name="notes_deletion_unsuccessful">Певні файли не було видалено</string>
-  <string name="books_count">%d книг(а)</string>
+  <string name="books_count">\%d книг(а)</string>
   <string name="discovery_initiated">Сканування почато</string>
   <string name="discovery_failed">Сканування не вдалося</string>
   <string name="severe_loss_error">Серйозна помилка! Попробуйте вимкнути і наново вмикнути WiFi P2P</string>
@@ -239,11 +240,11 @@
   <string name="discovery_needs_location">Пошук сусідніх пристроїв неможливий без сервісу місцезнаходження</string>
   <string name="request_enable_wifi">Ввімкніть WiFi P2P у налаштуваннях системи</string>
   <string name="discovery_needs_wifi">Пошук пристроїв неможливий без ввімкненого WiFi</string>
-  <string name="transfer_to">Передати файли до %s?</string>
+  <string name="transfer_to">Передати файли до \%s?</string>
   <string name="device_not_cooperating">Обраний пристрій не співпрацює щодо передачі</string>
   <string name="file_transfer_complete">Передачу файлу завершено</string>
   <string name="error_during_transfer">Сталася помилка під час передачі</string>
-  <string name="error_transferring">Помилка передачі файлу %s</string>
+  <string name="error_transferring">Помилка передачі файлу \%s</string>
   <string name="get_content_from_nearby_device">Отримати вміст із близько розташованих пристроїв</string>
   <string name="search_for_peers">Пошук сусідніх пристроїв</string>
   <string name="your_device">Ваш пристрій:</string>

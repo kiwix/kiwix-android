@@ -15,22 +15,25 @@ jobs:
   coverageReport:
     strategy:
       matrix:
-        api-level: [21, 21, 30]
+        api-level: [21,30]
       fail-fast: false
-    runs-on: macOS-latest
+    runs-on: macos-10.15
     steps:
       - name: checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: create instrumentation coverage
-        uses: ReactiveCircus/android-emulator-runner@v2.14.3
+        uses: ReactiveCircus/android-emulator-runner@v2.23.0
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           ndk: 21.4.7075529
           script: bash contrib/instrumentation.sh
+
 
       - name: Upload screenshot result
         uses: actions/upload-artifact@v1
@@ -40,15 +43,17 @@ jobs:
           path: screencap.png
 
       - name: create unit coverage
+        if: ${{ matrix.api-level==21  }}
         run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
 
       - name: Upload coverage to Codecov
+        if: ${{ matrix.api-level==21  }}
         run: |
           bash <(curl -s https://codecov.io/bash)
 
       - name: Upload Coverage to GH-Actions
         uses: actions/upload-artifact@v2.2.0
-        if: ${{ always()  }}
+        if: ${{ matrix.api-level==21  }}
         with:
           name: Tests Coverage Report
           path: |
