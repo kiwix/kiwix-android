@@ -70,14 +70,17 @@ public class KiwixDatabaseTest {
     kiwixDatabase.migrateBookmarksVersion6();
 
     ArrayList<String> bookmarkTitles = new ArrayList<>();
-    try (SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
-      Query.selectDistinct(Bookmark.BOOKMARK_TITLE)
-        .where(Bookmark.ZIM_ID.eq(testId)
-          .or(Bookmark.ZIM_NAME.eq("")))
-        .orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
+    try {
+      SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
+        Query.selectDistinct(Bookmark.BOOKMARK_TITLE)
+          .where(Bookmark.ZIM_ID.eq(testId)
+            .or(Bookmark.ZIM_NAME.eq("")))
+          .orderBy(Bookmark.BOOKMARK_TITLE.asc()));
       while (bookmarkCursor.moveToNext()) {
         bookmarkTitles.add(bookmarkCursor.get(Bookmark.BOOKMARK_TITLE));
       }
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
     assertArrayEquals(testBookmarks, bookmarkTitles.toArray());
 

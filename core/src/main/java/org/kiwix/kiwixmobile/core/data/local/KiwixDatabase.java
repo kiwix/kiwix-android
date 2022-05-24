@@ -92,7 +92,7 @@ public class KiwixDatabase extends SquidDatabase {
   @NonNull @Override protected ISQLiteOpenHelper createOpenHelper(
     @NonNull String databaseName,
     @NonNull OpenHelperDelegate delegate, int version) {
-    return new AndroidOpenHelper(context, getName(), delegate, getVersion());
+    return new AndroidOpenHelper(context, databaseName, delegate, version);
   }
 
   @Override
