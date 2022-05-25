@@ -75,19 +75,19 @@ class AllProjectConfigurer {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.apply {
           isReturnDefaultValues = true
-          all(KotlinClosure1<Any, Test>({
-            (this as Test).also { testTask ->
-              testTask.useJUnitPlatform()
-              testTask.testLogging {
-                setEvents(setOf("passed", "skipped", "failed", "standardOut", "standardError"))
-                outputs.upToDateWhen { false }
-                showStandardStreams = true
-              }
-              testTask.extensions
-                .getByType(JacocoTaskExtension::class.java)
-                .isIncludeNoLocationClasses = true
-            }
-          }, this))
+          // all(KotlinClosure1<Any, Test>({
+          //   (this as Test).also { testTask ->
+          //     testTask.useJUnitPlatform()
+          //     testTask.testLogging {
+          //       setEvents(setOf("passed", "skipped", "failed", "standardOut", "standardError"))
+          //       outputs.upToDateWhen { false }
+          //       showStandardStreams = true
+          //     }
+          //     testTask.extensions
+          //       .getByType(JacocoTaskExtension::class.java)
+          //       .isIncludeNoLocationClasses = true
+          //   }
+          // }, this))
         }
       }
 

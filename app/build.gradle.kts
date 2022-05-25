@@ -78,11 +78,11 @@ android {
 }
 
 play {
-  isEnabled = true
-  serviceAccountCredentials = file("../google.json")
-  track = "alpha"
-  releaseStatus = "draft"
-  resolutionStrategy = "fail"
+  //isEnabled = true
+  //serviceAccountCredentials = file("../google.json")
+  //track = "alpha"
+ // releaseStatus = "draft"
+  //resolutionStrategy = "fail"
 }
 
 dependencies {

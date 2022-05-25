@@ -42,11 +42,11 @@ object Versions {
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "4.0.1" // available: "4.1.1"
+  const val com_android_tools_build_gradle: String = "4.2.0" // available: "4.1.1"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
-  const val com_github_triplet_play_gradle_plugin: String = "2.8.0" // available: "3.0.0"
+  const val com_github_triplet_play_gradle_plugin: String = "3.5.0" // available: "3.0.0"
 
   const val javax_annotation_api: String = "1.3.2"
 
