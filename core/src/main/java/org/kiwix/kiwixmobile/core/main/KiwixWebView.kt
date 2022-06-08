@@ -166,9 +166,11 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         }
         val fileToSave = sequence {
           yield(File(root, fileName))
-          yieldAll(generateSequence(1) { it + 1 }.map {
-            File(root, fileName.replace(".", "_$it."))
-          })
+          yieldAll(
+            generateSequence(1) { it + 1 }.map {
+              File(root, fileName.replace(".", "_$it."))
+            }
+          )
         }.first { !it.exists() }
         val source = Uri.parse(src)
         try {

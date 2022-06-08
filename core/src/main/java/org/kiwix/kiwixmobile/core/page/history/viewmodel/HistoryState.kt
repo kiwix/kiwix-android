@@ -32,8 +32,10 @@ data class HistoryState(
 ) : PageState<HistoryItem>() {
   override val visiblePageItems: List<HistoryListItem> =
     HeaderizableList<HistoryListItem, HistoryItem, DateItem>(filteredPageItems)
-      .foldOverAddingHeaders({ historyItem -> DateItem(historyItem.dateString) },
-        { current, next -> current.dateString != next.dateString })
+      .foldOverAddingHeaders(
+        { historyItem -> DateItem(historyItem.dateString) },
+        { current, next -> current.dateString != next.dateString }
+      )
 
   override fun copyWithNewItems(newItems: List<HistoryItem>): PageState<HistoryItem> =
     copy(pageItems = (newItems))

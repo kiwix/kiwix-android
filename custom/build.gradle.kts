@@ -20,7 +20,7 @@ android {
   }
 
   flavorDimensions("default")
-  productFlavors {
+  productFlavors.apply {
     CustomApps.createDynamically(project.file("src"), this)
     all {
       File("$projectDir/src", "$name/$name.zim").let {

@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.error
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -139,7 +140,7 @@ open class ErrorActivity : BaseActivity() {
         All Zim Files in DB:
         $allZimFiles
         
-        """.trimIndent()
+    """.trimIndent()
   }
 
   private fun languageLocale(): String = """
@@ -184,13 +185,15 @@ open class ErrorActivity : BaseActivity() {
     get() = """
       Hi Kiwix Developers!
       The Android app crashed, here are some details to help fix it:
-      """.trimIndent()
+    """.trimIndent()
 
   private val versionCode: Int
+    @SuppressLint("WrongConstant")
     get() = packageManager
       .getPackageInfo(packageName, ZERO).versionCode
 
   private val versionName: String
+    @SuppressLint("WrongConstant")
     get() = packageManager
       .getPackageInfo(packageName, ZERO).versionName
 

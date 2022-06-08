@@ -36,8 +36,6 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
-import java.util.ArrayList
 
 object FileUtils {
 
@@ -252,8 +250,10 @@ object FileUtils {
   @SuppressLint("WrongConstant")
   @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String? {
     val uri: Uri? = data.data
-    val takeFlags: Int = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION
-      or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+    val takeFlags: Int = data.flags and (
+      Intent.FLAG_GRANT_READ_URI_PERMISSION
+        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      )
     uri?.let {
       activity.grantUriPermission(
         activity.packageName, it,

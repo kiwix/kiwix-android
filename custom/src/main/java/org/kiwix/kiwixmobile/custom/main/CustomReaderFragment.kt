@@ -183,9 +183,11 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private fun goToSettings() {
-    startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-      data = Uri.fromParts("package", activity?.packageName, null)
-    })
+    startActivity(
+      Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.fromParts("package", activity?.packageName, null)
+      }
+    )
   }
 
   private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =

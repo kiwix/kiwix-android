@@ -43,6 +43,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.StorageDevice
@@ -107,7 +108,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       LibraryDelegate.DownloadDelegate {
         dialogShower.show(
           KiwixDialog.YesNoDialog.StopDownload,
-          { downloader.cancelDownload(it.downloadId) })
+          { downloader.cancelDownload(it.downloadId) }
+        )
       },
       LibraryDelegate.DividerDelegate
     )
@@ -153,18 +155,21 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       viewLifecycleOwner, Observer(::onRefreshStateChange)
     )
     zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
-    zimManageViewModel.shouldShowWifiOnlyDialog.observe(viewLifecycleOwner, Observer {
+    zimManageViewModel.shouldShowWifiOnlyDialog.observe(
+      viewLifecycleOwner
+    ) {
       if (it) {
         showInternetPermissionDialog()
       }
-    })
+    }
 
     // hides keyboard when scrolled
-    libraryList.addOnScrollListener(SimpleRecyclerViewScrollListener { _, newState ->
-      if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-        libraryList.closeKeyboard()
-      }
-    })
+    libraryList.addOnScrollListener(
+      SimpleRecyclerViewScrollListener { _, newState ->
+        if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+          libraryList.closeKeyboard()
+        }
+      })
 
     allowInternetPermissionButton.setOnClickListener {
       showInternetPermissionDialog()
@@ -405,7 +410,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           })
           return
         }
-        else -> availableSpaceCalculator.hasAvailableSpaceFor(item,
+        else -> availableSpaceCalculator.hasAvailableSpaceFor(
+          item,
           { downloadFile(item.book) },
           {
             libraryList.snack(
@@ -415,7 +421,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
               R.string.download_change_storage,
               ::showStorageSelectDialog
             )
-          })
+          }
+        )
       }
     }
   }

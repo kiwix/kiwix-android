@@ -30,8 +30,8 @@ fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext
 
 fun generateVersionCode() =
   20 * 10000 +
-    ((ext["versionMajor"] as Int) * 10000) +
-    ((ext["versionMinor"] as Int) * 100) +
+    ext["versionMajor"] as Int * 10000 +
+    ext["versionMinor"] as Int * 100 +
     ext["versionPatch"] as Int
 
 val apkPrefix get() = System.getenv("TAG") ?: "dev"
@@ -45,7 +45,6 @@ android {
     versionCode = generateVersionCode()
     versionName = generateVersionName()
   }
-
   lintOptions {
     isCheckDependencies = true
   }
@@ -78,11 +77,11 @@ android {
 }
 
 play {
-  isEnabled = true
-  serviceAccountCredentials = file("../google.json")
-  track = "alpha"
-  releaseStatus = "draft"
-  resolutionStrategy = "fail"
+  enabled.set(true)
+  serviceAccountCredentials.set(file("../google.json"))
+  track.set("alpha")
+  releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
+  resolutionStrategy.set(com.github.triplet.gradle.androidpublisher.ResolutionStrategy.FAIL)
 }
 
 dependencies {

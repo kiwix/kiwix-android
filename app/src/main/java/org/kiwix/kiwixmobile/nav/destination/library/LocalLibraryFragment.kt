@@ -94,10 +94,12 @@ class LocalLibraryFragment : BaseFragment() {
   }
 
   private val bookDelegate: BookOnDiskDelegate.BookDelegate by lazy {
-    BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
+    BookOnDiskDelegate.BookDelegate(
+      sharedPreferenceUtil,
       { offerAction(RequestNavigateTo(it)) },
       { offerAction(RequestMultiSelection(it)) },
-      { offerAction(RequestSelect(it)) })
+      { offerAction(RequestSelect(it)) }
+    )
   }
   private val booksOnDiskAdapter: BooksOnDiskAdapter by lazy {
     BooksOnDiskAdapter(bookDelegate, BookOnDiskDelegate.LanguageDelegate)
@@ -138,9 +140,9 @@ class LocalLibraryFragment : BaseFragment() {
     }
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
     disposable.add(sideEffects())
-    zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner, Observer {
+    zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
       zim_swiperefresh.isRefreshing = it!!
-    })
+    }
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }

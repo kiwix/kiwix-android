@@ -82,7 +82,8 @@ import javax.inject.Inject
 const val URIS_KEY = "uris"
 
 @SuppressLint("GoogleAppIndexingApiWarning", "Registered")
-class LocalFileTransferFragment : BaseFragment(),
+class LocalFileTransferFragment :
+  BaseFragment(),
   WifiDirectManager.Callbacks {
   @Inject
   lateinit var alertDialogShower: AlertDialogShower

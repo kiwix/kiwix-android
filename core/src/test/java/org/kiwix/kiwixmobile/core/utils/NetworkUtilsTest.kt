@@ -200,32 +200,37 @@ class NetworkUtilsTest {
 
     // Using the standard Kiwix Download URLs
     assertEquals(
-      "URL Parsing", "No Pictures", NetworkUtils.parseURL(
+      "URL Parsing", "No Pictures",
+      NetworkUtils.parseURL(
         context,
         "http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
       )
     )
     assertEquals(
-      "URL Parsing", "No Videos", NetworkUtils.parseURL(
+      "URL Parsing", "No Videos",
+      NetworkUtils.parseURL(
         context,
         "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/" +
           "wikipedia_af_all_novid_2016-05.zim"
       )
     )
     assertEquals(
-      "URL Parsing", "Simple", NetworkUtils.parseURL(
+      "URL Parsing", "Simple",
+      NetworkUtils.parseURL(
         context,
         "http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"
       )
     )
     assertEquals(
-      "URL Parsing", "No Pictures", NetworkUtils.parseURL(
+      "URL Parsing", "No Pictures",
+      NetworkUtils.parseURL(
         context,
         "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
       )
     )
     assertEquals(
-      "URL Parsing", "Simple", NetworkUtils.parseURL(
+      "URL Parsing", "Simple",
+      NetworkUtils.parseURL(
         context,
         "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"
       )

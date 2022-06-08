@@ -105,7 +105,8 @@ class FileSearchTest {
       val zimFile = File.createTempFile(
         "fileToFind",
         ".zim",
-        File("$tempRoot${File.separator}dir").apply { mkdirs() })
+        File("$tempRoot${File.separator}dir").apply(File::mkdirs)
+      )
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parentFile.parent
       val fileList = fileSearch.scan()
