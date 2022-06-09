@@ -39,7 +39,6 @@ jobs:
           ndk: 21.4.7075529
           script: bash contrib/instrumentation.sh
 
-
       - name: Upload screenshot result
         uses: actions/upload-artifact@v1
         if: failure()
@@ -53,8 +52,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: ${{ matrix.api-level==21  }}
-        run: |
-          bash <(curl -s https://codecov.io/bash)
+        uses: codecov/codecov-action@v2
 
       - name: Upload Coverage to GH-Actions
         uses: actions/upload-artifact@v2.2.0

@@ -37,7 +37,7 @@ class AllProjectConfigurer {
     target.plugins.apply("kotlin-android")
     target.plugins.apply("kotlin-android-extensions")
     target.plugins.apply("kotlin-kapt")
-    target.plugins.apply("com.hiya.jacoco-android")
+    target.plugins.apply("com.dicedmelon.gradle.jacoco-android")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
     target.plugins.apply("io.gitlab.arturbosch.detekt")
     target.plugins.apply("androidx.navigation.safeargs")
