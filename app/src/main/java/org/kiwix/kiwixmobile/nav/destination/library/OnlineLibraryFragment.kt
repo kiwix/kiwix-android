@@ -169,7 +169,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
           libraryList.closeKeyboard()
         }
-      })
+      }
+    )
 
     allowInternetPermissionButton.setOnClickListener {
       showInternetPermissionDialog()
