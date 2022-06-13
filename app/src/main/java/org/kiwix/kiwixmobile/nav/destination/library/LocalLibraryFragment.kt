@@ -284,26 +284,30 @@ class LocalLibraryFragment : BaseFragment() {
         REQUEST_STORAGE_PERMISSION
       )
     } else {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        if (Environment.isExternalStorageManager()) {
-          // We already have permission!!
-          requestFileSystemCheck()
-        } else {
-          if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
-            // We should only ask for first time, If the users wants to revoke settings
-            // then they can directly toggle this feature from settings screen
-            sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
-            // Show Dialog and  Go to settings to give permission
-            dialogShower.show(
-              KiwixDialog.ManageExternalFilesPermissionDialog,
-              {
-                this.activity?.let(FragmentActivity::navigateToSettings)
-              }
-            )
-          }
-        }
-      } else {
+      if (sharedPreferenceUtil.isPlayStoreBuild) {
         requestFileSystemCheck()
+      } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          if (Environment.isExternalStorageManager()) {
+            // We already have permission!!
+            requestFileSystemCheck()
+          } else {
+            if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
+              // We should only ask for first time, If the users wants to revoke settings
+              // then they can directly toggle this feature from settings screen
+              sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
+              // Show Dialog and  Go to settings to give permission
+              dialogShower.show(
+                KiwixDialog.ManageExternalFilesPermissionDialog,
+                {
+                  this.activity?.let(FragmentActivity::navigateToSettings)
+                }
+              )
+            }
+          }
+        } else {
+          requestFileSystemCheck()
+        }
       }
     }
   }
