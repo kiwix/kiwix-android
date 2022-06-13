@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.drawer_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.navigation_container
 import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -100,6 +101,7 @@ class KiwixMainActivity : CoreMainActivity() {
     if (sharedPreferenceUtil.showIntro()) {
       navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
     }
+    sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
   }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {
