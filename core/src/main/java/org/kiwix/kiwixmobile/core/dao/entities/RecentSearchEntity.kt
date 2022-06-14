@@ -24,13 +24,13 @@ import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 @Entity
 data class RecentSearchEntity(
   @Id var id: Long = 0L,
-  val searchTerm: String,
-  val zimId: String
+  val searchTerm: String?,
+  val zimId: String?
 ) {
 
   constructor(recentSearch: RecentSearch) : this(
     0,
-    recentSearch.searchString!!,
-    recentSearch.zimID!!
+    recentSearch.searchString,
+    recentSearch.zimID
   )
 }

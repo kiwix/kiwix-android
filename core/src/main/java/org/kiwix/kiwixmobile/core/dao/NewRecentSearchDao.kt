@@ -40,7 +40,7 @@ class NewRecentSearchDao @Inject constructor(
   ).map { searchEntities ->
     searchEntities.distinctBy(RecentSearchEntity::searchTerm)
       .take(NUM_RECENT_RESULTS)
-      .map { searchEntity -> RecentSearchListItem(searchEntity.searchTerm) }
+      .map { searchEntity -> searchEntity.searchTerm?.let(::RecentSearchListItem) }
   }
 
   fun saveSearch(title: String, id: String) {

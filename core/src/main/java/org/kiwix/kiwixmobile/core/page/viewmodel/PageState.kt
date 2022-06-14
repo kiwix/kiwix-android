@@ -26,7 +26,7 @@ abstract class PageState<T : Page> {
   val isInSelectionState: Boolean by lazy { pageItems.any(Page::isSelected) }
   protected val filteredPageItems: List<T> by lazy {
     pageItems.filter { showAll || it.zimId == currentZimId }
-      .filter { it.title.contains(searchTerm, true) }
+      .filter { it.title?.contains(searchTerm, true) ?: false }
   }
 
   abstract val visiblePageItems: List<PageRelated>

@@ -19,17 +19,17 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 
 @Entity
 data class BookmarkEntity(
   @Id var id: Long = 0,
-  val zimId: String,
-  var zimName: String,
+  val zimId: String?,
+  var zimName: String?,
   var zimFilePath: String?,
-  var bookmarkUrl: String,
-  var bookmarkTitle: String,
+  var bookmarkUrl: String?,
+  var bookmarkTitle: String?,
   var favicon: String?
 ) {
   constructor(item: BookmarkItem) : this(
@@ -44,11 +44,11 @@ data class BookmarkEntity(
 
   private constructor(bookmark: Bookmark, zimFilePath: String?, favicon: String?) : this(
     0,
-    bookmark.zimId!!,
-    bookmark.zimName!!,
+    bookmark.zimId,
+    bookmark.zimName,
     zimFilePath,
-    bookmark.bookmarkUrl!!,
-    bookmark.bookmarkTitle!!,
+    bookmark.bookmarkUrl,
+    bookmark.bookmarkTitle,
     favicon
   )
 

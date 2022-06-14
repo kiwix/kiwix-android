@@ -24,9 +24,9 @@ interface PageRelated {
 
 interface Page : PageRelated {
   val zimFilePath: String?
-  val zimId: String
-  val url: String
-  val title: String
+  val zimId: String?
+  val url: String?
+  val title: String?
   var isSelected: Boolean
   val favicon: String?
 }
