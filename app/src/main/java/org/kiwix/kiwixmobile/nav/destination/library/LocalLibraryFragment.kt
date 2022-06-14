@@ -150,6 +150,15 @@ class LocalLibraryFragment : BaseFragment() {
     go_to_downloads_button_no_files.setOnClickListener {
       offerAction(FileSelectActions.UserClickedDownloadBooksButton)
     }
+    hideFilePickerButton()
+  }
+
+  private fun hideFilePickerButton() {
+    if (sharedPreferenceUtil.isPlayStoreBuild) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        select_file.visibility = View.GONE
+      }
+    }
 
     select_file.setOnClickListener {
       showFileChooser()

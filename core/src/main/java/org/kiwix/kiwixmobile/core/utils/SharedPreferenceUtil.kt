@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
@@ -182,7 +183,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun getPublicDirectoryPath(path: String): String =
     if (isPlayStoreBuild)
-      path
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        path
+      else
+        path.substringBefore(context.getString(R.string.android_directory_seperator))
     else
       path.substringBefore(context.getString(R.string.android_directory_seperator))
 
