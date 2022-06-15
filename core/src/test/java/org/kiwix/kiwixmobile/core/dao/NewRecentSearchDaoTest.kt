@@ -50,7 +50,8 @@ internal class NewRecentSearchDaoTest {
       expectFromRecentSearches(queryResult, zimId)
       newRecentSearchDao.recentSearches(zimId)
         .test(this)
-        .assertValues(queryResult.map { RecentSearchListItem(it.searchTerm) })
+        .assertValues(
+          queryResult.map { it.searchTerm?.let(::RecentSearchListItem) })
         .finish()
     }
 
@@ -60,7 +61,8 @@ internal class NewRecentSearchDaoTest {
       expectFromRecentSearches(queryResult, "")
       newRecentSearchDao.recentSearches(null)
         .test(this)
-        .assertValues(queryResult.map { RecentSearchListItem(it.searchTerm) })
+        .assertValues(
+          queryResult.map { it.searchTerm?.let(::RecentSearchListItem) })
         .finish()
     }
 
@@ -70,7 +72,8 @@ internal class NewRecentSearchDaoTest {
       expectFromRecentSearches(queryResult, "")
       newRecentSearchDao.recentSearches("")
         .test(this)
-        .assertValues(queryResult.take(1).map { RecentSearchListItem(it.searchTerm) })
+        .assertValues(
+          queryResult.take(1).map { it.searchTerm?.let(::RecentSearchListItem) })
         .finish()
     }
 
