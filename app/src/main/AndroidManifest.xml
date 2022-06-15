@@ -147,7 +147,7 @@
     <service android:name=".webserver.wifi_hotspot.HotspotService" />
 
     <receiver android:name=".main.KiwixSearchWidget"
-      android:exported="false">
+      android:exported="true">
       <meta-data
         android:name="android.appwidget.provider"
         android:resource="@xml/kiwix_widget_provider_info" />
