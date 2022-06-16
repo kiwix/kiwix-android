@@ -47,6 +47,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
+import kotlinx.android.synthetic.main.fragment_destination_download.allowInternetPermissionButton
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryErrorText
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryList
 import kotlinx.android.synthetic.main.fragment_destination_download.librarySwipeRefresh
@@ -154,20 +155,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
     zimManageViewModel.shouldShowWifiOnlyDialog.observe(viewLifecycleOwner, Observer {
       if (it) {
-        dialogShower.show(
-          WifiOnly,
-          {
-            sharedPreferenceUtil.putPrefWifiOnly(false)
-            zimManageViewModel.shouldShowWifiOnlyDialog.value = false
-          },
-          {
-            onRefreshStateChange(false)
-            context.toast(
-              resources.getString(R.string.denied_internet_permission_message),
-              Toast.LENGTH_SHORT
-            )
-          }
-        )
+        showInternetPermissionDialog()
       }
     })
 
@@ -177,6 +165,33 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         libraryList.closeKeyboard()
       }
     })
+
+    allowInternetPermissionButton.setOnClickListener {
+      showInternetPermissionDialog()
+    }
+  }
+
+  private fun showInternetPermissionDialog() {
+    dialogShower.show(
+      WifiOnly,
+      {
+        onRefreshStateChange(true)
+        libraryErrorText.visibility = View.GONE
+        allowInternetPermissionButton.visibility = View.GONE
+        sharedPreferenceUtil.putPrefWifiOnly(false)
+        zimManageViewModel.shouldShowWifiOnlyDialog.value = false
+      },
+      {
+        onRefreshStateChange(false)
+        context.toast(
+          resources.getString(R.string.denied_internet_permission_message),
+          Toast.LENGTH_SHORT
+        )
+        libraryErrorText.setText(R.string.allow_internet_permission_message)
+        libraryErrorText.visibility = View.VISIBLE
+        allowInternetPermissionButton.visibility = View.VISIBLE
+      }
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -227,6 +242,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           libraryErrorText.setText(R.string.no_network_connection)
           libraryErrorText.visibility = View.VISIBLE
         }
+        allowInternetPermissionButton.visibility = View.GONE
         librarySwipeRefresh.isRefreshing = false
       }
     }
@@ -255,6 +271,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     } else {
       libraryErrorText.visibility = View.GONE
     }
+    allowInternetPermissionButton.visibility = View.GONE
   }
 
   private fun refreshFragment() {
