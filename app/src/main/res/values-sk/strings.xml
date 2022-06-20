@@ -8,4 +8,5 @@
   <string name="cannot_open_file">Nepodarilo sa otvoriť súbor\nProsím skúste tento súbor nájsť na karte zariadenia vo vašej knižnici</string>
   <string name="send_files_title">Poslať súbory</string>
   <string name="receive_files_title">Prijať súbory</string>
+  <string name="no_app_found_to_open">Nepodarilo sa nájsť aplikáciu pre výber súboru zim!</string>
 </resources>

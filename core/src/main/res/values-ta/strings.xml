@@ -3,6 +3,7 @@
 * Gurulenin
 * Kanags
 * Kelson
+* Siddhan
 -->
 <resources>
   <string name="menu_help">உதவி</string>
@@ -48,7 +49,9 @@
   <string name="start_server_label">சேவையகத்தைத் தொடங்கு</string>
   <string name="stop_server_label">சேவையகத்தை நிறுத்து</string>
   <string name="server_started_message">%s சேவையகத்தை அணுக உங்கள் உலாவியில் இந்த ஐபி முகவரியை உள்ளிடவும்</string>
+  <string name="share_host_address">பிற பயன்பாடுகள் வழியாக URL ஐப் பகிரவும்</string>
   <string name="error_file_not_found">பிழை: தேர்வு செய்யப்பட்ட ZIM கோப்பு காணப்படவில்லை</string>
+  <string name="unable_to_read_zim_file">இந்த ஜிம் கோப்பைப் படிக்க முடியவில்லை!</string>
   <string name="zim_not_opened">ZIM கோப்பைத் திறக்க முடியவில்லை</string>
   <string name="error_file_invalid">பிழை: தேர்வு செய்யப்பட்ட கோப்பு, ஏற்புடைய ZIM கோப்பு அல்ல</string>
   <string name="error_article_url_not_found">பிழை: (Url: %1$s) கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
@@ -67,11 +70,13 @@
   <string name="no_reader_application_installed">இந்த வகை கோப்பிற்கான நிறுவப்பட்ட செயலியைக் கண்டுபிடிக்க முடியவில்லை</string>
   <string name="no_section_info">உள்ளடக்க தலைப்புகள் எதுவும் கிடைக்கவில்லை</string>
   <string name="request_storage">அணைவரி உள்ளடக்கத்தை அணுக உங்கள் சேமிப்பகத்தை அணுக வேண்டும்</string>
+  <string name="request_write_storage">ஜிம் கோப்புகளைப் பதிவிறக்க, உங்கள் சேமிப்பகத்திற்கான எழுத்து அணுகல் எங்களுக்குத் தேவை</string>
   <string name="clear_recent_and_tabs_history_dialog">உங்கள் தேடல் வரலாற்றை நீக்க மற்றும் அனைத்து செயலில் உள்ள தாவல்களையும் மீட்டமைக்க விரும்புகிறீர்களா?</string>
   <string name="delete_recent_search_item">இந்த உருப்படியை நீக்கவா?</string>
   <string name="pref_clear_all_history_title">வரலாற்றை நீக்கவும்</string>
   <string name="pref_clear_all_history_summary">சமீபத்திய தேடல்கள் மற்றும் தாவல்களின் வரலாற்றை அழிக்கவும்</string>
   <string name="pref_notes">குறிப்புகள்</string>
+  <string name="pref_permission">அனுமதிகள்</string>
   <string name="all_history_cleared">அனைத்து வரலாறும் அழிக்கப்பட்டது</string>
   <string name="pref_clear_all_bookmarks_title">புத்தகக்குறிகளை அழி</string>
   <string name="clear_all_history_dialog_title">எல்லா வரலாற்றையும் அழிக்கவா?</string>
@@ -99,12 +104,12 @@
   <string name="pref_extras">கூடுதல்கள்</string>
   <string name="new_tab_snack_bar">கட்டுரை புதிய தாவலில் திறக்கப்பட்டது</string>
   <string name="search_widget_text">கிவிக்ஸை தேடுங்கள்</string>
-  <string name="speech_prompt_text">%\s ஐ தேட பேசுங்கள்</string>
+  <string name="speech_prompt_text">%s ஐ தேட பேசுங்கள்</string>
   <string name="speech_not_supported">மன்னிக்கவும்! உங்கள் சாதனம் பேச்சு உள்ளீட்டை ஆதரிக்காது</string>
   <string name="local_zims">கருவி</string>
   <string name="remote_zims">எழிவரி</string>
   <string name="library">நூலகம்</string>
-  <string name="delete_zim_body">பின்வரும் zim கோப்பு(கள்) நீக்கப்படும் :! N !! N! \%s</string>
+  <string name="delete_zim_body">பின்வரும் zim கோப்பு(கள்) நீக்கப்படும் :! N !! N! %s</string>
   <string name="delete_zims_toast">கோப்புகள் வெற்றிகரமாக நீக்கப்பட்டன</string>
   <string name="no_files_here">இங்கே கோப்புகள் இல்லை</string>
   <string name="download_no_space">பதிவிறக்க போதுமான இடம் இல்லை.</string>
@@ -199,7 +204,7 @@
   <string name="running_state">நடைபெற்றுக் கொண்டுள்ளது</string>
   <string name="complete">நிறைவு பெற்றது</string>
   <string name="paused_state">இடைநிறுத்தப்பட்டது</string>
-  <string name="failed_state">தோல்வி: \%s</string>
+  <string name="failed_state">தோல்வி: %s</string>
   <string name="save">சேமி</string>
   <string name="note">குறிப்பு</string>
   <string name="wiki_article_title">விக்கி கட்டுரை தலைப்பு</string>
@@ -217,7 +222,7 @@
   <string name="ext_storage_permission_not_granted">பிழை: சேமிப்பக அனுமதிகள் வழங்கப்படவில்லை</string>
   <string name="notes_deletion_successful">முழு குறிப்புகள் கோப்புறை நீக்கப்பட்டது</string>
   <string name="notes_deletion_unsuccessful">சில கோப்புகள் நீக்கப்படவில்லை</string>
-  <string name="books_count">\%d புத்தகம்(கள்)</string>
+  <string name="books_count">%d புத்தகம்(கள்)</string>
   <string name="discovery_initiated">கண்டுபிடிப்பு தொடங்கப்பட்டது</string>
   <string name="discovery_failed">கண்டுபிடிப்பு தோல்வியடைந்தது</string>
   <string name="severe_loss_error">கடுமையான பிழை! வைஃபை P2P ஐ முடக்க / மீண்டும் இயக்க முயற்சிக்கவும்</string>
@@ -230,11 +235,11 @@
   <string name="discovery_needs_location">இருப்பிட சேவைகள் இல்லாமல் சகாக்களைக் கண்டறிய முடியாது</string>
   <string name="request_enable_wifi">கணினி அமைப்புகளிலிருந்து வைஃபை P2P ஐ இயக்கவும்</string>
   <string name="discovery_needs_wifi">வைஃபை-யை இயக்காமல் சகாக்களைக் கண்டறிய முடியாது</string>
-  <string name="transfer_to">கோப்புகளை \%s க்கு மாற்றவா?</string>
+  <string name="transfer_to">கோப்புகளை %s க்கு மாற்றவா?</string>
   <string name="device_not_cooperating">தேர்ந்தெடுக்கப்பட்ட சாதனம் பரிமாற்றத்திற்கு ஒத்துழைக்கவில்லை</string>
   <string name="file_transfer_complete">கோப்பு பரிமாற்றம் முடிந்தது</string>
   <string name="error_during_transfer">இடமாற்றத்தின் போது பிழை ஏற்பட்டது</string>
-  <string name="error_transferring">\%s ஐ மாற்றுவதில் பிழை</string>
+  <string name="error_transferring">%s ஐ மாற்றுவதில் பிழை</string>
   <string name="get_content_from_nearby_device">அருகிலுள்ள சாதனத்திலிருந்து உள்ளடக்கத்தைப் பெறுங்கள்</string>
   <string name="search_for_peers">சகாக்களைத் தேடவும்</string>
   <string name="your_device">உங்கள் சாதனம்:</string>
@@ -246,6 +251,7 @@
   <string name="status">நிலை</string>
   <string name="pref_clear_all_notes_summary">எல்லா கட்டுரைகளிலும் உள்ள அனைத்து குறிப்புகளையும் அழிக்கிறது</string>
   <string name="pref_clear_all_notes_title">எல்லா குறிப்புகளையும் அழிக்கவும்</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">SD கார்டில் ZIM கோப்புகளைப் படிக்கவும் எழுதவும் அனுமதிக்கவும்</string>
   <string name="pref_text_zoom_summary">உரை அளவை 25% அதிகரிப்புகளுடன் மாற்றவும்.</string>
   <string name="tag_pic">படம்</string>
   <string name="tag_vid">காணொளி</string>
@@ -280,4 +286,14 @@
   <string name="close_drawer">இழுப்பறையை மூடு</string>
   <string name="how_to_update_content">உள்ளடக்கத்தை எவ்வாறு புதுப்பிப்பது?</string>
   <string name="update_content_description">உள்ளடக்கத்தைப் புதுப்பிக்க (ஒரு zim கோப்பு) இதே உள்ளடக்கத்தின் முழு சமீபத்திய பதிப்பை நீங்கள் பதிவிறக்க வேண்டும். பதிவிறக்கப் பிரிவு வழியாக நீங்கள் அதைச் செய்யலாம்.</string>
+  <string name="all_files_permission_needed">அனைத்து கோப்புகளுக்கும் அனுமதி தேவை</string>
+  <string name="all_files_permission_needed_message">சாதனம் முழுவதும் உள்ள அனைத்து ஜிம் கோப்புகளையும் அணுக, எல்லா கோப்புகளுக்கும் அனுமதி இருக்க வேண்டும்</string>
+  <string name="allowed">அனுமதிக்கப்படுகிறது</string>
+  <string name="not_allowed">அனுமதி இல்லை</string>
+  <string name="denied_internet_permission_message">உள்ளடக்கத்தைப் பதிவிறக்க வைஃபையை இயக்கவும்</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">வெளிப்புற சேமிப்பகத்திற்கான கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
+  <string name="system_unable_to_grant_permission_message">அமைப்பு அனுமதி வழங்க முடியவில்லை!</string>
+  <string name="allow">அனுமதிக்கவும்</string>
+  <string name="allow_internet_permission_message">உள்ளடக்கத்தைப் பதிவிறக்க இணைய அனுமதியை அனுமதிக்கவும்</string>
 </resources>

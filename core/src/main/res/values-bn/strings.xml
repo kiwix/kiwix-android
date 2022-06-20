@@ -76,7 +76,7 @@
   <string name="pref_extras">অতিরিক্ত</string>
   <string name="new_tab_snack_bar">নতুন ট্যাবে নিবন্ধ খোলা হয়েছে</string>
   <string name="search_widget_text">কিউইক্স অনুসন্ধান</string>
-  <string name="speech_prompt_text">\%s অনুসন্ধান করতে কথা বলুন</string>
+  <string name="speech_prompt_text">%s অনুসন্ধান করতে কথা বলুন</string>
   <string name="speech_not_supported">দুঃখিত! আপনার ডিভাইস কথ্য ইনপুট সমর্থন করে না</string>
   <string name="local_zims">ডিভাইস</string>
   <string name="remote_zims">অনলাইন</string>
@@ -133,7 +133,7 @@
   <string name="pending_state">মুলতুবী</string>
   <string name="save">সংরক্ষণ</string>
   <string name="note">টীকা</string>
-  <string name="books_count">\%dটি বই</string>
+  <string name="books_count">%dটি বই</string>
   <string name="tag_text_only">শুধুমাত্র পাঠ্য</string>
   <string name="no_bookmarks">কোন বুকমার্ক নেই</string>
   <string name="search_open_in_new_tab">নতুন ট্যাবে খুলুন</string>

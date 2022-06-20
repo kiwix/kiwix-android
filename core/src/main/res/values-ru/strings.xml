@@ -6,6 +6,7 @@
 * DevilishSkull
 * Diman Russkov
 * Facenapalm
+* Fenixs-ru
 * Fitoschido
 * Gehhrr
 * Helpau
@@ -19,6 +20,7 @@
 * Rivka Silinsky
 * Smavrina
 * Teretalexev
+* Артём 13327
 -->
 <resources>
   <string name="menu_help">Помощь</string>
@@ -66,6 +68,7 @@
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
+  <string name="unable_to_read_zim_file">Невозможно прочитать этот ZIM-файл!</string>
   <string name="zim_not_opened">Невозможно открыть файл zim</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
@@ -84,6 +87,7 @@
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
   <string name="no_section_info">Не Найдены Заголовки Содержимого.</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
+  <string name="request_write_storage">Для скачивания ZIM-файлов нам нужен доступ на запись к вашему хранилищу</string>
   <string name="clear_recent_and_tabs_history_dialog">Вы уверены, что хотите удалить историю поиска и закрыть все активные вкладки?</string>
   <string name="delete_recent_search_item">Удалить этот элемент?</string>
   <string name="pref_clear_all_history_title">Очистить историю</string>
@@ -117,12 +121,12 @@
   <string name="pref_extras">Дополнительно</string>
   <string name="new_tab_snack_bar">Статья открыта в новой вкладке</string>
   <string name="search_widget_text">Поиск Kiwix</string>
-  <string name="speech_prompt_text">Говорите, чтобы искать %\s</string>
+  <string name="speech_prompt_text">Говорите, чтобы искать %s</string>
   <string name="speech_not_supported">Приносим извинения! Ваше устройство не поддерживает ввод речи.</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_zim_body">Следующие файлы zim будут удалены:\n\n\%s</string>
+  <string name="delete_zim_body">Следующие файлы zim будут удалены:\n\n%s</string>
   <string name="delete_zims_toast">Файл успешно удалён</string>
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space">Недостаточно места для загрузки.</string>
@@ -217,7 +221,7 @@
   <string name="running_state">В процессе</string>
   <string name="complete">Завершено</string>
   <string name="paused_state">Приостановлено</string>
-  <string name="failed_state">Ошибка: \%s</string>
+  <string name="failed_state">Ошибка: %s</string>
   <string name="save">Сохранить</string>
   <string name="note">Заметка</string>
   <string name="wiki_article_title">Заголовок вики-статьи</string>
@@ -235,7 +239,7 @@
   <string name="ext_storage_permission_not_granted">Ошибка: Отсутствует разрешение на хранение</string>
   <string name="notes_deletion_successful">Папка с заметками полностью удалена</string>
   <string name="notes_deletion_unsuccessful">Некоторые файлы не были удалены</string>
-  <string name="books_count">\%d книг</string>
+  <string name="books_count">%d книг</string>
   <string name="discovery_initiated">Обнаружение начато</string>
   <string name="discovery_failed">Обнаружение не удалось</string>
   <string name="severe_loss_error">Серьёзная ошибка! Попробуйте выключить и снова включить WiFi P2P</string>
@@ -248,11 +252,11 @@
   <string name="discovery_needs_location">Поиск близлежащих устройств невозможен без доступа к местоположению</string>
   <string name="request_enable_wifi">Включите WiFi P2P в настройках системы</string>
   <string name="discovery_needs_wifi">Поиск устройств невозможен без включённого WiFi</string>
-  <string name="transfer_to">Передать файлы на \%s?</string>
+  <string name="transfer_to">Передать файлы на %s?</string>
   <string name="device_not_cooperating">Выбранное устройство отказало в передаче</string>
   <string name="file_transfer_complete">Передача файла завершена</string>
   <string name="error_during_transfer">Произошла ошибка во время передачи файла</string>
-  <string name="error_transferring">Ошибка при передаче файла \%s</string>
+  <string name="error_transferring">Ошибка при передаче файла %s</string>
   <string name="get_content_from_nearby_device">Получить контент с устройства рядом</string>
   <string name="search_for_peers">Поиск устройств</string>
   <string name="your_device">Ваше устройство:</string>
@@ -303,4 +307,10 @@
   <string name="all_files_permission_needed_message">Чтобы получить доступ ко всем zim-файлам на устройстве, нам необходимо иметь разрешение на все файлы.</string>
   <string name="allowed">Разрешено</string>
   <string name="not_allowed">Не разрешено</string>
+  <string name="denied_internet_permission_message">Включите Wi-Fi для загрузки содержания</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">Выберите папку для внешнего хранилища.</string>
+  <string name="system_unable_to_grant_permission_message">Система не может предоставить разрешение!</string>
+  <string name="allow">Разрешить</string>
+  <string name="allow_internet_permission_message">Пожалуйста разрешите доступ в интернет для загрузки контента</string>
 </resources>

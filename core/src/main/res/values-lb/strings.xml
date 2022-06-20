@@ -59,7 +59,7 @@
   <string name="local_zims">Apparat</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliothéik</string>
-  <string name="delete_zim_body" fuzzy="true">\%s läschen?</string>
+  <string name="delete_zim_body" fuzzy="true">%s läschen?</string>
   <string name="delete_zims_toast">Fichier geläscht</string>
   <string name="no_files_here">Keng Fichieren hei?</string>
   <string name="download_no_space">Net genuch Plaz fir erofzelueden.</string>
@@ -127,4 +127,5 @@
   <string name="close_drawer">Tirang zoumaachen</string>
   <string name="allowed">Erlaabt</string>
   <string name="not_allowed">Net erlaabt</string>
+  <string name="allow">Erlaben</string>
 </resources>

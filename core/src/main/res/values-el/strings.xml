@@ -94,7 +94,7 @@
   <string name="pref_extras">Πρόσθετα</string>
   <string name="new_tab_snack_bar">Άρθρο άνοιξε σε νέα καρτέλα</string>
   <string name="search_widget_text">Αναζήτηση Kiwix</string>
-  <string name="speech_prompt_text">Ομιλήστε για αναζήτηση \%s</string>
+  <string name="speech_prompt_text">Ομιλήστε για αναζήτηση %s</string>
   <string name="local_zims">Συσκευή</string>
   <string name="remote_zims">Συνδεδεμένος</string>
   <string name="library">Βιβλιοθήκη</string>

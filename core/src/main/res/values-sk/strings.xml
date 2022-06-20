@@ -51,6 +51,7 @@
   <string name="server_started_message">Zadajte túto ip adresu to vášho prehliadača pre prístup na server %s</string>
   <string name="share_host_address">Zdieľať URL cez iné aplikácie</string>
   <string name="error_file_not_found">Chyba: Vybraný súbor ZIM sa nenašiel.</string>
+  <string name="unable_to_read_zim_file">Nepodarilo sa prečítať súbor zim!</string>
   <string name="zim_not_opened">Nepodarilo sa otvoriť súbor zim</string>
   <string name="error_file_invalid">Chyba: Vybraný súbor nie je platný ZIM súbor.</string>
   <string name="error_article_url_not_found">Chyba: Načítavanie článku (Url: %1$s) sa nepodarilo.</string>
@@ -69,6 +70,7 @@
   <string name="no_reader_application_installed">Nebola nájdená nainštalovaná aplikácia pre tento typ súboru</string>
   <string name="no_section_info">Neboli nájdené hlavičky obsahu</string>
   <string name="request_storage">Na prístup k offline obsahu potrebujeme prístup k vášmu úložisku</string>
+  <string name="request_write_storage">Pre stiahnutie súboru zim potrebujeme oprávnenie na zapisovanie do vášho úložného priestoru</string>
   <string name="clear_recent_and_tabs_history_dialog">Ste si istý/á, že chcete vymazať históriu vyhľadávania a vynulovať všetky svoje aktívne karty?</string>
   <string name="delete_recent_search_item">Zmazať túto položku?</string>
   <string name="pref_clear_all_history_title">Vymazať históriu</string>
@@ -102,12 +104,12 @@
   <string name="pref_extras">Extra</string>
   <string name="new_tab_snack_bar">Článok otvorený na novej karte</string>
   <string name="search_widget_text">Prehľadať Kiwix</string>
-  <string name="speech_prompt_text">Hovoriť pre vyhľadanie %\s</string>
+  <string name="speech_prompt_text">Hovoriť pre vyhľadanie %s</string>
   <string name="speech_not_supported">Prepáčte, Vaše zariadenie nepodporuje hlasový vstup</string>
   <string name="local_zims">Zariadenie</string>
   <string name="remote_zims">Online</string>
   <string name="library">Knižnica</string>
-  <string name="delete_zim_body">Nasledovné súbory zim budú vymazané:\n\n\%s</string>
+  <string name="delete_zim_body">Nasledovné súbory zim budú vymazané:\n\n%s</string>
   <string name="delete_zims_toast">Súbory úspešne vymazané</string>
   <string name="no_files_here">Nie sú tu žiadne súbory</string>
   <string name="download_no_space">Nedostatočný priestor na stiahnutie.</string>
@@ -202,7 +204,7 @@
   <string name="running_state">Rozpracované</string>
   <string name="complete">Dokončené</string>
   <string name="paused_state">Pozastavené</string>
-  <string name="failed_state">Zlyhalo: \%s</string>
+  <string name="failed_state">Zlyhalo: %s</string>
   <string name="save">Uložiť</string>
   <string name="note">Poznámka</string>
   <string name="wiki_article_title">Názov wiki článku</string>
@@ -220,7 +222,7 @@
   <string name="ext_storage_permission_not_granted">Chyba: Oprávnenie k úložisku nebolo udelené</string>
   <string name="notes_deletion_successful">Zmazaný celý adresár s poznámkami</string>
   <string name="notes_deletion_unsuccessful">Niektoré súbory neboli zmazané</string>
-  <string name="books_count">\%d kníh</string>
+  <string name="books_count">%d kníh</string>
   <string name="discovery_initiated">Objavovanie začaté</string>
   <string name="discovery_failed">Objavovanie zlyhalo</string>
   <string name="severe_loss_error">Závažná chyba! Skúste vypnúť/zapnúť WiFi P2P</string>
@@ -233,11 +235,11 @@
   <string name="discovery_needs_location">Bez povolenia k polohe nie je možné vyhľadať zariadenia v okolí</string>
   <string name="request_enable_wifi">Zapnite WiFi P2P v systémových nastaveniach</string>
   <string name="discovery_needs_wifi">Bez zapnutého WiFi nie je možné nájsť zariadenia v okolí</string>
-  <string name="transfer_to">Presunúť súbory do \%s?</string>
+  <string name="transfer_to">Presunúť súbory do %s?</string>
   <string name="device_not_cooperating">Vybrané zariadenie pri prenose nespolupracuje</string>
   <string name="file_transfer_complete">Prenos súborov dokončený</string>
   <string name="error_during_transfer">Pri prenose došlo k chybe</string>
-  <string name="error_transferring">Chyba pri prenose súbora \%s</string>
+  <string name="error_transferring">Chyba pri prenose súbora %s</string>
   <string name="get_content_from_nearby_device">Získať obsah z blízkeho zariadenia</string>
   <string name="search_for_peers">Hľadať zariadenia</string>
   <string name="your_device">Vaše zariadenie:</string>
@@ -288,4 +290,8 @@
   <string name="all_files_permission_needed_message">Pre prístup do súborov ZIM potrebujeme mať zapnuté Povolenie pre všetky súbory</string>
   <string name="allowed">Povolené</string>
   <string name="not_allowed">Nie je povolené</string>
+  <string name="denied_internet_permission_message">Pre stiahnutie obsahu zapnite wifi</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">Prosím vyberte priečinok pre externé úložisko.</string>
+  <string name="system_unable_to_grant_permission_message">Systému sa nedarí udeliť povolenie!</string>
 </resources>

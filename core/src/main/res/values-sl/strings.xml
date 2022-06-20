@@ -74,7 +74,7 @@
   <string name="pref_extras">Pripomočki</string>
   <string name="new_tab_snack_bar">Članek odprt na novem zavihku</string>
   <string name="search_widget_text">Iskanje Kiwix</string>
-  <string name="speech_prompt_text">Govori za iskanje %\s</string>
+  <string name="speech_prompt_text">Govori za iskanje %s</string>
   <string name="speech_not_supported">Žal vaša naprava ne podpira vnosa govora</string>
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
@@ -170,7 +170,7 @@
   <string name="running_state">V teku</string>
   <string name="complete">Končano</string>
   <string name="paused_state" fuzzy="true">Premor</string>
-  <string name="failed_state">Neuspešno: \%s</string>
+  <string name="failed_state">Neuspešno: %s</string>
   <string name="save">Shrani</string>
   <string name="note">Beležka</string>
   <string name="wiki_article_title">Naslov članka Wiki</string>

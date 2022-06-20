@@ -94,7 +94,7 @@
   <string name="running_state">In behandeling</string>
   <string name="complete">Afgerond</string>
   <string name="paused_state">Gepauzeerd</string>
-  <string name="failed_state">Mislukt: \%s</string>
+  <string name="failed_state">Mislukt: %s</string>
   <string name="save">Opslaan</string>
   <string name="note">Opmerking</string>
   <string name="file_transfer_complete">Bestandsoverdracht compleet</string>

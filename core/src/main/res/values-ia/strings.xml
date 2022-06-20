@@ -82,7 +82,7 @@
   <string name="cancel">Cancellar</string>
   <string name="delete_specific_search_toast">Recerca recente removite</string>
   <string name="library">Bibliotheca</string>
-  <string name="delete_zim_body">Le sequente file(s) zim essera delite:\n\n\%s</string>
+  <string name="delete_zim_body">Le sequente file(s) zim essera delite:\n\n%s</string>
   <string name="help_5">Ubi es le contento?</string>
   <string name="delete_zim_failed">Alcun files non ha potite esser delite. Tenta usar un gestor de files pro deler los.</string>
   <string name="confirm_stop_download_title">Stoppar le discarga?</string>

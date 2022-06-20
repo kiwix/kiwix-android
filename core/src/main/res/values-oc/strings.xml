@@ -62,7 +62,7 @@
   <string name="pref_newtab_background_summary">Al moment de la dobertura d\'un onglet novèl, se dobrirà en rèireplan</string>
   <string name="pref_extras">Extras</string>
   <string name="search_widget_text">Recercar dins Kiwix</string>
-  <string name="speech_prompt_text">Parlar per recercar \%s</string>
+  <string name="speech_prompt_text">Parlar per recercar %s</string>
   <string name="local_zims">Aparelh</string>
   <string name="remote_zims">En linha</string>
   <string name="library">Bibliotèca</string>

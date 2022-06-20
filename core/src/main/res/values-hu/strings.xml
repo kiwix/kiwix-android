@@ -76,7 +76,7 @@
   <string name="pref_extras">Extrák</string>
   <string name="new_tab_snack_bar">A cikk megnyitva egy új fülön</string>
   <string name="search_widget_text">Kiwix keresése</string>
-  <string name="speech_prompt_text" fuzzy="true">A kereséshez beszélj \%s</string>
+  <string name="speech_prompt_text" fuzzy="true">A kereséshez beszélj %s</string>
   <string name="speech_not_supported">Sajnálom, az eszközöd nem támogatja a beszédbevitelt</string>
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
