@@ -315,9 +315,13 @@ object FileUtils {
     }
     val fileToSave = sequence {
       yield(File(root, fileName))
-      yieldAll(generateSequence(1) { it + 1 }.map {
-        File(root, fileName.replace(".", "_$it."))
-      })
+      yieldAll(
+        generateSequence(1) { it + 1 }.map {
+          File(
+            root, fileName.replace(".", "_$it.")
+          )
+        }
+      )
     }.first { !it.exists() }
     val source = if (url == null) Uri.parse(src) else Uri.parse(url)
     return try {
