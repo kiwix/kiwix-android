@@ -18,7 +18,7 @@
 package org.kiwix.kiwixmobile.core.data.local.entity;
 
 import com.yahoo.squidb.annotations.TableModelSpec;
-import org.jetbrains.annotations.NotNull;
+import com.yahoo.squidb.annotations.tables.constraints.NotNull;
 
 /**
  * Squidb spec for saved bookmarks.
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 @TableModelSpec(className = "Bookmark", tableName = "Bookmarks")
 public class BookmarksSpec {
   @NotNull public String ZimId;
-  public String ZimName;
-  public String bookmarkUrl;
-  public String bookmarkTitle;
+  @NotNull public String ZimName;
+  @NotNull public String bookmarkUrl;
+  @NotNull public String bookmarkTitle;
 }

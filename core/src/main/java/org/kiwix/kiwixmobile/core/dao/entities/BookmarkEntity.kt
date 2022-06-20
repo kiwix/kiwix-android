@@ -28,8 +28,8 @@ data class BookmarkEntity(
   val zimId: String,
   var zimName: String,
   var zimFilePath: String?,
-  var bookmarkUrl: String?,
-  var bookmarkTitle: String?,
+  var bookmarkUrl: String,
+  var bookmarkTitle: String,
   var favicon: String?
 ) {
   constructor(item: BookmarkItem) : this(
@@ -44,8 +44,8 @@ data class BookmarkEntity(
 
   private constructor(bookmark: Bookmark, zimFilePath: String?, favicon: String?) : this(
     0,
-    bookmark.zimId!!,
-    bookmark.zimName!!,
+    bookmark.zimId,
+    bookmark.zimName,
     zimFilePath,
     bookmark.bookmarkUrl,
     bookmark.bookmarkTitle,

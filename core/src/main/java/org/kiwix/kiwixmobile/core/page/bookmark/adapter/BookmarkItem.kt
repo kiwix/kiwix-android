@@ -27,11 +27,11 @@ data class BookmarkItem(
   override val zimId: String,
   val zimName: String,
   override val zimFilePath: String?,
-  val bookmarkUrl: String?,
-  override val title: String?,
+  val bookmarkUrl: String,
+  override val title: String,
   override val favicon: String?,
   override var isSelected: Boolean = false,
-  override val url: String? = bookmarkUrl,
+  override val url: String = bookmarkUrl,
   override val id: Long = databaseId
 ) : Page {
   constructor(entity: BookmarkEntity) : this(

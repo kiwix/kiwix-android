@@ -33,9 +33,9 @@ data class OpenPage(
     activity as CoreMainActivity
     activity.popNavigationBackstack()
     if (page.zimFilePath != zimReaderContainer.zimCanonicalPath) {
-      page.url?.let { url -> page.zimFilePath?.let { path -> activity.openPage(url, path) } }
+      page.zimFilePath?.let { activity.openPage(page.url, it) }
     } else {
-      page.url?.let { activity.openPage(it) }
+      activity.openPage(page.url)
     }
   }
 }

@@ -18,13 +18,13 @@
 package org.kiwix.kiwixmobile.core.data.local.entity;
 
 import com.yahoo.squidb.annotations.TableModelSpec;
-import org.jetbrains.annotations.NotNull;
+import com.yahoo.squidb.annotations.tables.constraints.NotNull;
 
 /**
  * Squidb spec for recent searches.
  */
 @TableModelSpec(className = "RecentSearch", tableName = "recentSearches")
 public class RecentSearchSpec {
-  public String searchString;
-  @NotNull public String zimID;
+  @NotNull public String searchString;
+  @NotNull String zimID;
 }

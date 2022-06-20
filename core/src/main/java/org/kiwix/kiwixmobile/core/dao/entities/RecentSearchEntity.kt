@@ -29,7 +29,7 @@ data class RecentSearchEntity(
 ) {
   constructor(recentSearch: RecentSearch) : this(
     0,
-    recentSearch.searchString!!,
-    recentSearch.zimID!!
+    recentSearch.searchString,
+    recentSearch.zimID
   )
 }
