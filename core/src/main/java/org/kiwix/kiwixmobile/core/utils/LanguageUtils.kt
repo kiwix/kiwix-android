@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Typeface
@@ -54,12 +55,14 @@ class LanguageUtils(private val context: Context) {
     MutableList<LanguageContainer> {
     val localeCollator =
       Collator.getInstance(context.locale).apply { strength = Collator.SECONDARY }
-    languageCodesFromAssets.sortWith(Comparator { o1, o2 ->
-      localeCollator.compare(
-        o1.languageName,
-        o2.languageName
-      )
-    })
+    languageCodesFromAssets.sortWith(
+      Comparator { o1, o2 ->
+        localeCollator.compare(
+          o1.languageName,
+          o2.languageName
+        )
+      }
+    )
     return languageCodesFromAssets
   }
 
@@ -80,7 +83,10 @@ class LanguageUtils(private val context: Context) {
   // which also sets a Factory on the LayoutInflator, we have to access the private field of the
   // LayoutInflater, that handles this restriction via Java's reflection API
   // and make it accessible set it to false again.
-  fun changeFont(layoutInflater: LayoutInflater, sharedPreferenceUtil: SharedPreferenceUtil) {
+  @SuppressLint("SoonBlockedPrivateApi") fun changeFont(
+    layoutInflater: LayoutInflater,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ) {
 
     if (!haveToChangeFont(sharedPreferenceUtil)) {
       return
@@ -187,6 +193,7 @@ class LanguageUtils(private val context: Context) {
       }
     }
 
+    @SuppressLint("AppBundleLocaleChanges")
     @JvmStatic
     fun handleLocaleChange(context: Context, language: String) {
       val locale =

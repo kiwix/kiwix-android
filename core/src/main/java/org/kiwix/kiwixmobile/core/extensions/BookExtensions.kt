@@ -29,11 +29,13 @@ fun Book.calculateSearchMatches(
 ) {
   val searchableText = buildSearchableText(bookUtils)
   searchMatches = filter.split("\\s+")
-    .foldRight(0,
+    .foldRight(
+      0,
       { filterWord, acc ->
         if (searchableText.contains(filterWord, true)) acc + 1
         else acc
-      })
+      }
+    )
 }
 
 fun Book.buildSearchableText(bookUtils: BookUtils): String =

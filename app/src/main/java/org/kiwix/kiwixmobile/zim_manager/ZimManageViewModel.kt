@@ -483,6 +483,7 @@ class ZimManageViewModel @Inject constructor(
             oldBookOnDisk.id == newBookOnDisk.id
           }
         newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
-      })
+      }
+    )
   }
 }

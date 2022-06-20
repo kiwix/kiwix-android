@@ -1,19 +1,19 @@
-<?xml version="1.0" ?>
+<?xml version='1.0' encoding='UTF-8'?>
 <SmellBaseline>
-  <Blacklist></Blacklist>
-  <Whitelist>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
     <ID>EmptyFunctionBlock:None.kt$None${ }</ID>
     <ID>EmptyFunctionBlock:SimplePageChangeListener.kt$SimplePageChangeListener${ }</ID>
-    <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( booksOnFileSystem: List&lt;BookOnDisk&gt;, activeDownloads: List&lt;DownloadModel&gt;, allLanguages: List&lt;Language&gt;, libraryNetworkEntity: LibraryNetworkEntity, filter: String, fileSystemState: FileSystemState )</ID>
+    <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( booksOnFileSystem: List&lt;BookOnDisk>, activeDownloads: List&lt;DownloadModel>, allLanguages: List&lt;Language>, libraryNetworkEntity: LibraryNetworkEntity, filter: String, fileSystemState: FileSystemState )</ID>
     <ID>LongParameterList:ZimManageViewModel.kt$ZimManageViewModel$( private val downloadDao: FetchDownloadDao, private val bookDao: NewBookDao, private val languageDao: NewLanguagesDao, private val storageObserver: StorageObserver, private val kiwixService: KiwixService, private val context: Application, private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver, private val bookUtils: BookUtils, private val fat32Checker: Fat32Checker, private val defaultLanguageProvider: DefaultLanguageProvider, private val dataSource: DataSource, private val connectivityManager: ConnectivityManager, private val sharedPreferenceUtil: SharedPreferenceUtil )</ID>
     <ID>MagicNumber:LibraryListItem.kt$LibraryListItem.LibraryDownloadItem$1000L</ID>
     <ID>MagicNumber:PeerGroupHandshake.kt$PeerGroupHandshake$15000</ID>
     <ID>MagicNumber:ShareFiles.kt$ShareFiles$24</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
-    <ID>NestedBlockDepth:LocalLibraryFragment.kt$LocalLibraryFragment$checkPermissions</ID>
-    <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$readHandshakeAndExchangeMetaData</ID>
-    <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$exchangeFileTransferMetadata</ID>
+    <ID>NestedBlockDepth:LocalLibraryFragment.kt$LocalLibraryFragment$private fun checkPermissions()</ID>
+    <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$private fun readHandshakeAndExchangeMetaData(): InetAddress?</ID>
+    <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream)</ID>
     <ID>PackageNaming:AvailableSpaceCalculator.kt$package org.kiwix.kiwixmobile.zim_manager.library_view</ID>
     <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
     <ID>PackageNaming:DefaultLanguageProvider.kt$package org.kiwix.kiwixmobile.zim_manager</ID>
@@ -46,5 +46,5 @@
     <ID>TooGenericExceptionThrown:LibraryViewHolder.kt$LibraryViewHolder.LibraryBookViewHolder$throw RuntimeException("impossible invalid state: ${item.fileSystemState}")</ID>
     <ID>TooGenericExceptionThrown:ZimManageViewModel.kt$ZimManageViewModel$throw RuntimeException("Impossible state")</ID>
     <ID>VariableNaming:PeerGroupHandshake.kt$PeerGroupHandshake$private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"</ID>
-  </Whitelist>
+  </CurrentIssues>
 </SmellBaseline>

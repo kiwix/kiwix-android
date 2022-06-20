@@ -125,9 +125,11 @@ class LanguageFragment : BaseFragment() {
     super.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.menu_language, menu)
     val search = menu.findItem(R.id.menu_language_search)
-    (search.actionView as SearchView).setOnQueryTextListener(SimpleTextListener {
-      languageViewModel.actions.offer(Filter(it))
-    })
+    (search.actionView as SearchView).setOnQueryTextListener(
+      SimpleTextListener {
+        languageViewModel.actions.offer(Filter(it))
+      }
+    )
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

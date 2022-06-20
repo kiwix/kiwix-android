@@ -82,7 +82,8 @@ class ChunkUtilsTest {
 
     assertEquals(
       "verify that the same notificationID is passed on to each chunk",
-      true, listReturned[0].url == url &&
+      true,
+      listReturned[0].url == url &&
         listReturned[1].url == url &&
         listReturned[2].url == url &&
         listReturned[3].url == url &&
@@ -92,7 +93,8 @@ class ChunkUtilsTest {
 
     assertEquals(
       "verify that the same URL is passed on to each chunk",
-      true, listReturned[0].notificationID == 56 &&
+      true,
+      listReturned[0].notificationID == 56 &&
         listReturned[1].notificationID == 56 &&
         listReturned[2].notificationID == 56 &&
         listReturned[3].notificationID == 56 &&

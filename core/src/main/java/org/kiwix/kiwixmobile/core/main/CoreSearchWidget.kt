@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -46,6 +47,7 @@ abstract class CoreSearchWidget : AppWidgetProvider() {
     }
   }
 
+  @SuppressLint("UnspecifiedImmutableFlag")
   private fun pendingIntent(context: Context, action: String) = PendingIntent.getActivity(
     context,
     (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),

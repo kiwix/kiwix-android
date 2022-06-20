@@ -243,11 +243,13 @@ class AddNoteDialog : DialogFragment() {
 
     // Show the previously saved note if it exists
     displayNote()
-    add_note_edit_text.addTextChangedListener(SimpleTextWatcher { _, _, _, _ ->
-      noteEdited = true
-      enableSaveNoteMenuItem()
-      enableShareNoteMenuItem()
-    })
+    add_note_edit_text.addTextChangedListener(
+      SimpleTextWatcher { _, _, _, _ ->
+        noteEdited = true
+        enableSaveNoteMenuItem()
+        enableShareNoteMenuItem()
+      }
+    )
     if (!noteFileExists) {
       // Prepare for input in case of empty/new note
       add_note_edit_text.requestFocus()

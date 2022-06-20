@@ -68,7 +68,8 @@ class Repository @Inject internal constructor(
     .map {
       HeaderizableList<BooksOnDiskListItem, BookOnDisk, LanguageItem>(it).foldOverAddingHeaders(
         { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
-        { current, next -> current.locale.displayName != next.locale.displayName })
+        { current, next -> current.locale.displayName != next.locale.displayName }
+      )
     }
     .map { it.toList() }
 

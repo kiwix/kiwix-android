@@ -58,6 +58,7 @@ class ExternalLinkOpener @Inject constructor(
       {
         sharedPreferenceUtil.putPrefExternalLinkPopup(false)
         openLink(intent)
-      })
+      }
+    )
   }
 }

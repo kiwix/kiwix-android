@@ -34,7 +34,7 @@ internal class ServerUtilsTest {
       fec0::d8d1:9ff:fe42:160c
       fec0::8d6e:2327:6d9f:ce75
       192.168.200.2
-    """.trimIndent()
+        """.trimIndent()
       )
     ).isEqualTo(
       "192.168.232.2"

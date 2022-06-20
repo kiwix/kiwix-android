@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.downloader.fetch
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
@@ -107,6 +108,7 @@ class FetchDownloadNotificationManager(context: Context) :
     notificationCustomisation(downloadNotification, notificationBuilder, context)
   }
 
+  @SuppressLint("UnspecifiedImmutableFlag")
   private fun notificationCustomisation(
     downloadNotification: DownloadNotification,
     notificationBuilder: NotificationCompat.Builder,
