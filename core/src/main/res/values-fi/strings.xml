@@ -89,7 +89,7 @@
   <string name="pref_extras">Ekstrat</string>
   <string name="new_tab_snack_bar">Artikkeli avattu uudessa välilehdessä</string>
   <string name="search_widget_text">Hae Kiwixistä</string>
-  <string name="speech_prompt_text">Puhu hakeaksesi \%s</string>
+  <string name="speech_prompt_text">Puhu hakeaksesi %s</string>
   <string name="speech_not_supported">Sori! Laitteesi ei tue puheensyöttöä</string>
   <string name="local_zims">Laite</string>
   <string name="remote_zims">Online</string>
@@ -175,7 +175,7 @@
   <string name="running_state">Käynnissä</string>
   <string name="complete">Valmis</string>
   <string name="paused_state">Pysäytetty</string>
-  <string name="failed_state">Epäonnistui: \%s</string>
+  <string name="failed_state">Epäonnistui: %s</string>
   <string name="save">Tallenna</string>
   <string name="note">Huomautus</string>
   <string name="wiki_article_title">Wikiartikkelin otsikko</string>
@@ -223,4 +223,5 @@
   <string name="how_to_update_content">Kuinka päivittää sisältöä?</string>
   <string name="allowed">Sallittu</string>
   <string name="not_allowed">Ei sallittu</string>
+  <string name="allow">Salli</string>
 </resources>

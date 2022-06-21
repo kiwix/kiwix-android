@@ -70,7 +70,7 @@
   <string name="pref_extras">Thêm</string>
   <string name="new_tab_snack_bar">Trang đã mở trong thẻ mới</string>
   <string name="search_widget_text">Tìm kiếm Kiwix</string>
-  <string name="speech_prompt_text">Nói để tìm %\s</string>
+  <string name="speech_prompt_text">Nói để tìm %s</string>
   <string name="speech_not_supported">Xin lỗi! Thiết bị của bạn không hỗ trợ nhập bằng guọng nói</string>
   <string name="local_zims">Thiết bị</string>
   <string name="remote_zims">Trực tuyến</string>

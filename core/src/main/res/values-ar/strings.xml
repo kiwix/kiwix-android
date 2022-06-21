@@ -105,12 +105,12 @@
   <string name="pref_extras">إضافات</string>
   <string name="new_tab_snack_bar">فُتحت المقالة في علامة تبويب جديدة</string>
   <string name="search_widget_text">بحث كيويكس</string>
-  <string name="speech_prompt_text">تحدث للبحث \%s</string>
+  <string name="speech_prompt_text">تحدث للبحث %s</string>
   <string name="speech_not_supported">نعتذر! جهازك لا يدعم الإدخال الكلامي</string>
   <string name="local_zims">جهاز</string>
   <string name="remote_zims">متصل</string>
   <string name="library">المكتبة</string>
-  <string name="delete_zim_body">ملف(ات) zim التالية سيتم حذفها:n\n\%\s</string>
+  <string name="delete_zim_body">ملف(ات) zim التالية سيتم حذفها:n\n\%s</string>
   <string name="delete_zims_toast">حُذف الملف</string>
   <string name="no_files_here">لا توجد ملفات هنا</string>
   <string name="download_no_space">لا توجد مساحة كافية للتنزيل.</string>
@@ -205,7 +205,7 @@
   <string name="running_state">في تقدم</string>
   <string name="complete">اكتمال</string>
   <string name="paused_state">متوقف مؤقتًا</string>
-  <string name="failed_state">فشل: %\s</string>
+  <string name="failed_state">فشل: %s</string>
   <string name="save">حفظ</string>
   <string name="note">ملاحظة</string>
   <string name="wiki_article_title">عنوان مقالة الويكي</string>

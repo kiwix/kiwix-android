@@ -94,7 +94,7 @@
   <string name="pref_extras">Estres</string>
   <string name="new_tab_snack_bar">Artículu abiertu nuna llingüeta nueva</string>
   <string name="search_widget_text">Guetar en Kiwix</string>
-  <string name="speech_prompt_text">Fala pa guetar \%s</string>
+  <string name="speech_prompt_text">Fala pa guetar %s</string>
   <string name="speech_not_supported">Sentímoslo, el to preséu nun tien encontu pa entrada de voz</string>
   <string name="local_zims">Preséu</string>
   <string name="remote_zims">En llinia</string>
@@ -194,7 +194,7 @@
   <string name="running_state">En cursu</string>
   <string name="complete">Completáu</string>
   <string name="paused_state">En posa</string>
-  <string name="failed_state">Falló: \%s</string>
+  <string name="failed_state">Falló: %s</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Títulu del artículu de la wiki</string>

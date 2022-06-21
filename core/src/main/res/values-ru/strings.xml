@@ -6,6 +6,7 @@
 * DevilishSkull
 * Diman Russkov
 * Facenapalm
+* Fenixs-ru
 * Fitoschido
 * Gehhrr
 * Helpau
@@ -19,6 +20,7 @@
 * Rivka Silinsky
 * Smavrina
 * Teretalexev
+* Артём 13327
 -->
 <resources>
   <string name="menu_help">Помощь</string>
@@ -66,6 +68,7 @@
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
+  <string name="unable_to_read_zim_file">Невозможно прочитать этот ZIM-файл!</string>
   <string name="zim_not_opened">Невозможно открыть файл zim</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
@@ -84,6 +87,7 @@
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
   <string name="no_section_info">Не Найдены Заголовки Содержимого.</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
+  <string name="request_write_storage">Для скачивания ZIM-файлов нам нужен доступ на запись к вашему хранилищу</string>
   <string name="clear_recent_and_tabs_history_dialog">Вы уверены, что хотите удалить историю поиска и закрыть все активные вкладки?</string>
   <string name="delete_recent_search_item">Удалить этот элемент?</string>
   <string name="pref_clear_all_history_title">Очистить историю</string>
@@ -117,7 +121,7 @@
   <string name="pref_extras">Дополнительно</string>
   <string name="new_tab_snack_bar">Статья открыта в новой вкладке</string>
   <string name="search_widget_text">Поиск Kiwix</string>
-  <string name="speech_prompt_text">Говорите, чтобы искать %\s</string>
+  <string name="speech_prompt_text">Говорите, чтобы искать %s</string>
   <string name="speech_not_supported">Приносим извинения! Ваше устройство не поддерживает ввод речи.</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
@@ -217,7 +221,7 @@
   <string name="running_state">В процессе</string>
   <string name="complete">Завершено</string>
   <string name="paused_state">Приостановлено</string>
-  <string name="failed_state">Ошибка: \%s</string>
+  <string name="failed_state">Ошибка: %s</string>
   <string name="save">Сохранить</string>
   <string name="note">Заметка</string>
   <string name="wiki_article_title">Заголовок вики-статьи</string>
@@ -265,7 +269,7 @@
   <string name="pref_clear_all_notes_summary">Очистить все заметки во всех статьях</string>
   <string name="pref_clear_all_notes_title">Очистить все заметки</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Разрешить читать и записывать файлы ZIM на SD-карту</string>
-  <string name="pref_text_zoom_summary">Изменить размер текста с шагом 25%</string>
+  <string name="pref_text_zoom_summary">Изменить размер текста с шагом 25\%</string>
   <string name="tag_pic">Изображение</string>
   <string name="tag_vid">Видео</string>
   <string name="tag_text_only">Только текст</string>
@@ -303,4 +307,10 @@
   <string name="all_files_permission_needed_message">Чтобы получить доступ ко всем zim-файлам на устройстве, нам необходимо иметь разрешение на все файлы.</string>
   <string name="allowed">Разрешено</string>
   <string name="not_allowed">Не разрешено</string>
+  <string name="denied_internet_permission_message">Включите Wi-Fi для загрузки содержания</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">Выберите папку для внешнего хранилища.</string>
+  <string name="system_unable_to_grant_permission_message">Система не может предоставить разрешение!</string>
+  <string name="allow">Разрешить</string>
+  <string name="allow_internet_permission_message">Пожалуйста разрешите доступ в интернет для загрузки контента</string>
 </resources>

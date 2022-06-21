@@ -88,7 +88,7 @@
   <string name="pref_extras">Äxtras</string>
   <string name="new_tab_snack_bar">Syte imänä nöiä Tab ufgmacht</string>
   <string name="search_widget_text">Kiwix dürsuechä</string>
-  <string name="speech_prompt_text">Redä, um \%s z\'suechä</string>
+  <string name="speech_prompt_text">Redä, um %s z\'suechä</string>
   <string name="speech_not_supported">Exgüse, öies Grät unterstützt ke Spraachiigaab!</string>
   <string name="local_zims">Grät</string>
   <string name="library">Bibliothek</string>
@@ -155,7 +155,7 @@
   <string name="running_state">Am Bearbeitä</string>
   <string name="complete">Fertig</string>
   <string name="paused_state">Pousiert</string>
-  <string name="failed_state">Fählgschlage: \%s</string>
+  <string name="failed_state">Fählgschlage: %s</string>
   <string name="save">Spychere</string>
   <string name="note">Notiz</string>
   <string name="note_save_unsuccessful">Notiz spychere fählgschlage</string>

@@ -105,7 +105,7 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artigo aberto em nova guia</string>
   <string name="search_widget_text">Pesquisar Kiwix</string>
-  <string name="speech_prompt_text">Fale para pesquisar \%s</string>
+  <string name="speech_prompt_text">Fale para pesquisar %s</string>
   <string name="speech_not_supported">Desculpa! Seu dispositivo não suporta entrada de fala</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Online</string>
@@ -205,7 +205,7 @@
   <string name="running_state">Em progresso</string>
   <string name="complete">Completo</string>
   <string name="paused_state">Pausado</string>
-  <string name="failed_state">Falhou: \%s</string>
+  <string name="failed_state">Falhou: %s</string>
   <string name="save">Salvar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título do artigo da wiki</string>
@@ -252,7 +252,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Limpar todas as notas em todos os artigos</string>
   <string name="pref_clear_all_notes_title">Limpar todas as notas</string>
-  <string name="pref_text_zoom_summary">Altere o tamanho do texto com incrementos de 25%.</string>
+  <string name="pref_text_zoom_summary">Altere o tamanho do texto com incrementos de 25\%.</string>
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Somente texto</string>

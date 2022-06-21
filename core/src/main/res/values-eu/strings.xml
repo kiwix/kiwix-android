@@ -75,7 +75,7 @@
   <string name="pref_extras">Gehigarriak</string>
   <string name="new_tab_snack_bar">Artikulua erlaitza berrian irekita</string>
   <string name="search_widget_text">Kiwix bilatu</string>
-  <string name="speech_prompt_text">Hitz egin \%s bilatzeko</string>
+  <string name="speech_prompt_text">Hitz egin %s bilatzeko</string>
   <string name="speech_not_supported">Sentitzen dut! Zure gailuak ez du ahots bidezko sarrera onartzen.</string>
   <string name="local_zims">Gailua</string>
   <string name="remote_zims">Konektatuta</string>

@@ -109,7 +109,7 @@
   <string name="pref_extras">Extra</string>
   <string name="new_tab_snack_bar">Voce aperta in una nuova scheda</string>
   <string name="search_widget_text">Cerca in Kiwix</string>
-  <string name="speech_prompt_text">Parla per cercare in \%s</string>
+  <string name="speech_prompt_text">Parla per cercare in %s</string>
   <string name="speech_not_supported">Il tuo dispositivo non supporta la digitazione vocale</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Connesso</string>
@@ -209,7 +209,7 @@
   <string name="running_state">In corso</string>
   <string name="complete">Completato</string>
   <string name="paused_state">In pausa</string>
-  <string name="failed_state">Fallito: \%s</string>
+  <string name="failed_state">Fallito: %s</string>
   <string name="save">Salva</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Titolo della voce</string>
@@ -295,4 +295,5 @@
   <string name="all_files_permission_needed_message">Per poter accedere ai file ZIM sul dispositivo, è necessario fornire all\'applicazione l\'accesso a tutti i file</string>
   <string name="allowed">Consentita</string>
   <string name="not_allowed">Non consentita</string>
+  <string name="allow">Consenti</string>
 </resources>

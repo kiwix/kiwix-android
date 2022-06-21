@@ -76,6 +76,7 @@
   <string name="pref_clear_all_history_title">verore cı besterne</string>
   <string name="pref_clear_all_history_summary">Cıgeyrayışê peyêni u Verocê tavaya bıesterne</string>
   <string name="pref_notes">Noti</string>
+  <string name="pref_permission">Desturi</string>
   <string name="all_history_cleared">Tarix pêro biyo pak</string>
   <string name="pref_clear_all_bookmarks_title">Bookmarka pak kerê</string>
   <string name="clear_all_history_dialog_title">Verori pêro wa pak kerê?</string>
@@ -103,7 +104,7 @@
   <string name="pref_extras">Ekstray</string>
   <string name="new_tab_snack_bar">Meqale tabê neweyi de bi a</string>
   <string name="search_widget_text">Kiwix\'i cıgeyre</string>
-  <string name="speech_prompt_text">Serva cıgeyrayışi \%s vacê</string>
+  <string name="speech_prompt_text">Serva cıgeyrayışi %s vacê</string>
   <string name="speech_not_supported">Malesef, cihazê şımayo dekerderê qısekerdışi rê desteg nêdano</string>
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Online</string>
@@ -203,7 +204,7 @@
   <string name="running_state">Rameno</string>
   <string name="complete">Temam</string>
   <string name="paused_state">Vındarneya</string>
-  <string name="failed_state">Xırab: \%s</string>
+  <string name="failed_state">Xırab: %s</string>
   <string name="save">Qeyd kerê</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Serekê Meqaley Wiki</string>
@@ -250,7 +251,7 @@
   <string name="status">Weziyet</string>
   <string name="pref_clear_all_notes_summary">Meqaleya pêroyın de nota pêroyın pak ke</string>
   <string name="pref_clear_all_notes_title">Nota pêroyın pak ke</string>
-  <string name="pref_text_zoom_summary">Ebatê metin  %25 zeydnayışana bıvurnê</string>
+  <string name="pref_text_zoom_summary">Ebatê metin  \%25 zeydnayışana bıvurnê</string>
   <string name="tag_pic">Resım</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Teyna metin</string>
@@ -284,4 +285,5 @@
   <string name="close_drawer">Antergey bıqefelne</string>
   <string name="how_to_update_content">Zerrek seni rocane beno?</string>
   <string name="update_content_description">Seba rocane kerdışê zerreki (yu dosyay zimi), etni zerrekiya versiyonê tewr peyêni ronayış ganiyo. Ney kışta ronayışi ra şenê bıkerê.</string>
+  <string name="not_allowed">Mısade nêdiyayo</string>
 </resources>

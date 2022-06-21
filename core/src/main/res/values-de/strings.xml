@@ -112,7 +112,7 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artikel in neuer Registerkarte geöffnet</string>
   <string name="search_widget_text">Kiwix durchsuchen</string>
-  <string name="speech_prompt_text">Sprechen, um \%s zu suchen</string>
+  <string name="speech_prompt_text">Sprechen, um %s zu suchen</string>
   <string name="speech_not_supported">Leider unterstützt Ihr Gerät keine Spracheingabe!</string>
   <string name="local_zims">Gerät</string>
   <string name="remote_zims">Online</string>
@@ -212,7 +212,7 @@
   <string name="running_state">In Bearbeitung</string>
   <string name="complete">Vervollständigt</string>
   <string name="paused_state">Pausiert</string>
-  <string name="failed_state">Fehlgeschlagen: \%s</string>
+  <string name="failed_state">Fehlgeschlagen: %s</string>
   <string name="save">Speichern</string>
   <string name="note">Notiz</string>
   <string name="wiki_article_title">Wiki-Artikel-Titel</string>

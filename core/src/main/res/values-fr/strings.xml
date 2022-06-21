@@ -3,9 +3,11 @@
 * Alno
 * Derugon
 * Djiboun
+* Eneelk
 * Eneelktransfer_to
 * Fitoschido
 * Gomoko
+* I'm mender
 * Kelson
 * Stephane
 * The RedBurn
@@ -62,11 +64,12 @@
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
   <string name="share_host_address">Partager l’URL avec d’autres applications</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
+  <string name="unable_to_read_zim_file">Impossible de lire ce fichier ZIM !</string>
   <string name="zim_not_opened">Impossible d’ouvrir le fichier zim</string>
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
   <string name="error_article_url_not_found">Erreur : le chargement de l’article (URL : %1$s) a échoué.</string>
   <string name="pref_display_title">Affichage</string>
-  <string name="pref_info_title">Information</string>
+  <string name="pref_info_title">Informations</string>
   <string name="pref_info_version">Version</string>
   <string name="pref_night_mode">Mode nocturne</string>
   <string name="pref_night_mode_summary">Afficher les articles en couleurs inversées</string>
@@ -80,6 +83,7 @@
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
+  <string name="request_write_storage">Télécharger des fichiers ZIM nécessite l’accès en écriture à votre stockage local.</string>
   <string name="clear_recent_and_tabs_history_dialog">Êtes-vous sûr de vouloir supprimer votre historique de recherche et de réinitialiser tous les onglets actifs ?</string>
   <string name="delete_recent_search_item">Supprimer cet élément ?</string>
   <string name="pref_clear_all_history_title">Effacer l’historique</string>
@@ -113,7 +117,7 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Article ouvert dans un nouvel onglet</string>
   <string name="search_widget_text">Rechercher dans Kiwix</string>
-  <string name="speech_prompt_text">Parler pour rechercher \%s</string>
+  <string name="speech_prompt_text">Parler pour rechercher %s</string>
   <string name="speech_not_supported">Désolé ! Votre appareil ne prend pas en charge la saisie vocale</string>
   <string name="local_zims">Appareil</string>
   <string name="remote_zims">En ligne</string>
@@ -213,7 +217,7 @@
   <string name="running_state">En cours</string>
   <string name="complete">Terminer</string>
   <string name="paused_state">En pause</string>
-  <string name="failed_state">Échec : \%s</string>
+  <string name="failed_state">Échec : %s</string>
   <string name="save">Enregistrer</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Titre de l’article du Wiki</string>
@@ -261,7 +265,7 @@
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Permettre de lire et écrire des fichiers ZIM sur la carte SD</string>
-  <string name="pref_text_zoom_summary">Modifier la taille du texte par incrément de 25 %.</string>
+  <string name="pref_text_zoom_summary">Modifier la taille du texte par incrément de 25 %\.</string>
   <string name="tag_pic">Image</string>
   <string name="tag_vid">Vidéo</string>
   <string name="tag_text_only">Texte seulement</string>
@@ -299,4 +303,10 @@
   <string name="all_files_permission_needed_message">Afin d’accéder à tous les fichiers zim sur l’appareil, nous devons avoir tous les droits sur les fichiers</string>
   <string name="allowed">Autorisé</string>
   <string name="not_allowed">Non autorisé</string>
+  <string name="denied_internet_permission_message">Veuillez activer le Wi-Fi pour télécharger le contenu</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">Veuillez sélectionner un dossier pour le stockage externe.</string>
+  <string name="system_unable_to_grant_permission_message">Le système n’a pas pu accorder le droit d’accès !</string>
+  <string name="allow">Autoriser</string>
+  <string name="allow_internet_permission_message">Veuillez autoriser le droit sur Internet de télécharger le contenu.</string>
 </resources>

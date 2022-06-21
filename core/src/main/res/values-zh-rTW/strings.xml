@@ -106,7 +106,7 @@
   <string name="pref_extras">額外</string>
   <string name="new_tab_snack_bar">條目已開啟在新分頁裡</string>
   <string name="search_widget_text">搜尋 Kiwix</string>
-  <string name="speech_prompt_text">語音搜尋 %\s</string>
+  <string name="speech_prompt_text">語音搜尋 %s</string>
   <string name="speech_not_supported">很抱歉！您的設備不支援語音輸入</string>
   <string name="local_zims">設備</string>
   <string name="remote_zims">線上</string>
@@ -206,7 +206,7 @@
   <string name="running_state">進行中</string>
   <string name="complete">完成</string>
   <string name="paused_state">暫停</string>
-  <string name="failed_state">失敗：\%s</string>
+  <string name="failed_state">失敗：%s</string>
   <string name="save">儲存</string>
   <string name="note">註釋</string>
   <string name="wiki_article_title">Wiki 條目標題</string>
@@ -254,7 +254,7 @@
   <string name="pref_clear_all_notes_summary">清除在所有條目裡的所有註解</string>
   <string name="pref_clear_all_notes_title">清除所有註釋</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">允許讀寫 ZIM 檔案在 SD 卡裡</string>
-  <string name="pref_text_zoom_summary">以 25% 更改文字大小</string>
+  <string name="pref_text_zoom_summary">以 25\% 更改文字大小</string>
   <string name="tag_pic">圖片</string>
   <string name="tag_vid">影片</string>
   <string name="tag_text_only">僅限文字</string>
@@ -292,4 +292,7 @@
   <string name="all_files_permission_needed_message">為了能在其它設備上存取 ZIM 檔案，我們需要所有檔案允許權限</string>
   <string name="allowed">允許</string>
   <string name="not_allowed">不允許</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">請選取用於外部儲存的資料夾。</string>
+  <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
 </resources>

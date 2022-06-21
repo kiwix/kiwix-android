@@ -101,7 +101,7 @@
   <string name="pref_extras">Suplimentare</string>
   <string name="new_tab_snack_bar">Articol deschis într-o filă nouă</string>
   <string name="search_widget_text">Caută Kiwix</string>
-  <string name="speech_prompt_text">Vorbește pentru a căuta %\s</string>
+  <string name="speech_prompt_text">Vorbește pentru a căuta %s</string>
   <string name="speech_not_supported">Ne pare rău! Dispozitivul tău nu susține opțiunea de vorbire</string>
   <string name="local_zims">Dispozitiv</string>
   <string name="remote_zims">Online</string>
@@ -201,7 +201,7 @@
   <string name="running_state">În Progres</string>
   <string name="complete">Complet</string>
   <string name="paused_state">Pauză</string>
-  <string name="failed_state">Eșuat: \%s</string>
+  <string name="failed_state">Eșuat: %s</string>
   <string name="save">Salvează</string>
   <string name="note">Notă</string>
   <string name="wiki_article_title">Titlu Articol Wiki</string>
@@ -248,7 +248,7 @@
   <string name="status">Starea</string>
   <string name="pref_clear_all_notes_summary">Șterge toate notele la toate articolele</string>
   <string name="pref_clear_all_notes_title">Ștergeți toate notele</string>
-  <string name="pref_text_zoom_summary">Schimbați dimensiunea textului cu trepte de 25%.</string>
+  <string name="pref_text_zoom_summary">Schimbați dimensiunea textului cu trepte de 25\%.</string>
   <string name="tag_pic">Foto</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Doar Text</string>

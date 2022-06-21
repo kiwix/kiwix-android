@@ -73,7 +73,7 @@
   <string name="pref_extras">გეძინელი</string>
   <string name="new_tab_snack_bar">სტატია ახალ აშნაკიდას გონწყუმილი რე</string>
   <string name="search_widget_text">გორუა Kiwix</string>
-  <string name="speech_prompt_text">ქოთქვით დობგორათ %\s</string>
+  <string name="speech_prompt_text">ქოთქვით დობგორათ %s</string>
   <string name="speech_not_supported">მინავათის ვორეთ! თქანი მონწყილობას ვაუღუ რაგადით მიშაჸონაფაშ ფუნქცუა.</string>
   <string name="local_zims">მონწყილობა</string>
   <string name="remote_zims">ონლაინ</string>
@@ -129,7 +129,7 @@
   <string name="expand">გოფაჩუა</string>
   <string name="history">ისტორია</string>
   <string name="search_history">გორუაშ ისტორია</string>
-  <string name="failed_state">ჩილათა: \%s</string>
+  <string name="failed_state">ჩილათა: %s</string>
   <string name="save">ჩუალა</string>
   <string name="note">ხვილაფა</string>
 </resources>

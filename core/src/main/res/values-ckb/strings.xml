@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Aram
 * Arya sarhan
 * Cwtiyar
 * Hzr115
@@ -68,7 +69,7 @@
   <string name="pref_newtab_background_summary">لەکاتی کردنەوەی تابێکی نوێ لە پشتینەدا دەکرێتەوە</string>
   <string name="new_tab_snack_bar">وتارەکە لە تابێکی نوێ کرایەوە</string>
   <string name="search_widget_text">بگەڕێ لە کیویکس</string>
-  <string name="speech_prompt_text">قسەبکە بۆ گەڕان \%s</string>
+  <string name="speech_prompt_text">قسەبکە بۆ گەڕان %s</string>
   <string name="speech_not_supported">ببورە! ئامێرەکەت پشتگیری قسە ناکات</string>
   <string name="local_zims">ئامێر</string>
   <string name="remote_zims">سەرھێڵ</string>
@@ -133,7 +134,7 @@
   <string name="running_state">لەژێر کاردا</string>
   <string name="complete">تەواو</string>
   <string name="paused_state">ڕاگیرا</string>
-  <string name="failed_state">شکستی ھێنا: %\s</string>
+  <string name="failed_state">شکستی ھێنا: %s</string>
   <string name="save">پاشەکەوت</string>
   <string name="note">تێبینی</string>
   <string name="wiki_article_title">ناونیشانی وتاری ویکی</string>
@@ -145,7 +146,7 @@
   <string name="notes_deletion_unsuccessful">ھەندێک پەڕگە نەسڕدرانەوە</string>
   <string name="discovery_failed">دۆزینەوە شکستی ھێنا</string>
   <string name="connection_failed">پەیوەستکردن شکستی ھێنا</string>
-  <string name="transfer_to">گواستنەوەی پەڕگەکان بۆ %\s</string>
+  <string name="transfer_to">گواستنەوەی پەڕگەکان بۆ \%s</string>
   <string name="file_transfer_complete">گواستنەوەی پەڕگە تەواو</string>
   <string name="error_transferring">ھەڵەی گواستنەوەی پەڕگە \%s</string>
   <string name="your_device">ئامێرەکەت:</string>

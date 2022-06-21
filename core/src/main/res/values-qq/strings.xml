@@ -41,7 +41,7 @@
   <string name="no_thanks">{{Identical|No thanks}}</string>
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>
   <string name="open">{{Identical|Open}}</string>
-  <string name="speech_prompt_text">The placeholder refers to the app name \%s</string>
+  <string name="speech_prompt_text">The placeholder refers to the app name %s</string>
   <string name="library">Displayed in application menu</string>
   <string name="download">The title of the fragment/place where books are downloaded.</string>
   <string name="stop">{{Identical|Stop}}</string>
@@ -59,7 +59,7 @@
   <string name="note">{{Identical|Note}}</string>
   <string name="books_count">Identical|Book</string>
   <string name="permission_rationale_location_on_host_zim_file">Tell the user Location permission required for hosting zim file.</string>
-  <string name="pref_text_zoom_summary">Tell the user that this preference changes the text size in 25% increments.</string>
+  <string name="pref_text_zoom_summary">Tell the user that this preference changes the text size in 25\% increments.</string>
   <string name="go_to_settings">This is used in the start server dialog and leads the user to mobile hotspot settings when pressed</string>
   <string name="no_bookmarks">This means \"there are no bookmarks\"</string>
   <string name="delete_history">Ask if the user wants to delete all history items.</string>
@@ -75,4 +75,6 @@
   <string name="tab_restored">Tell the user that a tab has been restored.</string>
   <string name="allowed">This currently appears under the \"Allow to read and write ZIM files on SD card\" preference title</string>
   <string name="not_allowed">This currently appears under the \"Allow to read and write ZIM files on SD card\" preference title</string>
+  <string name="android_directory_seperator">{{Ignored}}</string>
+  <string name="allow">{{identical|Allow}}</string>
 </resources>

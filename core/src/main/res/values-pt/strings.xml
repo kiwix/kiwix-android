@@ -110,7 +110,7 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artigo aberto num novo separador</string>
   <string name="search_widget_text">Procurar no Kiwix</string>
-  <string name="speech_prompt_text">Falar para pesquisar \%s</string>
+  <string name="speech_prompt_text">Falar para pesquisar %s</string>
   <string name="speech_not_supported">Desculpe! O seu dispositivo não suporta entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
@@ -210,7 +210,7 @@
   <string name="running_state">Em curso</string>
   <string name="complete">Completo</string>
   <string name="paused_state">Pausado</string>
-  <string name="failed_state">Falhou: \%s</string>
+  <string name="failed_state">Falhou: %s</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título do artigo da wiki</string>

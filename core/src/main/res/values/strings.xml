@@ -98,12 +98,12 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Article opened in new tab</string>
   <string name="search_widget_text">Search Kiwix</string>
-  <string name="speech_prompt_text">Speak to search \%s</string>
+  <string name="speech_prompt_text">Speak to search %s</string>
   <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
   <string name="local_zims" tools:keep="@string/local_zims">Device</string>
   <string name="remote_zims" tools:keep="@string/remote_zims">Online</string>
   <string name="library">Library</string>
-  <string name="delete_zim_body">The following zim file(s) will be deleted:\n\n\%s</string>
+  <string name="delete_zim_body">The following zim file(s) will be deleted:n\n\%s</string>
   <string name="delete_zims_toast" tools:keep="@string/delete_zims_toast">Files deleted successfully</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
   <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
@@ -211,7 +211,7 @@
   <string name="running_state">In Progress</string>
   <string name="complete">Complete</string>
   <string name="paused_state">Paused</string>
-  <string name="failed_state">Failed: \%s</string>
+  <string name="failed_state">Failed: %s</string>
   <string name="save">Save</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Wiki Article Title</string>
@@ -298,9 +298,9 @@
   <string name="allowed">Allowed</string>
   <string name="not_allowed">Not allowed</string>
   <string name="denied_internet_permission_message">Please enable wifi to download content</string>
-  <string name="android_directory_seperator" translatable="false">/Android</string>
-  <string name="select_folder" translatable="false">Please select a folder for external storage.</string>
-  <string name="system_unable_to_grant_permission_message" translatable="false">System unable to grant permission!</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">Please select a folder for external storage.</string>
+  <string name="system_unable_to_grant_permission_message">System unable to grant permission!</string>
   <string name="allow">Allow</string>
   <string name="allow_internet_permission_message">Please allow internet permission to download content</string>
   <string-array name="pref_night_modes_entries">

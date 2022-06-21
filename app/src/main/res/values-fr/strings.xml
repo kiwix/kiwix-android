@@ -10,4 +10,5 @@
   <string name="cannot_open_file">Échec de l’ouverture du fichier.\nEssayez de chercher ce fichier dans l’onglet Appareils de votre Bibliothèque.</string>
   <string name="send_files_title">Envoyer des fichiers</string>
   <string name="receive_files_title">Recevoir des fichiers</string>
+  <string name="no_app_found_to_open">Aucune application trouvée pour sélectionner le fichier ZIM !</string>
 </resources>

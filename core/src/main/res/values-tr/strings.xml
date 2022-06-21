@@ -113,7 +113,7 @@
   <string name="pref_extras">Ekstralar</string>
   <string name="new_tab_snack_bar">Madde yeni bir sekmede açıldı</string>
   <string name="search_widget_text">Kiwix\'i ara</string>
-  <string name="speech_prompt_text">%\s aramak için konuşun</string>
+  <string name="speech_prompt_text">%s aramak için konuşun</string>
   <string name="speech_not_supported">Üzgünüz! Cihazınız konuşma girdisini desteklemiyor</string>
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Çevrimiçi</string>
@@ -213,7 +213,7 @@
   <string name="running_state">Devam Ediyor</string>
   <string name="complete">Tamamlandı</string>
   <string name="paused_state">Durduruldu</string>
-  <string name="failed_state">Başarısız: \%s</string>
+  <string name="failed_state">Başarısız: %s</string>
   <string name="save">Kaydet</string>
   <string name="note">Not</string>
   <string name="wiki_article_title">Viki Madde Başlığı</string>
@@ -261,7 +261,7 @@
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">SD karttaki ZIM dosyalarını okumaya ve yazmaya izin ver</string>
-  <string name="pref_text_zoom_summary">Metin boyutunu %25\'lik artışlarla değiştirin.</string>
+  <string name="pref_text_zoom_summary">Metin boyutunu \%25\'lik artışlarla değiştirin.</string>
   <string name="tag_pic">Resim</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Yalnızca Metin</string>

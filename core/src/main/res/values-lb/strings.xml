@@ -127,4 +127,5 @@
   <string name="close_drawer">Tirang zoumaachen</string>
   <string name="allowed">Erlaabt</string>
   <string name="not_allowed">Net erlaabt</string>
+  <string name="allow">Erlaben</string>
 </resources>

@@ -68,7 +68,7 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artigo aberto nunha lapela nova</string>
   <string name="search_widget_text">Procurar en Kiwix</string>
-  <string name="speech_prompt_text">Fale para procurar \%s</string>
+  <string name="speech_prompt_text">Fale para procurar %s</string>
   <string name="speech_not_supported">Sentímoloǃ O seu dispositivo non admite entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En liña</string>

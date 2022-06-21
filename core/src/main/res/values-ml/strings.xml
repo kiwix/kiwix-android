@@ -69,7 +69,7 @@
   <string name="search_widget_text">കിവിക്സിൽ തിരയുക</string>
   <string name="remote_zims">ഓൺലൈൻ</string>
   <string name="library">ഗ്രന്ഥപ്പുര</string>
-  <string name="delete_zim_body" fuzzy="true">%\s മായ്ക്കണോ?</string>
+  <string name="delete_zim_body" fuzzy="true">\%s മായ്ക്കണോ?</string>
   <string name="no_files_here">ഇവിടെ പ്രമാണങ്ങളൊന്നുമില്ല</string>
   <string name="download">ഡൗൺലോഡ് ചെയ്യുക</string>
   <string name="zim_no_pic">ചിത്രങ്ങളില്ല</string>
@@ -117,7 +117,7 @@
   <string name="running_state">പുരോഗമിക്കുന്നു</string>
   <string name="complete">സമ്പൂർണ്ണം</string>
   <string name="paused_state">തത്കാലം നിർത്തിവെച്ചിരിക്കുന്നു</string>
-  <string name="failed_state">പരാജയപ്പെട്ടു:\%s</string>
+  <string name="failed_state">പരാജയപ്പെട്ടു:%s</string>
   <string name="save">സേവ് ചെയ്യുക</string>
   <string name="note">കുറിപ്പ്</string>
   <string name="wiki_article_title">വിക്കി ലേഖനത്തിന്റെ തലക്കെട്ട്</string>
