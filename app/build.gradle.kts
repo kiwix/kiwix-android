@@ -66,7 +66,7 @@ android {
     }
     create("playStore") {
       initWith(getByName("release"))
-      matchingFallbacks = listOf("release")
+      setMatchingFallbacks("release")
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
     }
