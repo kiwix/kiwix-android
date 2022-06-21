@@ -107,7 +107,7 @@
   <string name="local_zims">Dispositivu</string>
   <string name="remote_zims">In lìnia</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Custos documentos zim ant a èssere iscantzellados:\n\n%s</string>
+  <string name="delete_zim_body">Custos documentos zim ant a èssere iscantzellados:\n\n\%s</string>
   <string name="delete_zims_toast">Documentu iscantzelladu chene problemas</string>
   <string name="no_files_here">Perunu documentu inoghe</string>
   <string name="download_no_space">Sa memòria non bastat pro l\'iscarrigare.</string>
@@ -220,7 +220,7 @@
   <string name="ext_storage_permission_not_granted">Errore: permissu de atzessu a sa memòria non frunidu</string>
   <string name="notes_deletion_successful">Cartella intrea de sas notas iscantzellada</string>
   <string name="notes_deletion_unsuccessful">Carchi documentu no est istadu iscantzelladu</string>
-  <string name="books_count">%d libru(os)</string>
+  <string name="books_count">\%d libru(os)</string>
   <string name="discovery_initiated">Iscoberta incumintzada</string>
   <string name="discovery_failed">Iscoberta fallida</string>
   <string name="severe_loss_error">Faddina manna! Proa a Disabilitare/Torrare a abilitare su P2P WiFi</string>
@@ -233,11 +233,11 @@
   <string name="discovery_needs_location">Non podes iscobèrrere pares (peers) chene servìtzios de localizatzione</string>
   <string name="request_enable_wifi">Abìlita su P2P WiFi dae sas impostatziones de sistema</string>
   <string name="discovery_needs_wifi">Non podes iscobèrrere pares (peers) chene tènnere su WiFi allutu</string>
-  <string name="transfer_to">Tramudare sos documentos cara a %s?</string>
+  <string name="transfer_to">Tramudare sos documentos cara a \%s?</string>
   <string name="device_not_cooperating">Su dispositivu ischertadu no est cooperende pro su tramudòngiu</string>
   <string name="file_transfer_complete">Tramudòngiu de su documentu acabadu</string>
   <string name="error_during_transfer">B\'at àpidu un\'errore cun su tramodòngiu</string>
-  <string name="error_transferring">Errore in su tramudòngiu de su documentu %s</string>
+  <string name="error_transferring">Errore in su tramudòngiu de su documentu \%s</string>
   <string name="get_content_from_nearby_device">Retzi cuntenutos dae dispositivos a curtzu</string>
   <string name="search_for_peers">Chirca pares (peers)</string>
   <string name="your_device">Su dispositivu tuo:</string>
@@ -250,7 +250,7 @@
   <string name="pref_clear_all_notes_summary">Iscantzella totu sas notas in totu sos artìculos</string>
   <string name="pref_clear_all_notes_title">Iscantzella totu sas notas</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Premite de lèghere e iscrìere sos documentos ZIM subra de s\'ischeda SD</string>
-  <string name="pref_text_zoom_summary">Càmbia sa mannària de su testu cun ismanniamentos de su 25%.</string>
+  <string name="pref_text_zoom_summary">Càmbia sa mannària de su testu cun ismanniamentos de su 25\%.</string>
   <string name="tag_pic">Immàgine</string>
   <string name="tag_vid">Vìdeu</string>
   <string name="tag_text_only">Testu ebbia</string>

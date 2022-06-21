@@ -114,7 +114,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Connesso</string>
   <string name="library">Libreria</string>
-  <string name="delete_zim_body">I seguenti file ZIM verranno eliminati:\n\n%s</string>
+  <string name="delete_zim_body">I seguenti file ZIM verranno eliminati:\n\n\%s</string>
   <string name="delete_zims_toast">File cancellato</string>
   <string name="no_files_here">Nessun file qui</string>
   <string name="download_no_space">Lo spazio è insufficiente per effettuare il download.</string>
@@ -227,7 +227,7 @@
   <string name="ext_storage_permission_not_granted">Errore: accesso allo spazio di archiviazione non consentito</string>
   <string name="notes_deletion_successful">Tutte le note sono state eliminate</string>
   <string name="notes_deletion_unsuccessful">Alcune note non sono state eliminate</string>
-  <string name="books_count">%d libro/i</string>
+  <string name="books_count">\%d libro/i</string>
   <string name="discovery_initiated">Ricerca iniziata</string>
   <string name="discovery_failed">Ricerca fallita</string>
   <string name="severe_loss_error">Errore grave rilevato! Prova a disabilitare e a riabilitare Wi-Fi Direct</string>
@@ -240,11 +240,11 @@
   <string name="discovery_needs_location">Impossibile cercare i dispositivi nelle vicinanze senza i servizi di geolocalizzazione</string>
   <string name="request_enable_wifi">Abilita Wi-Fi Direct nelle impostazioni di sistema</string>
   <string name="discovery_needs_wifi">Il Wi-Fi dev\'essere abilitato per poter cercare i dispositivi nelle vicinanze</string>
-  <string name="transfer_to">Vuoi trasferire i file a %s?</string>
+  <string name="transfer_to">Vuoi trasferire i file a \%s?</string>
   <string name="device_not_cooperating">Il dispositivo selezionato non consente il trasferimento</string>
   <string name="file_transfer_complete">Trasferimento file completato</string>
   <string name="error_during_transfer">Si è verificato un errore durante il trasferimento</string>
-  <string name="error_transferring">Errore durante il trasferimento del file %s</string>
+  <string name="error_transferring">Errore durante il trasferimento del file \%s</string>
   <string name="get_content_from_nearby_device">Ottieni contenuti da un dispositivo nelle vicinanze</string>
   <string name="search_for_peers">Cerca dispositivi nelle vicinanze</string>
   <string name="your_device">Il tuo dispositivo:</string>
@@ -257,7 +257,7 @@
   <string name="pref_clear_all_notes_summary">Cancella le note su tutte le voci</string>
   <string name="pref_clear_all_notes_title">Cancella tutte le note</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Autorizzazione a leggere e scrivere i file ZIM sulla scheda SD</string>
-  <string name="pref_text_zoom_summary">Aumenta o diminuisci la dimensione del testo del 25% alla volta.</string>
+  <string name="pref_text_zoom_summary">Aumenta o diminuisci la dimensione del testo del 25\% alla volta.</string>
   <string name="tag_pic">Immagini</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Solo testo</string>

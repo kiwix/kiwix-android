@@ -144,8 +144,8 @@
   <string name="note_save_successful">یادداشت ذخیره شد</string>
   <string name="note_share_error_file_missing">پروندهٔ یادداشت وجود ندارد</string>
   <string name="delete_notes_confirmation_msg">همهٔ یادداشت‌ها حذف شوند؟</string>
-  <string name="books_count">%d کتاب</string>
-  <string name="transfer_to">پرونده‌ها منتقل شوند به %s؟</string>
+  <string name="books_count">\%d کتاب</string>
+  <string name="transfer_to">پرونده‌ها منتقل شوند به \%s؟</string>
   <string name="file_transfer_complete">انتقال پرونده کامل شد</string>
   <string name="your_device">وسیلهٔ شما:</string>
   <string name="nearby_devices">وسیله‌های نزدیک</string>

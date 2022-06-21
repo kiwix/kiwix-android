@@ -115,7 +115,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Os seguintes ficheiros zim serão eliminados:\n\n%s</string>
+  <string name="delete_zim_body">Os seguintes ficheiros zim serão eliminados:\n\n\%s</string>
   <string name="delete_zims_toast">Ficheiros apagados</string>
   <string name="no_files_here">Não há ficheiros aqui</string>
   <string name="download_no_space">Espaço insuficiente para descarregar este ficheiro.</string>
@@ -228,7 +228,7 @@
   <string name="ext_storage_permission_not_granted">Erro: permissões de armazenamento não concedidas</string>
   <string name="notes_deletion_successful">Pasta de notas eliminada</string>
   <string name="notes_deletion_unsuccessful">Alguns ficheiros não foram eliminados</string>
-  <string name="books_count">%d livro(s)</string>
+  <string name="books_count">\%d livro(s)</string>
   <string name="discovery_initiated">Descoberta iniciada</string>
   <string name="discovery_failed">Falha na descoberta</string>
   <string name="connection_failed">Falha na conexão</string>

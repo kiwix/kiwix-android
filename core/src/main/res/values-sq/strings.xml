@@ -105,7 +105,7 @@
   <string name="local_zims">Pajisje</string>
   <string name="remote_zims">Në linjë</string>
   <string name="library">Bibliotekë</string>
-  <string name="delete_zim_body">Kartela(t) zim vijuese do të fshihen:\n\n%s</string>
+  <string name="delete_zim_body">Kartela(t) zim vijuese do të fshihen:\n\n\%s</string>
   <string name="delete_zims_toast">Kartela u fshi</string>
   <string name="no_files_here">S’ka kartela këtu</string>
   <string name="download_no_space">Hapësirë e pamjaftueshme për shkarkim.</string>
@@ -218,7 +218,7 @@
   <string name="ext_storage_permission_not_granted">Gabim: S’janë akorduar leje mbi depozitën</string>
   <string name="notes_deletion_successful">U fshi krejt dosja e shënimeve</string>
   <string name="notes_deletion_unsuccessful">Disa kartela s’u fshinë</string>
-  <string name="books_count">%d libër(a)</string>
+  <string name="books_count">\%d libër(a)</string>
   <string name="discovery_initiated">Nisi pikasja</string>
   <string name="discovery_failed">Pikasja dështoi</string>
   <string name="severe_loss_error">Gabim shërbyesi! Provoni të Çaktivizoni/Riaktivizoni WiFi P2P</string>
@@ -231,11 +231,11 @@
   <string name="discovery_needs_location">Pa shërbime vendndodhje s’mund të zbulohen ortakë</string>
   <string name="request_enable_wifi">Aktivizoni WiFi P2P që nga rregullimet e sistemit</string>
   <string name="discovery_needs_wifi">S’mund të zbulohen ortakë pa WiFi-n ON</string>
-  <string name="transfer_to">Të shpërngulen kartela te %s?</string>
+  <string name="transfer_to">Të shpërngulen kartela te \%s?</string>
   <string name="device_not_cooperating">Pajisja e përzgjedhur s’po bashkëpunon për shpërnguljen</string>
   <string name="file_transfer_complete">Shpërngulje kartelash e plotësuar</string>
   <string name="error_during_transfer">U has një gabim gjatë shpërnguljes</string>
-  <string name="error_transferring">Gabim në shpërnguljen e kartelës %s</string>
+  <string name="error_transferring">Gabim në shpërnguljen e kartelës \%s</string>
   <string name="get_content_from_nearby_device">Merr lëndë prej pajisjes atypari</string>
   <string name="search_for_peers">Kërko Për Ortakë</string>
   <string name="your_device">Pajisja Juaj:</string>
@@ -248,7 +248,7 @@
   <string name="pref_clear_all_notes_summary">Spastron krejt shënimet në krejt artikujt</string>
   <string name="pref_clear_all_notes_title">Spastro krejt shënimet</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Lejoni të lexohen dhe shkruhen kartela ZIM në kartë SD</string>
-  <string name="pref_text_zoom_summary">Ndrysho madhësi teksti me rritje prej 25%.</string>
+  <string name="pref_text_zoom_summary">Ndrysho madhësi teksti me rritje prej 25\%.</string>
   <string name="tag_pic">Fot</string>
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Vetëm Tekst</string>

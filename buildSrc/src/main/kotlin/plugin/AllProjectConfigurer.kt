@@ -115,7 +115,8 @@ class AllProjectConfigurer {
           "IconDipSize",
           "UnusedResources",
           "NonConstantResourceId",
-          "NotifyDataSetChanged"
+          "NotifyDataSetChanged",
+          "StringFormatCount"
         )
         lintConfig = target.rootProject.file("lintConfig.xml")
       }

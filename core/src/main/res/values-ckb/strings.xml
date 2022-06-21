@@ -74,7 +74,7 @@
   <string name="local_zims">ئامێر</string>
   <string name="remote_zims">سەرھێڵ</string>
   <string name="library">کتێبخانە</string>
-  <string name="delete_zim_body" fuzzy="true">لابردنی %s</string>
+  <string name="delete_zim_body" fuzzy="true">لابردنی \%s</string>
   <string name="delete_zims_toast">پەڕگە سڕدرایەوە</string>
   <string name="no_files_here">ھیچ پەڕگەیەک لێرە نییە</string>
   <string name="download">داگرتن</string>
@@ -146,9 +146,9 @@
   <string name="notes_deletion_unsuccessful">ھەندێک پەڕگە نەسڕدرانەوە</string>
   <string name="discovery_failed">دۆزینەوە شکستی ھێنا</string>
   <string name="connection_failed">پەیوەستکردن شکستی ھێنا</string>
-  <string name="transfer_to">گواستنەوەی پەڕگەکان بۆ %s</string>
+  <string name="transfer_to">گواستنەوەی پەڕگەکان بۆ \%s</string>
   <string name="file_transfer_complete">گواستنەوەی پەڕگە تەواو</string>
-  <string name="error_transferring">ھەڵەی گواستنەوەی پەڕگە %s</string>
+  <string name="error_transferring">ھەڵەی گواستنەوەی پەڕگە \%s</string>
   <string name="your_device">ئامێرەکەت:</string>
   <string name="files_for_transfer">پەڕگەکان بۆ گواستنەوە</string>
   <string name="status">ڕەوش</string>

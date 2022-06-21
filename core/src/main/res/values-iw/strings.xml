@@ -114,7 +114,7 @@
   <string name="local_zims">מכשיר</string>
   <string name="remote_zims">מקוון</string>
   <string name="library">ספרייה</string>
-  <string name="delete_zim_body">קובצי ה־zim הבאים יימחקו:\n\n%s</string>
+  <string name="delete_zim_body">קובצי ה־zim הבאים יימחקו:\n\n\%s</string>
   <string name="delete_zims_toast">הקבצים נמחקו בהצלחה</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום להורדה.</string>
@@ -227,7 +227,7 @@
   <string name="ext_storage_permission_not_granted">שגיאה: לא ניתנה הרשאה לאחסון</string>
   <string name="notes_deletion_successful">כל תיקיית ההערות נמחקה</string>
   <string name="notes_deletion_unsuccessful">קבצים אחדים לא נמחקו</string>
-  <string name="books_count">מספר הספרים: %d</string>
+  <string name="books_count">מספר הספרים: \%d</string>
   <string name="discovery_initiated">תהליך הגילוי התחיל</string>
   <string name="discovery_failed">תהליך הגילוי נכשל</string>
   <string name="severe_loss_error">שגיאה חמורה! נא לנסות לכבות ולהדליק מחדש את ה־P2P בווייפיי</string>
@@ -240,11 +240,11 @@
   <string name="discovery_needs_location">לא ניתן לזהות עמיתים ללא שירותי מיקום</string>
   <string name="request_enable_wifi">נא להפעיל P2P בווייפיי בהגדרות המערכת</string>
   <string name="discovery_needs_wifi">לא ניתן לגלות עמיתים בלי שהווייפיי מופעל</string>
-  <string name="transfer_to">להעביר קבצים אל %s?</string>
+  <string name="transfer_to">להעביר קבצים אל \%s?</string>
   <string name="device_not_cooperating">המכשיר שנבחר לא משתף פעולה עם ההעברה</string>
   <string name="file_transfer_complete">העברת הקובץ הושלמה</string>
   <string name="error_during_transfer">אירעה שגיאה בעת ההעברה</string>
-  <string name="error_transferring">שגיאה בהעברת הקובץ %s</string>
+  <string name="error_transferring">שגיאה בהעברת הקובץ \%s</string>
   <string name="get_content_from_nearby_device">קבלת תוכן ממכשיר בסביבה</string>
   <string name="search_for_peers">חיפוש עמיתים</string>
   <string name="your_device">המכשיר שלך:</string>
@@ -257,7 +257,7 @@
   <string name="pref_clear_all_notes_summary">ניקוי כל ההערות בכל הערכים</string>
   <string name="pref_clear_all_notes_title">ניקוי כל ההערות</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">לאפשר לקרוא ולכתוב קובצי ZIM על כרטיס SD</string>
-  <string name="pref_text_zoom_summary">לשנות את גודל הטקסט בקפיצות של 25%.</string>
+  <string name="pref_text_zoom_summary">לשנות את גודל הטקסט בקפיצות של \25%.</string>
   <string name="tag_pic">תמונה</string>
   <string name="tag_vid">סרטון</string>
   <string name="tag_text_only">רק טקסט</string>

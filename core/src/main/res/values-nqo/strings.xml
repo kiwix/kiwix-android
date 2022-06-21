@@ -18,7 +18,7 @@
   <string name="menu_wifi_hotspot">ߥߝߌ ߛߐ߬ߘߐ߲߬ ߦߙߐ</string>
   <string name="save_media">ߡߍ߲ߞߊ߲ ߠߎ߬ ߟߊߡߙߊ߬</string>
   <string name="save_media_error">ߝߎ߬ߕߎ߲߬ߕߌ ߘߏ߫ ߓߘߊ߫ ߓߌ߬ߟߴߊ߬ ߘߐ߫ ߞߵߌ ߕߴߌ ߞߊߘߊ߲ ߞߊ߲߬ ߞߊ߬ ߞߟߋߞߟߋ ߟߊߞߎ߲߬ߘߎ߫߹</string>
-  <string name="save_media_saved">ߞߟߋߞߟߋ߫ ߟߊߞߎ߲߬ߘߎ߬ߣߍ߲ %s ߠߎ߬ Android\\media\\org.KIWIX...\\ ߞߊ߲߬</string>
+  <string name="save_media_saved">ߞߟߋߞߟߋ߫ ߟߊߞߎ߲߬ߘߎ߬ߣߍ߲ %s ߠߎ߬ Android\\media\\org.KIWIX…\\ ߞߊ߲߬</string>
   <string name="search_label">ߢߌߣߌ߲ߠߌ߲</string>
   <string name="choose_file">ߞߣߐߘߐ߫ ߞߐߕߐ߮ ߓߊߕߐ߬ߡߐ߲߫  (* .zim)</string>
   <string name="open_in_new_tab">ߞߊ߬ ߛߘߌ߬ߜߋ߲ ߠߊߞߊ߬ ߝߢߐߘߊ߫ ߞߎߘߊ߫ ߟߊ߫؟</string>
@@ -101,7 +101,7 @@
   <string name="local_zims">ߞߍߟߊ߲</string>
   <string name="remote_zims">ߛߌ߬ߕߊߙߌ ߟߊ߫</string>
   <string name="library">ߟߍߙߊߓߏ߲</string>
-  <string name="delete_zim_body"> ZIM ߞߐߕߐ߯ ߢߌ߲߬ ߠߎ߬ ߘߌ߫ ߣߊ߬ ߖߏ߰ߛߌ߫: %s</string>
+  <string name="delete_zim_body"> ZIM ߞߐߕߐ߯ ߢߌ߲߬ ߠߎ߬ ߘߌ߫ ߣߊ߬ ߖߏ߰ߛߌ߫: \%s</string>
   <string name="delete_zims_toast">ߞߐߕߐ߮ ߖߏ߰ߛߌ߬ߟߌ ߓߘߊ߫ ߛߎߘߊ߲߫</string>
   <string name="no_files_here">ߞߐߕߐ߯ ߛߌ߫ ߟߎ߬ ߕߍ߫ ߦߊ߲߬</string>
   <string name="download_no_space">ߞߣߍ߫ ߘߐߥߛߊ߬ߣߍ߲߫ ߕߴߦߋ߲߬ ߞߊ߬ ߟߊ߬ߖߌ߰ߒ߰ߞߎ߲߬ߠߌ߲ ߞߍ߫.</string>
@@ -151,7 +151,7 @@
   <string name="your_languages">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
   <string name="other_languages">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
   <string name="no_items_msg">ߝߌ߬ߛߌ߬ ߛߌ߫ ߛߐ߬ߘߐ߲߬ߕߊ߫ ߕߍ߫</string>
-  <string name="crash_title">ߏ߬ ߓߘߊ߫ ߓߍ߲߬... ߏ߬ ߦߋ߫ ߞߏ߫ ߓߘߍ߫ ߓߊ߫ ߟߋ߬ ߘߌ߫</string>
+  <string name="crash_title">ߏ߬ ߓߘߊ߫ ߓߍ߲߬… ߏ߬ ߦߋ߫ ߞߏ߫ ߓߘߍ߫ ߓߊ߫ ߟߋ߬ ߘߌ߫</string>
   <string name="crash_checkbox_language">ߌ ߟߊ߫ ߞߊ߲ ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߟߎ߫</string>
   <string name="crash_checkbox_zimfiles">ߌ ߟߊ߫ ZIM ߞߐߕߐ߮ ߟߎ߬ ߛߙߍߘߍ</string>
   <string name="crash_checkbox_exception">ߜߊߛߊ߲ߠߌ߲ ߝߊߙߊ߲ߝߊ߯ߛߌ ߟߎ߬</string>
@@ -190,8 +190,8 @@
   <string name="save">ߊ߬ ߟߊߞߎ߬ߘߎ߲߬</string>
   <string name="note">ߦߟߌߣߐ</string>
   <string name="wiki_article_title">ߥߞߌ ߞߎߡߘߊ ߞߎ߲߬ߕߐ߮</string>
-  <string name="books_count">%d ߞߊ߬ߝߊ (ߟߎ߬)</string>
-  <string name="transfer_to">ߞߐߕߐ߮ ߟߊߕߊ߯ %s ؟</string>
+  <string name="books_count">\%d ߞߊ߬ߝߊ (ߟߎ߬)</string>
+  <string name="transfer_to">ߞߐߕߐ߮ ߟߊߕߊ߯ \%s ؟</string>
   <string name="status">ߡߊ߬ߘߎ߮</string>
   <string name="pref_clear_all_notes_summary">ߦߟߌߣߐ ߓߍ߯ ߖߏ߲߫ ߞߎߡߘߊ ߟߎ߬ ߓߍ߯ ߘߐ߫</string>
   <string name="pref_clear_all_notes_title">ߦߟߌߣߐ ߟߎ߬ ߓߍ߯ ߖߏ߰ߛߌ߫</string>
