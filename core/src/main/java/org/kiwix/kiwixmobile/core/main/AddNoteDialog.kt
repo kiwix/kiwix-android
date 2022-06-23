@@ -272,7 +272,8 @@ class AddNoteDialog : DialogFragment() {
       if (ContextCompat.checkSelfPermission(
           requireContext(),
           Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED
+        ) != PackageManager.PERMISSION_GRANTED &&
+        !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()
       ) {
         Log.d(
           TAG,

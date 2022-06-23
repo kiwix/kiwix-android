@@ -240,7 +240,8 @@ class LocalLibraryFragment : BaseFragment() {
 
   override fun onResume() {
     super.onResume()
-    checkPermissions()
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
+      checkPermissions()
   }
 
   override fun onDestroyView() {
