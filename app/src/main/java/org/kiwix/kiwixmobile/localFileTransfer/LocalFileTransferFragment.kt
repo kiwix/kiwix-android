@@ -57,12 +57,12 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
-import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -93,6 +93,9 @@ class LocalFileTransferFragment :
 
   @Inject
   lateinit var locationManager: LocationManager
+
+  @Inject
+  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
@@ -243,18 +246,21 @@ class LocalFileTransferFragment :
   }
 
   private fun checkExternalStorageWritePermission(): Boolean { // To access and store the zims
-    return permissionIsGranted(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
-      if (!permissionGranted) {
-        if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
-          alertDialogShower.show(
-            KiwixDialog.StoragePermissionRationale,
-            ::requestStoragePermissionPermission
-          )
-        } else {
-          requestStoragePermissionPermission()
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      return permissionIsGranted(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+            alertDialogShower.show(
+              KiwixDialog.StoragePermissionRationale,
+              ::requestStoragePermissionPermission
+            )
+          } else {
+            requestStoragePermissionPermission()
+          }
         }
       }
     }
+    return true
   }
 
   private fun shouldShowRationale(writeExternalStorage: String) =

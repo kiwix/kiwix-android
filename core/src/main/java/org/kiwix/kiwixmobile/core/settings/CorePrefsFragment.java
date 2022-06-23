@@ -229,7 +229,8 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     if (CoreApp.getInstance().isExternalStorageWritable()) {
       if (ContextCompat.checkSelfPermission(getActivity(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        != PackageManager.PERMISSION_GRANTED) {
+        != PackageManager.PERMISSION_GRANTED &&
+        !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
         Snackbar.make(getView(), R.string.ext_storage_permission_not_granted, Snackbar.LENGTH_SHORT)
           .show();
         return;

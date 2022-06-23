@@ -350,21 +350,24 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun checkExternalStorageWritePermission(): Boolean {
-    return hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
-      if (!permissionGranted) {
-        if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
-          alertDialogShower.show(
-            KiwixDialog.WriteStoragePermissionRationale,
-            ::requestExternalStoragePermission
-          )
-        } else {
-          alertDialogShower.show(
-            KiwixDialog.WriteStoragePermissionRationale,
-            ::openAppSettings
-          )
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      return hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+            alertDialogShower.show(
+              KiwixDialog.WriteStoragePermissionRationale,
+              ::requestExternalStoragePermission
+            )
+          } else {
+            alertDialogShower.show(
+              KiwixDialog.WriteStoragePermissionRationale,
+              ::openAppSettings
+            )
+          }
         }
       }
     }
+    return true
   }
 
   private fun openAppSettings() {
@@ -397,7 +400,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) {
       if (grantResults[0] != PERMISSION_GRANTED) {
-        checkExternalStorageWritePermission()
+        if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
+          checkExternalStorageWritePermission()
       }
     }
   }

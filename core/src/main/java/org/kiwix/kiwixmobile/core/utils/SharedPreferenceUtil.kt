@@ -190,6 +190,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     else
       path.substringBefore(context.getString(R.string.android_directory_seperator))
 
+  fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
+    isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
