@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -305,13 +306,22 @@ object FileUtils {
   @JvmStatic fun downloadFileFromUrl(
     url: String?,
     src: String?,
-    zimReaderContainer: ZimReaderContainer
+    zimReaderContainer: ZimReaderContainer,
+    sharedPreferenceUtil: SharedPreferenceUtil
   ): File? {
     val fileName = getDecodedFileName(url, src)
-    var root =
-      Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-    if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
-      root = CoreApp.instance.externalMediaDirs[0]
+    var root: File? = null
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
+        root = CoreApp.instance.externalMediaDirs[0]
+      }
+    } else {
+      root =
+        File(
+          "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+            "/org.kiwix"
+        )
+      if (!root.exists()) root.mkdir()
     }
     val fileToSave = sequence {
       yield(File(root, fileName))
@@ -326,7 +336,7 @@ object FileUtils {
     val source = if (url == null) Uri.parse(src) else Uri.parse(url)
     return try {
       zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
-        fileToSave.outputStream().use { inputStream.copyTo(it) }
+        fileToSave.outputStream().use(inputStream::copyTo)
       }
       fileToSave
     } catch (e: IOException) {

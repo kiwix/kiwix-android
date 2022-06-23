@@ -14,7 +14,7 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
-  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Saved media as %s to Downloads/org.kiwix…/</string>
   <string name="search_label">Search</string>
   <string name="choose_file" tools:keep="@string/choose_file">Select a Content File (*.zim)</string>
   <string name="open_in_new_tab">Open link in new tab?</string>

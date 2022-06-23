@@ -762,7 +762,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (activityMainRoot != null) {
       return new ToolbarScrollingKiwixWebView(
         getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-        new CoreWebViewClient(this, zimReaderContainer),
+        new CoreWebViewClient(this, zimReaderContainer, sharedPreferenceUtil),
         toolbarContainer, bottomToolbar,
         sharedPreferenceUtil);
     } else {

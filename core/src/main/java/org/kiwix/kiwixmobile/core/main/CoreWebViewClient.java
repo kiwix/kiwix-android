@@ -34,6 +34,7 @@ import java.io.File;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer;
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
 import static org.kiwix.kiwixmobile.core.reader.ZimFileReader.CONTENT_PREFIX;
@@ -47,6 +48,7 @@ public class CoreWebViewClient extends WebViewClient {
   }};
   protected final WebViewCallback callback;
   protected final ZimReaderContainer zimReaderContainer;
+  private final SharedPreferenceUtil sharedPreferenceUtil;
   private static String[] LEGACY_CONTENT_PREFIXES = new String[] {
     "zim://content/",
     Uri.parse("content://" + CoreApp.getInstance().getPackageName() + ".zim.base/").toString()
@@ -54,9 +56,12 @@ public class CoreWebViewClient extends WebViewClient {
   private String urlWithAnchor;
 
   public CoreWebViewClient(
-    WebViewCallback callback, ZimReaderContainer zimReaderContainer) {
+    WebViewCallback callback,
+    ZimReaderContainer zimReaderContainer,
+    SharedPreferenceUtil sharedPreferenceUtil) {
     this.callback = callback;
     this.zimReaderContainer = zimReaderContainer;
+    this.sharedPreferenceUtil = sharedPreferenceUtil;
   }
 
   @Override
@@ -102,7 +107,8 @@ public class CoreWebViewClient extends WebViewClient {
   private boolean handleEpubAndPdf(String url) {
     String extension = MimeTypeMap.getFileExtensionFromUrl(url);
     if (DOCUMENT_TYPES.containsKey(extension)) {
-      File savedFile = FileUtils.downloadFileFromUrl(url, null, zimReaderContainer);
+      File savedFile =
+        FileUtils.downloadFileFromUrl(url, null, zimReaderContainer, sharedPreferenceUtil);
       if (savedFile != null && savedFile.exists()) {
         Context context = CoreApp.getInstance();
         Uri uri = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
