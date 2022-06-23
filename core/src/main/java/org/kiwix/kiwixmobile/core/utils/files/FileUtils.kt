@@ -28,11 +28,13 @@ import android.provider.DocumentsContract
 import android.util.Log
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
@@ -287,5 +289,49 @@ object FileUtils {
       )
     }
     return null
+  }
+
+  /**
+   * Returns the file name from the url or src. In url it gets the file name from the last '/' and
+   * if it contains '.'. If the url is null then it'll get the file name from the last '/'.
+   * If the url and src doesn't exist it returns the empty string.
+   */
+  fun getDecodedFileName(url: String?, src: String?): String =
+    url?.substringAfterLast("/", "")
+      ?.takeIf { it.contains(".") }
+      ?: src?.substringAfterLast("/", "")
+        ?.substringAfterLast("%3A") ?: ""
+
+  @JvmStatic fun downloadFileFromUrl(
+    url: String?,
+    src: String?,
+    zimReaderContainer: ZimReaderContainer
+  ): File? {
+    val fileName = getDecodedFileName(url, src)
+    var root =
+      Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+    if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
+      root = CoreApp.instance.externalMediaDirs[0]
+    }
+    val fileToSave = sequence {
+      yield(File(root, fileName))
+      yieldAll(
+        generateSequence(1) { it + 1 }.map {
+          File(
+            root, fileName.replace(".", "_$it.")
+          )
+        }
+      )
+    }.first { !it.exists() }
+    val source = if (url == null) Uri.parse(src) else Uri.parse(url)
+    return try {
+      zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
+        fileToSave.outputStream().use { inputStream.copyTo(it) }
+      }
+      fileToSave
+    } catch (e: IOException) {
+      Log.w("kiwix", "Couldn't save file", e)
+      null
+    }
   }
 }

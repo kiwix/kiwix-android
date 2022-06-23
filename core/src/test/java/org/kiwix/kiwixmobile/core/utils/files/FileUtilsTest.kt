@@ -88,4 +88,44 @@ class FileUtilsTest {
     every { mockFile.path } returns "$fileName$extension"
     every { mockFile.exists() } returns fileExists
   }
+
+  @Test
+  fun `test decode file name`() {
+    val fileName =
+      FileUtils.getDecodedFileName(
+        url = "https://kiwix.org/contributors/contributors_list.pdf",
+        src = null
+      )
+    assertThat(fileName).isEqualTo("contributors_list.pdf")
+  }
+
+  @Test
+  fun `test file name if extension doesn't exist`() {
+    val fileName = FileUtils.getDecodedFileName(url = "https://kiwix.org/contributors/", src = null)
+    assertThat(fileName).isEqualTo("")
+  }
+
+  @Test
+  fun `test file name if the url and src doesn't exist`() {
+    val fileName = FileUtils.getDecodedFileName(url = null, src = null)
+    assertThat(fileName).isEqualTo("")
+  }
+
+  @Test
+  fun `test file name if only file name exist`() {
+    val fileName = FileUtils.getDecodedFileName(src = "android_tutorials.pdf", url = null)
+    assertThat(fileName).isEqualTo("")
+  }
+
+  @Test
+  fun `test file name if url doesn't exist`() {
+    val fileName = FileUtils.getDecodedFileName(url = null, src = "/html/images/test.png")
+    assertThat(fileName).isEqualTo("test.png")
+  }
+
+  @Test
+  fun `test file name if url and src's extension doesn't exist`() {
+    val fileName = FileUtils.getDecodedFileName(url = null, src = "/html/images/")
+    assertThat(fileName).isEqualTo("")
+  }
 }
