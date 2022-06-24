@@ -44,3 +44,10 @@ const val INTERNAL_SELECT_POSITION = 0
 const val EXTERNAL_SELECT_POSITION = 1
 
 const val FILE_SELECT_CODE = 5
+
+// For Read and Connect timeout on download OkHttpClient both are in minutes
+const val READ_TIME_OUT = 1L
+const val CONNECT_TIME_OUT = 1L
+
+// For autoRetryMaxAttempts in download zim file
+const val AUTO_RETRY_MAX_ATTEMPTS = 20

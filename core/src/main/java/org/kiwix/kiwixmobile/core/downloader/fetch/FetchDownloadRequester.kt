@@ -23,6 +23,7 @@ import com.tonyodev.fetch2.NetworkType.WIFI_ONLY
 import com.tonyodev.fetch2.Request
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
+import org.kiwix.kiwixmobile.core.utils.AUTO_RETRY_MAX_ATTEMPTS
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
@@ -45,5 +46,5 @@ class FetchDownloadRequester @Inject constructor(
 private fun DownloadRequest.toFetchRequest(sharedPreferenceUtil: SharedPreferenceUtil) =
   Request("$uri", getDestination(sharedPreferenceUtil)).apply {
     networkType = if (sharedPreferenceUtil.prefWifiOnly) WIFI_ONLY else ALL
-    autoRetryMaxAttempts = 10
+    autoRetryMaxAttempts = AUTO_RETRY_MAX_ATTEMPTS
   }
