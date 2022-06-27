@@ -111,7 +111,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val saveMenu =
         menu.add(0, 1, 0, resources.getString(R.string.save_media))
       saveMenu.setOnMenuItemClickListener {
-        val msg = SaveHandler(zimReaderContainer).obtainMessage()
+        val msg = SaveHandler(zimReaderContainer, sharedPreferenceUtil).obtainMessage()
         requestFocusNodeHref(msg)
         true
       }
@@ -141,7 +141,10 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     callback.webViewPageChanged(page, pages)
   }
 
-  internal class SaveHandler(private val zimReaderContainer: ZimReaderContainer) :
+  internal class SaveHandler(
+    private val zimReaderContainer: ZimReaderContainer,
+    private val sharedPreferenceUtil: SharedPreferenceUtil
+  ) :
     Handler() {
 
     @SuppressWarnings("NestedBlockDepth")
@@ -149,7 +152,8 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val url = msg.data["url"] as? String
       val src = msg.data["src"] as? String
       if (url != null || src != null) {
-        val savedFile = FileUtils.downloadFileFromUrl(url, src, zimReaderContainer)
+        val savedFile =
+          FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
         savedFile?.let {
           instance.toast(instance.getString(R.string.save_media_saved, it.name))
         } ?: run {

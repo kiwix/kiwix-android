@@ -300,14 +300,22 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
     } else {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
-        dialogShower.show(SelectFolder { view }, ::selectFolder)
+      if (sharedPreferenceUtil.isPlayStoreBuild) {
+        setExternalStoragePath(storageDevice)
       } else {
-        sharedPreferenceUtil.putPrefStorage(storageDevice.name)
-        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
+          dialogShower.show(SelectFolder { view }, ::selectFolder)
+        } else {
+          setExternalStoragePath(storageDevice)
+        }
       }
     }
+  }
+
+  private fun setExternalStoragePath(storageDevice: StorageDevice) {
+    sharedPreferenceUtil.putPrefStorage(storageDevice.name)
+    sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
   }
 
   private fun selectFolder() {
@@ -342,21 +350,24 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun checkExternalStorageWritePermission(): Boolean {
-    return hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
-      if (!permissionGranted) {
-        if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
-          alertDialogShower.show(
-            KiwixDialog.WriteStoragePermissionRationale,
-            ::requestExternalStoragePermission
-          )
-        } else {
-          alertDialogShower.show(
-            KiwixDialog.WriteStoragePermissionRationale,
-            ::openAppSettings
-          )
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      return hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+            alertDialogShower.show(
+              KiwixDialog.WriteStoragePermissionRationale,
+              ::requestExternalStoragePermission
+            )
+          } else {
+            alertDialogShower.show(
+              KiwixDialog.WriteStoragePermissionRationale,
+              ::openAppSettings
+            )
+          }
         }
       }
     }
+    return true
   }
 
   private fun openAppSettings() {
@@ -389,7 +400,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) {
       if (grantResults[0] != PERMISSION_GRANTED) {
-        checkExternalStorageWritePermission()
+        if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
+          checkExternalStorageWritePermission()
       }
     }
   }

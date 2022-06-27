@@ -44,6 +44,7 @@ android {
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = generateVersionCode()
     versionName = generateVersionName()
+    manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
   }
   lintOptions {
     isCheckDependencies = true
@@ -53,13 +54,21 @@ android {
     getByName("debug") {
       multiDexKeepProguard = file("multidex-instrumentation-config.pro")
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "false")
+      buildConfigField("boolean", "IS_PLAYSTORE", "false")
     }
 
     getByName("release") {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
+      buildConfigField("boolean", "IS_PLAYSTORE", "false")
       if (properties.containsKey("disableSigning")) {
         signingConfig = null
       }
+    }
+    create("playStore") {
+      initWith(getByName("release"))
+      setMatchingFallbacks("release")
+      buildConfigField("boolean", "IS_PLAYSTORE", "true")
+      manifestPlaceholders["permission"] = "android.permission.placeholder"
     }
   }
   bundle {

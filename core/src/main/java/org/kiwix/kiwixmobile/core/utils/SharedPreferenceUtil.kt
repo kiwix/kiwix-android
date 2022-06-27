@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
@@ -70,6 +71,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefExternalLinkPopup: Boolean
     get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
 
+  val isPlayStoreBuild: Boolean
+    get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
+
   val prefLanguage: String
     get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
 
@@ -119,6 +123,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putStoragePosition(pos: Int) {
     sharedPreferences.edit { putInt(STORAGE_POSITION, pos) }
+  }
+
+  fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
+    sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }
   }
 
   fun putPrefFullScreen(fullScreen: Boolean) =
@@ -174,7 +182,16 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     }
 
   fun getPublicDirectoryPath(path: String): String =
-    path.substringBefore(context.getString(R.string.android_directory_seperator))
+    if (isPlayStoreBuild)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        path
+      else
+        path.substringBefore(context.getString(R.string.android_directory_seperator))
+    else
+      path.substringBefore(context.getString(R.string.android_directory_seperator))
+
+  fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
+    isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
   companion object {
     // Prefs
@@ -197,5 +214,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
     private const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
+    private const val IS_PLAY_STORE_BUILD = "is_play_store_build"
   }
 }
