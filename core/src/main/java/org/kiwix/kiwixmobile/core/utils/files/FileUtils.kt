@@ -313,6 +313,7 @@ object FileUtils {
     if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
       root = CoreApp.instance.externalMediaDirs[0]
     }
+    if (File(root, fileName).exists()) return File(root, fileName)
     val fileToSave = sequence {
       yield(File(root, fileName))
       yieldAll(
@@ -326,7 +327,7 @@ object FileUtils {
     val source = if (url == null) Uri.parse(src) else Uri.parse(url)
     return try {
       zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
-        fileToSave.outputStream().use { inputStream.copyTo(it) }
+        fileToSave.outputStream().use(inputStream::copyTo)
       }
       fileToSave
     } catch (e: IOException) {
