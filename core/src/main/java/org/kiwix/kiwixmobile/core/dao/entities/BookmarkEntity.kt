@@ -19,8 +19,8 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 
 @Entity
 data class BookmarkEntity(

@@ -44,11 +44,14 @@ public class RecentSearchDao {
    */
   public List<RecentSearch> getRecentSearches() {
     List<RecentSearch> result = new ArrayList<>();
-    try (SquidCursor<RecentSearch> searchCursor = mDb.query(
-      RecentSearch.class, Query.select())) {
+    try {
+      SquidCursor<RecentSearch> searchCursor = mDb.query(
+        RecentSearch.class, Query.select());
       while (searchCursor.moveToNext()) {
         result.add(new RecentSearch(searchCursor));
       }
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
     return result;
   }

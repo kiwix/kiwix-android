@@ -28,10 +28,9 @@
   <issue id="Typos">
     <ignore path="**/values-tr/**.xml" />
   </issue>
-
   <issue id="InvalidPackage">
     <ignore path="**simple-xml-2.7.1.jar" />
-    <ignore path="**/squidb*.jar" />
+    <ignore path="**javapoet-1.8.0.jar" />
     <ignore path="**/org.jacoco.agent-0.8.3-runtime.jar" />
   </issue>
   <issue id="IconLocation">
@@ -41,5 +40,4 @@
   <issue id="ConvertToWebp">
     <ignore path="src/main/res/drawable/search_widget_preview.png" />
   </issue>
-
 </lint>

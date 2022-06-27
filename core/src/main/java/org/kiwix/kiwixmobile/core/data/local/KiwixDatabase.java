@@ -20,8 +20,11 @@ package org.kiwix.kiwixmobile.core.data.local;
 
 import android.content.Context;
 import android.util.Log;
+import androidx.annotation.NonNull;
+import com.yahoo.squidb.android.AndroidOpenHelper;
+import com.yahoo.squidb.data.ISQLiteDatabase;
+import com.yahoo.squidb.data.ISQLiteOpenHelper;
 import com.yahoo.squidb.data.SquidDatabase;
-import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -63,7 +66,7 @@ public class KiwixDatabase extends SquidDatabase {
   public KiwixDatabase(Context context, NewBookDao bookDao, NewLanguagesDao languagesDao,
     NewBookmarksDao bookmarksDao,
     NewRecentSearchDao recentSearchDao) {
-    super(context);
+    super();
     this.context = context;
     this.bookDao = bookDao;
     this.languagesDao = languagesDao;
@@ -86,8 +89,14 @@ public class KiwixDatabase extends SquidDatabase {
     };
   }
 
+  @NonNull @Override protected ISQLiteOpenHelper createOpenHelper(
+    @NonNull String databaseName,
+    @NonNull OpenHelperDelegate delegate, int version) {
+    return new AndroidOpenHelper(context, databaseName, delegate, version);
+  }
+
   @Override
-  protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
+  protected boolean onUpgrade(ISQLiteDatabase db, int oldVersion, int newVersion) {
     Log.e("UPGRADE", "oldversion: " + oldVersion + " newVersion: " + newVersion);
     switch (oldVersion) {
       case 1:
