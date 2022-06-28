@@ -99,6 +99,9 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       downloadProgress.progress = item.progress
       stop.setOnClickListener { clickAction.invoke(item) }
       downloadState.text = item.downloadState.toReadableState(containerView.context)
+      if (item.downloadState.toReadableState(containerView.context).contains("Failed")) {
+        clickAction.invoke(item)
+      }
       eta.text = item.readableEta
     }
   }

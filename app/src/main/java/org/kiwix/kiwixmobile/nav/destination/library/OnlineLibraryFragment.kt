@@ -106,10 +106,18 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     LibraryAdapter(
       LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick),
       LibraryDelegate.DownloadDelegate {
-        dialogShower.show(
-          KiwixDialog.YesNoDialog.StopDownload,
-          { downloader.cancelDownload(it.downloadId) }
-        )
+        if (it.downloadState.toReadableState(requireActivity()).contains("Failed")) {
+          if (isNotConnected) {
+            noInternetSnackbar()
+          } else {
+            downloader.retryDownload(it.downloadId)
+          }
+        } else {
+          dialogShower.show(
+            KiwixDialog.YesNoDialog.StopDownload,
+            { downloader.cancelDownload(it.downloadId) }
+          )
+        }
       },
       LibraryDelegate.DividerDelegate
     )

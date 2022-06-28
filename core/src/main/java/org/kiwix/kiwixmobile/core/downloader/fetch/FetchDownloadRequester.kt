@@ -41,6 +41,10 @@ class FetchDownloadRequester @Inject constructor(
   override fun cancel(downloadId: Long) {
     fetch.delete(downloadId.toInt())
   }
+
+  override fun retryDownload(downloadId: Long) {
+    fetch.retry(downloadId.toInt())
+  }
 }
 
 private fun DownloadRequest.toFetchRequest(sharedPreferenceUtil: SharedPreferenceUtil) =
