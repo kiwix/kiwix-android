@@ -44,6 +44,7 @@ data class ShowDeleteNotesDialog(
       if (state.isInSelectionState) DeleteSelectedNotes else DeleteAllNotes,
       {
         effects.offer(DeletePageItems(state, pageDao))
-      })
+      }
+    )
   }
 }

@@ -28,9 +28,11 @@ import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import javax.inject.Inject
 
 class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
-  fun notes(): Flowable<List<Page>> = box.asFlowable(box.query {
-    order(NotesEntity_.noteTitle)
-  }).map { it.map(::NoteListItem) }
+  fun notes(): Flowable<List<Page>> = box.asFlowable(
+    box.query {
+      order(NotesEntity_.noteTitle)
+    }
+  ).map { it.map(::NoteListItem) }
 
   override fun pages(): Flowable<List<Page>> = notes()
 

@@ -118,9 +118,14 @@ class AddNoteDialog : DialogFragment() {
       zimFavicon = zimReaderContainer.favicon
       zimId = zimReaderContainer.id
 
-      val webView = (activity as WebViewProvider?)?.getCurrentWebView()
-      articleTitle = webView?.title
-      zimFileUrl = webView?.url
+      if (arguments != null) {
+        articleTitle = arguments?.getString(NOTES_TITLE)
+        zimFileUrl = arguments?.getString(ARTICLE_URL)
+      } else {
+        val webView = (activity as WebViewProvider?)?.getCurrentWebView()
+        articleTitle = webView?.title
+        zimFileUrl = webView?.url
+      }
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
       articleNoteFileName = getArticleNoteFileName()
@@ -152,18 +157,18 @@ class AddNoteDialog : DialogFragment() {
 
   private fun getArticleNoteFileName(): String {
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
-    val articleUrl = if (arguments != null) {
-      arguments?.getString(ARTICLE_URL)
-    } else {
-      (activity as WebViewProvider?)?.getCurrentWebView()?.url
+    if (arguments != null && arguments?.getString(NOTE_FILE_PATH) != null) {
+      return getTextAfterLastSlashWithoutExtension(arguments?.getString(NOTE_FILE_PATH)!!)
     }
+
+    val articleUrl = (activity as WebViewProvider?)?.getCurrentWebView()?.url
     var noteFileName = ""
     if (articleUrl == null) {
       onFailureToCreateAddNoteDialog()
     } else {
       noteFileName = getTextAfterLastSlashWithoutExtension(articleUrl)
     }
-    return (if (noteFileName.isNotEmpty()) noteFileName else articleTitle) ?: ""
+    return (noteFileName.ifEmpty { articleTitle }) ?: ""
   }
 
   /* From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
@@ -312,7 +317,7 @@ class AddNoteDialog : DialogFragment() {
           noteEdited = false // As no unsaved changes remain
           enableDeleteNoteMenuItem()
           // adding only if saving file is success
-          addNoteToDao(noteFile.canonicalPath, zimFileTitle.orEmpty())
+          addNoteToDao(noteFile.canonicalPath, "${zimFileTitle.orEmpty()}: $articleTitle")
         } catch (e: IOException) {
           e.printStackTrace()
             .also { context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG) }
@@ -328,12 +333,12 @@ class AddNoteDialog : DialogFragment() {
 
   private fun addNoteToDao(noteFilePath: String?, title: String) {
     noteFilePath?.let { filePath ->
-      if (filePath.isNotEmpty() && zimFileUrl.orEmpty().isNotEmpty()) {
+      if (filePath.isNotEmpty() && zimFileUrl?.isNotEmpty() == true) {
         val zimReader = zimReaderContainer.zimFileReader
         if (zimReader != null) {
           val noteToSave = NoteListItem(
             title = title,
-            url = zimFileUrl.orEmpty(),
+            url = zimFileUrl!!,
             noteFilePath = noteFilePath,
             zimFileReader = zimReader
           )
@@ -367,19 +372,9 @@ class AddNoteDialog : DialogFragment() {
    * is displayed in the EditText field (note content area)
    */
   private fun displayNote() {
-    var noteFilePath: String? = ""
-    noteFilePath = if (arguments != null) {
-      arguments?.getString(NOTE_FILE_PATH)
-    } else {
-      "$zimNotesDirectory$articleNoteFileName.txt"
-    }
-    if (noteFilePath != null && noteFilePath.isNotEmpty()) {
-      val noteFile = File(noteFilePath)
-      if (noteFile.exists()) {
-        readNoteFromFile(noteFile)
-      } else {
-        onFailureToCreateAddNoteDialog()
-      }
+    val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
+    if (noteFile.exists()) {
+      readNoteFromFile(noteFile)
     }
 
     // No action in case the note file for the currently open article doesn't exist
@@ -451,5 +446,6 @@ class AddNoteDialog : DialogFragment() {
     const val TAG = "AddNoteDialog"
     const val NOTE_FILE_PATH = "NoteFilePath"
     const val ARTICLE_URL = "ArticleUrl"
+    const val NOTES_TITLE = "NotesTitle"
   }
 }
