@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
+import android.annotation.SuppressLint
 import android.view.Gravity
 import android.view.View
 import android.view.View.MeasureSpec
@@ -114,6 +115,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
   }
 }
 
+@SuppressLint("ShowToast")
 private fun View.centreToast(@StringRes id: Int) {
   val locationXAndY = intArrayOf(0, 0)
   getLocationOnScreen(locationXAndY)

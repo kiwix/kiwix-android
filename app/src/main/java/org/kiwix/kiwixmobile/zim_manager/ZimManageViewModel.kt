@@ -409,7 +409,7 @@ class ZimManageViewModel @Inject constructor(
   ) = if (filter.isEmpty()) {
     unDownloadedBooks
   } else {
-    unDownloadedBooks.forEach { it.calculateSearchMatches(filter, bookUtils) }
+    unDownloadedBooks.iterator().forEach { it.calculateSearchMatches(filter, bookUtils) }
     unDownloadedBooks.filter { it.searchMatches > 0 }
   }
 
