@@ -134,7 +134,7 @@ class Repository @Inject internal constructor(
     Completable.fromAction { notesDao.deleteNote(noteUniqueKey) }
       .subscribeOn(io)
 
-  // this does note removes notes from storage only the list : remove txt files as well?
+  // this removes notes from storage only: remove txt files as well?
   override fun clearNotes(): Completable =
     Completable.fromAction(notesDao::deleteAllNotes).subscribeOn(io)
 }
