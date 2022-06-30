@@ -60,6 +60,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 
+  private var isIntroScreenVisible: Boolean = false
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
   }
@@ -98,11 +99,14 @@ class KiwixMainActivity : CoreMainActivity() {
         handleDrawerOnNavigation()
       }
     }
-    if (sharedPreferenceUtil.showIntro()) {
+    if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
       navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
     }
     sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
   }
+
+  private fun isIntroScreenNotVisible(): Boolean =
+    isIntroScreenVisible.also { isIntroScreenVisible = true }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)
