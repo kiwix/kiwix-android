@@ -23,6 +23,7 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.tonyodev.fetch2.Status
 import kotlinx.android.synthetic.main.item_download.downloadProgress
 import kotlinx.android.synthetic.main.item_download.downloadState
 import kotlinx.android.synthetic.main.item_download.eta
@@ -99,7 +100,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       downloadProgress.progress = item.progress
       stop.setOnClickListener { clickAction.invoke(item) }
       downloadState.text = item.downloadState.toReadableState(containerView.context)
-      if (item.downloadState.toReadableState(containerView.context).contains("Failed")) {
+      if (item.currentDownloadState == Status.FAILED) {
         clickAction.invoke(item)
       }
       eta.text = item.readableEta

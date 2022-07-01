@@ -46,6 +46,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.fragment_destination_download.allowInternetPermissionButton
@@ -106,7 +107,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     LibraryAdapter(
       LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick),
       LibraryDelegate.DownloadDelegate {
-        if (it.downloadState.toReadableState(requireActivity()).contains("Failed")) {
+        if (it.currentDownloadState == Status.FAILED) {
           if (isNotConnected) {
             noInternetSnackbar()
           } else {
