@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import androidx.annotation.StringRes
+import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
@@ -69,7 +70,8 @@ sealed class LibraryListItem {
     val progress: Int,
     val eta: Seconds,
     val downloadState: DownloadState,
-    override val id: Long
+    override val id: Long,
+    val currentDownloadState: Status
   ) : LibraryListItem() {
 
     val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
@@ -84,7 +86,8 @@ sealed class LibraryListItem {
       downloadModel.progress,
       Seconds(downloadModel.etaInMilliSeconds / 1000L),
       DownloadState.from(downloadModel.state, downloadModel.error),
-      downloadModel.book.id.hashCode().toLong()
+      downloadModel.book.id.hashCode().toLong(),
+      downloadModel.state
     )
   }
 }
