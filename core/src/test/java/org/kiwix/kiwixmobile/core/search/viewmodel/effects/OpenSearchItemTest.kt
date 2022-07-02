@@ -24,7 +24,6 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResult
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
@@ -49,7 +48,7 @@ internal class OpenSearchItemTest {
         SearchItemToOpen(searchListItem.value, false),
         TAG_FILE_SEARCHED
       )
-      activity.popNavigationBackstack()
+      activity.navigate(activity.readerFragmentResId)
     }
   }
 
@@ -69,7 +68,7 @@ internal class OpenSearchItemTest {
         SearchItemToOpen(searchListItem.value, true),
         TAG_FILE_SEARCHED
       )
-      activity.popNavigationBackstack()
+      activity.navigate(activity.readerFragmentResId)
     }
   }
 }
