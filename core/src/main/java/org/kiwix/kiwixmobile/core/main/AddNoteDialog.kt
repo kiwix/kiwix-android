@@ -67,11 +67,10 @@ const val DISABLE_ICON_ITEM_ALPHA = 130
 const val ENABLE_ICON_ITEM_ALPHA = 255
 
 class AddNoteDialog : DialogFragment() {
-  private var zimId: String? = null
+  private lateinit var zimId: String
   private var zimFileName: String? = null
   private var zimFileTitle: String? = null
-  private var zimFileUrl: String? = null
-  private var zimFavicon: String? = null
+  private lateinit var zimFileUrl: String
   private var articleTitle: String? = null
 
   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
@@ -115,16 +114,15 @@ class AddNoteDialog : DialogFragment() {
     zimFileName = zimReaderContainer.zimCanonicalPath
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer.zimFileTitle
-      zimFavicon = zimReaderContainer.favicon
-      zimId = zimReaderContainer.id
+      zimId = zimReaderContainer.id.orEmpty()
 
       if (arguments != null) {
         articleTitle = arguments?.getString(NOTES_TITLE)
-        zimFileUrl = arguments?.getString(ARTICLE_URL)
+        zimFileUrl = arguments?.getString(ARTICLE_URL).orEmpty()
       } else {
         val webView = (activity as WebViewProvider?)?.getCurrentWebView()
         articleTitle = webView?.title
-        zimFileUrl = webView?.url
+        zimFileUrl = webView?.url.orEmpty()
       }
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
@@ -157,8 +155,8 @@ class AddNoteDialog : DialogFragment() {
 
   private fun getArticleNoteFileName(): String {
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
-    if (arguments != null && arguments?.getString(NOTE_FILE_PATH) != null) {
-      return getTextAfterLastSlashWithoutExtension(arguments?.getString(NOTE_FILE_PATH)!!)
+    arguments?.getString(NOTE_FILE_PATH)?.let {
+      return@getArticleNoteFileName getTextAfterLastSlashWithoutExtension(it)
     }
 
     val articleUrl = (activity as WebViewProvider?)?.getCurrentWebView()?.url
@@ -333,12 +331,12 @@ class AddNoteDialog : DialogFragment() {
 
   private fun addNoteToDao(noteFilePath: String?, title: String) {
     noteFilePath?.let { filePath ->
-      if (filePath.isNotEmpty() && zimFileUrl?.isNotEmpty() == true) {
+      if (filePath.isNotEmpty() && zimFileUrl.isNotEmpty()) {
         val zimReader = zimReaderContainer.zimFileReader
         if (zimReader != null) {
           val noteToSave = NoteListItem(
             title = title,
-            url = zimFileUrl!!,
+            url = zimFileUrl,
             noteFilePath = noteFilePath,
             zimFileReader = zimReader
           )
