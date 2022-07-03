@@ -47,6 +47,7 @@ import javax.inject.Singleton
  * A central repository of data which should provide the presenters with the required data.
  */
 
+@Suppress("LongParameterList")
 @Singleton
 class Repository @Inject internal constructor(
   @param:IO private val io: Scheduler,
