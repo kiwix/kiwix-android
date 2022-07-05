@@ -26,11 +26,8 @@ import javax.inject.Inject
 /**
  * Dao class for recent searches.
  */
-@Deprecated("")
 class RecentSearchDao @Inject constructor(private val mDb: KiwixDatabase) {
-  /**
-   * Returns a distinct enumeration of the `NUM_RECENT_RESULTS` most recent searches.
-   */
+
   fun getRecentSearches(): MutableList<RecentSearch> {
     val result: MutableList<RecentSearch> = ArrayList()
     mDb.query(
