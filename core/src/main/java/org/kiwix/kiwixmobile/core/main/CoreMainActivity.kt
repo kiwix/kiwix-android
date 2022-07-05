@@ -250,7 +250,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     supportFragmentManager.fragments
 
   fun navigate(action: NavDirections) {
-    navController.navigate(action)
+    navController.currentDestination?.getAction(action.actionId)?.run {
+      navController.navigate(action)
+    }
   }
 
   fun navigate(fragmentId: Int) {
