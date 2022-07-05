@@ -10,6 +10,7 @@
 * Rail
 * Rzuwig
 * Stojex
+* Strebski
 * WaldiSt
 * Woytecr
 -->
@@ -57,7 +58,9 @@
   <string name="start_server_label">Uruchom serwer</string>
   <string name="stop_server_label">Zatrzymaj serwer</string>
   <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
+  <string name="share_host_address">Udostępnij adres URL za pośrednictwem innych aplikacji</string>
   <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
+  <string name="unable_to_read_zim_file">Nie można odczytać tego pliku zim!</string>
   <string name="zim_not_opened">Nie można otworzyć pliku zim</string>
   <string name="error_file_invalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>
   <string name="error_article_url_not_found">Błąd: Ładowanie artykułu (Url:  %1$s ) się nie powiodło.</string>
@@ -81,6 +84,7 @@
   <string name="pref_clear_all_history_title">Wyczyść historię</string>
   <string name="pref_clear_all_history_summary">Wyczyść historię ostatnich wyszukiwań i kart</string>
   <string name="pref_notes">Uwagi</string>
+  <string name="pref_permission">Uprawnienia</string>
   <string name="all_history_cleared">Usunięto całą historię</string>
   <string name="pref_clear_all_bookmarks_title">Wyczyść zakładki</string>
   <string name="clear_all_history_dialog_title">Wyczyść całą historię?</string>
@@ -113,7 +117,7 @@
   <string name="local_zims">Urządzenie</string>
   <string name="remote_zims">Dostępne</string>
   <string name="library">Biblioteka</string>
-  <string name="delete_zim_body">Następujące pliki zim zostaną usunięte:\n\n%s</string>
+  <string name="delete_zim_body">Następujące pliki zim zostaną usunięte:\n\n\%s</string>
   <string name="delete_zims_toast">Plik został usunięty</string>
   <string name="no_files_here">Tu nie ma plików</string>
   <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
@@ -226,7 +230,7 @@
   <string name="ext_storage_permission_not_granted">Błąd: Nie przyznano uprawnień do przechowywania</string>
   <string name="notes_deletion_successful">Usunięto cały folder notatek</string>
   <string name="notes_deletion_unsuccessful">Niektóre pliki nie zostały usunięte</string>
-  <string name="books_count">%d książka(książek)</string>
+  <string name="books_count">\%d książka(książek)</string>
   <string name="discovery_initiated">Rozpoczęto odnajdowanie</string>
   <string name="discovery_failed">Odnajdowanie nie powiodło się</string>
   <string name="severe_loss_error">Poważny błąd! Spróbuj wyłączyć/ponownie włączyć WiFi P2P</string>
@@ -239,11 +243,11 @@
   <string name="discovery_needs_location">Nie można wykryć elementów równorzędnych bez usług lokalizacji</string>
   <string name="request_enable_wifi">Włącz WiFi P2P w ustawieniach systemu</string>
   <string name="discovery_needs_wifi">Nie można wykryć urządzeń równorzędnych bez włączonego WiFi</string>
-  <string name="transfer_to">Przesłać pliki do %s?</string>
+  <string name="transfer_to">Przesłać pliki do \%s?</string>
   <string name="device_not_cooperating">Wybrane urządzenie nie współpracuje przy przesyłaniu</string>
   <string name="file_transfer_complete">Przesyłanie pliku zakończone</string>
   <string name="error_during_transfer">Wystąpił błąd podczas przesyłania</string>
-  <string name="error_transferring">Błąd podczas przesyłania pliku %s</string>
+  <string name="error_transferring">Błąd podczas przesyłania pliku \%s</string>
   <string name="get_content_from_nearby_device">Pobierz zawartość z sąsiedniego urządzenia</string>
   <string name="search_for_peers">Szukaj Pirów</string>
   <string name="your_device">Twoje urządzenie:</string>
@@ -255,7 +259,8 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Usuwa wszystkie notatki ze wszystkich artykułów</string>
   <string name="pref_clear_all_notes_title">Wyczyść wszystkie notatki</string>
-  <string name="pref_text_zoom_summary">Zmień rozmiar tekstu co 25%.</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Zezwalaj na odczytywanie i zapisywanie plików ZIM na karcie SD</string>
+  <string name="pref_text_zoom_summary">Zmień rozmiar tekstu co 25\%.</string>
   <string name="tag_pic">Fotka</string>
   <string name="tag_vid">Wideo</string>
   <string name="tag_text_only">Tylko tekst</string>
@@ -289,4 +294,11 @@
   <string name="close_drawer">Zamknij szufladę</string>
   <string name="how_to_update_content">Jak zaktualizować zawartość?</string>
   <string name="update_content_description">Aby zaktualizować zawartość (plik zim), musisz pobrać pełną najnowszą wersję tej samej zawartości. Możesz to zrobić w sekcji pobierania.</string>
+  <string name="all_files_permission_needed">Wymagane uprawnienia do wszystkich plików</string>
+  <string name="all_files_permission_needed_message">Aby uzyskać dostęp do wszystkich plików zim na urządzeniu, musimy mieć uprawnienia do wszystkich plików</string>
+  <string name="allowed">Dozwolony</string>
+  <string name="not_allowed">Niedozwolony</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">Wybierz katalog do przechowywania zewnętrznego.</string>
+  <string name="system_unable_to_grant_permission_message">System nie może udzielić pozwolenia!</string>
 </resources>

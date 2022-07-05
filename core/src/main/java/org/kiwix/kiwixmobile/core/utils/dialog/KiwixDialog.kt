@@ -34,9 +34,11 @@ sealed class KiwixDialog(
   val getView: (() -> View)? = null
 ) {
 
-  data class DeleteZims(override val args: List<Any>) : KiwixDialog(
-    null, R.string.delete_zim_body, R.string.delete, R.string.no
-  ), HasBodyFormatArgs {
+  data class DeleteZims(override val args: List<Any>) :
+    KiwixDialog(
+      null, R.string.delete_zim_body, R.string.delete, R.string.no
+    ),
+    HasBodyFormatArgs {
     constructor(zimNameList: String) : this(listOf(zimNameList))
   }
 
@@ -57,6 +59,13 @@ sealed class KiwixDialog(
   object StoragePermissionRationale : KiwixDialog(
     null,
     R.string.request_storage,
+    android.R.string.yes,
+    android.R.string.cancel
+  )
+
+  object WriteStoragePermissionRationale : KiwixDialog(
+    null,
+    R.string.request_write_storage,
     android.R.string.yes,
     android.R.string.cancel
   )
@@ -92,12 +101,14 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
-  data class ShowHotspotDetails(override val args: List<Any>) : KiwixDialog(
-    R.string.hotspot_turned_on,
-    R.string.hotspot_details_message,
-    android.R.string.ok,
-    null
-  ), HasBodyFormatArgs {
+  data class ShowHotspotDetails(override val args: List<Any>) :
+    KiwixDialog(
+      R.string.hotspot_turned_on,
+      R.string.hotspot_details_message,
+      android.R.string.ok,
+      null
+    ),
+    HasBodyFormatArgs {
     constructor(wifiConfiguration: WifiConfiguration) : this(
       listOf(wifiConfiguration.SSID, wifiConfiguration.preSharedKey)
     )
@@ -118,9 +129,11 @@ sealed class KiwixDialog(
     neutralMessage = R.string.hotspot_dialog_neutral_button
   )
 
-  data class FileTransferConfirmation(override val args: List<Any>) : KiwixDialog(
-    null, R.string.transfer_to, R.string.yes, android.R.string.cancel
-  ), HasBodyFormatArgs {
+  data class FileTransferConfirmation(override val args: List<Any>) :
+    KiwixDialog(
+      null, R.string.transfer_to, R.string.yes, android.R.string.cancel
+    ),
+    HasBodyFormatArgs {
     constructor(selectedPeerDeviceName: String) : this(listOf(selectedPeerDeviceName))
   }
 
@@ -179,6 +192,14 @@ sealed class KiwixDialog(
 
   data class OpenCredits(val customGetView: (() -> View)?) : KiwixDialog(
     null,
+    null,
+    android.R.string.ok,
+    null,
+    getView = customGetView
+  )
+
+  data class SelectFolder(val customGetView: (() -> View)?) : KiwixDialog(
+    R.string.select_folder,
     null,
     android.R.string.ok,
     null,

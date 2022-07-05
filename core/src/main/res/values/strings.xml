@@ -14,7 +14,7 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
-  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Saved media as %s to Downloads/org.kiwix…/</string>
   <string name="search_label">Search</string>
   <string name="choose_file" tools:keep="@string/choose_file">Select a Content File (*.zim)</string>
   <string name="open_in_new_tab">Open link in new tab?</string>
@@ -45,6 +45,7 @@
   <string name="server_started_message" tools:keep="@string/server_started_message">Enter this ip address into your browser to access the server %s</string>
   <string name="share_host_address">Share URL via other applications</string>
   <string name="error_file_not_found">Error: The selected ZIM file could not be found.</string>
+  <string name="unable_to_read_zim_file">Unable to read this zim file!</string>
   <string name="zim_not_opened">Unable to open zim file</string>
   <string name="error_file_invalid">Error: The selected file is not a valid ZIM file.</string>
   <string name="error_article_url_not_found">Error: Loading article (Url: %1$s) failed.</string>
@@ -63,6 +64,7 @@
   <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
   <string name="no_section_info">No Content Headers Found</string>
   <string name="request_storage">To access offline content we need access to your storage</string>
+  <string name="request_write_storage">To download zim files we need write access to your storage</string>
   <string name="clear_recent_and_tabs_history_dialog">Are you sure you want to delete your search history and reset all active tabs?</string>
   <string name="delete_recent_search_item">Delete this item?</string>
   <string name="pref_clear_all_history_title">Clear history</string>
@@ -101,7 +103,7 @@
   <string name="local_zims" tools:keep="@string/local_zims">Device</string>
   <string name="remote_zims" tools:keep="@string/remote_zims">Online</string>
   <string name="library">Library</string>
-  <string name="delete_zim_body">The following zim file(s) will be deleted:\n\n%s</string>
+  <string name="delete_zim_body">The following zim file(s) will be deleted:n\n\%s</string>
   <string name="delete_zims_toast" tools:keep="@string/delete_zims_toast">Files deleted successfully</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
   <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
@@ -227,7 +229,7 @@
   <string name="ext_storage_permission_not_granted">Error: Storage permissions not granted</string>
   <string name="notes_deletion_successful">Entire notes folder deleted</string>
   <string name="notes_deletion_unsuccessful">Some files not deleted</string>
-  <string name="books_count" tools:ignore="PluralsCandidate" tools:keep="@string/books_count">%d book(s)</string>
+  <string name="books_count" tools:ignore="PluralsCandidate" tools:keep="@string/books_count">\%d book(s)</string>
   <string name="discovery_initiated" tools:keep="@string/discovery_initiated">Discovery initiated</string>
   <string name="discovery_failed" tools:keep="@string/discovery_failed">Discovery failed</string>
   <string name="severe_loss_error" tools:keep="@string/severe_loss_error">Severe error! Try Disable/Re-enable WiFi P2P</string>
@@ -240,11 +242,11 @@
   <string name="discovery_needs_location" tools:keep="@string/discovery_needs_location">Cannot discover peers without location services</string>
   <string name="request_enable_wifi">Enable WiFi P2P from system settings</string>
   <string name="discovery_needs_wifi" tools:keep="@string/discovery_needs_wifi">Cannot discover peers without WiFi ON</string>
-  <string name="transfer_to">Transfer files to %s?</string>
+  <string name="transfer_to">Transfer files to \%s?</string>
   <string name="device_not_cooperating" tools:keep="@string/device_not_cooperating">Selected device not co-operating for transfer</string>
   <string name="file_transfer_complete" tools:keep="@string/file_transfer_complete">File transfer complete</string>
   <string name="error_during_transfer" tools:keep="@string/error_during_transfer">An error was encountered during transfer</string>
-  <string name="error_transferring" tools:keep="@string/error_transferring">Error transferring file %s</string>
+  <string name="error_transferring" tools:keep="@string/error_transferring">Error transferring file \%s</string>
   <string name="get_content_from_nearby_device" tools:keep="@string/get_content_from_nearby_device">Get content from nearby device</string>
   <string name="search_for_peers" tools:keep="@string/search_for_peers">Search For Peers</string>
   <string name="your_device" tools:keep="@string/your_device">Your Device:</string>
@@ -295,6 +297,12 @@
   <string name="all_files_permission_needed_message">In order to access all the zim files across device we need to have All Files Permission</string>
   <string name="allowed">Allowed</string>
   <string name="not_allowed">Not allowed</string>
+  <string name="denied_internet_permission_message">Please enable wifi to download content</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">Please select a folder for external storage.</string>
+  <string name="system_unable_to_grant_permission_message">System unable to grant permission!</string>
+  <string name="allow">Allow</string>
+  <string name="allow_internet_permission_message">Please allow internet permission to download content</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>

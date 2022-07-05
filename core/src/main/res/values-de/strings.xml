@@ -13,6 +13,7 @@
 * Stephane
 * Susann Schweden
 * Symposiarch
+* Umlaut
 -->
 <resources>
   <string name="menu_help">Hilfe</string>
@@ -58,6 +59,7 @@
   <string name="start_server_label">Server starten</string>
   <string name="stop_server_label">Server anhalten</string>
   <string name="server_started_message">Geben Sie diese IP-Adresse in Ihren Browser ein, um auf den Server %s zuzugreifen</string>
+  <string name="share_host_address">URL mit anderen Applikationen teilen</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
   <string name="zim_not_opened">Konnte die ZIM-Datei nicht öffnen</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
@@ -82,6 +84,7 @@
   <string name="pref_clear_all_history_title">Verlauf löschen</string>
   <string name="pref_clear_all_history_summary">Letzte Suchanfragen und Registerkartenverlauf löschen</string>
   <string name="pref_notes">Anmerkungen</string>
+  <string name="pref_permission">Berechtigungen</string>
   <string name="all_history_cleared">Gesamter Verlauf gelöscht</string>
   <string name="pref_clear_all_bookmarks_title">Lesezeichen löschen</string>
   <string name="clear_all_history_dialog_title">Gesamten Verlauf löschen?</string>
@@ -114,7 +117,7 @@
   <string name="local_zims">Gerät</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliothek</string>
-  <string name="delete_zim_body">Die folgende(n) ZIM-Datei(en) werden gelöscht werden: %s</string>
+  <string name="delete_zim_body">Die folgende(n) ZIM-Datei(en) werden gelöscht werden:\n\n\%s</string>
   <string name="delete_zims_toast">Dateien erfolgreich gelöscht</string>
   <string name="no_files_here">Hier gibt es keine Dateien</string>
   <string name="download_no_space">Unzureichender Speicherplatz für einen Download.</string>
@@ -227,7 +230,7 @@
   <string name="ext_storage_permission_not_granted">Fehler: Speicherberechtigungen nicht gewährt</string>
   <string name="notes_deletion_successful">Gesamter Notizen-Ordner gelöscht</string>
   <string name="notes_deletion_unsuccessful">Einige Dateien nicht gelöscht</string>
-  <string name="books_count">%d Buch/Bücher</string>
+  <string name="books_count">\%d Buch/Bücher</string>
   <string name="discovery_initiated">Erkennung eingeleitet</string>
   <string name="discovery_failed">Erkennung fehlgeschlagen</string>
   <string name="severe_loss_error">Schwerer Fehler! Versuchen Sie, Wi-Fi P2P auszuschalten und wieder einzuschalten</string>
@@ -240,11 +243,11 @@
   <string name="discovery_needs_location">Ohne standortbezogene Dienste können keine Peer-Geräte gefunden werden</string>
   <string name="request_enable_wifi">Aktivieren Sie Wi-Fi P2P in den Systemeinstellungen</string>
   <string name="discovery_needs_wifi">Kann ohne Wi-Fi ON keine Peer-Geräte finden</string>
-  <string name="transfer_to">Dateien an %s übertragen?</string>
+  <string name="transfer_to">Dateien an \%s übertragen?</string>
   <string name="device_not_cooperating">Das gewählte Gerät kooperiert nicht bei der Übertragung</string>
   <string name="file_transfer_complete">Dateiübertragung abgeschlossen</string>
   <string name="error_during_transfer">Bei der Übertragung wurde ein Fehler festgestellt</string>
-  <string name="error_transferring">Fehler beim Übertragen der Datei %s</string>
+  <string name="error_transferring">Fehler beim Übertragen der Datei \%s</string>
   <string name="get_content_from_nearby_device">Inhalte von einem Gerät in der Nähe abrufen</string>
   <string name="search_for_peers">Nach Peer-Geräten suchen</string>
   <string name="your_device">Ihr Gerät:</string>
@@ -289,4 +292,6 @@
   <string name="open_drawer">Schublade öffnen</string>
   <string name="close_drawer">Schublade schließen</string>
   <string name="how_to_update_content">Wie erneuert man Inhalte?</string>
+  <string name="allowed">Erlaubt</string>
+  <string name="not_allowed">Nicht erlaubt</string>
 </resources>

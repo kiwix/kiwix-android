@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile
 import android.R.id
 import android.app.Instrumentation
 import android.content.Context
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
@@ -52,7 +53,7 @@ abstract class BaseRobot(
     uiDevice.pressBack()
   }
 
-  protected fun isVisible(findable: Findable, timeout: Long = DEFAULT_WAIT) =
+  protected fun isVisible(findable: Findable, timeout: Long = VERY_LONG_WAIT) =
     waitFor(findable, timeout) ?: throw RuntimeException(findable.errorMessage(this))
 
   protected fun UiObject2.swipeLeft() {
@@ -63,7 +64,7 @@ abstract class BaseRobot(
     customSwipe(Direction.RIGHT)
   }
 
-  protected fun clickOn(findable: Findable, timeout: Long = DEFAULT_WAIT) {
+  protected fun clickOn(findable: Findable, timeout: Long = VERY_LONG_WAIT) {
     isVisible(findable, timeout).click()
   }
 
@@ -81,9 +82,20 @@ abstract class BaseRobot(
 
   private fun waitFor(
     findable: Findable,
-    timeout: Long = DEFAULT_WAIT
-  ): UiObject2? =
-    uiDevice.wait(Until.findObject(findable.selector(this)), timeout)
+    timeout: Long = VERY_LONG_WAIT,
+    retryCount: Int = 5
+  ): UiObject2? {
+    var uiObject2: UiObject2? = null
+    for (i in 0 until retryCount) {
+      try {
+        uiObject2 = uiDevice.wait(Until.findObject(findable.selector(this)), timeout)
+        break
+      } catch (noMatchingViewException: NoMatchingViewException) {
+        noMatchingViewException.printStackTrace()
+      }
+    }
+    return uiObject2
+  }
 
   private fun UiObject2.customSwipe(
     direction: Direction,

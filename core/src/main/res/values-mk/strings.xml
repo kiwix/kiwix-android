@@ -48,6 +48,7 @@
   <string name="server_started_message">Внесете ја оваа IP-адреса во прелистувачот за да пристапите на опслужувачот %s</string>
   <string name="share_host_address">Сподели URL преку други прилози</string>
   <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека.</string>
+  <string name="unable_to_read_zim_file">Не можам да ја прочитам оваа ZIM-податотека!</string>
   <string name="zim_not_opened">Не можам да ја отворам ZIM-податотеката</string>
   <string name="error_file_invalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
   <string name="error_article_url_not_found">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
@@ -66,11 +67,13 @@
   <string name="no_reader_application_installed">Не можев да најдам воспоставен приложник за овој вид податотека</string>
   <string name="no_section_info">Не пронајдов содржински заглавија</string>
   <string name="request_storage">Ќе треба пристап до вашиот склад за да дојдам до вонмрежната содржина</string>
+  <string name="request_write_storage">За да преземете ZIM-податотеки ќе ни треба запишувачки пристап до вашиот склад</string>
   <string name="clear_recent_and_tabs_history_dialog">Дали сугурно сакате да ја избришете историјата на пребарувања и да ги отфрлите сите активни јазичиња?</string>
   <string name="delete_recent_search_item">Да ја избришам ставкава?</string>
   <string name="pref_clear_all_history_title">Исчисти историја</string>
   <string name="pref_clear_all_history_summary">Исчисти скорешни пребарувања и јазичиња</string>
   <string name="pref_notes">Белешки</string>
+  <string name="pref_permission">Дозволи</string>
   <string name="all_history_cleared">Сета историја е исчистена</string>
   <string name="pref_clear_all_bookmarks_title">Исчисти обележувачи</string>
   <string name="clear_all_history_dialog_title">Да ја исчистам сета историја</string>
@@ -103,7 +106,7 @@
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
   <string name="library">Библиотека</string>
-  <string name="delete_zim_body">Ќе бидат избришани следниве ZIM-податотеки:\n\n%s</string>
+  <string name="delete_zim_body">Ќе бидат избришани следниве ZIM-податотеки:\n\n\%s</string>
   <string name="delete_zims_toast">Податотеката е успешно избришана</string>
   <string name="no_files_here">Нема податотеки</string>
   <string name="download_no_space">Нема доволно место за преземање.</string>
@@ -216,7 +219,7 @@
   <string name="ext_storage_permission_not_granted">Грешка: Немате дадено дозвола за складирање</string>
   <string name="notes_deletion_successful">Избришана е цела папка со белешки</string>
   <string name="notes_deletion_unsuccessful">Некои податотеки не беа избришани</string>
-  <string name="books_count">%d книга/ги</string>
+  <string name="books_count">\%d книга/ги</string>
   <string name="discovery_initiated">Откривањето започна</string>
   <string name="discovery_failed">Откривањето не успеа</string>
   <string name="severe_loss_error">Голема грешка! Исклучете го и пак вклучете го поврзувањето на уреди со безжичен пристап</string>
@@ -229,11 +232,11 @@
   <string name="discovery_needs_location">Не можам да откривам уреди за сврзување без да е овозможена местоположбата</string>
   <string name="request_enable_wifi">Овозможете поврзување на уреди преку безжичен пристап во системските поставки</string>
   <string name="discovery_needs_wifi">Не можам да откривам уреди за поврзување без да е вклучена безжичната врска</string>
-  <string name="transfer_to">Да ги пренесам податотеките во %s?</string>
+  <string name="transfer_to">Да ги пренесам податотеките во \%s?</string>
   <string name="device_not_cooperating">Избраниот уред не соработува во преносот</string>
   <string name="file_transfer_complete">Податотечниот пренос е завршен</string>
   <string name="error_during_transfer">Се јави грешка при преносот</string>
-  <string name="error_transferring">Грешка при пренесување на податотеката %s</string>
+  <string name="error_transferring">Грешка при пренесување на податотеката \%s</string>
   <string name="get_content_from_nearby_device">Земи содржини од уред во близина</string>
   <string name="search_for_peers">Пребарај уреди за сврзување</string>
   <string name="your_device">Вашиот уред:</string>
@@ -245,7 +248,8 @@
   <string name="status">Состојба</string>
   <string name="pref_clear_all_notes_summary">Ги чисти сите белешки на сите статии</string>
   <string name="pref_clear_all_notes_title">Исчисти ги сите белешки</string>
-  <string name="pref_text_zoom_summary">Промени големина на текст во стапки од 25 %.</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Дозволи читање и запишување на ZIM-податотеки на SD-картичка</string>
+  <string name="pref_text_zoom_summary">Промени големина на текст во стапки од 25\%.</string>
   <string name="tag_pic">Слика</string>
   <string name="tag_vid">Видео</string>
   <string name="tag_text_only">Само текст</string>
@@ -279,4 +283,14 @@
   <string name="close_drawer">Затвори фиока</string>
   <string name="how_to_update_content">Како се подновува содржината?</string>
   <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>
+  <string name="all_files_permission_needed">Дозвола за сите податотеки</string>
+  <string name="all_files_permission_needed_message">За да имате пристап до сите ZIM-податотеки на уредот, ќе треба да ја имате дозволата за сите податотеки</string>
+  <string name="allowed">Дозволено</string>
+  <string name="not_allowed">Не е дозволено</string>
+  <string name="denied_internet_permission_message">Вклучете ја безжичната мрежа (Wi-Fi) за да ја преземете содржината</string>
+  <string name="android_directory_seperator">/Андроид</string>
+  <string name="select_folder">Изберете ја папката за надворешно складирање.</string>
+  <string name="system_unable_to_grant_permission_message">Системот не може да ја даде дозволата!</string>
+  <string name="allow">Дозволи</string>
+  <string name="allow_internet_permission_message">Дајте дозвола за семрежен пристап за преземање на содржините</string>
 </resources>

@@ -85,10 +85,14 @@ abstract class HelpFragment : BaseFragment() {
 
   private fun sendFeedback() {
     val intent = Intent(Intent.ACTION_SENDTO)
-    intent.data = ("mailto:${Uri.encode(CONTACT_EMAIL_ADDRESS)}" +
-      "?subject=${
-        Uri.encode("Feedback in ${getCurrentLocale(requireActivity()).displayLanguage}")
-      }").toUri()
+    intent.data = (
+      "mailto:${Uri.encode(CONTACT_EMAIL_ADDRESS)}" +
+        "?subject=" +
+        Uri.encode(
+          "Feedback in " +
+            getCurrentLocale(requireActivity()).displayLanguage
+        )
+      ).toUri()
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"))
   }
 }

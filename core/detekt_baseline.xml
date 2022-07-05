@@ -1,18 +1,20 @@
-<?xml version="1.0" ?>
+<?xml version='1.0' encoding='UTF-8'?>
 <SmellBaseline>
-  <Blacklist></Blacklist>
-  <Whitelist>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
     <ID>EmptyFunctionBlock:BooksOnDiskViewHolder.kt$BookOnDiskViewHolder.BookViewHolder${ }</ID>
-    <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided&gt;${}</ID>
+    <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided>${}</ID>
     <ID>EmptyFunctionBlock:OnSwipeTouchListener.kt$OnSwipeTouchListener${}</ID>
     <ID>ForbiddenComment:JNIInitialiser.kt$JNIInitialiser$// TODO: Consider surfacing to user</ID>
-    <ID>LongMethod:TabsAdapter.kt$TabsAdapter$onCreateViewHolder</ID>
-    <ID>LongParameterList:KiwixDialog.kt$KiwixDialog$( val title: Int?, val message: Int?, val positiveMessage: Int, val negativeMessage: Int?, val cancelable: Boolean = true, val icon: Int? = null, val neutralMessage: Int? = null, val getView: (() -&gt; View)? = null )</ID>
-    <ID>LongParameterList:MainMenu.kt$MainMenu$( private val activity: Activity, zimFileReader: ZimFileReader?, menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, disableReadAloud: Boolean = false, disableTabs: Boolean = false, private val menuClickListener: MenuClickListener )</ID>
-    <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView&gt;, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
+    <ID>ForbiddenComment:NetworkUtilsTest.kt$NetworkUtilsTest$// TODO: find a way to assert regex matching via JUnit and rewrite the test</ID>
+    <ID>LongMethod:ChunkUtilsTest.kt$ChunkUtilsTest$@Test fun testGetChunks()</ID>
+    <ID>LongMethod:TabsAdapter.kt$TabsAdapter$@SuppressLint("ResourceType") override fun onCreateViewHolder( parent: ViewGroup, viewType: Int ): ViewHolder</ID>
+    <ID>LongParameterList:KiwixDialog.kt$KiwixDialog$( val title: Int?, val message: Int?, val positiveMessage: Int, val negativeMessage: Int?, val cancelable: Boolean = true, val icon: Int? = null, val neutralMessage: Int? = null, val getView: (() -> View)? = null )</ID>
+    <ID>LongParameterList:MainMenu.kt$MainMenu$( private val activity: Activity, zimFileReader: ZimFileReader?, menu: Menu, webViews: MutableList&lt;KiwixWebView>, urlIsValid: Boolean, disableReadAloud: Boolean = false, disableTabs: Boolean = false, private val menuClickListener: MenuClickListener )</ID>
+    <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView>, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
+    <ID>LongParameterList:PageTestHelpers.kt$( bookmarkTitle: String = "bookmarkTitle", isSelected: Boolean = false, id: Long = 2, zimId: String = "zimId", zimName: String = "zimName", zimFilePath: String = "zimFilePath", bookmarkUrl: String = "bookmarkUrl", favicon: String = "favicon" )</ID>
     <ID>LongParameterList:Repository.kt$Repository$( @param:IO private val io: Scheduler, @param:MainThread private val mainThread: Scheduler, private val bookDao: NewBookDao, private val bookmarksDao: NewBookmarksDao, private val historyDao: HistoryDao, private val languageDao: NewLanguagesDao, private val recentSearchDao: NewRecentSearchDao, private val zimReaderContainer: ZimReaderContainer )</ID>
     <ID>LongParameterList:ToolbarScrollingKiwixWebView.kt$ToolbarScrollingKiwixWebView$( context: Context, callback: WebViewCallback, attrs: AttributeSet, nonVideoView: ViewGroup, videoView: ViewGroup, webViewClient: CoreWebViewClient, private val toolbarView: View, private val bottomBarView: View, sharedPreferenceUtil: SharedPreferenceUtil, private val parentNavigationBar: View? = null )</ID>
-    <ID>MagicNumber:ArticleCount.kt$ArticleCount$1000.0</ID>
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
     <ID>MagicNumber:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$100</ID>
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
@@ -29,11 +31,15 @@
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
     <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$8</ID>
-    <ID>NestedBlockDepth:FileUtils.kt$FileUtils$deleteZimFile</ID>
-    <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$getBitmapFromView</ID>
-    <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$loadICUData</ID>
-    <ID>NestedBlockDepth:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$onFling</ID>
-    <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$canWrite</ID>
+    <ID>MatchingDeclarationName:PageTestHelpers.kt$PageImpl : Page</ID>
+    <ID>MaxLineLength:BookUtilsTest.kt$BookUtilsTest$// this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest</ID>
+    <ID>MaxLineLength:MetaLinkNetworkEntityTest.kt$MetaLinkNetworkEntityTest$"http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"</ID>
+    <ID>MaxLineLength:NetworkUtilsTest.kt$NetworkUtilsTest$// Here the Method should return the substring between the first '?' character and the nearest '/' character preceeding it</ID>
+    <ID>NestedBlockDepth:FileUtils.kt$FileUtils$@JvmStatic @Synchronized fun deleteZimFile(path: String)</ID>
+    <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
+    <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$private fun loadICUData(context: Context): String?</ID>
+    <ID>NestedBlockDepth:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
+    <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$// Amazingly file.canWrite() does not always return the correct value private fun canWrite(file: File): Boolean</ID>
     <ID>PackageNaming:ArticleCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:BookOnDiskDelegate.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
     <ID>PackageNaming:BooksOnDiskAdapter.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
@@ -45,7 +51,7 @@
     <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:SelectionMode.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File&gt;</ID>
+    <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File></ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun hasPart(file: File): Boolean</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
@@ -68,5 +74,5 @@
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Mb = Kb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Pb = Tb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Tb = Gb * 1024</ID>
-  </Whitelist>
+  </CurrentIssues>
 </SmellBaseline>

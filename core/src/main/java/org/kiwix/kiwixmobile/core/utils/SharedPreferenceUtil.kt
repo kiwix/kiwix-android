@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
@@ -27,6 +28,7 @@ import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.Companion.from
+import org.kiwix.kiwixmobile.core.R
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -69,6 +71,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefExternalLinkPopup: Boolean
     get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
 
+  val isPlayStoreBuild: Boolean
+    get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
+
   val prefLanguage: String
     get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
 
@@ -76,11 +81,19 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
       return when {
-        storage == null -> defaultStorage().also(::putPrefStorage)
-        !File(storage).exists() -> defaultStorage()
+        storage == null -> getPublicDirectoryPath(defaultStorage()).also {
+          putPrefStorage(it)
+          putStoragePosition(0)
+        }
+        !File(storage).exists() -> getPublicDirectoryPath(defaultStorage()).also {
+          putStoragePosition(0)
+        }
         else -> storage
       }
     }
+
+  val storagePosition: Int
+    get() = sharedPreferences.getInt(STORAGE_POSITION, 0)
 
   private fun defaultStorage(): String =
     getExternalFilesDirs(context, null)[0]?.path
@@ -106,6 +119,14 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
     _prefStorages.onNext(storage)
+  }
+
+  fun putStoragePosition(pos: Int) {
+    sharedPreferences.edit { putInt(STORAGE_POSITION, pos) }
+  }
+
+  fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
+    sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }
   }
 
   fun putPrefFullScreen(fullScreen: Boolean) =
@@ -160,10 +181,23 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       _textZooms.offer(textZoom)
     }
 
+  fun getPublicDirectoryPath(path: String): String =
+    if (isPlayStoreBuild)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        path
+      else
+        path.substringBefore(context.getString(R.string.android_directory_seperator))
+    else
+      path.substringBefore(context.getString(R.string.android_directory_seperator))
+
+  fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
+    isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
     const val PREF_STORAGE = "pref_select_folder"
+    const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"
@@ -180,5 +214,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
     private const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
+    private const val IS_PLAY_STORE_BUILD = "is_play_store_build"
   }
 }

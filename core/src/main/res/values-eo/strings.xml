@@ -190,7 +190,7 @@
   <string name="ext_storage_permission_not_granted">Eraro: Permeso pri konservejo mankas</string>
   <string name="notes_deletion_successful">La tuta dosierujo da notoj foriĝis</string>
   <string name="notes_deletion_unsuccessful">Iuj dosieroj ne foriĝis</string>
-  <string name="books_count">%d libro(j)</string>
+  <string name="books_count">\%d libro(j)</string>
   <string name="connection_failed">Konektado fiaskis</string>
   <string name="your_device">Via Aparato:</string>
   <string name="nearby_devices">PROKSIMAJ APARATOJ</string>

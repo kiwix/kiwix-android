@@ -35,6 +35,7 @@
   <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an\'ity karazan-drakitra ity</string>
   <string name="no_section_info" fuzzy="true">Tsy misy loham-botoatiny hita</string>
   <string name="request_storage" fuzzy="true">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>
+  <string name="pref_permission">Alalana</string>
   <string name="bookmark_added">Mari-boky nampiana</string>
   <string name="rate_dialog_title">Omeo naoty izahay azafady</string>
   <string name="rate_dialog_msg_1">Raha tianao ny mampiasa</string>
@@ -46,4 +47,6 @@
   <string name="pref_newtab_background_summary">Rehefa manokatra vakizoro dia hosokafany any aoriana</string>
   <string name="library">Tahirim-boky</string>
   <string name="no_bookmarks" fuzzy="true">Tsy misy marika</string>
+  <string name="allowed">Mahazo alalana</string>
+  <string name="not_allowed">Tsy mahazo alalana</string>
 </resources>

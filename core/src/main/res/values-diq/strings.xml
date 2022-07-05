@@ -51,6 +51,7 @@
   <string name="start_server_label">Serveri serkewtış</string>
   <string name="stop_server_label">Serveri vındardış</string>
   <string name="server_started_message">Seba resayışê serverê %s re browseri rê ena adresê ip cı kerê</string>
+  <string name="share_host_address">URL\'yi be aplikasyonanê binan ra bare ke</string>
   <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye.</string>
   <string name="zim_not_opened">Dosyay Zimi nêabiyena</string>
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>
@@ -75,6 +76,7 @@
   <string name="pref_clear_all_history_title">verore cı besterne</string>
   <string name="pref_clear_all_history_summary">Cıgeyrayışê peyêni u Verocê tavaya bıesterne</string>
   <string name="pref_notes">Noti</string>
+  <string name="pref_permission">Desturi</string>
   <string name="all_history_cleared">Tarix pêro biyo pak</string>
   <string name="pref_clear_all_bookmarks_title">Bookmarka pak kerê</string>
   <string name="clear_all_history_dialog_title">Verori pêro wa pak kerê?</string>
@@ -107,7 +109,7 @@
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Online</string>
   <string name="library">Kıtıbxane</string>
-  <string name="delete_zim_body">Dosyay zim\'ê cêrêni do bıesteriyê:\n\n\n%s</string>
+  <string name="delete_zim_body">Dosyay zim\'ê cêrêni do bıesteriyê:\n\n\%s</string>
   <string name="delete_zims_toast">Dosyay hewl esteriyayê</string>
   <string name="no_files_here">Tiya dosyeyi çıniyê</string>
   <string name="download_no_space">Serba ronayışi rê ca bes niyo.</string>
@@ -220,7 +222,7 @@
   <string name="ext_storage_permission_not_granted">Xeta:Mısadey depoyi nêdeyayo</string>
   <string name="notes_deletion_successful">Klasorê notan pêroy esteriyay</string>
   <string name="notes_deletion_unsuccessful">Tat dosyay nêesreriyayê</string>
-  <string name="books_count">%d book(s)</string>
+  <string name="books_count">\%d book(s)</string>
   <string name="discovery_initiated">Kaşır serneyayo</string>
   <string name="discovery_failed">Kaşır nêşayo</string>
   <string name="severe_loss_error">Xetaya gıran! WiFi P2P\'yi Dewre ra vec/Retnanaltiv kerê bıcerrebnê</string>
@@ -233,11 +235,11 @@
   <string name="discovery_needs_location">Servisê mehali taypêyi nêvineyênê</string>
   <string name="request_enable_wifi">WiFi P2P\'yi eyaranê sistemi ra aktiv ke</string>
   <string name="discovery_needs_wifi">WiFi AKERDE nêbo se tekê cı keşf nêbeno</string>
-  <string name="transfer_to">%s ya wa dosya transfer vo?</string>
+  <string name="transfer_to">\%s ya wa dosya transfer vo?</string>
   <string name="device_not_cooperating">Weçineyaye cihazo seba transferi piya nêguriyeno</string>
   <string name="file_transfer_complete">Transferê dosya biyo temam</string>
   <string name="error_during_transfer">Çerğa transferi de yew xeta veciyê</string>
-  <string name="error_transferring">Dosyay %s transfer kerdış de xeta veciyê</string>
+  <string name="error_transferring">Dosyay \%s transfer kerdış de xeta veciyê</string>
   <string name="get_content_from_nearby_device">Cihazê nezdiy ra zerrek bıgêrê</string>
   <string name="search_for_peers">Zey pêyan cıgeyre</string>
   <string name="your_device">Cihazê Şıma:</string>
@@ -249,7 +251,7 @@
   <string name="status">Weziyet</string>
   <string name="pref_clear_all_notes_summary">Meqaleya pêroyın de nota pêroyın pak ke</string>
   <string name="pref_clear_all_notes_title">Nota pêroyın pak ke</string>
-  <string name="pref_text_zoom_summary">Ebatê metin  %25 zeydnayışana bıvurnê</string>
+  <string name="pref_text_zoom_summary">Ebatê metin  \%25 zeydnayışana bıvurnê</string>
   <string name="tag_pic">Resım</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Teyna metin</string>
@@ -283,4 +285,5 @@
   <string name="close_drawer">Antergey bıqefelne</string>
   <string name="how_to_update_content">Zerrek seni rocane beno?</string>
   <string name="update_content_description">Seba rocane kerdışê zerreki (yu dosyay zimi), etni zerrekiya versiyonê tewr peyêni ronayış ganiyo. Ney kışta ronayışi ra şenê bıkerê.</string>
+  <string name="not_allowed">Mısade nêdiyayo</string>
 </resources>

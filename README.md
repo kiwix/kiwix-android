@@ -1,4 +1,4 @@
-<img src="https://github.com/kiwix/kiwix-android/blob/develop/Kiwix_icon_transparent_512x512.png" align="right" height='250' />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Kiwix_logo_v3.svg/512px-Kiwix_logo_v3.svg.png" align="right" height='250' />
 <a href="https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile" target="_blank" align="left">
   <img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" />
 </a>
@@ -80,7 +80,7 @@ Available communication channels:
 * [Web Public Chat channel](https://chat.kiwix.org)
 * [Email](mailto:contact+android@kiwix.org)
 * [Mailing list](mailto:kiwix-developer@lists.sourceforge.net)
-* [Slack](https://kiwixoffline.slack.com): #android channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/enQtOTUyMTg4NzMxMTM4LTU0MzYyZDliYjdmMDYzYWMzNDA0MDc4MWE5OGM0ODFhYjAxNWIxMjVjZTU4MTkyODJlZWFkMmQ2YTZkYTUzZDY)
+* [Slack](https://kiwixoffline.slack.com): #android channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/zt-19s7tsi68-xlgHdmDr5c6MJ7uFmJuBkg)
 * IRC: #kiwix on irc.freenode.net
 
 For more information, please refer to

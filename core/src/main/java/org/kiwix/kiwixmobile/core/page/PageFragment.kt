@@ -102,9 +102,11 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     inflater.inflate(R.menu.menu_page, menu)
     val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
     search.queryHint = searchQueryHint
-    search.setOnQueryTextListener(SimpleTextListener {
-      pageViewModel.actions.offer(Action.Filter(it))
-    })
+    search.setOnQueryTextListener(
+      SimpleTextListener {
+        pageViewModel.actions.offer(Action.Filter(it))
+      }
+    )
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -139,11 +141,13 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
 
     // hides keyboard when scrolled
-    recycler_view.addOnScrollListener(SimpleRecyclerViewScrollListener { _, newState ->
-      if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-        recycler_view.closeKeyboard()
+    recycler_view.addOnScrollListener(
+      SimpleRecyclerViewScrollListener { _, newState ->
+        if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+          recycler_view.closeKeyboard()
+        }
       }
-    })
+    )
   }
 
   override fun onCreateView(

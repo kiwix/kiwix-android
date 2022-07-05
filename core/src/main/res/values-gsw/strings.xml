@@ -92,7 +92,7 @@
   <string name="speech_not_supported">Exgüse, öies Grät unterstützt ke Spraachiigaab!</string>
   <string name="local_zims">Grät</string>
   <string name="library">Bibliothek</string>
-  <string name="delete_zim_body">Diä folgendä zim Dateiä wärde glöscht: %s</string>
+  <string name="delete_zim_body">Diä folgendä zim Dateiä wärde glöscht:\n\n\%s</string>
   <string name="delete_zims_toast">Dateiä erfolgriich glöscht</string>
   <string name="no_files_here">Hie hets ke Dateiä</string>
   <string name="download_no_space">Nid gnüegend Spiicherplatz um abezladä.</string>
@@ -165,11 +165,11 @@
   <string name="note_share_error_file_missing">Diä Notiz Datei gits nid</string>
   <string name="delete_notes_confirmation_msg">Aui Notizä lösche?</string>
   <string name="notes_deletion_unsuccessful">Gwüssi Dateiä si nid glöscht worde</string>
-  <string name="books_count">%d Buech/Büecher</string>
+  <string name="books_count">\%d Buech/Büecher</string>
   <string name="connection_failed">Verbindig fählgschlagä</string>
   <string name="file_transfer_complete">Dateiübertragig abgschlossä</string>
   <string name="error_during_transfer">Es isch ä Fähler passiert während dr Übertragig</string>
-  <string name="error_transferring">Fähler bim Übertrage vor Datei %s</string>
+  <string name="error_transferring">Fähler bim Übertrage vor Datei \%s</string>
   <string name="preparing_files">Dateiä am Vorbereitä für d\'Übertragig…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_title">Alli Notizä lösche</string>

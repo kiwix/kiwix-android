@@ -66,7 +66,8 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
           InetSocketAddress(
             groupInfo.groupOwnerAddress.hostAddress,
             PEER_HANDSHAKE_PORT
-          ), 15000
+          ),
+          15000
         )
         val objectOutputStream = ObjectOutputStream(client.getOutputStream())
         // Send message for the peer device to verify

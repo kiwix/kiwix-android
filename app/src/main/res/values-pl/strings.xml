@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Strebski
 * WaldiSt
 -->
 <resources>
@@ -8,4 +9,5 @@
   <string name="cannot_open_file">Nie można otworzyć pliku\nSpróbuj wyszukać ten plik na karcie Urządzenia twojej biblioteki</string>
   <string name="send_files_title">Wyślij pliki</string>
   <string name="receive_files_title">Odbierz pliki</string>
+  <string name="no_app_found_to_open">Nie znaleziono aplikacji do wybrania pliku zim!</string>
 </resources>

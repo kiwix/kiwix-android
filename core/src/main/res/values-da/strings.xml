@@ -146,7 +146,7 @@
   <string name="close_all_tabs">Luk alle faner</string>
   <string name="running_state">I gang</string>
   <string name="save">Gem</string>
-  <string name="books_count">%d bog/bøger</string>
+  <string name="books_count">\%d bog/bøger</string>
   <string name="your_device">Din enhed:</string>
   <string name="tag_pic">Billede</string>
   <string name="tag_vid">Video</string>

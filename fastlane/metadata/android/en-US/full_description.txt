@@ -1,0 +1,5 @@
+<i>Kiwix</i> lets you read Wikipedia and other websites without an Internet connection. It uses the highly compressed <a href="https://www.openzim.org/">ZIM format</a> to store webpages for quick and easy reading.
+
+The app is a lightweight piece of software reading bigger files stored on your device or SD card: once it is installed, you can select which additional content you would like to download (Wikipedia, Wiktionary, TED talks, etc.) and be ready for when your internet connection is bad (or need to be in airplane mode)!
+
+<b>Note:</b> <i>Kiwix</i> is also available on regular computers (Windows, Mac, Linux).

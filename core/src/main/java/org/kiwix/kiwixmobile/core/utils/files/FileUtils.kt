@@ -17,19 +17,28 @@
  */
 package org.kiwix.kiwixmobile.core.utils.files
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
+import android.widget.Toast
+import androidx.documentfile.provider.DocumentFile
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
-import java.util.ArrayList
 
 object FileUtils {
 
@@ -98,6 +107,11 @@ object FileUtils {
 
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
+        }
+        return try {
+          "${getSdCardMainPath(context)}/${documentId[1]}"
+        } catch (ignore: Exception) {
+          null
         }
       } else if ("com.android.providers.downloads.documents" == uri.authority)
         return try {
@@ -227,5 +241,108 @@ object FileUtils {
       .use(BufferedReader::readText)
   } catch (e: IOException) {
     "".also { e.printStackTrace() }
+  }
+
+  @JvmStatic fun isValidZimFile(filePath: String): Boolean =
+    filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
+
+  @JvmStatic fun getSdCardMainPath(context: Context): String =
+    "${context.getExternalFilesDirs("")[1]}"
+      .substringBefore(context.getString(R.string.android_directory_seperator))
+
+  @SuppressLint("WrongConstant")
+  @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String? {
+    val uri: Uri? = data.data
+    val takeFlags: Int = data.flags and (
+      Intent.FLAG_GRANT_READ_URI_PERMISSION
+        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      )
+    uri?.let {
+      activity.grantUriPermission(
+        activity.packageName, it,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      )
+      activity.contentResolver.takePersistableUriPermission(it, takeFlags)
+
+      val dFile = DocumentFile.fromTreeUri(activity, it)
+      if (dFile != null) {
+        dFile.uri.path?.let { file ->
+          val originalPath = file.substring(
+            file.lastIndexOf(":") + 1
+          )
+          val path = "${activity.getExternalFilesDirs("")[1]}"
+          return@getPathFromUri path.substringBefore(
+            activity.getString(R.string.android_directory_seperator)
+          )
+            .plus(File.separator).plus(originalPath)
+        }
+      }
+      activity.toast(
+        activity.resources
+          .getString(R.string.system_unable_to_grant_permission_message),
+        Toast.LENGTH_SHORT
+      )
+    } ?: run {
+      activity.toast(
+        activity.resources
+          .getString(R.string.system_unable_to_grant_permission_message),
+        Toast.LENGTH_SHORT
+      )
+    }
+    return null
+  }
+
+  /**
+   * Returns the file name from the url or src. In url it gets the file name from the last '/' and
+   * if it contains '.'. If the url is null then it'll get the file name from the last '/'.
+   * If the url and src doesn't exist it returns the empty string.
+   */
+  fun getDecodedFileName(url: String?, src: String?): String =
+    url?.substringAfterLast("/", "")
+      ?.takeIf { it.contains(".") }
+      ?: src?.substringAfterLast("/", "")
+        ?.substringAfterLast("%3A") ?: ""
+
+  @JvmStatic fun downloadFileFromUrl(
+    url: String?,
+    src: String?,
+    zimReaderContainer: ZimReaderContainer,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ): File? {
+    val fileName = getDecodedFileName(url, src)
+    var root: File? = null
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
+        root = CoreApp.instance.externalMediaDirs[0]
+      }
+    } else {
+      root =
+        File(
+          "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+            "/org.kiwix"
+        )
+      if (!root.exists()) root.mkdir()
+    }
+    if (File(root, fileName).exists()) return File(root, fileName)
+    val fileToSave = sequence {
+      yield(File(root, fileName))
+      yieldAll(
+        generateSequence(1) { it + 1 }.map {
+          File(
+            root, fileName.replace(".", "_$it.")
+          )
+        }
+      )
+    }.first { !it.exists() }
+    val source = if (url == null) Uri.parse(src) else Uri.parse(url)
+    return try {
+      zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
+        fileToSave.outputStream().use(inputStream::copyTo)
+      }
+      fileToSave
+    } catch (e: IOException) {
+      Log.w("kiwix", "Couldn't save file", e)
+      null
+    }
   }
 }
