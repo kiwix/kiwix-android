@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Besnik b
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Sistemi juaj i kartelave nuk mbulon kartela mbi 4GB</string>
+  <string name="detecting_file_system">Po shihet nëse sistemi i kartelave mund të krijojë kartela 4GB</string>
+  <string name="cannot_open_file">S’u arrit të hapej kartela\nJu lutemi, provoni të shihni për këtë kartelë te Skeda Pajisje e Bibliotekës tuaj</string>
+  <string name="send_files_title">Dërgoni Kartela</string>
+  <string name="receive_files_title">Merrni Kartela</string>
+</resources>

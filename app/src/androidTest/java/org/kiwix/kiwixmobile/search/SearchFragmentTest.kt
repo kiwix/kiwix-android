@@ -18,7 +18,7 @@
 package org.kiwix.kiwixmobile.search
 
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest

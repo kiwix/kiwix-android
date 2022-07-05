@@ -58,16 +58,19 @@ class KiwixTextToSpeech internal constructor(
   private val focusLock: Any = Any()
   private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
   @JvmField var currentTTSTask: TTSTask? = null
-  private val tts: TextToSpeech = TextToSpeech(instance, OnInitListener { status: Int ->
-    if (status == SUCCESS) {
-      Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
-      this.isInitialized = true
-      onInitSucceedListener.onInitSucceed()
-    } else {
-      Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
-      context.toast(R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT)
+  private val tts: TextToSpeech = TextToSpeech(
+    instance,
+    OnInitListener { status: Int ->
+      if (status == SUCCESS) {
+        Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
+        this.isInitialized = true
+        onInitSucceedListener.onInitSucceed()
+      } else {
+        Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
+        context.toast(R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT)
+      }
     }
-  })
+  )
 
   /**
    * Returns whether the TTS is initialized.
@@ -139,7 +142,7 @@ class KiwixTextToSpeech internal constructor(
         Array.prototype.forEach.call(toRemove, function(elem) {    
           elem.parentElement.removeChild(elem);});
         tts.speakAloud(body.innerText);
-        """.trimIndent()
+      """.trimIndent()
     )
   }
 

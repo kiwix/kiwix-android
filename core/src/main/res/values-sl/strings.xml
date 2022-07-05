@@ -53,6 +53,7 @@
   <string name="share">Deli</string>
   <string name="selected_file_cab_app_chooser_title">Deli ZIM datoteke z:</string>
   <string name="delete">Odstrani</string>
+  <string name="cancel">Prekliči</string>
   <string name="delete_specific_search_toast">Zadnje iskanje je bilo odstranjeno</string>
   <string name="hint_contents_drawer_message">Za ogled vsebine tega članka lahko povlecite v levo</string>
   <string name="got_it">Razumem</string>

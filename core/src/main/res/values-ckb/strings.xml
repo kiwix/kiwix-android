@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Aram
 * Arya sarhan
 * Cwtiyar
 * Hzr115
@@ -73,7 +74,7 @@
   <string name="local_zims">ئامێر</string>
   <string name="remote_zims">سەرھێڵ</string>
   <string name="library">کتێبخانە</string>
-  <string name="delete_zim_body" fuzzy="true">لابردنی %s</string>
+  <string name="delete_zim_body" fuzzy="true">لابردنی \%s</string>
   <string name="delete_zims_toast">پەڕگە سڕدرایەوە</string>
   <string name="no_files_here">ھیچ پەڕگەیەک لێرە نییە</string>
   <string name="download">داگرتن</string>
@@ -109,7 +110,7 @@
   <string name="no_items_msg">ھیچ بڕگەیەک بەردەست نییە</string>
   <string name="crash_checkbox_language">ڕێکخستنەکانی زمانەکەت</string>
   <string name="crash_checkbox_logs">لۆگەکانی ئەپلیکەیشن</string>
-  <string name="shortcut_disabled_message">ناوبڕ بەردەست نییە</string>
+  <string name="shortcut_disabled_message">قەدبڕ بەردەست نییە</string>
   <string name="new_tab_shortcut_label">تابی نوێ</string>
   <string name="articleCount">%s وتار</string>
   <string name="get_started">دەست پێ بکە</string>
@@ -145,9 +146,9 @@
   <string name="notes_deletion_unsuccessful">ھەندێک پەڕگە نەسڕدرانەوە</string>
   <string name="discovery_failed">دۆزینەوە شکستی ھێنا</string>
   <string name="connection_failed">پەیوەستکردن شکستی ھێنا</string>
-  <string name="transfer_to">گواستنەوەی پەڕگەکان بۆ %s</string>
+  <string name="transfer_to">گواستنەوەی پەڕگەکان بۆ \%s</string>
   <string name="file_transfer_complete">گواستنەوەی پەڕگە تەواو</string>
-  <string name="error_transferring">ھەڵەی گواستنەوەی پەڕگە %s</string>
+  <string name="error_transferring">ھەڵەی گواستنەوەی پەڕگە \%s</string>
   <string name="your_device">ئامێرەکەت:</string>
   <string name="files_for_transfer">پەڕگەکان بۆ گواستنەوە</string>
   <string name="status">ڕەوش</string>

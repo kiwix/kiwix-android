@@ -1,0 +1,1 @@
+Lector de Wikipedia sin conexión

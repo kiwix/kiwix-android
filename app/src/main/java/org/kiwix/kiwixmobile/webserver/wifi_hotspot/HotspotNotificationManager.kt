@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.webserver.wifi_hotspot
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -38,18 +39,20 @@ class HotspotNotificationManager @Inject constructor(
 
   private fun hotspotNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      notificationManager.createNotificationChannel(NotificationChannel(
-        HOTSPOT_SERVICE_CHANNEL_ID,
-        context.getString(R.string.hotspot_service_channel_name),
-        NotificationManager.IMPORTANCE_DEFAULT
-      ).apply {
-        description = context.getString(R.string.hotspot_channel_description)
-        setSound(null, null)
-      })
+      notificationManager.createNotificationChannel(
+        NotificationChannel(
+          HOTSPOT_SERVICE_CHANNEL_ID,
+          context.getString(R.string.hotspot_service_channel_name),
+          NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+          description = context.getString(R.string.hotspot_channel_description)
+          setSound(null, null)
+        }
+      )
     }
   }
 
-  fun buildForegroundNotification(): Notification {
+  @SuppressLint("UnspecifiedImmutableFlag") fun buildForegroundNotification(): Notification {
     val contentIntent = NavDeepLinkBuilder(context).setComponentName(
       KiwixMainActivity::class.java
     )

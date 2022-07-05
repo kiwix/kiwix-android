@@ -99,7 +99,7 @@
   <string name="local_zims">Preséu</string>
   <string name="remote_zims">En llinia</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Van desaniciase los  ficheros zim siguientes:\n\n%s</string>
+  <string name="delete_zim_body">Van desaniciase los  ficheros zim siguientes:\n\n\%s</string>
   <string name="delete_zims_toast">Los ficheros desaniciáronse correutamente</string>
   <string name="no_files_here">Nun hai nengún ficheru equí</string>
   <string name="download_no_space">Nun hai espaciu abondo pa descargar.</string>
@@ -212,7 +212,7 @@
   <string name="ext_storage_permission_not_granted">Error: nun se concedió\'l permisu d\'almacenamientu</string>
   <string name="notes_deletion_successful">Desanicióse la carpeta de notes completa</string>
   <string name="notes_deletion_unsuccessful">Nun se desaniciaron dellos ficheros</string>
-  <string name="books_count">%d llibros</string>
+  <string name="books_count">\%d llibros</string>
   <string name="discovery_initiated">Discovery aniciáu</string>
   <string name="discovery_failed">Discovery falló</string>
   <string name="severe_loss_error">¡Fallu importante! Tenta desactivar/volver a activar el P2P de la WiFi</string>
@@ -224,11 +224,11 @@
   <string name="discovery_needs_location">Nun puen descubrise pares ensin servicios d\'allugamientu</string>
   <string name="request_enable_wifi">Activa los servicios ente pares (P2P) de la WiFi na configuración del sistema</string>
   <string name="discovery_needs_wifi">Nun puen descubrise pares ensin la WiFi ACTIVADA</string>
-  <string name="transfer_to">¿Tresferir ficheros a %s?</string>
+  <string name="transfer_to">¿Tresferir ficheros a \%s?</string>
   <string name="device_not_cooperating">El preséu seleicionáu nun ta cooperando cola tresferencia</string>
   <string name="file_transfer_complete">Tresferencia del ficheru completada</string>
   <string name="error_during_transfer">Alcontróse un error demientres la tresferencia</string>
-  <string name="error_transferring">Error al tresferir el ficheru %s</string>
+  <string name="error_transferring">Error al tresferir el ficheru \%s</string>
   <string name="get_content_from_nearby_device">Recibir conteníu d\'un preséu cercanu</string>
   <string name="search_for_peers">Buscar Pares</string>
   <string name="your_device">El to Preséu:</string>

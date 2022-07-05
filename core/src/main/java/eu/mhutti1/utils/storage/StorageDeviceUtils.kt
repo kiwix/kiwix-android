@@ -33,7 +33,7 @@ object StorageDeviceUtils {
   @JvmStatic
   fun getReadableStorage(context: Context): List<StorageDevice> {
     val storageDevices = ArrayList<StorageDevice>().apply {
-      add(environmentDevices())
+      add(environmentDevices(context))
       addAll(externalMountPointDevices())
       addAll(externalFilesDirsDevices(context, false))
     }
@@ -63,9 +63,9 @@ object StorageDeviceUtils {
       ?.map { dir -> StorageDevice(dir, false) }
       .orEmpty()
 
-  private fun environmentDevices() =
+  private fun environmentDevices(context: Context) =
     StorageDevice(
-      generalisePath(Environment.getExternalStorageDirectory().path, false),
+      generalisePath(context.getExternalFilesDir("").toString(), true),
       Environment.isExternalStorageEmulated()
     )
 

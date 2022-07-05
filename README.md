@@ -1,4 +1,4 @@
-<img src="https://github.com/kiwix/kiwix-android/blob/develop/Kiwix_icon_transparent_512x512.png" align="right" height='250' />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Kiwix_logo_v3.svg/512px-Kiwix_logo_v3.svg.png" align="right" height='250' />
 <a href="https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile" target="_blank" align="left">
   <img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" />
 </a>
@@ -17,11 +17,13 @@ Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
 pieces in Java).
 
 [![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Adevelop+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ANightly+branch%3Adevelop)
+[![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
 [![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://kiwixoffline.slack.com)
+[![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
 
 ## Build Instructions
 
@@ -78,7 +80,7 @@ Available communication channels:
 * [Web Public Chat channel](https://chat.kiwix.org)
 * [Email](mailto:contact+android@kiwix.org)
 * [Mailing list](mailto:kiwix-developer@lists.sourceforge.net)
-* [Slack](https://kiwixoffline.slack.com): #android channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/enQtOTUyMTg4NzMxMTM4LTU0MzYyZDliYjdmMDYzYWMzNDA0MDc4MWE5OGM0ODFhYjAxNWIxMjVjZTU4MTkyODJlZWFkMmQ2YTZkYTUzZDY)
+* [Slack](https://kiwixoffline.slack.com): #android channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/zt-19s7tsi68-xlgHdmDr5c6MJ7uFmJuBkg)
 * IRC: #kiwix on irc.freenode.net
 
 For more information, please refer to

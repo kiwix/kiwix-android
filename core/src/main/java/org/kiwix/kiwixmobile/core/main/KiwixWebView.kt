@@ -20,12 +20,9 @@ package org.kiwix.kiwixmobile.core.main
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.net.Uri
-import android.os.Environment
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
-import android.util.Log
 import android.view.ContextMenu
 import android.view.View
 import android.view.ViewGroup
@@ -40,8 +37,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import java.io.File
-import java.io.IOException
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import javax.inject.Inject
 
 private const val INITIAL_SCALE = 100
@@ -115,7 +111,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val saveMenu =
         menu.add(0, 1, 0, resources.getString(R.string.save_media))
       saveMenu.setOnMenuItemClickListener {
-        val msg = SaveHandler(zimReaderContainer).obtainMessage()
+        val msg = SaveHandler(zimReaderContainer, sharedPreferenceUtil).obtainMessage()
         requestFocusNodeHref(msg)
         true
       }
@@ -145,39 +141,22 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     callback.webViewPageChanged(page, pages)
   }
 
-  internal class SaveHandler(private val zimReaderContainer: ZimReaderContainer) :
+  internal class SaveHandler(
+    private val zimReaderContainer: ZimReaderContainer,
+    private val sharedPreferenceUtil: SharedPreferenceUtil
+  ) :
     Handler() {
-    private fun getDecodedFileName(url: String?, src: String?): String =
-      url?.substringAfterLast("/", "")
-        ?.takeIf { it.contains(".") }
-        ?: src?.substringAfterLast("/", "")
-          ?.substringAfterLast("%3A") ?: ""
 
     @SuppressWarnings("NestedBlockDepth")
     override fun handleMessage(msg: Message) {
       val url = msg.data["url"] as? String
       val src = msg.data["src"] as? String
       if (url != null || src != null) {
-        val fileName = getDecodedFileName(url, src)
-        var root =
-          Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        if (instance.externalMediaDirs.isNotEmpty()) {
-          root = instance.externalMediaDirs[0]
-        }
-        val fileToSave = sequence {
-          yield(File(root, fileName))
-          yieldAll(generateSequence(1) { it + 1 }.map {
-            File(root, fileName.replace(".", "_$it."))
-          })
-        }.first { !it.exists() }
-        val source = Uri.parse(src)
-        try {
-          zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
-            fileToSave.outputStream().use { inputStream.copyTo(it) }
-          }
-          instance.toast(instance.getString(R.string.save_media_saved, fileToSave.name))
-        } catch (e: IOException) {
-          Log.w("kiwix", "Couldn't save image", e)
+        val savedFile =
+          FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
+        savedFile?.let {
+          instance.toast(instance.getString(R.string.save_media_saved, it.name))
+        } ?: run {
           instance.toast(R.string.save_media_error)
         }
       }

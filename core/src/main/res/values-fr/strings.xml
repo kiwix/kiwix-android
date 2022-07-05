@@ -4,8 +4,10 @@
 * Derugon
 * Djiboun
 * Eneelk
+* Eneelktransfer_to
 * Fitoschido
 * Gomoko
+* I'm mender
 * Kelson
 * Stephane
 * The RedBurn
@@ -62,29 +64,32 @@
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
   <string name="share_host_address">Partager l’URL avec d’autres applications</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
+  <string name="unable_to_read_zim_file">Impossible de lire ce fichier ZIM !</string>
   <string name="zim_not_opened">Impossible d’ouvrir le fichier zim</string>
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
   <string name="error_article_url_not_found">Erreur : le chargement de l’article (URL : %1$s) a échoué.</string>
   <string name="pref_display_title">Affichage</string>
-  <string name="pref_info_title">Information</string>
+  <string name="pref_info_title">Informations</string>
   <string name="pref_info_version">Version</string>
   <string name="pref_night_mode">Mode nocturne</string>
   <string name="pref_night_mode_summary">Afficher les articles en couleurs inversées</string>
-  <string name="pref_back_to_top">Retourner au début</string>
+  <string name="pref_back_to_top">Retour en haut</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir au début</string>
   <string name="pref_language_title">Langue</string>
-  <string name="pref_language_chooser">Choisir une langue</string>
+  <string name="pref_language_chooser">Choisissez une langue</string>
   <string name="pref_credits">Contributeurs et licences</string>
   <string name="pref_credits_title">Remerciements</string>
   <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge ou les données linguistiques appropriées n’ont pas été installées. L’article risque d’être difficile à lire.</string>
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
+  <string name="request_write_storage">Télécharger des fichiers ZIM nécessite l’accès en écriture à votre stockage local.</string>
   <string name="clear_recent_and_tabs_history_dialog">Êtes-vous sûr de vouloir supprimer votre historique de recherche et de réinitialiser tous les onglets actifs ?</string>
   <string name="delete_recent_search_item">Supprimer cet élément ?</string>
   <string name="pref_clear_all_history_title">Effacer l’historique</string>
   <string name="pref_clear_all_history_summary">Effacer les recherches récentes et l’historique des onglets</string>
   <string name="pref_notes">Notes</string>
+  <string name="pref_permission">Droits</string>
   <string name="all_history_cleared">Tout l’historique est effacé</string>
   <string name="pref_clear_all_bookmarks_title">Supprimer les marque-pages</string>
   <string name="clear_all_history_dialog_title">Effacer tout l’historique ?</string>
@@ -117,7 +122,7 @@
   <string name="local_zims">Appareil</string>
   <string name="remote_zims">En ligne</string>
   <string name="library">Bibliothèque</string>
-  <string name="delete_zim_body">Le ou les fichiers zim suivants seront supprimés :\n\n%s</string>
+  <string name="delete_zim_body">Le ou les fichiers zim suivants seront supprimés :\n\n\%s</string>
   <string name="delete_zims_toast">Les fichiers ont bien été supprimés</string>
   <string name="no_files_here">Aucun fichier ici</string>
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
@@ -230,7 +235,7 @@
   <string name="ext_storage_permission_not_granted">Erreur : permissions de stockage non accordées</string>
   <string name="notes_deletion_successful">Dossier entier de notes supprimé</string>
   <string name="notes_deletion_unsuccessful">Certains fichiers n’ont pas été supprimés</string>
-  <string name="books_count">%d livre(s)</string>
+  <string name="books_count">\%d livre(s)</string>
   <string name="discovery_initiated">Découverte lancée</string>
   <string name="discovery_failed">La découverte a échoué</string>
   <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair en WiFi</string>
@@ -243,11 +248,11 @@
   <string name="discovery_needs_location">Impossible de découvrir des pairs sans service de géolocalisation</string>
   <string name="request_enable_wifi">Activer le pair-à-pair WiFi dans les paramètres système</string>
   <string name="discovery_needs_wifi">Impossible de découvrir des pairs sans WiFi activé</string>
-  <string name="transfer_to">Transférer les fichiers vers %s ?</string>
+  <string name="transfer_to">Transférer les fichiers vers \%s ?</string>
   <string name="device_not_cooperating">L’appareil sélectionné ne coopère pas pour le transfert</string>
   <string name="file_transfer_complete">Transfert de fichier bien terminé</string>
   <string name="error_during_transfer">Une erreur est survenue durant le transfert</string>
-  <string name="error_transferring">Erreur durant le transfert du fichier %s</string>
+  <string name="error_transferring">Erreur durant le transfert du fichier \%s</string>
   <string name="get_content_from_nearby_device">Obtenir des contenus depuis un appareil à proximité</string>
   <string name="search_for_peers">Rechercher des appareils pairs</string>
   <string name="your_device">Votre appareil :</string>
@@ -255,11 +260,12 @@
   <string name="no_devices_found">Aucun appareil détecté. Tapez le bouton Rechercher pour essayer à nouveau.</string>
   <string name="files_for_transfer">FICHIERS À TRANSFÉRER</string>
   <string name="preparing_files">Préparation des fichiers pour le transfert…</string>
-  <string name="performing_handshake">Établissement de liaison en cours…</string>
+  <string name="performing_handshake">Négociation de la liaison…</string>
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>
-  <string name="pref_text_zoom_summary">Modifier la taille du texte par incrément de 25 %.</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Permettre de lire et écrire des fichiers ZIM sur la carte SD</string>
+  <string name="pref_text_zoom_summary">Modifier la taille du texte par incrément de 25 %\.</string>
   <string name="tag_pic">Image</string>
   <string name="tag_vid">Vidéo</string>
   <string name="tag_text_only">Texte seulement</string>
@@ -293,4 +299,14 @@
   <string name="close_drawer">Fermer le tiroir</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>
+  <string name="all_files_permission_needed">Tous les droits sur les fichiers sont nécessaires</string>
+  <string name="all_files_permission_needed_message">Afin d’accéder à tous les fichiers zim sur l’appareil, nous devons avoir tous les droits sur les fichiers</string>
+  <string name="allowed">Autorisé</string>
+  <string name="not_allowed">Non autorisé</string>
+  <string name="denied_internet_permission_message">Veuillez activer le Wi-Fi pour télécharger le contenu</string>
+  <string name="android_directory_seperator">/Android</string>
+  <string name="select_folder">Veuillez sélectionner un dossier pour le stockage externe.</string>
+  <string name="system_unable_to_grant_permission_message">Le système n’a pas pu accorder le droit d’accès !</string>
+  <string name="allow">Autoriser</string>
+  <string name="allow_internet_permission_message">Veuillez autoriser le droit sur Internet de télécharger le contenu.</string>
 </resources>

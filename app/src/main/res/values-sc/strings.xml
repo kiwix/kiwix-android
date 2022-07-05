@@ -8,4 +8,5 @@
   <string name="cannot_open_file">Abertura de su documentu fallida\nPro praghere proa a chircare custu documentu in s\'Ischeda de sos Dispositivos de sa Biblioteca tua</string>
   <string name="send_files_title">Imbia documentos</string>
   <string name="receive_files_title">Retzi documentos</string>
+  <string name="no_app_found_to_open">Peruna aplicatzione atzapada pro seletzionare s\'archìviu zim!</string>
 </resources>

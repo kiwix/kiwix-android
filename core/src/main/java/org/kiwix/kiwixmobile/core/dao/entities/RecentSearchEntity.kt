@@ -27,7 +27,6 @@ data class RecentSearchEntity(
   val searchTerm: String,
   val zimId: String
 ) {
-
   constructor(recentSearch: RecentSearch) : this(
     0,
     recentSearch.searchString,

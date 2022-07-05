@@ -23,8 +23,6 @@ import Libs
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
-import org.gradle.kotlin.dsl.KotlinClosure1
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
@@ -39,7 +37,7 @@ class AllProjectConfigurer {
     target.plugins.apply("kotlin-android")
     target.plugins.apply("kotlin-android-extensions")
     target.plugins.apply("kotlin-kapt")
-    target.plugins.apply("com.hiya.jacoco-android")
+    target.plugins.apply("com.dicedmelon.gradle.jacoco-android")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
     target.plugins.apply("io.gitlab.arturbosch.detekt")
     target.plugins.apply("androidx.navigation.safeargs")
@@ -75,19 +73,21 @@ class AllProjectConfigurer {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.apply {
           isReturnDefaultValues = true
-          all(KotlinClosure1<Any, Test>({
-            (this as Test).also { testTask ->
+          all {
+            it.also { testTask ->
               testTask.useJUnitPlatform()
               testTask.testLogging {
                 setEvents(setOf("passed", "skipped", "failed", "standardOut", "standardError"))
-                outputs.upToDateWhen { false }
+                testTask.outputs.upToDateWhen { false }
                 showStandardStreams = true
               }
               testTask.extensions
-                .getByType(JacocoTaskExtension::class.java)
-                .isIncludeNoLocationClasses = true
+                .getByType(JacocoTaskExtension::class.java).apply {
+                  isIncludeNoLocationClasses = true
+                  excludes = listOf("jdk.internal.*")
+                }
             }
-          }, this))
+          }
         }
       }
 
@@ -104,16 +104,18 @@ class AllProjectConfigurer {
           "CheckResult",
           "LabelFor",
           "LogConditional",
-          "ConvertToWebp"
-        )
-
-        warning(
+          "ConvertToWebp",
+          //TODO remove this when we remove jcenter from gradle
+          "JcenterRepositoryObsolete",
           "UnknownNullness",
           "SelectableText",
           "MissingTranslation",
           "IconDensities",
           "ContentDescription",
-          "IconDipSize"
+          "IconDipSize",
+          "UnusedResources",
+          "NonConstantResourceId",
+          "NotifyDataSetChanged"
         )
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
@@ -144,9 +146,11 @@ class AllProjectConfigurer {
       configureExtension<JacocoPluginExtension> { toolVersion = "0.8.7" }
       configureExtension<KtlintExtension> { android.set(true) }
       configureExtension<DetektExtension> {
+        buildUponDefaultConfig = true
+        allRules = false
+        config = target.files("${target.rootDir}/config/detekt/detekt.yml")
         baseline = project.file("detekt_baseline.xml")
       }
-
     }
   }
 
@@ -184,8 +188,7 @@ class AllProjectConfigurer {
       implementation(Libs.collection_ktx)
       implementation(Libs.butterknife)
       kapt(Libs.butterknife_compiler)
-      implementation(Libs.xfetch2)
-      implementation(Libs.xfetch2okhttp)
+      implementation(Libs.fetch)
       implementation(Libs.rxandroid)
       implementation(Libs.rxjava)
       implementation(Libs.preference_ktx)

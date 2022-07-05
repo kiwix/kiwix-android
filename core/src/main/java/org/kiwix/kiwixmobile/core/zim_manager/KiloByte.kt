@@ -27,9 +27,11 @@ inline class KiloByte(private val kilobyteString: String?) {
     get() = kilobyteString?.toLongOrNull()?.let {
       val units = arrayOf("KB", "MB", "GB", "TB")
       val conversion = (log10(it.toDouble()) / log10(1024.0)).toInt()
-      (DecimalFormat("#,##0.#")
-        .format(it / 1024.0.pow(conversion.toDouble())) +
-        " " +
-        units[conversion])
+      (
+        DecimalFormat("#,##0.#")
+          .format(it / 1024.0.pow(conversion.toDouble())) +
+          " " +
+          units[conversion]
+        )
     } ?: ""
 }

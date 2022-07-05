@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -124,15 +125,18 @@ class LanguageFragment : BaseFragment() {
     super.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.menu_language, menu)
     val search = menu.findItem(R.id.menu_language_search)
-    (search.actionView as SearchView).setOnQueryTextListener(SimpleTextListener {
-      languageViewModel.actions.offer(Filter(it))
-    })
+    (search.actionView as SearchView).setOnQueryTextListener(
+      SimpleTextListener {
+        languageViewModel.actions.offer(Filter(it))
+      }
+    )
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
       R.id.menu_language_save -> {
         languageViewModel.actions.offer(Action.SaveAll)
+        closeKeyboard()
         true
       }
       else -> super.onOptionsItemSelected(item)

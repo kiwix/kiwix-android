@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.data.local.dao
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yahoo.squidb.data.AbstractModel
 import com.yahoo.squidb.data.SquidCursor
-import com.yahoo.squidb.sql.Query
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -38,6 +37,6 @@ class RecentSearchDaoTest {
       kiwixDatabase.query(any<Class<AbstractModel>>(), any())
     } returns mockk<SquidCursor<AbstractModel>>(relaxed = true)
     RecentSearchDao(kiwixDatabase).recentSearches
-    verify { kiwixDatabase.query(any<Class<AbstractModel>>(), Query.select()) }
+    verify { kiwixDatabase.query(any<Class<AbstractModel>>(), any()) }
   }
 }

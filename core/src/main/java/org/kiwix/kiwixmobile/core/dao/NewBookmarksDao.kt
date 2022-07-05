@@ -30,9 +30,11 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import javax.inject.Inject
 
 class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDao {
-  fun bookmarks(): Flowable<List<Page>> = box.asFlowable(box.query {
-    order(BookmarkEntity_.bookmarkTitle)
-  }).map { it.map(::BookmarkItem) }
+  fun bookmarks(): Flowable<List<Page>> = box.asFlowable(
+    box.query {
+      order(BookmarkEntity_.bookmarkTitle)
+    }
+  ).map { it.map(::BookmarkItem) }
 
   override fun pages(): Flowable<List<Page>> = bookmarks()
   override fun deletePages(pagesToDelete: List<Page>) =
@@ -55,7 +57,8 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
           .or()
           .equal(BookmarkEntity_.zimName, zimFileReader?.name ?: "")
         order(BookmarkEntity_.bookmarkTitle)
-      }).map { it.map(BookmarkEntity::bookmarkUrl) }
+      }
+    ).map { it.map(BookmarkEntity::bookmarkUrl) }
       .subscribeOn(Schedulers.io())
 
   fun saveBookmark(bookmarkItem: BookmarkItem) {

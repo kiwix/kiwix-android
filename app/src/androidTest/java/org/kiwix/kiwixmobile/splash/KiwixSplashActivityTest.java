@@ -28,7 +28,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
-import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

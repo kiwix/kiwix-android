@@ -90,7 +90,10 @@ class SearchViewModel @Inject constructor(
       recentSearchDao.recentSearches(zimReaderContainer.id),
       searchOrigin.asFlow()
     ) { searchTerm, searchResultsWithTerm, recentResults, searchOrigin ->
-      SearchState(searchTerm, searchResultsWithTerm, recentResults, searchOrigin)
+      SearchState(
+        searchTerm, searchResultsWithTerm,
+        recentResults as List<SearchListItem.RecentSearchListItem>, searchOrigin
+      )
     }
       .collect { state.value = it }
   }

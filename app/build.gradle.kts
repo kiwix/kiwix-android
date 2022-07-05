@@ -10,8 +10,8 @@ apply(from = rootProject.file("jacoco.gradle"))
 
 ext {
   set("versionMajor", 3)
-  set("versionMinor", 4)
-  set("versionPatch", 5)
+  set("versionMinor", 5)
+  set("versionPatch", 0)
 }
 
 fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext["versionPatch"]}"
@@ -30,8 +30,8 @@ fun generateVersionName() = "${ext["versionMajor"]}.${ext["versionMinor"]}.${ext
 
 fun generateVersionCode() =
   20 * 10000 +
-    ((ext["versionMajor"] as Int) * 10000) +
-    ((ext["versionMinor"] as Int) * 100) +
+    ext["versionMajor"] as Int * 10000 +
+    ext["versionMinor"] as Int * 100 +
     ext["versionPatch"] as Int
 
 val apkPrefix get() = System.getenv("TAG") ?: "dev"
@@ -44,8 +44,8 @@ android {
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = generateVersionCode()
     versionName = generateVersionName()
+    manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
   }
-
   lintOptions {
     isCheckDependencies = true
   }
@@ -54,13 +54,21 @@ android {
     getByName("debug") {
       multiDexKeepProguard = file("multidex-instrumentation-config.pro")
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "false")
+      buildConfigField("boolean", "IS_PLAYSTORE", "false")
     }
 
     getByName("release") {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
+      buildConfigField("boolean", "IS_PLAYSTORE", "false")
       if (properties.containsKey("disableSigning")) {
         signingConfig = null
       }
+    }
+    create("playStore") {
+      initWith(getByName("release"))
+      setMatchingFallbacks("release")
+      buildConfigField("boolean", "IS_PLAYSTORE", "true")
+      manifestPlaceholders["permission"] = "android.permission.placeholder"
     }
   }
   bundle {
@@ -78,16 +86,13 @@ android {
 }
 
 play {
-  isEnabled = true
-  serviceAccountCredentials = file("../google.json")
-  track = "alpha"
-  releaseStatus = "draft"
-  resolutionStrategy = "fail"
+  enabled.set(true)
+  serviceAccountCredentials.set(file("../google.json"))
+  track.set("alpha")
+  releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
+  resolutionStrategy.set(com.github.triplet.gradle.androidpublisher.ResolutionStrategy.FAIL)
 }
 
 dependencies {
   implementation(Libs.squidb)
-  implementation(Libs.squidb_annotations)
-  implementation(Libs.ink_page_indicator)
-  add("kapt", Libs.squidb_processor)
 }

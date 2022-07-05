@@ -25,7 +25,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -244,11 +243,13 @@ class AddNoteDialog : DialogFragment() {
 
     // Show the previously saved note if it exists
     displayNote()
-    add_note_edit_text.addTextChangedListener(SimpleTextWatcher { _, _, _, _ ->
-      noteEdited = true
-      enableSaveNoteMenuItem()
-      enableShareNoteMenuItem()
-    })
+    add_note_edit_text.addTextChangedListener(
+      SimpleTextWatcher { _, _, _, _ ->
+        noteEdited = true
+        enableSaveNoteMenuItem()
+        enableShareNoteMenuItem()
+      }
+    )
     if (!noteFileExists) {
       // Prepare for input in case of empty/new note
       add_note_edit_text.requestFocus()
@@ -271,7 +272,8 @@ class AddNoteDialog : DialogFragment() {
       if (ContextCompat.checkSelfPermission(
           requireContext(),
           Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED
+        ) != PackageManager.PERMISSION_GRANTED &&
+        !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()
       ) {
         Log.d(
           TAG,
@@ -399,7 +401,7 @@ class AddNoteDialog : DialogFragment() {
 
   companion object {
     @JvmField val NOTES_DIRECTORY =
-      Environment.getExternalStorageDirectory().toString() + "/Kiwix/Notes/"
+      instance.getExternalFilesDir("").toString() + "/Kiwix/Notes/"
     const val TAG = "AddNoteDialog"
   }
 }

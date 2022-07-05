@@ -22,4 +22,5 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 interface DownloadRequester {
   fun enqueue(downloadRequest: DownloadRequest): Long
   fun cancel(downloadId: Long)
+  fun retryDownload(downloadId: Long)
 }
