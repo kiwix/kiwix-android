@@ -40,8 +40,9 @@
    version=$(cat app/build/kotlinToolingMetadata/kotlin-tooling-metadata.json | tr { '\n' | tr , '\n' | tr } '\n' | grep "buildPluginVersion" | awk  -F'"' '{print $4}')
    if [ $version == "1.7.0" ];
    then
-    echo "Build System is using kotlin version 1.7.0"
+    echo "Build System is using kotlin Version 1.7.0"
    else
+    echo "Build Failure : Due to kotlin Version 1.7.0 is missing"
      exit 1
    fi
  else
