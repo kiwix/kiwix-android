@@ -32,9 +32,10 @@ class FileWritingFileSystemChecker : FileSystemChecker {
       when (val capability = readCapability(resultFile)) {
         CAN_WRITE_4GB,
         CANNOT_WRITE_4GB -> return capability
+        else -> {}
       }
     }
-    return with(File("$path/large_file_test.txt"), {
+    return with(File("$path/large_file_test.txt")) {
       deleteIfExists()
       try {
         RandomAccessFile(this.path, "rw").use {
@@ -50,7 +51,7 @@ class FileWritingFileSystemChecker : FileSystemChecker {
       } finally {
         deleteIfExists()
       }
-    })
+    }
   }
 
   private fun readCapability(resultFile: File) =

@@ -260,6 +260,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         allowInternetPermissionButton.visibility = View.GONE
         librarySwipeRefresh.isRefreshing = false
       }
+      else -> {}
     }
   }
 

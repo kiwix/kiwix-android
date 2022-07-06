@@ -22,11 +22,11 @@ object Versions {
 
   const val com_squareup_okhttp3: String = "4.9.0"
 
-  const val org_jetbrains_kotlin: String = "1.4.21"
+  const val org_jetbrains_kotlin: String = "1.7.0"
 
   const val androidx_navigation: String = "2.3.1"
 
-  const val com_google_dagger: String = "2.29.1"
+  const val com_google_dagger: String = "2.42"
 
   const val com_yahoo_squidb: String = "4.0.0-beta.2" // available: "3.2.3"
 
