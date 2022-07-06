@@ -17,7 +17,7 @@
  #
 
  if ./gradlew buildKotlinToolingMetadata; then
-   version=$(cat app/build/kotlinToolingMetadata/kotlin-tooling-metadata.json | tr { '\n' | tr , '\n' | tr } '\n' | grep "buildPluginVersion" | awk  -F'"' '{print $4}')
+   version=$(< app/build/kotlinToolingMetadata/kotlin-tooling-metadata.json  tr { '\n' | tr , '\n' | tr } '\n' | grep "buildPluginVersion" | awk  -F'"' '{print $4}')
    if [ $version == "1.7.0" ];
    then
     echo "Build System is using kotlin Version 1.7.0"
