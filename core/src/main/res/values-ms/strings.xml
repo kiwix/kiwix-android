@@ -104,7 +104,7 @@
   <string name="note_share_error_file_missing">Fail catatan tidak wujud</string>
   <string name="note_share_app_chooser_title">Kongsi fail nota dengan:</string>
   <string name="notes_deletion_unsuccessful">Beberapa file tidak terhapus</string>
-  <string name="books_count">\%d buku</string>
+  <string name="books_count">%d buku</string>
   <string name="your_device">Peranti Anda:</string>
   <string name="nearby_devices">PERANTI BERHAMPIRAN</string>
   <string name="status">Status</string>

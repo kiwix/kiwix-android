@@ -8,4 +8,5 @@
   <string name="cannot_open_file">檔案開啟失敗\n請嘗試查看在您圖書館設備分頁裡的該檔案</string>
   <string name="send_files_title">發送檔案</string>
   <string name="receive_files_title">接收檔案</string>
+  <string name="no_app_found_to_open">沒有找到選擇 zim 檔案的應用程式！</string>
 </resources>

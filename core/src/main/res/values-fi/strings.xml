@@ -22,7 +22,7 @@
   <string name="menu_wifi_hotspot">Hostaa kirjoja</string>
   <string name="save_media">Tallenna media</string>
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
-  <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix…/</string>
   <string name="search_label">Hae</string>
   <string name="choose_file">Valitse sisältötiedosto (*.zim)</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
@@ -94,7 +94,7 @@
   <string name="local_zims">Laite</string>
   <string name="remote_zims">Online</string>
   <string name="library">Kirjasto</string>
-  <string name="delete_zim_body">Seuraava(t) zim-tiedosto(t) tullaan poistamaan:\n\n\%s</string>
+  <string name="delete_zim_body">Seuraava(t) zim-tiedosto(t) tullaan poistamaan:\n\n%s</string>
   <string name="delete_zims_toast">Tiedosto poistettu</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
   <string name="download">Lataa</string>
@@ -187,11 +187,11 @@
   <string name="confirmation_alert_dialog_message">Hylkää tallentamattomat muutokset?</string>
   <string name="delete_notes_confirmation_msg">Poista kaikki huomautukset?</string>
   <string name="notes_deletion_unsuccessful">Joitakin tiedostoja ei poistettu</string>
-  <string name="books_count">\%d kirja(a)</string>
+  <string name="books_count">%d kirja(a)</string>
   <string name="connection_failed">Yhteys epäonnistui</string>
   <string name="file_transfer_complete">Tiedoston siirto valmis</string>
   <string name="error_during_transfer">Siirron aikana tapahtui virhe</string>
-  <string name="error_transferring">Virhe siirrettäessä tiedostoa \%s</string>
+  <string name="error_transferring">Virhe siirrettäessä tiedostoa %s</string>
   <string name="get_content_from_nearby_device">Hanki sisältöä lähistöllä olevasta laitteesta</string>
   <string name="your_device">Laitteesi:</string>
   <string name="nearby_devices">LÄHELLÄ OLEVAT LAITTEET</string>
