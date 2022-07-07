@@ -38,7 +38,6 @@ import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -58,13 +57,11 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.utils.FILE_SELECT_CODE
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
@@ -185,6 +182,11 @@ class LocalLibraryFragment : BaseFragment() {
     when (requestCode) {
       FILE_SELECT_CODE -> {
         data?.data?.let { uri ->
+          val contentResolver = requireActivity().contentResolver
+
+          val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+          contentResolver.takePersistableUriPermission(uri, takeFlags)
           getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
         }
       }
@@ -302,18 +304,19 @@ class LocalLibraryFragment : BaseFragment() {
             // We already have permission!!
             requestFileSystemCheck()
           } else {
-            if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
-              // We should only ask for first time, If the users wants to revoke settings
-              // then they can directly toggle this feature from settings screen
-              sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
-              // Show Dialog and  Go to settings to give permission
-              dialogShower.show(
-                KiwixDialog.ManageExternalFilesPermissionDialog,
-                {
-                  this.activity?.let(FragmentActivity::navigateToSettings)
-                }
-              )
-            }
+            // This code is for taking MANAGE_EXTERNAL_STORAGE permission
+            // if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
+            //   // We should only ask for first time, If the users wants to revoke settings
+            //   // then they can directly toggle this feature from settings screen
+            //   sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
+            //   // Show Dialog and  Go to settings to give permission
+            //   dialogShower.show(
+            //     KiwixDialog.ManageExternalFilesPermissionDialog,
+            //     {
+            //       this.activity?.let(FragmentActivity::navigateToSettings)
+            //     }
+            //   )
+            // }
           }
         } else {
           requestFileSystemCheck()

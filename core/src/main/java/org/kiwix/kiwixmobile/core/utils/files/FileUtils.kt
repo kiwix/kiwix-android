@@ -251,7 +251,11 @@ object FileUtils {
       .substringBefore(context.getString(R.string.android_directory_seperator))
 
   @SuppressLint("WrongConstant")
-  @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String? {
+  @JvmStatic fun getPathFromUri(
+    activity: Activity,
+    data: Intent,
+    isInternalStorageSelected: Boolean
+  ): String? {
     val uri: Uri? = data.data
     val takeFlags: Int = data.flags and (
       Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -270,7 +274,8 @@ object FileUtils {
           val originalPath = file.substring(
             file.lastIndexOf(":") + 1
           )
-          val path = "${activity.getExternalFilesDirs("")[1]}"
+          val path =
+            "${activity.getExternalFilesDirs("")[getStoragePosition(isInternalStorageSelected)]}"
           return@getPathFromUri path.substringBefore(
             activity.getString(R.string.android_directory_seperator)
           )
@@ -291,6 +296,9 @@ object FileUtils {
     }
     return null
   }
+
+  private fun getStoragePosition(isInternalStorageSelected: Boolean): Int =
+    if (isInternalStorageSelected) 0 else 1
 
   /**
    * Returns the file name from the url or src. In url it gets the file name from the last '/' and

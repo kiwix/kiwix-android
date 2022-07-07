@@ -99,6 +99,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
+  private val isInternalStorageSelected = false
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
@@ -305,6 +306,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @SuppressLint("InflateParams")
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
     if (storageDevice.isInternal) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
+        dialogShower.show(SelectFolder { view }, ::selectFolder)
+      } else {
+        setExternalStoragePath(storageDevice)
+      }
       sharedPreferenceUtil.putPrefStorage(
         sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
       )
@@ -347,8 +354,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == Activity.RESULT_OK) {
       data?.let {
-        getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
-        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+        getPathFromUri(
+          requireActivity(), data,
+          isInternalStorageSelected
+        )?.let(sharedPreferenceUtil::putPrefStorage)
+        if (isInternalStorageSelected) {
+          sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
+        } else {
+          sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+        }
       } ?: run {
         activity.toast(
           resources

@@ -86,6 +86,7 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
   protected NightModeConfig nightModeConfig;
   @Inject
   protected DialogShower alertDialogShower;
+  private boolean isInternalStorageSelected = false;
 
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -288,11 +289,22 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     );
 
     if (storageDevice.isInternal()) {
-      sharedPreferenceUtil.putPrefStorage(
-        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.getName()));
+      isInternalStorageSelected = true;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        @SuppressLint("InflateParams") View view =
+          LayoutInflater.from(getActivity()).inflate(R.layout.select_folder_dialog, null);
+        alertDialogShower.show(new KiwixDialog.SelectFolder(() -> view), () -> {
+          selectFolder();
+          return Unit.INSTANCE;
+        });
+      } else {
+        sharedPreferenceUtil.putPrefStorage(
+          sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.getName()));
+      }
       findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION);
     } else {
+      isInternalStorageSelected = false;
       if (sharedPreferenceUtil.isPlayStoreBuild()) {
         setExternalStoragePath(storageDevice);
       } else {
@@ -333,8 +345,14 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == RESULT_OK) {
       sharedPreferenceUtil.putPrefStorage(
-        FileUtils.getPathFromUri(requireActivity(), data));
-      findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+        FileUtils.getPathFromUri(requireActivity(), data, isInternalStorageSelected));
+      if (isInternalStorageSelected) {
+        sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION);
+        findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
+      } else {
+        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
+        findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+      }
       sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
     }
   }
