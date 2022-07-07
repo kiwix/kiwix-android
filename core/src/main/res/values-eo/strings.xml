@@ -23,7 +23,7 @@
   <string name="menu_support_kiwix">Subteni Kiwix</string>
   <string name="save_media">Konservi Aŭdvidaĵon</string>
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
-  <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
   <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu Dosieron de Enhavo (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
@@ -190,7 +190,7 @@
   <string name="ext_storage_permission_not_granted">Eraro: Permeso pri konservejo mankas</string>
   <string name="notes_deletion_successful">La tuta dosierujo da notoj foriĝis</string>
   <string name="notes_deletion_unsuccessful">Iuj dosieroj ne foriĝis</string>
-  <string name="books_count">\%d libro(j)</string>
+  <string name="books_count">%d libro(j)</string>
   <string name="connection_failed">Konektado fiaskis</string>
   <string name="your_device">Via Aparato:</string>
   <string name="nearby_devices">PROKSIMAJ APARATOJ</string>

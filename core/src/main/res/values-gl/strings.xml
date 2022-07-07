@@ -19,7 +19,7 @@
   <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
   <string name="save_media">Gardar multimedia</string>
   <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
-  <string name="save_media_saved">Multimedia gardado como %s en Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Multimedia gardado como %s en Android/media/org.kiwix…/</string>
   <string name="search_label">Procurar</string>
   <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>

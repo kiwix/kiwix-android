@@ -15,7 +15,7 @@
   <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
   <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
   <string name="save_media_error">א טעות האט פאסירט ביים אויפהיטן די מעדיע!</string>
-  <string name="save_media_saved">מעדיע אויפֿגעהיטן ווי %s צו Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">מעדיע אויפֿגעהיטן ווי %s צו Android/media/org.kiwix…/</string>
   <string name="search_label">זוכן</string>
   <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
   <string name="error_article_url_not_found">טעות: לאדן ארטיקל (Url: %1$s) דורכגעפאלן.</string>

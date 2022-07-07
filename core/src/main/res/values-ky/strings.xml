@@ -17,7 +17,7 @@
   <string name="menu_read_aloud_stop">Үн чыгарып окууну токтотуу</string>
   <string name="save_media">Медиафайлды мындай түрдө сактоо…</string>
   <string name="save_media_error" fuzzy="true">Медиафайлды сактоодо катачылыктар кетти!</string>
-  <string name="save_media_saved">Медиафайл %1$s түрүндө Сүрөт папкаңызга сакталды</string>
+  <string name="save_media_saved" fuzzy="true">Медиафайл %1$s түрүндө Сүрөт папкаңызга сакталды</string>
   <string name="search_label">Издөө</string>
   <string name="pref_display_title">Көрсөтүү</string>
   <string name="pref_info_title">Маалымат</string>

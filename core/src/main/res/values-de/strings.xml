@@ -10,12 +10,13 @@
 * Killarnee
 * Metalhead64
 * Pittigrilli
+* Sebastian Wallroth
 * Stephane
 * Susann Schweden
 * Symposiarch
 * Umlaut
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Hilfe</string>
   <string name="menu_home">Start</string>
   <string name="menu_settings">Einstellungen</string>
@@ -30,7 +31,7 @@
   <string name="menu_wifi_hotspot">WLAN Hotspot</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
-  <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
+  <string name="save_media_saved" fuzzy="true">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
   <string name="search_label">Suchen</string>
   <string name="choose_file">Wähle eine Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
@@ -117,7 +118,7 @@
   <string name="local_zims">Gerät</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliothek</string>
-  <string name="delete_zim_body">Die folgende(n) ZIM-Datei(en) werden gelöscht werden:\n\n\%s</string>
+  <string name="delete_zim_body">Die folgende(n) ZIM-Datei(en) werden gelöscht werden:\n\n%s</string>
   <string name="delete_zims_toast">Dateien erfolgreich gelöscht</string>
   <string name="no_files_here">Hier gibt es keine Dateien</string>
   <string name="download_no_space">Unzureichender Speicherplatz für einen Download.</string>
@@ -230,7 +231,7 @@
   <string name="ext_storage_permission_not_granted">Fehler: Speicherberechtigungen nicht gewährt</string>
   <string name="notes_deletion_successful">Gesamter Notizen-Ordner gelöscht</string>
   <string name="notes_deletion_unsuccessful">Einige Dateien nicht gelöscht</string>
-  <string name="books_count">\%d Buch/Bücher</string>
+  <string name="books_count">%d Buch/Bücher</string>
   <string name="discovery_initiated">Erkennung eingeleitet</string>
   <string name="discovery_failed">Erkennung fehlgeschlagen</string>
   <string name="severe_loss_error">Schwerer Fehler! Versuchen Sie, Wi-Fi P2P auszuschalten und wieder einzuschalten</string>
@@ -243,11 +244,11 @@
   <string name="discovery_needs_location">Ohne standortbezogene Dienste können keine Peer-Geräte gefunden werden</string>
   <string name="request_enable_wifi">Aktivieren Sie Wi-Fi P2P in den Systemeinstellungen</string>
   <string name="discovery_needs_wifi">Kann ohne Wi-Fi ON keine Peer-Geräte finden</string>
-  <string name="transfer_to">Dateien an \%s übertragen?</string>
+  <string name="transfer_to">Dateien an %s übertragen?</string>
   <string name="device_not_cooperating">Das gewählte Gerät kooperiert nicht bei der Übertragung</string>
   <string name="file_transfer_complete">Dateiübertragung abgeschlossen</string>
   <string name="error_during_transfer">Bei der Übertragung wurde ein Fehler festgestellt</string>
-  <string name="error_transferring">Fehler beim Übertragen der Datei \%s</string>
+  <string name="error_transferring">Fehler beim Übertragen der Datei %s</string>
   <string name="get_content_from_nearby_device">Inhalte von einem Gerät in der Nähe abrufen</string>
   <string name="search_for_peers">Nach Peer-Geräten suchen</string>
   <string name="your_device">Ihr Gerät:</string>
@@ -259,7 +260,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
-  <string name="pref_text_zoom_summary">Schriftgröße in 25\%-Schritten ändern.</string>
+  <string name="pref_text_zoom_summary" tools:ignore="StringFormatCount">Schriftgröße in 25%-Schritten ändern.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nur Text</string>
@@ -294,4 +295,5 @@
   <string name="how_to_update_content">Wie erneuert man Inhalte?</string>
   <string name="allowed">Erlaubt</string>
   <string name="not_allowed">Nicht erlaubt</string>
+  <string name="allow">Erlauben</string>
 </resources>

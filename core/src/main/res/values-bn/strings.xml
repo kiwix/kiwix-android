@@ -22,7 +22,7 @@
   <string name="menu_read_aloud_stop">জোরে পড়া বন্ধ করুন</string>
   <string name="save_media">মিডিয়া সংরক্ষণ করুন</string>
   <string name="save_media_error">মিডিয়া সংরক্ষণের চেষ্টা করার সময় একটি ত্রুটি ঘটেছে!</string>
-  <string name="save_media_saved">%s হিসাবে Android/media/org.kiwix…/ এ মিডিয়া সংরক্ষিত হয়েছে</string>
+  <string name="save_media_saved" fuzzy="true">%s হিসাবে Android/media/org.kiwix…/ এ মিডিয়া সংরক্ষিত হয়েছে</string>
   <string name="search_label">অনুসন্ধান</string>
   <string name="choose_file">একটি বিষয়বস্তুর ফাইল নির্বাচন করুন (*.zim)</string>
   <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
@@ -133,7 +133,7 @@
   <string name="pending_state">মুলতুবী</string>
   <string name="save">সংরক্ষণ</string>
   <string name="note">টীকা</string>
-  <string name="books_count">\%dটি বই</string>
+  <string name="books_count">%dটি বই</string>
   <string name="tag_text_only">শুধুমাত্র পাঠ্য</string>
   <string name="no_bookmarks">কোন বুকমার্ক নেই</string>
   <string name="search_open_in_new_tab">নতুন ট্যাবে খুলুন</string>

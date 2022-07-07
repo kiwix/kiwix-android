@@ -23,7 +23,7 @@
   <string name="menu_wifi_hotspot">کتاب‌های میزبان</string>
   <string name="save_media">ذخیرهٔ رسانه</string>
   <string name="save_media_error">خطایی در حین ذخیره‌سازی این رسانه رخ داد!</string>
-  <string name="save_media_saved">رسانه با نام %s در Android/media/org.kiwix…/ ذخیره شد</string>
+  <string name="save_media_saved" fuzzy="true">رسانه با نام %s در Android/media/org.kiwix…/ ذخیره شد</string>
   <string name="search_label">جستجو</string>
   <string name="choose_file">یک پروندهٔ محتوایی را انتخاب کنید (*.zim)</string>
   <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
@@ -144,8 +144,8 @@
   <string name="note_save_successful">یادداشت ذخیره شد</string>
   <string name="note_share_error_file_missing">پروندهٔ یادداشت وجود ندارد</string>
   <string name="delete_notes_confirmation_msg">همهٔ یادداشت‌ها حذف شوند؟</string>
-  <string name="books_count">\%d کتاب</string>
-  <string name="transfer_to">پرونده‌ها منتقل شوند به \%s؟</string>
+  <string name="books_count">%d کتاب</string>
+  <string name="transfer_to">پرونده‌ها منتقل شوند به %s؟</string>
   <string name="file_transfer_complete">انتقال پرونده کامل شد</string>
   <string name="your_device">وسیلهٔ شما:</string>
   <string name="nearby_devices">وسیله‌های نزدیک</string>

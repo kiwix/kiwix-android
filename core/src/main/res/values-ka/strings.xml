@@ -17,7 +17,7 @@
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
   <string name="save_media">მედიის შენახვა როგორც…</string>
   <string name="save_media_error" fuzzy="true">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
-  <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$s</string>
+  <string name="save_media_saved" fuzzy="true">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$s</string>
   <string name="search_label">ძიება</string>
   <string name="choose_file" fuzzy="true">აირჩიეთ ZIM-ფაილი (*.zim)</string>
   <string name="open_in_new_tab">ბმული ახალ ჩანართში გაიხსნას?</string>
