@@ -50,8 +50,7 @@ jobs:
       - name: Publish  versionInfo to download.kiwix.org
         run: |
           ./gradlew generateVersionCodeAndName
-          cp VERSION_INFO VERSION_INFO-${TAG}.txt
-          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO-${TAG}.txt ci@master.download.kiwix.org:/data/download/release/kiwix-android/
+          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
       - name: Publish to github releases
         uses: ncipollo/release-action@v1

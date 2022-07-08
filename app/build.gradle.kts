@@ -103,7 +103,7 @@ task("generateVersionCodeAndName") {
     it.print(
 
       "${generateVersionName()}\n" +
-       7${generateVersionCode()}"
+       "7${generateVersionCode()}"
 
     )
   }
