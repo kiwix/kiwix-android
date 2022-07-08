@@ -102,11 +102,8 @@ task("generateVersionCodeAndName") {
   file.printWriter().use {
     it.print(
 
-      "AutoUpdateMode: Version\n" +
-        "UpdateCheckMode: Tags\n" +
-        "UpdateCheckData: RELEASE_INFO|\\s([0-9]*)||\n" +
-        "CurrentVersion: ${generateVersionName()}\n" +
-        "CurrentVersionCode: 7${generateVersionCode()}"
+      "${generateVersionName()}\n" +
+       7${generateVersionCode()}"
 
     )
   }
