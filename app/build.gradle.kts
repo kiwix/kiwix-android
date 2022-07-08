@@ -101,10 +101,8 @@ task("generateVersionCodeAndName") {
   if (!file.exists()) file.createNewFile()
   file.printWriter().use {
     it.print(
-
       "${generateVersionName()}\n" +
-       "7${generateVersionCode()}"
-
+        "7${generateVersionCode()}"
     )
   }
 }
