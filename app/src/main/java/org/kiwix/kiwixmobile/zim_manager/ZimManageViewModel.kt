@@ -462,15 +462,16 @@ class ZimManageViewModel @Inject constructor(
 
   private fun updateBookItems() =
     dataSource.booksOnDiskAsListItems()
-      .subscribe(
-        { newList ->
-          fileSelectListStates.postValue(
-            fileSelectListStates.value?.let { inheritSelections(it, newList) }
-              ?: FileSelectListState(newList)
-          )
-        },
-        Throwable::printStackTrace
-      )
+      .subscribe({ newList ->
+        fileSelectListStates.postValue(
+          fileSelectListStates.value?.let {
+            inheritSelections(
+              it,
+              newList.toMutableList()
+            )
+          } ?: FileSelectListState(newList)
+        )
+      }, Throwable::printStackTrace)
 
   private fun inheritSelections(
     oldState: FileSelectListState,
