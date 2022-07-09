@@ -183,8 +183,8 @@ class SearchFragment : BaseFragment() {
   private fun render(state: SearchState) {
     searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem.isEnabled = state.searchTerm.isNotBlank()
-    searchLoadingIndicator.isShowing(state.isLoading)
-    searchNoResults.isVisible = state.visibleResults.isEmpty()
+    searchLoadingIndicator?.isShowing(state.isLoading)
+    searchNoResults?.isVisible = state.visibleResults.isEmpty()
     searchAdapter.items = state.visibleResults
   }
 
