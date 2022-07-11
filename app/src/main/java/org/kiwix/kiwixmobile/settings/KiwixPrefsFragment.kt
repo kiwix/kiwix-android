@@ -55,7 +55,7 @@ class KiwixPrefsFragment : CorePrefsFragment() {
 
   private fun setMangeExternalStoragePermission() {
     val permissionPref = findPreference<Preference>(PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !sharedPreferenceUtil.isPlayStoreBuild) {
       showPermissionPreference()
       val externalStorageManager = Environment.isExternalStorageManager()
       if (externalStorageManager) {
