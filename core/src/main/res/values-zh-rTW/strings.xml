@@ -24,7 +24,7 @@
   <string name="menu_wifi_hotspot">託管書籍</string>
   <string name="save_media">儲存媒體</string>
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>
-  <string name="save_media_saved">已將媒體以 %1$s 儲存到 Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">已將媒體以 %s 儲存到 Downloads/org.kiwix…/</string>
   <string name="search_label">搜尋</string>
   <string name="choose_file">請選擇一份內容檔案 (*.zim)</string>
   <string name="open_in_new_tab">在新分頁打開連結？</string>
@@ -55,6 +55,7 @@
   <string name="server_started_message">在您的瀏覽器輸入 IP 位址來存取伺服器%s</string>
   <string name="share_host_address">透過別種應用程式分享 URL</string>
   <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。</string>
+  <string name="unable_to_read_zim_file">無法讀取這個 zim 檔案！</string>
   <string name="zim_not_opened">無法打開 zim 檔案</string>
   <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。</string>
   <string name="error_article_url_not_found">錯誤：載入條目(網址：%1$s)失敗。</string>
@@ -73,6 +74,7 @@
   <string name="no_reader_application_installed">找不到開啟這類型檔案的應用程式</string>
   <string name="no_section_info">未找到內容標題</string>
   <string name="request_storage">我們需要進入你的儲存裝置以存取離線內容。</string>
+  <string name="request_write_storage">要下載 zim 檔案，我們需要寫入您的儲存裝置權限</string>
   <string name="clear_recent_and_tabs_history_dialog">您確定要刪除您的搜尋歷史記錄，並且重新設定所有啟用的分頁嗎？</string>
   <string name="delete_recent_search_item">刪除此項目？</string>
   <string name="pref_clear_all_history_title">清除歷史記錄</string>
@@ -111,7 +113,7 @@
   <string name="local_zims">設備</string>
   <string name="remote_zims">線上</string>
   <string name="library">圖書館</string>
-  <string name="delete_zim_body">以下 zim 檔案將會被刪除：\n\n\%s</string>
+  <string name="delete_zim_body">以下 zim 檔案將會被刪除：\n\n%s</string>
   <string name="delete_zims_toast">檔案刪除成功</string>
   <string name="no_files_here">沒有檔案在此</string>
   <string name="download_no_space">沒有足夠的空間來下載。</string>
@@ -224,7 +226,7 @@
   <string name="ext_storage_permission_not_granted">錯誤：未授予儲存權限</string>
   <string name="notes_deletion_successful">整個註釋檔案夾已刪除</string>
   <string name="notes_deletion_unsuccessful">一些檔案未刪除</string>
-  <string name="books_count">\%d 個書籍</string>
+  <string name="books_count">%d 個書籍</string>
   <string name="discovery_initiated">初始偵測</string>
   <string name="discovery_failed">偵測失敗</string>
   <string name="severe_loss_error">嚴重錯誤！請嘗試停用/重新啟用 WiFi P2P</string>
@@ -237,11 +239,11 @@
   <string name="discovery_needs_location">沒有位置服務無法偵測端點</string>
   <string name="request_enable_wifi">啟動系統設定的 WiFi P2P</string>
   <string name="discovery_needs_wifi">沒有開啟 Wifi 無法偵測端點</string>
-  <string name="transfer_to">傳送檔案到 \%s？</string>
+  <string name="transfer_to">傳送檔案到 %s？</string>
   <string name="device_not_cooperating">所選的設備沒有共同傳送</string>
   <string name="file_transfer_complete">檔案傳送完成</string>
   <string name="error_during_transfer">在傳送過程中發生錯誤</string>
-  <string name="error_transferring">傳送檔案\%s失敗</string>
+  <string name="error_transferring">傳送檔案%s失敗</string>
   <string name="get_content_from_nearby_device">取得來自附近設備的內容</string>
   <string name="search_for_peers">搜尋端點</string>
   <string name="your_device">您的設備：</string>
@@ -254,7 +256,7 @@
   <string name="pref_clear_all_notes_summary">清除在所有條目裡的所有註解</string>
   <string name="pref_clear_all_notes_title">清除所有註釋</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">允許讀寫 ZIM 檔案在 SD 卡裡</string>
-  <string name="pref_text_zoom_summary">以 25\% 更改文字大小</string>
+  <string name="pref_text_zoom_summary">以 25% 更改文字大小</string>
   <string name="tag_pic">圖片</string>
   <string name="tag_vid">影片</string>
   <string name="tag_text_only">僅限文字</string>
@@ -292,7 +294,9 @@
   <string name="all_files_permission_needed_message">為了能在其它設備上存取 ZIM 檔案，我們需要所有檔案允許權限</string>
   <string name="allowed">允許</string>
   <string name="not_allowed">不允許</string>
-  <string name="android_directory_seperator">/Android</string>
+  <string name="denied_internet_permission_message">請啟用 wifi 來下載內容</string>
   <string name="select_folder">請選取用於外部儲存的資料夾。</string>
   <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
+  <string name="allow">允許</string>
+  <string name="allow_internet_permission_message">請允許網路權限來下載內容</string>
 </resources>

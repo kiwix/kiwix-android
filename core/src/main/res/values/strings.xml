@@ -103,7 +103,7 @@
   <string name="local_zims" tools:keep="@string/local_zims">Device</string>
   <string name="remote_zims" tools:keep="@string/remote_zims">Online</string>
   <string name="library">Library</string>
-  <string name="delete_zim_body">The following zim file(s) will be deleted:n\n\%s</string>
+  <string name="delete_zim_body">The following zim file(s) will be deleted:n\n%s</string>
   <string name="delete_zims_toast" tools:keep="@string/delete_zims_toast">Files deleted successfully</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
   <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
@@ -242,11 +242,11 @@
   <string name="discovery_needs_location" tools:keep="@string/discovery_needs_location">Cannot discover peers without location services</string>
   <string name="request_enable_wifi">Enable WiFi P2P from system settings</string>
   <string name="discovery_needs_wifi" tools:keep="@string/discovery_needs_wifi">Cannot discover peers without WiFi ON</string>
-  <string name="transfer_to">Transfer files to \%s?</string>
+  <string name="transfer_to">Transfer files to %s?</string>
   <string name="device_not_cooperating" tools:keep="@string/device_not_cooperating">Selected device not co-operating for transfer</string>
   <string name="file_transfer_complete" tools:keep="@string/file_transfer_complete">File transfer complete</string>
   <string name="error_during_transfer" tools:keep="@string/error_during_transfer">An error was encountered during transfer</string>
-  <string name="error_transferring" tools:keep="@string/error_transferring">Error transferring file \%s</string>
+  <string name="error_transferring" tools:keep="@string/error_transferring">Error transferring file %s</string>
   <string name="get_content_from_nearby_device" tools:keep="@string/get_content_from_nearby_device">Get content from nearby device</string>
   <string name="search_for_peers" tools:keep="@string/search_for_peers">Search For Peers</string>
   <string name="your_device" tools:keep="@string/your_device">Your Device:</string>
@@ -259,7 +259,7 @@
   <string name="pref_clear_all_notes_summary">Clears all notes on all articles</string>
   <string name="pref_clear_all_notes_title">Clear all notes</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Allow to read and write ZIM files on SD card</string>
-  <string name="pref_text_zoom_summary">Change text size with 25\% increments.</string>
+  <string name="pref_text_zoom_summary">Change text size with 25% increments.</string>
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Text Only</string>

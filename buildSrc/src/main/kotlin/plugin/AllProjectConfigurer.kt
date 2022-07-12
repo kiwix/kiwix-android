@@ -140,6 +140,18 @@ class AllProjectConfigurer {
     }
   }
 
+  fun configureJacoco(target: Project) {
+    target.configurations.all {
+      resolutionStrategy {
+        eachDependency {
+          if ("org.jacoco" == this.requested.group) {
+            useVersion("0.8.7")
+          }
+        }
+      }
+    }
+  }
+
   fun configurePlugins(target: Project) {
     target.run {
       configureExtension<AndroidExtensionsExtension> { isExperimental = true }

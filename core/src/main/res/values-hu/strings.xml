@@ -26,7 +26,7 @@
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Média mentése</string>
   <string name="save_media_error">Hiba történt a média mentése közben!</string>
-  <string name="save_media_saved">Média elmentve %s néven ide: Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Média elmentve %s néven ide: Android/media/org.kiwix…/</string>
   <string name="search_label">Keresés</string>
   <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>

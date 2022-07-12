@@ -19,7 +19,7 @@
   <string name="menu_wifi_hotspot">Puncto de accesso a WiFi</string>
   <string name="save_media">Salveguardar multimedia</string>
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
-  <string name="save_media_saved">File multimedial salveguardate como %s in Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">File multimedial salveguardate como %s in Android/media/org.kiwix…/</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
   <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
@@ -82,7 +82,7 @@
   <string name="cancel">Cancellar</string>
   <string name="delete_specific_search_toast">Recerca recente removite</string>
   <string name="library">Bibliotheca</string>
-  <string name="delete_zim_body">Le sequente file(s) zim essera delite:\n\n\%s</string>
+  <string name="delete_zim_body">Le sequente file(s) zim essera delite:\n\n%s</string>
   <string name="help_5">Ubi es le contento?</string>
   <string name="delete_zim_failed">Alcun files non ha potite esser delite. Tenta usar un gestor de files pro deler los.</string>
   <string name="confirm_stop_download_title">Stoppar le discarga?</string>

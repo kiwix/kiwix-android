@@ -96,3 +96,13 @@ play {
 dependencies {
   implementation(Libs.squidb)
 }
+task("generateVersionCodeAndName") {
+  val file = File("VERSION_INFO")
+  if (!file.exists()) file.createNewFile()
+  file.printWriter().use {
+    it.print(
+      "${generateVersionName()}\n" +
+        "7${generateVersionCode()}"
+    )
+  }
+}

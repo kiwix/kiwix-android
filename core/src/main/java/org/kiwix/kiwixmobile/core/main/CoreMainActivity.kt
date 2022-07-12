@@ -97,7 +97,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    activeFragments().forEach { it.onActivityResult(requestCode, resultCode, data) }
+    activeFragments().iterator().forEach { it.onActivityResult(requestCode, resultCode, data) }
   }
 
   override fun onStart() {
@@ -128,7 +128,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    activeFragments().forEach {
+    activeFragments().iterator().forEach {
       it.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
   }
@@ -250,7 +250,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     supportFragmentManager.fragments
 
   fun navigate(action: NavDirections) {
-    navController.navigate(action)
+    navController.currentDestination?.getAction(action.actionId)?.run {
+      navController.navigate(action)
+    }
   }
 
   fun navigate(fragmentId: Int) {

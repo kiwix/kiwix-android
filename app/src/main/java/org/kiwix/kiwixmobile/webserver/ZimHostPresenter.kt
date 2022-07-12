@@ -34,7 +34,7 @@ class ZimHostPresenter @Inject internal constructor(private val dataSource: Data
   Presenter {
 
   override fun loadBooks(previouslyHostedBooks: Set<String>) {
-    dataSource.languageCategorizedBooks
+    dataSource.getLanguageCategorizedBooks()
       .map { books ->
         books
           .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
