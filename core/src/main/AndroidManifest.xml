@@ -37,6 +37,7 @@
       android:value="true" />
 
     <activity
+      android:exported="false"
       android:name=".error.ErrorActivity"
       android:process=":error_activity" />
 
@@ -50,7 +51,9 @@
         android:resource="@xml/provider_paths" />
     </provider>
 
-    <activity android:name=".error.DiagnosticReportActivity" />
+    <activity
+      android:exported="false"
+      android:name=".error.DiagnosticReportActivity" />
 
   </application>
 </manifest>
