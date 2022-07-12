@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -48,6 +49,7 @@ object AnimationUtils {
     animateHeight(measuredHeight, 0) { visibility = View.GONE }
   }
 
+  @SuppressLint("Recycle")
   private fun View.animateHeight(start: Int, end: Int, onEndAction: () -> Unit) {
     ValueAnimator.ofInt(start, end).apply {
       addUpdateListener {

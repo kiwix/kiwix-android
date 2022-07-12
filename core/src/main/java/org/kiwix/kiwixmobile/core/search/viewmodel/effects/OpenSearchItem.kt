@@ -22,8 +22,8 @@ import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.parcel.Parcelize
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResult
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 
@@ -36,7 +36,8 @@ data class OpenSearchItem(
       SearchItemToOpen(searchListItem.value, openInNewTab),
       TAG_FILE_SEARCHED
     )
-    activity.popNavigationBackstack()
+    val readerFragmentResId = (activity as CoreMainActivity).readerFragmentResId
+    activity.navigate(readerFragmentResId)
   }
 }
 

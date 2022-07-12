@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Authors:
+<?xml version="1.0" encoding="utf-8"?><!-- Authors:
 * Balyozxane
 * Bikarhêner
 * George Animal
 * Ghybu
 * Kur
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Alîkarî</string>
   <string name="menu_home">Mal</string>
   <string name="menu_settings">Mîheng</string>
@@ -21,7 +20,7 @@
   <string name="menu_wifi_hotspot">Kitêban Bihewîne</string>
   <string name="save_media">Medyayê Tomar Bike</string>
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
-  <string name="save_media_saved">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
+  <string name="save_media_saved" fuzzy="true">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
   <string name="search_label">Lê bigere</string>
   <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
@@ -110,7 +109,7 @@
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
-  <string name="delete_zim_body">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n\%s</string>
+  <string name="delete_zim_body">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n%s</string>
   <string name="delete_zims_toast">Pel hat jêbirin</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
   <string name="download_no_space">Ji bo daxistinê cihê ku hewce dike, tune ye.</string>
@@ -223,7 +222,7 @@
   <string name="ext_storage_permission_not_granted">Çewtî: Destûrên depoyê nehate dayîn</string>
   <string name="notes_deletion_successful">Temamiya peldankên notê hate jêbirin</string>
   <string name="notes_deletion_unsuccessful">Hin peldank nehate jêbirin</string>
-  <string name="books_count">\%d kitêb</string>
+  <string name="books_count">%d kitêb</string>
   <string name="discovery_initiated">Kişf dest pê kir</string>
   <string name="discovery_failed">Kişf bi ser neket</string>
   <string name="severe_loss_error">Çewtiya dijwar! WiFi P2P-yê neçalak bike/dîsa aktîv bike</string>
@@ -236,11 +235,11 @@
   <string name="discovery_needs_location">Bêyî xizmetên lokasyonê hevcinsan nikare tesbît bike</string>
   <string name="request_enable_wifi">Ji mîhengan Wîfî P2Pyê aktîv bike</string>
   <string name="discovery_needs_wifi">Hevcinsan nikare tesbît bike bêyî Wîfiya Vekirî</string>
-  <string name="transfer_to">Dixwazî dosyeyan transferê \%s bikî?</string>
+  <string name="transfer_to">Dixwazî dosyeyan transferê %s bikî?</string>
   <string name="device_not_cooperating">Cîhaza bijartî ji bo transferkirinê kooperasyon nake</string>
   <string name="file_transfer_complete">Transferkirina dosyeyê temam bû</string>
   <string name="error_during_transfer">Gava transferê çewtiyekê rû da</string>
-  <string name="error_transferring">Gava transferkirina \%s çewtiyeke derket holê</string>
+  <string name="error_transferring">Gava transferkirina %s çewtiyeke derket holê</string>
   <string name="get_content_from_nearby_device">Naverokê peyda bike ji cîhaza nêz</string>
   <string name="search_for_peers">Li Hevcinsan Bigere</string>
   <string name="your_device">Cîhaza Te:</string>
@@ -253,7 +252,7 @@
   <string name="pref_clear_all_notes_summary">Hemû notan ji hemû gotaran bibe</string>
   <string name="pref_clear_all_notes_title">Temamiya notan paqij bike</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Destûr bide ku dosyeyên ZIMê yên li ser SD karta te bixwîne û binivîse</string>
-  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25\% biguherîne.</string>
+  <string name="pref_text_zoom_summary" tools:ignore="StringFormatInvalid">Mezinahiya nivîsê bi bilindkirinên 25% biguherîne.</string>
   <string name="tag_pic">Wêne</string>
   <string name="tag_vid">Vîdeo</string>
   <string name="tag_text_only">Tenê Nivîs</string>
@@ -292,7 +291,6 @@
   <string name="allowed">Destûrdayî</string>
   <string name="not_allowed">Ne destûrdayî</string>
   <string name="denied_internet_permission_message">Ji bo daxistina naverokê ji kerema xwe wîfiyê aktîv bike</string>
-  <string name="android_directory_seperator">/Android</string>
   <string name="select_folder">Ji kerema xwe peldankekê bibijêre ji bo depokirina xaricî.</string>
   <string name="system_unable_to_grant_permission_message">Sîstem nikare destûrê werbigire!</string>
 </resources>

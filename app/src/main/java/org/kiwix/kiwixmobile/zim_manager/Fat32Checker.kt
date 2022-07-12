@@ -77,7 +77,7 @@ class Fat32Checker constructor(
     }
 
   private fun canCreate4GbFile(storage: String): Boolean {
-    fileSystemCheckers.forEach {
+    fileSystemCheckers.iterator().forEach {
       when (it.checkFilesystemSupports4GbFiles(storage)) {
         CAN_WRITE_4GB -> return@canCreate4GbFile true
         CANNOT_WRITE_4GB -> return@canCreate4GbFile false

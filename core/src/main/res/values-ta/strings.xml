@@ -20,7 +20,7 @@
   <string name="menu_wifi_hotspot">WiFi பகிரலை</string>
   <string name="save_media">ஊடகத்தை சேமிக்கவும்</string>
   <string name="save_media_error">ஊடகப்பொருளை சேமிக்கும் முயற்சியில் ஒரு பிழை நேர்ந்துவிட்டது!</string>
-  <string name="save_media_saved">தங்களுடைய ஊடகப்பொருளை %s to Android/media/org.kiwix…/ ல் சேமிக்கவும்</string>
+  <string name="save_media_saved" fuzzy="true">தங்களுடைய ஊடகப்பொருளை %s to Android/media/org.kiwix…/ ல் சேமிக்கவும்</string>
   <string name="search_label">தேடு</string>
   <string name="choose_file">கோப்பை தேர்வு செய் (*.zim)</string>
   <string name="open_in_new_tab">புதிய தாவலில் இணைப்பைத் திறக்கவா?</string>
@@ -109,7 +109,7 @@
   <string name="local_zims">கருவி</string>
   <string name="remote_zims">எழிவரி</string>
   <string name="library">நூலகம்</string>
-  <string name="delete_zim_body">பின்வரும் zim கோப்பு(கள்) நீக்கப்படும் :! N !! N! \%s</string>
+  <string name="delete_zim_body">பின்வரும் zim கோப்பு(கள்) நீக்கப்படும் :! N !! N! %s</string>
   <string name="delete_zims_toast">கோப்புகள் வெற்றிகரமாக நீக்கப்பட்டன</string>
   <string name="no_files_here">இங்கே கோப்புகள் இல்லை</string>
   <string name="download_no_space">பதிவிறக்க போதுமான இடம் இல்லை.</string>
@@ -222,7 +222,7 @@
   <string name="ext_storage_permission_not_granted">பிழை: சேமிப்பக அனுமதிகள் வழங்கப்படவில்லை</string>
   <string name="notes_deletion_successful">முழு குறிப்புகள் கோப்புறை நீக்கப்பட்டது</string>
   <string name="notes_deletion_unsuccessful">சில கோப்புகள் நீக்கப்படவில்லை</string>
-  <string name="books_count">\%d புத்தகம்(கள்)</string>
+  <string name="books_count">%d புத்தகம்(கள்)</string>
   <string name="discovery_initiated">கண்டுபிடிப்பு தொடங்கப்பட்டது</string>
   <string name="discovery_failed">கண்டுபிடிப்பு தோல்வியடைந்தது</string>
   <string name="severe_loss_error">கடுமையான பிழை! வைஃபை P2P ஐ முடக்க / மீண்டும் இயக்க முயற்சிக்கவும்</string>
@@ -235,11 +235,11 @@
   <string name="discovery_needs_location">இருப்பிட சேவைகள் இல்லாமல் சகாக்களைக் கண்டறிய முடியாது</string>
   <string name="request_enable_wifi">கணினி அமைப்புகளிலிருந்து வைஃபை P2P ஐ இயக்கவும்</string>
   <string name="discovery_needs_wifi">வைஃபை-யை இயக்காமல் சகாக்களைக் கண்டறிய முடியாது</string>
-  <string name="transfer_to">கோப்புகளை \%s க்கு மாற்றவா?</string>
+  <string name="transfer_to">கோப்புகளை %s க்கு மாற்றவா?</string>
   <string name="device_not_cooperating">தேர்ந்தெடுக்கப்பட்ட சாதனம் பரிமாற்றத்திற்கு ஒத்துழைக்கவில்லை</string>
   <string name="file_transfer_complete">கோப்பு பரிமாற்றம் முடிந்தது</string>
   <string name="error_during_transfer">இடமாற்றத்தின் போது பிழை ஏற்பட்டது</string>
-  <string name="error_transferring">\%s ஐ மாற்றுவதில் பிழை</string>
+  <string name="error_transferring">%s ஐ மாற்றுவதில் பிழை</string>
   <string name="get_content_from_nearby_device">அருகிலுள்ள சாதனத்திலிருந்து உள்ளடக்கத்தைப் பெறுங்கள்</string>
   <string name="search_for_peers">சகாக்களைத் தேடவும்</string>
   <string name="your_device">உங்கள் சாதனம்:</string>
@@ -252,7 +252,7 @@
   <string name="pref_clear_all_notes_summary">எல்லா கட்டுரைகளிலும் உள்ள அனைத்து குறிப்புகளையும் அழிக்கிறது</string>
   <string name="pref_clear_all_notes_title">எல்லா குறிப்புகளையும் அழிக்கவும்</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">SD கார்டில் ZIM கோப்புகளைப் படிக்கவும் எழுதவும் அனுமதிக்கவும்</string>
-  <string name="pref_text_zoom_summary">உரை அளவை 25\% அதிகரிப்புகளுடன் மாற்றவும்.</string>
+  <string name="pref_text_zoom_summary">உரை அளவை 25% அதிகரிப்புகளுடன் மாற்றவும்.</string>
   <string name="tag_pic">படம்</string>
   <string name="tag_vid">காணொளி</string>
   <string name="tag_text_only">உரை மட்டும்</string>
@@ -291,7 +291,6 @@
   <string name="allowed">அனுமதிக்கப்படுகிறது</string>
   <string name="not_allowed">அனுமதி இல்லை</string>
   <string name="denied_internet_permission_message">உள்ளடக்கத்தைப் பதிவிறக்க வைஃபையை இயக்கவும்</string>
-  <string name="android_directory_seperator">/Android</string>
   <string name="select_folder">வெளிப்புற சேமிப்பகத்திற்கான கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
   <string name="system_unable_to_grant_permission_message">அமைப்பு அனுமதி வழங்க முடியவில்லை!</string>
   <string name="allow">அனுமதிக்கவும்</string>

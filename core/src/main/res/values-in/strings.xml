@@ -23,7 +23,7 @@
   <string name="menu_support_kiwix">Dukung Kiwix</string>
   <string name="save_media">Simpan Media</string>
   <string name="save_media_error">Terjadi kesalahan saat menyimpan media!</string>
-  <string name="save_media_saved">Simpan media sebagai %s pada Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Simpan media sebagai %s pada Android/media/org.kiwix…/</string>
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Berkas Konten (*.zim)</string>
   <string name="open_in_new_tab">Buka pranala di tab baru?</string>
@@ -99,7 +99,7 @@
   <string name="local_zims">Perangkat</string>
   <string name="remote_zims">Daring</string>
   <string name="library">Perpustakaan</string>
-  <string name="delete_zim_body">Zim file berikut akan dihapus:\n\n\%s</string>
+  <string name="delete_zim_body">Zim file berikut akan dihapus:\n\n%s</string>
   <string name="delete_zims_toast">Berkas telah dihapus</string>
   <string name="no_files_here">Tidak ada berkas disini</string>
   <string name="download_no_space">Tidak tersedia cukup ruang data untuk mengunduh.</string>
@@ -193,7 +193,7 @@
   <string name="ext_storage_permission_not_granted">Gagal: Akses ke tempat penyimpanan data tidak ada</string>
   <string name="notes_deletion_successful">Seluruh direktori Catatan telah dihapus</string>
   <string name="notes_deletion_unsuccessful">Beberapa file tidak terhapus</string>
-  <string name="books_count">\%d buku</string>
+  <string name="books_count">%d buku</string>
   <string name="connection_failed">Koneksi gagal</string>
   <string name="files_for_transfer">FILE UNTUK DIPINDAHKAN</string>
   <string name="preparing_files">Mempersiapkan file untuk dipindahkan....</string>
@@ -201,7 +201,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Bersihkan semua catatan dari semua artikel</string>
   <string name="pref_clear_all_notes_title">Bersihkan semua catatan</string>
-  <string name="pref_text_zoom_summary">Ubah ukuran teks dengan penambahan 25\%</string>
+  <string name="pref_text_zoom_summary">Ubah ukuran teks dengan penambahan 25%</string>
   <string name="tag_pic">Gambar</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Teks Saja</string>

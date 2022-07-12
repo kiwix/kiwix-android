@@ -18,7 +18,7 @@
   <string name="menu_read_aloud_stop">Ophale mat Virliesen</string>
   <string name="save_media">Medium späicheren</string>
   <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d\'Medium ze späicheren!</string>
-  <string name="save_media_saved">Medium als %1$s op Android/media/org.kiwix…/ gespäichert</string>
+  <string name="save_media_saved">Medium als %s op Downloads/org.kiwix…/ gespäichert</string>
   <string name="search_label">Sichen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
@@ -59,7 +59,7 @@
   <string name="local_zims">Apparat</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliothéik</string>
-  <string name="delete_zim_body" fuzzy="true">\%s läschen?</string>
+  <string name="delete_zim_body" fuzzy="true">%s läschen?</string>
   <string name="delete_zims_toast">Fichier geläscht</string>
   <string name="no_files_here">Keng Fichieren hei?</string>
   <string name="download_no_space">Net genuch Plaz fir erofzelueden.</string>

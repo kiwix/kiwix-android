@@ -67,7 +67,7 @@
   <string name="history">ⴰⵎⵣⵔⵓⵢ</string>
   <string name="close_all_tabs">ⵔⴳⵍ ⵉⵙⴽⵙⴰⵍ ⵎⴰⵕⵕⴰ</string>
   <string name="save">ⵃⴹⵓ</string>
-  <string name="books_count">\%d ⴰⴷⵍⵉⵙ(ⵏ)</string>
+  <string name="books_count">%d ⴰⴷⵍⵉⵙ(ⵏ)</string>
   <string name="your_device">ⴰⵍⵍⴰⵍ ⵏⵏⴽ/ⵎ:</string>
   <string name="status">ⴰⴷⴷⴰⴷ</string>
   <string name="tag_pic">ⵜⵡⴼⵜ</string>

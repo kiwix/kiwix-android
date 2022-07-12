@@ -151,6 +151,7 @@ class CustomReaderFragment : CoreReaderFragment() {
             it.zimFile.delete()
             openZimFile(it.obbFile)
           }
+          else -> {}
         }
       },
       onNoFilesFound = {

@@ -31,7 +31,7 @@
   <string name="menu_wifi_hotspot">WiFi erişim paylaşımı alanı</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
-  <string name="save_media_saved">Medyayı %s olarak şuraya kaydet: Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Medyayı %s olarak şuraya kaydet: Android/media/org.kiwix…/</string>
   <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
@@ -118,7 +118,7 @@
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Çevrimiçi</string>
   <string name="library">Kütüphane</string>
-  <string name="delete_zim_body">Aşağıdaki zim dosyaları silinecektir:\n\n\%s</string>
+  <string name="delete_zim_body">Aşağıdaki zim dosyaları silinecektir:\n\n%s</string>
   <string name="delete_zims_toast">Dosyalar başarıyla silindi</string>
   <string name="no_files_here">Dosya yok</string>
   <string name="download_no_space">İndirmek için yetersiz alan.</string>
@@ -231,7 +231,7 @@
   <string name="ext_storage_permission_not_granted">Hata: Depolama izinleri verilmemiş</string>
   <string name="notes_deletion_successful">Tüm notlar klasörü silindi</string>
   <string name="notes_deletion_unsuccessful">Bazı dosyalar silinmedi</string>
-  <string name="books_count">\%d kitap</string>
+  <string name="books_count">%d kitap</string>
   <string name="discovery_initiated">Keşif başladı</string>
   <string name="discovery_failed">Keşif başarısız oldu</string>
   <string name="severe_loss_error">Ağır hata! WiFi P2P\'yi Devre Dışı Bırak/Yeniden Etkinleştir\'i deneyin</string>
@@ -244,11 +244,11 @@
   <string name="discovery_needs_location">Konum servisleri olmadan eşleri bulamıyor</string>
   <string name="request_enable_wifi">WiFi P2P\'yi sistem ayarlarından etkinleştir</string>
   <string name="discovery_needs_wifi">WiFi AÇIK olmadan eş keşfedemiyor</string>
-  <string name="transfer_to">\%s dosyasına aktarılsın mı?</string>
+  <string name="transfer_to">%s dosyasına aktarılsın mı?</string>
   <string name="device_not_cooperating">Seçilen cihaz aktarım için işbirliği yapmıyor</string>
   <string name="file_transfer_complete">Dosya aktarımı tamamlandı</string>
   <string name="error_during_transfer">Aktarım sırasında bir hatayla karşılaşıldı</string>
-  <string name="error_transferring">\%s dosyası aktarılırken hata oluştu</string>
+  <string name="error_transferring">%s dosyası aktarılırken hata oluştu</string>
   <string name="get_content_from_nearby_device">Yakındaki cihazdan içerik alın</string>
   <string name="search_for_peers">Akranları Ara</string>
   <string name="your_device">Cihazınız:</string>
@@ -261,7 +261,7 @@
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">SD karttaki ZIM dosyalarını okumaya ve yazmaya izin ver</string>
-  <string name="pref_text_zoom_summary">Metin boyutunu \%25\'lik artışlarla değiştirin.</string>
+  <string name="pref_text_zoom_summary">Metin boyutunu %25\'lik artışlarla değiştirin.</string>
   <string name="tag_pic">Resim</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Yalnızca Metin</string>
