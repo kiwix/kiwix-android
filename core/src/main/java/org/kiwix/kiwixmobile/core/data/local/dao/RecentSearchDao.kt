@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.data.local.dao
 import com.yahoo.squidb.sql.Query
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase
 import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
-import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -30,13 +29,17 @@ class RecentSearchDao @Inject constructor(private val mDb: KiwixDatabase) {
 
   fun getRecentSearches(): MutableList<RecentSearch> {
     val result: MutableList<RecentSearch> = ArrayList()
-    mDb.query(
-      RecentSearch::class.java, Query.select()
-    ).use { searchCursor ->
+    try {
+      val searchCursor = mDb.query(
+        RecentSearch::class.java, Query.select()
+      )
       while (searchCursor.moveToNext()) {
         result.add(RecentSearch(searchCursor))
       }
+    } catch (exception: Exception) {
+      exception.printStackTrace()
     }
+
     return result
   }
 }
