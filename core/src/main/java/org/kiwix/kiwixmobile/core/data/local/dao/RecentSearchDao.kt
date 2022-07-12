@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.data.local.dao
 
+import android.database.sqlite.SQLiteException
 import com.yahoo.squidb.sql.Query
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase
 import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
@@ -36,7 +37,7 @@ class RecentSearchDao @Inject constructor(private val mDb: KiwixDatabase) {
       while (searchCursor.moveToNext()) {
         result.add(RecentSearch(searchCursor))
       }
-    } catch (exception: Exception) {
+    } catch (exception: SQLiteException) {
       exception.printStackTrace()
     }
 
