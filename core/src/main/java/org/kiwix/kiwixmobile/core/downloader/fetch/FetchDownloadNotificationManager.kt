@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.downloader.fetch
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.PendingIntent.getActivity
 import android.content.Context
@@ -119,7 +120,12 @@ class FetchDownloadNotificationManager(context: Context) :
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotification.title)
       }
-      notificationBuilder.setContentIntent(getActivity(context, 0, internal, FLAG_UPDATE_CURRENT))
+      val pendingIntent = if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
+        getActivity(context, 0, internal, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
+      } else {
+        getActivity(context, 0, internal, FLAG_UPDATE_CURRENT)
+      }
+      notificationBuilder.setContentIntent(pendingIntent)
       notificationBuilder.setAutoCancel(true)
     }
   }

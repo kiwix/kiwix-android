@@ -35,6 +35,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -62,7 +63,6 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_SERVER
-import java.util.ArrayList
 import javax.inject.Inject
 
 class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
@@ -140,6 +140,11 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
 
     startServerButton.setOnClickListener {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
+        checkNearbyWifiDevicesPermission()
+      ) {
+        startStopServer()
+      }
       if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P || checkCoarseLocationAccessPermission()) {
         startStopServer()
       }
@@ -169,6 +174,33 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       true
     }
 
+  private fun checkNearbyWifiDevicesPermission(): Boolean =
+    if (ContextCompat.checkSelfPermission(
+        requireActivity(),
+        Manifest.permission.NEARBY_WIFI_DEVICES
+      ) == PackageManager.PERMISSION_DENIED
+    ) {
+      if (ActivityCompat.shouldShowRequestPermissionRationale(
+          requireActivity(),
+          Manifest.permission.NEARBY_WIFI_DEVICES
+        )
+      ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          alertDialogShower.show(
+            KiwixDialog.NearbyWifiPermissionRationaleOnHostZimFile,
+            ::askNearbyWifiDevicesPermission
+          )
+        }
+      } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          askNearbyWifiDevicesPermission()
+        }
+      }
+      false
+    } else {
+      true
+    }
+
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<out String>,
@@ -185,6 +217,14 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private fun askCoarseLocationPermission() {
     ActivityCompat.requestPermissions(
       requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+      PERMISSION_REQUEST_CODE_COARSE_LOCATION
+    )
+  }
+
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  private fun askNearbyWifiDevicesPermission() {
+    ActivityCompat.requestPermissions(
+      requireActivity(), arrayOf(Manifest.permission.NEARBY_WIFI_DEVICES),
       PERMISSION_REQUEST_CODE_COARSE_LOCATION
     )
   }
