@@ -40,7 +40,7 @@ class AllProjectConfigurer {
     target.plugins.apply("com.dicedmelon.gradle.jacoco-android")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
     target.plugins.apply("io.gitlab.arturbosch.detekt")
-    target.plugins.apply("androidx.navigation.safeargs")
+    target.plugins.apply("androidx.navigation.safeargs.kotlin")
   }
 
   fun configureBaseExtension(target: Project, path: String) {

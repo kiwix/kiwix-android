@@ -285,14 +285,16 @@ class LocalLibraryFragment : BaseFragment() {
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) != PackageManager.PERMISSION_GRANTED
     ) {
-      context.toast(R.string.request_storage)
-      requestPermissions(
-        arrayOf(
-          Manifest.permission.READ_EXTERNAL_STORAGE,
-          Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ),
-        REQUEST_STORAGE_PERMISSION
-      )
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        context.toast(R.string.request_storage)
+        requestPermissions(
+          arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+          ),
+          REQUEST_STORAGE_PERMISSION
+        )
+      }
     } else {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
         requestFileSystemCheck()

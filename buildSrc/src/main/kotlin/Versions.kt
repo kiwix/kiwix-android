@@ -26,7 +26,7 @@ object Versions {
 
   const val org_jetbrains_kotlin: String = "1.7.0"
 
-  const val androidx_navigation: String = "2.3.1"
+  const val androidx_navigation: String = "2.4.1"
 
   const val com_google_dagger: String = "2.42"
 

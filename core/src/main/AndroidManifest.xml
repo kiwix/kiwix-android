@@ -3,8 +3,11 @@
   package="org.kiwix.kiwixmobile.core"
   android:installLocation="auto">
 
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+  <uses-permission
+    android:name="android.permission.READ_EXTERNAL_STORAGE"
+    android:maxSdkVersion="32" />
+  <uses-permission
+    android:name="android.permission.WRITE_EXTERNAL_STORAGE"
     tools:ignore="ScopedStorage" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,7 +15,8 @@
 
   <!-- Device with versions >= Pie need this permission -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+  <uses-permission
+    android:name="android.permission.QUERY_ALL_PACKAGES"
     tools:ignore="QueryAllPackagesPermission" />
 
   <application
@@ -20,11 +24,11 @@
     android:extractNativeLibs="false"
     android:fullBackupContent="@xml/backup_rules"
     android:hardwareAccelerated="true"
+    android:requestLegacyExternalStorage="true"
     android:resizeableActivity="true"
     android:supportsRtl="true"
     android:theme="@style/KiwixTheme"
     android:usesCleartextTraffic="true"
-    android:requestLegacyExternalStorage="true"
     tools:targetApi="q">
 
     <!-- Version < 3.0. DeX Mode and Screen Mirroring support -->
@@ -37,8 +41,8 @@
       android:value="true" />
 
     <activity
-      android:exported="false"
       android:name=".error.ErrorActivity"
+      android:exported="false"
       android:process=":error_activity" />
 
     <provider
@@ -52,8 +56,8 @@
     </provider>
 
     <activity
-      android:exported="false"
-      android:name=".error.DiagnosticReportActivity" />
+      android:name=".error.DiagnosticReportActivity"
+      android:exported="false" />
 
   </application>
 </manifest>

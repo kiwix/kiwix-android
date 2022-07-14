@@ -144,8 +144,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         checkNearbyWifiDevicesPermission()
       ) {
         startStopServer()
-      }
-      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P || checkCoarseLocationAccessPermission()) {
+      } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P || checkCoarseLocationAccessPermission()) {
         startStopServer()
       }
     }
